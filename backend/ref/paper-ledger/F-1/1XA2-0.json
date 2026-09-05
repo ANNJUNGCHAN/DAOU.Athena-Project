@@ -1,0 +1,3978 @@
+{
+ "board_id": "1XA2-0",
+ "page": "F-1",
+ "page_name": "증명",
+ "name": "CC-03 / R01-B · 차트 전체 항목·행 상세",
+ "width": 1440,
+ "height": 0,
+ "texts": [
+  {
+   "id": "1XF8-0",
+   "text": "삼성전자",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XF7-0",
+   "text": "005930 · KOSPI",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XF6-0",
+   "text": "LIVE",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XF3-0",
+   "text": "150,850원",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XF2-0",
+   "text": "+2,350 · +1.58%",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XF1-0",
+   "text": "09:42:18",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XEY-0",
+   "text": "현재시세",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XEW-0",
+   "text": "차트",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XEU-0",
+   "text": "기업정보",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XES-0",
+   "text": "ETF",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XEQ-0",
+   "text": "ELW",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XEO-0",
+   "text": "금현물",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XEK-0",
+   "text": "시가 · 고가 · 저가",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XEJ-0",
+   "text": "149,200 · 152,400 · 148,100",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XEH-0",
+   "text": "거래량",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XEG-0",
+   "text": "14.2M",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XED-0",
+   "text": "PER",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XEC-0",
+   "text": "18.6배",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XE9-0",
+   "text": "PBR",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XE8-0",
+   "text": "1.42배",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XE5-0",
+   "text": "ROE",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XE4-0",
+   "text": "8.4%",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XE0-0",
+   "text": "일",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XDY-0",
+   "text": "주",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XDW-0",
+   "text": "월",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XDT-0",
+   "text": "1개월",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XDR-0",
+   "text": "3개월",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XDP-0",
+   "text": "1년",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XDM-0",
+   "text": "OHLCV",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XDL-0",
+   "text": "지표",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XDK-0",
+   "text": "그리기",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XDJ-0",
+   "text": "초기화",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XXE-0",
+   "text": "06/03",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Existing Athena Chart Module",
+    "Chart X Axis · raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XXF-0",
+   "text": "07/01",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Existing Athena Chart Module",
+    "Chart X Axis · raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XXG-0",
+   "text": "08/01",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Existing Athena Chart Module",
+    "Chart X Axis · raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XXH-0",
+   "text": "08/31",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Existing Athena Chart Module",
+    "Chart X Axis · raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XXZ-0",
+   "text": "153,400",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Existing Athena Chart Module",
+    "Chart Y Axis · raw · base:ka10081 · $.stk_dt_pole_chart_qry[].cur_prc"
+   ]
+  },
+  {
+   "id": "1XY0-0",
+   "text": "150,850",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Existing Athena Chart Module",
+    "Chart Y Axis · raw · base:ka10081 · $.stk_dt_pole_chart_qry[].cur_prc"
+   ]
+  },
+  {
+   "id": "1XY1-0",
+   "text": "148,100",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Existing Athena Chart Module",
+    "Chart Y Axis · raw · base:ka10081 · $.stk_dt_pole_chart_qry[].cur_prc"
+   ]
+  },
+  {
+   "id": "1XBD-0",
+   "text": "종목 요약",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Market Profile",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XBC-0",
+   "text": "정상 거래",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Market Profile",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XBA-0",
+   "text": "시가총액",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Market Profile",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XB9-0",
+   "text": "900.4조",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Market Profile",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XB7-0",
+   "text": "외국인 보유",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Market Profile",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XB6-0",
+   "text": "52.41%",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Market Profile",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XB4-0",
+   "text": "유통 주식",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Market Profile",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XB3-0",
+   "text": "4.44B",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Market Profile",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XB0-0",
+   "text": "가격 범위",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Range and Liquidity"
+   ]
+  },
+  {
+   "id": "1XAZ-0",
+   "text": "52주 최저 67,700",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Range and Liquidity",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XAY-0",
+   "text": "최고 153,400",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Range and Liquidity",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XAT-0",
+   "text": "거래대금",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Range and Liquidity",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XAS-0",
+   "text": "1.42조",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Range and Liquidity",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XAP-0",
+   "text": "오늘의 수급",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot"
+   ]
+  },
+  {
+   "id": "1XAO-0",
+   "text": "외국인",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XAN-0",
+   "text": "+482억원",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XAL-0",
+   "text": "기관",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XAK-0",
+   "text": "+196억원",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XAI-0",
+   "text": "개인",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XAH-0",
+   "text": "-654억원",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XAE-0",
+   "text": "알림 설정",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Chart Context Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XAC-0",
+   "text": "호가 열기",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Chart Context Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XA7-0",
+   "text": "● 기존 Athena 차트 실시간 갱신 중",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Status Footer"
+   ]
+  },
+  {
+   "id": "1XA6-0",
+   "text": "일봉 · 거래량 · 사용자 지표 2개 · 마지막 체결 09:42:18",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Instrument Card Surface",
+    "Chart Status Footer"
+   ]
+  },
+  {
+   "id": "1XFD-0",
+   "text": "차트 전체 항목·행 상세",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XFE-0",
+   "text": "주식일봉차트조회 · 공식 응답 항목과 선택 행을 한 화면에서 확인",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XFH-0",
+   "text": "10개 행 표시",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XFJ-0",
+   "text": "1개 행 선택",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XFQ-0",
+   "text": "종목·현재가",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "identity-and-quote",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XFR-0",
+   "text": "종목 식별과 선택 행의 가격 방향",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "identity-and-quote",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XFS-0",
+   "text": "주식일봉차트조회",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "identity-and-quote",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XFW-0",
+   "text": "종목코드",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "identity-and-quote",
+    "Identity Quote Fields",
+    "raw · base:ka10081 · $.stk_cd"
+   ]
+  },
+  {
+   "id": "1XFX-0",
+   "text": "005930",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "identity-and-quote",
+    "Identity Quote Fields",
+    "raw · base:ka10081 · $.stk_cd"
+   ]
+  },
+  {
+   "id": "1XG0-0",
+   "text": "현재가",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "identity-and-quote",
+    "Identity Quote Fields",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].cur_prc"
+   ]
+  },
+  {
+   "id": "1XG1-0",
+   "text": "150,850원",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "identity-and-quote",
+    "Identity Quote Fields",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].cur_prc"
+   ]
+  },
+  {
+   "id": "1XG4-0",
+   "text": "전일대비",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "identity-and-quote",
+    "Identity Quote Fields",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].pred_pre"
+   ]
+  },
+  {
+   "id": "1XG5-0",
+   "text": "+2,350원",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "identity-and-quote",
+    "Identity Quote Fields",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].pred_pre"
+   ]
+  },
+  {
+   "id": "1XG8-0",
+   "text": "전일대비기호",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "identity-and-quote",
+    "Identity Quote Fields",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].pred_pre_sig"
+   ]
+  },
+  {
+   "id": "1XGB-0",
+   "text": "2",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "identity-and-quote",
+    "Identity Quote Fields",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].pred_pre_sig",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XGC-0",
+   "text": "상승",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "identity-and-quote",
+    "Identity Quote Fields",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].pred_pre_sig",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XGH-0",
+   "text": "가격 이력·선택 행",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XGI-0",
+   "text": "캔들 한 개의 공식 응답 항목과 최근 10개 행",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XGL-0",
+   "text": "틱",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Frame",
+    "Requested Period Selector",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XGN-0",
+   "text": "분",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Frame",
+    "Requested Period Selector",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XGP-0",
+   "text": "일",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Frame",
+    "Requested Period Selector",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XGR-0",
+   "text": "주",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Frame",
+    "Requested Period Selector",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XGT-0",
+   "text": "월",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Frame",
+    "Requested Period Selector",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XKR-0",
+   "text": "선택 행 01",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Selected First Row Detail",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XKS-0",
+   "text": "2026-08-31",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Selected First Row Detail",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XKW-0",
+   "text": "시가",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Selected First Row Detail",
+    "Selected Row OHLC Fields",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].open_pric"
+   ]
+  },
+  {
+   "id": "1XKX-0",
+   "text": "149,200원",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Selected First Row Detail",
+    "Selected Row OHLC Fields",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].open_pric"
+   ]
+  },
+  {
+   "id": "1XL0-0",
+   "text": "고가",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Selected First Row Detail",
+    "Selected Row OHLC Fields",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].high_pric"
+   ]
+  },
+  {
+   "id": "1XL1-0",
+   "text": "152,400원",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Selected First Row Detail",
+    "Selected Row OHLC Fields",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].high_pric"
+   ]
+  },
+  {
+   "id": "1XL4-0",
+   "text": "저가",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Selected First Row Detail",
+    "Selected Row OHLC Fields",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].low_pric"
+   ]
+  },
+  {
+   "id": "1XL5-0",
+   "text": "148,100원",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Selected First Row Detail",
+    "Selected Row OHLC Fields",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].low_pric"
+   ]
+  },
+  {
+   "id": "1XL8-0",
+   "text": "종가(현재가)",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Selected First Row Detail",
+    "Selected Row OHLC Fields",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].cur_prc"
+   ]
+  },
+  {
+   "id": "1XL9-0",
+   "text": "150,850원",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Selected First Row Detail",
+    "Selected Row OHLC Fields",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].cur_prc"
+   ]
+  },
+  {
+   "id": "1XLD-0",
+   "text": "행",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XLE-0",
+   "text": "일자",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XLF-0",
+   "text": "현재가",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XLG-0",
+   "text": "거래량",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XLR-0",
+   "text": "01",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XLS-0",
+   "text": "08/31",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XLT-0",
+   "text": "150,850",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XLU-0",
+   "text": "14,213,490",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XLX-0",
+   "text": "02",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XLY-0",
+   "text": "08/28",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XLZ-0",
+   "text": "149,200",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XM0-0",
+   "text": "11,842,310",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XM3-0",
+   "text": "03",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XM4-0",
+   "text": "08/27",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XM5-0",
+   "text": "148,700",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XM6-0",
+   "text": "9,736,220",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XM9-0",
+   "text": "04",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XMA-0",
+   "text": "08/26",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XMB-0",
+   "text": "147,900",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XMC-0",
+   "text": "8,918,640",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XMF-0",
+   "text": "05",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XMG-0",
+   "text": "08/25",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XMH-0",
+   "text": "146,300",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XMI-0",
+   "text": "10,524,880",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XML-0",
+   "text": "06",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XMM-0",
+   "text": "08/24",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XMN-0",
+   "text": "145,800",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XMO-0",
+   "text": "7,804,150",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XMR-0",
+   "text": "07",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XMS-0",
+   "text": "08/21",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XMT-0",
+   "text": "144,900",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XMU-0",
+   "text": "9,127,660",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XMX-0",
+   "text": "08",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XMY-0",
+   "text": "08/20",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XMZ-0",
+   "text": "143,500",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XN0-0",
+   "text": "8,664,390",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XN3-0",
+   "text": "09",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XN4-0",
+   "text": "08/19",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XN5-0",
+   "text": "142,800",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XN6-0",
+   "text": "7,990,210",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XN9-0",
+   "text": "10",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XNA-0",
+   "text": "08/18",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XNB-0",
+   "text": "141,700",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XNC-0",
+   "text": "6,842,750",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Scrollable 10 Row Viewport",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XLJ-0",
+   "text": "1–10 / 전체",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Expand Collapse Controls"
+   ]
+  },
+  {
+   "id": "1XLM-0",
+   "text": "접기",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Expand Collapse Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XLO-0",
+   "text": "더보기",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "price-history",
+    "Price History Split",
+    "Top 10 Chart Rows · expanded scroll state",
+    "Expand Collapse Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XNJ-0",
+   "text": "거래량·기간",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "volume-and-period",
+    "Volume Metrics",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XNK-0",
+   "text": "선택 행의 거래 관련 공식 응답값",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "volume-and-period",
+    "Volume Metrics",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XNT-0",
+   "text": "거래량",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "volume-and-period",
+    "Volume Metrics",
+    "Volume Value Lanes",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].trde_qty"
+   ]
+  },
+  {
+   "id": "1XNU-0",
+   "text": "14,213,490주",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "volume-and-period",
+    "Volume Metrics",
+    "Volume Value Lanes",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].trde_qty"
+   ]
+  },
+  {
+   "id": "1XNX-0",
+   "text": "거래대금",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "volume-and-period",
+    "Volume Metrics",
+    "Volume Value Lanes",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].trde_prica"
+   ]
+  },
+  {
+   "id": "1XNY-0",
+   "text": "2,141,642백만원",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "volume-and-period",
+    "Volume Metrics",
+    "Volume Value Lanes",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].trde_prica"
+   ]
+  },
+  {
+   "id": "1XO1-0",
+   "text": "거래회전율",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "volume-and-period",
+    "Volume Metrics",
+    "Volume Value Lanes",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].trde_tern_rt"
+   ]
+  },
+  {
+   "id": "1XO2-0",
+   "text": "0.32%",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "volume-and-period",
+    "Volume Metrics",
+    "Volume Value Lanes",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].trde_tern_rt"
+   ]
+  },
+  {
+   "id": "1XNO-0",
+   "text": "공식 항목 이름",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "volume-and-period",
+    "Official Field Name Group",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XNP-0",
+   "text": "선택한 주식일봉 행에 포함되는 항목",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "volume-and-period",
+    "Official Field Name Group",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1XO7-0",
+   "text": "일자",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "volume-and-period",
+    "Official Field Name Group",
+    "Official Field Chips",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt"
+   ]
+  },
+  {
+   "id": "1XOA-0",
+   "text": "시가",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "volume-and-period",
+    "Official Field Name Group",
+    "Official Field Chips",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].open_pric"
+   ]
+  },
+  {
+   "id": "1XOD-0",
+   "text": "고가",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "volume-and-period",
+    "Official Field Name Group",
+    "Official Field Chips",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].high_pric"
+   ]
+  },
+  {
+   "id": "1XOG-0",
+   "text": "저가",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "volume-and-period",
+    "Official Field Name Group",
+    "Official Field Chips",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].low_pric"
+   ]
+  },
+  {
+   "id": "1XOJ-0",
+   "text": "현재가",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "volume-and-period",
+    "Official Field Name Group",
+    "Official Field Chips",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].cur_prc"
+   ]
+  },
+  {
+   "id": "1XOM-0",
+   "text": "전일대비",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "volume-and-period",
+    "Official Field Name Group",
+    "Official Field Chips",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].pred_pre"
+   ]
+  },
+  {
+   "id": "1XOP-0",
+   "text": "전일대비기호",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "volume-and-period",
+    "Official Field Name Group",
+    "Official Field Chips",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].pred_pre_sig"
+   ]
+  },
+  {
+   "id": "1XWD-0",
+   "text": "거래량",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "volume-and-period",
+    "Official Field Name Group",
+    "Official Field Chips",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].trde_qty"
+   ]
+  },
+  {
+   "id": "1XWG-0",
+   "text": "거래대금",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "volume-and-period",
+    "Official Field Name Group",
+    "Official Field Chips",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].trde_prica"
+   ]
+  },
+  {
+   "id": "1XWJ-0",
+   "text": "거래회전율",
+   "path": [
+    "CC-03 / R01-B · 차트 전체 항목·행 상세",
+    "Instrument Root · 차트 전체 확장",
+    "Chart Complete Detail Surface",
+    "Expanded Chart Detail Body",
+    "volume-and-period",
+    "Official Field Name Group",
+    "Official Field Chips",
+    "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].trde_tern_rt"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "1XA2-0",
+   "name": "CC-03 / R01-B · 차트 전체 항목·행 상세",
+   "component": "Frame",
+   "w": 1440,
+   "h": 0,
+   "depth": 0
+  },
+  {
+   "id": "1XA3-0",
+   "name": "Instrument Root · 차트 전체 확장",
+   "component": "Frame",
+   "w": 1440,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "1XA4-0",
+   "name": "Instrument Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 880,
+   "depth": 2
+  },
+  {
+   "id": "1XEL-0",
+   "name": "Instrument Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 106,
+   "depth": 3
+  },
+  {
+   "id": "1XEZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1XF4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1XF5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "1XF0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1XEM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1XEX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1XEV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1XET-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1XER-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1XEP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1XEN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1XE1-0",
+   "name": "Quote and Valuation Strip",
+   "component": "Frame",
+   "w": 0,
+   "h": 116,
+   "depth": 3
+  },
+  {
+   "id": "1XEI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "1XEE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "1XEA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "1XE6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "1XE2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "1XA8-0",
+   "name": "Chart Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 594,
+   "depth": 3
+  },
+  {
+   "id": "1XBE-0",
+   "name": "Athena Chart Module Mount",
+   "component": "Frame",
+   "w": 1000,
+   "h": 594,
+   "depth": 4
+  },
+  {
+   "id": "1XDH-0",
+   "name": "Chart Toolbar",
+   "component": "Frame",
+   "w": 0,
+   "h": 46,
+   "depth": 5
+  },
+  {
+   "id": "1XDN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "1XDZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XDX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XDV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XDU-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 1,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "1XDS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XDQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XDO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XDI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "1XBF-0",
+   "name": "Existing Athena Chart Module",
+   "component": "Frame",
+   "w": 944,
+   "h": 420,
+   "depth": 5
+  },
+  {
+   "id": "1XBG-0",
+   "name": "Athena Chart Preview",
+   "component": "SVG",
+   "w": 944,
+   "h": 420,
+   "depth": 6
+  },
+  {
+   "id": "1XDG-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XDF-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XDE-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XDD-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XDC-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XDB-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XDA-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XD9-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XD8-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XD7-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XD6-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XD5-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XD4-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XD3-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XD2-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XD1-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XD0-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XCZ-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XCY-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XCX-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XCW-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XCV-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XCU-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XCT-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XCS-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XCR-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XCQ-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XCP-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XCO-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XCN-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XCM-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XCL-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XCK-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XCJ-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XCI-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XCH-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XCG-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XCF-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XCE-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XCD-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XCC-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XCB-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XCA-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XC9-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XC8-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XC7-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XC6-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XC5-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XC4-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XC3-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XC2-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XC1-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XC0-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XBZ-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XBY-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XBX-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XBW-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XBV-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XBU-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XBT-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XBS-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XBR-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XBQ-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XBP-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XBO-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XBN-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XBM-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XBL-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XBK-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XBJ-0",
+   "name": "150,850 · +1.58%",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XBI-0",
+   "name": "거래량",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XBH-0",
+   "name": "14,213,490",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XXD-0",
+   "name": "Chart X Axis · raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "1XXY-0",
+   "name": "Chart Y Axis · raw · base:ka10081 · $.stk_dt_pole_chart_qry[].cur_prc",
+   "component": "Frame",
+   "w": 58,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "1XA9-0",
+   "name": "Instrument Context",
+   "component": "Frame",
+   "w": 360,
+   "h": 594,
+   "depth": 4
+  },
+  {
+   "id": "1XB1-0",
+   "name": "Market Profile",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1XBB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "1XB8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 42,
+   "depth": 6
+  },
+  {
+   "id": "1XB5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 42,
+   "depth": 6
+  },
+  {
+   "id": "1XB2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 42,
+   "depth": 6
+  },
+  {
+   "id": "1XAQ-0",
+   "name": "Range and Liquidity",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1XAX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "1XAU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "1XAW-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "1XAV-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "1XAR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "1XAF-0",
+   "name": "Investor Snapshot",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1XAM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 38,
+   "depth": 6
+  },
+  {
+   "id": "1XAJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 38,
+   "depth": 6
+  },
+  {
+   "id": "1XAG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 38,
+   "depth": 6
+  },
+  {
+   "id": "1XAA-0",
+   "name": "Chart Context Actions",
+   "component": "Frame",
+   "w": 312,
+   "h": 44,
+   "depth": 5
+  },
+  {
+   "id": "1XAD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "1XAB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "1XA5-0",
+   "name": "Chart Status Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 3
+  },
+  {
+   "id": "1XF9-0",
+   "name": "Chart Complete Detail Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "1XFB-0",
+   "name": "Expanded Chart Detail Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 86,
+   "depth": 3
+  },
+  {
+   "id": "1XFC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1XFF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1XFG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1XFI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1XFL-0",
+   "name": "Expanded Chart Detail Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "1XFN-0",
+   "name": "identity-and-quote",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1XFO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1XFP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "1XFT-0",
+   "name": "Identity Quote Fields",
+   "component": "Frame",
+   "w": 0,
+   "h": 92,
+   "depth": 5
+  },
+  {
+   "id": "1XFV-0",
+   "name": "raw · base:ka10081 · $.stk_cd",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "1XFZ-0",
+   "name": "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].cur_prc",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "1XG3-0",
+   "name": "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].pred_pre",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "1XG7-0",
+   "name": "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].pred_pre_sig",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "1XG9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XGA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22,
+   "h": 22,
+   "depth": 8
+  },
+  {
+   "id": "1XGE-0",
+   "name": "price-history",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1XGF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1XGG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "1XGJ-0",
+   "name": "Requested Period Selector",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "1XGK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XGM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XGO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XGQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XGS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XGU-0",
+   "name": "Price History Split",
+   "component": "Frame",
+   "w": 0,
+   "h": 360,
+   "depth": 5
+  },
+  {
+   "id": "1XKP-0",
+   "name": "Selected First Row Detail",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "1XKQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 58,
+   "depth": 7
+  },
+  {
+   "id": "1XKT-0",
+   "name": "Selected Row OHLC Fields",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XKV-0",
+   "name": "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].open_pric",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "1XKZ-0",
+   "name": "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].high_pric",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "1XL3-0",
+   "name": "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].low_pric",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "1XL7-0",
+   "name": "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].cur_prc",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "1XLB-0",
+   "name": "Top 10 Chart Rows · expanded scroll state",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "1XLC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 42,
+   "depth": 7
+  },
+  {
+   "id": "1XLH-0",
+   "name": "Scrollable 10 Row Viewport",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XLQ-0",
+   "name": "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt",
+   "component": "Frame",
+   "w": 0,
+   "h": 27,
+   "depth": 8
+  },
+  {
+   "id": "1XLW-0",
+   "name": "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt",
+   "component": "Frame",
+   "w": 0,
+   "h": 27,
+   "depth": 8
+  },
+  {
+   "id": "1XM2-0",
+   "name": "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt",
+   "component": "Frame",
+   "w": 0,
+   "h": 27,
+   "depth": 8
+  },
+  {
+   "id": "1XM8-0",
+   "name": "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt",
+   "component": "Frame",
+   "w": 0,
+   "h": 27,
+   "depth": 8
+  },
+  {
+   "id": "1XME-0",
+   "name": "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt",
+   "component": "Frame",
+   "w": 0,
+   "h": 27,
+   "depth": 8
+  },
+  {
+   "id": "1XMK-0",
+   "name": "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt",
+   "component": "Frame",
+   "w": 0,
+   "h": 27,
+   "depth": 8
+  },
+  {
+   "id": "1XMQ-0",
+   "name": "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt",
+   "component": "Frame",
+   "w": 0,
+   "h": 27,
+   "depth": 8
+  },
+  {
+   "id": "1XMW-0",
+   "name": "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt",
+   "component": "Frame",
+   "w": 0,
+   "h": 27,
+   "depth": 8
+  },
+  {
+   "id": "1XN2-0",
+   "name": "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt",
+   "component": "Frame",
+   "w": 0,
+   "h": 27,
+   "depth": 8
+  },
+  {
+   "id": "1XN8-0",
+   "name": "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt",
+   "component": "Frame",
+   "w": 0,
+   "h": 27,
+   "depth": 8
+  },
+  {
+   "id": "1XNE-0",
+   "name": "Scroll Position Indicator",
+   "component": "Frame",
+   "w": 3,
+   "h": 78,
+   "depth": 8
+  },
+  {
+   "id": "1XLI-0",
+   "name": "Expand Collapse Controls",
+   "component": "Frame",
+   "w": 0,
+   "h": 46,
+   "depth": 7
+  },
+  {
+   "id": "1XLK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "1XLL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "1XLN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "1XNG-0",
+   "name": "volume-and-period",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1XNH-0",
+   "name": "Volume Metrics",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1XNI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "1XNL-0",
+   "name": "Volume Value Lanes",
+   "component": "Frame",
+   "w": 0,
+   "h": 98,
+   "depth": 6
+  },
+  {
+   "id": "1XNS-0",
+   "name": "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].trde_qty",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XNW-0",
+   "name": "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].trde_prica",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XO0-0",
+   "name": "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].trde_tern_rt",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XNM-0",
+   "name": "Official Field Name Group",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "1XNN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "1XNQ-0",
+   "name": "Official Field Chips",
+   "component": "Frame",
+   "w": 0,
+   "h": 98,
+   "depth": 6
+  },
+  {
+   "id": "1XO6-0",
+   "name": "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].dt",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XO9-0",
+   "name": "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].open_pric",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XOC-0",
+   "name": "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].high_pric",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XOF-0",
+   "name": "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].low_pric",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XOI-0",
+   "name": "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].cur_prc",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XOL-0",
+   "name": "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].pred_pre",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XOO-0",
+   "name": "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].pred_pre_sig",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XWC-0",
+   "name": "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].trde_qty",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XWF-0",
+   "name": "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].trde_prica",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "1XWI-0",
+   "name": "raw · base:ka10081 · $.stk_dt_pole_chart_qry[].trde_tern_rt",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  }
+ ],
+ "text_multiset": {
+  "삼성전자": 1,
+  "005930 · KOSPI": 1,
+  "LIVE": 1,
+  "150,850원": 3,
+  "+2,350 · +1.58%": 1,
+  "09:42:18": 1,
+  "현재시세": 1,
+  "차트": 1,
+  "기업정보": 1,
+  "ETF": 1,
+  "ELW": 1,
+  "금현물": 1,
+  "시가 · 고가 · 저가": 1,
+  "149,200 · 152,400 · 148,100": 1,
+  "거래량": 4,
+  "14.2M": 1,
+  "PER": 1,
+  "18.6배": 1,
+  "PBR": 1,
+  "1.42배": 1,
+  "ROE": 1,
+  "8.4%": 1,
+  "일": 2,
+  "주": 2,
+  "월": 2,
+  "1개월": 1,
+  "3개월": 1,
+  "1년": 1,
+  "OHLCV": 1,
+  "지표": 1,
+  "그리기": 1,
+  "초기화": 1,
+  "06/03": 1,
+  "07/01": 1,
+  "08/01": 1,
+  "08/31": 2,
+  "153,400": 1,
+  "150,850": 2,
+  "148,100": 1,
+  "종목 요약": 1,
+  "정상 거래": 1,
+  "시가총액": 1,
+  "900.4조": 1,
+  "외국인 보유": 1,
+  "52.41%": 1,
+  "유통 주식": 1,
+  "4.44B": 1,
+  "가격 범위": 1,
+  "52주 최저 67,700": 1,
+  "최고 153,400": 1,
+  "거래대금": 3,
+  "1.42조": 1,
+  "오늘의 수급": 1,
+  "외국인": 1,
+  "+482억원": 1,
+  "기관": 1,
+  "+196억원": 1,
+  "개인": 1,
+  "-654억원": 1,
+  "알림 설정": 1,
+  "호가 열기": 1,
+  "● 기존 Athena 차트 실시간 갱신 중": 1,
+  "일봉 · 거래량 · 사용자 지표 2개 · 마지막 체결 09:42:18": 1,
+  "차트 전체 항목·행 상세": 1,
+  "주식일봉차트조회 · 공식 응답 항목과 선택 행을 한 화면에서 확인": 1,
+  "10개 행 표시": 1,
+  "1개 행 선택": 1,
+  "종목·현재가": 1,
+  "종목 식별과 선택 행의 가격 방향": 1,
+  "주식일봉차트조회": 1,
+  "종목코드": 1,
+  "005930": 1,
+  "현재가": 3,
+  "전일대비": 2,
+  "+2,350원": 1,
+  "전일대비기호": 2,
+  "2": 1,
+  "상승": 1,
+  "가격 이력·선택 행": 1,
+  "캔들 한 개의 공식 응답 항목과 최근 10개 행": 1,
+  "틱": 1,
+  "분": 1,
+  "선택 행 01": 1,
+  "2026-08-31": 1,
+  "시가": 2,
+  "149,200원": 1,
+  "고가": 2,
+  "152,400원": 1,
+  "저가": 2,
+  "148,100원": 1,
+  "종가(현재가)": 1,
+  "행": 1,
+  "일자": 2,
+  "01": 1,
+  "14,213,490": 1,
+  "02": 1,
+  "08/28": 1,
+  "149,200": 1,
+  "11,842,310": 1,
+  "03": 1,
+  "08/27": 1,
+  "148,700": 1,
+  "9,736,220": 1,
+  "04": 1,
+  "08/26": 1,
+  "147,900": 1,
+  "8,918,640": 1,
+  "05": 1,
+  "08/25": 1,
+  "146,300": 1,
+  "10,524,880": 1,
+  "06": 1,
+  "08/24": 1,
+  "145,800": 1,
+  "7,804,150": 1,
+  "07": 1,
+  "08/21": 1,
+  "144,900": 1,
+  "9,127,660": 1,
+  "08": 1,
+  "08/20": 1,
+  "143,500": 1,
+  "8,664,390": 1,
+  "09": 1,
+  "08/19": 1,
+  "142,800": 1,
+  "7,990,210": 1,
+  "10": 1,
+  "08/18": 1,
+  "141,700": 1,
+  "6,842,750": 1,
+  "1–10 / 전체": 1,
+  "접기": 1,
+  "더보기": 1,
+  "거래량·기간": 1,
+  "선택 행의 거래 관련 공식 응답값": 1,
+  "14,213,490주": 1,
+  "2,141,642백만원": 1,
+  "거래회전율": 2,
+  "0.32%": 1,
+  "공식 항목 이름": 1,
+  "선택한 주식일봉 행에 포함되는 항목": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "54812a518a3cd381f9cae2a181933997c09989dd14f0bd93ba6fd58d36ae5b47"
+}

@@ -1,0 +1,87 @@
+Frame "06 · 그래프 — 헤더 필터 (기간·정렬·연결 수)" (2QA3-2) 1680×0
+  Frame "보드 제목" (2QA4-2) 0×0
+    Text "헤더 필터 — 기간 · 정렬 · 연결…" (2QA5-2) 0×0 "헤더 필터 — 기간 · 정렬 · 연결 수"
+    Text "보드 01·03의 칩은 라벨이 아니라…" (2QA6-2) 0×0 "보드 01·03의 칩은 라벨이 아니라 컨트롤이다. 세 값 모두 실제로 데이터를 좁히고, 창을 닫아도 남는다."
+  Frame "요약 헤더 기본" (2QA8-2) 0×0
+    Text "요약 헤더 · 기본값" (2QA9-2) 0×0 "요약 헤더 · 기본값"
+    Frame "Frame" (2QAA-2) 0×0
+      Frame "Frame" (2QAB-2) 0×0
+        Frame "Frame" (2QAC-2) 0×0
+          Frame "Frame" (2QAD-2) 0×0
+            Text "요약" (2QAE-2) 0×0 "요약"
+          Frame "Frame" (2QAF-2) 0×0
+            Text "그래프" (2QAG-2) 0×0 "그래프"
+          Frame "Frame" (2QAH-2) 0×0
+            Text "수집·노출" (2QAI-2) 0×0 "수집·노출"
+        Text "최근 갱신 1일 전" (2QAJ-2) 0×0 "최근 갱신 1일 전"
+      Frame "Frame" (2QAK-2) 0×0
+        Frame "Frame" (2QAL-2) 0×0
+          Text "최근 90일" (2QAM-2) 0×0 "최근 90일"
+          Text "▾" (2QAN-2) 0×0 "▾"
+        Frame "Frame" (2QAO-2) 0×0
+          Text "보강 순" (2QAP-2) 0×0 "보강 순"
+          Text "▾" (2QAQ-2) 0×0 "▾"
+  Frame "요약 헤더 좁힘" (2QAS-2) 0×0
+    Text "요약 헤더 · 기본값이 아닌 값이 걸…" (2QAT-2) 0×0 "요약 헤더 · 기본값이 아닌 값이 걸림"
+    Frame "Frame" (2QAU-2) 0×0
+      Frame "Frame" (2QAV-2) 0×0
+        Frame "Frame" (2QAW-2) 0×0
+          Frame "Frame" (2QAX-2) 0×0
+            Text "요약" (2QAY-2) 0×0 "요약"
+          Frame "Frame" (2QAZ-2) 0×0
+            Text "그래프" (2QB0-2) 0×0 "그래프"
+          Frame "Frame" (2QB1-2) 0×0
+            Text "수집·노출" (2QB2-2) 0×0 "수집·노출"
+        Text "최근 갱신 1일 전" (2QB3-2) 0×0 "최근 갱신 1일 전"
+      Frame "Frame" (2QB4-2) 0×0
+        Frame "Frame" (2QB5-2) 0×0
+          Text "최근 30일" (2QB6-2) 0×0 "최근 30일"
+          Text "▾" (2QB7-2) 0×0 "▾"
+        Frame "Frame" (2QB8-2) 0×0
+          Text "최근 순" (2QB9-2) 0×0 "최근 순"
+          Text "▾" (2QBA-2) 0×0 "▾"
+  Frame "지도 헤더 두 상태" (2QBC-2) 0×0
+    Text "지도 헤더 · 기본값 / 연결 수로 …" (2QBD-2) 0×0 "지도 헤더 · 기본값 / 연결 수로 좁힘"
+    Frame "Frame" (2QBE-2) 0×0
+      Frame "Frame" (2QBF-2) 0×0
+        Frame "Frame" (2QBG-2) 0×0
+          Frame "Frame" (2QBH-2) 0×0
+            Text "요약" (2QBI-2) 0×0 "요약"
+          Frame "Frame" (2QBJ-2) 0×0
+            Text "그래프" (2QBK-2) 0×0 "그래프"
+          Frame "Frame" (2QBL-2) 0×0
+            Text "수집·노출" (2QBM-2) 0×0 "수집·노출"
+        Text "군집 7개 · 엔티티 40 · 미분류…" (2QBN-2) 0×0 "군집 7개 · 엔티티 40 · 미분류 7"
+      Frame "Frame" (2QBO-2) 0×0
+        Frame "Frame" (2QBP-2) 0×0
+          Text "최근 90일" (2QBQ-2) 0×0 "최근 90일"
+          Text "▾" (2QBR-2) 0×0 "▾"
+        Frame "Frame" (2QBS-2) 0×0
+          Text "연결 전체" (2QBT-2) 0×0 "연결 전체"
+          Text "▾" (2QBU-2) 0×0 "▾"
+    Frame "Frame" (2QBV-2) 0×0
+      Text "군집 5개 · 엔티티 22 · 미분류…" (2QBW-2) 0×0 "군집 5개 · 엔티티 22 · 미분류 0"
+      Frame "Frame" (2QBX-2) 0×0
+        Frame "Frame" (2QBY-2) 0×0
+          Text "최근 90일" (2QBZ-2) 0×0 "최근 90일"
+          Text "▾" (2QC0-2) 0×0 "▾"
+        Frame "Frame" (2QC1-2) 0×0
+          Text "연결 3개 이상" (2QC2-2) 0×0 "연결 3개 이상"
+          Text "▾" (2QC3-2) 0×0 "▾"
+  Frame "계약 표" (2QC5-2) 0×0
+    Frame "Frame" (2QC6-2) 0×0
+      Text "컨트롤" (2QC7-2) 150×0 "컨트롤"
+      Text "선택지" (2QC8-2) 210×0 "선택지"
+      Text "무엇을 실제로 거는가" (2QC9-2) 0×0 "무엇을 실제로 거는가"
+    Frame "Frame" (2QCA-2) 0×0
+      Text "기간" (2QCB-2) 150×0 "기간"
+      Text "30 · 90 · 180 · 365일" (2QCC-2) 210×0 "30 · 90 · 180 · 365일"
+      Text "표는 성향 신호 조회의 창을, 지도는…" (2QCD-2) 0×0 "표는 성향 신호 조회의 창을, 지도는 연결의 마지막 관측 시각을 거른다. 두 헤더의 기간 칩은 같은 값을 본"
+    Frame "Frame" (2QCE-2) 0×0
+      Text "정렬" (2QCF-2) 150×0 "정렬"
+      Text "보강 순 · 최근 순" (2QCG-2) 210×0 "보강 순 · 최근 순"
+      Text "성향 신호 표에만 있다. 보강 순은 …" (2QCH-2) 0×0 "성향 신호 표에만 있다. 보강 순은 백엔드가 준 순서를 그대로 두고, 최근 순만 관측 시각 내림차순으로 다시"
+    Frame "Frame" (2QCI-2) 0×0
+      Text "연결 수" (2QCJ-2) 150×0 "연결 수"
+      Text "전체 · 2 · 3 · 5개 이상" (2QCK-2) 210×0 "전체 · 2 · 3 · 5개 이상"
+      Text "지도에만 있다. 기간을 건 뒤 남은 …" (2QCL-2) 0×0 "지도에만 있다. 기간을 건 뒤 남은 연결로 차수를 다시 세고, 임계 미만 노드를 지운다 — 지우면 이웃 차수"

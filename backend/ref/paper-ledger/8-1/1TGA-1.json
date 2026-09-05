@@ -1,0 +1,2186 @@
+{
+ "board_id": "1TGA-1",
+ "page": "8-1",
+ "page_name": "백테스트",
+ "name": "03 · 백테스트 — 결과",
+ "width": 1680.0,
+ "height": 1010.0,
+ "texts": [
+  {
+   "id": "1TMN-1",
+   "text": "셸 — 백테스트 · 결과 — 지표 6장 · 자산곡선 · 체결 · 숨기지 않는 가정",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TMM-1",
+   "text": "실행이 끝나면 캔버스가 결과로 바뀝니다. 수치 6장 · 전략 vs 매수보유 곡선 · 체결 표가 한 화면이고, 체결 가정과 못 보는 것(생존 편향 등)은 접히지 않는 석에 늘 붙습니다.",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TML-1",
+   "text": "ATHENA",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TMD-1",
+   "text": "새 채팅",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TM6-1",
+   "text": "그래프",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TM1-1",
+   "text": "에이전트",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TLW-1",
+   "text": "플러그인",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Primary Actions",
+    "Nav 플러그인"
+   ]
+  },
+  {
+   "id": "1TLR-1",
+   "text": "백테스트",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Primary Actions",
+    "Nav 백테스트 (active)"
+   ]
+  },
+  {
+   "id": "1TLO-1",
+   "text": "프로젝트",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TLJ-1",
+   "text": "아테나",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TLA-1",
+   "text": "백엔드 API 개수 확인",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TL8-1",
+   "text": "앱 전체 기능 검수",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TL4-1",
+   "text": "최근",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TL3-1",
+   "text": "전체",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TL1-1",
+   "text": "앱 전체 기능 검수",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TKY-1",
+   "text": "삼성전자 주요 변동 알림",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TKW-1",
+   "text": "ETF 자금 흐름",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TKT-1",
+   "text": "AN",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Account Footer",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TKR-1",
+   "text": "모의-주력",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "47 · Project Recent Sidebar",
+    "Account Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TKL-1",
+   "text": "백테스트",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "헤더",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TKK-1",
+   "text": "20-60 골든크로스 · v4 · 실행 #41 · 3.2초",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "헤더",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TKI-1",
+   "text": "설계",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "헤더",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TKG-1",
+   "text": "결과",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "헤더",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TKD-1",
+   "text": "다시 실행",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "헤더",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TMQ-1",
+   "text": "총수익률",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "지표 타일",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TMR-1",
+   "text": "+184.2%",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "지표 타일",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TMS-1",
+   "text": "보유 +141.0%",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "지표 타일",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TMU-1",
+   "text": "CAGR",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "지표 타일",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TMV-1",
+   "text": "10.4%",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "지표 타일",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TMW-1",
+   "text": "거래일 252일 기준",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "지표 타일",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TMY-1",
+   "text": "Sharpe",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "지표 타일",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TMZ-1",
+   "text": "0.87",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "지표 타일",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TN0-1",
+   "text": "워밍업 60봉 제외",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "지표 타일",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TN2-1",
+   "text": "최대 낙폭",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "지표 타일",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TN3-1",
+   "text": "-27.9%",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "지표 타일",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TN4-1",
+   "text": "2020-03 · 87일",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "지표 타일",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TN6-1",
+   "text": "승률",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "지표 타일",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TN7-1",
+   "text": "46.3%",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "지표 타일",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TN8-1",
+   "text": "41전 19승 · 미청산 0",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "지표 타일",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TNA-1",
+   "text": "Profit Factor",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "지표 타일",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TNB-1",
+   "text": "1.62",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "지표 타일",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TNC-1",
+   "text": "총익 ÷ 총손",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "지표 타일",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TNG-1",
+   "text": "자산곡선",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "자산곡선",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TNK-1",
+   "text": "전략",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "자산곡선",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TNN-1",
+   "text": "매수보유",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "자산곡선",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TNQ-1",
+   "text": "진입",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "자산곡선",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TNT-1",
+   "text": "청산",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "자산곡선",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TO5-1",
+   "text": "2016",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "자산곡선",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TO6-1",
+   "text": "2019",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "자산곡선",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TO7-1",
+   "text": "2022",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "자산곡선",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TO8-1",
+   "text": "2026",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "자산곡선",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TOC-1",
+   "text": "체결 41건",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "체결 표",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TOD-1",
+   "text": "수수료·세금 반영 후 손익",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "체결 표",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TOF-1",
+   "text": "일자",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "체결 표",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TOG-1",
+   "text": "방향",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "체결 표",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TOH-1",
+   "text": "체결가",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "체결 표",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TOI-1",
+   "text": "수량",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "체결 표",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TOJ-1",
+   "text": "비용",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "체결 표",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TOK-1",
+   "text": "손익",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "체결 표",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TOL-1",
+   "text": "사유",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "체결 표",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TOO-1",
+   "text": "2026-07-14",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "체결 표",
+    "체결 행 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TOP-1",
+   "text": "매수",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "체결 표",
+    "체결 행 1"
+   ]
+  },
+  {
+   "id": "1TOQ-1",
+   "text": "71,300",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "체결 표",
+    "체결 행 1"
+   ]
+  },
+  {
+   "id": "1TOR-1",
+   "text": "140",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "체결 표",
+    "체결 행 1"
+   ]
+  },
+  {
+   "id": "1TOS-1",
+   "text": "1,497",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "체결 표",
+    "체결 행 1"
+   ]
+  },
+  {
+   "id": "1TOT-1",
+   "text": "—",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "체결 표",
+    "체결 행 1"
+   ]
+  },
+  {
+   "id": "1TOU-1",
+   "text": "signal",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "체결 표",
+    "체결 행 1"
+   ]
+  },
+  {
+   "id": "1TOX-1",
+   "text": "2026-08-21",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "체결 표",
+    "체결 행 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TOY-1",
+   "text": "매도",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "체결 표",
+    "체결 행 2"
+   ]
+  },
+  {
+   "id": "1TOZ-1",
+   "text": "76,800",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "체결 표",
+    "체결 행 2"
+   ]
+  },
+  {
+   "id": "1TP0-1",
+   "text": "140",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "체결 표",
+    "체결 행 2"
+   ]
+  },
+  {
+   "id": "1TP1-1",
+   "text": "20,966",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "체결 표",
+    "체결 행 2"
+   ]
+  },
+  {
+   "id": "1TP2-1",
+   "text": "+747,537",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "체결 표",
+    "체결 행 2"
+   ]
+  },
+  {
+   "id": "1TP3-1",
+   "text": "signal",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "체결 표",
+    "체결 행 2"
+   ]
+  },
+  {
+   "id": "1TP6-1",
+   "text": "2026-05-02",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "체결 표",
+    "체결 행 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TP7-1",
+   "text": "매도",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "체결 표",
+    "체결 행 3"
+   ]
+  },
+  {
+   "id": "1TP8-1",
+   "text": "64,170",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "체결 표",
+    "체결 행 3"
+   ]
+  },
+  {
+   "id": "1TP9-1",
+   "text": "155",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "체결 표",
+    "체결 행 3"
+   ]
+  },
+  {
+   "id": "1TPA-1",
+   "text": "19,406",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "체결 표",
+    "체결 행 3"
+   ]
+  },
+  {
+   "id": "1TPB-1",
+   "text": "-864,120",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "체결 표",
+    "체결 행 3"
+   ]
+  },
+  {
+   "id": "1TPC-1",
+   "text": "stop_loss",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "체결 표",
+    "체결 행 3"
+   ]
+  },
+  {
+   "id": "1TPD-1",
+   "text": "… 38건 더 — 스크롤",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "체결 표"
+   ]
+  },
+  {
+   "id": "1TH8-1",
+   "text": "체결 가정 — 결과에도 같은 문장이 그대로 붙습니다",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "가정"
+   ]
+  },
+  {
+   "id": "1TH7-1",
+   "text": "신호는 종가 확정 후 판정하고 체결은 다음 봉 시가입니다 · 손절·익절은 봉 내부 저가·고가 터치로 보고, 같은 봉에서 둘 다 닿으면 손절이 먼저입니다 · 상·하한가 봉과 거래량 0 봉은 체결 불가로 다음 봉에 넘깁니다 · 상장폐지 종목은 조회할 수 없어 유니버스 결과에는 생존 편향이 남습니다 · 배당 재투자·공매도·신용은 반영하지 않습니다",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "백테스트 설계 폼",
+    "가정"
+   ]
+  },
+  {
+   "id": "1TH3-1",
+   "text": "전략에게 묻기",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TH2-1",
+   "text": "답이 코드와 백테스트를 바꿉니다",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TH0-1",
+   "text": "이번 결과에서 낙폭이 제일 깊었던 구간만 보여줘",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "채팅 본문",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1TGX-1",
+   "text": "2020-03 초입니다 — 87일간 -27.9%. 손절이 두 번 연속 발화했고, 같은 구간 매수보유는 -32.4%였습니다. 곡선에 그 구간을 표시해 둘까요?",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "채팅 본문"
+   ]
+  },
+  {
+   "id": "1TGG-1",
+   "text": "무엇이든 물어보세요",
+   "path": [
+    "03 · 백테스트 — 결과",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "1TGA-1",
+   "name": "03 · 백테스트 — 결과",
+   "component": "Frame",
+   "w": 1680.0,
+   "h": 1010.0,
+   "depth": 0
+  },
+  {
+   "id": "1TGB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1680.0,
+   "h": 938.0,
+   "depth": 1
+  },
+  {
+   "id": "1TGC-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1560.0,
+   "h": 850.0,
+   "depth": 2
+  },
+  {
+   "id": "1TKM-1",
+   "name": "47 · Project Recent Sidebar",
+   "component": "Frame",
+   "w": 268.0,
+   "h": 819.0,
+   "depth": 3
+  },
+  {
+   "id": "1TLP-1",
+   "name": "Primary Actions",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "1TMH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 28.0,
+   "depth": 5
+  },
+  {
+   "id": "1TMI-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "1TMK-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TMJ-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TMC-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 5
+  },
+  {
+   "id": "1TME-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "1TMG-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TMF-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TM5-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 5
+  },
+  {
+   "id": "1TM7-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "1TMB-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TMA-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TM9-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TM8-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TM0-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 5
+  },
+  {
+   "id": "1TM2-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "1TM4-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TM3-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TLV-1",
+   "name": "Nav 플러그인",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 5
+  },
+  {
+   "id": "1TLX-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "1TLZ-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TLY-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TLQ-1",
+   "name": "Nav 백테스트 (active)",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 5
+  },
+  {
+   "id": "1TLS-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "1TLU-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TLT-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TL5-1",
+   "name": "Project Tree",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "1TLN-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1TLB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 32.0,
+   "depth": 5
+  },
+  {
+   "id": "1TLK-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "1TLM-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TLL-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TLF-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "1TLI-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TLH-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TLG-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TLC-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "1TLE-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TLD-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TL9-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 27.0,
+   "depth": 5
+  },
+  {
+   "id": "1TL6-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 29.0,
+   "depth": 5
+  },
+  {
+   "id": "1TL7-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6.0,
+   "h": 6.0,
+   "depth": 6
+  },
+  {
+   "id": "1TKU-1",
+   "name": "Recent Conversations",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "1TL2-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 20.0,
+   "depth": 5
+  },
+  {
+   "id": "1TKZ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 27.0,
+   "depth": 5
+  },
+  {
+   "id": "1TL0-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6.0,
+   "h": 6.0,
+   "depth": 6
+  },
+  {
+   "id": "1TKX-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 27.0,
+   "depth": 5
+  },
+  {
+   "id": "1TKV-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 27.0,
+   "depth": 5
+  },
+  {
+   "id": "1TKN-1",
+   "name": "Account Footer",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "1TKO-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 38.0,
+   "depth": 5
+  },
+  {
+   "id": "1TKS-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22.0,
+   "h": 22.0,
+   "depth": 6
+  },
+  {
+   "id": "1TKP-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "1TKQ-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TH4-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 848.0,
+   "depth": 3
+  },
+  {
+   "id": "1TH5-1",
+   "name": "백테스트 설계 폼",
+   "component": "Frame",
+   "w": 838.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "1TK9-1",
+   "name": "헤더",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1TKA-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "1TKJ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TKB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TKE-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 8
+  },
+  {
+   "id": "1TKH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 9
+  },
+  {
+   "id": "1TKF-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 9
+  },
+  {
+   "id": "1TKC-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 8
+  },
+  {
+   "id": "1TMO-1",
+   "name": "지표 타일",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1TMP-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "1TMT-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "1TMX-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "1TN1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "1TN5-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "1TN9-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "1TNE-1",
+   "name": "자산곡선",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1TNF-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "1TNH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TNI-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 8
+  },
+  {
+   "id": "1TNJ-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 14.0,
+   "h": 2.0,
+   "depth": 9
+  },
+  {
+   "id": "1TNL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 8
+  },
+  {
+   "id": "1TNM-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 14.0,
+   "h": 2.0,
+   "depth": 9
+  },
+  {
+   "id": "1TNO-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 8
+  },
+  {
+   "id": "1TNP-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8.0,
+   "h": 8.0,
+   "depth": 9
+  },
+  {
+   "id": "1TNR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 8
+  },
+  {
+   "id": "1TNS-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8.0,
+   "h": 8.0,
+   "depth": 9
+  },
+  {
+   "id": "1TNU-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "1TNV-1",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TNW-1",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TNX-1",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TNY-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TNZ-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TO0-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TO1-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TO2-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TO3-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TO4-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "1TOA-1",
+   "name": "체결 표",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1TOB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "1TOE-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 22.0,
+   "depth": 6
+  },
+  {
+   "id": "1TOM-1",
+   "name": "체결 행 1",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 28.0,
+   "depth": 6
+  },
+  {
+   "id": "1TON-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 88.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TOV-1",
+   "name": "체결 행 2",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 28.0,
+   "depth": 6
+  },
+  {
+   "id": "1TOW-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 88.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TP4-1",
+   "name": "체결 행 3",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 28.0,
+   "depth": 6
+  },
+  {
+   "id": "1TP5-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 88.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TH6-1",
+   "name": "가정",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1TGD-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 400.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "1TH1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "1TGL-1",
+   "name": "채팅 본문",
+   "component": "Frame",
+   "w": 399.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "1TGY-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1TGZ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "1TGE-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "1TGF-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "1TGH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22.0,
+   "h": 22.0,
+   "depth": 6
+  },
+  {
+   "id": "1TGI-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "1TGK-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 8
+  },
+  {
+   "id": "1TGJ-1",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 8
+  }
+ ],
+ "text_multiset": {
+  "셸 — 백테스트 · 결과 — 지표 6장 · 자산곡선 · 체결 · 숨기지 않는 가정": 1,
+  "실행이 끝나면 캔버스가 결과로 바뀝니다. 수치 6장 · 전략 vs 매수보유 곡선 · 체결 표가 한 화면이고, 체결 가정과 못 보는 것(생존 편향 등)은 접히지 않는 석에 늘 붙습니다.": 1,
+  "ATHENA": 1,
+  "새 채팅": 1,
+  "그래프": 1,
+  "에이전트": 1,
+  "플러그인": 1,
+  "백테스트": 2,
+  "프로젝트": 1,
+  "아테나": 1,
+  "백엔드 API 개수 확인": 1,
+  "앱 전체 기능 검수": 2,
+  "최근": 1,
+  "전체": 1,
+  "삼성전자 주요 변동 알림": 1,
+  "ETF 자금 흐름": 1,
+  "AN": 1,
+  "모의-주력": 1,
+  "20-60 골든크로스 · v4 · 실행 #41 · 3.2초": 1,
+  "설계": 1,
+  "결과": 1,
+  "다시 실행": 1,
+  "총수익률": 1,
+  "+184.2%": 1,
+  "보유 +141.0%": 1,
+  "CAGR": 1,
+  "10.4%": 1,
+  "거래일 252일 기준": 1,
+  "Sharpe": 1,
+  "0.87": 1,
+  "워밍업 60봉 제외": 1,
+  "최대 낙폭": 1,
+  "-27.9%": 1,
+  "2020-03 · 87일": 1,
+  "승률": 1,
+  "46.3%": 1,
+  "41전 19승 · 미청산 0": 1,
+  "Profit Factor": 1,
+  "1.62": 1,
+  "총익 ÷ 총손": 1,
+  "자산곡선": 1,
+  "전략": 1,
+  "매수보유": 1,
+  "진입": 1,
+  "청산": 1,
+  "2016": 1,
+  "2019": 1,
+  "2022": 1,
+  "2026": 1,
+  "체결 41건": 1,
+  "수수료·세금 반영 후 손익": 1,
+  "일자": 1,
+  "방향": 1,
+  "체결가": 1,
+  "수량": 1,
+  "비용": 1,
+  "손익": 1,
+  "사유": 1,
+  "2026-07-14": 1,
+  "매수": 1,
+  "71,300": 1,
+  "140": 2,
+  "1,497": 1,
+  "—": 1,
+  "signal": 2,
+  "2026-08-21": 1,
+  "매도": 2,
+  "76,800": 1,
+  "20,966": 1,
+  "+747,537": 1,
+  "2026-05-02": 1,
+  "64,170": 1,
+  "155": 1,
+  "19,406": 1,
+  "-864,120": 1,
+  "stop_loss": 1,
+  "… 38건 더 — 스크롤": 1,
+  "체결 가정 — 결과에도 같은 문장이 그대로 붙습니다": 1,
+  "신호는 종가 확정 후 판정하고 체결은 다음 봉 시가입니다 · 손절·익절은 봉 내부 저가·고가 터치로 보고, 같은 봉에서 둘 다 닿으면 손절이 먼저입니다 · 상·하한가 봉과 거래량 0 봉은 체결 불가로 다음 봉에 넘깁니다 · 상장폐지 종목은 조회할 수 없어 유니버스 결과에는 생존 편향이 남습니다 · 배당 재투자·공매도·신용은 반영하지 않습니다": 1,
+  "전략에게 묻기": 1,
+  "답이 코드와 백테스트를 바꿉니다": 1,
+  "이번 결과에서 낙폭이 제일 깊었던 구간만 보여줘": 1,
+  "2020-03 초입니다 — 87일간 -27.9%. 손절이 두 번 연속 발화했고, 같은 구간 매수보유는 -32.4%였습니다. 곡선에 그 구간을 표시해 둘까요?": 1,
+  "무엇이든 물어보세요": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "2061e9061aec285f350de315f2aa1c2a05bcdc2882559a3e9e87dc3c795f6f1b"
+}

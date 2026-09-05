@@ -1,0 +1,2705 @@
+{
+ "board_id": "B57-0",
+ "page": "A-2",
+ "page_name": "에이전트",
+ "name": "03 · 에이전트 — 실행 이력·결과",
+ "width": 1680,
+ "height": 900,
+ "texts": [
+  {
+   "id": "BFG-0",
+   "text": "새 대화",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "① 이력 사이드바 268px (리프 1.2.2 · 미구현)",
+    "사이드바 머리",
+    "새 대화"
+   ]
+  },
+  {
+   "id": "BFB-0",
+   "text": "대화 검색",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "① 이력 사이드바 268px (리프 1.2.2 · 미구현)",
+    "사이드바 머리",
+    "검색"
+   ]
+  },
+  {
+   "id": "BF4-0",
+   "text": "대화",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "① 이력 사이드바 268px (리프 1.2.2 · 미구현)",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BEX-0",
+   "text": "그래프",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "① 이력 사이드바 268px (리프 1.2.2 · 미구현)",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BET-0",
+   "text": "에이전트",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "① 이력 사이드바 268px (리프 1.2.2 · 미구현)",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BES-0",
+   "text": "3",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "① 이력 사이드바 268px (리프 1.2.2 · 미구현)",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2KPO-2",
+   "text": "플러그인",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "① 이력 사이드바 268px (리프 1.2.2 · 미구현)",
+    "Frame",
+    "모드 · 플러그인"
+   ]
+  },
+  {
+   "id": "2KPV-2",
+   "text": "백테스트",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "① 이력 사이드바 268px (리프 1.2.2 · 미구현)",
+    "Frame",
+    "모드 · 백테스트"
+   ]
+  },
+  {
+   "id": "BEN-0",
+   "text": "오늘",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "① 이력 사이드바 268px (리프 1.2.2 · 미구현)",
+    "이력 목록",
+    "섹션 · 오늘"
+   ]
+  },
+  {
+   "id": "BEL-0",
+   "text": "삼성전자 흐름·재무 같이 보기",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "① 이력 사이드바 268px (리프 1.2.2 · 미구현)",
+    "이력 목록",
+    "항목 · 선택됨"
+   ]
+  },
+  {
+   "id": "BEI-0",
+   "text": "88,000 넘으면 알려줘",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "① 이력 사이드바 268px (리프 1.2.2 · 미구현)",
+    "이력 목록",
+    "항목"
+   ]
+  },
+  {
+   "id": "BEG-0",
+   "text": "코스피 프로그램 매매 동향",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "① 이력 사이드바 268px (리프 1.2.2 · 미구현)",
+    "이력 목록",
+    "항목"
+   ]
+  },
+  {
+   "id": "BEE-0",
+   "text": "어제",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "① 이력 사이드바 268px (리프 1.2.2 · 미구현)",
+    "이력 목록",
+    "섹션 · 어제"
+   ]
+  },
+  {
+   "id": "BEC-0",
+   "text": "SK하이닉스 유상증자 공시 읽기",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "① 이력 사이드바 268px (리프 1.2.2 · 미구현)",
+    "이력 목록",
+    "항목"
+   ]
+  },
+  {
+   "id": "BEA-0",
+   "text": "모의 계좌 잔고 정리",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "① 이력 사이드바 268px (리프 1.2.2 · 미구현)",
+    "이력 목록",
+    "항목"
+   ]
+  },
+  {
+   "id": "BE8-0",
+   "text": "지난 7일",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "① 이력 사이드바 268px (리프 1.2.2 · 미구현)",
+    "이력 목록",
+    "섹션 · 지난 7일"
+   ]
+  },
+  {
+   "id": "BE6-0",
+   "text": "반도체 ETF 비교",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "① 이력 사이드바 268px (리프 1.2.2 · 미구현)",
+    "이력 목록",
+    "항목"
+   ]
+  },
+  {
+   "id": "BE4-0",
+   "text": "현대차 실적 발표 일정",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "① 이력 사이드바 268px (리프 1.2.2 · 미구현)",
+    "이력 목록",
+    "항목"
+   ]
+  },
+  {
+   "id": "BE2-0",
+   "text": "더 보기",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "① 이력 사이드바 268px (리프 1.2.2 · 미구현)",
+    "이력 목록",
+    "더 보기"
+   ]
+  },
+  {
+   "id": "BDY-0",
+   "text": "모의-주력",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "① 이력 사이드바 268px (리프 1.2.2 · 미구현)",
+    "사이드바 발치 — 활성 계좌",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BDX-0",
+   "text": "토큰 5시간 42분 남음",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "① 이력 사이드바 268px (리프 1.2.2 · 미구현)",
+    "사이드바 발치 — 활성 계좌",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BFT-0",
+   "text": "에이전트",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BFV-0",
+   "text": "작업 ›",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BFW-0",
+   "text": "평일 아침 브리핑",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BFY-0",
+   "text": "활성",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "42SN-1",
+   "text": "채팅에서 열기 ↗",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "실행 액션 그룹",
+    "버튼 · 채팅에서 열기"
+   ]
+  },
+  {
+   "id": "42SP-1",
+   "text": "지금 실행",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "실행 액션 그룹",
+    "버튼 · 지금 실행 (비활성)"
+   ]
+  },
+  {
+   "id": "42SQ-1",
+   "text": "놓친 예약 없음",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "실행 액션 그룹"
+   ]
+  },
+  {
+   "id": "BG1-0",
+   "text": "이력",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BG3-0",
+   "text": "설정",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BG7-0",
+   "text": "최근 30회",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BGC-0",
+   "text": "오늘 — 8/26 화",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BGF-0",
+   "text": "07:30",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BGG-0",
+   "text": "●",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BGI-0",
+   "text": "브리핑 생성 — 핵심 3건",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BGJ-0",
+   "text": "8.2s · 뉴스 24→3 · DART 1",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BGL-0",
+   "text": "어제 — 8/25 월",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BGO-0",
+   "text": "07:30",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BGP-0",
+   "text": "●",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BGR-0",
+   "text": "긴급 항목 없음",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BGS-0",
+   "text": "5.1s · 뉴스 18건 — 임계 미달",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BGU-0",
+   "text": "8/22 금",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BGX-0",
+   "text": "07:30",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BGY-0",
+   "text": "◐",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BH0-0",
+   "text": "근접 — 임계 미달",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BH1-0",
+   "text": "관측 87,400 · 임계 88,000",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BH4-0",
+   "text": "07:31",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BH5-0",
+   "text": "○",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BH7-0",
+   "text": "억제 — 쿨다운 중",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BH8-0",
+   "text": "직전 발화 후 300초 이내",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BHA-0",
+   "text": "8/21 목",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BHD-0",
+   "text": "07:30",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BHE-0",
+   "text": "●",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BHG-0",
+   "text": "브리핑 생성 — 핵심 4건",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BHH-0",
+   "text": "SK하이닉스 공시 포함",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BHK-0",
+   "text": "15:30",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BHL-0",
+   "text": "●",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BHN-0",
+   "text": "이어진 발화 — 조건 도달",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BHO-0",
+   "text": "이 브리핑에서 감시 1건 생성",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BHQ-0",
+   "text": "지난 실행 24건 더",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BG9-0",
+   "text": "오늘 07:30 산출물",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BHU-0",
+   "text": "# 아침 브리핑 — 8/26 화",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BHW-0",
+   "text": "캔버스 카드",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BHX-0",
+   "text": "1. 삼성전자 88,000 돌파 — 감시 조건 도달",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BHY-0",
+   "text": "권장: 감시 유지 · 89,000 재설정 검토",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BHZ-0",
+   "text": "2. 반도체 공급망 뉴스 — 참고",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BI0-0",
+   "text": "3. 배당 바스켓 응집 0.58 → 0.61",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BI3-0",
+   "text": "캔버스에서 열기",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BI5-0",
+   "text": "채팅으로",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BI6-0",
+   "text": "30회 통계",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BIC-0",
+   "text": "평균",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BID-0",
+   "text": "7.4s",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BIG-0",
+   "text": "발화→열람",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BIH-0",
+   "text": "71%",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BIJ-0",
+   "text": "이어진 대화",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BIK-0",
+   "text": "9건",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "② 캔버스 영역",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "42RA-1",
+   "text": "아테나 · 에이전트 대화",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "대화 머리 — 아테나 · 에이전트 대화"
+   ]
+  },
+  {
+   "id": "42RC-1",
+   "text": "관제 창 1 · 루틴 · 알람 · 제안",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "대화 머리 — 아테나 · 에이전트 대화"
+   ]
+  },
+  {
+   "id": "B8Z-0",
+   "text": "결과물",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 하위 에이전트 · 출처 도크",
+    "결과물",
+    "Frame"
+   ]
+  },
+  {
+   "id": "B8Y-0",
+   "text": "캔버스 2",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 하위 에이전트 · 출처 도크",
+    "결과물",
+    "Frame"
+   ]
+  },
+  {
+   "id": "B8W-0",
+   "text": "네이버 뉴스 · 삼성전자 일봉",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 하위 에이전트 · 출처 도크",
+    "결과물"
+   ]
+  },
+  {
+   "id": "B8U-0",
+   "text": "하위 에이전트",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 하위 에이전트 · 출처 도크",
+    "하위 에이전트",
+    "Frame"
+   ]
+  },
+  {
+   "id": "B8T-0",
+   "text": "1 / 2",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 하위 에이전트 · 출처 도크",
+    "하위 에이전트",
+    "Frame"
+   ]
+  },
+  {
+   "id": "B8Q-0",
+   "text": "재무 해석 · 작업 중",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 하위 에이전트 · 출처 도크",
+    "하위 에이전트",
+    "Frame"
+   ]
+  },
+  {
+   "id": "B8N-0",
+   "text": "시세 수집 · 완료",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 하위 에이전트 · 출처 도크",
+    "하위 에이전트",
+    "Frame"
+   ]
+  },
+  {
+   "id": "B8K-0",
+   "text": "출처",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 하위 에이전트 · 출처 도크",
+    "출처",
+    "Frame"
+   ]
+  },
+  {
+   "id": "B8J-0",
+   "text": "3",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 하위 에이전트 · 출처 도크",
+    "출처",
+    "Frame"
+   ]
+  },
+  {
+   "id": "B8H-0",
+   "text": "일봉 차트",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 하위 에이전트 · 출처 도크",
+    "출처",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "B8F-0",
+   "text": "DART 재무제표",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 하위 에이전트 · 출처 도크",
+    "출처",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "B8D-0",
+   "text": "네이버 뉴스",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "④ 결과물 · 하위 에이전트 · 출처 도크",
+    "출처",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "42SW-1",
+   "text": "실행",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "제안 턴 E · 평일 아침 브리핑 — 07:30 놓침",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "42SY-1",
+   "text": "제안",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "제안 턴 E · 평일 아침 브리핑 — 07:30 놓침",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "42T0-1",
+   "text": "대화 경로",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "제안 턴 E · 평일 아침 브리핑 — 07:30 놓침",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "42T2-1",
+   "text": "어제 07:41",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "제안 턴 E · 평일 아침 브리핑 — 07:30 놓침",
+    "Frame"
+   ]
+  },
+  {
+   "id": "42T3-1",
+   "text": "평일 아침 브리핑 — 07:30 놓침",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "제안 턴 E · 평일 아침 브리핑 — 07:30 놓침"
+   ]
+  },
+  {
+   "id": "42T4-1",
+   "text": "근거: 마지막 발화 그제 07:30 · 앱 꺼짐 06:50~07:38",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "제안 턴 E · 평일 아침 브리핑 — 07:30 놓침"
+   ]
+  },
+  {
+   "id": "42T7-1",
+   "text": "지금 실행",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "제안 턴 E · 평일 아침 브리핑 — 07:30 놓침",
+    "칩 행",
+    "칩 · 지금 실행"
+   ]
+  },
+  {
+   "id": "42T9-1",
+   "text": "건너뛰기",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "제안 턴 E · 평일 아침 브리핑 — 07:30 놓침",
+    "칩 행",
+    "칩 · 건너뛰기"
+   ]
+  },
+  {
+   "id": "42TE-1",
+   "text": "실행",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "결과 턴 · 지금 실행 반영",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "42TG-1",
+   "text": "완료",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "결과 턴 · 지금 실행 반영",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "42TH-1",
+   "text": "어제 07:42 발화 — 브리핑 생성 · 핵심 4건",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "결과 턴 · 지금 실행 반영"
+   ]
+  },
+  {
+   "id": "42TI-1",
+   "text": "오늘 07:30 정상 발화 · 놓친 예약 없음",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "history",
+    "결과 턴 · 지금 실행 반영"
+   ]
+  },
+  {
+   "id": "B5S-0",
+   "text": "무엇이든 물어보세요",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "input-stack",
+    "input-row · 실행 중 (ESC 중단)"
+   ]
+  },
+  {
+   "id": "B5R-0",
+   "text": "29s",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "input-stack",
+    "input-row · 실행 중 (ESC 중단)",
+    "Frame"
+   ]
+  },
+  {
+   "id": "B5Q-0",
+   "text": "ESC 중단",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "input-stack",
+    "input-row · 실행 중 (ESC 중단)",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "B5I-0",
+   "text": "CLAUDE",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "input-stack",
+    "control-strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "B5G-0",
+   "text": "감시 2",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "input-stack",
+    "control-strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "B5D-0",
+   "text": "OPUS · HIGH",
+   "path": [
+    "03 · 에이전트 — 실행 이력·결과",
+    "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+    "③ 대화 영역 400px",
+    "input-stack",
+    "control-strip",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "B57-0",
+   "name": "03 · 에이전트 — 실행 이력·결과",
+   "component": "Frame",
+   "w": 1680,
+   "h": 900,
+   "depth": 0
+  },
+  {
+   "id": "B58-0",
+   "name": "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
+   "component": "Frame",
+   "w": 1520,
+   "h": 760,
+   "depth": 1
+  },
+  {
+   "id": "BFR-0",
+   "name": "타이틀바",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 2
+  },
+  {
+   "id": "BFJ-0",
+   "name": "창 제어",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "BFP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "BFQ-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9,
+   "h": 2,
+   "depth": 4
+  },
+  {
+   "id": "BFN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "BFO-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 4
+  },
+  {
+   "id": "BFK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "BFL-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "BFM-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "BDU-0",
+   "name": "① 이력 사이드바 268px (리프 1.2.2 · 미구현)",
+   "component": "Frame",
+   "w": 268,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "BF9-0",
+   "name": "사이드바 머리",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "BFF-0",
+   "name": "새 대화",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 4
+  },
+  {
+   "id": "BFH-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "BFI-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "BFA-0",
+   "name": "검색",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 4
+  },
+  {
+   "id": "BFC-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "BFE-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "BFD-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "BEP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 267,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "BF7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "BF3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "BF5-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "BF6-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "BEW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "BEY-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "BF2-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "BF1-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "BF0-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "BEZ-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "BEQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "BEU-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "BEV-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "BER-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2KPL-2",
+   "name": "모드 · 플러그인",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2KPM-2",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2KPN-2",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2KPR-2",
+   "name": "모드 · 백테스트",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2KPS-2",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2KPT-2",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2KPU-2",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "BEO-0",
+   "name": "구분선",
+   "component": "Frame",
+   "w": 0,
+   "h": 1,
+   "depth": 3
+  },
+  {
+   "id": "BE0-0",
+   "name": "이력 목록",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "BEM-0",
+   "name": "섹션 · 오늘",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "BEJ-0",
+   "name": "항목 · 선택됨",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 4
+  },
+  {
+   "id": "BEK-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 5,
+   "h": 5,
+   "depth": 5
+  },
+  {
+   "id": "BEH-0",
+   "name": "항목",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 4
+  },
+  {
+   "id": "BEF-0",
+   "name": "항목",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 4
+  },
+  {
+   "id": "BED-0",
+   "name": "섹션 · 어제",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "BEB-0",
+   "name": "항목",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 4
+  },
+  {
+   "id": "BE9-0",
+   "name": "항목",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 4
+  },
+  {
+   "id": "BE7-0",
+   "name": "섹션 · 지난 7일",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "BE5-0",
+   "name": "항목",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 4
+  },
+  {
+   "id": "BE3-0",
+   "name": "항목",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 4
+  },
+  {
+   "id": "BE1-0",
+   "name": "더 보기",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 4
+  },
+  {
+   "id": "BDV-0",
+   "name": "사이드바 발치 — 활성 계좌",
+   "component": "Frame",
+   "w": 0,
+   "h": 48,
+   "depth": 3
+  },
+  {
+   "id": "BDZ-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 4
+  },
+  {
+   "id": "BDW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "B90-0",
+   "name": "② 캔버스 영역",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "B91-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 811,
+   "h": 717,
+   "depth": 3
+  },
+  {
+   "id": "BFS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "BFU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "BFX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "BFZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "42SL-1",
+   "name": "실행 액션 그룹",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "42SM-1",
+   "name": "버튼 · 채팅에서 열기",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "42SO-1",
+   "name": "버튼 · 지금 실행 (비활성)",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "42SR-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 1,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "BG0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "BG2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "BG4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "BG5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 400,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "BG6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "BGB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "BGD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "BGE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 38,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "BGH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "BGK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "BGM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "BGN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 38,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "BGQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "BGT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "BGV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "BGW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 38,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "BGZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "BH2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "BH3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 38,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "BH6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "BH9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "BHB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "BHC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 38,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "BHF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "BHI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "BHJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 38,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "BHM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "BHP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "BG8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "BHS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "BHT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "BHV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "BI1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "BI2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "BI4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "BI7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "BIB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "BIF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "BII-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "B59-0",
+   "name": "③ 대화 영역 400px",
+   "component": "Frame",
+   "w": 400,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "42R8-1",
+   "name": "대화 머리 — 아테나 · 에이전트 대화",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "42R9-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6,
+   "h": 6,
+   "depth": 4
+  },
+  {
+   "id": "42RB-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "B89-0",
+   "name": "④ 결과물 · 하위 에이전트 · 출처 도크",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "B8V-0",
+   "name": "결과물",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "B8X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "B8L-0",
+   "name": "하위 에이전트",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "B8S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "B8P-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "B8R-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 6
+  },
+  {
+   "id": "B8M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "B8O-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 6
+  },
+  {
+   "id": "B8A-0",
+   "name": "출처",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "B8I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "B8B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "B8G-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "B8E-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "B8C-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "B5T-0",
+   "name": "history",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "42ST-1",
+   "name": "제안 턴 E · 평일 아침 브리핑 — 07:30 놓침",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "42SU-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "42SV-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "42SX-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "42SZ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "42T1-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "42T5-1",
+   "name": "칩 행",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "42T6-1",
+   "name": "칩 · 지금 실행",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "42T8-1",
+   "name": "칩 · 건너뛰기",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "42TB-1",
+   "name": "결과 턴 · 지금 실행 반영",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "42TC-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "42TD-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "42TF-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "B5A-0",
+   "name": "input-stack",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "B5N-0",
+   "name": "input-row · 실행 중 (ESC 중단)",
+   "component": "Frame",
+   "w": 0,
+   "h": 44,
+   "depth": 4
+  },
+  {
+   "id": "B5O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "B5P-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "B5B-0",
+   "name": "control-strip",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "B5J-0",
+   "name": "키우미 (#dot 대체) · 호출 중 — 얼굴 열림",
+   "component": "Frame",
+   "w": 18,
+   "h": 18,
+   "depth": 5
+  },
+  {
+   "id": "B5K-0",
+   "name": "visor",
+   "component": "Frame",
+   "w": 11,
+   "h": 11,
+   "depth": 6
+  },
+  {
+   "id": "B5M-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 2,
+   "h": 4,
+   "depth": 7
+  },
+  {
+   "id": "B5L-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 2,
+   "h": 4,
+   "depth": 7
+  },
+  {
+   "id": "B5H-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 28,
+   "depth": 5
+  },
+  {
+   "id": "B5F-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "B5E-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "B5C-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 28,
+   "depth": 5
+  }
+ ],
+ "text_multiset": {
+  "새 대화": 1,
+  "대화 검색": 1,
+  "대화": 1,
+  "그래프": 1,
+  "에이전트": 2,
+  "3": 2,
+  "플러그인": 1,
+  "백테스트": 1,
+  "오늘": 1,
+  "삼성전자 흐름·재무 같이 보기": 1,
+  "88,000 넘으면 알려줘": 1,
+  "코스피 프로그램 매매 동향": 1,
+  "어제": 1,
+  "SK하이닉스 유상증자 공시 읽기": 1,
+  "모의 계좌 잔고 정리": 1,
+  "지난 7일": 1,
+  "반도체 ETF 비교": 1,
+  "현대차 실적 발표 일정": 1,
+  "더 보기": 1,
+  "모의-주력": 1,
+  "토큰 5시간 42분 남음": 1,
+  "작업 ›": 1,
+  "평일 아침 브리핑": 1,
+  "활성": 1,
+  "채팅에서 열기 ↗": 1,
+  "지금 실행": 2,
+  "놓친 예약 없음": 1,
+  "이력": 1,
+  "설정": 1,
+  "최근 30회": 1,
+  "오늘 — 8/26 화": 1,
+  "07:30": 4,
+  "●": 4,
+  "브리핑 생성 — 핵심 3건": 1,
+  "8.2s · 뉴스 24→3 · DART 1": 1,
+  "어제 — 8/25 월": 1,
+  "긴급 항목 없음": 1,
+  "5.1s · 뉴스 18건 — 임계 미달": 1,
+  "8/22 금": 1,
+  "◐": 1,
+  "근접 — 임계 미달": 1,
+  "관측 87,400 · 임계 88,000": 1,
+  "07:31": 1,
+  "○": 1,
+  "억제 — 쿨다운 중": 1,
+  "직전 발화 후 300초 이내": 1,
+  "8/21 목": 1,
+  "브리핑 생성 — 핵심 4건": 1,
+  "SK하이닉스 공시 포함": 1,
+  "15:30": 1,
+  "이어진 발화 — 조건 도달": 1,
+  "이 브리핑에서 감시 1건 생성": 1,
+  "지난 실행 24건 더": 1,
+  "오늘 07:30 산출물": 1,
+  "# 아침 브리핑 — 8/26 화": 1,
+  "캔버스 카드": 1,
+  "1. 삼성전자 88,000 돌파 — 감시 조건 도달": 1,
+  "권장: 감시 유지 · 89,000 재설정 검토": 1,
+  "2. 반도체 공급망 뉴스 — 참고": 1,
+  "3. 배당 바스켓 응집 0.58 → 0.61": 1,
+  "캔버스에서 열기": 1,
+  "채팅으로": 1,
+  "30회 통계": 1,
+  "평균": 1,
+  "7.4s": 1,
+  "발화→열람": 1,
+  "71%": 1,
+  "이어진 대화": 1,
+  "9건": 1,
+  "아테나 · 에이전트 대화": 1,
+  "관제 창 1 · 루틴 · 알람 · 제안": 1,
+  "결과물": 1,
+  "캔버스 2": 1,
+  "네이버 뉴스 · 삼성전자 일봉": 1,
+  "하위 에이전트": 1,
+  "1 / 2": 1,
+  "재무 해석 · 작업 중": 1,
+  "시세 수집 · 완료": 1,
+  "출처": 1,
+  "일봉 차트": 1,
+  "DART 재무제표": 1,
+  "네이버 뉴스": 1,
+  "실행": 2,
+  "제안": 1,
+  "대화 경로": 1,
+  "어제 07:41": 1,
+  "평일 아침 브리핑 — 07:30 놓침": 1,
+  "근거: 마지막 발화 그제 07:30 · 앱 꺼짐 06:50~07:38": 1,
+  "건너뛰기": 1,
+  "완료": 1,
+  "어제 07:42 발화 — 브리핑 생성 · 핵심 4건": 1,
+  "오늘 07:30 정상 발화 · 놓친 예약 없음": 1,
+  "무엇이든 물어보세요": 1,
+  "29s": 1,
+  "ESC 중단": 1,
+  "CLAUDE": 1,
+  "감시 2": 1,
+  "OPUS · HIGH": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "f5e16a39f08d6dcbb0c83fcc095b4e07129dab71fd43e53b480ddee9ce5c381f"
+}

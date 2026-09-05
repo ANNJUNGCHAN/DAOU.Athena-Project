@@ -1,0 +1,1983 @@
+{
+ "board_id": "32S7-0",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-03 / R01-T7 · 차트 — 업종 지수",
+ "width": 1440,
+ "height": 960,
+ "texts": [
+  {
+   "id": "32XL-0",
+   "text": "KOSPI 반도체",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32XK-0",
+   "text": "업종 013 · KRX",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32XJ-0",
+   "text": "실시간",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32XG-0",
+   "text": "3,184.52",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32XF-0",
+   "text": "+87.96 · +2.84%",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32XE-0",
+   "text": "09:42:18",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32XB-0",
+   "text": "현재시세",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32X9-0",
+   "text": "차트",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32X7-0",
+   "text": "기업정보",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32X5-0",
+   "text": "ETF",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32X3-0",
+   "text": "ELW",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32X1-0",
+   "text": "금현물",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32WZ-0",
+   "text": "순위",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32WV-0",
+   "text": "시가 · 고가 · 저가",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32WU-0",
+   "text": "3,102.11 · 3,198.40 · 3,096.85",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32WS-0",
+   "text": "거래대금",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32WR-0",
+   "text": "4.2조",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32WQ-0",
+   "text": "전일 2.6조",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32WO-0",
+   "text": "상승 · 하락",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32WN-0",
+   "text": "71 · 23",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32WM-0",
+   "text": "보합 8",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32WK-0",
+   "text": "거래량",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32WJ-0",
+   "text": "8.4억주",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32WI-0",
+   "text": "전일 5.3억주",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32WG-0",
+   "text": "전일 대비",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32WF-0",
+   "text": "1.6배",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32WE-0",
+   "text": "거래량 기준",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32WB-0",
+   "text": "일",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32W9-0",
+   "text": "주",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32W7-0",
+   "text": "월",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32W4-0",
+   "text": "틱",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32W2-0",
+   "text": "분",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32W0-0",
+   "text": "년",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32VY-0",
+   "text": "1개월",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32VW-0",
+   "text": "3개월",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32VU-0",
+   "text": "1년",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32VR-0",
+   "text": "시세·거래량",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32VQ-0",
+   "text": "지표",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32VP-0",
+   "text": "그리기",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32VO-0",
+   "text": "초기화",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32TI-0",
+   "text": "업종 요약",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Market Profile",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32TH-0",
+   "text": "정규장",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Market Profile",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32TF-0",
+   "text": "구성",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Market Profile",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32TE-0",
+   "text": "102종목",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Market Profile",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32TC-0",
+   "text": "시가총액",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Market Profile",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32TB-0",
+   "text": "1,462조",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Market Profile",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32T9-0",
+   "text": "주도",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Market Profile",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32T8-0",
+   "text": "SK하이닉스 +2.05%",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Market Profile",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32T5-0",
+   "text": "52주 범위",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Range and Liquidity"
+   ]
+  },
+  {
+   "id": "32T4-0",
+   "text": "52주 최저 2,410",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Range and Liquidity",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32T3-0",
+   "text": "최고 3,214",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Range and Liquidity",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32SY-0",
+   "text": "거래대금",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Range and Liquidity",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32SX-0",
+   "text": "4.2조",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Range and Liquidity",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32SU-0",
+   "text": "일별 지수",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot"
+   ]
+  },
+  {
+   "id": "32ST-0",
+   "text": "09-01",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32SS-0",
+   "text": "3,184.52 · +2.84% · 71/23",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32SQ-0",
+   "text": "08-31",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32SP-0",
+   "text": "3,096.56 · +0.42% · 58/39",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32SN-0",
+   "text": "08-28",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32SM-0",
+   "text": "3,083.62 · −0.35% · 41/55",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32SJ-0",
+   "text": "알림 설정",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Chart Context Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32SH-0",
+   "text": "구성 종목",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Chart Context Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32SC-0",
+   "text": "● 실시간 갱신 중",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Status Footer"
+   ]
+  },
+  {
+   "id": "32SB-0",
+   "text": "일봉 · 거래량 · 마지막 갱신 09:42:18",
+   "path": [
+    "CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Status Footer"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "32S7-0",
+   "name": "CC-03 / R01-T7 · 차트 — 업종 지수",
+   "component": "Frame",
+   "w": 1440,
+   "h": 960,
+   "depth": 0
+  },
+  {
+   "id": "32S8-0",
+   "name": "Instrument Root · 차트",
+   "component": "Frame",
+   "w": 1440,
+   "h": 960,
+   "depth": 1
+  },
+  {
+   "id": "32S9-0",
+   "name": "Instrument Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 880,
+   "depth": 2
+  },
+  {
+   "id": "32WW-0",
+   "name": "Instrument Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 106,
+   "depth": 3
+  },
+  {
+   "id": "32XC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "32XH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "32XI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "32XD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "32WX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "32XA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "32X8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "32X6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "32X4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "32X2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "32X0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "32WY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "32WC-0",
+   "name": "Quote and Valuation Strip",
+   "component": "Frame",
+   "w": 0,
+   "h": 116,
+   "depth": 3
+  },
+  {
+   "id": "32WT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "32WP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "32WL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "32WH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "32WD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "32SD-0",
+   "name": "Chart Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 594,
+   "depth": 3
+  },
+  {
+   "id": "32TJ-0",
+   "name": "Athena Chart Module Mount",
+   "component": "Frame",
+   "w": 1000,
+   "h": 594,
+   "depth": 4
+  },
+  {
+   "id": "32VM-0",
+   "name": "Chart Toolbar",
+   "component": "Frame",
+   "w": 0,
+   "h": 46,
+   "depth": 5
+  },
+  {
+   "id": "32VS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "32WA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "32W8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "32W6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "32W5-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 1,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "32W3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "32W1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "32VZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "32VX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "32VV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "32VT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "32VN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "32TK-0",
+   "name": "Existing Athena Chart Module",
+   "component": "Frame",
+   "w": 944,
+   "h": 420,
+   "depth": 5
+  },
+  {
+   "id": "3SRR-0",
+   "name": "Athena Chart Preview",
+   "component": "SVG",
+   "w": 944,
+   "h": 420,
+   "depth": 6
+  },
+  {
+   "id": "3SRS-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SRT-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SRU-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SRV-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SRW-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SRX-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SRY-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SRZ-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SS0-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SS1-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SS2-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SS3-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SS4-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SS5-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SS6-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SS7-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SS8-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SS9-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SSA-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SSB-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SSC-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SSD-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SSE-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SSF-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SSG-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SSH-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SSI-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SSJ-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SSK-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SSL-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SSM-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SSN-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SSO-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SSP-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SSQ-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SSR-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SSS-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SST-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SSU-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SSV-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SSW-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SSX-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SSY-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SSZ-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ST0-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ST1-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ST2-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ST3-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ST4-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ST5-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ST6-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ST7-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ST8-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ST9-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3STA-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3STB-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3STC-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3STD-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3STE-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3STF-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3STG-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3STH-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3STI-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3STJ-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3STK-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3STL-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3STM-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3STN-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3STO-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3STP-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3STQ-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3STR-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3STS-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3STT-0",
+   "name": "3,184.52 · +2.84%",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3STU-0",
+   "name": "8.39억",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3STV-0",
+   "name": "6.29억",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3STW-0",
+   "name": "4.20억",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3STX-0",
+   "name": "2.10억",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3STY-0",
+   "name": "0",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3STZ-0",
+   "name": "거래량 · 주",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "32SE-0",
+   "name": "Instrument Context",
+   "component": "Frame",
+   "w": 360,
+   "h": 594,
+   "depth": 4
+  },
+  {
+   "id": "32T6-0",
+   "name": "Market Profile",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "32TG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "32TD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "32TA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "32T7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "32SV-0",
+   "name": "Range and Liquidity",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "32T2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "32SZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "32T1-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "32T0-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "32SW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "32SK-0",
+   "name": "Investor Snapshot",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "32SR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "32SO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "32SL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "32SF-0",
+   "name": "Chart Context Actions",
+   "component": "Frame",
+   "w": 312,
+   "h": 44,
+   "depth": 5
+  },
+  {
+   "id": "32SI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "32SG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "32SA-0",
+   "name": "Chart Status Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 3
+  }
+ ],
+ "text_multiset": {
+  "KOSPI 반도체": 1,
+  "업종 013 · KRX": 1,
+  "실시간": 1,
+  "3,184.52": 1,
+  "+87.96 · +2.84%": 1,
+  "09:42:18": 1,
+  "현재시세": 1,
+  "차트": 1,
+  "기업정보": 1,
+  "ETF": 1,
+  "ELW": 1,
+  "금현물": 1,
+  "순위": 1,
+  "시가 · 고가 · 저가": 1,
+  "3,102.11 · 3,198.40 · 3,096.85": 1,
+  "거래대금": 2,
+  "4.2조": 2,
+  "전일 2.6조": 1,
+  "상승 · 하락": 1,
+  "71 · 23": 1,
+  "보합 8": 1,
+  "거래량": 1,
+  "8.4억주": 1,
+  "전일 5.3억주": 1,
+  "전일 대비": 1,
+  "1.6배": 1,
+  "거래량 기준": 1,
+  "일": 1,
+  "주": 1,
+  "월": 1,
+  "틱": 1,
+  "분": 1,
+  "년": 1,
+  "1개월": 1,
+  "3개월": 1,
+  "1년": 1,
+  "시세·거래량": 1,
+  "지표": 1,
+  "그리기": 1,
+  "초기화": 1,
+  "업종 요약": 1,
+  "정규장": 1,
+  "구성": 1,
+  "102종목": 1,
+  "시가총액": 1,
+  "1,462조": 1,
+  "주도": 1,
+  "SK하이닉스 +2.05%": 1,
+  "52주 범위": 1,
+  "52주 최저 2,410": 1,
+  "최고 3,214": 1,
+  "일별 지수": 1,
+  "09-01": 1,
+  "3,184.52 · +2.84% · 71/23": 1,
+  "08-31": 1,
+  "3,096.56 · +0.42% · 58/39": 1,
+  "08-28": 1,
+  "3,083.62 · −0.35% · 41/55": 1,
+  "알림 설정": 1,
+  "구성 종목": 1,
+  "● 실시간 갱신 중": 1,
+  "일봉 · 거래량 · 마지막 갱신 09:42:18": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "feded03533881edaed102f92d5bd66de0f83c34bdb529977f5a54465cd7fcbc7"
+}

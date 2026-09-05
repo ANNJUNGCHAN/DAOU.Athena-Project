@@ -1,0 +1,227 @@
+Frame "CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값" (3JT4-0) 1440×1014
+  Frame "Hoga Card Surface" (3JT5-0) 1360×934
+    Frame "Hoga Header" (3JYE-0) 0×0
+      Frame "Frame" (3JYR-0) 0×0
+        Frame "Frame" (3JYT-0) 0×0
+          Text "삼성전자 통합 호가" (3JYX-0) 0×0 "삼성전자 통합 호가"
+          Frame "Frame" (3JYU-0) 0×0
+            Rectangle "Rectangle" (3JYW-0) 6×6
+            Text "시간외 단일가" (3JYV-0) 0×0 "시간외 단일가"
+        Text "005930 · 16:00~18:00" (3JYS-0) 0×0 "005930 · 16:00~18:00"
+      Frame "Frame" (3JYF-0) 0×0
+        Frame "정규장" (3JYP-0) 0×0
+          Text "정규장" (3JYQ-0) 0×0 "정규장"
+        Frame "시간외" (3JYN-0) 0×0
+          Text "시간외" (3JYO-0) 0×0 "시간외"
+        Frame "금현물" (3JYL-0) 0×0
+          Text "금현물" (3JYM-0) 0×0 "금현물"
+        Frame "Divider" (3JYK-0) 1×24
+        Frame "5단" (3JYI-0) 0×0
+          Text "5단" (3JYJ-0) 0×0 "5단"
+        Frame "10단" (3JYG-0) 0×0
+          Text "10단" (3JYH-0) 0×0 "10단"
+    Frame "Hoga Summary Strip" (3JXR-0) 0×0
+      Frame "Frame" (3JY8-0) 0×0
+        Text "시간외 현재가" (3JYD-0) 0×0 "시간외 현재가"
+        Frame "Frame" (3JYA-0) 0×0
+          Text "150,900" (3JYC-0) 0×0 "150,900"
+          Text "+50 · +0.03%" (3JYB-0) 0×0 "+50 · +0.03%"
+        Text "정규장 종가 150,850 대비 · …" (3JY9-0) 0×0 "정규장 종가 150,850 대비 · 16:12:41"
+      Frame "Frame" (3JY4-0) 0×0
+        Text "최우선 매도호가" (3JY7-0) 0×0 "최우선 매도호가"
+        Text "150,950" (3JY6-0) 0×0 "150,950"
+        Text "잔량 24,050주" (3JY5-0) 0×0 "잔량 24,050주"
+      Frame "Frame" (3JY0-0) 0×0
+        Text "최우선 매수호가" (3JY3-0) 0×0 "최우선 매수호가"
+        Text "150,850" (3JY2-0) 0×0 "150,850"
+        Text "잔량 15,760주" (3JY1-0) 0×0 "잔량 15,760주"
+      Frame "Frame" (3JXS-0) 0×0
+        Frame "Frame" (3JXX-0) 0×0
+          Text "매수비율" (3JXZ-0) 0×0 "매수비율"
+          Text "41.2%" (3JXY-0) 0×0 "41.2%"
+        Frame "Frame" (3JXU-0) 0×8
+          Rectangle "Rectangle" (3JXW-0) 0×8
+          Rectangle "Rectangle" (3JXV-0) 0×8
+        Text "총 잔량 193,580주 · 다음 체…" (3JXT-0) 0×0 "총 잔량 193,580주 · 다음 체결 16:20"
+    Frame "Hoga Workspace" (3JTB-0) 0×0
+      Frame "Ladder Panel" (3JUM-0) 880×0
+        Frame "Detail Table" (3KG8-0) 0×0
+          Frame "Table Head" (3KG9-0) 0×0
+            Text "단계" (3KGA-0) 80×0 "단계"
+            Text "호가" (3KGB-0) 150×0 "호가"
+            Text "잔량" (3KGC-0) 140×0 "잔량"
+            Text "직전대비" (3KGD-0) 140×0 "직전대비"
+            Frame "Frame" (3KGE-0) 0×0
+              Text "분포" (3KGF-0) 0×0 "분포"
+          Frame "Group Head 매도" (3L13-0) 0×0
+            Text "매도 5단" (3L14-0) 230×0 "매도 5단"
+            Text "113,820주" (3L15-0) 140×0 "113,820주"
+            Text "+1,240" (3L16-0) 140×0 "+1,240"
+            Frame "Frame" (3L17-0) 0×16
+          Frame "Ask Steps" (3L3H-0) 0×0
+            Frame "Ask 5" (3L3I-0) 0×0
+              Text "5단" (3L3J-0) 80×0 "5단"
+              Text "151,150" (3L3K-0) 150×0 "151,150"
+              Text "17,940" (3L3L-0) 140×0 "17,940"
+              Text "+70" (3L3M-0) 140×0 "+70"
+              Frame "Frame" (3L3N-0) 0×0
+                Rectangle "Rectangle" (3L3O-0) 0×14
+            Frame "Ask 4" (3L3P-0) 0×0
+              Text "4단" (3L3Q-0) 80×0 "4단"
+              Text "151,100" (3L3R-0) 150×0 "151,100"
+              Text "21,340" (3L3S-0) 140×0 "21,340"
+              Text "+130" (3L3T-0) 140×0 "+130"
+              Frame "Frame" (3L3U-0) 0×0
+                Rectangle "Rectangle" (3L3V-0) 0×14
+            Frame "Ask 3" (3L3W-0) 0×0
+              Text "3단" (3L3X-0) 80×0 "3단"
+              Text "151,050" (3L3Y-0) 150×0 "151,050"
+              Text "24,880" (3L3Z-0) 140×0 "24,880"
+              Text "+180" (3L40-0) 140×0 "+180"
+              Frame "Frame" (3L41-0) 0×0
+                Rectangle "Rectangle" (3L42-0) 0×14
+            Frame "Ask 2" (3L44-0) 0×0
+              Text "2단" (3L45-0) 80×0 "2단"
+              Text "151,000" (3L46-0) 150×0 "151,000"
+              Text "25,610" (3L47-0) 140×0 "25,610"
+              Text "+340" (3L48-0) 140×0 "+340"
+              Frame "Frame" (3L49-0) 0×0
+                Rectangle "Rectangle" (3L4A-0) 0×14
+            Frame "Ask 1" (3L4B-0) 0×0
+              Text "1단" (3L4C-0) 80×0 "1단"
+              Text "150,950" (3L4D-0) 150×0 "150,950"
+              Text "24,050" (3L4E-0) 140×0 "24,050"
+              Text "+520" (3L4F-0) 140×0 "+520"
+              Frame "Frame" (3L4G-0) 0×0
+                Rectangle "Rectangle" (3L4H-0) 0×14
+          Frame "Expected Price Band" (3L4W-0) 0×0
+            Frame "Frame" (3L4X-0) 0×0
+              Text "예상 체결가" (3L4Y-0) 0×0 "예상 체결가"
+              Text "150,900" (3L4Z-0) 0×0 "150,900"
+              Text "▲ 50 · +0.03%" (3L50-0) 0×0 "▲ 50 · +0.03%"
+            Text "예상 체결수량 8,420주 · 다음 …" (3L51-0) 0×0 "예상 체결수량 8,420주 · 다음 체결 16:20"
+          Frame "Group Head 매수" (3L8S-0) 0×0
+            Text "매수 5단" (3L8T-0) 230×0 "매수 5단"
+            Text "79,760주" (3L8U-0) 140×0 "79,760주"
+            Text "−860" (3L8V-0) 140×0 "−860"
+            Rectangle "Rectangle" (3L8W-0) 0×0
+          Frame "Bid Steps" (3LA8-0) 0×0
+            Frame "Bid 1" (3LA9-0) 0×0
+              Text "1단" (3LAA-0) 80×0 "1단"
+              Text "150,850" (3LAB-0) 150×0 "150,850"
+              Text "15,760" (3LAC-0) 140×0 "15,760"
+              Text "−380" (3LAD-0) 140×0 "−380"
+              Frame "Frame" (3LAE-0) 0×0
+                Rectangle "Rectangle" (3LAF-0) 0×14
+            Frame "Bid 2" (3LAG-0) 0×0
+              Text "2단" (3LAH-0) 80×0 "2단"
+              Text "150,800" (3LAI-0) 150×0 "150,800"
+              Text "16,940" (3LAJ-0) 140×0 "16,940"
+              Text "−210" (3LAK-0) 140×0 "−210"
+              Frame "Frame" (3LAL-0) 0×0
+                Rectangle "Rectangle" (3LAM-0) 0×14
+            Frame "Bid 3" (3LAN-0) 0×0
+              Text "3단" (3LAO-0) 80×0 "3단"
+              Text "150,750" (3LAP-0) 150×0 "150,750"
+              Text "15,280" (3LAQ-0) 140×0 "15,280"
+              Text "−140" (3LAR-0) 140×0 "−140"
+              Frame "Frame" (3LAS-0) 0×0
+                Rectangle "Rectangle" (3LAT-0) 0×14
+            Frame "Bid 4" (3LCI-0) 0×0
+              Text "4단" (3LCJ-0) 80×0 "4단"
+              Text "150,700" (3LCK-0) 150×0 "150,700"
+              Text "16,120" (3LCL-0) 140×0 "16,120"
+              Text "−90" (3LCM-0) 140×0 "−90"
+              Frame "Frame" (3LCN-0) 0×0
+                Rectangle "Rectangle" (3LCO-0) 0×14
+            Frame "Bid 5" (3LCP-0) 0×0
+              Text "5단" (3LCQ-0) 80×0 "5단"
+              Text "150,650" (3LCR-0) 150×0 "150,650"
+              Text "15,660" (3LCS-0) 140×0 "15,660"
+              Text "−40" (3LCT-0) 140×0 "−40"
+              Frame "Frame" (3LCU-0) 0×0
+                Rectangle "Rectangle" (3LCV-0) 0×14
+        Frame "Depth Queue Band" (3JUN-0) 0×0
+          Frame "Band Head" (3JVI-0) 0×0
+            Text "구간별 호가 잔량" (3JVK-0) 0×0 "구간별 호가 잔량"
+            Text "매도 / 매수" (3JVJ-0) 0×0 "매도 / 매수"
+          Frame "Band Cells" (3JUO-0) 0×0
+            Frame "Cell 정규장" (3JV8-0) 0×0
+              Frame "Frame" (3JVF-0) 0×0
+                Text "정규장" (3JVH-0) 0×0 "정규장"
+                Rectangle "Rectangle" (3JVG-0) 32×16
+              Text "38,160 / 43,000" (3JVE-0) 0×0 "38,160 / 43,000"
+              Frame "Frame" (3JV9-0) 0×0
+                Text "직전대비" (3JVD-0) 0×0 "직전대비"
+                Text "+2,140" (3JVC-0) 0×0 "+2,140"
+                Text "/" (3JVB-0) 0×0 "/"
+                Text "−1,380" (3JVA-0) 0×0 "−1,380"
+            Frame "Cell 시간외 단일가" (3JUX-0) 0×0
+              Frame "Frame" (3JV4-0) 0×0
+                Text "시간외 단일가" (3JV7-0) 0×0 "시간외 단일가"
+                Frame "Expand Hit" (3JV5-0) 32×16
+                  Text "▾" (3JV6-0) 0×0 "▾"
+              Text "113,820 / 79,760" (3JV3-0) 0×0 "113,820 / 79,760"
+              Frame "Frame" (3JUY-0) 0×0
+                Text "직전대비" (3JV2-0) 0×0 "직전대비"
+                Text "+1,240" (3JV1-0) 0×0 "+1,240"
+                Text "/" (3JV0-0) 0×0 "/"
+                Text "−860" (3JUZ-0) 0×0 "−860"
+            Frame "Cell NXT 애프터마켓" (3JUP-0) 0×0
+              Frame "Frame" (3JUU-0) 0×0
+                Text "NXT 애프터마켓" (3JUW-0) 0×0 "NXT 애프터마켓"
+                Rectangle "Rectangle" (3JUV-0) 32×16
+              Text "46,180 / 31,520" (3JUT-0) 0×0 "46,180 / 31,520"
+              Frame "Frame" (3JUQ-0) 0×0
+                Text "직전대비" (3JUS-0) 0×0 "직전대비"
+                Text "미제공" (3JUR-0) 0×0 "미제공"
+      Frame "Side Panel" (3JTC-0) 0×0
+        Frame "Session Block" (3UIV-0) 422×0
+          Frame "Frame" (3UIW-0) 0×22
+            Text "단일가 체결" (3UIX-0) 0×0 "단일가 체결"
+            Text "10분 주기" (3UIY-0) 0×0 "10분 주기"
+          Frame "Frame" (3UIZ-0) 0×0
+            Frame "Frame" (3UJ0-0) 0×32
+              Text "16:10" (3UJ1-0) 74×0 "16:10"
+              Text "150,900" (3UJ2-0) 0×0 "150,900"
+              Text "8,420주" (3UJ3-0) 86×0 "8,420주"
+            Frame "Frame" (3UJ4-0) 0×32
+              Text "16:00" (3UJ5-0) 74×0 "16:00"
+              Text "150,880" (3UJ6-0) 0×0 "150,880"
+              Text "12,640주" (3UJ7-0) 86×0 "12,640주"
+        Frame "Session Info Block" (3UJ9-0) 422×0
+          Frame "Frame" (3UJA-0) 0×22
+            Text "시간외 정보" (3UJB-0) 0×0 "시간외 정보"
+            Text "16:00~18:00" (3UJC-0) 0×0 "16:00~18:00"
+          Frame "Frame" (3UJD-0) 0×0
+            Frame "Frame" (3UJE-0) 0×32
+              Text "누적 거래량" (3UJF-0) 0×0 "누적 거래량"
+              Text "21,060주" (3UJG-0) 0×0 "21,060주"
+            Frame "Frame" (3UJH-0) 0×32
+              Text "누적 거래대금" (3UJI-0) 0×0 "누적 거래대금"
+              Text "31.8억" (3UJJ-0) 0×0 "31.8억"
+            Frame "Frame" (3UJK-0) 0×32
+              Text "가격 제한" (3UJL-0) 0×0 "가격 제한"
+              Text "±10%" (3UJM-0) 0×0 "±10%"
+            Frame "Frame" (3UJN-0) 0×32
+              Text "정규장 종가" (3UJO-0) 0×0 "정규장 종가"
+              Text "150,850" (3UJP-0) 0×0 "150,850"
+        Frame "Cross Market Block" (3UJR-0) 422×0
+          Frame "Frame" (3UJS-0) 0×22
+            Text "거래소별 잔량" (3UJT-0) 0×0 "거래소별 잔량"
+            Text "시간외 단일가" (3UJU-0) 0×0 "시간외 단일가"
+          Frame "Frame" (3UJV-0) 0×0
+            Frame "Frame" (3UJW-0) 0×32
+              Text "KRX 매도 / 매수" (3UJX-0) 0×0 "KRX 매도 / 매수"
+              Text "86,420 / 61,340" (3UJY-0) 0×0 "86,420 / 61,340"
+            Frame "Frame" (3UJZ-0) 0×32
+              Text "NXT 매도 / 매수" (3UK0-0) 0×0 "NXT 매도 / 매수"
+              Text "27,400 / 18,420" (3UK1-0) 0×0 "27,400 / 18,420"
+            Frame "Frame" (3UK2-0) 0×32
+              Text "LP 매도 / 매수" (3UK3-0) 0×0 "LP 매도 / 매수"
+              Text "0 / 0" (3UK4-0) 0×0 "0 / 0"
+    Frame "Hoga Status Footer" (3JT6-0) 0×0
+      Frame "Frame" (3JT8-0) 0×0
+        Rectangle "Rectangle" (3JTA-0) 6×6
+        Text "시간외 단일가 · 10분 주기" (3JT9-0) 0×0 "시간외 단일가 · 10분 주기"
+      Text "상한 165,900 · 하한 135,…" (3JT7-0) 0×0 "상한 165,900 · 하한 135,800 · 기준가 150,850"

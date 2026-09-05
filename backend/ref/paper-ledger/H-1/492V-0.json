@@ -1,0 +1,92 @@
+{
+ "board_id": "492V-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "492X-0",
+   "text": "원본 보드: CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+   "path": [
+    "note/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Frame"
+   ]
+  },
+  {
+   "id": "492Z-0",
+   "text": "가져온 요소: ELW가격급등락 · 등락률 · 근접율 · 종목코드 · 전일대비",
+   "path": [
+    "note/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4931-0",
+   "text": "문법: compound",
+   "path": [
+    "note/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4933-0",
+   "text": "접은 개수: 스칼라 2개 · 행 18개",
+   "path": [
+    "note/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "492V-0",
+   "name": "note/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "492W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "492Y-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "4930-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "4932-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-03 / R01-T6-4 · 순위 — ELW 가격급등락": 1,
+  "가져온 요소: ELW가격급등락 · 등락률 · 근접율 · 종목코드 · 전일대비": 1,
+  "문법: compound": 1,
+  "접은 개수: 스칼라 2개 · 행 18개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "1fcb29e16d12042681df77640d2775131680969fb95c6c4bcbc8cd1d0d0ead62"
+}

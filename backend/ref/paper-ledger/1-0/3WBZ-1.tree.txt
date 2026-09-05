@@ -1,0 +1,217 @@
+Frame "41 · 세션 복원 — 다시 누르면 그대로" (3WBZ-1) 1680×900
+  Frame "41 Header" (3WCP-1) 1600×86
+    Frame "Frame" (3WCQ-1) 778×56
+      Frame "Frame" (3WCR-1) 48×48
+        Text "41" (3WCS-1) 17×20 "41"
+      Frame "Frame" (3WCT-1) 714×56
+        Text "세션 복원 — 다시 누르면 그대로" (3WCU-1) 714×36 "세션 복원 — 다시 누르면 그대로"
+        Text "이력에서 백테스트 창을 다시 누르면 …" (3WCV-1) 714×18 "이력에서 백테스트 창을 다시 누르면 폼·코드·결과·로그·스크롤까지 그 자리로 돌아옵니다. 배너도 토스트도 없"
+    Frame "Frame" (3WCW-1) 109×32
+      Text "신규 · 승인 대기" (3WCX-1) 81×16 "신규 · 승인 대기"
+  Frame "41 Content" (3WCZ-1) 1600×722
+    Frame "Stage" (3WD0-1) 1150×722
+      Frame "Titlebar" (3WD3-1) 1148×46
+        Frame "Frame" (3WD4-1) 168×16
+          Text "ATHENA" (3WD5-1) 49×16 "ATHENA"
+          Rectangle "Rectangle" (3WD6-1) 1×12
+          Text "아테나" (3WD7-1) 33×16 "아테나"
+          Rectangle "Rectangle" (3WD8-1) 1×12
+          Text "백테스트" (3WD9-1) 44×16 "백테스트"
+        Frame "Frame" (3WDA-1) 59×11
+          Rectangle "Rectangle" (3WDB-1) 11×1
+          Rectangle "Rectangle" (3WDC-1) 9×9
+          Frame "Frame" (3WDD-1) 11×11
+            SVG "SVG" (3WDE-1) 11×11
+              SVGVisualElement "Path" (3WDF-1) 6×6
+      Frame "Body" (3WDG-1) 1148×674
+        Frame "Sidebar" (3WDN-1) 254×674
+          Frame "Frame" (3WDO-1) 229×20
+            Text "SESSIONS" (3WDP-1) 58×14 "SESSIONS"
+            Text "5" (3WDQ-1) 6×14 "5"
+          Frame "Row 1" (3WEM-1) 229×32
+            Frame "Frame" (3WEN-1) 16×16
+              SVG "SVG" (3WEO-1) 14×14
+                SVGVisualElement "Path" (3WEP-1) 11×8
+            Text "추세추종 v3" (3WEQ-1) 145×16 "추세추종 v3"
+            Frame "Frame" (3WER-1) 34×14
+              Text "방금" (3WES-1) 20×14 "방금"
+          Frame "Row 2 · 눌림" (3WET-1) 229×38
+            Frame "Frame" (3WEU-1) 16×16
+              SVG "SVG" (3WEV-1) 14×14
+                SVGVisualElement "Path" (3WEW-1) 11×8
+            Text "변동성 돌파 실험" (3WEX-1) 145×16 "변동성 돌파 실험"
+            Frame "Frame" (3WEY-1) 34×22
+              Frame "Frame" (3WEZ-1) 22×22
+                SVG "SVG" (3WF0-1) 13×13
+                  SVGVisualElement "Path" (3WF1-1) 8×9
+          Frame "Row 3" (3WF2-1) 229×32
+            Frame "Frame" (3WF3-1) 16×16
+              SVG "SVG" (3WF4-1) 14×14
+                SVGVisualElement "Circle" (3WF5-1) 2×2
+                SVGVisualElement "Circle" (3WF6-1) 2×2
+                SVGVisualElement "Circle" (3WF7-1) 2×2
+                SVGVisualElement "Path" (3WF8-1) 5×5
+            Text "코스피 상관 그래프" (3WF9-1) 145×16 "코스피 상관 그래프"
+            Frame "Frame" (3WFA-1) 34×14
+              Text "5일" (3WFB-1) 16×14 "5일"
+          Frame "Row 4" (3WFC-1) 229×32
+            Frame "Frame" (3WFD-1) 16×16
+              SVG "SVG" (3WFE-1) 14×14
+                SVGVisualElement "Circle" (3WFF-1) 4×4
+                SVGVisualElement "Path" (3WFG-1) 8×4
+            Text "야간 리밸런싱 점검" (3WFH-1) 145×16 "야간 리밸런싱 점검"
+            Frame "Frame" (3WFI-1) 34×14
+              Text "1주" (3WFJ-1) 16×14 "1주"
+          Frame "Row 5" (3WFK-1) 229×32
+            Frame "Frame" (3WFL-1) 16×16
+              SVG "SVG" (3WFM-1) 14×14
+                SVGVisualElement "Path" (3WFN-1) 8×9
+            Text "스니펫 감사 로그" (3WFO-1) 145×16 "스니펫 감사 로그"
+            Frame "Frame" (3WFP-1) 34×14
+              Text "2주" (3WFQ-1) 16×14 "2주"
+        Frame "Workspace" (3WGK-1) 894×674
+          Frame "WS Header" (3WGL-1) 894×52
+            Frame "Frame" (3WGM-1) 193×22
+              Text "변동성 돌파 실험" (3WGN-1) 108×20 "변동성 돌파 실험"
+              Frame "Frame" (3WGO-1) 75×22
+                SVG "SVG" (3WGP-1) 12×12
+                  SVGVisualElement "Path" (3WGQ-1) 10×7
+                Text "백테스트" (3WGR-1) 40×14 "백테스트"
+            Text "3일 전 · 완료" (3WGS-1) 65×16 "3일 전 · 완료"
+          Frame "WS Content" (3WGT-1) 894×622
+            Frame "Top Row" (3WMC-1) 870×118
+              Frame "Chat Card" (3WMD-1) 870×118
+                Frame "Frame" (3WME-1) 848×16
+                  Text "대화 · 8턴" (3WMF-1) 50×16 "대화 · 8턴"
+                  Text "마지막 2턴" (3WMG-1) 52×14 "마지막 2턴"
+                Frame "Frame" (3WMH-1) 259×31
+                  Text "k를 0.62로 올리고 손절을 -3%…" (3WMI-1) 237×15 "k를 0.62로 올리고 손절을 -3%로 바꿔서 다시 돌려줘"
+                Frame "Frame" (3WMJ-1) 229×33
+                  Text "승률 54.0%, 최대 낙폭 -9.4…" (3WMK-1) 205×15 "승률 54.0%, 최대 낙폭 -9.4%로 나아졌습니다."
+            Frame "Form Card" (3WJQ-1) 870×96
+              Frame "Frame" (3WJR-1) 848×16
+                Text "전략 폼" (3WJS-1) 37×16 "전략 폼"
+                Text "복원 6/6" (3WJT-1) 44×14 "복원 6/6"
+              Frame "Frame" (3WJU-1) 848×49
+                Frame "Frame" (3WJV-1) 206×49
+                  Text "종목" (3WJW-1) 20×14 "종목"
+                  Text "005930 · 삼성전자" (3WJX-1) 91×16 "005930 · 삼성전자"
+                Frame "Frame" (3WJY-1) 206×49
+                  Text "기간" (3WJZ-1) 20×14 "기간"
+                  Text "2023-01 ~ 2025-12" (3WK0-1) 98×16 "2023-01 ~ 2025-12"
+                Frame "Frame" (3WK1-1) 206×49
+                  Text "돌파 계수 k" (3WK2-1) 53×14 "돌파 계수 k"
+                  Text "0.62" (3WK3-1) 21×16 "0.62"
+                Frame "Frame" (3WK4-1) 206×49
+                  Text "손절 · 수수료" (3WK5-1) 60×14 "손절 · 수수료"
+                  Text "-3.0% · 0.015%" (3WK6-1) 75×16 "-3.0% · 0.015%"
+            Frame "Code Card" (3WK8-1) 870×130
+              Frame "Frame" (3WK9-1) 846×14
+                Text "strategy.py · 84 lin…" (3WKA-1) 132×14 "strategy.py · 84 lines"
+                Text "restored" (3WKB-1) 48×14 "restored"
+              Text "def signal(df, k=0.6…" (3WKC-1) 282×84 "def signal(df, k=0.62):
+    rng = df.high.shift(1) - df.low."
+            Frame "Result Card" (3WKE-1) 870×150
+              Frame "Chart" (3WKF-1) 578×132
+                Frame "Frame" (3WKG-1) 578×14
+                  Frame "Frame" (3WKH-1) 37×14
+                    Rectangle "Rectangle" (3WKI-1) 12×2
+                    Text "전략" (3WKJ-1) 20×14 "전략"
+                  Frame "Frame" (3WKK-1) 57×14
+                    Rectangle "Rectangle" (3WKL-1) 12×2
+                    Text "매수보유" (3WKM-1) 40×14 "매수보유"
+                Frame "Frame" (3WKN-1) 578×114
+                  SVG "SVG" (3WKO-1) 529×82
+                    SVGVisualElement "Path" (3WKP-1) 525×66
+                    SVGVisualElement "Path" (3WKQ-1) 525×31
+              Frame "Metrics" (3WKR-1) 262×132
+                Frame "Frame" (3WKS-1) 262×27
+                  Text "누적 수익률" (3WKT-1) 54×14 "누적 수익률"
+                  Text "+41.8%" (3WKU-1) 38×15 "+41.8%"
+                Frame "Frame" (3WKV-1) 262×27
+                  Text "최대 낙폭" (3WKW-1) 44×14 "최대 낙폭"
+                  Text "-9.4%" (3WKX-1) 29×15 "-9.4%"
+                Frame "Frame" (3WKY-1) 262×27
+                  Text "샤프" (3WKZ-1) 20×14 "샤프"
+                  Text "1.32" (3WL0-1) 21×15 "1.32"
+                Frame "Frame" (3WL1-1) 262×27
+                  Text "거래 · 승률" (3WL2-1) 50×14 "거래 · 승률"
+                  Text "126회 · 54%" (3WL3-1) 61×15 "126회 · 54%"
+            Frame "Log Card" (3WL5-1) 870×68
+              Text "14:02:11 run start ·…" (3WL6-1) 228×14 "14:02:11 run start · bars 736 · k=0.62"
+              Text "14:02:19 trades 126 …" (3WL7-1) 258×14 "14:02:19 trades 126 · win 54.0% · mdd -9.4%"
+              Text "14:02:19 done · 스크롤 …" (3WL8-1) 188×14 "14:02:19 done · 스크롤 위치 저장됨"
+    Frame "Interaction Rail" (3WD1-1) 426×722
+      Frame "Rail Header" (3WMM-1) 388×34
+        Text "복원은 계약이다" (3WMN-1) 111×21 "복원은 계약이다"
+        Text "RESTORE" (3WMO-1) 49×14 "RESTORE"
+      Frame "Rule 1" (3WMP-1) 388×191
+        Frame "Frame" (3WMQ-1) 358×20
+          Frame "Frame" (3WMR-1) 20×20
+            Text "1" (3WMS-1) 6×12 "1"
+          Text "무엇이 반드시 돌아오는가" (3WMT-1) 141×16 "무엇이 반드시 돌아오는가"
+        Frame "Frame" (3WMU-1) 358×95
+          Frame "Frame" (3WMV-1) 358×15
+            Frame "Frame" (3WMW-1) 12×12
+              SVG "SVG" (3WMX-1) 12×12
+                SVGVisualElement "Path" (3WMY-1) 8×6
+            Text "대화 전체 — 8턴 그대로" (3WMZ-1) 110×15 "대화 전체 — 8턴 그대로"
+          Frame "Frame" (3WN0-1) 358×15
+            Frame "Frame" (3WN1-1) 12×12
+              SVG "SVG" (3WN2-1) 12×12
+                SVGVisualElement "Path" (3WN3-1) 8×6
+            Text "전략 폼 값 6개 — 마지막 입력 그…" (3WN4-1) 171×15 "전략 폼 값 6개 — 마지막 입력 그대로"
+          Frame "Frame" (3WN5-1) 358×15
+            Frame "Frame" (3WN6-1) 12×12
+              SVG "SVG" (3WN7-1) 12×12
+                SVGVisualElement "Path" (3WN8-1) 8×6
+            Text "사용자가 쓴 파이썬 코드 84줄" (3WN9-1) 136×15 "사용자가 쓴 파이썬 코드 84줄"
+          Frame "Frame" (3WNA-1) 358×15
+            Frame "Frame" (3WNB-1) 12×12
+              SVG "SVG" (3WNC-1) 12×12
+                SVGVisualElement "Path" (3WND-1) 8×6
+            Text "결과 카드 3장 — 원본 데이터까지" (3WNE-1) 154×15 "결과 카드 3장 — 원본 데이터까지"
+          Frame "Frame" (3WNF-1) 358×15
+            Frame "Frame" (3WNG-1) 12×12
+              SVG "SVG" (3WNH-1) 12×12
+                SVGVisualElement "Path" (3WNI-1) 8×6
+            Text "실행 로그와 스크롤 위치" (3WNJ-1) 111×15 "실행 로그와 스크롤 위치"
+        Text "Silent Restore Note" (49VN-0) 358×30 "전부 돌아왔으면 아무 말도 하지 않습니다 — '복원됨' 배너나 토스트 없이 그 자리가 그냥 열립니다. 말하는"
+      Frame "Rule 2" (3WNL-1) 388×103
+        Frame "Frame" (3WNM-1) 358×20
+          Frame "Frame" (3WNN-1) 20×20
+            Text "2" (3WNO-1) 6×12 "2"
+          Text "실행 중이던 것도 그대로 돌아온다" (3WNP-1) 185×16 "실행 중이던 것도 그대로 돌아온다"
+        Text "계산은 창과 무관하게 백그라운드 jo…" (3WNQ-1) 358×45 "계산은 창과 무관하게 백그라운드 job으로 도고, 세션은 job id를 들고 있습니다. 다시 열면 진행률·부"
+      Frame "Rule 3" (3WNR-1) 388×184
+        Frame "Frame" (3WNS-1) 358×20
+          Frame "Frame" (3WNT-1) 20×20
+            Text "3" (3WNU-1) 6×12 "3"
+          Text "일부만 복원되면 말한다" (3WNV-1) 129×16 "일부만 복원되면 말한다"
+        Text "빠진 것이 있으면 조용히 넘어가지 않…" (3WNW-1) 358×30 "빠진 것이 있으면 조용히 넘어가지 않습니다. 30번 보드 ‘대화 턴 복원 실패’와 같은 어휘로, 무엇이 빠졌"
+        Frame "Frame" (3WNX-1) 358×88
+          Frame "Frame" (3WNY-1) 336×15
+            Frame "Frame" (3WNZ-1) 13×13
+              SVG "SVG" (3WO0-1) 13×13
+                SVGVisualElement "Path" (3WO1-1) 10×8
+                SVGVisualElement "Path" (3WO2-1) 0×4
+            Text "일부만 복원했습니다" (3WO3-1) 94×15 "일부만 복원했습니다"
+          Text "결과 데이터셋 1장을 찾지 못했습니다…" (3WO4-1) 336×15 "결과 데이터셋 1장을 찾지 못했습니다. 폼·코드·로그는 그대로입니다."
+          Frame "Frame" (3WO5-1) 336×26
+            Frame "Frame" (3WO6-1) 64×24
+              Text "다시 시도" (3WO7-1) 44×14 "다시 시도"
+            Frame "Frame" (3WO8-1) 76×26
+              Text "이대로 열기" (3WO9-1) 54×14 "이대로 열기"
+      Frame "Gap Note" (3WOB-1) 388×124
+        Frame "Frame" (3WOC-1) 358×16
+          Frame "Frame" (3WOD-1) 16×16
+            SVG "SVG" (3WOE-1) 16×16
+              SVGVisualElement "Circle" (3WOF-1) 11×11
+              SVGVisualElement "Path" (3WOG-1) 0×6
+          Text "2026-09-05 개정 — 실앱에서…" (3WOH-1) 210×16 "2026-09-05 개정 — 실앱에서 어긋났던 것"
+        Frame "Frame" (3WOI-1) 358×30
+          Text "01" (3WOJ-1) 16×15 "01"
+          Text "실앱은 채팅 맨 위에 '복원됨 · 제…" (3WOK-1) 334×30 "실앱은 채팅 맨 위에 '복원됨 · 제목' 배너와 '이어서 말할 수 있습니다' 문구를 그렸습니다. 지웁니다 —"
+        Frame "Frame" (3WOL-1) 358×30
+          Text "02" (3WOM-1) 16×15 "02"
+          Text "일부만 복원됐을 때의 안내(3번)는 …" (3WON-1) 334×30 "일부만 복원됐을 때의 안내(3번)는 아직 코드에 없습니다. 열 수 없으면 아예 열지 않고(restorable"

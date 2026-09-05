@@ -1,0 +1,2293 @@
+{
+ "board_id": "2RBO-1",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+ "width": 1440,
+ "height": 960,
+ "texts": [
+  {
+   "id": "2RGU-1",
+   "text": "삼성전자",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RGT-1",
+   "text": "005930 · KOSPI · KRX",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A4B-0",
+   "text": "정규장",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame",
+    "Session Chips",
+    "장구분 칩"
+   ]
+  },
+  {
+   "id": "3A4D-0",
+   "text": "실시간",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame",
+    "Session Chips",
+    "실시간 칩"
+   ]
+  },
+  {
+   "id": "2RGP-1",
+   "text": "150,850원",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RGO-1",
+   "text": "+1,850 · +1.24%",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RGN-1",
+   "text": "09:42:18",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RGK-1",
+   "text": "현재시세",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RGI-1",
+   "text": "차트",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RGG-1",
+   "text": "기업정보",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RGE-1",
+   "text": "ETF",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RGC-1",
+   "text": "ELW",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RGA-1",
+   "text": "금현물",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2WFH-0",
+   "text": "순위",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RG6-1",
+   "text": "시가 · 고가 · 저가",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RG5-1",
+   "text": "149,200 · 152,400 · 148,100",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RG3-1",
+   "text": "거래량",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RG2-1",
+   "text": "1,420만주",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RG1-1",
+   "text": "거래대금 2.14조원",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RFZ-1",
+   "text": "PER",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RFY-1",
+   "text": "21.2배",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RFX-1",
+   "text": "업종 11.2배",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RFV-1",
+   "text": "PBR",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RFU-1",
+   "text": "2.63배",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RFT-1",
+   "text": "업종 1.61배",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RFR-1",
+   "text": "ROE",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RFQ-1",
+   "text": "8.4%",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RFP-1",
+   "text": "전년 7.9%",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RGW-1",
+   "text": "기업 개요",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RGX-1",
+   "text": "보통주 기준",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EU5-0",
+   "text": "결산월",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "기업 개요 4칸",
+    "결산월"
+   ]
+  },
+  {
+   "id": "3EU6-0",
+   "text": "12월",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "기업 개요 4칸",
+    "결산월"
+   ]
+  },
+  {
+   "id": "3EU8-0",
+   "text": "액면가",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "기업 개요 4칸",
+    "액면가"
+   ]
+  },
+  {
+   "id": "3EU9-0",
+   "text": "100원",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "기업 개요 4칸",
+    "액면가"
+   ]
+  },
+  {
+   "id": "3EUB-0",
+   "text": "자본금",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "기업 개요 4칸",
+    "자본금"
+   ]
+  },
+  {
+   "id": "3EUC-0",
+   "text": "5,970억원",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "기업 개요 4칸",
+    "자본금"
+   ]
+  },
+  {
+   "id": "3EUE-0",
+   "text": "상장주식",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "기업 개요 4칸",
+    "상장주식"
+   ]
+  },
+  {
+   "id": "3EUF-0",
+   "text": "59억 6,978만주",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "기업 개요 4칸",
+    "상장주식"
+   ]
+  },
+  {
+   "id": "3EW5-0",
+   "text": "가치 지표",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "가치 지표"
+   ]
+  },
+  {
+   "id": "3EW7-0",
+   "text": "PER",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "가치 지표",
+    "PER"
+   ]
+  },
+  {
+   "id": "3EW9-0",
+   "text": "21.2배",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "가치 지표",
+    "PER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EWA-0",
+   "text": "EPS 7,115원",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "가치 지표",
+    "PER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EWC-0",
+   "text": "PBR",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "가치 지표",
+    "PBR"
+   ]
+  },
+  {
+   "id": "3EWE-0",
+   "text": "2.63배",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "가치 지표",
+    "PBR",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EWF-0",
+   "text": "BPS 57,320원",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "가치 지표",
+    "PBR",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3EWH-0",
+   "text": "ROE",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "가치 지표",
+    "ROE"
+   ]
+  },
+  {
+   "id": "3EWI-0",
+   "text": "8.4%",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "가치 지표",
+    "ROE"
+   ]
+  },
+  {
+   "id": "3EWK-0",
+   "text": "EV",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "가치 지표",
+    "EV"
+   ]
+  },
+  {
+   "id": "3EWL-0",
+   "text": "868.2조원",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "가치 지표",
+    "EV"
+   ]
+  },
+  {
+   "id": "39RC-0",
+   "text": "가격 이력 · 기준",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "가격 이력 · 기준"
+   ]
+  },
+  {
+   "id": "39RE-0",
+   "text": "250일 최고",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "가격 이력 · 기준",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39RG-0",
+   "text": "153,400 · 08/21",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "가격 이력 · 기준",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39RH-0",
+   "text": "현재가 대비 −1.66%",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "가격 이력 · 기준",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39RJ-0",
+   "text": "250일 최저",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "가격 이력 · 기준",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39RL-0",
+   "text": "67,700 · 11/03",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "가격 이력 · 기준",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39RM-0",
+   "text": "현재가 대비 +122.8%",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "가격 이력 · 기준",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39RO-0",
+   "text": "기준가",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "가격 이력 · 기준",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39RP-0",
+   "text": "149,000",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "가격 이력 · 기준",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39RR-0",
+   "text": "상한가",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "가격 이력 · 기준",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39RS-0",
+   "text": "193,700",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "가격 이력 · 기준",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39RU-0",
+   "text": "하한가",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "가격 이력 · 기준",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39RV-0",
+   "text": "104,300",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "가격 이력 · 기준",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39RX-0",
+   "text": "예상 체결",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "가격 이력 · 기준",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39RZ-0",
+   "text": "150,900 · 8,420주",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "가격 이력 · 기준",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39S0-0",
+   "text": "08:50 기준",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "가격 이력 · 기준",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39S8-0",
+   "text": "수급 · 신용",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "수급 · 신용"
+   ]
+  },
+  {
+   "id": "39SA-0",
+   "text": "외인소진율",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "수급 · 신용",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39SB-0",
+   "text": "65.5%",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "수급 · 신용",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39SD-0",
+   "text": "신용비율",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "수급 · 신용",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39SF-0",
+   "text": "0.86%",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "수급 · 신용",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39SG-0",
+   "text": "신용잔고율 0.52%",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "수급 · 신용",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39SI-0",
+   "text": "대용가",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "수급 · 신용",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39SK-0",
+   "text": "118,800",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "수급 · 신용",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39SL-0",
+   "text": "기준가 대비 79.7%",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "수급 · 신용",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39SN-0",
+   "text": "연중최고",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "수급 · 신용",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39SO-0",
+   "text": "153,400",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "수급 · 신용",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39SQ-0",
+   "text": "연중최저",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "수급 · 신용",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39SR-0",
+   "text": "112,300",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "수급 · 신용",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39ST-0",
+   "text": "유통비율",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "수급 · 신용",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39SU-0",
+   "text": "74.4%",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "Frame",
+    "수급 · 신용",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F3I-0",
+   "text": "실적 스냅샷",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "실적 스냅샷",
+    "실적 스냅샷 제목"
+   ]
+  },
+  {
+   "id": "3F3J-0",
+   "text": "최근 결산 · 연간",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "실적 스냅샷",
+    "실적 스냅샷 제목"
+   ]
+  },
+  {
+   "id": "3F3M-0",
+   "text": "매출액",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "실적 스냅샷",
+    "실적 3칸",
+    "매출액"
+   ]
+  },
+  {
+   "id": "3F3N-0",
+   "text": "300조 8,700억원",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "실적 스냅샷",
+    "실적 3칸",
+    "매출액"
+   ]
+  },
+  {
+   "id": "3F3P-0",
+   "text": "영업이익",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "실적 스냅샷",
+    "실적 3칸",
+    "영업이익"
+   ]
+  },
+  {
+   "id": "3F3Q-0",
+   "text": "52조 8,000억원",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "실적 스냅샷",
+    "실적 3칸",
+    "영업이익"
+   ]
+  },
+  {
+   "id": "3F3S-0",
+   "text": "당기순이익",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "실적 스냅샷",
+    "실적 3칸",
+    "당기순이익"
+   ]
+  },
+  {
+   "id": "3F3T-0",
+   "text": "48조 1,600억원",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Corp Info Mount",
+    "실적 스냅샷",
+    "실적 3칸",
+    "당기순이익"
+   ]
+  },
+  {
+   "id": "2RCZ-1",
+   "text": "종목 요약",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Market Profile",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RCY-1",
+   "text": "정상 거래",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Market Profile",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F3W-0",
+   "text": "시가총액",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Market Profile",
+    "시가총액"
+   ]
+  },
+  {
+   "id": "3F3Y-0",
+   "text": "900.4조원",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Market Profile",
+    "시가총액",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3F3Z-0",
+   "text": "코스피 비중 21.4%",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Market Profile",
+    "시가총액",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RCT-1",
+   "text": "외국인 보유",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Market Profile",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RCS-1",
+   "text": "52.41%",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Market Profile",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RCQ-1",
+   "text": "유통 주식",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Market Profile",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RCP-1",
+   "text": "44.4억주",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Market Profile",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RCM-1",
+   "text": "가격 범위",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Range and Liquidity"
+   ]
+  },
+  {
+   "id": "2RCL-1",
+   "text": "52주 최저 67,700",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Range and Liquidity",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RCK-1",
+   "text": "최고 153,400",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Range and Liquidity",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RCF-1",
+   "text": "거래대금",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Range and Liquidity",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RCE-1",
+   "text": "2.14조원",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Range and Liquidity",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RCB-1",
+   "text": "오늘의 수급",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot"
+   ]
+  },
+  {
+   "id": "2RCA-1",
+   "text": "외국인",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RC9-1",
+   "text": "+128억원",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RC7-1",
+   "text": "기관",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RC6-1",
+   "text": "+196억원",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RC4-1",
+   "text": "개인",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RC3-1",
+   "text": "−312억원",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Investor Snapshot",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RC0-1",
+   "text": "알림 설정",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Chart Context Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RBY-1",
+   "text": "호가 열기",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Chart Context Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RBT-1",
+   "text": "● 기본정보 조회 기준 09:42",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Status Footer"
+   ]
+  },
+  {
+   "id": "2RBS-1",
+   "text": "결산 12월 · 증거금율 20% · 통화단위 원",
+   "path": [
+    "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Instrument Root · 기업정보",
+    "Instrument Card Surface",
+    "Chart Status Footer"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "2RBO-1",
+   "name": "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+   "component": "Frame",
+   "w": 1440,
+   "h": 960,
+   "depth": 0
+  },
+  {
+   "id": "2RBP-1",
+   "name": "Instrument Root · 기업정보",
+   "component": "Frame",
+   "w": 1440,
+   "h": 960,
+   "depth": 1
+  },
+  {
+   "id": "2RBQ-1",
+   "name": "Instrument Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 880,
+   "depth": 2
+  },
+  {
+   "id": "2RG7-1",
+   "name": "Instrument Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 106,
+   "depth": 3
+  },
+  {
+   "id": "2RGL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2RGQ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3A49-0",
+   "name": "Session Chips",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3A4A-0",
+   "name": "장구분 칩",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3A4C-0",
+   "name": "실시간 칩",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2RGM-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2RG8-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2RGJ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2RGH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2RGF-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2RGD-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2RGB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2RG9-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2WFG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2RFN-1",
+   "name": "Quote and Valuation Strip",
+   "component": "Frame",
+   "w": 0,
+   "h": 116,
+   "depth": 3
+  },
+  {
+   "id": "2RG4-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2RG0-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2RFW-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2RFS-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2RFO-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2RBU-1",
+   "name": "Chart Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 594,
+   "depth": 3
+  },
+  {
+   "id": "2RD0-1",
+   "name": "Corp Info Mount",
+   "component": "Frame",
+   "w": 1000,
+   "h": 594,
+   "depth": 4
+  },
+  {
+   "id": "2RGV-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3EU3-0",
+   "name": "기업 개요 4칸",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3EU4-0",
+   "name": "결산월",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3EU7-0",
+   "name": "액면가",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3EUA-0",
+   "name": "자본금",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3EUD-0",
+   "name": "상장주식",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2RHC-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3EW4-0",
+   "name": "가치 지표",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3EW6-0",
+   "name": "PER",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 7
+  },
+  {
+   "id": "3EW8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3EWB-0",
+   "name": "PBR",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 7
+  },
+  {
+   "id": "3EWD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3EWG-0",
+   "name": "ROE",
+   "component": "Frame",
+   "w": 0,
+   "h": 24,
+   "depth": 7
+  },
+  {
+   "id": "3EWJ-0",
+   "name": "EV",
+   "component": "Frame",
+   "w": 0,
+   "h": 24,
+   "depth": 7
+  },
+  {
+   "id": "39RB-0",
+   "name": "가격 이력 · 기준",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39RD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 7
+  },
+  {
+   "id": "39RF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "39RI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 7
+  },
+  {
+   "id": "39RK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "39RN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 24,
+   "depth": 7
+  },
+  {
+   "id": "39RQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 24,
+   "depth": 7
+  },
+  {
+   "id": "39RT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 24,
+   "depth": 7
+  },
+  {
+   "id": "39RW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 7
+  },
+  {
+   "id": "39RY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "39S7-0",
+   "name": "수급 · 신용",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39S9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 24,
+   "depth": 7
+  },
+  {
+   "id": "39SC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 7
+  },
+  {
+   "id": "39SE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "39SH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 7
+  },
+  {
+   "id": "39SJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "39SM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 24,
+   "depth": 7
+  },
+  {
+   "id": "39SP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 24,
+   "depth": 7
+  },
+  {
+   "id": "39SS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 24,
+   "depth": 7
+  },
+  {
+   "id": "3F3G-0",
+   "name": "실적 스냅샷",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3F3H-0",
+   "name": "실적 스냅샷 제목",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3F3K-0",
+   "name": "실적 3칸",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3F3L-0",
+   "name": "매출액",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3F3O-0",
+   "name": "영업이익",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3F3R-0",
+   "name": "당기순이익",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2RBV-1",
+   "name": "Instrument Context",
+   "component": "Frame",
+   "w": 360,
+   "h": 594,
+   "depth": 4
+  },
+  {
+   "id": "2RCN-1",
+   "name": "Market Profile",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2RCX-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3F3V-0",
+   "name": "시가총액",
+   "component": "Frame",
+   "w": 0,
+   "h": 42,
+   "depth": 6
+  },
+  {
+   "id": "3F3X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2RCR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 42,
+   "depth": 6
+  },
+  {
+   "id": "2RCO-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 42,
+   "depth": 6
+  },
+  {
+   "id": "2RCC-1",
+   "name": "Range and Liquidity",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2RCJ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2RCG-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "2RCI-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "2RCH-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "2RCD-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2RC1-1",
+   "name": "Investor Snapshot",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2RC8-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 38,
+   "depth": 6
+  },
+  {
+   "id": "2RC5-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 38,
+   "depth": 6
+  },
+  {
+   "id": "2RC2-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 38,
+   "depth": 6
+  },
+  {
+   "id": "2RBW-1",
+   "name": "Chart Context Actions",
+   "component": "Frame",
+   "w": 312,
+   "h": 44,
+   "depth": 5
+  },
+  {
+   "id": "2RBZ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "2RBX-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "2RBR-1",
+   "name": "Chart Status Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 3
+  }
+ ],
+ "text_multiset": {
+  "삼성전자": 1,
+  "005930 · KOSPI · KRX": 1,
+  "정규장": 1,
+  "실시간": 1,
+  "150,850원": 1,
+  "+1,850 · +1.24%": 1,
+  "09:42:18": 1,
+  "현재시세": 1,
+  "차트": 1,
+  "기업정보": 1,
+  "ETF": 1,
+  "ELW": 1,
+  "금현물": 1,
+  "순위": 1,
+  "시가 · 고가 · 저가": 1,
+  "149,200 · 152,400 · 148,100": 1,
+  "거래량": 1,
+  "1,420만주": 1,
+  "거래대금 2.14조원": 1,
+  "PER": 2,
+  "21.2배": 2,
+  "업종 11.2배": 1,
+  "PBR": 2,
+  "2.63배": 2,
+  "업종 1.61배": 1,
+  "ROE": 2,
+  "8.4%": 2,
+  "전년 7.9%": 1,
+  "기업 개요": 1,
+  "보통주 기준": 1,
+  "결산월": 1,
+  "12월": 1,
+  "액면가": 1,
+  "100원": 1,
+  "자본금": 1,
+  "5,970억원": 1,
+  "상장주식": 1,
+  "59억 6,978만주": 1,
+  "가치 지표": 1,
+  "EPS 7,115원": 1,
+  "BPS 57,320원": 1,
+  "EV": 1,
+  "868.2조원": 1,
+  "가격 이력 · 기준": 1,
+  "250일 최고": 1,
+  "153,400 · 08/21": 1,
+  "현재가 대비 −1.66%": 1,
+  "250일 최저": 1,
+  "67,700 · 11/03": 1,
+  "현재가 대비 +122.8%": 1,
+  "기준가": 1,
+  "149,000": 1,
+  "상한가": 1,
+  "193,700": 1,
+  "하한가": 1,
+  "104,300": 1,
+  "예상 체결": 1,
+  "150,900 · 8,420주": 1,
+  "08:50 기준": 1,
+  "수급 · 신용": 1,
+  "외인소진율": 1,
+  "65.5%": 1,
+  "신용비율": 1,
+  "0.86%": 1,
+  "신용잔고율 0.52%": 1,
+  "대용가": 1,
+  "118,800": 1,
+  "기준가 대비 79.7%": 1,
+  "연중최고": 1,
+  "153,400": 1,
+  "연중최저": 1,
+  "112,300": 1,
+  "유통비율": 1,
+  "74.4%": 1,
+  "실적 스냅샷": 1,
+  "최근 결산 · 연간": 1,
+  "매출액": 1,
+  "300조 8,700억원": 1,
+  "영업이익": 1,
+  "52조 8,000억원": 1,
+  "당기순이익": 1,
+  "48조 1,600억원": 1,
+  "종목 요약": 1,
+  "정상 거래": 1,
+  "시가총액": 1,
+  "900.4조원": 1,
+  "코스피 비중 21.4%": 1,
+  "외국인 보유": 1,
+  "52.41%": 1,
+  "유통 주식": 1,
+  "44.4억주": 1,
+  "가격 범위": 1,
+  "52주 최저 67,700": 1,
+  "최고 153,400": 1,
+  "거래대금": 1,
+  "2.14조원": 1,
+  "오늘의 수급": 1,
+  "외국인": 1,
+  "+128억원": 1,
+  "기관": 1,
+  "+196억원": 1,
+  "개인": 1,
+  "−312억원": 1,
+  "알림 설정": 1,
+  "호가 열기": 1,
+  "● 기본정보 조회 기준 09:42": 1,
+  "결산 12월 · 증거금율 20% · 통화단위 원": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "2e8f8e2e4f55ee9f07d70203fe63d14089383f98f1eb15b94cf4b9205d7dc9b9"
+}

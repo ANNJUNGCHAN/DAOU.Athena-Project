@@ -1,0 +1,7286 @@
+{
+ "board_id": "2ZHC-0",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+ "width": 1440,
+ "height": 1120,
+ "texts": [
+  {
+   "id": "3IWJ-0",
+   "text": "주식 순위",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IWK-0",
+   "text": "KRX 전체 · 52주 고저가 근접",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IWM-0",
+   "text": "고가 근접 41 · 저가 근접 9",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IWN-0",
+   "text": "최소 근접률 0.6%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IWO-0",
+   "text": "09:42:18 조회",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IWS-0",
+   "text": "현재시세",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Header",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IWU-0",
+   "text": "차트",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Header",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IWW-0",
+   "text": "기업정보",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Header",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IWY-0",
+   "text": "ETF",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Header",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IX0-0",
+   "text": "ELW",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Header",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IX2-0",
+   "text": "금현물",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Header",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IX4-0",
+   "text": "순위",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Header",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IX5-0",
+   "text": "전체 50건 · 20건 표시",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IX8-0",
+   "text": "정렬 기준",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "KPI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IX9-0",
+   "text": "근접률 낮은 순",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "KPI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IXB-0",
+   "text": "신고가 근접",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "KPI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IXC-0",
+   "text": "41",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "KPI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IXD-0",
+   "text": "52주 고가 대비",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "KPI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IXF-0",
+   "text": "신저가 근접",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "KPI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IXG-0",
+   "text": "9",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "KPI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IXH-0",
+   "text": "52주 저가 대비",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "KPI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IXJ-0",
+   "text": "최소 근접률",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "KPI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IXK-0",
+   "text": "0.6%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "KPI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IXL-0",
+   "text": "1위 종목",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "KPI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IXN-0",
+   "text": "평균 잔여",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "KPI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IXO-0",
+   "text": "1,830원",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "KPI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IXP-0",
+   "text": "근접 종목",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "KPI",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IXW-0",
+   "text": "신고저가",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Chips",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IXY-0",
+   "text": "상하한가",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Chips",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IY0-0",
+   "text": "고저가근접",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Chips",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IY2-0",
+   "text": "가격급등락",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Chips",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IY4-0",
+   "text": "거래량갱신",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Chips",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IY6-0",
+   "text": "범위",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Chips",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IY8-0",
+   "text": "주식",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Chips",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IYA-0",
+   "text": "ETF",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Chips",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IYC-0",
+   "text": "ELW",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Chips",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IYF-0",
+   "text": "매물대집중",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Chips",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IYH-0",
+   "text": "고저 PER",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Chips",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IYJ-0",
+   "text": "시가대비 등락",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Chips",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IYL-0",
+   "text": "VI 발동",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Chips",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IYN-0",
+   "text": "당일·전일 체결량",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Chips",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IYQ-0",
+   "text": "순위",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Head"
+   ]
+  },
+  {
+   "id": "3IYR-0",
+   "text": "종목",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Head"
+   ]
+  },
+  {
+   "id": "3IYS-0",
+   "text": "현재가",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Head"
+   ]
+  },
+  {
+   "id": "3IYT-0",
+   "text": "근접률",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Head"
+   ]
+  },
+  {
+   "id": "3IYU-0",
+   "text": "당일 고가·저가",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Head"
+   ]
+  },
+  {
+   "id": "3IYV-0",
+   "text": "호가",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Head"
+   ]
+  },
+  {
+   "id": "3IYW-0",
+   "text": "거래량 · 거래대금",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Head"
+   ]
+  },
+  {
+   "id": "3IYX-0",
+   "text": "시장",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Head"
+   ]
+  },
+  {
+   "id": "3IZK-0",
+   "text": "1",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IZM-0",
+   "text": "현대차",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IZN-0",
+   "text": "005380",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IZP-0",
+   "text": "232,500",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IZQ-0",
+   "text": "+3,000 · +1.31%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IZS-0",
+   "text": "고가 0.6%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IZT-0",
+   "text": "잔여 1,400원",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IZV-0",
+   "text": "고가 233,000",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IZW-0",
+   "text": "저가 229,500",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IZY-0",
+   "text": "매도 232,500",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IZZ-0",
+   "text": "매수 232,000",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J01-0",
+   "text": "96만주",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J02-0",
+   "text": "2,232억",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J03-0",
+   "text": "코스피",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J05-0",
+   "text": "2",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J07-0",
+   "text": "한화에어로스페이스",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J08-0",
+   "text": "012450",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J0A-0",
+   "text": "762,000",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J0B-0",
+   "text": "+9,000 · +1.20%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J0D-0",
+   "text": "고가 0.7%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J0E-0",
+   "text": "잔여 5,300원",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J0G-0",
+   "text": "고가 764,000",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J0H-0",
+   "text": "저가 752,000",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J0J-0",
+   "text": "매도 762,000",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J0K-0",
+   "text": "매수 761,000",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J0M-0",
+   "text": "28만주",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J0N-0",
+   "text": "2,134억",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J0O-0",
+   "text": "코스피",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J0Q-0",
+   "text": "3",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J0S-0",
+   "text": "NAVER",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J0T-0",
+   "text": "035420",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J0V-0",
+   "text": "214,000",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J0W-0",
+   "text": "+2,500 · +1.18%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J0Y-0",
+   "text": "고가 0.9%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J0Z-0",
+   "text": "잔여 1,900원",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J11-0",
+   "text": "고가 214,500",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J12-0",
+   "text": "저가 211,000",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J14-0",
+   "text": "매도 214,000",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J15-0",
+   "text": "매수 213,500",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J17-0",
+   "text": "62만주",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J18-0",
+   "text": "1,327억",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J19-0",
+   "text": "코스피",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J2H-0",
+   "text": "4",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J2J-0",
+   "text": "기아",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J2K-0",
+   "text": "000270",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J2M-0",
+   "text": "99,400",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J2N-0",
+   "text": "-700 · -0.70%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J2P-0",
+   "text": "고가 0.9%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J2Q-0",
+   "text": "잔여 900원",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J2S-0",
+   "text": "고가 100,300",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J2T-0",
+   "text": "저가 99,100",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J2V-0",
+   "text": "매도 99,500",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J2W-0",
+   "text": "매수 99,400",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J2Y-0",
+   "text": "130만주",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J2Z-0",
+   "text": "1,296억",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J30-0",
+   "text": "코스피",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J1B-0",
+   "text": "5",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J1D-0",
+   "text": "두산에너빌리티",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J1E-0",
+   "text": "034020",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J1G-0",
+   "text": "62,400",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J1H-0",
+   "text": "+700 · +1.13%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J1J-0",
+   "text": "고가 1.0%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J1K-0",
+   "text": "잔여 620원",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J1M-0",
+   "text": "고가 62,700",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J1N-0",
+   "text": "저가 61,500",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J1P-0",
+   "text": "매도 62,400",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J1Q-0",
+   "text": "매수 62,300",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J1S-0",
+   "text": "412만주",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J1T-0",
+   "text": "2,571억",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J1U-0",
+   "text": "코스피",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J1W-0",
+   "text": "6",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J1Y-0",
+   "text": "HD한국조선해양",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J1Z-0",
+   "text": "009540",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J21-0",
+   "text": "386,500",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J22-0",
+   "text": "+4,000 · +1.05%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J24-0",
+   "text": "고가 1.2%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J25-0",
+   "text": "잔여 4,600원",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J27-0",
+   "text": "고가 388,000",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J28-0",
+   "text": "저가 381,000",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J2A-0",
+   "text": "매도 386,500",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J2B-0",
+   "text": "매수 386,000",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J2D-0",
+   "text": "42만주",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J2E-0",
+   "text": "1,623억",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J2F-0",
+   "text": "코스피",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J32-0",
+   "text": "7",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J34-0",
+   "text": "삼성바이오로직스",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J35-0",
+   "text": "207940",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J37-0",
+   "text": "1,048,000",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J38-0",
+   "text": "+9,000 · +0.87%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J3A-0",
+   "text": "고가 1.5%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J3B-0",
+   "text": "잔여 15,700원",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J3D-0",
+   "text": "고가 1,052,000",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J3E-0",
+   "text": "저가 1,036,000",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J3G-0",
+   "text": "매도 1,048,000",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J3H-0",
+   "text": "매수 1,047,000",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J3J-0",
+   "text": "8만주",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J3K-0",
+   "text": "838억",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J3L-0",
+   "text": "코스피",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IYZ-0",
+   "text": "8",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IZ1-0",
+   "text": "삼성전자",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IZ2-0",
+   "text": "005930",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IZ4-0",
+   "text": "150,850",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IZ5-0",
+   "text": "+1,850 · +1.24%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IZ7-0",
+   "text": "고가 1.7%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IZ8-0",
+   "text": "잔여 2,550원",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IZA-0",
+   "text": "고가 152,400",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IZB-0",
+   "text": "저가 148,100",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IZD-0",
+   "text": "매도 150,900",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IZE-0",
+   "text": "매수 150,850",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IZG-0",
+   "text": "1,420만주",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IZH-0",
+   "text": "2.14조",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IZI-0",
+   "text": "코스피",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J3N-0",
+   "text": "9",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J3P-0",
+   "text": "셀트리온",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J3Q-0",
+   "text": "068270",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J3S-0",
+   "text": "186,300",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J3T-0",
+   "text": "+1,500 · +0.81%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J3V-0",
+   "text": "고가 1.7%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J3W-0",
+   "text": "잔여 3,200원",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J3Y-0",
+   "text": "고가 187,000",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J3Z-0",
+   "text": "저가 184,200",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J41-0",
+   "text": "매도 186,300",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J42-0",
+   "text": "매수 186,200",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J44-0",
+   "text": "74만주",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J45-0",
+   "text": "1,379억",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J46-0",
+   "text": "코스피",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J48-0",
+   "text": "10",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J4A-0",
+   "text": "포스코퓨처엠",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J4B-0",
+   "text": "003670",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J4D-0",
+   "text": "318,000",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J4E-0",
+   "text": "+2,500 · +0.79%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J4G-0",
+   "text": "고가 1.9%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J4H-0",
+   "text": "잔여 6,100원",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J4J-0",
+   "text": "고가 319,500",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J4K-0",
+   "text": "저가 314,000",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J4M-0",
+   "text": "매도 318,000",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J4N-0",
+   "text": "매수 317,500",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J4P-0",
+   "text": "36만주",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J4Q-0",
+   "text": "1,145억",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J4R-0",
+   "text": "코스피",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J4T-0",
+   "text": "11",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J4V-0",
+   "text": "크래프톤",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J4W-0",
+   "text": "259960",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J4Y-0",
+   "text": "342,000",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J4Z-0",
+   "text": "+2,500 · +0.74%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J51-0",
+   "text": "고가 2.1%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J52-0",
+   "text": "잔여 7,200원",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J54-0",
+   "text": "고가 343,500",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J55-0",
+   "text": "저가 338,500",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J57-0",
+   "text": "매도 342,000",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J58-0",
+   "text": "매수 341,500",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J5A-0",
+   "text": "22만주",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J5B-0",
+   "text": "752억",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J5C-0",
+   "text": "코스피",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J5E-0",
+   "text": "12",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J5G-0",
+   "text": "삼성물산",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J5H-0",
+   "text": "028260",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J5J-0",
+   "text": "186,700",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J5K-0",
+   "text": "+1,300 · +0.70%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J5M-0",
+   "text": "고가 2.3%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J5N-0",
+   "text": "잔여 4,300원",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J5P-0",
+   "text": "고가 187,500",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J5Q-0",
+   "text": "저가 184,900",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J5S-0",
+   "text": "매도 186,700",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J5T-0",
+   "text": "매수 186,600",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J5V-0",
+   "text": "46만주",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J5W-0",
+   "text": "859억",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J5X-0",
+   "text": "코스피",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J5Z-0",
+   "text": "13",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J61-0",
+   "text": "KB금융",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J62-0",
+   "text": "105560",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J64-0",
+   "text": "118,900",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J65-0",
+   "text": "+800 · +0.68%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J67-0",
+   "text": "고가 2.4%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J68-0",
+   "text": "잔여 2,900원",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J6A-0",
+   "text": "고가 119,400",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J6B-0",
+   "text": "저가 117,800",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J6D-0",
+   "text": "매도 118,900",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J6E-0",
+   "text": "매수 118,800",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J6G-0",
+   "text": "88만주",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J6H-0",
+   "text": "1,046억",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J6I-0",
+   "text": "코스피",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J6K-0",
+   "text": "14",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J6M-0",
+   "text": "신한지주",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J6N-0",
+   "text": "055550",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J6P-0",
+   "text": "68,300",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J6Q-0",
+   "text": "+400 · +0.59%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J6S-0",
+   "text": "고가 2.6%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J6T-0",
+   "text": "잔여 1,800원",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J6V-0",
+   "text": "고가 68,600",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J6W-0",
+   "text": "저가 67,700",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J6Y-0",
+   "text": "매도 68,300",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J6Z-0",
+   "text": "매수 68,200",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J71-0",
+   "text": "132만주",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J72-0",
+   "text": "901억",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J73-0",
+   "text": "코스피",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J75-0",
+   "text": "15",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J77-0",
+   "text": "카카오",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J78-0",
+   "text": "035720",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J7A-0",
+   "text": "41,850",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J7B-0",
+   "text": "-350 · -0.83%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J7D-0",
+   "text": "저가 1.2%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J7E-0",
+   "text": "잔여 500원",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J7G-0",
+   "text": "고가 42,400",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J7H-0",
+   "text": "저가 41,750",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J7J-0",
+   "text": "매도 41,900",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J7K-0",
+   "text": "매수 41,850",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J7M-0",
+   "text": "184만주",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J7N-0",
+   "text": "770억",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J7O-0",
+   "text": "코스피",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J7Q-0",
+   "text": "16",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J7S-0",
+   "text": "엔씨소프트",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J7T-0",
+   "text": "036570",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J7V-0",
+   "text": "168,400",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J7W-0",
+   "text": "-2,100 · -1.23%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J7Y-0",
+   "text": "저가 1.5%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J7Z-0",
+   "text": "잔여 2,500원",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J81-0",
+   "text": "고가 171,000",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J82-0",
+   "text": "저가 168,000",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J84-0",
+   "text": "매도 168,500",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J85-0",
+   "text": "매수 168,400",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J87-0",
+   "text": "26만주",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J88-0",
+   "text": "438억",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J89-0",
+   "text": "코스피",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J8B-0",
+   "text": "17",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J8D-0",
+   "text": "아모레퍼시픽",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J8E-0",
+   "text": "090430",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J8G-0",
+   "text": "97,600",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J8H-0",
+   "text": "-1,300 · -1.31%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J8J-0",
+   "text": "저가 1.8%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J8K-0",
+   "text": "잔여 1,700원",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J8M-0",
+   "text": "고가 99,200",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J8N-0",
+   "text": "저가 97,300",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J8P-0",
+   "text": "매도 97,700",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J8Q-0",
+   "text": "매수 97,600",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J8S-0",
+   "text": "42만주",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J8T-0",
+   "text": "410억",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J8U-0",
+   "text": "코스피",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J8W-0",
+   "text": "18",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J8Y-0",
+   "text": "HMM",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J8Z-0",
+   "text": "011200",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J91-0",
+   "text": "18,240",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J92-0",
+   "text": "-260 · -1.41%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J94-0",
+   "text": "저가 2.0%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J95-0",
+   "text": "잔여 360원",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J97-0",
+   "text": "고가 18,550",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J98-0",
+   "text": "저가 18,180",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J9A-0",
+   "text": "매도 18,250",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J9B-0",
+   "text": "매수 18,240",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J9D-0",
+   "text": "386만주",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J9E-0",
+   "text": "704억",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J9F-0",
+   "text": "코스피",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J9H-0",
+   "text": "19",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J9J-0",
+   "text": "넷마블",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J9K-0",
+   "text": "251270",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J9M-0",
+   "text": "52,800",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J9N-0",
+   "text": "-800 · -1.49%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J9P-0",
+   "text": "저가 2.3%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J9Q-0",
+   "text": "잔여 1,190원",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J9S-0",
+   "text": "고가 53,700",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J9T-0",
+   "text": "저가 52,600",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J9V-0",
+   "text": "매도 52,900",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J9W-0",
+   "text": "매수 52,800",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J9Y-0",
+   "text": "34만주",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3J9Z-0",
+   "text": "180억",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JA0-0",
+   "text": "코스피",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JA2-0",
+   "text": "20",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JA4-0",
+   "text": "카카오뱅크",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JA5-0",
+   "text": "323410",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JA7-0",
+   "text": "22,150",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JA8-0",
+   "text": "-350 · -1.56%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JAA-0",
+   "text": "저가 2.5%",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JAB-0",
+   "text": "잔여 540원",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JAD-0",
+   "text": "고가 22,550",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JAE-0",
+   "text": "저가 22,050",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JAG-0",
+   "text": "매도 22,200",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JAH-0",
+   "text": "매수 22,150",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JAJ-0",
+   "text": "218만주",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JAK-0",
+   "text": "483억",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JAL-0",
+   "text": "코스피",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "List",
+    "Table",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JAO-0",
+   "text": "근접 분포",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 1"
+   ]
+  },
+  {
+   "id": "3JAR-0",
+   "text": "고가 근접",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JAS-0",
+   "text": "41종목",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JAX-0",
+   "text": "저가 근접",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JAY-0",
+   "text": "9종목",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JB0-0",
+   "text": "1% 이내",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JB1-0",
+   "text": "5종목",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JB3-0",
+   "text": "오늘 도달",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 2"
+   ]
+  },
+  {
+   "id": "3JB6-0",
+   "text": "종목",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 2",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JB7-0",
+   "text": "시각",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 2",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JB8-0",
+   "text": "구분",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 2",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JBA-0",
+   "text": "한미반도체",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 2",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JBB-0",
+   "text": "09:41",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 2",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JBC-0",
+   "text": "신고가",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 2",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JBE-0",
+   "text": "알테오젠",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 2",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JBF-0",
+   "text": "09:38",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 2",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JBG-0",
+   "text": "신고가",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 2",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JBI-0",
+   "text": "롯데케미칼",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 2",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JBJ-0",
+   "text": "09:35",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 2",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JBK-0",
+   "text": "신저가",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 2",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JBM-0",
+   "text": "오늘 도달 합계",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 2",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JBN-0",
+   "text": "신고가 6 · 신저가 2",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 2",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JBP-0",
+   "text": "근접 구간",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 3"
+   ]
+  },
+  {
+   "id": "3JBS-0",
+   "text": "1% 이내",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 3",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JBT-0",
+   "text": "5종목",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 3",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JBV-0",
+   "text": "1.5% 이내",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 3",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JBW-0",
+   "text": "9종목",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 3",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JBY-0",
+   "text": "2% 이내",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 3",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JBZ-0",
+   "text": "14종목",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 3",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JC1-0",
+   "text": "3% 이내",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 3",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JC2-0",
+   "text": "50종목",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 3",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JC4-0",
+   "text": "잔여 폭",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 4"
+   ]
+  },
+  {
+   "id": "3JC7-0",
+   "text": "고가 근접 평균",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 4",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JC8-0",
+   "text": "1,830원",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 4",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JCA-0",
+   "text": "저가 근접 평균",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 4",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JCB-0",
+   "text": "920원",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 4",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JCD-0",
+   "text": "최소 잔여",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 4",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JCE-0",
+   "text": "360원",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 4",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JCG-0",
+   "text": "최대 잔여",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 4",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JCH-0",
+   "text": "15,700원",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 4",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JCJ-0",
+   "text": "시장 구분",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 5"
+   ]
+  },
+  {
+   "id": "3JCM-0",
+   "text": "코스피 고가 근접",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 5",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JCN-0",
+   "text": "29종목",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 5",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JCP-0",
+   "text": "코스닥 고가 근접",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 5",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JCQ-0",
+   "text": "12종목",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 5",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JCS-0",
+   "text": "코스피 저가 근접",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 5",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JCT-0",
+   "text": "7종목",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 5",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JCV-0",
+   "text": "코스닥 저가 근접",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 5",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JCW-0",
+   "text": "2종목",
+   "path": [
+    "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+    "Instrument Root · 현재시세",
+    "Rank Card",
+    "Body",
+    "Rail",
+    "Block 5",
+    "Frame",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "2ZHC-0",
+   "name": "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+   "component": "Frame",
+   "w": 1440,
+   "h": 1120,
+   "depth": 0
+  },
+  {
+   "id": "3IWE-0",
+   "name": "Instrument Root · 현재시세",
+   "component": "Frame",
+   "w": 1440,
+   "h": 1120,
+   "depth": 1
+  },
+  {
+   "id": "3IWF-0",
+   "name": "Rank Card",
+   "component": "Frame",
+   "w": 1360,
+   "h": 1040,
+   "depth": 2
+  },
+  {
+   "id": "3IWG-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 96,
+   "depth": 3
+  },
+  {
+   "id": "3IWH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3IWI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3IWL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3IWP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3IWQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3IWR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3IWT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3IWV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3IWX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3IWZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3IX1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3IX3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3IX6-0",
+   "name": "KPI",
+   "component": "Frame",
+   "w": 0,
+   "h": 96,
+   "depth": 3
+  },
+  {
+   "id": "3IX7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 70,
+   "depth": 4
+  },
+  {
+   "id": "3IXA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 70,
+   "depth": 4
+  },
+  {
+   "id": "3IXE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 160,
+   "h": 70,
+   "depth": 4
+  },
+  {
+   "id": "3IXI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 160,
+   "h": 70,
+   "depth": 4
+  },
+  {
+   "id": "3IXM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 160,
+   "h": 70,
+   "depth": 4
+  },
+  {
+   "id": "3IXQ-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 848,
+   "depth": 3
+  },
+  {
+   "id": "3IXR-0",
+   "name": "List",
+   "component": "Frame",
+   "w": 1000,
+   "h": 848,
+   "depth": 4
+  },
+  {
+   "id": "3IXS-0",
+   "name": "Chips",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3IXT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3IXU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3IXV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3IXX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3IXZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3IY1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3IY3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3IY5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3IY7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3IY9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3IYB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3IYD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3IYE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3IYG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3IYI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3IYK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3IYM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3IYO-0",
+   "name": "Table",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3IYP-0",
+   "name": "Head",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3IZJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3IZL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3IZO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3IZR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3IZU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3IZX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J00-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 124,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J04-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3J06-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J09-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J0C-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J0F-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J0I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J0L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 124,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J0P-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3J0R-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J0U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J0X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J10-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J13-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J16-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 124,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J2G-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3J2I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J2L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J2O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J2R-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J2U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J2X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 124,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J1A-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3J1C-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J1F-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J1I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J1L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J1O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J1R-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 124,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J1V-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3J1X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J20-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J23-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J26-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J29-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J2C-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 124,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J31-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3J33-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J36-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J39-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J3C-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J3F-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J3I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 124,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3IYY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3IZ0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3IZ3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3IZ6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3IZ9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3IZC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3IZF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 124,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J3M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3J3O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J3R-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J3U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J3X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J40-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J43-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 124,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J47-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3J49-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J4C-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J4F-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J4I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J4L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J4O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 124,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J4S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3J4U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J4X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J50-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J53-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J56-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J59-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 124,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J5D-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3J5F-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J5I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J5L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J5O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J5R-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J5U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 124,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J5Y-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3J60-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J63-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J66-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J69-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J6C-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J6F-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 124,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J6J-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3J6L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J6O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J6R-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J6U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J6X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J70-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 124,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J74-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3J76-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J79-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J7C-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J7F-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J7I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J7L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 124,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J7P-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3J7R-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J7U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J7X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J80-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J83-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J86-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 124,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J8A-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3J8C-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J8F-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J8I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J8L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J8O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J8R-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 124,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J8V-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3J8X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J90-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J93-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J96-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J99-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J9C-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 124,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J9G-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3J9I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J9L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J9O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J9R-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J9U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3J9X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 124,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JA1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JA3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JA6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JA9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JAC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JAF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 100,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JAI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 124,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JAM-0",
+   "name": "Rail",
+   "component": "Frame",
+   "w": 360,
+   "h": 848,
+   "depth": 4
+  },
+  {
+   "id": "3JAN-0",
+   "name": "Block 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3JAP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JAQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JAT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "3JAU-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "3JAV-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "3JAW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JAZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JB2-0",
+   "name": "Block 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3JB4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JB5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JB9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JBD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JBH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JBL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JBO-0",
+   "name": "Block 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3JBQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JBR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JBU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JBX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JC0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JC3-0",
+   "name": "Block 4",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3JC5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JC6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JC9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JCC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JCF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JCI-0",
+   "name": "Block 5",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3JCK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JCL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JCO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JCR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JCU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  }
+ ],
+ "text_multiset": {
+  "주식 순위": 1,
+  "KRX 전체 · 52주 고저가 근접": 1,
+  "고가 근접 41 · 저가 근접 9": 1,
+  "최소 근접률 0.6%": 1,
+  "09:42:18 조회": 1,
+  "현재시세": 1,
+  "차트": 1,
+  "기업정보": 1,
+  "ETF": 2,
+  "ELW": 2,
+  "금현물": 1,
+  "순위": 2,
+  "전체 50건 · 20건 표시": 1,
+  "정렬 기준": 1,
+  "근접률 낮은 순": 1,
+  "신고가 근접": 1,
+  "41": 1,
+  "52주 고가 대비": 1,
+  "신저가 근접": 1,
+  "9": 2,
+  "52주 저가 대비": 1,
+  "최소 근접률": 1,
+  "0.6%": 1,
+  "1위 종목": 1,
+  "평균 잔여": 1,
+  "1,830원": 2,
+  "근접 종목": 1,
+  "신고저가": 1,
+  "상하한가": 1,
+  "고저가근접": 1,
+  "가격급등락": 1,
+  "거래량갱신": 1,
+  "범위": 1,
+  "주식": 1,
+  "매물대집중": 1,
+  "고저 PER": 1,
+  "시가대비 등락": 1,
+  "VI 발동": 1,
+  "당일·전일 체결량": 1,
+  "종목": 2,
+  "현재가": 1,
+  "근접률": 1,
+  "당일 고가·저가": 1,
+  "호가": 1,
+  "거래량 · 거래대금": 1,
+  "시장": 1,
+  "1": 1,
+  "현대차": 1,
+  "005380": 1,
+  "232,500": 1,
+  "+3,000 · +1.31%": 1,
+  "고가 0.6%": 1,
+  "잔여 1,400원": 1,
+  "고가 233,000": 1,
+  "저가 229,500": 1,
+  "매도 232,500": 1,
+  "매수 232,000": 1,
+  "96만주": 1,
+  "2,232억": 1,
+  "코스피": 20,
+  "2": 1,
+  "한화에어로스페이스": 1,
+  "012450": 1,
+  "762,000": 1,
+  "+9,000 · +1.20%": 1,
+  "고가 0.7%": 1,
+  "잔여 5,300원": 1,
+  "고가 764,000": 1,
+  "저가 752,000": 1,
+  "매도 762,000": 1,
+  "매수 761,000": 1,
+  "28만주": 1,
+  "2,134억": 1,
+  "3": 1,
+  "NAVER": 1,
+  "035420": 1,
+  "214,000": 1,
+  "+2,500 · +1.18%": 1,
+  "고가 0.9%": 2,
+  "잔여 1,900원": 1,
+  "고가 214,500": 1,
+  "저가 211,000": 1,
+  "매도 214,000": 1,
+  "매수 213,500": 1,
+  "62만주": 1,
+  "1,327억": 1,
+  "4": 1,
+  "기아": 1,
+  "000270": 1,
+  "99,400": 1,
+  "-700 · -0.70%": 1,
+  "잔여 900원": 1,
+  "고가 100,300": 1,
+  "저가 99,100": 1,
+  "매도 99,500": 1,
+  "매수 99,400": 1,
+  "130만주": 1,
+  "1,296억": 1,
+  "5": 1,
+  "두산에너빌리티": 1,
+  "034020": 1,
+  "62,400": 1,
+  "+700 · +1.13%": 1,
+  "고가 1.0%": 1,
+  "잔여 620원": 1,
+  "고가 62,700": 1,
+  "저가 61,500": 1,
+  "매도 62,400": 1,
+  "매수 62,300": 1,
+  "412만주": 1,
+  "2,571억": 1,
+  "6": 1,
+  "HD한국조선해양": 1,
+  "009540": 1,
+  "386,500": 1,
+  "+4,000 · +1.05%": 1,
+  "고가 1.2%": 1,
+  "잔여 4,600원": 1,
+  "고가 388,000": 1,
+  "저가 381,000": 1,
+  "매도 386,500": 1,
+  "매수 386,000": 1,
+  "42만주": 2,
+  "1,623억": 1,
+  "7": 1,
+  "삼성바이오로직스": 1,
+  "207940": 1,
+  "1,048,000": 1,
+  "+9,000 · +0.87%": 1,
+  "고가 1.5%": 1,
+  "잔여 15,700원": 1,
+  "고가 1,052,000": 1,
+  "저가 1,036,000": 1,
+  "매도 1,048,000": 1,
+  "매수 1,047,000": 1,
+  "8만주": 1,
+  "838억": 1,
+  "8": 1,
+  "삼성전자": 1,
+  "005930": 1,
+  "150,850": 1,
+  "+1,850 · +1.24%": 1,
+  "고가 1.7%": 2,
+  "잔여 2,550원": 1,
+  "고가 152,400": 1,
+  "저가 148,100": 1,
+  "매도 150,900": 1,
+  "매수 150,850": 1,
+  "1,420만주": 1,
+  "2.14조": 1,
+  "셀트리온": 1,
+  "068270": 1,
+  "186,300": 1,
+  "+1,500 · +0.81%": 1,
+  "잔여 3,200원": 1,
+  "고가 187,000": 1,
+  "저가 184,200": 1,
+  "매도 186,300": 1,
+  "매수 186,200": 1,
+  "74만주": 1,
+  "1,379억": 1,
+  "10": 1,
+  "포스코퓨처엠": 1,
+  "003670": 1,
+  "318,000": 1,
+  "+2,500 · +0.79%": 1,
+  "고가 1.9%": 1,
+  "잔여 6,100원": 1,
+  "고가 319,500": 1,
+  "저가 314,000": 1,
+  "매도 318,000": 1,
+  "매수 317,500": 1,
+  "36만주": 1,
+  "1,145억": 1,
+  "11": 1,
+  "크래프톤": 1,
+  "259960": 1,
+  "342,000": 1,
+  "+2,500 · +0.74%": 1,
+  "고가 2.1%": 1,
+  "잔여 7,200원": 1,
+  "고가 343,500": 1,
+  "저가 338,500": 1,
+  "매도 342,000": 1,
+  "매수 341,500": 1,
+  "22만주": 1,
+  "752억": 1,
+  "12": 1,
+  "삼성물산": 1,
+  "028260": 1,
+  "186,700": 1,
+  "+1,300 · +0.70%": 1,
+  "고가 2.3%": 1,
+  "잔여 4,300원": 1,
+  "고가 187,500": 1,
+  "저가 184,900": 1,
+  "매도 186,700": 1,
+  "매수 186,600": 1,
+  "46만주": 1,
+  "859억": 1,
+  "13": 1,
+  "KB금융": 1,
+  "105560": 1,
+  "118,900": 1,
+  "+800 · +0.68%": 1,
+  "고가 2.4%": 1,
+  "잔여 2,900원": 1,
+  "고가 119,400": 1,
+  "저가 117,800": 1,
+  "매도 118,900": 1,
+  "매수 118,800": 1,
+  "88만주": 1,
+  "1,046억": 1,
+  "14": 1,
+  "신한지주": 1,
+  "055550": 1,
+  "68,300": 1,
+  "+400 · +0.59%": 1,
+  "고가 2.6%": 1,
+  "잔여 1,800원": 1,
+  "고가 68,600": 1,
+  "저가 67,700": 1,
+  "매도 68,300": 1,
+  "매수 68,200": 1,
+  "132만주": 1,
+  "901억": 1,
+  "15": 1,
+  "카카오": 1,
+  "035720": 1,
+  "41,850": 1,
+  "-350 · -0.83%": 1,
+  "저가 1.2%": 1,
+  "잔여 500원": 1,
+  "고가 42,400": 1,
+  "저가 41,750": 1,
+  "매도 41,900": 1,
+  "매수 41,850": 1,
+  "184만주": 1,
+  "770억": 1,
+  "16": 1,
+  "엔씨소프트": 1,
+  "036570": 1,
+  "168,400": 1,
+  "-2,100 · -1.23%": 1,
+  "저가 1.5%": 1,
+  "잔여 2,500원": 1,
+  "고가 171,000": 1,
+  "저가 168,000": 1,
+  "매도 168,500": 1,
+  "매수 168,400": 1,
+  "26만주": 1,
+  "438억": 1,
+  "17": 1,
+  "아모레퍼시픽": 1,
+  "090430": 1,
+  "97,600": 1,
+  "-1,300 · -1.31%": 1,
+  "저가 1.8%": 1,
+  "잔여 1,700원": 1,
+  "고가 99,200": 1,
+  "저가 97,300": 1,
+  "매도 97,700": 1,
+  "매수 97,600": 1,
+  "410억": 1,
+  "18": 1,
+  "HMM": 1,
+  "011200": 1,
+  "18,240": 1,
+  "-260 · -1.41%": 1,
+  "저가 2.0%": 1,
+  "잔여 360원": 1,
+  "고가 18,550": 1,
+  "저가 18,180": 1,
+  "매도 18,250": 1,
+  "매수 18,240": 1,
+  "386만주": 1,
+  "704억": 1,
+  "19": 1,
+  "넷마블": 1,
+  "251270": 1,
+  "52,800": 1,
+  "-800 · -1.49%": 1,
+  "저가 2.3%": 1,
+  "잔여 1,190원": 1,
+  "고가 53,700": 1,
+  "저가 52,600": 1,
+  "매도 52,900": 1,
+  "매수 52,800": 1,
+  "34만주": 1,
+  "180억": 1,
+  "20": 1,
+  "카카오뱅크": 1,
+  "323410": 1,
+  "22,150": 1,
+  "-350 · -1.56%": 1,
+  "저가 2.5%": 1,
+  "잔여 540원": 1,
+  "고가 22,550": 1,
+  "저가 22,050": 1,
+  "매도 22,200": 1,
+  "매수 22,150": 1,
+  "218만주": 1,
+  "483억": 1,
+  "근접 분포": 1,
+  "고가 근접": 1,
+  "41종목": 1,
+  "저가 근접": 1,
+  "9종목": 2,
+  "1% 이내": 2,
+  "5종목": 2,
+  "오늘 도달": 1,
+  "시각": 1,
+  "구분": 1,
+  "한미반도체": 1,
+  "09:41": 1,
+  "신고가": 2,
+  "알테오젠": 1,
+  "09:38": 1,
+  "롯데케미칼": 1,
+  "09:35": 1,
+  "신저가": 1,
+  "오늘 도달 합계": 1,
+  "신고가 6 · 신저가 2": 1,
+  "근접 구간": 1,
+  "1.5% 이내": 1,
+  "2% 이내": 1,
+  "14종목": 1,
+  "3% 이내": 1,
+  "50종목": 1,
+  "잔여 폭": 1,
+  "고가 근접 평균": 1,
+  "저가 근접 평균": 1,
+  "920원": 1,
+  "최소 잔여": 1,
+  "360원": 1,
+  "최대 잔여": 1,
+  "15,700원": 1,
+  "시장 구분": 1,
+  "코스피 고가 근접": 1,
+  "29종목": 1,
+  "코스닥 고가 근접": 1,
+  "12종목": 1,
+  "코스피 저가 근접": 1,
+  "7종목": 1,
+  "코스닥 저가 근접": 1,
+  "2종목": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "ded4f4f17e83549b63b5c135163ccadde8af27e20b7e372122fb212ca5e8159d"
+}

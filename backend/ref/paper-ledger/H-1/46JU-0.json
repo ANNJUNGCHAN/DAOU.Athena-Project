@@ -1,0 +1,234 @@
+{
+ "board_id": "46JU-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-06 / R09 · 시장 체온·VI",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "46KH-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R09 · 시장 체온·VI",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46KG-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-06 / R09 · 시장 체온·VI",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46KE-0",
+   "text": "시장 체온·VI",
+   "path": [
+    "mini/CC-06 / R09 · 시장 체온·VI",
+    "Header"
+   ]
+  },
+  {
+   "id": "46KC-0",
+   "text": "KOSPI",
+   "path": [
+    "mini/CC-06 / R09 · 시장 체온·VI",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "46KB-0",
+   "text": "2,684.21 · +1.12%",
+   "path": [
+    "mini/CC-06 / R09 · 시장 체온·VI",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "46K9-0",
+   "text": "KOSDAQ",
+   "path": [
+    "mini/CC-06 / R09 · 시장 체온·VI",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "46K8-0",
+   "text": "842.15 · +0.84%",
+   "path": [
+    "mini/CC-06 / R09 · 시장 체온·VI",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "46K6-0",
+   "text": "상승",
+   "path": [
+    "mini/CC-06 / R09 · 시장 체온·VI",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "46K5-0",
+   "text": "1,486종목",
+   "path": [
+    "mini/CC-06 / R09 · 시장 체온·VI",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "46K3-0",
+   "text": "보합",
+   "path": [
+    "mini/CC-06 / R09 · 시장 체온·VI",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "46K2-0",
+   "text": "183종목",
+   "path": [
+    "mini/CC-06 / R09 · 시장 체온·VI",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "46K0-0",
+   "text": "하락",
+   "path": [
+    "mini/CC-06 / R09 · 시장 체온·VI",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "46JZ-0",
+   "text": "621종목",
+   "path": [
+    "mini/CC-06 / R09 · 시장 체온·VI",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "46JW-0",
+   "text": "외 44개 항목 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-06 / R09 · 시장 체온·VI",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "46JU-0",
+   "name": "mini/CC-06 / R09 · 시장 체온·VI",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "46KD-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46KF-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46JX-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46KA-0",
+   "name": "Fact 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46K7-0",
+   "name": "Fact 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46K4-0",
+   "name": "Fact 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46K1-0",
+   "name": "Fact 4",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46JY-0",
+   "name": "Fact 5",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46JV-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 1,
+  "기준 09:42": 1,
+  "시장 체온·VI": 1,
+  "KOSPI": 1,
+  "2,684.21 · +1.12%": 1,
+  "KOSDAQ": 1,
+  "842.15 · +0.84%": 1,
+  "상승": 1,
+  "1,486종목": 1,
+  "보합": 1,
+  "183종목": 1,
+  "하락": 1,
+  "621종목": 1,
+  "외 44개 항목 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "000aab1314f2944450e5e5c579c2d96adfab3525fff89ab956cc75e5065ba647"
+}

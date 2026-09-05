@@ -1,0 +1,4259 @@
+{
+ "board_id": "2RJ7-1",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+ "width": 1440,
+ "height": 1120,
+ "texts": [
+  {
+   "id": "2ROD-1",
+   "text": "금 99.99K",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ROC-1",
+   "text": "04020000 · KRX 금시장",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ROB-1",
+   "text": "실시간",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RO8-1",
+   "text": "168,420원",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RO7-1",
+   "text": "+1,240 · +0.74%",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RO6-1",
+   "text": "09:42:18",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RO3-1",
+   "text": "현재시세",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RO1-1",
+   "text": "차트",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RNZ-1",
+   "text": "기업정보",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RNX-1",
+   "text": "ETF",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RNV-1",
+   "text": "ELW",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RNT-1",
+   "text": "금현물",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2WFK-0",
+   "text": "순위",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RNP-1",
+   "text": "시가 · 고가 · 저가",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RNO-1",
+   "text": "167,300 · 168,600 · 166,900",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RNM-1",
+   "text": "거래량",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RNL-1",
+   "text": "185.4kg",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RNK-1",
+   "text": "거래대금 310억원",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RNI-1",
+   "text": "전일대비",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RNH-1",
+   "text": "+1,240",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RNG-1",
+   "text": "등락률 +0.74%",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39KT-0",
+   "text": "전일비 100.74%",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RNE-1",
+   "text": "거래단위",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RND-1",
+   "text": "1g",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RNC-1",
+   "text": "호가단위 10원",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RNA-1",
+   "text": "시장구분",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RN9-1",
+   "text": "KRX",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RN8-1",
+   "text": "금현물 · 정규장",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HA0-0",
+   "text": "주기",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "조회 단위 세그먼트",
+    "주기"
+   ]
+  },
+  {
+   "id": "3HA3-0",
+   "text": "틱",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "조회 단위 세그먼트",
+    "주기",
+    "Frame",
+    "틱"
+   ]
+  },
+  {
+   "id": "3HA5-0",
+   "text": "분",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "조회 단위 세그먼트",
+    "주기",
+    "Frame",
+    "분"
+   ]
+  },
+  {
+   "id": "3HA7-0",
+   "text": "일",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "조회 단위 세그먼트",
+    "주기",
+    "Frame",
+    "일"
+   ]
+  },
+  {
+   "id": "3HA9-0",
+   "text": "주",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "조회 단위 세그먼트",
+    "주기",
+    "Frame",
+    "주"
+   ]
+  },
+  {
+   "id": "3HAB-0",
+   "text": "월",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "조회 단위 세그먼트",
+    "주기",
+    "Frame",
+    "월"
+   ]
+  },
+  {
+   "id": "3HAD-0",
+   "text": "범위",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "조회 단위 세그먼트",
+    "범위"
+   ]
+  },
+  {
+   "id": "3HAG-0",
+   "text": "당일",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "조회 단위 세그먼트",
+    "범위",
+    "Frame",
+    "당일"
+   ]
+  },
+  {
+   "id": "3HAI-0",
+   "text": "기간",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "조회 단위 세그먼트",
+    "범위",
+    "Frame",
+    "기간"
+   ]
+  },
+  {
+   "id": "3HAK-0",
+   "text": "구간",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "조회 단위 세그먼트",
+    "적용 구간"
+   ]
+  },
+  {
+   "id": "3HAL-0",
+   "text": "09:00~09:42",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "조회 단위 세그먼트",
+    "적용 구간"
+   ]
+  },
+  {
+   "id": "2RMR-1",
+   "text": "시세·거래량",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RMQ-1",
+   "text": "지표",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RMP-1",
+   "text": "그리기",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RMO-1",
+   "text": "초기화",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Chart Toolbar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ROF-1",
+   "text": "▲ 168,420 · +0.74%",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Existing Athena Chart Module",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ROH-1",
+   "text": "185.4kg",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Existing Athena Chart Module",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RJJ-1",
+   "text": "알림 설정",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Chart Context Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RJH-1",
+   "text": "호가 열기",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Chart Context Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RKI-1",
+   "text": "종목 요약",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column A",
+    "Market Profile",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RKH-1",
+   "text": "정상 거래",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column A",
+    "Market Profile",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RKF-1",
+   "text": "전일 종가",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column A",
+    "Market Profile",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RKE-1",
+   "text": "167,180",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column A",
+    "Market Profile",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RKC-1",
+   "text": "실물 인출",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column A",
+    "Market Profile",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RKB-1",
+   "text": "가능",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column A",
+    "Market Profile",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RK9-1",
+   "text": "상장 시장",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column A",
+    "Market Profile",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RK8-1",
+   "text": "KRX 금시장",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column A",
+    "Market Profile",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RK5-1",
+   "text": "가격 범위 · 최근 일봉",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column A",
+    "Range and Liquidity"
+   ]
+  },
+  {
+   "id": "2RK4-1",
+   "text": "52주 최저 128,540",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column A",
+    "Range and Liquidity",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RK3-1",
+   "text": "최고 172,850",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column A",
+    "Range and Liquidity",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RJY-1",
+   "text": "거래대금",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column A",
+    "Range and Liquidity",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2RJX-1",
+   "text": "310억",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column A",
+    "Range and Liquidity",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39M0-0",
+   "text": "가격제한",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column A",
+    "Range and Liquidity",
+    "가격제한"
+   ]
+  },
+  {
+   "id": "39M2-0",
+   "text": "하한",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column A",
+    "Range and Liquidity",
+    "가격제한",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39M3-0",
+   "text": "150,460",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column A",
+    "Range and Liquidity",
+    "가격제한",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39M4-0",
+   "text": "· 상한",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column A",
+    "Range and Liquidity",
+    "가격제한",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39M5-0",
+   "text": "183,890",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column A",
+    "Range and Liquidity",
+    "가격제한",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SU9-0",
+   "text": "08-31",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column A",
+    "Range and Liquidity",
+    "최근 일봉",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SUA-0",
+   "text": "+0.42%",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column A",
+    "Range and Liquidity",
+    "최근 일봉",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SUC-0",
+   "text": "08-28",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column A",
+    "Range and Liquidity",
+    "최근 일봉",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SUD-0",
+   "text": "−0.18%",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column A",
+    "Range and Liquidity",
+    "최근 일봉",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SUF-0",
+   "text": "08-27",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column A",
+    "Range and Liquidity",
+    "최근 일봉",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SUG-0",
+   "text": "+1.05%",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column A",
+    "Range and Liquidity",
+    "최근 일봉",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33DV-0",
+   "text": "국제 금 환산",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "국제 금 환산"
+   ]
+  },
+  {
+   "id": "39QG-0",
+   "text": "온스",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "국제 금 환산",
+    "Rows",
+    "온스"
+   ]
+  },
+  {
+   "id": "39QI-0",
+   "text": "$3,751.30",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "국제 금 환산",
+    "Rows",
+    "온스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39QJ-0",
+   "text": "▲ +18.40 · +0.49%",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "국제 금 환산",
+    "Rows",
+    "온스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33E1-0",
+   "text": "환산",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "국제 금 환산",
+    "Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33E2-0",
+   "text": "167,750원/g",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "국제 금 환산",
+    "Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33E4-0",
+   "text": "국내 대비",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "국제 금 환산",
+    "Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33E5-0",
+   "text": "+0.4%",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "국제 금 환산",
+    "Rows",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A9A-0",
+   "text": "체결 추이",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "체결 추이",
+    "Title Row"
+   ]
+  },
+  {
+   "id": "3A9C-0",
+   "text": "체결강도",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "체결 추이",
+    "Title Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A9D-0",
+   "text": "104.6%",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "체결 추이",
+    "Title Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A9G-0",
+   "text": "시각",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "체결 추이",
+    "Column Head"
+   ]
+  },
+  {
+   "id": "3A9H-0",
+   "text": "체결가",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "체결 추이",
+    "Column Head"
+   ]
+  },
+  {
+   "id": "3A9I-0",
+   "text": "전일대비",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "체결 추이",
+    "Column Head"
+   ]
+  },
+  {
+   "id": "3A9J-0",
+   "text": "체결량",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "체결 추이",
+    "Column Head"
+   ]
+  },
+  {
+   "id": "3A9K-0",
+   "text": "구분",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "체결 추이",
+    "Column Head"
+   ]
+  },
+  {
+   "id": "3AE7-0",
+   "text": "09:42:18",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "체결 추이",
+    "Rows",
+    "09:42:18"
+   ]
+  },
+  {
+   "id": "3AE8-0",
+   "text": "168,420",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "체결 추이",
+    "Rows",
+    "09:42:18"
+   ]
+  },
+  {
+   "id": "3AE9-0",
+   "text": "+1,240",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "체결 추이",
+    "Rows",
+    "09:42:18"
+   ]
+  },
+  {
+   "id": "3AEA-0",
+   "text": "42g",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "체결 추이",
+    "Rows",
+    "09:42:18"
+   ]
+  },
+  {
+   "id": "3AEB-0",
+   "text": "매수",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "체결 추이",
+    "Rows",
+    "09:42:18"
+   ]
+  },
+  {
+   "id": "3AED-0",
+   "text": "09:42:05",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "체결 추이",
+    "Rows",
+    "09:42:05"
+   ]
+  },
+  {
+   "id": "3AEE-0",
+   "text": "168,410",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "체결 추이",
+    "Rows",
+    "09:42:05"
+   ]
+  },
+  {
+   "id": "3AEF-0",
+   "text": "+1,230",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "체결 추이",
+    "Rows",
+    "09:42:05"
+   ]
+  },
+  {
+   "id": "3AEG-0",
+   "text": "18g",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "체결 추이",
+    "Rows",
+    "09:42:05"
+   ]
+  },
+  {
+   "id": "3AEH-0",
+   "text": "매도",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "체결 추이",
+    "Rows",
+    "09:42:05"
+   ]
+  },
+  {
+   "id": "3AEJ-0",
+   "text": "09:41:52",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "체결 추이",
+    "Rows",
+    "09:41:52"
+   ]
+  },
+  {
+   "id": "3AEK-0",
+   "text": "168,420",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "체결 추이",
+    "Rows",
+    "09:41:52"
+   ]
+  },
+  {
+   "id": "3AEL-0",
+   "text": "+1,240",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "체결 추이",
+    "Rows",
+    "09:41:52"
+   ]
+  },
+  {
+   "id": "3AEM-0",
+   "text": "96g",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "체결 추이",
+    "Rows",
+    "09:41:52"
+   ]
+  },
+  {
+   "id": "3AEN-0",
+   "text": "매수",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "체결 추이",
+    "Rows",
+    "09:41:52"
+   ]
+  },
+  {
+   "id": "3AEQ-0",
+   "text": "매도호가",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "체결 추이",
+    "Rows",
+    "호가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AER-0",
+   "text": "168,430",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "체결 추이",
+    "Rows",
+    "호가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AET-0",
+   "text": "매수호가",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "체결 추이",
+    "Rows",
+    "호가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AEU-0",
+   "text": "168,420",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "체결 추이",
+    "Rows",
+    "호가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AEX-0",
+   "text": "전일 거래량 대비",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "체결 추이",
+    "Rows",
+    "거래량 상태",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AEY-0",
+   "text": "119.2%",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "체결 추이",
+    "Rows",
+    "거래량 상태",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AF0-0",
+   "text": "순간 비율",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "체결 추이",
+    "Rows",
+    "거래량 상태",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3AF1-0",
+   "text": "0.02%",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "체결 추이",
+    "Rows",
+    "거래량 상태",
+    "Frame"
+   ]
+  },
+  {
+   "id": "39ZP-0",
+   "text": "장전 예상",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "장전 예상",
+    "Title Row"
+   ]
+  },
+  {
+   "id": "39ZQ-0",
+   "text": "08:50 기준",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "장전 예상",
+    "Title Row"
+   ]
+  },
+  {
+   "id": "3A3X-0",
+   "text": "예상 체결가",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "장전 예상",
+    "Rows",
+    "예상 체결가"
+   ]
+  },
+  {
+   "id": "3A3Z-0",
+   "text": "167,300원",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "장전 예상",
+    "Rows",
+    "예상 체결가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A40-0",
+   "text": "▲ +120 · +0.07%",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "장전 예상",
+    "Rows",
+    "예상 체결가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A42-0",
+   "text": "예상 누적 수량",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "장전 예상",
+    "Rows",
+    "예상 수량"
+   ]
+  },
+  {
+   "id": "3A44-0",
+   "text": "84g",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "장전 예상",
+    "Rows",
+    "예상 수량",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A46-0",
+   "text": "예상 체결 시간",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "장전 예상",
+    "Rows",
+    "예상 수량",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3A47-0",
+   "text": "08:59:58",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Instrument Context",
+    "Rail Column B",
+    "장전 예상",
+    "Rows",
+    "예상 수량",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HCB-0",
+   "text": "투자자별 매매",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "블록 제목"
+   ]
+  },
+  {
+   "id": "3HCD-0",
+   "text": "08-31",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "블록 제목",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HCE-0",
+   "text": "확정",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "블록 제목",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HFY-0",
+   "text": "전일 거래량",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "블록 제목",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HFZ-0",
+   "text": "155.6kg · 260억원",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "블록 제목",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HCG-0",
+   "text": "투자자",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "3HCH-0",
+   "text": "매도 수량",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "3HCI-0",
+   "text": "매도 금액",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "3HCJ-0",
+   "text": "매수 수량",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "3HCK-0",
+   "text": "매수 금액",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "3HCL-0",
+   "text": "단가 매도·매수",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "3HCM-0",
+   "text": "순매수 수량·금액",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "3HCN-0",
+   "text": "순매수 증감",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "3HCQ-0",
+   "text": "개인",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "개인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZED-0",
+   "text": "8000",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "개인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HCT-0",
+   "text": "51.8kg",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "개인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HCU-0",
+   "text": "+4.2kg",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "개인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HCW-0",
+   "text": "86.5억원",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "개인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HCX-0",
+   "text": "+7.0억원",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "개인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HCZ-0",
+   "text": "103.8kg",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "개인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HD0-0",
+   "text": "+18.6kg",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "개인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HD2-0",
+   "text": "173.8억원",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "개인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HD3-0",
+   "text": "+31.1억원",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "개인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HD5-0",
+   "text": "167,050",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "개인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HD6-0",
+   "text": "167,420",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "개인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HD8-0",
+   "text": "+52.0kg",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "개인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HD9-0",
+   "text": "+87.3억원",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "개인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HDB-0",
+   "text": "+14.4kg",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "개인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HDC-0",
+   "text": "+24.1억원",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "개인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HDF-0",
+   "text": "기관",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "기관",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZEF-0",
+   "text": "1000",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "기관",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HDI-0",
+   "text": "82.4kg",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "기관",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HDJ-0",
+   "text": "+9.1kg",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "기관",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HDL-0",
+   "text": "137.9억원",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "기관",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HDM-0",
+   "text": "+15.2억원",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "기관",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HDO-0",
+   "text": "18.4kg",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "기관",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HDP-0",
+   "text": "−6.3kg",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "기관",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HDR-0",
+   "text": "30.7억원",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "기관",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HDS-0",
+   "text": "−10.5억원",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "기관",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HDU-0",
+   "text": "167,310",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "기관",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HDV-0",
+   "text": "166,980",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "기관",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HDX-0",
+   "text": "−64.0kg",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "기관",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HDY-0",
+   "text": "−107.2억원",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "기관",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HE0-0",
+   "text": "−15.4kg",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "기관",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HE1-0",
+   "text": "−25.7억원",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "기관",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HE4-0",
+   "text": "외국인",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "외국인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZEH-0",
+   "text": "9000",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "외국인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HE7-0",
+   "text": "21.4kg",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "외국인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HE8-0",
+   "text": "−2.8kg",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "외국인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HEA-0",
+   "text": "35.8억원",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "외국인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HEB-0",
+   "text": "−4.7억원",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "외국인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HED-0",
+   "text": "33.4kg",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "외국인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HEE-0",
+   "text": "−1.8kg",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "외국인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HEG-0",
+   "text": "56.0억원",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "외국인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HEH-0",
+   "text": "−3.0억원",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "외국인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HEJ-0",
+   "text": "167,120",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "외국인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HEK-0",
+   "text": "167,540",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "외국인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HEM-0",
+   "text": "+12.0kg",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "외국인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HEN-0",
+   "text": "+20.2억원",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "외국인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HEP-0",
+   "text": "+1.0kg",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "외국인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HEQ-0",
+   "text": "+1.7억원",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "외국인",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3HES-0",
+   "text": "누적 순매수",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "누적 순매수"
+   ]
+  },
+  {
+   "id": "3HET-0",
+   "text": "08-26~08-31",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "누적 순매수"
+   ]
+  },
+  {
+   "id": "3HEU-0",
+   "text": "개인",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "누적 순매수"
+   ]
+  },
+  {
+   "id": "3HEV-0",
+   "text": "+412kg · +688억원",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "누적 순매수"
+   ]
+  },
+  {
+   "id": "3HEW-0",
+   "text": "기관",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "누적 순매수"
+   ]
+  },
+  {
+   "id": "3HEX-0",
+   "text": "−158kg · −264억원",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "누적 순매수"
+   ]
+  },
+  {
+   "id": "3HEY-0",
+   "text": "외국인",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "누적 순매수"
+   ]
+  },
+  {
+   "id": "3HEZ-0",
+   "text": "−254kg · −424억원",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "투자자별 매매",
+    "누적 순매수"
+   ]
+  },
+  {
+   "id": "3HF1-0",
+   "text": "● 금현물 차트 실시간 갱신 중",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Status Footer"
+   ]
+  },
+  {
+   "id": "3HF2-0",
+   "text": "분봉 · 당일 · 거래량 · 마지막 체결 09:42:18",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Status Footer"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "2RJ7-1",
+   "name": "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+   "component": "Frame",
+   "w": 1440,
+   "h": 1120,
+   "depth": 0
+  },
+  {
+   "id": "2RJ8-1",
+   "name": "Instrument Root · 금현물",
+   "component": "Frame",
+   "w": 1440,
+   "h": 1120,
+   "depth": 1
+  },
+  {
+   "id": "2RJ9-1",
+   "name": "Instrument Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 1040,
+   "depth": 2
+  },
+  {
+   "id": "2RNQ-1",
+   "name": "Instrument Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 106,
+   "depth": 3
+  },
+  {
+   "id": "2RO4-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2RO9-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2ROA-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2RO5-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2RNR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2RO2-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2RO0-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2RNY-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2RNW-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2RNU-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2RNS-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2WFJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2RN6-1",
+   "name": "Quote and Valuation Strip",
+   "component": "Frame",
+   "w": 0,
+   "h": 116,
+   "depth": 3
+  },
+  {
+   "id": "2RNN-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 92,
+   "depth": 4
+  },
+  {
+   "id": "2RNJ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 92,
+   "depth": 4
+  },
+  {
+   "id": "2RNF-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 92,
+   "depth": 4
+  },
+  {
+   "id": "2RNB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 92,
+   "depth": 4
+  },
+  {
+   "id": "2RN7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 92,
+   "depth": 4
+  },
+  {
+   "id": "2RJD-1",
+   "name": "Chart Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 558,
+   "depth": 3
+  },
+  {
+   "id": "2RKJ-1",
+   "name": "Athena Chart Module Mount",
+   "component": "Frame",
+   "w": 820,
+   "h": 558,
+   "depth": 4
+  },
+  {
+   "id": "2RMM-1",
+   "name": "Chart Toolbar",
+   "component": "Frame",
+   "w": 0,
+   "h": 46,
+   "depth": 5
+  },
+  {
+   "id": "3H9Y-0",
+   "name": "조회 단위 세그먼트",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3H9Z-0",
+   "name": "주기",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3HA1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3HA2-0",
+   "name": "틱",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3HA4-0",
+   "name": "분",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3HA6-0",
+   "name": "일",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3HA8-0",
+   "name": "주",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3HAA-0",
+   "name": "월",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3HAC-0",
+   "name": "범위",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3HAE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3HAF-0",
+   "name": "당일",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3HAH-0",
+   "name": "기간",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3HAJ-0",
+   "name": "적용 구간",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2RMN-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2RKK-1",
+   "name": "Existing Athena Chart Module",
+   "component": "Frame",
+   "w": 763,
+   "h": 420,
+   "depth": 5
+  },
+  {
+   "id": "3SYH-0",
+   "name": "Athena Chart Preview",
+   "component": "SVG",
+   "w": 763,
+   "h": 420,
+   "depth": 6
+  },
+  {
+   "id": "3SYI-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SYJ-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SYK-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SYL-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SYM-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SYN-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SYO-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SYP-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SYQ-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SYR-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SYS-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SYT-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SYU-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SYV-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SYW-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SYX-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SYY-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SYZ-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZ0-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZ1-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZ2-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZ3-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZ4-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZ5-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZ6-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZ7-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZ8-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZ9-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZA-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZB-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZC-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZD-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZE-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZF-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZG-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZH-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZI-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZJ-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZK-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZL-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZM-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZN-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZO-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZP-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZQ-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZR-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZS-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZT-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZU-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZV-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZW-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZX-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZY-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SZZ-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T00-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T01-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T02-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T03-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T04-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T05-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T06-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T07-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T08-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T09-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T0A-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T0B-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T0C-0",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T0D-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3T0E-0",
+   "name": "거래량",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2ROE-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 148,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "2ROG-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 121,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2RJE-1",
+   "name": "Instrument Context",
+   "component": "Frame",
+   "w": 538,
+   "h": 558,
+   "depth": 4
+  },
+  {
+   "id": "2RJF-1",
+   "name": "Chart Context Actions",
+   "component": "Frame",
+   "w": 490,
+   "h": 44,
+   "depth": 5
+  },
+  {
+   "id": "2RJI-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "2RJG-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "33DR-0",
+   "name": "Rail Column A",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2RK6-1",
+   "name": "Market Profile",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2RKG-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2RKD-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 7
+  },
+  {
+   "id": "2RKA-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 7
+  },
+  {
+   "id": "2RK7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 7
+  },
+  {
+   "id": "2RJV-1",
+   "name": "Range and Liquidity",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2RK2-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2RJZ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "2RK1-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "2RK0-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 16,
+   "depth": 8
+  },
+  {
+   "id": "2RJW-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39LZ-0",
+   "name": "가격제한",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39M1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3SU7-0",
+   "name": "최근 일봉",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SU8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 22,
+   "depth": 8
+  },
+  {
+   "id": "3SUB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 22,
+   "depth": 8
+  },
+  {
+   "id": "3SUE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 22,
+   "depth": 8
+  },
+  {
+   "id": "33DS-0",
+   "name": "Rail Column B",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "33DU-0",
+   "name": "국제 금 환산",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "33DW-0",
+   "name": "Rows",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "39QF-0",
+   "name": "온스",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 8
+  },
+  {
+   "id": "39QH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "33E0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "33E3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 8
+  },
+  {
+   "id": "33E7-0",
+   "name": "체결 추이",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3A99-0",
+   "name": "Title Row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3A9B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3A9F-0",
+   "name": "Column Head",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 7
+  },
+  {
+   "id": "3AE5-0",
+   "name": "Rows",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3AE6-0",
+   "name": "09:42:18",
+   "component": "Frame",
+   "w": 0,
+   "h": 22,
+   "depth": 8
+  },
+  {
+   "id": "3AEC-0",
+   "name": "09:42:05",
+   "component": "Frame",
+   "w": 0,
+   "h": 22,
+   "depth": 8
+  },
+  {
+   "id": "3AEI-0",
+   "name": "09:41:52",
+   "component": "Frame",
+   "w": 0,
+   "h": 22,
+   "depth": 8
+  },
+  {
+   "id": "3AEO-0",
+   "name": "호가",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3AEP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3AES-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3AEV-0",
+   "name": "거래량 상태",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3AEW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3AEZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "33ER-0",
+   "name": "장전 예상",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "39ZO-0",
+   "name": "Title Row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3A3V-0",
+   "name": "Rows",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3A3W-0",
+   "name": "예상 체결가",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3A3Y-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3A41-0",
+   "name": "예상 수량",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3A43-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 9
+  },
+  {
+   "id": "3A45-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 10
+  },
+  {
+   "id": "3HC9-0",
+   "name": "투자자별 매매",
+   "component": "Frame",
+   "w": 0,
+   "h": 196,
+   "depth": 3
+  },
+  {
+   "id": "3HCA-0",
+   "name": "블록 제목",
+   "component": "Frame",
+   "w": 0,
+   "h": 22,
+   "depth": 4
+  },
+  {
+   "id": "3HCC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3HCF-0",
+   "name": "열 머리",
+   "component": "Frame",
+   "w": 0,
+   "h": 20,
+   "depth": 4
+  },
+  {
+   "id": "3HCO-0",
+   "name": "개인",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 4
+  },
+  {
+   "id": "3HCP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3HCS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 155,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3HCV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 155,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3HCY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 155,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3HD1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 155,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3HD4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 165,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3HD7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 185,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3HDA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 184,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3HDD-0",
+   "name": "기관",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 4
+  },
+  {
+   "id": "3HDE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3HDH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 155,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3HDK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 155,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3HDN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 155,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3HDQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 155,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3HDT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 165,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3HDW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 185,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3HDZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 184,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3HE2-0",
+   "name": "외국인",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 4
+  },
+  {
+   "id": "3HE3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3HE6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 155,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3HE9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 155,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3HEC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 155,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3HEF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 155,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3HEI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 165,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3HEL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 185,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3HEO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 184,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3HER-0",
+   "name": "누적 순매수",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 4
+  },
+  {
+   "id": "3HF0-0",
+   "name": "Chart Status Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 3
+  }
+ ],
+ "text_multiset": {
+  "금 99.99K": 1,
+  "04020000 · KRX 금시장": 1,
+  "실시간": 1,
+  "168,420원": 1,
+  "+1,240 · +0.74%": 1,
+  "09:42:18": 2,
+  "현재시세": 1,
+  "차트": 1,
+  "기업정보": 1,
+  "ETF": 1,
+  "ELW": 1,
+  "금현물": 1,
+  "순위": 1,
+  "시가 · 고가 · 저가": 1,
+  "167,300 · 168,600 · 166,900": 1,
+  "거래량": 1,
+  "185.4kg": 2,
+  "거래대금 310억원": 1,
+  "전일대비": 2,
+  "+1,240": 3,
+  "등락률 +0.74%": 1,
+  "전일비 100.74%": 1,
+  "거래단위": 1,
+  "1g": 1,
+  "호가단위 10원": 1,
+  "시장구분": 1,
+  "KRX": 1,
+  "금현물 · 정규장": 1,
+  "주기": 1,
+  "틱": 1,
+  "분": 1,
+  "일": 1,
+  "주": 1,
+  "월": 1,
+  "범위": 1,
+  "당일": 1,
+  "기간": 1,
+  "구간": 1,
+  "09:00~09:42": 1,
+  "시세·거래량": 1,
+  "지표": 1,
+  "그리기": 1,
+  "초기화": 1,
+  "▲ 168,420 · +0.74%": 1,
+  "알림 설정": 1,
+  "호가 열기": 1,
+  "종목 요약": 1,
+  "정상 거래": 1,
+  "전일 종가": 1,
+  "167,180": 1,
+  "실물 인출": 1,
+  "가능": 1,
+  "상장 시장": 1,
+  "KRX 금시장": 1,
+  "가격 범위 · 최근 일봉": 1,
+  "52주 최저 128,540": 1,
+  "최고 172,850": 1,
+  "거래대금": 1,
+  "310억": 1,
+  "가격제한": 1,
+  "하한": 1,
+  "150,460": 1,
+  "· 상한": 1,
+  "183,890": 1,
+  "08-31": 2,
+  "+0.42%": 1,
+  "08-28": 1,
+  "−0.18%": 1,
+  "08-27": 1,
+  "+1.05%": 1,
+  "국제 금 환산": 1,
+  "온스": 1,
+  "$3,751.30": 1,
+  "▲ +18.40 · +0.49%": 1,
+  "환산": 1,
+  "167,750원/g": 1,
+  "국내 대비": 1,
+  "+0.4%": 1,
+  "체결 추이": 1,
+  "체결강도": 1,
+  "104.6%": 1,
+  "시각": 1,
+  "체결가": 1,
+  "체결량": 1,
+  "구분": 1,
+  "168,420": 3,
+  "42g": 1,
+  "매수": 2,
+  "09:42:05": 1,
+  "168,410": 1,
+  "+1,230": 1,
+  "18g": 1,
+  "매도": 1,
+  "09:41:52": 1,
+  "96g": 1,
+  "매도호가": 1,
+  "168,430": 1,
+  "매수호가": 1,
+  "전일 거래량 대비": 1,
+  "119.2%": 1,
+  "순간 비율": 1,
+  "0.02%": 1,
+  "장전 예상": 1,
+  "08:50 기준": 1,
+  "예상 체결가": 1,
+  "167,300원": 1,
+  "▲ +120 · +0.07%": 1,
+  "예상 누적 수량": 1,
+  "84g": 1,
+  "예상 체결 시간": 1,
+  "08:59:58": 1,
+  "투자자별 매매": 1,
+  "확정": 1,
+  "전일 거래량": 1,
+  "155.6kg · 260억원": 1,
+  "투자자": 1,
+  "매도 수량": 1,
+  "매도 금액": 1,
+  "매수 수량": 1,
+  "매수 금액": 1,
+  "단가 매도·매수": 1,
+  "순매수 수량·금액": 1,
+  "순매수 증감": 1,
+  "개인": 2,
+  "8000": 1,
+  "51.8kg": 1,
+  "+4.2kg": 1,
+  "86.5억원": 1,
+  "+7.0억원": 1,
+  "103.8kg": 1,
+  "+18.6kg": 1,
+  "173.8억원": 1,
+  "+31.1억원": 1,
+  "167,050": 1,
+  "167,420": 1,
+  "+52.0kg": 1,
+  "+87.3억원": 1,
+  "+14.4kg": 1,
+  "+24.1억원": 1,
+  "기관": 2,
+  "1000": 1,
+  "82.4kg": 1,
+  "+9.1kg": 1,
+  "137.9억원": 1,
+  "+15.2억원": 1,
+  "18.4kg": 1,
+  "−6.3kg": 1,
+  "30.7억원": 1,
+  "−10.5억원": 1,
+  "167,310": 1,
+  "166,980": 1,
+  "−64.0kg": 1,
+  "−107.2억원": 1,
+  "−15.4kg": 1,
+  "−25.7억원": 1,
+  "외국인": 2,
+  "9000": 1,
+  "21.4kg": 1,
+  "−2.8kg": 1,
+  "35.8억원": 1,
+  "−4.7억원": 1,
+  "33.4kg": 1,
+  "−1.8kg": 1,
+  "56.0억원": 1,
+  "−3.0억원": 1,
+  "167,120": 1,
+  "167,540": 1,
+  "+12.0kg": 1,
+  "+20.2억원": 1,
+  "+1.0kg": 1,
+  "+1.7억원": 1,
+  "누적 순매수": 1,
+  "08-26~08-31": 1,
+  "+412kg · +688억원": 1,
+  "−158kg · −264억원": 1,
+  "−254kg · −424억원": 1,
+  "● 금현물 차트 실시간 갱신 중": 1,
+  "분봉 · 당일 · 거래량 · 마지막 체결 09:42:18": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "cddbdb36eb10e44848e3c6a8f04d8097f29958f423a08be650cd7b1c72cf8ec2"
+}

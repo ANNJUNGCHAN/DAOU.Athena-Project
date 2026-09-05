@@ -1,0 +1,35 @@
+Frame "mini/CC-03 / R07 · KODEX 200 ETF" (46MT-0) 360×420
+  Frame "Header" (46NN-0) 0×0
+    Frame "Meta row" (46NP-0) 0×0
+      Text "Eyebrow" (46NR-0) 0×0
+      Text "As of" (46NQ-0) 0×0 "기준 09:42"
+    Text "Title" (46NO-0) 0×0 "KODEX 200 ETF"
+  Frame "Body" (46MW-0) 0×0
+    Frame "KPI band" (46ND-0) 0×0
+      Frame "Frame" (46NK-0) 0×0
+        Text "NAV전일대비" (46NM-0) 0×0 "NAV전일대비"
+        Text "전일대비 ▲ +398 · +0.83%" (46NL-0) 0×0 "전일대비 ▲ +398 · +0.83%"
+      Frame "Frame" (46NH-0) 0×0
+        Text "NAV/ETF 괴리율" (46NJ-0) 0×0 "NAV/ETF 괴리율"
+        Text "괴리 +0.09%" (46NI-0) 0×0 "괴리 +0.09%"
+      Frame "Frame" (46NE-0) 0×0
+        Text "추적오차율" (46NG-0) 0×0 "추적오차율"
+        Text "0.11%" (46NF-0) 0×0 "0.11%"
+    Frame "Table header" (46N9-0) 0×0
+      Text "항목" (46NC-0) 0×0 "항목"
+      Text "값" (46NB-0) 0×0 "값"
+      Text "비고" (46NA-0) 72×0 "비고"
+    Frame "Position 1" (46N3-0) 0×0
+      Frame "Frame" (46N6-0) 0×0
+        Text "ETF대상지수코드" (46N8-0) 0×0 "ETF대상지수코드"
+        Text "Text" (46N7-0) 0×0
+      Text "대상지수 코스피200" (46N5-0) 0×0 "대상지수 코스피200"
+      Text "Text" (46N4-0) 72×0
+    Frame "Position 2" (46MX-0) 0×0
+      Frame "Frame" (46N0-0) 0×0
+        Text "NAV/지수괴리율" (46N2-0) 0×0 "NAV/지수괴리율"
+        Text "Text" (46N1-0) 0×0
+      Text "+0.09%" (46MZ-0) 0×0 "+0.09%"
+      Text "Text" (46MY-0) 72×0
+  Frame "Fold note" (46MU-0) 0×0
+    Text "스칼라 1개, 행 1개 접힘 · 원본…" (46MV-0) 0×0 "스칼라 1개, 행 1개 접힘 · 원본에서 확인"

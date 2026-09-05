@@ -1,0 +1,234 @@
+{
+ "board_id": "46UY-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "46VL-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46VK-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46VI-0",
+   "text": "기업 개요·가치 및 실적",
+   "path": [
+    "mini/CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Header"
+   ]
+  },
+  {
+   "id": "46VG-0",
+   "text": "거래대금",
+   "path": [
+    "mini/CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "46VF-0",
+   "text": "거래대금 2.14조원",
+   "path": [
+    "mini/CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "46VD-0",
+   "text": "거래량",
+   "path": [
+    "mini/CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "46VC-0",
+   "text": "1,420만주",
+   "path": [
+    "mini/CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "46VA-0",
+   "text": "PBR",
+   "path": [
+    "mini/CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "46V9-0",
+   "text": "2.63배",
+   "path": [
+    "mini/CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "46V7-0",
+   "text": "PER",
+   "path": [
+    "mini/CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "46V6-0",
+   "text": "21.2배",
+   "path": [
+    "mini/CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "46V4-0",
+   "text": "ROE",
+   "path": [
+    "mini/CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "46V3-0",
+   "text": "8.4%",
+   "path": [
+    "mini/CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "46V0-0",
+   "text": "외 52개 항목 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "46UY-0",
+   "name": "mini/CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "46VH-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46VJ-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46V1-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46VE-0",
+   "name": "Fact 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46VB-0",
+   "name": "Fact 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46V8-0",
+   "name": "Fact 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46V5-0",
+   "name": "Fact 4",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46V2-0",
+   "name": "Fact 5",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46UZ-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 1,
+  "기준 09:42": 1,
+  "기업 개요·가치 및 실적": 1,
+  "거래대금": 1,
+  "거래대금 2.14조원": 1,
+  "거래량": 1,
+  "1,420만주": 1,
+  "PBR": 1,
+  "2.63배": 1,
+  "PER": 1,
+  "21.2배": 1,
+  "ROE": 1,
+  "8.4%": 1,
+  "외 52개 항목 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "2d5e4e0daf171418f1f3a985a99efcb32f76125114ab92fac26077e146ac72e6"
+}

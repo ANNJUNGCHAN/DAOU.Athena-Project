@@ -1,0 +1,92 @@
+{
+ "board_id": "498P-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-03 / R01-T4-9 · 순위 — VI 발동",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "498R-0",
+   "text": "원본 보드: CC-03 / R01-T4-9 · 순위 — VI 발동",
+   "path": [
+    "note/CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Frame"
+   ]
+  },
+  {
+   "id": "498T-0",
+   "text": "가져온 요소: 발동종목 · VI적용구분 · 종목코드 · 발동가격 · 정적기준가격",
+   "path": [
+    "note/CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Frame"
+   ]
+  },
+  {
+   "id": "498V-0",
+   "text": "문법: compound",
+   "path": [
+    "note/CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Frame"
+   ]
+  },
+  {
+   "id": "498X-0",
+   "text": "접은 개수: 스칼라 2개 · 행 4개",
+   "path": [
+    "note/CC-03 / R01-T4-9 · 순위 — VI 발동",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "498P-0",
+   "name": "note/CC-03 / R01-T4-9 · 순위 — VI 발동",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "498Q-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "498S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "498U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "498W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-03 / R01-T4-9 · 순위 — VI 발동": 1,
+  "가져온 요소: 발동종목 · VI적용구분 · 종목코드 · 발동가격 · 정적기준가격": 1,
+  "문법: compound": 1,
+  "접은 개수: 스칼라 2개 · 행 4개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "c10a74121992d7290b82087356998387606bedc9ca035490d3e7862616d7daa9"
+}

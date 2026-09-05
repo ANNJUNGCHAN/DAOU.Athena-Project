@@ -1,0 +1,35 @@
+Frame "mini/CC-04 / R02-T3 · 호가 — KRX 금현물" (46T0-0) 360×420
+  Frame "Header" (46TU-0) 0×0
+    Frame "Meta row" (46TW-0) 0×0
+      Text "Eyebrow" (46TY-0) 0×0
+      Text "As of" (46TX-0) 0×0 "기준 09:42"
+    Text "Title" (46TV-0) 0×0 "KRX 금현물 호가"
+  Frame "Body" (46T3-0) 0×0
+    Frame "Table header" (46TP-0) 0×0
+      Text "순서" (46TT-0) 34×0 "순서"
+      Text "항목" (46TS-0) 0×0 "항목"
+      Text "값" (46TR-0) 0×0 "값"
+      Text "비고" (46TQ-0) 64×0 "비고"
+    Frame "Rank 1" (46TI-0) 0×0
+      Text "01" (46TO-0) 34×0 "01"
+      Frame "Frame" (46TL-0) 0×0
+        Text "전일대비기호" (46TN-0) 0×0 "전일대비기호"
+        Text "Text" (46TM-0) 0×0
+      Text "850 · +0.78%" (46TK-0) 0×0 "850 · +0.78%"
+      Text "Text" (46TJ-0) 64×0
+    Frame "Rank 2" (46TB-0) 0×0
+      Text "02" (46TH-0) 34×0 "02"
+      Frame "Frame" (46TE-0) 0×0
+        Text "체결가" (46TG-0) 0×0 "체결가"
+        Text "Text" (46TF-0) 0×0
+      Text "109,750" (46TD-0) 0×0 "109,750"
+      Text "Text" (46TC-0) 64×0
+    Frame "Rank 3" (46T4-0) 0×0
+      Text "03" (46TA-0) 34×0 "03"
+      Frame "Frame" (46T7-0) 0×0
+        Text "금현물호가" (46T9-0) 0×0 "금현물호가"
+        Text "Text" (46T8-0) 0×0
+      Text "92" (46T6-0) 0×0 "92"
+      Text "Text" (46T5-0) 64×0
+  Frame "Fold note" (46T1-0) 0×0
+    Text "외 5개 행 접힘 · 원본에서 확인" (46T2-0) 0×0 "외 5개 행 접힘 · 원본에서 확인"

@@ -1,0 +1,9 @@
+Frame "note/CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침" (49B7-0) 360×92
+  Frame "Frame" (49B8-0) 334×0
+    Text "원본 보드: CC-06 / R04-T…" (49B9-0) 0×0 "원본 보드: CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침"
+  Frame "Frame" (49BA-0) 334×0
+    Text "가져온 요소: 체결시간 · 종목명 ·…" (49BB-0) 0×0 "가져온 요소: 체결시간 · 종목명 · 종목코드"
+  Frame "Frame" (49BC-0) 334×0
+    Text "문법: table" (49BD-0) 0×0 "문법: table"
+  Frame "Frame" (49BE-0) 334×0
+    Text "접은 개수: 행 2개" (49BF-0) 0×0 "접은 개수: 행 2개"

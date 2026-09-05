@@ -1,0 +1,92 @@
+{
+ "board_id": "48ZJ-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-05 / R03-T6 · 수급 — 순위",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "48ZL-0",
+   "text": "원본 보드: CC-05 / R03-T6 · 수급 — 순위",
+   "path": [
+    "note/CC-05 / R03-T6 · 수급 — 순위",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48ZN-0",
+   "text": "가져온 요소: 프로그램순매수… · 순매수대금합계 · 잔고주수 · 대차거래증감 · 순위",
+   "path": [
+    "note/CC-05 / R03-T6 · 수급 — 순위",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48ZP-0",
+   "text": "문법: compound",
+   "path": [
+    "note/CC-05 / R03-T6 · 수급 — 순위",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48ZR-0",
+   "text": "접은 개수: 스칼라 2개 · 행 6개",
+   "path": [
+    "note/CC-05 / R03-T6 · 수급 — 순위",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48ZJ-0",
+   "name": "note/CC-05 / R03-T6 · 수급 — 순위",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "48ZK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48ZM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48ZO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48ZQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-05 / R03-T6 · 수급 — 순위": 1,
+  "가져온 요소: 프로그램순매수… · 순매수대금합계 · 잔고주수 · 대차거래증감 · 순위": 1,
+  "문법: compound": 1,
+  "접은 개수: 스칼라 2개 · 행 6개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "8c11db175c6bf5772d22eceec064eb4effd3358e9a293381acfc08c336606046"
+}

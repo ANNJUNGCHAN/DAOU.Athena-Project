@@ -1,0 +1,342 @@
+{
+ "board_id": "489Q-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-03 / R08-X · ELW 바스켓·만기평가",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "48AO-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R08-X · ELW 바스켓·만기평가",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "48AN-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-03 / R08-X · ELW 바스켓·만기평가",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "48AL-0",
+   "text": "ELW 바스켓·만기평가",
+   "path": [
+    "mini/CC-03 / R08-X · ELW 바스켓·만기평가",
+    "Header"
+   ]
+  },
+  {
+   "id": "48AJ-0",
+   "text": "거래대금",
+   "path": [
+    "mini/CC-03 / R08-X · ELW 바스켓·만기평가",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48AI-0",
+   "text": "5.9억원",
+   "path": [
+    "mini/CC-03 / R08-X · ELW 바스켓·만기평가",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48AG-0",
+   "text": "변화",
+   "path": [
+    "mini/CC-03 / R08-X · ELW 바스켓·만기평가",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48AF-0",
+   "text": "+1.24%",
+   "path": [
+    "mini/CC-03 / R08-X · ELW 바스켓·만기평가",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48AD-0",
+   "text": "거래량",
+   "path": [
+    "mini/CC-03 / R08-X · ELW 바스켓·만기평가",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48AC-0",
+   "text": "48만주",
+   "path": [
+    "mini/CC-03 / R08-X · ELW 바스켓·만기평가",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48A9-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-03 / R08-X · ELW 바스켓·만기평가",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48A8-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R08-X · ELW 바스켓·만기평가",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48A7-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-03 / R08-X · ELW 바스켓·만기평가",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48A5-0",
+   "text": "ELW투자지표산출",
+   "path": [
+    "mini/CC-03 / R08-X · ELW 바스켓·만기평가",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48A4-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R08-X · ELW 바스켓·만기평가",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48A2-0",
+   "text": "22.4%",
+   "path": [
+    "mini/CC-03 / R08-X · ELW 바스켓·만기평가",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "48A1-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R08-X · ELW 바스켓·만기평가",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "489Z-0",
+   "text": "자산코드",
+   "path": [
+    "mini/CC-03 / R08-X · ELW 바스켓·만기평가",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "489Y-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R08-X · ELW 바스켓·만기평가",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "489W-0",
+   "text": "005930",
+   "path": [
+    "mini/CC-03 / R08-X · ELW 바스켓·만기평가",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "489V-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R08-X · ELW 바스켓·만기평가",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "489S-0",
+   "text": "스칼라 5개, 행 3개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-03 / R08-X · ELW 바스켓·만기평가",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "489Q-0",
+   "name": "mini/CC-03 / R08-X · ELW 바스켓·만기평가",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "48AK-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48AM-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "489T-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48AA-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48AH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48AE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48AB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48A6-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48A0-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48A3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "489U-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "489X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "489R-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "ELW 바스켓·만기평가": 1,
+  "거래대금": 1,
+  "5.9억원": 1,
+  "변화": 1,
+  "+1.24%": 1,
+  "거래량": 1,
+  "48만주": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "ELW투자지표산출": 1,
+  "22.4%": 1,
+  "자산코드": 1,
+  "005930": 1,
+  "스칼라 5개, 행 3개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "3dbe31009d9ac27311ff9bdc5b682592076c0fbbf1befc6b4c21700fa0011e87"
+}

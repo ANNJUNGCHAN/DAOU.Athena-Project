@@ -1,0 +1,144 @@
+Frame "CC-04 / R02-B · 시간외·통합·금현물 호가" (177W-2) 1440×960
+  Frame "Orderbook Mode Header" (177X-2) 0×92
+    Frame "Frame" (177Y-2) 0×0
+      Text "삼성전자 호가를 시장별로 보여줘" (177Z-2) 0×0 "삼성전자 호가를 시장별로 보여줘"
+      Text "정규장·통합·시간외·금현물 데이터를 …" (1780-2) 0×0 "정규장·통합·시간외·금현물 데이터를 같은 래더 문법으로 읽습니다."
+    Frame "Frame" (1781-2) 0×0
+      Frame "Frame" (1782-2) 0×34
+        Rectangle "Rectangle" (1783-2) 7×7
+        Text "실시간 등록" (1784-2) 0×0 "실시간 등록"
+      Frame "Frame" (1785-2) 0×34
+        Text "위 매도 · 아래 매수" (1786-2) 0×0 "위 매도 · 아래 매수"
+  Frame "Orderbook Mode Workspace" (1788-2) 0×0
+    Frame "Unified Orderbook Ladder" (178A-2) 800×0
+      Frame "Frame" (178B-2) 0×0
+        Frame "Frame" (178C-2) 0×0
+          Frame "Frame" (178D-2) 0×34
+            Text "정규장" (178E-2) 0×0 "정규장"
+          Frame "Frame" (178F-2) 0×34
+            Text "통합호가" (178G-2) 0×0 "통합호가"
+          Frame "Frame" (178H-2) 0×34
+            Text "시간외" (178I-2) 0×0 "시간외"
+          Frame "Frame" (178J-2) 0×34
+            Text "금현물" (178K-2) 0×0 "금현물"
+        Text "10단 · 정규장+거래소 통합" (178L-2) 0×0 "10단 · 정규장+거래소 통합"
+      Frame "Frame" (178M-2) 0×0
+        Frame "Frame" (178N-2) 0×0
+          Text "삼성전자 005930" (178O-2) 0×0 "삼성전자 005930"
+          Text "KOSPI · 통합 예상체결 포함" (178P-2) 0×0 "KOSPI · 통합 예상체결 포함"
+        Frame "Frame" (178Q-2) 0×0
+          Text "150,850원" (178R-2) 0×0 "150,850원"
+          Text "+2.35%" (178S-2) 0×0 "+2.35%"
+      Frame "Frame" (178T-2) 0×0
+        Frame "Frame" (178U-2) 0×40
+          Text "42,510" (178V-2) 180×0 "42,510"
+          Text "151,100" (178W-2) 240×0 "151,100"
+          Frame "Frame" (178X-2) 320×0
+            Rectangle "Rectangle" (178Y-2) 0×18
+        Frame "Frame" (178Z-2) 0×40
+          Text "38,440" (1790-2) 180×0 "38,440"
+          Text "151,050" (1791-2) 240×0 "151,050"
+          Frame "Frame" (1792-2) 320×0
+            Rectangle "Rectangle" (1793-2) 0×18
+        Frame "Frame" (1794-2) 0×40
+          Text "31,280" (1795-2) 180×0 "31,280"
+          Text "151,000" (1796-2) 240×0 "151,000"
+          Frame "Frame" (1797-2) 320×0
+            Rectangle "Rectangle" (1798-2) 0×18
+        Frame "Frame" (1799-2) 0×40
+          Text "24,950" (179A-2) 180×0 "24,950"
+          Text "150,950" (179B-2) 240×0 "150,950"
+          Frame "Frame" (179C-2) 320×0
+            Rectangle "Rectangle" (179D-2) 0×18
+        Frame "Frame" (179E-2) 0×40
+          Text "56,320" (179F-2) 180×0 "56,320"
+          Text "150,900" (179G-2) 240×0 "150,900"
+          Frame "Frame" (179H-2) 320×0
+            Rectangle "Rectangle" (179I-2) 0×18
+        Frame "Frame" (179J-2) 0×40
+          Text "예상 체결" (179K-2) 0×0 "예상 체결"
+          Text "150,850원" (179L-2) 0×0 "150,850원"
+          Text "127,540주" (179M-2) 0×0 "127,540주"
+        Frame "Frame" (179N-2) 0×40
+          Frame "Frame" (179O-2) 320×0
+            Rectangle "Rectangle" (179P-2) 0×18
+          Text "150,800" (179Q-2) 240×0 "150,800"
+          Text "61,780" (179R-2) 180×0 "61,780"
+        Frame "Frame" (179S-2) 0×40
+          Frame "Frame" (179T-2) 320×0
+            Rectangle "Rectangle" (179U-2) 0×18
+          Text "150,750" (179V-2) 240×0 "150,750"
+          Text "34,210" (179W-2) 180×0 "34,210"
+        Frame "Frame" (179X-2) 0×40
+          Frame "Frame" (179Y-2) 320×0
+            Rectangle "Rectangle" (179Z-2) 0×18
+          Text "150,700" (17A0-2) 240×0 "150,700"
+          Text "28,670" (17A1-2) 180×0 "28,670"
+        Frame "Frame" (17A2-2) 0×40
+          Frame "Frame" (17A3-2) 320×0
+            Rectangle "Rectangle" (17A4-2) 0×18
+          Text "150,650" (17A5-2) 240×0 "150,650"
+          Text "22,540" (17A6-2) 180×0 "22,540"
+        Frame "Frame" (17A7-2) 0×40
+          Frame "Frame" (17A8-2) 320×0
+            Rectangle "Rectangle" (17A9-2) 0×18
+          Text "150,600" (17AA-2) 240×0 "150,600"
+          Text "18,430" (17AB-2) 180×0 "18,430"
+      Frame "Orderbook Imbalance Summary" (17BR-2) 0×0
+        Frame "Frame" (17BS-2) 0×0
+          Frame "Frame" (17BT-2) 0×0
+            Text "총 매도 193,500주" (17BU-2) 0×0 "총 매도 193,500주"
+            Text "총 매수 165,630주" (17BV-2) 0×0 "총 매수 165,630주"
+          Text "매도비율 45.3%" (17BW-2) 0×0 "매도비율 45.3%"
+        Frame "Frame" (17BX-2) 0×8
+          Rectangle "Rectangle" (17BY-2) 0×0
+          Rectangle "Rectangle" (17BZ-2) 0×0
+    Frame "Orderbook Market Context" (17AD-2) 492×0
+      Frame "Frame" (17AE-2) 0×0
+        Text "시장별 맥락" (17AF-2) 0×0 "시장별 맥락"
+        Text "14:31:08.214" (17AG-2) 0×0 "14:31:08.214"
+      Frame "Frame" (17AH-2) 0×0
+        Frame "Frame" (17AI-2) 0×0
+          Text "시간외 단일가" (17AJ-2) 0×0 "시간외 단일가"
+          Text "다음 체결 16:20" (17AK-2) 0×0 "다음 체결 16:20"
+        Frame "Frame" (17AL-2) 0×0
+          Frame "Frame" (17AM-2) 0×0
+            Text "예상가" (17AN-2) 0×0 "예상가"
+            Text "150,900원" (17AO-2) 0×0 "150,900원"
+          Frame "Frame" (17AP-2) 0×0
+            Text "예상 거래량" (17AQ-2) 0×0 "예상 거래량"
+            Text "82,140주" (17AR-2) 0×0 "82,140주"
+        Frame "Frame" (17AS-2) 0×8
+          Rectangle "Rectangle" (17AT-2) 0×8
+        Frame "Frame" (17AU-2) 0×0
+          Text "매수비율 54.7%" (17AV-2) 0×0 "매수비율 54.7%"
+          Text "매도비율 45.3%" (17AW-2) 0×0 "매도비율 45.3%"
+      Frame "Frame" (17AX-2) 0×0
+        Frame "Frame" (17AY-2) 0×0
+          Text "KRX 금현물" (17AZ-2) 0×0 "KRX 금현물"
+          Text "g 단위" (17B0-2) 0×0 "g 단위"
+        Frame "Frame" (17B1-2) 0×0
+          Frame "Frame" (17B2-2) 0×0
+            Text "매도 1호가" (17B3-2) 0×0 "매도 1호가"
+            Text "128,470원" (17B4-2) 0×0 "128,470원"
+            Text "3,240g" (17B5-2) 0×0 "3,240g"
+          Frame "Frame" (17B6-2) 0×0
+            Text "매수 1호가" (17B7-2) 0×0 "매수 1호가"
+            Text "128,450원" (17B8-2) 0×0 "128,450원"
+            Text "4,120g" (17B9-2) 0×0 "4,120g"
+        Text "raw · base:ka50101 · output.cntr_str + output.lpmmcm_nm_1" (17BA-2) 0×0 "체결강도 112.6 · LP회원사 키움증권"
+      Frame "Frame" (17BB-2) 0×0
+        Text "최근 체결" (17BC-2) 0×0 "최근 체결"
+        Frame "Frame" (17BD-2) 0×30
+          Text "14:31:08" (17BE-2) 92×0 "14:31:08"
+          Text "150,850원" (17BF-2) 170×0 "150,850원"
+          Text "320주" (17BG-2) 0×0 "320주"
+        Frame "Frame" (17BH-2) 0×30
+          Text "14:31:07" (17BI-2) 92×0 "14:31:07"
+          Text "150,800원" (17BJ-2) 170×0 "150,800원"
+          Text "180주" (17BK-2) 0×0 "180주"
+      Frame "Frame" (17BL-2) 0×0
+        Frame "Frame" (17BM-2) 0×0
+          Rectangle "Rectangle" (17BN-2) 8×8
+          Text "실시간 연결됨" (17BO-2) 0×0 "실시간 연결됨"
+        Text "재연결 시 마지막 정상값 유지" (17BP-2) 0×0 "재연결 시 마지막 정상값 유지"

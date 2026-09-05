@@ -1,0 +1,340 @@
+{
+ "board_id": "46T0-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-04 / R02-T3 · 호가 — KRX 금현물",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "46TY-0",
+   "text": "",
+   "path": [
+    "mini/CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46TX-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46TV-0",
+   "text": "KRX 금현물 호가",
+   "path": [
+    "mini/CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Header"
+   ]
+  },
+  {
+   "id": "46TT-0",
+   "text": "순서",
+   "path": [
+    "mini/CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46TS-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46TR-0",
+   "text": "값",
+   "path": [
+    "mini/CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46TQ-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46TO-0",
+   "text": "01",
+   "path": [
+    "mini/CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "46TN-0",
+   "text": "전일대비기호",
+   "path": [
+    "mini/CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Body",
+    "Rank 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46TM-0",
+   "text": "",
+   "path": [
+    "mini/CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Body",
+    "Rank 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46TK-0",
+   "text": "850 · +0.78%",
+   "path": [
+    "mini/CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "46TJ-0",
+   "text": "",
+   "path": [
+    "mini/CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "46TH-0",
+   "text": "02",
+   "path": [
+    "mini/CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "46TG-0",
+   "text": "체결가",
+   "path": [
+    "mini/CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Body",
+    "Rank 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46TF-0",
+   "text": "",
+   "path": [
+    "mini/CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Body",
+    "Rank 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46TD-0",
+   "text": "109,750",
+   "path": [
+    "mini/CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "46TC-0",
+   "text": "",
+   "path": [
+    "mini/CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "46TA-0",
+   "text": "03",
+   "path": [
+    "mini/CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "46T9-0",
+   "text": "금현물호가",
+   "path": [
+    "mini/CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Body",
+    "Rank 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46T8-0",
+   "text": "",
+   "path": [
+    "mini/CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Body",
+    "Rank 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46T6-0",
+   "text": "92",
+   "path": [
+    "mini/CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "46T5-0",
+   "text": "",
+   "path": [
+    "mini/CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "46T2-0",
+   "text": "외 5개 행 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-04 / R02-T3 · 호가 — KRX 금현물",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "46T0-0",
+   "name": "mini/CC-04 / R02-T3 · 호가 — KRX 금현물",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "46TU-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46TW-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46T3-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46TP-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46TI-0",
+   "name": "Rank 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46TL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46TB-0",
+   "name": "Rank 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46TE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46T4-0",
+   "name": "Rank 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46T7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46T1-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 7,
+  "기준 09:42": 1,
+  "KRX 금현물 호가": 1,
+  "순서": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "01": 1,
+  "전일대비기호": 1,
+  "850 · +0.78%": 1,
+  "02": 1,
+  "체결가": 1,
+  "109,750": 1,
+  "03": 1,
+  "금현물호가": 1,
+  "92": 1,
+  "외 5개 행 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "482abff90081a5796affad87f96b2418879e91053332448ed67f47c359d2b714"
+}

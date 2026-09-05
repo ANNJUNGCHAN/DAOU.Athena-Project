@@ -1,0 +1,92 @@
+{
+ "board_id": "48Y5-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "48Y7-0",
+   "text": "원본 보드: CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+   "path": [
+    "note/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48Y9-0",
+   "text": "가져온 요소: 체결시간 · 전업종지수 · 업종코드리스트",
+   "path": [
+    "note/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48YB-0",
+   "text": "문법: table",
+   "path": [
+    "note/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48YD-0",
+   "text": "접은 개수: 행 3개",
+   "path": [
+    "note/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48Y5-0",
+   "name": "note/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "48Y6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48Y8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48YA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48YC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색": 1,
+  "가져온 요소: 체결시간 · 전업종지수 · 업종코드리스트": 1,
+  "문법: table": 1,
+  "접은 개수: 행 3개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "464f7b6a451630e40936139a0b1f355a899ede9616d070c97f7c80656689b057"
+}

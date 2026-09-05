@@ -1,0 +1,259 @@
+Frame "29 · 프로젝트·최근·새 채팅" (GCF-0) 1680×900
+  Frame "54 Header" (GCG-0) 1600×86
+    Frame "Frame" (GCH-0) 816×56
+      Frame "Frame" (GCI-0) 48×48
+        Text "51" (GCJ-0) 17×20 "51"
+      Frame "Frame" (GCK-0) 752×56
+        Text "프로젝트 · 최근 · 새 채팅 상호작…" (GCL-0) 752×36 "프로젝트 · 최근 · 새 채팅 상호작용"
+        Text "프로젝트 Hover부터 새 채팅까지,…" (GCM-0) 752×18 "프로젝트 Hover부터 새 채팅까지, 실제 Athena 셸에서 연결합니다. 설명 카드는 머물고, 프로젝트 수"
+    Frame "Frame" (GCN-0) 170×32
+      Text "개정 2026-09-05 · 승인 대…" (GCO-0) 142×16 "개정 2026-09-05 · 승인 대기"
+  Frame "54 Content" (GCQ-0) 1600×722
+    Frame "Live Athena Shell" (GHV-0) 1150×722
+      Frame "Native Titlebar" (GHZ-0) 1148×46
+        Frame "Frame" (GI0-0) 165×18
+          SVG "SVG" (GI1-0) 18×18
+            SVGVisualElement "Rect" (GI2-0) 13×13
+            SVGVisualElement "Path" (GI3-0) 0×12
+          Text "ATHENA" (GI4-0) 50×16 "ATHENA"
+          Text "아테나 · 그래프" (GI5-0) 77×14 "아테나 · 그래프"
+        Frame "Frame" (GI6-0) 208×14
+          Text "파일 편집 보기 도움말" (GI7-0) 132×14 "파일　편집　보기　도움말"
+          SVG "SVG" (GI8-0) 58×14
+            SVGVisualElement "Path" (GI9-0) 10×0
+            SVGVisualElement "Rect" (GIA-0) 10×10
+            SVGVisualElement "Path" (GIB-0) 9×10
+      Frame "Shell Body" (GIJ-0) 1148×676
+        Frame "Project Sidebar" (GIK-0) 254×676
+          Frame "Primary Actions" (GIO-0) 228×164
+            Frame "Frame" (GIP-0) 228×28
+              Text "ATHENA" (GIQ-0) 53×18 "ATHENA"
+              SVG "SVG" (GIR-0) 15×15
+                SVGVisualElement "Circle" (GIS-0) 8×8
+                SVGVisualElement "Path" (GIT-0) 3×3
+            Frame "Frame" (GIU-0) 228×30
+              SVG "SVG" (GIV-0) 15×15
+                SVGVisualElement "Path" (GIW-0) 6×0
+                SVGVisualElement "Path" (GIX-0) 10×10
+              Text "새 채팅" (GIY-0) 41×16 "새 채팅"
+            Frame "Frame" (GIZ-0) 228×30
+              SVG "SVG" (GJ0-0) 15×15
+                SVGVisualElement "Circle" (GJ1-0) 3×3
+                SVGVisualElement "Circle" (GJ2-0) 3×3
+                SVGVisualElement "Circle" (GJ3-0) 3×3
+                SVGVisualElement "Path" (GJ4-0) 5×5
+              Text "그래프" (GJ5-0) 36×16 "그래프"
+            Frame "Frame" (GJ6-0) 228×30
+              SVG "SVG" (GJ7-0) 15×15
+                SVGVisualElement "Circle" (GJ8-0) 4×4
+                SVGVisualElement "Path" (GJ9-0) 8×4
+              Text "에이전트" (GJA-0) 48×16 "에이전트"
+            Frame "Frame" (GJB-0) 228×30
+              SVG "SVG" (GJC-0) 15×15
+                SVGVisualElement "Path" (GJD-0) 9×10
+                SVGVisualElement "Path" (GJE-0) 0×1
+              Text "플러그인" (GJF-0) 48×16 "플러그인"
+          Frame "Project Tree" (GJH-0) 228×129
+            Frame "Frame" (GJI-0) 228×16
+              Text "프로젝트" (GJJ-0) 43×12 "프로젝트"
+            Frame "Frame" (GJK-0) 228×32
+              SVG "SVG" (GJL-0) 15×15
+                SVGVisualElement "Path" (GJM-0) 11×8
+                SVGVisualElement "Path" (GJN-0) 8×3
+              Text "아테나" (GJO-0) 141×16 "아테나"
+              SVG "SVG" (GJP-0) 17×17
+                SVGVisualElement "Circle" (GJQ-0) 2×2
+                SVGVisualElement "Circle" (GJR-0) 2×2
+                SVGVisualElement "Circle" (GJS-0) 2×2
+              SVG "SVG" (GJT-0) 17×17
+                SVGVisualElement "Path" (GJU-0) 6×0
+                SVGVisualElement "Path" (GJV-0) 11×11
+            Frame "Frame" (GJW-0) 228×27
+              SVG "Mode 대화" (49W4-0) 14×14
+                SVGVisualElement "Path" (49W5-0) 9×9
+              Text "백엔드 API 개수 확인" (GJX-0) 187×14 "백엔드 API 개수 확인"
+            Frame "Frame" (GJY-0) 228×29
+              SVG "Mode 그래프" (49W7-0) 14×14
+                SVGVisualElement "Circle" (49W8-0) 2×2
+                SVGVisualElement "Circle" (49W9-0) 2×2
+                SVGVisualElement "Circle" (49WA-0) 2×2
+                SVGVisualElement "Path" (49WB-0) 5×4
+              Text "앱 전체 기능 검수" (GJZ-0) 176×14 "앱 전체 기능 검수"
+              Rectangle "Rectangle" (H47-0) 6×6
+          Frame "Recent Conversations" (GK1-0) 228×126
+            Frame "Frame" (GK2-0) 228×20
+              Text "최근" (GK3-0) 22×12 "최근"
+              Text "전체" (GK4-0) 18×12 "전체"
+            Frame "Frame" (GK5-0) 228×27
+              SVG "Mode 그래프" (49WD-0) 14×14
+                SVGVisualElement "Circle" (49WE-0) 2×2
+                SVGVisualElement "Circle" (49WF-0) 2×2
+                SVGVisualElement "Circle" (49WG-0) 2×2
+                SVGVisualElement "Path" (49WH-0) 5×4
+              Text "앱 전체 기능 검수" (GK6-0) 176×14 "앱 전체 기능 검수"
+              Rectangle "Rectangle" (GK7-0) 6×6
+            Frame "Frame" (GK8-0) 228×27
+              SVG "Mode 에이전트" (49WJ-0) 14×14
+                SVGVisualElement "Circle" (49WK-0) 4×4
+                SVGVisualElement "Path" (49WL-0) 8×4
+              Text "삼성전자 주요 변동 알림" (GK9-0) 122×14 "삼성전자 주요 변동 알림"
+            Frame "Frame" (GKA-0) 228×27
+              SVG "Mode 대화" (49WN-0) 14×14
+                SVGVisualElement "Path" (49WO-0) 9×9
+              Text "ETF 자금 흐름" (GKB-0) 69×14 "ETF 자금 흐름"
+          Frame "Account Footer" (GKD-0) 228×191
+            Frame "Frame" (GKE-0) 228×38
+              Frame "Frame" (GKF-0) 22×22
+                Text "AN" (GKG-0) 13×12 "AN"
+              Text "모의-주력" (GKH-0) 159×14 "모의-주력"
+              SVG "SVG" (GKI-0) 13×13
+                SVGVisualElement "Path" (GKJ-0) 5×3
+        Frame "Graph Canvas" (GIL-0) 556×676
+          Frame "Canvas Header" (GKL-0) 555×52
+            Frame "Frame" (GKM-0) 129×16
+              SVG "SVG" (GKN-0) 16×16
+                SVGVisualElement "Path" (GKO-0) 12×9
+              Text "앱 전체 기능 검수" (GKP-0) 105×16 "앱 전체 기능 검수"
+            Frame "Frame" (GKQ-0) 45×12
+              Text "그래프" (GKR-0) 30×12 "그래프"
+              Rectangle "Rectangle" (GKS-0) 7×7
+          Frame "Graph Workspace" (GKU-0) 555×624
+            Frame "Frame" (GKV-0) 523×40
+              Frame "Frame" (GKW-0) 132×14
+                Rectangle "Rectangle" (GKX-0) 7×7
+                Text "현재 기능 유지 · 그래프" (GKY-0) 117×14 "현재 기능 유지 · 그래프"
+              Text "새 채팅을 열어도 캔버스는 유지됩니다" (GKZ-0) 175×12 "새 채팅을 열어도 캔버스는 유지됩니다"
+            Frame "Frame" (GL0-0) 523×540
+              Frame "Frame" (GL1-0) 489×16
+                Text "Athena 기능 구조" (GL2-0) 95×16 "Athena 기능 구조"
+                Text "7 CLUSTERS · 24 LINK…" (GL3-0) 114×12 "7 CLUSTERS · 24 LINKS"
+              SVG "SVG" (GL4-0) 489×360
+                SVGVisualElement "Path" (GL5-0) 388×259
+                SVGVisualElement "Circle" (GL6-0) 82×82
+                SVGVisualElement "Circle" (GL7-0) 59×59
+                SVGVisualElement "Circle" (GL8-0) 59×59
+                SVGVisualElement "Circle" (GL9-0) 59×59
+                SVGVisualElement "Circle" (GLA-0) 59×59
+                SVGVisualElement "Circle" (GLB-0) 47×47
+                SVGVisualElement "Circle" (GLC-0) 39×39
+                SVGVisualElement "Circle" (GLD-0) 39×39
+                SVGVisualElement "ATHENA" (GLE-0) 57×21
+                SVGVisualElement "APP REVIEW" (GLF-0) 58×12
+                SVGVisualElement "대화" (GLG-0) 26×17
+                SVGVisualElement "그래프" (GLH-0) 35×17
+                SVGVisualElement "에이전트" (GLI-0) 44×17
+                SVGVisualElement "플러그인" (GLJ-0) 44×17
+                SVGVisualElement "계정" (GLK-0) 21×12
+              Frame "Frame" (GLL-0) 489×34
+                Text "프로젝트 소속 대화와 전역 최근은 같…" (GLM-0) 245×12 "프로젝트 소속 대화와 전역 최근은 같은 기록을 엽니다"
+                Text "동일 대화" (GLN-0) 44×12 "동일 대화"
+        Frame "New Chat Panel" (GIM-0) 340×676
+          Frame "Chat Header" (GLP-0) 340×52
+            Frame "Frame" (GLQ-0) 70×30
+              Text "새 채팅" (GLR-0) 70×16 "새 채팅"
+              Text "아테나 · 그래프" (GLS-0) 70×12 "아테나 · 그래프"
+            Frame "Frame" (GLT-0) 48×24
+              Frame "Frame" (GLU-0) 24×24
+                SVG "SVG" (GLV-0) 14×14
+                  SVGVisualElement "Path" (GLW-0) 8×8
+              SVG "SVG" (GLX-0) 16×16
+                SVGVisualElement "Circle" (GLY-0) 2×2
+                SVGVisualElement "Circle" (GLZ-0) 2×2
+                SVGVisualElement "Circle" (GM0-0) 2×2
+          Frame "Blank Conversation" (GM2-0) 340×535
+            Frame "Frame" (GM3-0) 44×44
+              SVG "SVG" (GM4-0) 22×22
+                SVGVisualElement "Path" (GM5-0) 15×14
+                SVGVisualElement "Path" (GM6-0) 7×3
+            Text "그래프에서 새 채팅" (GM7-0) 122×18 "그래프에서 새 채팅"
+            Text "프로젝트는 아테나로, 현재 기능은 그…" (GM8-0) 292×34 "프로젝트는 아테나로, 현재 기능은 그래프로 유지된 빈 채팅입니다."
+            Frame "Frame" (GM9-0) 193×28
+              Rectangle "Rectangle" (GMA-0) 6×6
+              Text "첫 입력 후 프로젝트와 최근에 표시" (GMB-0) 158×12 "첫 입력 후 프로젝트와 최근에 표시"
+          Frame "Chat Composer" (GMD-0) 340×89
+            Frame "Frame" (GME-0) 316×42
+              Text "무엇이든 요청하세요" (GMF-0) 233×14 "무엇이든 요청하세요"
+              Frame "Frame" (GMG-0) 24×24
+                Rectangle "Rectangle" (GMH-0) 10×5
+              SVG "SVG" (GMI-0) 15×15
+                SVGVisualElement "Path" (GMJ-0) 9×9
+            Frame "Frame" (GMK-0) 316×12
+              Text "아테나 프로젝트" (GML-0) 67×12 "아테나 프로젝트"
+              Text "그래프 유지" (GMM-0) 49×12 "그래프 유지"
+      Frame "Project Info Popover" (GMO-0) 226×158
+        Frame "Frame" (GMP-0) 198×16
+          Frame "Frame" (GMQ-0) 59×16
+            SVG "SVG" (GMR-0) 15×15
+              SVGVisualElement "Path" (GMS-0) 11×8
+            Text "아테나" (GMT-0) 36×16 "아테나"
+          SVG "SVG" (GMU-0) 14×14
+            SVGVisualElement "Path" (GMV-0) 8×8
+        Text "대화 2개 · 활성 1개" (GMW-0) 198×12 "대화 2개 · 활성 1개"
+        Frame "Frame" (GMX-0) 198×51
+          Text "ANNJUNGCHAN/DAOU.Ath…" (GMY-0) 198×12 "ANNJUNGCHAN/DAOU.Athena"
+          Text "C:\Projects\DAOU.Ath…" (GMZ-0) 198×12 "C:\Projects\DAOU.Athena"
+        Frame "프로젝트 수정 버튼" (49VH-0) 102×24
+          SVG "SVG" (49VI-0) 12×12
+            SVGVisualElement "Path" (49VJ-0) 5×0
+            SVGVisualElement "Path" (49VK-0) 8×8
+          Text "프로젝트 수정" (49VL-0) 64×12 "프로젝트 수정"
+    Frame "Interaction Rail" (GHX-0) 426×722
+      Frame "Rail Header" (GID-0) 388×54
+        Frame "Frame" (GIE-0) 388×20
+          Text "한 번의 흐름" (GIF-0) 92×20 "한 번의 흐름"
+          Text "PROJECT CHAT" (GIG-0) 82×12 "PROJECT CHAT"
+        Text "Hover에서 새 채팅까지, 실제 셸…" (GIH-0) 388×14 "Hover에서 새 채팅까지, 실제 셸 안에서 이어집니다."
+      Frame "Step 1 Hover" (GN2-0) 388×112
+        Frame "Frame" (GN3-0) 362×20
+          Frame "Frame" (GN4-0) 20×20
+            Text "1" (GN5-0) 6×12 "1"
+          Text "프로젝트 행 Hover" (GN6-0) 101×16 "프로젝트 행 Hover"
+        Frame "Frame" (GN7-0) 362×32
+          SVG "SVG" (GN8-0) 14×14
+            SVGVisualElement "Path" (GN9-0) 11×8
+          Text "아테나" (GNA-0) 281×14 "아테나"
+          Text "···" (GNB-0) 10×18 "···"
+          SVG "SVG" (GNC-0) 15×15
+            SVGVisualElement "Path" (GND-0) 6×0
+            SVGVisualElement "Path" (GNE-0) 10×10
+        Text "설명 카드는 행이나 카드 위에 머무는…" (GNF-0) 362×24 "설명 카드는 행이나 카드 위에 머무는 동안 남습니다 — 카드로 건너가도 꺼지지 않고, '프로젝트 수정'이 눌"
+      Frame "Step 2 Project Menu" (GNH-0) 388×232
+        Frame "Frame" (GNI-0) 362×20
+          Frame "Frame" (GNJ-0) 20×20
+            Text "2" (GNK-0) 6×12 "2"
+          Text "프로젝트 수정 — 이름·설명을 그 자…" (GNL-0) 229×16 "프로젝트 수정 — 이름·설명을 그 자리에서"
+        Frame "Project Edit Panel" (49VP-0) 362×144
+          Text "이름" (49VQ-0) 344×12 "이름"
+          Frame "Frame" (49VR-0) 344×26
+            Text "아테나" (49VS-0) 33×14 "아테나"
+          Text "설명" (49VT-0) 344×12 "설명"
+          Frame "Frame" (49VU-0) 344×26
+            Text "이 프로젝트에 속한 대화와 작업" (49VV-0) 159×14 "이 프로젝트에 속한 대화와 작업"
+          Frame "Frame" (49VW-0) 344×26
+            Frame "Frame" (49VX-0) 44×24
+              Text "취소" (49VY-0) 22×14 "취소"
+            Frame "Frame" (49VZ-0) 42×24
+              Text "저장" (49W0-0) 22×14 "저장"
+        Text "Edit Panel Caption" (49W2-0) 362×24 "설명 카드의 '프로젝트 수정'을 누르면 행 아래에 열립니다. 이름은 비울 수 없고, Esc·취소로 닫힙니다."
+      Frame "Step 3 New Chat" (GOF-0) 388×140
+        Frame "Frame" (GOG-0) 362×20
+          Frame "Frame" (GOH-0) 20×20
+            Text "3" (GOI-0) 6×12 "3"
+          Text "현재 기능으로 새 채팅" (GOJ-0) 121×16 "현재 기능으로 새 채팅"
+        Frame "Frame" (GOK-0) 362×50
+          Frame "Frame" (GOL-0) 164×50
+            Text "현재" (GOM-0) 144×12 "현재"
+            Text "아테나 · 그래프" (GON-0) 144×14 "아테나 · 그래프"
+          SVG "SVG" (GOO-0) 20×20
+            SVGVisualElement "Path" (GOP-0) 12×8
+          Frame "Frame" (GOQ-0) 164×50
+            Text "결과" (GOR-0) 144×12 "결과"
+            Text "빈 우측 채팅" (GOS-0) 144×14 "빈 우측 채팅"
+        Text "첫 입력 뒤 프로젝트 하위와 최근에 …" (GOT-0) 362×12 "첫 입력 뒤 프로젝트 하위와 최근에 같은 기록으로 표시"
+      Frame "Acceptance Note" (GOV-0) 388×78
+        Frame "Frame" (GOW-0) 28×28
+          SVG "SVG" (GOX-0) 15×15
+            SVGVisualElement "Path" (GOY-0) 9×6
+        Frame "Frame" (GOZ-0) 324×47
+          Text "하나의 대화 기록" (GP0-0) 324×14 "하나의 대화 기록"
+          Text "프로젝트와 최근은 동일한 우측 채팅을…" (GP1-0) 324×30 "프로젝트와 최근은 동일한 우측 채팅을 엽니다. 04–08과 47–49의 실제 셸에 반영했습니다."

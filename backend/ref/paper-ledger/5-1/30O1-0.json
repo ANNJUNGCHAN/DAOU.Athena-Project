@@ -1,0 +1,5712 @@
+{
+ "board_id": "30O1-0",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+ "width": 1440,
+ "height": 1120,
+ "texts": [
+  {
+   "id": "30TX-0",
+   "text": "주식 순위",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30TW-0",
+   "text": "KRX 전체 · 가격대별 매물 집중",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30TV-0",
+   "text": "조회 스냅샷",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30TS-0",
+   "text": "평균 비중 11.0%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30TR-0",
+   "text": "최대 18.4%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30TQ-0",
+   "text": "09:42:18 조회",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30TN-0",
+   "text": "현재시세",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30TL-0",
+   "text": "차트",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30TJ-0",
+   "text": "기업정보",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30TH-0",
+   "text": "ETF",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30TF-0",
+   "text": "ELW",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30TD-0",
+   "text": "금현물",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30TB-0",
+   "text": "순위",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Instrument Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30T7-0",
+   "text": "정렬 기준",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30T6-0",
+   "text": "집중 비중 큰 순",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30T4-0",
+   "text": "표시 범위",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30T3-0",
+   "text": "상위 50",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30T2-0",
+   "text": "집중 비중 순",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30T0-0",
+   "text": "평균 비중",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30SZ-0",
+   "text": "11.0%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30SY-0",
+   "text": "표시 종목 기준",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30SW-0",
+   "text": "최대 비중",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30SV-0",
+   "text": "18.4%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30SU-0",
+   "text": "1위 종목",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30SS-0",
+   "text": "집계 기간",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30SR-0",
+   "text": "3개월",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30SQ-0",
+   "text": "일봉 기준",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Quote and Valuation Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30SN-0",
+   "text": "신고저가",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30SL-0",
+   "text": "상하한가",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30SJ-0",
+   "text": "고저가근접",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30SH-0",
+   "text": "가격급등락",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30SF-0",
+   "text": "거래량갱신",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30SC-0",
+   "text": "범위",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30SB-0",
+   "text": "주식",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30S9-0",
+   "text": "ETF",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30S7-0",
+   "text": "ELW",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30S3-0",
+   "text": "매물대집중",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30S1-0",
+   "text": "고저 PER",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30RZ-0",
+   "text": "시가대비 등락",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30RX-0",
+   "text": "VI 발동",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "30RV-0",
+   "text": "당일·전일 체결량",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RJS-0",
+   "text": "전체 50건 · 19건 표시",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RJW-0",
+   "text": "순위",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "3RJX-0",
+   "text": "종목",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "3RJY-0",
+   "text": "현재가",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "3RJZ-0",
+   "text": "집중 가격대",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "3RK0-0",
+   "text": "매물량 · 비중",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "3RK1-0",
+   "text": "현재 거래량",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "3RK2-0",
+   "text": "분포",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "3RK3-0",
+   "text": "시장",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "열 머리"
+   ]
+  },
+  {
+   "id": "3RK5-0",
+   "text": "1",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "1 한미반도체"
+   ]
+  },
+  {
+   "id": "3RK7-0",
+   "text": "한미반도체",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "1 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RK8-0",
+   "text": "042700",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "1 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RKA-0",
+   "text": "197,400",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "1 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RKB-0",
+   "text": "+7,900 · +4.18%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "1 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RKC-0",
+   "text": "195,000 ~ 197,000",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "1 한미반도체"
+   ]
+  },
+  {
+   "id": "3RKE-0",
+   "text": "418만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "1 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RKF-0",
+   "text": "비중 18.4%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "1 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RKH-0",
+   "text": "320만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "1 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RKI-0",
+   "text": "6,317억",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "1 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RKM-0",
+   "text": "코스피",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "1 한미반도체"
+   ]
+  },
+  {
+   "id": "3RKO-0",
+   "text": "2",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "2 HD현대일렉트릭"
+   ]
+  },
+  {
+   "id": "3RKQ-0",
+   "text": "HD현대일렉트릭",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "2 HD현대일렉트릭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RKR-0",
+   "text": "267260",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "2 HD현대일렉트릭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RKT-0",
+   "text": "412,500",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "2 HD현대일렉트릭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RKU-0",
+   "text": "+11,500 · +2.86%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "2 HD현대일렉트릭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RKV-0",
+   "text": "405,000 ~ 409,000",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "2 HD현대일렉트릭"
+   ]
+  },
+  {
+   "id": "3RKX-0",
+   "text": "285만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "2 HD현대일렉트릭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RKY-0",
+   "text": "비중 16.9%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "2 HD현대일렉트릭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RL0-0",
+   "text": "80만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "2 HD현대일렉트릭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RL1-0",
+   "text": "3,300억",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "2 HD현대일렉트릭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RL5-0",
+   "text": "코스피",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "2 HD현대일렉트릭"
+   ]
+  },
+  {
+   "id": "3RL7-0",
+   "text": "3",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "3 알테오젠"
+   ]
+  },
+  {
+   "id": "3RL9-0",
+   "text": "알테오젠",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "3 알테오젠",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RLA-0",
+   "text": "196170",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "3 알테오젠",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RLC-0",
+   "text": "391,000",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "3 알테오젠",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RLD-0",
+   "text": "+88,200 · +29.12%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "3 알테오젠",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RLE-0",
+   "text": "398,000 ~ 402,000",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "3 알테오젠"
+   ]
+  },
+  {
+   "id": "3RLG-0",
+   "text": "242만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "3 알테오젠",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RLH-0",
+   "text": "비중 15.2%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "3 알테오젠",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RLJ-0",
+   "text": "110만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "3 알테오젠",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RLK-0",
+   "text": "4,301억",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "3 알테오젠",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RLO-0",
+   "text": "코스닥",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "3 알테오젠"
+   ]
+  },
+  {
+   "id": "3RLQ-0",
+   "text": "4",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "4 삼양식품"
+   ]
+  },
+  {
+   "id": "3RLS-0",
+   "text": "삼양식품",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "4 삼양식품",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RLT-0",
+   "text": "003230",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "4 삼양식품",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RLV-0",
+   "text": "745,000",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "4 삼양식품",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RLW-0",
+   "text": "+167,600 · +29.03%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "4 삼양식품",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RLX-0",
+   "text": "752,000 ~ 760,000",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "4 삼양식품"
+   ]
+  },
+  {
+   "id": "3RLZ-0",
+   "text": "86만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "4 삼양식품",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RM0-0",
+   "text": "비중 14.1%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "4 삼양식품",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RM2-0",
+   "text": "20만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "4 삼양식품",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RM3-0",
+   "text": "1,490억",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "4 삼양식품",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RM7-0",
+   "text": "코스피",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "4 삼양식품"
+   ]
+  },
+  {
+   "id": "3RM9-0",
+   "text": "5",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "5 현대로템"
+   ]
+  },
+  {
+   "id": "3RMB-0",
+   "text": "현대로템",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "5 현대로템",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RMC-0",
+   "text": "064350",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "5 현대로템",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RME-0",
+   "text": "128,900",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "5 현대로템",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RMF-0",
+   "text": "+29,000 · +29.03%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "5 현대로템",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RMG-0",
+   "text": "126,500 ~ 128,000",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "5 현대로템"
+   ]
+  },
+  {
+   "id": "3RMI-0",
+   "text": "512만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "5 현대로템",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RMJ-0",
+   "text": "비중 13.3%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "5 현대로템",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RML-0",
+   "text": "240만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "5 현대로템",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RMM-0",
+   "text": "3,094억",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "5 현대로템",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RMQ-0",
+   "text": "코스피",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "5 현대로템"
+   ]
+  },
+  {
+   "id": "3RMS-0",
+   "text": "6",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "6 LS일렉트릭"
+   ]
+  },
+  {
+   "id": "3RMU-0",
+   "text": "LS일렉트릭",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "6 LS일렉트릭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RMV-0",
+   "text": "010120",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "6 LS일렉트릭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RMX-0",
+   "text": "289,500",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "6 LS일렉트릭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RMY-0",
+   "text": "+4,000 · +1.40%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "6 LS일렉트릭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RMZ-0",
+   "text": "292,000 ~ 295,000",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "6 LS일렉트릭"
+   ]
+  },
+  {
+   "id": "3RN1-0",
+   "text": "194만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "6 LS일렉트릭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RN2-0",
+   "text": "비중 12.6%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "6 LS일렉트릭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RN4-0",
+   "text": "60만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "6 LS일렉트릭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RN5-0",
+   "text": "1,737억",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "6 LS일렉트릭",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RN9-0",
+   "text": "코스피",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "6 LS일렉트릭"
+   ]
+  },
+  {
+   "id": "3RNB-0",
+   "text": "7",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "7 롯데케미칼"
+   ]
+  },
+  {
+   "id": "3RND-0",
+   "text": "롯데케미칼",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "7 롯데케미칼",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RNE-0",
+   "text": "011170",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "7 롯데케미칼",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RNG-0",
+   "text": "61,200",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "7 롯데케미칼",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RNH-0",
+   "text": "-2,000 · -3.16%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "7 롯데케미칼",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RNI-0",
+   "text": "62,400 ~ 63,200",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "7 롯데케미칼"
+   ]
+  },
+  {
+   "id": "3RNK-0",
+   "text": "321만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "7 롯데케미칼",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RNL-0",
+   "text": "비중 11.8%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "7 롯데케미칼",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RNN-0",
+   "text": "90만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "7 롯데케미칼",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RNO-0",
+   "text": "551억",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "7 롯데케미칼",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RNS-0",
+   "text": "코스피",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "7 롯데케미칼"
+   ]
+  },
+  {
+   "id": "3RNU-0",
+   "text": "8",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "8 이마트"
+   ]
+  },
+  {
+   "id": "3RNW-0",
+   "text": "이마트",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "8 이마트",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RNX-0",
+   "text": "139480",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "8 이마트",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RNZ-0",
+   "text": "52,300",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "8 이마트",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RO0-0",
+   "text": "-21,400 · -29.04%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "8 이마트",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RO1-0",
+   "text": "51,500 ~ 52,000",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "8 이마트"
+   ]
+  },
+  {
+   "id": "3RO3-0",
+   "text": "176만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "8 이마트",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RO4-0",
+   "text": "비중 10.9%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "8 이마트",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RO6-0",
+   "text": "40만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "8 이마트",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RO7-0",
+   "text": "209억",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "8 이마트",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ROB-0",
+   "text": "코스피",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "8 이마트"
+   ]
+  },
+  {
+   "id": "3ROD-0",
+   "text": "9",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "9 실리콘투"
+   ]
+  },
+  {
+   "id": "3ROF-0",
+   "text": "실리콘투",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "9 실리콘투",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ROG-0",
+   "text": "257720",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "9 실리콘투",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ROI-0",
+   "text": "58,900",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "9 실리콘투",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ROJ-0",
+   "text": "+13,530 · +29.81%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "9 실리콘투",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ROK-0",
+   "text": "56,000 ~ 57,500",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "9 실리콘투"
+   ]
+  },
+  {
+   "id": "3ROM-0",
+   "text": "288만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "9 실리콘투",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RON-0",
+   "text": "비중 10.4%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "9 실리콘투",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ROP-0",
+   "text": "316만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "9 실리콘투",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ROQ-0",
+   "text": "1,861억",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "9 실리콘투",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ROU-0",
+   "text": "코스닥",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "9 실리콘투"
+   ]
+  },
+  {
+   "id": "3ROW-0",
+   "text": "10",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "10 하나마이크론"
+   ]
+  },
+  {
+   "id": "3ROY-0",
+   "text": "하나마이크론",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "10 하나마이크론",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ROZ-0",
+   "text": "067310",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "10 하나마이크론",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RP1-0",
+   "text": "27,850",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "10 하나마이크론",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RP2-0",
+   "text": "+6,320 · +29.35%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "10 하나마이크론",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RP3-0",
+   "text": "26,500 ~ 27,200",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "10 하나마이크론"
+   ]
+  },
+  {
+   "id": "3RP5-0",
+   "text": "462만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "10 하나마이크론",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RP6-0",
+   "text": "비중 10.1%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "10 하나마이크론",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RP8-0",
+   "text": "508만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "10 하나마이크론",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RP9-0",
+   "text": "1,415억",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "10 하나마이크론",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RPD-0",
+   "text": "코스닥",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "10 하나마이크론"
+   ]
+  },
+  {
+   "id": "3RPF-0",
+   "text": "11",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "11 동진쎄미켐"
+   ]
+  },
+  {
+   "id": "3RPH-0",
+   "text": "동진쎄미켐",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "11 동진쎄미켐",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RPI-0",
+   "text": "005290",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "11 동진쎄미켐",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RPK-0",
+   "text": "42,150",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "11 동진쎄미켐",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RPL-0",
+   "text": "+9,530 · +29.22%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "11 동진쎄미켐",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RPM-0",
+   "text": "40,500 ~ 41,400",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "11 동진쎄미켐"
+   ]
+  },
+  {
+   "id": "3RPO-0",
+   "text": "196만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "11 동진쎄미켐",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RPP-0",
+   "text": "비중 9.8%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "11 동진쎄미켐",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RPR-0",
+   "text": "214만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "11 동진쎄미켐",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RPS-0",
+   "text": "902억",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "11 동진쎄미켐",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RPW-0",
+   "text": "코스닥",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "11 동진쎄미켐"
+   ]
+  },
+  {
+   "id": "3RPY-0",
+   "text": "12",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "12 주성엔지니어링"
+   ]
+  },
+  {
+   "id": "3RQ0-0",
+   "text": "주성엔지니어링",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "12 주성엔지니어링",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RQ1-0",
+   "text": "036930",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "12 주성엔지니어링",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RQ3-0",
+   "text": "38,700",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "12 주성엔지니어링",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RQ4-0",
+   "text": "+8,730 · +29.13%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "12 주성엔지니어링",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RQ5-0",
+   "text": "37,200 ~ 38,100",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "12 주성엔지니어링"
+   ]
+  },
+  {
+   "id": "3RQ7-0",
+   "text": "164만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "12 주성엔지니어링",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RQ8-0",
+   "text": "비중 9.4%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "12 주성엔지니어링",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RQA-0",
+   "text": "176만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "12 주성엔지니어링",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RQB-0",
+   "text": "681억",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "12 주성엔지니어링",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RQF-0",
+   "text": "코스닥",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "12 주성엔지니어링"
+   ]
+  },
+  {
+   "id": "3RQH-0",
+   "text": "13",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "13 원익IPS"
+   ]
+  },
+  {
+   "id": "3RQJ-0",
+   "text": "원익IPS",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "13 원익IPS",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RQK-0",
+   "text": "240810",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "13 원익IPS",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RQM-0",
+   "text": "41,300",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "13 원익IPS",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RQN-0",
+   "text": "+9,300 · +29.06%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "13 원익IPS",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RQO-0",
+   "text": "39,800 ~ 40,600",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "13 원익IPS"
+   ]
+  },
+  {
+   "id": "3RQQ-0",
+   "text": "138만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "13 원익IPS",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RQR-0",
+   "text": "비중 9.1%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "13 원익IPS",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RQT-0",
+   "text": "148만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "13 원익IPS",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RQU-0",
+   "text": "611억",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "13 원익IPS",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RQY-0",
+   "text": "코스닥",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "13 원익IPS"
+   ]
+  },
+  {
+   "id": "3RR0-0",
+   "text": "14",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "14 대주전자재료"
+   ]
+  },
+  {
+   "id": "3RR2-0",
+   "text": "대주전자재료",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "14 대주전자재료",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RR3-0",
+   "text": "078600",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "14 대주전자재료",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RR5-0",
+   "text": "118,700",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "14 대주전자재료",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RR6-0",
+   "text": "+27,120 · +29.61%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "14 대주전자재료",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RR7-0",
+   "text": "114,000 ~ 117,000",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "14 대주전자재료"
+   ]
+  },
+  {
+   "id": "3RR9-0",
+   "text": "52만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "14 대주전자재료",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RRA-0",
+   "text": "비중 8.7%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "14 대주전자재료",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RRC-0",
+   "text": "58만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "14 대주전자재료",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RRD-0",
+   "text": "688억",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "14 대주전자재료",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RRH-0",
+   "text": "코스닥",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "14 대주전자재료"
+   ]
+  },
+  {
+   "id": "3RRJ-0",
+   "text": "15",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "15 티씨케이"
+   ]
+  },
+  {
+   "id": "3RRL-0",
+   "text": "티씨케이",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "15 티씨케이",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RRM-0",
+   "text": "064760",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "15 티씨케이",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RRO-0",
+   "text": "96,400",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "15 티씨케이",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RRP-0",
+   "text": "+21,700 · +29.05%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "15 티씨케이",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RRQ-0",
+   "text": "93,000 ~ 95,200",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "15 티씨케이"
+   ]
+  },
+  {
+   "id": "3RRS-0",
+   "text": "41만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "15 티씨케이",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RRT-0",
+   "text": "비중 8.4%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "15 티씨케이",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RRV-0",
+   "text": "44만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "15 티씨케이",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RRW-0",
+   "text": "424억",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "15 티씨케이",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RS0-0",
+   "text": "코스닥",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "15 티씨케이"
+   ]
+  },
+  {
+   "id": "3RS2-0",
+   "text": "16",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "16 리가켐바이오"
+   ]
+  },
+  {
+   "id": "3RS4-0",
+   "text": "리가켐바이오",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "16 리가켐바이오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RS5-0",
+   "text": "141080",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "16 리가켐바이오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RS7-0",
+   "text": "172,300",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "16 리가켐바이오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RS8-0",
+   "text": "+39,450 · +29.70%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "16 리가켐바이오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RS9-0",
+   "text": "166,000 ~ 170,000",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "16 리가켐바이오"
+   ]
+  },
+  {
+   "id": "3RSB-0",
+   "text": "68만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "16 리가켐바이오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RSC-0",
+   "text": "비중 8.1%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "16 리가켐바이오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RSE-0",
+   "text": "74만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "16 리가켐바이오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RSF-0",
+   "text": "1,275억",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "16 리가켐바이오",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RSJ-0",
+   "text": "코스닥",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "16 리가켐바이오"
+   ]
+  },
+  {
+   "id": "3RSL-0",
+   "text": "17",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "17 레인보우로보틱스"
+   ]
+  },
+  {
+   "id": "3RSN-0",
+   "text": "레인보우로보틱스",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "17 레인보우로보틱스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RSO-0",
+   "text": "277810",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "17 레인보우로보틱스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RSQ-0",
+   "text": "246,500",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "17 레인보우로보틱스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RSR-0",
+   "text": "+56,800 · +29.94%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "17 레인보우로보틱스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RSS-0",
+   "text": "238,000 ~ 244,000",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "17 레인보우로보틱스"
+   ]
+  },
+  {
+   "id": "3RSU-0",
+   "text": "84만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "17 레인보우로보틱스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RSV-0",
+   "text": "비중 7.8%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "17 레인보우로보틱스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RSX-0",
+   "text": "92만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "17 레인보우로보틱스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RSY-0",
+   "text": "2,268억",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "17 레인보우로보틱스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RT2-0",
+   "text": "코스닥",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "17 레인보우로보틱스"
+   ]
+  },
+  {
+   "id": "3RT4-0",
+   "text": "18",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "18 코스맥스"
+   ]
+  },
+  {
+   "id": "3RT6-0",
+   "text": "코스맥스",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "18 코스맥스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RT7-0",
+   "text": "192820",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "18 코스맥스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RT9-0",
+   "text": "118,600",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "18 코스맥스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RTA-0",
+   "text": "-48,600 · -29.07%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "18 코스맥스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RTB-0",
+   "text": "148,000 ~ 155,000",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "18 코스맥스"
+   ]
+  },
+  {
+   "id": "3RTD-0",
+   "text": "58만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "18 코스맥스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RTE-0",
+   "text": "비중 7.4%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "18 코스맥스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RTG-0",
+   "text": "62만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "18 코스맥스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RTH-0",
+   "text": "735억",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "18 코스맥스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RTL-0",
+   "text": "코스피",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "18 코스맥스"
+   ]
+  },
+  {
+   "id": "3RTN-0",
+   "text": "19",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "19 덕산네오룩스"
+   ]
+  },
+  {
+   "id": "3RTP-0",
+   "text": "덕산네오룩스",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "19 덕산네오룩스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RTQ-0",
+   "text": "213420",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "19 덕산네오룩스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RTS-0",
+   "text": "26,150",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "19 덕산네오룩스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RTT-0",
+   "text": "-10,700 · -29.04%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "19 덕산네오룩스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RTU-0",
+   "text": "32,000 ~ 34,000",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "19 덕산네오룩스"
+   ]
+  },
+  {
+   "id": "3RTW-0",
+   "text": "82만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "19 덕산네오룩스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RTX-0",
+   "text": "비중 7.1%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "19 덕산네오룩스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RTZ-0",
+   "text": "88만주",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "19 덕산네오룩스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RU0-0",
+   "text": "230억",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "19 덕산네오룩스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3RU4-0",
+   "text": "코스닥",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Quote Detail Mount",
+    "순위 표",
+    "19 덕산네오룩스"
+   ]
+  },
+  {
+   "id": "3ORH-0",
+   "text": "집중 요약",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 1 · 집중 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ORI-0",
+   "text": "최근 3개월 · 일봉",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 1 · 집중 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ORL-0",
+   "text": "평균 비중",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 1 · 집중 요약",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ORM-0",
+   "text": "11.0%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 1 · 집중 요약",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ORO-0",
+   "text": "현재가 위 매물대",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 1 · 집중 요약",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ORP-0",
+   "text": "28개",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 1 · 집중 요약",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ORR-0",
+   "text": "현재가 아래 매물대",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 1 · 집중 요약",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ORS-0",
+   "text": "22개",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 1 · 집중 요약",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ORV-0",
+   "text": "가격대 분포",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 2 · 가격대 분포",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ORW-0",
+   "text": "상위 3개 합계 40.3%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 2 · 가격대 분포",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OS0-0",
+   "text": "195,000 ~ 197,000",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 2 · 가격대 분포",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OS1-0",
+   "text": "18.4%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 2 · 가격대 분포",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OS5-0",
+   "text": "192,000 ~ 195,000",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 2 · 가격대 분포",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OS6-0",
+   "text": "12.1%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 2 · 가격대 분포",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OSA-0",
+   "text": "197,000 ~ 200,000",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 2 · 가격대 분포",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3OSB-0",
+   "text": "9.8%",
+   "path": [
+    "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+    "Instrument Root · 현재시세",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Rail",
+    "Block 2 · 가격대 분포",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "30O1-0",
+   "name": "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+   "component": "Frame",
+   "w": 1440,
+   "h": 1120,
+   "depth": 0
+  },
+  {
+   "id": "30O2-0",
+   "name": "Instrument Root · 현재시세",
+   "component": "Frame",
+   "w": 1440,
+   "h": 960,
+   "depth": 1
+  },
+  {
+   "id": "30O3-0",
+   "name": "Instrument Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 1040,
+   "depth": 2
+  },
+  {
+   "id": "30T8-0",
+   "name": "Instrument Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 96,
+   "depth": 3
+  },
+  {
+   "id": "30TO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "30TT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "30TU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "30TP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "30T9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "30TM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "30TK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "30TI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "30TG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "30TE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "30TC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "30TA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "30SO-0",
+   "name": "Quote and Valuation Strip",
+   "component": "Frame",
+   "w": 0,
+   "h": 96,
+   "depth": 3
+  },
+  {
+   "id": "30T5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "30T1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "30SX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "30ST-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "30SP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "30O7-0",
+   "name": "Chart Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 848,
+   "depth": 3
+  },
+  {
+   "id": "30PK-0",
+   "name": "Quote Detail Mount",
+   "component": "Frame",
+   "w": 1000,
+   "h": 848,
+   "depth": 4
+  },
+  {
+   "id": "30RS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "30S4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "30SD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "30SM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "30SK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "30SI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "30SG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "30SE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "30S5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "30SA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "30S8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "30S6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "30RT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "30S2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "30S0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "30RY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "30RW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "30RU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RJU-0",
+   "name": "순위 표",
+   "component": "Frame",
+   "w": 943,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3RJV-0",
+   "name": "열 머리",
+   "component": "Frame",
+   "w": 0,
+   "h": 30,
+   "depth": 6
+  },
+  {
+   "id": "3RK4-0",
+   "name": "1 한미반도체",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3RK6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RK9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RKD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RKG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RKJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RKK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3RKL-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 84,
+   "h": 6,
+   "depth": 9
+  },
+  {
+   "id": "3RKN-0",
+   "name": "2 HD현대일렉트릭",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3RKP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RKS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RKW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RKZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RL2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RL3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3RL4-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 77,
+   "h": 6,
+   "depth": 9
+  },
+  {
+   "id": "3RL6-0",
+   "name": "3 알테오젠",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3RL8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RLB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RLF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RLI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RLL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RLM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3RLN-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 69,
+   "h": 6,
+   "depth": 9
+  },
+  {
+   "id": "3RLP-0",
+   "name": "4 삼양식품",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3RLR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RLU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RLY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RM1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RM4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RM5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3RM6-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 64,
+   "h": 6,
+   "depth": 9
+  },
+  {
+   "id": "3RM8-0",
+   "name": "5 현대로템",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3RMA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RMD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RMH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RMK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RMN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RMO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3RMP-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 61,
+   "h": 6,
+   "depth": 9
+  },
+  {
+   "id": "3RMR-0",
+   "name": "6 LS일렉트릭",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3RMT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RMW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RN0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RN3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RN6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RN7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3RN8-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 58,
+   "h": 6,
+   "depth": 9
+  },
+  {
+   "id": "3RNA-0",
+   "name": "7 롯데케미칼",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3RNC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RNF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RNJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RNM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RNP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RNQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3RNR-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 54,
+   "h": 6,
+   "depth": 9
+  },
+  {
+   "id": "3RNT-0",
+   "name": "8 이마트",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3RNV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RNY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RO2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RO5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RO8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RO9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3ROA-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 50,
+   "h": 6,
+   "depth": 9
+  },
+  {
+   "id": "3ROC-0",
+   "name": "9 실리콘투",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3ROE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ROH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ROL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ROO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ROR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ROS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3ROT-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 47,
+   "h": 6,
+   "depth": 9
+  },
+  {
+   "id": "3ROV-0",
+   "name": "10 하나마이크론",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3ROX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RP0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RP4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RP7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RPA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RPB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3RPC-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 46,
+   "h": 6,
+   "depth": 9
+  },
+  {
+   "id": "3RPE-0",
+   "name": "11 동진쎄미켐",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3RPG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RPJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RPN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RPQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RPT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RPU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3RPV-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 45,
+   "h": 6,
+   "depth": 9
+  },
+  {
+   "id": "3RPX-0",
+   "name": "12 주성엔지니어링",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3RPZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RQ2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RQ6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RQ9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RQC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RQD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3RQE-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 43,
+   "h": 6,
+   "depth": 9
+  },
+  {
+   "id": "3RQG-0",
+   "name": "13 원익IPS",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3RQI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RQL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RQP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RQS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RQV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RQW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3RQX-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 42,
+   "h": 6,
+   "depth": 9
+  },
+  {
+   "id": "3RQZ-0",
+   "name": "14 대주전자재료",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3RR1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RR4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RR8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RRB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RRE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RRF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3RRG-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 40,
+   "h": 6,
+   "depth": 9
+  },
+  {
+   "id": "3RRI-0",
+   "name": "15 티씨케이",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3RRK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RRN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RRR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RRU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RRX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RRY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3RRZ-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 38,
+   "h": 6,
+   "depth": 9
+  },
+  {
+   "id": "3RS1-0",
+   "name": "16 리가켐바이오",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3RS3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RS6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RSA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RSD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RSG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RSH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3RSI-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 37,
+   "h": 6,
+   "depth": 9
+  },
+  {
+   "id": "3RSK-0",
+   "name": "17 레인보우로보틱스",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3RSM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RSP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RST-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RSW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RSZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RT0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3RT1-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 36,
+   "h": 6,
+   "depth": 9
+  },
+  {
+   "id": "3RT3-0",
+   "name": "18 코스맥스",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3RT5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RT8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RTC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RTF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RTI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RTJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3RTK-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 34,
+   "h": 6,
+   "depth": 9
+  },
+  {
+   "id": "3RTM-0",
+   "name": "19 덕산네오룩스",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "3RTO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RTR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RTV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RTY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RU1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3RU2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 84,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3RU3-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 32,
+   "h": 6,
+   "depth": 9
+  },
+  {
+   "id": "3ORE-0",
+   "name": "Rail",
+   "component": "Frame",
+   "w": 360,
+   "h": 848,
+   "depth": 4
+  },
+  {
+   "id": "3ORF-0",
+   "name": "Block 1 · 집중 요약",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ORG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ORJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ORK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ORN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ORQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ORT-0",
+   "name": "Block 2 · 가격대 분포",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3ORU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ORX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3ORY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3ORZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3OS2-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 276,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3OS3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3OS4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3OS7-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 181,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3OS8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3OS9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3OSC-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 147,
+   "h": 6,
+   "depth": 8
+  }
+ ],
+ "text_multiset": {
+  "주식 순위": 1,
+  "KRX 전체 · 가격대별 매물 집중": 1,
+  "조회 스냅샷": 1,
+  "평균 비중 11.0%": 1,
+  "최대 18.4%": 1,
+  "09:42:18 조회": 1,
+  "현재시세": 1,
+  "차트": 1,
+  "기업정보": 1,
+  "ETF": 2,
+  "ELW": 2,
+  "금현물": 1,
+  "순위": 2,
+  "정렬 기준": 1,
+  "집중 비중 큰 순": 1,
+  "표시 범위": 1,
+  "상위 50": 1,
+  "집중 비중 순": 1,
+  "평균 비중": 2,
+  "11.0%": 2,
+  "표시 종목 기준": 1,
+  "최대 비중": 1,
+  "18.4%": 2,
+  "1위 종목": 1,
+  "집계 기간": 1,
+  "3개월": 1,
+  "일봉 기준": 1,
+  "신고저가": 1,
+  "상하한가": 1,
+  "고저가근접": 1,
+  "가격급등락": 1,
+  "거래량갱신": 1,
+  "범위": 1,
+  "주식": 1,
+  "매물대집중": 1,
+  "고저 PER": 1,
+  "시가대비 등락": 1,
+  "VI 발동": 1,
+  "당일·전일 체결량": 1,
+  "전체 50건 · 19건 표시": 1,
+  "종목": 1,
+  "현재가": 1,
+  "집중 가격대": 1,
+  "매물량 · 비중": 1,
+  "현재 거래량": 1,
+  "분포": 1,
+  "시장": 1,
+  "1": 1,
+  "한미반도체": 1,
+  "042700": 1,
+  "197,400": 1,
+  "+7,900 · +4.18%": 1,
+  "195,000 ~ 197,000": 2,
+  "418만주": 1,
+  "비중 18.4%": 1,
+  "320만주": 1,
+  "6,317억": 1,
+  "코스피": 8,
+  "2": 1,
+  "HD현대일렉트릭": 1,
+  "267260": 1,
+  "412,500": 1,
+  "+11,500 · +2.86%": 1,
+  "405,000 ~ 409,000": 1,
+  "285만주": 1,
+  "비중 16.9%": 1,
+  "80만주": 1,
+  "3,300억": 1,
+  "3": 1,
+  "알테오젠": 1,
+  "196170": 1,
+  "391,000": 1,
+  "+88,200 · +29.12%": 1,
+  "398,000 ~ 402,000": 1,
+  "242만주": 1,
+  "비중 15.2%": 1,
+  "110만주": 1,
+  "4,301억": 1,
+  "코스닥": 11,
+  "4": 1,
+  "삼양식품": 1,
+  "003230": 1,
+  "745,000": 1,
+  "+167,600 · +29.03%": 1,
+  "752,000 ~ 760,000": 1,
+  "86만주": 1,
+  "비중 14.1%": 1,
+  "20만주": 1,
+  "1,490억": 1,
+  "5": 1,
+  "현대로템": 1,
+  "064350": 1,
+  "128,900": 1,
+  "+29,000 · +29.03%": 1,
+  "126,500 ~ 128,000": 1,
+  "512만주": 1,
+  "비중 13.3%": 1,
+  "240만주": 1,
+  "3,094억": 1,
+  "6": 1,
+  "LS일렉트릭": 1,
+  "010120": 1,
+  "289,500": 1,
+  "+4,000 · +1.40%": 1,
+  "292,000 ~ 295,000": 1,
+  "194만주": 1,
+  "비중 12.6%": 1,
+  "60만주": 1,
+  "1,737억": 1,
+  "7": 1,
+  "롯데케미칼": 1,
+  "011170": 1,
+  "61,200": 1,
+  "-2,000 · -3.16%": 1,
+  "62,400 ~ 63,200": 1,
+  "321만주": 1,
+  "비중 11.8%": 1,
+  "90만주": 1,
+  "551억": 1,
+  "8": 1,
+  "이마트": 1,
+  "139480": 1,
+  "52,300": 1,
+  "-21,400 · -29.04%": 1,
+  "51,500 ~ 52,000": 1,
+  "176만주": 2,
+  "비중 10.9%": 1,
+  "40만주": 1,
+  "209억": 1,
+  "9": 1,
+  "실리콘투": 1,
+  "257720": 1,
+  "58,900": 1,
+  "+13,530 · +29.81%": 1,
+  "56,000 ~ 57,500": 1,
+  "288만주": 1,
+  "비중 10.4%": 1,
+  "316만주": 1,
+  "1,861억": 1,
+  "10": 1,
+  "하나마이크론": 1,
+  "067310": 1,
+  "27,850": 1,
+  "+6,320 · +29.35%": 1,
+  "26,500 ~ 27,200": 1,
+  "462만주": 1,
+  "비중 10.1%": 1,
+  "508만주": 1,
+  "1,415억": 1,
+  "11": 1,
+  "동진쎄미켐": 1,
+  "005290": 1,
+  "42,150": 1,
+  "+9,530 · +29.22%": 1,
+  "40,500 ~ 41,400": 1,
+  "196만주": 1,
+  "비중 9.8%": 1,
+  "214만주": 1,
+  "902억": 1,
+  "12": 1,
+  "주성엔지니어링": 1,
+  "036930": 1,
+  "38,700": 1,
+  "+8,730 · +29.13%": 1,
+  "37,200 ~ 38,100": 1,
+  "164만주": 1,
+  "비중 9.4%": 1,
+  "681억": 1,
+  "13": 1,
+  "원익IPS": 1,
+  "240810": 1,
+  "41,300": 1,
+  "+9,300 · +29.06%": 1,
+  "39,800 ~ 40,600": 1,
+  "138만주": 1,
+  "비중 9.1%": 1,
+  "148만주": 1,
+  "611억": 1,
+  "14": 1,
+  "대주전자재료": 1,
+  "078600": 1,
+  "118,700": 1,
+  "+27,120 · +29.61%": 1,
+  "114,000 ~ 117,000": 1,
+  "52만주": 1,
+  "비중 8.7%": 1,
+  "58만주": 2,
+  "688억": 1,
+  "15": 1,
+  "티씨케이": 1,
+  "064760": 1,
+  "96,400": 1,
+  "+21,700 · +29.05%": 1,
+  "93,000 ~ 95,200": 1,
+  "41만주": 1,
+  "비중 8.4%": 1,
+  "44만주": 1,
+  "424억": 1,
+  "16": 1,
+  "리가켐바이오": 1,
+  "141080": 1,
+  "172,300": 1,
+  "+39,450 · +29.70%": 1,
+  "166,000 ~ 170,000": 1,
+  "68만주": 1,
+  "비중 8.1%": 1,
+  "74만주": 1,
+  "1,275억": 1,
+  "17": 1,
+  "레인보우로보틱스": 1,
+  "277810": 1,
+  "246,500": 1,
+  "+56,800 · +29.94%": 1,
+  "238,000 ~ 244,000": 1,
+  "84만주": 1,
+  "비중 7.8%": 1,
+  "92만주": 1,
+  "2,268억": 1,
+  "18": 1,
+  "코스맥스": 1,
+  "192820": 1,
+  "118,600": 1,
+  "-48,600 · -29.07%": 1,
+  "148,000 ~ 155,000": 1,
+  "비중 7.4%": 1,
+  "62만주": 1,
+  "735억": 1,
+  "19": 1,
+  "덕산네오룩스": 1,
+  "213420": 1,
+  "26,150": 1,
+  "-10,700 · -29.04%": 1,
+  "32,000 ~ 34,000": 1,
+  "82만주": 1,
+  "비중 7.1%": 1,
+  "88만주": 1,
+  "230억": 1,
+  "집중 요약": 1,
+  "최근 3개월 · 일봉": 1,
+  "현재가 위 매물대": 1,
+  "28개": 1,
+  "현재가 아래 매물대": 1,
+  "22개": 1,
+  "가격대 분포": 1,
+  "상위 3개 합계 40.3%": 1,
+  "192,000 ~ 195,000": 1,
+  "12.1%": 1,
+  "197,000 ~ 200,000": 1,
+  "9.8%": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "6f8d77c39d89bc6580707b901b070fe55a39d1ea0cce3ced4a439690b2492a83"
+}

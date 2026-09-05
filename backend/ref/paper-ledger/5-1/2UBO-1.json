@@ -1,0 +1,2560 @@
+{
+ "board_id": "2UBO-1",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+ "width": 1440,
+ "height": 960,
+ "texts": [
+  {
+   "id": "2UFG-1",
+   "text": "테마 탐색",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UFF-1",
+   "text": "장중 · 09:42",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UFC-1",
+   "text": "전체 시장 · 테마 48개",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UFA-1",
+   "text": "업종",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UF8-1",
+   "text": "종목찾기",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UF6-1",
+   "text": "관심",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UF4-1",
+   "text": "테마",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UF2-1",
+   "text": "시장·VI",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UF0-1",
+   "text": "조건검색",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UEW-1",
+   "text": "조건",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UEU-1",
+   "text": "등락률",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UES-1",
+   "text": "전체 시장",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UEQ-1",
+   "text": "상승 테마",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UEO-1",
+   "text": "구성 5종목↑",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UEM-1",
+   "text": "당일 기준",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UEJ-1",
+   "text": "● 실시간 갱신",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UEI-1",
+   "text": "48개 테마",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame"
+   ]
+  },
+  {
+   "id": "348L-0",
+   "text": "테마",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "열 헤더"
+   ]
+  },
+  {
+   "id": "348M-0",
+   "text": "등락률",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "열 헤더"
+   ]
+  },
+  {
+   "id": "348N-0",
+   "text": "거래대금",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "열 헤더"
+   ]
+  },
+  {
+   "id": "348O-0",
+   "text": "상승/전체",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "열 헤더"
+   ]
+  },
+  {
+   "id": "348P-0",
+   "text": "테마 5일",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "열 헤더"
+   ]
+  },
+  {
+   "id": "348S-0",
+   "text": "AI 반도체",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "AI 반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "348T-0",
+   "text": "T0142",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "AI 반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "348U-0",
+   "text": "+3.42%",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "AI 반도체"
+   ]
+  },
+  {
+   "id": "348V-0",
+   "text": "2.8조",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "AI 반도체"
+   ]
+  },
+  {
+   "id": "348X-0",
+   "text": "18 / 24",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "AI 반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "348Y-0",
+   "text": "하락 6",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "AI 반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "348Z-0",
+   "text": "+12.4%",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "AI 반도체"
+   ]
+  },
+  {
+   "id": "3492-0",
+   "text": "전력 설비",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "전력 설비",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3493-0",
+   "text": "T0087",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "전력 설비",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3494-0",
+   "text": "+2.18%",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "전력 설비"
+   ]
+  },
+  {
+   "id": "3495-0",
+   "text": "1.1조",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "전력 설비"
+   ]
+  },
+  {
+   "id": "3497-0",
+   "text": "11 / 16",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "전력 설비",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3498-0",
+   "text": "하락 5",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "전력 설비",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3499-0",
+   "text": "+8.7%",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "전력 설비"
+   ]
+  },
+  {
+   "id": "349C-0",
+   "text": "2차전지 소재",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "2차전지 소재",
+    "Frame"
+   ]
+  },
+  {
+   "id": "349D-0",
+   "text": "T0053",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "2차전지 소재",
+    "Frame"
+   ]
+  },
+  {
+   "id": "349E-0",
+   "text": "+1.24%",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "2차전지 소재"
+   ]
+  },
+  {
+   "id": "349F-0",
+   "text": "0.9조",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "2차전지 소재"
+   ]
+  },
+  {
+   "id": "349H-0",
+   "text": "14 / 22",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "2차전지 소재",
+    "Frame"
+   ]
+  },
+  {
+   "id": "349I-0",
+   "text": "하락 8",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "2차전지 소재",
+    "Frame"
+   ]
+  },
+  {
+   "id": "349J-0",
+   "text": "-4.2%",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "2차전지 소재"
+   ]
+  },
+  {
+   "id": "349M-0",
+   "text": "로봇",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "로봇",
+    "Frame"
+   ]
+  },
+  {
+   "id": "349N-0",
+   "text": "T0119",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "로봇",
+    "Frame"
+   ]
+  },
+  {
+   "id": "349O-0",
+   "text": "+0.86%",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "로봇"
+   ]
+  },
+  {
+   "id": "349P-0",
+   "text": "0.6조",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "로봇"
+   ]
+  },
+  {
+   "id": "349R-0",
+   "text": "9 / 18",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "로봇",
+    "Frame"
+   ]
+  },
+  {
+   "id": "349S-0",
+   "text": "하락 9",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "로봇",
+    "Frame"
+   ]
+  },
+  {
+   "id": "349T-0",
+   "text": "+3.1%",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "로봇"
+   ]
+  },
+  {
+   "id": "349W-0",
+   "text": "조선 기자재",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "조선 기자재",
+    "Frame"
+   ]
+  },
+  {
+   "id": "349X-0",
+   "text": "T0064",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "조선 기자재",
+    "Frame"
+   ]
+  },
+  {
+   "id": "349Y-0",
+   "text": "-0.34%",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "조선 기자재"
+   ]
+  },
+  {
+   "id": "349Z-0",
+   "text": "0.4조",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "조선 기자재"
+   ]
+  },
+  {
+   "id": "34A1-0",
+   "text": "6 / 15",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "조선 기자재",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34A2-0",
+   "text": "하락 9",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "조선 기자재",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34A3-0",
+   "text": "+6.8%",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "조선 기자재"
+   ]
+  },
+  {
+   "id": "34A6-0",
+   "text": "저PBR 가치",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "저PBR 가치",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34A7-0",
+   "text": "T0201",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "저PBR 가치",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34A8-0",
+   "text": "-0.58%",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "저PBR 가치"
+   ]
+  },
+  {
+   "id": "34A9-0",
+   "text": "0.7조",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "저PBR 가치"
+   ]
+  },
+  {
+   "id": "34AB-0",
+   "text": "12 / 31",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "저PBR 가치",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34AC-0",
+   "text": "하락 19",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "저PBR 가치",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34AD-0",
+   "text": "-1.9%",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "저PBR 가치"
+   ]
+  },
+  {
+   "id": "34AF-0",
+   "text": "등락률 상위 6개 표시 · 전체 48개",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "표 푸터"
+   ]
+  },
+  {
+   "id": "34AH-0",
+   "text": "더보기",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "표 푸터",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34AK-0",
+   "text": "AI 반도체 구성 상위",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34AL-0",
+   "text": "09:42 기준",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34AN-0",
+   "text": "종목",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34AO-0",
+   "text": "현재가",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34AP-0",
+   "text": "등락률",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34AQ-0",
+   "text": "누적 거래량",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34AR-0",
+   "text": "매도호가",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34AS-0",
+   "text": "매수호가",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34AV-0",
+   "text": "SK하이닉스",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34AW-0",
+   "text": "000660",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34AY-0",
+   "text": "198,400",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34AZ-0",
+   "text": "+3,990",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34B1-0",
+   "text": "+2.05%",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34B2-0",
+   "text": "종목 5일 +8.2%",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34B3-0",
+   "text": "497만주",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "SK하이닉스"
+   ]
+  },
+  {
+   "id": "34B5-0",
+   "text": "198,500",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34B6-0",
+   "text": "잔량 1.0만",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34B8-0",
+   "text": "198,400",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34B9-0",
+   "text": "잔량 1.4만",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34BC-0",
+   "text": "한미반도체",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34BD-0",
+   "text": "042700",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34BF-0",
+   "text": "197,400",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34BG-0",
+   "text": "+7,900",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34BI-0",
+   "text": "+4.18%",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34BJ-0",
+   "text": "종목 5일 +18.6%",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34BK-0",
+   "text": "242만주",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "한미반도체"
+   ]
+  },
+  {
+   "id": "34BM-0",
+   "text": "197,500",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34BN-0",
+   "text": "잔량 0.5만",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34BP-0",
+   "text": "197,400",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34BQ-0",
+   "text": "잔량 0.7만",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34BT-0",
+   "text": "이수페타시스",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34BU-0",
+   "text": "007660",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34BW-0",
+   "text": "64,500",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34BX-0",
+   "text": "+14,850",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34BZ-0",
+   "text": "+29.90%",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34C0-0",
+   "text": "종목 5일 +38.5%",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34C1-0",
+   "text": "340만주",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "이수페타시스"
+   ]
+  },
+  {
+   "id": "34C3-0",
+   "text": "해당 없음",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34C4-0",
+   "text": "잔량 해당 없음",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34C6-0",
+   "text": "64,500",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34C7-0",
+   "text": "잔량 96.0만",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "테마 표",
+    "구성 상위",
+    "이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UGU-1",
+   "text": "AI 반도체 — 선택 테마",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UGV-1",
+   "text": "확산 중",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DUN-0",
+   "text": "테마 등락률",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "선택 테마 값",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DUO-0",
+   "text": "+3.42%",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "선택 테마 값",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DUQ-0",
+   "text": "테마 5일 수익률",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "선택 테마 값",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DUR-0",
+   "text": "+12.4%",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "선택 테마 값",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DUT-0",
+   "text": "구성 24종목",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "선택 테마 값",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DUU-0",
+   "text": "상승 18 · 보합 0 · 하락 6",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "선택 테마 값",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DUW-0",
+   "text": "거래대금",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "선택 테마 값",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DUX-0",
+   "text": "2.8조",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "선택 테마 값",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DUZ-0",
+   "text": "주도 종목",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "선택 테마 값",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DV0-0",
+   "text": "SK하이닉스 +2.05%",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "선택 테마 값",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DV2-0",
+   "text": "09:42 기준",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "선택 테마 값",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DVT-0",
+   "text": "다른 테마",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "다른 테마",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DVW-0",
+   "text": "전력 설비",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "다른 테마",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DVX-0",
+   "text": "T0087",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "다른 테마",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DVY-0",
+   "text": "+2.18%",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "다른 테마",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DW1-0",
+   "text": "2차전지 소재",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "다른 테마",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DW2-0",
+   "text": "T0053",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "다른 테마",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DW3-0",
+   "text": "+1.24%",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "다른 테마",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DW6-0",
+   "text": "로봇",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "다른 테마",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DW7-0",
+   "text": "T0119",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "다른 테마",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DW8-0",
+   "text": "+0.86%",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "다른 테마",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DYX-0",
+   "text": "확산 흐름",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "테마 동작",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3DYZ-0",
+   "text": "구성 종목 보기",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "테마 동작",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UBT-1",
+   "text": "● 테마 등락 실시간 갱신 중",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "User Status Footer"
+   ]
+  },
+  {
+   "id": "32JZ-0",
+   "text": "마지막 반영 09:42:18",
+   "path": [
+    "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Discovery Root · 테마",
+    "Explorer Card Surface",
+    "User Status Footer"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "2UBO-1",
+   "name": "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+   "component": "Frame",
+   "w": 1440,
+   "h": 960,
+   "depth": 0
+  },
+  {
+   "id": "2UBP-1",
+   "name": "Discovery Root · 테마",
+   "component": "Frame",
+   "w": 1440,
+   "h": 960,
+   "depth": 1
+  },
+  {
+   "id": "2UBQ-1",
+   "name": "Explorer Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 880,
+   "depth": 2
+  },
+  {
+   "id": "2UEX-1",
+   "name": "Header and Capability Navigation",
+   "component": "Frame",
+   "w": 0,
+   "h": 112,
+   "depth": 3
+  },
+  {
+   "id": "2UFB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2UFD-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UFE-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2UEY-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2UF9-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UF7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UF5-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UF3-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UF1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UEZ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UEG-1",
+   "name": "Ranking Query Controls",
+   "component": "Frame",
+   "w": 0,
+   "h": 92,
+   "depth": 3
+  },
+  {
+   "id": "2UEK-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2UEV-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UET-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UER-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UEP-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UEN-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UEL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UEH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2UBU-1",
+   "name": "Ranking Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 612,
+   "depth": 3
+  },
+  {
+   "id": "348J-0",
+   "name": "테마 표",
+   "component": "Frame",
+   "w": 880,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "348K-0",
+   "name": "열 헤더",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 5
+  },
+  {
+   "id": "348Q-0",
+   "name": "AI 반도체",
+   "component": "Frame",
+   "w": 0,
+   "h": 48,
+   "depth": 5
+  },
+  {
+   "id": "348R-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 270,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "348W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3490-0",
+   "name": "전력 설비",
+   "component": "Frame",
+   "w": 0,
+   "h": 48,
+   "depth": 5
+  },
+  {
+   "id": "3491-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 270,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3496-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "349A-0",
+   "name": "2차전지 소재",
+   "component": "Frame",
+   "w": 0,
+   "h": 48,
+   "depth": 5
+  },
+  {
+   "id": "349B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 270,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "349G-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "349K-0",
+   "name": "로봇",
+   "component": "Frame",
+   "w": 0,
+   "h": 48,
+   "depth": 5
+  },
+  {
+   "id": "349L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 270,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "349Q-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "349U-0",
+   "name": "조선 기자재",
+   "component": "Frame",
+   "w": 0,
+   "h": 48,
+   "depth": 5
+  },
+  {
+   "id": "349V-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 270,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34A0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34A4-0",
+   "name": "저PBR 가치",
+   "component": "Frame",
+   "w": 0,
+   "h": 48,
+   "depth": 5
+  },
+  {
+   "id": "34A5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 270,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34AA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34AE-0",
+   "name": "표 푸터",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "34AG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34AI-0",
+   "name": "구성 상위",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "34AJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34AM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 18,
+   "depth": 6
+  },
+  {
+   "id": "34AT-0",
+   "name": "SK하이닉스",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 6
+  },
+  {
+   "id": "34AU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34AX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 116,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34B0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 116,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34B4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 140,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34B7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 142,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34BA-0",
+   "name": "한미반도체",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 6
+  },
+  {
+   "id": "34BB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34BE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 116,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34BH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 116,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34BL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 140,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34BO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 142,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34BR-0",
+   "name": "이수페타시스",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 6
+  },
+  {
+   "id": "34BS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34BV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 116,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34BY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 116,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34C2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 140,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34C5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 142,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2UGS-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 478,
+   "h": 612,
+   "depth": 4
+  },
+  {
+   "id": "2UGT-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 5
+  },
+  {
+   "id": "3DUL-0",
+   "name": "선택 테마 값",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3DUM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "3DUP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "3DUS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "3DUV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "3DUY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "3DV1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 26,
+   "depth": 6
+  },
+  {
+   "id": "3DVR-0",
+   "name": "다른 테마",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3DVS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 6
+  },
+  {
+   "id": "3DVU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 46,
+   "depth": 6
+  },
+  {
+   "id": "3DVV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3DVZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 46,
+   "depth": 6
+  },
+  {
+   "id": "3DW0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3DW4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 46,
+   "depth": 6
+  },
+  {
+   "id": "3DW5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3DYV-0",
+   "name": "테마 동작",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3DYW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 42,
+   "depth": 6
+  },
+  {
+   "id": "3DYY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 42,
+   "depth": 6
+  },
+  {
+   "id": "2UBR-1",
+   "name": "User Status Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 3
+  }
+ ],
+ "text_multiset": {
+  "테마 탐색": 1,
+  "장중 · 09:42": 1,
+  "전체 시장 · 테마 48개": 1,
+  "업종": 1,
+  "종목찾기": 1,
+  "관심": 1,
+  "테마": 2,
+  "시장·VI": 1,
+  "조건검색": 1,
+  "조건": 1,
+  "등락률": 3,
+  "전체 시장": 1,
+  "상승 테마": 1,
+  "구성 5종목↑": 1,
+  "당일 기준": 1,
+  "● 실시간 갱신": 1,
+  "48개 테마": 1,
+  "거래대금": 2,
+  "상승/전체": 1,
+  "테마 5일": 1,
+  "AI 반도체": 1,
+  "T0142": 1,
+  "+3.42%": 2,
+  "2.8조": 2,
+  "18 / 24": 1,
+  "하락 6": 1,
+  "+12.4%": 2,
+  "전력 설비": 2,
+  "T0087": 2,
+  "+2.18%": 2,
+  "1.1조": 1,
+  "11 / 16": 1,
+  "하락 5": 1,
+  "+8.7%": 1,
+  "2차전지 소재": 2,
+  "T0053": 2,
+  "+1.24%": 2,
+  "0.9조": 1,
+  "14 / 22": 1,
+  "하락 8": 1,
+  "-4.2%": 1,
+  "로봇": 2,
+  "T0119": 2,
+  "+0.86%": 2,
+  "0.6조": 1,
+  "9 / 18": 1,
+  "하락 9": 2,
+  "+3.1%": 1,
+  "조선 기자재": 1,
+  "T0064": 1,
+  "-0.34%": 1,
+  "0.4조": 1,
+  "6 / 15": 1,
+  "+6.8%": 1,
+  "저PBR 가치": 1,
+  "T0201": 1,
+  "-0.58%": 1,
+  "0.7조": 1,
+  "12 / 31": 1,
+  "하락 19": 1,
+  "-1.9%": 1,
+  "등락률 상위 6개 표시 · 전체 48개": 1,
+  "더보기": 1,
+  "AI 반도체 구성 상위": 1,
+  "09:42 기준": 2,
+  "종목": 1,
+  "현재가": 1,
+  "누적 거래량": 1,
+  "매도호가": 1,
+  "매수호가": 1,
+  "SK하이닉스": 1,
+  "000660": 1,
+  "198,400": 2,
+  "+3,990": 1,
+  "+2.05%": 1,
+  "종목 5일 +8.2%": 1,
+  "497만주": 1,
+  "198,500": 1,
+  "잔량 1.0만": 1,
+  "잔량 1.4만": 1,
+  "한미반도체": 1,
+  "042700": 1,
+  "197,400": 2,
+  "+7,900": 1,
+  "+4.18%": 1,
+  "종목 5일 +18.6%": 1,
+  "242만주": 1,
+  "197,500": 1,
+  "잔량 0.5만": 1,
+  "잔량 0.7만": 1,
+  "이수페타시스": 1,
+  "007660": 1,
+  "64,500": 2,
+  "+14,850": 1,
+  "+29.90%": 1,
+  "종목 5일 +38.5%": 1,
+  "340만주": 1,
+  "해당 없음": 1,
+  "잔량 해당 없음": 1,
+  "잔량 96.0만": 1,
+  "AI 반도체 — 선택 테마": 1,
+  "확산 중": 1,
+  "테마 등락률": 1,
+  "테마 5일 수익률": 1,
+  "구성 24종목": 1,
+  "상승 18 · 보합 0 · 하락 6": 1,
+  "주도 종목": 1,
+  "SK하이닉스 +2.05%": 1,
+  "다른 테마": 1,
+  "확산 흐름": 1,
+  "구성 종목 보기": 1,
+  "● 테마 등락 실시간 갱신 중": 1,
+  "마지막 반영 09:42:18": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "87c319629e959a30dd3678c716a14a3471c93a3083aca131734859575419bf58"
+}

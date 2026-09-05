@@ -1,0 +1,2723 @@
+{
+ "board_id": "3K7K-0",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+ "width": 1440,
+ "height": 1116,
+ "texts": [
+  {
+   "id": "3KFU-0",
+   "text": "내 계좌",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KFT-0",
+   "text": "실시간",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KFQ-0",
+   "text": "키움증권 종합계좌 ****4721 · 개인종합 · 마지막 갱신 09:42:18",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3L1D-0",
+   "text": "자산 종합",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Header",
+    "Header Right",
+    "Tab List",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3L1F-0",
+   "text": "보유종목",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Header",
+    "Header Right",
+    "Tab List",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3L1H-0",
+   "text": "예수금·결제",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Header",
+    "Header Right",
+    "Tab List",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3L1J-0",
+   "text": "손익·성과",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Header",
+    "Header Right",
+    "Tab List",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3L1L-0",
+   "text": "주문·체결",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Header",
+    "Header Right",
+    "Tab List",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3L1N-0",
+   "text": "증거금·담보",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Header",
+    "Header Right",
+    "Tab List",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3L1P-0",
+   "text": "금현물",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Header",
+    "Header Right",
+    "Tab List",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3L1R-0",
+   "text": "▾",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Header",
+    "Header Right",
+    "Active Marker"
+   ]
+  },
+  {
+   "id": "3L1S-0",
+   "text": "이달 기초·기말 구성",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Header",
+    "Header Right",
+    "Active Marker"
+   ]
+  },
+  {
+   "id": "3KF8-0",
+   "text": "이달 순증",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KF7-0",
+   "text": "+4,830,240원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KF6-0",
+   "text": "1억 1,975만 → 1억 2,458만",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KF4-0",
+   "text": "주문가능금액",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KF3-0",
+   "text": "31,240,000원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KF2-0",
+   "text": "출금가능 28,940,000원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KF0-0",
+   "text": "주식 평가액",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KEZ-0",
+   "text": "89,760,240원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KEY-0",
+   "text": "8종목",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KEW-0",
+   "text": "평가손익",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KEV-0",
+   "text": "+4,240,900원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KEU-0",
+   "text": "매입 85,519,340원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KES-0",
+   "text": "현금 비중",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KER-0",
+   "text": "28.0%",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3KEQ-0",
+   "text": "보유종목 8종",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3L4L-0",
+   "text": "이달 기초·기말 구성",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "Section Title"
+   ]
+  },
+  {
+   "id": "3L4M-0",
+   "text": "08월 01일 기초 · 09월 01일 기말",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "Section Title"
+   ]
+  },
+  {
+   "id": "3L4O-0",
+   "text": "항목",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "Table Head"
+   ]
+  },
+  {
+   "id": "3L4P-0",
+   "text": "기초 08/01",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "Table Head"
+   ]
+  },
+  {
+   "id": "3L4Q-0",
+   "text": "기말 09/01",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "Table Head"
+   ]
+  },
+  {
+   "id": "3L4R-0",
+   "text": "증감",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "Table Head"
+   ]
+  },
+  {
+   "id": "3L4T-0",
+   "text": "자산",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "Group · 자산"
+   ]
+  },
+  {
+   "id": "3L4U-0",
+   "text": "8개 항목",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "Group · 자산"
+   ]
+  },
+  {
+   "id": "3L8Z-0",
+   "text": "예수금",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 예수금"
+   ]
+  },
+  {
+   "id": "3L90-0",
+   "text": "30,300,000원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 예수금"
+   ]
+  },
+  {
+   "id": "3L91-0",
+   "text": "34,820,000원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 예수금"
+   ]
+  },
+  {
+   "id": "3L92-0",
+   "text": "+4,520,000원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 예수금"
+   ]
+  },
+  {
+   "id": "3L94-0",
+   "text": "유가증권평가금액",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 유가증권평가금액"
+   ]
+  },
+  {
+   "id": "3L95-0",
+   "text": "89,450,000원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 유가증권평가금액"
+   ]
+  },
+  {
+   "id": "3L96-0",
+   "text": "89,760,240원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 유가증권평가금액"
+   ]
+  },
+  {
+   "id": "3L97-0",
+   "text": "+310,240원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 유가증권평가금액"
+   ]
+  },
+  {
+   "id": "3L99-0",
+   "text": "대주담보금",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 대주담보금"
+   ]
+  },
+  {
+   "id": "3L9A-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 대주담보금"
+   ]
+  },
+  {
+   "id": "3L9B-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 대주담보금"
+   ]
+  },
+  {
+   "id": "3L9C-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 대주담보금"
+   ]
+  },
+  {
+   "id": "3L9E-0",
+   "text": "신용융자금",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 신용융자금"
+   ]
+  },
+  {
+   "id": "3L9F-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 신용융자금"
+   ]
+  },
+  {
+   "id": "3L9G-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 신용융자금"
+   ]
+  },
+  {
+   "id": "3L9H-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 신용융자금"
+   ]
+  },
+  {
+   "id": "3L9J-0",
+   "text": "현금미수금",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 현금미수금"
+   ]
+  },
+  {
+   "id": "3L9K-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 현금미수금"
+   ]
+  },
+  {
+   "id": "3L9L-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 현금미수금"
+   ]
+  },
+  {
+   "id": "3L9M-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 현금미수금"
+   ]
+  },
+  {
+   "id": "3L9O-0",
+   "text": "원화대용금",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 원화대용금"
+   ]
+  },
+  {
+   "id": "3L9P-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 원화대용금"
+   ]
+  },
+  {
+   "id": "3L9Q-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 원화대용금"
+   ]
+  },
+  {
+   "id": "3L9R-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 원화대용금"
+   ]
+  },
+  {
+   "id": "3L9T-0",
+   "text": "대주평가금",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 대주평가금"
+   ]
+  },
+  {
+   "id": "3L9U-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 대주평가금"
+   ]
+  },
+  {
+   "id": "3L9V-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 대주평가금"
+   ]
+  },
+  {
+   "id": "3L9W-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 대주평가금"
+   ]
+  },
+  {
+   "id": "3L9Y-0",
+   "text": "권리평가금",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 권리평가금"
+   ]
+  },
+  {
+   "id": "3L9Z-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 권리평가금"
+   ]
+  },
+  {
+   "id": "3LA0-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 권리평가금"
+   ]
+  },
+  {
+   "id": "3LA1-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 권리평가금"
+   ]
+  },
+  {
+   "id": "3LA3-0",
+   "text": "자산 합계",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 자산 합계"
+   ]
+  },
+  {
+   "id": "3LA4-0",
+   "text": "119,750,000원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 자산 합계"
+   ]
+  },
+  {
+   "id": "3LA5-0",
+   "text": "124,580,240원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 자산 합계"
+   ]
+  },
+  {
+   "id": "3LA6-0",
+   "text": "+4,830,240원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 자산 합계"
+   ]
+  },
+  {
+   "id": "3LCY-0",
+   "text": "부채",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "Group · 부채"
+   ]
+  },
+  {
+   "id": "3LCZ-0",
+   "text": "4개 항목",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "Group · 부채"
+   ]
+  },
+  {
+   "id": "3LD1-0",
+   "text": "대출금",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 대출금"
+   ]
+  },
+  {
+   "id": "3LD2-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 대출금"
+   ]
+  },
+  {
+   "id": "3LD3-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 대출금"
+   ]
+  },
+  {
+   "id": "3LD4-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 대출금"
+   ]
+  },
+  {
+   "id": "3LD6-0",
+   "text": "기타대여금",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 기타대여금"
+   ]
+  },
+  {
+   "id": "3LD7-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 기타대여금"
+   ]
+  },
+  {
+   "id": "3LD8-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 기타대여금"
+   ]
+  },
+  {
+   "id": "3LD9-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 기타대여금"
+   ]
+  },
+  {
+   "id": "3LDB-0",
+   "text": "신용이자미납금",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 신용이자미납금"
+   ]
+  },
+  {
+   "id": "3LDC-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 신용이자미납금"
+   ]
+  },
+  {
+   "id": "3LDD-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 신용이자미납금"
+   ]
+  },
+  {
+   "id": "3LDE-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 신용이자미납금"
+   ]
+  },
+  {
+   "id": "3LDG-0",
+   "text": "신용이자",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 신용이자"
+   ]
+  },
+  {
+   "id": "3LDH-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 신용이자"
+   ]
+  },
+  {
+   "id": "3LDI-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 신용이자"
+   ]
+  },
+  {
+   "id": "3LDJ-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 신용이자"
+   ]
+  },
+  {
+   "id": "3LDL-0",
+   "text": "부채 합계",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 부채 합계"
+   ]
+  },
+  {
+   "id": "3LDM-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 부채 합계"
+   ]
+  },
+  {
+   "id": "3LDN-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 부채 합계"
+   ]
+  },
+  {
+   "id": "3LDO-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "R 부채 합계"
+   ]
+  },
+  {
+   "id": "3URJ-0",
+   "text": "기간 입출고 · 대용매도",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "기간 입출고 · 대용매도",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3URK-0",
+   "text": "08/01 → 09/01 · 4항목 모두 0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "기간 입출고 · 대용매도",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3URN-0",
+   "text": "기간내 총입고",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "기간 입출고 · 대용매도",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3URO-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "기간 입출고 · 대용매도",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3URQ-0",
+   "text": "기간내 총출고",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "기간 입출고 · 대용매도",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3URR-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "기간 입출고 · 대용매도",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3URT-0",
+   "text": "위탁대용 매도금액",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "기간 입출고 · 대용매도",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3URU-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "기간 입출고 · 대용매도",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3URW-0",
+   "text": "선물대용 매도금액",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "기간 입출고 · 대용매도",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3URX-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Balance Change Column",
+    "기간 입출고 · 대용매도",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LRK-0",
+   "text": "증감 구성",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 증감 구성",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LRL-0",
+   "text": "순증 +4,830,240원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 증감 구성",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LRO-0",
+   "text": "예수금",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 증감 구성",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LRQ-0",
+   "text": "+4,520,000원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 증감 구성",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LRR-0",
+   "text": "93.6%",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 증감 구성",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LRW-0",
+   "text": "유가증권",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 증감 구성",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LRY-0",
+   "text": "+310,240원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 증감 구성",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LRZ-0",
+   "text": "6.4%",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 증감 구성",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LS4-0",
+   "text": "이달 현금 원장",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 이달 현금 원장",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LS5-0",
+   "text": "08/01 → 09/01",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 이달 현금 원장",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LS7-0",
+   "text": "입금",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 이달 현금 원장",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LS8-0",
+   "text": "+5,054,300원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 이달 현금 원장",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LSA-0",
+   "text": "매도 결제 유입",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 이달 현금 원장",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LSB-0",
+   "text": "+35,809,090원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 이달 현금 원장",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LSD-0",
+   "text": "매수 결제 유출",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 이달 현금 원장",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LSE-0",
+   "text": "-36,343,390원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 이달 현금 원장",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LSG-0",
+   "text": "예수금 증감",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 이달 현금 원장",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3LSH-0",
+   "text": "+4,520,000원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 이달 현금 원장",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3US1-0",
+   "text": "기타 자산·수익 낱값",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 기타 자산·수익 낱값",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3US2-0",
+   "text": "6항목 모두 0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 기타 자산·수익 낱값",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3US6-0",
+   "text": "RP 평가",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 기타 자산·수익 낱값",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3US7-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 기타 자산·수익 낱값",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3US9-0",
+   "text": "채권 평가",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 기타 자산·수익 낱값",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3USA-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 기타 자산·수익 낱값",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3USD-0",
+   "text": "ELS 평가",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 기타 자산·수익 낱값",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3USE-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 기타 자산·수익 낱값",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3USG-0",
+   "text": "신용이자 금액",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 기타 자산·수익 낱값",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3USH-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 기타 자산·수익 낱값",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3USK-0",
+   "text": "매도담보 이자",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 기타 자산·수익 낱값",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3USL-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 기타 자산·수익 낱값",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3USN-0",
+   "text": "중도이용료",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 기타 자산·수익 낱값",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3USO-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 기타 자산·수익 낱값",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3USS-0",
+   "text": "신용 실현 · 대주",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 신용 실현·대주",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UST-0",
+   "text": "거래 없음",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 신용 실현·대주",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3USX-0",
+   "text": "당일 실현손익",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 신용 실현·대주",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3USY-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 신용 실현·대주",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UT0-0",
+   "text": "당일 실현수익률",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 신용 실현·대주",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UT1-0",
+   "text": "0.00%",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 신용 실현·대주",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UT4-0",
+   "text": "담보대출 수량",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 신용 실현·대주",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UT5-0",
+   "text": "0주",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 신용 실현·대주",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UT7-0",
+   "text": "총대주금액",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 신용 실현·대주",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UT8-0",
+   "text": "0원",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Workspace",
+    "Change Rail",
+    "Rail Section · 신용 실현·대주",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3K7R-0",
+   "text": "● 이달 기초·기말 장 마감 후 확정",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Status Footer"
+   ]
+  },
+  {
+   "id": "3K7Q-0",
+   "text": "영업부 · 담당자 미제공",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Status Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3K7P-0",
+   "text": "이달 잔고 증감 전체 보기",
+   "path": [
+    "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+    "Account Root · 이달 기초·기말 구성",
+    "Account Card Surface",
+    "Account Status Footer",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "3K7K-0",
+   "name": "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+   "component": "Frame",
+   "w": 1440,
+   "h": 1116,
+   "depth": 0
+  },
+  {
+   "id": "3K7L-0",
+   "name": "Account Root · 이달 기초·기말 구성",
+   "component": "Frame",
+   "w": 1440,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "3K7M-0",
+   "name": "Account Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "3KF9-0",
+   "name": "Account Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 106,
+   "depth": 3
+  },
+  {
+   "id": "3KFP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3KFR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3KFS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3L1A-0",
+   "name": "Header Right",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3L1B-0",
+   "name": "Tab List",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3L1C-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3L1E-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3L1G-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3L1I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3L1K-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3L1M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3L1O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3L1Q-0",
+   "name": "Active Marker",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3KEO-0",
+   "name": "Account Summary Strip",
+   "component": "Frame",
+   "w": 0,
+   "h": 116,
+   "depth": 3
+  },
+  {
+   "id": "3KF5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 340,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "3KF1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 265,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "3KEX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 245,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "3KET-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 245,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "3KEP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "3K7S-0",
+   "name": "Account Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3L4J-0",
+   "name": "Balance Change Column",
+   "component": "Frame",
+   "w": 900,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3L4K-0",
+   "name": "Section Title",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3L4N-0",
+   "name": "Table Head",
+   "component": "Frame",
+   "w": 0,
+   "h": 36,
+   "depth": 5
+  },
+  {
+   "id": "3L4S-0",
+   "name": "Group · 자산",
+   "component": "Frame",
+   "w": 0,
+   "h": 28,
+   "depth": 5
+  },
+  {
+   "id": "3L8Y-0",
+   "name": "R 예수금",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "3L93-0",
+   "name": "R 유가증권평가금액",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "3L98-0",
+   "name": "R 대주담보금",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "3L9D-0",
+   "name": "R 신용융자금",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "3L9I-0",
+   "name": "R 현금미수금",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "3L9N-0",
+   "name": "R 원화대용금",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "3L9S-0",
+   "name": "R 대주평가금",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "3L9X-0",
+   "name": "R 권리평가금",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "3LA2-0",
+   "name": "R 자산 합계",
+   "component": "Frame",
+   "w": 0,
+   "h": 38,
+   "depth": 5
+  },
+  {
+   "id": "3LCX-0",
+   "name": "Group · 부채",
+   "component": "Frame",
+   "w": 0,
+   "h": 28,
+   "depth": 5
+  },
+  {
+   "id": "3LD0-0",
+   "name": "R 대출금",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "3LD5-0",
+   "name": "R 기타대여금",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "3LDA-0",
+   "name": "R 신용이자미납금",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "3LDF-0",
+   "name": "R 신용이자",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "3LDK-0",
+   "name": "R 부채 합계",
+   "component": "Frame",
+   "w": 0,
+   "h": 38,
+   "depth": 5
+  },
+  {
+   "id": "3URH-0",
+   "name": "기간 입출고 · 대용매도",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3URI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3URL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 6
+  },
+  {
+   "id": "3URM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3URP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3URS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3URV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3LRH-0",
+   "name": "Change Rail",
+   "component": "Frame",
+   "w": 460,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3LRI-0",
+   "name": "Rail Section · 증감 구성",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3LRJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3LRM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 408,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3LRN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3LRP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3LRS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 408,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "3LRT-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 382,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "3LRU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 408,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3LRV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3LRX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3LS0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 408,
+   "h": 8,
+   "depth": 7
+  },
+  {
+   "id": "3LS1-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 26,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "3LS2-0",
+   "name": "Rail Section · 이달 현금 원장",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3LS3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3LS6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3LS9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3LSC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3LSF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3URZ-0",
+   "name": "Rail Section · 기타 자산·수익 낱값",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3US0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3US3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3US4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 7
+  },
+  {
+   "id": "3US5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 196,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3US8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 196,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3USB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 7
+  },
+  {
+   "id": "3USC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 196,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3USF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 196,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3USI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 7
+  },
+  {
+   "id": "3USJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 196,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3USM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 196,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3USQ-0",
+   "name": "Rail Section · 신용 실현·대주",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3USR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3USU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3USV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 7
+  },
+  {
+   "id": "3USW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 196,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3USZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 196,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3UT2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 7
+  },
+  {
+   "id": "3UT3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 196,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3UT6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 196,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3K7N-0",
+   "name": "Account Status Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 3
+  },
+  {
+   "id": "3K7O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  }
+ ],
+ "text_multiset": {
+  "내 계좌": 1,
+  "실시간": 1,
+  "키움증권 종합계좌 ****4721 · 개인종합 · 마지막 갱신 09:42:18": 1,
+  "자산 종합": 1,
+  "보유종목": 1,
+  "예수금·결제": 1,
+  "손익·성과": 1,
+  "주문·체결": 1,
+  "증거금·담보": 1,
+  "금현물": 1,
+  "▾": 1,
+  "이달 기초·기말 구성": 2,
+  "이달 순증": 1,
+  "+4,830,240원": 2,
+  "1억 1,975만 → 1억 2,458만": 1,
+  "주문가능금액": 1,
+  "31,240,000원": 1,
+  "출금가능 28,940,000원": 1,
+  "주식 평가액": 1,
+  "89,760,240원": 2,
+  "8종목": 1,
+  "평가손익": 1,
+  "+4,240,900원": 1,
+  "매입 85,519,340원": 1,
+  "현금 비중": 1,
+  "28.0%": 1,
+  "보유종목 8종": 1,
+  "08월 01일 기초 · 09월 01일 기말": 1,
+  "항목": 1,
+  "기초 08/01": 1,
+  "기말 09/01": 1,
+  "증감": 1,
+  "자산": 1,
+  "8개 항목": 1,
+  "예수금": 2,
+  "30,300,000원": 1,
+  "34,820,000원": 1,
+  "+4,520,000원": 3,
+  "유가증권평가금액": 1,
+  "89,450,000원": 1,
+  "+310,240원": 2,
+  "대주담보금": 1,
+  "0원": 45,
+  "신용융자금": 1,
+  "현금미수금": 1,
+  "원화대용금": 1,
+  "대주평가금": 1,
+  "권리평가금": 1,
+  "자산 합계": 1,
+  "119,750,000원": 1,
+  "124,580,240원": 1,
+  "부채": 1,
+  "4개 항목": 1,
+  "대출금": 1,
+  "기타대여금": 1,
+  "신용이자미납금": 1,
+  "신용이자": 1,
+  "부채 합계": 1,
+  "기간 입출고 · 대용매도": 1,
+  "08/01 → 09/01 · 4항목 모두 0원": 1,
+  "기간내 총입고": 1,
+  "기간내 총출고": 1,
+  "위탁대용 매도금액": 1,
+  "선물대용 매도금액": 1,
+  "증감 구성": 1,
+  "순증 +4,830,240원": 1,
+  "93.6%": 1,
+  "유가증권": 1,
+  "6.4%": 1,
+  "이달 현금 원장": 1,
+  "08/01 → 09/01": 1,
+  "입금": 1,
+  "+5,054,300원": 1,
+  "매도 결제 유입": 1,
+  "+35,809,090원": 1,
+  "매수 결제 유출": 1,
+  "-36,343,390원": 1,
+  "예수금 증감": 1,
+  "기타 자산·수익 낱값": 1,
+  "6항목 모두 0원": 1,
+  "RP 평가": 1,
+  "채권 평가": 1,
+  "ELS 평가": 1,
+  "신용이자 금액": 1,
+  "매도담보 이자": 1,
+  "중도이용료": 1,
+  "신용 실현 · 대주": 1,
+  "거래 없음": 1,
+  "당일 실현손익": 1,
+  "당일 실현수익률": 1,
+  "0.00%": 1,
+  "담보대출 수량": 1,
+  "0주": 1,
+  "총대주금액": 1,
+  "● 이달 기초·기말 장 마감 후 확정": 1,
+  "영업부 · 담당자 미제공": 1,
+  "이달 잔고 증감 전체 보기": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "7a55a220555a1003d227fdcc8ed00c87d01a9b8d4baee51f7b87b69e4585ed47"
+}

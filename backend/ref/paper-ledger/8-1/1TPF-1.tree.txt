@@ -1,0 +1,53 @@
+Frame "04 · 백테스트 — 데이터 수집 승인" (1TPF-1) 1680×620
+  Frame "타이틀" (1TPG-1) 0×0
+    Text "백테스트 — 데이터 수집 승인" (1TPH-1) 0×0 "백테스트 — 데이터 수집 승인"
+    Text "키움 조회는 TR당 초당 1회가 상한…" (1TPI-1) 0×0 "키움 조회는 TR당 초당 1회가 상한이라, 캐시에 없는 구간은 시간을 씁니다. 몇 번 부르고 얼마나 걸릴지 "
+  Frame "카드 행" (1TQE-1) 0×0
+    Frame "승인 카드" (1TPK-1) 560×0
+      Frame "Frame" (1TPL-1) 0×0
+        Frame "Frame" (1TPM-1) 0×0
+          Text "수집 필요" (1TPN-1) 0×0 "수집 필요"
+        Text "캐시에 없는 구간이 있습니다" (1TPO-1) 0×0 "캐시에 없는 구간이 있습니다"
+      Frame "커버리지 바" (1TPP-1) 0×0
+        Frame "Frame" (1TPQ-1) 0×10
+          Rectangle "Rectangle" (1TPR-1) 0×10
+          Rectangle "Rectangle" (1TPS-1) 0×10
+        Frame "Frame" (1TPT-1) 0×0
+          Text "2016-01-01 (없음)" (1TPU-1) 0×0 "2016-01-01 (없음)"
+          Text "2018-02-12 → 2026-08…" (1TPV-1) 0×0 "2018-02-12 → 2026-08-28 (보유 2,842봉)"
+      Frame "계획 수치" (1TPW-1) 0×0
+        Frame "Frame" (1TPX-1) 0×0
+          Text "부족 구간" (1TPY-1) 0×0 "부족 구간"
+          Text "약 520봉" (1TPZ-1) 0×0 "약 520봉"
+        Frame "Frame" (1TQ0-1) 0×0
+          Text "TR 호출" (1TQ1-1) 0×0 "TR 호출"
+          Text "ka10081 × 4회" (1TQ2-1) 0×0 "ka10081 × 4회"
+        Frame "Frame" (1TQ3-1) 0×0
+          Text "예상 소요" (1TQ4-1) 0×0 "예상 소요"
+          Text "~5초" (1TQ5-1) 0×0 "~5초"
+      Text "수정주가 기준으로 받습니다. 이어 붙…" (1TQ6-1) 0×0 "수정주가 기준으로 받습니다. 이어 붙일 때 최근 20봉 종가를 대조해 권리락이 감지되면 전체를 다시 받고, "
+      Frame "Frame" (1TQ7-1) 0×0
+        Frame "Frame" (1TQ8-1) 0×0
+          Text "수집하고 실행" (1TQ9-1) 0×0 "수집하고 실행"
+        Frame "Frame" (1TQA-1) 0×0
+          Text "보유 구간만으로 실행" (1TQB-1) 0×0 "보유 구간만으로 실행"
+        Text "취소" (1TQC-1) 0×0 "취소"
+    Frame "진행 카드" (1TQG-1) 560×0
+      Frame "Frame" (1TQH-1) 0×0
+        Frame "Frame" (1TQI-1) 0×0
+          Text "수집 중" (1TQJ-1) 0×0 "수집 중"
+        Text "승인 후 — 진행이 그대로 보입니다" (1TQK-1) 0×0 "승인 후 — 진행이 그대로 보입니다"
+      Frame "Frame" (1TQL-1) 0×0
+        Frame "Frame" (1TQM-1) 0×10
+          Rectangle "Rectangle" (1TQN-1) 0×10
+        Frame "Frame" (1TQO-1) 0×0
+          Text "3 / 4 페이지 · 390봉 수신" (1TQP-1) 0×0 "3 / 4 페이지 · 390봉 수신"
+          Text "남은 시간 ~1초" (1TQQ-1) 0×0 "남은 시간 ~1초"
+      Frame "Frame" (1TQR-1) 0×0
+        Text "ka10081 base_dt=2018…" (1TQS-1) 0×0 "ka10081 base_dt=20180211 → 600봉 · cont-yn=Y"
+        Text "ka10081 base_dt=2016…" (1TQT-1) 0×0 "ka10081 base_dt=20160805 → 390봉 · cont-yn=Y"
+        Text "겹침 20봉 종가 대조 — 일치 (권…" (1TQU-1) 0×0 "겹침 20봉 종가 대조 — 일치 (권리락 없음)"
+      Frame "Frame" (1TQV-1) 0×0
+        Frame "Frame" (1TQW-1) 0×0
+          Text "중단" (1TQX-1) 0×0 "중단"
+        Text "끝나면 바로 백테스트가 이어집니다" (1TQY-1) 0×0 "끝나면 바로 백테스트가 이어집니다"

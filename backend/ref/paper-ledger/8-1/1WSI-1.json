@@ -1,0 +1,521 @@
+{
+ "board_id": "1WSI-1",
+ "page": "8-1",
+ "page_name": "백테스트",
+ "name": "05 · 백테스트 — 이력·비교",
+ "width": 1680.0,
+ "height": 760.0,
+ "texts": [
+  {
+   "id": "1WSK-1",
+   "text": "백테스트 — 이력·비교",
+   "path": [
+    "05 · 백테스트 — 이력·비교",
+    "타이틀"
+   ]
+  },
+  {
+   "id": "1WSL-1",
+   "text": "모든 실행은 전략 버전에 묶입니다 — 같은 버전·같은 파라미터·같은 구간이면 같은 결과가 나와야 하고, 두 실행을 겹치면 무엇이 달랐는지(파라미터·코드 버전)가 먼저 보입니다.",
+   "path": [
+    "05 · 백테스트 — 이력·비교",
+    "타이틀"
+   ]
+  },
+  {
+   "id": "1WY8-1",
+   "text": "실행 이력 — 20-60 골든크로스",
+   "path": [
+    "05 · 백테스트 — 이력·비교",
+    "본문 행",
+    "실행 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1WY9-1",
+   "text": "2개 선택 → 비교",
+   "path": [
+    "05 · 백테스트 — 이력·비교",
+    "본문 행",
+    "실행 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1WYC-1",
+   "text": "#41",
+   "path": [
+    "05 · 백테스트 — 이력·비교",
+    "본문 행",
+    "실행 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1WYD-1",
+   "text": "v4",
+   "path": [
+    "05 · 백테스트 — 이력·비교",
+    "본문 행",
+    "실행 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1WYE-1",
+   "text": "fast 20 · slow 60",
+   "path": [
+    "05 · 백테스트 — 이력·비교",
+    "본문 행",
+    "실행 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1WYF-1",
+   "text": "+184.2%",
+   "path": [
+    "05 · 백테스트 — 이력·비교",
+    "본문 행",
+    "실행 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1WYI-1",
+   "text": "#38",
+   "path": [
+    "05 · 백테스트 — 이력·비교",
+    "본문 행",
+    "실행 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1WYJ-1",
+   "text": "v3",
+   "path": [
+    "05 · 백테스트 — 이력·비교",
+    "본문 행",
+    "실행 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1WYK-1",
+   "text": "fast 10 · slow 40",
+   "path": [
+    "05 · 백테스트 — 이력·비교",
+    "본문 행",
+    "실행 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1WYL-1",
+   "text": "+96.7%",
+   "path": [
+    "05 · 백테스트 — 이력·비교",
+    "본문 행",
+    "실행 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1WYO-1",
+   "text": "#36",
+   "path": [
+    "05 · 백테스트 — 이력·비교",
+    "본문 행",
+    "실행 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1WYP-1",
+   "text": "v3",
+   "path": [
+    "05 · 백테스트 — 이력·비교",
+    "본문 행",
+    "실행 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1WYQ-1",
+   "text": "fast 5 · slow 20",
+   "path": [
+    "05 · 백테스트 — 이력·비교",
+    "본문 행",
+    "실행 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1WYR-1",
+   "text": "-12.1%",
+   "path": [
+    "05 · 백테스트 — 이력·비교",
+    "본문 행",
+    "실행 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1WYU-1",
+   "text": "#29",
+   "path": [
+    "05 · 백테스트 — 이력·비교",
+    "본문 행",
+    "실행 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1WYV-1",
+   "text": "v2",
+   "path": [
+    "05 · 백테스트 — 이력·비교",
+    "본문 행",
+    "실행 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1WYW-1",
+   "text": "실패 — 캐시 부족 (수집 미승인)",
+   "path": [
+    "05 · 백테스트 — 이력·비교",
+    "본문 행",
+    "실행 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1WYX-1",
+   "text": "—",
+   "path": [
+    "05 · 백테스트 — 이력·비교",
+    "본문 행",
+    "실행 목록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1WYZ-1",
+   "text": "#41 vs #38 — 무엇이 달랐나",
+   "path": [
+    "05 · 백테스트 — 이력·비교",
+    "본문 행",
+    "비교 패널"
+   ]
+  },
+  {
+   "id": "1WZ2-1",
+   "text": "파라미터 diff",
+   "path": [
+    "05 · 백테스트 — 이력·비교",
+    "본문 행",
+    "비교 패널",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1WZ3-1",
+   "text": "fast 10→20 · slow 40→60",
+   "path": [
+    "05 · 백테스트 — 이력·비교",
+    "본문 행",
+    "비교 패널",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1WZ5-1",
+   "text": "코드 diff",
+   "path": [
+    "05 · 백테스트 — 이력·비교",
+    "본문 행",
+    "비교 패널",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1WZ6-1",
+   "text": "v3→v4 · 12줄 (ATR 손절)",
+   "path": [
+    "05 · 백테스트 — 이력·비교",
+    "본문 행",
+    "비교 패널",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1WZE-1",
+   "text": "#41 · MDD -27.9% · Sharpe 0.87",
+   "path": [
+    "05 · 백테스트 — 이력·비교",
+    "본문 행",
+    "비교 패널",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1WZH-1",
+   "text": "#38 · MDD -34.6% · Sharpe 0.51",
+   "path": [
+    "05 · 백테스트 — 이력·비교",
+    "본문 행",
+    "비교 패널",
+    "Frame",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "1WSI-1",
+   "name": "05 · 백테스트 — 이력·비교",
+   "component": "Frame",
+   "w": 1680.0,
+   "h": 760.0,
+   "depth": 0
+  },
+  {
+   "id": "1WSJ-1",
+   "name": "타이틀",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 1
+  },
+  {
+   "id": "1WY5-1",
+   "name": "본문 행",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 1
+  },
+  {
+   "id": "1WY6-1",
+   "name": "실행 목록",
+   "component": "Frame",
+   "w": 520.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "1WY7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "1WYA-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 40.0,
+   "depth": 3
+  },
+  {
+   "id": "1WYB-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 14.0,
+   "h": 14.0,
+   "depth": 4
+  },
+  {
+   "id": "1WYG-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 40.0,
+   "depth": 3
+  },
+  {
+   "id": "1WYH-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 14.0,
+   "h": 14.0,
+   "depth": 4
+  },
+  {
+   "id": "1WYM-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 40.0,
+   "depth": 3
+  },
+  {
+   "id": "1WYN-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 14.0,
+   "h": 14.0,
+   "depth": 4
+  },
+  {
+   "id": "1WYS-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 40.0,
+   "depth": 3
+  },
+  {
+   "id": "1WYT-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 14.0,
+   "h": 14.0,
+   "depth": 4
+  },
+  {
+   "id": "1WYY-1",
+   "name": "비교 패널",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "1WZ0-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "1WZ1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "1WZ4-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "1WZ7-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "1WZ8-1",
+   "name": "Line",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "1WZ9-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "1WZA-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "1WZB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "1WZC-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "1WZD-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 14.0,
+   "h": 2.0,
+   "depth": 5
+  },
+  {
+   "id": "1WZF-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "1WZG-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 14.0,
+   "h": 2.0,
+   "depth": 5
+  }
+ ],
+ "text_multiset": {
+  "백테스트 — 이력·비교": 1,
+  "모든 실행은 전략 버전에 묶입니다 — 같은 버전·같은 파라미터·같은 구간이면 같은 결과가 나와야 하고, 두 실행을 겹치면 무엇이 달랐는지(파라미터·코드 버전)가 먼저 보입니다.": 1,
+  "실행 이력 — 20-60 골든크로스": 1,
+  "2개 선택 → 비교": 1,
+  "#41": 1,
+  "v4": 1,
+  "fast 20 · slow 60": 1,
+  "+184.2%": 1,
+  "#38": 1,
+  "v3": 2,
+  "fast 10 · slow 40": 1,
+  "+96.7%": 1,
+  "#36": 1,
+  "fast 5 · slow 20": 1,
+  "-12.1%": 1,
+  "#29": 1,
+  "v2": 1,
+  "실패 — 캐시 부족 (수집 미승인)": 1,
+  "—": 1,
+  "#41 vs #38 — 무엇이 달랐나": 1,
+  "파라미터 diff": 1,
+  "fast 10→20 · slow 40→60": 1,
+  "코드 diff": 1,
+  "v3→v4 · 12줄 (ATR 손절)": 1,
+  "#41 · MDD -27.9% · Sharpe 0.87": 1,
+  "#38 · MDD -34.6% · Sharpe 0.51": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "c0019197e060c1ab7dc81c0d6b9c47a3d1b08184fe5329bd6cae17f94e965f28"
+}

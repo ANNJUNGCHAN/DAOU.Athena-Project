@@ -1,0 +1,3368 @@
+{
+ "board_id": "2SRV-1",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+ "width": 1440,
+ "height": 1090,
+ "texts": [
+  {
+   "id": "2SWR-1",
+   "text": "내 계좌",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SWQ-1",
+   "text": "실시간",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SWN-1",
+   "text": "키움증권 종합계좌 ****4721 · 개인종합 · 마지막 갱신 09:42:18",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SWL-1",
+   "text": "자산 종합",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SWJ-1",
+   "text": "보유종목",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SWH-1",
+   "text": "예수금·결제",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SWF-1",
+   "text": "손익·성과",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SWD-1",
+   "text": "주문·체결",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SWB-1",
+   "text": "증거금·담보",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SW9-1",
+   "text": "금현물",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SW5-1",
+   "text": "총자산",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SW4-1",
+   "text": "124,580,240원",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SW3-1",
+   "text": "수익률 +4.96%",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SW1-1",
+   "text": "주문가능금액",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SW0-1",
+   "text": "31,240,000원",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SVZ-1",
+   "text": "출금가능 28,940,000원",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SVX-1",
+   "text": "주식 평가액",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SVW-1",
+   "text": "89,760,240원",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SVV-1",
+   "text": "8종목",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SVT-1",
+   "text": "평가손익",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SVS-1",
+   "text": "+4,240,900원",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SVR-1",
+   "text": "매입 85,519,340원",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SVP-1",
+   "text": "현금 비중",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SVO-1",
+   "text": "28.0%",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2SVN-1",
+   "text": "보유종목 8종",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Summary Strip",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IG0-0",
+   "text": "실현손익",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Section Title"
+   ]
+  },
+  {
+   "id": "3IG1-0",
+   "text": "매도 확정 기준 · 세후",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Section Title"
+   ]
+  },
+  {
+   "id": "3IG4-0",
+   "text": "당일 실현손익",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Realized KPI Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IG5-0",
+   "text": "+1,082,400",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Realized KPI Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IG6-0",
+   "text": "당일 투자원금 11,839,000원",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Realized KPI Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IG8-0",
+   "text": "이번 달 누적",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Realized KPI Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IG9-0",
+   "text": "+1,082,400",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Realized KPI Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IGA-0",
+   "text": "원금 1억 1,975만 · +0.90%",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Realized KPI Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IGC-0",
+   "text": "올해 누적",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Realized KPI Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IGD-0",
+   "text": "+8,899,520",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Realized KPI Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IGE-0",
+   "text": "원금 1억 1,200만 · +7.95%",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Realized KPI Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IGG-0",
+   "text": "당일 수수료·세금",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Realized KPI Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IGH-0",
+   "text": "-24,600",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Realized KPI Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IGI-0",
+   "text": "수수료 -3,880·세금 -20,720",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Realized KPI Row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3IGK-0",
+   "text": "일자",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Table Head"
+   ]
+  },
+  {
+   "id": "3IGL-0",
+   "text": "매도 종목",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Table Head"
+   ]
+  },
+  {
+   "id": "3IGM-0",
+   "text": "실현손익",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Table Head"
+   ]
+  },
+  {
+   "id": "3IGN-0",
+   "text": "수익률",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Table Head"
+   ]
+  },
+  {
+   "id": "3IGO-0",
+   "text": "수수료",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Table Head"
+   ]
+  },
+  {
+   "id": "3IGP-0",
+   "text": "세금",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Table Head"
+   ]
+  },
+  {
+   "id": "3JDF-0",
+   "text": "09/01",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 09/01 KODEX 200 외 1건",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JDH-0",
+   "text": "KODEX 200 외 1건",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 09/01 KODEX 200 외 1건",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JDJ-0",
+   "text": "069500 · 035420",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 09/01 KODEX 200 외 1건",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JDL-0",
+   "text": "현금",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 09/01 KODEX 200 외 1건",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JDO-0",
+   "text": "+1,082,400",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 09/01 KODEX 200 외 1건",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JDP-0",
+   "text": "매도손익 +1,107,000",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 09/01 KODEX 200 외 1건",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JDR-0",
+   "text": "+9.14%",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 09/01 KODEX 200 외 1건",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JDT-0",
+   "text": "-3,880",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 09/01 KODEX 200 외 1건",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JDU-0",
+   "text": "HTS 매도 -3,110 · 매수 -770",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 09/01 KODEX 200 외 1건",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JDW-0",
+   "text": "-20,720",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 09/01 KODEX 200 외 1건",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JDX-0",
+   "text": "거래세 -5,180 · 농특세 -15,540",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 09/01 KODEX 200 외 1건",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JE0-0",
+   "text": "08/28",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/28 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JE2-0",
+   "text": "NAVER",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/28 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JE4-0",
+   "text": "035420",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/28 NAVER",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JE6-0",
+   "text": "현금",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/28 NAVER",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JE9-0",
+   "text": "-132,300",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/28 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JEA-0",
+   "text": "매도손익 -108,000",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/28 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JEC-0",
+   "text": "-0.99%",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/28 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JEE-0",
+   "text": "-3,170",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/28 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JEF-0",
+   "text": "HTS 매도 -3,170",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/28 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JEH-0",
+   "text": "-21,130",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/28 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JEI-0",
+   "text": "거래세 -5,280 · 농특세 -15,850",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/28 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JEL-0",
+   "text": "08/27",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/27 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JEN-0",
+   "text": "SK하이닉스",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/27 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JEP-0",
+   "text": "000660",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/27 SK하이닉스",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JER-0",
+   "text": "현금",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/27 SK하이닉스",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JEU-0",
+   "text": "+413,380",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/27 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JEV-0",
+   "text": "매도손익 +450,000",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/27 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JEX-0",
+   "text": "+2.13%",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/27 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JEZ-0",
+   "text": "-4,780",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/27 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JF0-0",
+   "text": "HTS 매도 -4,780",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/27 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JF2-0",
+   "text": "-31,840",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/27 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JF3-0",
+   "text": "거래세 -7,960 · 농특세 -23,880",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/27 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JF6-0",
+   "text": "08/26",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/26 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JF8-0",
+   "text": "삼성전자",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/26 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JFA-0",
+   "text": "005930",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/26 삼성전자",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JFC-0",
+   "text": "현금",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/26 삼성전자",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JFF-0",
+   "text": "+582,590",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/26 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JFG-0",
+   "text": "매도손익 +648,600",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/26 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JFI-0",
+   "text": "+1.65%",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/26 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JFK-0",
+   "text": "-8,610",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/26 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JFL-0",
+   "text": "HTS 매도 -8,610",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/26 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JFN-0",
+   "text": "-57,400",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/26 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JFO-0",
+   "text": "거래세 -14,350 · 농특세 -43,050",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/26 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JGC-0",
+   "text": "08/26",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/26 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JGE-0",
+   "text": "현대차",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/26 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JGG-0",
+   "text": "005380",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/26 현대차",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JGI-0",
+   "text": "현금",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/26 현대차",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JGL-0",
+   "text": "+600,580",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/26 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JGM-0",
+   "text": "매도손익 +639,000",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/26 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JGO-0",
+   "text": "+2.97%",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/26 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JGQ-0",
+   "text": "-5,010",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/26 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JGR-0",
+   "text": "HTS 매도 -5,010",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/26 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JGT-0",
+   "text": "-33,410",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/26 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JGU-0",
+   "text": "거래세 -8,350 · 농특세 -25,060",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/26 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JGX-0",
+   "text": "08/25",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/25 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JGZ-0",
+   "text": "삼성전자",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/25 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JH1-0",
+   "text": "005930",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/25 삼성전자",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JH3-0",
+   "text": "현금",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/25 삼성전자",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JH6-0",
+   "text": "+212,370",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/25 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JH7-0",
+   "text": "매도손익 +240,000",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/25 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JH9-0",
+   "text": "+1.44%",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/25 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JHB-0",
+   "text": "-3,600",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/25 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JHC-0",
+   "text": "HTS 매도 -3,600",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/25 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JHE-0",
+   "text": "-24,030",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/25 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JHF-0",
+   "text": "거래세 -6,010 · 농특세 -18,020",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/25 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JHI-0",
+   "text": "08/21",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/21 KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JHK-0",
+   "text": "KODEX 200",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/21 KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JHM-0",
+   "text": "069500",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/21 KODEX 200",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JHO-0",
+   "text": "현금",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/21 KODEX 200",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JHR-0",
+   "text": "-50,500",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/21 KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JHS-0",
+   "text": "매도손익 -24,000",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/21 KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JHU-0",
+   "text": "-0.35%",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/21 KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JHW-0",
+   "text": "-3,460",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/21 KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JHX-0",
+   "text": "HTS 매도 -3,460",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/21 KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JHZ-0",
+   "text": "-23,040",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/21 KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JI0-0",
+   "text": "거래세 -5,760 · 농특세 -17,280",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Row 08/21 KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3JI2-0",
+   "text": "최근 7건 표시 · 표시 합 +2,708,520원 · 대출일 해당 없음",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Table Foot"
+   ]
+  },
+  {
+   "id": "3JI3-0",
+   "text": "매도수수료 0.024% · 거래세 0.04% · 농특세 0.12% · 매수수수료 0.02%",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Realized PL Column",
+    "Table Foot"
+   ]
+  },
+  {
+   "id": "3UGV-0",
+   "text": "성과 요약",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "성과 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UGW-0",
+   "text": "실현 + 평가",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "성과 요약",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UGY-0",
+   "text": "평가손익 (미실현)",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "성과 요약",
+    "평가손익"
+   ]
+  },
+  {
+   "id": "3UGZ-0",
+   "text": "+4,240,900원",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "성과 요약",
+    "평가손익"
+   ]
+  },
+  {
+   "id": "3UH1-0",
+   "text": "최근 5일 승률",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "성과 요약",
+    "최근 5일 승률"
+   ]
+  },
+  {
+   "id": "3UH2-0",
+   "text": "4승 1패",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "성과 요약",
+    "최근 5일 승률"
+   ]
+  },
+  {
+   "id": "3UH4-0",
+   "text": "투자원금 평잔",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "성과 요약",
+    "투자원금 평잔"
+   ]
+  },
+  {
+   "id": "3UH5-0",
+   "text": "1억 1,975만원",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "성과 요약",
+    "투자원금 평잔"
+   ]
+  },
+  {
+   "id": "3UH7-0",
+   "text": "회전율",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "성과 요약",
+    "회전율"
+   ]
+  },
+  {
+   "id": "3UH8-0",
+   "text": "14.0%",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "성과 요약",
+    "회전율"
+   ]
+  },
+  {
+   "id": "3UHA-0",
+   "text": "기간 총입고·총출고·위탁대용 매도·선물대용 매도",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "성과 요약",
+    "영값 묶음"
+   ]
+  },
+  {
+   "id": "3UHC-0",
+   "text": "0원 4항목",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "성과 요약",
+    "영값 묶음",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UHD-0",
+   "text": "▸",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "성과 요약",
+    "영값 묶음",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UHG-0",
+   "text": "오늘 실현 상세",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "오늘 실현 상세",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UHH-0",
+   "text": "09월 01일",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "오늘 실현 상세",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UHK-0",
+   "text": "KODEX 200",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "오늘 실현 상세",
+    "KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UHL-0",
+   "text": "+1,135,000",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "오늘 실현 상세",
+    "KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UHN-0",
+   "text": "250주 · 매입 43,820 → 48,360",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "오늘 실현 상세",
+    "KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UHQ-0",
+   "text": "NAVER",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "오늘 실현 상세",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UHR-0",
+   "text": "-28,000",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "오늘 실현 상세",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UHT-0",
+   "text": "4주 · 매입 221,000 → 214,000",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "오늘 실현 상세",
+    "NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UHV-0",
+   "text": "매매 비용",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "오늘 실현 상세",
+    "매매 비용"
+   ]
+  },
+  {
+   "id": "3UHW-0",
+   "text": "-24,600",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "오늘 실현 상세",
+    "매매 비용"
+   ]
+  },
+  {
+   "id": "3UHY-0",
+   "text": "실현 합계",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "오늘 실현 상세",
+    "실현 합계"
+   ]
+  },
+  {
+   "id": "3UHZ-0",
+   "text": "+1,082,400원",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "오늘 실현 상세",
+    "실현 합계"
+   ]
+  },
+  {
+   "id": "3UI2-0",
+   "text": "오늘 매매일지",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "오늘 매매일지",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UI3-0",
+   "text": "약정 16,788,000원",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "오늘 매매일지",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UI5-0",
+   "text": "매수 금액",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "오늘 매매일지",
+    "매수 금액"
+   ]
+  },
+  {
+   "id": "3UI6-0",
+   "text": "3,842,000원",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "오늘 매매일지",
+    "매수 금액"
+   ]
+  },
+  {
+   "id": "3UI8-0",
+   "text": "매도 금액",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "오늘 매매일지",
+    "매도 금액"
+   ]
+  },
+  {
+   "id": "3UI9-0",
+   "text": "12,946,000원",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "오늘 매매일지",
+    "매도 금액"
+   ]
+  },
+  {
+   "id": "3UIB-0",
+   "text": "매매 비용",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "오늘 매매일지",
+    "매매 비용"
+   ]
+  },
+  {
+   "id": "3UIC-0",
+   "text": "-24,600원",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "오늘 매매일지",
+    "매매 비용"
+   ]
+  },
+  {
+   "id": "3UIE-0",
+   "text": "순손익",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "오늘 매매일지",
+    "순손익"
+   ]
+  },
+  {
+   "id": "3UIF-0",
+   "text": "+1,082,400원",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "오늘 매매일지",
+    "순손익"
+   ]
+  },
+  {
+   "id": "3UII-0",
+   "text": "이달 잔고 증감",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "이달 잔고 증감",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UIJ-0",
+   "text": "08/01 → 09/01",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "이달 잔고 증감",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UIL-0",
+   "text": "자산",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "이달 잔고 증감",
+    "자산"
+   ]
+  },
+  {
+   "id": "3UIN-0",
+   "text": "1억 1,975만 → 1억 2,458만 (+483만)",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "이달 잔고 증감",
+    "자산",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UIO-0",
+   "text": "▸",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "이달 잔고 증감",
+    "자산",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UIQ-0",
+   "text": "부채",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "이달 잔고 증감",
+    "부채"
+   ]
+  },
+  {
+   "id": "3UIS-0",
+   "text": "0원 → 0원",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "이달 잔고 증감",
+    "부채",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3UIT-0",
+   "text": "▸",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Workspace",
+    "Performance Rail",
+    "이달 잔고 증감",
+    "부채",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3B4A-0",
+   "text": "● 손익·성과 장 마감 후 확정",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Status Footer"
+   ]
+  },
+  {
+   "id": "3B4C-0",
+   "text": "영업부 · 담당자 미제공",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Status Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3B4D-0",
+   "text": "손익 전체 내역 보기",
+   "path": [
+    "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+    "Account Root · 손익·성과",
+    "Account Card Surface",
+    "Account Status Footer",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "2SRV-1",
+   "name": "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+   "component": "Frame",
+   "w": 1440,
+   "h": 1090,
+   "depth": 0
+  },
+  {
+   "id": "2SRW-1",
+   "name": "Account Root · 손익·성과",
+   "component": "Frame",
+   "w": 1440,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "2SRX-1",
+   "name": "Account Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "2SW6-1",
+   "name": "Account Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 106,
+   "depth": 3
+  },
+  {
+   "id": "2SWM-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2SWO-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2SWP-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2SW7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2SWK-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2SWI-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2SWG-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2SWE-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2SWC-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2SWA-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2SW8-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2SVL-1",
+   "name": "Account Summary Strip",
+   "component": "Frame",
+   "w": 0,
+   "h": 116,
+   "depth": 3
+  },
+  {
+   "id": "2SW2-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 340,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2SVY-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 265,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2SVU-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 245,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2SVQ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 245,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2SVM-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 78,
+   "depth": 4
+  },
+  {
+   "id": "2SS1-1",
+   "name": "Account Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3IFY-0",
+   "name": "Realized PL Column",
+   "component": "Frame",
+   "w": 900,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3IFZ-0",
+   "name": "Section Title",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3IG2-0",
+   "name": "Realized KPI Row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3IG3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3IG7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3IGB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3IGF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3IGJ-0",
+   "name": "Table Head",
+   "component": "Frame",
+   "w": 0,
+   "h": 40,
+   "depth": 5
+  },
+  {
+   "id": "3JDD-0",
+   "name": "Row 09/01 KODEX 200 외 1건",
+   "component": "Frame",
+   "w": 0,
+   "h": 56,
+   "depth": 5
+  },
+  {
+   "id": "3JDE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 55,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JDG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 156,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JDI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JDK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3JDN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 136,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JDQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 63,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JDS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 205,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JDV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 228,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JDY-0",
+   "name": "Row 08/28 NAVER",
+   "component": "Frame",
+   "w": 0,
+   "h": 56,
+   "depth": 5
+  },
+  {
+   "id": "3JDZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 55,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JE1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 156,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JE3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JE5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3JE8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 136,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JEB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 63,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JED-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 205,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JEG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 228,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JEJ-0",
+   "name": "Row 08/27 SK하이닉스",
+   "component": "Frame",
+   "w": 0,
+   "h": 56,
+   "depth": 5
+  },
+  {
+   "id": "3JEK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 55,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JEM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 156,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JEO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JEQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3JET-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 136,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JEW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 63,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JEY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 205,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JF1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 228,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JF4-0",
+   "name": "Row 08/26 삼성전자",
+   "component": "Frame",
+   "w": 0,
+   "h": 56,
+   "depth": 5
+  },
+  {
+   "id": "3JF5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 55,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JF7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 156,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JF9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JFB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3JFE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 136,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JFH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 63,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JFJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 205,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JFM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 228,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JGA-0",
+   "name": "Row 08/26 현대차",
+   "component": "Frame",
+   "w": 0,
+   "h": 56,
+   "depth": 5
+  },
+  {
+   "id": "3JGB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 55,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JGD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 156,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JGF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JGH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3JGK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 136,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JGN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 63,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JGP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 205,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JGS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 228,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JGV-0",
+   "name": "Row 08/25 삼성전자",
+   "component": "Frame",
+   "w": 0,
+   "h": 56,
+   "depth": 5
+  },
+  {
+   "id": "3JGW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 55,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JGY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 156,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JH0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JH2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3JH5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 136,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JH8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 63,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JHA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 205,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JHD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 228,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JHG-0",
+   "name": "Row 08/21 KODEX 200",
+   "component": "Frame",
+   "w": 0,
+   "h": 56,
+   "depth": 5
+  },
+  {
+   "id": "3JHH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 55,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JHJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 156,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JHL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3JHN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "3JHQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 136,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JHT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 63,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JHV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 205,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JHY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 228,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3JI1-0",
+   "name": "Table Foot",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3UGS-0",
+   "name": "Performance Rail",
+   "component": "Frame",
+   "w": 460,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3UGT-0",
+   "name": "성과 요약",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3UGU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3UGX-0",
+   "name": "평가손익",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UH0-0",
+   "name": "최근 5일 승률",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UH3-0",
+   "name": "투자원금 평잔",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UH6-0",
+   "name": "회전율",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UH9-0",
+   "name": "영값 묶음",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UHB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UHE-0",
+   "name": "오늘 실현 상세",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3UHF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3UHI-0",
+   "name": "KODEX 200",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UHJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UHM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UHO-0",
+   "name": "NAVER",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UHP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UHS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UHU-0",
+   "name": "매매 비용",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UHX-0",
+   "name": "실현 합계",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UI0-0",
+   "name": "오늘 매매일지",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3UI1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3UI4-0",
+   "name": "매수 금액",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UI7-0",
+   "name": "매도 금액",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UIA-0",
+   "name": "매매 비용",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UID-0",
+   "name": "순손익",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UIG-0",
+   "name": "이달 잔고 증감",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3UIH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3UIK-0",
+   "name": "자산",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UIM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3UIP-0",
+   "name": "부채",
+   "component": "Frame",
+   "w": 0,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "3UIR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3B49-0",
+   "name": "Account Status Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 3
+  },
+  {
+   "id": "3B4B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  }
+ ],
+ "text_multiset": {
+  "내 계좌": 1,
+  "실시간": 1,
+  "키움증권 종합계좌 ****4721 · 개인종합 · 마지막 갱신 09:42:18": 1,
+  "자산 종합": 1,
+  "보유종목": 1,
+  "예수금·결제": 1,
+  "손익·성과": 1,
+  "주문·체결": 1,
+  "증거금·담보": 1,
+  "금현물": 1,
+  "총자산": 1,
+  "124,580,240원": 1,
+  "수익률 +4.96%": 1,
+  "주문가능금액": 1,
+  "31,240,000원": 1,
+  "출금가능 28,940,000원": 1,
+  "주식 평가액": 1,
+  "89,760,240원": 1,
+  "8종목": 1,
+  "평가손익": 1,
+  "+4,240,900원": 2,
+  "매입 85,519,340원": 1,
+  "현금 비중": 1,
+  "28.0%": 1,
+  "보유종목 8종": 1,
+  "실현손익": 2,
+  "매도 확정 기준 · 세후": 1,
+  "당일 실현손익": 1,
+  "+1,082,400": 3,
+  "당일 투자원금 11,839,000원": 1,
+  "이번 달 누적": 1,
+  "원금 1억 1,975만 · +0.90%": 1,
+  "올해 누적": 1,
+  "+8,899,520": 1,
+  "원금 1억 1,200만 · +7.95%": 1,
+  "당일 수수료·세금": 1,
+  "-24,600": 2,
+  "수수료 -3,880·세금 -20,720": 1,
+  "일자": 1,
+  "매도 종목": 1,
+  "수익률": 1,
+  "수수료": 1,
+  "세금": 1,
+  "09/01": 1,
+  "KODEX 200 외 1건": 1,
+  "069500 · 035420": 1,
+  "현금": 7,
+  "매도손익 +1,107,000": 1,
+  "+9.14%": 1,
+  "-3,880": 1,
+  "HTS 매도 -3,110 · 매수 -770": 1,
+  "-20,720": 1,
+  "거래세 -5,180 · 농특세 -15,540": 1,
+  "08/28": 1,
+  "NAVER": 2,
+  "035420": 1,
+  "-132,300": 1,
+  "매도손익 -108,000": 1,
+  "-0.99%": 1,
+  "-3,170": 1,
+  "HTS 매도 -3,170": 1,
+  "-21,130": 1,
+  "거래세 -5,280 · 농특세 -15,850": 1,
+  "08/27": 1,
+  "SK하이닉스": 1,
+  "000660": 1,
+  "+413,380": 1,
+  "매도손익 +450,000": 1,
+  "+2.13%": 1,
+  "-4,780": 1,
+  "HTS 매도 -4,780": 1,
+  "-31,840": 1,
+  "거래세 -7,960 · 농특세 -23,880": 1,
+  "08/26": 2,
+  "삼성전자": 2,
+  "005930": 2,
+  "+582,590": 1,
+  "매도손익 +648,600": 1,
+  "+1.65%": 1,
+  "-8,610": 1,
+  "HTS 매도 -8,610": 1,
+  "-57,400": 1,
+  "거래세 -14,350 · 농특세 -43,050": 1,
+  "현대차": 1,
+  "005380": 1,
+  "+600,580": 1,
+  "매도손익 +639,000": 1,
+  "+2.97%": 1,
+  "-5,010": 1,
+  "HTS 매도 -5,010": 1,
+  "-33,410": 1,
+  "거래세 -8,350 · 농특세 -25,060": 1,
+  "08/25": 1,
+  "+212,370": 1,
+  "매도손익 +240,000": 1,
+  "+1.44%": 1,
+  "-3,600": 1,
+  "HTS 매도 -3,600": 1,
+  "-24,030": 1,
+  "거래세 -6,010 · 농특세 -18,020": 1,
+  "08/21": 1,
+  "KODEX 200": 2,
+  "069500": 1,
+  "-50,500": 1,
+  "매도손익 -24,000": 1,
+  "-0.35%": 1,
+  "-3,460": 1,
+  "HTS 매도 -3,460": 1,
+  "-23,040": 1,
+  "거래세 -5,760 · 농특세 -17,280": 1,
+  "최근 7건 표시 · 표시 합 +2,708,520원 · 대출일 해당 없음": 1,
+  "매도수수료 0.024% · 거래세 0.04% · 농특세 0.12% · 매수수수료 0.02%": 1,
+  "성과 요약": 1,
+  "실현 + 평가": 1,
+  "평가손익 (미실현)": 1,
+  "최근 5일 승률": 1,
+  "4승 1패": 1,
+  "투자원금 평잔": 1,
+  "1억 1,975만원": 1,
+  "회전율": 1,
+  "14.0%": 1,
+  "기간 총입고·총출고·위탁대용 매도·선물대용 매도": 1,
+  "0원 4항목": 1,
+  "▸": 3,
+  "오늘 실현 상세": 1,
+  "09월 01일": 1,
+  "+1,135,000": 1,
+  "250주 · 매입 43,820 → 48,360": 1,
+  "-28,000": 1,
+  "4주 · 매입 221,000 → 214,000": 1,
+  "매매 비용": 2,
+  "실현 합계": 1,
+  "+1,082,400원": 2,
+  "오늘 매매일지": 1,
+  "약정 16,788,000원": 1,
+  "매수 금액": 1,
+  "3,842,000원": 1,
+  "매도 금액": 1,
+  "12,946,000원": 1,
+  "-24,600원": 1,
+  "순손익": 1,
+  "이달 잔고 증감": 1,
+  "08/01 → 09/01": 1,
+  "자산": 1,
+  "1억 1,975만 → 1억 2,458만 (+483만)": 1,
+  "부채": 1,
+  "0원 → 0원": 1,
+  "● 손익·성과 장 마감 후 확정": 1,
+  "영업부 · 담당자 미제공": 1,
+  "손익 전체 내역 보기": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "027fd4250b2391aebb463ed76b075aff0acdb15fdd22661c9596bf4facdcfeb8"
+}

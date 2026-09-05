@@ -1,0 +1,92 @@
+{
+ "board_id": "499J-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-03 / R01-T7 · 차트 — 업종 지수",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "499L-0",
+   "text": "원본 보드: CC-03 / R01-T7 · 차트 — 업종 지수",
+   "path": [
+    "note/CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Frame"
+   ]
+  },
+  {
+   "id": "499N-0",
+   "text": "가져온 요소: 업종코드 · 현재가 · 추이",
+   "path": [
+    "note/CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Frame"
+   ]
+  },
+  {
+   "id": "499P-0",
+   "text": "문법: chart",
+   "path": [
+    "note/CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Frame"
+   ]
+  },
+  {
+   "id": "499R-0",
+   "text": "접은 개수: 계열 33개",
+   "path": [
+    "note/CC-03 / R01-T7 · 차트 — 업종 지수",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "499J-0",
+   "name": "note/CC-03 / R01-T7 · 차트 — 업종 지수",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "499K-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "499M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "499O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "499Q-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-03 / R01-T7 · 차트 — 업종 지수": 1,
+  "가져온 요소: 업종코드 · 현재가 · 추이": 1,
+  "문법: chart": 1,
+  "접은 개수: 계열 33개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "2f0a285abd76b22be711578d9039cc4ac7b04ed3771af993f59ce29293ca63e1"
+}

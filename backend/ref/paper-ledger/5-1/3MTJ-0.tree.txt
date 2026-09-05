@@ -1,0 +1,225 @@
+Frame "CC-01 / R10-T2-X4 · D+2 정산 후 계좌" (3MTJ-0) 1440×976
+  Frame "Account Root · 예수금·결제" (3MTK-0) 1440×976
+    Frame "Account Card Surface" (3MTL-0) 1360×896
+      Frame "Account Header" (3N42-0) 0×106
+        Frame "Frame" (3N4I-0) 0×0
+          Frame "Frame" (3N4K-0) 0×0
+            Text "내 계좌" (3N4N-0) 0×0 "내 계좌"
+            Frame "Frame" (3N4L-0) 0×0
+              Text "실시간" (3N4M-0) 0×0 "실시간"
+          Text "키움증권 종합계좌 ****4721 ·…" (3N4J-0) 0×0 "키움증권 종합계좌 ****4721 · 개인종합 · 마지막 갱신 09:42:18"
+        Frame "Frame" (3N43-0) 0×0
+          Frame "Frame" (3N4G-0) 0×0
+            Text "자산 종합" (3N4H-0) 0×0 "자산 종합"
+          Frame "Frame" (3N4E-0) 0×0
+            Text "보유종목" (3N4F-0) 0×0 "보유종목"
+          Frame "Frame" (3N4C-0) 0×0
+            Text "예수금·결제" (3N4D-0) 0×0 "예수금·결제"
+          Frame "Frame" (3N4A-0) 0×0
+            Text "손익·성과" (3N4B-0) 0×0 "손익·성과"
+          Frame "Frame" (3N48-0) 0×0
+            Text "주문·체결" (3N49-0) 0×0 "주문·체결"
+          Frame "Frame" (3N46-0) 0×0
+            Text "증거금·담보" (3N47-0) 0×0 "증거금·담보"
+          Frame "Frame" (3N44-0) 0×0
+            Text "금현물" (3N45-0) 0×0 "금현물"
+      Frame "Account Summary Strip" (3N3H-0) 0×116
+        Frame "Frame" (3N3Y-0) 340×78
+          Text "D+2 총자산" (3N41-0) 0×0 "D+2 총자산"
+          Text "detail|kt00017|d2_account_position|d2 총자산" (3N40-0) 0×0 "132,024,040원"
+          Text "detail|kt00017|d2_account_position|현재 대비" (3N3Z-0) 0×0 "현재 대비 +7,443,800원"
+        Frame "Frame" (3N3U-0) 265×78
+          Text "주문가능금액" (3N3X-0) 0×0 "주문가능금액"
+          Text "raw|kt00001|body|d2_pymn_alow_amt" (3N3W-0) 0×0 "31,240,000원"
+          Text "raw|kt00005|body|pymn_alow_amt" (3N3V-0) 0×0 "출금가능 28,940,000원"
+        Frame "Frame" (3N3Q-0) 245×78
+          Text "주식 평가액" (3N3T-0) 0×0 "주식 평가액"
+          Text "raw|kt00004|body|aset_evlt_amt" (3N3S-0) 0×0 "89,760,240원"
+          Text "structure|kt00004|stk_acnt_evlt_prst|count" (3N3R-0) 0×0 "8종목"
+        Frame "Frame" (3N3M-0) 245×78
+          Text "평가손익" (3N3P-0) 0×0 "평가손익"
+          Text "raw|ka01690|body|tot_evltv_prft" (3N3O-0) 0×0 "+4,240,900원"
+          Text "raw|ka01690|body|tot_prft_rt" (3N3N-0) 0×0 "매입 85,519,340원"
+        Frame "Frame" (3N3I-0) 0×78
+          Text "현금 비중" (3N3L-0) 0×0 "현금 비중"
+          Text "raw|ka01690|body|buy_wght" (3N3K-0) 0×0 "28.0%"
+          Text "보유종목 8종" (3N3J-0) 0×0 "보유종목 8종"
+      Frame "Account Workspace" (3MTP-0) 0×610
+        Frame "D+2 본문" (3OP4-0) 900×610
+          Frame "결제 예정 제목" (3OP5-0) 0×0
+            Text "결제 예정 · 09/01 → 09/0…" (3OP6-0) 0×0 "결제 예정 · 09/01 → 09/03"
+            Text "D+2 09/03 선택 · 09:42…" (3OP7-0) 0×0 "D+2 09/03 선택 · 09:42 기준"
+          Frame "열 머리" (3OP8-0) 0×32
+            Text "일자" (3OP9-0) 108×0 "일자"
+            Frame "Frame" (3OPA-0) 116×0
+              Text "매도 정산" (3OPB-0) 0×0 "매도 정산"
+            Frame "Frame" (3OPC-0) 116×0
+              Text "매수 정산" (3OPD-0) 0×0 "매수 정산"
+            Frame "Frame" (3OPE-0) 126×0
+              Text "정산 합계" (3OPF-0) 0×0 "정산 합계"
+            Frame "Frame" (3OPG-0) 116×0
+              Text "미수 변제소요" (3OPH-0) 0×0 "미수 변제소요"
+            Frame "Frame" (3OPI-0) 120×0
+              Text "출금가능" (3OPJ-0) 0×0 "출금가능"
+            Frame "Frame" (3OPK-0) 128×0
+              Text "예수금 예상" (3OPL-0) 0×0 "예수금 예상"
+          Frame "오늘 09/01" (3OPM-0) 0×62
+            Frame "Frame" (3OPN-0) 108×0
+              Text "오늘 09/01" (3OPO-0) 0×0 "오늘 09/01"
+              Text "화요일 · 당일" (3OPP-0) 0×0 "화요일 · 당일"
+            Frame "Frame" (3OPQ-0) 116×0
+              Text "0" (3OPR-0) 0×0 "0"
+            Frame "Frame" (3OPS-0) 116×0
+              Text "0" (3OPT-0) 0×0 "0"
+            Frame "Frame" (3OPU-0) 126×0
+              Text "0" (3OPV-0) 0×0 "0"
+            Frame "Frame" (3OPW-0) 116×0
+              Text "0" (3OPX-0) 0×0 "0"
+            Frame "Frame" (3OPY-0) 120×0
+              Text "28,940,000" (3OPZ-0) 0×0 "28,940,000"
+            Frame "Frame" (3OQ0-0) 128×0
+              Text "34,820,000" (3OQ1-0) 0×0 "34,820,000"
+          Frame "D+1 09/02" (3OQ2-0) 0×62
+            Frame "Frame" (3OQ3-0) 108×0
+              Text "D+1 09/02" (3OQ4-0) 0×0 "D+1 09/02"
+              Text "수요일" (3OQ5-0) 0×0 "수요일"
+            Frame "Frame" (3OQ6-0) 116×0
+              Text "0" (3OQ7-0) 0×0 "0"
+            Frame "Frame" (3OQ8-0) 116×0
+              Text "-1,635,600" (3OQ9-0) 0×0 "-1,635,600"
+              Text "카카오 40주" (3OQA-0) 0×0 "카카오 40주"
+            Frame "Frame" (3OQB-0) 126×0
+              Text "-1,635,600" (3OQC-0) 0×0 "-1,635,600"
+            Frame "Frame" (3OQD-0) 116×0
+              Text "0" (3OQE-0) 0×0 "0"
+            Frame "Frame" (3OQF-0) 120×0
+              Text "27,304,400" (3OQG-0) 0×0 "27,304,400"
+            Frame "Frame" (3OQH-0) 128×0
+              Text "33,184,400" (3OQI-0) 0×0 "33,184,400"
+          Frame "D+2 09/03 · 활성" (3OQJ-0) 0×62
+            Frame "Frame" (3OQK-0) 108×0
+              Text "D+2 09/03" (3OQL-0) 0×0 "D+2 09/03"
+              Text "목요일 · 선택" (3OQM-0) 0×0 "목요일 · 선택"
+            Frame "Frame" (3OQN-0) 116×0
+              Text "+12,946,000" (3OQO-0) 0×0 "+12,946,000"
+              Text "KODEX 200 · NAVER" (3OQP-0) 0×0 "KODEX 200 · NAVER"
+            Frame "Frame" (3OQQ-0) 116×0
+              Text "-3,842,000" (3OQR-0) 0×0 "-3,842,000"
+              Text "SK하이닉스 20주" (3OQS-0) 0×0 "SK하이닉스 20주"
+            Frame "Frame" (3OQT-0) 126×0
+              Text "+9,079,400" (3OQU-0) 0×0 "+9,079,400"
+              Text "비용 -24,600" (3OQV-0) 0×0 "비용 -24,600"
+            Frame "Frame" (3OQW-0) 116×0
+              Text "0" (3OQX-0) 0×0 "0"
+            Frame "Frame" (3OQY-0) 120×0
+              Text "36,383,800" (3OQZ-0) 0×0 "36,383,800"
+            Frame "Frame" (3OR0-0) 128×0
+              Text "42,263,800" (3OR1-0) 0×0 "42,263,800"
+              Text "▾" (3OR2-0) 0×0 "▾"
+          Frame "확정 자산 제목" (3OR3-0) 0×0
+            Text "D+2 확정 자산" (3OR4-0) 0×0 "D+2 확정 자산"
+            Frame "Frame" (3OR5-0) 0×0
+              Text "현재 대비 변동 없음 7건" (3OR6-0) 0×0 "현재 대비 변동 없음 7건"
+          Frame "확정 자산 열 머리" (3OR7-0) 0×30
+            Text "항목" (3OR8-0) 430×0 "항목"
+            Frame "Frame" (3OR9-0) 200×0
+              Text "D+2 금액" (3ORA-0) 0×0 "D+2 금액"
+            Frame "Frame" (3ORB-0) 200×0
+              Text "현재 대비" (3ORC-0) 0×0 "현재 대비"
+          Frame "일반주식평가금액" (3OSW-0) 0×32
+            Text "일반주식평가금액" (3OSX-0) 430×0 "일반주식평가금액"
+            Frame "Frame" (3OSY-0) 200×0
+              Text "89,760,240원" (3OSZ-0) 0×0 "89,760,240원"
+            Frame "Frame" (3OT0-0) 200×0
+              Text "변동 없음" (3OT1-0) 0×0 "변동 없음"
+          Frame "예탁담보대출금" (3OT2-0) 0×32
+            Text "예탁담보대출금" (3OT3-0) 430×0 "예탁담보대출금"
+            Frame "Frame" (3OT4-0) 200×0
+              Text "0원" (3OT5-0) 0×0 "0원"
+            Frame "Frame" (3OT6-0) 200×0
+              Text "변동 없음" (3OT7-0) 0×0 "변동 없음"
+          Frame "예탁담보주식평가금액" (3OT8-0) 0×32
+            Text "예탁담보주식평가금액" (3OT9-0) 430×0 "예탁담보주식평가금액"
+            Frame "Frame" (3OTA-0) 200×0
+              Text "0원" (3OTB-0) 0×0 "0원"
+            Frame "Frame" (3OTC-0) 200×0
+              Text "변동 없음" (3OTD-0) 0×0 "변동 없음"
+          Frame "신용융자금" (3OTE-0) 0×32
+            Text "신용융자금" (3OTF-0) 430×0 "신용융자금"
+            Frame "Frame" (3OTG-0) 200×0
+              Text "0원" (3OTH-0) 0×0 "0원"
+            Frame "Frame" (3OTI-0) 200×0
+              Text "변동 없음" (3OTJ-0) 0×0 "변동 없음"
+          Frame "신용융자평가금" (3OTK-0) 0×32
+            Text "신용융자평가금" (3OTL-0) 430×0 "신용융자평가금"
+            Frame "Frame" (3OTM-0) 200×0
+              Text "0원" (3OTN-0) 0×0 "0원"
+            Frame "Frame" (3OTO-0) 200×0
+              Text "변동 없음" (3OTP-0) 0×0 "변동 없음"
+          Frame "신용대주담보금" (3OTQ-0) 0×32
+            Text "신용대주담보금" (3OTR-0) 430×0 "신용대주담보금"
+            Frame "Frame" (3OTS-0) 200×0
+              Text "0원" (3OTT-0) 0×0 "0원"
+            Frame "Frame" (3OTU-0) 200×0
+              Text "변동 없음" (3OTV-0) 0×0 "변동 없음"
+          Frame "신용대주평가금" (3OTW-0) 0×32
+            Text "신용대주평가금" (3OTX-0) 430×0 "신용대주평가금"
+            Frame "Frame" (3OTY-0) 200×0
+              Text "0원" (3OTZ-0) 0×0 "0원"
+            Frame "Frame" (3OU0-0) 200×0
+              Text "변동 없음" (3OU1-0) 0×0 "변동 없음"
+        Frame "D+2 레일" (3OW3-0) 460×610
+          Frame "결제 예정 종목" (3OWG-0) 0×0
+            Frame "Frame" (3OWH-0) 0×0
+              Text "결제 예정 종목" (3OWI-0) 0×0 "결제 예정 종목"
+              Text "4건" (3OWJ-0) 0×0 "4건"
+            Frame "Frame" (3OWK-0) 0×0
+              Frame "Frame" (3OWL-0) 0×42
+                Frame "Frame" (3OWM-0) 40×0
+                  Text "D+1" (3OWN-0) 0×0 "D+1"
+                Text "카카오 매수" (3OWO-0) 0×0 "카카오 매수"
+                Text "40주" (3OWP-0) 0×0 "40주"
+              Frame "Frame" (3OWQ-0) 0×42
+                Frame "Frame" (3OWR-0) 40×0
+                  Text "D+2" (3OWS-0) 0×0 "D+2"
+                Text "KODEX 200 매도" (3OWT-0) 0×0 "KODEX 200 매도"
+                Text "250주" (3OWU-0) 0×0 "250주"
+              Frame "Frame" (3OWV-0) 0×42
+                Frame "Frame" (3OWW-0) 40×0
+                  Text "D+2" (3OWX-0) 0×0 "D+2"
+                Text "NAVER 매도" (3OWY-0) 0×0 "NAVER 매도"
+                Text "4주" (3OWZ-0) 0×0 "4주"
+              Frame "Frame" (3OX0-0) 0×42
+                Frame "Frame" (3OX1-0) 40×0
+                  Text "D+2" (3OX2-0) 0×0 "D+2"
+                Text "SK하이닉스 매수" (3OX3-0) 0×0 "SK하이닉스 매수"
+                Text "20주" (3OX4-0) 0×0 "20주"
+          Frame "정산 흐름" (3OX5-0) 0×0
+            Frame "Frame" (3OX6-0) 0×0
+              Text "정산 흐름" (3OX7-0) 0×0 "정산 흐름"
+              Text "09/01 → 09/03" (3OX8-0) 0×0 "09/01 → 09/03"
+            Frame "Frame" (3OX9-0) 0×0
+              Frame "Frame" (3OXA-0) 0×42
+                Text "오늘 09/01" (3OXB-0) 0×0 "오늘 09/01"
+                Text "0원" (3OXC-0) 0×0 "0원"
+              Frame "Frame" (3OXD-0) 0×42
+                Text "D+1 09/02" (3OXE-0) 0×0 "D+1 09/02"
+                Text "-1,635,600원" (3OXF-0) 0×0 "-1,635,600원"
+              Frame "Frame" (3OXG-0) 0×42
+                Text "D+2 09/03" (3OXH-0) 0×0 "D+2 09/03"
+                Text "+9,079,400원" (3OXI-0) 0×0 "+9,079,400원"
+          Frame "잔여 부채" (3OW4-0) 0×0
+            Frame "Frame" (3OW5-0) 0×0
+              Text "잔여 부채" (3OW6-0) 0×0 "잔여 부채"
+              Frame "Frame" (3OW7-0) 0×0
+                Text "D+2 기준" (3OW8-0) 0×0 "D+2 기준"
+            Frame "Frame" (3OW9-0) 0×0
+              Frame "Frame" (3OWA-0) 0×42
+                Text "신용이자미납금" (3OWB-0) 0×0 "신용이자미납금"
+                Text "0원" (3OWC-0) 0×0 "0원"
+              Frame "Frame" (3OWD-0) 0×42
+                Text "기타대여금" (3OWE-0) 0×0 "기타대여금"
+                Text "0원" (3OWF-0) 0×0 "0원"
+      Frame "Account Status Footer" (3MTM-0) 0×64
+        Text "● 예수금·결제 실시간 반영 중" (3MTO-0) 0×0 "● 예수금·결제 실시간 반영 중"
+        Text "결제 전체 내역 보기" (3MTN-0) 0×0 "결제 전체 내역 보기"

@@ -1,0 +1,20 @@
+Frame "mini/CC-03 / R01 · 삼성전자 3개월 차트" (46E2-0) 360×420
+  Frame "Header" (46EH-0) 0×0
+    Frame "Meta row" (46EJ-0) 0×0
+      Text "Eyebrow" (46EL-0) 0×0
+      Text "As of" (46EK-0) 0×0 "기준 09:42"
+    Text "Title" (46EI-0) 0×0 "삼성전자 3개월 차트"
+  Frame "Body" (46E5-0) 0×0
+    Frame "Price hero" (46EE-0) 0×0
+      Text "150,850원" (46EG-0) 0×0 "150,850원"
+      Text "+1.24%" (46EF-0) 0×0 "+1.24%"
+    Frame "Line chart" (46E9-0) 0×184
+      SVG "SVG" (46EA-0) 0×0
+        SVGVisualElement "Path" (46ED-0) 0×0
+        SVGVisualElement "Path" (46EC-0) 0×0
+        SVGVisualElement "Circle" (46EB-0) 0×0
+    Frame "Chart range" (46E6-0) 0×0
+      Text "06.03" (46E8-0) 0×0 "06.03"
+      Text "09.01" (46E7-0) 0×0 "09.01"
+  Frame "Fold note" (46E3-0) 0×0
+    Text "계열 67개 접힘 · 원본에서 확인" (46E4-0) 0×0 "계열 67개 접힘 · 원본에서 확인"

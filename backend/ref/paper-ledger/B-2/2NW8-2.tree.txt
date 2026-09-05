@@ -1,0 +1,128 @@
+Frame "05 · 플러그인 — 설치 승인 (캔버스 카드)" (2NW8-2) 1680×986
+  Frame "board-head" (2NW9-2) 0×0
+    Text "셸 — 플러그인 모드 · 설치 승인 …" (2NWA-2) 0×0 "셸 — 플러그인 모드 · 설치 승인 카드"
+    Text "승인 카드는 플러그인 캔버스 안에 놓…" (2NWB-2) 0×0 "승인 카드는 플러그인 캔버스 안에 놓입니다. 허브의 설치 버튼과 채팅 제안이 같은 카드로 들어옵니다."
+  Frame "Shell 창 · 플러그인 모드" (3ZF0-0) 1560×811
+    Frame "Frame" (3ZF1-0) 268×809
+      Frame "Primary Actions" (3ZF2-0) 0×0
+        Frame "Frame" (3ZF3-0) 0×28
+          Text "ATHENA" (3ZF4-0) 0×0 "ATHENA"
+          SVG "SVG" (3ZF5-0) 0×0
+            SVGVisualElement "Circle" (3ZF6-0) 0×0
+            SVGVisualElement "Path" (3ZF7-0) 0×0
+        Frame "Frame" (3ZF8-0) 0×30
+          SVG "SVG" (3ZF9-0) 0×0
+            SVGVisualElement "Path" (3ZFA-0) 0×0
+            SVGVisualElement "Path" (3ZFB-0) 0×0
+          Text "새 채팅" (3ZFC-0) 0×0 "새 채팅"
+        Frame "Frame" (3ZFD-0) 0×30
+          SVG "SVG" (3ZFE-0) 0×0
+            SVGVisualElement "Circle" (3ZFF-0) 0×0
+            SVGVisualElement "Circle" (3ZFG-0) 0×0
+            SVGVisualElement "Circle" (3ZFH-0) 0×0
+            SVGVisualElement "Path" (3ZFI-0) 0×0
+          Text "그래프" (3ZFJ-0) 0×0 "그래프"
+        Frame "Frame" (3ZFK-0) 0×30
+          SVG "SVG" (3ZFL-0) 0×0
+            SVGVisualElement "Circle" (3ZFM-0) 0×0
+            SVGVisualElement "Path" (3ZFN-0) 0×0
+          Text "에이전트" (3ZFO-0) 0×0 "에이전트"
+        Frame "Frame" (3ZFP-0) 0×30
+          SVG "SVG" (3ZFQ-0) 0×0
+            SVGVisualElement "Path" (3ZFR-0) 0×0
+            SVGVisualElement "Path" (3ZFS-0) 0×0
+          Text "플러그인" (3ZFT-0) 0×0 "플러그인"
+      Frame "Project Tree" (3ZFU-0) 0×0
+        Frame "Frame" (3ZFV-0) 0×0
+          Text "프로젝트" (3ZFW-0) 0×0 "프로젝트"
+        Frame "Frame" (3ZFX-0) 0×32
+          SVG "SVG" (3ZFY-0) 0×0
+            SVGVisualElement "Path" (3ZFZ-0) 0×0
+            SVGVisualElement "Path" (3ZG0-0) 0×0
+          Text "아테나" (3ZG1-0) 0×0 "아테나"
+          SVG "SVG" (3ZG2-0) 0×0
+            SVGVisualElement "Circle" (3ZG3-0) 0×0
+            SVGVisualElement "Circle" (3ZG4-0) 0×0
+            SVGVisualElement "Circle" (3ZG5-0) 0×0
+          SVG "SVG" (3ZG6-0) 0×0
+            SVGVisualElement "Path" (3ZG7-0) 0×0
+            SVGVisualElement "Path" (3ZG8-0) 0×0
+        Frame "Frame" (3ZG9-0) 0×27
+          Text "백엔드 API 개수 확인" (3ZGA-0) 0×0 "백엔드 API 개수 확인"
+        Frame "Frame" (3ZGB-0) 0×29
+          Text "앱 전체 기능 검수" (3ZGC-0) 0×0 "앱 전체 기능 검수"
+          Rectangle "Rectangle" (3ZGD-0) 6×6
+      Frame "Recent Conversations" (3ZGE-0) 0×0
+        Frame "Frame" (3ZGF-0) 0×20
+          Text "최근" (3ZGG-0) 0×0 "최근"
+          Text "전체" (3ZGH-0) 0×0 "전체"
+        Frame "Frame" (3ZGI-0) 0×27
+          Text "앱 전체 기능 검수" (3ZGJ-0) 0×0 "앱 전체 기능 검수"
+          Rectangle "Rectangle" (3ZGK-0) 6×6
+        Frame "Frame" (3ZGL-0) 0×27
+          Text "삼성전자 주요 변동 알림" (3ZGM-0) 0×0 "삼성전자 주요 변동 알림"
+        Frame "Frame" (3ZGN-0) 0×27
+          Text "ETF 자금 흐름" (3ZGO-0) 0×0 "ETF 자금 흐름"
+      Frame "Account Footer" (3ZGP-0) 0×0
+        Frame "Frame" (3ZGQ-0) 0×38
+          Frame "Frame" (3ZGR-0) 22×22
+            Text "AN" (3ZGS-0) 0×0 "AN"
+          Text "모의-주력" (3ZGT-0) 0×0 "모의-주력"
+          SVG "SVG" (3ZGU-0) 0×0
+            SVGVisualElement "Path" (3ZGV-0) 0×0
+    Frame "플러그인 캔버스" (3ZGW-0) 0×0
+      Frame "canvas-head" (3ZHF-0) 0×0
+        Text "플러그인" (3ZHG-0) 0×0 "플러그인"
+        Rectangle "Rectangle" (3ZHH-0) 0×0
+        Frame "Frame" (3ZHI-0) 0×0
+          Text "설치됨 2" (3ZHJ-0) 0×0 "설치됨 2"
+      Frame "install-card" (3ZHL-0) 560×0
+        Frame "card-head" (3ZHM-0) 0×0
+          Frame "출처 라벨" (3ZHN-0) 0×0
+            Text "아테나 제안" (3ZHO-0) 0×0 "아테나 제안"
+          Text "card-title" (3ZHP-0) 0×0 "웹 문서 읽기 설치"
+        Frame "card-body" (3ZHR-0) 0×0
+          Text "info-title" (3ZHS-0) 0×0 "플러그인 정보"
+          Frame "info" (3ZHT-0) 0×0
+            Text "웹 문서 읽기" (3ZHU-0) 0×0 "웹 문서 읽기"
+            Text "제공: athena-official …" (3ZHV-0) 0×0 "제공: athena-official · mcp-server-fetch"
+            Text "용도: 공시·리서치 웹 페이지를 마크…" (3ZHW-0) 0×0 "용도: 공시·리서치 웹 페이지를 마크다운으로 읽기"
+          Text "features-title" (3ZHY-0) 0×0 "요청 기능"
+          Frame "features" (3ZHZ-0) 0×0
+            Frame "Frame" (3ZI0-0) 0×0
+              Text "fetch — 웹 페이지를 마크다운으…" (3ZI1-0) 0×0 "fetch — 웹 페이지를 마크다운으로 읽습니다"
+              Frame "Frame" (3ZI2-0) 0×0
+                Text "요청" (3ZI3-0) 0×0 "요청"
+          Frame "command" (3ZI5-0) 0×0
+            Text "실행 명령: uvx mcp-serve…" (3ZI6-0) 0×0 "실행 명령: uvx mcp-server-fetch"
+          Frame "location" (3ZI7-0) 0×0
+            Text "설치 위치 · 플러그인 모드 > 웹 …" (3ZI8-0) 0×0 "설치 위치 · 플러그인 모드 > 웹 문서 읽기"
+          Frame "badges" (3ZIA-0) 0×0
+            Frame "Frame" (3ZIB-0) 0×0
+              Text "권한 1개 요청" (3ZIC-0) 0×0 "권한 1개 요청"
+            Frame "Frame" (3ZID-0) 0×0
+              Text "설치형 플러그인" (3ZIE-0) 0×0 "설치형 플러그인"
+          Frame "actions" (3ZIF-0) 0×0
+            Frame "btn-reject" (3ZIG-0) 0×0
+              Text "거부" (3ZIH-0) 0×0 "거부"
+            Frame "btn-approve" (3ZII-0) 0×0
+              Text "승인" (3ZIJ-0) 0×0 "승인"
+      Frame "card-footnote" (3ZIL-0) 0×0
+        Text "허브의 설치 버튼도 이 카드로 들어옵…" (3ZIM-0) 0×0 "허브의 설치 버튼도 이 카드로 들어옵니다"
+    Frame "Frame" (3ZGX-0) 400×809
+      Frame "Frame" (3ZGY-0) 0×0
+        Text "아테나 · 플러그인 대화" (3ZGZ-0) 0×0 "아테나 · 플러그인 대화"
+        Text "설치와 권한을 여기서 정합니다" (3ZH0-0) 0×0 "설치와 권한을 여기서 정합니다"
+      Frame "Frame" (3ZH1-0) 0×0
+        Frame "Frame" (3ZH2-0) 0×0
+          Frame "Frame" (3ZH3-0) 0×0
+            Text "공시 웹 페이지를 그대로 읽고 싶어" (3ZH4-0) 0×0 "공시 웹 페이지를 그대로 읽고 싶어"
+        Text "웹 문서 읽기 플러그인이 맞겠습니다.…" (3ZH5-0) 0×0 "웹 문서 읽기 플러그인이 맞겠습니다. 설치하면 공시·리서치 페이지를 마크다운으로 읽습니다."
+        Text "설치를 제안했습니다. 캔버스의 승인 …" (3ZH6-0) 0×0 "설치를 제안했습니다. 캔버스의 승인 카드에서 실행 명령과 요청 기능을 확인하세요."
+      Frame "Frame" (3ZH7-0) 0×0
+        Frame "Frame" (3ZH8-0) 0×0
+          Frame "Frame" (3ZH9-0) 22×22
+            SVG "SVG" (3ZHA-0) 0×0
+              SVGVisualElement "Rect" (3ZHB-0) 0×0
+              SVGVisualElement "Rect" (3ZHC-0) 0×0
+          Text "무엇이든 물어보세요" (3ZHD-0) 0×0 "무엇이든 물어보세요"

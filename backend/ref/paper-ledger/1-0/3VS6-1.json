@@ -1,0 +1,983 @@
+{
+ "board_id": "3VS6-1",
+ "page": "1-0",
+ "page_name": "화면",
+ "name": "36 · 프로젝트 추가 — 폴더 점유",
+ "width": 1680,
+ "height": 900,
+ "texts": [
+  {
+   "id": "3VSA-1",
+   "text": "36",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VSC-1",
+   "text": "프로젝트 추가 — 폴더를 점유한다",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VSD-1",
+   "text": "프로젝트는 폴더 하나입니다. 사용자가 직접 고르고, 그 안에서만 자유롭습니다.",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VSF-1",
+   "text": "신규 · 승인 대기",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VSQ-1",
+   "text": "ATHENA",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Stage",
+    "Titlebar"
+   ]
+  },
+  {
+   "id": "3VSR-1",
+   "text": "· 아테나",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Stage",
+    "Titlebar"
+   ]
+  },
+  {
+   "id": "3VSW-1",
+   "text": "프로젝트 추가",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Stage",
+    "Blurred Shell",
+    "Add Project Modal",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VSX-1",
+   "text": "프로젝트는 폴더 하나를 점유합니다",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Stage",
+    "Blurred Shell",
+    "Add Project Modal",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VT0-1",
+   "text": "작업 폴더",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Stage",
+    "Blurred Shell",
+    "Add Project Modal",
+    "Step 1 Folder"
+   ]
+  },
+  {
+   "id": "3VT4-1",
+   "text": "C:\\Projects\\DAOU.Athena",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Stage",
+    "Blurred Shell",
+    "Add Project Modal",
+    "Step 1 Folder",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VT6-1",
+   "text": "폴더 바꾸기",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Stage",
+    "Blurred Shell",
+    "Add Project Modal",
+    "Step 1 Folder",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VT7-1",
+   "text": "탐색기가 열립니다. 빈 폴더든 기존 폴더든 됩니다.",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Stage",
+    "Blurred Shell",
+    "Add Project Modal",
+    "Step 1 Folder"
+   ]
+  },
+  {
+   "id": "3VTA-1",
+   "text": "프로젝트 이름",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Stage",
+    "Blurred Shell",
+    "Add Project Modal",
+    "Step 2 Name"
+   ]
+  },
+  {
+   "id": "3VTC-1",
+   "text": "아테나",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Stage",
+    "Blurred Shell",
+    "Add Project Modal",
+    "Step 2 Name",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VTD-1",
+   "text": "폴더 이름에서 가져왔습니다 · 바꿀 수 있습니다",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Stage",
+    "Blurred Shell",
+    "Add Project Modal",
+    "Step 2 Name",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VTG-1",
+   "text": "이 폴더에서 아테나가 하는 일",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Stage",
+    "Blurred Shell",
+    "Add Project Modal",
+    "Step 3 Permission"
+   ]
+  },
+  {
+   "id": "3VTK-1",
+   "text": "이 폴더 안에서 파일을 만들고 고치고 지웁니다",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Stage",
+    "Blurred Shell",
+    "Add Project Modal",
+    "Step 3 Permission",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VTO-1",
+   "text": "백테스트 코드·결과·로그를 이 폴더에 남깁니다",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Stage",
+    "Blurred Shell",
+    "Add Project Modal",
+    "Step 3 Permission",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VTS-1",
+   "text": "폴더 밖은 읽지도 쓰지도 않습니다",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Stage",
+    "Blurred Shell",
+    "Add Project Modal",
+    "Step 3 Permission",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VTW-1",
+   "text": "취소",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Stage",
+    "Blurred Shell",
+    "Add Project Modal",
+    "Modal Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VTY-1",
+   "text": "이 폴더로 만들기",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Stage",
+    "Blurred Shell",
+    "Add Project Modal",
+    "Modal Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VU2-1",
+   "text": "이미 점유된 폴더",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Stage",
+    "Blurred Shell",
+    "Edge Cases",
+    "Occupied"
+   ]
+  },
+  {
+   "id": "3VU3-1",
+   "text": "이 폴더는 ‘키움 리서치’가 쓰고 있습니다. 프로젝트 하나가 폴더 하나를 독점합니다.",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Stage",
+    "Blurred Shell",
+    "Edge Cases",
+    "Occupied"
+   ]
+  },
+  {
+   "id": "3VU4-1",
+   "text": "C:\\Projects\\DAOU.Athena",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Stage",
+    "Blurred Shell",
+    "Edge Cases",
+    "Occupied"
+   ]
+  },
+  {
+   "id": "3VU6-1",
+   "text": "빈 폴더가 아닐 때",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Stage",
+    "Blurred Shell",
+    "Edge Cases",
+    "Not Empty"
+   ]
+  },
+  {
+   "id": "3VU7-1",
+   "text": "기존 파일은 그대로 둡니다. 아테나가 만든 것만 지웁니다.",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Stage",
+    "Blurred Shell",
+    "Edge Cases",
+    "Not Empty"
+   ]
+  },
+  {
+   "id": "3VUB-1",
+   "text": "폴더가 곧 프로젝트다",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Interaction Rail",
+    "Rail Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VUC-1",
+   "text": "PROJECT · FOLDER",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Interaction Rail",
+    "Rail Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VUD-1",
+   "text": "추가 흐름에서 정한 규칙과, 지금 코드가 아직 갖지 못한 것.",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Interaction Rail",
+    "Rail Header"
+   ]
+  },
+  {
+   "id": "3VUI-1",
+   "text": "1",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VUJ-1",
+   "text": "폴더 하나 = 프로젝트 하나",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VUK-1",
+   "text": "관계는 1:1입니다. 두 프로젝트가 같은 폴더를 동시에 쓸 수 없고, 이미 점유된 폴더를 고르면 만들기 단추가 잠깁니다.",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Interaction Rail",
+    "Rule 1"
+   ]
+  },
+  {
+   "id": "3VUR-1",
+   "text": "2",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VUP-1",
+   "text": "폴더는 사용자가 고른다",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VUN-1",
+   "text": "앱이 임의로 폴더를 만들지 않습니다. 탐색기 대화상자를 띄워 사용자가 직접 지정한 경로만 받습니다.",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Interaction Rail",
+    "Rule 1"
+   ]
+  },
+  {
+   "id": "3VUX-1",
+   "text": "3",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VUV-1",
+   "text": "권한의 경계는 폴더 벽",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VUT-1",
+   "text": "안쪽은 마음대로, 바깥은 접근 금지. 이 경계를 만들기 화면에서 문장으로 그대로 보여주고, 동의한 뒤에만 프로젝트가 생깁니다.",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Interaction Rail",
+    "Rule 1"
+   ]
+  },
+  {
+   "id": "3VV4-1",
+   "text": "지금 코드에 없는 것",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Interaction Rail",
+    "Gap Note",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3VV5-1",
+   "text": "프로젝트 자료구조는 id·label·description 셋뿐이고 폴더 경로 필드가 아예 없습니다. 프로젝트를 만들거나 이름을 바꾸는 IPC도 없습니다.",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Interaction Rail",
+    "Gap Note"
+   ]
+  },
+  {
+   "id": "3VV6-1",
+   "text": "폴더 스캔·경로 검증 모듈은 하나 있지만 테스트에서만 불리고 프로덕션에서는 로드되지 않습니다. 이 보드는 그 빈칸을 채우는 설계입니다.",
+   "path": [
+    "36 · 프로젝트 추가 — 폴더 점유",
+    "36 Content",
+    "Interaction Rail",
+    "Gap Note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "3VS6-1",
+   "name": "36 · 프로젝트 추가 — 폴더 점유",
+   "component": "Frame",
+   "w": 1680,
+   "h": 900,
+   "depth": 0
+  },
+  {
+   "id": "3VS7-1",
+   "name": "36 Header",
+   "component": "Frame",
+   "w": 1600,
+   "h": 86,
+   "depth": 1
+  },
+  {
+   "id": "3VS8-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 497,
+   "h": 56,
+   "depth": 2
+  },
+  {
+   "id": "3VS9-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 48,
+   "h": 48,
+   "depth": 3
+  },
+  {
+   "id": "3VSB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 433,
+   "h": 56,
+   "depth": 3
+  },
+  {
+   "id": "3VSE-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 109,
+   "h": 32,
+   "depth": 2
+  },
+  {
+   "id": "3VSH-1",
+   "name": "36 Content",
+   "component": "Frame",
+   "w": 1600,
+   "h": 722,
+   "depth": 1
+  },
+  {
+   "id": "3VSI-1",
+   "name": "Stage",
+   "component": "Frame",
+   "w": 1150,
+   "h": 722,
+   "depth": 2
+  },
+  {
+   "id": "3VSL-1",
+   "name": "Titlebar",
+   "component": "Frame",
+   "w": 1148,
+   "h": 46,
+   "depth": 3
+  },
+  {
+   "id": "3VSM-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 56,
+   "h": 10,
+   "depth": 4
+  },
+  {
+   "id": "3VSN-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 10,
+   "h": 10,
+   "depth": 5
+  },
+  {
+   "id": "3VSO-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 10,
+   "h": 10,
+   "depth": 5
+  },
+  {
+   "id": "3VSP-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 10,
+   "h": 10,
+   "depth": 5
+  },
+  {
+   "id": "3VSS-1",
+   "name": "Blurred Shell",
+   "component": "Frame",
+   "w": 1148,
+   "h": 674,
+   "depth": 3
+  },
+  {
+   "id": "3VSU-1",
+   "name": "Add Project Modal",
+   "component": "Frame",
+   "w": 560,
+   "h": 467,
+   "depth": 4
+  },
+  {
+   "id": "3VSV-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 514,
+   "h": 41,
+   "depth": 5
+  },
+  {
+   "id": "3VSZ-1",
+   "name": "Step 1 Folder",
+   "component": "Frame",
+   "w": 514,
+   "h": 98,
+   "depth": 5
+  },
+  {
+   "id": "3VT1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 516,
+   "h": 52,
+   "depth": 6
+  },
+  {
+   "id": "3VT2-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 18,
+   "h": 18,
+   "depth": 7
+  },
+  {
+   "id": "3VT3-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 14,
+   "h": 11,
+   "depth": 8
+  },
+  {
+   "id": "3VT5-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 80,
+   "h": 28,
+   "depth": 7
+  },
+  {
+   "id": "3VT9-1",
+   "name": "Step 2 Name",
+   "component": "Frame",
+   "w": 514,
+   "h": 63,
+   "depth": 5
+  },
+  {
+   "id": "3VTB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 516,
+   "h": 40,
+   "depth": 6
+  },
+  {
+   "id": "3VTF-1",
+   "name": "Step 3 Permission",
+   "component": "Frame",
+   "w": 514,
+   "h": 121,
+   "depth": 5
+  },
+  {
+   "id": "3VTH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 484,
+   "h": 15,
+   "depth": 6
+  },
+  {
+   "id": "3VTI-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "3VTJ-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3VTL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 484,
+   "h": 15,
+   "depth": 6
+  },
+  {
+   "id": "3VTM-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "3VTN-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3VTP-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 484,
+   "h": 15,
+   "depth": 6
+  },
+  {
+   "id": "3VTQ-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "3VTR-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3VTU-1",
+   "name": "Modal Footer",
+   "component": "Frame",
+   "w": 514,
+   "h": 34,
+   "depth": 5
+  },
+  {
+   "id": "3VTV-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 56,
+   "h": 34,
+   "depth": 6
+  },
+  {
+   "id": "3VTX-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 117,
+   "h": 34,
+   "depth": 6
+  },
+  {
+   "id": "3VU0-1",
+   "name": "Edge Cases",
+   "component": "Frame",
+   "w": 300,
+   "h": 188,
+   "depth": 4
+  },
+  {
+   "id": "3VU1-1",
+   "name": "Occupied",
+   "component": "Frame",
+   "w": 300,
+   "h": 107,
+   "depth": 5
+  },
+  {
+   "id": "3VU5-1",
+   "name": "Not Empty",
+   "component": "Frame",
+   "w": 300,
+   "h": 69,
+   "depth": 5
+  },
+  {
+   "id": "3VSJ-1",
+   "name": "Interaction Rail",
+   "component": "Frame",
+   "w": 426,
+   "h": 722,
+   "depth": 2
+  },
+  {
+   "id": "3VU9-1",
+   "name": "Rail Header",
+   "component": "Frame",
+   "w": 388,
+   "h": 55,
+   "depth": 3
+  },
+  {
+   "id": "3VUA-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 388,
+   "h": 21,
+   "depth": 4
+  },
+  {
+   "id": "3VUF-1",
+   "name": "Rule 1",
+   "component": "Frame",
+   "w": 388,
+   "h": 88,
+   "depth": 3
+  },
+  {
+   "id": "3VUG-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 20,
+   "depth": 4
+  },
+  {
+   "id": "3VUH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 20,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "3VUM-1",
+   "name": "Rule 1",
+   "component": "Frame",
+   "w": 388,
+   "h": 88,
+   "depth": 3
+  },
+  {
+   "id": "3VUO-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 20,
+   "depth": 4
+  },
+  {
+   "id": "3VUQ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 20,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "3VUS-1",
+   "name": "Rule 1",
+   "component": "Frame",
+   "w": 388,
+   "h": 88,
+   "depth": 3
+  },
+  {
+   "id": "3VUU-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 20,
+   "depth": 4
+  },
+  {
+   "id": "3VUW-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 20,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "3VUY-1",
+   "name": "Gap Note",
+   "component": "Frame",
+   "w": 388,
+   "h": 122,
+   "depth": 3
+  },
+  {
+   "id": "3VUZ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 16,
+   "depth": 4
+  },
+  {
+   "id": "3VV0-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 16,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "3VV1-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 3,
+   "depth": 6
+  },
+  {
+   "id": "3VV2-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3VV3-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 13,
+   "h": 12,
+   "depth": 6
+  }
+ ],
+ "text_multiset": {
+  "36": 1,
+  "프로젝트 추가 — 폴더를 점유한다": 1,
+  "프로젝트는 폴더 하나입니다. 사용자가 직접 고르고, 그 안에서만 자유롭습니다.": 1,
+  "신규 · 승인 대기": 1,
+  "ATHENA": 1,
+  "· 아테나": 1,
+  "프로젝트 추가": 1,
+  "프로젝트는 폴더 하나를 점유합니다": 1,
+  "작업 폴더": 1,
+  "C:\\Projects\\DAOU.Athena": 2,
+  "폴더 바꾸기": 1,
+  "탐색기가 열립니다. 빈 폴더든 기존 폴더든 됩니다.": 1,
+  "프로젝트 이름": 1,
+  "아테나": 1,
+  "폴더 이름에서 가져왔습니다 · 바꿀 수 있습니다": 1,
+  "이 폴더에서 아테나가 하는 일": 1,
+  "이 폴더 안에서 파일을 만들고 고치고 지웁니다": 1,
+  "백테스트 코드·결과·로그를 이 폴더에 남깁니다": 1,
+  "폴더 밖은 읽지도 쓰지도 않습니다": 1,
+  "취소": 1,
+  "이 폴더로 만들기": 1,
+  "이미 점유된 폴더": 1,
+  "이 폴더는 ‘키움 리서치’가 쓰고 있습니다. 프로젝트 하나가 폴더 하나를 독점합니다.": 1,
+  "빈 폴더가 아닐 때": 1,
+  "기존 파일은 그대로 둡니다. 아테나가 만든 것만 지웁니다.": 1,
+  "폴더가 곧 프로젝트다": 1,
+  "PROJECT · FOLDER": 1,
+  "추가 흐름에서 정한 규칙과, 지금 코드가 아직 갖지 못한 것.": 1,
+  "1": 1,
+  "폴더 하나 = 프로젝트 하나": 1,
+  "관계는 1:1입니다. 두 프로젝트가 같은 폴더를 동시에 쓸 수 없고, 이미 점유된 폴더를 고르면 만들기 단추가 잠깁니다.": 1,
+  "2": 1,
+  "폴더는 사용자가 고른다": 1,
+  "앱이 임의로 폴더를 만들지 않습니다. 탐색기 대화상자를 띄워 사용자가 직접 지정한 경로만 받습니다.": 1,
+  "3": 1,
+  "권한의 경계는 폴더 벽": 1,
+  "안쪽은 마음대로, 바깥은 접근 금지. 이 경계를 만들기 화면에서 문장으로 그대로 보여주고, 동의한 뒤에만 프로젝트가 생깁니다.": 1,
+  "지금 코드에 없는 것": 1,
+  "프로젝트 자료구조는 id·label·description 셋뿐이고 폴더 경로 필드가 아예 없습니다. 프로젝트를 만들거나 이름을 바꾸는 IPC도 없습니다.": 1,
+  "폴더 스캔·경로 검증 모듈은 하나 있지만 테스트에서만 불리고 프로덕션에서는 로드되지 않습니다. 이 보드는 그 빈칸을 채우는 설계입니다.": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "1ef9406ef9e13cd2b8e559949006b4a354c64142f1d6112bccaea58aa8303fae"
+}

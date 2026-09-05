@@ -1,0 +1,2180 @@
+{
+ "board_id": "3WBZ-1",
+ "page": "1-0",
+ "page_name": "화면",
+ "name": "41 · 세션 복원 — 다시 누르면 그대로",
+ "width": 1680,
+ "height": 900,
+ "texts": [
+  {
+   "id": "3WCS-1",
+   "text": "41",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WCU-1",
+   "text": "세션 복원 — 다시 누르면 그대로",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WCV-1",
+   "text": "이력에서 백테스트 창을 다시 누르면 폼·코드·결과·로그·스크롤까지 그 자리로 돌아옵니다. 배너도 토스트도 없이, 그냥 그 자리입니다.",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WCX-1",
+   "text": "신규 · 승인 대기",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WD5-1",
+   "text": "ATHENA",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Titlebar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WD7-1",
+   "text": "아테나",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Titlebar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WD9-1",
+   "text": "백테스트",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Titlebar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WDP-1",
+   "text": "SESSIONS",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Sidebar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WDQ-1",
+   "text": "5",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Sidebar",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WEQ-1",
+   "text": "추세추종 v3",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Sidebar",
+    "Row 1"
+   ]
+  },
+  {
+   "id": "3WES-1",
+   "text": "방금",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Sidebar",
+    "Row 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WEX-1",
+   "text": "변동성 돌파 실험",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Sidebar",
+    "Row 2 · 눌림"
+   ]
+  },
+  {
+   "id": "3WF9-1",
+   "text": "코스피 상관 그래프",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Sidebar",
+    "Row 3"
+   ]
+  },
+  {
+   "id": "3WFB-1",
+   "text": "5일",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Sidebar",
+    "Row 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WFH-1",
+   "text": "야간 리밸런싱 점검",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Sidebar",
+    "Row 4"
+   ]
+  },
+  {
+   "id": "3WFJ-1",
+   "text": "1주",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Sidebar",
+    "Row 4",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WFO-1",
+   "text": "스니펫 감사 로그",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Sidebar",
+    "Row 5"
+   ]
+  },
+  {
+   "id": "3WFQ-1",
+   "text": "2주",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Sidebar",
+    "Row 5",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WGN-1",
+   "text": "변동성 돌파 실험",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Workspace",
+    "WS Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WGR-1",
+   "text": "백테스트",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Workspace",
+    "WS Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WGS-1",
+   "text": "3일 전 · 완료",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Workspace",
+    "WS Header"
+   ]
+  },
+  {
+   "id": "3WMF-1",
+   "text": "대화 · 8턴",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Workspace",
+    "WS Content",
+    "Top Row",
+    "Chat Card",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WMG-1",
+   "text": "마지막 2턴",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Workspace",
+    "WS Content",
+    "Top Row",
+    "Chat Card",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WMI-1",
+   "text": "k를 0.62로 올리고 손절을 -3%로 바꿔서 다시 돌려줘",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Workspace",
+    "WS Content",
+    "Top Row",
+    "Chat Card",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WMK-1",
+   "text": "승률 54.0%, 최대 낙폭 -9.4%로 나아졌습니다.",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Workspace",
+    "WS Content",
+    "Top Row",
+    "Chat Card",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WJS-1",
+   "text": "전략 폼",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Workspace",
+    "WS Content",
+    "Form Card",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WJT-1",
+   "text": "복원 6/6",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Workspace",
+    "WS Content",
+    "Form Card",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WJW-1",
+   "text": "종목",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Workspace",
+    "WS Content",
+    "Form Card",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WJX-1",
+   "text": "005930 · 삼성전자",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Workspace",
+    "WS Content",
+    "Form Card",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WJZ-1",
+   "text": "기간",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Workspace",
+    "WS Content",
+    "Form Card",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WK0-1",
+   "text": "2023-01 ~ 2025-12",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Workspace",
+    "WS Content",
+    "Form Card",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WK2-1",
+   "text": "돌파 계수 k",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Workspace",
+    "WS Content",
+    "Form Card",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WK3-1",
+   "text": "0.62",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Workspace",
+    "WS Content",
+    "Form Card",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WK5-1",
+   "text": "손절 · 수수료",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Workspace",
+    "WS Content",
+    "Form Card",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WK6-1",
+   "text": "-3.0% · 0.015%",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Workspace",
+    "WS Content",
+    "Form Card",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WKA-1",
+   "text": "strategy.py · 84 lines",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Workspace",
+    "WS Content",
+    "Code Card",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WKB-1",
+   "text": "restored",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Workspace",
+    "WS Content",
+    "Code Card",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WKC-1",
+   "text": "def signal(df, k=0.62):\n    rng = df.high.shift(1) - df.low.shift(1)\n    target = df.open + rng * k\n    entry = df.high >= target\n    stop = df.close < df.open * 0.97\n    return entry.astype(int) - stop.astype(int)",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Workspace",
+    "WS Content",
+    "Code Card"
+   ]
+  },
+  {
+   "id": "3WKJ-1",
+   "text": "전략",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Workspace",
+    "WS Content",
+    "Result Card",
+    "Chart",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WKM-1",
+   "text": "매수보유",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Workspace",
+    "WS Content",
+    "Result Card",
+    "Chart",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WKT-1",
+   "text": "누적 수익률",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Workspace",
+    "WS Content",
+    "Result Card",
+    "Metrics",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WKU-1",
+   "text": "+41.8%",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Workspace",
+    "WS Content",
+    "Result Card",
+    "Metrics",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WKW-1",
+   "text": "최대 낙폭",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Workspace",
+    "WS Content",
+    "Result Card",
+    "Metrics",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WKX-1",
+   "text": "-9.4%",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Workspace",
+    "WS Content",
+    "Result Card",
+    "Metrics",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WKZ-1",
+   "text": "샤프",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Workspace",
+    "WS Content",
+    "Result Card",
+    "Metrics",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WL0-1",
+   "text": "1.32",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Workspace",
+    "WS Content",
+    "Result Card",
+    "Metrics",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WL2-1",
+   "text": "거래 · 승률",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Workspace",
+    "WS Content",
+    "Result Card",
+    "Metrics",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WL3-1",
+   "text": "126회 · 54%",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Workspace",
+    "WS Content",
+    "Result Card",
+    "Metrics",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WL6-1",
+   "text": "14:02:11 run start · bars 736 · k=0.62",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Workspace",
+    "WS Content",
+    "Log Card"
+   ]
+  },
+  {
+   "id": "3WL7-1",
+   "text": "14:02:19 trades 126 · win 54.0% · mdd -9.4%",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Workspace",
+    "WS Content",
+    "Log Card"
+   ]
+  },
+  {
+   "id": "3WL8-1",
+   "text": "14:02:19 done · 스크롤 위치 저장됨",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Stage",
+    "Body",
+    "Workspace",
+    "WS Content",
+    "Log Card"
+   ]
+  },
+  {
+   "id": "3WMN-1",
+   "text": "복원은 계약이다",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Interaction Rail",
+    "Rail Header"
+   ]
+  },
+  {
+   "id": "3WMO-1",
+   "text": "RESTORE",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Interaction Rail",
+    "Rail Header"
+   ]
+  },
+  {
+   "id": "3WMS-1",
+   "text": "1",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WMT-1",
+   "text": "무엇이 반드시 돌아오는가",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WMZ-1",
+   "text": "대화 전체 — 8턴 그대로",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WN4-1",
+   "text": "전략 폼 값 6개 — 마지막 입력 그대로",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WN9-1",
+   "text": "사용자가 쓴 파이썬 코드 84줄",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WNE-1",
+   "text": "결과 카드 3장 — 원본 데이터까지",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WNJ-1",
+   "text": "실행 로그와 스크롤 위치",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Interaction Rail",
+    "Rule 1",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "49VN-0",
+   "text": "전부 돌아왔으면 아무 말도 하지 않습니다 — '복원됨' 배너나 토스트 없이 그 자리가 그냥 열립니다. 말하는 건 3번, 빠진 게 있을 때뿐입니다.",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Interaction Rail",
+    "Rule 1"
+   ]
+  },
+  {
+   "id": "3WNO-1",
+   "text": "2",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Interaction Rail",
+    "Rule 2",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WNP-1",
+   "text": "실행 중이던 것도 그대로 돌아온다",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Interaction Rail",
+    "Rule 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WNQ-1",
+   "text": "계산은 창과 무관하게 백그라운드 job으로 도고, 세션은 job id를 들고 있습니다. 다시 열면 진행률·부분 결과·로그 스트림에 그 자리에서 다시 붙습니다. 외부 시세 스트림도 저장된 구독 목록으로 자동 재접속합니다.",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Interaction Rail",
+    "Rule 2"
+   ]
+  },
+  {
+   "id": "3WNU-1",
+   "text": "3",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Interaction Rail",
+    "Rule 3",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WNV-1",
+   "text": "일부만 복원되면 말한다",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Interaction Rail",
+    "Rule 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WNW-1",
+   "text": "빠진 것이 있으면 조용히 넘어가지 않습니다. 30번 보드 ‘대화 턴 복원 실패’와 같은 어휘로, 무엇이 빠졌는지 이름을 대고 다시 시도를 답니다.",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Interaction Rail",
+    "Rule 3"
+   ]
+  },
+  {
+   "id": "3WO3-1",
+   "text": "일부만 복원했습니다",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Interaction Rail",
+    "Rule 3",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WO4-1",
+   "text": "결과 데이터셋 1장을 찾지 못했습니다. 폼·코드·로그는 그대로입니다.",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Interaction Rail",
+    "Rule 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WO7-1",
+   "text": "다시 시도",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Interaction Rail",
+    "Rule 3",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WO9-1",
+   "text": "이대로 열기",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Interaction Rail",
+    "Rule 3",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WOH-1",
+   "text": "2026-09-05 개정 — 실앱에서 어긋났던 것",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Interaction Rail",
+    "Gap Note",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WOJ-1",
+   "text": "01",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Interaction Rail",
+    "Gap Note",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WOK-1",
+   "text": "실앱은 채팅 맨 위에 '복원됨 · 제목' 배너와 '이어서 말할 수 있습니다' 문구를 그렸습니다. 지웁니다 — 복원은 조용하고, 입력은 열려 있습니다.",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Interaction Rail",
+    "Gap Note",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WOM-1",
+   "text": "02",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Interaction Rail",
+    "Gap Note",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3WON-1",
+   "text": "일부만 복원됐을 때의 안내(3번)는 아직 코드에 없습니다. 열 수 없으면 아예 열지 않고(restorable 게이트), 열리면 조용히 엽니다.",
+   "path": [
+    "41 · 세션 복원 — 다시 누르면 그대로",
+    "41 Content",
+    "Interaction Rail",
+    "Gap Note",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "3WBZ-1",
+   "name": "41 · 세션 복원 — 다시 누르면 그대로",
+   "component": "Frame",
+   "w": 1680,
+   "h": 900,
+   "depth": 0
+  },
+  {
+   "id": "3WCP-1",
+   "name": "41 Header",
+   "component": "Frame",
+   "w": 1600,
+   "h": 86,
+   "depth": 1
+  },
+  {
+   "id": "3WCQ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 778,
+   "h": 56,
+   "depth": 2
+  },
+  {
+   "id": "3WCR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 48,
+   "h": 48,
+   "depth": 3
+  },
+  {
+   "id": "3WCT-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 714,
+   "h": 56,
+   "depth": 3
+  },
+  {
+   "id": "3WCW-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 109,
+   "h": 32,
+   "depth": 2
+  },
+  {
+   "id": "3WCZ-1",
+   "name": "41 Content",
+   "component": "Frame",
+   "w": 1600,
+   "h": 722,
+   "depth": 1
+  },
+  {
+   "id": "3WD0-1",
+   "name": "Stage",
+   "component": "Frame",
+   "w": 1150,
+   "h": 722,
+   "depth": 2
+  },
+  {
+   "id": "3WD3-1",
+   "name": "Titlebar",
+   "component": "Frame",
+   "w": 1148,
+   "h": 46,
+   "depth": 3
+  },
+  {
+   "id": "3WD4-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 168,
+   "h": 16,
+   "depth": 4
+  },
+  {
+   "id": "3WD6-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 1,
+   "h": 12,
+   "depth": 5
+  },
+  {
+   "id": "3WD8-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 1,
+   "h": 12,
+   "depth": 5
+  },
+  {
+   "id": "3WDA-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 59,
+   "h": 11,
+   "depth": 4
+  },
+  {
+   "id": "3WDB-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 11,
+   "h": 1,
+   "depth": 5
+  },
+  {
+   "id": "3WDC-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9,
+   "h": 9,
+   "depth": 5
+  },
+  {
+   "id": "3WDD-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 11,
+   "h": 11,
+   "depth": 5
+  },
+  {
+   "id": "3WDE-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 11,
+   "h": 11,
+   "depth": 6
+  },
+  {
+   "id": "3WDF-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 6,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "3WDG-1",
+   "name": "Body",
+   "component": "Frame",
+   "w": 1148,
+   "h": 674,
+   "depth": 3
+  },
+  {
+   "id": "3WDN-1",
+   "name": "Sidebar",
+   "component": "Frame",
+   "w": 254,
+   "h": 674,
+   "depth": 4
+  },
+  {
+   "id": "3WDO-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 229,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "3WEM-1",
+   "name": "Row 1",
+   "component": "Frame",
+   "w": 229,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "3WEN-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 16,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3WEO-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "3WEP-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "3WER-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 34,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3WET-1",
+   "name": "Row 2 · 눌림",
+   "component": "Frame",
+   "w": 229,
+   "h": 38,
+   "depth": 5
+  },
+  {
+   "id": "3WEU-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 16,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3WEV-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "3WEW-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "3WEY-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 34,
+   "h": 22,
+   "depth": 6
+  },
+  {
+   "id": "3WEZ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22,
+   "h": 22,
+   "depth": 7
+  },
+  {
+   "id": "3WF0-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 13,
+   "h": 13,
+   "depth": 8
+  },
+  {
+   "id": "3WF1-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 9,
+   "depth": 9
+  },
+  {
+   "id": "3WF2-1",
+   "name": "Row 3",
+   "component": "Frame",
+   "w": 229,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "3WF3-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 16,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3WF4-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "3WF5-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 8
+  },
+  {
+   "id": "3WF6-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 8
+  },
+  {
+   "id": "3WF7-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 2,
+   "h": 2,
+   "depth": 8
+  },
+  {
+   "id": "3WF8-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 5,
+   "h": 5,
+   "depth": 8
+  },
+  {
+   "id": "3WFA-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 34,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3WFC-1",
+   "name": "Row 4",
+   "component": "Frame",
+   "w": 229,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "3WFD-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 16,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3WFE-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "3WFF-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 4,
+   "h": 4,
+   "depth": 8
+  },
+  {
+   "id": "3WFG-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 4,
+   "depth": 8
+  },
+  {
+   "id": "3WFI-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 34,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3WFK-1",
+   "name": "Row 5",
+   "component": "Frame",
+   "w": 229,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "3WFL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 16,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3WFM-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 14,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "3WFN-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 9,
+   "depth": 8
+  },
+  {
+   "id": "3WFP-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 34,
+   "h": 14,
+   "depth": 6
+  },
+  {
+   "id": "3WGK-1",
+   "name": "Workspace",
+   "component": "Frame",
+   "w": 894,
+   "h": 674,
+   "depth": 4
+  },
+  {
+   "id": "3WGL-1",
+   "name": "WS Header",
+   "component": "Frame",
+   "w": 894,
+   "h": 52,
+   "depth": 5
+  },
+  {
+   "id": "3WGM-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 193,
+   "h": 22,
+   "depth": 6
+  },
+  {
+   "id": "3WGO-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 75,
+   "h": 22,
+   "depth": 7
+  },
+  {
+   "id": "3WGP-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 8
+  },
+  {
+   "id": "3WGQ-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 10,
+   "h": 7,
+   "depth": 9
+  },
+  {
+   "id": "3WGT-1",
+   "name": "WS Content",
+   "component": "Frame",
+   "w": 894,
+   "h": 622,
+   "depth": 5
+  },
+  {
+   "id": "3WMC-1",
+   "name": "Top Row",
+   "component": "Frame",
+   "w": 870,
+   "h": 118,
+   "depth": 6
+  },
+  {
+   "id": "3WMD-1",
+   "name": "Chat Card",
+   "component": "Frame",
+   "w": 870,
+   "h": 118,
+   "depth": 7
+  },
+  {
+   "id": "3WME-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 848,
+   "h": 16,
+   "depth": 8
+  },
+  {
+   "id": "3WMH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 259,
+   "h": 31,
+   "depth": 8
+  },
+  {
+   "id": "3WMJ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 229,
+   "h": 33,
+   "depth": 8
+  },
+  {
+   "id": "3WJQ-1",
+   "name": "Form Card",
+   "component": "Frame",
+   "w": 870,
+   "h": 96,
+   "depth": 6
+  },
+  {
+   "id": "3WJR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 848,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "3WJU-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 848,
+   "h": 49,
+   "depth": 7
+  },
+  {
+   "id": "3WJV-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 206,
+   "h": 49,
+   "depth": 8
+  },
+  {
+   "id": "3WJY-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 206,
+   "h": 49,
+   "depth": 8
+  },
+  {
+   "id": "3WK1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 206,
+   "h": 49,
+   "depth": 8
+  },
+  {
+   "id": "3WK4-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 206,
+   "h": 49,
+   "depth": 8
+  },
+  {
+   "id": "3WK8-1",
+   "name": "Code Card",
+   "component": "Frame",
+   "w": 870,
+   "h": 130,
+   "depth": 6
+  },
+  {
+   "id": "3WK9-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 846,
+   "h": 14,
+   "depth": 7
+  },
+  {
+   "id": "3WKE-1",
+   "name": "Result Card",
+   "component": "Frame",
+   "w": 870,
+   "h": 150,
+   "depth": 6
+  },
+  {
+   "id": "3WKF-1",
+   "name": "Chart",
+   "component": "Frame",
+   "w": 578,
+   "h": 132,
+   "depth": 7
+  },
+  {
+   "id": "3WKG-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 578,
+   "h": 14,
+   "depth": 8
+  },
+  {
+   "id": "3WKH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 37,
+   "h": 14,
+   "depth": 9
+  },
+  {
+   "id": "3WKI-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 12,
+   "h": 2,
+   "depth": 10
+  },
+  {
+   "id": "3WKK-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 57,
+   "h": 14,
+   "depth": 9
+  },
+  {
+   "id": "3WKL-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 12,
+   "h": 2,
+   "depth": 10
+  },
+  {
+   "id": "3WKN-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 578,
+   "h": 114,
+   "depth": 8
+  },
+  {
+   "id": "3WKO-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 529,
+   "h": 82,
+   "depth": 9
+  },
+  {
+   "id": "3WKP-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 525,
+   "h": 66,
+   "depth": 10
+  },
+  {
+   "id": "3WKQ-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 525,
+   "h": 31,
+   "depth": 10
+  },
+  {
+   "id": "3WKR-1",
+   "name": "Metrics",
+   "component": "Frame",
+   "w": 262,
+   "h": 132,
+   "depth": 7
+  },
+  {
+   "id": "3WKS-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 262,
+   "h": 27,
+   "depth": 8
+  },
+  {
+   "id": "3WKV-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 262,
+   "h": 27,
+   "depth": 8
+  },
+  {
+   "id": "3WKY-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 262,
+   "h": 27,
+   "depth": 8
+  },
+  {
+   "id": "3WL1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 262,
+   "h": 27,
+   "depth": 8
+  },
+  {
+   "id": "3WL5-1",
+   "name": "Log Card",
+   "component": "Frame",
+   "w": 870,
+   "h": 68,
+   "depth": 6
+  },
+  {
+   "id": "3WD1-1",
+   "name": "Interaction Rail",
+   "component": "Frame",
+   "w": 426,
+   "h": 722,
+   "depth": 2
+  },
+  {
+   "id": "3WMM-1",
+   "name": "Rail Header",
+   "component": "Frame",
+   "w": 388,
+   "h": 34,
+   "depth": 3
+  },
+  {
+   "id": "3WMP-1",
+   "name": "Rule 1",
+   "component": "Frame",
+   "w": 388,
+   "h": 191,
+   "depth": 3
+  },
+  {
+   "id": "3WMQ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 20,
+   "depth": 4
+  },
+  {
+   "id": "3WMR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 20,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "3WMU-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 95,
+   "depth": 4
+  },
+  {
+   "id": "3WMV-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 15,
+   "depth": 5
+  },
+  {
+   "id": "3WMW-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 12,
+   "h": 12,
+   "depth": 6
+  },
+  {
+   "id": "3WMX-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 7
+  },
+  {
+   "id": "3WMY-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3WN0-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 15,
+   "depth": 5
+  },
+  {
+   "id": "3WN1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 12,
+   "h": 12,
+   "depth": 6
+  },
+  {
+   "id": "3WN2-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 7
+  },
+  {
+   "id": "3WN3-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3WN5-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 15,
+   "depth": 5
+  },
+  {
+   "id": "3WN6-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 12,
+   "h": 12,
+   "depth": 6
+  },
+  {
+   "id": "3WN7-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 7
+  },
+  {
+   "id": "3WN8-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3WNA-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 15,
+   "depth": 5
+  },
+  {
+   "id": "3WNB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 12,
+   "h": 12,
+   "depth": 6
+  },
+  {
+   "id": "3WNC-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 7
+  },
+  {
+   "id": "3WND-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3WNF-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 15,
+   "depth": 5
+  },
+  {
+   "id": "3WNG-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 12,
+   "h": 12,
+   "depth": 6
+  },
+  {
+   "id": "3WNH-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 12,
+   "h": 12,
+   "depth": 7
+  },
+  {
+   "id": "3WNI-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 6,
+   "depth": 8
+  },
+  {
+   "id": "3WNL-1",
+   "name": "Rule 2",
+   "component": "Frame",
+   "w": 388,
+   "h": 103,
+   "depth": 3
+  },
+  {
+   "id": "3WNM-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 20,
+   "depth": 4
+  },
+  {
+   "id": "3WNN-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 20,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "3WNR-1",
+   "name": "Rule 3",
+   "component": "Frame",
+   "w": 388,
+   "h": 184,
+   "depth": 3
+  },
+  {
+   "id": "3WNS-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 20,
+   "depth": 4
+  },
+  {
+   "id": "3WNT-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 20,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "3WNX-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 88,
+   "depth": 4
+  },
+  {
+   "id": "3WNY-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 336,
+   "h": 15,
+   "depth": 5
+  },
+  {
+   "id": "3WNZ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 13,
+   "h": 13,
+   "depth": 6
+  },
+  {
+   "id": "3WO0-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 13,
+   "h": 13,
+   "depth": 7
+  },
+  {
+   "id": "3WO1-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 10,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "3WO2-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 4,
+   "depth": 8
+  },
+  {
+   "id": "3WO5-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 336,
+   "h": 26,
+   "depth": 5
+  },
+  {
+   "id": "3WO6-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 64,
+   "h": 24,
+   "depth": 6
+  },
+  {
+   "id": "3WO8-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 76,
+   "h": 26,
+   "depth": 6
+  },
+  {
+   "id": "3WOB-1",
+   "name": "Gap Note",
+   "component": "Frame",
+   "w": 388,
+   "h": 124,
+   "depth": 3
+  },
+  {
+   "id": "3WOC-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 16,
+   "depth": 4
+  },
+  {
+   "id": "3WOD-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 16,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "3WOE-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 16,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3WOF-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 11,
+   "h": 11,
+   "depth": 7
+  },
+  {
+   "id": "3WOG-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0,
+   "h": 6,
+   "depth": 7
+  },
+  {
+   "id": "3WOI-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 30,
+   "depth": 4
+  },
+  {
+   "id": "3WOL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 358,
+   "h": 30,
+   "depth": 4
+  }
+ ],
+ "text_multiset": {
+  "41": 1,
+  "세션 복원 — 다시 누르면 그대로": 1,
+  "이력에서 백테스트 창을 다시 누르면 폼·코드·결과·로그·스크롤까지 그 자리로 돌아옵니다. 배너도 토스트도 없이, 그냥 그 자리입니다.": 1,
+  "신규 · 승인 대기": 1,
+  "ATHENA": 1,
+  "아테나": 1,
+  "백테스트": 2,
+  "SESSIONS": 1,
+  "5": 1,
+  "추세추종 v3": 1,
+  "방금": 1,
+  "변동성 돌파 실험": 2,
+  "코스피 상관 그래프": 1,
+  "5일": 1,
+  "야간 리밸런싱 점검": 1,
+  "1주": 1,
+  "스니펫 감사 로그": 1,
+  "2주": 1,
+  "3일 전 · 완료": 1,
+  "대화 · 8턴": 1,
+  "마지막 2턴": 1,
+  "k를 0.62로 올리고 손절을 -3%로 바꿔서 다시 돌려줘": 1,
+  "승률 54.0%, 최대 낙폭 -9.4%로 나아졌습니다.": 1,
+  "전략 폼": 1,
+  "복원 6/6": 1,
+  "종목": 1,
+  "005930 · 삼성전자": 1,
+  "기간": 1,
+  "2023-01 ~ 2025-12": 1,
+  "돌파 계수 k": 1,
+  "0.62": 1,
+  "손절 · 수수료": 1,
+  "-3.0% · 0.015%": 1,
+  "strategy.py · 84 lines": 1,
+  "restored": 1,
+  "def signal(df, k=0.62):\n    rng = df.high.shift(1) - df.low.shift(1)\n    target = df.open + rng * k\n    entry = df.high >= target\n    stop = df.close < df.open * 0.97\n    return entry.astype(int) - stop.astype(int)": 1,
+  "전략": 1,
+  "매수보유": 1,
+  "누적 수익률": 1,
+  "+41.8%": 1,
+  "최대 낙폭": 1,
+  "-9.4%": 1,
+  "샤프": 1,
+  "1.32": 1,
+  "거래 · 승률": 1,
+  "126회 · 54%": 1,
+  "14:02:11 run start · bars 736 · k=0.62": 1,
+  "14:02:19 trades 126 · win 54.0% · mdd -9.4%": 1,
+  "14:02:19 done · 스크롤 위치 저장됨": 1,
+  "복원은 계약이다": 1,
+  "RESTORE": 1,
+  "1": 1,
+  "무엇이 반드시 돌아오는가": 1,
+  "대화 전체 — 8턴 그대로": 1,
+  "전략 폼 값 6개 — 마지막 입력 그대로": 1,
+  "사용자가 쓴 파이썬 코드 84줄": 1,
+  "결과 카드 3장 — 원본 데이터까지": 1,
+  "실행 로그와 스크롤 위치": 1,
+  "전부 돌아왔으면 아무 말도 하지 않습니다 — '복원됨' 배너나 토스트 없이 그 자리가 그냥 열립니다. 말하는 건 3번, 빠진 게 있을 때뿐입니다.": 1,
+  "2": 1,
+  "실행 중이던 것도 그대로 돌아온다": 1,
+  "계산은 창과 무관하게 백그라운드 job으로 도고, 세션은 job id를 들고 있습니다. 다시 열면 진행률·부분 결과·로그 스트림에 그 자리에서 다시 붙습니다. 외부 시세 스트림도 저장된 구독 목록으로 자동 재접속합니다.": 1,
+  "3": 1,
+  "일부만 복원되면 말한다": 1,
+  "빠진 것이 있으면 조용히 넘어가지 않습니다. 30번 보드 ‘대화 턴 복원 실패’와 같은 어휘로, 무엇이 빠졌는지 이름을 대고 다시 시도를 답니다.": 1,
+  "일부만 복원했습니다": 1,
+  "결과 데이터셋 1장을 찾지 못했습니다. 폼·코드·로그는 그대로입니다.": 1,
+  "다시 시도": 1,
+  "이대로 열기": 1,
+  "2026-09-05 개정 — 실앱에서 어긋났던 것": 1,
+  "01": 1,
+  "실앱은 채팅 맨 위에 '복원됨 · 제목' 배너와 '이어서 말할 수 있습니다' 문구를 그렸습니다. 지웁니다 — 복원은 조용하고, 입력은 열려 있습니다.": 1,
+  "02": 1,
+  "일부만 복원됐을 때의 안내(3번)는 아직 코드에 없습니다. 열 수 없으면 아예 열지 않고(restorable 게이트), 열리면 조용히 엽니다.": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "40679de49183ae47d34faaf7bc94ce8532a9df8c6d904ada28fd3dd5ec43d7a0"
+}

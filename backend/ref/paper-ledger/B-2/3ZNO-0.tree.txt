@@ -1,0 +1,53 @@
+Frame "09 · 플러그인 창 복원" (3ZNO-0) 1680×986
+  Frame "board-head" (3ZNP-0) 0×0
+    Text "창을 다시 열었을 때" (3ZNQ-0) 0×0 "창을 다시 열었을 때"
+    Text "작업하던 것이 그대로 남습니다" (3ZNR-0) 0×0 "작업하던 것이 그대로 남습니다"
+  Frame "columns" (3ZNS-0) 0×0
+    Frame "col-draft" (3ZNU-0) 514×0
+      Text "col-label" (3ZNV-0) 0×0 "권한 초안"
+      Frame "toggles" (3ZNW-0) 0×0
+        Frame "Frame" (3ZNX-0) 0×0
+          Text "종목 검색" (3ZNY-0) 0×0 "종목 검색"
+          Frame "Frame" (3ZNZ-0) 34×20
+            Rectangle "Rectangle" (3ZO0-0) 16×16
+        Frame "Frame" (3ZO1-0) 0×0
+          Text "시세 조회" (3ZO2-0) 0×0 "시세 조회"
+          Frame "Frame" (3ZO3-0) 34×20
+            Rectangle "Rectangle" (3ZO4-0) 16×16
+        Frame "Frame" (3ZO5-0) 0×0
+          Text "시총 상위" (3ZO6-0) 0×0 "시총 상위"
+          Frame "Frame" (3ZO7-0) 34×20
+            Rectangle "Rectangle" (3ZO8-0) 16×16
+      Frame "발산 알림" (3ZOA-0) 0×0
+        Text "그 사이 바뀐 기능: 시세 조회 · …" (3ZOB-0) 0×0 "그 사이 바뀐 기능: 시세 조회 · 종목 검색"
+      Frame "draft-actions" (3ZOC-0) 0×0
+        Frame "Frame" (3ZOD-0) 0×0
+          Text "현재 값으로 초기화" (3ZOE-0) 0×0 "현재 값으로 초기화"
+        Frame "Frame" (3ZOF-0) 0×0
+          Text "초안대로 저장" (3ZOG-0) 0×0 "초안대로 저장"
+    Frame "col-unsent" (3ZOI-0) 514×0
+      Text "col-label" (3ZOJ-0) 0×0 "미전송 입력"
+      Frame "chat-input" (3ZOK-0) 0×0
+        Text "공시 페이지 읽는 플러그인 중에" (3ZOL-0) 0×0 "공시 페이지 읽는 플러그인 중에"
+        Frame "caret" (3ZOM-0) 2×18
+      Text "쓰다 만 문장이 그대로 남아 있습니다" (3ZON-0) 0×0 "쓰다 만 문장이 그대로 남아 있습니다"
+    Frame "col-pending" (3ZOP-0) 514×0
+      Text "col-label" (3ZOQ-0) 0×0 "제안 대기 카드"
+      Frame "card-pending" (3ZOR-0) 0×0
+        Frame "Frame" (3ZOS-0) 0×0
+          Text "제안 대기" (3ZOT-0) 0×0 "제안 대기"
+        Text "웹 문서 읽기 설치" (3ZOU-0) 0×0 "웹 문서 읽기 설치"
+        Frame "Frame" (3ZOV-0) 0×0
+          Text "거부" (3ZOW-0) 0×0 "거부"
+        Frame "Frame" (3ZOX-0) 0×0
+          Text "승인" (3ZOY-0) 0×0 "승인"
+      Frame "card-expired" (3ZOZ-0) 0×0
+        Frame "Frame" (3ZP0-0) 0×0
+          Text "만료됨" (3ZP1-0) 0×0 "만료됨"
+        Text "한국 주식 시세 · 기능 허용" (3ZP2-0) 0×0 "한국 주식 시세 · 기능 허용"
+        Frame "btn-disabled" (3ZP3-0) 0×0
+          Text "승인" (3ZP4-0) 0×0 "승인"
+        Frame "chip-again" (3ZP5-0) 0×0
+          Text "다시 제안받기" (3ZP6-0) 0×0 "다시 제안받기"
+  Frame "하단 경계 문구" (3ZP8-0) 0×0
+    Text "앱을 완전히 껐다 켜면 대기 중인 제…" (3ZP9-0) 0×0 "앱을 완전히 껐다 켜면 대기 중인 제안은 사라집니다"

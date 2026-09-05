@@ -1,0 +1,313 @@
+Frame "42 · 스냅샷 명세 — 모드별 저장 항목" (3WOP-1) 1680×900
+  Frame "42 Header" (3WOQ-1) 1600×86
+    Frame "Frame" (3WOR-1) 573×56
+      Frame "Frame" (3WOS-1) 48×48
+        Text "42" (3WOT-1) 17×20 "42"
+      Frame "Frame" (3WOU-1) 509×56
+        Text "스냅샷 명세 — 모드별 저장 항목" (3WOV-1) 509×36 "스냅샷 명세 — 모드별 저장 항목"
+        Text "세션 하나를 봉인할 때 무엇을 남기는…" (3WOW-1) 509×18 "세션 하나를 봉인할 때 무엇을 남기는가. 값으로 남기거나 참조로 남긴다 — 저장 안 함은 없다."
+    Frame "Frame" (3WOX-1) 109×32
+      Text "신규 · 승인 대기" (3WOY-1) 81×16 "신규 · 승인 대기"
+  Frame "42 Content" (3WP0-1) 1600×722
+    Frame "Matrix Card" (3WP1-1) 1600×514
+      Frame "Legend" (3WWZ-1) 1566×18
+        Text "한 세션을 봉인할 때 남는 것 — 저…" (3WX0-1) 271×16 "한 세션을 봉인할 때 남는 것 — 저장 안 함은 없다"
+        Frame "Frame" (3WX1-1) 388×13
+          Frame "Frame" (3WX2-1) 72×13
+            SVG "SVG" (3WX3-1) 13×13
+              SVGVisualElement "Path" (3WX4-1) 8×5
+            Text "값으로 저장" (3WX5-1) 54×12 "값으로 저장"
+          Frame "Frame" (3WX6-1) 145×13
+            SVG "SVG" (3WX7-1) 13×13
+              SVGVisualElement "Path" (3WX8-1) 9×9
+            Text "참조로 저장 · 원본은 제자리" (3WX9-1) 127×12 "참조로 저장 · 원본은 제자리"
+          Frame "Frame" (3WXA-1) 143×12
+            Text "—" (3WXB-1) 13×12 "—"
+            Text "그 모드에 개념 자체가 없음" (3WXC-1) 125×12 "그 모드에 개념 자체가 없음"
+      Frame "Table" (3WPN-1) 1566×452
+        Frame "Head Row" (3WPO-1) 1566×44
+          Frame "Frame" (3WPP-1) 230×16
+            Text "저장 항목" (3WPQ-1) 48×16 "저장 항목"
+          Frame "Frame" (3WPR-1) 267×16
+            SVG "SVG" (3WPS-1) 14×14
+              SVGVisualElement "Path" (3WPT-1) 9×9
+            Text "대화" (3WPU-1) 22×16 "대화"
+          Frame "Frame" (3WPV-1) 267×16
+            SVG "SVG" (3WPW-1) 14×14
+              SVGVisualElement "Circle" (3WPX-1) 2×2
+              SVGVisualElement "Circle" (3WPY-1) 2×2
+              SVGVisualElement "Circle" (3WPZ-1) 2×2
+              SVGVisualElement "Path" (3WQ0-1) 5×5
+            Text "그래프" (3WQ1-1) 33×16 "그래프"
+          Frame "Frame" (3WQ2-1) 267×16
+            SVG "SVG" (3WQ3-1) 14×14
+              SVGVisualElement "Circle" (3WQ4-1) 4×4
+              SVGVisualElement "Path" (3WQ5-1) 8×4
+            Text "에이전트" (3WQ6-1) 44×16 "에이전트"
+          Frame "Frame" (3WQ7-1) 267×16
+            SVG "SVG" (3WQ8-1) 14×14
+              SVGVisualElement "Path" (3WQ9-1) 8×9
+            Text "플러그인" (3WQA-1) 44×16 "플러그인"
+          Frame "Frame" (3WQB-1) 267×16
+            SVG "SVG" (3WQC-1) 14×14
+              SVGVisualElement "Path" (3WQD-1) 11×8
+            Text "백테스트" (3WQE-1) 44×16 "백테스트"
+        Frame "R1 대화 메시지 전체" (3WQG-1) 1566×45
+          Frame "Frame" (3WQH-1) 230×16
+            Text "대화 메시지 전체" (3WQI-1) 85×16 "대화 메시지 전체"
+          Frame "Frame" (3WQJ-1) 267×14
+            SVG "SVG" (3WQK-1) 14×14
+              SVGVisualElement "Path" (3WQL-1) 9×6
+            Text "값" (3WQM-1) 10×14 "값"
+          Frame "Frame" (3WQN-1) 267×14
+            SVG "SVG" (3WQO-1) 14×14
+              SVGVisualElement "Path" (3WQP-1) 9×6
+            Text "값" (3WQQ-1) 10×14 "값"
+          Frame "Frame" (3WQR-1) 267×14
+            SVG "SVG" (3WQS-1) 14×14
+              SVGVisualElement "Path" (3WQT-1) 9×6
+            Text "값" (3WQU-1) 10×14 "값"
+          Frame "Frame" (3WQV-1) 267×14
+            SVG "SVG" (3WQW-1) 14×14
+              SVGVisualElement "Path" (3WQX-1) 9×6
+            Text "값" (3WQY-1) 10×14 "값"
+          Frame "Frame" (3WQZ-1) 267×14
+            SVG "SVG" (3WR0-1) 14×14
+              SVGVisualElement "Path" (3WR1-1) 9×6
+            Text "값" (3WR2-1) 10×14 "값"
+        Frame "R2 캔버스 카드 스택" (3WR4-1) 1566×45
+          Frame "Frame" (3WR5-1) 230×16
+            Text "캔버스 카드 스택" (3WR6-1) 85×16 "캔버스 카드 스택"
+          Frame "Frame" (3WR7-1) 267×14
+            SVG "SVG" (3WR8-1) 14×14
+              SVGVisualElement "Path" (3WR9-1) 9×6
+            Text "값" (3WRA-1) 10×14 "값"
+          Frame "Frame" (3WRB-1) 267×14
+            SVG "SVG" (3WRC-1) 14×14
+              SVGVisualElement "Path" (3WRD-1) 9×6
+            Text "값" (3WRE-1) 10×14 "값"
+          Frame "Frame" (3WRF-1) 267×14
+            Frame "Frame" (3X4K-1) 267×14
+              SVG "SVG" (3X4L-1) 14×14
+                SVGVisualElement "Path" (3X4M-1) 9×6
+              Text "값" (3X4N-1) 10×14 "값"
+          Frame "Frame" (3WRH-1) 267×14
+            SVG "SVG" (3WRI-1) 14×14
+              SVGVisualElement "Path" (3WRJ-1) 9×6
+            Text "값" (3WRK-1) 10×14 "값"
+          Frame "Frame" (3WRL-1) 267×14
+            SVG "SVG" (3WRM-1) 14×14
+              SVGVisualElement "Path" (3WRN-1) 9×6
+            Text "값" (3WRO-1) 10×14 "값"
+        Frame "R3 화면 스크롤·선택 위치" (3WRQ-1) 1566×45
+          Frame "Frame" (3WSB-1) 230×16
+            Text "화면 스크롤·선택 위치" (3WSC-1) 110×16 "화면 스크롤·선택 위치"
+          Frame "Frame" (3WS7-1) 267×14
+            SVG "SVG" (3WS9-1) 14×14
+              SVGVisualElement "Path" (3WSA-1) 9×6
+            Text "값" (3WS8-1) 10×14 "값"
+          Frame "Frame" (3WS3-1) 267×14
+            SVG "SVG" (3WS5-1) 14×14
+              SVGVisualElement "Path" (3WS6-1) 9×6
+            Text "값" (3WS4-1) 10×14 "값"
+          Frame "Frame" (3WRZ-1) 267×14
+            SVG "SVG" (3WS1-1) 14×14
+              SVGVisualElement "Path" (3WS2-1) 9×6
+            Text "값" (3WS0-1) 10×14 "값"
+          Frame "Frame" (3WRV-1) 267×14
+            SVG "SVG" (3WRX-1) 14×14
+              SVGVisualElement "Path" (3WRY-1) 9×6
+            Text "값" (3WRW-1) 10×14 "값"
+          Frame "Frame" (3WRR-1) 267×14
+            SVG "SVG" (3WRT-1) 14×14
+              SVGVisualElement "Path" (3WRU-1) 9×6
+            Text "값" (3WRS-1) 10×14 "값"
+        Frame "R4 모드 전용 폼 값" (3WSD-1) 1566×45
+          Frame "Frame" (3WSE-1) 230×32
+            Text "모드 전용 폼 값" (3WSF-1) 78×16 "모드 전용 폼 값"
+            Text "전략 폼 · 필터 칩 · 드릴인 · …" (3WSG-1) 231×14 "전략 폼 · 필터 칩 · 드릴인 · 권한 초안 · 미전송 입력"
+          Frame "Frame" (3WSH-1) 267×14
+            Frame "Frame" (3X4P-1) 267×14
+              SVG "SVG" (3X4Q-1) 14×14
+                SVGVisualElement "Path" (3X4R-1) 9×6
+              Text "값" (3X4S-1) 10×14 "값"
+          Frame "Frame" (3WSJ-1) 267×14
+            Frame "Frame" (3X4U-1) 267×14
+              SVG "SVG" (3X4V-1) 14×14
+                SVGVisualElement "Path" (3X4W-1) 9×6
+              Text "값" (3X4X-1) 10×14 "값"
+          Frame "Frame" (3WSL-1) 267×14
+            Frame "Frame" (3X4Z-1) 267×14
+              SVG "SVG" (3X50-1) 14×14
+                SVGVisualElement "Path" (3X51-1) 9×6
+              Text "값" (3X52-1) 10×14 "값"
+          Frame "Frame" (3WSN-1) 267×14
+            SVG "SVG" (3WWN-1) 14×14
+              SVGVisualElement "Path" (3WWO-1) 9×6
+            Text "값" (3WSP-1) 10×14 "값"
+          Frame "Frame" (3WSQ-1) 267×14
+            SVG "SVG" (3WSR-1) 14×14
+              SVGVisualElement "Path" (3WSS-1) 9×6
+            Text "값" (3WST-1) 10×14 "값"
+        Frame "R5 사용자 작성 코드" (3WSU-1) 1566×45
+          Frame "Frame" (3WSV-1) 230×32
+            Text "사용자 작성 코드" (3WSW-1) 85×16 "사용자 작성 코드"
+            Text "파이썬 전략 원본" (3WSX-1) 78×14 "파이썬 전략 원본"
+          Frame "Frame" (3WSY-1) 267×16
+            Text "—" (3WSZ-1) 13×16 "—"
+          Frame "Frame" (3WT0-1) 267×16
+            Text "—" (3WT1-1) 13×16 "—"
+          Frame "Frame" (3WT2-1) 267×16
+            Text "—" (3WT3-1) 13×16 "—"
+          Frame "Frame" (3WT4-1) 267×16
+            Text "—" (3WT5-1) 13×16 "—"
+          Frame "Frame" (3X5E-1) 267×14
+            SVG "SVG" (3X5F-1) 14×14
+              SVGVisualElement "Path" (3X5G-1) 9×9
+            Text "참조 + 버퍼 값" (3X5H-1) 68×14 "참조 + 버퍼 값"
+        Frame "R6 실행 로그" (3WTB-1) 1566×45
+          Frame "Frame" (3WTC-1) 230×16
+            Text "실행 로그" (3WTD-1) 48×16 "실행 로그"
+          Frame "Frame" (3X5J-1) 267×14
+            SVG "SVG" (3X5K-1) 14×14
+              SVGVisualElement "Path" (3X5L-1) 9×9
+            Text "참조" (3X5M-1) 20×14 "참조"
+          Frame "Frame" (3X5O-1) 267×14
+            SVG "SVG" (3X5P-1) 14×14
+              SVGVisualElement "Path" (3X5Q-1) 9×9
+            Text "참조" (3X5R-1) 20×14 "참조"
+          Frame "Frame" (3X6I-1) 267×14
+            SVG "SVG" (3X6J-1) 14×14
+              SVGVisualElement "Path" (3X6K-1) 9×9
+            Text "참조" (3X6L-1) 20×14 "참조"
+          Frame "Frame" (3X6N-1) 267×14
+            SVG "SVG" (3X6O-1) 14×14
+              SVGVisualElement "Path" (3X6P-1) 9×9
+            Text "참조" (3X6Q-1) 20×14 "참조"
+          Frame "Frame" (3X6S-1) 267×14
+            SVG "SVG" (3X6T-1) 14×14
+              SVGVisualElement "Path" (3X6U-1) 9×9
+            Text "참조" (3X6V-1) 20×14 "참조"
+        Frame "R7 결과 데이터셋" (3WTU-1) 1566×45
+          Frame "Frame" (3WTV-1) 230×32
+            Text "결과 데이터셋" (3WTW-1) 70×16 "결과 데이터셋"
+            Text "표·차트의 원본 행" (3WTX-1) 80×14 "표·차트의 원본 행"
+          Frame "Frame" (3X6X-1) 267×14
+            SVG "SVG" (3X6Y-1) 14×14
+              SVGVisualElement "Path" (3X6Z-1) 9×9
+            Text "참조" (3X70-1) 20×14 "참조"
+          Frame "Frame" (3X72-1) 267×14
+            SVG "SVG" (3X73-1) 14×14
+              SVGVisualElement "Path" (3X74-1) 9×9
+            Text "참조" (3X75-1) 20×14 "참조"
+          Frame "Frame" (3X5T-1) 267×14
+            SVG "SVG" (3X5U-1) 14×14
+              SVGVisualElement "Path" (3X5V-1) 9×9
+            Text "참조" (3X5W-1) 20×14 "참조"
+          Frame "Frame" (3X5Y-1) 267×14
+            SVG "SVG" (3X5Z-1) 14×14
+              SVGVisualElement "Path" (3X60-1) 9×9
+            Text "참조" (3X61-1) 20×14 "참조"
+          Frame "Frame" (3X77-1) 267×14
+            SVG "SVG" (3X78-1) 14×14
+              SVGVisualElement "Path" (3X79-1) 9×9
+            Text "참조" (3X7A-1) 20×14 "참조"
+        Frame "R8 필터·기간·정렬" (3WUE-1) 1566×45
+          Frame "Frame" (3WUF-1) 230×16
+            Text "필터·기간·정렬" (3WUG-1) 71×16 "필터·기간·정렬"
+          Frame "Frame" (3WUH-1) 267×14
+            Frame "Frame" (3X54-1) 267×14
+              SVG "SVG" (3X55-1) 14×14
+                SVGVisualElement "Path" (3X56-1) 9×6
+              Text "값" (3X57-1) 10×14 "값"
+          Frame "Frame" (3WUJ-1) 267×14
+            SVG "SVG" (3WUK-1) 14×14
+              SVGVisualElement "Path" (3WUL-1) 9×6
+            Text "값" (3WUM-1) 10×14 "값"
+          Frame "Frame" (3WUN-1) 267×14
+            SVG "SVG" (3WUO-1) 14×14
+              SVGVisualElement "Path" (3WUP-1) 9×6
+            Text "값" (3WUQ-1) 10×14 "값"
+          Frame "Frame" (3WUR-1) 267×14
+            Frame "Frame" (3X59-1) 267×14
+              SVG "SVG" (3X5A-1) 14×14
+                SVGVisualElement "Path" (3X5B-1) 9×6
+              Text "값" (3X5C-1) 10×14 "값"
+          Frame "Frame" (3WUT-1) 267×14
+            SVG "SVG" (3WUU-1) 14×14
+              SVGVisualElement "Path" (3WUV-1) 9×6
+            Text "값" (3WUW-1) 10×14 "값"
+        Frame "R9 실행 핸들(진행률)" (3WUX-1) 1566×44
+          Frame "Frame" (3WUY-1) 230×32
+            Text "실행 핸들(진행률)" (3WUZ-1) 88×16 "실행 핸들(진행률)"
+            Text "job id로 재접속 · 진행률·부분…" (3WV0-1) 212×14 "job id로 재접속 · 진행률·부분 결과까지 이어 봄"
+          Frame "Frame" (3X63-1) 267×14
+            SVG "SVG" (3X64-1) 14×14
+              SVGVisualElement "Path" (3X65-1) 9×9
+            Text "참조" (3X66-1) 20×14 "참조"
+          Frame "Frame" (3X68-1) 267×14
+            SVG "SVG" (3X69-1) 14×14
+              SVGVisualElement "Path" (3X6A-1) 9×9
+            Text "참조" (3X6B-1) 20×14 "참조"
+          Frame "Frame" (3X7C-1) 267×14
+            SVG "SVG" (3X7D-1) 14×14
+              SVGVisualElement "Path" (3X7E-1) 9×9
+            Text "참조" (3X7F-1) 20×14 "참조"
+          Frame "Frame" (3X6D-1) 267×14
+            SVG "SVG" (3X6E-1) 14×14
+              SVGVisualElement "Path" (3X6F-1) 9×9
+            Text "참조" (3X6G-1) 20×14 "참조"
+          Frame "Frame" (3X7H-1) 267×14
+            SVG "SVG" (3X7I-1) 14×14
+              SVGVisualElement "Path" (3X7J-1) 9×9
+            Text "참조" (3X7K-1) 20×14 "참조"
+    Frame "Bottom Cards" (3WPF-1) 1600×134
+      Frame "언제 저장하나" (3WVE-1) 523×134
+        Text "언제 저장하나" (3WVF-1) 77×18 "언제 저장하나"
+        Frame "Frame" (3WVG-1) 489×16
+          Frame "Frame" (3WVH-1) 16×16
+            SVG "SVG" (3WVI-1) 15×15
+              SVGVisualElement "Path" (3WVJ-1) 9×8
+          Text "메시지·카드가 생길 때" (3WVK-1) 341×16 "메시지·카드가 생길 때"
+          Text "즉시 · 스트리밍 중에도" (3WVL-1) 114×14 "즉시 · 스트리밍 중에도"
+        Frame "Frame" (3WVM-1) 489×16
+          Frame "Frame" (3WVN-1) 16×16
+            SVG "SVG" (3WVO-1) 15×15
+              SVGVisualElement "Path" (3WVP-1) 9×9
+          Text "폼·코드·필터가 바뀔 때" (3WVQ-1) 341×16 "폼·코드·필터가 바뀔 때"
+          Text "1s 디바운스 · 최대 5s" (3WVR-1) 114×14 "1s 디바운스 · 최대 5s"
+        Frame "Frame" (3WVS-1) 489×16
+          Frame "Frame" (3WVT-1) 16×16
+            SVG "SVG" (3WVU-1) 15×15
+              SVGVisualElement "Circle" (3WVV-1) 11×11
+              SVGVisualElement "Path" (3WVW-1) 2×4
+          Text "실행 로그·진행률" (3WVX-1) 333×16 "실행 로그·진행률"
+          Text "5s 체크포인트 + append" (3WVY-1) 122×14 "5s 체크포인트 + append"
+      Frame "어디에 남나" (3WVZ-1) 523×134
+        Text "어디에 남나" (3WW0-1) 65×18 "어디에 남나"
+        Frame "Frame" (3WW1-1) 489×16
+          Text "대화 · 메시지" (3WW2-1) 342×16 "대화 · 메시지"
+          Text "~/.athena/brain.sqli…" (3WW3-1) 138×14 "~/.athena/brain.sqlite3"
+        Frame "Frame" (3WW4-1) 489×16
+          Text "폼 · 코드 · 로그" (3WW5-1) 326×16 "폼 · 코드 · 로그"
+          Text "<프로젝트>/.athena/sessi…" (3WW6-1) 154×14 "<프로젝트>/.athena/session/"
+        Frame "Frame" (3WW7-1) 489×16
+          Text "큰 결과 데이터셋" (3WW8-1) 336×16 "큰 결과 데이터셋"
+          Text "session/result-3.par…" (3WW9-1) 144×14 "session/result-3.parquet"
+      Frame "얼마나 남기나" (3WWB-1) 523×134
+        Text "얼마나 남기나" (3WWC-1) 77×18 "얼마나 남기나"
+        Frame "Frame" (3WWD-1) 489×16
+          Text "세션 수·용량 상한" (3WWE-1) 460×16 "세션 수·용량 상한"
+          Text "없음" (3WWF-1) 20×14 "없음"
+        Frame "Frame" (3WWG-1) 489×16
+          Text "결과 데이터셋" (3WWH-1) 434×16 "결과 데이터셋"
+          Text "전부 보관" (3WWI-1) 46×14 "전부 보관"
+        Frame "Frame" (3WWJ-1) 489×16
+          Text "지우는 주체" (3WWK-1) 440×16 "지우는 주체"
+          Text "사용자뿐" (3WWL-1) 40×14 "사용자뿐"
+    Frame "Gap Strip" (3WPG-1) 1600×42
+      Frame "Frame" (3WPH-1) 16×16
+        SVG "SVG" (3WPI-1) 16×16
+          SVGVisualElement "Circle" (3WPJ-1) 11×11
+          SVGVisualElement "Path" (3WPK-1) 0×6
+      Text "지금 백엔드 채팅 적재 스키마는 co…" (3WPL-1) 666×15 "지금 백엔드 채팅 적재 스키마는 conversation_id · role · text · message_id"

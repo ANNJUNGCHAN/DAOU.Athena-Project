@@ -1,0 +1,1696 @@
+{
+ "board_id": "2TJ6-1",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+ "width": 1440,
+ "height": 960,
+ "texts": [
+  {
+   "id": "2TNI-1",
+   "text": "삼성전자 주문",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TNH-1",
+   "text": "검토 필요",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Header",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TNE-1",
+   "text": "005930 · 키움증권 01 · 신용융자",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Header",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TNC-1",
+   "text": "현금",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TNA-1",
+   "text": "신용",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TN8-1",
+   "text": "금현물",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TN5-1",
+   "text": "매수",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TN3-1",
+   "text": "매도",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TN1-1",
+   "text": "정정",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TMZ-1",
+   "text": "취소",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Header",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TMV-1",
+   "text": "1",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Progress",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TMT-1",
+   "text": "주문 작성",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Progress",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TMQ-1",
+   "text": "2",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Progress",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TMO-1",
+   "text": "주문 조건 검토",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Progress",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TML-1",
+   "text": "3",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Progress",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TMJ-1",
+   "text": "사용자 확인",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Progress",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TMG-1",
+   "text": "4",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Progress",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TME-1",
+   "text": "접수·체결",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Progress",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TMB-1",
+   "text": "주문 입력",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Order Entry",
+    "Order Form",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TMA-1",
+   "text": "현재가 150,850원",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Order Entry",
+    "Order Form",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TM8-1",
+   "text": "주문 유형",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Order Entry",
+    "Order Form",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TM7-1",
+   "text": "시장가 · 신용융자",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Order Entry",
+    "Order Form",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TM5-1",
+   "text": "수량",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Order Entry",
+    "Order Form",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TM4-1",
+   "text": "10주",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Order Entry",
+    "Order Form",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TM1-1",
+   "text": "가격",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Order Entry",
+    "Order Form",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TM0-1",
+   "text": "시장가로 체결",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Order Entry",
+    "Order Form",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TLY-1",
+   "text": "계좌",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Order Entry",
+    "Order Form",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TLX-1",
+   "text": "키움증권 01",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Order Entry",
+    "Order Form",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TLU-1",
+   "text": "10%",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Order Entry",
+    "Order Quick Quantity",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TLS-1",
+   "text": "25%",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Order Entry",
+    "Order Quick Quantity",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TLQ-1",
+   "text": "50%",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Order Entry",
+    "Order Quick Quantity",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TLO-1",
+   "text": "최대",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Order Entry",
+    "Order Quick Quantity",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TLL-1",
+   "text": "주문가능금액",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Order Entry",
+    "Order Quick Quantity",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TLK-1",
+   "text": "31,240,000원",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Order Entry",
+    "Order Quick Quantity",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TLI-1",
+   "text": "현재 매수 1호가",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Order Entry",
+    "Order Quick Quantity",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TLH-1",
+   "text": "150,840원",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Order Entry",
+    "Order Quick Quantity",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TLD-1",
+   "text": "주문 전 최종 확인",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Order Preview",
+    "Preview Heading"
+   ]
+  },
+  {
+   "id": "2TLA-1",
+   "text": "삼성전자 · 시장가 신용 매수",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Order Preview",
+    "Order Hero"
+   ]
+  },
+  {
+   "id": "2TL9-1",
+   "text": "10주",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Order Preview",
+    "Order Hero",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TL8-1",
+   "text": "응답 대기",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Order Preview",
+    "Order Hero",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TL5-1",
+   "text": "주문 방향",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Order Preview",
+    "Order Details",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TL4-1",
+   "text": "매수 (신용융자)",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Order Preview",
+    "Order Details",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TL2-1",
+   "text": "가격 조건",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Order Preview",
+    "Order Details",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TL1-1",
+   "text": "시장가",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Order Preview",
+    "Order Details",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TKZ-1",
+   "text": "현재 매수 1호가",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Order Preview",
+    "Order Details",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TKY-1",
+   "text": "150,840원",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Order Preview",
+    "Order Details",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TKW-1",
+   "text": "계좌",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Order Preview",
+    "Order Details",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TKV-1",
+   "text": "키움증권 01",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Order Preview",
+    "Order Details",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TKR-1",
+   "text": "아직 주문되지 않았습니다",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Order Preview",
+    "Order Safety Notice",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TKQ-1",
+   "text": "아래 주문 확인을 누른 뒤 한 번 더 확인해야 접수됩니다.",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Order Preview",
+    "Order Safety Notice",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TKN-1",
+   "text": "수정",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Order Preview",
+    "Order Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TKL-1",
+   "text": "주문 확인",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Order Preview",
+    "Order Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TKH-1",
+   "text": "주문 접수 정보",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Fees and Execution",
+    "Cost Heading"
+   ]
+  },
+  {
+   "id": "2TKE-1",
+   "text": "주문번호",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Fees and Execution",
+    "Cost Breakdown",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TKD-1",
+   "text": "—",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Fees and Execution",
+    "Cost Breakdown",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TKB-1",
+   "text": "국내거래소구분",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Fees and Execution",
+    "Cost Breakdown",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TKA-1",
+   "text": "—",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Fees and Execution",
+    "Cost Breakdown",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TK8-1",
+   "text": "주문수량",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Fees and Execution",
+    "Cost Breakdown",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TK7-1",
+   "text": "10주",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Fees and Execution",
+    "Cost Breakdown",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TK5-1",
+   "text": "매매구분",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Fees and Execution",
+    "Cost Breakdown",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TK4-1",
+   "text": "시장가",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Fees and Execution",
+    "Cost Breakdown",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TK2-1",
+   "text": "종목코드",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Fees and Execution",
+    "Cost Breakdown",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TK1-1",
+   "text": "005930",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Fees and Execution",
+    "Cost Breakdown",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2WGL-0",
+   "text": "신용거래구분",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Fees and Execution",
+    "Cost Breakdown",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2WGM-0",
+   "text": "33 · 융자",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Fees and Execution",
+    "Cost Breakdown",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2WGO-0",
+   "text": "대출일",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Fees and Execution",
+    "Cost Breakdown",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2WGP-0",
+   "text": "— · 신규 융자",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Fees and Execution",
+    "Cost Breakdown",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TJY-1",
+   "text": "이 주문의 진행 상태",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Fees and Execution",
+    "Execution Status",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TJX-1",
+   "text": "검토 중",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Fees and Execution",
+    "Execution Status",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TJV-1",
+   "text": "1",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Fees and Execution",
+    "Execution Status",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TJT-1",
+   "text": "조건 입력 완료",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Fees and Execution",
+    "Execution Status",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TJS-1",
+   "text": "시장가 · 10주 · 신용융자",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Fees and Execution",
+    "Execution Status",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TJP-1",
+   "text": "2",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Fees and Execution",
+    "Execution Status",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TJN-1",
+   "text": "응답 필드 대기",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Fees and Execution",
+    "Execution Status",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TJM-1",
+   "text": "주문번호 · 거래소구분",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Fees and Execution",
+    "Execution Status",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2TJI-1",
+   "text": "사용자 확인 후 접수",
+   "path": [
+    "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+    "Order Root · 신용 매수 검토",
+    "Order Card Surface",
+    "Order Workspace",
+    "Fees and Execution",
+    "Execution Status",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "2TJ6-1",
+   "name": "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+   "component": "Frame",
+   "w": 1440,
+   "h": 960,
+   "depth": 0
+  },
+  {
+   "id": "2TJ7-1",
+   "name": "Order Root · 신용 매수 검토",
+   "component": "Frame",
+   "w": 1440,
+   "h": 960,
+   "depth": 1
+  },
+  {
+   "id": "2TJ8-1",
+   "name": "Order Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 880,
+   "depth": 2
+  },
+  {
+   "id": "2TMW-1",
+   "name": "Order Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 106,
+   "depth": 3
+  },
+  {
+   "id": "2TND-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2TNF-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2TNG-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2TMX-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2TNB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2TN9-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2TN7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2TN6-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 1,
+   "h": 22,
+   "depth": 5
+  },
+  {
+   "id": "2TN4-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2TN2-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2TN0-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2TMY-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2TMC-1",
+   "name": "Order Progress",
+   "component": "Frame",
+   "w": 0,
+   "h": 84,
+   "depth": 3
+  },
+  {
+   "id": "2TMR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2TMU-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 28,
+   "h": 28,
+   "depth": 5
+  },
+  {
+   "id": "2TMS-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 1,
+   "depth": 5
+  },
+  {
+   "id": "2TMM-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2TMP-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 28,
+   "h": 28,
+   "depth": 5
+  },
+  {
+   "id": "2TMN-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 1,
+   "depth": 5
+  },
+  {
+   "id": "2TMH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2TMK-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 28,
+   "h": 28,
+   "depth": 5
+  },
+  {
+   "id": "2TMI-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 1,
+   "depth": 5
+  },
+  {
+   "id": "2TMD-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 220,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2TMF-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 28,
+   "h": 28,
+   "depth": 5
+  },
+  {
+   "id": "2TJE-1",
+   "name": "Order Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 626,
+   "depth": 3
+  },
+  {
+   "id": "2TLE-1",
+   "name": "Order Entry",
+   "component": "Frame",
+   "w": 420,
+   "h": 626,
+   "depth": 4
+  },
+  {
+   "id": "2TLV-1",
+   "name": "Order Form",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2TM9-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2TM6-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 6
+  },
+  {
+   "id": "2TM2-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 82,
+   "depth": 6
+  },
+  {
+   "id": "2TM3-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 46,
+   "depth": 7
+  },
+  {
+   "id": "2TLZ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 6
+  },
+  {
+   "id": "2TLW-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 6
+  },
+  {
+   "id": "2TLF-1",
+   "name": "Order Quick Quantity",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2TLM-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2TLT-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2TLR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2TLP-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2TLN-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2TLJ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2TLG-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2TKI-1",
+   "name": "Order Preview",
+   "component": "Frame",
+   "w": 520,
+   "h": 626,
+   "depth": 4
+  },
+  {
+   "id": "2TLB-1",
+   "name": "Preview Heading",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2TL6-1",
+   "name": "Order Hero",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2TL7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2TKT-1",
+   "name": "Order Details",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2TL3-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2TL0-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2TKX-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2TKU-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2TKO-1",
+   "name": "Order Safety Notice",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2TKS-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 6
+  },
+  {
+   "id": "2TKP-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2TKJ-1",
+   "name": "Order Actions",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2TKM-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 120,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "2TKK-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "2TJF-1",
+   "name": "Fees and Execution",
+   "component": "Frame",
+   "w": 420,
+   "h": 626,
+   "depth": 4
+  },
+  {
+   "id": "2TKF-1",
+   "name": "Cost Heading",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2TJZ-1",
+   "name": "Cost Breakdown",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2TKC-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2TK9-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2TK6-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2TK3-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2TK0-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2WGK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2WGN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2TJG-1",
+   "name": "Execution Status",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2TJW-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2TJQ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2TJU-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22,
+   "h": 22,
+   "depth": 7
+  },
+  {
+   "id": "2TJR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2TJK-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2TJO-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22,
+   "h": 22,
+   "depth": 7
+  },
+  {
+   "id": "2TJL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2TJH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2TJJ-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 22,
+   "h": 22,
+   "depth": 7
+  }
+ ],
+ "text_multiset": {
+  "삼성전자 주문": 1,
+  "검토 필요": 1,
+  "005930 · 키움증권 01 · 신용융자": 1,
+  "현금": 1,
+  "신용": 1,
+  "금현물": 1,
+  "매수": 1,
+  "매도": 1,
+  "정정": 1,
+  "취소": 1,
+  "1": 2,
+  "주문 작성": 1,
+  "2": 2,
+  "주문 조건 검토": 1,
+  "3": 1,
+  "사용자 확인": 1,
+  "4": 1,
+  "접수·체결": 1,
+  "주문 입력": 1,
+  "현재가 150,850원": 1,
+  "주문 유형": 1,
+  "시장가 · 신용융자": 1,
+  "수량": 1,
+  "10주": 3,
+  "가격": 1,
+  "시장가로 체결": 1,
+  "계좌": 2,
+  "키움증권 01": 2,
+  "10%": 1,
+  "25%": 1,
+  "50%": 1,
+  "최대": 1,
+  "주문가능금액": 1,
+  "31,240,000원": 1,
+  "현재 매수 1호가": 2,
+  "150,840원": 2,
+  "주문 전 최종 확인": 1,
+  "삼성전자 · 시장가 신용 매수": 1,
+  "응답 대기": 1,
+  "주문 방향": 1,
+  "매수 (신용융자)": 1,
+  "가격 조건": 1,
+  "시장가": 2,
+  "아직 주문되지 않았습니다": 1,
+  "아래 주문 확인을 누른 뒤 한 번 더 확인해야 접수됩니다.": 1,
+  "수정": 1,
+  "주문 확인": 1,
+  "주문 접수 정보": 1,
+  "주문번호": 1,
+  "—": 2,
+  "국내거래소구분": 1,
+  "주문수량": 1,
+  "매매구분": 1,
+  "종목코드": 1,
+  "005930": 1,
+  "신용거래구분": 1,
+  "33 · 융자": 1,
+  "대출일": 1,
+  "— · 신규 융자": 1,
+  "이 주문의 진행 상태": 1,
+  "검토 중": 1,
+  "조건 입력 완료": 1,
+  "시장가 · 10주 · 신용융자": 1,
+  "응답 필드 대기": 1,
+  "주문번호 · 거래소구분": 1,
+  "사용자 확인 후 접수": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "87f71354e9e8d9f80efead573d28d78544fbeaedb8e8386c0b9065d12cc0107d"
+}

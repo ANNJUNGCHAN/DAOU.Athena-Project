@@ -1,0 +1,234 @@
+{
+ "board_id": "47N2-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-06 / R04-S10 · 종목찾기 — 시간외 등락률",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "47NP-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-S10 · 종목찾기 — 시간외 등락률",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47NO-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-06 / R04-S10 · 종목찾기 — 시간외 등락률",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47NM-0",
+   "text": "시간외 등락률",
+   "path": [
+    "mini/CC-06 / R04-S10 · 종목찾기 — 시간외 등락률",
+    "Header"
+   ]
+  },
+  {
+   "id": "47NK-0",
+   "text": "매수총잔량",
+   "path": [
+    "mini/CC-06 / R04-S10 · 종목찾기 — 시간외 등락률",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "47NJ-0",
+   "text": "매수 0.4만",
+   "path": [
+    "mini/CC-06 / R04-S10 · 종목찾기 — 시간외 등락률",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "47NH-0",
+   "text": "매도총잔량",
+   "path": [
+    "mini/CC-06 / R04-S10 · 종목찾기 — 시간외 등락률",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "47NG-0",
+   "text": "매도 0.3만",
+   "path": [
+    "mini/CC-06 / R04-S10 · 종목찾기 — 시간외 등락률",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "47NE-0",
+   "text": "누적거래량",
+   "path": [
+    "mini/CC-06 / R04-S10 · 종목찾기 — 시간외 등락률",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "47ND-0",
+   "text": "0.7만주",
+   "path": [
+    "mini/CC-06 / R04-S10 · 종목찾기 — 시간외 등락률",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "47NB-0",
+   "text": "누적거래대금",
+   "path": [
+    "mini/CC-06 / R04-S10 · 종목찾기 — 시간외 등락률",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "47NA-0",
+   "text": "거래대금 56.7억",
+   "path": [
+    "mini/CC-06 / R04-S10 · 종목찾기 — 시간외 등락률",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "47N8-0",
+   "text": "시간외단일가등락율순위",
+   "path": [
+    "mini/CC-06 / R04-S10 · 종목찾기 — 시간외 등락률",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "47N7-0",
+   "text": "상위 5개 표시 · 전체 100개",
+   "path": [
+    "mini/CC-06 / R04-S10 · 종목찾기 — 시간외 등락률",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "47N4-0",
+   "text": "외 85개 항목 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-06 / R04-S10 · 종목찾기 — 시간외 등락률",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "47N2-0",
+   "name": "mini/CC-06 / R04-S10 · 종목찾기 — 시간외 등락률",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "47NL-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47NN-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47N5-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47NI-0",
+   "name": "Fact 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47NF-0",
+   "name": "Fact 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47NC-0",
+   "name": "Fact 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47N9-0",
+   "name": "Fact 4",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47N6-0",
+   "name": "Fact 5",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47N3-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 1,
+  "기준 09:42": 1,
+  "시간외 등락률": 1,
+  "매수총잔량": 1,
+  "매수 0.4만": 1,
+  "매도총잔량": 1,
+  "매도 0.3만": 1,
+  "누적거래량": 1,
+  "0.7만주": 1,
+  "누적거래대금": 1,
+  "거래대금 56.7억": 1,
+  "시간외단일가등락율순위": 1,
+  "상위 5개 표시 · 전체 100개": 1,
+  "외 85개 항목 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "56ef8e074cf0dbc69a088f1dbb947f0228c072759485c6d95e4e60b653d9ecb3"
+}

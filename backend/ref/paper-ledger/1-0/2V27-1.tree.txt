@@ -1,0 +1,166 @@
+Frame "34 · 사이드바 검색 — 결과·빈 결과" (2V27-1) 1680×900
+  Frame "셸 창" (2V2Z-1) 1560×820
+    Frame "05 · Project Recent Sidebar" (2V4B-1) 268×799
+      Frame "Primary Actions" (2V5E-1) 242×164
+        Frame "Frame" (2V61-1) 242×28
+          Text "ATHENA" (2V65-1) 53×18 "ATHENA"
+          SVG "SVG" (2V62-1) 15×15
+            SVGVisualElement "Circle" (2V64-1) 8×8
+            SVGVisualElement "Path" (2V63-1) 3×3
+        Frame "Frame" (2V5W-1) 242×30
+          SVG "SVG" (2V5Y-1) 15×15
+            SVGVisualElement "Path" (2V60-1) 6×0
+            SVGVisualElement "Path" (2V5Z-1) 10×10
+          Text "새 채팅" (2V5X-1) 41×16 "새 채팅"
+        Frame "Frame" (2V5P-1) 242×30
+          SVG "SVG" (2V5R-1) 15×15
+            SVGVisualElement "Circle" (2V5V-1) 3×3
+            SVGVisualElement "Circle" (2V5U-1) 3×3
+            SVGVisualElement "Circle" (2V5T-1) 3×3
+            SVGVisualElement "Path" (2V5S-1) 5×5
+          Text "그래프" (2V5Q-1) 36×16 "그래프"
+        Frame "Frame" (2V5K-1) 242×30
+          SVG "SVG" (2V5M-1) 15×15
+            SVGVisualElement "Circle" (2V5O-1) 4×4
+            SVGVisualElement "Path" (2V5N-1) 8×4
+          Text "에이전트" (2V5L-1) 48×16 "에이전트"
+        Frame "Frame" (2V5F-1) 242×30
+          SVG "SVG" (2V5H-1) 15×15
+            SVGVisualElement "Path" (2V5J-1) 9×10
+            SVGVisualElement "Path" (2V5I-1) 0×1
+          Text "플러그인" (2V5G-1) 48×16 "플러그인"
+      Frame "Project Tree" (2V4U-1) 242×129
+        Frame "Frame" (2V5C-1) 242×16
+          Text "프로젝트" (2V5D-1) 43×12 "프로젝트"
+        Frame "Frame" (2V50-1) 242×32
+          SVG "SVG" (2V59-1) 15×15
+            SVGVisualElement "Path" (2V5B-1) 11×8
+            SVGVisualElement "Path" (2V5A-1) 8×3
+          Text "아테나" (2V58-1) 155×16 "아테나"
+          SVG "SVG" (2V54-1) 17×17
+            SVGVisualElement "Circle" (2V57-1) 2×2
+            SVGVisualElement "Circle" (2V56-1) 2×2
+            SVGVisualElement "Circle" (2V55-1) 2×2
+          SVG "SVG" (2V51-1) 17×17
+            SVGVisualElement "Path" (2V53-1) 6×0
+            SVGVisualElement "Path" (2V52-1) 11×11
+        Frame "Frame" (2V4Y-1) 242×27
+          SVG "Mode 대화" (49XC-0) 14×14
+            SVGVisualElement "Path" (49XD-0) 9×9
+          Text "백엔드 API 개수 확인" (2V4Z-1) 201×14 "백엔드 API 개수 확인"
+        Frame "Frame" (2V4V-1) 242×29
+          SVG "Mode 그래프" (49XF-0) 14×14
+            SVGVisualElement "Circle" (49XG-0) 2×2
+            SVGVisualElement "Circle" (49XH-0) 2×2
+            SVGVisualElement "Circle" (49XI-0) 2×2
+            SVGVisualElement "Path" (49XJ-0) 5×4
+          Text "앱 전체 기능 검수" (2V4X-1) 190×14 "앱 전체 기능 검수"
+          Rectangle "Rectangle" (2V4W-1) 6×6
+      Frame "Recent Conversations" (2V4J-1) 242×126
+        Frame "Frame" (2V4R-1) 242×20
+          Text "최근" (2V4T-1) 22×12 "최근"
+          Text "전체" (2V4S-1) 18×12 "전체"
+        Frame "Frame" (2V4O-1) 242×27
+          SVG "Mode 그래프" (49XL-0) 14×14
+            SVGVisualElement "Circle" (49XM-0) 2×2
+            SVGVisualElement "Circle" (49XN-0) 2×2
+            SVGVisualElement "Circle" (49XO-0) 2×2
+            SVGVisualElement "Path" (49XP-0) 5×4
+          Text "앱 전체 기능 검수" (2V4Q-1) 190×14 "앱 전체 기능 검수"
+          Rectangle "Rectangle" (2V4P-1) 6×6
+        Frame "Frame" (2V4M-1) 242×27
+          SVG "Mode 에이전트" (49XR-0) 14×14
+            SVGVisualElement "Circle" (49XS-0) 4×4
+            SVGVisualElement "Path" (49XT-0) 8×4
+          Text "삼성전자 주요 변동 알림" (2V4N-1) 122×14 "삼성전자 주요 변동 알림"
+        Frame "Frame" (2V4K-1) 242×27
+          SVG "Mode 대화" (49XV-0) 14×14
+            SVGVisualElement "Path" (49XW-0) 9×9
+          Text "ETF 자금 흐름" (2V4L-1) 69×14 "ETF 자금 흐름"
+      Frame "Account Footer" (2V4C-1) 242×314
+        Frame "Frame" (2V4D-1) 243×38
+          Frame "Frame" (2V4H-1) 22×22
+            Text "AN" (2V4I-1) 13×12 "AN"
+          Text "모의-주력" (2V4G-1) 174×14 "모의-주력"
+          SVG "SVG" (2V4E-1) 13×13
+            SVGVisualElement "Path" (2V4F-1) 5×3
+    Frame "캔버스 — 빈 상태" (2V3K-1) 850×798
+      Frame "빈 상태" (2V3L-1) 420×290
+        SVG "SVG" (2V3Z-1) 120×74
+          SVGVisualElement "Line" (2V4A-1) 32×10
+          SVGVisualElement "Line" (2V49-1) 8×28
+          SVGVisualElement "Line" (2V48-1) 36×24
+          SVGVisualElement "Line" (2V47-1) 28×10
+          SVGVisualElement "Line" (2V46-1) 18×16
+          SVGVisualElement "Circle" (2V45-1) 18×18
+          SVGVisualElement "Circle" (2V44-1) 14×14
+          SVGVisualElement "Circle" (2V43-1) 9×9
+          SVGVisualElement "Circle" (2V42-1) 8×8
+          SVGVisualElement "Circle" (2V41-1) 8×8
+          SVGVisualElement "Circle" (2V40-1) 7×7
+        Frame "빈 상태 문구" (2V3W-1) 334×96
+          Text "아직 답변 카드가 없습니다" (2V3Y-1) 239×24 "아직 답변 카드가 없습니다"
+          Text "그동안 나눈 대화와 체결로 성향은 계…" (2V3X-1) 334×42 "그동안 나눈 대화와 체결로 성향은 계속 쌓이고 있습니다.
+무엇이 쌓였는지 지금 볼 수 있습니다."
+        Frame "빈 상태 수치" (2V3Q-1) 259×52
+          Text "엔티티 312" (2V3V-1) 56×14 "엔티티 312"
+          Text "·" (2V3U-1) 3×14 "·"
+          Text "테마 군집 7" (2V3T-1) 58×14 "테마 군집 7"
+          Text "·" (2V3S-1) 3×14 "·"
+          Text "최근 7일 +14" (2V3R-1) 67×14 "최근 7일 +14"
+        Frame "빈 상태 CTA" (2V3O-1) 141×38
+          Text "성향 그래프 열기" (2V3P-1) 101×16 "성향 그래프 열기"
+        Frame "확인 필요 힌트" (2V3M-1) 213×30
+          Text "확인이 필요한 것 3건이 기다리고 있…" (2V3N-1) 213×14 "확인이 필요한 것 3건이 기다리고 있습니다"
+    Frame "채팅 400" (2V30-1) 400×798
+      Frame "대화 본문" (2V3H-1) 398×718
+        Text "새 대화" (2V3J-1) 44×16 "새 대화"
+        Text "종목·재무·공시를 물어보면
+답이 캔버…" (2V3I-1) 169×38 "종목·재무·공시를 물어보면
+답이 캔버스에 카드로 쌓입니다"
+      Frame "입력 스택" (2V31-1) 398×78
+        Frame "Frame" (2V3F-1) 366×16
+          Text "무엇이든 물어보세요" (2V3G-1) 122×16 "무엇이든 물어보세요"
+        Frame "control-strip" (2V32-1) 366×26
+          Frame "키우미 점 — 모드 전환" (2V3C-1) 22×22
+            Rectangle "Rectangle" (2V3E-1) 3×7
+            Rectangle "Rectangle" (2V3D-1) 3×7
+          Frame "Frame" (2V3A-1) 44×26
+            Text "답변" (2V3B-1) 22×14 "답변"
+          Frame "Frame" (2V38-1) 61×24
+            Text "CLAUDE" (2V39-1) 41×14 "CLAUDE"
+          Frame "Frame" (2V36-1) 52×24
+            Text "감시 2" (2V37-1) 32×14 "감시 2"
+          Rectangle "Rectangle" (2V35-1) 61×0
+          Frame "Frame" (2V33-1) 86×24
+            Text "OPUS · HIGH" (2V34-1) 66×12 "OPUS · HIGH"
+  Frame "검색 패널" (2V28-1) 440×277
+    Frame "Frame" (2V66-1) 410×38
+      Text "삼성전자" (2V67-1) 52×16 "삼성전자"
+      Text "대화·카드 검색" (2V68-1) 72×12 "대화·카드 검색"
+    Frame "Frame" (2V69-1) 410×170
+      Frame "Frame" (2V6A-1) 410×20
+        Text "대화 2건" (2V6B-1) 406×12 "대화 2건"
+      Frame "Frame" (2V6C-1) 410×38
+        Text "삼성전자 3개월 차트 보여줘" (2V6D-1) 152×16 "삼성전자 3개월 차트 보여줘"
+        Text "오늘 09:41" (2V6E-1) 56×12 "오늘 09:41"
+      Frame "Frame" (2V6F-1) 410×38
+        Text "삼성전자 수급 누가 사는지 알려줘" (2V6G-1) 185×16 "삼성전자 수급 누가 사는지 알려줘"
+        Text "어제" (2V6H-1) 20×12 "어제"
+      Frame "Frame" (2V6I-1) 410×20
+        Text "캔버스 카드 1건" (2V6J-1) 406×12 "캔버스 카드 1건"
+      Frame "Frame" (2V6K-1) 410×38
+        Text "차트 · 삼성전자 일봉" (2V6L-1) 112×16 "차트 · 삼성전자 일봉"
+        Text "이 대화" (2V6M-1) 36×12 "이 대화"
+    Frame "Frame" (2V6N-1) 410×19
+      Text "↑↓ 이동 · Enter 열기 · E…" (2V6O-1) 174×12 "↑↓ 이동 · Enter 열기 · Esc 닫기"
+      Text "3건" (2V6P-1) 16×12 "3건"
+  Frame "Frame" (2V6R-1) 340×198
+    Frame "Frame" (2V6S-1) 310×38
+      Text "금현물 ETF 적립" (2V6T-1) 95×16 "금현물 ETF 적립"
+      Text "대화·카드 검색" (2V6U-1) 72×12 "대화·카드 검색"
+    Frame "Frame" (2V6V-1) 310×120
+      Text "결과 없음" (2V6W-1) 57×16 "결과 없음"
+      Text "아직 이 주제로 나눈 대화가 없습니다" (2V6X-1) 185×16 "아직 이 주제로 나눈 대화가 없습니다"
+      Frame "Frame" (2V6Y-1) 137×36
+        Text "새 대화로 물어보기" (2V6Z-1) 105×16 "새 대화로 물어보기"

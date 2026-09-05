@@ -1,0 +1,342 @@
+{
+ "board_id": "4780-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "478Y-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "478X-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "478V-0",
+   "text": "시장 상태와 VI 발동",
+   "path": [
+    "mini/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Header"
+   ]
+  },
+  {
+   "id": "478T-0",
+   "text": "장시작예상잔여시간",
+   "path": [
+    "mini/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "478S-0",
+   "text": "장 시작 09:00 · 잔여 없음",
+   "path": [
+    "mini/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "478Q-0",
+   "text": "수량",
+   "path": [
+    "mini/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "478P-0",
+   "text": "3건",
+   "path": [
+    "mini/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "478N-0",
+   "text": "핵심",
+   "path": [
+    "mini/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "478M-0",
+   "text": "842.15",
+   "path": [
+    "mini/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "478J-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "478I-0",
+   "text": "값",
+   "path": [
+    "mini/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "478H-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "478F-0",
+   "text": "누적거래대금",
+   "path": [
+    "mini/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "478E-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "478C-0",
+   "text": "272억",
+   "path": [
+    "mini/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "478B-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "4789-0",
+   "text": "괴리율 동적",
+   "path": [
+    "mini/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4788-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4786-0",
+   "text": "괴리 -10.1%",
+   "path": [
+    "mini/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "4785-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "4782-0",
+   "text": "스칼라 1개, 행 1개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "4780-0",
+   "name": "mini/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "478U-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "478W-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4783-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "478K-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "478R-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "478O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "478L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "478G-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "478A-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "478D-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4784-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4787-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4781-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "시장 상태와 VI 발동": 1,
+  "장시작예상잔여시간": 1,
+  "장 시작 09:00 · 잔여 없음": 1,
+  "수량": 1,
+  "3건": 1,
+  "핵심": 1,
+  "842.15": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "누적거래대금": 1,
+  "272억": 1,
+  "괴리율 동적": 1,
+  "괴리 -10.1%": 1,
+  "스칼라 1개, 행 1개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "f5100c1ce3d6bc07653c385e807cb21a3085bf333799003113b25d15bb5b256d"
+}

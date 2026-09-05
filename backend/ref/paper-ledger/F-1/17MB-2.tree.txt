@@ -1,0 +1,137 @@
+Frame "CC-06 / R06-B · 조건검색·이어보기·실시간 해제" (17MB-2) 1440×960
+  Frame "Condition Search Header" (17MC-2) 0×92
+    Frame "Frame" (17MD-2) 0×0
+      Text "거래량이 급증한 반도체 종목을 실시간…" (17ME-2) 0×0 "거래량이 급증한 반도체 종목을 실시간으로 찾아줘"
+      Text "조건 선택·일반 검색·이어보기·실시간…" (17MF-2) 0×0 "조건 선택·일반 검색·이어보기·실시간 등록·중지·해제를 한 카드에서 관리합니다."
+    Frame "Frame" (17MG-2) 0×0
+      Frame "Frame" (17MH-2) 0×34
+        Rectangle "Rectangle" (17MI-2) 7×7
+        Text "실시간 등록" (17MJ-2) 0×0 "실시간 등록"
+      Frame "Frame" (17MK-2) 0×34
+        Text "조건 1개 활성" (17ML-2) 0×0 "조건 1개 활성"
+  Frame "Condition Search Workspace" (17MN-2) 0×0
+    Frame "Condition Results" (17MP-2) 800×0
+      Frame "Frame" (17MQ-2) 0×0
+        Frame "Frame" (17MR-2) 0×0
+          Frame "Frame" (17MS-2) 0×34
+            Text "거래량 급증 · 반도체" (17MT-2) 0×0 "거래량 급증 · 반도체"
+          Frame "Frame" (17MU-2) 0×34
+            Text "외국인 연속 순매수" (17MV-2) 0×0 "외국인 연속 순매수"
+          Frame "Frame" (17MW-2) 0×34
+            Text "52주 신고가" (17MX-2) 0×0 "52주 신고가"
+        Text "일치 34종목" (17MY-2) 0×0 "일치 34종목"
+      Frame "Frame" (17MZ-2) 0×0
+        Frame "Frame" (17N0-2) 0×0
+          Text "거래량 배수" (17N1-2) 0×0 "거래량 배수"
+          Text "전일 대비 3배+" (17N2-2) 0×0 "전일 대비 3배+"
+        Frame "Frame" (17N3-2) 0×0
+          Text "대상 시장" (17N4-2) 0×0 "대상 시장"
+          Text "KOSPI · KOSDAQ" (17N5-2) 0×0 "KOSPI · KOSDAQ"
+        Frame "Frame" (17N6-2) 0×0
+          Text "업종 범위" (17N7-2) 0×0 "업종 범위"
+          Text "반도체" (17N8-2) 0×0 "반도체"
+      Frame "Frame" (17NA-2) 0×40
+        Text "종목" (17NB-2) 250×0 "종목"
+        Text "현재가" (17NC-2) 140×0 "현재가"
+        Text "거래량 배수" (17ND-2) 130×0 "거래량 배수"
+        Text "등락률" (17NE-2) 130×0 "등락률"
+        Text "상태" (17NF-2) 102×0 "상태"
+      Frame "Frame" (17N9-2) 0×0
+        Frame "Frame" (17NG-2) 0×76
+          Frame "Frame" (17NH-2) 232×0
+            Text "한미반도체" (17NI-2) 0×0 "한미반도체"
+            Text "042700 · KOSPI" (17NJ-2) 0×0 "042700 · KOSPI"
+          Text "128,650원" (17NK-2) 140×0 "128,650원"
+          Text "5.8배" (17NL-2) 130×0 "5.8배"
+          Text "+8.2%" (17NM-2) 130×0 "+8.2%"
+          Text "실시간" (17NN-2) 102×0 "실시간"
+        Frame "Frame" (17NO-2) 0×76
+          Frame "Frame" (17NP-2) 232×0
+            Text "제주반도체" (17NQ-2) 0×0 "제주반도체"
+            Text "080220 · KOSDAQ" (17NR-2) 0×0 "080220 · KOSDAQ"
+          Text "32,450원" (17NS-2) 140×0 "32,450원"
+          Text "4.7배" (17NT-2) 130×0 "4.7배"
+          Text "+5.6%" (17NU-2) 130×0 "+5.6%"
+          Text "실시간" (17NV-2) 102×0 "실시간"
+        Frame "Frame" (17NW-2) 0×76
+          Frame "Frame" (17NX-2) 232×0
+            Text "DB하이텍" (17NY-2) 0×0 "DB하이텍"
+            Text "000990 · KOSPI" (17NZ-2) 0×0 "000990 · KOSPI"
+          Text "61,200원" (17O0-2) 140×0 "61,200원"
+          Text "3.9배" (17O1-2) 130×0 "3.9배"
+          Text "+3.4%" (17O2-2) 130×0 "+3.4%"
+          Text "실시간" (17O3-2) 102×0 "실시간"
+        Frame "Frame" (17O4-2) 0×76
+          Frame "Frame" (17O5-2) 232×0
+            Text "리노공업" (17O6-2) 0×0 "리노공업"
+            Text "058470 · KOSDAQ" (17O7-2) 0×0 "058470 · KOSDAQ"
+          Text "214,500원" (17O8-2) 140×0 "214,500원"
+          Text "3.4배" (17O9-2) 130×0 "3.4배"
+          Text "−0.8%" (17OA-2) 130×0 "−0.8%"
+          Text "실시간" (17OB-2) 102×0 "실시간"
+      Frame "List Footer · Collapsed" (1VGR-1) 800×38
+        Text "상위 10개 표시 · 전체 34종목" (1VGS-1) 0×0 "상위 10개 표시 · 전체 34종목"
+        Frame "Frame" (1VGT-1) 0×28
+          Text "더보기" (1VGU-1) 0×0 "더보기"
+      Frame "Frame" (17OJ-2) 0×0
+        Rectangle "Rectangle" (17OK-2) 8×8
+        Text "새로 조건에 들어온 종목은 위에 추가…" (17OL-2) 0×0 "새로 조건에 들어온 종목은 위에 추가되고, 조건을 벗어난 종목은 이력에 남습니다."
+    Frame "Condition Realtime Lifecycle" (17ON-2) 492×0
+      Frame "Frame" (17OO-2) 0×0
+        Text "실시간 조건 상태" (17OP-2) 0×0 "실시간 조건 상태"
+        Frame "Frame" (17OQ-2) 0×0
+          Rectangle "Rectangle" (17OR-2) 8×8
+          Text "수신 중" (17OS-2) 0×0 "수신 중"
+      Frame "Frame" (17OT-2) 0×0
+        Frame "Frame" (17OU-2) 0×0
+          Text "활성 조건" (17OV-2) 0×0 "활성 조건"
+          Text "거래량 급증 · 반도체" (17OW-2) 0×0 "거래량 급증 · 반도체"
+        Frame "Frame" (17OX-2) 0×0
+          Text "등록 종목" (17OY-2) 0×0 "등록 종목"
+          Text "34종목" (17OZ-2) 0×0 "34종목"
+        Frame "Frame" (17P0-2) 0×0
+          Text "마지막 이벤트" (17P1-2) 0×0 "마지막 이벤트"
+          Text "14:31:14" (17P2-2) 0×0 "14:31:14"
+        Frame "Frame" (17P3-2) 0×0
+          Text "재연결 정책" (17P4-2) 0×0 "재연결 정책"
+          Text "마지막 정상값 유지" (17P5-2) 0×0 "마지막 정상값 유지"
+      Frame "Frame" (17P6-2) 0×0
+        Frame "Frame" (17P7-2) 0×0
+          Text "최근 변화" (17P8-2) 0×0 "최근 변화"
+          Text "3건" (17P9-2) 0×0 "3건"
+        Frame "Frame" (17PA-2) 0×0
+          Rectangle "Rectangle" (17PB-2) 8×8
+          Frame "Frame" (17PC-2) 0×0
+            Text "한미반도체 조건 진입" (17PD-2) 0×0 "한미반도체 조건 진입"
+            Text "거래량 5.8배 · 14:31:14" (17PE-2) 0×0 "거래량 5.8배 · 14:31:14"
+        Frame "Frame" (17PF-2) 0×0
+          Rectangle "Rectangle" (17PG-2) 8×8
+          Frame "Frame" (17PH-2) 0×0
+            Text "리노공업 조건 유지" (17PI-2) 0×0 "리노공업 조건 유지"
+            Text "등락률 −0.8% · 14:30:56" (17PJ-2) 0×0 "등락률 −0.8% · 14:30:56"
+        Frame "Frame" (17PK-2) 0×0
+          Rectangle "Rectangle" (17PL-2) 8×8
+          Frame "Frame" (17PM-2) 0×0
+            Text "테스 조건 이탈" (17PN-2) 0×0 "테스 조건 이탈"
+            Text "거래량 배수 2.9배 · 14:30:…" (17PO-2) 0×0 "거래량 배수 2.9배 · 14:30:41"
+      Frame "Frame" (17PP-2) 0×0
+        Text "연결 상태 문법" (17PQ-2) 0×0 "연결 상태 문법"
+        Frame "Frame" (17PR-2) 0×0
+          Frame "Frame" (17PS-2) 0×0
+            Rectangle "Rectangle" (17PT-2) 7×7
+            Text "수신 중" (17PU-2) 0×0 "수신 중"
+          Frame "Frame" (17PV-2) 0×0
+            Rectangle "Rectangle" (17PW-2) 7×7
+            Text "재연결" (17PX-2) 0×0 "재연결"
+          Frame "Frame" (17PY-2) 0×0
+            Rectangle "Rectangle" (17PZ-2) 7×7
+            Text "중지됨" (17Q0-2) 0×0 "중지됨"
+        Text "재연결 중에는 마지막 정상 결과와 기…" (17Q1-2) 0×0 "재연결 중에는 마지막 정상 결과와 기준 시각을 그대로 표시합니다."
+      Frame "Frame" (17Q2-2) 0×0
+        Frame "Frame" (17Q3-2) 0×46
+          Text "일시 중지" (17Q4-2) 0×0 "일시 중지"
+        Frame "Frame" (17Q5-2) 0×46
+          Text "실시간 해제" (17Q6-2) 0×0 "실시간 해제"
+      Frame "Frame" (17Q7-2) 0×0
+        Rectangle "Rectangle" (17Q8-2) 8×8
+        Text "해제하면 새 이벤트 수신만 멈추고 현…" (17Q9-2) 0×0 "해제하면 새 이벤트 수신만 멈추고 현재 결과와 이력은 남습니다."

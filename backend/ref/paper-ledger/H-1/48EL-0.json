@@ -1,0 +1,340 @@
+{
+ "board_id": "48EL-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "48FJ-0",
+   "text": "",
+   "path": [
+    "mini/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "48FI-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "48FG-0",
+   "text": "시간외 단일가 단계별 낱값 호가",
+   "path": [
+    "mini/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+    "Header"
+   ]
+  },
+  {
+   "id": "48FE-0",
+   "text": "순서",
+   "path": [
+    "mini/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48FD-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48FC-0",
+   "text": "값",
+   "path": [
+    "mini/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48FB-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48F9-0",
+   "text": "01",
+   "path": [
+    "mini/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "48F8-0",
+   "text": "매도호가총잔량직전대비",
+   "path": [
+    "mini/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+    "Body",
+    "Rank 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48F7-0",
+   "text": "",
+   "path": [
+    "mini/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+    "Body",
+    "Rank 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48F5-0",
+   "text": "+2,140",
+   "path": [
+    "mini/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "48F4-0",
+   "text": "",
+   "path": [
+    "mini/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "48F2-0",
+   "text": "02",
+   "path": [
+    "mini/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "48F1-0",
+   "text": "매수호가총잔량직전대비",
+   "path": [
+    "mini/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+    "Body",
+    "Rank 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48F0-0",
+   "text": "",
+   "path": [
+    "mini/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+    "Body",
+    "Rank 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48EY-0",
+   "text": "−1,380",
+   "path": [
+    "mini/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "48EX-0",
+   "text": "",
+   "path": [
+    "mini/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "48EV-0",
+   "text": "03",
+   "path": [
+    "mini/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "48EU-0",
+   "text": "시간외단일가_매도호가총잔량",
+   "path": [
+    "mini/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+    "Body",
+    "Rank 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48ET-0",
+   "text": "",
+   "path": [
+    "mini/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+    "Body",
+    "Rank 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48ER-0",
+   "text": "113,820 / 79,760",
+   "path": [
+    "mini/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "48EQ-0",
+   "text": "",
+   "path": [
+    "mini/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "48EN-0",
+   "text": "외 1개 행 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48EL-0",
+   "name": "mini/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "48FF-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48FH-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48EO-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48FA-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48F3-0",
+   "name": "Rank 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48F6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48EW-0",
+   "name": "Rank 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48EZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48EP-0",
+   "name": "Rank 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48ES-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48EM-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 7,
+  "기준 09:42": 1,
+  "시간외 단일가 단계별 낱값 호가": 1,
+  "순서": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "01": 1,
+  "매도호가총잔량직전대비": 1,
+  "+2,140": 1,
+  "02": 1,
+  "매수호가총잔량직전대비": 1,
+  "−1,380": 1,
+  "03": 1,
+  "시간외단일가_매도호가총잔량": 1,
+  "113,820 / 79,760": 1,
+  "외 1개 행 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "5b71e0e8cfb8bea6f379507d17a0a8b6e15927449fa579392ed92f37ea5feb3c"
+}

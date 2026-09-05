@@ -1,0 +1,506 @@
+{
+ "board_id": "3ZNO-0",
+ "page": "B-2",
+ "page_name": "플러그인",
+ "name": "09 · 플러그인 창 복원",
+ "width": 1680,
+ "height": 986,
+ "texts": [
+  {
+   "id": "3ZNQ-0",
+   "text": "창을 다시 열었을 때",
+   "path": [
+    "09 · 플러그인 창 복원",
+    "board-head"
+   ]
+  },
+  {
+   "id": "3ZNR-0",
+   "text": "작업하던 것이 그대로 남습니다",
+   "path": [
+    "09 · 플러그인 창 복원",
+    "board-head"
+   ]
+  },
+  {
+   "id": "3ZNV-0",
+   "text": "권한 초안",
+   "path": [
+    "09 · 플러그인 창 복원",
+    "columns",
+    "col-draft"
+   ]
+  },
+  {
+   "id": "3ZNY-0",
+   "text": "종목 검색",
+   "path": [
+    "09 · 플러그인 창 복원",
+    "columns",
+    "col-draft",
+    "toggles",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZO2-0",
+   "text": "시세 조회",
+   "path": [
+    "09 · 플러그인 창 복원",
+    "columns",
+    "col-draft",
+    "toggles",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZO6-0",
+   "text": "시총 상위",
+   "path": [
+    "09 · 플러그인 창 복원",
+    "columns",
+    "col-draft",
+    "toggles",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZOB-0",
+   "text": "그 사이 바뀐 기능: 시세 조회 · 종목 검색",
+   "path": [
+    "09 · 플러그인 창 복원",
+    "columns",
+    "col-draft",
+    "발산 알림"
+   ]
+  },
+  {
+   "id": "3ZOE-0",
+   "text": "현재 값으로 초기화",
+   "path": [
+    "09 · 플러그인 창 복원",
+    "columns",
+    "col-draft",
+    "draft-actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZOG-0",
+   "text": "초안대로 저장",
+   "path": [
+    "09 · 플러그인 창 복원",
+    "columns",
+    "col-draft",
+    "draft-actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZOJ-0",
+   "text": "미전송 입력",
+   "path": [
+    "09 · 플러그인 창 복원",
+    "columns",
+    "col-unsent"
+   ]
+  },
+  {
+   "id": "3ZOL-0",
+   "text": "공시 페이지 읽는 플러그인 중에",
+   "path": [
+    "09 · 플러그인 창 복원",
+    "columns",
+    "col-unsent",
+    "chat-input"
+   ]
+  },
+  {
+   "id": "3ZON-0",
+   "text": "쓰다 만 문장이 그대로 남아 있습니다",
+   "path": [
+    "09 · 플러그인 창 복원",
+    "columns",
+    "col-unsent"
+   ]
+  },
+  {
+   "id": "3ZOQ-0",
+   "text": "제안 대기 카드",
+   "path": [
+    "09 · 플러그인 창 복원",
+    "columns",
+    "col-pending"
+   ]
+  },
+  {
+   "id": "3ZOT-0",
+   "text": "제안 대기",
+   "path": [
+    "09 · 플러그인 창 복원",
+    "columns",
+    "col-pending",
+    "card-pending",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZOU-0",
+   "text": "웹 문서 읽기 설치",
+   "path": [
+    "09 · 플러그인 창 복원",
+    "columns",
+    "col-pending",
+    "card-pending"
+   ]
+  },
+  {
+   "id": "3ZOW-0",
+   "text": "거부",
+   "path": [
+    "09 · 플러그인 창 복원",
+    "columns",
+    "col-pending",
+    "card-pending",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZOY-0",
+   "text": "승인",
+   "path": [
+    "09 · 플러그인 창 복원",
+    "columns",
+    "col-pending",
+    "card-pending",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZP1-0",
+   "text": "만료됨",
+   "path": [
+    "09 · 플러그인 창 복원",
+    "columns",
+    "col-pending",
+    "card-expired",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZP2-0",
+   "text": "한국 주식 시세 · 기능 허용",
+   "path": [
+    "09 · 플러그인 창 복원",
+    "columns",
+    "col-pending",
+    "card-expired"
+   ]
+  },
+  {
+   "id": "3ZP4-0",
+   "text": "승인",
+   "path": [
+    "09 · 플러그인 창 복원",
+    "columns",
+    "col-pending",
+    "card-expired",
+    "btn-disabled"
+   ]
+  },
+  {
+   "id": "3ZP6-0",
+   "text": "다시 제안받기",
+   "path": [
+    "09 · 플러그인 창 복원",
+    "columns",
+    "col-pending",
+    "card-expired",
+    "chip-again"
+   ]
+  },
+  {
+   "id": "3ZP9-0",
+   "text": "앱을 완전히 껐다 켜면 대기 중인 제안은 사라집니다",
+   "path": [
+    "09 · 플러그인 창 복원",
+    "하단 경계 문구"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "3ZNO-0",
+   "name": "09 · 플러그인 창 복원",
+   "component": "Frame",
+   "w": 1680,
+   "h": 986,
+   "depth": 0
+  },
+  {
+   "id": "3ZNP-0",
+   "name": "board-head",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "3ZNS-0",
+   "name": "columns",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "3ZNU-0",
+   "name": "col-draft",
+   "component": "Frame",
+   "w": 514,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "3ZNW-0",
+   "name": "toggles",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZNX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZNZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 34,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "3ZO0-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3ZO1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZO3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 34,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "3ZO4-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3ZO5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZO7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 34,
+   "h": 20,
+   "depth": 5
+  },
+  {
+   "id": "3ZO8-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 16,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "3ZOA-0",
+   "name": "발산 알림",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZOC-0",
+   "name": "draft-actions",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZOD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZOF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZOI-0",
+   "name": "col-unsent",
+   "component": "Frame",
+   "w": 514,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "3ZOK-0",
+   "name": "chat-input",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZOM-0",
+   "name": "caret",
+   "component": "Frame",
+   "w": 2,
+   "h": 18,
+   "depth": 4
+  },
+  {
+   "id": "3ZOP-0",
+   "name": "col-pending",
+   "component": "Frame",
+   "w": 514,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "3ZOR-0",
+   "name": "card-pending",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZOS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZOV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZOX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZOZ-0",
+   "name": "card-expired",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "3ZP0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZP3-0",
+   "name": "btn-disabled",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZP5-0",
+   "name": "chip-again",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "3ZP8-0",
+   "name": "하단 경계 문구",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "창을 다시 열었을 때": 1,
+  "작업하던 것이 그대로 남습니다": 1,
+  "권한 초안": 1,
+  "종목 검색": 1,
+  "시세 조회": 1,
+  "시총 상위": 1,
+  "그 사이 바뀐 기능: 시세 조회 · 종목 검색": 1,
+  "현재 값으로 초기화": 1,
+  "초안대로 저장": 1,
+  "미전송 입력": 1,
+  "공시 페이지 읽는 플러그인 중에": 1,
+  "쓰다 만 문장이 그대로 남아 있습니다": 1,
+  "제안 대기 카드": 1,
+  "제안 대기": 1,
+  "웹 문서 읽기 설치": 1,
+  "거부": 1,
+  "승인": 2,
+  "만료됨": 1,
+  "한국 주식 시세 · 기능 허용": 1,
+  "다시 제안받기": 1,
+  "앱을 완전히 껐다 켜면 대기 중인 제안은 사라집니다": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "b02caa7a43a0429a62fe97a9d196a1df8c44238d3bfa1d551f896115abe8a611"
+}

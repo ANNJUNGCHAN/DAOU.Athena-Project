@@ -1,0 +1,361 @@
+Frame "CC-01 / R10-T2-X3 · 거래내역 상세" (3LGC-0) 1440×1098
+  Frame "Account Root · 예수금·결제" (3LGD-0) 1440×1098
+    Frame "Account Card Surface" (3LGE-0) 1360×1018
+      Frame "Account Header" (3LQV-0) 0×106
+        Frame "Frame" (3LRB-0) 0×0
+          Frame "Frame" (3LRD-0) 0×0
+            Text "내 계좌" (3LRG-0) 0×0 "내 계좌"
+            Frame "Frame" (3LRE-0) 0×0
+              Text "실시간" (3LRF-0) 0×0 "실시간"
+          Text "키움증권 종합계좌 ****4721 ·…" (3LRC-0) 0×0 "키움증권 종합계좌 ****4721 · 개인종합 · 마지막 갱신 09:42:18"
+        Frame "Frame" (3LQW-0) 0×0
+          Frame "Frame" (3LR9-0) 0×0
+            Text "자산 종합" (3LRA-0) 0×0 "자산 종합"
+          Frame "Frame" (3LR7-0) 0×0
+            Text "보유종목" (3LR8-0) 0×0 "보유종목"
+          Frame "Frame" (3LR5-0) 0×0
+            Text "예수금·결제" (3LR6-0) 0×0 "예수금·결제"
+          Frame "Frame" (3LR3-0) 0×0
+            Text "손익·성과" (3LR4-0) 0×0 "손익·성과"
+          Frame "Frame" (3LR1-0) 0×0
+            Text "주문·체결" (3LR2-0) 0×0 "주문·체결"
+          Frame "Frame" (3LQZ-0) 0×0
+            Text "증거금·담보" (3LR0-0) 0×0 "증거금·담보"
+          Frame "Frame" (3LQX-0) 0×0
+            Text "금현물" (3LQY-0) 0×0 "금현물"
+      Frame "Account Summary Strip" (3LQA-0) 0×116
+        Frame "Frame" (3LQR-0) 340×78
+          Text "총자산" (3LQU-0) 0×0 "총자산"
+          Text "raw|ka01690|body|tot_evlt_amt" (3LQT-0) 0×0 "124,580,240원"
+          Text "raw|ka01690|body|tot_prft_rt" (3LQS-0) 0×0 "수익률 +4.96%"
+        Frame "Frame" (3LQN-0) 265×78
+          Text "주문가능금액" (3LQQ-0) 0×0 "주문가능금액"
+          Text "raw|kt00001|body|d2_pymn_alow_amt" (3LQP-0) 0×0 "31,240,000원"
+          Text "raw|kt00005|body|pymn_alow_amt" (3LQO-0) 0×0 "출금가능 28,940,000원"
+        Frame "Frame" (3LQJ-0) 245×78
+          Text "주식 평가액" (3LQM-0) 0×0 "주식 평가액"
+          Text "raw|kt00004|body|aset_evlt_amt" (3LQL-0) 0×0 "89,760,240원"
+          Text "structure|kt00004|stk_acnt_evlt_prst|count" (3LQK-0) 0×0 "8종목"
+        Frame "Frame" (3LQF-0) 245×78
+          Text "평가손익" (3LQI-0) 0×0 "평가손익"
+          Text "raw|ka01690|body|tot_evltv_prft" (3LQH-0) 0×0 "+4,240,900원"
+          Text "raw|ka01690|body|tot_prft_rt" (3LQG-0) 0×0 "매입 85,519,340원"
+        Frame "Frame" (3LQB-0) 0×78
+          Text "현금 비중" (3LQE-0) 0×0 "현금 비중"
+          Text "raw|ka01690|body|buy_wght" (3LQD-0) 0×0 "28.0%"
+          Text "보유종목 8종" (3LQC-0) 0×0 "보유종목 8종"
+      Frame "Account Workspace" (3LGI-0) 0×732
+        Frame "거래내역 상세 본문" (3LVJ-0) 900×732
+          Frame "Frame" (3LVK-0) 0×0
+            Text "이달 거래 · 08/01 ~ 09/0…" (3LVL-0) 0×0 "이달 거래 · 08/01 ~ 09/01"
+            Text "최근 9건 · 09/01 09:42 …" (3LVM-0) 0×0 "최근 9건 · 09/01 09:42 기준"
+          Frame "열 머리" (3LVN-0) 0×32
+            Text "일자" (3LVO-0) 112×0 "일자"
+            Text "구분" (3LVP-0) 116×0 "구분"
+            Text "내용" (3LVQ-0) 318×0 "내용"
+            Frame "Frame" (3LVR-0) 176×0
+              Text "금액" (3LVS-0) 0×0 "금액"
+            Frame "Frame" (3LVT-0) 108×0
+              Text "유가금잔" (3LVU-0) 0×0 "유가금잔"
+          Frame "raw|kt00015|142 선택" (3MHR-0) 0×50
+            Frame "Frame" (3MHS-0) 112×0
+              Text "09/01" (3MHT-0) 0×0 "09/01"
+              Text "결제 09/03" (3MHU-0) 0×0 "결제 09/03"
+            Frame "Frame" (3MHV-0) 116×0
+              Text "매도 결제" (3MHW-0) 0×0 "매도 결제"
+              Frame "Frame" (3MHX-0) 0×0
+                Frame "Frame" (3MHY-0) 0×0
+                  Text "현금" (3MHZ-0) 0×0 "현금"
+                Text "순번 142" (3MI0-0) 0×0 "순번 142"
+            Frame "Frame" (3MI1-0) 318×0
+              Text "KODEX 200 250주 · NAV…" (3MI2-0) 0×0 "KODEX 200 250주 · NAVER 4주"
+              Text "선택" (3MI3-0) 0×0 "선택"
+            Frame "Frame" (3MI4-0) 176×0
+              Text "+12,946,000" (3MI5-0) 0×0 "+12,946,000"
+            Frame "Frame" (3MI6-0) 108×0
+              Text "89,760,240" (3MI7-0) 0×0 "89,760,240"
+          Frame "raw|kt00015|141" (3MI8-0) 0×50
+            Frame "Frame" (3MI9-0) 112×0
+              Text "09/01" (3MIA-0) 0×0 "09/01"
+              Text "결제 09/03" (3MIB-0) 0×0 "결제 09/03"
+            Frame "Frame" (3MIC-0) 116×0
+              Text "매수 결제" (3MID-0) 0×0 "매수 결제"
+              Frame "Frame" (3MIE-0) 0×0
+                Frame "Frame" (3MIF-0) 0×0
+                  Text "현금" (3MIG-0) 0×0 "현금"
+                Text "순번 141" (3MIH-0) 0×0 "순번 141"
+            Frame "Frame" (3MII-0) 318×0
+              Text "SK하이닉스 20주 · 192,100…" (3MIJ-0) 0×0 "SK하이닉스 20주 · 192,100원"
+            Frame "Frame" (3MIK-0) 176×0
+              Text "-3,842,000" (3MIL-0) 0×0 "-3,842,000"
+            Frame "Frame" (3MIM-0) 108×0
+              Text "89,760,240" (3MIN-0) 0×0 "89,760,240"
+          Frame "raw|kt00015|140" (3MIO-0) 0×50
+            Frame "Frame" (3MIP-0) 112×0
+              Text "09/01" (3MIQ-0) 0×0 "09/01"
+              Text "결제 09/03" (3MIR-0) 0×0 "결제 09/03"
+            Frame "Frame" (3MIS-0) 116×0
+              Text "수수료·제세금" (3MIT-0) 0×0 "수수료·제세금"
+              Frame "Frame" (3MIU-0) 0×0
+                Frame "Frame" (3MIV-0) 0×0
+                  Text "현금" (3MIW-0) 0×0 "현금"
+                Text "순번 140" (3MIX-0) 0×0 "순번 140"
+            Frame "Frame" (3MIY-0) 318×0
+              Text "매도 거래 비용 합계" (3MIZ-0) 0×0 "매도 거래 비용 합계"
+              Text "거래세·농특세 -20,720 · 수수…" (3MJ0-0) 0×0 "거래세·농특세 -20,720 · 수수료 -3,880"
+            Frame "Frame" (3MJ1-0) 176×0
+              Text "-24,600" (3MJ2-0) 0×0 "-24,600"
+            Frame "Frame" (3MJ3-0) 108×0
+              Text "89,760,240" (3MJ4-0) 0×0 "89,760,240"
+          Frame "raw|kt00015|139" (3MJ5-0) 0×50
+            Frame "Frame" (3MJ6-0) 112×0
+              Text "08/31" (3MJ7-0) 0×0 "08/31"
+              Text "결제 09/02" (3MJ8-0) 0×0 "결제 09/02"
+            Frame "Frame" (3MJ9-0) 116×0
+              Text "매수 결제" (3MJA-0) 0×0 "매수 결제"
+              Frame "Frame" (3MJB-0) 0×0
+                Frame "Frame" (3MJC-0) 0×0
+                  Text "현금" (3MJD-0) 0×0 "현금"
+                Text "순번 139" (3MJE-0) 0×0 "순번 139"
+            Frame "Frame" (3MJF-0) 318×0
+              Text "카카오 40주 · 40,890원" (3MJG-0) 0×0 "카카오 40주 · 40,890원"
+            Frame "Frame" (3MJH-0) 176×0
+              Text "-1,635,600" (3MJI-0) 0×0 "-1,635,600"
+            Frame "Frame" (3MJJ-0) 108×0
+              Text "88,124,640" (3MJK-0) 0×0 "88,124,640"
+          Frame "raw|kt00015|138" (3MJL-0) 0×50
+            Frame "Frame" (3MJM-0) 112×0
+              Text "08/28" (3MJN-0) 0×0 "08/28"
+              Text "체결 08/26" (3MJO-0) 0×0 "체결 08/26"
+            Frame "Frame" (3MJP-0) 116×0
+              Text "매도 결제" (3MJQ-0) 0×0 "매도 결제"
+              Frame "Frame" (3MJR-0) 0×0
+                Frame "Frame" (3MJS-0) 0×0
+                  Text "현금" (3MJT-0) 0×0 "현금"
+                Text "순번 138" (3MJU-0) 0×0 "순번 138"
+            Frame "Frame" (3MJV-0) 318×0
+              Text "삼성전자 235주 · 152,660원" (3MJW-0) 0×0 "삼성전자 235주 · 152,660원"
+              Text "비용 -66,010" (3MJX-0) 0×0 "비용 -66,010"
+            Frame "Frame" (3MJY-0) 176×0
+              Text "+35,809,090" (3MJZ-0) 0×0 "+35,809,090"
+            Frame "Frame" (3MK0-0) 108×0
+              Text "86,489,040" (3MK1-0) 0×0 "86,489,040"
+          Frame "raw|kt00015|137" (3MK3-0) 0×50
+            Frame "Frame" (3MK4-0) 112×0
+              Text "08/27" (3MK5-0) 0×0 "08/27"
+              Text "결제 08/27" (3MK6-0) 0×0 "결제 08/27"
+            Frame "Frame" (3MK7-0) 116×0
+              Text "배당금 입금" (3MK8-0) 0×0 "배당금 입금"
+              Frame "Frame" (3MK9-0) 0×0
+                Frame "Frame" (3MKA-0) 0×0
+                  Text "현금" (3MKB-0) 0×0 "현금"
+                Text "순번 137" (3MKC-0) 0×0 "순번 137"
+            Frame "Frame" (3MKD-0) 318×0
+              Text "삼성전자 분기 배당 · 세후" (3MKE-0) 0×0 "삼성전자 분기 배당 · 세후"
+            Frame "Frame" (3MKF-0) 176×0
+              Text "+54,300" (3MKG-0) 0×0 "+54,300"
+            Frame "Frame" (3MKH-0) 108×0
+              Text "122,364,140" (3MKI-0) 0×0 "122,364,140"
+          Frame "raw|kt00015|136" (3MKJ-0) 0×50
+            Frame "Frame" (3MKK-0) 112×0
+              Text "08/26" (3MKL-0) 0×0 "08/26"
+              Text "결제 08/26" (3MKM-0) 0×0 "결제 08/26"
+            Frame "Frame" (3MKN-0) 116×0
+              Text "이체 입금" (3MKO-0) 0×0 "이체 입금"
+              Frame "Frame" (3MKP-0) 0×0
+                Frame "Frame" (3MKQ-0) 0×0
+                  Text "현금" (3MKR-0) 0×0 "현금"
+                Text "순번 136" (3MKS-0) 0×0 "순번 136"
+            Frame "Frame" (3MKT-0) 318×0
+              Text "연결 은행계좌에서 이체" (3MKU-0) 0×0 "연결 은행계좌에서 이체"
+              Text "입금자 예금주 본인" (3MKV-0) 0×0 "입금자 예금주 본인"
+            Frame "Frame" (3MKW-0) 176×0
+              Text "+5,000,000" (3MKX-0) 0×0 "+5,000,000"
+            Frame "Frame" (3MKY-0) 108×0
+              Text "122,364,140" (3MKZ-0) 0×0 "122,364,140"
+          Frame "raw|kt00015|135" (3ML0-0) 0×50
+            Frame "Frame" (3ML1-0) 112×0
+              Text "08/25" (3ML2-0) 0×0 "08/25"
+              Text "결제 08/27" (3ML3-0) 0×0 "결제 08/27"
+            Frame "Frame" (3ML4-0) 116×0
+              Text "매수 결제" (3ML5-0) 0×0 "매수 결제"
+              Frame "Frame" (3ML6-0) 0×0
+                Frame "Frame" (3ML7-0) 0×0
+                  Text "현금" (3ML8-0) 0×0 "현금"
+                Text "순번 135" (3ML9-0) 0×0 "순번 135"
+            Frame "Frame" (3MLA-0) 318×0
+              Text "삼성전자 10주 · 150,200원" (3MLB-0) 0×0 "삼성전자 10주 · 150,200원"
+            Frame "Frame" (3MLC-0) 176×0
+              Text "-1,502,000" (3MLD-0) 0×0 "-1,502,000"
+            Frame "Frame" (3MLE-0) 108×0
+              Text "122,364,140" (3MLF-0) 0×0 "122,364,140"
+          Frame "raw|kt00015|134" (3MLG-0) 0×50
+            Frame "Frame" (3MLH-0) 112×0
+              Text "08/21" (3MLI-0) 0×0 "08/21"
+              Text "결제 08/21" (3MLJ-0) 0×0 "결제 08/21"
+            Frame "Frame" (3MLK-0) 116×0
+              Text "이자 입금" (3MLL-0) 0×0 "이자 입금"
+              Frame "Frame" (3MLM-0) 0×0
+                Frame "Frame" (3MLN-0) 0×0
+                  Text "현금" (3MLO-0) 0×0 "현금"
+                Text "순번 134" (3MLP-0) 0×0 "순번 134"
+            Frame "Frame" (3MLQ-0) 318×0
+              Text "예탁금 이용료" (3MLR-0) 0×0 "예탁금 이용료"
+            Frame "Frame" (3MLS-0) 176×0
+              Text "+1,240" (3MLT-0) 0×0 "+1,240"
+            Frame "Frame" (3MLU-0) 108×0
+              Text "120,862,140" (3MLV-0) 0×0 "120,862,140"
+          Frame "이달 합계" (3MLW-0) 0×44
+            Text "이달 매수 유출 36,343,390원…" (3MLX-0) 0×0 "이달 매수 유출 36,343,390원 · 표시 9건 7,004,200원 · 매도 유입 35,809,090원 · 입금 5,054,300원"
+            Text "예수금 30,300,000 → 34,…" (3MLY-0) 0×0 "예수금 30,300,000 → 34,820,000원"
+          Frame "외화 정산 섹션" (3UE1-0) 0×0
+            Frame "Frame" (3UE2-0) 0×0
+              Text "외화 정산" (3UE3-0) 0×0 "외화 정산"
+              Frame "Frame" (3UE4-0) 0×0
+                Text "8항목 모두 0달러" (3UE5-0) 0×0 "8항목 모두 0달러"
+            Frame "Frame" (3UE6-0) 0×0
+              Frame "Frame" (3UE7-0) 0×32
+                Frame "Frame" (3UE8-0) 193×0
+                  Text "거래금액" (3UE9-0) 0×0 "거래금액"
+                  Text "0달러" (3UEA-0) 0×0 "0달러"
+                Frame "Frame" (3UEB-0) 193×0
+                  Text "정산금액" (3UEC-0) 0×0 "정산금액"
+                  Text "0달러" (3UED-0) 0×0 "0달러"
+                Frame "Frame" (3UEE-0) 193×0
+                  Text "거래세" (3UEF-0) 0×0 "거래세"
+                  Text "0달러" (3UEG-0) 0×0 "0달러"
+                Frame "Frame" (3UEH-0) 193×0
+                  Text "수수료" (3UEI-0) 0×0 "수수료"
+                  Text "0달러" (3UEJ-0) 0×0 "0달러"
+              Frame "Frame" (3UEK-0) 0×32
+                Frame "Frame" (3UEL-0) 193×0
+                  Text "연체합" (3UEM-0) 0×0 "연체합"
+                  Text "0달러" (3UEN-0) 0×0 "0달러"
+                Frame "Frame" (3UEO-0) 193×0
+                  Text "미수" (3UEP-0) 0×0 "미수"
+                  Text "0달러" (3UEQ-0) 0×0 "0달러"
+                Frame "Frame" (3UER-0) 193×0
+                  Text "변제합" (3UES-0) 0×0 "변제합"
+                  Text "0달러" (3UET-0) 0×0 "0달러"
+                Frame "Frame" (3UEU-0) 193×0
+                  Text "외국납부세액" (3UEV-0) 0×0 "외국납부세액"
+                  Text "0달러" (3UEW-0) 0×0 "0달러"
+        Frame "거래 상세 레일" (3MMF-0) 460×732
+          Frame "R1 거래 식별" (3MMG-0) 0×0
+            Frame "Frame" (3MMH-0) 0×0
+              Text "거래 식별" (3MMI-0) 0×0 "거래 식별"
+              Frame "Frame" (3MMJ-0) 0×0
+                Text "09/01 매도 결제" (3MMK-0) 0×0 "09/01 매도 결제"
+            Frame "Frame" (3MML-0) 0×0
+              Frame "Frame" (3MMM-0) 0×30
+                Frame "Frame" (3MMN-0) 196×0
+                  Text "거래번호" (3MMO-0) 0×0 "거래번호"
+                  Text "0000000142" (3MMP-0) 0×0 "0000000142"
+                Frame "Frame" (3MMQ-0) 196×0
+                  Text "원거래번호" (3MMR-0) 0×0 "원거래번호"
+                  Text "해당 없음" (3MMS-0) 0×0 "해당 없음"
+              Frame "Frame" (3MMT-0) 0×30
+                Frame "Frame" (3MMU-0) 196×0
+                  Text "출납번호" (3MMV-0) 0×0 "출납번호"
+                  Text "0000318" (3MMW-0) 0×0 "0000318"
+                Frame "Frame" (3MMX-0) 196×0
+                  Text "처리시간" (3MMY-0) 0×0 "처리시간"
+                  Text "09:41:52" (3MMZ-0) 0×0 "09:41:52"
+              Frame "Frame" (3MN0-0) 0×30
+                Frame "Frame" (3MN1-0) 196×0
+                  Text "처리자" (3MN2-0) 0×0 "처리자"
+                  Text "시스템" (3MN3-0) 0×0 "시스템"
+                Frame "Frame" (3MN4-0) 196×0
+                  Text "처리점" (3MN5-0) 0×0 "처리점"
+                  Text "영업부" (3MN6-0) 0×0 "영업부"
+              Frame "Frame" (3MN7-0) 0×30
+                Frame "Frame" (3MN8-0) 196×0
+                  Text "거래 매체" (3MN9-0) 0×0 "거래 매체"
+                  Text "HTS" (3MNA-0) 0×0 "HTS"
+                Frame "Frame" (3MNB-0) 196×0
+                  Text "입금자" (3MNC-0) 0×0 "입금자"
+                  Text "해당 없음" (3MND-0) 0×0 "해당 없음"
+          Frame "R2 거래 성격" (3MNE-0) 0×0
+            Text "거래 성격" (3MNF-0) 0×0 "거래 성격"
+            Frame "성격 행" (3UQ7-0) 0×0
+              Frame "Frame" (3UQ8-0) 0×30
+                Frame "Frame" (3UQ9-0) 196×0
+                  Text "거래 종류" (3UQA-0) 0×0 "거래 종류"
+                  Text "매도 결제" (3UQB-0) 0×0 "매도 결제"
+                Frame "Frame" (3UQC-0) 196×0
+                  Text "내역 구분" (3UQD-0) 0×0 "내역 구분"
+                  Text "위탁" (3UQE-0) 0×0 "위탁"
+              Frame "Frame" (3UQF-0) 0×30
+                Frame "Frame" (3UQG-0) 196×0
+                  Text "매매 형태" (3UQH-0) 0×0 "매매 형태"
+                  Text "보통" (3UQI-0) 0×0 "보통"
+                Frame "Frame" (3UQJ-0) 196×0
+                  Text "신용거래 구분" (3UQK-0) 0×0 "신용거래 구분"
+                  Text "현금" (3UQL-0) 0×0 "현금"
+              Frame "Frame" (3UQM-0) 0×30
+                Frame "Frame" (3UQN-0) 196×0
+                  Text "대출일" (3UQO-0) 0×0 "대출일"
+                  Text "해당 없음" (3UQP-0) 0×0 "해당 없음"
+                Frame "Frame" (3UQQ-0) 196×0
+                  Text "예약 · 반대" (3UQR-0) 0×0 "예약 · 반대"
+                  Text "해당 없음" (3UQS-0) 0×0 "해당 없음"
+              Frame "Frame" (3UQT-0) 0×30
+                Frame "Frame" (3UQU-0) 196×0
+                  Text "정정 · 취소" (3UQV-0) 0×0 "정정 · 취소"
+                  Text "해당 없음" (3UQW-0) 0×0 "해당 없음"
+                Frame "Frame" (3UQX-0) 196×0
+                  Text "거부 사유" (3UQY-0) 0×0 "거부 사유"
+                  Text "해당 없음" (3UQZ-0) 0×0 "해당 없음"
+          Frame "R3 종목·시장" (3MO0-0) 0×0
+            Text "종목·시장" (3MO1-0) 0×0 "종목·시장"
+            Frame "Frame" (3MO2-0) 0×0
+              Frame "Frame" (3MO3-0) 0×30
+                Frame "Frame" (3MO4-0) 196×0
+                  Text "종목명" (3MO5-0) 0×0 "종목명"
+                  Text "KODEX 200" (3MO6-0) 0×0 "KODEX 200"
+                Frame "Frame" (3MO7-0) 196×0
+                  Text "종목코드" (3MO8-0) 0×0 "종목코드"
+                  Text "069500" (3MO9-0) 0×0 "069500"
+              Frame "Frame" (3MOA-0) 0×30
+                Frame "Frame" (3MOB-0) 196×0
+                  Text "ISIN코드" (3MOC-0) 0×0 "ISIN코드"
+                  Text "KR7069500007" (3MOD-0) 0×0 "KR7069500007"
+                Frame "Frame" (3MOE-0) 196×0
+                  Text "거래소" (3MOF-0) 0×0 "거래소"
+                  Text "KRX" (3MOG-0) 0×0 "KRX"
+              Frame "Frame" (3MOH-0) 0×30
+                Frame "Frame" (3MOI-0) 196×0
+                  Text "과세기준가" (3MOJ-0) 0×0 "과세기준가"
+                  Text "0원" (3MOK-0) 0×0 "0원"
+                Rectangle "Rectangle" (3MOL-0) 196×0
+          Frame "R4 정산·세금·잔고" (3UFZ-0) 0×0
+            Text "정산·세금·잔고" (3UG0-0) 0×0 "정산·세금·잔고"
+            Frame "Frame" (3UG1-0) 0×0
+              Frame "Frame" (3UG2-0) 0×32
+                Text "유가금잔" (3UG3-0) 0×0 "유가금잔"
+                Text "89,760,240원" (3UG4-0) 0×0 "89,760,240원"
+              Frame "Frame" (3UG5-0) 0×32
+                Text "거래세·농특세" (3UG6-0) 0×0 "거래세·농특세"
+                Text "-20,720원" (3UG7-0) 0×0 "-20,720원"
+              Frame "Frame" (3UG8-0) 0×32
+                Frame "Frame" (3UG9-0) 196×0
+                  Text "소득세·주민세" (3UGA-0) 0×0 "소득세·주민세"
+                  Text "0원" (3UGB-0) 0×0 "0원"
+                Frame "Frame" (3UGC-0) 196×0
+                  Text "대출금상환" (3UGD-0) 0×0 "대출금상환"
+                  Text "0원" (3UGE-0) 0×0 "0원"
+              Frame "Frame" (3UGF-0) 0×32
+                Frame "Frame" (3UGG-0) 196×0
+                  Text "상환차금" (3UGH-0) 0×0 "상환차금"
+                  Text "0원" (3UGI-0) 0×0 "0원"
+                Frame "Frame" (3UGJ-0) 196×0
+                  Text "변제합" (3UGK-0) 0×0 "변제합"
+                  Text "0원" (3UGL-0) 0×0 "0원"
+              Frame "Frame" (3UGM-0) 0×32
+                Frame "Frame" (3UGN-0) 196×0
+                  Text "연체합" (3UGO-0) 0×0 "연체합"
+                  Text "0원" (3UGP-0) 0×0 "0원"
+                Rectangle "Rectangle" (3UGQ-0) 196×0
+      Frame "Account Status Footer" (3LGF-0) 0×64
+        Text "● 예수금·결제 실시간 반영 중" (3LGH-0) 0×0 "● 예수금·결제 실시간 반영 중"
+        Text "결제 전체 내역 보기 ▾" (3LGG-0) 0×0 "결제 전체 내역 보기 ▾"

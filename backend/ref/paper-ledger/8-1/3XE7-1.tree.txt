@@ -1,0 +1,221 @@
+Frame "16 · 백테스트 — 지도 실행 → 멈춤 → 대화로 고침 — 폐기(요약 지도 제거, 보드 19~22 현행)" (3XE7-1) 1680×1080
+  Frame "타이틀" (3XJZ-1) 1584×0
+    Text "셀 — 백테스트 · 지도 실행 → 멈…" (3XK1-1) 0×0 "셀 — 백테스트 · 지도 실행 → 멈춤 → 대화로 고침 — 오류는 코드 줄이 아니라 지도의 칸에 붙는다 — "
+    Text "지도를 실행하면 앱이 코드를 모아 돌…" (3XK0-1) 0×0 "지도를 실행하면 앱이 코드를 모아 돌립니다. 멈추면 어느 칸에서 · 왜 · 어떻게를 사람 말로 그 칸에 붙이"
+  Frame "셸" (3XE8-1) 1584×960
+    Frame "Frame" (3XHZ-1) 268×819
+      Frame "Primary Actions" (3XJ2-1) 0×0
+        Frame "Frame" (3XJU-1) 0×28
+          Text "ATHENA" (3XJY-1) 0×0 "ATHENA"
+          SVG "SVG" (3XJV-1) 0×0
+            SVGVisualElement "Circle" (3XJX-1) 0×0
+            SVGVisualElement "Path" (3XJW-1) 0×0
+        Frame "Frame" (3XJP-1) 0×30
+          SVG "SVG" (3XJR-1) 0×0
+            SVGVisualElement "Path" (3XJT-1) 0×0
+            SVGVisualElement "Path" (3XJS-1) 0×0
+          Text "새 채팅" (3XJQ-1) 0×0 "새 채팅"
+        Frame "Frame" (3XJI-1) 0×30
+          SVG "SVG" (3XJK-1) 0×0
+            SVGVisualElement "Circle" (3XJO-1) 0×0
+            SVGVisualElement "Circle" (3XJN-1) 0×0
+            SVGVisualElement "Circle" (3XJM-1) 0×0
+            SVGVisualElement "Path" (3XJL-1) 0×0
+          Text "그래프" (3XJJ-1) 0×0 "그래프"
+        Frame "Frame" (3XJD-1) 0×30
+          SVG "SVG" (3XJF-1) 0×0
+            SVGVisualElement "Circle" (3XJH-1) 0×0
+            SVGVisualElement "Path" (3XJG-1) 0×0
+          Text "에이전트" (3XJE-1) 0×0 "에이전트"
+        Frame "Nav 플러그인" (3XJ8-1) 0×30
+          SVG "SVG" (3XJA-1) 0×0
+            SVGVisualElement "Path" (3XJC-1) 0×0
+            SVGVisualElement "Path" (3XJB-1) 0×0
+          Text "플러그인" (3XJ9-1) 0×0 "플러그인"
+        Frame "Nav 백테스트 (active)" (3XJ3-1) 0×30
+          SVG "SVG" (3XJ5-1) 0×0
+            SVGVisualElement "Path" (3XJ7-1) 0×0
+            SVGVisualElement "Path" (3XJ6-1) 0×0
+          Text "백테스트" (3XJ4-1) 0×0 "백테스트"
+      Frame "Project Tree" (3XII-1) 0×0
+        Frame "Frame" (3XJ0-1) 0×0
+          Text "프로젝트" (3XJ1-1) 0×0 "프로젝트"
+        Frame "Frame" (3XIO-1) 0×32
+          SVG "SVG" (3XIX-1) 0×0
+            SVGVisualElement "Path" (3XIZ-1) 0×0
+            SVGVisualElement "Path" (3XIY-1) 0×0
+          Text "아테나" (3XIW-1) 0×0 "아테나"
+          SVG "SVG" (3XIS-1) 0×0
+            SVGVisualElement "Circle" (3XIV-1) 0×0
+            SVGVisualElement "Circle" (3XIU-1) 0×0
+            SVGVisualElement "Circle" (3XIT-1) 0×0
+          SVG "SVG" (3XIP-1) 0×0
+            SVGVisualElement "Path" (3XIR-1) 0×0
+            SVGVisualElement "Path" (3XIQ-1) 0×0
+        Frame "Frame" (3XIM-1) 0×27
+          Text "백엔드 API 개수 확인" (3XIN-1) 0×0 "백엔드 API 개수 확인"
+        Frame "Frame" (3XIJ-1) 0×29
+          Text "앱 전체 기능 검수" (3XIL-1) 0×0 "앱 전체 기능 검수"
+          Rectangle "Rectangle" (3XIK-1) 6×6
+      Frame "Recent Conversations" (3XI7-1) 0×0
+        Frame "Frame" (3XIF-1) 0×20
+          Text "최근" (3XIH-1) 0×0 "최근"
+          Text "전체" (3XIG-1) 0×0 "전체"
+        Frame "Frame" (3XIC-1) 0×27
+          Text "앱 전체 기능 검수" (3XIE-1) 0×0 "앱 전체 기능 검수"
+          Rectangle "Rectangle" (3XID-1) 6×6
+        Frame "Frame" (3XIA-1) 0×27
+          Text "삼성전자 주요 변동 알림" (3XIB-1) 0×0 "삼성전자 주요 변동 알림"
+        Frame "Frame" (3XI8-1) 0×27
+          Text "ETF 자금 흐름" (3XI9-1) 0×0 "ETF 자금 흐름"
+      Frame "Account Footer" (3XI0-1) 0×0
+        Frame "Frame" (3XI1-1) 0×38
+          Frame "Frame" (3XI5-1) 22×22
+            Text "AN" (3XI6-1) 0×0 "AN"
+          Text "모의-주력" (3XI4-1) 0×0 "모의-주력"
+          SVG "SVG" (3XI2-1) 0×0
+            SVGVisualElement "Path" (3XI3-1) 0×0
+    Frame "메인 · 지도" (3XF4-1) 0×0
+      Frame "헤더" (3XHM-1) 0×0
+        Frame "Frame" (3XHW-1) 0×0
+          Text "백테스트" (3XHY-1) 0×0 "백테스트"
+          Text "20-60 골든크로스 · 지도 v5 …" (3XHX-1) 0×0 "20-60 골든크로스 · 지도 v5 · 실행 #42 멈춤"
+        Frame "설계 탭" (3XHP-1) 0×0
+          Frame "Frame" (3XHU-1) 0×0
+            Text "지도" (3XHV-1) 0×0 "지도"
+          Frame "Frame" (3XHS-1) 0×0
+            Text "폼" (3XHT-1) 0×0 "폼"
+          Frame "Frame" (3XHQ-1) 0×0
+            Text "코드 · 최후의 보루" (3XHR-1) 0×0 "코드 · 최후의 보루"
+        Frame "Frame" (3XHN-1) 0×0
+          Text "실행" (3XHO-1) 0×0 "실행"
+      Frame "대상 한 줄" (3XHF-1) 0×0
+        Text "삼성전자" (3XHL-1) 0×0 "삼성전자"
+        Text "005930" (3XHK-1) 0×0 "005930"
+        Rectangle "Rectangle" (3XHJ-1) 1×14
+        Text "일봉 · 수정주가 · 2024-09-…" (3XHI-1) 0×0 "일봉 · 수정주가 · 2024-09-02 → 2026-09-02"
+        Rectangle "Rectangle" (3XHH-1) 0×0
+        Text "캐시 606봉 · 추가 수집 0회 —…" (3XHG-1) 0×0 "캐시 606봉 · 추가 수집 0회 — 대상·기간도 대화로 바꿉니다"
+      Frame "지도 헤더" (3XHA-1) 0×0
+        Text "이 전략은 이렇게 흐릅니다" (3XHE-1) 0×0 "이 전략은 이렇게 흐릅니다"
+        Text "칸을 누르면 대화가 그 칸을 다룹니다…" (3XHD-1) 0×0 "칸을 누르면 대화가 그 칸을 다룹니다 · 오른쪽 숫자는 지난 실행(#41)의 실제 값"
+        Rectangle "Rectangle" (3XHC-1) 0×0
+        Text "지도 이력 v3 → v4 → v5" (3XHB-1) 0×0 "지도 이력 v3 → v4 → v5"
+      Frame "구역 라벨 앱" (3XH7-1) 0×0
+        Text "앱이 준비해서 건넵니다" (3XH9-1) 0×0 "앱이 준비해서 건넵니다"
+        Rectangle "Rectangle" (3XH8-1) 0×1
+      Frame "노드 앱 · 봉" (3XH0-1) 0×0
+        Frame "Frame" (3XH5-1) 26×26
+          Text "앱" (3XH6-1) 0×0 "앱"
+        Frame "Frame" (3XH2-1) 0×0
+          Text "봉 데이터를 모읍니다" (3XH4-1) 0×0 "봉 데이터를 모읍니다"
+          Text "캐시에 있는 일봉을 날짜순으로 정리해…" (3XH3-1) 0×0 "캐시에 있는 일봉을 날짜순으로 정리해 표 하나로 만듭니다 — 이 칸은 고칠 수 없습니다"
+        Text "df — 606행 × 5열
+open …" (3XH1-1) 0×0 "df — 606행 × 5열
+open high low close volume"
+      Frame "구역 라벨 내전략" (3XGX-1) 0×0
+        Text "여기부터 내 전략 — 대화로 고치는 …" (3XGZ-1) 0×0 "여기부터 내 전략 — 대화로 고치는 칸들"
+        Rectangle "Rectangle" (3XGY-1) 0×1
+      Frame "노드 ① 조절할 값" (3XGK-1) 0×0
+        Frame "Frame" (3XGV-1) 26×26
+          Text "①" (3XGW-1) 0×0 "①"
+        Frame "Frame" (3XGM-1) 0×0
+          Text "조절할 값을 정합니다" (3XGU-1) 0×0 "조절할 값을 정합니다"
+          Frame "Frame" (3XGN-1) 0×0
+            Frame "Frame" (3XGS-1) 0×0
+              Text "fast 20 5–60" (3XGT-1) 0×0 "fast 20 5–60"
+            Frame "Frame" (3XGQ-1) 0×0
+              Text "slow 60 20–240" (3XGR-1) 0×0 "slow 60 20–240"
+            Frame "Frame" (3XGO-1) 0×0
+              Text "atr_mult 2.0 방금 추가" (3XGP-1) 0×0 "atr_mult 2.0 방금 추가"
+        Text "값 3개 · 최적화가 훑는 축
+슬라이…" (3XGL-1) 0×0 "값 3개 · 최적화가 훑는 축
+슬라이더는 폼 탭에서도 같은 값"
+      Frame "노드 ② 지표" (3XGD-1) 0×0
+        Frame "Frame" (3XGI-1) 26×26
+          Text "②" (3XGJ-1) 0×0 "②"
+        Frame "Frame" (3XGF-1) 0×0
+          Text "가격을 지표로 바꿉니다" (3XGH-1) 0×0 "가격을 지표로 바꿉니다"
+          Text "종가의 20봉 평균(fast)과 60…" (3XGG-1) 0×0 "종가의 20봉 평균(fast)과 60봉 평균(slow)을 내고, 변동폭 ATR(14)도 한 줄 만듭니다"
+        Text "fast · slow · atr — …" (3XGE-1) 0×0 "fast · slow · atr — 3열
+앞 60봉은 빈칸(워밍업)"
+      Frame "노드 ③ 사고 파는 순간" (3XFZ-1) 0×0
+        Frame "Frame" (3XGB-1) 26×26
+          Text "③" (3XGC-1) 0×0 "③"
+        Frame "Frame" (3XG1-1) 0×0
+          Text "사고·파는 순간을 찍습니다" (3XGA-1) 0×0 "사고·파는 순간을 찍습니다"
+          Frame "Frame" (3XG7-1) 0×0
+            Text "진입" (3XG9-1) 44×0 "진입"
+            Text "fast가 slow를 위로 뚫는 날" (3XG8-1) 0×0 "fast가 slow를 위로 뚫는 날"
+          Frame "Frame" (3XG2-1) 0×0
+            Text "청산" (3XG6-1) 44×0 "청산"
+            Text "fast가 slow를 아래로 뚫는 날…" (3XG5-1) 0×0 "fast가 slow를 아래로 뚫는 날 또는 저가가 손절선(진입가 − ATR×2.0)에 닿는 날"
+            Frame "Frame" (3XG3-1) 0×0
+              Text "멈춤 — 손절선이 진입 전 날엔 빈칸" (3XG4-1) 0×0 "멈춤 — 손절선이 진입 전 날엔 빈칸"
+        Text "여기서 멈추었습니다
+빈칸(NaN)과 …" (3XG0-1) 0×0 "여기서 멈추었습니다
+빈칸(NaN)과 크기를 비교했습니다"
+      Frame "노드 ④ 출력" (3XFS-1) 0×0
+        Frame "Frame" (3XFX-1) 26×26
+          Text "④" (3XFY-1) 0×0 "④"
+        Frame "Frame" (3XFU-1) 0×0
+          Text "두 열만 돌려줍니다" (3XFW-1) 0×0 "두 열만 돌려줍니다"
+          Text "전략은 "언제 사고 언제 파는가"만 …" (3XFV-1) 0×0 "전략은 "언제 사고 언제 파는가"만 정합니다 — 수익률을 전략이 직접 쓸 수 없게 여기서 끝납니다"
+        Text "entry · exit — 2열 불리…" (3XFT-1) 0×0 "entry · exit — 2열 불리언
+빈칸 없음 · 길이 606"
+      Frame "구역 라벨 앱2" (3XFP-1) 0×0
+        Text "여기부터 다시 앱 — 전략이 손댈 수…" (3XFR-1) 0×0 "여기부터 다시 앱 — 전략이 손댈 수 없는 구간"
+        Rectangle "Rectangle" (3XFQ-1) 0×1
+      Frame "앱 노드 3개" (3XFC-1) 0×0
+        Frame "Frame" (3XFL-1) 0×0
+          Text "사고·파는 가격을 정합니다" (3XFO-1) 0×0 "사고·파는 가격을 정합니다"
+          Text "신호 다음 봉의 시가 — 같은 봉 종…" (3XFN-1) 0×0 "신호 다음 봉의 시가 — 같은 봉 종가는 미래를 본 것"
+          Text "체결 41건 · 이월 3건" (3XFM-1) 0×0 "체결 41건 · 이월 3건"
+        Frame "Frame" (3XFH-1) 0×0
+          Text "비용을 뗍니다" (3XFK-1) 0×0 "비용을 뗍니다"
+          Text "수수료·거래세·슬리피지를 뺀 다음 손…" (3XFJ-1) 0×0 "수수료·거래세·슬리피지를 뺀 다음 손익"
+          Text "1.5bp · 매도 18bp · 5b…" (3XFI-1) 0×0 "1.5bp · 매도 18bp · 5bp"
+        Frame "Frame" (3XFD-1) 0×0
+          Text "성과를 냅니다" (3XFG-1) 0×0 "성과를 냅니다"
+          Text "지표 6장·자산곡선·체결 표를 결과 …" (3XFF-1) 0×0 "지표 6장·자산곡선·체결 표를 결과 탭으로"
+          Text "+184.2% · Sharpe 0.8…" (3XFE-1) 0×0 "+184.2% · Sharpe 0.87 · MDD −27.9%"
+      Frame "코드 서랍" (3XF5-1) 0×0
+        Text "이 지도 뒤의 코드" (3XFB-1) 0×0 "이 지도 뒤의 코드"
+        Text "golden_cross.py · 23…" (3XFA-1) 0×0 "golden_cross.py · 23줄 · 지도 v5와 일치"
+        Rectangle "Rectangle" (3XF9-1) 0×0
+        Text "웬만하면 열 일이 없습니다 — 최후의…" (3XF8-1) 0×0 "웬만하면 열 일이 없습니다 — 최후의 보루"
+        Frame "Frame" (3XF6-1) 0×0
+          Text "코드 열기" (3XF7-1) 0×0 "코드 열기"
+    Frame "Frame" (3XE9-1) 400×0
+      Frame "Frame" (3XF1-1) 0×0
+        Text "전략에게 묻기" (3XF3-1) 0×0 "전략에게 묻기"
+        Text "답이 지도를 바꿉니다" (3XF2-1) 0×0 "답이 지도를 바꿉니다"
+      Frame "채팅 본문" (3XK2-1) 0×0
+        Frame "Frame" (3XK3-1) 0×0
+          Frame "Frame" (3XK4-1) 0×0
+            Text "실행해줘" (3XK5-1) 0×0 "실행해줘"
+        Frame "카드 지도 멈춤" (3XK6-1) 0×0
+          Frame "Frame" (3XK7-1) 0×0
+            Frame "Frame" (3XK8-1) 0×0
+              Text "지도 멈춤" (3XK9-1) 0×0 "지도 멈춤"
+            Frame "Frame" (3XKA-1) 0×0
+              Text "실행 #42 · ③ 칸" (3XKB-1) 0×0 "실행 #42 · ③ 칸"
+          Text "③ 사고·파는 순간에서 멈췄습니다 —…" (3XKC-1) 0×0 "③ 사고·파는 순간에서 멈췄습니다 — 손절선이 빈칸인 날을 저가와 비교했습니다"
+          Text "왜 ATR(14)은 앞 14봉이 빈칸…" (3XKD-1) 0×0 "왜 ATR(14)은 앞 14봉이 빈칸이고, 손절선은 진입한 날에만 값이 생깁니다. 지금 지도는 모든 날에 손"
+          Text "어떻게 청산 조건의 손절선을 "진입한…" (3XKE-1) 0×0 "어떻게 청산 조건의 손절선을 "진입한 날 값으로 고정해 청산까지 유지"로 바꿉니다. ③ 칸 한 줄만 달라집니"
+          Frame "Frame" (3XKF-1) 0×0
+            Frame "Frame" (3XKG-1) 0×0
+              Text "적용하고 다시 실행" (3XKH-1) 0×0 "적용하고 다시 실행"
+            Frame "Frame" (3XKI-1) 0×0
+              Text "지도만 고치기" (3XKJ-1) 0×0 "지도만 고치기"
+            Frame "Frame" (3XKK-1) 0×0
+              Text "버리기" (3XKL-1) 0×0 "버리기"
+          Text "파이썬 원문이 궁금하면 카드 아래 '…" (3XKM-1) 0×0 "파이썬 원문이 궁금하면 카드 아래 '원문 보기' — 고치는 데는 필요 없습니다"
+        Text "③번 칸에서 멈췄어요. 손절선을 매일…" (3XKN-1) 0×0 "③번 칸에서 멈췄어요. 손절선을 매일 다시 계산하다 진입 전 날의 빈칸과 비교한 게 원인이고, 진입한 날 값"
+      Frame "Frame" (3XEA-1) 0×0
+        Frame "Frame" (3XEB-1) 0×0
+          Frame "Frame" (3XED-1) 22×22
+            SVG "SVG" (3XEE-1) 0×0
+              SVGVisualElement "Rect" (3XEG-1) 0×0
+              SVGVisualElement "Rect" (3XEF-1) 0×0
+          Text "무엇이든 물어보세요" (3XEC-1) 0×0 "무엇이든 물어보세요"

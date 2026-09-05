@@ -1,0 +1,232 @@
+{
+ "board_id": "4892-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-03 / R01-X · 투자자 12주체",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "489P-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-X · 투자자 12주체",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "489O-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-03 / R01-X · 투자자 12주체",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "489M-0",
+   "text": "투자자 12주체",
+   "path": [
+    "mini/CC-03 / R01-X · 투자자 12주체",
+    "Header"
+   ]
+  },
+  {
+   "id": "489K-0",
+   "text": "누적거래대금",
+   "path": [
+    "mini/CC-03 / R01-X · 투자자 12주체",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "489J-0",
+   "text": "거래대금 2.14조원",
+   "path": [
+    "mini/CC-03 / R01-X · 투자자 12주체",
+    "Body",
+    "Fact 1"
+   ]
+  },
+  {
+   "id": "489H-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-X · 투자자 12주체",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "489G-0",
+   "text": "21.2배",
+   "path": [
+    "mini/CC-03 / R01-X · 투자자 12주체",
+    "Body",
+    "Fact 2"
+   ]
+  },
+  {
+   "id": "489E-0",
+   "text": "변화",
+   "path": [
+    "mini/CC-03 / R01-X · 투자자 12주체",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "489D-0",
+   "text": "전년 7.9%",
+   "path": [
+    "mini/CC-03 / R01-X · 투자자 12주체",
+    "Body",
+    "Fact 3"
+   ]
+  },
+  {
+   "id": "489B-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-X · 투자자 12주체",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "489A-0",
+   "text": "업종 11.2배",
+   "path": [
+    "mini/CC-03 / R01-X · 투자자 12주체",
+    "Body",
+    "Fact 4"
+   ]
+  },
+  {
+   "id": "4898-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-X · 투자자 12주체",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "4897-0",
+   "text": "업종 1.61배",
+   "path": [
+    "mini/CC-03 / R01-X · 투자자 12주체",
+    "Body",
+    "Fact 5"
+   ]
+  },
+  {
+   "id": "4894-0",
+   "text": "외 149개 항목 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-03 / R01-X · 투자자 12주체",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "4892-0",
+   "name": "mini/CC-03 / R01-X · 투자자 12주체",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "489L-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "489N-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4895-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "489I-0",
+   "name": "Fact 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "489F-0",
+   "name": "Fact 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "489C-0",
+   "name": "Fact 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4899-0",
+   "name": "Fact 4",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4896-0",
+   "name": "Fact 5",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4893-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 1,
+  "기준 09:42": 1,
+  "투자자 12주체": 1,
+  "누적거래대금": 1,
+  "거래대금 2.14조원": 1,
+  "값": 3,
+  "21.2배": 1,
+  "변화": 1,
+  "전년 7.9%": 1,
+  "업종 11.2배": 1,
+  "업종 1.61배": 1,
+  "외 149개 항목 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "41648291bdc48e6543ca1b672f626a7dc673be7d0f89e0aca7adcfad6b6c13bc"
+}

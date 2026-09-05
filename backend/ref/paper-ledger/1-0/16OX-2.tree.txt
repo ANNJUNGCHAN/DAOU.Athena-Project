@@ -1,0 +1,6 @@
+Frame "05 · 부팅 — COMPLETE · 880–1440ms" (16OX-2) 1640×900
+  Frame "BOOT CENTER · KIWOOM + COMPLETE" (16OY-2) 457×209
+    Frame "키움증권 CI" (16P2-2) 220×69
+    Frame "ATHENA · COMPLETE" (16OZ-2) 457×112
+      Text "typed · ATHENA" (16P1-2) 397×112 "ATHENA"
+      Text "Blinking cursor · 480ms ON / 320ms OFF" (16P0-2) 68×112 "|"

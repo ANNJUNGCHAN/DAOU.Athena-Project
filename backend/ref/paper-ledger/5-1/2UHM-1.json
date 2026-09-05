@@ -1,0 +1,2425 @@
+{
+ "board_id": "2UHM-1",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+ "width": 1440,
+ "height": 960,
+ "texts": [
+  {
+   "id": "2ULE-1",
+   "text": "시장 · VI",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ULD-1",
+   "text": "장중 · 09:42",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2ULA-1",
+   "text": "KRX·NXT · 정규장",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UL8-1",
+   "text": "업종",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UL6-1",
+   "text": "종목찾기",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UL4-1",
+   "text": "관심",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UL2-1",
+   "text": "테마",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UL0-1",
+   "text": "시장·VI",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UKY-1",
+   "text": "조건검색",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UKU-1",
+   "text": "상태",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UKS-1",
+   "text": "정규장",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UKQ-1",
+   "text": "KRX · NXT",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UKO-1",
+   "text": "VI 포함",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UKM-1",
+   "text": "발동 순",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UKK-1",
+   "text": "오늘",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UKH-1",
+   "text": "● 실시간 갱신",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UKG-1",
+   "text": "VI 3건",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame"
+   ]
+  },
+  {
+   "id": "357H-0",
+   "text": "KOSPI",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "KPI 밴드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "357I-0",
+   "text": "2,684.21",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "KPI 밴드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "357J-0",
+   "text": "+29.73 · +1.12%",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "KPI 밴드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "357L-0",
+   "text": "KOSDAQ",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "KPI 밴드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "357M-0",
+   "text": "842.15",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "KPI 밴드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "357N-0",
+   "text": "+7.01 · +0.84%",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "KPI 밴드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "357P-0",
+   "text": "장 운영",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "KPI 밴드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "357Q-0",
+   "text": "정규장 진행",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "KPI 밴드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "357R-0",
+   "text": "장 시작 09:00 · 잔여 없음",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "KPI 밴드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "357T-0",
+   "text": "오늘 VI 발동",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "KPI 밴드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "357U-0",
+   "text": "3건",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "KPI 밴드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "357V-0",
+   "text": "발동 중 2 · 해제 1",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "KPI 밴드",
+    "Frame"
+   ]
+  },
+  {
+   "id": "359R-0",
+   "text": "발동 시간",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 표 헤더"
+   ]
+  },
+  {
+   "id": "359S-0",
+   "text": "종목",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 표 헤더"
+   ]
+  },
+  {
+   "id": "359T-0",
+   "text": "구분",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 표 헤더"
+   ]
+  },
+  {
+   "id": "359U-0",
+   "text": "발동가",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 표 헤더"
+   ]
+  },
+  {
+   "id": "359V-0",
+   "text": "기준가",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 표 헤더"
+   ]
+  },
+  {
+   "id": "359W-0",
+   "text": "거래량",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 표 헤더"
+   ]
+  },
+  {
+   "id": "359X-0",
+   "text": "상태",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 표 헤더"
+   ]
+  },
+  {
+   "id": "35A0-0",
+   "text": "09:41:08",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35A1-0",
+   "text": "해제 09:43:08",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35A3-0",
+   "text": "이수페타시스",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35A5-0",
+   "text": "007660",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 이수페타시스",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35A7-0",
+   "text": "KOSPI",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 이수페타시스",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35A9-0",
+   "text": "동적 상승",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35AA-0",
+   "text": "동적 ±3% · 오늘 1회",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35AC-0",
+   "text": "64,500",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35AD-0",
+   "text": "+29.90%",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35AF-0",
+   "text": "62,600",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35AG-0",
+   "text": "괴리 +3.04%",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35AI-0",
+   "text": "312만주",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35AJ-0",
+   "text": "1,720억",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35AL-0",
+   "text": "발동 중",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35AM-0",
+   "text": "50초 남음",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 이수페타시스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35AP-0",
+   "text": "09:40:44",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 대성첨단",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35AQ-0",
+   "text": "해제 09:42:44",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 대성첨단",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35AS-0",
+   "text": "대성첨단",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 대성첨단",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35AU-0",
+   "text": "396300",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 대성첨단",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35AW-0",
+   "text": "KOSDAQ",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 대성첨단",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35AY-0",
+   "text": "정적 상승",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 대성첨단",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35AZ-0",
+   "text": "정적 ±10% · 오늘 1회",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 대성첨단",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35B1-0",
+   "text": "20,500",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 대성첨단",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35B2-0",
+   "text": "+10.22%",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 대성첨단",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35B4-0",
+   "text": "18,600",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 대성첨단",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35B5-0",
+   "text": "괴리 +10.22%",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 대성첨단",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35B7-0",
+   "text": "486만주",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 대성첨단",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35B8-0",
+   "text": "992억",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 대성첨단",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35BA-0",
+   "text": "발동 중",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 대성첨단",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35BB-0",
+   "text": "26초 남음",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 대성첨단",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35BE-0",
+   "text": "09:04:12",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 테마파워",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35BF-0",
+   "text": "해제 09:06:12",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 테마파워",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35BH-0",
+   "text": "테마파워",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 테마파워",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35BJ-0",
+   "text": "217500",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 테마파워",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35BL-0",
+   "text": "KOSDAQ",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 테마파워",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35BN-0",
+   "text": "정적 하락",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 테마파워",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35BO-0",
+   "text": "정적 ±10% · 오늘 1회",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 테마파워",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35BQ-0",
+   "text": "8,120",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 테마파워",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35BR-0",
+   "text": "-10.1%",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 테마파워",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35BT-0",
+   "text": "9,030",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 테마파워",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35BU-0",
+   "text": "괴리 -10.1%",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 테마파워",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35BW-0",
+   "text": "318만주",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 테마파워",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35BX-0",
+   "text": "272억",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 테마파워",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35BZ-0",
+   "text": "해제",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 테마파워",
+    "Frame"
+   ]
+  },
+  {
+   "id": "35C0-0",
+   "text": "09:06:12",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 행 · 테마파워",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UMI-1",
+   "text": "오늘 3건 전체 표시 · 해제 1건",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FB5-0",
+   "text": "장 운영 상태",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "장 운영 상태",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FB6-0",
+   "text": "09:42 기준",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "장 운영 상태",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FBB-0",
+   "text": "08:30",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "장 운영 상태",
+    "운영 구간",
+    "08:30"
+   ]
+  },
+  {
+   "id": "3FBC-0",
+   "text": "장전 시간외",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "장 운영 상태",
+    "운영 구간",
+    "08:30"
+   ]
+  },
+  {
+   "id": "3FBD-0",
+   "text": "지남",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "장 운영 상태",
+    "운영 구간",
+    "08:30"
+   ]
+  },
+  {
+   "id": "3FBG-0",
+   "text": "09:00",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "장 운영 상태",
+    "운영 구간",
+    "09:00"
+   ]
+  },
+  {
+   "id": "3FBH-0",
+   "text": "정규장 개시",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "장 운영 상태",
+    "운영 구간",
+    "09:00"
+   ]
+  },
+  {
+   "id": "3FBI-0",
+   "text": "지남",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "장 운영 상태",
+    "운영 구간",
+    "09:00"
+   ]
+  },
+  {
+   "id": "3FBL-0",
+   "text": "09:42",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "장 운영 상태",
+    "운영 구간",
+    "09:42 현재"
+   ]
+  },
+  {
+   "id": "3FBM-0",
+   "text": "현재",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "장 운영 상태",
+    "운영 구간",
+    "09:42 현재"
+   ]
+  },
+  {
+   "id": "3FBN-0",
+   "text": "진행 중",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "장 운영 상태",
+    "운영 구간",
+    "09:42 현재"
+   ]
+  },
+  {
+   "id": "3FBR-0",
+   "text": "15:20",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "장 운영 상태",
+    "운영 구간",
+    "15:20"
+   ]
+  },
+  {
+   "id": "3FBS-0",
+   "text": "종가 단일가",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "장 운영 상태",
+    "운영 구간",
+    "15:20"
+   ]
+  },
+  {
+   "id": "3FBT-0",
+   "text": "예정",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "장 운영 상태",
+    "운영 구간",
+    "15:20"
+   ]
+  },
+  {
+   "id": "3FBW-0",
+   "text": "15:30",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "장 운영 상태",
+    "운영 구간",
+    "15:30"
+   ]
+  },
+  {
+   "id": "3FBX-0",
+   "text": "장 마감",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "장 운영 상태",
+    "운영 구간",
+    "15:30"
+   ]
+  },
+  {
+   "id": "3FBY-0",
+   "text": "예정",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "장 운영 상태",
+    "운영 구간",
+    "15:30"
+   ]
+  },
+  {
+   "id": "3FC1-0",
+   "text": "16:00",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "장 운영 상태",
+    "운영 구간",
+    "16:00"
+   ]
+  },
+  {
+   "id": "3FC2-0",
+   "text": "시간외 단일가",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "장 운영 상태",
+    "운영 구간",
+    "16:00"
+   ]
+  },
+  {
+   "id": "3FC3-0",
+   "text": "예정",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "장 운영 상태",
+    "운영 구간",
+    "16:00"
+   ]
+  },
+  {
+   "id": "2UMM-1",
+   "text": "이수페타시스 — 발동 중",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UMN-1",
+   "text": "단일가 진행",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UMP-1",
+   "text": "발동 구분",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UMQ-1",
+   "text": "동적 VI · 상승",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UMS-1",
+   "text": "발동가 · 기준가 대비",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UMT-1",
+   "text": "64,500 · +3.04%",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UMV-1",
+   "text": "해제 예정",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UMW-1",
+   "text": "09:43:08",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FPA-0",
+   "text": "다른 발동 종목",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "다른 발동 종목",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FPD-0",
+   "text": "대성첨단",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "다른 발동 종목",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FPE-0",
+   "text": "396300 · 발동 중",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "다른 발동 종목",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FPF-0",
+   "text": "20,500 · +10.22%",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "다른 발동 종목",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FPI-0",
+   "text": "테마파워",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "다른 발동 종목",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FPJ-0",
+   "text": "217500 · 09:06:12 해제",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "다른 발동 종목",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FPK-0",
+   "text": "8,120 · -10.1%",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "다른 발동 종목",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FQM-0",
+   "text": "차트 열기",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 동작",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3FQO-0",
+   "text": "호가 열기",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "VI 동작",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UHR-1",
+   "text": "● 시장 상태·VI 실시간 갱신 중",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "User Status Footer"
+   ]
+  },
+  {
+   "id": "32J8-0",
+   "text": "마지막 반영 09:42:18",
+   "path": [
+    "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+    "Discovery Root · 시장·VI",
+    "Explorer Card Surface",
+    "User Status Footer"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "2UHM-1",
+   "name": "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+   "component": "Frame",
+   "w": 1440,
+   "h": 960,
+   "depth": 0
+  },
+  {
+   "id": "2UHN-1",
+   "name": "Discovery Root · 시장·VI",
+   "component": "Frame",
+   "w": 1440,
+   "h": 960,
+   "depth": 1
+  },
+  {
+   "id": "2UHO-1",
+   "name": "Explorer Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 880,
+   "depth": 2
+  },
+  {
+   "id": "2UKV-1",
+   "name": "Header and Capability Navigation",
+   "component": "Frame",
+   "w": 0,
+   "h": 112,
+   "depth": 3
+  },
+  {
+   "id": "2UL9-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2ULB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2ULC-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2UKW-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2UL7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UL5-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UL3-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UL1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UKZ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UKX-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UKE-1",
+   "name": "Ranking Query Controls",
+   "component": "Frame",
+   "w": 0,
+   "h": 92,
+   "depth": 3
+  },
+  {
+   "id": "2UKI-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2UKT-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UKR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UKP-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UKN-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UKL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UKJ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UKF-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2UHS-1",
+   "name": "Ranking Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 612,
+   "depth": 3
+  },
+  {
+   "id": "2ULF-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 880,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "357F-0",
+   "name": "KPI 밴드",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "357G-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "357K-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "357O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "357S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "359Q-0",
+   "name": "VI 표 헤더",
+   "component": "Frame",
+   "w": 0,
+   "h": 38,
+   "depth": 5
+  },
+  {
+   "id": "359Y-0",
+   "name": "VI 행 · 이수페타시스",
+   "component": "Frame",
+   "w": 0,
+   "h": 56,
+   "depth": 5
+  },
+  {
+   "id": "359Z-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "35A2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 146,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "35A4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "35A6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "35A8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 138,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "35AB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "35AE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "35AH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "35AK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 105,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "35AN-0",
+   "name": "VI 행 · 대성첨단",
+   "component": "Frame",
+   "w": 0,
+   "h": 56,
+   "depth": 5
+  },
+  {
+   "id": "35AO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "35AR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 146,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "35AT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "35AV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "35AX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 138,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "35B0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "35B3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "35B6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "35B9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 105,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "35BC-0",
+   "name": "VI 행 · 테마파워",
+   "component": "Frame",
+   "w": 0,
+   "h": 56,
+   "depth": 5
+  },
+  {
+   "id": "35BD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 104,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "35BG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 146,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "35BI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "35BK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "35BM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 138,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "35BP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "35BS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "35BV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "35BY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 105,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2UMH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3FB3-0",
+   "name": "장 운영 상태",
+   "component": "Frame",
+   "w": 823,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3FB4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 6
+  },
+  {
+   "id": "3FB7-0",
+   "name": "운영 구간",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "3FB9-0",
+   "name": "08:30",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3FBA-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 3,
+   "depth": 8
+  },
+  {
+   "id": "3FBE-0",
+   "name": "09:00",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3FBF-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 3,
+   "depth": 8
+  },
+  {
+   "id": "3FBJ-0",
+   "name": "09:42 현재",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3FBK-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 3,
+   "depth": 8
+  },
+  {
+   "id": "3FBP-0",
+   "name": "15:20",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3FBQ-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 3,
+   "depth": 8
+  },
+  {
+   "id": "3FBU-0",
+   "name": "15:30",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3FBV-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 3,
+   "depth": 8
+  },
+  {
+   "id": "3FBZ-0",
+   "name": "16:00",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3FC0-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0,
+   "h": 3,
+   "depth": 8
+  },
+  {
+   "id": "2UMK-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 478,
+   "h": 612,
+   "depth": 4
+  },
+  {
+   "id": "2UML-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UMO-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 66,
+   "depth": 5
+  },
+  {
+   "id": "2UMR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 66,
+   "depth": 5
+  },
+  {
+   "id": "2UMU-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 66,
+   "depth": 5
+  },
+  {
+   "id": "3FP8-0",
+   "name": "다른 발동 종목",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3FP9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 42,
+   "depth": 6
+  },
+  {
+   "id": "3FPB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 68,
+   "depth": 6
+  },
+  {
+   "id": "3FPC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3FPG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 68,
+   "depth": 6
+  },
+  {
+   "id": "3FPH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3FQK-0",
+   "name": "VI 동작",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3FQL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 42,
+   "depth": 6
+  },
+  {
+   "id": "3FQN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 42,
+   "depth": 6
+  },
+  {
+   "id": "2UHP-1",
+   "name": "User Status Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 3
+  }
+ ],
+ "text_multiset": {
+  "시장 · VI": 1,
+  "장중 · 09:42": 1,
+  "KRX·NXT · 정규장": 1,
+  "업종": 1,
+  "종목찾기": 1,
+  "관심": 1,
+  "테마": 1,
+  "시장·VI": 1,
+  "조건검색": 1,
+  "상태": 2,
+  "정규장": 1,
+  "KRX · NXT": 1,
+  "VI 포함": 1,
+  "발동 순": 1,
+  "오늘": 1,
+  "● 실시간 갱신": 1,
+  "VI 3건": 1,
+  "KOSPI": 2,
+  "2,684.21": 1,
+  "+29.73 · +1.12%": 1,
+  "KOSDAQ": 3,
+  "842.15": 1,
+  "+7.01 · +0.84%": 1,
+  "장 운영": 1,
+  "정규장 진행": 1,
+  "장 시작 09:00 · 잔여 없음": 1,
+  "오늘 VI 발동": 1,
+  "3건": 1,
+  "발동 중 2 · 해제 1": 1,
+  "발동 시간": 1,
+  "종목": 1,
+  "구분": 1,
+  "발동가": 1,
+  "기준가": 1,
+  "거래량": 1,
+  "09:41:08": 1,
+  "해제 09:43:08": 1,
+  "이수페타시스": 1,
+  "007660": 1,
+  "동적 상승": 1,
+  "동적 ±3% · 오늘 1회": 1,
+  "64,500": 1,
+  "+29.90%": 1,
+  "62,600": 1,
+  "괴리 +3.04%": 1,
+  "312만주": 1,
+  "1,720억": 1,
+  "발동 중": 2,
+  "50초 남음": 1,
+  "09:40:44": 1,
+  "해제 09:42:44": 1,
+  "대성첨단": 2,
+  "396300": 1,
+  "정적 상승": 1,
+  "정적 ±10% · 오늘 1회": 2,
+  "20,500": 1,
+  "+10.22%": 1,
+  "18,600": 1,
+  "괴리 +10.22%": 1,
+  "486만주": 1,
+  "992억": 1,
+  "26초 남음": 1,
+  "09:04:12": 1,
+  "해제 09:06:12": 1,
+  "테마파워": 2,
+  "217500": 1,
+  "정적 하락": 1,
+  "8,120": 1,
+  "-10.1%": 1,
+  "9,030": 1,
+  "괴리 -10.1%": 1,
+  "318만주": 1,
+  "272억": 1,
+  "해제": 1,
+  "09:06:12": 1,
+  "오늘 3건 전체 표시 · 해제 1건": 1,
+  "장 운영 상태": 1,
+  "09:42 기준": 1,
+  "08:30": 1,
+  "장전 시간외": 1,
+  "지남": 2,
+  "09:00": 1,
+  "정규장 개시": 1,
+  "09:42": 1,
+  "현재": 1,
+  "진행 중": 1,
+  "15:20": 1,
+  "종가 단일가": 1,
+  "예정": 3,
+  "15:30": 1,
+  "장 마감": 1,
+  "16:00": 1,
+  "시간외 단일가": 1,
+  "이수페타시스 — 발동 중": 1,
+  "단일가 진행": 1,
+  "발동 구분": 1,
+  "동적 VI · 상승": 1,
+  "발동가 · 기준가 대비": 1,
+  "64,500 · +3.04%": 1,
+  "해제 예정": 1,
+  "09:43:08": 1,
+  "다른 발동 종목": 1,
+  "396300 · 발동 중": 1,
+  "20,500 · +10.22%": 1,
+  "217500 · 09:06:12 해제": 1,
+  "8,120 · -10.1%": 1,
+  "차트 열기": 1,
+  "호가 열기": 1,
+  "● 시장 상태·VI 실시간 갱신 중": 1,
+  "마지막 반영 09:42:18": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "8ecb8e25348859b2ee36ac0eefc8f88e599903f4a491ff3269e15aab17d1e9c2"
+}

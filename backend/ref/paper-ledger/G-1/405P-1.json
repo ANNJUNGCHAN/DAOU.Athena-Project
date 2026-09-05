@@ -1,0 +1,1536 @@
+{
+ "board_id": "405P-1",
+ "page": "G-1",
+ "page_name": "백테스트 구현 현황",
+ "name": "00b · 백테스트 — 의도 대비 구현 상태 표",
+ "width": 1655.0,
+ "height": 2263.0,
+ "texts": [
+  {
+   "id": "405R-1",
+   "text": "의도 대비 구현 상태 — 다르게 구현 3 · 구현 6 · 부분 10 · 미구현 3",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "타이틀"
+   ]
+  },
+  {
+   "id": "405S-1",
+   "text": "사용자가 마지막에 준 명세 항목을 하나씩 코드·프로브로 대조했다. 초록=구현, 주황=부분, 빨강=미구현, 보라=다르게 구현. 근거는 파일·함수 또는 프로브 스텝 id다.",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "타이틀"
+   ]
+  },
+  {
+   "id": "405Y-1",
+   "text": "다르게 구현",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4060-1",
+   "text": "1) 설계 하위 탭 4개(폼·시각 설계·코드·흐름), 흐름은 읽기 전용 projection, 시각 설계는 별도 탭",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4061-1",
+   "text": "탭은 3개다: 지도 · 폼 · 코드·최후의 보루. 별도의 '시각 설계' 탭도, 별도의 읽기 전용 '흐름' 탭도 없다. 지도 탭 하나가 두 역할을 겹쳐 쓴다 — renderFlowTab이 (스냅샷이면 읽기 전용 → visualActive면 편집 표면 → 아니면 읽기 전용 요약 지도) 순으로 갈래를 타고, 편집 표면 안에서 요약 지도(projection)가 편집기 **위에** 다시 그려진다.",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4062-1",
+   "text": "app/lib/backtest-canvas.js:97 DESIGN_TABS = [['flow','지도'],['form','폼'],['code','코드 · 최후의 보루']]; :2618 renderFlowTab; :3714 renderVisualDesign이 renderSummaryMap(false) 다음에 visualHost를 붙인다",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4065-1",
+   "text": "구현",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4067-1",
+   "text": "2) 왼쪽 팔레트 · 중앙 캔버스 · 오른쪽 검사기 · 하단 검증 요약 · 오른쪽 대화 패널",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4068-1",
+   "text": "편집기 render()가 body에 팔레트→캔버스→검사기를 넣고 root 끝에 요약 바를 붙인다. 다만 '오른쪽 대화 패널'은 시각 설계 화면이 소유하지 않는다 — 셸의 chatRegion(캔버스 영역 오른쪽)이고, 시각 카드는 그 패널에 뜬다.",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4069-1",
+   "text": "app/lib/backtest-visual-editor.js:1775-1795 render(); app/shell.html:156 canvasRegion / :298 chatRegion; app/chat.js:3243",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "406C-1",
+   "text": "부분",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "406E-1",
+   "text": "3) 같은 diagnostic이 노드·포트·연결선·검사기·요약·코드 span·대화 intent에 동시 표시, 오류 개수 = 고유 diagnostic id 수, diagnostic에 stable id 필드",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "406F-1",
+   "text": "7개 표면 동시 표시는 된다: 노드 카드·포트 점·엣지 path·검사기 오류 상자·요약 바 전부 data-diag-code를 달고, 코드 span은 attach_spans가 붙이며, 대화 접두는 'code @ node.port: message'로 싣는다(프로브 O03이 node1·port1·inspector1·summary1을 잰다). 그러나 Diagnostic 모델에 **id 필드가 없다** — 식별자는 code + node_id + port + json_path 조합이다. 오류 개수도 '고유 id 수'가 아니라 severity=error 진단 배열의 길이다.",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "406G-1",
+   "text": "backend/athena_api/backtest/visual_schema.py:161 Diagnostic(code/severity/node_id/port/json_path/source_span/message_ko/suggested_fix — id 없음); app/lib/backtest-visual-editor.js:880 errors = diagnostics.filter(severity==",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "406J-1",
+   "text": "부분",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 4",
+    "Frame"
+   ]
+  },
+  {
+   "id": "406L-1",
+   "text": "4) 오류 노드 더블클릭·Enter·검사기 버튼 → 코드 탭 동적 span; 코드의 '시각 설계에서 보기' → 같은 노드 복귀 + 노드/포트/연결선 강조 + 포커스 복원",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 4",
+    "Frame"
+   ]
+  },
+  {
+   "id": "406M-1",
+   "text": "세 입구(더블클릭 dblclick, Enter, 검사기 [코드에서 열기])가 모두 onOpenCode로 들어가고 openCodeAt이 authoritative/preview를 골라 span을 연다(textarea.focus + 두 줄 위 스크롤). 리본 [시각 설계에서 보기]는 backToVisualNode로 그 node_id를 select+focusNode한다. 미달: 복귀 시 강조되는 것은 **노드 카드(is-selected)와 포커스뿐**이고, 포트·연결선은 진단이 걸려 있을 때만(is-diag) 색이 산다 — 선택에 따라 포트/엣지가 강조되는 배선은 없다.",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 4",
+    "Frame"
+   ]
+  },
+  {
+   "id": "406N-1",
+   "text": "app/lib/backtest-visual-editor.js:1237 dblclick, :822 Enter, :1479 renderOpenCallout; app/lib/backtest-canvas.js:3228 openCodeAt, :3297 backToVisualNode; renderEdge/renderPort에 is-selected 갈래 없음(:1133, :1270); 프로브 O04",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 4",
+    "Frame"
+   ]
+  },
+  {
+   "id": "406Q-1",
+   "text": "부분",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 5",
+    "Frame"
+   ]
+  },
+  {
+   "id": "406S-1",
+   "text": "5) 대화 '오류를 고쳐줘' → 질문 하나 → 답 → 비활성 patch proposal(그래프 diff·코드 diff·영향 범위·검증 미리보기) → Apply → 재검증·컴파일 → origin=visual 비활성 원자 저장 → 수정 노드 강조 + 그래프/코드 같은 버전 표시",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 5",
+    "Frame"
+   ]
+  },
+  {
+   "id": "406T-1",
+   "text": "사슬 전체가 돈다: questions_for가 막는 첫 오류 하나만(remaining 포함) 묻고 → build_patch가 base_graph_hash를 대조해 비활성 수정안을 만들고 → 사람이 [적용하고 시각 설계로 돌아가기]를 눌러야 applyVisualPatch가 재검증·컴파일 후 origin=visual·비활성으로 저장한다(프로브 O05·O06·O07). 미달 둘: ① 패치 카드가 **그래프 diff(graph_patch RFC6902)를 그리지 않는다** — 코드 diff와 spec diff 토글만 있다. ② 적용 뒤 '수정된 노드·포트·연결선' 강조가 없다 — synced가 되면 모든 노드가 똑같이 is-synced가 된다. 같은 버전 표시(요약 바 '그래프와 코드가 같은 버전입니다', 서랍 '지도 vN와 일치')는 있다.",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 5",
+    "Frame"
+   ]
+  },
+  {
+   "id": "406U-1",
+   "text": "backend/athena_api/backtest/visual_repair.py:271 questions_for / :492 build_patch(graph_patch·spec_diff·code_diff·diagnostics_after·graph_compatible·applied:false); app/chat.js:3336 visual_patch 카드(code_diff+spec_diff만);",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 5",
+    "Frame"
+   ]
+  },
+  {
+   "id": "406X-1",
+   "text": "부분",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 6",
+    "Frame"
+   ]
+  },
+  {
+   "id": "406Z-1",
+   "text": "6) 활성화·실행은 별도 승인 UX; patch 적용만으로 run/backfill/optimize/deploy 호출 없음",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 6",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4070-1",
+   "text": "'부작용 없음'은 지켜진다 — backtest_visual.py에는 runner·store import 자체가 없고, 프로브 O06/O07이 수정안 생성·적용 전후로 versions 2→2, runs 193→193, activeVersionId 불변을 잰다. 실행도 별도다(헤더 [실행], invalid면 '오류 검토'로 disabled, 수집은 승인 카드). 그러나 **활성화 UX가 백테스트 화면에 없다**: deps.activate가 canvas.js에 배선돼 있는데 backtest-canvas.js 어디서도 부르지 않는다. 저장된 origin=visual 버전은 이력 목록에서 되열기만 되고 켤 길이 없다.",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 6",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4071-1",
+   "text": "backend/athena_api/api/backtest_visual.py 파일 머리말; artifacts/backtest-tour/full-all.log O06·O07; app/canvas.js:2802 activate 배선; app/lib/backtest-canvas.js에 activate 호출 0건(grep 결과 activeVersionId만)",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 6",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4075-1",
+   "text": "구현",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 7",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4077-1",
+   "text": "7) origin visual/code_only 항상 비활성, active=true 거부, active_version_id 불변, 원자 transaction, migration 보존",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 7",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4078-1",
+   "text": "저장층이 _INACTIVE_ONLY_ORIGINS에 active=True를 주면 ValueError로 거부하고, API는 body.active가 참이면 422를 낸다. bundle 6열은 source와 **같은 INSERT**로 들어가고 트랜잭션 안에서 저장 전후 active_version_id를 다시 읽어 어긋나면 통째로 되돌린다(API도 한 번 더 대조해 500). 기존 DB에는 ALTER TABLE ADD COLUMN만 붙여 캔들 캐시·기존 행을 건드리지 않는다. hash는 클라이언트 값을 믿지 않고 파싱한 모델에서 다시 계산해 대조한다(422).",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 7",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4079-1",
+   "text": "backend/athena_api/backtest/store.py:634-676 add_version(atomic + after!=expected → RuntimeError), :205 _migrate_version_bundle; backend/athena_api/api/backtest.py:869 active 거부 / :802 hash 재유도 / :908 active 변경 시 500",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 7",
+    "Frame"
+   ]
+  },
+  {
+   "id": "407C-1",
+   "text": "다르게 구현",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 8",
+    "Frame"
+   ]
+  },
+  {
+   "id": "407E-1",
+   "text": "8-a) graph_schema_version",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 8",
+    "Frame"
+   ]
+  },
+  {
+   "id": "407F-1",
+   "text": "이름이 graph_version이고 Literal[\"1\"]로 고정이다. 스키마 버전을 싣는 자리는 있으나 계약이 부른 이름과 다르다.",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 8",
+    "Frame"
+   ]
+  },
+  {
+   "id": "407G-1",
+   "text": "backend/athena_api/backtest/visual_schema.py:56 GRAPH_VERSION='1' / :136 graph_version: Literal['1']",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 8",
+    "Frame"
+   ]
+  },
+  {
+   "id": "407J-1",
+   "text": "부분",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 9",
+    "Frame"
+   ]
+  },
+  {
+   "id": "407L-1",
+   "text": "8-b) graph_revision",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 9",
+    "Frame"
+   ]
+  },
+  {
+   "id": "407M-1",
+   "text": "그래프 모델에는 없다. preview source map에만 graph_revision이 있고 값은 graph_hash 앞 12자다(호출자가 넘기면 그 값). authoritative map에는 아예 없다.",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 9",
+    "Frame"
+   ]
+  },
+  {
+   "id": "407N-1",
+   "text": "backend/athena_api/backtest/codegen.py:643 revision = graph_revision or gh[:12]; :592-608 authoritative hashes에는 없음",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 9",
+    "Frame"
+   ]
+  },
+  {
+   "id": "407Q-1",
+   "text": "미구현",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 10",
+    "Frame"
+   ]
+  },
+  {
+   "id": "407S-1",
+   "text": "8-c) node_type_version",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 10",
+    "Frame"
+   ]
+  },
+  {
+   "id": "407T-1",
+   "text": "GraphNode는 id·kind·label·params·ui뿐이고 노드 종류 payload에도 버전이 없다. 전체 registry_version=\"1\" 상수만 있다 — 노드 종류 하나가 바뀌었는지 판정할 수단이 없다.",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 10",
+    "Frame"
+   ]
+  },
+  {
+   "id": "407U-1",
+   "text": "backend/athena_api/backtest/visual_schema.py:74 GraphNode; backend/athena_api/backtest/visual_registry.py:27 REGISTRY_VERSION='1' / :164 NodeKind.payload",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 10",
+    "Frame"
+   ]
+  },
+  {
+   "id": "407X-1",
+   "text": "구현",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 11",
+    "Frame"
+   ]
+  },
+  {
+   "id": "407Z-1",
+   "text": "8-d) compiler_version",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 11",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4080-1",
+   "text": "\"visual-1.0.0\" 하나가 hashes·authoritative map·preview map·저장 bundle 열·422 불일치 검사까지 관통한다. null은 생략과 같게 본다.",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 11",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4081-1",
+   "text": "backend/athena_api/backtest/visual_schema.py:54 COMPILER_VERSION; codegen.py:592·605·647·654; store.py:106 컬럼; api/backtest.py:782-790",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 11",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4084-1",
+   "text": "미구현",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 12",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4086-1",
+   "text": "8-e) indicator_registry_digest",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 12",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4087-1",
+   "text": "digest를 계산하거나 싣는 코드가 backend 전체에 없다. 지표 레지스트리가 바뀌어도 저장된 그래프가 그것을 알 방법이 없다.",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 12",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4088-1",
+   "text": "backend/athena_api/backtest/visual_registry.py:345 registry_payload(registry_version·graph_version·port_types·ohlcv_columns·logic_ports·kinds만)",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 12",
+    "Frame"
+   ]
+  },
+  {
+   "id": "408C-1",
+   "text": "다르게 구현",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 13",
+    "Frame"
+   ]
+  },
+  {
+   "id": "408E-1",
+   "text": "8-f) semantic_hash",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 13",
+    "Frame"
+   ]
+  },
+  {
+   "id": "408F-1",
+   "text": "이름은 graph_hash이고 실체는 의미 해시다 — ui를 제거한 정규 JSON(sort_keys·구분자 고정)의 sha256이라 노드를 옮겨도 값이 안 바뀐다. 곁에 spec_hash·artifact_hash·preview_hash가 함께 있다.",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 13",
+    "Frame"
+   ]
+  },
+  {
+   "id": "408G-1",
+   "text": "backend/athena_api/backtest/visual_schema.py:201 canonical_graph_json(node.pop('ui')) / :213 graph_hash / :217 spec_hash / :221 source_hash",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 13",
+    "Frame"
+   ]
+  },
+  {
+   "id": "408J-1",
+   "text": "미구현",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 14",
+    "Frame"
+   ]
+  },
+  {
+   "id": "408L-1",
+   "text": "8-g) layout_hash",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 14",
+    "Frame"
+   ]
+  },
+  {
+   "id": "408M-1",
+   "text": "layout을 해시하는 함수·필드가 없다. ui는 해시 대상에서 빠질 뿐(저장은 된다), 배치가 바뀌었는지 판정하는 값은 어디에도 없다.",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 14",
+    "Frame"
+   ]
+  },
+  {
+   "id": "408N-1",
+   "text": "backend/athena_api/backtest/visual_schema.py:201 canonical_graph_json 주석 '노드를 옮겨도 그래프 hash는 바뀌지 않아야 한다'",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 14",
+    "Frame"
+   ]
+  },
+  {
+   "id": "408Q-1",
+   "text": "부분",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 15",
+    "Frame"
+   ]
+  },
+  {
+   "id": "408S-1",
+   "text": "9) validator 검사 항목 14종",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 15",
+    "Frame"
+   ]
+  },
+  {
+   "id": "408T-1",
+   "text": "구현 10종 — schema/버전(pydantic + Literal, 위반 시 422), unknown node type(BTG-KIND-001), 중복 id(노드·엣지 모두 BTG-ID-001), 없는 node/port(BTG-EDGE-001·BTG-PORT-001), port type(BTG-TYPE-001), input cardinality(한 입력 두 연결 BTG-EDGE-001 · 필수 입력 빔 BTG-PORT-002 · 캔들/진입/청산 정확히 하나 BTG-DATA-001·OUT-001/002/003), cycle(BTG-CYCLE-001), alias 중복(BTG-ALIAS-001), entry/exit Boolean(signal 포트가 accepts=(Series<Bool>,) required로 타입 검사에 걸린다), extra field 거부(모든 그래프 모델 extra='forbid'; NodeUI만 allow — 해시 대상 밖). 미구현 4종 — node/edge/fan-in **전역 상한** 없음(kind별 max_per_graph 필드는 registry payload에 실리지만 validator가 읽지 않는다), orphan warning 없음, node_type_version 검사 없음, 미래 버전 read-only 없음(graph_version이 '1'이 아니면 read-only가 아니라 422 거절).",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 15",
+    "Frame"
+   ]
+  },
+  {
+   "id": "408U-1",
+   "text": "backend/athena_api/backtest/visual_schema.py:848 validate_graph(_check_params/_ports/_types/_cardinality/_names/_cycle/_logic/_scenario), :260 build_index; visual_registry.py:136·313 max_per_graph(검증에서 미사용); grep MAX/LIM",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 15",
+    "Frame"
+   ]
+  },
+  {
+   "id": "408X-1",
+   "text": "구현",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 16",
+    "Frame"
+   ]
+  },
+  {
+   "id": "408Z-1",
+   "text": "10) source map 두 종류 분리(provisional preview executable=false / authoritative + artifact hash), stale 시 이동 금지",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 16",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4090-1",
+   "text": "generate_from_graph은 kind='authoritative'·executable=true·artifact_hash를 내고 모든 노드를 덮지 못하면 예외로 멈춘다. preview_from_graph은 kind='preview'·executable=false·preview_only=true·preview_hash·graph_revision을 내고, 만들 수 없으면 None이다(그때 exact_code_jump=false). 화면은 열기 전에 spanIsValid로 지금 코드의 sha256을 대조하고 어긋나면 줄을 추정하지 않고 알림만 띄운다.",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 16",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4091-1",
+   "text": "backend/athena_api/backtest/codegen.py:567·612; backend/athena_api/api/backtest_visual.py:118 exact_code_jump; app/lib/backtest-code-editor.js:195 spanIsValid / :148 STALE_NOTICE_TEXT; app/lib/backtest-canvas.js:3228 ope",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 16",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4094-1",
+   "text": "구현",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 17",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4096-1",
+   "text": "11) 코드 전용 분기(origin=code_only, 마지막 호환 그래프 읽기 전용, 동기화 표시 금지)",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 17",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4097-1",
+   "text": "forkCodeOnly가 origin=code_only 비활성 버전을 남기고 codeOnlyGraph를 붙잡은 뒤 상태를 'unvalidated'로 되돌린다(synced 표시가 사라진다). 지도 탭은 renderSnapshotDesign으로 readOnly 편집기 + '동기화되지 않음 · 코드 전용' 배지만 낸다. 서버는 origin=code_only에 bundle을 실으면 422로 막고, live prompt 접두는 '동기화됐다고 말하지 않는다' 줄을 싣는다.",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 17",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4098-1",
+   "text": "app/lib/backtest-canvas.js:2806 forkCodeOnly / :2891 renderSnapshotDesign; backend/athena_api/api/backtest.py:884 code_only bundle 422; app/lib/main/live-prompt.js:352 code_only 줄; 프로브 O09",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 17",
+    "Frame"
+   ]
+  },
+  {
+   "id": "409B-1",
+   "text": "부분",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 18",
+    "Frame"
+   ]
+  },
+  {
+   "id": "409D-1",
+   "text": "12) 좁은 폭 drawer/overlay + focus 복귀, .backtest-body 스크롤 소유권",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 18",
+    "Frame"
+   ]
+  },
+  {
+   "id": "409E-1",
+   "text": "서랍 자체는 다 있다: narrow면 팔레트·검사기가 body에서 빠지고 캔버스 칼럼 안에 position:absolute 서랍으로 얹히며, [닫기]·Escape·팔레트에서 노드 추가 후 자동 닫힘이 모두 focusNode로 초점을 돌려준다. 그러나 **setNarrow()를 부르는 코드가 앱에 없다** — 호출자는 테스트뿐이라 실행 중에는 좁은 폭 모드가 켜지지 않는다(창을 줄여도 팔레트·검사기가 그대로 남는다). 스크롤은 .backtest-body가 페이지 스크롤을 갖고, 그 안에서 .backtest-vis-surface가 좌표 캔버스용 내부 스크롤러로 하나 더 있다(팔레트·검사기의 overflow-y는 높이 제약이 없어 실제로는 안 걸린다).",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 18",
+    "Frame"
+   ]
+  },
+  {
+   "id": "409F-1",
+   "text": "app/lib/backtest-visual-editor.js:1783-1792 render() narrow 갈래 / :1820 setNarrow / :836 closeDrawers→focusNode; grep 결과 setNarrow 호출은 backtest-visual-editor.test.js:640·665뿐; app/shell.css:814 .backtest-body{overflow-y:a",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 18",
+    "Frame"
+   ]
+  },
+  {
+   "id": "409J-1",
+   "text": "부분",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 19",
+    "Frame"
+   ]
+  },
+  {
+   "id": "409L-1",
+   "text": "13) 접근성: 키보드만으로 탐색·선택·연결·삭제·오류 확인·코드 이동, aria-live, 접근 가능한 이름, focus trap/복원, list/form 대체 뷰, 한국어 IME 조합 중 단축키 안전",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 19",
+    "Frame"
+   ]
+  },
+  {
+   "id": "409M-1",
+   "text": "되는 것: Tab/Shift+Tab 노드 순회, Enter 코드 열기, Delete/Backspace 삭제, Ctrl+Z/Y, Escape(연결 취소·서랍 닫기), 요약 바 role=status+aria-live=polite, 알림·검사기 오류 role=alert, 팔레트/검사기 aria-label + 서랍 role=dialog + aria-expanded, 포트 점 aria-label(노드·포트 이름·타입), 노드 aria-pressed, 목록/폼 대체 뷰. 미달 셋: ① 서랍에 focus trap이 없다(aria-modal도 없음 — 복원만 있다). ② **키보드로 캔버스 포트 점에 닿을 수 없다** — 루트 keydown이 Tab을 preventDefault하고 노드만 순회하므로, 연결은 검사기·목록의 select로만 된다. ③ isComposing/compositionstart 가드가 없다 — IME 안전은 '입력칸이면 무시'(isFormTarget) 하나에 기대고 있다.",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 19",
+    "Frame"
+   ]
+  },
+  {
+   "id": "409N-1",
+   "text": "app/lib/backtest-visual-editor.js:800 onKeyDown / :473 isFormTarget / :1692 aria-live / :935·1379 role=dialog / :836 closeDrawers; grep isComposing 0건",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 19",
+    "Frame"
+   ]
+  },
+  {
+   "id": "409Q-1",
+   "text": "부분",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 20",
+    "Frame"
+   ]
+  },
+  {
+   "id": "409S-1",
+   "text": "14) P4: undo/redo, 복사/붙여넣기, keyboard connection, 대형 그래프 성능 측정(20/30·50/80·100/160 fixture, p95 budget), 취소",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 20",
+    "Frame"
+   ]
+  },
+  {
+   "id": "409T-1",
+   "text": "undo/redo: 구현(헤더 버튼 + Ctrl+Z/Y, 최대 100단계, 같은 파라미터 연속 편집은 coalesce). 단 setGraph가 past/future를 비우므로 패치 적용·버전 되열기 뒤에는 되돌릴 수 없고, 세션을 넘겨 영속되지도 않는다. 복사/붙여넣기: **미구현** — duplicateNode가 API로만 있고 키·버튼·클립보드 배선이 없다. keyboard connection: 다르게 — 캔버스 포트가 아니라 검사기/목록의 입력 select로 잇는다. 성능 측정: **미구현** — fixture(20/30·50/80·100/160)도 p95 budget 측정도 코드·테스트에 없다. 취소: 연결 취소(Escape)와 수정안 [버리기]는 있으나, 진행 중인 validate/compile 요청을 끊는 abort는 없다(400ms 디바운스만).",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 20",
+    "Frame"
+   ]
+  },
+  {
+   "id": "409U-1",
+   "text": "app/lib/backtest-visual-editor.js:536 pushHistory / :546 undo / :1037 undo·redo 버튼 / :1817 setGraph가 past·future 비움 / :632 duplicateNode(호출자 없음) / :810 Ctrl+Z·Y / :811 Escape; app/lib/backtest-canvas.js:126 VISUAL_DEBOUN",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 20",
+    "Frame"
+   ]
+  },
+  {
+   "id": "409X-1",
+   "text": "구현",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 21",
+    "Frame"
+   ]
+  },
+  {
+   "id": "409Z-1",
+   "text": "15) 렌더러: 새 의존성 없이 DOM/SVG; Rete/React 미도입",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 21",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40A0-1",
+   "text": "backtest-visual-editor.js는 UMD 한 파일이고 외부 import가 없다. 노드는 div/button, 엣지는 createElementNS로 만든 SVG path다. 파일 머리말이 vis-network가 설치돼 있어도 쓰지 않는 이유(좌표를 감춘다)를 적어 두었다.",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 21",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40A1-1",
+   "text": "app/lib/backtest-visual-editor.js:26-28 헤더 주석, :30 SVG_NS, :446 svgEl, :1870 UMD 각주(require 0건)",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 21",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40A4-1",
+   "text": "부분",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 22",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40A6-1",
+   "text": "16) 기존 폼·코드·흐름·승인·실행·결과·이력·최적화·배포 회귀 없음(프로브 근거)",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 22",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40A7-1",
+   "text": "프로브는 깨끗하다: full-all.log가 194/196이고 FAIL 0, 나머지 2는 SKIP(C13 실제 백필은 키움 쿼터라 자동 미실행, Z02 삭제 API 없음)이며 이 로그는 지금 작업 트리의 backtest-canvas.js보다 나중에 만들어졌다. 그러나 단위 테스트는 **11건 빨갛다** — 전부 코드 탭의 프로젝트 IDE·가상환경 영역이고, 미커밋 변경 한 줄(renderCodeTab의 IDE 표시 조건)이 원인임을 확인했다(HEAD 사본으로 같은 테스트를 돌리면 145/0, 그 한 줄만 되돌리면 145/0).",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 22",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40A8-1",
+   "text": "artifacts/backtest-tour/full-all.log 마지막 줄 'ALL OK (194/196)'; app/lib/backtest-canvas.js:2454 `if (ide && ide.currentProject() && (runPath === 'code' || activeProjectFile()))`; lib/backtest-canvas.test.js not ok 75·79·8",
+   "path": [
+    "00b · 백테스트 — 의도 대비 구현 상태 표",
+    "상태 표",
+    "행 22",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "405P-1",
+   "name": "00b · 백테스트 — 의도 대비 구현 상태 표",
+   "component": "Frame",
+   "w": 1655.0,
+   "h": 2263.0,
+   "depth": 0
+  },
+  {
+   "id": "405Q-1",
+   "name": "타이틀",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 1
+  },
+  {
+   "id": "405U-1",
+   "name": "상태 표",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 1
+  },
+  {
+   "id": "405W-1",
+   "name": "행 1",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "405X-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 86.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "405Z-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "4063-1",
+   "name": "행 2",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "4064-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 86.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "4066-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "406A-1",
+   "name": "행 3",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "406B-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 86.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "406D-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "406H-1",
+   "name": "행 4",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "406I-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 86.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "406K-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "406O-1",
+   "name": "행 5",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "406P-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 86.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "406R-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "406V-1",
+   "name": "행 6",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "406W-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 86.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "406Y-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "4073-1",
+   "name": "행 7",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "4074-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 86.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "4076-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "407A-1",
+   "name": "행 8",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "407B-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 86.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "407D-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "407H-1",
+   "name": "행 9",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "407I-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 86.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "407K-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "407O-1",
+   "name": "행 10",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "407P-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 86.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "407R-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "407V-1",
+   "name": "행 11",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "407W-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 86.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "407Y-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "4082-1",
+   "name": "행 12",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "4083-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 86.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "4085-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "408A-1",
+   "name": "행 13",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "408B-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 86.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "408D-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "408H-1",
+   "name": "행 14",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "408I-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 86.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "408K-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "408O-1",
+   "name": "행 15",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "408P-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 86.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "408R-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "408V-1",
+   "name": "행 16",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "408W-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 86.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "408Y-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "4092-1",
+   "name": "행 17",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "4093-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 86.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "4095-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "4099-1",
+   "name": "행 18",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "409A-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 86.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "409C-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "409H-1",
+   "name": "행 19",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "409I-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 86.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "409K-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "409O-1",
+   "name": "행 20",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "409P-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 86.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "409R-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "409V-1",
+   "name": "행 21",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "409W-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 86.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "409Y-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "40A2-1",
+   "name": "행 22",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "40A3-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 86.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "40A5-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  }
+ ],
+ "text_multiset": {
+  "의도 대비 구현 상태 — 다르게 구현 3 · 구현 6 · 부분 10 · 미구현 3": 1,
+  "사용자가 마지막에 준 명세 항목을 하나씩 코드·프로브로 대조했다. 초록=구현, 주황=부분, 빨강=미구현, 보라=다르게 구현. 근거는 파일·함수 또는 프로브 스텝 id다.": 1,
+  "다르게 구현": 3,
+  "1) 설계 하위 탭 4개(폼·시각 설계·코드·흐름), 흐름은 읽기 전용 projection, 시각 설계는 별도 탭": 1,
+  "탭은 3개다: 지도 · 폼 · 코드·최후의 보루. 별도의 '시각 설계' 탭도, 별도의 읽기 전용 '흐름' 탭도 없다. 지도 탭 하나가 두 역할을 겹쳐 쓴다 — renderFlowTab이 (스냅샷이면 읽기 전용 → visualActive면 편집 표면 → 아니면 읽기 전용 요약 지도) 순으로 갈래를 타고, 편집 표면 안에서 요약 지도(projection)가 편집기 **위에** 다시 그려진다.": 1,
+  "app/lib/backtest-canvas.js:97 DESIGN_TABS = [['flow','지도'],['form','폼'],['code','코드 · 최후의 보루']]; :2618 renderFlowTab; :3714 renderVisualDesign이 renderSummaryMap(false) 다음에 visualHost를 붙인다": 1,
+  "구현": 6,
+  "2) 왼쪽 팔레트 · 중앙 캔버스 · 오른쪽 검사기 · 하단 검증 요약 · 오른쪽 대화 패널": 1,
+  "편집기 render()가 body에 팔레트→캔버스→검사기를 넣고 root 끝에 요약 바를 붙인다. 다만 '오른쪽 대화 패널'은 시각 설계 화면이 소유하지 않는다 — 셸의 chatRegion(캔버스 영역 오른쪽)이고, 시각 카드는 그 패널에 뜬다.": 1,
+  "app/lib/backtest-visual-editor.js:1775-1795 render(); app/shell.html:156 canvasRegion / :298 chatRegion; app/chat.js:3243": 1,
+  "부분": 10,
+  "3) 같은 diagnostic이 노드·포트·연결선·검사기·요약·코드 span·대화 intent에 동시 표시, 오류 개수 = 고유 diagnostic id 수, diagnostic에 stable id 필드": 1,
+  "7개 표면 동시 표시는 된다: 노드 카드·포트 점·엣지 path·검사기 오류 상자·요약 바 전부 data-diag-code를 달고, 코드 span은 attach_spans가 붙이며, 대화 접두는 'code @ node.port: message'로 싣는다(프로브 O03이 node1·port1·inspector1·summary1을 잰다). 그러나 Diagnostic 모델에 **id 필드가 없다** — 식별자는 code + node_id + port + json_path 조합이다. 오류 개수도 '고유 id 수'가 아니라 severity=error 진단 배열의 길이다.": 1,
+  "backend/athena_api/backtest/visual_schema.py:161 Diagnostic(code/severity/node_id/port/json_path/source_span/message_ko/suggested_fix — id 없음); app/lib/backtest-visual-editor.js:880 errors = diagnostics.filter(severity==": 1,
+  "4) 오류 노드 더블클릭·Enter·검사기 버튼 → 코드 탭 동적 span; 코드의 '시각 설계에서 보기' → 같은 노드 복귀 + 노드/포트/연결선 강조 + 포커스 복원": 1,
+  "세 입구(더블클릭 dblclick, Enter, 검사기 [코드에서 열기])가 모두 onOpenCode로 들어가고 openCodeAt이 authoritative/preview를 골라 span을 연다(textarea.focus + 두 줄 위 스크롤). 리본 [시각 설계에서 보기]는 backToVisualNode로 그 node_id를 select+focusNode한다. 미달: 복귀 시 강조되는 것은 **노드 카드(is-selected)와 포커스뿐**이고, 포트·연결선은 진단이 걸려 있을 때만(is-diag) 색이 산다 — 선택에 따라 포트/엣지가 강조되는 배선은 없다.": 1,
+  "app/lib/backtest-visual-editor.js:1237 dblclick, :822 Enter, :1479 renderOpenCallout; app/lib/backtest-canvas.js:3228 openCodeAt, :3297 backToVisualNode; renderEdge/renderPort에 is-selected 갈래 없음(:1133, :1270); 프로브 O04": 1,
+  "5) 대화 '오류를 고쳐줘' → 질문 하나 → 답 → 비활성 patch proposal(그래프 diff·코드 diff·영향 범위·검증 미리보기) → Apply → 재검증·컴파일 → origin=visual 비활성 원자 저장 → 수정 노드 강조 + 그래프/코드 같은 버전 표시": 1,
+  "사슬 전체가 돈다: questions_for가 막는 첫 오류 하나만(remaining 포함) 묻고 → build_patch가 base_graph_hash를 대조해 비활성 수정안을 만들고 → 사람이 [적용하고 시각 설계로 돌아가기]를 눌러야 applyVisualPatch가 재검증·컴파일 후 origin=visual·비활성으로 저장한다(프로브 O05·O06·O07). 미달 둘: ① 패치 카드가 **그래프 diff(graph_patch RFC6902)를 그리지 않는다** — 코드 diff와 spec diff 토글만 있다. ② 적용 뒤 '수정된 노드·포트·연결선' 강조가 없다 — synced가 되면 모든 노드가 똑같이 is-synced가 된다. 같은 버전 표시(요약 바 '그래프와 코드가 같은 버전입니다', 서랍 '지도 vN와 일치')는 있다.": 1,
+  "backend/athena_api/backtest/visual_repair.py:271 questions_for / :492 build_patch(graph_patch·spec_diff·code_diff·diagnostics_after·graph_compatible·applied:false); app/chat.js:3336 visual_patch 카드(code_diff+spec_diff만);": 1,
+  "6) 활성화·실행은 별도 승인 UX; patch 적용만으로 run/backfill/optimize/deploy 호출 없음": 1,
+  "'부작용 없음'은 지켜진다 — backtest_visual.py에는 runner·store import 자체가 없고, 프로브 O06/O07이 수정안 생성·적용 전후로 versions 2→2, runs 193→193, activeVersionId 불변을 잰다. 실행도 별도다(헤더 [실행], invalid면 '오류 검토'로 disabled, 수집은 승인 카드). 그러나 **활성화 UX가 백테스트 화면에 없다**: deps.activate가 canvas.js에 배선돼 있는데 backtest-canvas.js 어디서도 부르지 않는다. 저장된 origin=visual 버전은 이력 목록에서 되열기만 되고 켤 길이 없다.": 1,
+  "backend/athena_api/api/backtest_visual.py 파일 머리말; artifacts/backtest-tour/full-all.log O06·O07; app/canvas.js:2802 activate 배선; app/lib/backtest-canvas.js에 activate 호출 0건(grep 결과 activeVersionId만)": 1,
+  "7) origin visual/code_only 항상 비활성, active=true 거부, active_version_id 불변, 원자 transaction, migration 보존": 1,
+  "저장층이 _INACTIVE_ONLY_ORIGINS에 active=True를 주면 ValueError로 거부하고, API는 body.active가 참이면 422를 낸다. bundle 6열은 source와 **같은 INSERT**로 들어가고 트랜잭션 안에서 저장 전후 active_version_id를 다시 읽어 어긋나면 통째로 되돌린다(API도 한 번 더 대조해 500). 기존 DB에는 ALTER TABLE ADD COLUMN만 붙여 캔들 캐시·기존 행을 건드리지 않는다. hash는 클라이언트 값을 믿지 않고 파싱한 모델에서 다시 계산해 대조한다(422).": 1,
+  "backend/athena_api/backtest/store.py:634-676 add_version(atomic + after!=expected → RuntimeError), :205 _migrate_version_bundle; backend/athena_api/api/backtest.py:869 active 거부 / :802 hash 재유도 / :908 active 변경 시 500": 1,
+  "8-a) graph_schema_version": 1,
+  "이름이 graph_version이고 Literal[\"1\"]로 고정이다. 스키마 버전을 싣는 자리는 있으나 계약이 부른 이름과 다르다.": 1,
+  "backend/athena_api/backtest/visual_schema.py:56 GRAPH_VERSION='1' / :136 graph_version: Literal['1']": 1,
+  "8-b) graph_revision": 1,
+  "그래프 모델에는 없다. preview source map에만 graph_revision이 있고 값은 graph_hash 앞 12자다(호출자가 넘기면 그 값). authoritative map에는 아예 없다.": 1,
+  "backend/athena_api/backtest/codegen.py:643 revision = graph_revision or gh[:12]; :592-608 authoritative hashes에는 없음": 1,
+  "미구현": 3,
+  "8-c) node_type_version": 1,
+  "GraphNode는 id·kind·label·params·ui뿐이고 노드 종류 payload에도 버전이 없다. 전체 registry_version=\"1\" 상수만 있다 — 노드 종류 하나가 바뀌었는지 판정할 수단이 없다.": 1,
+  "backend/athena_api/backtest/visual_schema.py:74 GraphNode; backend/athena_api/backtest/visual_registry.py:27 REGISTRY_VERSION='1' / :164 NodeKind.payload": 1,
+  "8-d) compiler_version": 1,
+  "\"visual-1.0.0\" 하나가 hashes·authoritative map·preview map·저장 bundle 열·422 불일치 검사까지 관통한다. null은 생략과 같게 본다.": 1,
+  "backend/athena_api/backtest/visual_schema.py:54 COMPILER_VERSION; codegen.py:592·605·647·654; store.py:106 컬럼; api/backtest.py:782-790": 1,
+  "8-e) indicator_registry_digest": 1,
+  "digest를 계산하거나 싣는 코드가 backend 전체에 없다. 지표 레지스트리가 바뀌어도 저장된 그래프가 그것을 알 방법이 없다.": 1,
+  "backend/athena_api/backtest/visual_registry.py:345 registry_payload(registry_version·graph_version·port_types·ohlcv_columns·logic_ports·kinds만)": 1,
+  "8-f) semantic_hash": 1,
+  "이름은 graph_hash이고 실체는 의미 해시다 — ui를 제거한 정규 JSON(sort_keys·구분자 고정)의 sha256이라 노드를 옮겨도 값이 안 바뀐다. 곁에 spec_hash·artifact_hash·preview_hash가 함께 있다.": 1,
+  "backend/athena_api/backtest/visual_schema.py:201 canonical_graph_json(node.pop('ui')) / :213 graph_hash / :217 spec_hash / :221 source_hash": 1,
+  "8-g) layout_hash": 1,
+  "layout을 해시하는 함수·필드가 없다. ui는 해시 대상에서 빠질 뿐(저장은 된다), 배치가 바뀌었는지 판정하는 값은 어디에도 없다.": 1,
+  "backend/athena_api/backtest/visual_schema.py:201 canonical_graph_json 주석 '노드를 옮겨도 그래프 hash는 바뀌지 않아야 한다'": 1,
+  "9) validator 검사 항목 14종": 1,
+  "구현 10종 — schema/버전(pydantic + Literal, 위반 시 422), unknown node type(BTG-KIND-001), 중복 id(노드·엣지 모두 BTG-ID-001), 없는 node/port(BTG-EDGE-001·BTG-PORT-001), port type(BTG-TYPE-001), input cardinality(한 입력 두 연결 BTG-EDGE-001 · 필수 입력 빔 BTG-PORT-002 · 캔들/진입/청산 정확히 하나 BTG-DATA-001·OUT-001/002/003), cycle(BTG-CYCLE-001), alias 중복(BTG-ALIAS-001), entry/exit Boolean(signal 포트가 accepts=(Series<Bool>,) required로 타입 검사에 걸린다), extra field 거부(모든 그래프 모델 extra='forbid'; NodeUI만 allow — 해시 대상 밖). 미구현 4종 — node/edge/fan-in **전역 상한** 없음(kind별 max_per_graph 필드는 registry payload에 실리지만 validator가 읽지 않는다), orphan warning 없음, node_type_version 검사 없음, 미래 버전 read-only 없음(graph_version이 '1'이 아니면 read-only가 아니라 422 거절).": 1,
+  "backend/athena_api/backtest/visual_schema.py:848 validate_graph(_check_params/_ports/_types/_cardinality/_names/_cycle/_logic/_scenario), :260 build_index; visual_registry.py:136·313 max_per_graph(검증에서 미사용); grep MAX/LIM": 1,
+  "10) source map 두 종류 분리(provisional preview executable=false / authoritative + artifact hash), stale 시 이동 금지": 1,
+  "generate_from_graph은 kind='authoritative'·executable=true·artifact_hash를 내고 모든 노드를 덮지 못하면 예외로 멈춘다. preview_from_graph은 kind='preview'·executable=false·preview_only=true·preview_hash·graph_revision을 내고, 만들 수 없으면 None이다(그때 exact_code_jump=false). 화면은 열기 전에 spanIsValid로 지금 코드의 sha256을 대조하고 어긋나면 줄을 추정하지 않고 알림만 띄운다.": 1,
+  "backend/athena_api/backtest/codegen.py:567·612; backend/athena_api/api/backtest_visual.py:118 exact_code_jump; app/lib/backtest-code-editor.js:195 spanIsValid / :148 STALE_NOTICE_TEXT; app/lib/backtest-canvas.js:3228 ope": 1,
+  "11) 코드 전용 분기(origin=code_only, 마지막 호환 그래프 읽기 전용, 동기화 표시 금지)": 1,
+  "forkCodeOnly가 origin=code_only 비활성 버전을 남기고 codeOnlyGraph를 붙잡은 뒤 상태를 'unvalidated'로 되돌린다(synced 표시가 사라진다). 지도 탭은 renderSnapshotDesign으로 readOnly 편집기 + '동기화되지 않음 · 코드 전용' 배지만 낸다. 서버는 origin=code_only에 bundle을 실으면 422로 막고, live prompt 접두는 '동기화됐다고 말하지 않는다' 줄을 싣는다.": 1,
+  "app/lib/backtest-canvas.js:2806 forkCodeOnly / :2891 renderSnapshotDesign; backend/athena_api/api/backtest.py:884 code_only bundle 422; app/lib/main/live-prompt.js:352 code_only 줄; 프로브 O09": 1,
+  "12) 좁은 폭 drawer/overlay + focus 복귀, .backtest-body 스크롤 소유권": 1,
+  "서랍 자체는 다 있다: narrow면 팔레트·검사기가 body에서 빠지고 캔버스 칼럼 안에 position:absolute 서랍으로 얹히며, [닫기]·Escape·팔레트에서 노드 추가 후 자동 닫힘이 모두 focusNode로 초점을 돌려준다. 그러나 **setNarrow()를 부르는 코드가 앱에 없다** — 호출자는 테스트뿐이라 실행 중에는 좁은 폭 모드가 켜지지 않는다(창을 줄여도 팔레트·검사기가 그대로 남는다). 스크롤은 .backtest-body가 페이지 스크롤을 갖고, 그 안에서 .backtest-vis-surface가 좌표 캔버스용 내부 스크롤러로 하나 더 있다(팔레트·검사기의 overflow-y는 높이 제약이 없어 실제로는 안 걸린다).": 1,
+  "app/lib/backtest-visual-editor.js:1783-1792 render() narrow 갈래 / :1820 setNarrow / :836 closeDrawers→focusNode; grep 결과 setNarrow 호출은 backtest-visual-editor.test.js:640·665뿐; app/shell.css:814 .backtest-body{overflow-y:a": 1,
+  "13) 접근성: 키보드만으로 탐색·선택·연결·삭제·오류 확인·코드 이동, aria-live, 접근 가능한 이름, focus trap/복원, list/form 대체 뷰, 한국어 IME 조합 중 단축키 안전": 1,
+  "되는 것: Tab/Shift+Tab 노드 순회, Enter 코드 열기, Delete/Backspace 삭제, Ctrl+Z/Y, Escape(연결 취소·서랍 닫기), 요약 바 role=status+aria-live=polite, 알림·검사기 오류 role=alert, 팔레트/검사기 aria-label + 서랍 role=dialog + aria-expanded, 포트 점 aria-label(노드·포트 이름·타입), 노드 aria-pressed, 목록/폼 대체 뷰. 미달 셋: ① 서랍에 focus trap이 없다(aria-modal도 없음 — 복원만 있다). ② **키보드로 캔버스 포트 점에 닿을 수 없다** — 루트 keydown이 Tab을 preventDefault하고 노드만 순회하므로, 연결은 검사기·목록의 select로만 된다. ③ isComposing/compositionstart 가드가 없다 — IME 안전은 '입력칸이면 무시'(isFormTarget) 하나에 기대고 있다.": 1,
+  "app/lib/backtest-visual-editor.js:800 onKeyDown / :473 isFormTarget / :1692 aria-live / :935·1379 role=dialog / :836 closeDrawers; grep isComposing 0건": 1,
+  "14) P4: undo/redo, 복사/붙여넣기, keyboard connection, 대형 그래프 성능 측정(20/30·50/80·100/160 fixture, p95 budget), 취소": 1,
+  "undo/redo: 구현(헤더 버튼 + Ctrl+Z/Y, 최대 100단계, 같은 파라미터 연속 편집은 coalesce). 단 setGraph가 past/future를 비우므로 패치 적용·버전 되열기 뒤에는 되돌릴 수 없고, 세션을 넘겨 영속되지도 않는다. 복사/붙여넣기: **미구현** — duplicateNode가 API로만 있고 키·버튼·클립보드 배선이 없다. keyboard connection: 다르게 — 캔버스 포트가 아니라 검사기/목록의 입력 select로 잇는다. 성능 측정: **미구현** — fixture(20/30·50/80·100/160)도 p95 budget 측정도 코드·테스트에 없다. 취소: 연결 취소(Escape)와 수정안 [버리기]는 있으나, 진행 중인 validate/compile 요청을 끊는 abort는 없다(400ms 디바운스만).": 1,
+  "app/lib/backtest-visual-editor.js:536 pushHistory / :546 undo / :1037 undo·redo 버튼 / :1817 setGraph가 past·future 비움 / :632 duplicateNode(호출자 없음) / :810 Ctrl+Z·Y / :811 Escape; app/lib/backtest-canvas.js:126 VISUAL_DEBOUN": 1,
+  "15) 렌더러: 새 의존성 없이 DOM/SVG; Rete/React 미도입": 1,
+  "backtest-visual-editor.js는 UMD 한 파일이고 외부 import가 없다. 노드는 div/button, 엣지는 createElementNS로 만든 SVG path다. 파일 머리말이 vis-network가 설치돼 있어도 쓰지 않는 이유(좌표를 감춘다)를 적어 두었다.": 1,
+  "app/lib/backtest-visual-editor.js:26-28 헤더 주석, :30 SVG_NS, :446 svgEl, :1870 UMD 각주(require 0건)": 1,
+  "16) 기존 폼·코드·흐름·승인·실행·결과·이력·최적화·배포 회귀 없음(프로브 근거)": 1,
+  "프로브는 깨끗하다: full-all.log가 194/196이고 FAIL 0, 나머지 2는 SKIP(C13 실제 백필은 키움 쿼터라 자동 미실행, Z02 삭제 API 없음)이며 이 로그는 지금 작업 트리의 backtest-canvas.js보다 나중에 만들어졌다. 그러나 단위 테스트는 **11건 빨갛다** — 전부 코드 탭의 프로젝트 IDE·가상환경 영역이고, 미커밋 변경 한 줄(renderCodeTab의 IDE 표시 조건)이 원인임을 확인했다(HEAD 사본으로 같은 테스트를 돌리면 145/0, 그 한 줄만 되돌리면 145/0).": 1,
+  "artifacts/backtest-tour/full-all.log 마지막 줄 'ALL OK (194/196)'; app/lib/backtest-canvas.js:2454 `if (ide && ide.currentProject() && (runPath === 'code' || activeProjectFile()))`; lib/backtest-canvas.test.js not ok 75·79·8": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "33740bc2597b34974254879df34cad0f5188d2b3a3bb7cd5fc934a05030f46f7"
+}

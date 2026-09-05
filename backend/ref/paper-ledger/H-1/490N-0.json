@@ -1,0 +1,92 @@
+{
+ "board_id": "490N-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "490P-0",
+   "text": "원본 보드: CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+   "path": [
+    "note/CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Frame"
+   ]
+  },
+  {
+   "id": "490R-0",
+   "text": "가져온 요소: ETF전체시세 · ETF수익률 · 종목명 · ETF수익율 · 종가",
+   "path": [
+    "note/CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Frame"
+   ]
+  },
+  {
+   "id": "490T-0",
+   "text": "문법: facts",
+   "path": [
+    "note/CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Frame"
+   ]
+  },
+  {
+   "id": "490V-0",
+   "text": "접은 개수: 항목 196개",
+   "path": [
+    "note/CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "490N-0",
+   "name": "note/CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "490O-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "490Q-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "490S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "490U-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률": 1,
+  "가져온 요소: ETF전체시세 · ETF수익률 · 종목명 · ETF수익율 · 종가": 1,
+  "문법: facts": 1,
+  "접은 개수: 항목 196개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "56a2228659c6f1f2a963a76964892d6697bd6cc8125c38fb12827754ab83d064"
+}

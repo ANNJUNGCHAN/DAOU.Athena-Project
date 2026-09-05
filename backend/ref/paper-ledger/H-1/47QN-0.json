@@ -1,0 +1,341 @@
+{
+ "board_id": "47QN-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-05 / R03-T6-3 · 순위 — 대차 상위",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "47RL-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-3 · 순위 — 대차 상위",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47RK-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-05 / R03-T6-3 · 순위 — 대차 상위",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47RI-0",
+   "text": "대차 상위",
+   "path": [
+    "mini/CC-05 / R03-T6-3 · 순위 — 대차 상위",
+    "Header"
+   ]
+  },
+  {
+   "id": "47RG-0",
+   "text": "잔고주수",
+   "path": [
+    "mini/CC-05 / R03-T6-3 · 순위 — 대차 상위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47RF-0",
+   "text": "1,284만주",
+   "path": [
+    "mini/CC-05 / R03-T6-3 · 순위 — 대차 상위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47RD-0",
+   "text": "변화",
+   "path": [
+    "mini/CC-05 / R03-T6-3 · 순위 — 대차 상위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47RC-0",
+   "text": "비중 5% 초과",
+   "path": [
+    "mini/CC-05 / R03-T6-3 · 순위 — 대차 상위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47RA-0",
+   "text": "핵심",
+   "path": [
+    "mini/CC-05 / R03-T6-3 · 순위 — 대차 상위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47R9-0",
+   "text": "7종목",
+   "path": [
+    "mini/CC-05 / R03-T6-3 · 순위 — 대차 상위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47R6-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-05 / R03-T6-3 · 순위 — 대차 상위",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47R5-0",
+   "text": "값",
+   "path": [
+    "mini/CC-05 / R03-T6-3 · 순위 — 대차 상위",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47R4-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-05 / R03-T6-3 · 순위 — 대차 상위",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47R2-0",
+   "text": "대차거래증감",
+   "path": [
+    "mini/CC-05 / R03-T6-3 · 순위 — 대차 상위",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47R1-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-3 · 순위 — 대차 상위",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47QZ-0",
+   "text": "+214만주",
+   "path": [
+    "mini/CC-05 / R03-T6-3 · 순위 — 대차 상위",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "47QY-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-3 · 순위 — 대차 상위",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "47QW-0",
+   "text": "값",
+   "path": [
+    "mini/CC-05 / R03-T6-3 · 순위 — 대차 상위",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47QV-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-3 · 순위 — 대차 상위",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47QT-0",
+   "text": "상위 50 합계",
+   "path": [
+    "mini/CC-05 / R03-T6-3 · 순위 — 대차 상위",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "47QS-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-3 · 순위 — 대차 상위",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "47QP-0",
+   "text": "스칼라 2개, 행 6개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-05 / R03-T6-3 · 순위 — 대차 상위",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "47QN-0",
+   "name": "mini/CC-05 / R03-T6-3 · 순위 — 대차 상위",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "47RH-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47RJ-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47QQ-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47R7-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47RE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47RB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47R8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47R3-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47QX-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47R0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47QR-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47QU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47QO-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "대차 상위": 1,
+  "잔고주수": 1,
+  "1,284만주": 1,
+  "변화": 1,
+  "비중 5% 초과": 1,
+  "핵심": 1,
+  "7종목": 1,
+  "항목": 1,
+  "값": 2,
+  "비고": 1,
+  "대차거래증감": 1,
+  "+214만주": 1,
+  "상위 50 합계": 1,
+  "스칼라 2개, 행 6개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "87d75c752a05e013601c808d994e3701f74fd56767928ba7390d178a73fce9da"
+}

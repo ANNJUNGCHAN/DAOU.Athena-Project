@@ -1,0 +1,508 @@
+{
+ "board_id": "1FN-0",
+ "page": "1-0",
+ "page_name": "화면",
+ "name": "08 · 온보딩 — 계좌 연결 (AT-SY-003)",
+ "width": 1680,
+ "height": 900,
+ "texts": [
+  {
+   "id": "1H9-0",
+   "text": "3 / 3",
+   "path": [
+    "08 · 온보딩 — 계좌 연결 (AT-SY-003)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-head"
+   ]
+  },
+  {
+   "id": "1H8-0",
+   "text": "증권 계좌를 연결합니다",
+   "path": [
+    "08 · 온보딩 — 계좌 연결 (AT-SY-003)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-head"
+   ]
+  },
+  {
+   "id": "1H7-0",
+   "text": "키움 모의투자 계좌를 연결합니다. 앱키는 이 컴퓨터의 자격증명 저장소에만 저장되고 화면에 다시 나타나지 않습니다.",
+   "path": [
+    "08 · 온보딩 — 계좌 연결 (AT-SY-003)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-head"
+   ]
+  },
+  {
+   "id": "1HC-0",
+   "text": "별칭",
+   "path": [
+    "08 · 온보딩 — 계좌 연결 (AT-SY-003)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body · onb-form",
+    "onb-field · 별칭"
+   ]
+  },
+  {
+   "id": "1HE-0",
+   "text": "모의-1",
+   "path": [
+    "08 · 온보딩 — 계좌 연결 (AT-SY-003)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body · onb-form",
+    "onb-field · 별칭",
+    "onb-input-row"
+   ]
+  },
+  {
+   "id": "1HF-0",
+   "text": "선택",
+   "path": [
+    "08 · 온보딩 — 계좌 연결 (AT-SY-003)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body · onb-form",
+    "onb-field · 별칭",
+    "onb-input-row"
+   ]
+  },
+  {
+   "id": "1HG-0",
+   "text": "이 컴퓨터에서만 쓰는 이름이다. 증권사 계좌번호가 아니다.",
+   "path": [
+    "08 · 온보딩 — 계좌 연결 (AT-SY-003)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body · onb-form",
+    "onb-field · 별칭"
+   ]
+  },
+  {
+   "id": "1HI-0",
+   "text": "APP KEY",
+   "path": [
+    "08 · 온보딩 — 계좌 연결 (AT-SY-003)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body · onb-form",
+    "onb-field · APP KEY"
+   ]
+  },
+  {
+   "id": "1HK-0",
+   "text": "••••••••••••••••••••••••••••••••••••",
+   "path": [
+    "08 · 온보딩 — 계좌 연결 (AT-SY-003)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body · onb-form",
+    "onb-field · APP KEY",
+    "onb-input-row"
+   ]
+  },
+  {
+   "id": "1HL-0",
+   "text": "붙여넣음 · 36자",
+   "path": [
+    "08 · 온보딩 — 계좌 연결 (AT-SY-003)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body · onb-form",
+    "onb-field · APP KEY",
+    "onb-input-row"
+   ]
+  },
+  {
+   "id": "1HM-0",
+   "text": "붙여넣기만 지원한다. 입력한 값은 저장 후 다시 표시되지 않는다.",
+   "path": [
+    "08 · 온보딩 — 계좌 연결 (AT-SY-003)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body · onb-form",
+    "onb-field · APP KEY"
+   ]
+  },
+  {
+   "id": "1HO-0",
+   "text": "SECRET KEY",
+   "path": [
+    "08 · 온보딩 — 계좌 연결 (AT-SY-003)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body · onb-form",
+    "onb-field · SECRET KEY"
+   ]
+  },
+  {
+   "id": "1HQ-0",
+   "text": "••••••••••••••••••••••••••••••••••••",
+   "path": [
+    "08 · 온보딩 — 계좌 연결 (AT-SY-003)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body · onb-form",
+    "onb-field · SECRET KEY",
+    "onb-input-row"
+   ]
+  },
+  {
+   "id": "1HR-0",
+   "text": "붙여넣음 · 180자",
+   "path": [
+    "08 · 온보딩 — 계좌 연결 (AT-SY-003)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body · onb-form",
+    "onb-field · SECRET KEY",
+    "onb-input-row"
+   ]
+  },
+  {
+   "id": "1HS-0",
+   "text": "값이 아니라 문자 수만 보여준다 — 오타는 잡되 값은 노출하지 않는다.",
+   "path": [
+    "08 · 온보딩 — 계좌 연결 (AT-SY-003)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body · onb-form",
+    "onb-field · SECRET KEY"
+   ]
+  },
+  {
+   "id": "1HV-0",
+   "text": "저장 위치",
+   "path": [
+    "08 · 온보딩 — 계좌 연결 (AT-SY-003)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body · onb-form",
+    "onb-savebox",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1HW-0",
+   "text": "Windows 자격증명 저장소(DPAPI)에 암호화되어 저장됩니다. 앱 화면·로그·스크린샷 어디에도 값이 다시 나타나지 않습니다.",
+   "path": [
+    "08 · 온보딩 — 계좌 연결 (AT-SY-003)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body · onb-form",
+    "onb-savebox",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1HX-0",
+   "text": "여기서 등록한 계좌가 활성 계좌가 됩니다. 계좌는 나중에 더 추가할 수 있고, 활성은 항상 하나입니다.",
+   "path": [
+    "08 · 온보딩 — 계좌 연결 (AT-SY-003)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body · onb-form",
+    "onb-savebox",
+    "Frame"
+   ]
+  },
+  {
+   "id": "1HY-0",
+   "text": "검증에 성공한 키만 저장됩니다. 실패하면 다음으로 넘어가지 않습니다.",
+   "path": [
+    "08 · 온보딩 — 계좌 연결 (AT-SY-003)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-body · onb-form"
+   ]
+  },
+  {
+   "id": "1G3-0",
+   "text": "검증 후 시작",
+   "path": [
+    "08 · 온보딩 — 계좌 연결 (AT-SY-003)",
+    "Shell 창 · 온보딩 (#onboard)",
+    "onb-col (800px)",
+    "onb-foot",
+    "uk-btn-primary · 계속 (화면 내 유일 브랜드색)"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "1FN-0",
+   "name": "08 · 온보딩 — 계좌 연결 (AT-SY-003)",
+   "component": "Frame",
+   "w": 1680,
+   "h": 900,
+   "depth": 0
+  },
+  {
+   "id": "1FO-0",
+   "name": "Shell 창 · 온보딩 (#onboard)",
+   "component": "Frame",
+   "w": 1520,
+   "h": 760,
+   "depth": 1
+  },
+  {
+   "id": "1FY-0",
+   "name": "onb-col (800px)",
+   "component": "Frame",
+   "w": 800,
+   "h": 734,
+   "depth": 2
+  },
+  {
+   "id": "1H6-0",
+   "name": "onb-head",
+   "component": "Frame",
+   "w": 800,
+   "h": 156,
+   "depth": 3
+  },
+  {
+   "id": "1HA-0",
+   "name": "onb-body · onb-form",
+   "component": "Frame",
+   "w": 800,
+   "h": 508,
+   "depth": 3
+  },
+  {
+   "id": "1HB-0",
+   "name": "onb-field · 별칭",
+   "component": "Frame",
+   "w": 716,
+   "h": 91,
+   "depth": 4
+  },
+  {
+   "id": "1HD-0",
+   "name": "onb-input-row",
+   "component": "Frame",
+   "w": 716,
+   "h": 44,
+   "depth": 5
+  },
+  {
+   "id": "1HH-0",
+   "name": "onb-field · APP KEY",
+   "component": "Frame",
+   "w": 716,
+   "h": 91,
+   "depth": 4
+  },
+  {
+   "id": "1HJ-0",
+   "name": "onb-input-row",
+   "component": "Frame",
+   "w": 716,
+   "h": 44,
+   "depth": 5
+  },
+  {
+   "id": "1HN-0",
+   "name": "onb-field · SECRET KEY",
+   "component": "Frame",
+   "w": 716,
+   "h": 91,
+   "depth": 4
+  },
+  {
+   "id": "1HP-0",
+   "name": "onb-input-row",
+   "component": "Frame",
+   "w": 716,
+   "h": 44,
+   "depth": 5
+  },
+  {
+   "id": "1HT-0",
+   "name": "onb-savebox",
+   "component": "Frame",
+   "w": 716,
+   "h": 84,
+   "depth": 4
+  },
+  {
+   "id": "1HU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 608,
+   "h": 54,
+   "depth": 5
+  },
+  {
+   "id": "1FZ-0",
+   "name": "onb-foot",
+   "component": "Frame",
+   "w": 800,
+   "h": 70,
+   "depth": 3
+  },
+  {
+   "id": "1G5-0",
+   "name": "uk-dots (3단계 중 2)",
+   "component": "Frame",
+   "w": 72,
+   "h": 3,
+   "depth": 4
+  },
+  {
+   "id": "1G8-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 20,
+   "h": 3,
+   "depth": 5
+  },
+  {
+   "id": "1G7-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 20,
+   "h": 3,
+   "depth": 5
+  },
+  {
+   "id": "1G6-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 20,
+   "h": 3,
+   "depth": 5
+  },
+  {
+   "id": "1G4-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 479,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "1G0-0",
+   "name": "uk-btn-primary · 계속 (화면 내 유일 브랜드색)",
+   "component": "Frame",
+   "w": 135,
+   "h": 36,
+   "depth": 4
+  },
+  {
+   "id": "1G1-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 12,
+   "h": 10,
+   "depth": 5
+  },
+  {
+   "id": "1G2-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 10,
+   "h": 7,
+   "depth": 6
+  },
+  {
+   "id": "1FX-0",
+   "name": "타이틀바",
+   "component": "Frame",
+   "w": 1518,
+   "h": 26,
+   "depth": 2
+  },
+  {
+   "id": "1FP-0",
+   "name": "창 제어",
+   "component": "Frame",
+   "w": 94,
+   "h": 24,
+   "depth": 2
+  },
+  {
+   "id": "1FV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "1FW-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9,
+   "h": 2,
+   "depth": 4
+  },
+  {
+   "id": "1FT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "1FU-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 4
+  },
+  {
+   "id": "1FQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "1FR-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 10,
+   "h": 10,
+   "depth": 4
+  },
+  {
+   "id": "1FS-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 5
+  }
+ ],
+ "text_multiset": {
+  "3 / 3": 1,
+  "증권 계좌를 연결합니다": 1,
+  "키움 모의투자 계좌를 연결합니다. 앱키는 이 컴퓨터의 자격증명 저장소에만 저장되고 화면에 다시 나타나지 않습니다.": 1,
+  "별칭": 1,
+  "모의-1": 1,
+  "선택": 1,
+  "이 컴퓨터에서만 쓰는 이름이다. 증권사 계좌번호가 아니다.": 1,
+  "APP KEY": 1,
+  "••••••••••••••••••••••••••••••••••••": 2,
+  "붙여넣음 · 36자": 1,
+  "붙여넣기만 지원한다. 입력한 값은 저장 후 다시 표시되지 않는다.": 1,
+  "SECRET KEY": 1,
+  "붙여넣음 · 180자": 1,
+  "값이 아니라 문자 수만 보여준다 — 오타는 잡되 값은 노출하지 않는다.": 1,
+  "저장 위치": 1,
+  "Windows 자격증명 저장소(DPAPI)에 암호화되어 저장됩니다. 앱 화면·로그·스크린샷 어디에도 값이 다시 나타나지 않습니다.": 1,
+  "여기서 등록한 계좌가 활성 계좌가 됩니다. 계좌는 나중에 더 추가할 수 있고, 활성은 항상 하나입니다.": 1,
+  "검증에 성공한 키만 저장됩니다. 실패하면 다음으로 넘어가지 않습니다.": 1,
+  "검증 후 시작": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "6993b2449b8442b891ce7c1b11ccd994067b12dc565b0ad84b35dcc88355ecc4"
+}

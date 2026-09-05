@@ -1,0 +1,341 @@
+{
+ "board_id": "47VI-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "47WG-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47WF-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47WD-0",
+   "text": "장중 투자자 상위",
+   "path": [
+    "mini/CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
+    "Header"
+   ]
+  },
+  {
+   "id": "47WB-0",
+   "text": "순매수금액",
+   "path": [
+    "mini/CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47WA-0",
+   "text": "+310억원",
+   "path": [
+    "mini/CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47W8-0",
+   "text": "값",
+   "path": [
+    "mini/CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47W7-0",
+   "text": "30분 집계",
+   "path": [
+    "mini/CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47W5-0",
+   "text": "핵심",
+   "path": [
+    "mini/CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47W4-0",
+   "text": "순매수 1위",
+   "path": [
+    "mini/CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47W1-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47W0-0",
+   "text": "값",
+   "path": [
+    "mini/CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47VZ-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47VX-0",
+   "text": "기준 시각",
+   "path": [
+    "mini/CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47VW-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47VU-0",
+   "text": "09:30 잠정",
+   "path": [
+    "mini/CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "47VT-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "47VR-0",
+   "text": "변화",
+   "path": [
+    "mini/CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47VQ-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47VO-0",
+   "text": "+2,368억원",
+   "path": [
+    "mini/CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "47VN-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "47VK-0",
+   "text": "스칼라 2개, 행 6개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "47VI-0",
+   "name": "mini/CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "47WC-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47WE-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47VL-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47W2-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47W9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47W6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47W3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47VY-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47VS-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47VV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47VM-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47VP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47VJ-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "장중 투자자 상위": 1,
+  "순매수금액": 1,
+  "+310억원": 1,
+  "값": 2,
+  "30분 집계": 1,
+  "핵심": 1,
+  "순매수 1위": 1,
+  "항목": 1,
+  "비고": 1,
+  "기준 시각": 1,
+  "09:30 잠정": 1,
+  "변화": 1,
+  "+2,368억원": 1,
+  "스칼라 2개, 행 6개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "d5e69d6011a6e1b72f3ab90ab3a33717aef1388f9e3e0f9c4ab19e5e504cf0d1"
+}

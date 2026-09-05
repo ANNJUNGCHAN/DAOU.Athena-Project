@@ -1,0 +1,24 @@
+Frame "mini/CC-02 / R11-T2 · 정정 — 삼성전자 지정가 정정" (471G-0) 360×420
+  Frame "Header" (471Z-0) 0×0
+    Frame "Meta row" (4721-0) 0×0
+      Text "Eyebrow" (4723-0) 0×0
+      Text "As of" (4722-0) 0×0 "기준 09:42"
+    Text "Title" (4720-0) 0×0 "삼성전자 지정가 정정"
+  Frame "Body" (471H-0) 0×0
+    Frame "Status" (471W-0) 0×0
+      Rectangle "Rectangle" (471Y-0) 7×7
+      Text "주문 정보를 확인했어요" (471X-0) 0×0 "주문 정보를 확인했어요"
+    Frame "Confirm facts" (471P-0) 0×0
+      Frame "Frame" (471T-0) 0×0
+        Text "주문가능금액" (471V-0) 0×0 "주문가능금액"
+        Text "31,240,000원" (471U-0) 0×0 "31,240,000원"
+      Frame "Frame" (471Q-0) 0×0
+        Text "금액" (471S-0) 0×0 "금액"
+        Text "150,800원" (471R-0) 0×0 "150,800원"
+    Frame "Confirm values" (471I-0) 0×0
+      Frame "Frame" (471M-0) 0×0
+        Text "수량" (471O-0) 0×0 "수량"
+        Text "10주" (471N-0) 0×0 "10주"
+      Frame "Frame" (471J-0) 0×0
+        Text "계좌" (471L-0) 0×0 "계좌"
+        Text "키움증권 01" (471K-0) 0×0 "키움증권 01"

@@ -1,0 +1,188 @@
+Frame "07 · 키우미 메뉴 — 셸 오버레이" (C8G-0) 1680×760
+  Frame "Frame" (F22-0) 1680×760
+    Frame "Frame" (F23-0) 1520×680
+      Frame "49 · Project Recent Sidebar" (H24-0) 260×680
+        Frame "Primary Actions" (H25-0) 0×0
+          Frame "Frame" (H26-0) 0×28
+            Text "ATHENA" (H27-0) 0×0 "ATHENA"
+            SVG "SVG" (H28-0) 0×0
+              SVGVisualElement "Circle" (H29-0) 0×0
+              SVGVisualElement "Path" (H2A-0) 0×0
+          Frame "Frame" (H2B-0) 0×30
+            SVG "SVG" (H2C-0) 0×0
+              SVGVisualElement "Path" (H2D-0) 0×0
+              SVGVisualElement "Path" (H2E-0) 0×0
+            Text "새 채팅" (H2F-0) 0×0 "새 채팅"
+          Frame "Frame" (H2G-0) 0×30
+            SVG "SVG" (H2H-0) 0×0
+              SVGVisualElement "Circle" (H2I-0) 0×0
+              SVGVisualElement "Circle" (H2J-0) 0×0
+              SVGVisualElement "Circle" (H2K-0) 0×0
+              SVGVisualElement "Path" (H2L-0) 0×0
+            Text "그래프" (H2M-0) 0×0 "그래프"
+          Frame "Frame" (H2N-0) 0×30
+            SVG "SVG" (H2O-0) 0×0
+              SVGVisualElement "Circle" (H2P-0) 0×0
+              SVGVisualElement "Path" (H2Q-0) 0×0
+            Text "에이전트" (H2R-0) 0×0 "에이전트"
+          Frame "Frame" (H2S-0) 0×30
+            SVG "SVG" (H2T-0) 0×0
+              SVGVisualElement "Path" (H2U-0) 0×0
+              SVGVisualElement "Path" (H2V-0) 0×0
+            Text "플러그인" (H2W-0) 0×0 "플러그인"
+        Frame "Project Tree" (H2X-0) 0×0
+          Frame "Frame" (H2Y-0) 0×0
+            Text "프로젝트" (H2Z-0) 0×0 "프로젝트"
+          Frame "Frame" (H30-0) 0×32
+            SVG "SVG" (H31-0) 0×0
+              SVGVisualElement "Path" (H32-0) 0×0
+              SVGVisualElement "Path" (H33-0) 0×0
+            Text "아테나" (H34-0) 0×0 "아테나"
+            SVG "SVG" (H35-0) 0×0
+              SVGVisualElement "Circle" (H36-0) 0×0
+              SVGVisualElement "Circle" (H37-0) 0×0
+              SVGVisualElement "Circle" (H38-0) 0×0
+            SVG "SVG" (H39-0) 0×0
+              SVGVisualElement "Path" (H3A-0) 0×0
+              SVGVisualElement "Path" (H3B-0) 0×0
+          Frame "Frame" (H3C-0) 0×27
+            Text "백엔드 API 개수 확인" (H3D-0) 0×0 "백엔드 API 개수 확인"
+          Frame "Frame" (H3E-0) 0×29
+            Text "앱 전체 기능 검수" (H3F-0) 0×0 "앱 전체 기능 검수"
+            Rectangle "Rectangle" (H44-0) 6×6
+        Frame "Recent Conversations" (H3G-0) 0×0
+          Frame "Frame" (H3H-0) 0×20
+            Text "최근" (H3I-0) 0×0 "최근"
+            Text "전체" (H3J-0) 0×0 "전체"
+          Frame "Frame" (H3K-0) 0×27
+            Text "앱 전체 기능 검수" (H3L-0) 0×0 "앱 전체 기능 검수"
+            Rectangle "Rectangle" (H3M-0) 6×6
+          Frame "Frame" (H3N-0) 0×27
+            Text "삼성전자 주요 변동 알림" (H3O-0) 0×0 "삼성전자 주요 변동 알림"
+          Frame "Frame" (H3P-0) 0×27
+            Text "ETF 자금 흐름" (H3Q-0) 0×0 "ETF 자금 흐름"
+        Frame "Account Footer" (H3R-0) 0×0
+          Frame "Frame" (H3S-0) 0×38
+            Frame "Frame" (H3T-0) 22×22
+              Text "AN" (H3U-0) 0×0 "AN"
+            Text "모의-주력" (H3V-0) 0×0 "모의-주력"
+            SVG "SVG" (H3W-0) 0×0
+              SVGVisualElement "Path" (H3X-0) 0×0
+      Frame "Frame" (F2S-0) 940×680
+        Text "대화 캔버스" (F2T-0) 0×0 "대화 캔버스"
+        Frame "카드 · 시세" (2GQN-2) 888×170
+          Frame "Frame" (2GQO-2) 0×0
+            Text "시세" (2GQP-2) 0×0 "시세"
+            Text "삼성전자 005930 · KRX 실시…" (2GQQ-2) 0×0 "삼성전자 005930 · KRX 실시간"
+          Frame "Frame" (2GQR-2) 0×0
+            Text "88,100" (2GQS-2) 0×0 "88,100"
+            Text "▲ 900 (+1.03%)" (2GQT-2) 0×0 "▲ 900 (+1.03%)"
+          Frame "Frame" (2GQU-2) 0×0
+            Frame "Frame" (2GQV-2) 0×0
+              Text "거래량" (2GQW-2) 0×0 "거래량"
+              Text "11,689,068" (2GQX-2) 0×0 "11,689,068"
+            Frame "Frame" (2GQY-2) 0×0
+              Text "시가총액" (2GQZ-2) 0×0 "시가총액"
+              Text "525.8조" (2GR0-2) 0×0 "525.8조"
+            Frame "Frame" (2GR1-2) 0×0
+              Text "기준시각" (2GR2-2) 0×0 "기준시각"
+              Text "15:30" (2GR3-2) 0×0 "15:30"
+        Frame "카드 · 차트" (2GSK-2) 888×220
+          Frame "Frame" (2GSL-2) 0×0
+            Text "차트" (2GSM-2) 0×0 "차트"
+            Text "삼성전자 005930 · 일봉 · 3…" (2GSN-2) 0×0 "삼성전자 005930 · 일봉 · 3M"
+          SVG "SVG" (2GSO-2) 0×0
+            SVGVisualElement "Path" (2GSP-2) 0×0
+          Frame "Frame" (2GSQ-2) 0×0
+            Text "05-26" (2GSR-2) 0×0 "05-26"
+            Rectangle "Rectangle" (2GSS-2) 0×0
+            Text "07-19" (2GST-2) 0×0 "07-19"
+        Frame "카드 · 보유주식" (2GVG-2) 888×130
+          Frame "Frame" (2GVH-2) 0×0
+            Text "보유주식" (2GVI-2) 0×0 "보유주식"
+            Text "모의-주력 · 3종목" (2GVJ-2) 0×0 "모의-주력 · 3종목"
+          Frame "헤더" (2GVK-2) 0×0
+            Text "종목" (2GVL-2) 300×0 "종목"
+            Text "수량" (2GVM-2) 180×0 "수량"
+            Text "평가금액" (2GVN-2) 180×0 "평가금액"
+            Text "평가손익" (2GVO-2) 188×0 "평가손익"
+          Frame "행" (2GVP-2) 0×0
+            Text "삼성전자 005930" (2GVQ-2) 300×0 "삼성전자 005930"
+            Text "120" (2GVR-2) 180×0 "120"
+            Text "10,572,000" (2GVS-2) 180×0 "10,572,000"
+            Text "+412,000" (2GVT-2) 188×0 "+412,000"
+      Frame "Frame" (F2X-0) 320×680
+        Frame "Frame" (F2Y-0) 0×56
+          Text "결과물" (F2Z-0) 0×0 "결과물"
+        Frame "Frame" (F30-0) 0×0
+          Frame "턴 · 질문" (2GZO-2) 283×0
+            Frame "Frame" (2GZP-2) 0×0
+              Text "삼성전자 3개월 흐름 보여줘" (2GZQ-2) 0×0 "삼성전자 3개월 흐름 보여줘"
+            Text "3개월 저점 68,900에서 88,1…" (2GZR-2) 0×0 "3개월 저점 68,900에서 88,100까지 올라왔습니다. 캔버스에 차트를 올렸습니다."
+      Frame "Frame" (F33-0) 380×0
+        Frame "Frame" (F34-0) 0×26
+          Text "추가" (F35-0) 0×0 "추가"
+        Frame "Frame" (F36-0) 0×36
+          Frame "Frame" (F37-0) 24×0
+            SVG "SVG" (2GEK-2) 0×0
+              SVGVisualElement "Path" (2GEL-2) 0×0
+          Frame "Frame" (F3A-0) 0×0
+            Text "파일 첨부" (F3B-0) 0×0 "파일 첨부"
+            Text "경로가 첨부 칩으로 쌓인다" (F3C-0) 0×0 "경로가 첨부 칩으로 쌓인다"
+        Frame "Frame" (2FUM-2) 0×36
+          Frame "Frame" (2FUQ-2) 24×0
+            SVG "SVG" (2GEN-2) 0×0
+              SVGVisualElement "Path" (2GEO-2) 0×0
+          Frame "Frame" (2FUN-2) 0×0
+            Text "폴더 첨부" (2FUP-2) 0×0 "폴더 첨부"
+            Text "폴더 경로를 칩으로 쌓는다" (2FUO-2) 0×0 "폴더 경로를 칩으로 쌓는다"
+        Frame "Frame" (F3D-0) 0×36
+          Frame "Frame" (F3E-0) 24×0
+            SVG "SVG" (2GEQ-2) 0×0
+              SVGVisualElement "Path" (2GER-2) 0×0
+          Frame "Frame" (F3I-0) 0×0
+            Text "목표" (F3J-0) 0×0 "목표"
+            Text "계속 추구할 목표를 설정" (F3K-0) 0×0 "계속 추구할 목표를 설정"
+        Frame "Frame" (F3L-0) 0×36
+          Frame "Frame" (F3M-0) 24×0
+            SVG "SVG" (2GIZ-2) 0×0
+              SVGVisualElement "Path" (2GJ0-2) 0×0
+          Frame "Frame" (F3P-0) 0×0
+            Text "계획 모드" (F3Q-0) 0×0 "계획 모드"
+            Text "실행 전에 계획을 정리" (F3R-0) 0×0 "실행 전에 계획을 정리"
+        Rectangle "Rectangle" (F3S-0) 0×1
+        Frame "Frame" (F3T-0) 0×28
+          Text "플러그인 UI 초안" (F3U-0) 0×0 "플러그인 UI 초안"
+        Frame "Frame" (F3V-0) 0×36
+          Frame "Frame" (F3W-0) 16×16
+            SVG "SVG" (2GBH-2) 0×0
+              SVGVisualElement "Path" (2GBI-2) 0×0
+          Text "DART 전자공시" (F40-0) 0×0 "DART 전자공시"
+          Text "세션 미리보기 · 기능 허용" (F41-0) 0×0 "세션 미리보기 · 기능 허용"
+        Frame "Frame" (F42-0) 0×36
+          Frame "Frame" (F43-0) 16×16
+            SVG "SVG" (2GBM-2) 0×0
+              SVGVisualElement "Path" (2GBN-2) 0×0
+          Text "Google Sheets 내보내기" (F47-0) 0×0 "Google Sheets 내보내기"
+          Text "세션 미리보기 · 현재 꺼짐" (F48-0) 0×0 "세션 미리보기 · 현재 꺼짐"
+        Rectangle "Rectangle" (2FW7-2) 0×1
+        Frame "Frame" (2FW8-2) 0×28
+          Text "설정" (2FW9-2) 0×0 "설정"
+        Frame "Frame" (2FWA-2) 0×36
+          Frame "Frame" (2FWD-2) 16×16
+            SVG "SVG" (2GJ2-2) 0×0
+              SVGVisualElement "Path" (2GJ3-2) 0×0
+          Text "모델 설정" (2FWC-2) 0×0 "모델 설정"
+          Text "모델 · 사고 강도" (2FWB-2) 0×0 "모델 · 사고 강도"
+        Frame "Frame" (2FWH-2) 0×36
+          Frame "Frame" (2FWK-2) 16×16
+            SVG "SVG" (2GJ5-2) 0×0
+              SVGVisualElement "Path" (2GJ6-2) 0×0
+          Text "플러그인 관리" (2FWJ-2) 0×0 "플러그인 관리"
+          Text "설치 · 기능 허용 · 마켓플레이스" (2FWI-2) 0×0 "설치 · 기능 허용 · 마켓플레이스"
+      Frame "Frame" (F52-0) 292×56
+        Frame "Frame" (F53-0) 30×30
+          SVG "SVG" (F54-0) 0×0
+            SVGVisualElement "Rect" (F55-0) 0×0
+            SVGVisualElement "Rect" (F56-0) 0×0
+        Text "무엇이든 물어보세요" (F57-0) 0×0 "무엇이든 물어보세요"

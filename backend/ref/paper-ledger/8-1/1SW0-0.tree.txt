@@ -1,0 +1,230 @@
+Frame "01 · 백테스트 — 설계 (폼)" (1SW0-0) 1680×1010
+  Frame "Frame" (1SW1-0) 1680×938
+    Text "셸 — 백테스트 · 설계 (다섯 번째…" (1T12-0) 0×0 "셸 — 백테스트 · 설계 (다섯 번째 모드 · 캔버스만 교체 · 채팅 상시)"
+    Text "백테스트는 다섯 번째 모드입니다. 들…" (1T11-0) 0×0 "백테스트는 다섯 번째 모드입니다. 들어오면 채팅은 유지되고 캔버스만 전략 설계대로 바뀝니다. 폼은 조건을 고"
+    Frame "Frame" (1SW2-0) 1560×850
+      Frame "47 · Project Recent Sidebar" (1SZ6-0) 268×819
+        Frame "Primary Actions" (1T09-0) 0×0
+          Frame "Frame" (1T0W-0) 0×28
+            Text "ATHENA" (1T10-0) 0×0 "ATHENA"
+            SVG "SVG" (1T0X-0) 0×0
+              SVGVisualElement "Circle" (1T0Z-0) 0×0
+              SVGVisualElement "Path" (1T0Y-0) 0×0
+          Frame "Frame" (1T0R-0) 0×30
+            SVG "SVG" (1T0T-0) 0×0
+              SVGVisualElement "Path" (1T0V-0) 0×0
+              SVGVisualElement "Path" (1T0U-0) 0×0
+            Text "새 채팅" (1T0S-0) 0×0 "새 채팅"
+          Frame "Frame" (1T0K-0) 0×30
+            SVG "SVG" (1T0M-0) 0×0
+              SVGVisualElement "Circle" (1T0Q-0) 0×0
+              SVGVisualElement "Circle" (1T0P-0) 0×0
+              SVGVisualElement "Circle" (1T0O-0) 0×0
+              SVGVisualElement "Path" (1T0N-0) 0×0
+            Text "그래프" (1T0L-0) 0×0 "그래프"
+          Frame "Frame" (1T0F-0) 0×30
+            SVG "SVG" (1T0H-0) 0×0
+              SVGVisualElement "Circle" (1T0J-0) 0×0
+              SVGVisualElement "Path" (1T0I-0) 0×0
+            Text "에이전트" (1T0G-0) 0×0 "에이전트"
+          Frame "Nav 플러그인" (1T13-0) 0×30
+            SVG "SVG" (1T14-0) 0×0
+              SVGVisualElement "Path" (1T15-0) 0×0
+              SVGVisualElement "Path" (1T16-0) 0×0
+            Text "플러그인" (1T17-0) 0×0 "플러그인"
+          Frame "Nav 백테스트 (active)" (1T18-0) 0×30
+            SVG "SVG" (1T19-0) 0×0
+              SVGVisualElement "Path" (1T1A-0) 0×0
+              SVGVisualElement "Path" (1T1B-0) 0×0
+            Text "백테스트" (1T1C-0) 0×0 "백테스트"
+        Frame "Project Tree" (1SZP-0) 0×0
+          Frame "Frame" (1T07-0) 0×0
+            Text "프로젝트" (1T08-0) 0×0 "프로젝트"
+          Frame "Frame" (1SZV-0) 0×32
+            SVG "SVG" (1T04-0) 0×0
+              SVGVisualElement "Path" (1T06-0) 0×0
+              SVGVisualElement "Path" (1T05-0) 0×0
+            Text "아테나" (1T03-0) 0×0 "아테나"
+            SVG "SVG" (1SZZ-0) 0×0
+              SVGVisualElement "Circle" (1T02-0) 0×0
+              SVGVisualElement "Circle" (1T01-0) 0×0
+              SVGVisualElement "Circle" (1T00-0) 0×0
+            SVG "SVG" (1SZW-0) 0×0
+              SVGVisualElement "Path" (1SZY-0) 0×0
+              SVGVisualElement "Path" (1SZX-0) 0×0
+          Frame "Frame" (1SZT-0) 0×27
+            Text "백엔드 API 개수 확인" (1SZU-0) 0×0 "백엔드 API 개수 확인"
+          Frame "Frame" (1SZQ-0) 0×29
+            Text "앱 전체 기능 검수" (1SZS-0) 0×0 "앱 전체 기능 검수"
+            Rectangle "Rectangle" (1SZR-0) 6×6
+        Frame "Recent Conversations" (1SZE-0) 0×0
+          Frame "Frame" (1SZM-0) 0×20
+            Text "최근" (1SZO-0) 0×0 "최근"
+            Text "전체" (1SZN-0) 0×0 "전체"
+          Frame "Frame" (1SZJ-0) 0×27
+            Text "앱 전체 기능 검수" (1SZL-0) 0×0 "앱 전체 기능 검수"
+            Rectangle "Rectangle" (1SZK-0) 6×6
+          Frame "Frame" (1SZH-0) 0×27
+            Text "삼성전자 주요 변동 알림" (1SZI-0) 0×0 "삼성전자 주요 변동 알림"
+          Frame "Frame" (1SZF-0) 0×27
+            Text "ETF 자금 흐름" (1SZG-0) 0×0 "ETF 자금 흐름"
+        Frame "Account Footer" (1SZ7-0) 0×0
+          Frame "Frame" (1SZ8-0) 0×38
+            Frame "Frame" (1SZC-0) 22×22
+              Text "AN" (1SZD-0) 0×0 "AN"
+            Text "모의-주력" (1SZB-0) 0×0 "모의-주력"
+            SVG "SVG" (1SZ9-0) 0×0
+              SVGVisualElement "Path" (1SZA-0) 0×0
+      Frame "Frame" (1SWK-0) 0×848
+        Frame "백테스트 설계 폼" (1T1E-0) 838×0
+          Frame "헤더" (1T1G-0) 0×0
+            Frame "Frame" (1T1H-0) 0×0
+              Frame "Frame" (1T1I-0) 0×0
+                Text "백테스트" (1T1J-0) 0×0 "백테스트"
+                Text "20-60 골든크로스 · v4 · 방…" (1T1K-0) 0×0 "20-60 골든크로스 · v4 · 방금 저장됨"
+              Frame "Frame" (1T1L-0) 0×0
+                Frame "Frame" (1T1M-0) 0×0
+                  Frame "Frame" (1T1N-0) 0×0
+                    Text "폼" (1T1O-0) 0×0 "폼"
+                  Frame "Frame" (1T1P-0) 0×0
+                    Text "코드" (1T1Q-0) 0×0 "코드"
+                Frame "Frame" (1T1R-0) 0×0
+                  Text "실행" (1T1S-0) 0×0 "실행"
+          Frame "대상·기간" (1T1U-0) 0×0
+            Frame "Frame" (1T1V-0) 0×0
+              Text "대상 · 기간" (1T1W-0) 0×0 "대상 · 기간"
+              Frame "Frame" (1T1X-0) 0×0
+                Rectangle "Rectangle" (1T1Y-0) 6×6
+                Text "캐시 2,842봉 · 2015-01-…" (1T1Z-0) 0×0 "캐시 2,842봉 · 2015-01-02 → 2026-08-28 · 추가 수집 0회"
+            Frame "Frame" (1T20-0) 0×0
+              Frame "Frame" (1T21-0) 280×0
+                Text "종목" (1T22-0) 0×0 "종목"
+                Frame "Frame" (1T23-0) 0×34
+                  Frame "Frame" (1T24-0) 0×0
+                    Text "삼성전자" (1T25-0) 0×0 "삼성전자"
+                    Text "005930" (1T26-0) 0×0 "005930"
+                  Text "+ 종목 추가" (1T27-0) 0×0 "+ 종목 추가"
+              Frame "Frame" (1T28-0) 186×0
+                Text "주기" (1T29-0) 0×0 "주기"
+                Frame "Frame" (1T2A-0) 0×34
+                  Frame "Frame" (1T2B-0) 0×0
+                    Text "일" (1T2C-0) 0×0 "일"
+                  Frame "Frame" (1T2D-0) 0×0
+                    Text "주" (1T2E-0) 0×0 "주"
+                  Frame "Frame" (1T2F-0) 0×0
+                    Text "월" (1T2G-0) 0×0 "월"
+              Frame "Frame" (1T2H-0) 0×0
+                Text "기간 · 주가 기준" (1T2I-0) 0×0 "기간 · 주가 기준"
+                Frame "Frame" (1T2J-0) 0×34
+                  Text "2016-01-01 → 2026-08…" (1T2K-0) 0×0 "2016-01-01 → 2026-08-28"
+                  Text "수정주가" (1T2L-0) 0×0 "수정주가"
+          Frame "지표" (1T2N-0) 0×0
+            Frame "Frame" (1T2O-0) 0×0
+              Text "지표" (1T2P-0) 0×0 "지표"
+              Text "80종 중 2종 사용 · 별칭으로 조…" (1T2Q-0) 0×0 "80종 중 2종 사용 · 별칭으로 조건에서 부릅니다"
+            Frame "지표 행 ma_fast" (1T2R-0) 0×38
+              Text "SMA" (1T2S-0) 64×0 "SMA"
+              Text "ma_fast" (1T2T-0) 96×0 "ma_fast"
+              Frame "Frame" (1T2U-0) 0×0
+                Text "기간" (1T2V-0) 0×0 "기간"
+                Frame "Frame" (1T2W-0) 0×0
+                  Frame "Frame" (1T2X-0) 0×4
+                    Rectangle "Rectangle" (1T2Y-0) 0×4
+                    Rectangle "Rectangle" (1T2Z-0) 0×12
+                  Text "20" (1T30-0) 52×0 "20"
+              Text "5 – 60" (1T31-0) 78×0 "5 – 60"
+            Frame "지표 행 ma_slow" (1T33-0) 0×38
+              Text "SMA" (1T3D-0) 64×0 "SMA"
+              Text "ma_slow" (1T3C-0) 96×0 "ma_slow"
+              Frame "Frame" (1T35-0) 0×0
+                Text "기간" (1T3B-0) 0×0 "기간"
+                Frame "Frame" (1T36-0) 0×0
+                  Frame "Frame" (1T38-0) 0×4
+                    Rectangle "Rectangle" (1T3A-0) 0×4
+                    Rectangle "Rectangle" (1T39-0) 12×12
+                  Text "60" (1T37-0) 52×0 "60"
+              Text "20 – 240" (1T34-0) 78×0 "20 – 240"
+            Frame "지표 추가" (1T3E-0) 0×32
+              Text "+ 지표 추가 — RSI · MACD…" (1T3F-0) 0×0 "+ 지표 추가 — RSI · MACD · ATR · 볼린저 …"
+          Frame "조건" (1T3H-0) 0×0
+            Frame "진입 조건" (1T3I-0) 0×0
+              Frame "Frame" (1T3J-0) 0×0
+                Text "진입 조건" (1T3K-0) 0×0 "진입 조건"
+                Frame "Frame" (1T3L-0) 0×0
+                  Text "모두 만족 AND" (1T3M-0) 0×0 "모두 만족 AND"
+              Frame "Frame" (1T3N-0) 0×36
+                Text "ma_fast" (1T3O-0) 0×0 "ma_fast"
+                Text "가 상향 돌파" (1T3P-0) 0×0 "가 상향 돌파"
+                Text "ma_slow" (1T3Q-0) 0×0 "ma_slow"
+                Rectangle "Rectangle" (1T3R-0) 0×0
+                Text "cross_above" (1T3S-0) 0×0 "cross_above"
+              Frame "Frame" (1T3T-0) 0×32
+                Text "+ 조건 추가" (1T3U-0) 0×0 "+ 조건 추가"
+            Frame "청산 조건" (1T3V-0) 0×0
+              Frame "Frame" (1T3W-0) 0×0
+                Text "청산 조건" (1T3X-0) 0×0 "청산 조건"
+                Frame "Frame" (1T3Y-0) 0×0
+                  Text "하나라도 OR" (1T3Z-0) 0×0 "하나라도 OR"
+              Frame "Frame" (1T40-0) 0×36
+                Text "ma_fast" (1T41-0) 0×0 "ma_fast"
+                Text "가 하향 돌파" (1T42-0) 0×0 "가 하향 돌파"
+                Text "ma_slow" (1T43-0) 0×0 "ma_slow"
+                Rectangle "Rectangle" (1T44-0) 0×0
+                Text "cross_below" (1T45-0) 0×0 "cross_below"
+              Frame "Frame" (1T46-0) 0×32
+                Text "+ 조건 추가" (1T47-0) 0×0 "+ 조건 추가"
+          Frame "리스크·비용" (1T49-0) 0×0
+            Frame "Frame" (1T4A-0) 0×0
+              Text "리스크 · 비용" (1T4B-0) 0×0 "리스크 · 비용"
+              Text "세율·수수료는 시점에 따라 다릅니다 …" (1T4C-0) 0×0 "세율·수수료는 시점에 따라 다릅니다 — 기본값일 뿐 사실 주장이 아닙니다"
+            Frame "Frame" (1T4D-0) 0×0
+              Frame "Frame" (1T4E-0) 0×0
+                Text "손절" (1T4F-0) 0×0 "손절"
+                Frame "Frame" (1T4G-0) 0×34
+                  Text "-8.0%" (1T4H-0) 0×0 "-8.0%"
+                  Frame "Frame" (1T4I-0) 26×15
+                    Rectangle "Rectangle" (1T4J-0) 11×11
+              Frame "Frame" (1T4K-0) 0×0
+                Text "익절" (1T4L-0) 0×0 "익절"
+                Frame "Frame" (1T4M-0) 0×34
+                  Text "사용 안 함" (1T4N-0) 0×0 "사용 안 함"
+                  Frame "Frame" (1T4O-0) 26×15
+                    Rectangle "Rectangle" (1T4P-0) 11×11
+              Frame "Frame" (1T4Q-0) 0×0
+                Text "수수료 · 세금" (1T4R-0) 0×0 "수수료 · 세금"
+                Frame "Frame" (1T4S-0) 0×34
+                  Text "1.5bp · 매도 18.0bp" (1T4T-0) 0×0 "1.5bp · 매도 18.0bp"
+              Frame "Frame" (1T4U-0) 0×0
+                Text "슬리피지" (1T4V-0) 0×0 "슬리피지"
+                Frame "Frame" (1T4W-0) 0×34
+                  Text "5.0bp" (1T4X-0) 0×0 "5.0bp"
+          Frame "가정" (1T4Z-0) 0×0
+            Text "체결 가정 — 결과에도 같은 문장이 …" (1T50-0) 0×0 "체결 가정 — 결과에도 같은 문장이 그대로 붙습니다"
+            Text "신호는 종가 확정 후 판정하고 체결은…" (1T51-0) 0×0 "신호는 종가 확정 후 판정하고 체결은 다음 봉 시가입니다 · 손절·익절은 봉 내부 저가·고가 터치로 보고, "
+      Frame "Frame" (1SW3-0) 400×0
+        Frame "Frame" (1SWH-0) 0×0
+          Text "전략에게 묻기" (1SWJ-0) 0×0 "전략에게 묻기"
+          Text "답이 코드와 백테스트를 바꿉니다" (1SWI-0) 0×0 "답이 코드와 백테스트를 바꿉니다"
+        Frame "채팅 본문" (1T53-0) 399×0
+          Frame "Frame" (1T54-0) 0×0
+            Frame "Frame" (1T55-0) 0×0
+              Text "손절을 ATR 2배로 바꾸고 다시 돌…" (1T56-0) 0×0 "손절을 ATR 2배로 바꾸고 다시 돌려줘"
+          Text "고정 -8% 대신 진입 시점 ATR(…" (1T57-0) 0×0 "고정 -8% 대신 진입 시점 ATR(14)의 2배를 손절폭으로 쓰는 코드 초안을 만들었습니다. 폼으로는 표현"
+          Frame "Frame" (1T58-0) 0×0
+            Frame "Frame" (1T59-0) 0×0
+              Frame "Frame" (1T5A-0) 0×0
+                Text "코드 초안" (1T5B-0) 0×0 "코드 초안"
+              Text "v4 → v5 · 12줄 바뀜" (1T5C-0) 0×0 "v4 → v5 · 12줄 바뀜"
+            Text "아직 적용하지 않았습니다. 지금 도는…" (1T5D-0) 0×0 "아직 적용하지 않았습니다. 지금 도는 전략은 v4 그대로입니다."
+            Frame "Frame" (1T5E-0) 0×0
+              Frame "Frame" (1T5F-0) 0×0
+                Text "차이 보기" (1T5G-0) 0×0 "차이 보기"
+              Frame "Frame" (1T5H-0) 0×0
+                Text "버리기" (1T5I-0) 0×0 "버리기"
+        Frame "Frame" (1SW4-0) 0×0
+          Frame "Frame" (1SW5-0) 0×0
+            Frame "Frame" (1SW7-0) 22×22
+              SVG "SVG" (1SW8-0) 0×0
+                SVGVisualElement "Rect" (1SWA-0) 0×0
+                SVGVisualElement "Rect" (1SW9-0) 0×0
+            Text "무엇이든 물어보세요" (1SW6-0) 0×0 "무엇이든 물어보세요"

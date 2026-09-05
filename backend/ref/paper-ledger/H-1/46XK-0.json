@@ -1,0 +1,342 @@
+{
+ "board_id": "46XK-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-05 / R03-T4 · 수급 — 신용·대차",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "46YI-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T4 · 수급 — 신용·대차",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46YH-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-05 / R03-T4 · 수급 — 신용·대차",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "46YF-0",
+   "text": "신용·대차 수급",
+   "path": [
+    "mini/CC-05 / R03-T4 · 수급 — 신용·대차",
+    "Header"
+   ]
+  },
+  {
+   "id": "46YD-0",
+   "text": "금융투자",
+   "path": [
+    "mini/CC-05 / R03-T4 · 수급 — 신용·대차",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46YC-0",
+   "text": "금융투자 -842억원",
+   "path": [
+    "mini/CC-05 / R03-T4 · 수급 — 신용·대차",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46YA-0",
+   "text": "기관계",
+   "path": [
+    "mini/CC-05 / R03-T4 · 수급 — 신용·대차",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46Y9-0",
+   "text": "-1,204억원",
+   "path": [
+    "mini/CC-05 / R03-T4 · 수급 — 신용·대차",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46Y7-0",
+   "text": "거래대금",
+   "path": [
+    "mini/CC-05 / R03-T4 · 수급 — 신용·대차",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46Y6-0",
+   "text": "2.14조원",
+   "path": [
+    "mini/CC-05 / R03-T4 · 수급 — 신용·대차",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46Y3-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-05 / R03-T4 · 수급 — 신용·대차",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46Y2-0",
+   "text": "값",
+   "path": [
+    "mini/CC-05 / R03-T4 · 수급 — 신용·대차",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46Y1-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-05 / R03-T4 · 수급 — 신용·대차",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "46XZ-0",
+   "text": "공매도량",
+   "path": [
+    "mini/CC-05 / R03-T4 · 수급 — 신용·대차",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46XY-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T4 · 수급 — 신용·대차",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46XW-0",
+   "text": "529,470주",
+   "path": [
+    "mini/CC-05 / R03-T4 · 수급 — 신용·대차",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "46XV-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T4 · 수급 — 신용·대차",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "46XT-0",
+   "text": "공매도거래대금",
+   "path": [
+    "mini/CC-05 / R03-T4 · 수급 — 신용·대차",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46XS-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T4 · 수급 — 신용·대차",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "46XQ-0",
+   "text": "781억원 · 누적 2,234만주",
+   "path": [
+    "mini/CC-05 / R03-T4 · 수급 — 신용·대차",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "46XP-0",
+   "text": "",
+   "path": [
+    "mini/CC-05 / R03-T4 · 수급 — 신용·대차",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "46XM-0",
+   "text": "스칼라 2개, 행 3개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-05 / R03-T4 · 수급 — 신용·대차",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "46XK-0",
+   "name": "mini/CC-05 / R03-T4 · 수급 — 신용·대차",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "46YE-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46YG-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46XN-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "46Y4-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46YB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46Y8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46Y5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46Y0-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46XU-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46XX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46XO-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "46XR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "46XL-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "신용·대차 수급": 1,
+  "금융투자": 1,
+  "금융투자 -842억원": 1,
+  "기관계": 1,
+  "-1,204억원": 1,
+  "거래대금": 1,
+  "2.14조원": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "공매도량": 1,
+  "529,470주": 1,
+  "공매도거래대금": 1,
+  "781억원 · 누적 2,234만주": 1,
+  "스칼라 2개, 행 3개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "55cc8d12775ecf57134fd27728d71a7271f4f5668f5a69bdc8d7d2bec81155d4"
+}

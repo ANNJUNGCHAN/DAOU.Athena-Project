@@ -1,0 +1,35 @@
+Frame "mini/CC-01 / R10-T2-X6 · 부채·미수·연체 상세" (48O0-0) 360×420
+  Frame "Header" (48OU-0) 0×0
+    Frame "Meta row" (48OW-0) 0×0
+      Text "Eyebrow" (48OY-0) 0×0
+      Text "As of" (48OX-0) 0×0 "기준 09:42"
+    Text "Title" (48OV-0) 0×0 "부채·미수 및 연체 상세"
+  Frame "Body" (48O3-0) 0×0
+    Frame "KPI band" (48OK-0) 0×0
+      Frame "Frame" (48OR-0) 0×0
+        Text "총평가손익금액" (48OT-0) 0×0 "총평가손익금액"
+        Text "+4,240,900원" (48OS-0) 0×0 "+4,240,900원"
+      Frame "Frame" (48OO-0) 0×0
+        Text "매수비중" (48OQ-0) 0×0 "매수비중"
+        Text "28.0%" (48OP-0) 0×0 "28.0%"
+      Frame "Frame" (48OL-0) 0×0
+        Text "핵심" (48ON-0) 0×0 "핵심"
+        Text "0원" (48OM-0) 0×0 "0원"
+    Frame "Table header" (48OG-0) 0×0
+      Text "항목" (48OJ-0) 0×0 "항목"
+      Text "값" (48OI-0) 0×0 "값"
+      Text "비고" (48OH-0) 72×0 "비고"
+    Frame "Position 1" (48OA-0) 0×0
+      Frame "Frame" (48OD-0) 0×0
+        Text "총수익률" (48OF-0) 0×0 "총수익률"
+        Text "Text" (48OE-0) 0×0
+      Text "매입 85,519,340원" (48OC-0) 0×0 "매입 85,519,340원"
+      Text "Text" (48OB-0) 72×0
+    Frame "Position 2" (48O4-0) 0×0
+      Frame "Frame" (48O7-0) 0×0
+        Text "금액" (48O9-0) 0×0 "금액"
+        Text "Text" (48O8-0) 0×0
+      Text "89,760,240원" (48O6-0) 0×0 "89,760,240원"
+      Text "Text" (48O5-0) 72×0
+  Frame "Fold note" (48O1-0) 0×0
+    Text "스칼라 2개, 행 7개 접힘 · 원본…" (48O2-0) 0×0 "스칼라 2개, 행 7개 접힘 · 원본에서 확인"

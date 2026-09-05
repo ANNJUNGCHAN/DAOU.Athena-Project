@@ -1,0 +1,509 @@
+{
+ "board_id": "3Z8U-1",
+ "page": "8-1",
+ "page_name": "백테스트",
+ "name": "09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)",
+ "width": 1680.0,
+ "height": 0.0,
+ "texts": [
+  {
+   "id": "3Z8W-1",
+   "text": "채팅이 화면을 몬다 — 말한 것이 화면에서 실제로 일어난다",
+   "path": [
+    "09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)",
+    "보드 제목"
+   ]
+  },
+  {
+   "id": "3Z8X-1",
+   "text": "모델은 athena_graph_view를 부르고, 그 결과가 delivered:\"canvas\" 봉투로 렌더러에 도착한다. 렌더러는 사람이 직접 눌렀을 때와 같은 함수를 부른다 — 탭 클릭이 부르는 setSurface, 지도 클릭이 부르는 selectNode, 필터 select가 부르는 writePrefs. 채팅용 두 번째 경로를 만들면 두 입구가 다른 상태를 남긴다.",
+   "path": [
+    "09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)",
+    "보드 제목"
+   ]
+  },
+  {
+   "id": "3Z91-1",
+   "text": "navigate",
+   "path": [
+    "09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)",
+    "세 액션의 전후",
+    "navigate",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Z92-1",
+   "text": "surface = summary · map · settings",
+   "path": [
+    "09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)",
+    "세 액션의 전후",
+    "navigate",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Z93-1",
+   "text": "\"수집·노출 탭 보여줘\"",
+   "path": [
+    "09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)",
+    "세 액션의 전후",
+    "navigate"
+   ]
+  },
+  {
+   "id": "3Z95-1",
+   "text": "전",
+   "path": [
+    "09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)",
+    "세 액션의 전후",
+    "navigate",
+    "전"
+   ]
+  },
+  {
+   "id": "3Z98-1",
+   "text": "요약",
+   "path": [
+    "09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)",
+    "세 액션의 전후",
+    "navigate",
+    "전",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Z9A-1",
+   "text": "그래프",
+   "path": [
+    "09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)",
+    "세 액션의 전후",
+    "navigate",
+    "전",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Z9C-1",
+   "text": "수집·노출",
+   "path": [
+    "09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)",
+    "세 액션의 전후",
+    "navigate",
+    "전",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Z9E-1",
+   "text": "후",
+   "path": [
+    "09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)",
+    "세 액션의 전후",
+    "navigate",
+    "후"
+   ]
+  },
+  {
+   "id": "3Z9H-1",
+   "text": "요약",
+   "path": [
+    "09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)",
+    "세 액션의 전후",
+    "navigate",
+    "후",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Z9J-1",
+   "text": "그래프",
+   "path": [
+    "09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)",
+    "세 액션의 전후",
+    "navigate",
+    "후",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Z9L-1",
+   "text": "수집·노출",
+   "path": [
+    "09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)",
+    "세 액션의 전후",
+    "navigate",
+    "후",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Z9M-1",
+   "text": "탭 활성 표시까지 함께 따라온다. 그래프 기능 밖이면 아무 일도 안 한다 — 다른 모드를 보고 있는데 화면이 갈아치워지면 안 된다.",
+   "path": [
+    "09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)",
+    "세 액션의 전후",
+    "navigate"
+   ]
+  },
+  {
+   "id": "3Z9P-1",
+   "text": "select",
+   "path": [
+    "09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)",
+    "세 액션의 전후",
+    "select",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Z9Q-1",
+   "text": "entity = entity_id",
+   "path": [
+    "09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)",
+    "세 액션의 전후",
+    "select",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3Z9R-1",
+   "text": "\"한미반도체 골라줘\"",
+   "path": [
+    "09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)",
+    "세 액션의 전후",
+    "select"
+   ]
+  },
+  {
+   "id": "3Z9T-1",
+   "text": "① 지도를 안 보고 있으면 지도로 옮긴다",
+   "path": [
+    "09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)",
+    "세 액션의 전후",
+    "select",
+    "일어나는 일"
+   ]
+  },
+  {
+   "id": "3Z9U-1",
+   "text": "② 공통 패널이 그 노드로 열린다",
+   "path": [
+    "09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)",
+    "세 액션의 전후",
+    "select",
+    "일어나는 일"
+   ]
+  },
+  {
+   "id": "3Z9V-1",
+   "text": "③ 지도 카메라가 그 노드로 옮겨간다",
+   "path": [
+    "09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)",
+    "세 액션의 전후",
+    "select",
+    "일어나는 일"
+   ]
+  },
+  {
+   "id": "3Z9W-1",
+   "text": "이름이 아니라 id가 필요하다. 성향 신호에 entityId가 함께 실려 오고, 모르면 athena_brain action=entity로 먼저 확인한다. 필터에 걸려 지도에 없는 노드면 조용히 아무 일도 안 한다.",
+   "path": [
+    "09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)",
+    "세 액션의 전후",
+    "select"
+   ]
+  },
+  {
+   "id": "3Z9Z-1",
+   "text": "filter",
+   "path": [
+    "09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)",
+    "세 액션의 전후",
+    "filter",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZA0-1",
+   "text": "기간 · 연결 수 · 정렬",
+   "path": [
+    "09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)",
+    "세 액션의 전후",
+    "filter",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZA1-1",
+   "text": "\"최근 1년으로 넓혀줘\"",
+   "path": [
+    "09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)",
+    "세 액션의 전후",
+    "filter"
+   ]
+  },
+  {
+   "id": "3ZA4-1",
+   "text": "최근 90일",
+   "path": [
+    "09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)",
+    "세 액션의 전후",
+    "filter",
+    "전후 칩",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZA5-1",
+   "text": "→",
+   "path": [
+    "09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)",
+    "세 액션의 전후",
+    "filter",
+    "전후 칩"
+   ]
+  },
+  {
+   "id": "3ZA7-1",
+   "text": "최근 365일",
+   "path": [
+    "09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)",
+    "세 액션의 전후",
+    "filter",
+    "전후 칩",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3ZA8-1",
+   "text": "칩만 바뀌는 것이 아니라 백엔드를 그 창으로 다시 조회한다. 값은 localStorage에 남아 다음에 열어도 같다. 걸 수 없는 값(예 7일)은 조용히 버린다 — 봉투가 어디서 왔는지 모르는 채로 저장하지 않는다.",
+   "path": [
+    "09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)",
+    "세 액션의 전후",
+    "filter"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "3Z8U-1",
+   "name": "09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)",
+   "component": "Frame",
+   "w": 1680.0,
+   "h": 0.0,
+   "depth": 0
+  },
+  {
+   "id": "3Z8V-1",
+   "name": "보드 제목",
+   "component": "Frame",
+   "w": 1600.0,
+   "h": 0.0,
+   "depth": 1
+  },
+  {
+   "id": "3Z8Y-1",
+   "name": "세 액션의 전후",
+   "component": "Frame",
+   "w": 1600.0,
+   "h": 0.0,
+   "depth": 1
+  },
+  {
+   "id": "3Z8Z-1",
+   "name": "navigate",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "3Z90-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "3Z94-1",
+   "name": "전",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "3Z96-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3Z97-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3Z99-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3Z9B-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3Z9D-1",
+   "name": "후",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "3Z9F-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3Z9G-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3Z9I-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3Z9K-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "3Z9N-1",
+   "name": "select",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "3Z9O-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "3Z9S-1",
+   "name": "일어나는 일",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "3Z9X-1",
+   "name": "filter",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "3Z9Y-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "3ZA2-1",
+   "name": "전후 칩",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "3ZA3-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "3ZA6-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  }
+ ],
+ "text_multiset": {
+  "채팅이 화면을 몬다 — 말한 것이 화면에서 실제로 일어난다": 1,
+  "모델은 athena_graph_view를 부르고, 그 결과가 delivered:\"canvas\" 봉투로 렌더러에 도착한다. 렌더러는 사람이 직접 눌렀을 때와 같은 함수를 부른다 — 탭 클릭이 부르는 setSurface, 지도 클릭이 부르는 selectNode, 필터 select가 부르는 writePrefs. 채팅용 두 번째 경로를 만들면 두 입구가 다른 상태를 남긴다.": 1,
+  "navigate": 1,
+  "surface = summary · map · settings": 1,
+  "\"수집·노출 탭 보여줘\"": 1,
+  "전": 1,
+  "요약": 2,
+  "그래프": 2,
+  "수집·노출": 2,
+  "후": 1,
+  "탭 활성 표시까지 함께 따라온다. 그래프 기능 밖이면 아무 일도 안 한다 — 다른 모드를 보고 있는데 화면이 갈아치워지면 안 된다.": 1,
+  "select": 1,
+  "entity = entity_id": 1,
+  "\"한미반도체 골라줘\"": 1,
+  "① 지도를 안 보고 있으면 지도로 옮긴다": 1,
+  "② 공통 패널이 그 노드로 열린다": 1,
+  "③ 지도 카메라가 그 노드로 옮겨간다": 1,
+  "이름이 아니라 id가 필요하다. 성향 신호에 entityId가 함께 실려 오고, 모르면 athena_brain action=entity로 먼저 확인한다. 필터에 걸려 지도에 없는 노드면 조용히 아무 일도 안 한다.": 1,
+  "filter": 1,
+  "기간 · 연결 수 · 정렬": 1,
+  "\"최근 1년으로 넓혀줘\"": 1,
+  "최근 90일": 1,
+  "→": 1,
+  "최근 365일": 1,
+  "칩만 바뀌는 것이 아니라 백엔드를 그 창으로 다시 조회한다. 값은 localStorage에 남아 다음에 열어도 같다. 걸 수 없는 값(예 7일)은 조용히 버린다 — 봉투가 어디서 왔는지 모르는 채로 저장하지 않는다.": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "c32ea485bab8d2754b51116d491e7efb2d8aca32141434eca1f34e57fa8689ba"
+}

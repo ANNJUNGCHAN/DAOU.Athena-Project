@@ -1,0 +1,162 @@
+Frame "CC-06 / R05 · 반도체 업종·AI 테마" (15J9-2) 1440×832
+  Frame "Header" (15JA-2) 1360×122
+    Frame "Frame" (15JB-2) 0×0
+      Text "반도체 업종과 AI 테마 흐름을 보여…" (15JC-2) 0×0 "반도체 업종과 AI 테마 흐름을 보여줘"
+      Text "반도체 업종 · AI 반도체 테마 ·…" (15JD-2) 0×0 "반도체 업종 · AI 반도체 테마 · 주도 3종목"
+    Frame "Frame" (15JE-2) 0×0
+      Text "업종 · 테마" (15JF-2) 0×0 "업종 · 테마"
+      Text "오전 9:42 · 실시간" (15JG-2) 0×0 "오전 9:42 · 실시간"
+  Frame "Workspace" (15JI-2) 1360×0
+    Frame "Sector pulse" (15JJ-2) 870×610
+      Frame "Sector score" (15JM-2) 814×0
+        Frame "Frame" (15JN-2) 0×0
+          Text "반도체 업종 강도" (15JO-2) 0×0 "반도체 업종 강도"
+          Text "상위 4%" (15JP-2) 0×0 "상위 4%"
+        Text "+2.84%" (15JQ-2) 0×0 "+2.84%"
+        Frame "Frame" (15JR-2) 814×14
+          Rectangle "Rectangle" (15JS-2) 0×14
+          Rectangle "Rectangle" (15JT-2) 0×14
+        Text "상승 71 · 보합 8 · 하락 23…" (15JU-2) 0×0 "상승 71 · 보합 8 · 하락 23 · 거래대금 전일 대비 1.6배"
+      Frame "주도 종목 표" (355R-0) 814×0
+        Frame "열 헤더" (355S-0) 0×46
+          Text "주도 종목" (355T-0) 186×0 "주도 종목"
+          Text "현재가" (355U-0) 124×0 "현재가"
+          Text "거래대금" (355V-0) 126×0 "거래대금"
+          Text "시 · 고 · 저" (355W-0) 182×0 "시 · 고 · 저"
+          Text "호가" (355X-0) 110×0 "호가"
+          Text "테마 기여" (355Y-0) 86×0 "테마 기여"
+        Frame "SK하이닉스" (355Z-0) 0×0
+          Frame "Frame" (3560-0) 186×0
+            Text "SK하이닉스" (3561-0) 0×0 "SK하이닉스"
+            Text "000660" (3562-0) 0×0 "000660"
+          Frame "Frame" (3563-0) 124×0
+            Text "198,400" (3564-0) 0×0 "198,400"
+            Text "+3,990 · +2.05%" (3565-0) 0×0 "+3,990 · +2.05%"
+          Frame "Frame" (3566-0) 126×0
+            Text "0.98조" (3567-0) 0×0 "0.98조"
+            Text "497만주" (3568-0) 0×0 "497만주"
+          Frame "Frame" (3569-0) 182×0
+            Text "고 199,100 · 저 194,80…" (356A-0) 0×0 "고 199,100 · 저 194,800"
+            Text "시 195,000" (356B-0) 0×0 "시 195,000"
+          Frame "Frame" (356C-0) 110×0
+            Text "매도 198,500" (356D-0) 0×0 "매도 198,500"
+            Text "매수 198,400" (356E-0) 0×0 "매수 198,400"
+          Text "HBM 주도" (356F-0) 86×0 "HBM 주도"
+        Frame "한미반도체" (356G-0) 0×0
+          Frame "Frame" (356H-0) 186×0
+            Text "한미반도체" (356I-0) 0×0 "한미반도체"
+            Text "042700" (356J-0) 0×0 "042700"
+          Frame "Frame" (356K-0) 124×0
+            Text "197,400" (356L-0) 0×0 "197,400"
+            Text "+7,900 · +4.18%" (356M-0) 0×0 "+7,900 · +4.18%"
+          Frame "Frame" (356N-0) 126×0
+            Text "4,780억" (356O-0) 0×0 "4,780억"
+            Text "242만주" (356P-0) 0×0 "242만주"
+          Frame "Frame" (356Q-0) 182×0
+            Text "고 198,000 · 저 189,80…" (356R-0) 0×0 "고 198,000 · 저 189,800"
+            Text "시 190,200" (356S-0) 0×0 "시 190,200"
+          Frame "Frame" (356T-0) 110×0
+            Text "매도 197,500" (356U-0) 0×0 "매도 197,500"
+            Text "매수 197,400" (356V-0) 0×0 "매수 197,400"
+          Text "장비 확산" (356W-0) 86×0 "장비 확산"
+        Frame "삼성전자" (356X-0) 0×0
+          Frame "Frame" (356Y-0) 186×0
+            Text "삼성전자" (356Z-0) 0×0 "삼성전자"
+            Text "005930" (3570-0) 0×0 "005930"
+          Frame "Frame" (3571-0) 124×0
+            Text "150,850" (3572-0) 0×0 "150,850"
+            Text "+1,850 · +1.24%" (3573-0) 0×0 "+1,850 · +1.24%"
+          Frame "Frame" (3574-0) 126×0
+            Text "2.14조" (3575-0) 0×0 "2.14조"
+            Text "1,420만주" (3576-0) 0×0 "1,420만주"
+          Frame "Frame" (3577-0) 182×0
+            Text "고 152,400 · 저 148,10…" (3578-0) 0×0 "고 152,400 · 저 148,100"
+            Text "시 149,500" (3579-0) 0×0 "시 149,500"
+          Frame "Frame" (357A-0) 110×0
+            Text "매도 150,900" (357B-0) 0×0 "매도 150,900"
+            Text "매수 150,850" (357C-0) 0×0 "매수 150,850"
+          Text "지수 견인" (357D-0) 86×0 "지수 견인"
+      Frame "주도 종목 상태" (3HZ1-0) 0×36
+        Text "주도 3종목 표시 · 구성 102종목" (3HZ2-0) 0×0 "주도 3종목 표시 · 구성 102종목"
+        Text "09:42 기준" (3HZ3-0) 0×0 "09:42 기준"
+    Frame "Theme evidence" (15JK-2) 470×0
+      Frame "Theme spread" (15KI-2) 414×0
+        Frame "테마 확산 제목" (3HF4-0) 414×0
+          Text "AI 반도체 테마 확산" (3HF5-0) 0×0 "AI 반도체 테마 확산"
+          Text "최근 8거래일 등락률" (3HF6-0) 0×0 "최근 8거래일 등락률"
+        Frame "일별 등락률" (3HF8-0) 414×0
+          Frame "Frame" (3HF9-0) 0×0
+            Frame "Frame" (3HFA-0) 0×168
+              Text "+1.8%" (3HFB-0) 0×0 "+1.8%"
+              Rectangle "Rectangle" (3HFC-0) 34×72
+            Rectangle "Rectangle" (3HFD-0) 0×56
+            Text "08-21" (3HFE-0) 0×0 "08-21"
+          Frame "Frame" (3HFF-0) 0×0
+            Rectangle "Rectangle" (3HFG-0) 0×168
+            Frame "Frame" (3HFH-0) 0×56
+              Rectangle "Rectangle" (3HFI-0) 34×36
+              Text "-0.9%" (3HFJ-0) 0×0 "-0.9%"
+            Text "08-24" (3HFK-0) 0×0 "08-24"
+          Frame "Frame" (3HFL-0) 0×0
+            Frame "Frame" (3HFM-0) 0×168
+              Text "+2.4%" (3HFN-0) 0×0 "+2.4%"
+              Rectangle "Rectangle" (3HFO-0) 34×96
+            Rectangle "Rectangle" (3HFP-0) 0×56
+            Text "08-25" (3HFQ-0) 0×0 "08-25"
+          Frame "Frame" (3HFR-0) 0×0
+            Frame "Frame" (3HFS-0) 0×168
+              Text "+3.1%" (3HFT-0) 0×0 "+3.1%"
+              Rectangle "Rectangle" (3HFU-0) 34×124
+            Rectangle "Rectangle" (3HFV-0) 0×56
+            Text "08-26" (3HFW-0) 0×0 "08-26"
+          Frame "Frame" (3HIW-0) 0×0
+            Frame "Frame" (3HIX-0) 0×168
+              Text "+2.2%" (3HIY-0) 0×0 "+2.2%"
+              Rectangle "Rectangle" (3HIZ-0) 34×88
+            Rectangle "Rectangle" (3HJ0-0) 0×56
+            Text "08-27" (3HJ1-0) 0×0 "08-27"
+          Frame "Frame" (3HJ2-0) 0×0
+            Frame "Frame" (3HJ3-0) 0×168
+              Text "+1.6%" (3HJ4-0) 0×0 "+1.6%"
+              Rectangle "Rectangle" (3HJ5-0) 34×64
+            Rectangle "Rectangle" (3HJ6-0) 0×56
+            Text "08-28" (3HJ7-0) 0×0 "08-28"
+          Frame "Frame" (3HJ8-0) 0×0
+            Frame "Frame" (3HJ9-0) 0×168
+              Text "+2.1%" (3HJA-0) 0×0 "+2.1%"
+              Rectangle "Rectangle" (3HJB-0) 34×84
+            Rectangle "Rectangle" (3HJC-0) 0×56
+            Text "08-31" (3HJD-0) 0×0 "08-31"
+          Frame "Frame" (3HJE-0) 0×0
+            Frame "Frame" (3HJF-0) 0×168
+              Text "+3.4%" (3HJG-0) 0×0 "+3.4%"
+              Rectangle "Rectangle" (3HJH-0) 34×136
+            Rectangle "Rectangle" (3HJI-0) 0×56
+            Text "09-01" (3HJJ-0) 0×0 "09-01"
+        Frame "구성 축" (3HJL-0) 414×0
+          Frame "Frame" (3HJM-0) 0×38
+            Text "HBM" (3HJN-0) 0×0 "HBM"
+            Frame "Frame" (3HJO-0) 0×0
+              Text "5일 +14.2%" (3HJP-0) 0×0 "5일 +14.2%"
+              Text "+4.9%" (3HJQ-0) 58×0 "+4.9%"
+          Frame "Frame" (3HJR-0) 0×38
+            Text "후공정 장비" (3HJS-0) 0×0 "후공정 장비"
+            Frame "Frame" (3HJT-0) 0×0
+              Text "5일 +11.8%" (3HJU-0) 0×0 "5일 +11.8%"
+              Text "+3.6%" (3HJV-0) 58×0 "+3.6%"
+          Frame "Frame" (3HJW-0) 0×38
+            Text "파운드리" (3HJX-0) 0×0 "파운드리"
+            Frame "Frame" (3HJY-0) 0×0
+              Text "5일 +7.4%" (3HJZ-0) 0×0 "5일 +7.4%"
+              Text "+1.8%" (3HK0-0) 58×0 "+1.8%"
+        Frame "테마 확산" (32I4-0) 414×0
+          Text "테마 확산" (32I5-0) 0×0 "테마 확산"
+          Frame "Frame" (32I6-0) 0×0
+            Text "확산 종목" (32I7-0) 0×0 "확산 종목"
+            Text "18 / 24" (32I8-0) 0×0 "18 / 24"
+          Frame "Frame" (32I9-0) 0×0
+            Text "테마 5일" (32IA-0) 0×0 "테마 5일"
+            Text "+12.4%" (32IB-0) 0×0 "+12.4%"
+          Frame "Frame" (32IC-0) 0×0
+            Text "거래대금" (32ID-0) 0×0 "거래대금"
+            Text "전일 대비 1.6배" (32IE-0) 0×0 "전일 대비 1.6배"

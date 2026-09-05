@@ -1,0 +1,35 @@
+Frame "mini/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색" (4753-0) 360×420
+  Frame "Header" (475X-0) 0×0
+    Frame "Meta row" (475Z-0) 0×0
+      Text "Eyebrow" (4761-0) 0×0
+      Text "As of" (4760-0) 0×0 "기준 09:42"
+    Text "Title" (475Y-0) 0×0 "업종 지수·등락 탐색"
+  Frame "Body" (4756-0) 0×0
+    Frame "Table header" (475S-0) 0×0
+      Text "순서" (475W-0) 34×0 "순서"
+      Text "항목" (475V-0) 0×0 "항목"
+      Text "값" (475U-0) 0×0 "값"
+      Text "비고" (475T-0) 64×0 "비고"
+    Frame "Rank 1" (475L-0) 0×0
+      Text "01" (475R-0) 34×0 "01"
+      Frame "Frame" (475O-0) 0×0
+        Text "누적거래량n" (475Q-0) 0×0 "누적거래량n"
+        Text "Text" (475P-0) 0×0
+      Text "누적 3억 4,200만주" (475N-0) 0×0 "누적 3억 4,200만주"
+      Text "Text" (475M-0) 64×0
+    Frame "Rank 2" (475E-0) 0×0
+      Text "02" (475K-0) 34×0 "02"
+      Frame "Frame" (475H-0) 0×0
+        Text "상승" (475J-0) 0×0 "상승"
+        Text "Text" (475I-0) 0×0
+      Text "71 · 23" (475G-0) 0×0 "71 · 23"
+      Text "Text" (475F-0) 64×0
+    Frame "Rank 3" (4757-0) 0×0
+      Text "03" (475D-0) 34×0 "03"
+      Frame "Frame" (475A-0) 0×0
+        Text "시간n" (475C-0) 0×0 "시간n"
+        Text "Text" (475B-0) 0×0
+      Text "09:30" (4759-0) 0×0 "09:30"
+      Text "Text" (4758-0) 64×0
+  Frame "Fold note" (4754-0) 0×0
+    Text "외 3개 행 접힘 · 원본에서 확인" (4755-0) 0×0 "외 3개 행 접힘 · 원본에서 확인"

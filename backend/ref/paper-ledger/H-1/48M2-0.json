@@ -1,0 +1,340 @@
+{
+ "board_id": "48M2-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-03 / R01-T4-9-X · VI 발동 전체 12건",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "48N0-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-9-X · VI 발동 전체 12건",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "48MZ-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-03 / R01-T4-9-X · VI 발동 전체 12건",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "48MX-0",
+   "text": "VI 발동 전체 12건",
+   "path": [
+    "mini/CC-03 / R01-T4-9-X · VI 발동 전체 12건",
+    "Header"
+   ]
+  },
+  {
+   "id": "48MV-0",
+   "text": "발동종목",
+   "path": [
+    "mini/CC-03 / R01-T4-9-X · VI 발동 전체 12건",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48MU-0",
+   "text": "12건",
+   "path": [
+    "mini/CC-03 / R01-T4-9-X · VI 발동 전체 12건",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48MS-0",
+   "text": "VI적용구분",
+   "path": [
+    "mini/CC-03 / R01-T4-9-X · VI 발동 전체 12건",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48MR-0",
+   "text": "8건",
+   "path": [
+    "mini/CC-03 / R01-T4-9-X · VI 발동 전체 12건",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48MP-0",
+   "text": "핵심",
+   "path": [
+    "mini/CC-03 / R01-T4-9-X · VI 발동 전체 12건",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48MO-0",
+   "text": "1건",
+   "path": [
+    "mini/CC-03 / R01-T4-9-X · VI 발동 전체 12건",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48ML-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-03 / R01-T4-9-X · VI 발동 전체 12건",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48MK-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-T4-9-X · VI 발동 전체 12건",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48MJ-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-03 / R01-T4-9-X · VI 발동 전체 12건",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48MH-0",
+   "text": "VI적용구분",
+   "path": [
+    "mini/CC-03 / R01-T4-9-X · VI 발동 전체 12건",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48MG-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-9-X · VI 발동 전체 12건",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48ME-0",
+   "text": "4건",
+   "path": [
+    "mini/CC-03 / R01-T4-9-X · VI 발동 전체 12건",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "48MD-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-9-X · VI 발동 전체 12건",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "48MB-0",
+   "text": "발동종목",
+   "path": [
+    "mini/CC-03 / R01-T4-9-X · VI 발동 전체 12건",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48MA-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-9-X · VI 발동 전체 12건",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48M8-0",
+   "text": "전체 12건 · 12건 표시",
+   "path": [
+    "mini/CC-03 / R01-T4-9-X · VI 발동 전체 12건",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "48M7-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T4-9-X · VI 발동 전체 12건",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "48M4-0",
+   "text": "스칼라 2개, 행 10개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-03 / R01-T4-9-X · VI 발동 전체 12건",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48M2-0",
+   "name": "mini/CC-03 / R01-T4-9-X · VI 발동 전체 12건",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "48MW-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48MY-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48M5-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48MM-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48MT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48MQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48MN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48MI-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48MC-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48MF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48M6-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48M9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48M3-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "VI 발동 전체 12건": 1,
+  "발동종목": 2,
+  "12건": 1,
+  "VI적용구분": 2,
+  "8건": 1,
+  "핵심": 1,
+  "1건": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "4건": 1,
+  "전체 12건 · 12건 표시": 1,
+  "스칼라 2개, 행 10개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "e8c031488c2b7ca0ca2e57a1947b817b1276b751cd40d411ff834e3c2fb87031"
+}

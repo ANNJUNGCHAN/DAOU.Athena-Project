@@ -1,0 +1,1004 @@
+{
+ "board_id": "AJ-0",
+ "page": "1-0",
+ "page_name": "화면",
+ "name": "13 · 설정 — 셸 오버레이",
+ "width": 1680,
+ "height": 900,
+ "texts": [
+  {
+   "id": "AV-0",
+   "text": "설정",
+   "path": [
+    "13 · 설정 — 셸 오버레이",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-head"
+   ]
+  },
+  {
+   "id": "AW-0",
+   "text": "↑↓ 이동 · Enter 선택 · Tab 패널 이동 · Esc 닫기",
+   "path": [
+    "13 · 설정 — 셸 오버레이",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-head"
+   ]
+  },
+  {
+   "id": "B2-0",
+   "text": "화면",
+   "path": [
+    "13 · 설정 — 셸 오버레이",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item is-selected"
+   ]
+  },
+  {
+   "id": "B4-0",
+   "text": "계좌",
+   "path": [
+    "13 · 설정 — 셸 오버레이",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item"
+   ]
+  },
+  {
+   "id": "B5-0",
+   "text": "2개",
+   "path": [
+    "13 · 설정 — 셸 오버레이",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item"
+   ]
+  },
+  {
+   "id": "BA-0",
+   "text": "모델",
+   "path": [
+    "13 · 설정 — 셸 오버레이",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item"
+   ]
+  },
+  {
+   "id": "BC-0",
+   "text": "성향・이력",
+   "path": [
+    "13 · 설정 — 셸 오버레이",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-nav",
+    "nav-item"
+   ]
+  },
+  {
+   "id": "BH-0",
+   "text": "화면",
+   "path": [
+    "13 · 설정 — 셸 오버레이",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 화면 (.card.screen)",
+    "card-head",
+    "uk-settings-title"
+   ]
+  },
+  {
+   "id": "BI-0",
+   "text": "두 영역과 카드에 함께 적용된다",
+   "path": [
+    "13 · 설정 — 셸 오버레이",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 화면 (.card.screen)",
+    "card-head",
+    "uk-settings-title"
+   ]
+  },
+  {
+   "id": "BQ-0",
+   "text": "질의하면 캔버스를 자동으로 연다",
+   "path": [
+    "13 · 설정 — 셸 오버레이",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 화면 (.card.screen)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-toggle-row · 자동 캔버스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "BW-0",
+   "text": "답변 길이에 따라 대화 열이 자란다",
+   "path": [
+    "13 · 설정 — 셸 오버레이",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 화면 (.card.screen)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-toggle-row · 자동 성장",
+    "Frame"
+   ]
+  },
+  {
+   "id": "C3-0",
+   "text": "글자 크기",
+   "path": [
+    "13 · 설정 — 셸 오버레이",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 화면 (.card.screen)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-toggle-row · 글자 크기 5단",
+    "Frame"
+   ]
+  },
+  {
+   "id": "C7-0",
+   "text": "매우 작음",
+   "path": [
+    "13 · 설정 — 셸 오버레이",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 화면 (.card.screen)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-toggle-row · 글자 크기 5단",
+    "uk-chip-row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "C9-0",
+   "text": "작음",
+   "path": [
+    "13 · 설정 — 셸 오버레이",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 화면 (.card.screen)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-toggle-row · 글자 크기 5단",
+    "uk-chip-row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "CB-0",
+   "text": "보통",
+   "path": [
+    "13 · 설정 — 셸 오버레이",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 화면 (.card.screen)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-toggle-row · 글자 크기 5단",
+    "uk-chip-row",
+    "is-pressed"
+   ]
+  },
+  {
+   "id": "CD-0",
+   "text": "큼",
+   "path": [
+    "13 · 설정 — 셸 오버레이",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 화면 (.card.screen)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-toggle-row · 글자 크기 5단",
+    "uk-chip-row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "CF-0",
+   "text": "매우 큼",
+   "path": [
+    "13 · 설정 — 셸 오버레이",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 화면 (.card.screen)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-toggle-row · 글자 크기 5단",
+    "uk-chip-row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "CV-0",
+   "text": "유리 투명도",
+   "path": [
+    "13 · 설정 — 셸 오버레이",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 화면 (.card.screen)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-toggle-row · 글자 크기 5단",
+    "Frame"
+   ]
+  },
+  {
+   "id": "CS-0",
+   "text": "가장 투명",
+   "path": [
+    "13 · 설정 — 셸 오버레이",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 화면 (.card.screen)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-toggle-row · 글자 크기 5단",
+    "uk-chip-row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "CQ-0",
+   "text": "투명",
+   "path": [
+    "13 · 설정 — 셸 오버레이",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 화면 (.card.screen)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-toggle-row · 글자 크기 5단",
+    "uk-chip-row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "CO-0",
+   "text": "중간",
+   "path": [
+    "13 · 설정 — 셸 오버레이",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 화면 (.card.screen)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-toggle-row · 글자 크기 5단",
+    "uk-chip-row",
+    "is-pressed"
+   ]
+  },
+  {
+   "id": "CM-0",
+   "text": "불투명",
+   "path": [
+    "13 · 설정 — 셸 오버레이",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 화면 (.card.screen)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-toggle-row · 글자 크기 5단",
+    "uk-chip-row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "CK-0",
+   "text": "가장 불투명",
+   "path": [
+    "13 · 설정 — 셸 오버레이",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 화면 (.card.screen)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-toggle-row · 글자 크기 5단",
+    "uk-chip-row",
+    "Frame"
+   ]
+  },
+  {
+   "id": "CY-0",
+   "text": "UI 배율",
+   "path": [
+    "13 · 설정 — 셸 오버레이",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 화면 (.card.screen)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-toggle-row · UI 배율",
+    "Frame"
+   ]
+  },
+  {
+   "id": "D2-0",
+   "text": "−",
+   "path": [
+    "13 · 설정 — 셸 오버레이",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 화면 (.card.screen)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-toggle-row · UI 배율",
+    "uk-zoom-controls",
+    "Frame"
+   ]
+  },
+  {
+   "id": "D3-0",
+   "text": "100%",
+   "path": [
+    "13 · 설정 — 셸 오버레이",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 화면 (.card.screen)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-toggle-row · UI 배율",
+    "uk-zoom-controls"
+   ]
+  },
+  {
+   "id": "D5-0",
+   "text": "+",
+   "path": [
+    "13 · 설정 — 셸 오버레이",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 화면 (.card.screen)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-toggle-row · UI 배율",
+    "uk-zoom-controls",
+    "Frame"
+   ]
+  },
+  {
+   "id": "DA-0",
+   "text": "접근성 — 이 컴퓨터의 OS 설정을 따른다",
+   "path": [
+    "13 · 설정 — 셸 오버레이",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 화면 (.card.screen)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-a11y-status"
+   ]
+  },
+  {
+   "id": "DD-0",
+   "text": "투명도 감소",
+   "path": [
+    "13 · 설정 — 셸 오버레이",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 화면 (.card.screen)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-a11y-status",
+    "uk-a11y-row"
+   ]
+  },
+  {
+   "id": "DE-0",
+   "text": "꺼짐",
+   "path": [
+    "13 · 설정 — 셸 오버레이",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 화면 (.card.screen)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-a11y-status",
+    "uk-a11y-row"
+   ]
+  },
+  {
+   "id": "DH-0",
+   "text": "고대비",
+   "path": [
+    "13 · 설정 — 셸 오버레이",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 화면 (.card.screen)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-a11y-status",
+    "uk-a11y-row"
+   ]
+  },
+  {
+   "id": "DI-0",
+   "text": "꺼짐",
+   "path": [
+    "13 · 설정 — 셸 오버레이",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 화면 (.card.screen)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-a11y-status",
+    "uk-a11y-row"
+   ]
+  },
+  {
+   "id": "DL-0",
+   "text": "모션 감소",
+   "path": [
+    "13 · 설정 — 셸 오버레이",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 화면 (.card.screen)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-a11y-status",
+    "uk-a11y-row"
+   ]
+  },
+  {
+   "id": "DM-0",
+   "text": "켜짐",
+   "path": [
+    "13 · 설정 — 셸 오버레이",
+    "Shell 창 · 설정 모드 (#settings)",
+    "settings-body",
+    "settings-grid",
+    "카드 · 화면 (.card.screen)",
+    "card-body · 내용 초과 시 세로 스크롤",
+    "uk-a11y-status",
+    "uk-a11y-row"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "AJ-0",
+   "name": "13 · 설정 — 셸 오버레이",
+   "component": "Frame",
+   "w": 1680,
+   "h": 900,
+   "depth": 0
+  },
+  {
+   "id": "AK-0",
+   "name": "Shell 창 · 설정 모드 (#settings)",
+   "component": "Frame",
+   "w": 1520,
+   "h": 760,
+   "depth": 1
+  },
+  {
+   "id": "AU-0",
+   "name": "settings-head",
+   "component": "Frame",
+   "w": 1478,
+   "h": 32,
+   "depth": 2
+  },
+  {
+   "id": "AX-0",
+   "name": "settings-body",
+   "component": "Frame",
+   "w": 1478,
+   "h": 662,
+   "depth": 2
+  },
+  {
+   "id": "AY-0",
+   "name": "settings-nav",
+   "component": "Frame",
+   "w": 236,
+   "h": 662,
+   "depth": 3
+  },
+  {
+   "id": "B1-0",
+   "name": "nav-item is-selected",
+   "component": "Frame",
+   "w": 218,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "B3-0",
+   "name": "nav-item",
+   "component": "Frame",
+   "w": 218,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "B9-0",
+   "name": "nav-item",
+   "component": "Frame",
+   "w": 218,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "BB-0",
+   "name": "nav-item",
+   "component": "Frame",
+   "w": 218,
+   "h": 40,
+   "depth": 4
+  },
+  {
+   "id": "AZ-0",
+   "name": "settings-grid",
+   "component": "Frame",
+   "w": 1226,
+   "h": 662,
+   "depth": 3
+  },
+  {
+   "id": "BE-0",
+   "name": "카드 · 화면 (.card.screen)",
+   "component": "Frame",
+   "w": 1226,
+   "h": 662,
+   "depth": 4
+  },
+  {
+   "id": "BF-0",
+   "name": "card-head",
+   "component": "Frame",
+   "w": 1224,
+   "h": 44,
+   "depth": 5
+  },
+  {
+   "id": "BG-0",
+   "name": "uk-settings-title",
+   "component": "Frame",
+   "w": 225,
+   "h": 19,
+   "depth": 6
+  },
+  {
+   "id": "BJ-0",
+   "name": "uk-card-close",
+   "component": "Frame",
+   "w": 22,
+   "h": 22,
+   "depth": 6
+  },
+  {
+   "id": "BK-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 9,
+   "h": 9,
+   "depth": 7
+  },
+  {
+   "id": "BL-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 8,
+   "h": 8,
+   "depth": 8
+  },
+  {
+   "id": "BM-0",
+   "name": "card-body · 내용 초과 시 세로 스크롤",
+   "component": "Frame",
+   "w": 1224,
+   "h": 616,
+   "depth": 5
+  },
+  {
+   "id": "BO-0",
+   "name": "uk-toggle-row · 자동 캔버스",
+   "component": "Frame",
+   "w": 1188,
+   "h": 57,
+   "depth": 6
+  },
+  {
+   "id": "BP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 211,
+   "h": 18,
+   "depth": 7
+  },
+  {
+   "id": "BS-0",
+   "name": "uk-toggle is-on",
+   "component": "Frame",
+   "w": 44,
+   "h": 24,
+   "depth": 7
+  },
+  {
+   "id": "BT-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 18,
+   "h": 18,
+   "depth": 8
+  },
+  {
+   "id": "BU-0",
+   "name": "uk-toggle-row · 자동 성장",
+   "component": "Frame",
+   "w": 1188,
+   "h": 57,
+   "depth": 6
+  },
+  {
+   "id": "BV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 221,
+   "h": 18,
+   "depth": 7
+  },
+  {
+   "id": "BY-0",
+   "name": "uk-toggle",
+   "component": "Frame",
+   "w": 44,
+   "h": 24,
+   "depth": 7
+  },
+  {
+   "id": "BZ-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 18,
+   "h": 18,
+   "depth": 8
+  },
+  {
+   "id": "C1-0",
+   "name": "uk-toggle-row · 글자 크기 5단",
+   "component": "Frame",
+   "w": 1188,
+   "h": 63,
+   "depth": 6
+  },
+  {
+   "id": "C2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 61,
+   "h": 18,
+   "depth": 7
+  },
+  {
+   "id": "C5-0",
+   "name": "uk-chip-row",
+   "component": "Frame",
+   "w": 316,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "C6-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 79,
+   "h": 30,
+   "depth": 8
+  },
+  {
+   "id": "C8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 50,
+   "h": 30,
+   "depth": 8
+  },
+  {
+   "id": "CA-0",
+   "name": "is-pressed",
+   "component": "Frame",
+   "w": 50,
+   "h": 30,
+   "depth": 8
+  },
+  {
+   "id": "CC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 38,
+   "h": 30,
+   "depth": 8
+  },
+  {
+   "id": "CE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 67,
+   "h": 30,
+   "depth": 8
+  },
+  {
+   "id": "CH-0",
+   "name": "uk-toggle-row · 글자 크기 5단",
+   "component": "Frame",
+   "w": 1188,
+   "h": 63,
+   "depth": 6
+  },
+  {
+   "id": "CT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 75,
+   "h": 18,
+   "depth": 7
+  },
+  {
+   "id": "CI-0",
+   "name": "uk-chip-row",
+   "component": "Frame",
+   "w": 364,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "CR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 79,
+   "h": 30,
+   "depth": 8
+  },
+  {
+   "id": "CP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 50,
+   "h": 30,
+   "depth": 8
+  },
+  {
+   "id": "CN-0",
+   "name": "is-pressed",
+   "component": "Frame",
+   "w": 50,
+   "h": 30,
+   "depth": 8
+  },
+  {
+   "id": "CL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 62,
+   "h": 30,
+   "depth": 8
+  },
+  {
+   "id": "CJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 91,
+   "h": 30,
+   "depth": 8
+  },
+  {
+   "id": "CW-0",
+   "name": "uk-toggle-row · UI 배율",
+   "component": "Frame",
+   "w": 1188,
+   "h": 63,
+   "depth": 6
+  },
+  {
+   "id": "CX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 47,
+   "h": 18,
+   "depth": 7
+  },
+  {
+   "id": "D0-0",
+   "name": "uk-zoom-controls",
+   "component": "Frame",
+   "w": 137,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "D1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 37,
+   "h": 30,
+   "depth": 8
+  },
+  {
+   "id": "D4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 38,
+   "h": 30,
+   "depth": 8
+  },
+  {
+   "id": "D9-0",
+   "name": "uk-a11y-status",
+   "component": "Frame",
+   "w": 1188,
+   "h": 106,
+   "depth": 6
+  },
+  {
+   "id": "DB-0",
+   "name": "uk-a11y-row",
+   "component": "Frame",
+   "w": 1188,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "DC-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 8
+  },
+  {
+   "id": "DF-0",
+   "name": "uk-a11y-row",
+   "component": "Frame",
+   "w": 1188,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "DG-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 8
+  },
+  {
+   "id": "DJ-0",
+   "name": "uk-a11y-row",
+   "component": "Frame",
+   "w": 1188,
+   "h": 16,
+   "depth": 7
+  },
+  {
+   "id": "DK-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 7,
+   "h": 7,
+   "depth": 8
+  },
+  {
+   "id": "AL-0",
+   "name": "타이틀바 (.titlebar)",
+   "component": "Frame",
+   "w": 1518,
+   "h": 26,
+   "depth": 2
+  },
+  {
+   "id": "AM-0",
+   "name": "창 제어 (.win-controls · 최대화 비활성)",
+   "component": "Frame",
+   "w": 94,
+   "h": 24,
+   "depth": 2
+  },
+  {
+   "id": "AN-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "AO-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 9,
+   "h": 2,
+   "depth": 4
+  },
+  {
+   "id": "AP-0",
+   "name": "disabled",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "AQ-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 8,
+   "h": 8,
+   "depth": 4
+  },
+  {
+   "id": "AR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 24,
+   "depth": 3
+  },
+  {
+   "id": "AS-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 10,
+   "h": 10,
+   "depth": 4
+  },
+  {
+   "id": "AT-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 9,
+   "h": 9,
+   "depth": 5
+  }
+ ],
+ "text_multiset": {
+  "설정": 1,
+  "↑↓ 이동 · Enter 선택 · Tab 패널 이동 · Esc 닫기": 1,
+  "화면": 2,
+  "계좌": 1,
+  "2개": 1,
+  "모델": 1,
+  "성향・이력": 1,
+  "두 영역과 카드에 함께 적용된다": 1,
+  "질의하면 캔버스를 자동으로 연다": 1,
+  "답변 길이에 따라 대화 열이 자란다": 1,
+  "글자 크기": 1,
+  "매우 작음": 1,
+  "작음": 1,
+  "보통": 1,
+  "큼": 1,
+  "매우 큼": 1,
+  "유리 투명도": 1,
+  "가장 투명": 1,
+  "투명": 1,
+  "중간": 1,
+  "불투명": 1,
+  "가장 불투명": 1,
+  "UI 배율": 1,
+  "−": 1,
+  "100%": 1,
+  "+": 1,
+  "접근성 — 이 컴퓨터의 OS 설정을 따른다": 1,
+  "투명도 감소": 1,
+  "꺼짐": 2,
+  "고대비": 1,
+  "모션 감소": 1,
+  "켜짐": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "d08e9248b5d79b8f49850914a23b84c0fbca487745ef12556588020b3ed60f79"
+}

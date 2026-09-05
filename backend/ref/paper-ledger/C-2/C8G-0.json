@@ -1,0 +1,1831 @@
+{
+ "board_id": "C8G-0",
+ "page": "C-2",
+ "page_name": "키우미",
+ "name": "07 · 키우미 메뉴 — 셸 오버레이",
+ "width": 1680.0,
+ "height": 760.0,
+ "texts": [
+  {
+   "id": "H27-0",
+   "text": "ATHENA",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "49 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H2F-0",
+   "text": "새 채팅",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "49 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H2M-0",
+   "text": "그래프",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "49 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H2R-0",
+   "text": "에이전트",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "49 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H2W-0",
+   "text": "플러그인",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "49 · Project Recent Sidebar",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H2Z-0",
+   "text": "프로젝트",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "49 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H34-0",
+   "text": "아테나",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "49 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H3D-0",
+   "text": "백엔드 API 개수 확인",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "49 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H3F-0",
+   "text": "앱 전체 기능 검수",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "49 · Project Recent Sidebar",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H3I-0",
+   "text": "최근",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "49 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H3J-0",
+   "text": "전체",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "49 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H3L-0",
+   "text": "앱 전체 기능 검수",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "49 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H3O-0",
+   "text": "삼성전자 주요 변동 알림",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "49 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H3Q-0",
+   "text": "ETF 자금 흐름",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "49 · Project Recent Sidebar",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H3U-0",
+   "text": "AN",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "49 · Project Recent Sidebar",
+    "Account Footer",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "H3V-0",
+   "text": "모의-주력",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "49 · Project Recent Sidebar",
+    "Account Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "F2T-0",
+   "text": "대화 캔버스",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2GQP-2",
+   "text": "시세",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "카드 · 시세",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2GQQ-2",
+   "text": "삼성전자 005930 · KRX 실시간",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "카드 · 시세",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2GQS-2",
+   "text": "88,100",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "카드 · 시세",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2GQT-2",
+   "text": "▲ 900 (+1.03%)",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "카드 · 시세",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2GQW-2",
+   "text": "거래량",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "카드 · 시세",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2GQX-2",
+   "text": "11,689,068",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "카드 · 시세",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2GQZ-2",
+   "text": "시가총액",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "카드 · 시세",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2GR0-2",
+   "text": "525.8조",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "카드 · 시세",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2GR2-2",
+   "text": "기준시각",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "카드 · 시세",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2GR3-2",
+   "text": "15:30",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "카드 · 시세",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2GSM-2",
+   "text": "차트",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "카드 · 차트",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2GSN-2",
+   "text": "삼성전자 005930 · 일봉 · 3M",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "카드 · 차트",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2GSR-2",
+   "text": "05-26",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "카드 · 차트",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2GST-2",
+   "text": "07-19",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "카드 · 차트",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2GVI-2",
+   "text": "보유주식",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "카드 · 보유주식",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2GVJ-2",
+   "text": "모의-주력 · 3종목",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "카드 · 보유주식",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2GVL-2",
+   "text": "종목",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "카드 · 보유주식",
+    "헤더"
+   ]
+  },
+  {
+   "id": "2GVM-2",
+   "text": "수량",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "카드 · 보유주식",
+    "헤더"
+   ]
+  },
+  {
+   "id": "2GVN-2",
+   "text": "평가금액",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "카드 · 보유주식",
+    "헤더"
+   ]
+  },
+  {
+   "id": "2GVO-2",
+   "text": "평가손익",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "카드 · 보유주식",
+    "헤더"
+   ]
+  },
+  {
+   "id": "2GVQ-2",
+   "text": "삼성전자 005930",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "카드 · 보유주식",
+    "행"
+   ]
+  },
+  {
+   "id": "2GVR-2",
+   "text": "120",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "카드 · 보유주식",
+    "행"
+   ]
+  },
+  {
+   "id": "2GVS-2",
+   "text": "10,572,000",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "카드 · 보유주식",
+    "행"
+   ]
+  },
+  {
+   "id": "2GVT-2",
+   "text": "+412,000",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "카드 · 보유주식",
+    "행"
+   ]
+  },
+  {
+   "id": "F2Z-0",
+   "text": "결과물",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2GZQ-2",
+   "text": "삼성전자 3개월 흐름 보여줘",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "턴 · 질문",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2GZR-2",
+   "text": "3개월 저점 68,900에서 88,100까지 올라왔습니다. 캔버스에 차트를 올렸습니다.",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "턴 · 질문"
+   ]
+  },
+  {
+   "id": "F35-0",
+   "text": "추가",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "F3B-0",
+   "text": "파일 첨부",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "F3C-0",
+   "text": "경로가 첨부 칩으로 쌓인다",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FUP-2",
+   "text": "폴더 첨부",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FUO-2",
+   "text": "폴더 경로를 칩으로 쌓는다",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "F3J-0",
+   "text": "목표",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "F3K-0",
+   "text": "계속 추구할 목표를 설정",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "F3Q-0",
+   "text": "계획 모드",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "F3R-0",
+   "text": "실행 전에 계획을 정리",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "F3U-0",
+   "text": "플러그인 UI 초안",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "F40-0",
+   "text": "DART 전자공시",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "F41-0",
+   "text": "세션 미리보기 · 기능 허용",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "F47-0",
+   "text": "Google Sheets 내보내기",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "F48-0",
+   "text": "세션 미리보기 · 현재 꺼짐",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FW9-2",
+   "text": "설정",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FWC-2",
+   "text": "모델 설정",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FWB-2",
+   "text": "모델 · 사고 강도",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FWJ-2",
+   "text": "플러그인 관리",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2FWI-2",
+   "text": "설치 · 기능 허용 · 마켓플레이스",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "F57-0",
+   "text": "무엇이든 물어보세요",
+   "path": [
+    "07 · 키우미 메뉴 — 셸 오버레이",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "C8G-0",
+   "name": "07 · 키우미 메뉴 — 셸 오버레이",
+   "component": "Frame",
+   "w": 1680.0,
+   "h": 760.0,
+   "depth": 0
+  },
+  {
+   "id": "F22-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1680.0,
+   "h": 760.0,
+   "depth": 1
+  },
+  {
+   "id": "F23-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1520.0,
+   "h": 680.0,
+   "depth": 2
+  },
+  {
+   "id": "H24-0",
+   "name": "49 · Project Recent Sidebar",
+   "component": "Frame",
+   "w": 260.0,
+   "h": 680.0,
+   "depth": 3
+  },
+  {
+   "id": "H25-0",
+   "name": "Primary Actions",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "H26-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 28.0,
+   "depth": 5
+  },
+  {
+   "id": "H28-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "H29-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "H2A-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "H2B-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 5
+  },
+  {
+   "id": "H2C-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "H2D-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "H2E-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "H2G-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 5
+  },
+  {
+   "id": "H2H-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "H2I-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "H2J-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "H2K-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "H2L-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "H2N-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 5
+  },
+  {
+   "id": "H2O-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "H2P-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "H2Q-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "H2S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 5
+  },
+  {
+   "id": "H2T-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "H2U-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "H2V-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "H2X-0",
+   "name": "Project Tree",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "H2Y-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "H30-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 32.0,
+   "depth": 5
+  },
+  {
+   "id": "H31-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "H32-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "H33-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "H35-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "H36-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "H37-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "H38-0",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "H39-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "H3A-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "H3B-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "H3C-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 27.0,
+   "depth": 5
+  },
+  {
+   "id": "H3E-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 29.0,
+   "depth": 5
+  },
+  {
+   "id": "H44-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6.0,
+   "h": 6.0,
+   "depth": 6
+  },
+  {
+   "id": "H3G-0",
+   "name": "Recent Conversations",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "H3H-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 20.0,
+   "depth": 5
+  },
+  {
+   "id": "H3K-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 27.0,
+   "depth": 5
+  },
+  {
+   "id": "H3M-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6.0,
+   "h": 6.0,
+   "depth": 6
+  },
+  {
+   "id": "H3N-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 27.0,
+   "depth": 5
+  },
+  {
+   "id": "H3P-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 27.0,
+   "depth": 5
+  },
+  {
+   "id": "H3R-0",
+   "name": "Account Footer",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "H3S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 38.0,
+   "depth": 5
+  },
+  {
+   "id": "H3T-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22.0,
+   "h": 22.0,
+   "depth": 6
+  },
+  {
+   "id": "H3W-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "H3X-0",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "F2S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 940.0,
+   "h": 680.0,
+   "depth": 3
+  },
+  {
+   "id": "2GQN-2",
+   "name": "카드 · 시세",
+   "component": "Frame",
+   "w": 888.0,
+   "h": 170.0,
+   "depth": 4
+  },
+  {
+   "id": "2GQO-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "2GQR-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "2GQU-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "2GQV-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2GQY-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2GR1-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2GSK-2",
+   "name": "카드 · 차트",
+   "component": "Frame",
+   "w": 888.0,
+   "h": 220.0,
+   "depth": 4
+  },
+  {
+   "id": "2GSL-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "2GSO-2",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "2GSP-2",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2GSQ-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "2GSS-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2GVG-2",
+   "name": "카드 · 보유주식",
+   "component": "Frame",
+   "w": 888.0,
+   "h": 130.0,
+   "depth": 4
+  },
+  {
+   "id": "2GVH-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "2GVK-2",
+   "name": "헤더",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "2GVP-2",
+   "name": "행",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "F2X-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 320.0,
+   "h": 680.0,
+   "depth": 3
+  },
+  {
+   "id": "F2Y-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 56.0,
+   "depth": 4
+  },
+  {
+   "id": "F30-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "2GZO-2",
+   "name": "턴 · 질문",
+   "component": "Frame",
+   "w": 283.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "2GZP-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "F33-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 380.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "F34-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 26.0,
+   "depth": 4
+  },
+  {
+   "id": "F36-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 36.0,
+   "depth": 4
+  },
+  {
+   "id": "F37-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 24.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "2GEK-2",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2GEL-2",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "F3A-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "2FUM-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 36.0,
+   "depth": 4
+  },
+  {
+   "id": "2FUQ-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 24.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "2GEN-2",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2GEO-2",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "2FUN-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "F3D-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 36.0,
+   "depth": 4
+  },
+  {
+   "id": "F3E-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 24.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "2GEQ-2",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2GER-2",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "F3I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "F3L-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 36.0,
+   "depth": 4
+  },
+  {
+   "id": "F3M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 24.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "2GIZ-2",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2GJ0-2",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "F3P-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "F3S-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 1.0,
+   "depth": 4
+  },
+  {
+   "id": "F3T-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 28.0,
+   "depth": 4
+  },
+  {
+   "id": "F3V-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 36.0,
+   "depth": 4
+  },
+  {
+   "id": "F3W-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 16.0,
+   "h": 16.0,
+   "depth": 5
+  },
+  {
+   "id": "2GBH-2",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2GBI-2",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "F42-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 36.0,
+   "depth": 4
+  },
+  {
+   "id": "F43-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 16.0,
+   "h": 16.0,
+   "depth": 5
+  },
+  {
+   "id": "2GBM-2",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2GBN-2",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "2FW7-2",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 1.0,
+   "depth": 4
+  },
+  {
+   "id": "2FW8-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 28.0,
+   "depth": 4
+  },
+  {
+   "id": "2FWA-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 36.0,
+   "depth": 4
+  },
+  {
+   "id": "2FWD-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 16.0,
+   "h": 16.0,
+   "depth": 5
+  },
+  {
+   "id": "2GJ2-2",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2GJ3-2",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "2FWH-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 36.0,
+   "depth": 4
+  },
+  {
+   "id": "2FWK-2",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 16.0,
+   "h": 16.0,
+   "depth": 5
+  },
+  {
+   "id": "2GJ5-2",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "2GJ6-2",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 7
+  },
+  {
+   "id": "F52-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 292.0,
+   "h": 56.0,
+   "depth": 3
+  },
+  {
+   "id": "F53-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30.0,
+   "h": 30.0,
+   "depth": 4
+  },
+  {
+   "id": "F54-0",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "F55-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "F56-0",
+   "name": "Rect",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  }
+ ],
+ "text_multiset": {
+  "ATHENA": 1,
+  "새 채팅": 1,
+  "그래프": 1,
+  "에이전트": 1,
+  "플러그인": 1,
+  "프로젝트": 1,
+  "아테나": 1,
+  "백엔드 API 개수 확인": 1,
+  "앱 전체 기능 검수": 2,
+  "최근": 1,
+  "전체": 1,
+  "삼성전자 주요 변동 알림": 1,
+  "ETF 자금 흐름": 1,
+  "AN": 1,
+  "모의-주력": 1,
+  "대화 캔버스": 1,
+  "시세": 1,
+  "삼성전자 005930 · KRX 실시간": 1,
+  "88,100": 1,
+  "▲ 900 (+1.03%)": 1,
+  "거래량": 1,
+  "11,689,068": 1,
+  "시가총액": 1,
+  "525.8조": 1,
+  "기준시각": 1,
+  "15:30": 1,
+  "차트": 1,
+  "삼성전자 005930 · 일봉 · 3M": 1,
+  "05-26": 1,
+  "07-19": 1,
+  "보유주식": 1,
+  "모의-주력 · 3종목": 1,
+  "종목": 1,
+  "수량": 1,
+  "평가금액": 1,
+  "평가손익": 1,
+  "삼성전자 005930": 1,
+  "120": 1,
+  "10,572,000": 1,
+  "+412,000": 1,
+  "결과물": 1,
+  "삼성전자 3개월 흐름 보여줘": 1,
+  "3개월 저점 68,900에서 88,100까지 올라왔습니다. 캔버스에 차트를 올렸습니다.": 1,
+  "추가": 1,
+  "파일 첨부": 1,
+  "경로가 첨부 칩으로 쌓인다": 1,
+  "폴더 첨부": 1,
+  "폴더 경로를 칩으로 쌓는다": 1,
+  "목표": 1,
+  "계속 추구할 목표를 설정": 1,
+  "계획 모드": 1,
+  "실행 전에 계획을 정리": 1,
+  "플러그인 UI 초안": 1,
+  "DART 전자공시": 1,
+  "세션 미리보기 · 기능 허용": 1,
+  "Google Sheets 내보내기": 1,
+  "세션 미리보기 · 현재 꺼짐": 1,
+  "설정": 1,
+  "모델 설정": 1,
+  "모델 · 사고 강도": 1,
+  "플러그인 관리": 1,
+  "설치 · 기능 허용 · 마켓플레이스": 1,
+  "무엇이든 물어보세요": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "0369431bc2c159246f307a346bed69f536c1464fdb0746a2b7aba2d73eb1f452"
+}

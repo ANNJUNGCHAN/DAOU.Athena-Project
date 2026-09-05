@@ -1,0 +1,92 @@
+{
+ "board_id": "498Z-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "4991-0",
+   "text": "원본 보드: CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+   "path": [
+    "note/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4993-0",
+   "text": "가져온 요소: 신용보증금율 · 종목코드 · 현재가 · 전일대비 · 신용한도초과",
+   "path": [
+    "note/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4995-0",
+   "text": "문법: compound",
+   "path": [
+    "note/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4997-0",
+   "text": "접은 개수: 스칼라 2개 · 행 6개",
+   "path": [
+    "note/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "498Z-0",
+   "name": "note/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "4990-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "4992-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "4994-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "4996-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-05 / R03-T6-9 · 순위 — 신용융자 가능": 1,
+  "가져온 요소: 신용보증금율 · 종목코드 · 현재가 · 전일대비 · 신용한도초과": 1,
+  "문법: compound": 1,
+  "접은 개수: 스칼라 2개 · 행 6개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "8b00bd96ab2e4fc27873952b7c744207a43cb236353261c1ee1d4688660e35dc"
+}

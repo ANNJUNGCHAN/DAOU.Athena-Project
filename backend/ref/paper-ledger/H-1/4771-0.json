@@ -1,0 +1,340 @@
+{
+ "board_id": "4771-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "477Z-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "477Y-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "477W-0",
+   "text": "테마 등락·확산 탐색",
+   "path": [
+    "mini/CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Header"
+   ]
+  },
+  {
+   "id": "477U-0",
+   "text": "순서",
+   "path": [
+    "mini/CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "477T-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "477S-0",
+   "text": "값",
+   "path": [
+    "mini/CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "477R-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "477P-0",
+   "text": "01",
+   "path": [
+    "mini/CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "477O-0",
+   "text": "등락율",
+   "path": [
+    "mini/CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Body",
+    "Rank 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "477N-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Body",
+    "Rank 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "477L-0",
+   "text": "+0.86%",
+   "path": [
+    "mini/CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "477K-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Body",
+    "Rank 1"
+   ]
+  },
+  {
+   "id": "477I-0",
+   "text": "02",
+   "path": [
+    "mini/CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "477H-0",
+   "text": "테마그룹코드",
+   "path": [
+    "mini/CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Body",
+    "Rank 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "477G-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Body",
+    "Rank 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "477E-0",
+   "text": "T0119",
+   "path": [
+    "mini/CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "477D-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Body",
+    "Rank 2"
+   ]
+  },
+  {
+   "id": "477B-0",
+   "text": "03",
+   "path": [
+    "mini/CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "477A-0",
+   "text": "하락종목수",
+   "path": [
+    "mini/CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Body",
+    "Rank 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4779-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Body",
+    "Rank 3",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4777-0",
+   "text": "하락 9",
+   "path": [
+    "mini/CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "4776-0",
+   "text": "",
+   "path": [
+    "mini/CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Body",
+    "Rank 3"
+   ]
+  },
+  {
+   "id": "4773-0",
+   "text": "추가 항목은 원본에서 확인",
+   "path": [
+    "mini/CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "4771-0",
+   "name": "mini/CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "477V-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "477X-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4774-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "477Q-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "477J-0",
+   "name": "Rank 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "477M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "477C-0",
+   "name": "Rank 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "477F-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4775-0",
+   "name": "Rank 3",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4778-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4772-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 7,
+  "기준 09:42": 1,
+  "테마 등락·확산 탐색": 1,
+  "순서": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "01": 1,
+  "등락율": 1,
+  "+0.86%": 1,
+  "02": 1,
+  "테마그룹코드": 1,
+  "T0119": 1,
+  "03": 1,
+  "하락종목수": 1,
+  "하락 9": 1,
+  "추가 항목은 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "08d2ec247fd4326fc4ce5d0daf71e3186702b72482b20c2dfe1dfd92554a6164"
+}

@@ -1,0 +1,405 @@
+Frame "04 · 키우미 — 대화·콘텐츠 전개" (4TY-0) 1900×0
+  Frame "설명" (4TZ-0) 1100×0
+    Text "오브는 접힘 → 전환 중 → 펼침의 …" (4U0-0) 0×0 "오브는 접힘 → 전환 중 → 펼침의 세 크기만 가진다"
+    Text "아래 8개는 크기 상태가 아니라 콘텐…" (4U1-0) 0×0 "아래 8개는 크기 상태가 아니라 콘텐츠 전개 예시다. 셸 숨김일 때만 펼치고 640px부터 내부 스크롤한다."
+  Frame "A행 — 대화가 흘러가는 순서" (4U3-0) 0×0
+    Frame "① 빈 대화" (4U5-0) 400×0
+      Frame "orb-root · chat · empty" (4U6-0) 400×0
+        Frame "머리 (얼굴 76 + 헤더)" (4U7-0) 0×0
+          Frame "얼굴 · 평소" (4U8-0) 76×76
+            Frame "Frame" (4U9-0) 62×61
+              Rectangle "Rectangle" (4UA-0) 7×16
+              Rectangle "Rectangle" (4UB-0) 7×16
+          Frame "헤더" (4UC-0) 0×0
+            Text "메인 대화" (4UD-0) 0×0 "메인 대화"
+            Rectangle "Rectangle" (4UE-0) 0×0
+            Frame "orb-close" (4UF-0) 22×22
+              SVG "SVG" (4UG-0) 0×0
+                SVGVisualElement "Path" (4UH-0) 0×0
+        Frame "본문 · 빈 대화" (4UJ-0) 0×0
+          Text "셸을 내려두셨네요. 여기서 바로 물어…" (4UK-0) 0×0 "셸을 내려두셨네요. 여기서 바로 물어보셔도 됩니다."
+          Text "긴 표와 차트는 줄여서 보여드리고, …" (4UL-0) 0×0 "긴 표와 차트는 줄여서 보여드리고, 전체는 대화창에서 이어집니다."
+        Frame "input-stack (오브의 새 부품)" (4UN-0) 0×0
+          Frame "input-row" (4UO-0) 0×44
+            Text "무엇이든 물어보세요" (4UP-0) 0×0 "무엇이든 물어보세요"
+          Frame "control-strip" (4UQ-0) 0×40
+            Frame "dot" (4UR-0) 12×12
+            Frame "pill · CLI" (4US-0) 0×28
+              Text "CLAUDE" (4UT-0) 0×0 "CLAUDE"
+            Frame "routine-chip" (4UU-0) 0×0
+              Text "감시 2" (4UV-0) 0×0 "감시 2"
+            Rectangle "Rectangle" (4UW-0) 0×0
+            Frame "pill · 대화창으로 가기" (4UX-0) 0×28
+              Text "대화창으로 가기" (4UY-0) 0×0 "대화창으로 가기"
+      Frame "캡션" (4V0-0) 400×0
+        Text "① 펼침 · 빈 대화" (4V1-0) 0×0 "① 펼침 · 빈 대화"
+        Text "셸이 숨겨졌을 때만 입력줄이 존재한다…" (4V2-0) 0×0 "셸이 숨겨졌을 때만 입력줄이 존재한다. 스트립은 셸과 같은 부품 — 점 · CLI 필 · 루틴 칩, 그리고 "
+    Frame "② 답변 중" (4V4-0) 400×0
+      Frame "orb-root · chat · empty" (4V8-0) 400×0
+        Frame "머리 (얼굴 76 + 헤더)" (4VO-0) 0×0
+          Frame "얼굴 · 평소" (4VV-0) 76×76
+            Frame "Frame" (4VW-0) 62×61
+              Rectangle "Rectangle" (4VY-0) 7×5
+              Rectangle "Rectangle" (4VX-0) 7×5
+          Frame "헤더" (4VP-0) 0×0
+            Text "메인 대화" (4VU-0) 0×0 "메인 대화"
+            Rectangle "Rectangle" (4VT-0) 0×0
+            Frame "orb-close" (4VQ-0) 22×22
+              SVG "SVG" (4VR-0) 0×0
+                SVGVisualElement "Path" (4VS-0) 0×0
+        Frame "본문 · 진행 중" (4VZ-0) 0×0
+          Text "turn-q" (4W0-0) 0×0 "삼성전자 재무 좀 봐줘"
+          Frame "progress-card" (4W1-0) 0×0
+            Frame "판단 중" (4W2-0) 0×0
+              Rectangle "Rectangle" (4W3-0) 12×12
+              Text "판단 중" (4W4-0) 0×0 "판단 중"
+            Frame "tool-steps" (4W6-0) 0×0
+              Frame "step · done" (4W7-0) 0×0
+                Frame "Frame" (4W8-0) 12×12
+                  SVG "SVG" (4W9-0) 0×0
+                    SVGVisualElement "Path" (4WA-0) 0×0
+                Text "재무제표 조회 · 2025 연결" (4WB-0) 0×0 "재무제표 조회 · 2025 연결"
+                Text "1.2s" (4WC-0) 44×0 "1.2s"
+              Frame "step · done" (4WD-0) 0×0
+                Frame "Frame" (4WE-0) 12×12
+                  SVG "SVG" (4WF-0) 0×0
+                    SVGVisualElement "Path" (4WG-0) 0×0
+                Text "현재가 조회 · 삼성전자" (4WH-0) 0×0 "현재가 조회 · 삼성전자"
+                Text "0.4s" (4WI-0) 44×0 "0.4s"
+              Frame "step · waiting" (4WJ-0) 0×0
+                Frame "Frame" (4WK-0) 12×12
+                  Rectangle "Rectangle" (4WL-0) 5×5
+                Text "일별 주가 조회 · 대기" (4WM-0) 0×0 "일별 주가 조회 · 대기"
+                Text "—" (4WN-0) 44×0 "—"
+        Frame "input-stack (오브의 새 부품)" (4V9-0) 0×0
+          Frame "input-row · 잠금" (4WP-0) 0×44
+            Text "무엇이든 물어보세요" (4WQ-0) 0×0 "무엇이든 물어보세요"
+            Frame "lock-hint" (4WR-0) 0×0
+              Text "답변 중…" (4WS-0) 0×0 "답변 중…"
+              Frame "esc" (4WT-0) 0×0
+                Text "ESC 중단" (4WU-0) 0×0 "ESC 중단"
+          Frame "control-strip" (4VA-0) 0×40
+            Frame "dot" (4VI-0) 12×12
+            Frame "pill · CLI" (4VG-0) 0×28
+              Text "CLAUDE" (4VH-0) 0×0 "CLAUDE"
+            Frame "routine-chip" (4VE-0) 0×0
+              Text "감시 2" (4VF-0) 0×0 "감시 2"
+            Rectangle "Rectangle" (4VD-0) 0×0
+            Frame "pill · 대화창으로 가기" (4VB-0) 0×28
+              Text "대화창으로 가기" (4VC-0) 0×0 "대화창으로 가기"
+      Frame "캡션" (4V5-0) 400×0
+        Text "② 답변 중 — 하위 진행 단계까지" (4V7-0) 0×0 "② 답변 중 — 하위 진행 단계까지"
+        Text "눈이 가늘어지는 것이 진행 표시다(스…" (4V6-0) 0×0 "눈이 가늘어지는 것이 진행 표시다(스피너 없음). 툴 호출은 아이콘 12px · 라벨 · 소요시간 44px의"
+    Frame "③ 답변 + 표 축약" (4WW-0) 400×0
+      Frame "orb-root · chat · empty" (4X0-0) 400×0
+        Frame "머리 (얼굴 76 + 헤더)" (4XG-0) 0×0
+          Frame "얼굴 · 평소" (4XN-0) 76×76
+            Frame "Frame" (4XO-0) 62×61
+              Rectangle "Rectangle" (4XQ-0) 10×6
+              Rectangle "Rectangle" (4XP-0) 10×6
+          Frame "헤더" (4XH-0) 0×0
+            Text "메인 대화" (4XM-0) 0×0 "메인 대화"
+            Rectangle "Rectangle" (4XL-0) 0×0
+            Frame "orb-close" (4XI-0) 22×22
+              SVG "SVG" (4XJ-0) 0×0
+                SVGVisualElement "Path" (4XK-0) 0×0
+        Frame "본문 · 답변 + 표 축약" (4XR-0) 0×0
+          Text "turn-q" (4XS-0) 0×0 "삼성전자 재무 좀 봐줘"
+          Text "turn-a" (4XT-0) 0×0 "자산총계 566조, 유동자산 247조입니다. 전기 대비 둘 다 늘었습니다."
+          Frame "orb-card · 표 축약" (4XV-0) 0×0
+            Frame "card-head" (4XW-0) 0×0
+              Text "재무상태표 — 삼성전자" (4XX-0) 0×0 "재무상태표 — 삼성전자"
+              Text "DART 2025" (4XY-0) 0×0 "DART 2025"
+            Frame "fin-table (3열로 접힘)" (4Y0-0) 0×0
+              Frame "thead" (4Y1-0) 0×0
+                Text "계정" (4Y2-0) 0×0 "계정"
+                Text "당기" (4Y3-0) 96×0 "당기"
+                Text "전기" (4Y4-0) 96×0 "전기"
+              Frame "row" (4Y5-0) 0×0
+                Text "자산총계" (4Y6-0) 0×0 "자산총계"
+                Text "566,942,110" (4Y7-0) 96×0 "566,942,110"
+                Text "514,531,948" (4Y8-0) 96×0 "514,531,948"
+              Frame "row" (4Y9-0) 0×0
+                Text "유동자산" (4YA-0) 0×0 "유동자산"
+                Text "247,684,612" (4YB-0) 96×0 "247,684,612"
+                Text "227,062,266" (4YC-0) 96×0 "227,062,266"
+              Frame "row" (4YD-0) 0×0
+                Text "현금및현금성자산" (4YE-0) 0×0 "현금및현금성자산"
+                Text "57,856,378" (4YF-0) 96×0 "57,856,378"
+                Text "53,705,579" (4YG-0) 96×0 "53,705,579"
+            Frame "fold-note (결정론 축약 고지)" (4YI-0) 0×0
+              SVG "SVG" (4YJ-0) 0×0
+                SVGVisualElement "Path" (4YK-0) 0×0
+              Text "열 2개 · 행 2개를 접었습니다 —…" (4YL-0) 0×0 "열 2개 · 행 2개를 접었습니다 — 전체는 캔버스에서"
+        Frame "input-stack (오브의 새 부품)" (4X1-0) 0×0
+          Frame "input-row" (4XB-0) 0×44
+            Text "무엇이든 물어보세요" (4XC-0) 0×0 "무엇이든 물어보세요"
+          Frame "control-strip" (4X2-0) 0×40
+            Frame "dot" (4XA-0) 12×12
+            Frame "pill · CLI" (4X8-0) 0×28
+              Text "CLAUDE" (4X9-0) 0×0 "CLAUDE"
+            Frame "routine-chip" (4X6-0) 0×0
+              Text "감시 2" (4X7-0) 0×0 "감시 2"
+            Rectangle "Rectangle" (4X5-0) 0×0
+            Frame "pill · 대화창으로 가기" (4X3-0) 0×28
+              Text "대화창으로 가기" (4X4-0) 0×0 "대화창으로 가기"
+      Frame "캡션" (4WX-0) 400×0
+        Text "③ 답변 + 표 — 결정론으로 접는다" (4WZ-0) 0×0 "③ 답변 + 표 — 결정론으로 접는다"
+        Text "column-fold.js가 이미 가…" (4WY-0) 0×0 "column-fold.js가 이미 가진 규칙을 360폭에 한 번 더 적용한다. LLM은 어느 열을 남길지 고"
+    Frame "④ 오브용 차트" (4YN-0) 400×0
+      Frame "orb-root · chat · empty" (4YR-0) 400×0
+        Frame "머리 (얼굴 76 + 헤더)" (4Z7-0) 0×0
+          Frame "얼굴 · 평소" (4ZE-0) 76×76
+            Frame "Frame" (4ZF-0) 62×61
+              Rectangle "Rectangle" (4ZH-0) 10×6
+              Rectangle "Rectangle" (4ZG-0) 10×6
+          Frame "헤더" (4Z8-0) 0×0
+            Text "메인 대화" (4ZD-0) 0×0 "메인 대화"
+            Rectangle "Rectangle" (4ZC-0) 0×0
+            Frame "orb-close" (4Z9-0) 22×22
+              SVG "SVG" (4ZA-0) 0×0
+                SVGVisualElement "Path" (4ZB-0) 0×0
+        Frame "본문 · 오브용 차트" (4ZI-0) 0×0
+          Text "turn-q" (4ZJ-0) 0×0 "삼성전자 3개월 흐름 보여줘"
+          Text "turn-a" (4ZK-0) 0×0 "3개월 저점 68,900에서 88,100까지 올라왔습니다."
+          Frame "orb-card · 오브용 차트" (4ZM-0) 0×0
+            Frame "card-head" (4ZN-0) 0×0
+              Text "삼성전자 005930" (4ZO-0) 0×0 "삼성전자 005930"
+              Text "일봉 · 3M" (4ZP-0) 0×0 "일봉 · 3M"
+            Frame "가격 헤드라인" (4ZQ-0) 0×0
+              Text "88,100" (4ZR-0) 0×0 "88,100"
+              Text "▲ 900 (+1.03%)" (4ZS-0) 0×0 "▲ 900 (+1.03%)"
+            Frame "차트 판 (336×116)" (4ZU-0) 336×116
+              SVG "SVG" (4ZV-0) 0×0
+                SVGVisualElement "Path" (4ZW-0) 0×0
+                SVGVisualElement "Path" (4ZX-0) 0×0
+                SVGVisualElement "Path" (4ZY-0) 0×0
+                SVGVisualElement "Path" (4ZZ-0) 0×0
+                SVGVisualElement "Path" (500-0) 0×0
+                SVGVisualElement "Circle" (501-0) 0×0
+            Frame "축 + 고지" (503-0) 0×0
+              Frame "Frame" (504-0) 0×0
+                Text "05-26" (505-0) 0×0 "05-26"
+                Text "07-19" (506-0) 0×0 "07-19"
+              Frame "Frame" (507-0) 0×0
+                SVG "SVG" (508-0) 0×0
+                  SVGVisualElement "Path" (509-0) 0×0
+                Text "지표 · 드로잉 · 매물대는 캔버스에…" (50A-0) 0×0 "지표 · 드로잉 · 매물대는 캔버스에서"
+        Frame "input-stack (오브의 새 부품)" (4YS-0) 0×0
+          Frame "input-row" (4Z2-0) 0×44
+            Text "무엇이든 물어보세요" (4Z3-0) 0×0 "무엇이든 물어보세요"
+          Frame "control-strip" (4YT-0) 0×40
+            Frame "dot" (4Z1-0) 12×12
+            Frame "pill · CLI" (4YZ-0) 0×28
+              Text "CLAUDE" (4Z0-0) 0×0 "CLAUDE"
+            Frame "routine-chip" (4YX-0) 0×0
+              Text "감시 2" (4YY-0) 0×0 "감시 2"
+            Rectangle "Rectangle" (4YW-0) 0×0
+            Frame "pill · 대화창으로 가기" (4YU-0) 0×28
+              Text "대화창으로 가기" (4YV-0) 0×0 "대화창으로 가기"
+      Frame "캡션" (4YO-0) 400×0
+        Text "④ 오브용 차트 — 읽힐 만큼만" (4YQ-0) 0×0 "④ 오브용 차트 — 읽힐 만큼만"
+        Text "캔버스 차트의 축소판이 아니라 별도 …" (4YP-0) 0×0 "캔버스 차트의 축소판이 아니라 별도 렌더러다. 가격 한 줄 · 선 하나 · 날짜 두 개까지. 툴바도 지표도 "
+  Frame "B행 — 경계와 예외" (50C-0) 0×0
+    Frame "⑤ 미니 주문 티켓" (50E-0) 400×0
+      Frame "orb-root · chat · empty" (50I-0) 400×0
+        Frame "머리 (얼굴 76 + 헤더)" (50Y-0) 0×0
+          Frame "얼굴 · 평소" (515-0) 76×76
+            Frame "Frame" (516-0) 62×61
+              Rectangle "Rectangle" (518-0) 7×16
+              Rectangle "Rectangle" (517-0) 7×16
+          Frame "헤더" (50Z-0) 0×0
+            Text "메인 대화" (514-0) 0×0 "메인 대화"
+            Rectangle "Rectangle" (513-0) 0×0
+            Frame "orb-close" (510-0) 22×22
+              SVG "SVG" (511-0) 0×0
+                SVGVisualElement "Path" (512-0) 0×0
+        Frame "본문 · 미니 주문 티켓" (519-0) 0×0
+          Text "turn-q" (51A-0) 0×0 "삼성전자 10주 시장가로 사줘"
+          Text "turn-a" (51B-0) 0×0 "티켓을 만들었습니다. 실행 전에는 아무 일도 일어나지 않습니다."
+          Frame "orb-card · 미니 주문 티켓" (51D-0) 0×0
+            Frame "card-head" (51E-0) 0×0
+              Text "주문 티켓" (51F-0) 0×0 "주문 티켓"
+              Text "모의-주력" (51G-0) 0×0 "모의-주력"
+            Frame "rows" (51H-0) 0×0
+              Frame "Frame" (51I-0) 0×0
+                Text "종목" (51J-0) 0×0 "종목"
+                Text "삼성전자 005930" (51K-0) 0×0 "삼성전자 005930"
+              Frame "Frame" (51L-0) 0×0
+                Text "구분" (51M-0) 0×0 "구분"
+                Text "매수 · 시장가" (51N-0) 0×0 "매수 · 시장가"
+              Frame "Frame" (51O-0) 0×0
+                Text "수량" (51P-0) 0×0 "수량"
+                Text "10주" (51Q-0) 0×0 "10주"
+              Frame "Frame" (51R-0) 0×0
+                Text "예상 체결금액" (51S-0) 0×0 "예상 체결금액"
+                Text "881,000원" (51T-0) 0×0 "881,000원"
+            Frame "ticket-actions" (51V-0) 0×0
+              Frame "btn · 실행" (51W-0) 0×0
+                Text "실행" (51X-0) 0×0 "실행"
+              Frame "btn · 취소" (51Y-0) 0×0
+                Text "취소" (51Z-0) 0×0 "취소"
+              Rectangle "Rectangle" (520-0) 0×0
+              Text "1회 확인" (521-0) 0×0 "1회 확인"
+        Frame "input-stack (오브의 새 부품)" (50J-0) 0×0
+          Frame "input-row" (50T-0) 0×44
+            Text "무엇이든 물어보세요" (50U-0) 0×0 "무엇이든 물어보세요"
+          Frame "control-strip" (50K-0) 0×40
+            Frame "dot" (50S-0) 12×12
+            Frame "pill · CLI" (50Q-0) 0×28
+              Text "CLAUDE" (50R-0) 0×0 "CLAUDE"
+            Frame "routine-chip" (50O-0) 0×0
+              Text "감시 2" (50P-0) 0×0 "감시 2"
+            Rectangle "Rectangle" (50N-0) 0×0
+            Frame "pill · 대화창으로 가기" (50L-0) 0×28
+              Text "대화창으로 가기" (50M-0) 0×0 "대화창으로 가기"
+      Frame "캡션" (50F-0) 400×0
+        Text "⑤ 미니 주문 티켓 — 오브에서 집행…" (50H-0) 0×0 "⑤ 미니 주문 티켓 — 오브에서 집행한다"
+        Text "확정 결정 3의 다른 절반도 폐기된다…" (50G-0) 0×0 "확정 결정 3의 다른 절반도 폐기된다. 방어 장치 없이 셸과 동일하게 1회 확인 — alwaysOnTop 창"
+    Frame "⑥ 접힌 채 도착" (523-0) 400×0
+      Frame "접힘 · 발화" (524-0) 0×0
+        Frame "orb 76 · fired" (525-0) 76×76
+          Frame "Frame" (526-0) 62×61
+            Rectangle "Rectangle" (527-0) 10×6
+            Rectangle "Rectangle" (528-0) 10×6
+          Frame "orb-count" (529-0) 0×18
+            Text "1" (52A-0) 0×0 "1"
+        Frame "Frame" (52B-0) 0×0
+          Text "내가 물은 턴도 같은 문법으로 돌아온…" (52C-0) 0×0 "내가 물은 턴도 같은 문법으로 돌아온다"
+          Text "자동으로 펼치지 않는다 — 얼굴이 드…" (52D-0) 0×0 "자동으로 펼치지 않는다 — 얼굴이 드러나고 수가 붙을 뿐이다."
+      Frame "orb-root · chat · empty" (52K-0) 400×0
+        Frame "머리 (얼굴 76 + 헤더)" (530-0) 0×0
+          Frame "얼굴 · 평소" (537-0) 76×76
+            Frame "Frame" (538-0) 62×61
+              Rectangle "Rectangle" (53A-0) 10×6
+              Rectangle "Rectangle" (539-0) 10×6
+          Frame "헤더" (531-0) 0×0
+            Text "메인 대화" (536-0) 0×0 "메인 대화"
+            Rectangle "Rectangle" (535-0) 0×0
+            Frame "orb-close" (532-0) 22×22
+              SVG "SVG" (533-0) 0×0
+                SVGVisualElement "Path" (534-0) 0×0
+        Frame "본문 · 도착한 답" (53B-0) 0×0
+          Text "turn-q" (53C-0) 0×0 "반도체 ETF 뭐가 있어?"
+          Text "turn-a" (53D-0) 0×0 "국내 상장 반도체 ETF는 4종입니다. 순자산 순으로 정리했습니다."
+        Frame "input-stack (오브의 새 부품)" (52L-0) 0×0
+          Frame "input-row" (52V-0) 0×44
+            Text "무엇이든 물어보세요" (52W-0) 0×0 "무엇이든 물어보세요"
+          Frame "control-strip" (52M-0) 0×40
+            Frame "dot" (52U-0) 12×12
+            Frame "pill · CLI" (52S-0) 0×28
+              Text "CLAUDE" (52T-0) 0×0 "CLAUDE"
+            Frame "routine-chip" (52Q-0) 0×0
+              Text "감시 2" (52R-0) 0×0 "감시 2"
+            Rectangle "Rectangle" (52P-0) 0×0
+            Frame "pill · 대화창으로 가기" (52N-0) 0×28
+              Text "대화창으로 가기" (52O-0) 0×0 "대화창으로 가기"
+      Frame "화살표" (52F-0) 0×0
+        SVG "SVG" (52G-0) 0×0
+          SVGVisualElement "Path" (52H-0) 0×0
+        Text "누르면 펼쳐지고, 그 순간 확인 처리…" (52I-0) 0×0 "누르면 펼쳐지고, 그 순간 확인 처리된다"
+      Frame "캡션" (53F-0) 400×0
+        Text "⑥ 접힌 채 도착 — 알림과 같은 문…" (53G-0) 0×0 "⑥ 접힌 채 도착 — 알림과 같은 문법"
+        Text "질의해놓고 접었을 때. 기존 미확인 …" (53H-0) 0×0 "질의해놓고 접었을 때. 기존 미확인 메커니즘을 그대로 쓴다 — 새 경로 0개."
+    Frame "⑦ 알림 전용 모드" (53J-0) 400×0
+      Frame "orb-root · chat · empty" (53N-0) 400×0
+        Frame "머리 (얼굴 76 + 헤더)" (543-0) 0×0
+          Frame "얼굴 · 평소" (54A-0) 76×76
+            Frame "Frame" (54B-0) 62×61
+              Rectangle "Rectangle" (54D-0) 7×16
+              Rectangle "Rectangle" (54C-0) 7×16
+          Frame "헤더" (544-0) 0×0
+            Text "알림" (549-0) 0×0 "알림"
+            Rectangle "Rectangle" (548-0) 0×0
+            Frame "orb-close" (545-0) 22×22
+              SVG "SVG" (546-0) 0×0
+                SVGVisualElement "Path" (547-0) 0×0
+        Frame "본문 · 알림 전용" (54E-0) 0×0
+          Frame "시점 정직성 3종" (54F-0) 0×0
+            Frame "orb-badge" (54G-0) 0×0
+              Text "15:30 발화" (54H-0) 0×0 "15:30 발화"
+            Text "주기 확인" (54I-0) 0×0 "주기 확인"
+            Text "2분 전" (54J-0) 0×0 "2분 전"
+          Text "orb-body" (54K-0) 0×0 "삼성전자 005930 조건 도달 — 관측값 88,100 (임계 88,000). 값은 발화 시점 기준입니다."
+          Frame "orb-card · 원장 행 1:1" (54M-0) 0×0
+            Frame "Frame" (54N-0) 0×0
+              Text "종목" (54O-0) 0×0 "종목"
+              Text "삼성전자 005930" (54P-0) 0×0 "삼성전자 005930"
+            Frame "Frame" (54Q-0) 0×0
+              Text "관측값" (54R-0) 0×0 "관측값"
+              Text "88,100" (54S-0) 0×0 "88,100"
+            Frame "Frame" (54T-0) 0×0
+              Text "임계" (54U-0) 0×0 "임계"
+              Text "88,000" (54V-0) 0×0 "88,000"
+            Frame "Frame" (54W-0) 0×0
+              Text "소스" (54X-0) 0×0 "소스"
+              Text "KRX 실시간" (54Y-0) 0×0 "KRX 실시간"
+        Frame "orb-foot (입력줄 없음)" (550-0) 0×0
+          Text "루틴 ‘삼성전자 88,000’ · 묻…" (551-0) 0×0 "루틴 ‘삼성전자 88,000’ · 묻지 않은 턴입니다"
+          Frame "btn · 셸로 가기" (552-0) 0×0
+            Text "셸로 가기" (553-0) 0×0 "셸로 가기"
+      Frame "캡션" (53K-0) 400×0
+        Text "⑦ 알림 전용 — 셸이 떠 있을 때" (53M-0) 0×0 "⑦ 알림 전용 — 셸이 떠 있을 때"
+        Text "입력줄과 컨트롤 스트립이 통째 사라진…" (53L-0) 0×0 "입력줄과 컨트롤 스트립이 통째 사라진다. 오브와 대화 금지 — 진행 경로는 ‘셸로 가기’ 하나다."
+    Frame "⑧ 높이 상한 640" (555-0) 400×0
+      Frame "orb-root · chat · empty" (559-0) 400×640
+        Frame "머리 (얼굴 76 + 헤더)" (56E-0) 0×0
+          Frame "얼굴 · 평소" (56L-0) 76×76
+            Frame "Frame" (56M-0) 62×61
+              Rectangle "Rectangle" (56O-0) 10×6
+              Rectangle "Rectangle" (56N-0) 10×6
+          Frame "헤더" (56F-0) 0×0
+            Text "메인 대화" (56K-0) 0×0 "메인 대화"
+            Rectangle "Rectangle" (56J-0) 0×0
+            Frame "orb-close" (56G-0) 22×22
+              SVG "SVG" (56H-0) 0×0
+                SVGVisualElement "Path" (56I-0) 0×0
+        Frame "본문 · 답변 + 표 축약" (55M-0) 0×0
+          Text "turn-q" (56D-0) 0×0 "삼성전자 재무 좀 봐줘"
+          Text "turn-a" (56C-0) 0×0 "자산총계 566조, 유동자산 247조입니다. 전기 대비 둘 다 늘었습니다."
+          Frame "orb-card · 표 축약" (55N-0) 0×0
+            Frame "card-head" (569-0) 0×0
+              Text "재무상태표 — 삼성전자" (56B-0) 0×0 "재무상태표 — 삼성전자"
+              Text "DART 2025" (56A-0) 0×0 "DART 2025"
+            Frame "fin-table (3열로 접힘)" (55S-0) 0×0
+              Frame "thead" (565-0) 0×0
+                Text "계정" (568-0) 0×0 "계정"
+                Text "당기" (567-0) 96×0 "당기"
+                Text "전기" (566-0) 96×0 "전기"
+              Frame "row" (561-0) 0×0
+                Text "자산총계" (564-0) 0×0 "자산총계"
+                Text "566,942,110" (563-0) 96×0 "566,942,110"
+                Text "514,531,948" (562-0) 96×0 "514,531,948"
+              Frame "row" (55X-0) 0×0
+                Text "유동자산" (560-0) 0×0 "유동자산"
+                Text "247,684,612" (55Z-0) 96×0 "247,684,612"
+                Text "227,062,266" (55Y-0) 96×0 "227,062,266"
+              Frame "row" (55T-0) 0×0
+                Text "현금및현금성자산" (55W-0) 0×0 "현금및현금성자산"
+                Text "57,856,378" (55V-0) 96×0 "57,856,378"
+                Text "53,705,579" (55U-0) 96×0 "53,705,579"
+            Frame "fold-note (결정론 축약 고지)" (55O-0) 0×0
+              SVG "SVG" (55Q-0) 0×0
+                SVGVisualElement "Path" (55R-0) 0×0
+              Text "열 2개 · 행 2개를 접었습니다 —…" (55P-0) 0×0 "열 2개 · 행 2개를 접었습니다 — 전체는 캔버스에서"
+          Frame "이어지는 턴 (잘림)" (56P-0) 0×0
+            Text "turn-q" (56Q-0) 0×0 "부채비율은?"
+            Text "turn-a" (56R-0) 0×0 "유동비율 189%, 부채비율 27%입니다. 전기보다 각각"
+          Frame "더 이어지는 턴 (상한에서 잘림)" (56T-0) 0×0
+            Text "turn-q" (56U-0) 0×0 "경쟁사랑 비교해줘"
+            Text "turn-a" (56V-0) 0×0 "SK하이닉스와 나란히 놓으면 자산 규모는 2.1배, 부채비율은"
+        Frame "input-stack (오브의 새 부품)" (55A-0) 0×0
+          Frame "input-row" (55K-0) 0×44
+            Text "무엇이든 물어보세요" (55L-0) 0×0 "무엇이든 물어보세요"
+          Frame "control-strip" (55B-0) 0×40
+            Frame "dot" (55J-0) 12×12
+            Frame "pill · CLI" (55H-0) 0×28
+              Text "CLAUDE" (55I-0) 0×0 "CLAUDE"
+            Frame "routine-chip" (55F-0) 0×0
+              Text "감시 2" (55G-0) 0×0 "감시 2"
+            Rectangle "Rectangle" (55E-0) 0×0
+            Frame "pill · 대화창으로 가기" (55C-0) 0×28
+              Text "대화창으로 가기" (55D-0) 0×0 "대화창으로 가기"
+      Frame "캡션" (556-0) 400×0
+        Text "⑧ 높이 상한 640 — 여기서부터 …" (558-0) 0×0 "⑧ 높이 상한 640 — 여기서부터 스크롤"
+        Text "패널은 내용만큼 자라다가 640에서 …" (557-0) 0×0 "패널은 내용만큼 자라다가 640에서 멈춘다. 밑이 잘리는 것이 바로 '대화창으로 가기'의 이유다. 머리와 입"

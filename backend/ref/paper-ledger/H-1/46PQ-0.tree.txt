@@ -1,0 +1,35 @@
+Frame "mini/A02×A04 · 호가 주문 정본 — 시장가 매수" (46PQ-0) 360×420
+  Frame "Header" (46QK-0) 0×0
+    Frame "Meta row" (46QM-0) 0×0
+      Text "Eyebrow" (46QO-0) 0×0
+      Text "As of" (46QN-0) 0×0 "기준 09:42"
+    Text "Title" (46QL-0) 0×0 "시장가 매수 주문"
+  Frame "Body" (46PT-0) 0×0
+    Frame "Table header" (46QF-0) 0×0
+      Text "순서" (46QJ-0) 34×0 "순서"
+      Text "항목" (46QI-0) 0×0 "항목"
+      Text "값" (46QH-0) 0×0 "값"
+      Text "비고" (46QG-0) 64×0 "비고"
+    Frame "Rank 1" (46Q8-0) 0×0
+      Text "01" (46QE-0) 34×0 "01"
+      Frame "Frame" (46QB-0) 0×0
+        Text "현재가" (46QD-0) 0×0 "현재가"
+        Text "Text" (46QC-0) 0×0
+      Text "+20" (46QA-0) 0×0 "+20"
+      Text "Text" (46Q9-0) 64×0
+    Frame "Rank 2" (46Q1-0) 0×0
+      Text "02" (46Q7-0) 34×0 "02"
+      Frame "Frame" (46Q4-0) 0×0
+        Text "매도호가3" (46Q6-0) 0×0 "매도호가3"
+        Text "Text" (46Q5-0) 0×0
+      Text "150,870" (46Q3-0) 0×0 "150,870"
+      Text "Text" (46Q2-0) 64×0
+    Frame "Rank 3" (46PU-0) 0×0
+      Text "03" (46Q0-0) 34×0 "03"
+      Frame "Frame" (46PX-0) 0×0
+        Text "매도호가직전대비3" (46PZ-0) 0×0 "매도호가직전대비3"
+        Text "Text" (46PY-0) 0×0
+      Text "+320" (46PW-0) 0×0 "+320"
+      Text "Text" (46PV-0) 64×0
+  Frame "Fold note" (46PR-0) 0×0
+    Text "외 18개 행 접힘 · 원본에서 확인" (46PS-0) 0×0 "외 18개 행 접힘 · 원본에서 확인"

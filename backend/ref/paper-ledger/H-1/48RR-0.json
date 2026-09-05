@@ -1,0 +1,92 @@
+{
+ "board_id": "48RR-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/A04 · 호가 정본 — 실시간 통합 호가",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "48RT-0",
+   "text": "원본 보드: A04 · 호가 정본 — 실시간 통합 호가",
+   "path": [
+    "note/A04 · 호가 정본 — 실시간 통합 호가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48RV-0",
+   "text": "가져온 요소: 종목명 · 날짜 · 체결강도",
+   "path": [
+    "note/A04 · 호가 정본 — 실시간 통합 호가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48RX-0",
+   "text": "문법: table",
+   "path": [
+    "note/A04 · 호가 정본 — 실시간 통합 호가",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48RZ-0",
+   "text": "접은 개수: 행 18개",
+   "path": [
+    "note/A04 · 호가 정본 — 실시간 통합 호가",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48RR-0",
+   "name": "note/A04 · 호가 정본 — 실시간 통합 호가",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "48RS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48RU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48RW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48RY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: A04 · 호가 정본 — 실시간 통합 호가": 1,
+  "가져온 요소: 종목명 · 날짜 · 체결강도": 1,
+  "문법: table": 1,
+  "접은 개수: 행 18개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "6d964df059badb4565f69e3767378fdf1bfedebda9dba65211f0c637b1dac4c5"
+}

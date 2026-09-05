@@ -1,0 +1,92 @@
+{
+ "board_id": "48WH-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "48WJ-0",
+   "text": "원본 보드: CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도",
+   "path": [
+    "note/CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48WL-0",
+   "text": "가져온 요소: 매매가능수량",
+   "path": [
+    "note/CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48WN-0",
+   "text": "문법: order_confirm",
+   "path": [
+    "note/CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48WP-0",
+   "text": "접은 개수: 항목 19개",
+   "path": [
+    "note/CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48WH-0",
+   "name": "note/CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "48WI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48WK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48WM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48WO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도": 1,
+  "가져온 요소: 매매가능수량": 1,
+  "문법: order_confirm": 1,
+  "접은 개수: 항목 19개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "840e56338cc6be8b3c28289fbf6bf0c4a8698f9ba5734e1d31f4507e91f4b1a2"
+}

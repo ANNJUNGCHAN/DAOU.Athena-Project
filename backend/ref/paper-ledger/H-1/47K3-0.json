@@ -1,0 +1,342 @@
+{
+ "board_id": "47K3-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "47L1-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47L0-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "47KY-0",
+   "text": "ELW 가격급등락",
+   "path": [
+    "mini/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Header"
+   ]
+  },
+  {
+   "id": "47KW-0",
+   "text": "등락률",
+   "path": [
+    "mini/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47KV-0",
+   "text": "+12.16%",
+   "path": [
+    "mini/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47KT-0",
+   "text": "근접율",
+   "path": [
+    "mini/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47KS-0",
+   "text": "98.6%",
+   "path": [
+    "mini/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47KQ-0",
+   "text": "핵심",
+   "path": [
+    "mini/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47KP-0",
+   "text": "2건",
+   "path": [
+    "mini/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47KM-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47KL-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47KK-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "47KI-0",
+   "text": "수량",
+   "path": [
+    "mini/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47KH-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47KF-0",
+   "text": "12건",
+   "path": [
+    "mini/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "47KE-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "47KC-0",
+   "text": "ELW가격급등락",
+   "path": [
+    "mini/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47KB-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "47K9-0",
+   "text": "전체 3,482건 · 20건 표시",
+   "path": [
+    "mini/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "47K8-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "47K5-0",
+   "text": "스칼라 2개, 행 18개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "47K3-0",
+   "name": "mini/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "47KX-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47KZ-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47K6-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "47KN-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47KU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47KR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47KO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47KJ-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47KD-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47KG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47K7-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "47KA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "47K4-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "ELW 가격급등락": 1,
+  "등락률": 1,
+  "+12.16%": 1,
+  "근접율": 1,
+  "98.6%": 1,
+  "핵심": 1,
+  "2건": 1,
+  "항목": 1,
+  "값": 1,
+  "비고": 1,
+  "수량": 1,
+  "12건": 1,
+  "ELW가격급등락": 1,
+  "전체 3,482건 · 20건 표시": 1,
+  "스칼라 2개, 행 18개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "04a87b25addb88c536b5366cdb973b17fe0aa37ddb0c3d4b34468f5bc29cd723"
+}

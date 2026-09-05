@@ -1,0 +1,92 @@
+{
+ "board_id": "48SV-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "note/CC-05 / R03-T2 · 수급 — 거래원",
+ "width": 360,
+ "height": 92,
+ "texts": [
+  {
+   "id": "48SX-0",
+   "text": "원본 보드: CC-05 / R03-T2 · 수급 — 거래원",
+   "path": [
+    "note/CC-05 / R03-T2 · 수급 — 거래원",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48SZ-0",
+   "text": "가져온 요소: 종목코드 · 누적순매수 · 외국계순매수추… · 외국계매수추정합 · 매도상위이탈원",
+   "path": [
+    "note/CC-05 / R03-T2 · 수급 — 거래원",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48T1-0",
+   "text": "문법: facts",
+   "path": [
+    "note/CC-05 / R03-T2 · 수급 — 거래원",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48T3-0",
+   "text": "접은 개수: 항목 130개",
+   "path": [
+    "note/CC-05 / R03-T2 · 수급 — 거래원",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48SV-0",
+   "name": "note/CC-05 / R03-T2 · 수급 — 거래원",
+   "component": "Frame",
+   "w": 360,
+   "h": 92,
+   "depth": 0
+  },
+  {
+   "id": "48SW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48SY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48T0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48T2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 334,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "원본 보드: CC-05 / R03-T2 · 수급 — 거래원": 1,
+  "가져온 요소: 종목코드 · 누적순매수 · 외국계순매수추… · 외국계매수추정합 · 매도상위이탈원": 1,
+  "문법: facts": 1,
+  "접은 개수: 항목 130개": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "596fb7e8bca0c65b1db291fcd698ccaf08703d684d89efcbb53ddc93418b6bfd"
+}

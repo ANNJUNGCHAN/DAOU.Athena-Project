@@ -1,0 +1,340 @@
+{
+ "board_id": "48BO-0",
+ "page": "H-1",
+ "page_name": "카드미니",
+ "name": "mini/CC-03 / R01-T1-X · 분봉 시세",
+ "width": 360,
+ "height": 420,
+ "texts": [
+  {
+   "id": "48CM-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T1-X · 분봉 시세",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "48CL-0",
+   "text": "기준 09:42",
+   "path": [
+    "mini/CC-03 / R01-T1-X · 분봉 시세",
+    "Header",
+    "Meta row"
+   ]
+  },
+  {
+   "id": "48CJ-0",
+   "text": "분봉 시세",
+   "path": [
+    "mini/CC-03 / R01-T1-X · 분봉 시세",
+    "Header"
+   ]
+  },
+  {
+   "id": "48CH-0",
+   "text": "거래대금",
+   "path": [
+    "mini/CC-03 / R01-T1-X · 분봉 시세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48CG-0",
+   "text": "2.14조원",
+   "path": [
+    "mini/CC-03 / R01-T1-X · 분봉 시세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48CE-0",
+   "text": "변화",
+   "path": [
+    "mini/CC-03 / R01-T1-X · 분봉 시세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48CD-0",
+   "text": "8.4%",
+   "path": [
+    "mini/CC-03 / R01-T1-X · 분봉 시세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48CB-0",
+   "text": "핵심",
+   "path": [
+    "mini/CC-03 / R01-T1-X · 분봉 시세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48CA-0",
+   "text": "21.2배",
+   "path": [
+    "mini/CC-03 / R01-T1-X · 분봉 시세",
+    "Body",
+    "KPI band",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48C7-0",
+   "text": "항목",
+   "path": [
+    "mini/CC-03 / R01-T1-X · 분봉 시세",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48C6-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-T1-X · 분봉 시세",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48C5-0",
+   "text": "비고",
+   "path": [
+    "mini/CC-03 / R01-T1-X · 분봉 시세",
+    "Body",
+    "Table header"
+   ]
+  },
+  {
+   "id": "48C3-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-T1-X · 분봉 시세",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48C2-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T1-X · 분봉 시세",
+    "Body",
+    "Position 1",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48C0-0",
+   "text": "업종 1.61배",
+   "path": [
+    "mini/CC-03 / R01-T1-X · 분봉 시세",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "48BZ-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T1-X · 분봉 시세",
+    "Body",
+    "Position 1"
+   ]
+  },
+  {
+   "id": "48BX-0",
+   "text": "값",
+   "path": [
+    "mini/CC-03 / R01-T1-X · 분봉 시세",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48BW-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T1-X · 분봉 시세",
+    "Body",
+    "Position 2",
+    "Frame"
+   ]
+  },
+  {
+   "id": "48BU-0",
+   "text": "2.63배",
+   "path": [
+    "mini/CC-03 / R01-T1-X · 분봉 시세",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "48BT-0",
+   "text": "",
+   "path": [
+    "mini/CC-03 / R01-T1-X · 분봉 시세",
+    "Body",
+    "Position 2"
+   ]
+  },
+  {
+   "id": "48BQ-0",
+   "text": "스칼라 2개, 행 11개 접힘 · 원본에서 확인",
+   "path": [
+    "mini/CC-03 / R01-T1-X · 분봉 시세",
+    "Fold note"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "48BO-0",
+   "name": "mini/CC-03 / R01-T1-X · 분봉 시세",
+   "component": "Frame",
+   "w": 360,
+   "h": 420,
+   "depth": 0
+  },
+  {
+   "id": "48CI-0",
+   "name": "Header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48CK-0",
+   "name": "Meta row",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48BR-0",
+   "name": "Body",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "48C8-0",
+   "name": "KPI band",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48CF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48CC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48C9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48C4-0",
+   "name": "Table header",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48BY-0",
+   "name": "Position 1",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48C1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48BS-0",
+   "name": "Position 2",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "48BV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "48BP-0",
+   "name": "Fold note",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  }
+ ],
+ "text_multiset": {
+  "": 5,
+  "기준 09:42": 1,
+  "분봉 시세": 1,
+  "거래대금": 1,
+  "2.14조원": 1,
+  "변화": 1,
+  "8.4%": 1,
+  "핵심": 1,
+  "21.2배": 1,
+  "항목": 1,
+  "값": 3,
+  "비고": 1,
+  "업종 1.61배": 1,
+  "2.63배": 1,
+  "스칼라 2개, 행 11개 접힘 · 원본에서 확인": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "b023d849bd070c0aa8036e500514aaeb58d2e82f08d8e9f60ca7970a218f457f"
+}

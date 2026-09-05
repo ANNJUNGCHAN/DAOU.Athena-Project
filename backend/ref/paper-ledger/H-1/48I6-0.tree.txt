@@ -1,0 +1,35 @@
+Frame "mini/CC-01 / R10-T2-X4 · D+2 정산 후 계좌" (48I6-0) 360×420
+  Frame "Header" (48J0-0) 0×0
+    Frame "Meta row" (48J2-0) 0×0
+      Text "Eyebrow" (48J4-0) 0×0
+      Text "As of" (48J3-0) 0×0 "기준 09:42"
+    Text "Title" (48J1-0) 0×0 "D+2 정산 후 계좌"
+  Frame "Body" (48I9-0) 0×0
+    Frame "KPI band" (48IQ-0) 0×0
+      Frame "Frame" (48IX-0) 0×0
+        Text "종목별계좌평가현황" (48IZ-0) 0×0 "종목별계좌평가현황"
+        Text "8종목" (48IY-0) 0×0 "8종목"
+      Frame "Frame" (48IU-0) 0×0
+        Text "매수비중" (48IW-0) 0×0 "매수비중"
+        Text "28.0%" (48IV-0) 0×0 "28.0%"
+      Frame "Frame" (48IR-0) 0×0
+        Text "Text" (48IT-0) 0×0
+        Text "Text" (48IS-0) 0×0
+    Frame "Table header" (48IM-0) 0×0
+      Text "항목" (48IP-0) 0×0 "항목"
+      Text "값" (48IO-0) 0×0 "값"
+      Text "비고" (48IN-0) 72×0 "비고"
+    Frame "Position 1" (48IG-0) 0×0
+      Frame "Frame" (48IJ-0) 0×0
+        Text "신용대주평가금D+2" (48IL-0) 0×0 "신용대주평가금D+2"
+        Text "Text" (48IK-0) 0×0
+      Text "0원" (48II-0) 0×0 "0원"
+      Text "Text" (48IH-0) 72×0
+    Frame "Position 2" (48IA-0) 0×0
+      Frame "Frame" (48ID-0) 0×0
+        Text "종목명" (48IF-0) 0×0 "종목명"
+        Text "Text" (48IE-0) 0×0
+      Text "SK하이닉스 20주" (48IC-0) 0×0 "SK하이닉스 20주"
+      Text "Text" (48IB-0) 72×0
+  Frame "Fold note" (48I7-0) 0×0
+    Text "스칼라 2개, 행 1개 접힘 · 원본…" (48I8-0) 0×0 "스칼라 2개, 행 1개 접힘 · 원본에서 확인"

@@ -1,0 +1,2795 @@
+{
+ "board_id": "40EV-1",
+ "page": "8-1",
+ "page_name": "백테스트",
+ "name": "19 · 백테스트 — 기법 목록 · 새 기법",
+ "width": 1680.0,
+ "height": 1120.0,
+ "texts": [
+  {
+   "id": "40EX-1",
+   "text": "셸 — 백테스트 · 기법 목록 — 처음 있던 것도, 내가 만든 것도, 다 같은 기법",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "타이틀"
+   ]
+  },
+  {
+   "id": "40EY-1",
+   "text": "프리셋이라는 구분은 없습니다. 목록은 하나뿐이고 맨 위 [+ 새 기법 만들기]로 늘어납니다. 기법은 언제든 눌러 고칠 수 있고, 검증을 마치면 실매매에 적용됩니다.",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "타이틀"
+   ]
+  },
+  {
+   "id": "40F5-1",
+   "text": "ATHENA",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "Frame",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40FD-1",
+   "text": "새 채팅",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "Frame",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40FK-1",
+   "text": "그래프",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "Frame",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40FP-1",
+   "text": "에이전트",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "Frame",
+    "Primary Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40FU-1",
+   "text": "플러그인",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "Frame",
+    "Primary Actions",
+    "Nav 플러그인"
+   ]
+  },
+  {
+   "id": "40FZ-1",
+   "text": "백테스트",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "Frame",
+    "Primary Actions",
+    "Nav 백테스트 (active)"
+   ]
+  },
+  {
+   "id": "40G2-1",
+   "text": "프로젝트",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "Frame",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40G7-1",
+   "text": "아테나",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "Frame",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40GG-1",
+   "text": "백엔드 API 개수 확인",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "Frame",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40GI-1",
+   "text": "앱 전체 기능 검수",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "Frame",
+    "Project Tree",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40GM-1",
+   "text": "최근",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "Frame",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40GN-1",
+   "text": "전체",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "Frame",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40GP-1",
+   "text": "앱 전체 기능 검수",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "Frame",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40GS-1",
+   "text": "삼성전자 주요 변동 알림",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "Frame",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40GU-1",
+   "text": "ETF 자금 흐름",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "Frame",
+    "Recent Conversations",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40GY-1",
+   "text": "AN",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "Frame",
+    "Account Footer",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40GZ-1",
+   "text": "모의-주력",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "Frame",
+    "Account Footer",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40H9-1",
+   "text": "백테스트",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "헤더",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40HA-1",
+   "text": "기법 11개 · 마지막 수정 2분 전",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "헤더",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40HD-1",
+   "text": "기법",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "헤더",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40HF-1",
+   "text": "결과",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "헤더",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40HH-1",
+   "text": "이력",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "헤더",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40HL-1",
+   "text": "+",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "새 기법 만들기",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40HN-1",
+   "text": "새 기법 만들기",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "새 기법 만들기",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40HO-1",
+   "text": "코드창과 대화창이 열립니다 — AI가 한 번에 하나씩 물어보며 원하는 알고리즘을 코드로 씁니다",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "새 기법 만들기",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40HQ-1",
+   "text": "대화로 시작",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "새 기법 만들기",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40HT-1",
+   "text": "기법 11개",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "목록 헤더"
+   ]
+  },
+  {
+   "id": "40HU-1",
+   "text": "처음 있던 10개와 내가 만든 1개를 구분하지 않습니다",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "목록 헤더"
+   ]
+  },
+  {
+   "id": "40HW-1",
+   "text": "분류 전체 · 상태 전체",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "목록 헤더"
+   ]
+  },
+  {
+   "id": "40I2-1",
+   "text": "20-60 골든크로스",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 1 · 20-60 골든크로스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40I4-1",
+   "text": "추세",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 1 · 20-60 골든크로스",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40I7-1",
+   "text": "실매매 적용 중",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 1 · 20-60 골든크로스",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40I8-1",
+   "text": "20일선이 60일선을 위로 뚫으면 사고, 아래로 뚫으면 팝니다.",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 1 · 20-60 골든크로스"
+   ]
+  },
+  {
+   "id": "40IA-1",
+   "text": "v7 · 08-30 검증 · 거래 41",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 1 · 20-60 골든크로스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40IC-1",
+   "text": "키우미 적용 중",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 1 · 20-60 골든크로스",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40IF-1",
+   "text": "수정",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 1 · 20-60 골든크로스",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40II-1",
+   "text": "볼린저 하단 반등",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 2 · 볼린저 하단 반등",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40IK-1",
+   "text": "평균회귀",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 2 · 볼린저 하단 반등",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40IN-1",
+   "text": "검증됨",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 2 · 볼린저 하단 반등",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40IO-1",
+   "text": "가격이 하단 밴드를 찍고 돌아설 때 삽니다.",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 2 · 볼린저 하단 반등"
+   ]
+  },
+  {
+   "id": "40IQ-1",
+   "text": "v3 · 08-27 검증 · 거래 66",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 2 · 볼린저 하단 반등",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40IT-1",
+   "text": "수정",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 2 · 볼린저 하단 반등",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40IW-1",
+   "text": "20일 신고가 돌파",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 3 · 20일 신고가 돌파",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40IY-1",
+   "text": "돌파",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 3 · 20일 신고가 돌파",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40J1-1",
+   "text": "검증됨",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 3 · 20일 신고가 돌파",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40J2-1",
+   "text": "직전 20봉 최고가를 종가로 넘기면 삽니다.",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 3 · 20일 신고가 돌파"
+   ]
+  },
+  {
+   "id": "40J4-1",
+   "text": "v2 · 08-22 검증 · 거래 38",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 3 · 20일 신고가 돌파",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40J7-1",
+   "text": "수정",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 3 · 20일 신고가 돌파",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40JB-1",
+   "text": "RSI 과매도 반전",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 4 · RSI 과매도 반전",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40JD-1",
+   "text": "평균회귀",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 4 · RSI 과매도 반전",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40JG-1",
+   "text": "검증됨",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 4 · RSI 과매도 반전",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40JH-1",
+   "text": "RSI가 30 아래로 갔다가 다시 올라오면 삽니다.",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 4 · RSI 과매도 반전"
+   ]
+  },
+  {
+   "id": "40JJ-1",
+   "text": "v4 · 08-19 검증 · 거래 52",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 4 · RSI 과매도 반전",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40JM-1",
+   "text": "수정",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 4 · RSI 과매도 반전",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40JP-1",
+   "text": "MACD 시그널 교차",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 5 · MACD 시그널 교차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40JR-1",
+   "text": "추세",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 5 · MACD 시그널 교차",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40JU-1",
+   "text": "검증됨",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 5 · MACD 시그널 교차",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40JV-1",
+   "text": "MACD가 시그널선을 위로 지날 때 삽니다.",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 5 · MACD 시그널 교차"
+   ]
+  },
+  {
+   "id": "40JX-1",
+   "text": "v2 · 08-15 검증 · 거래 44",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 5 · MACD 시그널 교차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40K0-1",
+   "text": "수정",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 5 · MACD 시그널 교차",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40K3-1",
+   "text": "이격도 회귀",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 6 · 이격도 회귀",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40K5-1",
+   "text": "평균회귀",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 6 · 이격도 회귀",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40K8-1",
+   "text": "검증됨",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 6 · 이격도 회귀",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40K9-1",
+   "text": "20일선에서 너무 벌어지면 되돌림을 노립니다.",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 6 · 이격도 회귀"
+   ]
+  },
+  {
+   "id": "40KB-1",
+   "text": "v1 · 08-11 검증 · 거래 71",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 6 · 이격도 회귀",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40KE-1",
+   "text": "수정",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 6 · 이격도 회귀",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40KI-1",
+   "text": "거래량 급증 추격",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 7 · 거래량 급증 추격",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40KK-1",
+   "text": "수급",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 7 · 거래량 급증 추격",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40KN-1",
+   "text": "검증됨",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 7 · 거래량 급증 추격",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40KO-1",
+   "text": "평균 거래량의 3배가 터진 날 종가에 붙습니다.",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 7 · 거래량 급증 추격"
+   ]
+  },
+  {
+   "id": "40KQ-1",
+   "text": "v3 · 08-08 검증 · 거래 29",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 7 · 거래량 급증 추격",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40KT-1",
+   "text": "수정",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 7 · 거래량 급증 추격",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40KW-1",
+   "text": "갭 상승 눌림 매수",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 8 · 갭 상승 눌림 매수",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40KY-1",
+   "text": "돌파",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 8 · 갭 상승 눌림 매수",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40L1-1",
+   "text": "검증됨",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 8 · 갭 상승 눌림 매수",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40L2-1",
+   "text": "갭으로 뛴 뒤 첫 눌림에서 삽니다.",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 8 · 갭 상승 눌림 매수"
+   ]
+  },
+  {
+   "id": "40L4-1",
+   "text": "v2 · 08-04 검증 · 거래 33",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 8 · 갭 상승 눌림 매수",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40L7-1",
+   "text": "수정",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 8 · 갭 상승 눌림 매수",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40LA-1",
+   "text": "5-20 단기 교차",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 9 · 5-20 단기 교차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40LC-1",
+   "text": "추세",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 9 · 5-20 단기 교차",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40LF-1",
+   "text": "검증됨",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 9 · 5-20 단기 교차",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40LG-1",
+   "text": "짧은 두 이동평균의 교차만 봅니다.",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 9 · 5-20 단기 교차"
+   ]
+  },
+  {
+   "id": "40LI-1",
+   "text": "v5 · 07-31 검증 · 거래 88",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 9 · 5-20 단기 교차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40LL-1",
+   "text": "수정",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 9 · 5-20 단기 교차",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40LP-1",
+   "text": "변동성 돌파",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 10 · 변동성 돌파",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40LR-1",
+   "text": "돌파",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 10 · 변동성 돌파",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40LU-1",
+   "text": "검증됨",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 10 · 변동성 돌파",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40LV-1",
+   "text": "전일 변동폭의 절반을 넘으면 그날 삽니다.",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 10 · 변동성 돌파"
+   ]
+  },
+  {
+   "id": "40LX-1",
+   "text": "v2 · 07-28 검증 · 거래 57",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 10 · 변동성 돌파",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40M0-1",
+   "text": "수정",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 10 · 변동성 돌파",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40M3-1",
+   "text": "내 ATR 돌파 + 손절",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 11 · 내 ATR 돌파 + 손절",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40M5-1",
+   "text": "돌파",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 11 · 내 ATR 돌파 + 손절",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40M8-1",
+   "text": "수정 중",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 11 · 내 ATR 돌파 + 손절",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40M9-1",
+   "text": "20일 신고가 돌파에 ATR 2배 손절을 붙인 내 기법.",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 11 · 내 ATR 돌파 + 손절"
+   ]
+  },
+  {
+   "id": "40MB-1",
+   "text": "v3 초안 · 방금 대화로 바뀜",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 11 · 내 ATR 돌파 + 손절",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40ME-1",
+   "text": "수정",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "기법 격자",
+    "기법 11 · 내 ATR 돌파 + 손절",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40MI-1",
+   "text": "기법을 누르면 오른쪽 대화가 그 기법을 다룹니다. 실행·배포·주문은 여기서도 사람이 누르는 버튼입니다.",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "메인 · 기법 목록",
+    "바닥 안내"
+   ]
+  },
+  {
+   "id": "40ML-1",
+   "text": "기법에게 묻기",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "채팅",
+    "채팅 헤더"
+   ]
+  },
+  {
+   "id": "40MM-1",
+   "text": "고른 기법을 다룹니다",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "채팅",
+    "채팅 헤더"
+   ]
+  },
+  {
+   "id": "40MS-1",
+   "text": "?",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "채팅",
+    "채팅 본문",
+    "빈 상태",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40MT-1",
+   "text": "아직 고른 기법이 없습니다",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "채팅",
+    "채팅 본문",
+    "빈 상태"
+   ]
+  },
+  {
+   "id": "40MU-1",
+   "text": "왼쪽 목록에서 기법을 누르면 그 기법에 대해 묻고 고칠 수 있어요. 새로 만들려면 [+ 새 기법 만들기]를 누르세요.",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "채팅",
+    "채팅 본문",
+    "빈 상태"
+   ]
+  },
+  {
+   "id": "40MX-1",
+   "text": "이런 걸 물어볼 수 있어요",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "채팅",
+    "채팅 본문",
+    "예시 질문"
+   ]
+  },
+  {
+   "id": "40MZ-1",
+   "text": "이 기법은 다른 것과 뭐가 다른가요?",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "채팅",
+    "채팅 본문",
+    "예시 질문",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40N1-1",
+   "text": "왜 최근 두 달 동안 한 번도 안 샀죠?",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "채팅",
+    "채팅 본문",
+    "예시 질문",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40N3-1",
+   "text": "손절을 ATR 2배로 바꾸고 싶어요",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "채팅",
+    "채팅 본문",
+    "예시 질문",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40N8-1",
+   "text": "+",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "채팅",
+    "입력",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "40N9-1",
+   "text": "무엇이든 물어보세요",
+   "path": [
+    "19 · 백테스트 — 기법 목록 · 새 기법",
+    "셸",
+    "채팅",
+    "입력",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "40EV-1",
+   "name": "19 · 백테스트 — 기법 목록 · 새 기법",
+   "component": "Frame",
+   "w": 1680.0,
+   "h": 1120.0,
+   "depth": 0
+  },
+  {
+   "id": "40EW-1",
+   "name": "타이틀",
+   "component": "Frame",
+   "w": 1584.0,
+   "h": 0.0,
+   "depth": 1
+  },
+  {
+   "id": "40F0-1",
+   "name": "셸",
+   "component": "Frame",
+   "w": 1584.0,
+   "h": 900.0,
+   "depth": 1
+  },
+  {
+   "id": "40F2-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 268.0,
+   "h": 900.0,
+   "depth": 2
+  },
+  {
+   "id": "40F3-1",
+   "name": "Primary Actions",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "40F4-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 28.0,
+   "depth": 4
+  },
+  {
+   "id": "40F6-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40F7-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40F8-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40F9-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 4
+  },
+  {
+   "id": "40FA-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40FB-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40FC-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40FE-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 4
+  },
+  {
+   "id": "40FF-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40FG-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40FH-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40FI-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40FJ-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40FL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 4
+  },
+  {
+   "id": "40FM-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40FN-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40FO-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40FQ-1",
+   "name": "Nav 플러그인",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 4
+  },
+  {
+   "id": "40FR-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40FS-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40FT-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40FV-1",
+   "name": "Nav 백테스트 (active)",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 30.0,
+   "depth": 4
+  },
+  {
+   "id": "40FW-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40FX-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40FY-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40G0-1",
+   "name": "Project Tree",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "40G1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "40G3-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 32.0,
+   "depth": 4
+  },
+  {
+   "id": "40G4-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40G5-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40G6-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40G8-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40G9-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40GA-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40GB-1",
+   "name": "Circle",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40GC-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40GD-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40GE-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40GF-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 27.0,
+   "depth": 4
+  },
+  {
+   "id": "40GH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 29.0,
+   "depth": 4
+  },
+  {
+   "id": "40GJ-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6.0,
+   "h": 6.0,
+   "depth": 5
+  },
+  {
+   "id": "40GK-1",
+   "name": "Recent Conversations",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "40GL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 20.0,
+   "depth": 4
+  },
+  {
+   "id": "40GO-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 27.0,
+   "depth": 4
+  },
+  {
+   "id": "40GQ-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 6.0,
+   "h": 6.0,
+   "depth": 5
+  },
+  {
+   "id": "40GR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 27.0,
+   "depth": 4
+  },
+  {
+   "id": "40GT-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 27.0,
+   "depth": 4
+  },
+  {
+   "id": "40GV-1",
+   "name": "Account Footer",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "40GW-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 38.0,
+   "depth": 4
+  },
+  {
+   "id": "40GX-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22.0,
+   "h": 22.0,
+   "depth": 5
+  },
+  {
+   "id": "40H0-1",
+   "name": "SVG",
+   "component": "SVG",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40H1-1",
+   "name": "Path",
+   "component": "SVGVisualElement",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40H3-1",
+   "name": "메인 · 기법 목록",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 2
+  },
+  {
+   "id": "40H7-1",
+   "name": "헤더",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "40H8-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "40HB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "40HC-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40HE-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40HG-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40HJ-1",
+   "name": "새 기법 만들기",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "40HK-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30.0,
+   "h": 30.0,
+   "depth": 4
+  },
+  {
+   "id": "40HM-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "40HP-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "40HS-1",
+   "name": "목록 헤더",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "40HV-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 1.0,
+   "depth": 4
+  },
+  {
+   "id": "40HY-1",
+   "name": "기법 격자",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "40I0-1",
+   "name": "기법 1 · 20-60 골든크로스",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "40I1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40I3-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40I5-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40I6-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40I9-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40IB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40ID-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40IE-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40IG-1",
+   "name": "기법 2 · 볼린저 하단 반등",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "40IH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40IJ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40IL-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40IM-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40IP-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40IR-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40IS-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40IU-1",
+   "name": "기법 3 · 20일 신고가 돌파",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "40IV-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40IX-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40IZ-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40J0-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40J3-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40J5-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40J6-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40J9-1",
+   "name": "기법 4 · RSI 과매도 반전",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "40JA-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40JC-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40JE-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40JF-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40JI-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40JK-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40JL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40JN-1",
+   "name": "기법 5 · MACD 시그널 교차",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "40JO-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40JQ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40JS-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40JT-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40JW-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40JY-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40JZ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40K1-1",
+   "name": "기법 6 · 이격도 회귀",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "40K2-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40K4-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40K6-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40K7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40KA-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40KC-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40KD-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40KG-1",
+   "name": "기법 7 · 거래량 급증 추격",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "40KH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40KJ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40KL-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40KM-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40KP-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40KR-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40KS-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40KU-1",
+   "name": "기법 8 · 갭 상승 눌림 매수",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "40KV-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40KX-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40KZ-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40L0-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40L3-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40L5-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40L6-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40L8-1",
+   "name": "기법 9 · 5-20 단기 교차",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "40L9-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40LB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40LD-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40LE-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40LH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40LJ-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40LK-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40LN-1",
+   "name": "기법 10 · 변동성 돌파",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "40LO-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40LQ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40LS-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40LT-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40LW-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40LY-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40LZ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40M1-1",
+   "name": "기법 11 · 내 ATR 돌파 + 손절",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "40M2-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40M4-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40M6-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40M7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40MA-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40MC-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40MD-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 6
+  },
+  {
+   "id": "40MG-1",
+   "name": "바닥 안내",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "40MH-1",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 5.0,
+   "h": 5.0,
+   "depth": 4
+  },
+  {
+   "id": "40H5-1",
+   "name": "채팅",
+   "component": "Frame",
+   "w": 400.0,
+   "h": 900.0,
+   "depth": 2
+  },
+  {
+   "id": "40MK-1",
+   "name": "채팅 헤더",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "40MO-1",
+   "name": "채팅 본문",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "40MQ-1",
+   "name": "빈 상태",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "40MR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 44.0,
+   "h": 44.0,
+   "depth": 5
+  },
+  {
+   "id": "40MW-1",
+   "name": "예시 질문",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "40MY-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40N0-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40N2-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 5
+  },
+  {
+   "id": "40N5-1",
+   "name": "입력",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 3
+  },
+  {
+   "id": "40N6-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0.0,
+   "h": 0.0,
+   "depth": 4
+  },
+  {
+   "id": "40N7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 22.0,
+   "h": 22.0,
+   "depth": 5
+  }
+ ],
+ "text_multiset": {
+  "셸 — 백테스트 · 기법 목록 — 처음 있던 것도, 내가 만든 것도, 다 같은 기법": 1,
+  "프리셋이라는 구분은 없습니다. 목록은 하나뿐이고 맨 위 [+ 새 기법 만들기]로 늘어납니다. 기법은 언제든 눌러 고칠 수 있고, 검증을 마치면 실매매에 적용됩니다.": 1,
+  "ATHENA": 1,
+  "새 채팅": 1,
+  "그래프": 1,
+  "에이전트": 1,
+  "플러그인": 1,
+  "백테스트": 2,
+  "프로젝트": 1,
+  "아테나": 1,
+  "백엔드 API 개수 확인": 1,
+  "앱 전체 기능 검수": 2,
+  "최근": 1,
+  "전체": 1,
+  "삼성전자 주요 변동 알림": 1,
+  "ETF 자금 흐름": 1,
+  "AN": 1,
+  "모의-주력": 1,
+  "기법 11개 · 마지막 수정 2분 전": 1,
+  "기법": 1,
+  "결과": 1,
+  "이력": 1,
+  "+": 2,
+  "새 기법 만들기": 1,
+  "코드창과 대화창이 열립니다 — AI가 한 번에 하나씩 물어보며 원하는 알고리즘을 코드로 씁니다": 1,
+  "대화로 시작": 1,
+  "기법 11개": 1,
+  "처음 있던 10개와 내가 만든 1개를 구분하지 않습니다": 1,
+  "분류 전체 · 상태 전체": 1,
+  "20-60 골든크로스": 1,
+  "추세": 3,
+  "실매매 적용 중": 1,
+  "20일선이 60일선을 위로 뚫으면 사고, 아래로 뚫으면 팝니다.": 1,
+  "v7 · 08-30 검증 · 거래 41": 1,
+  "키우미 적용 중": 1,
+  "수정": 11,
+  "볼린저 하단 반등": 1,
+  "평균회귀": 3,
+  "검증됨": 9,
+  "가격이 하단 밴드를 찍고 돌아설 때 삽니다.": 1,
+  "v3 · 08-27 검증 · 거래 66": 1,
+  "20일 신고가 돌파": 1,
+  "돌파": 4,
+  "직전 20봉 최고가를 종가로 넘기면 삽니다.": 1,
+  "v2 · 08-22 검증 · 거래 38": 1,
+  "RSI 과매도 반전": 1,
+  "RSI가 30 아래로 갔다가 다시 올라오면 삽니다.": 1,
+  "v4 · 08-19 검증 · 거래 52": 1,
+  "MACD 시그널 교차": 1,
+  "MACD가 시그널선을 위로 지날 때 삽니다.": 1,
+  "v2 · 08-15 검증 · 거래 44": 1,
+  "이격도 회귀": 1,
+  "20일선에서 너무 벌어지면 되돌림을 노립니다.": 1,
+  "v1 · 08-11 검증 · 거래 71": 1,
+  "거래량 급증 추격": 1,
+  "수급": 1,
+  "평균 거래량의 3배가 터진 날 종가에 붙습니다.": 1,
+  "v3 · 08-08 검증 · 거래 29": 1,
+  "갭 상승 눌림 매수": 1,
+  "갭으로 뛴 뒤 첫 눌림에서 삽니다.": 1,
+  "v2 · 08-04 검증 · 거래 33": 1,
+  "5-20 단기 교차": 1,
+  "짧은 두 이동평균의 교차만 봅니다.": 1,
+  "v5 · 07-31 검증 · 거래 88": 1,
+  "변동성 돌파": 1,
+  "전일 변동폭의 절반을 넘으면 그날 삽니다.": 1,
+  "v2 · 07-28 검증 · 거래 57": 1,
+  "내 ATR 돌파 + 손절": 1,
+  "수정 중": 1,
+  "20일 신고가 돌파에 ATR 2배 손절을 붙인 내 기법.": 1,
+  "v3 초안 · 방금 대화로 바뀜": 1,
+  "기법을 누르면 오른쪽 대화가 그 기법을 다룹니다. 실행·배포·주문은 여기서도 사람이 누르는 버튼입니다.": 1,
+  "기법에게 묻기": 1,
+  "고른 기법을 다룹니다": 1,
+  "?": 1,
+  "아직 고른 기법이 없습니다": 1,
+  "왼쪽 목록에서 기법을 누르면 그 기법에 대해 묻고 고칠 수 있어요. 새로 만들려면 [+ 새 기법 만들기]를 누르세요.": 1,
+  "이런 걸 물어볼 수 있어요": 1,
+  "이 기법은 다른 것과 뭐가 다른가요?": 1,
+  "왜 최근 두 달 동안 한 번도 안 샀죠?": 1,
+  "손절을 ATR 2배로 바꾸고 싶어요": 1,
+  "무엇이든 물어보세요": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "1aede1733f8bb57b2abb3b5a579aedb03d03faaefcb62639a1984745c59cc311"
+}

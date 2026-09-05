@@ -1,0 +1,2956 @@
+{
+ "board_id": "2UN6-1",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+ "width": 1440,
+ "height": 960,
+ "texts": [
+  {
+   "id": "2UQY-1",
+   "text": "조건검색",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UQX-1",
+   "text": "장중 · 09:42",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UQU-1",
+   "text": "저장 조건식 3건 · 실시간 감시",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UQS-1",
+   "text": "업종",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UQQ-1",
+   "text": "종목찾기",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UQO-1",
+   "text": "관심",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UQM-1",
+   "text": "테마",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UQK-1",
+   "text": "시장·VI",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UQI-1",
+   "text": "조건검색",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UQE-1",
+   "text": "조건식",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UQC-1",
+   "text": "전체 3건",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "32OY-0",
+   "text": "모드",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "모드"
+   ]
+  },
+  {
+   "id": "32P0-0",
+   "text": "실시간 감시",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "실시간 감시"
+   ]
+  },
+  {
+   "id": "32P2-0",
+   "text": "1회 조회",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "1회 조회"
+   ]
+  },
+  {
+   "id": "2UQ8-1",
+   "text": "알림 켜짐",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UQ6-1",
+   "text": "KRX 전체",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UQ4-1",
+   "text": "오늘 감지 순",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UQ1-1",
+   "text": "● 실시간 감시 중",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UQ0-1",
+   "text": "조건식 3개",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34NG-0",
+   "text": "거래대금 급증",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "조건식 카드 밴드",
+    "조건 01",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34NH-0",
+   "text": "4건",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "조건식 카드 밴드",
+    "조건 01",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3SAL-0",
+   "text": "조건 01",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "조건식 카드 밴드",
+    "조건 01",
+    "조건 01 · 선택"
+   ]
+  },
+  {
+   "id": "3SAM-0",
+   "text": "선택",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "조건식 카드 밴드",
+    "조건 01",
+    "조건 01 · 선택"
+   ]
+  },
+  {
+   "id": "34NK-0",
+   "text": "실시간 감시 · 알림 켜짐",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "조건식 카드 밴드",
+    "조건 01",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34NN-0",
+   "text": "감시 중",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "조건식 카드 밴드",
+    "조건 01",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34NQ-0",
+   "text": "20일 신고가",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "조건식 카드 밴드",
+    "조건 02",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34NR-0",
+   "text": "2건",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "조건식 카드 밴드",
+    "조건 02",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34NS-0",
+   "text": "조건 02",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "조건식 카드 밴드",
+    "조건 02"
+   ]
+  },
+  {
+   "id": "34NU-0",
+   "text": "실시간 감시 · 알림 켜짐",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "조건식 카드 밴드",
+    "조건 02",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34NX-0",
+   "text": "감시 중",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "조건식 카드 밴드",
+    "조건 02",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34O0-0",
+   "text": "골든크로스 5·20",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "조건식 카드 밴드",
+    "조건 03",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34O1-0",
+   "text": "0건",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "조건식 카드 밴드",
+    "조건 03",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34O2-0",
+   "text": "조건 03",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "조건식 카드 밴드",
+    "조건 03"
+   ]
+  },
+  {
+   "id": "34O4-0",
+   "text": "장 마감 후 판정",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "조건식 카드 밴드",
+    "조건 03",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34O7-0",
+   "text": "중지됨",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "조건식 카드 밴드",
+    "조건 03",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34O9-0",
+   "text": "감지 시간",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "열 헤더"
+   ]
+  },
+  {
+   "id": "34OA-0",
+   "text": "종목",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "열 헤더"
+   ]
+  },
+  {
+   "id": "34OB-0",
+   "text": "조건식",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "열 헤더"
+   ]
+  },
+  {
+   "id": "34OC-0",
+   "text": "신호",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "열 헤더"
+   ]
+  },
+  {
+   "id": "34OD-0",
+   "text": "방향",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "열 헤더"
+   ]
+  },
+  {
+   "id": "34OE-0",
+   "text": "현재가",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "열 헤더"
+   ]
+  },
+  {
+   "id": "34OF-0",
+   "text": "감지 후 등락",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "열 헤더"
+   ]
+  },
+  {
+   "id": "34OI-0",
+   "text": "09:41:12",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:41:12 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34OJ-0",
+   "text": "오늘 6번째",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:41:12 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34OL-0",
+   "text": "한미반도체",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:41:12 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34OM-0",
+   "text": "042700",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:41:12 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34OO-0",
+   "text": "거래대금 급증",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:41:12 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34OP-0",
+   "text": "조건 01",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:41:12 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34OS-0",
+   "text": "편입",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:41:12 한미반도체",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34OV-0",
+   "text": "매수",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:41:12 한미반도체",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34OX-0",
+   "text": "197,400",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:41:12 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34OY-0",
+   "text": "감지가 193,500",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:41:12 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34OZ-0",
+   "text": "+2.02%",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:41:12 한미반도체"
+   ]
+  },
+  {
+   "id": "34P2-0",
+   "text": "09:38:24",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:38:24 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34P3-0",
+   "text": "오늘 5번째",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:38:24 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34P5-0",
+   "text": "삼성전자",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:38:24 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34P6-0",
+   "text": "005930",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:38:24 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34P8-0",
+   "text": "거래대금 급증",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:38:24 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34P9-0",
+   "text": "조건 01",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:38:24 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34PC-0",
+   "text": "편입",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:38:24 삼성전자",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34PF-0",
+   "text": "매수",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:38:24 삼성전자",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34PH-0",
+   "text": "150,850",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:38:24 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34PI-0",
+   "text": "감지가 150,220",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:38:24 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34PJ-0",
+   "text": "+0.42%",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:38:24 삼성전자"
+   ]
+  },
+  {
+   "id": "34PM-0",
+   "text": "09:33:08",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:33:08 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34PN-0",
+   "text": "오늘 4번째",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:33:08 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34PP-0",
+   "text": "현대차",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:33:08 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34PQ-0",
+   "text": "005380",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:33:08 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34PS-0",
+   "text": "거래대금 급증",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:33:08 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34PT-0",
+   "text": "조건 01",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:33:08 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34PW-0",
+   "text": "편입",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:33:08 현대차",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34PZ-0",
+   "text": "매수",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:33:08 현대차",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34Q1-0",
+   "text": "232,500",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:33:08 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34Q2-0",
+   "text": "감지가 231,780",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:33:08 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34Q3-0",
+   "text": "+0.31%",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:33:08 현대차"
+   ]
+  },
+  {
+   "id": "34Q6-0",
+   "text": "09:28:05",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:28:05 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34Q7-0",
+   "text": "오늘 3번째",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:28:05 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34Q9-0",
+   "text": "SK하이닉스",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:28:05 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34QA-0",
+   "text": "000660",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:28:05 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34QC-0",
+   "text": "20일 신고가",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:28:05 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34QD-0",
+   "text": "조건 02",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:28:05 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34QG-0",
+   "text": "편입",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:28:05 SK하이닉스",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34QJ-0",
+   "text": "매수",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:28:05 SK하이닉스",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34QL-0",
+   "text": "198,400",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:28:05 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34QM-0",
+   "text": "감지가 194,400",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:28:05 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34QN-0",
+   "text": "+2.06%",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:28:05 SK하이닉스"
+   ]
+  },
+  {
+   "id": "34QQ-0",
+   "text": "09:19:47",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:19:47 KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34QR-0",
+   "text": "오늘 2번째",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:19:47 KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34QT-0",
+   "text": "KODEX 200",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:19:47 KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34QU-0",
+   "text": "069500",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:19:47 KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34QW-0",
+   "text": "거래대금 급증",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:19:47 KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34QX-0",
+   "text": "조건 01",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:19:47 KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34R0-0",
+   "text": "이탈",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:19:47 KODEX 200",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34R3-0",
+   "text": "매도",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:19:47 KODEX 200",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34R5-0",
+   "text": "48,360",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:19:47 KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34R6-0",
+   "text": "감지가 48,254",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:19:47 KODEX 200",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34R7-0",
+   "text": "+0.22%",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:19:47 KODEX 200"
+   ]
+  },
+  {
+   "id": "34RA-0",
+   "text": "09:07:31",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:07:31 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34RB-0",
+   "text": "오늘 1번째",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:07:31 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34RD-0",
+   "text": "한미반도체",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:07:31 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34RE-0",
+   "text": "042700",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:07:31 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34RG-0",
+   "text": "20일 신고가",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:07:31 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34RH-0",
+   "text": "조건 02",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:07:31 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34RK-0",
+   "text": "편입",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:07:31 한미반도체",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34RN-0",
+   "text": "매수",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:07:31 한미반도체",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34RP-0",
+   "text": "197,400",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:07:31 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34RQ-0",
+   "text": "감지가 189,500",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:07:31 한미반도체",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34RR-0",
+   "text": "+4.17%",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "09:07:31 한미반도체"
+   ]
+  },
+  {
+   "id": "34RT-0",
+   "text": "오늘 감지 6건 전체 표시 · 추가 없음 · 이어보기 기준 09:07:31",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "표 푸터"
+   ]
+  },
+  {
+   "id": "34RW-0",
+   "text": "조건 수정",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "표 푸터",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "34RY-0",
+   "text": "새 조건식",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "조건식·감지 표",
+    "표 푸터",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2USD-1",
+   "text": "한미반도체 — 감지 근거",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2USE-1",
+   "text": "09:41 감지",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2USG-1",
+   "text": "5분 거래대금",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2USH-1",
+   "text": "842억 · 평균 3.1배",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2USJ-1",
+   "text": "체결강도",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2USK-1",
+   "text": "124.8%",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2USM-1",
+   "text": "감지 시 가격",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2USN-1",
+   "text": "193,500",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UST-1",
+   "text": "관심에 추가",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2USV-1",
+   "text": "차트 열기",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3H8F-0",
+   "text": "감지 이력",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "감지 이력",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3H8G-0",
+   "text": "최근 3건",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "감지 이력",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3H8J-0",
+   "text": "09:41",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "감지 이력",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3H8K-0",
+   "text": "한미반도체",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "감지 이력",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3H8L-0",
+   "text": "거래대금 급증",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "감지 이력",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3H8O-0",
+   "text": "09:38",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "감지 이력",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3H8P-0",
+   "text": "삼성전자",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "감지 이력",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3H8Q-0",
+   "text": "거래대금 급증",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "감지 이력",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3H8T-0",
+   "text": "09:33",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "감지 이력",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3H8U-0",
+   "text": "현대차",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "감지 이력",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "3H8V-0",
+   "text": "거래대금 급증",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "감지 이력",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33HR-0",
+   "text": "감시 현황",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "감시 현황",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33HS-0",
+   "text": "조건식 3개",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "감시 현황",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33HU-0",
+   "text": "감시 중",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "감시 현황",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33HV-0",
+   "text": "2건",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "감시 현황",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33HX-0",
+   "text": "중지",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "감시 현황",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33HY-0",
+   "text": "1건",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "감시 현황",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33I0-0",
+   "text": "오늘 감지",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "감시 현황",
+    "Frame"
+   ]
+  },
+  {
+   "id": "33I1-0",
+   "text": "6건",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Frame",
+    "감시 현황",
+    "Frame"
+   ]
+  },
+  {
+   "id": "2UNB-1",
+   "text": "● 조건 감지 실시간 갱신 중",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "User Status Footer"
+   ]
+  },
+  {
+   "id": "32J6-0",
+   "text": "마지막 반영 09:42:18",
+   "path": [
+    "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+    "Discovery Root · 조건검색",
+    "Explorer Card Surface",
+    "User Status Footer"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "2UN6-1",
+   "name": "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+   "component": "Frame",
+   "w": 1440,
+   "h": 960,
+   "depth": 0
+  },
+  {
+   "id": "2UN7-1",
+   "name": "Discovery Root · 조건검색",
+   "component": "Frame",
+   "w": 1440,
+   "h": 960,
+   "depth": 1
+  },
+  {
+   "id": "2UN8-1",
+   "name": "Explorer Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 880,
+   "depth": 2
+  },
+  {
+   "id": "2UQF-1",
+   "name": "Header and Capability Navigation",
+   "component": "Frame",
+   "w": 0,
+   "h": 112,
+   "depth": 3
+  },
+  {
+   "id": "2UQT-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2UQV-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UQW-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "2UQG-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2UQR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UQP-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UQN-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UQL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UQJ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UQH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UPY-1",
+   "name": "Ranking Query Controls",
+   "component": "Frame",
+   "w": 0,
+   "h": 92,
+   "depth": 3
+  },
+  {
+   "id": "2UQ2-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2UQD-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UQB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "32OX-0",
+   "name": "모드",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "32OZ-0",
+   "name": "실시간 감시",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "32P1-0",
+   "name": "1회 조회",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UQ7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UQ5-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UQ3-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2UPZ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2UNC-1",
+   "name": "Ranking Workspace",
+   "component": "Frame",
+   "w": 0,
+   "h": 612,
+   "depth": 3
+  },
+  {
+   "id": "34NC-0",
+   "name": "조건식·감지 표",
+   "component": "Frame",
+   "w": 880,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "34ND-0",
+   "name": "조건식 카드 밴드",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "34NE-0",
+   "name": "조건 01",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34NF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3SAK-0",
+   "name": "조건 01 · 선택",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34NJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34NL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "34NM-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 5,
+   "h": 5,
+   "depth": 9
+  },
+  {
+   "id": "34NO-0",
+   "name": "조건 02",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34NP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34NT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34NV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "34NW-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 5,
+   "h": 5,
+   "depth": 9
+  },
+  {
+   "id": "34NY-0",
+   "name": "조건 03",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34NZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34O3-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34O5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 8
+  },
+  {
+   "id": "34O6-0",
+   "name": "Rectangle",
+   "component": "Rectangle",
+   "w": 5,
+   "h": 5,
+   "depth": 9
+  },
+  {
+   "id": "34O8-0",
+   "name": "열 헤더",
+   "component": "Frame",
+   "w": 0,
+   "h": 50,
+   "depth": 5
+  },
+  {
+   "id": "34OG-0",
+   "name": "09:41:12 한미반도체",
+   "component": "Frame",
+   "w": 0,
+   "h": 62,
+   "depth": 5
+  },
+  {
+   "id": "34OH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34OK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34ON-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34OQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 88,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34OR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34OT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 76,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34OU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34OW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34P0-0",
+   "name": "09:38:24 삼성전자",
+   "component": "Frame",
+   "w": 0,
+   "h": 62,
+   "depth": 5
+  },
+  {
+   "id": "34P1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34P4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34P7-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34PA-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 88,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34PB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34PD-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 76,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34PE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34PG-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34PK-0",
+   "name": "09:33:08 현대차",
+   "component": "Frame",
+   "w": 0,
+   "h": 62,
+   "depth": 5
+  },
+  {
+   "id": "34PL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34PO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34PR-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34PU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 88,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34PV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34PX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 76,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34PY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34Q0-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34Q4-0",
+   "name": "09:28:05 SK하이닉스",
+   "component": "Frame",
+   "w": 0,
+   "h": 62,
+   "depth": 5
+  },
+  {
+   "id": "34Q5-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34Q8-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34QB-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34QE-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 88,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34QF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34QH-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 76,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34QI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34QK-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34QO-0",
+   "name": "09:19:47 KODEX 200",
+   "component": "Frame",
+   "w": 0,
+   "h": 62,
+   "depth": 5
+  },
+  {
+   "id": "34QP-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34QS-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34QV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34QY-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 88,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34QZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34R1-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 76,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34R2-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34R4-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34R8-0",
+   "name": "09:07:31 한미반도체",
+   "component": "Frame",
+   "w": 0,
+   "h": 62,
+   "depth": 5
+  },
+  {
+   "id": "34R9-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 96,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34RC-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34RF-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 150,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34RI-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 88,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34RJ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34RL-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 76,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34RM-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34RO-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 110,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34RS-0",
+   "name": "표 푸터",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "34RU-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "34RV-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "34RX-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "2USB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 478,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "2USC-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2USF-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 5
+  },
+  {
+   "id": "2USI-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 5
+  },
+  {
+   "id": "2USL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 34,
+   "depth": 5
+  },
+  {
+   "id": "2USR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "2USS-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 42,
+   "depth": 6
+  },
+  {
+   "id": "2USU-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 42,
+   "depth": 6
+  },
+  {
+   "id": "3H8D-0",
+   "name": "감지 이력",
+   "component": "Frame",
+   "w": 426,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "3H8E-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 38,
+   "depth": 6
+  },
+  {
+   "id": "3H8H-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "3H8I-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3H8M-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "3H8N-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "3H8R-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "3H8S-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 7
+  },
+  {
+   "id": "33HP-0",
+   "name": "감시 현황",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "33HQ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "33HT-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 24,
+   "depth": 6
+  },
+  {
+   "id": "33HW-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 24,
+   "depth": 6
+  },
+  {
+   "id": "33HZ-0",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 24,
+   "depth": 6
+  },
+  {
+   "id": "2UN9-1",
+   "name": "User Status Footer",
+   "component": "Frame",
+   "w": 0,
+   "h": 64,
+   "depth": 3
+  }
+ ],
+ "text_multiset": {
+  "조건검색": 2,
+  "장중 · 09:42": 1,
+  "저장 조건식 3건 · 실시간 감시": 1,
+  "업종": 1,
+  "종목찾기": 1,
+  "관심": 1,
+  "테마": 1,
+  "시장·VI": 1,
+  "조건식": 2,
+  "전체 3건": 1,
+  "모드": 1,
+  "실시간 감시": 1,
+  "1회 조회": 1,
+  "알림 켜짐": 1,
+  "KRX 전체": 1,
+  "오늘 감지 순": 1,
+  "● 실시간 감시 중": 1,
+  "조건식 3개": 2,
+  "거래대금 급증": 8,
+  "4건": 1,
+  "조건 01": 5,
+  "선택": 1,
+  "실시간 감시 · 알림 켜짐": 2,
+  "감시 중": 3,
+  "20일 신고가": 3,
+  "2건": 2,
+  "조건 02": 3,
+  "골든크로스 5·20": 1,
+  "0건": 1,
+  "조건 03": 1,
+  "장 마감 후 판정": 1,
+  "중지됨": 1,
+  "감지 시간": 1,
+  "종목": 1,
+  "신호": 1,
+  "방향": 1,
+  "현재가": 1,
+  "감지 후 등락": 1,
+  "09:41:12": 1,
+  "오늘 6번째": 1,
+  "한미반도체": 3,
+  "042700": 2,
+  "편입": 5,
+  "매수": 5,
+  "197,400": 2,
+  "감지가 193,500": 1,
+  "+2.02%": 1,
+  "09:38:24": 1,
+  "오늘 5번째": 1,
+  "삼성전자": 2,
+  "005930": 1,
+  "150,850": 1,
+  "감지가 150,220": 1,
+  "+0.42%": 1,
+  "09:33:08": 1,
+  "오늘 4번째": 1,
+  "현대차": 2,
+  "005380": 1,
+  "232,500": 1,
+  "감지가 231,780": 1,
+  "+0.31%": 1,
+  "09:28:05": 1,
+  "오늘 3번째": 1,
+  "SK하이닉스": 1,
+  "000660": 1,
+  "198,400": 1,
+  "감지가 194,400": 1,
+  "+2.06%": 1,
+  "09:19:47": 1,
+  "오늘 2번째": 1,
+  "KODEX 200": 1,
+  "069500": 1,
+  "이탈": 1,
+  "매도": 1,
+  "48,360": 1,
+  "감지가 48,254": 1,
+  "+0.22%": 1,
+  "09:07:31": 1,
+  "오늘 1번째": 1,
+  "감지가 189,500": 1,
+  "+4.17%": 1,
+  "오늘 감지 6건 전체 표시 · 추가 없음 · 이어보기 기준 09:07:31": 1,
+  "조건 수정": 1,
+  "새 조건식": 1,
+  "한미반도체 — 감지 근거": 1,
+  "09:41 감지": 1,
+  "5분 거래대금": 1,
+  "842억 · 평균 3.1배": 1,
+  "체결강도": 1,
+  "124.8%": 1,
+  "감지 시 가격": 1,
+  "193,500": 1,
+  "관심에 추가": 1,
+  "차트 열기": 1,
+  "감지 이력": 1,
+  "최근 3건": 1,
+  "09:41": 1,
+  "09:38": 1,
+  "09:33": 1,
+  "감시 현황": 1,
+  "중지": 1,
+  "1건": 1,
+  "오늘 감지": 1,
+  "6건": 1,
+  "● 조건 감지 실시간 갱신 중": 1,
+  "마지막 반영 09:42:18": 1
+ },
+ "exported_at": "2026-09-05",
+ "tree_summary_sha256": "23311483c6e46d19bb9903bf212c4fe3a5ba9952db01fba2bb6ef69cbf1b0035"
+}
