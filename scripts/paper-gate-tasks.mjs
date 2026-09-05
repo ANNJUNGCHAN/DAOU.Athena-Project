@@ -18,12 +18,19 @@
  * 판정을 하지 않는다. 리포트가 실패라 적은 것만 옮긴다. 리포트를 다시 읽어 「이건 사실
  * 통과다」라고 고쳐 쓰기 시작하면 게이트가 둘이 되고 둘은 반드시 어긋난다.
  *
- * ── 실패 코드 무게 (정렬 2키)
+ * ── 실패 코드 무게 (정렬 1키)
  * 설계서 §6.4는 네 개(route_missing > phrase_missing > structure_mismatch > overflow_x)의
  * 순서만 정했다. 실제 세 게이트가 뱉는 코드는 15종이라 그 상대 순서를 지키면서 나머지를
  * 끼워 넣었다. 큰 원칙: **도달 자체가 없는 것 > 문구가 없는 것 > 구조가 다른 것 >
  * 기하가 넘치는 것 > 값이 낡은 것**. 값 부류(카드미니)가 맨 뒤인 것은 설계서 §5.2대로
  * `paper_cross_board`가 0이 되기 전에는 대장을 못 고치기 때문이다.
+ *
+ * ── 정렬 키를 설계서와 바꿨다 (무게가 페이지 보드 수보다 앞선다)
+ * §6.4는 1키를 「같은 페이지 보드 수 내림차순」으로 적었다. 실측 311장을 그 순서로
+ * 세우면 H-1 카드미니 171장이 앞을 다 채우고 `route_missing` 96장이 뒤로 밀린다.
+ * 그런데 카드미니 어긋남은 §5.2가 「이 게이트는 보고만 한다」고 못 박은 부류라, 그
+ * 배치를 랄프에 넘기면 아무도 못 고칠 작업 20개를 받는다. 무게를 1키로 올려 §6.4가
+ * 노린 「한 파일을 여는 김에 여러 장을 닫는다」는 **같은 코드 안에서** 살렸다.
  *
  * ── files 추론
  * 코드마다 후보 경로를 만들고 **저장소에 실재하는 것만 남긴다.** 없는 경로를 적으면
@@ -368,12 +375,12 @@ export function buildTasks({ reports, manifest, limit = null, exists = (file) =>
   const weightOf = (record) => Math.max(...record.failures.map((item) => codeSpec(item.code).weight));
 
   records.sort((a, b) => {
+    const byWeight = weightOf(b) - weightOf(a);
+    if (byWeight) return byWeight;
     const byPage = (pageCount.get(b.page ?? 'unknown') ?? 0) - (pageCount.get(a.page ?? 'unknown') ?? 0);
     if (byPage) return byPage;
     const pageName = String(a.page ?? '').localeCompare(String(b.page ?? ''));
     if (pageName) return pageName;
-    const byWeight = weightOf(b) - weightOf(a);
-    if (byWeight) return byWeight;
     const byNumber = leadingNumber(a.name) - leadingNumber(b.name);
     if (byNumber) return byNumber;
     return a.board.localeCompare(b.board);
