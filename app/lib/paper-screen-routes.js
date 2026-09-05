@@ -4,7 +4,7 @@
 //
 // 매니페스트 role==="screen" 104장이 결국 전부 여기 있어야 한다. 없는 보드는 미구현 실패다 —
 // 「도달 절차가 없는 보드는 실패한다」가 게이트 2의 핵심이라, 표가 곧 남은 작업 목록이 된다.
-// 지금은 초기 8장(에이전트 4 + 화면 4)이고, 래칫(§4.5)이 이 8장을 잠근 뒤 저작이 이어진다.
+// 지금은 13장(에이전트 4 + 화면 4 + 부팅 5)이고, 래칫(§4.5)이 잠근 뒤 저작이 이어진다.
 //
 // ── reach 어휘는 닫혀 있다
 // 임의 JS를 표에 심으면 표가 곧 프로브가 되어 유지가 안 된다. STEP_KINDS만 허용하고,
@@ -66,6 +66,11 @@ const STEP_KINDS = Object.freeze({
   wait: Object.freeze(['ms']),
   // settle    (인자 없음) — rAF 2회 (verify.js responsiveSettle)
   settle: Object.freeze([]),
+  // boot-hold chars — 부팅 창을 `?bootHoldChars=N`으로 다시 읽어 N글자에서 세운다
+  //                    (chat.js의 같은 이름 블록, 셸 창의 shellHandoff=1과 같은 문법).
+  //                    부팅은 화면이 아니라 시간축이라 도달한 뒤에 되돌아갈 클릭이 없다 —
+  //                    이 한 마디가 없으면 부팅 다섯 단계가 전부 마지막 프레임으로 수렴한다.
+  'boot-hold': Object.freeze(['chars']),
   // eval      js,why — 탈출구. why가 없으면 라우트표 린트가 거절한다
   eval: Object.freeze(['js', 'why']),
 });
@@ -114,6 +119,78 @@ const PAPER_ACCOUNTS = Object.freeze({
 });
 
 const ROUTES = Object.freeze([
+  // ---------- 부팅 5장 (1-0) ----------
+  // 부팅 02~05는 한 애니메이션의 시간 단계라 서로를 가르는 것은 **찍힌 글자 수**뿐이다.
+  // 원장 texts도 그것뿐이다: 'ATHENA'(폭 guide) · 이미 찍힌 조각 · 커서 '|'. 그래서 이
+  // 넷은 문구가 아니라 structure가 판정을 진다 — .boot-name-char 개수가 0·2·4·6으로
+  // 갈린다(chat.js 240 + (i+1)*160ms 슬롯 여섯 번). 02·05는 원장에 문구가 둘뿐이라
+  // 3개 하한을 paper-screen-routes.test.js가 사유와 함께 예외 처리했고, 그 대가로
+  // structure를 셋씩 실었다.
+  {
+    board: '16OD-2', // 02 · 부팅 — READY · 0–240ms
+    window: 'boot',
+    reach: [{ do: 'boot-hold', chars: 0 }, { do: 'settle' }],
+    root: '#boot',
+    // 'ATHENA'는 앱에서 색이 투명한 폭 guide다(chat.css .boot-base — 사용자 결정
+    // "글자 뒤에 회색 문자가 비치지 않는다"). 가시 텍스트로는 잡히지만 눈에는
+    // 안 보이므로, 이 보드에서 실제로 무게를 지는 것은 아래 structure 셋이다.
+    phrases: ['ATHENA', '|'],
+    structure: [
+      { what: 'absent', selector: '.boot-name-char' }, // 아직 한 글자도 안 찍혔다
+      { what: 'count', selector: '.boot-logo', equals: 1 }, // 키움증권 CI
+      { what: 'count', selector: '.boot-cursor', equals: 1 },
+    ],
+  },
+  {
+    board: '16OJ-2', // 03 · 부팅 — TYPE A→AT · 240–560ms
+    window: 'boot',
+    reach: [{ do: 'boot-hold', chars: 2 }, { do: 'settle' }],
+    root: '#boot',
+    // Paper는 남은 글자를 'HENA'로 따로 그리고 앱은 'ATHENA' 폭 guide 한 덩이로
+    // 그린다 — 같은 픽셀이라 문구로는 갈리지 않는다. 갈리는 것은 찍힌 두 글자다.
+    phrases: ['AT', 'HENA', '|'],
+    structure: [
+      { what: 'count', selector: '.boot-name-char', equals: 2 },
+      { what: 'count', selector: '.boot-logo', equals: 1 },
+    ],
+  },
+  {
+    board: '16OQ-2', // 04 · 부팅 — TYPE ATH→ATHE · 560–880ms
+    window: 'boot',
+    reach: [{ do: 'boot-hold', chars: 4 }, { do: 'settle' }],
+    root: '#boot',
+    phrases: ['ATHE', 'NA', '|'],
+    structure: [
+      { what: 'count', selector: '.boot-name-char', equals: 4 },
+      { what: 'count', selector: '.boot-logo', equals: 1 },
+    ],
+  },
+  {
+    board: '16OX-2', // 05 · 부팅 — COMPLETE · 880–1440ms
+    window: 'boot',
+    reach: [{ do: 'boot-hold', chars: 6 }, { do: 'settle' }],
+    root: '#boot',
+    phrases: ['ATHENA', '|'],
+    structure: [
+      { what: 'count', selector: '.boot-name-char', equals: 6 }, // ATHENA가 다 찍혔다
+      { what: 'count', selector: '.boot-logo', equals: 1 },
+      { what: 'count', selector: '.boot-cursor', equals: 1 },
+    ],
+  },
+  {
+    board: '16P3-2', // 06 · 부팅 — DIRECT SHELL EXPAND · 1440–1920ms
+    window: 'shell',
+    // 부팅이 끝나면 완성된 조판이 셸로 펼쳐진다 — 러너가 읽은 셸 창이 곧 그 상태다.
+    reach: [{ do: 'settle' }],
+    root: '#shell',
+    // Paper가 이 보드에 채운 카드·대화·에이전트 턴은 전부 데이터라 문구가 못 된다.
+    // 사이드바 첫 행은 Paper가 「새 채팅」, 앱이 「새 대화」로 갈리는데(보드 12·29도
+    // 같다) 어느 쪽이 정본인지는 사이드바 보드가 정할 일이라 여기서는 안 적는다.
+    phrases: ['그래프', '에이전트', '플러그인'],
+    // Paper의 프레임 이름이 그대로 계약이다 — 「Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)」.
+    structure: [{ what: 'count', selector: '.shell-region', equals: 3 }],
+  },
+
   // ---------- 에이전트 4장 (A-2) ----------
   {
     board: 'ARM-0', // 02 · 에이전트 — 알람 센터 · 라이브 관제

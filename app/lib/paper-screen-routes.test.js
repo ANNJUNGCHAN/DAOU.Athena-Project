@@ -32,7 +32,21 @@ test('every route targets a distinct board the manifest calls a screen', () => {
 });
 
 test('every route renders in a window the app actually has', () => {
-  for (const route of ROUTES) assert.ok(['shell', 'orb'].includes(route.window), route.board);
+  // boot은 부팅 단계 보드가 사는 창이다(main.js createWindows의 bootWin) — 부팅이
+  // 끝나면 셸로 넘어가며 사라지므로, 그 창을 쓰는 라우트는 boot-hold로 세워 둔다.
+  for (const route of ROUTES) assert.ok(['boot', 'shell', 'orb'].includes(route.window), route.board);
+});
+
+test('a route that lives in the boot window holds the sequence at one stage', () => {
+  for (const route of ROUTES.filter((r) => r.window === 'boot')) {
+    const hold = route.reach.filter((step) => step.do === 'boot-hold');
+    assert.equal(hold.length, 1, `${route.board}: 부팅 창은 단계를 세워야 잰다`);
+    assert.ok(Number.isInteger(hold[0].chars) && hold[0].chars >= 0 && hold[0].chars <= 6,
+      `${route.board}: 세울 글자 수는 0~6이다 ('ATHENA')`);
+  }
+  // 세우는 통로는 라우트표만의 발명이 아니라 앱이 실제로 읽는 파라미터다.
+  assert.match(fs.readFileSync(path.join(__dirname, '..', 'chat.js'), 'utf8'),
+    /bootHoldChars=\(\[0-6\]\)/);
 });
 
 // ---------- reach 어휘가 닫혀 있다 ----------
@@ -107,9 +121,30 @@ test('every phrase survived the generator, so none of them is a data value', () 
   }
 });
 
+// 원장이 그 보드에 그린 텍스트가 애초에 둘뿐인 자리. 부팅 02·05는 'ATHENA'(폭
+// guide)와 커서 '|'가 전부라, 3개를 채우려면 없는 문구를 지어내는 수밖에 없다.
+// 대신 이 둘은 structure를 2개 이상 실어 공허 통과를 막는다(아래 두 번째 단언).
+const PHRASE_FLOOR_EXCEPTIONS = new Map([
+  ['16OD-2', '원장 texts가 ATHENA·| 둘뿐이다 (02 · 부팅 — READY)'],
+  ['16OX-2', '원장 texts가 ATHENA·| 둘뿐이다 (05 · 부팅 — COMPLETE)'],
+]);
+
+test('the only routes under three phrases are the ones Paper drew with two texts', () => {
+  for (const [board, why] of PHRASE_FLOOR_EXCEPTIONS) {
+    const texts = new Set(ledger(board).texts.map((t) => String(t.text).trim()));
+    assert.ok(texts.size < 3, `${board}: 원장에 문구가 ${texts.size}개나 있다 — ${why}가 거짓이다`);
+    const route = ROUTES.find((r) => r.board === board);
+    if (route) {
+      assert.ok(route.structure.length >= 2,
+        `${board}: 문구를 깎았으면 structure가 최소 2개는 져야 한다`);
+    }
+  }
+});
+
 test('each route carries 3 to 7 phrases', () => {
   for (const route of ROUTES) {
-    assert.ok(route.phrases.length >= 3, `${route.board}: ${route.phrases.length}개는 공허 통과한다`);
+    const floor = PHRASE_FLOOR_EXCEPTIONS.has(route.board) ? 2 : 3;
+    assert.ok(route.phrases.length >= floor, `${route.board}: ${route.phrases.length}개는 공허 통과한다`);
     assert.ok(route.phrases.length <= 7, `${route.board}: ${route.phrases.length}개는 너무 잘 깨진다`);
     assert.equal(new Set(route.phrases).size, route.phrases.length, `${route.board}: 중복 문구`);
   }
