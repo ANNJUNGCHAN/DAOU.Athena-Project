@@ -61,6 +61,35 @@ const APP_PRIMARY_CHART_OPS = new Set([
   'base:ka50082', 'base:ka50083', 'base:ka50091', 'base:ka50092',
 ]);
 
+// 임시 예외 — 호가 사다리·주문 티켓 보드에는 아직 앱 렌더러를 품는 마운트 지점이
+// 없다. 정본은 backend/ref/kiwoom-capability-assignment.json의 capability
+// 'orderbook'(31개)·'order'(12개)이고, 이 두 목록이 그 파일과 어긋나면
+// paper-card-routing.test.js가 깬다. card_title로는 대신할 수 없다 — 실제 값은
+// 신용거래 주문 4종이 '신용거래', 호가 detail 3종이 '시세'라 예외에서 새고,
+// 실시간 접수 통보(base:00)는 계좌 카드인데도 '주문'이라 자기 보드를 잃는다
+// (2026-09-06 전수 대조 실측). 보드가 마운트 지점을 갖추면(계획서 C4) 이 두 집합과
+// preservesAppPrimary 마지막 return을 함께 지운다(그 자리는 false가 된다).
+const APP_PRIMARY_ORDERBOOK_OPS = new Set([
+  'base:0C', 'base:0D', 'base:0E', 'base:ka50101', 'detail:ka10004:after_hours_totals',
+  'detail:ka10004:aggregate_totals', 'detail:ka10004:buy_bid_changes',
+  'detail:ka10004:buy_bid_prices', 'detail:ka10004:buy_bid_quantities',
+  'detail:ka10004:sell_bid_changes', 'detail:ka10004:sell_bid_prices',
+  'detail:ka10004:sell_bid_quantities', 'detail:ka10004:snapshot_time',
+  'detail:ka10007:bid_changes', 'detail:ka10007:bid_prices', 'detail:ka10007:bid_quantities',
+  'detail:ka10007:expected_market', 'detail:ka10007:identity',
+  'detail:ka10007:liquidity_provider', 'detail:ka10007:order_counts',
+  'detail:ka10007:session', 'detail:ka10007:totals', 'detail:ka10087:aggregate_totals',
+  'detail:ka10087:buy_bid_changes', 'detail:ka10087:buy_bid_prices',
+  'detail:ka10087:buy_bid_quantities', 'detail:ka10087:sell_bid_changes',
+  'detail:ka10087:sell_bid_prices', 'detail:ka10087:sell_bid_quantities',
+  'detail:ka10087:snapshot_time', 'detail:ka10087:trading_summary',
+]);
+const APP_PRIMARY_ORDER_OPS = new Set([
+  'base:kt10000', 'base:kt10001', 'base:kt10002', 'base:kt10003', 'base:kt10006',
+  'base:kt10007', 'base:kt10008', 'base:kt10009', 'base:kt50000', 'base:kt50001',
+  'base:kt50002', 'base:kt50003',
+]);
+
 function preservesAppPrimary(envelope) {
   if (!envelope) return false;
   const renderer = typeof envelope.renderer_id === 'string' ? envelope.renderer_id : '';
@@ -68,11 +97,9 @@ function preservesAppPrimary(envelope) {
   // REST 직행 차트 봉투는 renderer_id가 비어 있어도 AITS가 primary다. 보드 HTML을
   // 먼저 붙이면 3초 paint ack를 넘긴다(실앱 live-full QA-CHART 실측).
   if (envelope.canvas_type === 'chart' && !envelope.fell_back) return true;
-  if (APP_PRIMARY_CHART_OPS.has(operationRefOf(envelope))) return true;
-  // 임시 예외 — 호가 사다리·주문 티켓 보드에는 아직 앱 렌더러를 품는 마운트
-  // 지점이 없다. 보드가 그 자리를 갖추면(계획서 C4) 이 두 줄을 지운다.
-  const title = typeof envelope.card_title === 'string' ? envelope.card_title : '';
-  return title === '호가' || title === '주문';
+  const ref = operationRefOf(envelope);
+  if (APP_PRIMARY_CHART_OPS.has(ref)) return true;
+  return APP_PRIMARY_ORDERBOOK_OPS.has(ref) || APP_PRIMARY_ORDER_OPS.has(ref);
 }
 function blockedReason(envelope) {
   return `카드 계약이 없는 키움 응답이다 — ${operationRefOf(envelope)}. 범용 카드로 대체하지 않는다.`;
@@ -81,6 +108,7 @@ function blockedReason(envelope) {
 const __exports = {
   isKiwoomEnvelope, operationRefOf, paperCardRoute, blockedReason, preservesAppPrimary,
   APP_PRIMARY_RENDERERS, APP_PRIMARY_CHART_OPS,
+  APP_PRIMARY_ORDERBOOK_OPS, APP_PRIMARY_ORDER_OPS,
 };
 
 // UMD 각주(2026-08-18 렌더러 격리) — card-kinds.js와 같은 패턴.
