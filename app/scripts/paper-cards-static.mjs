@@ -47,7 +47,9 @@ import { fileURLToPath } from 'node:url';
 import { checkPaperManifest, loadManifest, LEDGER_DIR, CARD_INDEX_PATH } from './paper-manifest-check.mjs';
 
 // 두 층이 같은 파일에 쓰는 병합 규칙은 CJS 한 곳에 있다(마운트 프로브도 이것을 쓴다).
-const { mergeStaticLayer } = createRequire(import.meta.url)('../lib/paper-cards-report.js');
+const require_ = createRequire(import.meta.url);
+const { mergeStaticLayer } = require_('../lib/paper-cards-report.js');
+const { parseTreeRecords } = require_('../lib/paper-tree.js');
 
 const APP_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const REPO_ROOT = path.resolve(APP_DIR, '..');
@@ -73,40 +75,9 @@ export const STATIC_FAILURE_CODES = Object.freeze([
 
 // ---------------------------------------------------------------- 트리 정규형
 
-/**
- * 트리 한 줄의 머리. 뒤따르는 텍스트 내용은 줄을 넘길 수 있으므로 여기서 닫지 않는다 —
- * 원장 추출기는 텍스트 안 개행을 실제 개행으로 적어 한 노드가 여러 줄을 차지한다.
- */
-const RECORD_HEAD = /^( *)(Text|Frame|Rectangle|SVGVisualElement|SVG) "(.*)" \(([^()]+)\) (\d+)×(\d+)(?: (.*))?$/;
-
-/**
- * `.tree.txt` 원문을 레코드 배열로 접는다. 기하(`W×H`)는 여기서 버린다 — 설계서 §8 3번.
- * @returns {{depth:number, kind:string, name:string, id:string, text:string}[]}
- */
-export function parseTreeRecords(raw) {
-  const records = [];
-  for (const line of raw.replace(/\r\n/g, '\n').replace(/\n+$/, '').split('\n')) {
-    const match = line.match(RECORD_HEAD);
-    if (match) {
-      records.push({
-        depth: match[1].length / 2,
-        kind: match[2],
-        name: match[3],
-        id: match[4],
-        text: match[7] ?? '',
-      });
-    } else if (records.length) {
-      records[records.length - 1].text += '\n' + line;
-    }
-  }
-  for (const record of records) {
-    let text = record.text;
-    if (text.startsWith('"') && text.endsWith('"')) text = text.slice(1, -1);
-    // 실제 개행을 두 글자 `\n`으로 접어 두 추출기의 개행 표기를 맞춘다.
-    record.text = text.replace(/\n/g, '\\n');
-  }
-  return records;
-}
+// 파서 본체는 `app/lib/paper-tree.js` 한 곳에 있다 — 카드미니 게이트의 CJS 프로브도
+// 같은 트리를 읽어야 하고, 파서를 복사하면 두 게이트가 서로 다른 트리를 보게 된다.
+export { parseTreeRecords };
 
 /** `rootId` 노드와 그 아래 전부를 잘라 온다. 없으면 null. */
 export function subtreeAt(records, rootId) {
