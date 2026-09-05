@@ -6,7 +6,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const {
   collapsePlan, mountPlan, pairedGroups, nodeIndex, applyPlan, setHidden, isValueSlot,
-  hoistLayout, applyResponsiveHooks, RESPONSIVE_REGIONS, HOISTED_PROPERTIES,
+  hoistLayout, applyResponsiveHooks, RESPONSIVE_REGIONS, HOISTED_PROPERTIES, primaryMountPoint,
   slotValueEntries, realtimeSlotIndex, pairedClosure, realtimePlan, applyRealtimeSlots,
   stateLinksFromMarks, stateControlActivationOwner, wireStateControlActivation,
 } = require('./board-mount');
@@ -24,15 +24,18 @@ const SELECTORS = {
   '[data-paired-source]': (node) => node.dataset.pairedSource !== undefined,
 };
 function attrSelector(selector) {
+  const klass = /^\.([\w-]+)$/.exec(selector);
+  if (klass) return (node) => String(node.className).split(/\s+/).includes(klass[1]);
   const match = /^\[data-([a-z-]+)="([^"]+)"\]$/.exec(selector);
   if (!match) return SELECTORS[selector] || (() => false);
   const key = match[1].replace(/-([a-z])/g, (_, ch) => ch.toUpperCase());
   return (node) => node.dataset[key] === match[2];
 }
 
-function el(dataset = {}, children = []) {
+function el(dataset = {}, children = [], className = '') {
   const node = {
     dataset: { ...dataset },
+    className,
     style: {},
     hidden: false,
     textContent: '',
@@ -1085,4 +1088,26 @@ test('마운트 표면에서 원시 식별자를 실은 data-name만 걷어내�
   assert.equal(RAW_IDENTITY_NAME.test('Quote and Valuation Strip'), false);
   assert.equal(RAW_IDENTITY_NAME.test('base:kt00001'), true);
   assert.equal(RAW_IDENTITY_NAME.test('ka10081'), true);
+});
+
+// ---------- primary: 전문 렌더러가 앉을 자리 ----------
+
+test('primaryMountPoint는 mount_slot을 먼저 보고, 없으면 .bs-primary로 떨어진다', () => {
+  const mount = el({ node: '14P9-2' });
+  const fallback = el({ node: '14PA-2' }, [], 'bs-primary bs-table');
+  const surface = el({}, [mount, fallback]);
+
+  const contract = { primary: { renderer: 'athena-chart', mount_slot: '14P9-2' } };
+  assert.equal(primaryMountPoint(surface, contract), mount);
+  // 계약이 가리키는 노드가 보드에 없으면 표면의 primary 자리로 떨어진다.
+  assert.equal(primaryMountPoint(surface, { primary: { mount_slot: '없는노드' } }), fallback);
+  // mount_slot 없이 renderer만 저작된 보드도 마찬가지다(32S7-0 저작 정본).
+  assert.equal(primaryMountPoint(surface, { primary: { renderer: 'athena-chart', mount_slot: null } }), fallback);
+  assert.equal(primaryMountPoint(surface, null), fallback);
+});
+
+test('primaryMountPoint는 자리가 없으면 지어내지 않는다', () => {
+  const surface = el({}, [el({ node: '14PA-2' })]);
+  assert.equal(primaryMountPoint(surface, { primary: { renderer: 'athena-chart', mount_slot: '14P9-2' } }), null);
+  assert.equal(primaryMountPoint(null, { primary: { renderer: 'athena-chart' } }), null);
 });
