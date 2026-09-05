@@ -151,6 +151,8 @@ body { margin: 0; overflow: hidden; }
   padding: 6px 10px 10px;
 }
 .sidebar-mode-caption {
+  display: flex;
+  justify-content: space-between;
   padding: 2px 8px 6px;
   color: var(--color-k-faint);
   font-family: var(--font-body);
@@ -434,10 +436,14 @@ body { margin: 0; overflow: hidden; }
   background: rgb(255 255 255 / 86%);
   box-shadow: 0 8px 24px rgb(16 19 26 / 16%), inset 0 1px 0 rgb(255 255 255 / 72%);
 }
+/* 항목마다 결과 한 줄이 라벨 아래 붙는다(37번 보드 팝오버 실측: 라벨 15px · 결과 14px). */
 .sidebar-project-menu-item {
   width: 100%;
-  min-height: 32px;
-  padding: 0 10px;
+  min-height: 44px;
+  padding: 6px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
   border: 0;
   border-radius: 8px;
   background: transparent;
@@ -445,6 +451,11 @@ body { margin: 0; overflow: hidden; }
   font: 400 var(--text-sm)/16px var(--font-body);
   text-align: left;
   cursor: pointer;
+}
+.sidebar-project-menu-item-hint {
+  color: rgb(91 98 112 / 88%);
+  font-size: var(--text-2xs);
+  line-height: 14px;
 }
 .sidebar-project-menu-item:hover { background: rgb(16 19 26 / 6%); }
 .sidebar-project-menu-item:disabled {
