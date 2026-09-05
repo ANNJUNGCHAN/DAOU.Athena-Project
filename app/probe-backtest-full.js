@@ -2657,7 +2657,7 @@ async function main() {
     })()`, WAIT_UI);
     await step('K05', '모르는 프리셋은 반영하지 않고 그 사실을 적는다', () => ({
       ok: !!blockedCard
-            && blockedCard.errors.indexOf('no_such_preset는 없는 프리셋입니다') !== -1
+            && blockedCard.errors.indexOf('no_such_preset는 없는 기법입니다') !== -1
             && blockedCard.buttons.length === 0,
       data: blockedCard,
     }));

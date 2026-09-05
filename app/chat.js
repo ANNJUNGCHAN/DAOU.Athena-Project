@@ -2187,7 +2187,7 @@ function pastMessageTurn(message) {
   return line;
 }
 
-function restoreConversation(conv, switched, messages, snapshot) {
+function restoreConversation(switched, messages, snapshot) {
   while ($history.firstChild) $history.removeChild($history.firstChild);
   if (window.AthenaShell && typeof window.AthenaShell.clearCanvases === 'function') {
     window.AthenaShell.clearCanvases();
@@ -2256,7 +2256,7 @@ window.AthenaShell.registerOpenConversation(async (conv) => {
       .catch(() => null);
     messages = res && res.ok && Array.isArray(res.messages) ? res.messages : [];
   }
-  restoreConversation(conv, switched, messages, snapshot);
+  restoreConversation(switched, messages, snapshot);
   // 카드는 main이 저장된 봉투를 같은 페인트 채널로 다시 흘린다 — 캔버스를 비운 뒤라 순서가 맞는다.
   void window.athena.invoke('athena:session-replay-cards', { id: conv.id }).catch(() => {});
   return true;

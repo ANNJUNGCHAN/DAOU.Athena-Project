@@ -107,6 +107,16 @@ function findByClass(node, cls) {
   return found;
 }
 
+function findByTag(node, tag) {
+  const found = [];
+  const walk = (n) => {
+    if (n.tag === tag) found.push(n);
+    (n.children || []).forEach(walk);
+  };
+  walk(node);
+  return found;
+}
+
 function textOf(node) {
   const parts = [];
   const walk = (n) => {
@@ -805,7 +815,7 @@ test('모르는 프리셋 id는 반영하지 않고 오류로 알린다', async 
   await fillForm(container);
   const receipt = canvas.onChatAction({ kind: 'spec_draft', patch: { preset: 'nope' } });
   assert.equal(receipt.applied, false);
-  assert.deepEqual(receipt.errors, ['nope는 없는 프리셋입니다']);
+  assert.deepEqual(receipt.errors, ['nope는 없는 기법입니다']);
   assert.equal(canvas.getContext().spec.presetId, 'sma_crossover');
 });
 
@@ -1886,6 +1896,149 @@ test('[+ 새 기법 만들기] 뒤에 기법을 고르면 만들던 중이라는
   assert.equal(ctx.techniqueDraft, false);
   assert.equal(ctx.runPath, 'form');
   assert.equal(ctx.code.source, '');
+});
+
+// ── 보드 19 → 20 · 목록 화면에서 대화가 먼저 시작될 때 ────────────────────────
+//
+// 목록 화면은 spec이 없는 화면이다. 그 자리에서 모델이 설정·코드를 보내면 예전에는
+// 「프리셋이 없어…」로 막히거나(설정), 「반영됨」이라 해놓고 화면 어디에도 코드가
+// 없었다. 보드 19의 약속은 하나다 — 목록 화면에서 대화로 시작하면 새 기법 흐름이
+// 열린다. [+ 새 기법 만들기]를 누른 것과 같은 뼈대 위에 얹는다.
+
+// 고르지 않은 첫 화면 그대로 — mounted()와 달리 프리셋을 고르지 않는다.
+async function listMounted(overrides) {
+  const made = makeCanvas(overrides);
+  made.canvas.mount();
+  await flush();
+  return made;
+}
+
+// document.dispatchEvent로 나가는 athena:chat-submit을 잰다.
+async function withChatSubmits(fn) {
+  const sent = [];
+  const prevCustomEvent = global.CustomEvent;
+  global.CustomEvent = class {
+    constructor(type, init) { this.type = type; this.detail = init && init.detail; }
+  };
+  global.document.dispatchEvent = (event) => { sent.push(event); return true; };
+  try { await fn(); } finally { global.CustomEvent = prevCustomEvent; }
+  return sent.filter((e) => e.type === 'athena:chat-submit');
+}
+
+test('목록 화면에서 온 설정은 새 기법 뼈대를 세우고 그 위에 얹는다', async () => {
+  const submits = await withChatSubmits(async () => {
+    const made = await listMounted();
+    const receipt = made.canvas.onChatAction({
+      kind: 'spec_draft', patch: { symbols: ['005930'] },
+    });
+    await flush();
+    assert.equal(receipt.applied, true);
+    assert.deepEqual(receipt.errors.includes('기법이 없어 설정을 얹을 수 없습니다'), false);
+    const ctx = made.canvas.getContext();
+    assert.equal(ctx.techniqueDraft, true);
+    assert.equal(ctx.spec.name, '새 기법');
+    assert.deepEqual(ctx.spec.symbols, ['005930']);
+    // 초안에는 지도도 폼도 없다 — 컨텍스트가 화면에 없는 탭을 말하면 안 된다.
+    assert.equal(ctx.designTab, 'code');
+    assert.equal(ctx.runPath, 'code');
+    assert.equal(findByClass(made.container, 'backtest-technique-list').length, 0);
+    const labels = findByClass(made.container, 'backtest-subtab').map((t) => t.textContent);
+    assert.deepEqual(labels, ['코드', '노드·흐름']);
+  });
+  // 첫 문장은 사람이 [+ 새 기법 만들기]를 눌렀을 때만 나간다 — 대화가 이미 시작된
+  // 자리에서 또 보내면 모델이 자기 말에 답하는 고리가 된다.
+  assert.deepEqual(submits, []);
+});
+
+test('목록 화면에서 온 코드는 뼈대 위에 얹히고 코드창이 실제로 선다', async () => {
+  const source = 'import athena_bt as bt\nPARAMS = {"n": 5}\n';
+  const made = await listMounted();
+  const receipt = made.canvas.onChatAction({ kind: 'code_draft', source, note: '초안' });
+  await flush();
+  assert.equal(receipt.applied, true);
+  assert.equal(receipt.designTab, 'code');
+  const ctx = made.canvas.getContext();
+  assert.equal(ctx.techniqueDraft, true);
+  assert.equal(ctx.code.source, source);
+  assert.equal(ctx.designTab, 'code');
+  // 「반영됨」이라 했으면 화면에 있어야 한다 — 목록이 아니라 편집기다.
+  assert.equal(findByClass(made.container, 'backtest-technique-list').length, 0);
+  assert.equal(findByClass(made.container, 'backtest-code-editor').length, 1);
+  const labels = findByClass(made.container, 'backtest-subtab').map((t) => t.textContent);
+  assert.deepEqual(labels, ['코드', '노드·흐름']);
+});
+
+test('목록 화면이어도 아는 기법 id가 든 설정은 그 기법을 고른다', async () => {
+  const made = await listMounted();
+  const receipt = made.canvas.onChatAction({
+    kind: 'spec_draft', patch: { preset: 'sma_crossover' },
+  });
+  await flush();
+  assert.equal(receipt.applied, true);
+  const ctx = made.canvas.getContext();
+  assert.equal(ctx.techniqueDraft, false, '새 기법이 아니라 고른 기법이다');
+  assert.equal(ctx.spec.presetId, 'sma_crossover');
+  assert.equal(ctx.designTab, 'flow');
+});
+
+test('목록 화면의 navigate는 하위 탭을 반영하지 않고 이유를 돌려준다', async () => {
+  const made = await listMounted();
+  const receipt = made.canvas.onChatAction({
+    kind: 'navigate', tab: 'design', designTab: 'flow',
+  });
+  await flush();
+  assert.equal(receipt.applied, false);
+  assert.deepEqual(receipt.errors, ['기법을 먼저 고르세요']);
+  const ctx = made.canvas.getContext();
+  assert.equal(ctx.designTab, 'form', '없는 탭으로 컨텍스트만 옮기지 않는다');
+  assert.equal(findByClass(made.container, 'backtest-technique-list').length, 1);
+});
+
+test('목록 화면에서도 모드 탭 이동(이력)은 그대로 반영된다', async () => {
+  const made = await listMounted({ fetchHistory: async () => [] });
+  const receipt = made.canvas.onChatAction({ kind: 'navigate', tab: 'history' });
+  await flush();
+  assert.equal(receipt.applied, true);
+  assert.equal(made.canvas.getContext().tab, 'history');
+});
+
+// 위 두 케이스를 **실제 앱의 배선**(폴더 생성 + 파일 쓰기)에서 다시 본다. 폴더 만들기는
+// 비동기라 그 사이에 얹힌 코드가 씨앗 쓰기에 덮일 수 있고, 막힐 설정이 폴더를 남길 수
+// 있다 — 단일 버퍼 배선에서는 둘 다 보이지 않는 자리다.
+
+test('폴더 배선에서도 목록 화면에서 온 코드가 디스크와 편집기에 남는다', async () => {
+  const calls = techniqueCalls();
+  const source = ['import athena_bt as bt', '', 'PARAMS = {"n": 5}', '', '',
+    'def signals(df, p):', '    return df', ''].join('\n');
+  const made = await listMounted(techniqueProjectDeps(calls));
+  const receipt = made.canvas.onChatAction({ kind: 'code_draft', source, note: '초안' });
+  assert.equal(receipt.applied, true);
+  for (let i = 0; i < 8; i += 1) await flush();
+  // 폴더 하나에 뼈대 두 파일 — 그런데 strategy.py에 남는 것은 빈 뼈대가 아니라 그 코드다.
+  assert.equal(calls.created.length, 1);
+  const strategy = calls.writes.filter((w) => w.path === 'strategy.py').pop();
+  assert.equal(strategy.text, source, '빈 뼈대가 방금 반영한 코드를 덮으면 안 된다');
+  const ctx = made.canvas.getContext();
+  assert.equal(ctx.code.source, source);
+  assert.equal(ctx.project.activeFile, 'strategy.py');
+  assert.equal(findByClass(made.container, 'project-ide').length, 1);
+  // 「반영됨」이라 했으면 화면에도 그 코드가 있어야 한다 — 도는 것과 보이는 것이 같다.
+  assert.equal(findByTag(made.container, 'textarea')[0].value, source);
+});
+
+test('폴더 배선에서 모르는 기법 id는 뼈대도 폴더도 만들지 않는다', async () => {
+  const calls = techniqueCalls();
+  const made = await listMounted(techniqueProjectDeps(calls));
+  const receipt = made.canvas.onChatAction({ kind: 'spec_draft', patch: { preset: 'nope' } });
+  for (let i = 0; i < 8; i += 1) await flush();
+  assert.equal(receipt.applied, false);
+  assert.deepEqual(receipt.errors, ['nope는 없는 기법입니다']);
+  // 되돌렸다고 답해놓고 폴더만 쌓이면 모델이 id를 틀릴 때마다 빈 폴더가 남는다.
+  assert.deepEqual(calls.created, []);
+  assert.deepEqual(calls.writes, []);
+  const ctx = made.canvas.getContext();
+  assert.equal(ctx.techniqueDraft, false);
+  assert.equal(findByClass(made.container, 'backtest-technique-list').length, 1);
 });
 
 test('내 전략을 고르면 그 파일이 IDE에 열리고 실행경로가 코드로 바뀐다', async () => {
