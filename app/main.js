@@ -2075,6 +2075,9 @@ ipcMain.on('athena:rest-canvas-painted', (event, payload = {}) => {
       waiter.cleanup();
       waiter.resolve(timedOutPaint(decision.paint));
     });
+    // 카드는 이미 눈에 보인다. 첫 피드백 도달을 지금 알려 러너의 3초 마감과
+    // 지연 영수증 워치독을 풀고, 미루는 것은 render_state 확정뿐이다.
+    if (waiter.notifyFirstPaint) waiter.notifyFirstPaint(decision.paint);
     return;
   }
   restPaintWaiters.delete(key);
@@ -2284,6 +2287,7 @@ async function emitRestCanvasAndWaitForPaint(payload, { expand = true, timeoutMs
       resolve,
       reject,
       cleanup,
+      notifyFirstPaint: typeof payload.onFirstPaint === 'function' ? payload.onFirstPaint : null,
       // 차트 껍질 ack가 도착하면 첫 피드백 한도를 풀고 마운트 결과 ack만 기다린다.
       beginPendingMount(onTimeout) {
         if (timer) { clearTimeout(timer); timer = null; }
@@ -3473,7 +3477,10 @@ async function runDirectRestDataset(dataset, expand = true, overrides = {}) {
     ).then((paint) => ({ paint, error: null }), (error) => ({ paint: null, error }));
   }, DIRECT_FEEDBACK_WATCHDOG_MS) : null;
   const handleDirectEvent = (event) => {
-    if (event && event.type === 'paint-ack') feedbackObserved = true;
+    // 차트는 껍질이 뜬 시점('paint-pending')이 사용자가 실제로 본 첫 피드백이다 —
+    // 마운트 확정 ack를 기다리다 워치독이 먼저 터지면 화면에 카드가 있는데도
+    // 지연 영수증을 그리게 된다.
+    if (event && (event.type === 'paint-ack' || event.type === 'paint-pending')) feedbackObserved = true;
     if (typeof overrides.onEvent === 'function') overrides.onEvent(event);
   };
   let result;

@@ -1391,3 +1391,41 @@ test('recommendations accept only predeclared safe query actions, dedupe, and ca
   ]);
   assert.deepEqual(actions.map((item) => item.id), ['a', 'c', 'd']);
 });
+
+test('껍질 paint를 알린 차트는 마운트가 마감을 넘겨 끝나도 답변이 뒤집히지 않는다', async () => {
+  async function runProfile(announceFirstPaint) {
+    const input = dataset();
+    input.firstCanvasDeadlineMs = 60;
+    const eventTypes = [];
+    const result = await runRestDataset({
+      dataset: input,
+      backendBase: 'http://backend',
+      fetchImpl: successfulFetch(),
+      onEvent: (event) => eventTypes.push(event.type),
+      emitCanvas: async (payload) => {
+        const visiblePaintAt = payload.requestStartedAt + 20;
+        if (announceFirstPaint) payload.onFirstPaint({ visiblePaintAt });
+        // 마운트 결과 ack는 첫 카드 마감을 넘겨서야 도착한다.
+        await new Promise((resolve) => setTimeout(resolve, 300));
+        return { verifiedVisible: true, visiblePaintAt, renderState: 'data' };
+      },
+    });
+    return { result, eventTypes };
+  }
+
+  const announced = await runProfile(true);
+  assert.equal(announced.result.ok, true);
+  assert.equal(announced.result.feedbackOk, true);
+  assert.equal(Math.round(announced.result.firstFeedbackMs), 20);
+  assert.equal(announced.result.canvases.length, 1);
+  assert.equal(announced.result.errors.length, 0);
+  assert.equal(announced.result.state, null);
+  assert.ok(announced.eventTypes.indexOf('paint-pending') < announced.eventTypes.indexOf('paint-ack'));
+
+  // 알리지 않으면 종전대로 3초 마감이 걸린다 — 마감 자체는 살아 있다.
+  const silent = await runProfile(false);
+  assert.equal(silent.result.ok, false);
+  assert.equal(silent.result.state, 'timeout');
+  assert.equal(silent.result.canvases.length, 0);
+  assert.equal(silent.eventTypes.includes('paint-pending'), false);
+});
