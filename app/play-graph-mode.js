@@ -329,20 +329,15 @@ async function main() {
       .catch((e) => ({ ok: false, error: String(e && e.message) }));
     const opened = await window.AthenaShell.openConversation({ id: target.id, title: target.title });
     await new Promise((r) => setTimeout(r, 300));
-    const banner = document.querySelector('#history .past-banner');
+    // 복원은 조용하다(2026-09-05, 41번 보드) — 배너가 보이면 그것이 회귀다.
     const out = {
       ok: true,
       channel: { ok: !!(res && res.ok), isCurrent: res && res.isCurrent, count: res && res.messages ? res.messages.length : null },
       opened,
-      bannerShown: !!banner,
-      bannerText: banner ? banner.textContent.slice(0, 60) : null,
+      bannerShown: !!document.querySelector('#history .past-banner'),
       inputLocked: document.getElementById('input').disabled,
     };
-    // 원래 화면으로 되돌린다 — 프로브가 화면을 바꿔놓고 끝내지 않는다.
-    const back = banner && banner.querySelector('.past-banner-back');
-    if (back) back.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-    await new Promise((r) => setTimeout(r, 200));
-    out.restored = !document.querySelector('#history .past-banner') && !document.getElementById('input').disabled;
+    out.restored = !out.bannerShown && !out.inputLocked;
     return out;
   })()`);
   log(`      과거 대화 이동: ${JSON.stringify(past)}`);
