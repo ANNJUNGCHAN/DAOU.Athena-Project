@@ -841,7 +841,16 @@ function openBoardSurface(host, contract, envelope) {
   state.links = stateLinksOf(contract);
   state.unbound = Array.isArray(contract.unbound_slots) ? contract.unbound_slots.slice() : [];
   state.realtimeSlots = boardMount.realtimeSlotIndex(contract, realtimeBindingsOf(envelope));
-  return mountBoardState(host, contract.board_id, envelope);
+  return mountBoardState(host, contract.board_id, envelope).then((mounted) => {
+    // 계약이 갈아탈 탭을 지정했으면 기본 보드를 세운 **뒤에** 그리로 간다 — 사람이
+    // 탭을 누른 것과 같은 경로이고, 형제 탭 레일은 색인이 다시 얹어 준다.
+    // 값 표를 다 채운 뒤(기본 보드 하이드레이션까지 끝난 뒤)에 옮긴다 — 그래야 새
+    // 보드가 결측어부터 그리지 않는다. 대신 첫 화면은 잠깐 기본 보드다.
+    const initial = String(contract.initial_state_board || '');
+    const switched = initial && switchStateBoard(host, initial, envelope);
+    // 갈아타다 실패해도 이미 선 기본 보드는 지우지 않는다 — 사람이 탭을 눌렀을 때와 같다.
+    return switched ? switched.catch(() => mounted) : mounted;
+  });
 }
 
 // 봉투가 싣는 실시간 바인딩 표. semantic-workspace가 읽는 자리와 같은 자리다.
@@ -1004,8 +1013,14 @@ function renderBoardSurfaceCard(envelope) {
   stampPaperScreen(card, envelope);
   const host = document.createElement('div');
   host.className = 'board-surface-host';
+  // 마운트 전까지 카드 높이가 0이면 페인트 확인(폭·높이 둘 다 0보다 커야 한다)이
+  // 카드가 서지 않은 것으로 읽는다. 보드가 서면 뗀다 — 전역 CSS에 두면 마운트를
+  // 끝낸 보드의 레이아웃까지 건드린다.
+  host.style.minHeight = '120px';
   body.appendChild(host);
-  openBoardSurface(host, contract, envelope).catch((error) => {
+  openBoardSurface(host, contract, envelope).then(() => {
+    host.style.minHeight = '';
+  }).catch((error) => {
     // 보드를 못 세우면 범용 카드로 조용히 떨어뜨리지 않는다 — 그건 계약 파생
     // 실패이고, 감추면 사용자는 알 수 없는 표를 본다(paper-card-routing과 같은 판단).
     body.replaceChildren(errorNote(String((error && error.message) || error)));
