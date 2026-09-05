@@ -414,7 +414,10 @@ function applyEmptyCopy(seed) {
   box.querySelector('.canvas-empty-title').textContent = picked.title;
   box.querySelector('.canvas-empty-sub').textContent = picked.sub;
 }
-applyEmptyCopy(Date.now());
+// 첫 페인트는 늘 풀의 기본 문구다 — Paper 보드 26의 대화 패널이 그린 그 두 줄이고,
+// 열 때마다 다른 문구로 시작하면 같은 빈 화면이 매번 달라 보인다. 시간대·성향 갈래는
+// 45초 회전이 데려온다.
+applyEmptyCopy(0);
 setInterval(() => {
   if (gridEmptyEl && !gridEmptyEl.hidden) applyEmptyCopy(Date.now());
 }, 45000);
@@ -462,8 +465,9 @@ async function loadEmptyCanvasExtras() {
   appendEmptyCanvasExtras(stats, hintCount);
   const profEntries = profileRes && profileRes.ok ? (profileRes.entries || profileRes.rows) : null;
   const topEntry = Array.isArray(profEntries) ? profEntries[0] : null;
+  // 성향 갈래는 여기서 풀에 들어갈 뿐, 지금 보고 있는 문구를 갈아치우지 않는다 —
+  // 브레인 응답이 늦게 오면 읽던 줄이 눈앞에서 바뀐다. 다음 회전이 데려간다.
   emptyCopyProfileTop = (topEntry && (topEntry.entity_name || topEntry.entity_id)) || null;
-  if (emptyCopyProfileTop) applyEmptyCopy(Date.now());
 }
 
 // ---------- 캔버스 카드 추가/초기화/하이라이트 ----------
