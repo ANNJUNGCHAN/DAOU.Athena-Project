@@ -60,7 +60,17 @@ function createHarness(t, { initialState, statusOutcomes = [] } = {}) {
 }
 
 test('list preserves the existing provider-grouped IPC shape and fixed order', async (t) => {
-  const { accounts, statusCalls } = createHarness(t, { statusOutcomes: [0] });
+  const { accounts, statusCalls } = createHarness(t, {
+    statusOutcomes: [0],
+    initialState: {
+      activeId: 'codex:athena-runtime',
+      accounts: {
+        'codex:athena-runtime': {
+          id: 'codex:athena-runtime', providerId: 'codex', label: 'Codex', source: 'detected', addedAt: 'old',
+        },
+      },
+    },
+  });
 
   const result = await accounts.list();
 
@@ -71,12 +81,97 @@ test('list preserves the existing provider-grouped IPC shape and fixed order', a
         id: 'codex',
         name: 'Codex',
         connected: true,
-        accounts: [{ id: 'codex:athena-runtime', label: 'Codex', active: true }],
+        // addedAt·current는 설정 모델 카드(2026-09-05)가 부제·[제거] 잠금에 쓴다.
+        accounts: [{ id: 'codex:athena-runtime', label: 'Codex', active: true, addedAt: 'old', current: true }],
       },
     ],
   });
   assert.deepEqual(statusCalls[0].argv, ['login', 'status']);
   assert.deepEqual(statusCalls[0].options, { timeoutMs: 20, stdio: 'ignore' });
+});
+
+// Claude 로그인 감지 픽스처 — detectClaude()가 보는 두 파일(자격증명 존재 +
+// .claude.json의 oauthAccount.emailAddress)을 harness의 globalHome에 심는다.
+function seedClaudeLogin(globalHome, email) {
+  fs.mkdirSync(path.join(globalHome, '.claude'), { recursive: true });
+  fs.writeFileSync(path.join(globalHome, '.claude', '.credentials.json'), '{}');
+  fs.writeFileSync(path.join(globalHome, '.claude.json'), JSON.stringify({ oauthAccount: { emailAddress: email } }));
+}
+
+const TWO_CLAUDE_LOGINS = {
+  activeId: 'claude:old@example.com',
+  accounts: {
+    'claude:old@example.com': {
+      id: 'claude:old@example.com', providerId: 'claude', label: 'old@example.com', source: 'detected', addedAt: '2026-08-08T08:45:00.000Z',
+    },
+    'claude:now@example.com': {
+      id: 'claude:now@example.com', providerId: 'claude', label: 'now@example.com', source: 'detected', addedAt: '2026-08-10T07:49:00.000Z',
+    },
+  },
+};
+
+test('list marks only the login the Claude CLI currently holds as current', async (t) => {
+  const { accounts, globalHome } = createHarness(t, { statusOutcomes: [1], initialState: TWO_CLAUDE_LOGINS });
+  seedClaudeLogin(globalHome, 'now@example.com');
+
+  const { providers } = await accounts.list();
+
+  assert.deepEqual(providers[0].accounts, [
+    { id: 'claude:old@example.com', label: 'old@example.com', active: true, addedAt: '2026-08-08T08:45:00.000Z', current: false },
+    { id: 'claude:now@example.com', label: 'now@example.com', active: false, addedAt: '2026-08-10T07:49:00.000Z', current: true },
+  ]);
+});
+
+test('remove drops a previous Claude login and hands active over to the current one', async (t) => {
+  const { accounts, globalHome, stateFile } = createHarness(t, { statusOutcomes: [1], initialState: TWO_CLAUDE_LOGINS });
+  seedClaudeLogin(globalHome, 'now@example.com');
+
+  const result = await accounts.remove('claude:old@example.com');
+
+  assert.deepEqual(result, { ok: true });
+  const state = JSON.parse(fs.readFileSync(stateFile, 'utf8'));
+  assert.equal(state.activeId, 'claude:now@example.com');
+  assert.deepEqual(Object.keys(state.accounts), ['claude:now@example.com']);
+});
+
+test('remove refuses the login the Claude CLI currently holds and leaves state untouched', async (t) => {
+  const { accounts, globalHome, stateFile } = createHarness(t, { statusOutcomes: [1], initialState: TWO_CLAUDE_LOGINS });
+  seedClaudeLogin(globalHome, 'now@example.com');
+
+  const result = await accounts.remove('claude:now@example.com');
+
+  assert.equal(result.ok, false);
+  assert.match(result.message, /현재 Claude CLI/);
+  assert.deepEqual(JSON.parse(fs.readFileSync(stateFile, 'utf8')), TWO_CLAUDE_LOGINS);
+});
+
+test('remove on the Codex runtime account is the private-home logout', async (t) => {
+  const { accounts, statusCalls, stateFile } = createHarness(t, {
+    statusOutcomes: [0, 1],
+    initialState: {
+      activeId: 'codex:athena-runtime',
+      accounts: {
+        'codex:athena-runtime': {
+          id: 'codex:athena-runtime', providerId: 'codex', label: 'Codex', source: 'detected', addedAt: 'old',
+        },
+      },
+    },
+  });
+
+  const result = await accounts.remove('codex:athena-runtime');
+
+  assert.deepEqual(result, { ok: true, codexStatus: 'disconnected' });
+  assert.deepEqual(statusCalls.map((call) => call.argv), [['logout'], ['login', 'status']]);
+  assert.deepEqual(JSON.parse(fs.readFileSync(stateFile, 'utf8')), { activeId: null, accounts: {} });
+});
+
+test('remove of an unknown account fails without touching state', async (t) => {
+  const { accounts, saves } = createHarness(t, { statusOutcomes: [] });
+
+  const result = await accounts.remove('claude:ghost@example.com');
+
+  assert.equal(result.ok, false);
+  assert.deepEqual(saves, []);
 });
 
 test('global Codex state never counts and disconnected private status removes stale rows and active selection', async (t) => {

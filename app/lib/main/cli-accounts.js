@@ -44,7 +44,7 @@ function defaultAtomicWrite(fsImpl, file, state) {
   }
 }
 
-function immutableSnapshot(state, codexStatus, reconciledAtMonotonicMs) {
+function immutableSnapshot(state, codexStatus, reconciledAtMonotonicMs, currentClaudeId) {
   const accounts = {};
   for (const [id, account] of Object.entries(state.accounts)) {
     accounts[id] = Object.freeze({ ...account });
@@ -54,6 +54,7 @@ function immutableSnapshot(state, codexStatus, reconciledAtMonotonicMs) {
     activeId: state.activeId,
     codexStatus,
     reconciledAtMonotonicMs,
+    currentClaudeId,
   });
 }
 
@@ -112,9 +113,11 @@ function createCliAccounts({
     return { identifier: label, label };
   }
 
+  // 반환값은 지금 CLI가 들고 있는 Claude 로그인의 id(없으면 null) — 목록의
+  // current 표시와 remove()의 "현재 로그인은 못 지운다" 판정이 같은 값을 쓴다.
   function mergeClaude(state) {
     const found = detectClaude();
-    if (!found) return;
+    if (!found) return null;
     const id = `claude:${found.identifier}`;
     if (!state.accounts[id]) {
       state.accounts[id] = {
@@ -122,6 +125,7 @@ function createCliAccounts({
       };
       if (!state.activeId) state.activeId = id;
     }
+    return id;
   }
 
   function probeCodexStatus() {
@@ -168,7 +172,7 @@ function createCliAccounts({
 
   async function reconcileCodexRuntimeAccountLocked() {
     const state = readState();
-    mergeClaude(state);
+    const currentClaudeId = mergeClaude(state);
     const priorCodexIds = Object.values(state.accounts)
       .filter((account) => account && account.providerId === 'codex')
       .map((account) => account.id);
@@ -193,7 +197,7 @@ function createCliAccounts({
     }
 
     writeState(state);
-    return immutableSnapshot(state, codexStatus, monotonicNow());
+    return immutableSnapshot(state, codexStatus, monotonicNow(), currentClaudeId);
   }
 
   const reconcileCodexRuntimeAccount = () => withMutex(reconcileCodexRuntimeAccountLocked);
@@ -206,6 +210,12 @@ function createCliAccounts({
         id: account.id,
         label: account.label,
         active: account.id === snapshot.activeId,
+        // 설정 모델 카드(Paper 화면 18, 2026-09-05)가 카드 부제에 쓴다.
+        addedAt: typeof account.addedAt === 'string' ? account.addedAt : null,
+        // current = 그 CLI가 지금 들고 있는 로그인. Claude는 ~/.claude 자격증명이
+        // 하나뿐이라 나머지 항목은 이전에 감지된 로그인이고, Codex 런타임 계정은
+        // 연결돼 있을 때만 목록에 있으므로 항상 현재 로그인이다.
+        current: account.providerId === 'codex' || account.id === snapshot.currentClaudeId,
       });
     }
     return {
@@ -284,42 +294,45 @@ function createCliAccounts({
 
   async function logout(providerId) {
     if (providerId !== 'codex') return { ok: false, message: '지원하지 않는 로그아웃 대상이다' };
-    return withMutex(async () => {
-      const logoutStatus = await new Promise((resolve) => {
-        let child;
-        let settled = false;
-        let timer;
-        const finish = (ok) => {
-          if (settled) return;
-          settled = true;
-          if (timer) clearTimeout(timer);
-          if (child && typeof child.removeAllListeners === 'function') {
-            child.removeAllListeners('error');
-            child.removeAllListeners('exit');
-          }
-          resolve(ok);
-        };
-        try {
-          child = codexRuntime.spawnPrivateHomeCommand(['logout'], {
-            timeoutMs: statusTimeoutMs,
-            stdio: 'ignore',
-          });
-        } catch {
-          finish(false);
-          return;
+    return withMutex(logoutCodexLocked);
+  }
+
+  // withMutex 안에서만 부른다 — logout()과 remove()가 공유한다.
+  async function logoutCodexLocked() {
+    const logoutStatus = await new Promise((resolve) => {
+      let child;
+      let settled = false;
+      let timer;
+      const finish = (ok) => {
+        if (settled) return;
+        settled = true;
+        if (timer) clearTimeout(timer);
+        if (child && typeof child.removeAllListeners === 'function') {
+          child.removeAllListeners('error');
+          child.removeAllListeners('exit');
         }
-        child.once('error', () => finish(false));
-        child.once('exit', (code, signal) => finish(!signal && code === 0));
-        timer = setTimeout(() => {
-          try { child.kill(); } catch { /* fail closed */ }
-          finish(false);
-        }, statusTimeoutMs);
-      });
-      const snapshot = await reconcileCodexRuntimeAccountLocked();
-      return Object.freeze({
-        ok: logoutStatus && snapshot.codexStatus === 'disconnected',
-        codexStatus: snapshot.codexStatus,
-      });
+        resolve(ok);
+      };
+      try {
+        child = codexRuntime.spawnPrivateHomeCommand(['logout'], {
+          timeoutMs: statusTimeoutMs,
+          stdio: 'ignore',
+        });
+      } catch {
+        finish(false);
+        return;
+      }
+      child.once('error', () => finish(false));
+      child.once('exit', (code, signal) => finish(!signal && code === 0));
+      timer = setTimeout(() => {
+        try { child.kill(); } catch { /* fail closed */ }
+        finish(false);
+      }, statusTimeoutMs);
+    });
+    const snapshot = await reconcileCodexRuntimeAccountLocked();
+    return Object.freeze({
+      ok: logoutStatus && snapshot.codexStatus === 'disconnected',
+      codexStatus: snapshot.codexStatus,
     });
   }
 
@@ -329,6 +342,29 @@ function createCliAccounts({
     state.activeId = accountId;
     writeState(state);
     return { ok: true };
+  }
+
+  // 설정 모델 카드 [제거](2026-09-05, Paper 화면 18). Codex는 런타임 로그아웃이
+  // 곧 제거다. Claude는 자격증명 파일이 하나뿐이라 지금 CLI가 들고 있는 로그인은
+  // 여기서 못 지운다 — 이전에 감지된 로그인 항목만 상태 파일에서 지우고, 그게
+  // 활성이었으면 현재 로그인으로 넘긴다(null로 두면 질의가 막힌다). reconcile과
+  // 같은 뮤텍스 안에서 돈다 — 상태 읽기/쓰기 사이에 reconcile이 끼어들면 지운
+  // 항목이 되살아난다.
+  async function remove(accountId) {
+    return withMutex(async () => {
+      const state = readState();
+      const account = state.accounts[accountId];
+      if (!account) return { ok: false, message: '목록에 없는 계정이다' };
+      if (account.providerId === 'codex') return logoutCodexLocked();
+      const currentClaudeId = mergeClaude(state);
+      if (accountId === currentClaudeId) {
+        return { ok: false, message: '현재 Claude CLI에 로그인된 계정이다 — 터미널에서 로그아웃한 뒤 제거한다' };
+      }
+      delete state.accounts[accountId];
+      if (state.activeId === accountId) state.activeId = currentClaudeId;
+      writeState(state);
+      return { ok: true };
+    });
   }
 
   async function activateProviderCurrent(providerId) {
@@ -369,6 +405,7 @@ function createCliAccounts({
     getActiveAccount,
     login,
     logout,
+    remove,
     setActive,
     probeBinaryExists,
     credentialsSignature,
@@ -389,6 +426,7 @@ module.exports = {
   getActiveAccount: (...args) => getDefaultInstance().getActiveAccount(...args),
   login: (...args) => getDefaultInstance().login(...args),
   logout: (...args) => getDefaultInstance().logout(...args),
+  remove: (...args) => getDefaultInstance().remove(...args),
   setActive: (...args) => getDefaultInstance().setActive(...args),
   probeBinaryExists: (...args) => getDefaultInstance().probeBinaryExists(...args),
   credentialsSignature: (...args) => getDefaultInstance().credentialsSignature(...args),
