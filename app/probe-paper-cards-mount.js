@@ -22,8 +22,8 @@
 // 청크로 끊는 이유는 따로 있다 — 96장을 한꺼번에 세우면 DOM이 3만 노드가 된다.
 //
 // 실패 보드는 고치지 않는다. `app/captures/paper-gates/PAPER-CARDS.json`의
-// `runtime` 절에 코드와 함께 남기는 것이 이 게이트의 산출물이다(설계서 §6.4가
-// 그 목록을 작업 명세로 바꾼다).
+// `boards[]`에 `layer: "mount"` 실패로 남기는 것이 이 게이트의 산출물이다 — 정적 층과
+// 같은 배열, 같은 항목이다(설계서 §3.7 형상, §6.4가 그 목록을 작업 명세로 바꾼다).
 //
 // 샤딩·파일럿: `ATHENA_VERIFY_BOARD_IDS=2SKU-1,137X-2,...`
 // 성공 표지: paper cards mount verification passed
@@ -47,9 +47,9 @@ const {
   boardMountRecord,
   formatMountCliReport,
   groupBoardsByCard,
-  mergeRuntimeReport,
   mountFailures,
 } = require('./lib/paper-cards-mount-report');
+const { mergeMountLayer } = require('./lib/paper-cards-report');
 
 const APP = __dirname;
 const ROOT = path.resolve(APP, '..');
@@ -77,7 +77,9 @@ const BOARD_NAME_OF = new Map(CARD_BOARDS.map((board) => [board.board_id, board.
 // (실시간 이음매는 fixture-quote가 계속 맡는다, 설계서 §3.3).
 function registerShellIpc() {
   const source = fs.readFileSync(path.join(APP, 'preload.js'), 'utf8');
-  const block = source.split('const INVOKE_CHANNELS = new Set([')[1].split(']);')[0];
+  const block = source.split('const INVOKE_CHANNELS = new Set([')[1]?.split(']);')[0];
+  // 상수명이나 형식이 바뀌면 채널 0개짜리 셸로 조용히 넘어가지 않게 여기서 멈춘다.
+  if (!block) throw new Error('preload.js에서 INVOKE_CHANNELS 블록을 못 찾았다');
   for (const channel of [...block.matchAll(/'([^']+)'/g)].map((match) => match[1])) {
     ipcMain.handle(channel, async () => {
       if (channel === 'athena:integrated-card-realtime-policy') return publicPolicies();
@@ -135,6 +137,16 @@ async function bootShell() {
   return win;
 }
 
+// slots.json의 텍스트 다중집합. 없으면 던진다 — `{}`로 넘어가면 DOM 텍스트가 전부
+// added로 잡혀 `text_multiset_dom_mismatch`로 빨개지고, 진짜 원인(「템플릿에 다중집합이
+// 없다」)이 리포트에서 안 읽힌다.
+function readTextMultiset(boardId) {
+  const slotsPath = path.join(TEMPLATE_ROOT, boardId, 'slots.json');
+  const { text_multiset: multiset } = JSON.parse(fs.readFileSync(slotsPath, 'utf8'));
+  if (!multiset) throw new Error(`slots.json에 text_multiset이 없다: ${boardId}`);
+  return multiset;
+}
+
 // `boardStepProbe`가 안 재는 둘을 한 번에 더 잰다.
 //
 //   state_boards_in_dom — 상태 링크는 마운트 뒤 DOM에 `data-state-board`로 찍힌다
@@ -167,13 +179,25 @@ async function measureSurfaceExtras(win, instanceId) {
 // 청크 하나(카드 1종)를 세우고 네 폭에서 잰다. 폭이 바깥 루프라 창 리사이즈는
 // 청크당 4회고, 봉투는 첫 폭에서만 보낸다(설계서 §3.4).
 async function probeChunk(win, chunk) {
-  const surfaces = chunk.board_ids.map((boardId, index) => ({
-    ...loadRealBoardContract(boardId, (index % 6) + 1, TEMPLATE_ROOT),
-    expectedTextMultiset: JSON.parse(fs.readFileSync(
-      path.join(TEMPLATE_ROOT, boardId, 'slots.json'), 'utf8',
-    )).text_multiset || {},
-  }));
-  const collected = new Map(surfaces.map((surface) => [surface.boardId, { steps: [], failures: [] }]));
+  const collected = new Map(chunk.board_ids.map((boardId) => [boardId, { steps: [], failures: [] }]));
+  const surfaces = [];
+  for (const [index, boardId] of chunk.board_ids.entries()) {
+    try {
+      surfaces.push({
+        ...loadRealBoardContract(boardId, (index % 6) + 1, TEMPLATE_ROOT),
+        expectedTextMultiset: readTextMultiset(boardId),
+      });
+    } catch (error) {
+      // 계약을 못 읽는 보드도 그 보드만 빨갛게 남긴다 — 여기서 던지면 청크가 아니라
+      // 실행 전체가 죽어 96장 결과와 리포트가 통째로 날아간다.
+      collected.get(boardId).failures.push({
+        code: 'mount_failed',
+        layer: 'mount',
+        stage: 'contract',
+        error: String(error.message || error),
+      });
+    }
+  }
 
   for (const [presetIndex, preset] of BOARD_WINDOW_PRESETS.entries()) {
     win.setContentSize(preset.width, preset.height);
@@ -229,11 +253,11 @@ async function probeChunk(win, chunk) {
   }
 
   await win.webContents.executeJavaScript('window.AthenaShell.clearCanvases()');
-  return surfaces.map((surface) => {
-    const record = collected.get(surface.boardId);
+  return chunk.board_ids.map((boardId) => {
+    const record = collected.get(boardId);
     return boardMountRecord({
-      board_id: surface.boardId,
-      card_id: surface.contract.card_id,
+      board_id: boardId,
+      card_id: chunk.card_id,
       steps: record.steps,
       failures: record.failures,
     });
@@ -275,7 +299,7 @@ async function main() {
     ? JSON.parse(fs.readFileSync(REPORT_PATH, 'utf8'))
     : null;
   fs.mkdirSync(path.dirname(REPORT_PATH), { recursive: true });
-  fs.writeFileSync(REPORT_PATH, `${JSON.stringify(mergeRuntimeReport(existing, runtime), null, 2)}\n`);
+  fs.writeFileSync(REPORT_PATH, `${JSON.stringify(mergeMountLayer(existing, runtime), null, 2)}\n`);
 
   const { exitCode, lines } = formatMountCliReport(
     runtime,

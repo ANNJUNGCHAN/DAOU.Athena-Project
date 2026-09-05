@@ -161,40 +161,6 @@ function boardMountRecord(board) {
   };
 }
 
-/**
- * 런타임 절을 PAPER-CARDS.json에 얹는다. 정적 게이트가 쓴 `static`·`boards`는
- * 손대지 않는다 — 층이 서로를 지우면 어느 쪽이 마지막에 돌았는지가 리포트를
- * 정하게 되고, 그건 게이트가 아니라 경주다.
- *
- * 샤드 실행(ATHENA_VERIFY_BOARD_IDS)은 96장의 일부만 보므로 `totals.mount_fail`을
- * 채우지 않는다 — 부분 실행 수치를 전수 자리에 적으면 리포트가 조용히 거짓말한다.
- * @param {object|null} existing 이전 PAPER-CARDS.json (없으면 null)
- * @param {object} runtime
- */
-function mergeRuntimeReport(existing, runtime) {
-  const base = existing && existing.schema_version === 1
-    ? existing
-    : {
-      schema_version: 1,
-      gate: 'verify:paper-cards-mount',
-      generated_at: runtime.generated_at,
-      totals: { boards: runtime.totals.boards, pass: null, fail: null, static_fail: null, mount_fail: null },
-      boards: [],
-    };
-  const canonical = runtime.selection.canonical === true;
-  const staticFailIds = new Set((base.boards || [])
-    .filter((board) => board.status === 'fail')
-    .map((board) => board.board_id));
-  const mountFailIds = runtime.boards.filter((board) => board.status === 'fail').map((board) => board.board_id);
-  const totals = { ...base.totals, mount_fail: canonical ? mountFailIds.length : null };
-  if (canonical && typeof totals.static_fail === 'number') {
-    const failed = new Set([...staticFailIds, ...mountFailIds]);
-    totals.fail = failed.size;
-    totals.pass = totals.boards - failed.size;
-  }
-  return { ...base, totals, runtime };
-}
-
 /** CLI 출력과 종료코드. 실패 경로를 테스트가 부를 수 있게 순수 함수로 뽑았다. */
 function formatMountCliReport(runtime, reportPathLabel) {
   const failed = runtime.boards.filter((board) => board.status === 'fail');
@@ -219,6 +185,5 @@ module.exports = {
   domTextMultiset,
   formatMountCliReport,
   groupBoardsByCard,
-  mergeRuntimeReport,
   mountFailures,
 };
