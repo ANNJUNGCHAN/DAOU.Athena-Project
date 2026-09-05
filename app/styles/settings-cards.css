@@ -354,11 +354,12 @@
 .uk-a11y-label { font-family: var(--font-body); font-size: var(--text-base); color: var(--color-k-text); flex: 1; }
 
 /* =========================================================================
-   모델 카드 (2026-08-18, 다계정 요건 추가) — Claude/Codex 섹션(계정 목록 ·
-   계정 추가 · 모델/강도 칩) · 구분선.
+   모델 카드 (2026-08-18, 다계정 요건 추가 · 2026-09-05 Paper 화면 18 계정
+   카드형으로 개편) — 리드 · Claude/Codex 섹션(설명 · "계정" 소제목 + 추가 버튼 ·
+   계정 카드 목록 · 모델/강도 칩) · 구분선.
    ========================================================================= */
-.card.model .card-body { display: flex; flex-direction: column; gap: 20px; padding-top: 18px; padding-bottom: 18px; }
-.uk-model-section { display: flex; flex-direction: column; gap: 12px; }
+.card.model .card-body { display: flex; flex-direction: column; gap: 16px; padding-top: 18px; padding-bottom: 18px; }
+.uk-model-section { display: flex; flex-direction: column; gap: 10px; }
 .uk-model-section-head { display: flex; align-items: center; gap: 10px; }
 .uk-model-divider { height: 1px; background: var(--color-k-line-soft); flex-shrink: 0; }
 /* disabled는 모델·강도 컨트롤에만 걸린다 — 계정 목록은 연결해야 잠금이
@@ -369,36 +370,60 @@
 .uk-model-effort-label { margin-top: 4px; }
 .uk-model-custom-input { max-width: 320px; }
 
-/* ---- 계정 목록 — 활성(정적 행) · 비활성(전환 button) · 미연결(연결 button) ----
-   button.uk-model-account-row는 uk-btn 계열이 아니라 여기서 직접 리셋한다
-   (chip/ghost 버튼과 시각적으로 다르다 — 표 행처럼 보여야 한다). */
-.uk-model-accounts { display: flex; flex-direction: column; gap: 2px; }
+/* ---- 리드 · 섹션 설명 · "계정" 소제목 ---- */
+.uk-provider-lead { display: flex; flex-direction: column; gap: 6px; }
+.uk-provider-lead-title { font-family: var(--font-strong); font-size: var(--text-lg); line-height: 20px; color: var(--color-k-text); }
+.uk-provider-lead-desc { font-family: var(--font-body); font-size: var(--text-sm); line-height: 16px; color: var(--color-k-dim); }
+.uk-provider-desc { font-family: var(--font-body); font-size: var(--text-sm); line-height: 16px; color: var(--color-k-faint); }
+.uk-accounts-block { display: flex; flex-direction: column; gap: 8px; }
+.uk-accounts-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.uk-accounts-title { font-family: var(--font-strong); font-size: var(--text-base); line-height: 16px; color: var(--color-k-text); }
+.uk-accounts-hint { font-family: var(--font-body); font-size: var(--text-sm); line-height: 16px; color: var(--color-k-faint); margin-top: 3px; }
+
+/* ---- 계정 카드 — 활성(흰 배경·진한 테두리, 정적 본문) · 비활성(반투명 배경·옅은
+   테두리, 본문이 전환 button) · 미연결(점선 빈 카드). 카드 자체는 div다 — 우측
+   [재인증]·[제거]가 진짜 button이라 button 중첩을 피한다. 비활성 카드의
+   button.uk-account-switch는 uk-btn 계열이 아니라 여기서 직접 리셋한다. ---- */
+.uk-model-accounts { display: flex; flex-direction: column; gap: 6px; }
 .uk-model-account-row {
   display: flex;
   align-items: center;
-  gap: 10px;
-  min-height: 34px;
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-family: var(--font-body);
-  font-size: var(--text-base);
-  color: var(--color-k-text);
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: rgb(255 255 255 / 60%);
+  border: 1px solid rgb(16 19 26 / 8%);
 }
-button.uk-model-account-row {
-  width: 100%;
+.uk-model-account-row.is-active { background: #fff; border-color: rgb(16 19 26 / 24%); }
+.uk-account-main { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+button.uk-account-switch {
   border: 0;
   background: transparent;
-  cursor: pointer;
+  padding: 0;
   text-align: left;
-  transition: background var(--dur-fast) var(--ease);
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+  border-radius: 6px;
 }
-button.uk-model-account-row:hover { background: rgb(16 19 26 / 5%); }
-button.uk-model-account-row:focus-visible { outline: 2px solid rgb(255 255 255 / 55%); outline-offset: -2px; }
-.uk-model-account-label { flex: none; }
-.uk-model-connect-label { font-family: var(--font-body); font-size: var(--text-sm); color: var(--color-k-dim); }
-.uk-model-account-connect:hover .uk-model-connect-label { color: var(--color-k-text); }
-@media (prefers-reduced-motion: reduce) {
-  button.uk-model-account-row { transition: none; }
+button.uk-account-switch:hover .uk-model-account-label { color: var(--color-k-bright); }
+button.uk-account-switch:focus-visible { outline: 2px solid rgb(255 255 255 / 55%); outline-offset: 2px; }
+.uk-account-title-row { display: flex; align-items: center; gap: 8px; }
+.uk-model-account-label { font-family: var(--font-body); font-size: var(--text-base); line-height: 16px; color: var(--color-k-text); }
+.uk-model-account-row.is-active .uk-model-account-label { font-family: var(--font-strong); }
+.uk-account-sub { font-family: var(--font-body); font-size: var(--text-sm); line-height: 16px; color: var(--color-k-faint); }
+.uk-account-actions { display: flex; align-items: center; gap: 8px; flex: none; }
+.uk-account-actions .uk-btn-ghost { padding: 7px 12px; gap: 6px; }
+.uk-account-actions .uk-btn-ghost svg { color: var(--color-k-dim); }
+.uk-account-empty {
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px dashed rgb(16 19 26 / 14%);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  line-height: 16px;
+  color: var(--color-k-faint);
 }
 
 /* 칩 — 모델·사고 강도 선택. 액센트 색을 쓰지 않는다(soul.md §7): 눌림 상태는
