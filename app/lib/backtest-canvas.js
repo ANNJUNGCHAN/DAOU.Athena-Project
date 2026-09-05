@@ -1707,13 +1707,14 @@ function createBacktestCanvas(options) {
 
   // 반영을 막는 것만 돌려준다 — 얹을 스펙이 없거나 모르는 프리셋. 검증 오류는 막지 않는다.
   function mergeBlockers(patch, merged) {
-    if (!merged) return ['기법이 없어 설정을 얹을 수 없습니다'];
-    // 모르는 프리셋 id는 mergePatch가 조용히 흘려보내 "아무것도 안 바뀐 반영"이 된다 —
-    // 사람에게도 모델에게도 알리고 반영을 막는다.
+    // 모르는 기법 id는 mergePatch가 조용히 흘려보내 "아무것도 안 바뀐 반영"이 된다 —
+    // 사람에게도 모델에게도 알리고 반영을 막는다. 고르기 전 화면에서는 얹을 스펙도 없어
+    // merged가 null이지만, 그때 하는 말은 "없는 기법"이지 "기법이 없다"가 아니다.
     const wanted = patch.preset;
     if (typeof wanted === 'string' && !presets.some((p) => p.id === wanted)) {
       return [`${wanted}는 없는 기법입니다`];
     }
+    if (!merged) return ['기법이 없어 설정을 얹을 수 없습니다'];
     return [];
   }
 
@@ -1837,8 +1838,9 @@ function createBacktestCanvas(options) {
     if (isBusyView()) return busyReceipt('spec_draft', note);
     // 아직 아무 기법도 고르지 않은 목록 화면(보드 19)에서 온 설정은 새 기법의 것이다 —
     // 얹을 스펙이 없다고 되돌리지 않고 [+ 새 기법 만들기]와 같은 뼈대를 세워 그 위에
-    // 얹는다. 아는 기법 id가 patch에 있으면 그것을 고르는 길이 먼저다.
-    if (listFirst() && !presets.some((p) => p.id === patch.preset)) startTechniqueFromChat();
+    // 얹는다. 기법 id가 온 경우는 이 길이 아니다: 아는 id면 그 기법을 고르고, 모르는
+    // id면 mergeBlockers가 막는다 — 막을 것 때문에 폴더를 만들어 두면 안 된다.
+    if (listFirst() && typeof patch.preset !== 'string') startTechniqueFromChat();
 
     const base = spec || SpecModel.createSpec(null);
     const merged = mergePatch(patch);
@@ -2783,7 +2785,11 @@ function createBacktestCanvas(options) {
     try {
       // 뼈대가 먼저다 — 관리형 폴더는 씨앗 strategy.py(SMA 골든크로스)를 갖고 태어난다.
       // 그것을 남기면 "아직 아무 신호도 없다"는 화면의 말과 파일이 어긋난다.
-      await deps.writeProjectFile(project.id, TECHNIQUE_STRATEGY_PATH, TECHNIQUE_NEW_SOURCE);
+      // 덮어쓸 원문은 상수가 아니라 **지금 화면의 코드**다. 폴더를 만드는 동안(첫 await)
+      // 대화가 낸 코드가 들어올 수 있다 — 목록 화면에서 시작한 길이 그렇다. 거기서 상수를
+      // 쓰면 방금 반영한 코드를 빈 뼈대가 덮어 「반영됨」이 거짓말이 된다.
+      const seed = codeSource || TECHNIQUE_NEW_SOURCE;
+      await deps.writeProjectFile(project.id, TECHNIQUE_STRATEGY_PATH, seed);
       await deps.writeProjectFile(project.id, TECHNIQUE_TEST_PATH, TECHNIQUE_TEST_SOURCE);
     } catch (err) { failTechniqueProject(String((err && err.message) || err)); return; }
     await loadProjectFiles(project.id);
