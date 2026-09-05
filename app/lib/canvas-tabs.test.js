@@ -489,6 +489,16 @@ test('상태 보드를 갈아타기 전에 열린 primary 패널을 먼저 닫�
   assert.match(swap, /destroyBoardPrimary\(state\);\n\s*return mountBoardState\(host, target, envelope\);/);
 });
 
+test('봉투가 차트를 안 실었거나 봉이 없으면 목업을 걷지 않는다', () => {
+  const describe = CANVAS.slice(
+    CANVAS.indexOf('function boardChartDescriptor'),
+    CANVAS.indexOf('function beginBoardChartMount'),
+  );
+  // 봉을 지어내지 않는다 — 실을 것이 없으면 Paper 목업이 그대로 남는다.
+  assert.match(describe, /if \(!data \|\| !data\.chart\) return null;/);
+  assert.match(describe, /return descriptor\.body\.candles\.length \? descriptor : null;/);
+});
+
 test('보드 primary는 목업을 접고 얹으며, 실패하면 목업을 되돌린다', () => {
   const primary = CANVAS.slice(
     CANVAS.indexOf('async function mountBoardPrimary'),
@@ -496,22 +506,75 @@ test('보드 primary는 목업을 접고 얹으며, 실패하면 목업을 되�
   );
   // 저작된 렌더러 자리에만 손댄다.
   assert.match(primary, /primary\.renderer !== BOARD_CHART_RENDERER \|\| !primary\.mountPoint\) return null;/);
-  // 데이터가 없으면 목업을 걷지 않는다 — 봉을 지어내지 않는다.
-  assert.match(primary, /if \(!data \|\| !data\.chart\) return null;/);
-  assert.match(primary, /if \(!descriptor\.body\.candles\.length\) return null;/);
+  // 껍질이 확정한 신원을 그대로 쓴다 — 다시 만들면 paint ack와 어긋난다.
+  assert.match(primary, /let descriptor = state\.primaryDescriptor;/);
   // 목업은 지우지 않고 접는다(D1) — 실패하면 그대로 편다.
   assert.match(primary, /boardMount\.collapsePrimaryMockup\(primary\.mountPoint\)/);
   assert.match(primary, /boardMount\.restorePrimaryMockup\(collapsed\)/);
   assert.doesNotMatch(primary, /mountPoint\.replaceChildren|mountPoint\.innerHTML/);
   // 마운트 표식 — 검증 스크립트와 CSS가 이걸 본다.
   assert.match(primary, /primary\.mountPoint\.dataset\.bsPrimaryMounted = BOARD_CHART_RENDERER;/);
-  // 실패를 감추지 않는다.
-  assert.match(primary, /appendChild\(errorNote\(`차트를 그리지 못했다/);
+  // 실패를 감추지 않되, 사용자에게 보이는 문구에는 내부 용어를 싣지 않는다
+  // (어댑터 원문은 검수용 표식에만 남는다 — 제품 문구 3원칙).
+  assert.match(primary, /prepend\(errorNote\('차트를 그리지 못했다'\)\)/);
+  assert.doesNotMatch(primary, /errorNote\(`/);
+  assert.match(primary, /dataset\.bsPrimaryError = String\(\(error && error\.message\) \|\| error\)/);
+  // 마운트 결과를 첫 ack가 걸어둔 자리에 맺는다 — 안 맺으면 확정 ack가 안 나간다.
+  assert.match(primary, /settleBoardChartMount\(state, session\.body\.candles\.length \? 'data' : 'empty'\)/);
+  assert.match(primary, /settleBoardChartMount\(state, 'error'\)/);
   // 실시간은 통합 카드 리스가 이미 나른다 — 보드 카드에 0B를 다시 걸지 않는다.
   assert.doesNotMatch(primary, /wireQuoteRealtime/);
   // 저수준 렌더러를 직접 부르지 않는다 — 같은 AITS adapter 문으로만 들어간다.
   assert.match(primary, /mountAitsChartPanel\(card, chartBody, descriptor, \{ registerCardDestroyer: false \}\)/);
   assert.doesNotMatch(primary, /createChartCard/);
+  // 같은 panelId가 다른 컨테이너에 살아 있으면 열기 전에 놓아준다 — 안 놓으면 던진다.
+  assert.ok(primary.indexOf('releaseBoardChartPanel(descriptor.panelId)') > 0);
+  assert.ok(
+    primary.indexOf('releaseBoardChartPanel(descriptor.panelId)') < primary.indexOf('mountAitsChartPanel'),
+  );
+  // 늦게 거부된 마운트가 그 사이 살아난 패널의 신원을 지우지 못하게 한다.
+  assert.match(primary, /if \(state\.primaryMount !== attempt\) return null;/);
+  assert.ok(
+    primary.indexOf('if (state.primaryMount !== attempt) return null;')
+    < primary.lastIndexOf('primary.mountPoint.dataset.bsPrimaryError'),
+  );
+});
+
+test('보드 껍질이 차트 신원을 찍어 paint ack에 넘긴다', () => {
+  const begin = CANVAS.slice(
+    CANVAS.indexOf('function beginBoardChartMount'),
+    CANVAS.indexOf('function settleBoardChartMount'),
+  );
+  // paint ack는 껍질이 선 시점의 dataset만 읽는다 — 여기서 안 찍으면 마운트도
+  // 안 끝난 차트가 'data'로 집계되고 재조회 권위(panel_id·generation)가 안 선다.
+  assert.match(begin, /card\.dataset\.renderState = 'loading';/);
+  assert.match(begin, /card\.dataset\.chartPanelId = descriptor\.panelId;/);
+  assert.match(begin, /card\.dataset\.chartGeneration = String\(descriptor\.generation\);/);
+  assert.match(begin, /card\.dataset\.rendererId = descriptor\.rendererId;/);
+  // 확정 ack가 기다릴 자리 — canvas.js의 rest paint 핸들러가 이 표에서 꺼낸다.
+  assert.match(begin, /chartMountSettlements\.set\(descriptor\.panelId, settled\);/);
+
+  const board = CANVAS.slice(
+    CANVAS.indexOf('function renderBoardSurfaceCard'),
+    CANVAS.indexOf('async function renderTaskCanvasEnvelope'),
+  );
+  assert.match(board, /if \(chartDescriptor\) beginBoardChartMount\(card, state, chartDescriptor\);/);
+  assert.ok(board.indexOf('beginBoardChartMount') < board.indexOf('openBoardSurface(host, contract, envelope)'));
+  // 보드를 못 세우면 차트도 못 선다 — 기다리던 결과를 맺어야 확정 ack가 나간다.
+  assert.match(board, /settleBoardChartMount\(state, 'error'\);/);
+});
+
+test('같은 panelId가 다른 자리에 살아 있으면 열기 전에 놓아준다', () => {
+  const release = CANVAS.slice(
+    CANVAS.indexOf('function releaseBoardChartPanel'),
+    CANVAS.indexOf('// 껍질(보드 HTML)이 선 뒤에'),
+  );
+  // 살아 있는 패널만 건드린다.
+  assert.match(release, /if \(!aitsChartPanels\.has\(panelId\)\) return false;/);
+  // 옛 보드 상태가 죽은 panelId를 붙들고 있으면 그 카드를 닫아도 아무것도 안 닫힌다.
+  assert.match(release, /other\.primaryPanelId = '';/);
+  // main은 이 통지로 재조회 권위와 실시간 참조를 푼다 — 조용히 닫으면 리스가 샌다.
+  assert.match(release, /window\.athena\.send\('athena:chart-panel-destroyed', \{ panelId \}\)/);
 });
 
 test('보드 카드를 닫으면 그 자리에 열린 패널도 닫힌다', () => {

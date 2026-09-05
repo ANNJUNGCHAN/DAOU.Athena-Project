@@ -943,36 +943,59 @@ const BOARD_CHART_CANDLES = Object.freeze(Array.from({ length: 15 }, (_, index) 
   };
 }));
 
-async function exerciseBoardChartPrimary(win) {
-  const surface = loadRealBoardContract(BOARD_CHART_BOARD_ID, 4, REAL_BOARD_TEMPLATE_ROOT);
-  surface.instanceId = boardInstanceId(`${BOARD_CHART_BOARD_ID}-chart`);
-  surface.cardTitle = '보드 차트 마운트 검수';
-  surface.envelopeExtra = {
-    renderer_id: 'aits-chart-v1',
-    data: {
-      symbol: '005930',
-      chart: {
-        period: 'day', target: 'stock', trId: 'ka10081', candles: BOARD_CHART_CANDLES.slice(),
-      },
+// 봉투가 보드로 가는 실제 채널은 athena:add-rest-canvas이고, 그 채널의 계약은
+// paint ack 왕복이다(첫 ack는 pending, 마운트 결과가 확정 ack). 카드가 그려졌는지
+// 만 보면 그 왕복이 끊겨도 초록으로 보인다 — 여기서 두 ack를 다 모아서 잰다.
+function collectPaintAcks(itemId) {
+  const acks = [];
+  const onPainted = (_event, painted) => {
+    if (painted && painted.item_id === itemId) acks.push(painted);
+  };
+  ipcMain.on('athena:rest-canvas-painted', onPainted);
+  return {
+    acks,
+    stop: () => ipcMain.removeListener('athena:rest-canvas-painted', onPainted),
+    // 확정 ack는 AITS 로드·마운트 뒤에 온다 — 첫 ack보다 늦다.
+    waitForSettled: async () => {
+      for (let tries = 0; tries < 120; tries += 1) {
+        const settled = acks.find((ack) => ack.pending !== true);
+        if (settled) return settled;
+        await new Promise((resolve) => setTimeout(resolve, 100));
+      }
+      return null;
     },
   };
-  const paint = await sendBoardEnvelope(win, surface);
-  await activateBoardTab(win, surface.instanceId);
-  const dom = await win.webContents.executeJavaScript(`new Promise((resolve) => {
+}
+
+// 보드 차트 카드의 실측 DOM. 두 번째 봉투가 오면 root에 패널이 하나 더 붙으므로
+// 보이는 패널만 읽는다 — 숨은 옛 패널을 읽으면 무엇이 살아 있는지 알 수 없다.
+function readBoardChartDom(win, instanceId) {
+  return win.webContents.executeJavaScript(`new Promise((resolve) => {
     const started = Date.now();
     const read = () => {
       const card = document.querySelector(
-        '#grid .card[data-integrated-instance-key="view:${surface.instanceId}"]');
+        '#grid .card[data-integrated-instance-key="view:${instanceId}"]');
       if (!card) return { error: 'board card missing' };
-      const mount = card.querySelector('[data-bs-primary-mounted]');
+      const panels = [...card.querySelectorAll('.integrated-card-panel')];
+      const scope = panels.find((node) => !node.hidden) || card;
+      const mount = scope.querySelector('[data-bs-primary-mounted]');
       const chartBody = mount && mount.querySelector('.chart-card-body');
       const rect = mount ? mount.getBoundingClientRect() : null;
       return {
         error: null,
         board_id: card.dataset.boardId || null,
         board_surface: card.dataset.boardSurface || null,
-        board_nodes: card.querySelectorAll('.board-surface [data-node]').length,
+        board_nodes: scope.querySelectorAll('.board-surface [data-node]').length,
+        render_state: card.dataset.renderState || null,
+        chart_panel_id: card.dataset.chartPanelId || null,
+        chart_generation: card.dataset.chartGeneration || null,
         primary_renderer: mount ? mount.dataset.bsPrimaryMounted : null,
+        primary_error: (() => {
+          const stamped = scope.querySelector('[data-bs-primary-error]');
+          return stamped ? stamped.dataset.bsPrimaryError : null;
+        })(),
+        error_text: [...scope.querySelectorAll('.uk-error, [role="alert"]')]
+          .map((node) => node.textContent).join(' | ') || null,
         chart_body_count: mount ? mount.querySelectorAll('.chart-card-body').length : 0,
         canvas_count: chartBody ? chartBody.querySelectorAll('canvas').length : 0,
         // 목업은 지운 것이 아니라 접은 것이다 — 자식 수는 그대로고 보이는 것만 없다.
@@ -981,7 +1004,7 @@ async function exerciseBoardChartPrimary(win) {
           ? [...mount.children].filter((node) => node !== chartBody && !node.hidden).length : 0,
         mount_width: rect ? Math.round(rect.width) : 0,
         mount_height: rect ? Math.round(rect.height) : 0,
-        error_notes: card.querySelectorAll('.uk-error, [role="alert"]').length,
+        error_notes: scope.querySelectorAll('.uk-error, [role="alert"]').length,
       };
     };
     const check = () => {
@@ -994,25 +1017,151 @@ async function exerciseBoardChartPrimary(win) {
     };
     check();
   })`);
-  if (dom.error) throw new Error(`board chart primary: ${dom.error}`);
+}
+
+function assertBoardChartMounted(label, dom) {
+  if (dom.error) throw new Error(`board chart primary(${label}): ${dom.error}`);
   if (dom.board_id !== BOARD_CHART_BOARD_ID || dom.board_surface !== 'true') {
-    throw new Error(`board chart primary: 차트 봉투가 보드로 가지 않았다 — ${JSON.stringify(dom)}`);
+    throw new Error(`board chart primary(${label}): 차트 봉투가 보드로 가지 않았다 — ${JSON.stringify(dom)}`);
   }
   if (dom.primary_renderer !== 'athena-chart' || dom.canvas_count === 0 || dom.chart_body_count !== 1) {
-    throw new Error(`board chart primary: 라이브 차트가 보드 자리에 서지 않았다 — ${JSON.stringify(dom)}`);
+    throw new Error(`board chart primary(${label}): 라이브 차트가 보드 자리에 서지 않았다 — ${JSON.stringify(dom)}`);
   }
   if (dom.visible_mockup_children !== 0 || dom.mockup_children < 2) {
-    throw new Error(`board chart primary: Paper 목업 처리가 접기가 아니다 — ${JSON.stringify(dom)}`);
+    throw new Error(`board chart primary(${label}): Paper 목업 처리가 접기가 아니다 — ${JSON.stringify(dom)}`);
   }
-  if (dom.error_notes !== 0) {
-    throw new Error(`board chart primary: 오류 문구가 남았다 — ${JSON.stringify(dom)}`);
+  if (dom.error_notes !== 0 || dom.primary_error) {
+    throw new Error(`board chart primary(${label}): 오류 문구가 남았다 — ${JSON.stringify(dom)}`);
   }
   if (dom.mount_width <= 0 || dom.mount_height <= 0 || dom.board_nodes < 100) {
-    throw new Error(`board chart primary: 보드 크롬이 서지 않았다 — ${JSON.stringify(dom)}`);
+    throw new Error(`board chart primary(${label}): 보드 크롬이 서지 않았다 — ${JSON.stringify(dom)}`);
+  }
+}
+
+// 껍질 ack와 확정 ack가 계약대로 나갔는가. main은 이 값으로 재조회 권위를 세우고
+// (chartReloadAuthority.registerPaint는 panel_id·renderer_id·generation을 요구한다)
+// 데이터 카드를 집계한다 — 신원이 비면 주기 전환과 과거봉이 권위 없는 패널로 막히고,
+// 마운트 결과가 아닌 낙관적 'data'가 새면 안 그려진 차트가 데이터 카드가 된다.
+function assertBoardChartAcks(label, shell, settled, shellMs) {
+  // 첫 피드백 3초 계약 — 보드 HTML을 먼저 붙이는 이유가 이것이다.
+  if (!(shellMs < 3000)) {
+    throw new Error(`board chart ack(${label}): 첫 ack가 3초를 넘겼다 — ${shellMs}ms`);
+  }
+  // 마운트가 아직이면 pending('loading'), 이미 끝났으면 그 결과('data')다.
+  const expected = shell.pending === true ? 'loading' : 'data';
+  if (shell.render_state !== expected) {
+    throw new Error(`board chart ack(${label}): 껍질 ack의 상태가 마운트 결과와 어긋난다 — ${JSON.stringify(shell)}`);
+  }
+  if (!shell.panel_id || shell.renderer_id !== 'aits-chart-v1' || !Number.isInteger(shell.generation)) {
+    throw new Error(`board chart ack(${label}): 껍질 ack에 패널 신원이 없다 — ${JSON.stringify(shell)}`);
+  }
+  if (!settled) {
+    throw new Error(`board chart ack(${label}): 확정 ack가 오지 않았다`);
+  }
+  if (settled.render_state !== 'data' || settled.panel_id !== shell.panel_id
+    || settled.renderer_id !== 'aits-chart-v1' || !Number.isInteger(settled.generation)) {
+    throw new Error(`board chart ack(${label}): 확정 ack가 마운트 결과를 싣지 않았다 — ${JSON.stringify(settled)}`);
+  }
+}
+
+async function exerciseBoardChartPrimary(win) {
+  const surface = loadRealBoardContract(BOARD_CHART_BOARD_ID, 4, REAL_BOARD_TEMPLATE_ROOT);
+  surface.instanceId = boardInstanceId(`${BOARD_CHART_BOARD_ID}-chart`);
+  surface.cardTitle = '보드 차트 마운트 검수';
+  surface.operationRef = 'base:ka10081';
+  surface.envelopeExtra = {
+    renderer_id: 'aits-chart-v1',
+    data: {
+      symbol: '005930',
+      chart: {
+        period: 'day', target: 'stock', trId: 'ka10081', candles: BOARD_CHART_CANDLES.slice(),
+      },
+    },
+  };
+  const collector = collectPaintAcks(surface.instanceId);
+  let dom = null;
+  let secondDom = null;
+  let shell = null;
+  let settled = null;
+  let secondShell = null;
+  let secondSettled = null;
+  let shellMs = 0;
+  let secondShellMs = 0;
+  try {
+    const startedAt = Date.now();
+    shell = await sendBoardEnvelope(win, surface);
+    shellMs = Date.now() - startedAt;
+    await activateBoardTab(win, surface.instanceId);
+    dom = await readBoardChartDom(win, surface.instanceId);
+    settled = await collector.waitForSettled();
+    assertBoardChartMounted('첫 봉투', dom);
+    assertBoardChartAcks('첫 봉투', shell, settled, shellMs);
+
+    // 주기 전환 — 같은 종목·같은 자리로 두 번째 차트 봉투가 온다. panelId는 같고
+    // 컨테이너는 새것이라, 살아 있는 패널을 놓아주지 않으면 adapter가 던져 그 자리가
+    // 목업으로 되돌아간다(2026-09-06 검토 지적).
+    collector.acks.length = 0;
+    const second = {
+      ...surface,
+      operationRef: 'base:ka10083',
+      cardTitle: '보드 차트 주기 전환 검수',
+      envelopeExtra: {
+        renderer_id: 'aits-chart-v1',
+        data: {
+          symbol: '005930',
+          chart: {
+            period: 'month',
+            target: 'stock',
+            trId: 'ka10083',
+            candles: BOARD_CHART_CANDLES.map((candle, index) => ({
+              ...candle,
+              open: candle.open + 500,
+              high: candle.high + 500,
+              low: candle.low + 500,
+              close: candle.close + 500,
+              // 월봉은 달마다 한 봉이다 — 같은 봉 수를 12달씩 끊어 채운다.
+              time: `${2025 + Math.floor(index / 12)}-${String((index % 12) + 1).padStart(2, '0')}-01`,
+            })),
+          },
+        },
+      },
+    };
+    const secondStartedAt = Date.now();
+    secondShell = await sendBoardEnvelope(win, second);
+    secondShellMs = Date.now() - secondStartedAt;
+    await activateBoardTab(win, surface.instanceId);
+    secondDom = await readBoardChartDom(win, surface.instanceId);
+    secondSettled = await collector.waitForSettled();
+    assertBoardChartMounted('주기 전환', secondDom);
+    assertBoardChartAcks('주기 전환', secondShell, secondSettled, secondShellMs);
+    if (secondSettled.panel_id !== settled.panel_id) {
+      throw new Error(
+        `board chart primary: 같은 자리의 두 번째 봉투가 다른 패널을 열었다 — ${
+          JSON.stringify([settled.panel_id, secondSettled.panel_id])}`,
+      );
+    }
+    if (!(secondSettled.generation > settled.generation)) {
+      throw new Error(
+        `board chart primary: 주기 전환이 generation을 올리지 않았다 — ${
+          JSON.stringify([settled.generation, secondSettled.generation])}`,
+      );
+    }
+  } finally {
+    collector.stop();
   }
   return {
     board_id: BOARD_CHART_BOARD_ID,
-    paint_receipt: { render_state: paint.render_state, verified_visible: paint.verified_visible },
+    paint_receipt: { render_state: shell.render_state, verified_visible: shell.verified_visible },
+    shell_ack_ms: shellMs,
+    settled_ack: {
+      render_state: settled.render_state, panel_id: settled.panel_id, generation: settled.generation,
+    },
+    period_switch: {
+      shell_ack_ms: secondShellMs,
+      generation: secondSettled.generation,
+      canvas_count: secondDom.canvas_count,
+      error_notes: secondDom.error_notes,
+    },
     ...dom,
   };
 }
