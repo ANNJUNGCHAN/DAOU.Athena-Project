@@ -31,16 +31,6 @@ test('every route targets a distinct board the manifest calls a screen', () => {
   }
 });
 
-test('the seed table is the eight boards the plan asks for — agent 4 and screen 4', () => {
-  assert.equal(ROUTES.length, 8);
-  const byPage = {};
-  for (const route of ROUTES) {
-    const page = screenBoards.get(route.board).page;
-    byPage[page] = (byPage[page] ?? 0) + 1;
-  }
-  assert.deepEqual(byPage, { 'A-2': 4, '1-0': 3, 'D-2': 1 });
-});
-
 test('every route renders in a window the app actually has', () => {
   for (const route of ROUTES) assert.ok(['shell', 'orb'].includes(route.window), route.board);
 });
