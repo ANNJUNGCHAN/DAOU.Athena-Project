@@ -8,5 +8,8 @@
     { "node_id": "30JC-0", "name": "Investor Panel", "role": "primary", "depth": 2 },
     { "node_id": "30I4-0", "name": "Side Panel", "role": "rail", "depth": 2 },
     { "node_id": "30I0-0", "name": "Flow Status Footer", "role": "footer", "depth": 1 }
+  ],
+  "responsive": [
+    { "node_id": "34IW-0", "traits": ["paired-table"], "header_row": "34IX-0" }
   ]
 }

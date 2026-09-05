@@ -326,6 +326,41 @@ test('스트립·정렬 칩 표식이 Paper가 그 보드에 활성으로 그린
   }
 });
 
+// ---------- 순위 본표가 표로 서는가 ----------
+// ETF 기간 수익률(2WZK-0)과 외국인·기관 상위(30HY-0)는 Paper가 열 머리 한 줄과
+// 같은 폭의 본문 행으로 그린 본표를 가졌다. 열 이름에 숫자가 섞여 있어(「1주」·
+// 「3달」) 휴리스틱 헤더 판정을 통과하지 못하므로 regions.json의 responsive 선언이
+// 유일한 인식 경로다. 선언이 빠지면 표가 0개가 되고 열 접기도 전부 죽는다.
+test('순위 본표가 열 머리와 본문 행을 갖춘 표로 추출된다', () => {
+  // [보드, 표 소유 노드, 열 머리 노드, 열 수, 본문 행 수]
+  const authored = [
+    ['2WZK-0', '3R2H-0', '3R2I-0', 8, 20],
+    ['30HY-0', '34IW-0', '34IX-0', 8, 8],
+  ];
+  for (const [boardId, ownerId, headerId, columns, bodyRows] of authored) {
+    const slots = realSlots(boardId);
+    assert.equal(slots.tables.length, 1, `${boardId} 표가 1개가 아니다`);
+    const table = slots.tables[0];
+    assert.equal(table.node_id, ownerId);
+    assert.equal(table.header_row, headerId);
+    assert.equal(table.source, 'responsive');
+    assert.equal(table.responsive_mode, 'paired-table');
+    assert.equal(table.columns, columns);
+    assert.equal(table.body_rows.length, bodyRows);
+    assert.deepEqual(table.column_labels, slots.column_priority);
+    assert.equal(slots.density.table_columns, columns);
+    assert.equal(slots.density.rows_max, bodyRows);
+    // 생성물에도 표 표식이 실려야 한다 — 없으면 열 접기 CSS가 걸릴 자리가 없다.
+    const html = fs.readFileSync(path.join(
+      __dirname, '..', '..', 'backend', 'ref', 'card-surface-templates', boardId, 'board.html',
+    ), 'utf8');
+    assert.match(html, new RegExp(`data-node="${ownerId}"[^>]*`));
+    assert.ok(html.includes('bs-table'), `${boardId} board.html에 표 표식이 없다`);
+    assert.ok(html.includes('bs-r-paired-table'), `${boardId} board.html에 접기 표식이 없다`);
+    assert.ok(html.includes('data-row="head"'), `${boardId} board.html에 열 머리가 없다`);
+  }
+});
+
 test('canonical glyph verifier has no alternate diagnostic success path', () => {
   const verify = verifierSource();
   assert.match(verify, /waitForStableLayout/);
