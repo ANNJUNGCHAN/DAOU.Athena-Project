@@ -61,6 +61,44 @@ test('buildTurnModel: 만료·복원실패·미지 타입', () => {
   assert.equal(buildTurnModel(null, 0).kind, 'unknown');
 });
 
+// ---- 화면 P1 항목 10 (Paper DH2-0 › DH7-0) — 복원 실패 턴의 문체와 이유 ----
+test('buildTurnModel(restore-failed): reason만 와도 사실과 다른 기본 문구로 떨어지지 않는다', () => {
+  // scheduler._fail_code_watch는 note 없이 reason만 보낸다(코드 감시 해시 불일치).
+  const m = buildTurnModel({
+    type: 'routine-restore-failed',
+    reason: '감시 코드가 바뀌거나 사라짐 — 다시 검사',
+  }, 0);
+  assert.ok(!m.body.includes('감시가 비어 있다'), '오지도 않은 사실을 지어내면 안 된다');
+  assert.ok(m.body.includes('감시 코드가 바뀌거나 사라짐 — 다시 검사'));
+});
+
+test('buildTurnModel(restore-failed): note가 있으면 note를 쓴다', () => {
+  const m = buildTurnModel({
+    type: 'routine-restore-failed',
+    note: "'검증 루틴' 실시간 구독에 실패했습니다",
+    reason: '무시되는 값',
+  }, 0);
+  assert.ok(m.body.includes("'검증 루틴' 실시간 구독에 실패했습니다"));
+  assert.ok(!m.body.includes('무시되는 값'));
+});
+
+test('복원 실패·만료·미지 세 문장이 모두 존댓말이다', () => {
+  const bodies = [
+    buildTurnModel({ type: 'routine-restore-failed' }, 0).body,
+    buildTurnModel({ type: 'routine-expired', note: '검증 루틴' }, 0).body,
+    buildTurnModel({ type: '???' }, 0).body,
+  ];
+  for (const body of bodies) {
+    assert.match(body, /습니다|주세요/);
+    assert.doesNotMatch(body, /했다\.|있다\.|받았다\.|달라\./);
+  }
+});
+
+test('복원 실패 문장에 사람이 할 다음 행동이 들어간다', () => {
+  const body = buildTurnModel({ type: 'routine-restore-failed' }, 0).body;
+  assert.ok(body.includes('다시 시도'));
+});
+
 test('buildToast(fired): 방식이 제목에 들어간다', () => {
   const t = buildToast(FIRED);
   assert.ok(t.title.includes('005930'));
