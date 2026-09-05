@@ -214,6 +214,12 @@ async function runStep(win, step) {
         envelope: { fell_back: false, fallback_reason: null, layout: null, drop_types: [], ...step.data },
       });
       return;
+    case 'send':
+      // main이 밀어 주는 이벤트를 그대로 쏜다 — 능동 턴(athena:routine-event)처럼
+      // 이벤트로만 그려지는 화면은 클릭으로 도달할 길이 없다. 되돌릴 것은 없다:
+      // 라우트마다 창을 다시 읽으므로 남긴 DOM이 다음 라우트로 새지 않는다.
+      win.webContents.send(step.channel, step.data);
+      return;
     case 'wait':
       await wait(step.ms);
       return;
