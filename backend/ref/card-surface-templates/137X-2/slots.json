@@ -277,10 +277,47 @@
     "bs-footer": "차트 상태 · 기준·제한"
   },
   "primary": {
-    "renderer": null,
-    "mount_slot": null,
+    "renderer": "athena-chart",
+    "mount_slot": "14P9-2",
     "module": null,
-    "props_from": null
+    "props_from": [
+      {
+        "mapping_id": "base:ka10079",
+        "f": "stk_tic_chart_qry",
+        "kor": "주식틱차트조회",
+        "control": "주기 틱"
+      },
+      {
+        "mapping_id": "base:ka10080",
+        "f": "stk_min_pole_chart_qry",
+        "kor": "주식분봉차트조회",
+        "control": "주기 분"
+      },
+      {
+        "mapping_id": "base:ka10081",
+        "f": "stk_dt_pole_chart_qry",
+        "kor": "주식일봉차트조회",
+        "control": "주기 일"
+      },
+      {
+        "mapping_id": "base:ka10082",
+        "f": "stk_stk_pole_chart_qry",
+        "kor": "주식주봉차트조회",
+        "control": "주기 주"
+      },
+      {
+        "mapping_id": "base:ka10083",
+        "f": "stk_mth_pole_chart_qry",
+        "kor": "주식월봉차트조회",
+        "control": "주기 월"
+      },
+      {
+        "mapping_id": "base:ka10094",
+        "f": "stk_yr_pole_chart_qry",
+        "kor": "주식년봉차트조회",
+        "control": "주기 년"
+      }
+    ]
   },
   "slots": [
     {
