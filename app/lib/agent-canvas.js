@@ -289,6 +289,9 @@ function createAgentCanvas(deps) {
   for (const view of VIEWS) {
     const btn = el('button', view.key === activeView ? 'agent-view-tab is-active' : 'agent-view-tab');
     btn.type = 'button';
+    // 사이드바 모드 네비(shell.html data-view)와 같은 관례 — 라벨이 아니라 키로 집는다.
+    // lib/paper-screen-routes.js의 도달 절차가 이 셀렉터로 "제안" 뷰를 연다.
+    btn.setAttribute('data-view', view.key);
     btn.textContent = view.label;
     btn.addEventListener('click', () => setActiveView(view.key));
     viewTabButtons[view.key] = btn;
