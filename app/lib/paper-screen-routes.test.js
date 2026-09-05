@@ -136,24 +136,42 @@ test('every phrase survived the generator, so none of them is a data value', () 
   }
 });
 
-// 원장이 그 보드에 그린 텍스트가 애초에 둘뿐인 자리. 부팅 02·05는 'ATHENA'(폭
-// guide)와 커서 '|'가 전부라, 3개를 채우려면 없는 문구를 지어내는 수밖에 없다.
-// 대신 이 둘은 structure를 2개 이상 실어 공허 통과를 막는다(아래 두 번째 단언).
+// 3개 하한의 예외. 사유는 두 갈래뿐이고, 어느 쪽이든 대가로 structure를 2개 이상
+// 실어 공허 통과를 막는다(아래 마지막 단언).
+//   ledger-two  원장이 그 보드에 그린 텍스트가 애초에 둘뿐이다 — 부팅 02·05는
+//               'ATHENA'(폭 guide)와 커서 '|'가 전부라, 3개를 채우려면 없는 문구를
+//               지어내는 수밖에 없다. 이 갈래는 원장 크기로 참·거짓을 잰다.
+//   state-two   원장에는 더 있지만 **한 번에 보이는 상태**가 두 줄뿐이다. 보드 26은
+//               세 모드의 빈 화면을 나란히 그렸는데 앱은 그중 하나만 그린다 —
+//               그 사실 자체를 아래 별도 테스트가 canvas.css에서 잰다.
 const PHRASE_FLOOR_EXCEPTIONS = new Map([
-  ['16OD-2', '원장 texts가 ATHENA·| 둘뿐이다 (02 · 부팅 — READY)'],
-  ['16OX-2', '원장 texts가 ATHENA·| 둘뿐이다 (05 · 부팅 — COMPLETE)'],
+  ['16OD-2', { kind: 'ledger-two', why: '원장 texts가 ATHENA·| 둘뿐이다 (02 · 부팅 — READY)' }],
+  ['16OX-2', { kind: 'ledger-two', why: '원장 texts가 ATHENA·| 둘뿐이다 (05 · 부팅 — COMPLETE)' }],
+  ['COS-0', { kind: 'state-two', why: '대화 빈 화면이 제목·부제 둘뿐이다 (26 · 빈 작업공간)' }],
 ]);
 
 test('the only routes under three phrases are the ones Paper drew with two texts', () => {
-  for (const [board, why] of PHRASE_FLOOR_EXCEPTIONS) {
-    const texts = new Set(ledger(board).texts.map((t) => String(t.text).trim()));
-    assert.ok(texts.size < 3, `${board}: 원장에 문구가 ${texts.size}개나 있다 — ${why}가 거짓이다`);
+  for (const [board, exception] of PHRASE_FLOOR_EXCEPTIONS) {
+    if (exception.kind === 'ledger-two') {
+      const texts = new Set(ledger(board).texts.map((t) => String(t.text).trim()));
+      assert.ok(texts.size < 3,
+        `${board}: 원장에 문구가 ${texts.size}개나 있다 — ${exception.why}가 거짓이다`);
+    }
     const route = ROUTES.find((r) => r.board === board);
     if (route) {
       assert.ok(route.structure.length >= 2,
         `${board}: 문구를 깎았으면 structure가 최소 2개는 져야 한다`);
+      assert.ok(route.phrases.length >= 2, `${board}: 문구가 둘은 있어야 예외가 성립한다`);
     }
   }
+});
+
+// COS-0의 예외가 기대는 사실 — 보드 26이 나란히 그린 대화·그래프 빈 화면을 앱은
+// 한 번에 하나만 그린다. 이 규칙이 사라지면 두 변형이 함께 보이므로 예외도 거짓이 된다.
+test('the empty canvas draws one mode variant at a time', () => {
+  const css = fs.readFileSync(path.join(__dirname, '..', 'canvas.css'), 'utf8');
+  assert.match(css, /#canvasRegion\[data-mode="graph"\] \.canvas-empty-chat \{ display: none; \}/);
+  assert.match(css, /#canvasRegion:not\(\[data-mode="graph"\]\) \.canvas-empty-graphmode \{ display: none; \}/);
 });
 
 test('each route carries 3 to 7 phrases', () => {
