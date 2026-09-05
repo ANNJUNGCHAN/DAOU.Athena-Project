@@ -2229,6 +2229,7 @@ ipcMain.handle('athena:canvas-board-hydrate', async (event, payload = {}) => {
   return boardHydrate.hydrateBoard({
     backendBase: BACKEND_HTTP_BASE,
     fetchImpl: fetch,
+    token: LOCAL_BEARER_TOKEN,
     boardId: payload.boardId || payload.board_id,
     target: payload.target,
     account: payload.account,
