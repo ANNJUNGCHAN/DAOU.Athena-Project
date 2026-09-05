@@ -268,6 +268,19 @@ body { margin: 0; overflow: hidden; }
   border-radius: 50%;
   background: var(--color-brand);
 }
+/* 대화 행 앞의 모드 아이콘 슬롯(35번 보드 "모드 아이콘 · 제목 · 실행 점" 세 레인) — 모드
+ * 네비의 SVG를 복제해 넣는다(lib/sidebar.js makeModeIcon). 슬롯은 비어 있어도 폭을 지켜
+ * 제목 레인이 흔들리지 않는다. 색은 Paper 실측(#8A93A0, 현재 대화는 --color-down). */
+.sidebar-item-mode-ic {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #8a93a0;
+}
+.sidebar-item.is-current-conversation .sidebar-item-mode-ic { color: var(--color-down); }
 
 /* Paper 52/54 — 프로젝트 소속과 전역 최근는 같은 conversation id를 두 위치에
  * 투영한다. 현재 대화는 블루 강조선이 아니라 흰 행 + 우측 초록 점이다. */
@@ -340,7 +353,8 @@ body { margin: 0; overflow: hidden; }
   color: #5b6270;
   font-size: var(--text-xs);
   line-height: 16px;
-  pointer-events: none;
+  /* pointer-events는 막지 않는다 — 카드 위에 머물 수 있어야 '프로젝트 수정'이 눌린다
+   * (29번 보드 2026-09-05 개정, lib/sidebar.js makeProjectRow). */
 }
 .sidebar-project-description-name {
   color: var(--color-k-text);
@@ -359,10 +373,28 @@ body { margin: 0; overflow: hidden; }
   border-top: 1px solid rgb(255 255 255 / 36%);
   color: var(--color-k-text);
 }
+/* '프로젝트 수정' — 카드 안의 진짜 버튼(29번 보드 실측: 24px 높이, #E9F0FF 위 #C9DCFB 선,
+ * 연필 12px + 굵은 10px 글자). */
 .sidebar-project-description-action {
   margin-top: 4px;
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 24px;
+  padding: 0 9px;
+  border: 1px solid #c9dcfb;
+  border-radius: 7px;
+  background: #e9f0ff;
   color: var(--color-down);
-  font-family: var(--font-strong);
+  font: 400 var(--text-2xs)/12px var(--font-strong);
+  cursor: pointer;
+}
+.sidebar-project-description-action:hover,
+.sidebar-project-description-action:focus-visible { background: #dbe7fb; }
+.sidebar-project-description-action:focus-visible {
+  outline: 2px solid rgb(47 59 168 / 72%);
+  outline-offset: 2px;
 }
 .sidebar-project-actions {
   position: relative;

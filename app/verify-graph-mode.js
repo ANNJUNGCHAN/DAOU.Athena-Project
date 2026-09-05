@@ -726,8 +726,9 @@ async function main() {
     // ── 8. 과거 대화 이동 ──────────────────────────────────────────────────
     section('8. 대화 이력 이동');
     // 2026-09-03에 이 기능의 계약이 바뀌었다: 과거 대화를 **읽기 전용으로 보는 것**에서
-    // **그 대화로 실제 복원**으로(다른 세션 c51dc10). 그래서 여기서 재는 것도 바뀐다 —
-    // 배너는 "복원됨"이라 말하고, 입력은 잠기지 않으며, 열기는 restorable 게이트를 탄다.
+    // **그 대화로 실제 복원**으로(다른 세션 c51dc10). 2026-09-05에 한 번 더 — 복원은
+    // 조용하다(41번 보드): 배너를 그리지 않고, 입력은 잠기지 않으며, 열기는 restorable
+    // 게이트를 탄다.
     const past = await evaluateAsync(wc, `
       const list = await window.athena.invoke('athena:conversations-list').catch(() => null);
       const convs = (list && Array.isArray(list.conversations)) ? list.conversations : [];
@@ -738,14 +739,11 @@ async function main() {
       const beforeCount = document.getElementById('history').childNodes.length;
       const opened = await window.AthenaShell.openConversation({ id: target.id, title: target.title });
       await new Promise((r) => setTimeout(r, 700));
-      const banner = document.querySelector('#history .past-banner');
       return {
         ok: true,
         channelOk: !!(res && res.ok),
         opened,
-        isCurrent: !banner && opened === true,
-        bannerTitle: banner ? banner.querySelector('.past-banner-title').textContent : null,
-        bannerNote: banner ? banner.querySelector('.past-banner-note').textContent : null,
+        bannerShown: !!document.querySelector('#history .past-banner'),
         inputLocked: document.getElementById('input').disabled,
         beforeCount,
       };
@@ -753,22 +751,11 @@ async function main() {
     if (past.ok) {
       check('대화 메시지 조회 채널이 답한다', past.channelOk === true, past.channelOk);
       // 목록의 첫 대화가 지금 보고 있는 대화면 화면을 갈아치우지 않고 true만 준다 —
-      // 그것도 정상 경로다. 배너가 뜬 경우에만 배너 계약을 잰다.
+      // 그것도 정상 경로다. 어느 쪽이든 배너는 없어야 하고 입력은 열려 있어야 한다.
       check('이력 행을 누르면 성공을 보고한다', past.opened === true, past);
-      if (past.bannerTitle !== null) {
-        check('배너가 복원됐음을 밝힌다', /복원됨/.test(past.bannerTitle), past.bannerTitle);
-        check('이어서 말할 수 있는지를 배너가 정직하게 말한다',
-          /이어서 말할 수 있습니다/.test(past.bannerNote || ''), past.bannerNote);
-        // 복원은 읽기 전용이 아니다 — 잠긴 입력을 남기면 고장으로 읽힌다.
-        check('복원된 대화에서 입력이 잠기지 않는다', past.inputLocked === false, past.inputLocked);
-      } else {
-        steps.push({
-          section: currentSection,
-          name: '첫 이력 행이 지금 대화라 배너 없이 통과했다',
-          ok: true,
-          detail: past.opened,
-        });
-      }
+      check('복원은 조용하다 — 배너를 그리지 않는다', past.bannerShown === false, past.bannerShown);
+      // 복원은 읽기 전용이 아니다 — 잠긴 입력을 남기면 고장으로 읽힌다.
+      check('복원된 대화에서 입력이 잠기지 않는다', past.inputLocked === false, past.inputLocked);
     } else {
       steps.push({ section: currentSection, name: '실 대화 목록으로는 못 잼', ok: true, detail: past.reason });
     }

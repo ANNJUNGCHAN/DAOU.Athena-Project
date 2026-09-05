@@ -124,16 +124,15 @@ async function main() {
   const opened = await wc.executeJavaScript(`(async () => {
     const ok = await window.AthenaShell.openConversation({ id: 'conv-chat', title: '삼성전자 수급 확인' });
     const view = window.AthenaCanvasMode && window.AthenaCanvasMode.state && window.AthenaCanvasMode.state.view;
-    const banner = document.querySelector('.past-banner-title');
-    const note = document.querySelector('.past-banner-note');
+    const banner = document.querySelector('#history .past-banner');
     const empty = document.querySelector('.past-empty');
     const input = document.getElementById('input');
-    return { ok, view, banner: banner && banner.textContent, note: note && note.textContent,
+    return { ok, view, bannerShown: Boolean(banner),
       empty: empty && empty.textContent, inputDisabled: input ? input.disabled : null };
   })()`);
   check('렌더러: chat 대화를 열면 화면이 summary(대화) 모드로 간다', opened.ok === true && opened.view === 'summary', opened);
-  check('렌더러: 복원 배너가 뜨고 입력은 잠기지 않는다', /복원됨/.test(opened.banner || '') && opened.inputDisabled === false, opened);
-  check('렌더러: 커서가 없던 대화는 "문맥 없이 새로 시작"이라고 말한다', /문맥 없이/.test(opened.note || ''), opened.note);
+  // 복원은 조용하다(2026-09-05 사용자 정정, 41번 보드) — '복원됨' 배너를 그리지 않고 입력만 연다.
+  check('렌더러: 복원은 조용하다 — 배너 없이 입력이 열린다', opened.bannerShown === false && opened.inputDisabled === false, opened);
   check('렌더러: 백엔드가 없어 메시지 0건이면 그 사실을 적는다', /저장된 메시지가 없습니다/.test(opened.empty || ''), opened.empty);
   check('전환(chat): 커서가 없는 대화로 돌아오면 main 커서가 비워진다', mainMod.getLiveSessionId() === null, mainMod.getLiveSessionId());
 
@@ -141,11 +140,11 @@ async function main() {
     const ok = await window.AthenaShell.openConversation({ id: 'conv-bt', title: '추세추종 v3' });
     const view = window.AthenaCanvasMode && window.AthenaCanvasMode.state && window.AthenaCanvasMode.state.view;
     const nav = document.getElementById('modeNavBacktest');
-    const note = document.querySelector('.past-banner-note');
-    return { ok, view, navActive: nav ? nav.classList.contains('is-active') : null, note: note && note.textContent };
+    return { ok, view, navActive: nav ? nav.classList.contains('is-active') : null,
+      bannerShown: Boolean(document.querySelector('#history .past-banner')) };
   })()`);
   check('렌더러: backtest 대화를 열면 화면과 모드 네비가 backtest로 간다', openedBt.ok === true && openedBt.view === 'backtest' && openedBt.navActive === true, openedBt);
-  check('렌더러: 커서가 있던 대화는 "문맥까지 이어진다"고 말한다', /문맥까지/.test(openedBt.note || ''), openedBt.note);
+  check('렌더러: 커서가 있던 대화도 배너 없이 조용히 연다', openedBt.bannerShown === false, openedBt);
 
   // 6) 모르는 id는 복원 불가로 정직하게 거절한다
   const unknown = await wc.executeJavaScript(`window.athena.invoke('athena:conversations-set-active', { id: 'no-such' })`);
@@ -259,6 +258,133 @@ async function main() {
     const finished = await readSidebarRun();
     check('완료: 스피너가 회색 점이 되고 모드 옆 스피너·머리 알약이 사라진다',
       /sidebar-item-run-done/.test(finished.bt || '') && finished.navRunning === false && finished.pill === null, finished);
+
+    // 11) 2026-09-05 정정 — 모드 클릭은 목록을 거르지 않고 새 대화만 연다(35·40번), 대화 행 앞
+    //     모드 아이콘(35번), 설명 카드가 머물고 '프로젝트 수정'이 눌린다(29번). 조용한 복원은
+    //     위 5번이 잰다. ATHENA_PROBE_SHOT이 있으면 각 장면을 PNG로도 남긴다.
+    const shotTen = async (suffix) => {
+      if (!process.env.ATHENA_PROBE_SHOT) return;
+      const target = process.env.ATHENA_PROBE_SHOT.replace(/\.png$/i, `${suffix}.png`);
+      fs.writeFileSync(target, (await shellWin.capturePage()).toPNG());
+      console.log(`shot ${target}`);
+    };
+    await wc.executeJavaScript(`window.AthenaShell.openConversation({ id: 'conv-bt', title: '추세추종 v3' })`);
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    const readRows = () => wc.executeJavaScript(`(() => {
+      const ids = ['conv-chat', 'conv-bt', 'conv-graph'];
+      const rows = ids.map((id) => document.querySelector('.sidebar-item[data-conversation-id="' + id + '"]'));
+      return {
+        view: window.AthenaCanvasMode && window.AthenaCanvasMode.state && window.AthenaCanvasMode.state.view,
+        present: rows.map((row) => Boolean(row)),
+        icons: rows.map((row) => Boolean(row && row.querySelector('.sidebar-item-mode-ic svg'))),
+        iconLabels: rows.map((row) => { const ic = row && row.querySelector('.sidebar-item-mode-ic'); return ic ? ic.getAttribute('aria-label') : null; }),
+        firstLane: rows.map((row) => (row && row.firstElementChild ? row.firstElementChild.className : null)),
+      };
+    })()`);
+    const rowsInBacktest = await readRows();
+    check('목록: 백테스트 화면에서도 chat·backtest·graph 대화가 전부 보인다(모드 필터 없음)',
+      rowsInBacktest.view === 'backtest' && rowsInBacktest.present.every(Boolean), rowsInBacktest);
+    check('목록: 대화 행마다 앞 레인에 그 모드의 아이콘이 선다(대화·백테스트·그래프)',
+      rowsInBacktest.icons.every(Boolean)
+      && rowsInBacktest.firstLane.every((cls) => /sidebar-item-mode-ic/.test(cls || ''))
+      && rowsInBacktest.iconLabels.join('|') === '대화 모드|백테스트 모드|그래프 모드', rowsInBacktest);
+    await shotTen('-icons');
+
+    const afterModeClick = await wc.executeJavaScript(`(async () => {
+      document.getElementById('modeNavGraph').click();
+      await new Promise((r) => setTimeout(r, 500));
+      const listed = await window.athena.invoke('athena:conversations-list');
+      const ids = ['conv-chat', 'conv-bt', 'conv-graph'];
+      return {
+        view: window.AthenaCanvasMode && window.AthenaCanvasMode.state && window.AthenaCanvasMode.state.view,
+        present: ids.map((id) => Boolean(document.querySelector('.sidebar-item[data-conversation-id="' + id + '"]'))),
+        activeId: listed.activeId, activeMode: listed.activeMode, rowCount: listed.conversations.length,
+        historyChildren: document.getElementById('history').childNodes.length,
+      };
+    })()`);
+    check('모드 클릭: 그래프로 들어가고 목록은 그대로다(세 대화 전부, 행 수 그대로)',
+      afterModeClick.view === 'graph' && afterModeClick.present.every(Boolean) && afterModeClick.rowCount === 3, afterModeClick);
+    check('모드 클릭: 그 프로젝트의 새 그래프 대화가 열린다(activeId는 새 id, 채팅은 빈 채, 행은 첫 입력 전이라 아직 없음)',
+      afterModeClick.activeMode === 'graph' && afterModeClick.historyChildren === 0
+      && !['conv-chat', 'conv-bt', 'conv-graph'].includes(afterModeClick.activeId), afterModeClick);
+    await shotTen('-mode-click');
+
+    const card = await wc.executeJavaScript(`(async () => {
+      const wrap = Array.from(document.querySelectorAll('.sidebar-project')).find((w) => w.dataset.projectId === 'proj-athena');
+      if (!wrap) return { ok: false, reason: 'no project row' };
+      const row = wrap.querySelector('.sidebar-project-row');
+      const main = wrap.querySelector('.sidebar-project-main');
+      const card = wrap.querySelector('.sidebar-project-description');
+      if (!row || !main || !card) return { ok: false, reason: 'row/main/card missing' };
+      const insideButton = main.contains(card);
+      // 앞 장면(ATHENA_PROBE_SHOT)이 삭제 확인 패널을 열어 둔 채일 수 있다 — 사람이 Esc를 누르듯
+      // 닫고 시작한다. 다른 팝오버가 열려 있으면 카드는 겹치지 않는 게 계약이다.
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+      row.dispatchEvent(new MouseEvent('mouseenter'));
+      const shownOnHover = !card.hidden;
+      // 행을 벗어나 카드로 건너간다 — 8px 틈을 지나는 동안 꺼지면 안 된다.
+      row.dispatchEvent(new MouseEvent('mouseleave'));
+      await new Promise((r) => setTimeout(r, 60));
+      card.dispatchEvent(new MouseEvent('mouseenter'));
+      await new Promise((r) => setTimeout(r, 300));
+      const staysOnCard = !card.hidden;
+      const button = card.querySelector('button.sidebar-project-description-action');
+      return { ok: true, insideButton, shownOnHover, staysOnCard, hasButton: Boolean(button),
+        tooltip: main.getAttribute('title'), pointerEvents: getComputedStyle(card).pointerEvents };
+    })()`);
+    check('설명 카드: 행에 머물면 뜨고, 카드로 건너가도 꺼지지 않으며, 버튼 안이 아니라 형제다',
+      card.ok && card.shownOnHover && card.staysOnCard && !card.insideButton, card);
+    check("설명 카드: '프로젝트 수정'은 진짜 버튼이고 포인터를 받으며, 행 title 툴팁은 없다",
+      card.ok && card.hasButton && card.pointerEvents !== 'none' && !card.tooltip, card);
+    await shotTen('-card');
+
+    const editOpened = await wc.executeJavaScript(`(async () => {
+      const findWrap = () => Array.from(document.querySelectorAll('.sidebar-project')).find((w) => w.dataset.projectId === 'proj-athena');
+      const button = findWrap() && findWrap().querySelector('.sidebar-project-description-action');
+      if (!button) return { ok: false, reason: 'no button' };
+      button.click();
+      await new Promise((r) => setTimeout(r, 150));
+      const panel = findWrap() && findWrap().querySelector('.sidebar-project-edit');
+      if (!panel) return { ok: false, reason: 'no panel' };
+      const label = panel.querySelector('.sidebar-project-edit-input[data-field="label"]');
+      const description = panel.querySelector('.sidebar-project-edit-input[data-field="description"]');
+      const save = panel.querySelector('.sidebar-project-edit-save');
+      const cardHidden = findWrap().querySelector('.sidebar-project-description').hidden;
+      return { ok: true, label: label.value, description: description.value, saveDisabled: save.disabled, cardHidden };
+    })()`);
+    check("프로젝트 수정: 버튼이 행 아래에 이름·설명 패널을 열고 현재 값을 채운다(카드는 접힌다)",
+      editOpened.ok && editOpened.label === '아테나' && editOpened.description === '' && editOpened.saveDisabled === false
+      && editOpened.cardHidden === true, editOpened);
+    await shotTen('-edit');
+
+    const edited = await wc.executeJavaScript(`(async () => {
+      const findWrap = () => Array.from(document.querySelectorAll('.sidebar-project')).find((w) => w.dataset.projectId === 'proj-athena');
+      const panel = findWrap() && findWrap().querySelector('.sidebar-project-edit');
+      if (!panel) return { ok: false, reason: 'no panel' };
+      const label = panel.querySelector('.sidebar-project-edit-input[data-field="label"]');
+      const description = panel.querySelector('.sidebar-project-edit-input[data-field="description"]');
+      const save = panel.querySelector('.sidebar-project-edit-save');
+      label.value = '   ';
+      label.dispatchEvent(new Event('input', { bubbles: true }));
+      const emptyDisabled = save.disabled;
+      label.value = '아테나 리서치';
+      label.dispatchEvent(new Event('input', { bubbles: true }));
+      description.value = '키움 리서치 노트';
+      description.dispatchEvent(new Event('input', { bubbles: true }));
+      save.click();
+      await new Promise((r) => setTimeout(r, 400));
+      const listed = await window.athena.invoke('athena:conversations-list');
+      const wrap = findWrap();
+      return { ok: true, emptyDisabled,
+        panelGone: !(wrap && wrap.querySelector('.sidebar-project-edit')),
+        rowLabel: wrap && wrap.querySelector('.sidebar-project-name').textContent,
+        project: listed.projects.find((p) => p.id === 'proj-athena') || null };
+    })()`);
+    check('프로젝트 수정: 빈 이름이면 저장이 잠기고, 저장하면 행·레코드가 새 이름·설명을 갖는다',
+      edited.ok && edited.emptyDisabled === true && edited.panelGone && edited.rowLabel === '아테나 리서치'
+      && edited.project && edited.project.label === '아테나 리서치' && edited.project.description === '키움 리서치 노트', edited);
+    const rejected = await wc.executeJavaScript(`window.athena.invoke('athena:project-update', { id: 'proj-athena', label: '' })`);
+    check('프로젝트 수정 IPC: 빈 이름은 invalid_label로 거절한다', rejected && rejected.ok === false && rejected.reason === 'invalid_label', rejected);
 
     // 10) 그래프 워크스페이스(42번 보드) — 서브뷰(지도)가 세션에 남고, 돌아오면 그대로 지도다.
     //     브레인 백엔드가 없어 지도 그리기는 실패하지만 서브뷰 상태 자체는 남아야 한다.
