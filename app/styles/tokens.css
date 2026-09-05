@@ -87,9 +87,9 @@
   --dur-base: 180ms;
   --tracking-num: -1px;
 
-  --font-body: 'Daki', 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', -apple-system, 'Segoe UI', sans-serif;
-  --font-strong: 'Daki B', 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', -apple-system, 'Segoe UI', sans-serif;
-  --font-display: 'Daki Title', 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', -apple-system, 'Segoe UI', sans-serif;
+  --font-body: 'Daki', 'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', -apple-system, 'Segoe UI', sans-serif;
+  --font-strong: 'Daki B', 'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Daki Title', 'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, 'Cascadia Code', monospace;
 
   /* 글자 크기 스케일 — 2026-08-19 결정(질의응답): 0.5px 단위 임의값 12종 난립을
