@@ -195,6 +195,8 @@ function renderNav(nav, grid, { onSelect }) {
     b.type = 'button';
     b.setAttribute('role', 'option');
     b.setAttribute('aria-selected', 'false');
+    // 라벨이 아니라 키로 집는다 — lib/paper-screen-routes.js의 도달 절차가 쓰는 셀렉터다.
+    b.setAttribute('data-key', item.key);
     b.appendChild(el('span', 'settings-nav-label', item.label));
     if (item.countChannel) {
       const badgeEl = el('span', 'settings-nav-badge', '');
