@@ -246,7 +246,7 @@
 .uk-tr-actions { font-family: var(--font-body); color: var(--color-k-dim); font-size: var(--text-sm); }
 .uk-tr-foot { font-family: var(--font-body); color: var(--color-k-faint); font-size: var(--text-xs); padding-top: 4px; }
 .uk-closed-item { display: flex; flex-direction: column; gap: 3px; }
-.uk-closed-title { font-family: var(--font-strong); color: #F2F4F8; font-size: var(--text-md); }
+.uk-closed-title { font-family: var(--font-strong); color: var(--color-k-text); font-size: var(--text-md); }
 .uk-closed-desc { font-family: var(--font-body); color: var(--color-k-dim); font-size: var(--text-sm); }
 
 .uk-toggle-row {

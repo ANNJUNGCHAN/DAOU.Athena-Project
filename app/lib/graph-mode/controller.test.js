@@ -68,6 +68,7 @@ function setup(options) {
   // 렌더러에 무엇을 넘기는가**다. opts.noLiveMap이면 렌더러가 아예 없는 상황
   // (vis 로드 실패)을 흉내낸다.
   const liveRenders = [];
+  const liveRenderOptions = [];
   const liveSelections = [];
   const controller = createGraphModeController({
     store,
@@ -76,7 +77,7 @@ function setup(options) {
     elements,
     createLiveMap: opts.noLiveMap ? undefined : () => ({
       available: () => true,
-      render: (payloadIn) => { liveRenders.push(payloadIn); return true; },
+      render: (payloadIn, optionsIn) => { liveRenders.push(payloadIn); liveRenderOptions.push(optionsIn); return true; },
       selectEntity: (id) => { liveSelections.push(id); },
       destroy: () => {},
     }),
@@ -99,7 +100,7 @@ function setup(options) {
   // 대부분의 테스트는 브레인이 켜져 있다고 가정한다 — 꺼진 채 시작하고 싶은
   // 테스트만 opts.available: false를 넘긴다.
   if (opts.available !== false) controller.setAvailable(true);
-  return { controller, elements, fetchCalls: () => calls, liveRenders, liveSelections };
+  return { controller, elements, fetchCalls: () => calls, liveRenders, liveRenderOptions, liveSelections };
 }
 
 // render.js의 renderClusterBubbles(스텝10)가 theme-clusters.js의 shouldWarnUnnamed를
@@ -589,6 +590,31 @@ test('관계 목록 — 선택 엔티티가 어느 surprising-connections에도 
   await controller.toggle();
   controller.selectNode('e:a');
   assert.equal(elements.panel.querySelector('.panel-relations'), null);
+});
+
+// ── 지도의 숨은 연관 강조(화면 P1 항목 8-B, 보드 2QCN-2 › 2QF8-2) ──────────
+
+test('지도에 넘기는 숨은 연관은 요약 카드와 같은 상위 3쌍이다', async () => {
+  const make = (name, score) => ({
+    source_entity_id: `e:${name}`, source_name: name, target_entity_id: 'e:b', surprise_score: score,
+  });
+  const connections = [make('D', 0.1), make('A', 0.9), make('B', 0.5), make('C', 0.7)];
+  const { controller, liveRenderOptions } = setup({
+    payload: payloadTwoClusters, getSurprisingConnections: () => connections,
+  });
+  await controller.toggle();
+  const last = liveRenderOptions[liveRenderOptions.length - 1];
+  assert.deepEqual(
+    last.hiddenPairs,
+    topSurprising(connections).map((c) => [c.source_entity_id, c.target_entity_id]),
+  );
+  assert.equal(last.hiddenPairs.length, 3, '상한 3은 요약 카드(hidden-links.js)와 같은 계약이다');
+});
+
+test('숨은 연관을 아직 못 받았으면 지도에 강조할 쌍이 없다', async () => {
+  const { controller, liveRenderOptions } = setup({ payload: payloadTwoClusters });
+  await controller.toggle();
+  assert.deepEqual(liveRenderOptions[liveRenderOptions.length - 1].hiddenPairs, []);
 });
 
 // ── 필터가 화면을 비웠을 때(보드 07 정직성 상태) ─────────────────────────────

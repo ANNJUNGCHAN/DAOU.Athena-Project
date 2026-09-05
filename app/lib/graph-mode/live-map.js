@@ -115,10 +115,62 @@ function pairKey(a, b) {
 // 같은 그래프를 다시 받았는데 처음부터 다시 그리면 물리가 재시작돼 사용자가
 // 손으로 만들어 둔 배치가 날아간다. draw(true)는 필터·전환마다 불리므로
 // 내용이 실제로 달라졌을 때만 다시 만든다.
-function signatureOf(payload) {
+function signatureOf(payload, hiddenPairs) {
   const nodes = Array.isArray(payload && payload.nodes) ? payload.nodes : [];
   const edges = Array.isArray(payload && payload.edges) ? payload.edges : [];
-  return `${payload && payload.revision}|${nodes.length}|${edges.length}|${nodes.map((n) => n.entity_id).join(',')}`;
+  // 숨은 연관은 지도보다 늦게 도착한다(별도 왕복이다) — 강조할 쌍이 바뀌었으면
+  // 같은 그래프라도 다시 그려야 핑크가 그 셋에 붙는다.
+  const hidden = (Array.isArray(hiddenPairs) ? hiddenPairs : [])
+    .map((pair) => (Array.isArray(pair) ? pairKey(pair[0], pair[1]) : '')).join(',');
+  return `${payload && payload.revision}|${nodes.length}|${edges.length}|${nodes.map((n) => n.entity_id).join(',')}|${hidden}`;
+}
+
+// 숨은 연관 강조는 **상위 3쌍에만** 붙는다(보드 2QCN-2 › 2QF8-2).
+//
+// 예전에는 군집을 넘는 연결을 전부 핑크로 칠했다. 작은 그래프에서는 군집이 종목↔테마
+// 경계를 따라 갈려 거의 모든 연결이 경계를 넘는다 — 전부 핑크로 칠하면 “예외”라는
+// 뜻이 사라진다(모두가 예외면 아무도 예외가 아니다). 강조할 쌍은 요약의 “숨은 연관”
+// 카드와 **같은 셋**이어야 해서 컨트롤러(topSurprising, 상한 3)가 골라 넘겨준다.
+function hiddenPairSet(hiddenPairs) {
+  const set = new Set();
+  for (const pair of (Array.isArray(hiddenPairs) ? hiddenPairs : [])) {
+    if (!Array.isArray(pair) || pair.length < 2) continue;
+    set.add(pairKey(pair[0], pair[1]));
+    set.add(pairKey(pair[1], pair[0]));
+  }
+  return set;
+}
+
+function buildEdges(payload, theme, hiddenPairs) {
+  const hidden = hiddenPairSet(hiddenPairs);
+  const details = new Map();
+  for (const detail of (payload.edge_details || [])) {
+    details.set(pairKey(detail.source, detail.target), detail);
+  }
+  return payload.edges.map((pair, index) => {
+    const [a, b] = pair;
+    const detail = details.get(pairKey(a, b)) || details.get(pairKey(b, a)) || {};
+    const conf = CONFIDENCE[detail.confidence] || CONFIDENCE.AMBIGUOUS;
+    const isHidden = hidden.has(pairKey(a, b));
+    const kinds = Array.isArray(detail.kinds) ? detail.kinds.join(' · ') : '';
+    return {
+      id: index,
+      from: a,
+      to: b,
+      label: kinds || undefined,
+      // 숨은 연관은 확정성보다 우선해서 칠한다 — 정적 뷰의
+      // .graph-edge.is-hidden-link도 다른 엣지 규칙을 덮는다.
+      color: {
+        color: isHidden ? HIDDEN_COLOR : conf.color,
+        highlight: HIDDEN_COLOR,
+      },
+      dashes: isHidden ? [6, 4] : conf.dashes,
+      width: isHidden ? 2 : 1.4,
+      arrows: { to: { enabled: true, scaleFactor: 0.5, type: 'arrow' } },
+      font: { color: theme.dim, size: 10, strokeWidth: 4, strokeColor: theme.halo, align: 'horizontal' },
+      title: `${conf.label}${isHidden ? ' · 숨은 연관' : ''}${kinds ? `\n${kinds}` : ''}`,
+    };
+  });
 }
 
 function createLiveMap(deps) {
@@ -194,46 +246,15 @@ function createLiveMap(deps) {
     });
   }
 
-  function buildEdges(payload, theme) {
-    const clusterOf = new Map(payload.nodes.map((n) => [String(n.entity_id), n.cluster]));
-    const details = new Map();
-    for (const detail of (payload.edge_details || [])) {
-      details.set(pairKey(detail.source, detail.target), detail);
-    }
-    return payload.edges.map((pair, index) => {
-      const [a, b] = pair;
-      const detail = details.get(pairKey(a, b)) || details.get(pairKey(b, a)) || {};
-      const conf = CONFIDENCE[detail.confidence] || CONFIDENCE.AMBIGUOUS;
-      const crossing = clusterOf.get(String(a)) !== clusterOf.get(String(b));
-      const kinds = Array.isArray(detail.kinds) ? detail.kinds.join(' · ') : '';
-      return {
-        id: index,
-        from: a,
-        to: b,
-        label: kinds || undefined,
-        // 숨은 연관은 확정성보다 우선해서 칠한다 — 정적 뷰의
-        // .graph-edge.is-hidden-link도 다른 엣지 규칙을 덮는다.
-        color: {
-          color: crossing ? HIDDEN_COLOR : conf.color,
-          highlight: HIDDEN_COLOR,
-        },
-        dashes: crossing ? [6, 4] : conf.dashes,
-        width: crossing ? 2 : 1.4,
-        arrows: { to: { enabled: true, scaleFactor: 0.5, type: 'arrow' } },
-        font: { color: theme.dim, size: 10, strokeWidth: 4, strokeColor: theme.halo, align: 'horizontal' },
-        title: `${conf.label}${crossing ? ' · 숨은 연관' : ''}${kinds ? `\n${kinds}` : ''}`,
-      };
-    });
-  }
-
-  function render(payload) {
+  function render(payload, options) {
     if (!available()) return false;
     const nodes = Array.isArray(payload && payload.nodes) ? payload.nodes : [];
     if (nodes.length === 0) {
       destroy();
       return false;
     }
-    const next = signatureOf(payload);
+    const hiddenPairs = (options && Array.isArray(options.hiddenPairs)) ? options.hiddenPairs : [];
+    const next = signatureOf(payload, hiddenPairs);
     if (network && next === signature) return true; // 같은 그래프 — 배치를 지키고 아무것도 안 한다.
     signature = next;
 
@@ -244,7 +265,7 @@ function createLiveMap(deps) {
 
     const theme = themeColors(container);
     nodesDs = new vis.DataSet(buildNodes(payload, theme));
-    edgesDs = new vis.DataSet(buildEdges(payload, theme));
+    edgesDs = new vis.DataSet(buildEdges(payload, theme, hiddenPairs));
     network = new vis.Network(host, { nodes: nodesDs, edges: edgesDs }, {
       // 크기는 노드마다 widthConstraint로 못박는다(buildNodes) — scaling은 shape:'dot'의
       // value 축에만 듣고 'circle'에는 안 들어서, 남겨두면 안 듣는 설정이 된다.
@@ -375,7 +396,7 @@ function createLiveMap(deps) {
 }
 
 const __exports = {
-  createLiveMap, signatureOf, clusterColor, nodeDiameterPx, truncateForCircle, CONFIDENCE, PHYSICS,
+  createLiveMap, signatureOf, buildEdges, clusterColor, nodeDiameterPx, truncateForCircle, CONFIDENCE, PHYSICS,
 };
 
 // UMD 각주(2026-08-18 렌더러 격리) — column-fold.js와 같은 패턴.

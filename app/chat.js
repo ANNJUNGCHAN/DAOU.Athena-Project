@@ -2785,7 +2785,9 @@ function renderKiumiMenu() {
   $kiumiMenu.appendChild(settingsSep);
   $kiumiMenu.appendChild(kiumiSection('설정'));
   // 모델·추론 노력 — 스트립 필 제거로 이 메뉴가 유일한 진입로다(보드 45 v5).
-  $kiumiMenu.appendChild(kiumiItem('model', '모델 설정', 'Claude·Grok 모델·사고 강도 — 모델 팝오버(보드 09)', async () => {
+  // 설명은 Paper 2HDB-2 원문 그대로다 — 이 항목이 여는 모델 팝오버(보드 09)는
+  // 화면 문구가 아니라 여기 주석에 적는다(제품 문구 3원칙: 내부용어 금지).
+  $kiumiMenu.appendChild(kiumiItem('model', '모델 설정', '모델 · 사고 강도', async () => {
     closeKiumiMenu();
     await refreshModelState();
     renderModelPopover();
