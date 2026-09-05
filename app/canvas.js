@@ -832,6 +832,8 @@ function boardStateOf(host) {
       // 지금 이 보드의 primary 자리에 열려 있는 앱 렌더러 패널 — 상태 보드를
       // 갈아타거나 카드를 닫을 때 이 id로 닫는다.
       primaryPanelId: '',
+      // 그 자리가 잡은 실시간 리스를 놓는 문(호가 0D). 한 번만 나간다.
+      primaryRelease: null,
       // 껍질 단계가 확정한 차트 신원과 그 마운트 결과를 기다리는 자리.
       // primaryMount는 "지금 진행 중인 마운트 시도"다(늦은 거부를 가려낸다).
       primaryDescriptor: null, primarySettle: null, primaryMount: null,
@@ -976,6 +978,7 @@ function wireStateControls(host, envelope, mounted) {
 // BOARD_MOUNTED_RENDERERS와 같은 목록이어야 한다 — 어긋나면 봉투는 보드로 갔는데
 // 그 자리가 목업인 채로 남는다.
 const BOARD_CHART_RENDERER = 'athena-chart';
+const BOARD_ORDERBOOK_RENDERER = 'orderbook-ladder';
 
 // 열려 있는 보드 primary 패널을 닫는다. 상태 보드 전환과 카드 파괴가 같은 문을 쓴다.
 function destroyBoardPrimary(state) {
@@ -983,12 +986,17 @@ function destroyBoardPrimary(state) {
   // 진행 중인 마운트는 이 순간부터 "현재 시도"가 아니다 — 늦게 거부돼도 그 사이
   // 새로 살아난 패널의 신원을 지우지 못한다.
   state.primaryMount = null;
+  // 호가 0D 리스는 이 자리가 열 때만 잡는다(리스가 나르는 0B와 다르다) — 자리를
+  // 놓으면 같이 놓는다. 안 놓으면 갈아탄 보드마다 REG가 하나씩 쌓인다.
+  const release = state.primaryRelease;
+  state.primaryRelease = null;
+  const released = typeof release === 'function' ? release() : false;
   const panelId = state.primaryPanelId;
-  if (!panelId) return false;
+  if (!panelId) return released;
   state.primaryPanelId = '';
   const destroyed = aitsChartPanels.destroyPanel(panelId);
   if (destroyed) window.athena.send('athena:chart-panel-destroyed', { panelId });
-  return destroyed;
+  return destroyed || released;
 }
 
 // 이 봉투가 보드 primary 자리에 얹을 라이브 차트. 봉투가 차트를 안 실었거나 봉이
@@ -1073,14 +1081,46 @@ function boardPrimaryAcceptsEnvelope(primary, envelope) {
   return sources.some((source) => String((source && source.mapping_id) || '') === operationRef);
 }
 
+// 보드 primary 자리에 호가 사다리를 얹는다. 조각은 카드종 렌더러가 만들고
+// (all-or-nothing — 못 만들면 null) 여기서는 목업을 접고 그 자리에 넣기만 한다.
+// 0D 호가잔량은 통합 카드 리스가 나르지 않는다 — 호가는 카드가 실제로 열려 있을
+// 때만 REG를 쓰므로 여기서 명시로 acquire하고, 보드를 갈아타거나 카드를 닫을 때
+// destroyBoardPrimary가 같은 문으로 놓아준다.
+function mountBoardOrderbook(card, state, primary, envelope) {
+  const kinds = window.AthenaLib.CardKinds;
+  const render = kinds && kinds.resolve('호가');
+  const built = render && render(envelope);
+  // 조각이 없으면 목업을 걷어낼 이유가 못 된다 — 빈 사다리를 지어내지 않는다.
+  if (!built) return null;
+  boardMount.collapsePrimaryMockup(primary.mountPoint);
+  // primary 자리는 Paper가 세로 flex 상자로 저작했다 — 남은 높이를 사다리가 받는다.
+  built.style.flex = '1 1 auto';
+  built.style.minHeight = '0';
+  primary.mountPoint.appendChild(built);
+  primary.mountPoint.dataset.bsPrimaryMounted = BOARD_ORDERBOOK_RENDERER;
+  const hoga = window.AthenaLib.CardKindHoga;
+  if (hoga.supportsLive0D(built)) {
+    state.primaryRelease = wireOrderbookRealtime(
+      card, built, envelope, hoga.applyLiveTick, { registerCardDestroyer: false },
+    );
+  }
+  return built;
+}
+
 // 껍질(보드 HTML)이 선 뒤에 primary 자리의 Paper 목업을 접고 그 자리에 앱 렌더러를
 // 얹는다. 목업은 지우지 않고 접는다(D1) — 마운트가 실패하면 되돌리고 사유를 얹는다.
-// 실시간은 여기서 다시 걸지 않는다: 통합 카드 리스가 이미 그 피드를 나르고
+// 실시간은 차트 자리에서는 다시 걸지 않는다: 통합 카드 리스가 이미 그 피드를 나르고
 // (syncIntegratedRealtime → applyBoardRealtimeTick), 진행봉은 aitsChartPanels가 접는다.
 async function mountBoardPrimary(host, envelope, mounted) {
   const state = boardStateOf(host);
   const primary = mounted && mounted.primary;
   const card = typeof host.closest === 'function' ? host.closest('.card') : null;
+  // 호가 사다리는 동기 렌더러다 — 기다릴 라이브러리가 없고 차트 신원(paint ack의
+  // panel_id·generation)도 쓰지 않으므로 껍질 ack가 그대로 확정이다.
+  if (primary && primary.renderer === BOARD_ORDERBOOK_RENDERER && primary.mountPoint && card
+    && boardPrimaryAcceptsEnvelope(primary, envelope)) {
+    return mountBoardOrderbook(card, state, primary, envelope);
+  }
   // 안 얹기로 한 것도 결과다 — 껍질이 'loading'을 찍어 두고 여기서 조용히 빠지면
   // 확정 ack가 영영 안 나가고 main의 pendingMount 한도 뒤 'timeout'으로 샌다.
   // (갈아탄 보드에서는 이미 맺힌 뒤라 settleBoardChartMount가 아무 것도 안 한다.)
@@ -1850,17 +1890,30 @@ function wireQuoteRealtime(card, wrap, envelope, applyTick) {
 // 보고 알아서 acquire하지 않는다(0B는 "시장 데이터 도메인이면 무조건 REG",
 // 호가는 카드가 실제로 열려 있을 때만 REG를 쓴다 — task #25, 리미터 절약).
 // 그래서 여기서 acquire를 명시적으로 보낸다 — release와 짝이 대칭이다.
-function wireOrderbookRealtime(card, wrap, envelope, applyTick) {
+function wireOrderbookRealtime(card, wrap, envelope, applyTick, options = {}) {
   const symbol = resolveEnvelopeSymbol(envelope);
-  if (!symbol || typeof applyTick !== 'function') return;
+  if (!symbol || typeof applyTick !== 'function') return null;
   orderbookRealtimePanels.openPanel(card, symbol, (tick) => applyTick(wrap, envelope, tick));
   window.athena.send('athena:orderbook-realtime-acquire', { symbol });
-  const priorDestroy = cardDestroyers.get(card);
-  cardDestroyers.set(card, () => {
+  // 해제는 한 번만 나간다 — acquire보다 release가 많으면 main의 REG 셈이 무너져
+  // 같은 종목을 보는 남의 카드 피드까지 끊긴다.
+  let released = false;
+  const release = () => {
+    if (released) return false;
+    released = true;
     orderbookRealtimePanels.closePanel(card);
     window.athena.send('athena:orderbook-realtime-release', { symbol });
+    return true;
+  };
+  // 보드 카드는 정리자를 renderBoardSurfaceCard가 이미 걸었다(보드 상태가 자리를
+  // 닫는다) — 여기서 덮으면 그 정리자를 잃고, 갈아탈 때마다 사슬만 길어진다.
+  if (options.registerCardDestroyer === false) return release;
+  const priorDestroy = cardDestroyers.get(card);
+  cardDestroyers.set(card, () => {
+    release();
     if (priorDestroy) priorDestroy();
   });
+  return release;
 }
 
 function renderMcpTable(envelope) {
