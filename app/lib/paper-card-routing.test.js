@@ -205,6 +205,24 @@ test('canvas_type chart는 recipe_id가 없어도 보드가 AITS를 가로채지
   }), false);
 });
 
+test('보드가 그 앱 렌더러를 얹을 수 있으면 봉투는 보드로 간다', () => {
+  const chart = {
+    operation_ref: 'base:ka10081',
+    renderer_id: 'aits-chart-v1',
+    canvas_type: 'chart',
+    card_id: 'CC-03',
+    surface_contract: { board_id: '137X-2' },
+  };
+  // 자리가 없는 보드에서는 예외가 그대로다 — 가로채면 라이브가 목업으로 바뀐다.
+  assert.strictEqual(routing.preservesAppPrimary(chart), true);
+  assert.strictEqual(routing.preservesAppPrimary(chart, ''), true);
+  assert.strictEqual(routing.preservesAppPrimary(chart, 'orderbook-ladder'), true);
+  // 자리가 저작됐고 canvas가 그 종류를 얹을 줄 알면 보드가 껍질을 그린다.
+  assert.strictEqual(routing.preservesAppPrimary(chart, 'athena-chart'), false);
+  // 목록은 canvas가 실제로 마운트하는 종류다 — 저작만 된 종류는 아직 들어오지 않는다.
+  assert.deepEqual(Array.from(routing.BOARD_MOUNTED_RENDERERS), ['athena-chart']);
+});
+
 test('semantic-workspaces 검증기의 preserve 판정은 이 모듈이 든다', () => {
   // 검증기가 자기 기준(recipe 3종)을 따로 들면 앱이 새로 보드로 보내는 봉투를
   // 채점하지 못한다 — 두 집합이 갈라질 수 없게 같은 함수를 부른다(2026-09-06 검수 P1).
@@ -213,5 +231,7 @@ test('semantic-workspaces 검증기의 preserve 판정은 이 모듈이 든다',
   );
   assert.match(verifier, /require\('\.\/lib\/paper-card-routing'\)/);
   assert.match(verifier, /primary_expected = paperCardRouting\.preservesAppPrimary\(/);
+  // 보드 쪽 사실(그 보드가 앱 렌더러를 얹을 수 있는가)도 같이 넘긴다.
+  assert.match(verifier, /boardTemplateRegistry\.primaryRendererFor\(surface\.board_id \|\| ''\)/);
   assert.doesNotMatch(verifier, /preserve_primary/);
 });

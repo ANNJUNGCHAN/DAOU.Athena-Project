@@ -749,10 +749,13 @@ async function addLiveCard(result) {
 function renderPrimaryEnvelope(envelope, options = {}) {
   // 표면 계약이 실려 오면 Paper 보드 원문을 그대로 마운트한다(D1) — 런타임 레이아웃
   // 재조립 없이 텍스트 노드만 바뀐다. 계약이 없으면 기존 경로 그대로.
-  // 단, D1의 예외 — 앱 렌더러(AITS 차트·호가 래더·주문 초안)가 primary인 recipe는
-  // 보드가 그 렌더러를 품을 길(primary.renderer)이 아직 없어 가로채면 라이브
-  // 표면이 정적 목업으로 바뀐다(2026-09-04 실측). 판정은 paper-card-routing이 든다.
-  const boardCard = paperCardRouting.preservesAppPrimary(envelope) ? null : renderBoardSurfaceCard(envelope);
+  // 단, D1의 예외 — 앱 렌더러(AITS 차트·호가 래더·주문 초안)가 primary인 봉투는
+  // 그 렌더러를 품을 자리(primary.renderer)가 저작된 보드에만 보낸다. 자리가 없는
+  // 보드가 가로채면 라이브 표면이 정적 목업으로 바뀐다(2026-09-04 실측). 자리가
+  // 있으면 보드가 껍질을 그리고 렌더러는 그 안에 앉는다(mountBoardPrimary).
+  // 판정은 paper-card-routing이 들고, 보드 쪽 사실은 색인이 동기로 답한다.
+  const boardCard = paperCardRouting.preservesAppPrimary(envelope, boardPrimaryRendererOf(envelope))
+    ? null : renderBoardSurfaceCard(envelope);
   if (boardCard) return boardCard;
   if (envelope.canvas_type === 'table' && !envelope.fell_back) return renderMcpTable(envelope);
   if (envelope.canvas_type === 'stream' && !envelope.fell_back) return renderLiveStream(envelope);
@@ -772,6 +775,13 @@ function renderPrimaryEnvelope(envelope, options = {}) {
 function surfaceContractOf(envelope) {
   const contract = envelope && (envelope.surface_contract || envelope.surfaceContract);
   return contract && typeof contract === 'object' && contract.board_id ? contract : null;
+}
+
+// 이 봉투가 갈 보드에 전문 렌더러 자리가 저작돼 있는가. 청크(수 MB)가 아니라
+// 색인을 읽는다 — 라우팅은 청크가 실리기 전에 답이 있어야 한다.
+function boardPrimaryRendererOf(envelope) {
+  const contract = surfaceContractOf(envelope);
+  return contract ? boardTemplateRegistry.primaryRendererFor(contract.board_id) : '';
 }
 
 // slot_values는 {slot_id: value} 맵으로도, [{slot_id, value}] 목록으로도 온다.
@@ -819,6 +829,12 @@ function boardStateOf(host) {
       // binding_id → [slot_id]. 봉투가 두 표를 같이 실을 때만 채워진다 —
       // 비어 있으면 실시간 프레임은 보드에 아무것도 안 한다(추측하지 않는다).
       realtimeSlots: new Map(), surface: null, mountContract: null,
+      // 지금 이 보드의 primary 자리에 열려 있는 앱 렌더러 패널 — 상태 보드를
+      // 갈아타거나 카드를 닫을 때 이 id로 닫는다.
+      primaryPanelId: '',
+      // 껍질 단계가 확정한 차트 신원과 그 마운트 결과를 기다리는 자리.
+      // primaryMount는 "지금 진행 중인 마운트 시도"다(늦은 거부를 가려낸다).
+      primaryDescriptor: null, primarySettle: null, primaryMount: null,
     };
   }
   return host.__athenaBoard;
@@ -892,6 +908,9 @@ function mountBoardState(host, boardId, envelope) {
     .then((mounted) => {
       rememberMountedBoard(state, mounted);
       wireStateControls(host, envelope, mounted);
+      // 껍질이 먼저다 — 여기서 기다리면 AITS 라이브러리 로드가 첫 피드백 3초
+      // 계약을 넘긴다(renderLiveChart가 같은 판단을 한다). 던져 놓고 진행한다.
+      void mountBoardPrimary(host, envelope, mounted);
       return hydrateBoardSlots(host, envelope, mounted);
     });
 }
@@ -901,6 +920,9 @@ function switchStateBoard(host, boardId, envelope) {
   const target = String(boardId || '');
   if (!target || target === state.boardId) return null;
   if (!state.links.some((link) => link.board_id === target)) return null;
+  // 표면을 통째로 갈면 컨테이너가 바뀐다 — 같은 panelId를 다른 컨테이너로 열면
+  // AITS adapter가 던지므로(aits-chart-panel openPanel) 먼저 닫는다.
+  destroyBoardPrimary(state);
   return mountBoardState(host, target, envelope);
 }
 
@@ -948,6 +970,186 @@ function wireStateControls(host, envelope, mounted) {
     wired += 1;
   }
   return wired;
+}
+
+// 보드가 자기 자리에 얹을 줄 아는 앱 렌더러. paper-card-routing의
+// BOARD_MOUNTED_RENDERERS와 같은 목록이어야 한다 — 어긋나면 봉투는 보드로 갔는데
+// 그 자리가 목업인 채로 남는다.
+const BOARD_CHART_RENDERER = 'athena-chart';
+
+// 열려 있는 보드 primary 패널을 닫는다. 상태 보드 전환과 카드 파괴가 같은 문을 쓴다.
+function destroyBoardPrimary(state) {
+  if (!state) return false;
+  // 진행 중인 마운트는 이 순간부터 "현재 시도"가 아니다 — 늦게 거부돼도 그 사이
+  // 새로 살아난 패널의 신원을 지우지 못한다.
+  state.primaryMount = null;
+  const panelId = state.primaryPanelId;
+  if (!panelId) return false;
+  state.primaryPanelId = '';
+  const destroyed = aitsChartPanels.destroyPanel(panelId);
+  if (destroyed) window.athena.send('athena:chart-panel-destroyed', { panelId });
+  return destroyed;
+}
+
+// 이 봉투가 보드 primary 자리에 얹을 라이브 차트. 봉투가 차트를 안 실었거나 봉이
+// 없으면 null이다 — 목업을 걷어낼 이유가 못 된다(봉을 지어내지 않는다). 계약이
+// 깨졌으면 던진다 — 사유는 부르는 쪽이 드러낸다.
+function boardChartDescriptor(envelope) {
+  const data = envelope && typeof envelope.data === 'object' ? envelope.data : null;
+  if (!data || !data.chart) return null;
+  const descriptor = describeAitsChartPanel(data, envelope, 'live');
+  return descriptor.body.candles.length ? descriptor : null;
+}
+
+// 껍질 단계에서 차트 신원을 카드에 찍고 마운트 결과를 기다릴 자리를 연다.
+// paint ack(athena:add-rest-canvas)는 껍질이 선 그 시점의 dataset만 읽는다 —
+// 안 찍으면 마운트도 안 끝난 차트가 render_state 'data'로 집계되고(false green),
+// 확정 ack가 없어 재조회 권위도 못 선다(main chartReloadAuthority.registerPaint는
+// panel_id·renderer_id·generation을 요구한다). 그러면 주기 전환과 과거봉 페이지가
+// 권위 없는 패널로 막힌다 — 137X-2가 저작한 것이 바로 그 주기 조작이다.
+function beginBoardChartMount(card, state, descriptor) {
+  card.dataset.chartAuthority = 'AITS';
+  card.dataset.rendererId = descriptor.rendererId;
+  card.dataset.chartPanelId = descriptor.panelId;
+  card.dataset.chartGeneration = String(descriptor.generation);
+  card.dataset.renderState = 'loading';
+  state.primaryDescriptor = descriptor;
+  const settled = new Promise((resolve) => { state.primarySettle = resolve; });
+  chartMountSettlements.set(descriptor.panelId, settled);
+  void settled.then(() => {
+    if (chartMountSettlements.get(descriptor.panelId) === settled) {
+      chartMountSettlements.delete(descriptor.panelId);
+    }
+  });
+  return settled;
+}
+
+// 마운트 결과를 첫 ack가 걸어둔 promise에 맺는다 — 한 카드당 한 번만 맺힌다.
+function settleBoardChartMount(state, renderState) {
+  const settle = state && state.primarySettle;
+  if (!settle) return renderState;
+  state.primarySettle = null;
+  settle(renderState);
+  return renderState;
+}
+
+// 마운트가 실패하면 껍질에 찍어둔 차트 신원을 거둔다 — 안 거두면 카드가 없는
+// 패널을 가리킨 채 남는다(renderLiveChart 실패 분기와 같은 처리).
+function clearBoardChartIdentity(card) {
+  card.dataset.renderState = 'error';
+  delete card.dataset.chartAuthority;
+  delete card.dataset.rendererId;
+  delete card.dataset.chartPanelId;
+  delete card.dataset.chartGeneration;
+}
+
+// 같은 panelId가 다른 컨테이너에서 살아 있으면 먼저 놓아준다. 안 놓으면 adapter가
+// 던지고(aits-chart-panel openPanel 컨테이너 충돌) 같은 종목의 두 번째 차트 봉투가
+// 목업으로 되돌아간다. 보드 카드는 표면을 통째로 갈아 끼우므로 옛 자리에서 제자리
+// 재조회할 길이 없다 — 옛 자리는 이미 화면에서 빠진 보드다.
+function releaseBoardChartPanel(panelId) {
+  if (!aitsChartPanels.has(panelId)) return false;
+  for (const node of document.querySelectorAll('.board-surface-host')) {
+    const other = node.__athenaBoard;
+    if (!other || other.primaryPanelId !== panelId) continue;
+    other.primaryPanelId = '';
+    other.primaryMount = null;
+  }
+  const destroyed = aitsChartPanels.destroyPanel(panelId);
+  if (destroyed) window.athena.send('athena:chart-panel-destroyed', { panelId });
+  return destroyed;
+}
+
+// 이 보드의 primary가 어느 조회에서 값을 받는지는 계약이 저작해 뒀다(props_from).
+// 봉투의 조회가 그 목록에 없으면 남의 보드다. 상태 보드를 갈아타면 같은 봉투가
+// 다음 보드로 그대로 따라가므로(switchStateBoard → mountBoardState) 여기서 막지
+// 않으면 137X-2의 종목 일봉이 32S7-0(업종 지수 캔들) 자리에 얹힌다 — 그 보드가
+// 부르지 않는 조회의 봉이다. 출처를 저작하지 않은 보드는 아무 것도 주장하지
+// 않은 것이므로 그대로 얹는다(픽스처 계약이 그 경우다).
+function boardPrimaryAcceptsEnvelope(primary, envelope) {
+  const sources = Array.isArray(primary.propsFrom) ? primary.propsFrom : [];
+  if (!sources.length) return true;
+  const operationRef = String((envelope && (envelope.operation_ref || envelope.operationRef)) || '');
+  return sources.some((source) => String((source && source.mapping_id) || '') === operationRef);
+}
+
+// 껍질(보드 HTML)이 선 뒤에 primary 자리의 Paper 목업을 접고 그 자리에 앱 렌더러를
+// 얹는다. 목업은 지우지 않고 접는다(D1) — 마운트가 실패하면 되돌리고 사유를 얹는다.
+// 실시간은 여기서 다시 걸지 않는다: 통합 카드 리스가 이미 그 피드를 나르고
+// (syncIntegratedRealtime → applyBoardRealtimeTick), 진행봉은 aitsChartPanels가 접는다.
+async function mountBoardPrimary(host, envelope, mounted) {
+  const state = boardStateOf(host);
+  const primary = mounted && mounted.primary;
+  const card = typeof host.closest === 'function' ? host.closest('.card') : null;
+  // 안 얹기로 한 것도 결과다 — 껍질이 'loading'을 찍어 두고 여기서 조용히 빠지면
+  // 확정 ack가 영영 안 나가고 main의 pendingMount 한도 뒤 'timeout'으로 샌다.
+  // (갈아탄 보드에서는 이미 맺힌 뒤라 settleBoardChartMount가 아무 것도 안 한다.)
+  if (!primary || primary.renderer !== BOARD_CHART_RENDERER || !primary.mountPoint || !card
+    || !boardPrimaryAcceptsEnvelope(primary, envelope)) {
+    settleBoardChartMount(state, 'error');
+    return null;
+  }
+  // 껍질 단계가 만든 신원을 그대로 쓴다 — 다시 만들면 paint ack가 실어 보낸
+  // panel_id·generation과 어긋난다.
+  let descriptor = state.primaryDescriptor;
+  if (!descriptor) {
+    try {
+      descriptor = boardChartDescriptor(envelope);
+    } catch (error) {
+      primary.mountPoint.dataset.bsPrimaryError = String((error && error.message) || error);
+      primary.mountPoint.prepend(errorNote('차트를 그리지 못했다'));
+      return null;
+    }
+    if (!descriptor) return null;
+  }
+  const collapsed = boardMount.collapsePrimaryMockup(primary.mountPoint);
+  const chartBody = document.createElement('div');
+  chartBody.className = 'chart-card-body';
+  // primary 자리는 Paper가 세로 flex 상자로 저작했다 — 남은 높이를 차트가 받는다.
+  chartBody.style.flex = '1 1 auto';
+  chartBody.style.minHeight = '0';
+  primary.mountPoint.appendChild(chartBody);
+  primary.mountPoint.dataset.bsPrimaryMounted = BOARD_CHART_RENDERER;
+  releaseBoardChartPanel(descriptor.panelId);
+  // 이 마운트 시도의 신원 — 늦게 거부된 시도가 그 사이 살아난 패널을 지우지 못하게 한다.
+  const attempt = {};
+  state.primaryMount = attempt;
+  state.primaryPanelId = descriptor.panelId;
+  try {
+    // 카드 정리자는 renderBoardSurfaceCard가 이미 걸었다(보드 상태가 패널을 닫는다) —
+    // 여기서 덮으면 통합 카드 root의 집계 정리자를 잃는다.
+    const session = await mountAitsChartPanel(card, chartBody, descriptor, { registerCardDestroyer: false });
+    // 성공도 실패와 같은 문으로 판정한다 — 그 사이 보드를 갈아탔으면(destroyBoardPrimary)
+    // 이 자리는 이미 화면에서 빠진 표면이다. 그대로 'data'로 맺으면 main이 죽은
+    // panelId에 재조회 권위와 실시간을 건다(main.js athena:rest-canvas-painted).
+    if (state.primaryMount !== attempt) {
+      session.destroy();
+      chartBody.remove();
+      delete primary.mountPoint.dataset.bsPrimaryMounted;
+      boardMount.restorePrimaryMockup(collapsed);
+      settleBoardChartMount(state, 'error');
+      return null;
+    }
+    settleBoardChartMount(state, session.body.candles.length ? 'data' : 'empty');
+    return session;
+  } catch (error) {
+    // 실패를 감추지 않는다 — 목업을 되돌리고 그 위에 사유를 얹는다. 사용자에게
+    // 보이는 문구에는 내부 용어를 싣지 않는다(원문은 검수용으로 표식에 남긴다).
+    chartBody.remove();
+    delete primary.mountPoint.dataset.bsPrimaryMounted;
+    boardMount.restorePrimaryMockup(collapsed);
+    if (state.primaryMount !== attempt) {
+      settleBoardChartMount(state, 'error');
+      return null;
+    }
+    state.primaryMount = null;
+    state.primaryPanelId = '';
+    primary.mountPoint.dataset.bsPrimaryError = String((error && error.message) || error);
+    primary.mountPoint.prepend(errorNote('차트를 그리지 못했다'));
+    clearBoardChartIdentity(card);
+    settleBoardChartMount(state, 'error');
+    return null;
+  }
 }
 
 // 봉투가 못 채운 슬롯을 마운트 뒤에 한 번 더 채운다. 엔드포인트가 아직 없으면
@@ -1018,9 +1220,23 @@ function renderBoardSurfaceCard(envelope) {
   // 끝낸 보드의 레이아웃까지 건드린다.
   host.style.minHeight = '120px';
   body.appendChild(host);
+  // 카드를 닫으면 보드가 품은 앱 렌더러도 닫는다 — 안 걸면 패널과 그 리스가 남는다.
+  // host를 붙잡으므로 상태 보드를 갈아타 패널이 갈려도 "지금 열린 것"을 닫는다.
+  cardDestroyers.set(card, () => destroyBoardPrimary(boardStateOf(host)));
+  const state = boardStateOf(host);
+  // 이 봉투가 보드 자리에 라이브 차트를 얹을 것이면 껍질 단계에서 신원을 찍는다 —
+  // paint ack는 껍질이 선 시점의 dataset만 읽는다(beginBoardChartMount 주석).
+  // 계약 오류는 여기서 삼키고 마운트가 사유와 함께 드러낸다.
+  let chartDescriptor = null;
+  if (boardPrimaryRendererOf(envelope) === BOARD_CHART_RENDERER) {
+    try { chartDescriptor = boardChartDescriptor(envelope); } catch { chartDescriptor = null; }
+  }
+  if (chartDescriptor) beginBoardChartMount(card, state, chartDescriptor);
   openBoardSurface(host, contract, envelope).then(() => {
     host.style.minHeight = '';
   }).catch((error) => {
+    // 보드가 안 서면 차트도 안 선다 — 첫 ack가 기다리는 결과를 여기서 맺는다.
+    settleBoardChartMount(state, 'error');
     // 보드를 못 세우면 범용 카드로 조용히 떨어뜨리지 않는다 — 그건 계약 파생
     // 실패이고, 감추면 사용자는 알 수 없는 표를 본다(paper-card-routing과 같은 판단).
     body.replaceChildren(errorNote(String((error && error.message) || error)));
@@ -1504,7 +1720,7 @@ function liveChartCard(card, chartBody) {
 // 나간 뒤 후속 ack가 여기서 최종 상태를 기다린다.
 const chartMountSettlements = new Map();
 
-async function mountAitsChartPanel(card, chartBody, descriptor) {
+async function mountAitsChartPanel(card, chartBody, descriptor, options = {}) {
   // panel identity와 provisional disposer를 await 전에 등록한다. 같은 panel의
   // 동시 reload/dataset 교체가 늦은 mount를 두 번째 renderer로 만들지 못한다.
   card.dataset.chartAuthority = 'AITS';
@@ -1552,10 +1768,14 @@ async function mountAitsChartPanel(card, chartBody, descriptor) {
   descriptor.context.onChartLibraryReady = (readyAt) => {
     if (Number.isFinite(Number(readyAt))) card.dataset.chartImportReadyAt = String(Number(readyAt));
   };
-  cardDestroyers.set(card, () => {
-    aitsChartPanels.destroyPanel(descriptor.panelId);
-    window.athena.send('athena:chart-panel-destroyed', { panelId: descriptor.panelId });
-  });
+  // 보드 카드는 이미 자기 정리자를 갖고 있다(destroyBoardPrimary) — 거기서 덮으면
+  // 통합 카드 root의 집계 정리자가 사라진다. 그 경우에만 등록을 건너뛴다.
+  if (options.registerCardDestroyer !== false) {
+    cardDestroyers.set(card, () => {
+      aitsChartPanels.destroyPanel(descriptor.panelId);
+      window.athena.send('athena:chart-panel-destroyed', { panelId: descriptor.panelId });
+    });
+  }
   const session = await aitsChartPanels.openPanel(chartBody, descriptor.body, descriptor.context);
   mountedChartSessions.set(descriptor.panelId, session);
   const mounted = liveChartCard(card, chartBody) || card;

@@ -784,6 +784,22 @@ test('청크가 primary 계약을 나른다 — 저작 안 된 보드는 null이
   assert.equal(registry.contractFor(BOARD_ID).primary, null);
 });
 
+test('색인이 primary 렌더러 종류를 청크 없이 답한다', () => {
+  // 라우팅은 봉투를 어느 표면으로 보낼지 정할 때 답이 있어야 하고, 그 시점에
+  // 카드 청크(수 MB)는 아직 안 실려 있다 — 종류 하나만 색인에 둔 이유다.
+  const index = require('./board-templates.index.generated');
+  for (const [boardId, renderer] of Object.entries(index.BOARD_PRIMARY)) {
+    assert.equal(registry.primaryRendererFor(boardId), renderer);
+    assert.equal(registry.contractFor(boardId).primary.renderer, renderer);
+  }
+  for (const [boardId, renderer] of AUTHORED_PRIMARY.map((row) => [row[0], row[1]])) {
+    assert.equal(registry.primaryRendererFor(boardId), renderer);
+  }
+  // 저작 안 된 보드는 빈 문자열이다 — 없는 자리를 지어내지 않는다.
+  assert.equal(registry.primaryRendererFor(BOARD_ID), '');
+  assert.equal(registry.primaryRendererFor('없는보드'), '');
+});
+
 test('저작된 mount_slot은 실보드의 primary 자리 그 자체다', () => {
   for (const [boardId, , mountSlot] of AUTHORED_PRIMARY) {
     const tree = parse(registry.boardHtml(boardId));
@@ -796,6 +812,21 @@ test('저작된 mount_slot은 실보드의 primary 자리 그 자체다', () => 
       String(node.className).split(/\s+/).includes('bs-primary'),
       `${boardId}: mount_slot이 primary 자리가 아니다`,
     );
+  }
+});
+
+test('primary가 저작된 전 보드에 마운트 지점이 실재한다', () => {
+  // mount_slot을 저작하지 않은 보드(32S7-0)는 `.bs-primary` 폴백 하나에만 기댄다.
+  // 그 자리가 없으면 canvas.js mountBoardPrimary가 조용히 빠지고, 카드는 껍질이
+  // 찍어둔 'loading'에 멈춘 채 확정 ack를 못 받는다 — 구조적으로 여기서 막는다.
+  const { BOARD_PRIMARY } = require('./board-templates.index.generated');
+  const boardIds = Object.keys(BOARD_PRIMARY);
+  assert.ok(boardIds.length > 0);
+  for (const boardId of boardIds) {
+    const tree = parse(registry.boardHtml(boardId));
+    const surface = tree.querySelector('.board-surface') || tree.children.find((c) => c.tag !== '#text');
+    const node = primaryMountPoint(surface, registry.contractFor(boardId));
+    assert.ok(node, `${boardId}: primary 마운트 지점을 못 찾았다`);
   }
 });
 
