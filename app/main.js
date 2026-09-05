@@ -24,6 +24,7 @@ const { createPluginProposalRegistry } = require('./lib/main/plugin-proposal-reg
 const { CATALOG: PLUGIN_CATALOG } = require('./lib/plugin-catalog');
 // 결정 D1의 실배선 — claude -p 스폰 + stream-json 파싱 + .mcp.json 생성.
 const { runClaudeQuery } = require('./lib/main/claude-runner');
+const { runGrokQuery } = require('./lib/main/grok-runner');
 // 툴 호출 진행 단계(board-33) 라벨링에 render_canvas 판정 하나만 빌려 쓴다 —
 // 파서 자체는 손대지 않는다(sendLiveToolStep 근처 주석 참고).
 const streamJsonParser = require('./lib/main/stream-json-parser');
@@ -2327,6 +2328,25 @@ function getLiveChatSession() {
   return liveChatSession;
 }
 
+function stopLiveClaudeChatSession(reason) {
+  if (!liveChatSession) return;
+  try { liveChatSession.stop(new Error(reason || 'provider switch')); } catch { /* already stopping */ }
+  liveChatSession = null;
+}
+
+function resolveLiveQueryProviderId() {
+  const selected = currentProviderSelection && currentProviderSelection.activeAccount;
+  if (selected && selected.providerId) return selected.providerId;
+  const peeked = cliAccounts.peekActiveAccount();
+  return (peeked && peeked.providerId) || 'claude';
+}
+
+function noteLiveQueryProvider(providerId) {
+  if (liveQueryProviderId && liveQueryProviderId !== providerId) liveSessionId = null;
+  liveQueryProviderId = providerId;
+  if (providerId === 'grok') stopLiveClaudeChatSession('grok_active');
+}
+
 // 캔버스 결과 하나(stream-json-parser.classifyCanvasBlock의 출력)를 캔버스
 // 창으로 보낸다. 렌더러(canvas.js)가 status별로 카드를 그리거나 안내를 띄운다.
 function sendLiveCanvasResult(result, metadata = null) {
@@ -2730,6 +2750,7 @@ let activeSelectorFastRun = null;
 // 포크해 새 session_id를 발급하므로 매 성공 왕복마다 갱신해야 체인이 이어진다.
 // 앱 재시작 시 null — 대화는 앱 수명 단위다(디스크에 세션 키를 남기지 않는다).
 let liveSessionId = null;
+let liveQueryProviderId = null;
 
 // history-sink conversation_id — **앱 세션 단위로 고정한다. liveSessionId를 쓰지 않는다.**
 // 계획 §2(a)는 liveSessionId 재사용을 제안했지만 실배선 E2E가 그 전제를 뒤집었다
@@ -3199,6 +3220,12 @@ async function resolveProviderDesiredState(options = {}) {
   }
   const { dir, configPath } = getLiveMcpConfig();
   const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+  if (resolvedAccount.providerId === 'grok') {
+    currentProviderSelection = Object.freeze({
+      activeAccount: resolvedAccount, desiredState: null, disabled: null,
+    });
+    return currentProviderSelection;
+  }
   const { model, effort } = resolvedAccount.providerId === 'codex'
     ? codexConfig.readModelSettings()
     : modelPrefs.get().claude;
@@ -3249,7 +3276,15 @@ async function rotatePersistentProviderInner(reason, options = {}) {
   // 기능이 꺼져 있으면 프로바이더 상태를 아예 건드리지 않는다. broadcastCliChanged가
   // 셸 포커스·CLI 로그인·setActive마다 이 경로를 무조건 부르는데, 여기서 계정·MCP
   // 스냅샷을 계속 재계산하면 기본 경로에 없던 일이 조용히 생긴다.
-  if (!providerRuntimeEnabled) return currentProviderSelection;
+  if (!providerRuntimeEnabled) {
+    const activeAccount = Object.prototype.hasOwnProperty.call(options, 'activeAccount')
+      ? options.activeAccount
+      : cliAccounts.peekActiveAccount();
+    currentProviderSelection = Object.freeze({
+      activeAccount: activeAccount || null, desiredState: null, disabled: null,
+    });
+    return currentProviderSelection;
+  }
   assertProviderLifecycleOpen();
   const activeAccount = Object.prototype.hasOwnProperty.call(options, 'activeAccount')
     ? options.activeAccount
@@ -3266,6 +3301,19 @@ async function rotatePersistentProviderInner(reason, options = {}) {
       providerRuntimeReady = false;
     }
     return disabledSelection;
+  }
+  if (activeAccount.providerId === 'grok') {
+    const grokSelection = await awaitProviderLifecycle(
+      resolveProviderDesiredState({ ...options, activeAccount }),
+    );
+    if (providerRuntimeController) {
+      providerRuntimeController.blockNewTurns('grok_cold_path');
+      providerEpochStore.invalidate(providerSecurityGeneration);
+      const stoppedRuntime = providerRuntimeController;
+      await awaitProviderLifecycle(providerControllerLifecycle.stopAndDiscard(reason, stoppedRuntime));
+      providerRuntimeReady = false;
+    }
+    return grokSelection;
   }
   if (activeAccount.providerId === 'codex') {
     const disabledSelection = await awaitProviderLifecycle(
@@ -3907,10 +3955,13 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
     if (bridge) bridge.recordToolStep({ sessionId: turnConversationId, messageId: sessionAssistantId, step });
   });
   const trackSubagent = createSubagentTracker();
+  const liveProviderId = resolveLiveQueryProviderId();
+  noteLiveQueryProvider(liveProviderId);
   const resumeSessionId = liveSessionId;
   // 설정 화면 모델 패널(lib/main/model-prefs.js) 값 — null이면 buildArgs가
-  // --model/--effort를 안 붙여 claude CLI 기본값을 쓴다.
-  const { model, effort } = modelPrefs.get().claude;
+  // --model/--effort를 안 붙여 CLI 기본값을 쓴다.
+  const prefsState = modelPrefs.get();
+  const { model, effort } = liveProviderId === 'grok' ? prefsState.grok : prefsState.claude;
   // 턴 텍스트는 한 번만 만든다 — chat.js가 제출에 실은 canvasMode·backtestContext를
   // 그대로 넘기면 백테스트 설계 모드에서만 접두가 붙고(live-prompt.js
   // buildBacktestModePrefix), 그 외 모드는 문자열 호출과 바이트 동일하다. 캐시 키
@@ -3928,13 +3979,13 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
     return {
       ...currentProviderSelection.disabled,
       source: 'live',
-      error: 'Codex 대화 연결은 현재 사용할 수 없습니다. 계정 설정에서 Claude를 선택해 주세요.',
+      error: 'Codex 대화 연결은 현재 사용할 수 없습니다. 계정 설정에서 Claude 또는 Grok을 선택해 주세요.',
       answerText: null,
       canvasTypes: [],
       canvasCaptions: [],
     };
   }
-  if (providerRuntimeEnabled) {
+  if (providerRuntimeEnabled && liveProviderId !== 'grok') {
     const runtime = ensureProviderRuntimeController();
     const clientSubmitId = String(submit.clientSubmitId || '');
     const rendererSubmittedAt = Number(submit.rendererSubmittedAt);
@@ -4038,7 +4089,16 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   // 아래 세션 체인·캐시·저장 로직은 분기를 모른다. ATHENA_PERSISTENT_CHAT=0
   // 이면 기존 왕복(runClaudeQuery)으로 폴백한다(킬 스위치).
   let result;
-  if (persistentChatEnabled()) {
+  if (liveProviderId === 'grok') {
+    result = await runGrokQuery({
+      prompt: buildLivePrompt(liveTurnInput),
+      cwd: dir,
+      resumeSessionId,
+      model,
+      effort,
+      ...turnCallbacks,
+    });
+  } else if (persistentChatEnabled()) {
     result = await getLiveChatSession().run({
       // 규칙은 세션 system prompt로 이미 갔다 — 턴에는 질문(+백테스트 설계 접두)만 보낸다.
       prompt: turnPrompt,
@@ -4660,14 +4720,13 @@ ipcMain.handle('athena:settings:expose-to-model:set', async (_e, { enabled } = {
 // 전역 기본값이다. 검증은 각 모듈이 한다, 여기선 라우팅 + 성공 시 병합·방송만
 // 담당한다(prefs와 같은 문법 — 셸 창이 같은 렌더러의 #settings 패널이라도
 // 명시적으로 보낸다).
-// IPC 계약은 그대로: athena:model-get/-set → { claude: {model,effort},
-// codex: {model,effort} }.
+// IPC 계약: athena:model-get/-set → { claude, grok, codex } 각 {model,effort}.
 // ---------------------------------------------------------------------------
 
 function handleModelGet() {
-  const { claude } = modelPrefs.get();
+  const { claude, grok } = modelPrefs.get();
   const { model, effort } = codexConfig.readModelSettings();
-  return { claude, codex: { model, effort } };
+  return { claude, grok, codex: { model, effort } };
 }
 
 async function handleModelSet(e, payload = {}) {
@@ -4777,7 +4836,7 @@ async function handleCliLogin(e, { providerId } = {}) {
 }
 
 async function handleCliSetActive(e, { accountId } = {}) {
-  const result = cliAccounts.setActive(accountId);
+  const result = await cliAccounts.setActive(accountId);
   if (result.ok) await broadcastCliChanged({ rotateReason: 'active_provider_changed' });
   return result;
 }

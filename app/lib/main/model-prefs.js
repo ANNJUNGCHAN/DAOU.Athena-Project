@@ -7,10 +7,12 @@ const { writeJsonAtomic } = require('./json-store');
 
 const DEFAULT_STATE = {
   claude: { model: null, effort: null },
+  grok: { model: null, effort: null },
 };
 
 const CLAUDE_EFFORTS = new Set(['low', 'medium', 'high', 'xhigh', 'max']);
-const EFFORT_SETS = { claude: CLAUDE_EFFORTS };
+const GROK_EFFORTS = new Set(['low', 'medium', 'high', 'xhigh']);
+const EFFORT_SETS = { claude: CLAUDE_EFFORTS, grok: GROK_EFFORTS };
 
 // 영문·숫자·점·하이픈·대괄호, 1~64자. 하이픈은 문자셋에 포함되므로 "선두 금지"는
 // 별도로 검사한다(정규식만으로는 "-model" 같은 값을 걸러내지 못한다).
@@ -37,7 +39,10 @@ function statePath() {
 function readState() {
   try {
     const raw = JSON.parse(fs.readFileSync(statePath(), 'utf-8'));
-    const out = { claude: { ...DEFAULT_STATE.claude } };
+    const out = {
+      claude: { ...DEFAULT_STATE.claude },
+      grok: { ...DEFAULT_STATE.grok },
+    };
     for (const provider of Object.keys(DEFAULT_STATE)) {
       const entry = raw && raw[provider];
       if (!entry || typeof entry !== 'object') continue;
@@ -49,7 +54,10 @@ function readState() {
     }
     return out;
   } catch {
-    return { claude: { ...DEFAULT_STATE.claude } };
+    return {
+      claude: { ...DEFAULT_STATE.claude },
+      grok: { ...DEFAULT_STATE.grok },
+    };
   }
 }
 
@@ -57,9 +65,9 @@ function writeState(state) {
   writeJsonAtomic(statePath(), state);
 }
 
-// athena:model-get -> { claude: {model, effort} } — main.js의 handleModelGet이
+// athena:model-get -> { claude, grok } — main.js의 handleModelGet이
 // 여기에 codex-config.js의 config.toml 값을 얹어 렌더러가 보는 전체 계약
-// { claude, codex }를 만든다(model-prefs.js 자체는 codex를 모른다).
+// { claude, grok, codex }를 만든다(model-prefs.js 자체는 codex를 모른다).
 function get() {
   return readState();
 }
@@ -69,7 +77,7 @@ function get() {
 // patch에 없는 키는 건드리지 않는다(부분 갱신). provider:'codex'는 여기서
 // 다루지 않는다 — main.js의 handleModelSet이 codex-config.js로 라우팅한다.
 function set({ provider, patch } = {}) {
-  if (provider !== 'claude') {
+  if (provider !== 'claude' && provider !== 'grok') {
     return { ok: false, error: 'invalid-provider' };
   }
   const patchObj = patch && typeof patch === 'object' ? patch : {};

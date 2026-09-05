@@ -127,10 +127,10 @@ async function run() {
   // ---------------- CLI 계정 ----------------
   log('cli.list', h.cliList());
   log('cli.login.unknownProvider', await h.cliLogin(null, { providerId: 'nope' }));
-  // gemini/grok은 LOGIN_COMMANDS에 없다(D6 — cli-accounts.js 주석 참고) — 설치
-  // 여부와 무관하게 unknownProvider 경로("알 수 없는 CLI다")를 탄다.
+  // gemini는 LOGIN_COMMANDS에 없다 — 설치 여부와 무관하게 unknownProvider
+  // 경로("알 수 없는 CLI다")를 탄다. grok은 이제 알려진 공급자라 여기서
+  // login()을 부르면 실제 콘솔 창이 뜬다 — claude/codex와 같이 스폰하지 않는다.
   log('cli.login.gemini(unknownProvider)', await h.cliLogin(null, { providerId: 'gemini' }));
-  log('cli.login.grok(unknownProvider)', await h.cliLogin(null, { providerId: 'grok' }));
   const cliAccounts = require('./lib/main/cli-accounts');
   log('cli.probeBinaryExists', {
     claude: await cliAccounts.probeBinaryExists('claude'),
@@ -138,7 +138,7 @@ async function run() {
     gemini: await cliAccounts.probeBinaryExists('gemini'),
     grok: await cliAccounts.probeBinaryExists('grok'),
   });
-  console.log('[verify-settings] NOTE: claude/codex 실제 login() 스폰(대화형 콘솔 창 오픈, codex는 기존 세션 로그아웃 위험 실측됨)은');
+  console.log('[verify-settings] NOTE: claude/codex/grok 실제 login() 스폰(대화형 콘솔 창 오픈, codex는 기존 세션 로그아웃 위험 실측됨)은');
   console.log('  이 자동 검증에서 의도적으로 실행하지 않았다 — probeBinaryExists()로 설치 감지만 확인했다.');
 
   // ---------------- 계좌 ----------------

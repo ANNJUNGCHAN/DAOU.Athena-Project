@@ -27,10 +27,11 @@ async function withTempState(fn) {
   }
 }
 
-test('get: 상태 파일이 없으면 claude 기본값(null)', async () => {
+test('get: 상태 파일이 없으면 claude·grok 기본값(null)', async () => {
   await withTempState(() => {
     assert.deepEqual(modelPrefs.get(), {
       claude: { model: null, effort: null },
+      grok: { model: null, effort: null },
     });
   });
 });
@@ -148,6 +149,7 @@ test('fail-open: 상태 파일이 깨진 JSON이어도 기본값으로 저하된
     assert.doesNotThrow(() => modelPrefs.get());
     assert.deepEqual(modelPrefs.get(), {
       claude: { model: null, effort: null },
+      grok: { model: null, effort: null },
     });
   });
 });
@@ -161,7 +163,27 @@ test('fail-open: 저장된 claude 값 중 검증에 실패하는 필드만 기�
       codex: { model: 'gpt-5-codex', effort: 'medium' },
     }), 'utf-8');
     const state = modelPrefs.get();
-    assert.deepEqual(state, { claude: { model: null, effort: null } });
+    assert.deepEqual(state, {
+      claude: { model: null, effort: null },
+      grok: { model: null, effort: null },
+    });
+  });
+});
+
+test('set: grok 모델·effort 를 저장한다', async () => {
+  await withTempState(() => {
+    const result = modelPrefs.set({ provider: 'grok', patch: { model: 'grok-4.6', effort: 'xhigh' } });
+    assert.equal(result.ok, true);
+    assert.deepEqual(result.state.grok, { model: 'grok-4.6', effort: 'xhigh' });
+    assert.deepEqual(modelPrefs.get().claude, { model: null, effort: null });
+  });
+});
+
+test('set: grok effort max 는 거부된다 — grok-4.5 CLI 가 max 를 모른다', async () => {
+  await withTempState(() => {
+    const result = modelPrefs.set({ provider: 'grok', patch: { effort: 'max' } });
+    assert.equal(result.ok, false);
+    assert.equal(result.error, 'invalid-effort');
   });
 });
 

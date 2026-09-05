@@ -131,6 +131,27 @@ function atomicWriteFileSync(targetPath, data) {
   }
 }
 
+function tomlInlineTable(obj) {
+  const parts = Object.entries(obj).map(([key, value]) => `${key} = ${JSON.stringify(String(value))}`);
+  return `{ ${parts.join(', ')} }`;
+}
+
+function writeGrokProjectMcpConfig(dir) {
+  const grokDir = path.join(dir, '.grok');
+  fs.mkdirSync(grokDir, { recursive: true });
+  const grokConfigPath = path.join(grokDir, 'config.toml');
+  const body = [
+    '[mcp_servers.athena]',
+    `command = ${JSON.stringify(PYTHON_EXE)}`,
+    `args = ${JSON.stringify(['-m', 'athena_mcp', 'serve'])}`,
+    `env = ${tomlInlineTable({ PYTHONPATH: BACKEND_DIR })}`,
+    'enabled = true',
+    '',
+  ].join('\n');
+  atomicWriteFileSync(grokConfigPath, body);
+  return grokConfigPath;
+}
+
 function ensureMcpConfig(userDataDir) {
   const dir = path.join(userDataDir, 'mcp-config');
   fs.mkdirSync(dir, { recursive: true });
@@ -145,7 +166,8 @@ function ensureMcpConfig(userDataDir) {
     },
   };
   atomicWriteFileSync(configPath, JSON.stringify(config, null, 2));
-  return { dir, configFile: '.mcp.json', configPath };
+  const grokConfigPath = writeGrokProjectMcpConfig(dir);
+  return { dir, configFile: '.mcp.json', configPath, grokConfigPath };
 }
 
 module.exports = {

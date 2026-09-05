@@ -2432,6 +2432,18 @@ const PILL_EFFORT_CHIPS = [
   { value: 'xhigh', label: 'xhigh' },
   { value: 'max', label: 'max' },
 ];
+const PILL_GROK_MODEL_CHIPS = [
+  { value: null, label: '기본' },
+  { value: 'grok-4.6', label: 'grok-4.6' },
+  { value: 'grok-4.5', label: 'grok-4.5' },
+];
+const PILL_GROK_EFFORT_CHIPS = [
+  { value: null, label: '기본' },
+  { value: 'low', label: 'low' },
+  { value: 'medium', label: 'medium' },
+  { value: 'high', label: 'high' },
+  { value: 'xhigh', label: 'xhigh' },
+];
 
 let modelStateCache = null;
 
@@ -2444,7 +2456,7 @@ async function refreshModelState() {
   if (!$modelPopover.hidden) renderModelPopover();
 }
 
-function popoverSection(title, chips, currentValue, key) {
+function popoverSection(title, chips, currentValue, key, provider) {
   const t = document.createElement('div');
   t.className = 'mp-title';
   t.textContent = title;
@@ -2457,7 +2469,7 @@ function popoverSection(title, chips, currentValue, key) {
     b.className = 'mp-chip' + (c.value === currentValue ? ' on' : '');
     b.textContent = c.label;
     b.addEventListener('click', async () => {
-      const res = await window.athena.invoke('athena:model-set', { provider: 'claude', patch: { [key]: c.value } });
+      const res = await window.athena.invoke('athena:model-set', { provider, patch: { [key]: c.value } });
       if (res && res.ok === false) return; // 거부된 값은 상태를 안 바꾼다(model-prefs 검증)
       await refreshModelState();
     });
@@ -2468,12 +2480,21 @@ function popoverSection(title, chips, currentValue, key) {
 
 function renderModelPopover() {
   const c = (modelStateCache && modelStateCache.claude) || { model: null, effort: null };
+  const g = (modelStateCache && modelStateCache.grok) || { model: null, effort: null };
   $modelPopover.textContent = '';
-  popoverSection('모델', PILL_MODEL_CHIPS, c.model, 'model');
+  popoverSection('Claude 모델', PILL_MODEL_CHIPS, c.model, 'model', 'claude');
   const sep = document.createElement('div');
   sep.className = 'mp-sep';
   $modelPopover.appendChild(sep);
-  popoverSection('사고 강도', PILL_EFFORT_CHIPS, c.effort, 'effort');
+  popoverSection('Claude 사고 강도', PILL_EFFORT_CHIPS, c.effort, 'effort', 'claude');
+  const grokSep = document.createElement('div');
+  grokSep.className = 'mp-sep';
+  $modelPopover.appendChild(grokSep);
+  popoverSection('Grok 모델', PILL_GROK_MODEL_CHIPS, g.model, 'model', 'grok');
+  const grokEffortSep = document.createElement('div');
+  grokEffortSep.className = 'mp-sep';
+  $modelPopover.appendChild(grokEffortSep);
+  popoverSection('Grok 사고 강도', PILL_GROK_EFFORT_CHIPS, g.effort, 'effort', 'grok');
 }
 
 function closeModelPopover() { $modelPopover.hidden = true; }
@@ -2674,7 +2695,7 @@ function renderKiumiMenu() {
   $kiumiMenu.appendChild(settingsSep);
   $kiumiMenu.appendChild(kiumiSection('설정'));
   // 모델·추론 노력 — 스트립 필 제거로 이 메뉴가 유일한 진입로다(보드 45 v5).
-  $kiumiMenu.appendChild(kiumiItem('model', '모델 설정', '모델·사고 강도 — 모델 팝오버(보드 09)', async () => {
+  $kiumiMenu.appendChild(kiumiItem('model', '모델 설정', 'Claude·Grok 모델·사고 강도 — 모델 팝오버(보드 09)', async () => {
     closeKiumiMenu();
     await refreshModelState();
     renderModelPopover();
