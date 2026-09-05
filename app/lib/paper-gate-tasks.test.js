@@ -140,10 +140,30 @@ test('files 는 같은 경로를 두 번 적지 않는다', async () => {
 
 // ---------- 정렬·상한 ----------
 
-test('같은 페이지 보드가 많은 쪽이 먼저 온다', async () => {
-  // 1-0 두 장 대 5-1 한 장 — 한 파일을 여는 김에 여러 장을 닫는다(§6.4 정렬 1키).
-  const tasks = await build([CARDS, SCREENS]);
-  assert.deepEqual(tasks.map((task) => task.source.board), ['16OD-2', '11D-0', '137X-2']);
+test('무게가 큰 실패 코드가 보드 수 많은 페이지보다 앞선다', async () => {
+  // 카드미니가 페이지 보드 수로는 압도해도(실측 H-1 171장) route_missing 이 먼저다.
+  // §5.2가 「보고만 한다」고 못 박은 부류를 랄프 배치 앞에 세우면 못 고칠 작업을 받는다.
+  const many = {
+    gate: 'verify:paper-mini',
+    boards: [
+      { paper_board: '46AX-0', page: 'H-1', name: 'mini/A', ledger_board: '2SCE-1', status: 'divergent', failures: [{ code: 'annotation_drift', drift: [{ field: 'elements' }] }] },
+      { paper_board: '46BW-0', page: 'H-1', name: 'mini/B', ledger_board: '2SKU-1', status: 'divergent', failures: [{ code: 'annotation_drift', drift: [{ field: 'elements' }] }] },
+      { paper_board: '46FL-0', page: 'H-1', name: 'mini/C', ledger_board: '13BC-2', status: 'divergent', failures: [{ code: 'annotation_drift', drift: [{ field: 'elements' }] }] },
+    ],
+  };
+  const tasks = await build([many, SCREENS]);
+  assert.deepEqual(tasks.slice(0, 2).map((task) => task.source.board), ['16OD-2', '11D-0']);
+  assert.equal(tasks[2].source.page, 'H-1');
+});
+
+test('같은 무게에서는 보드가 많은 페이지가 먼저 온다', async () => {
+  // 한 파일을 여는 김에 여러 장을 닫는다(§6.4 정렬 근거) — 같은 코드 안에서 살아 있다.
+  const other = {
+    gate: 'verify:paper-screens',
+    boards: [{ board_id: '2GXG-1', page: '8-1', name: '01 · 백테스트', status: 'fail', failures: [{ code: 'route_missing' }] }],
+  };
+  const tasks = await build([other, SCREENS]);
+  assert.deepEqual(tasks.map((task) => task.source.page), ['1-0', '1-0', '8-1']);
 });
 
 test('같은 페이지 안에서는 보드명 선두 번호가 작은 쪽이 먼저 온다', async () => {
@@ -152,16 +172,9 @@ test('같은 페이지 안에서는 보드명 선두 번호가 작은 쪽이 먼
   assert.equal(tasks[0].title, '화면 02 · 부팅 — READY · 0–240ms');
 });
 
-test('무게가 큰 실패 코드가 같은 페이지 안에서 앞선다', async () => {
-  const mixed = {
-    gate: 'verify:paper-screens',
-    boards: [
-      { board_id: '11D-0', page: '1-0', name: '24 · 주문 — 거래 기능 연결 안내', status: 'fail', failures: [{ code: 'route_missing' }] },
-      { board_id: '16OD-2', page: '1-0', name: '02 · 부팅 — READY · 0–240ms', status: 'fail', failures: [{ code: 'contract_undocumented', sentences: ['어떤 계약.'] }] },
-    ],
-  };
-  // 선두 번호는 02 < 24 지만 route_missing 이 더 무겁다 — 무게가 번호보다 앞선다.
-  assert.deepEqual((await build([mixed])).map((task) => task.source.board), ['11D-0', '16OD-2']);
+test('무게가 같으면 카드 게이트도 화면 게이트와 나란히 줄 선다', async () => {
+  const tasks = await build([CARDS, SCREENS]);
+  assert.deepEqual(tasks.map((task) => task.source.board), ['16OD-2', '11D-0', '137X-2']);
 });
 
 test('--limit 은 정렬 뒤 앞에서 자른다', async () => {
