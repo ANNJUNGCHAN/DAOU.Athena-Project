@@ -10,12 +10,11 @@ const {
   domTextMultiset,
   formatMountCliReport,
   groupBoardsByCard,
-  mergeRuntimeReport,
   mountFailures,
 } = require('./paper-cards-mount-report');
 
 // 창 없이 재는 부분만 본다 — 청크 묶기, 다중집합 3분류, 폭 하나의 실패 판정,
-// 보드 항목 형상, 정적 리포트 위에 런타임 절을 얹는 병합.
+// 보드 항목 형상, CLI 출력. 두 층을 한 파일에 얹는 병합은 paper-cards-report.test.js.
 
 const probe = (over = {}) => ({
   overflow_x: 0,
@@ -147,46 +146,6 @@ const runtime = (over = {}) => ({
     { board_id: '137X-2', card_id: 'CC-03', status: 'pass', mount: {} },
   ],
   ...over,
-});
-
-test('런타임 절은 정적 게이트가 쓴 static·boards를 지우지 않고 얹힌다', () => {
-  const existing = {
-    schema_version: 1,
-    gate: 'verify:paper-cards-static',
-    totals: { boards: 2, pass: 1, fail: 1, static_fail: 1, mount_fail: null },
-    static: { S2_text_multiset: { ok: false } },
-    boards: [
-      { board_id: '2QM7-2', status: 'fail', failures: [{ code: 'text_multiset_drift' }] },
-      { board_id: '137X-2', status: 'pass', failures: [] },
-    ],
-  };
-  const merged = mergeRuntimeReport(existing, runtime());
-  assert.deepEqual(merged.static, existing.static);
-  assert.deepEqual(merged.boards, existing.boards);
-  assert.equal(merged.runtime.gate, 'verify:paper-cards-mount');
-  // 정적으로도 마운트로도 같은 보드 하나만 빨갛다 — 합집합이라 fail은 1이다.
-  assert.deepEqual(merged.totals, { boards: 2, pass: 1, fail: 1, static_fail: 1, mount_fail: 1 });
-});
-
-test('정적 리포트가 없으면 런타임만 담은 껍데기를 만든다', () => {
-  const merged = mergeRuntimeReport(null, runtime());
-  assert.equal(merged.schema_version, 1);
-  assert.equal(merged.gate, 'verify:paper-cards-mount');
-  assert.deepEqual(merged.boards, []);
-  assert.equal(merged.totals.mount_fail, 1);
-  assert.equal(merged.totals.static_fail, null);
-});
-
-test('샤드 실행은 전수 자리(totals.mount_fail)를 채우지 않는다', () => {
-  const existing = {
-    schema_version: 1,
-    totals: { boards: 96, pass: 90, fail: 6, static_fail: 6, mount_fail: null },
-    boards: [],
-  };
-  const merged = mergeRuntimeReport(existing, runtime({ selection: { canonical: false, boards: 2 } }));
-  assert.equal(merged.totals.mount_fail, null);
-  assert.deepEqual(merged.totals.fail, 6);
-  assert.equal(merged.runtime.boards.length, 2);
 });
 
 test('CLI는 빨간 보드를 코드와 함께 줄로 적고 exit 1을 돌려준다', () => {
