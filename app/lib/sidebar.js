@@ -23,6 +23,7 @@
   const $searchInput = document.getElementById('sidebarSearchInput');
   const $compactToggle = document.getElementById('sidebarCompactToggle');
   const $historyRegion = document.getElementById('historyRegion');
+  const $modeTotal = document.getElementById('sidebarModeTotal');
   const $accountRow = document.getElementById('sidebarAccountRow');
   const $accountDot = document.getElementById('sidebarAccountDot');
   const $accountAlias = document.getElementById('sidebarAccountAlias');
@@ -677,7 +678,8 @@
       const button = el('button', `sidebar-project-menu-item${item.danger ? ' is-danger' : ''}`);
       button.type = 'button';
       button.setAttribute('role', 'menuitem');
-      button.textContent = item.label;
+      button.appendChild(el('span', 'sidebar-project-menu-item-label', item.label));
+      button.appendChild(el('span', 'sidebar-project-menu-item-hint', item.hint));
       if (item.disabled) {
         button.disabled = true;
         if (item.reason) button.title = item.reason;
@@ -828,7 +830,8 @@
     }
 
     if (filtered.length) {
-      $list.appendChild(makeSectionLabel('최근', 'is-recent-caption'));
+      // 최근은 모드를 가리지 않는다 — 머리말이 그것을 말한다(35번 보드).
+      $list.appendChild(makeSectionLabel('최근 · 모드 무관', 'is-recent-caption'));
       const visible = showOlder || q ? filtered : filtered.slice(0, INITIAL_VISIBLE);
       for (const conversation of visible) {
         $list.appendChild(makeConversationItem(conversation, 'recent'));
@@ -907,6 +910,8 @@
 
   function updateModeCounts() {
     renderRunSummary();
+    // 모드 구역 머리의 대화 수(35번 보드) — 모드별 숫자와 달리 거르지 않은 전체다.
+    if ($modeTotal) $modeTotal.textContent = `${conversationsCache.length}개 대화`;
     const historyView = window.AthenaLib && window.AthenaLib.SessionHistoryView;
     const snapshot = window.AthenaLib && window.AthenaLib.SessionSnapshot;
     if (!modeNav || !historyView || !snapshot) return;
