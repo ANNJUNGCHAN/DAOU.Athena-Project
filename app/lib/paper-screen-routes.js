@@ -2,10 +2,10 @@
 
 // Paper 화면계 보드를 실앱 도달 절차 + 대조 계약으로 잇는다(설계서 §4.1~§4.3).
 //
-// 매니페스트 role==="screen" 104장이 결국 전부 여기 있어야 한다. 없는 보드는 미구현 실패다 —
+// 매니페스트 role==="screen" 103장이 결국 전부 여기 있어야 한다. 없는 보드는 미구현 실패다 —
 // 「도달 절차가 없는 보드는 실패한다」가 게이트 2의 핵심이라, 표가 곧 남은 작업 목록이 된다.
-// 지금은 26장(부팅 5 + 온보딩 3 + 인증 3 + 에이전트 4 + 화면 4 + 셸·그래프 2 + 대화·계정 2 + 사이드바 3)이고,
-// 래칫(§4.5)이 잠근 뒤 저작이 이어진다.
+// 지금은 29장(부팅 5 + 온보딩 3 + 인증 3 + 에이전트 4 + 화면 4 + 셸·그래프 2 + 대화·계정 2
+// + 모드·빈 화면 2 + 사이드바 4)이고, 래칫(§4.5)이 잠근 뒤 저작이 이어진다.
 //
 // ── reach 어휘는 닫혀 있다
 // 임의 JS를 표에 심으면 표가 곧 프로브가 되어 유지가 안 된다. STEP_KINDS만 허용하고,
@@ -834,8 +834,59 @@ const ROUTES = Object.freeze([
     ],
   },
 
-  // ---------- 사이드바 3장 (1-0) ----------
-  // 셋 다 이력 사이드바 하나를 다른 상태로 그린 보드라 fixture와 다시 읽히는 방법이 같다.
+  // ---------- 모드·빈 화면 2장 (1-0) ----------
+  {
+    board: 'AMZ-0', // 25 · 모드 전환 — 대화 유지·작업공간 교체
+    window: 'shell',
+    // 모드 네비는 shell.html이 정적으로 그리는 다섯 줄이라 도달에 fixture가 필요 없다.
+    reach: [{ do: 'settle' }],
+    root: '#sidebarModeNav',
+    // 이 보드에서 앱 표면으로 살아남은 것은 「모드가 다섯이고 사이드바가 그 전환의
+    // 자리」 하나다. 모드 카드의 설명문은 적지 않는다 — Paper 38이 같은 다섯 줄을
+    // 「결과 카드가 쌓이는 기본 창」으로 다시 쓰고 앱이 그 새 문장을 따르므로
+    // (sidebar-project-menu.js MODE_CHOICES), 25의 옛 문장을 적으면 두 Paper 보드
+    // 중 오래된 쪽을 정본으로 삼는 것이 된다. 「공통 규칙」의 '모드를 바꾸면 새 대화'
+    // 줄도 안 적는다: 원장이 그 줄에 「(40번으로 대체됨)」을 달았고 40이 그것을
+    // 「폐기」로 그렸다 — 화면에 그려지는 문장도 아니다.
+    phrases: ['대화', '그래프', '에이전트', '플러그인', '백테스트'],
+    // 다섯 줄과 그 차례가 이 보드의 계약이다(MODE 01~05).
+    structure: [
+      { what: 'count', selector: '.sidebar-mode-item', equals: 5 },
+      {
+        what: 'order',
+        selector: '.sidebar-mode-item-label',
+        equals: ['대화', '그래프', '에이전트', '플러그인', '백테스트'],
+      },
+    ],
+  },
+  {
+    board: 'COS-0', // 26 · 빈 작업공간 — 대화·그래프·백테스트
+    window: 'shell',
+    // 카드가 하나도 없으면 빈 화면이 저절로 드러난다(canvas.js:281) — 검사 프로필은
+    // 비어 있으므로 부팅 직후가 이미 그 상태다.
+    reach: [{ do: 'settle' }],
+    root: '#gridEmpty',
+    // Paper는 세 모드의 빈 화면을 나란히 그렸지만 앱은 한 번에 하나만 그린다
+    // (canvas.css:1271-1272). 그래서 잴 수 있는 것은 기본 모드인 대화 쪽 두 줄이다 —
+    // 3개 하한을 paper-screen-routes.test.js가 사유와 함께 예외 처리했고, 그 대가로
+    // structure를 셋 실었다. 「엔티티 N · 테마 군집 N」류는 앱이 실수치로 그리는
+    // 값이라 애초에 문구가 못 된다.
+    //
+    // Paper의 백테스트 빈 상태(「아직 전략이 없습니다」·[프리셋에서 시작])는 적지
+    // 않는다 — 앱의 백테스트 진입은 프리셋 목록이 먼저 서는 다른 화면이고(보드 G-1/01),
+    // 여기에 26의 옛 패널을 적으면 없는 화면을 있다고 하는 것이 된다.
+    phrases: ['무엇이든 물어보세요', '질문하면 답변 카드가 이 자리에 쌓입니다.'],
+    // 대화 변형 하나 + 삽화 하나, 그래프 변형은 안 보인다 — 「모드가 다르면 빈
+    // 화면도 다르다」가 이 보드의 계약이다.
+    structure: [
+      { what: 'count', selector: '.canvas-empty-chat', equals: 1 },
+      { what: 'count', selector: '.canvas-empty-art', equals: 1 },
+      { what: 'absent', selector: '.canvas-empty-graphmode' },
+    ],
+  },
+
+  // ---------- 사이드바 4장 (1-0) ----------
+  // 넷 다 이력 사이드바 하나를 다른 상태로 그린 보드라 fixture와 다시 읽히는 방법이 같다.
   // 사이드바는 대화 목록을 부팅 때 한 번 읽고 다음 폴링이 5초 뒤다(sidebar.js:1359) —
   // 5초를 세 번 기다리는 대신, 앱이 「모르는 대화의 실행 상태」를 받으면 목록을 통째로
   // 다시 읽는다는 것을 그대로 쓴다(sidebar.js:944 handleSessionRunState).
@@ -922,6 +973,44 @@ const ROUTES = Object.freeze([
       { what: 'count', selector: '.sidebar-project', equals: 3 },
       { what: 'count', selector: '.sidebar-project-menu-item', equals: 3 },
       { what: 'count', selector: '.sidebar-project-menu-item-hint', equals: 3 },
+    ],
+  },
+  {
+    board: '3VV9-1', // 38 · 펜 — 새 대화창 모드 선택
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:conversations-list', data: SIDEBAR_HISTORY },
+      { do: 'send', channel: 'athena:session-run-state', data: { id: 'fx-reload' } },
+      { do: 'wait', ms: 300 },
+      // 첫 프로젝트 행의 펜. 모드 목록은 렌더 상태로만 살아서(sidebar.js
+      // openModePickerId) 이 클릭이 없으면 DOM에 아예 없다 — 보드 37의 ⋯ 와 같은 문.
+      { do: 'click', selector: '.sidebar-project-new-chat' },
+      { do: 'settle' },
+    ],
+    root: '#historyRegion',
+    // 다섯 줄의 설명이 이 보드가 확정한 문장이다(sidebar-project-menu.js MODE_CHOICES).
+    // 모드 이름은 안 적는다 — 사이드바 모드 네비가 같은 다섯 낱말을 이미 그려 어느
+    // 쪽이 보였는지 구분하지 못한다. 설명 다섯은 이 목록에만 있다.
+    //
+    // Paper의 시트 머리(「어느 모드로 열까요?」)·발치(「같은 모드로 여러 개를 열 수
+    // 있습니다」)·[취소][백테스트 창 열기]는 적지 않는다: 앱의 펜은 모달 시트가 아니라
+    // 행에 붙는 목록이고, 고른 줄이 곧 새 대화창이라 확인 버튼이 없다. 「현재 2개」류의
+    // 창 수와 Gap Note의 「지금 코드에 없는 것」도 화면 문구가 아니다.
+    phrases: [
+      '결과 카드가 쌓이는 기본 창',
+      '성향·엔티티·근거를 보는 지도',
+      '감시·예약 작업을 관제',
+      '설치·권한·MCP 캔버스',
+      '전략 폼·코드·결과 캔버스',
+    ],
+    // 펜을 누른 프로젝트 한 줄에만 목록이 열리고, 그 목록은 다섯 모드가 이 차례다.
+    structure: [
+      { what: 'count', selector: '.sidebar-mode-picker', equals: 1 },
+      {
+        what: 'order',
+        selector: '.sidebar-mode-picker-label',
+        equals: ['대화', '그래프', '에이전트', '플러그인', '백테스트'],
+      },
     ],
   },
 ]);
