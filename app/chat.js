@@ -4578,8 +4578,8 @@ async function renderOrderTicket(prefill) {
   const sideLabel = document.createElement('span');
   sideLabel.className = 'ticket-label';
   sideLabel.textContent = '방향';
-  const buyBtn = _btn('매수', 'routine-btn');
-  const sellBtn = _btn('매도', 'routine-btn');
+  const buyBtn = _btn('구매', 'routine-btn');
+  const sellBtn = _btn('판매', 'routine-btn');
   sideRow.append(sideLabel, buyBtn, sellBtn);
   card.appendChild(sideRow);
 
@@ -4666,13 +4666,15 @@ async function renderOrderTicket(prefill) {
 
   const execRow = document.createElement('div');
   execRow.className = 'routine-approval-actions';
-  const execBtn = _btn('주문 실행', 'routine-btn routine-btn-approve');
+  const execBtn = _btn('구매하기', 'routine-btn routine-btn-approve');
   const closeBtn = _btn('닫기 (Esc)', 'routine-btn');
   execRow.append(execBtn, closeBtn);
   card.append(execRow, status);
   $orderBody.appendChild(card);
 
   const syncExec = () => {
+    // Paper 22 — 실행 버튼은 고른 방향을 그대로 말한다(「구매하기」).
+    execBtn.textContent = ticket.side === 'sell' ? '판매하기' : '구매하기';
     execBtn.disabled = !!gateBlocked || !ticket.side || !Number(qtyInput.value)
       || ticket.state === 'done' || ticket.state === 'in_doubt';
   };

@@ -70,7 +70,7 @@ test('buildSelectorOrderPrefill: 실행 부작용 없이 unsupported·invalid �
 
 test('gateBlocker: 주문 API 비활성이면 정직한 사유를 준다', () => {
   assert.ok(ot.gateBlocker(null).includes('백엔드'));
-  assert.ok(ot.gateBlocker({ orderApi: false }).includes('주문 API 비활성'));
+  assert.ok(ot.gateBlocker({ orderApi: false }).includes('주문 API가 OFF'));
   assert.equal(ot.gateBlocker({ orderApi: true }), null);
 });
 
