@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "gate": "verify:paper-screens",
-  "blessed_at": "2026-09-06T08:30:49.591Z",
+  "blessed_at": "2026-09-06T08:56:57.183Z",
   "blessed_by": "verify:paper-screens --bless",
   "target_boards": 115,
   "passing": [
@@ -12,6 +12,10 @@
     "16OQ-2",
     "16OX-2",
     "16P3-2",
+    "177W-2",
+    "17F8-2",
+    "17IH-2",
+    "17MB-2",
     "1DX-0",
     "1FN-0",
     "1I0-0",
@@ -24,8 +28,13 @@
     "1TPF-1",
     "1WSI-1",
     "1WZJ-1",
+    "1XGW-0",
     "1Y3-0",
+    "24GR-0",
+    "24GS-0",
+    "24GT-0",
     "25Q-0",
+    "2E4E-0",
     "2FIA-2",
     "2FMM-2",
     "2FR9-2",
@@ -35,6 +44,7 @@
     "2QA3-2",
     "2V0K-1",
     "31H-0",
+    "322V-0",
     "3JL-0",
     "3NE-0",
     "3VHD-1",
@@ -84,7 +94,7 @@
     "OJ-0",
     "XI-0"
   ],
-  "passing_count": 78,
+  "passing_count": 88,
   "shrink_log": [
     {
       "at": "2026-09-06T02:19:45.642Z",
