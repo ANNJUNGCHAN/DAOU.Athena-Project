@@ -1749,6 +1749,31 @@ body { margin: 0; overflow: hidden; }
   font-family: var(--font-mono);
   font-size: var(--text-2xs);
 }
+/* 보드 04(1TQV-1) — 수집을 멈추는 버튼과 그 옆의 이어짐 안내. */
+.backtest-running-foot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+  min-width: 0;
+}
+.backtest-running-stop {
+  padding: 7px 20px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-k-soft);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+.backtest-running-hint {
+  color: var(--color-k-hint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  word-break: keep-all;
+  min-width: 0;
+}
 
 /* 자산곡선(보드 03) — SVG 두 선과 체결 마커. */
 .backtest-equity { margin-bottom: 12px; }
@@ -1846,6 +1871,33 @@ body { margin: 0; overflow: hidden; }
   border: 1px solid var(--color-k-line);
   border-radius: 12px;
 }
+/* 보드 05(1WYY-1) — 지표 앞에 서는 "왜 달랐나" 두 칸과 그 아래 줄 diff. */
+.backtest-compare-diffs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.backtest-compare-diff-box {
+  padding: 12px 16px;
+  background: var(--color-k-panel3);
+  border-radius: 8px;
+  min-width: 0;
+}
+.backtest-compare-diff-label {
+  color: var(--color-k-hint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  margin-bottom: 4px;
+}
+.backtest-compare-diff-value {
+  color: var(--color-k-text);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.backtest-compare-code { margin-bottom: 12px; }
 .backtest-compare-row {
   display: flex;
   gap: 12px;
@@ -1888,6 +1940,35 @@ body { margin: 0; overflow: hidden; }
   font-family: var(--font-body);
   font-size: var(--text-xs);
   cursor: pointer;
+}
+/* 보드 23(42NE-1·42NF-1) — 한도의 머리·경고와 아직 빈 칸을 말하는 줄. */
+.backtest-deploy-limits-head {
+  margin-top: 12px;
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+}
+.backtest-deploy-limits-warning {
+  margin: 4px 0 8px;
+  color: var(--color-warn);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  word-break: keep-all;
+  min-width: 0;
+}
+.backtest-deploy-limits-gate {
+  margin-top: 8px;
+  color: var(--color-k-hint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  word-break: keep-all;
+  min-width: 0;
+}
+.backtest-deploy-limits-gate:empty { display: none; }
+.backtest-deploy-create[disabled] {
+  background: var(--color-k-panel3);
+  color: var(--color-k-ghost);
+  cursor: not-allowed;
 }
 .backtest-optimize-warn {
   display: flex;
@@ -1995,6 +2076,14 @@ body { margin: 0; overflow: hidden; }
   border-radius: var(--radius-full);
   background: var(--color-brand);
   color: var(--color-k-panel);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+}
+/* 만료 배지 — 상태 값을 덮지 않고 그 옆에 선다. 사람이 [배포 중지]로 멈춘 것과
+   유효기간이 지난 것은 다른 사실이라 한 자리에 겹쳐 적지 않는다. */
+.backtest-deploy-expired {
+  flex: 0 0 auto;
+  color: var(--color-warn);
   font-family: var(--font-body);
   font-size: var(--text-2xs);
 }

@@ -3344,6 +3344,68 @@ async function runWatchCheck(r) {
   return { ok: false, reason: (res && res.error) || '검사 통로가 막혀 있음' };
 }
 
+// 자동 검사 진행 패널(Paper 보드 09 · 458M-1) — 검사 카드와 「도는 중」 카드가 같은
+// 문법을 쓴다. 마크는 세 종류뿐이고 발치 안전 고지는 순수 모델의 상수다.
+const watchProgressLib = window.AthenaLib.WatchProgressCard;
+
+const WATCH_PROGRESS_MARK_CLASS = {
+  '✓': 'done', '◐': 'running', '○': 'pending',
+};
+
+function appendWatchProgress(card, progress) {
+  const panel = document.createElement('div');
+  panel.className = 'watch-progress';
+
+  const head = document.createElement('div');
+  head.className = 'watch-progress-head';
+  const left = document.createElement('span');
+  left.className = 'watch-progress-head-left';
+  left.textContent = progress.headLeft;
+  head.appendChild(left);
+  const right = document.createElement('span');
+  right.className = 'watch-progress-head-right';
+  right.textContent = progress.headRight;
+  head.appendChild(right);
+  panel.appendChild(head);
+
+  for (const line of progress.lines) {
+    const row = document.createElement('div');
+    row.className = `watch-progress-line is-${WATCH_PROGRESS_MARK_CLASS[line.mark] || 'pending'}`;
+    const mark = document.createElement('span');
+    mark.className = 'watch-progress-mark';
+    mark.textContent = line.mark;
+    row.appendChild(mark);
+    const text = document.createElement('span');
+    text.className = 'watch-progress-text';
+    text.textContent = line.text;
+    row.appendChild(text);
+    panel.appendChild(row);
+  }
+
+  const notice = document.createElement('div');
+  notice.className = 'watch-progress-notice';
+  notice.textContent = progress.notice;
+  panel.appendChild(notice);
+
+  card.appendChild(panel);
+}
+
+// 검사가 도는 동안의 카드. 결과가 오면 이 턴을 걷고 검사 카드가 그 자리에 선다 —
+// 같은 사실을 두 카드가 반복하지 않는다.
+function renderWatchProgressTurn(r) {
+  const line = document.createElement('div');
+  line.className = 'turn';
+  const card = document.createElement('div');
+  card.className = 'turn-agent routine-approval';
+  appendWatchProgress(card, watchProgressLib.buildProgress({
+    pending: true,
+    symbol: r.symbol,
+    lookback_days: (r.watch && r.watch.lookback_days) || null,
+  }));
+  _mountTurn(line, card);
+  return line;
+}
+
 function renderWatchCheckCard(r, check) {
   const model = watchCheckCardLib.checkCardModel(check, r);
   const line = document.createElement('div');
@@ -3386,6 +3448,10 @@ function renderWatchCheckCard(r, check) {
   counted.className = 'agent-source';
   counted.textContent = model.countedUntil;
   card.appendChild(counted);
+
+  // 보드 09(458M-1) — 무엇을 확인했고 무엇이 아직인지 다섯 줄로 말하고,
+  // 발치에 격리 실행 고지를 붙인다(백엔드 응답과 무관한 상수다).
+  appendWatchProgress(card, watchProgressLib.buildProgress(check));
 
   if (r.activation_blocker) {
     const blocker = document.createElement('div');
@@ -3521,7 +3587,10 @@ function renderApprovalCard(r) {
     preview.addEventListener('click', async () => {
       preview.disabled = true;
       status.textContent = '검사 중 — 지난 30일 다시 돌려 봄';
+      const progressLine = renderWatchProgressTurn(r);
       const check = await runWatchCheck(r);
+      // 결과가 오면 도는 중 카드를 걷는다 — 같은 사실을 두 카드가 반복하지 않는다.
+      progressLine.remove();
       preview.disabled = false;
       if (!check) {
         status.textContent = '감시 코드 자리를 못 찾음 — 대화로 다시 만들기';
@@ -3652,6 +3721,88 @@ function renderGuardConfirmCard({ current, proposed } = {}, triggerText) {
   row.appendChild(dismissBtn);
   row.appendChild(status);
   card.appendChild(row);
+
+  _mountTurn(line, card);
+}
+
+// ---------- 제어 결과 턴 (Paper 보드 08 · 4330-1, 2026-09-06) ----------
+// 에이전트 표면으로 데려가는 두 걸음(캔버스 전환 + 네비 활성)은 모드 네비와
+// 같은 순서다(canvas.js onOpenGraph 참고) — 새 전환 경로를 만들지 않는다.
+function openAgentCanvas() {
+  if (window.AthenaCanvasMode && typeof window.AthenaCanvasMode.setView === 'function') {
+    window.AthenaCanvasMode.setView('agent');
+  }
+  if (window.AthenaModeNav && typeof window.AthenaModeNav.setActive === 'function') {
+    window.AthenaModeNav.setActive('agent');
+  }
+  if (window.AthenaAgentCanvas && typeof window.AthenaAgentCanvas.refresh === 'function') {
+    window.AthenaAgentCanvas.refresh();
+  }
+}
+// 칩을 누른 뒤 같은 방에 붙는 네 상태다: 성공 · 거부 · 실패·재시도 · 뷰 이동.
+// 클릭은 캔버스에서 일어나므로(살아 있는 LLM 턴 밖) 결과 턴은 플러그인 결과와
+// 똑같이 모듈 스코프의 이 구독이 마운트한다. 이벤트가 와야만 그린다 —
+// 부팅 직후 #history는 비어 있어야 한다(verify.js emptyHistory 계약).
+window.addEventListener('athena:routine-control-result', (event) => {
+  const detail = (event && event.detail) || {};
+  const turn = detail.turn || null;
+  if (!turn || !turn.lead) return;
+  renderControlResultTurn(turn, typeof detail.retry === 'function' ? detail.retry : null);
+});
+
+function renderControlResultTurn(turn, retry) {
+  const line = document.createElement('div');
+  line.className = 'turn';
+  const card = document.createElement('div');
+  card.className = 'turn-agent control-result';
+
+  // 배지 두 개 — 누른 칩 이름(검정)과 판정(테두리). 설명문은 없다.
+  const head = document.createElement('div');
+  head.className = 'agent-head';
+  if (turn.badge) {
+    const action = document.createElement('span');
+    action.className = 'control-result-badge';
+    action.textContent = turn.badge;
+    head.appendChild(action);
+  }
+  const status = document.createElement('span');
+  status.className = `control-result-status is-${turn.tone}`;
+  status.textContent = turn.statusBadge;
+  head.appendChild(status);
+  card.appendChild(head);
+
+  const lead = document.createElement('div');
+  lead.className = 'control-result-lead';
+  lead.textContent = turn.lead;
+  card.appendChild(lead);
+
+  if (turn.fact) {
+    const fact = document.createElement('div');
+    fact.className = 'control-result-fact';
+    fact.textContent = turn.fact;
+    card.appendChild(fact);
+  }
+
+  // 실패에만 다음 행동이 있다. 「다시 시도」는 실패한 제어를 그대로 다시 부른다
+  // (결과는 새 턴으로 온다). 손잡이가 없는 결과면 최소한 그 버튼 자리로
+  // 데려간다 — 막다른 길을 만들지 않는다(보드 10).
+  if (turn.chips.length) {
+    const row = document.createElement('div');
+    row.className = 'routine-approval-actions';
+    for (const label of turn.chips) {
+      const chip = _btn(label, 'agent-proactive-chip');
+      chip.addEventListener('click', () => {
+        chip.disabled = true;
+        if (retry) {
+          Promise.resolve(retry()).catch(() => {});
+          return;
+        }
+        openAgentCanvas();
+      });
+      row.appendChild(chip);
+    }
+    card.appendChild(row);
+  }
 
   _mountTurn(line, card);
 }

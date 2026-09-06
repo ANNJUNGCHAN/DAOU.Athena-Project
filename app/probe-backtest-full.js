@@ -2093,13 +2093,20 @@ async function main() {
       data: overlay,
     }));
 
-    const compareDiff = await countOf(shellWin, `${R}.backtest-compare .backtest-diff`);
-    await step('H06', '이력 비교에는 파라미터·코드 diff가 없다(미구현 계약)', () => ({
-      ok: compareDiff === 0,
-      data: {
-              diffs: compareDiff,
-              note: 'renderCompare(backtest-canvas.js:1717)는 지표 4행 + 곡선 겹치기까지다 — CodeEditor.renderDiff는 아무도 안 부른다',
-            },
+    const compareDiff = await js(shellWin, `(() => {
+      const root = document.getElementById('backtestCanvas');
+      const box = root.querySelector('.backtest-compare-diffs');
+      if (!box) return null;
+      return {
+        labels: Array.from(box.querySelectorAll('.backtest-compare-diff-label')).map((n) => n.textContent),
+        values: Array.from(box.querySelectorAll('.backtest-compare-diff-value')).map((n) => n.textContent),
+      };
+    })()`);
+    await step('H06', '이력 비교에 파라미터 diff와 코드 diff 두 칸이 선다', () => ({
+      ok: !!compareDiff
+            && JSON.stringify(compareDiff.labels) === JSON.stringify(['파라미터 diff', '코드 diff'])
+            && compareDiff.values.length === 2,
+      data: compareDiff,
     }));
   });
 
