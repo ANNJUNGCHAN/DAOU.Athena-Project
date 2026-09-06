@@ -3772,6 +3772,14 @@ const agentCanvas = window.AthenaLib.AgentCanvas.createAgentCanvas({
     if (!res || !res.ok) throw new Error((res && res.error) || '취소 실패');
     return res.data;
   },
+  // Step 7 — 초안 상세의 「이 알람 승인」(보드 10 승인 패널). 채팅 초안 카드의
+  // 승인 칩과 같은 채널 하나뿐이다 — Paper가 「채팅 칩으로도, 이 버튼으로도 —
+  // 같은 게이트」라고 못박은 그 게이트다.
+  confirmRoutine: async (id) => {
+    const res = await window.athena.invoke('athena:routine-confirm', { id });
+    if (!res || !res.ok) throw new Error((res && res.error) || '승인 실패');
+    return res.data;
+  },
   // Step 7 — 초안 상세의 「검사」. 채팅 초안 카드의 검사 칩과 같은 본문·같은
   // 통로다(chat.js runWatchCheck) — 두 화면이 다른 것을 재면 안 된다.
   runWatchCheck: async (item) => {

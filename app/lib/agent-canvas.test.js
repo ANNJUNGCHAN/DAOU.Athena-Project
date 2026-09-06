@@ -2012,6 +2012,39 @@ test('A-12 일시중지: 확인 없이 바로 고치기로 넘어간다', async 
   assert.equal(findByClass(findByClass(container, 'agent-detail-col')[0], 'agent-code-edit-chip').length, 0);
 });
 
+test('초안: 승인 패널의 「이 알람 승인」은 채팅 칩과 같은 confirmRoutine 게이트를 부른다', async () => {
+  const confirmed = [];
+  const { detail } = await mountCode({ status: 'draft', watch: { poll_interval_s: 60 } }, {
+    confirmRoutine: async (id) => { confirmed.push(id); },
+  });
+  assert.equal(
+    findByClass(detail, 'agent-code-approve-lead')[0].textContent,
+    '승인하면 장중 1분마다 이 함수를 돌리고, 울리면 이 대화에 알림 턴이 붙음',
+  );
+  assert.equal(
+    findByClass(detail, 'agent-code-approve-note')[0].textContent,
+    '승인 전까지 실행 없음 · 채팅 칩으로도, 이 버튼으로도 — 같은 게이트',
+  );
+  await findByClass(detail, 'agent-code-approve-btn')[0].dispatchEvent({ type: 'click' });
+  assert.deepEqual(confirmed, ['cw1']);
+});
+
+test('초안: 승인 패널의 「취소」는 cancelRoutine을 부른다 — 상태 제어 행의 취소와 같은 채널', async () => {
+  const cancelled = [];
+  const { detail } = await mountCode({ status: 'draft' }, {
+    cancelRoutine: async (id) => { cancelled.push(id); },
+  });
+  const buttons = findByClass(detail, 'agent-code-approve-row')[0].children;
+  assert.deepEqual(buttons.map((b) => b.textContent), ['이 알람 승인', '취소']);
+  await buttons[1].dispatchEvent({ type: 'click' });
+  assert.deepEqual(cancelled, ['cw1']);
+});
+
+test('켜진 알람에는 승인 패널이 없다 — 승인은 초안 한 번뿐이다', async () => {
+  const { detail } = await mountCode({ status: 'active' });
+  assert.equal(findByClass(detail, 'agent-code-approve').length, 0);
+});
+
 test('초안: 검사 요약과 「검사」 버튼이 있고 누르면 검사 1회를 돈다', async () => {
   const checked = [];
   const { container, detail } = await mountCode({ status: 'draft' }, {

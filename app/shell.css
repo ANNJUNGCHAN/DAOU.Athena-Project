@@ -6465,6 +6465,48 @@ body { margin: 0; overflow: hidden; }
   cursor: not-allowed;
 }
 
+/* 초안의 승인 패널(보드 10) — 안내 한 줄 · 버튼 둘 · 게이트 고지. */
+.agent-code-approve {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.agent-code-approve-lead {
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--text-xs);
+  word-break: keep-all;
+}
+.agent-code-approve-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.agent-code-approve-btn {
+  height: 32px;
+  border: 1px solid var(--color-k-line);
+  border-radius: var(--radius-full);
+  padding: 0 16px;
+  background: var(--color-k-text);
+  color: var(--color-k-bg);
+  font-family: var(--font-strong);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.agent-code-approve-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.agent-code-approve-note {
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--text-2xs);
+  word-break: keep-all;
+}
+
 /* 「울린 기록」 최근 3줄 — 드릴인 로그(agent-detail-log)와 같은 리듬(보드 12). */
 .agent-code-fires {
   display: flex;
