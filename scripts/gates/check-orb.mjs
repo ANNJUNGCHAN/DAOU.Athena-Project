@@ -127,7 +127,9 @@ if (htmlRaw) {
   must(buttonIds.includes("orbMore"), "orb.html: #orbMore(더보기)가 없다 — 오브에서 셸로 가는 유일한 경로다");
 
   // (c) 텍스트 대조군 — 버튼 id를 우회해 실행 어포던스를 심는 것도 막는다.
-  for (const word of ["매수", "매도", "주문 실행", "즉시 실행", "지금 실행"]) {
+  // 구매·판매는 셸 주문 티켓이 Paper 보드 22로 옮겨 간 어휘다 — 대조군이 옛 어휘만
+  // 보면 새 말로 쓴 실행 어포던스가 그냥 통과한다(verify.js의 같은 목적 정규식과 맞춘다).
+  for (const word of ["매수", "매도", "구매", "판매", "주문 실행", "즉시 실행", "지금 실행"]) {
     must(!html.includes(word), `orb.html: 실행을 암시하는 문구 "${word}"가 있다(확정 결정 3)`);
   }
 
@@ -219,7 +221,7 @@ if (orbJsRaw) {
       else if (orbJs[i] === "}") depth--;
     }
     const outsideTicketFn = orbJs.slice(0, ticketFnMatch.index) + orbJs.slice(i);
-    for (const word of ["매수", "매도", "주문 실행", "즉시 실행", "지금 실행"]) {
+    for (const word of ["매수", "매도", "구매", "판매", "주문 실행", "즉시 실행", "지금 실행"]) {
       must(!outsideTicketFn.includes(word),
         `orb.js: renderOrbTicket() 밖에서 실행을 암시하는 문구 "${word}"가 있다(CP2는 티켓 하나만 승인했다)`);
     }
