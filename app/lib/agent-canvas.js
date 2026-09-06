@@ -25,11 +25,12 @@ const WatchNodes = isNode ? require('./watch-nodes') : window.AthenaLib.WatchNod
 //   · 감시(watch) — GET /api/v1/routines 실데이터. status가 active/paused고
 //     mode가 'scheduled'가 아닌 것(3단계부터 — 예약은 아래 schedule로 간다).
 //   · 초안(draft, 8단계 추가) — status가 draft인 것(mode 무관). ◌ 점선 핑크
-//     행으로 구분한다(Paper 보드 43 실측). draft→confirm 자체는 채팅의
-//     "작업 요약·초안" 카드 칩("바로 활성화")이 처리한다 — 여기서 새로
-//     만들지 않는다(재사용, 동선 규칙③ "확정은 채팅 카드의 칩 — 캔버스는
-//     결과가 비치는 곳"). 그래서 상세 패널은 draft 항목에서 읽기 전용이다
-//     (액션 버튼 없음).
+//     행으로 구분한다(Paper 보드 43 실측). draft→confirm은 채팅의 "작업
+//     요약·초안" 카드 칩("바로 활성화"·코드 알람이면 "이 알람 승인")과
+//     코드 알람 상세의 승인 패널, 두 입구가 같은 athena:routine-confirm을
+//     부른다 — Paper 보드 10이 「채팅 칩으로도, 이 버튼으로도 — 같은
+//     게이트」로 그 둘을 못박았다. 게이트가 하나뿐이라 입구가 둘이어도
+//     "확정은 사람이 누른다"는 규칙은 그대로다.
 //   · 예약(schedule) — 3단계부터 GET /api/v1/routines 실데이터(mode가
 //     'scheduled'인 것). schedule.daily 벽시계 트리거가 2단계에서 백엔드에
 //     생겼다 — 더 이상 fixture가 아니다.
@@ -182,10 +183,11 @@ function createAgentCanvas(deps) {
     onOpenGraph,
     onOpenInChat,
     onEditInChat,
-    // 코드 알람(Step 7) — 상세 1회 조회, 취소, 초안 검사 1회. 셋 다 사람
+    // 코드 알람(Step 7) — 상세 1회 조회, 취소, 승인, 초안 검사 1회. 넷 다 사람
     // 클릭 전용 경로이고 canvas.js가 기존 routine-* 채널과 같은 모양으로 잇는다.
     fetchDetail,
     cancelRoutine,
+    confirmRoutine,
     runWatchCheck,
   } = deps || {};
   if (!container) return { mount() {}, async refresh() {} };
@@ -1743,12 +1745,51 @@ function createAgentCanvas(deps) {
       });
       checkWrap.appendChild(checkBtn);
       detailCol.appendChild(checkWrap);
+
+      // 승인 패널(보드 10 45GD-1) — Paper가 「승인 전까지 실행 없음 · 채팅 칩으로도,
+      // 이 버튼으로도 — 같은 게이트」로 입구 둘을 못박았다. 그 둘이 다른 게이트를
+      // 타면 거짓말이 되므로 채팅 초안 카드의 「이 알람 승인」 칩과 같은
+      // athena:routine-confirm 하나만 부른다(chat.js renderApprovalCard).
+      const approveCaption = el('div', 'agent-panel-caption');
+      approveCaption.textContent = '승인';
+      detailCol.appendChild(approveCaption);
+      const approve = el('div', 'agent-code-approve');
+      const approveLead = el('div', 'agent-code-approve-lead');
+      approveLead.textContent = `승인하면 장중 ${WatchNodes.pollMinutes(watch)}분마다 이 함수를 돌리고, 울리면 이 대화에 알림 턴이 붙음`;
+      approve.appendChild(approveLead);
+      const approveRow = el('div', 'agent-code-approve-row');
+      const approveBtn = el('button', 'agent-code-approve-btn');
+      approveBtn.type = 'button';
+      approveBtn.textContent = '이 알람 승인';
+      approveBtn.addEventListener('click', async () => {
+        approveBtn.disabled = true;
+        try { if (typeof confirmRoutine === 'function') await confirmRoutine(item.id); } catch { /* 위와 같다 */ }
+        codeDetailCache = { id: null, data: null };
+        await refresh();
+      });
+      approveRow.appendChild(approveBtn);
+      // 초안의 「취소」 — draft → cancelled는 백엔드 전이표가 여는 길이다
+      // (routines/models.py ALLOWED_TRANSITIONS). 켜진 알람의 취소와 같은 채널이다.
+      const dropBtn = el('button', 'agent-code-cancel');
+      dropBtn.type = 'button';
+      dropBtn.textContent = '취소';
+      dropBtn.addEventListener('click', async () => {
+        dropBtn.disabled = true;
+        try { if (typeof cancelRoutine === 'function') await cancelRoutine(item.id); } catch { /* 위와 같다 */ }
+        await refresh();
+      });
+      approveRow.appendChild(dropBtn);
+      approve.appendChild(approveRow);
+      const gateNote = el('div', 'agent-code-approve-note');
+      gateNote.textContent = '승인 전까지 실행 없음 · 채팅 칩으로도, 이 버튼으로도 — 같은 게이트';
+      approve.appendChild(gateNote);
+      detailCol.appendChild(approve);
     } else {
       // 「울린 기록」 — 드릴인(10단계)과 같은 /runs 원천이다(두 개의 진실 금지).
       loadCodeFires(item);
       const firesCaptionRow = el('div', 'agent-panel-caption-row');
       const firesCaption = el('span', 'agent-panel-caption');
-      firesCaption.textContent = '울린 기록';
+      firesCaption.textContent = '울린 기록 · 최근';
       firesCaptionRow.appendChild(firesCaption);
       const openHistoryBtn = el('button', 'agent-history-open');
       openHistoryBtn.type = 'button';
@@ -1781,6 +1822,22 @@ function createAgentCanvas(deps) {
           line.appendChild(mark);
           line.appendChild(text);
           line.appendChild(time);
+          // 보드 12는 울린 줄에만 문을 단다 — 억제된 줄은 열 턴이 없어 「—」다
+          // (원장 45QX-1·45R2-1 대 45R7-1). 방은 루틴 단위라 이 알람의 알림 방을
+          // 여는 것까지가 앱이 아는 전부다 — 상세 패널의 같은 이름 버튼과 같은 경로다.
+          if (run.verdict === 'fired') {
+            const openFire = el('button', 'agent-code-fire-open');
+            openFire.type = 'button';
+            openFire.textContent = '채팅에서 열기 ↗';
+            openFire.addEventListener('click', () => {
+              if (typeof onOpenInChat === 'function') onOpenInChat(item.id);
+            });
+            line.appendChild(openFire);
+          } else {
+            const noDoor = el('span', 'agent-code-fire-nodoor');
+            noDoor.textContent = WatchNodes.DASH;
+            line.appendChild(noDoor);
+          }
           firesWrap.appendChild(line);
         }
       }
@@ -1793,7 +1850,7 @@ function createAgentCanvas(deps) {
     detailCol.appendChild(fieldsCaption);
     const fieldsWrap = el('div', 'agent-detail-fields');
     fieldsWrap.setAttribute('data-source', item.source);
-    const fields = [['확인 주기', `장중 ${WatchNodes.pollMinutes(watch)}분`], ['쿨다운', `${raw.cooldown_s}초`]];
+    const fields = [['확인 주기', `장중 ${WatchNodes.pollMinutes(watch)}분`], ['쿨다운', WatchNodes.cooldownLabel(raw.cooldown_s)]];
     if (raw.expires_at) fields.push(['만료', WatchNodes.dayLabel(raw.expires_at)]);
     for (const [label, value] of fields) {
       const fieldRow = el('div', 'agent-detail-field');

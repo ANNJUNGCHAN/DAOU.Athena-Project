@@ -34,6 +34,7 @@
   const $roomBanner = document.getElementById('roomHeadBanner');
   const $roomTime = document.getElementById('roomHeadTime');
   const $roomTitle = document.getElementById('roomHeadTitle');
+  const $roomJoin = document.getElementById('roomHeadJoin');
 
   if (!$list) return; // shell.html 계약이 깨진 경우 — 조용히 물러난다(다른 영역을 막지 않는다).
 
@@ -113,6 +114,40 @@
   // 바뀌는데 이 네비의 활성 표시는 안 바뀌는 불일치가 생긴다 — setActive도
   // 같이 노출한다(모드 네비 자신의 클릭 핸들러가 이미 하는 것과 동일한 순서).
   if (modeNav) window.AthenaModeNav = { setActive: modeNav.setActive };
+
+  // 「관제 창으로 →」(Paper 보드 01) — 알림 파생 방은 관제 창과 별개라, 관제로
+  // 합류하는 문을 방 머리에 하나 둔다. Paper가 그 문 옆에 적은 것은 「이 감시
+  // 건 · 관제 대화 1개」다 — 새 관제 대화를 만드는 문이 아니라 이미 있는 그
+  // 대화로 들어가는 문이다. 모드 네비를 누르면 모드가 바뀔 때 새 대화로
+  // 갈아타므로(onSelect의 modeChanged 분기) 쓰던 관제 대화를 버리게 된다 —
+  // 그래서 관제 대화가 있으면 캔버스·네비 표시만 에이전트로 옮기고(canvas.js
+  // onOpenGraph와 같은 두 걸음) 그 대화를 연다.
+  if ($roomJoin) {
+    $roomJoin.addEventListener('click', () => {
+      const conv = conversationsCache.find((c) => c && c.mode === 'agent');
+      if (conv) {
+        if (window.AthenaCanvasMode && typeof window.AthenaCanvasMode.setView === 'function') {
+          window.AthenaCanvasMode.setView('agent');
+        }
+        if (window.AthenaModeNav && typeof window.AthenaModeNav.setActive === 'function') {
+          window.AthenaModeNav.setActive('agent');
+        }
+        loadAgentRoutines();
+        if (window.AthenaAgentCanvas && typeof window.AthenaAgentCanvas.refresh === 'function') {
+          window.AthenaAgentCanvas.refresh();
+        }
+        selectConversation(conv.id);
+        return;
+      }
+      // 관제 대화가 아직 없다 — 사람이 누르는 그 진입로(에이전트 모드 네비)로
+      // 하나 만든다. 이미 에이전트 모드면 네비 클릭이 모드를 안 바꿔 갈아타기도
+      // 안 일어나므로(죽은 버튼) 같은 갈아타기를 여기서 부른다.
+      const alreadyAgent = currentMode() === 'agent';
+      const agentNav = document.getElementById('modeNavAgent');
+      if (agentNav) agentNav.click();
+      if (alreadyAgent) startNewConversation(currentProjectId, 'agent');
+    });
+  }
 
   // 3단계(리프 1.2.2, Paper 보드 39 보강본) — 순수 포매팅/상태아이콘은
   // agent-sidebar-list.js가 갖고 DOM은 여기서 조립한다(다른 make*Item과 같은 자리).
