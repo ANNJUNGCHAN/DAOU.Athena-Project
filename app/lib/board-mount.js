@@ -182,18 +182,31 @@ function setTone(el, tone) {
 
 function pairedMirrorIndex(root) {
   const index = new Map();
+  const add = (key, mirror) => {
+    if (!key) return;
+    if (!index.has(key)) index.set(key, []);
+    index.get(key).push(mirror);
+  };
   for (const mirror of root.querySelectorAll('[data-paired-source]')) {
-    const source = mirror.dataset
-      ? mirror.dataset.pairedSource : mirror.getAttribute('data-paired-source');
-    if (!source) continue;
-    if (!index.has(source)) index.set(source, []);
-    index.get(source).push(mirror);
+    add(mirror.dataset
+      ? mirror.dataset.pairedSource : mirror.getAttribute('data-paired-source'), mirror);
+  }
+  // 구형 사본 — paired-table이 아닌 표에서는 추출기가 접힌 열의 사본을
+  // `<span class="bs-paired" data-paired-col data-node="<원본 id>">`로 만든다
+  // (data-paired-source가 없다). 앵커는 원본 쪽이라 값 쓰기가 사본까지 가지 않는데,
+  // 좁은 단계(S/XS)에서 원본 열은 접히고 화면에 서는 쪽은 이 사본이다 — 함께 칠하지
+  // 않으면 실데이터가 실린 뒤에도 추출 당시 Paper 목업 숫자가 그대로 남는다.
+  for (const mirror of root.querySelectorAll('.bs-paired')) {
+    if (mirror.dataset && mirror.dataset.pairedSource !== undefined) continue;
+    add(mirror.dataset ? mirror.dataset.node : mirror.getAttribute('data-node'), mirror);
   }
   return index;
 }
 
 function syncPairedMirrors(source, mirrors) {
   for (const mirror of mirrors || []) {
+    // 원본이 없어 사본이 앵커로 뽑힌 자리는 이미 값이 실렸다.
+    if (mirror === source) continue;
     mirror.textContent = source.textContent;
     const color = source.style.color;
     if (color) mirror.style.color = color;
