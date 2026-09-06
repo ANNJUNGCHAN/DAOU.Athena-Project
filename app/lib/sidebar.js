@@ -116,15 +116,32 @@
   if (modeNav) window.AthenaModeNav = { setActive: modeNav.setActive };
 
   // 「관제 창으로 →」(Paper 보드 01) — 알림 파생 방은 관제 창과 별개라, 관제로
-  // 합류하는 문을 방 머리에 하나 둔다. 모드를 여기서 따로 바꾸지 않고 사람이
-  // 누르는 그 진입로(에이전트 모드 네비)를 그대로 누른다 — 진입로가 둘이 되면
-  // 새 대화 갈아타기 같은 부수 효과가 한쪽에만 붙는다.
+  // 합류하는 문을 방 머리에 하나 둔다. Paper가 그 문 옆에 적은 것은 「이 감시
+  // 건 · 관제 대화 1개」다 — 새 관제 대화를 만드는 문이 아니라 이미 있는 그
+  // 대화로 들어가는 문이다. 모드 네비를 누르면 모드가 바뀔 때 새 대화로
+  // 갈아타므로(onSelect의 modeChanged 분기) 쓰던 관제 대화를 버리게 된다 —
+  // 그래서 관제 대화가 있으면 캔버스·네비 표시만 에이전트로 옮기고(canvas.js
+  // onOpenGraph와 같은 두 걸음) 그 대화를 연다.
   if ($roomJoin) {
     $roomJoin.addEventListener('click', () => {
-      // 알림 파생 방은 모드와 무관하게 열리므로 이미 에이전트 모드일 수 있다.
-      // 그때는 위 클릭이 모드를 안 바꿔 새 대화 갈아타기(onSelect의 modeChanged
-      // 분기)도 안 일어나 방을 못 떠나는 죽은 버튼이 된다 — 같은 갈아타기를
-      // 여기서 부른다(모드 전환은 여전히 네비 하나만 한다).
+      const conv = conversationsCache.find((c) => c && c.mode === 'agent');
+      if (conv) {
+        if (window.AthenaCanvasMode && typeof window.AthenaCanvasMode.setView === 'function') {
+          window.AthenaCanvasMode.setView('agent');
+        }
+        if (window.AthenaModeNav && typeof window.AthenaModeNav.setActive === 'function') {
+          window.AthenaModeNav.setActive('agent');
+        }
+        loadAgentRoutines();
+        if (window.AthenaAgentCanvas && typeof window.AthenaAgentCanvas.refresh === 'function') {
+          window.AthenaAgentCanvas.refresh();
+        }
+        selectConversation(conv.id);
+        return;
+      }
+      // 관제 대화가 아직 없다 — 사람이 누르는 그 진입로(에이전트 모드 네비)로
+      // 하나 만든다. 이미 에이전트 모드면 네비 클릭이 모드를 안 바꿔 갈아타기도
+      // 안 일어나므로(죽은 버튼) 같은 갈아타기를 여기서 부른다.
       const alreadyAgent = currentMode() === 'agent';
       const agentNav = document.getElementById('modeNavAgent');
       if (agentNav) agentNav.click();
