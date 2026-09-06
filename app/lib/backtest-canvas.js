@@ -134,7 +134,7 @@ const VISUAL_STATUS_TEXT = {
   validating: '검증 중',
   valid: '서버 검증 가능',
   invalid: '서버 검증 실패',
-  synced: '그래프·코드 검증 완료',
+  synced: '그래프 · 코드 검증 완료',
 };
 
 // 유효하지 않은 그래프에서 [실행]이 서는 자리 — 실행이 아니라 검토가 다음 행동이다.

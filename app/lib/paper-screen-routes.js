@@ -966,6 +966,243 @@ const BACKTEST_DIAGNOSIS = Object.freeze({
   },
 });
 
+// ── 시각 전략 편집기 4장(보드 11~14) fixture ────────────────────────────────
+// 편집 표면은 백엔드 왕복 셋으로만 선다(registry → from-spec → validate). 하나라도
+// 비면 지도 탭이 읽기 전용으로 접혀(ensureVisualGraph의 실패 갈래) 네 보드가 전부
+// 같은 알림 한 줄을 재게 된다. 노드 이름·기간·포트 타입·파이썬 원문은 전부 값이라
+// phrases에는 한 글자도 넣지 않는다 — 이 넷에서 화면이 갖고 있는 문구는 팔레트·
+// 캔버스 머리·요약 바·검사기의 구조 라벨뿐이다.
+const VIS_NUM = 'Series<Number>';
+const VIS_BOOL = 'Series<Bool>';
+
+function visCondition(kind, labelKo) {
+  return {
+    kind,
+    label_ko: labelKo,
+    group: '조건',
+    inputs: [
+      { port: 'left', type: VIS_NUM, required: true },
+      { port: 'right', type: `${VIS_NUM}|Number`, required: true },
+    ],
+    outputs: [{ port: 'signal', type: VIS_BOOL }],
+    params: [],
+  };
+}
+
+// Paper가 그린 팔레트 네 묶음(데이터 · 지표 · 조건 · 출력) 그대로다.
+const VISUAL_REGISTRY = Object.freeze({
+  ok: true,
+  data: {
+    kinds: [
+      {
+        kind: 'data.ohlcv',
+        label_ko: '가격 데이터',
+        group: '데이터',
+        inputs: [],
+        outputs: [{ port: 'close', type: VIS_NUM }, { port: 'volume', type: VIS_NUM }],
+        params: [],
+      },
+      {
+        kind: 'param',
+        label_ko: '파라미터',
+        group: '데이터',
+        inputs: [],
+        outputs: [{ port: 'value', type: 'Number' }],
+        params: [{ name: 'name', type: 'str' }, { name: 'default', type: 'number' }],
+      },
+      {
+        kind: 'indicator.sma',
+        label_ko: '이동평균 SMA',
+        group: '지표',
+        inputs: [
+          { port: 'source', type: VIS_NUM, required: true },
+          { port: 'period', type: 'Number', required: false },
+        ],
+        outputs: [{ port: 'value', type: VIS_NUM }],
+        params: [
+          { name: 'alias', type: 'str' },
+          { name: 'period', type: 'number', default: 20, min: 5, max: 60 },
+        ],
+      },
+      visCondition('condition.cross_above', '상향 돌파'),
+      visCondition('condition.cross_below', '하향 돌파'),
+      {
+        kind: 'output.entry',
+        label_ko: '진입 신호',
+        group: '출력',
+        inputs: [{ port: 'signal', type: VIS_BOOL, required: true }],
+        outputs: [],
+        params: [],
+      },
+      {
+        kind: 'output.exit',
+        label_ko: '청산 신호',
+        group: '출력',
+        inputs: [{ port: 'signal', type: VIS_BOOL, required: true }],
+        outputs: [],
+        params: [],
+      },
+    ],
+  },
+});
+
+function visEdge(id, fromNode, fromPort, toNode, toPort) {
+  return { id, from: { node_id: fromNode, port: fromPort }, to: { node_id: toNode, port: toPort } };
+}
+
+// 보드 11이 그린 그래프 그대로 — 7개 노드 · 8개 연결 · 진입 1 · 청산 1.
+const VIS_NODES = Object.freeze([
+  { id: 'n_data', kind: 'data.ohlcv', label: '가격 데이터', params: {}, ui: { x: 16, y: 218 } },
+  { id: 'n_fast', kind: 'indicator.sma', label: '빠른 SMA', params: { alias: 'ma_fast', period: 20 }, ui: { x: 125, y: 100 } },
+  { id: 'n_slow', kind: 'indicator.sma', label: '느린 SMA', params: { alias: 'ma_slow', period: 60 }, ui: { x: 125, y: 315 } },
+  { id: 'n_above', kind: 'condition.cross_above', label: '상향 돌파', params: {}, ui: { x: 245, y: 100 } },
+  { id: 'n_below', kind: 'condition.cross_below', label: '하향 돌파', params: {}, ui: { x: 245, y: 315 } },
+  { id: 'n_entry', kind: 'output.entry', label: '진입', params: {}, ui: { x: 360, y: 115 } },
+  { id: 'n_exit', kind: 'output.exit', label: '청산', params: {}, ui: { x: 360, y: 330 } },
+]);
+const VIS_EDGES = Object.freeze([
+  visEdge('e1', 'n_data', 'close', 'n_fast', 'source'),
+  visEdge('e2', 'n_data', 'close', 'n_slow', 'source'),
+  visEdge('e3', 'n_fast', 'value', 'n_above', 'left'),
+  visEdge('e4', 'n_slow', 'value', 'n_above', 'right'),
+  visEdge('e5', 'n_fast', 'value', 'n_below', 'left'),
+  visEdge('e6', 'n_slow', 'value', 'n_below', 'right'),
+  visEdge('e7', 'n_above', 'signal', 'n_entry', 'signal'),
+  visEdge('e8', 'n_below', 'signal', 'n_exit', 'signal'),
+]);
+
+function visualGraphOf(edges) {
+  return {
+    graph_version: '1',
+    nodes: VIS_NODES.map((node) => Object.assign({}, node)),
+    edges: edges.map((edge) => JSON.parse(JSON.stringify(edge))),
+    scenario: { symbol: '005930', period: '1d', adjusted: true },
+  };
+}
+
+const VISUAL_FROM_SPEC = Object.freeze({
+  ok: true,
+  data: { graph: visualGraphOf(VIS_EDGES), hashes: { graph_hash: 'fx-graph-8' } },
+});
+// 보드 12·13 — 하향 돌파의 오른쪽 입력(e6)이 끊긴 그래프.
+const VISUAL_FROM_SPEC_BROKEN = Object.freeze({
+  ok: true,
+  data: {
+    graph: visualGraphOf(VIS_EDGES.filter((edge) => edge.id !== 'e6')),
+    hashes: { graph_hash: 'fx-graph-7' },
+  },
+});
+
+// 보드 13이 여는 **미실행 미리보기**. 17행이 Paper가 가리킨 그 줄이고, preview_hash는
+// 이 문자열의 sha256이다 — 한 글자라도 어긋나면 편집기가 「낡았다」며 열지 않는다
+// (backtest-code-editor.js spanIsValid). 파이썬 원문은 값이라 phrases에 안 넣는다.
+const VISUAL_PREVIEW_SOURCE = [
+  'import athena_bt as bt',
+  '',
+  'PARAMS = {',
+  '    "fast": {"default": 20, "min": 5, "max": 60},',
+  '    "slow": {"default": 60, "min": 20, "max": 240},',
+  '}',
+  '',
+  '',
+  'def signals(df, p):',
+  '    close = df.close',
+  '    fast = bt.sma(close, p["fast"])',
+  '    slow = bt.sma(close, p["slow"])',
+  '',
+  '    entry = bt.cross_above(fast, slow)',
+  '',
+  '    # 청산 조건',
+  '    exit_ = bt.cross_below(fast, __MISSING__)',
+  '',
+  '    return df.assign(entry=entry, exit=exit_)[["entry", "exit"]]',
+  '',
+].join('\n');
+const VISUAL_PREVIEW_HASH = '680a5e4f2c5dff8dc91c10d5ee270773f2c06bea377b4be4bfb3b6cc10f526b6';
+
+const VISUAL_SPAN = Object.freeze({
+  file: 'golden_cross.py',
+  start: { line: 17, column: 4 },
+  end: { line: 17, column: 44 },
+});
+
+const VISUAL_VALIDATE_OK = Object.freeze({
+  ok: true,
+  data: { valid: true, diagnostics: [], hashes: { graph_hash: 'fx-graph-8' } },
+});
+const VISUAL_VALIDATE_BROKEN = Object.freeze({
+  ok: true,
+  data: {
+    valid: false,
+    diagnostics: [{
+      code: 'BTG-PORT-002',
+      severity: 'error',
+      node_id: 'n_below',
+      port: 'right',
+      json_path: '$.nodes[4].inputs.right',
+      source_span: VISUAL_SPAN,
+      message_ko: '느린 SMA 입력이 없습니다',
+    }],
+    preview: { source: VISUAL_PREVIEW_SOURCE },
+    source_map: {
+      preview_hash: VISUAL_PREVIEW_HASH,
+      entries: [{ node_id: 'n_below', source_span: VISUAL_SPAN }],
+    },
+    hashes: { graph_hash: 'fx-graph-7' },
+  },
+});
+
+// 보드 14 — 검증을 넘긴 그래프를 코드로 옮긴 산출물. spec_yaml은 폼이 그래프를
+// 따라오는 값이라(adoptSpecYaml) 프리셋의 것과 같은 문법이면 된다.
+const VISUAL_COMPILE = Object.freeze({
+  ok: true,
+  data: {
+    spec_yaml: BACKTEST_PRESET_YAML,
+    spec: null,
+    source: VISUAL_PREVIEW_SOURCE,
+    source_map: { artifact_hash: VISUAL_PREVIEW_HASH, entries: [] },
+    hashes: { graph_hash: 'fx-graph-8', artifact_hash: VISUAL_PREVIEW_HASH },
+  },
+});
+
+// ── 기법 목록(보드 19) fixture ──────────────────────────────────────────────
+// Paper는 처음 있던 10개와 내가 만든 1개를 한 목록에 세웠다. 그 열하나가 실제로 서야
+// 「처음 있던 10개와 내가 만든 1개를 구분하지 않습니다」가 화면에 그대로 뜬다 —
+// 그 줄은 앱이 두 목록의 길이로 만든다(renderTechniqueList). 이름·설명·경로는 값이라
+// phrases에 한 글자도 넣지 않는다.
+function techniquePreset(id, name, category, description) {
+  return { id, name, category, description, yaml: BACKTEST_PRESET_YAML };
+}
+const BACKTEST_TECHNIQUE_PRESETS = Object.freeze({
+  ok: true,
+  data: {
+    presets: [
+      techniquePreset('sma_crossover', '20-60 골든크로스', 'trend', '20일선이 60일선을 위로 뚫으면 사고, 아래로 뚫으면 팝니다.'),
+      techniquePreset('bb_bounce', '볼린저 하단 반등', 'reversion', '가격이 하단 밴드를 찍고 돌아설 때 삽니다.'),
+      techniquePreset('high20', '20일 신고가 돌파', 'breakout', '직전 20봉 최고가를 종가로 넘기면 삽니다.'),
+      techniquePreset('rsi_reversal', 'RSI 과매도 반전', 'reversal', ''),
+      techniquePreset('macd_cross', 'MACD 시그널 교차', 'momentum', 'MACD가 시그널선을 위로 지날 때 삽니다.'),
+      techniquePreset('disparity', '이격도 회귀', 'reversion', '20일선에서 너무 벌어지면 되돌림을 노립니다.'),
+      techniquePreset('volume_surge', '거래량 급증 추격', 'momentum', '평균 거래량의 3배가 터진 날 종가에 붙습니다.'),
+      techniquePreset('gap_pullback', '갭 상승 눌림 매수', 'breakout', '갭으로 뛴 뒤 첫 눌림에서 삽니다.'),
+      techniquePreset('sma_5_20', '5-20 단기 교차', 'trend', '짧은 두 이동평균의 교차만 봅니다.'),
+      techniquePreset('vol_breakout', '변동성 돌파', 'volatility', '전일 변동폭의 절반을 넘으면 그날 삽니다.'),
+    ],
+  },
+});
+const BACKTEST_USER_STRATEGIES = Object.freeze({
+  ok: true,
+  data: {
+    strategies: [{
+      id: 'fx-us-1',
+      name: '내 ATR 돌파 + 손절',
+      path: 'techniques/my-atr-breakout/strategy.py',
+      exists: true,
+      params: {},
+    }],
+  },
+});
+
 const ROUTES = Object.freeze([
   // ---------- 부팅 5장 (1-0) ----------
   // 부팅 02~05는 한 애니메이션의 시간 단계라 서로를 가르는 것은 **찍힌 글자 수**뿐이다.
@@ -3066,6 +3303,224 @@ const ROUTES = Object.freeze([
     structure: [
       { what: 'count', selector: '.backtest-diag-actions button', equals: 3 },
       { what: 'count', selector: '.backtest-diag-raw-toggle', equals: 1 },
+    ],
+  },
+  // ---------- 백테스트 시각 전략 4장 (8-1 · 보드 11~14) ----------
+  // 넷은 한 편집기의 네 상태다(backtest-visual-editor.js 머리말이 그 셋을 그대로 적었다):
+  // 검증 전 → 검증 통과(valid) → 연결 오류(invalid) → 코드까지 같아짐(synced). 상태를
+  // 가르는 것은 클릭이 아니라 **검증 왕복의 답**이라, 넷 다 같은 자리에서 봉투만 바꿔 선다.
+  // Paper의 머리·탭 이름(「20–60 골든크로스 · v5 초안」·「실행 검토」)은 안 적는다 —
+  // 판 번호와 전략 이름은 값이고, 앱의 실행 버튼은 유효할 때 「실행」이다.
+  {
+    board: '3Y38-1', // 11 · 백테스트 — 시각 전략 설계 · 편집 가능
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:backtest-presets', data: BACKTEST_PRESETS },
+      // Paper의 보드 폭은 1680이고 그 폭에서 팔레트·캔버스·검사기가 나란히 선다. 앱도
+      // 같은 규칙이지만 경계가 편집기 상자의 폭이라(VISUAL_NARROW_PX) 셸 창이 좁으면
+      // 팔레트와 검사기가 서랍으로 접힌다 — 창 폭이 곧 이 화면이라 보드 28과 같은
+      // 어휘로 세운다(러너가 라우트 전 bounds를 적어 두고 되돌린다).
+      { do: 'resize', width: 1680, height: 1080 },
+      { do: 'ipc-fixture', channel: 'athena:backtest-visual-registry', data: VISUAL_REGISTRY },
+      { do: 'ipc-fixture', channel: 'athena:backtest-visual-from-spec', data: VISUAL_FROM_SPEC },
+      { do: 'ipc-fixture', channel: 'athena:backtest-visual-validate', data: VISUAL_VALIDATE_OK },
+      // 「연결 정상」은 검증이 끝나고 **코드로 옮기는 왕복이 도는 동안**의 상태다
+      // (runVisualValidate가 valid를 세운 뒤 곧바로 compile을 기다린다). 봉투로 답하면
+      // 그 상태는 IPC 한 왕복만큼만 살고 보드 14의 「동기화」로 넘어간다 — 계좌 등록의
+      // 「확인 중」과 같은 사정이라 같은 어휘로 시간축을 세운다.
+      { do: 'ipc-hang', channel: 'athena:backtest-visual-compile' },
+      { do: 'mode', view: 'backtest' },
+      { do: 'send', channel: 'athena:backtest-chat-action', data: BACKTEST_TARGET },
+      { do: 'wait', ms: 400 },
+      { do: 'click', selector: '#backtestCanvas .backtest-visual-validate' },
+      { do: 'wait', ms: 300 },
+      // 검증이 끝난 자리에서 캔버스는 스스로 다시 그리지 않는다(편집기만 갱신된다) —
+      // 머리줄의 상태 문구를 재려면 캔버스를 한 번 더 그려야 한다. 모드 탭 첫째는
+      // 지금 서 있는 그 탭이라 화면을 옮기지 않고 다시 그리기만 한다.
+      { do: 'click', selector: '#backtestCanvas .backtest-tab:nth-child(1)' },
+      { do: 'wait', ms: 200 },
+      // 검사기는 노드를 고른 뒤에만 값을 그린다(고르기 전에는 「노드를 고르면…」 한 줄).
+      { do: 'click', selector: '#backtestCanvas .backtest-vis-node[data-node-id="n_fast"]' },
+      { do: 'settle' },
+    ],
+    root: '#backtestCanvas',
+    phrases: [
+      '서버 검증 가능',
+      '연결 정상',
+      '진입·청산 흐름',
+      '끌어서 전략에 놓기',
+      '선택한 노드',
+      'StrategySpec으로 변환할 수 있습니다',
+      '목록으로 보기',
+    ],
+    // Paper가 그린 노드 일곱·연결 여덟과 팔레트 네 묶음(데이터·지표·조건·출력).
+    structure: [
+      { what: 'count', selector: '.backtest-vis-node', equals: 7 },
+      { what: 'count', selector: '.backtest-vis-edge', equals: 8 },
+      { what: 'count', selector: '.backtest-vis-palette-group', equals: 4 },
+    ],
+  },
+  {
+    board: '3YFV-1', // 12 · 백테스트 — 시각 전략 검증 · 연결 오류
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:backtest-presets', data: BACKTEST_PRESETS },
+      // Paper의 보드 폭은 1680이고 그 폭에서 팔레트·캔버스·검사기가 나란히 선다. 앱도
+      // 같은 규칙이지만 경계가 편집기 상자의 폭이라(VISUAL_NARROW_PX) 셸 창이 좁으면
+      // 팔레트와 검사기가 서랍으로 접힌다 — 창 폭이 곧 이 화면이라 보드 28과 같은
+      // 어휘로 세운다(러너가 라우트 전 bounds를 적어 두고 되돌린다).
+      { do: 'resize', width: 1680, height: 1080 },
+      { do: 'ipc-fixture', channel: 'athena:backtest-visual-registry', data: VISUAL_REGISTRY },
+      { do: 'ipc-fixture', channel: 'athena:backtest-visual-from-spec', data: VISUAL_FROM_SPEC_BROKEN },
+      { do: 'ipc-fixture', channel: 'athena:backtest-visual-validate', data: VISUAL_VALIDATE_BROKEN },
+      { do: 'mode', view: 'backtest' },
+      { do: 'send', channel: 'athena:backtest-chat-action', data: BACKTEST_TARGET },
+      { do: 'wait', ms: 400 },
+      { do: 'click', selector: '#backtestCanvas .backtest-visual-validate' },
+      { do: 'wait', ms: 300 },
+      { do: 'click', selector: '#backtestCanvas .backtest-tab:nth-child(1)' },
+      { do: 'wait', ms: 200 },
+      // 오류 검사기는 **그 오류가 난 노드**를 골랐을 때만 선다.
+      { do: 'click', selector: '#backtestCanvas .backtest-vis-node[data-node-id="n_below"]' },
+      { do: 'settle' },
+    ],
+    root: '#backtestCanvas',
+    // 오류 문장(「느린 SMA 입력이 없습니다」)·포트 이름·줄 번호는 전부 백엔드 진단이
+    // 만드는 값이다. 남는 것은 검사기의 구조 라벨과 갈래 둘, 그리고 막힌 사실 한 줄이다.
+    phrases: [
+      '서버 검증 실패',
+      '오류가 난 노드',
+      '문제 위치',
+      '코드에서 열기',
+      '대화로 수정하기',
+      '설계와 오류 검토는 가능하지만, 이 상태에서는 최종 실행을 시작할 수 없습니다.',
+      '첫 오류로',
+    ],
+    // 연결 하나가 끊겼으니 노드는 그대로 일곱, 연결은 일곱이다. 같은 진단 코드가 네
+    // 곳에 붙는다는 계약(US-006)은 노드 카드·포트·검사기 상세·요약 바다.
+    structure: [
+      { what: 'count', selector: '.backtest-vis-node', equals: 7 },
+      { what: 'count', selector: '.backtest-vis-edge', equals: 7 },
+      { what: 'count', selector: '.backtest-vis-inspector-error', equals: 1 },
+    ],
+  },
+  {
+    board: '3YQ0-1', // 13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결
+    window: 'shell',
+    // 보드 12에서 [코드에서 열기]를 누른 다음 화면이다. 여는 것은 실행 산출물이 아니라
+    // **미실행 미리보기**다(검증이 실패했으니 컴파일 산출물이 없다) — 그래서 파일 띠에
+    // 「그래프 호환 모드」가 붙고, 맨 아래 줄이 코드 전용 전환을 묻는다.
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:backtest-presets', data: BACKTEST_PRESETS },
+      // Paper의 보드 폭은 1680이고 그 폭에서 팔레트·캔버스·검사기가 나란히 선다. 앱도
+      // 같은 규칙이지만 경계가 편집기 상자의 폭이라(VISUAL_NARROW_PX) 셸 창이 좁으면
+      // 팔레트와 검사기가 서랍으로 접힌다 — 창 폭이 곧 이 화면이라 보드 28과 같은
+      // 어휘로 세운다(러너가 라우트 전 bounds를 적어 두고 되돌린다).
+      { do: 'resize', width: 1680, height: 1080 },
+      { do: 'ipc-fixture', channel: 'athena:backtest-visual-registry', data: VISUAL_REGISTRY },
+      { do: 'ipc-fixture', channel: 'athena:backtest-visual-from-spec', data: VISUAL_FROM_SPEC_BROKEN },
+      { do: 'ipc-fixture', channel: 'athena:backtest-visual-validate', data: VISUAL_VALIDATE_BROKEN },
+      { do: 'mode', view: 'backtest' },
+      { do: 'send', channel: 'athena:backtest-chat-action', data: BACKTEST_TARGET },
+      { do: 'wait', ms: 400 },
+      { do: 'click', selector: '#backtestCanvas .backtest-visual-validate' },
+      { do: 'wait', ms: 300 },
+      { do: 'click', selector: '#backtestCanvas .backtest-tab:nth-child(1)' },
+      { do: 'wait', ms: 200 },
+      { do: 'click', selector: '#backtestCanvas .backtest-vis-node[data-node-id="n_below"]' },
+      { do: 'wait', ms: 200 },
+      { do: 'click', selector: '#backtestCanvas .backtest-vis-open-code' },
+      { do: 'wait', ms: 400 },
+      { do: 'settle' },
+    ],
+    root: '#backtestCanvas',
+    phrases: [
+      '연결된 노드 · 하향 돌파',
+      '시각 설계에서 보기',
+      '전략 파일',
+      '그래프에서 생성됨',
+      '그래프 호환 모드',
+      '그래프로 표현할 수 없는 수정은 적용 전에 코드 전용 전환을 묻습니다',
+    ],
+    // Paper의 리본 한 줄 · 파일 띠 한 줄 · 맨 아래 연결 상태 한 줄.
+    structure: [
+      { what: 'count', selector: '.backtest-code-ribbon-back', equals: 1 },
+      { what: 'count', selector: '.backtest-code-filemeta', equals: 1 },
+      { what: 'count', selector: '.backtest-code-linkstatus', equals: 1 },
+    ],
+  },
+  {
+    board: '3Z0X-1', // 14 · 백테스트 — 그래프·코드 동기화 완료 · 실행 전
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:backtest-presets', data: BACKTEST_PRESETS },
+      // Paper의 보드 폭은 1680이고 그 폭에서 팔레트·캔버스·검사기가 나란히 선다. 앱도
+      // 같은 규칙이지만 경계가 편집기 상자의 폭이라(VISUAL_NARROW_PX) 셸 창이 좁으면
+      // 팔레트와 검사기가 서랍으로 접힌다 — 창 폭이 곧 이 화면이라 보드 28과 같은
+      // 어휘로 세운다(러너가 라우트 전 bounds를 적어 두고 되돌린다).
+      { do: 'resize', width: 1680, height: 1080 },
+      { do: 'ipc-fixture', channel: 'athena:backtest-visual-registry', data: VISUAL_REGISTRY },
+      { do: 'ipc-fixture', channel: 'athena:backtest-visual-from-spec', data: VISUAL_FROM_SPEC },
+      { do: 'ipc-fixture', channel: 'athena:backtest-visual-validate', data: VISUAL_VALIDATE_OK },
+      // 보드 11과 다른 것은 이 한 줄뿐이다 — 코드로 옮기는 왕복이 답하면 그래프와 코드가
+      // 같은 판을 가리키고, 그 사실이 요약 바와 머리줄에 그대로 선다.
+      { do: 'ipc-fixture', channel: 'athena:backtest-visual-compile', data: VISUAL_COMPILE },
+      { do: 'mode', view: 'backtest' },
+      { do: 'send', channel: 'athena:backtest-chat-action', data: BACKTEST_TARGET },
+      { do: 'wait', ms: 400 },
+      { do: 'click', selector: '#backtestCanvas .backtest-visual-validate' },
+      { do: 'wait', ms: 500 },
+      // Paper가 고른 노드는 방금 고쳐진 하향 돌파다 — 필수 입력이 둘이라 「입력 연결」
+      // 줄이 서는 것도 이 노드뿐이다.
+      { do: 'click', selector: '#backtestCanvas .backtest-vis-node[data-node-id="n_below"]' },
+      { do: 'settle' },
+    ],
+    root: '#backtestCanvas',
+    phrases: [
+      '그래프 · 코드 검증 완료',
+      '동기화',
+      '그래프와 코드가 같은 버전입니다',
+      '수정됨',
+      '입력 연결',
+      '연결과 값이 유효합니다',
+      '목록으로 보기',
+    ],
+    structure: [
+      { what: 'count', selector: '.backtest-vis-node', equals: 7 },
+      { what: 'count', selector: '.backtest-vis-edge', equals: 8 },
+    ],
+  },
+  // ---------- 백테스트 기법 목록 1장 (8-1 · 보드 19) ----------
+  {
+    board: '40EV-1', // 19 · 백테스트 — 기법 목록 · 새 기법
+    window: 'shell',
+    // 기법을 고르기 전 첫 화면이다 — 위 여섯 보드가 쓰던 BACKTEST_TARGET을 여기서는
+    // 보내지 않는다(보내면 그 기법이 열려 목록이 아니라 설계 화면이 선다).
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:backtest-presets', data: BACKTEST_TECHNIQUE_PRESETS },
+      { do: 'ipc-fixture', channel: 'athena:backtest-user-strategies', data: BACKTEST_USER_STRATEGIES },
+      { do: 'mode', view: 'backtest' },
+      { do: 'wait', ms: 500 },
+      { do: 'settle' },
+    ],
+    root: '#backtestCanvas',
+    // 기법 이름·분류·설명은 전부 목록이 준 값이다. 「처음 있던 10개와 내가 만든 1개를
+    // 구분하지 않습니다」는 값처럼 보이지만 아니다 — 앱이 두 목록의 **길이**로 만드는
+    // 문장이라, 한 목록이 비면 그 자리에서 다른 문장이 된다.
+    phrases: [
+      '새 기법 만들기',
+      '코드창과 대화창이 열립니다 — AI가 한 번에 하나씩 물어보며 원하는 알고리즘을 코드로 씁니다',
+      '대화로 시작',
+      '처음 있던 10개와 내가 만든 1개를 구분하지 않습니다',
+      '결과',
+      '이력',
+    ],
+    // 고르기 전에는 모드 탭이 셋이다(기법 · 결과 · 이력). 목록은 열한 줄이고 맨 위에
+    // [+ 새 기법 만들기] 하나가 선다.
+    structure: [
+      { what: 'count', selector: '.backtest-tab', equals: 3 },
+      { what: 'count', selector: '.backtest-technique-card', equals: 11 },
+      { what: 'count', selector: '.backtest-technique-new', equals: 1 },
     ],
   },
 ]);
