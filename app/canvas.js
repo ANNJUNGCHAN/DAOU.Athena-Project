@@ -79,7 +79,59 @@ if (window.athena && typeof window.athena.on === 'function' && window.AthenaLib.
   });
   window.athena.on('athena:auth-token-changed', (payload) => {
     addLiveCard(protectedCards.buildAuthTokenStatusCard(payload));
+    // Paper 1SUQ-0 — 인증이 만료되면 이미 그려진 계좌 카드를 지우지 않고 읽기 전용으로
+    // 낮춘다. 재시도가 아니라 재연결이므로 REST_RETRY_STATES에는 넣지 않는다.
+    applyAuthExpiryToAccountCards((payload && payload.state) === 'expired');
   });
+}
+
+function releaseAuthExpiry(card) {
+  if (card.dataset.authExpired !== 'true') return;
+  delete card.dataset.authExpired;
+  const notice = card.querySelector(':scope .integrated-auth-expired');
+  if (notice) notice.remove();
+  for (const control of card.querySelectorAll('[data-auth-expired-locked]')) {
+    control.disabled = false;
+    delete control.dataset.authExpiredLocked;
+  }
+}
+
+// 값은 그대로 두고 진입점만 잠근다 — Paper 1SUQ-0의 「이전 값 읽기 전용 유지 ·
+// 주문과 새 조회는 재연결 후 가능」이다. 다시 연결되면(state !== 'expired') 원래대로 푼다.
+function applyAuthExpiryToAccountCards(expired) {
+  for (const card of grid.querySelectorAll('.card.integrated-card--account')) {
+    if (!expired) {
+      releaseAuthExpiry(card);
+      continue;
+    }
+    if (card.dataset.authExpired === 'true') continue;
+    const state = integratedCardSurface.buildAuthExpiredState();
+    card.dataset.authExpired = 'true';
+    const notice = document.createElement('div');
+    notice.className = 'integrated-auth-expired';
+    notice.setAttribute('role', 'status');
+    const text = document.createElement('span');
+    text.textContent = `${state.badge} — ${state.facts.join(' · ')}`;
+    const reconnect = document.createElement('button');
+    reconnect.type = 'button';
+    reconnect.textContent = state.action;
+    reconnect.addEventListener('click', () => {
+      if (!(window.AthenaShell && typeof window.AthenaShell.openSettings === 'function')) return;
+      window.AthenaShell.openSettings();
+      // renderNav이 심는 data-key는 lib/paper-screen-routes.js도 쓰는 도달 셀렉터다.
+      const accountsNav = document.querySelector('.settings-nav-item[data-key="accounts"]');
+      if (accountsNav) accountsNav.click();
+    });
+    notice.appendChild(text);
+    notice.appendChild(reconnect);
+    for (const control of card.querySelectorAll('button, input, select')) {
+      if (control.disabled) continue;
+      control.disabled = true;
+      control.dataset.authExpiredLocked = 'true';
+    }
+    const content = card.querySelector('.integrated-card-content');
+    (content || card).prepend(notice);
+  }
 }
 
 // 프로브·검증용 읽기 창구(window.addCard와 같은 관례). 상태를 바꾸지 않는다 —
@@ -568,7 +620,9 @@ function attachRestRetryAction(card, retryId) {
   action.className = 'rest-retry-action';
   const button = document.createElement('button');
   button.type = 'button';
-  button.textContent = '다시 시도';
+  // Paper 1IG3-0 — 중단 카드의 행동 문구는 상태 모델이 정한다(결과가 남아 있으면
+  // 「결과 유지 · 다시 검색」). 나머지 상태는 지금까지의 「다시 시도」 그대로다.
+  button.textContent = card.dataset.restActionLabel || '다시 시도';
   const status = document.createElement('span');
   status.setAttribute('role', 'status');
   status.setAttribute('aria-live', 'polite');
@@ -1541,17 +1595,37 @@ function showIntegratedRealtimeError(root, envelope, error) {
   if (content) content.prepend(note);
 }
 
+// 이 조회에서 이미 그려 둔 데이터 카드 — 상태 카드(data-screen-state)는 뺀다.
+// 하나라도 남아 있으면 중단 카드가 "표시하지 않았습니다"라고 말하면 안 된다.
+function paintedDataCardsFor(datasetId) {
+  if (!datasetId) return [];
+  return Array.from(grid.querySelectorAll('.card[data-dataset-id]'))
+    .filter((candidate) => candidate.dataset.datasetId === datasetId && !candidate.dataset.screenState);
+}
+
 function renderRestStateCard(envelope) {
   const type = envelope.canvas_type === 'table' ? 'mcp-table' : envelope.canvas_type;
   const labels = {
     timeout: ['조회 시간 초과', '제한 시간 안에 데이터를 받지 못했습니다. 다시 시도해 주세요.'],
-    cancelled: ['조회 취소됨', '요청이 취소되었습니다. 데이터 카드는 표시하지 않았습니다.'],
     error: ['조회 오류', '데이터를 불러오지 못했습니다. 잠시 뒤 다시 시도해 주세요.'],
   };
-  const [title, message] = labels[envelope.state] || labels.error;
+  // Paper 1IG3-0 — 사용자 취소는 이미 확인한 값을 지우지 않는다. 남은 카드 수로
+  // 문구와 행동을 가른다(빈 취소 카드는 정말 아무것도 못 받았을 때만 쓴다).
+  const cancelled = envelope.state === 'cancelled'
+    ? integratedCardSurface.buildCancelledState({
+      partial: paintedDataCardsFor((envelope.correlation && envelope.correlation.dataset_id) || activeDatasetId),
+    })
+    : null;
+  const [title, message] = cancelled
+    ? [cancelled.title, cancelled.message]
+    : (labels[envelope.state] || labels.error);
   const { card, body } = makeCard(type, title, envelope.layout, envelope.correlation);
   card.dataset.screenState = envelope.state;
   card.dataset.renderState = envelope.state === 'timeout' ? 'timeout' : 'error';
+  if (cancelled) {
+    card.dataset.restActionLabel = cancelled.action;
+    card.dataset.keepResults = String(cancelled.keepResults);
+  }
   if (envelope.screen_id) card.dataset.screenId = envelope.screen_id;
   body.appendChild(errorNote(message));
   return card;

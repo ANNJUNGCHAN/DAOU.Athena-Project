@@ -16,6 +16,14 @@ const {
 // ui-kit.js는 다른 에이전트가 동시에 읽는 중이라 편집하지 않는다).
 // ---------------------------------------------------------------------------
 
+// Paper FPE-0 FPS-0의 확인 완료 박스. ui-kit엔 errorNote만 있어 여기서 만든다
+// (ui-kit.js는 다른 트랙이 동시에 읽는 파일이라 건드리지 않는다 — 위 주석과 같은 이유).
+function successNote(message) {
+  const n = el('div', 'uk-success', message);
+  n.setAttribute('role', 'status');
+  return n;
+}
+
 function pill(text, tone) {
   return el('span', `uk-pill tone-${tone || 'dim'}`, text);
 }
@@ -545,18 +553,70 @@ function buildAccountsTable(accounts, refresh, openOrderApi) {
 }
 
 function accountErrorMessage(code) {
-  if (code === 'auth') return '인증 실패 — APP KEY/SECRET KEY를 확인한다';
+  // Paper FLM-0 FM0-0 원문 — 인증 실패만 보드가 문구를 확정했다.
+  if (code === 'auth') return '인증 실패 — APP KEY 또는 SECRET KEY를 확인해 주세요';
   if (code === 'network') return '네트워크 오류 — 잠시 후 다시 시도한다';
   if (code === 'ratelimit') return '레이트리밋 초과 — 잠시 후 다시 시도한다';
   if (code === 'invalid') return '입력값을 확인한다';
   return '검증에 실패해 저장하지 않았다';
 }
 
+// Paper XI-0(확인 중) · FLM-0(인증 실패) · FPE-0(확인 완료) — 계좌 등록 시트는
+// idle → verifying → failed | verified → saving → saved 순서로 움직인다. 검증과
+// 저장이 갈리므로 실패해도 시트가 열려 있는 **동안만** 입력 값이 남는다(다시 검증).
+// 시트를 닫는 두 길(취소·저장 완료)에서는 예외 없이 비운다 — wipeInputs가 그 계약이다.
+const ACCOUNT_SHEET_HINTS = {
+  idle: '모의투자 계좌의 APP KEY / SECRET KEY로 연결 권한을 확인합니다',
+  verifying: '토큰 발급 확인 중… 입력과 저장이 잠시 잠깁니다',
+  failed: '검증에 실패해 저장하지 않았습니다. 키를 수정한 뒤 다시 검증할 수 있습니다',
+  verified: '확인이 완료되었습니다. 저장하면 OS 자격증명 저장소에 암호화됩니다',
+};
+const ACCOUNT_SHEET_SUCCESS = '확인 완료 — 모의투자 계좌 연결 권한을 확인했습니다';
+
+function accountSheetPhase(phase, extra) {
+  const verifiedLike = phase === 'verified' || phase === 'saving';
+  return {
+    phase,
+    hint: ACCOUNT_SHEET_HINTS[phase === 'saving' ? 'verified' : phase],
+    submitLabel: phase === 'verifying' ? '확인 중…'
+      : verifiedLike ? '계좌 저장'
+        : phase === 'failed' ? '다시 검증' : '검증 후 저장',
+    submitDisabled: phase === 'verifying' || phase === 'saving',
+    inputsDisabled: phase === 'verifying' || phase === 'saving',
+    wipeInputs: false,
+    closeSheet: false,
+    successBox: verifiedLike ? ACCOUNT_SHEET_SUCCESS : null,
+    errorMessage: null,
+    errorFields: [],
+    ...extra,
+  };
+}
+
+function accountSheetState(prev, event) {
+  const phase = (prev && prev.phase) || 'idle';
+  const type = (event && event.type) || 'open';
+  if (type === 'cancel') return accountSheetPhase('idle', { wipeInputs: true, closeSheet: true });
+  if (type === 'saved') return accountSheetPhase('idle', { wipeInputs: true, closeSheet: true });
+  if (type === 'verify') return accountSheetPhase('verifying');
+  if (type === 'verified') return accountSheetPhase('verified');
+  if (type === 'save') return accountSheetPhase('saving');
+  if (type === 'verify-failed' || type === 'save-failed') {
+    return accountSheetPhase('failed', {
+      errorMessage: accountErrorMessage(event && event.error),
+      // 인증 실패만 어느 칸이 틀렸는지 말할 수 있다 — 네트워크·레이트리밋은
+      // 입력과 무관하므로 테두리를 물들이지 않는다(FLM-0은 SECRET KEY를 짚는다).
+      errorFields: (event && event.error) === 'auth' ? ['appKey', 'secretKey'] : [],
+    });
+  }
+  return accountSheetPhase(type === 'open' ? 'idle' : phase);
+}
+
 // ---- AT-ST-002: 계좌 등록 시트 ----
 function openAccountRegisterSheet(card, onDone) {
   const { root, body } = sheet('계좌 등록', {
     subtitle: '모의투자 계좌의 APP KEY / SECRET KEY를 등록한다',
-    onClose: () => detachSheet(card, root),
+    // 닫는 길은 전부 취소 이벤트를 거친다 — 그래야 값 비우기가 한 곳에서만 일어난다.
+    onClose: () => applyState(accountSheetState(sheetState, { type: 'cancel' })),
   });
 
   const cols = el('div', 'uk-two-col');
@@ -626,28 +686,28 @@ function openAccountRegisterSheet(card, onDone) {
   cols.appendChild(right);
   body.appendChild(cols);
 
+  // 상태 행(Paper XI-0 113-0)이 지금 상태의 한 문장을 혼자 말한다 — 정적 안내
+  // 한 줄을 늘 띄우던 자리를 대신한다.
   const statusRow = el('div', 'uk-status-row');
   const statusDotEl = el('span', 'uk-status-dot');
   const statusText = el('span', 'uk-status-text', '');
   statusRow.appendChild(statusDotEl);
   statusRow.appendChild(statusText);
   body.appendChild(statusRow);
-  body.appendChild(el('div', 'uk-field-hint-static', '검증에 실패하면 저장하지 않는다 — 인증 실패 / 네트워크 / 레이트리밋을 구분해 표시한다'));
 
   const errBox = el('div');
   body.appendChild(errBox);
 
   const btnRow = row('uk-btn-row-end', []);
   const cancelBtn = button('ghost', '취소', {
-    onClick: () => {
-      wipeSecretInputs();
-      detachSheet(card, root);
-    },
+    onClick: () => applyState(accountSheetState(sheetState, { type: 'cancel' })),
   });
-  const submitBtn = button('primary', '검증 후 저장', { onClick: onSubmit });
+  const submitBtn = button('primary', '검증 후 저장', { onClick: onPrimary });
   btnRow.appendChild(cancelBtn);
   btnRow.appendChild(submitBtn);
   body.appendChild(btnRow);
+
+  let sheetState = accountSheetState(null, { type: 'open' });
 
   function wipeSecretInputs() {
     aliasInput.value = '';
@@ -657,44 +717,87 @@ function openAccountRegisterSheet(card, onDone) {
     secretKeyField.hint.textContent = '';
   }
 
-  async function onSubmit() {
-    // 값은 여기서만 읽고, invoke 인자로 넘긴 직후 즉시 입력 요소를 비운다 —
-    // 바깥 스코프 변수(alias/appKey/secretKey)는 이 함수 실행이 끝나면 더 이상
-    // 참조되지 않는다(재렌더·재표시 없음).
-    const alias = aliasInput.value.trim();
-    const appKey = appKeyField.input.value;
-    const secretKey = secretKeyField.input.value;
-
+  // 상태 하나가 화면 전부를 정한다. 값 비우기·시트 닫기도 여기서만 일어나므로
+  // "닫히는 길은 반드시 비운다"가 취소·저장 완료·닫기 세 길에서 똑같이 지켜진다.
+  function applyState(next, overrideError) {
+    sheetState = next;
+    statusText.textContent = next.hint;
+    statusDotEl.className = next.inputsDisabled ? 'uk-status-dot is-busy' : 'uk-status-dot';
+    submitBtn.textContent = next.submitLabel;
+    submitBtn.disabled = next.submitDisabled;
+    aliasInput.disabled = next.inputsDisabled;
+    appKeyField.input.disabled = next.inputsDisabled;
+    secretKeyField.input.disabled = next.inputsDisabled;
+    appKeyField.input.classList.toggle('is-error', next.errorFields.includes('appKey'));
+    secretKeyField.input.classList.toggle('is-error', next.errorFields.includes('secretKey'));
     clear(errBox);
-    statusDotEl.className = 'uk-status-dot is-busy';
-    statusText.textContent = '토큰 발급 확인 중…';
-    submitBtn.disabled = true;
+    if (next.successBox) errBox.appendChild(successNote(next.successBox));
+    const failure = overrideError || next.errorMessage;
+    if (failure) errBox.appendChild(errorNote(failure));
+    if (next.wipeInputs) wipeSecretInputs();
+    if (next.closeSheet) detachSheet(card, root);
+  }
 
-    let res;
-    let threw = false;
+  // 값은 누를 때마다 입력에서 읽는다. 검증과 저장이 갈린 뒤로는 실패해도 값을
+  // 지우지 않으므로(FLM-0 다시 검증) 값이 남아 있는 구간은 **시트가 열려 있는
+  // 동안**으로 한정된다 — 닫히는 순간 applyState가 예외 없이 비운다. 마스크
+  // (password 입력 + 붙여넣음 · N자)는 그동안에도 그대로다.
+  function readInputs() {
+    return {
+      alias: aliasInput.value.trim(),
+      appKey: appKeyField.input.value,
+      secretKey: secretKeyField.input.value,
+    };
+  }
+
+  async function callRegister(payload) {
     try {
-      res = await window.athena.invoke('athena:account-register', { alias, appKey, secretKey });
+      return { res: await window.athena.invoke('athena:account-register', payload) };
     } catch (err) {
-      threw = true;
+      return { missingHandler: true };
     }
+  }
 
-    wipeSecretInputs();
-    submitBtn.disabled = false;
-    statusDotEl.className = 'uk-status-dot';
-    statusText.textContent = '';
+  async function onPrimary() {
+    if (sheetState.phase === 'verified') return onSave();
+    return onVerify();
+  }
 
-    if (threw) {
-      errBox.appendChild(errorNote('계좌 등록 기능을 아직 사용할 수 없다 (athena:account-register 핸들러 없음)'));
+  async function onVerify() {
+    const input = readInputs();
+    applyState(accountSheetState(sheetState, { type: 'verify' }));
+    const { res, missingHandler } = await callRegister({ ...input, verifyOnly: true });
+    if (missingHandler) {
+      applyState(accountSheetState(sheetState, { type: 'verify-failed' }),
+        '계좌 등록 기능을 아직 사용할 수 없다 (athena:account-register 핸들러 없음)');
       return;
     }
     if (res && res.ok) {
-      detachSheet(card, root);
+      applyState(accountSheetState(sheetState, { type: 'verified' }));
+      return;
+    }
+    applyState(accountSheetState(sheetState, { type: 'verify-failed', error: res && res.error }));
+  }
+
+  async function onSave() {
+    const input = readInputs();
+    applyState(accountSheetState(sheetState, { type: 'save' }));
+    const { res, missingHandler } = await callRegister(input);
+    if (missingHandler) {
+      applyState(accountSheetState(sheetState, { type: 'save-failed' }),
+        '계좌 등록 기능을 아직 사용할 수 없다 (athena:account-register 핸들러 없음)');
+      return;
+    }
+    if (res && res.ok) {
+      // 목록 새로고침은 저장이 끝난 뒤다 — 검증만 한 시점에는 아직 계좌가 없다.
+      applyState(accountSheetState(sheetState, { type: 'saved' }));
       onDone();
       return;
     }
-    errBox.appendChild(errorNote(accountErrorMessage(res && res.error)));
+    applyState(accountSheetState(sheetState, { type: 'save-failed', error: res && res.error }));
   }
 
+  applyState(sheetState);
   attachSheet(card, root);
   aliasInput.focus();
 }
@@ -1566,7 +1669,7 @@ function refreshHistoryCard(card, head, body) {
 // UMD 각주(2026-08-18 렌더러 격리) — sanitize.js와 같은 패턴.
 const __exports = {
   renderAccounts, renderScreen, renderModel, renderHistory, renderNav,
-  accountSubline, formatAddedAt,
+  accountSubline, formatAddedAt, accountSheetState,
   buildHistoryCardModel,
   normalizeGraphSettings, readGraphSettings, writeGraphSettings, setCollectChatPreference,
   GRAPH_SETTINGS_DEFAULTS,
