@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "gate": "verify:paper-screens",
-  "blessed_at": "2026-09-06T01:01:16.077Z",
+  "blessed_at": "2026-09-06T02:19:45.642Z",
   "blessed_by": "verify:paper-screens --bless",
   "target_boards": 115,
   "passing": [
@@ -28,8 +28,11 @@
     "3VV8-1",
     "3VV9-1",
     "3ZPB-0",
+    "446V-1",
+    "44RV-1",
     "4AN-0",
     "4IA-0",
+    "56X-0",
     "AJ-0",
     "AMZ-0",
     "ARM-0",
@@ -43,6 +46,14 @@
     "GCF-0",
     "OJ-0"
   ],
-  "passing_count": 37,
-  "shrink_log": []
+  "passing_count": 40,
+  "shrink_log": [
+    {
+      "at": "2026-09-06T02:19:45.642Z",
+      "removed": [
+        "44HD-1"
+      ],
+      "why": "보드 11(44HD-1)을 gap 으로 되돌린다 — Paper의 순환·재검사·한 바퀴 영수증·되돌리기가 앱에 없어 노드 행만으로 잠근 것은 잘못된 잠금이었다(2026-09-06 검토)"
+    }
+  ]
 }

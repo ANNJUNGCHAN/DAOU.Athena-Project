@@ -313,9 +313,9 @@
           <span class="chat-mode-head-title"></span>
           <span class="chat-mode-head-sub"></span>
         </div>
-        <!-- 알림 파생 방 머리(Paper 보드 08) — 사이드바 "알림에서" 항목을 선택했을 때만
-             보인다. 메인 대화와 섞이지 않는다는 문구가 계약이다 — lib/sidebar.js가
-             채운다. -->
+        <!-- 알림 파생 방 머리(Paper 보드 01 · 56X-0) — 사이드바 "알림에서" 항목을
+             선택했을 때만 보인다. 이 방이 관제 창과 별개라는 표기와, 관제 창으로
+             합류하는 문 하나가 계약이다 — lib/sidebar.js가 채우고 잇는다. -->
         <div id="roomHeadBanner" class="room-head-banner" hidden>
           <div class="room-head-top">
             <span class="room-head-dot" aria-hidden="true"></span>
@@ -323,7 +323,10 @@
             <span id="roomHeadTime" class="room-head-time"></span>
           </div>
           <div id="roomHeadTitle" class="room-head-title"></div>
-          <div class="room-head-sub">오브에서 넘어왔습니다. 이 감시 건에 대해서만 이어서 이야기합니다 — 메인 대화와 섞이지 않습니다.</div>
+          <div class="room-head-sub">오브에서 넘어온 예외 창 — 관제 창과 별개</div>
+          <div class="room-head-join">
+            <button type="button" id="roomHeadJoin" class="room-head-join-btn">관제 창으로 →</button>
+          </div>
         </div>
         <div class="history" id="history" role="log" aria-label="현재 대화" tabindex="0"></div>
 
