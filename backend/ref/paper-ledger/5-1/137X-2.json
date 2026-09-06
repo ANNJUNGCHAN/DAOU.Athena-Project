@@ -537,6 +537,84 @@
    ]
   },
   {
+   "id": "3SK2-0",
+   "text": "1,420만",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Existing Athena Chart Module",
+    "Athena Chart Preview"
+   ]
+  },
+  {
+   "id": "3SK3-0",
+   "text": "1,065만",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Existing Athena Chart Module",
+    "Athena Chart Preview"
+   ]
+  },
+  {
+   "id": "3SK4-0",
+   "text": "710만",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Existing Athena Chart Module",
+    "Athena Chart Preview"
+   ]
+  },
+  {
+   "id": "3SK5-0",
+   "text": "355만",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Existing Athena Chart Module",
+    "Athena Chart Preview"
+   ]
+  },
+  {
+   "id": "3SK6-0",
+   "text": "0",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Existing Athena Chart Module",
+    "Athena Chart Preview"
+   ]
+  },
+  {
+   "id": "3SK7-0",
+   "text": "거래량 · 주",
+   "path": [
+    "CC-03 / R01 · 삼성전자 3개월 차트",
+    "Instrument Root · 차트",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Existing Athena Chart Module",
+    "Athena Chart Preview"
+   ]
+  },
+  {
    "id": "33FX-0",
    "text": "150,850 · +1.24%",
    "path": [
@@ -3413,6 +3491,7 @@
   }
  ],
  "text_multiset": {
+  "0": 1,
   "삼성전자": 1,
   "005930 · KOSPI · KRX": 1,
   "정규장": 1,
@@ -3456,6 +3535,11 @@
   "초기화": 1,
   "거래회전율": 1,
   "일 0.24% · 주 1.12% · 월 4.36%": 1,
+  "1,420만": 1,
+  "1,065만": 1,
+  "710만": 1,
+  "355만": 1,
+  "거래량 · 주": 1,
   "150,850 · +1.24%": 1,
   "종목 요약": 1,
   "정상 거래": 1,
