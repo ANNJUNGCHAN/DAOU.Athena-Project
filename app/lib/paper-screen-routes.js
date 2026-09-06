@@ -686,6 +686,11 @@ const WATCH_CHECK_DONE = Object.freeze({
 // 나가 무엇을 답할지 이 컴퓨터에 좌우된다. 사유 문장은 값이라 phrases에 안 넣는다.
 const ROUTINE_CANCEL_REFUSED = Object.freeze({ ok: false, error: '이미 발화된 예약' });
 
+// 제어가 받아들여진 답(보드 08의 「성공」 열). 상세의 [일시중지]가 실제로 성공해야
+// 판정 배지 「완료」가 그려지는데, 원 핸들러는 fixture 루틴을 모르는 백엔드로 나간다
+// (거절 봉투와 같은 이유). 돌려주는 상태 값은 화면 문구가 아니다.
+const ROUTINE_PAUSE_OK = Object.freeze({ ok: true, data: { status: 'paused' } });
+
 // 성향 제안 한 줄 — 보드 08의 「거부」 열은 제안 카드의 [보류]를 누른 결과다.
 // 이 봉투가 없으면 제안 뷰가 이 컴퓨터의 브레인에 좌우돼 카드가 아예 없을 수 있다
 // (agent-canvas.js renderProactiveCards의 빈 상태). 대상 이름·보강 수는 값이다.
@@ -1876,16 +1881,16 @@ const ROUTES = Object.freeze([
     window: 'shell',
     // 결과 턴은 캔버스에서 칩을 누른 뒤에만 같은 방에 붙는다(chat.js의
     // athena:routine-control-result 구독) — 부팅 직후 #history는 비어 있다.
-    // 그래서 이 라우트는 네 상태 중 클릭으로 만들 수 있는 둘을 실제로 만든다:
-    // 제안 카드의 [보류](거부)와, 백엔드가 거절한 [취소](실패·재시도).
-    // 「성공」·「뷰 이동」은 적지 않는다 — 성공의 배지·리드(「작업 설정」·「쿨다운
-    // 600초 반영」)를 앱이 그 낱말로 쓰지 않고, 뷰 이동은 채팅이 에이전트 뷰를
-    // 옮기는 길 자체가 아직 없다(routine-control-turn.js 머리말의 그 사실).
+    // 그래서 이 라우트는 네 상태 중 클릭으로 만들 수 있는 셋을 실제로 만든다:
+    // 제안 카드의 [보류](거부), 받아들여진 [일시중지](성공), 백엔드가 거절한
+    // [취소](실패·재시도). 「뷰 이동」만 빠진다 — 채팅이 에이전트 뷰를 옮기는 길
+    // 자체가 아직 없다(routine-control-turn.js 머리말의 그 사실).
     reach: [
       { do: 'ipc-fixture', channel: 'athena:brain-profile-summary', data: PROACTIVE_SUGGESTION },
       { do: 'ipc-fixture', channel: 'athena:routines-list', data: CODE_WATCH_ACTIVE },
       { do: 'ipc-fixture', channel: 'athena:routine-detail', data: CODE_DETAIL_ACTIVE },
       { do: 'ipc-fixture', channel: 'athena:routine-runs', data: CODE_RUNS },
+      { do: 'ipc-fixture', channel: 'athena:routine-pause', data: ROUTINE_PAUSE_OK },
       { do: 'ipc-fixture', channel: 'athena:routine-cancel', data: ROUTINE_CANCEL_REFUSED },
       { do: 'mode', view: 'agent' },
       { do: 'click', selector: '.agent-view-tab[data-view="proactive"]' },
@@ -1897,18 +1902,23 @@ const ROUTES = Object.freeze([
       { do: 'wait', ms: 700 },
       { do: 'click', selector: '.agent-row' },
       { do: 'wait', ms: 400 },
+      // 상세의 두 문 — [일시중지]는 받아들여져 「완료」로, [취소]는 거절당해 「실패」로 온다.
+      { do: 'click', selector: '.agent-pause-btn' },
+      { do: 'wait', ms: 500 },
       { do: 'click', selector: '.agent-code-cancel' },
       { do: 'wait', ms: 500 },
       { do: 'settle' },
     ],
     root: '#history',
     // 배지·판정·상태 리드만 담는다. 실패의 리드(「이미 발화된 예약」)와 사실행은
-    // 백엔드 거절 사유와 원장 값이라 한 글자도 안 넣는다.
-    phrases: ['제안 채택', '보류', '보류 — 목록 유지', '실패', '다시 시도'],
-    // 이 보드의 계약 — 제어 한 번에 결과 한 건이고, 다음 행동(칩)은 실패에만 붙는다
-    // (거부는 서버 상태가 안 바뀐 채로 끝난 일이다).
+    // 백엔드 거절 사유와 원장 값이라 한 글자도 안 넣는다. 「보류」 하나는 안 적는다 —
+    // 포함 판정이라 「보류 — 목록 유지」에 통째로 삼켜져 한 칸을 쓰고 아무것도 안 잠근다.
+    phrases: ['제안 채택', '보류 — 목록 유지', '완료', '실패', '다시 시도'],
+    // 이 보드의 계약 — 다음 행동(칩)은 실패에만 붙는다(성공·거부는 이미 끝난 일이다).
+    // 앞 줄의 3은 Paper 수치가 아니라 위 도달 절차가 칩을 세 번 누른 결과다: Paper는
+    // 사양 보드로 네 열을 나란히 그린다. 절차에 클릭이 늘면 이 줄도 같이 고쳐야 한다.
     structure: [
-      { what: 'count', selector: '.control-result', equals: 2 },
+      { what: 'count', selector: '.control-result', equals: 3 },
       { what: 'count', selector: '.control-result .routine-approval-actions', equals: 1 },
     ],
   },
@@ -2024,16 +2034,21 @@ const ROUTES = Object.freeze([
     ],
     root: '#settings',
     // Paper가 그린 값 넉 줄(성향 이름·한 문장 요약·위험 성향·보존 기간)은 앱에 오는
-    // 길이 없어 앱이 그 행을 만들지 않는다 — 그래서 라벨만 적는다. 「보관 중」·
-    // 「주요 관심」·「성향 반영」도 뺐다: 셋 다 값이 와야 서는 행이라, 값을 못 박는
-    // 봉투를 지우면 문구가 같이 사라져 라우트가 봉투를 재게 된다.
+    // 길이 없어 앱이 그 행을 만들지 않는다 — 그래서 라벨만 적는다. 두 문구가 봉투를
+    // 하나씩 진다: 「대화에서 학습됨」은 성향 봉투가(없으면 빈 상태로 떨어진다),
+    // 「보관 중」은 건수 봉투가 세운다(없으면 그 자리가 오류 문구가 된다).
+    // 「주요 관심」은 값이 이름이라 안 적고, 「성향 반영」은 앱이 Paper와 다른 문장을
+    // 일부러 쓴다: Paper의 「켜짐 · 답변 어조에만 사용」은 exposeToModel이 실제로
+    // 넘기는 것(보유 종목·수량·대화 원문)을 축소해 말한다. 이 트랙에서 Paper를 정본으로
+    // 삼지 않은 유일한 자리라 여기 적어 둔다 — 되돌리려면 사람 판단이 필요하고, 지금
+    // 문장은 settings-cards.test.js 「성향 반영」 시험이 잠갔다.
     phrases: [
       '성향·이력',
       '로컬 보관 · 언제든 내보내기 가능',
       '투자 성향',
       '대화에서 학습됨',
       '대화 이력',
-      '이력 내보내기',
+      '보관 중',
       '삭제는 확인 단계를 한 번 더 거치며 되돌릴 수 없습니다',
     ],
     // 보드 32의 본문은 두 구역(투자 성향 · 대화 이력)이고 발치의 문은 둘이다
