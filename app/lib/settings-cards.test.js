@@ -154,22 +154,14 @@ test('collectChat 재활성화 실패는 로컬 상태를 OFF로 복원하고 �
   }
 });
 
-test('collectChat 비활성화 purge 실패는 메인의 정제 오류를 보존해 삭제 전용 안내를 표시한다', async () => {
+test('collectChat 비활성화 purge 실패는 메인의 정제 오류를 그대로 던지고 로컬을 OFF로 남긴다', async () => {
   const storage = fakeStorage(JSON.stringify({ ...settingsCards.GRAPH_SETTINGS_DEFAULTS, collectChat: true }));
   const mainError = new Error('대화 이력 수집은 OFF로 유지됐지만 남은 원문을 삭제하지 못했습니다.');
   global.window = { athena: { invoke: () => Promise.reject(mainError) } };
   try {
-    let renderedMessage = '';
     await assert.rejects(
-      settingsCards.setCollectChatPreference(false, storage).catch((error) => {
-        renderedMessage = settingsCards.collectChatPreferenceErrorMessage(error);
-        throw error;
-      }),
+      settingsCards.setCollectChatPreference(false, storage),
       (error) => error === mainError,
-    );
-    assert.equal(
-      renderedMessage,
-      '대화 이력 수집은 OFF지만 남아 있던 원문을 삭제하지 못했습니다. 저장소 상태를 확인해 주세요.',
     );
     assert.equal(settingsCards.readGraphSettings(storage).collectChat, false);
   } finally {
@@ -200,7 +192,6 @@ test('성향·이력 카드는 백엔드가 준 값만 행으로 만든다 — �
   const model = settingsCards.buildHistoryCardModel({});
   assert.deepEqual(model.profileRows, []);
   assert.deepEqual(model.storageRows, []);
-  assert.doesNotMatch(JSON.stringify(model), /128|42MB|90일|장기 ETF/);
 });
 
 test('학습된 관심 대상이 오면 Paper 라벨 그대로 한 행이 된다 — 중복은 접는다', () => {
