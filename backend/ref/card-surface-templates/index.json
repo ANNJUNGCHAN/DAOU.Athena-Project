@@ -262,7 +262,8 @@
             "control": "순위",
             "kind": "tab",
             "boards": [
-              "2VDA-0"
+              "2VDA-0",
+              "32XM-0"
             ],
             "node_id": "2WFB-0",
             "how": "exact"
@@ -297,7 +298,7 @@
         ],
         "unresolved": []
       },
-      "html_sha256": "8b3701778949e9fcfb7b28ea17daa630ff5569dfbcf4f6d4aa05591b017d6e55"
+      "html_sha256": "8039a65e86a52c2ee2cbe11ed931f284ccfb510b3473094e750c711a8033e9c8"
     },
     {
       "board_id": "13BC-2",
@@ -4019,9 +4020,9 @@
       "card_id": "CC-03",
       "name": "CC-03 / R01-T8 · 순위 — 신주인수권 전체",
       "state": {
-        "kind": "default",
-        "parent_board": null,
-        "control": null,
+        "kind": "tab",
+        "parent_board": "137X-2",
+        "control": "순위",
         "control_text": null,
         "control_node": null
       },
@@ -4925,7 +4926,7 @@
     }
   ],
   "state_controls": {
-    "resolved": 82,
+    "resolved": 83,
     "unresolved_count": 0,
     "unresolved": []
   }

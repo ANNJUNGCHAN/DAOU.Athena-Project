@@ -115,7 +115,7 @@ const BOARD_PRIMARY = Object.freeze({
 const STATE_GRAPH = Object.freeze({
   "133H-2": {"parent":null,"links":[{"control":"금현물 잔고·거래내역","board_id":"3ODO-0"},{"control":"보유종목","board_id":"2SCE-1"},{"control":"손익·성과","board_id":"2SRV-1"},{"control":"예수금·결제","board_id":"2SKU-1"},{"control":"주문·체결","board_id":"2SYW-1"}]},
   "135M-2": {"parent":null,"links":[{"control":"금현물 · 매수","board_id":"2TNJ-1"},{"control":"신용 · 매수","board_id":"2TJ6-1"},{"control":"정정","board_id":"2TAG-1"},{"control":"취소","board_id":"2TET-1"},{"control":"현금 매도","board_id":"2T63-1"}]},
-  "137X-2": {"parent":null,"links":[{"control":"금현물","board_id":"2RJ7-1"},{"control":"기업정보","board_id":"2RBO-1"},{"control":"순위","board_id":"2VDA-0"},{"control":"차트","board_id":"32S7-0"},{"control":"투자자 12주체","board_id":"3DI2-0"},{"control":"현재시세","board_id":"2R3M-1"}]},
+  "137X-2": {"parent":null,"links":[{"control":"금현물","board_id":"2RJ7-1"},{"control":"기업정보","board_id":"2RBO-1"},{"control":"순위","board_id":"2VDA-0"},{"control":"순위","board_id":"32XM-0"},{"control":"차트","board_id":"32S7-0"},{"control":"투자자 12주체","board_id":"3DI2-0"},{"control":"현재시세","board_id":"2R3M-1"}]},
   "13BC-2": {"parent":null,"links":[{"control":"금현물 · 5단","board_id":"2QX1-1"},{"control":"단계별 낱값·거래소별","board_id":"3JZ3-0"},{"control":"시간외","board_id":"2QRP-1"},{"control":"정규장 · 5단","board_id":"2TRW-1"}]},
   "13K0-2": {"parent":null,"links":[{"control":"거래량 급증","board_id":"2YJ8-0"},{"control":"관심종목 시세 보드","board_id":"2U5L-1"},{"control":"당일 거래량","board_id":"2X5N-0"},{"control":"등락률","board_id":"2XKO-0"},{"control":"시간외 등락률","board_id":"2YNQ-0"},{"control":"시장·VI","board_id":"2UHM-1"},{"control":"업종","board_id":"2TZN-1"},{"control":"예상체결 등락률","board_id":"2XP6-0"},{"control":"잔량률 급증","board_id":"2YEQ-0"},{"control":"전일 거래량","board_id":"2XG6-0"},{"control":"조건검색","board_id":"2UN6-1"},{"control":"테마 등락·확산 탐색","board_id":"2UBO-1"},{"control":"호가잔량 급증","board_id":"2YA8-0"},{"control":"호가잔량 상위","board_id":"2XTO-0"}]},
   "15P5-2": {"parent":null,"links":[{"control":"ELW 바스켓·만기평가","board_id":"3DZ1-0"}]},
@@ -182,6 +182,7 @@ const STATE_GRAPH = Object.freeze({
   "31OF-0": {"parent":"2V71-0","links":[]},
   "31UD-0": {"parent":"2VDA-0","links":[]},
   "32S7-0": {"parent":"137X-2","links":[]},
+  "32XM-0": {"parent":"137X-2","links":[]},
   "3BQB-0": {"parent":"2TZN-1","links":[]},
   "3D4I-0": {"parent":"2U5L-1","links":[]},
   "3DI2-0": {"parent":"137X-2","links":[]},
