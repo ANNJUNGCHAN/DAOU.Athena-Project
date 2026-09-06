@@ -177,6 +177,195 @@ function statusRowIcon(routine) {
   return { glyph: '○', colorVar: '--color-k-faint' }; // expired/cancelled/failed — 정직하게 흐리게
 }
 
+function formatDateTime(iso) {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return d.toLocaleString('ko-KR', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+}
+
+// ---------- 드릴인 "설정" 편집 폼(Paper 보드 06) ----------
+//
+// 폼의 모양은 mode가 아니라 **소스 명세**가 정한다 — GET /{id}가 주는
+// source_spec(ops·value_type·transport)이 곧 분기다(백엔드 models.py SOURCES가
+// 원본). Paper가 나란히 그린 두 폼의 차이도 전부 여기서 갈린다: 연속 틱은
+// transport === 'ws'에서만 있고("1~20 · 실시간 소스만"), 비교 목록은 그 소스가
+// 허용하는 연산자뿐이다(예약은 "at 하나뿐").
+//
+// 코드 감시는 조건 행 자체가 없다 — 백엔드가 폼의 조건 변경을 422로 막고
+// (api/routines.py update_routine), Paper 보드 12도 「폼으로 바꾸는 건
+// 쿨다운·만료·설명」이라고 같은 말을 적었다.
+const OP_GLYPH = { '<': '<', '<=': '≤', '>': '>', '>=': '≥', '==': '=', at: 'at', contains: '포함' };
+
+// 조건 값 뒤에 붙는 단위 — 백엔드 카탈로그에 단위 필드가 없어 표기만 여기 둔다.
+// 카탈로그 라벨이 단위를 말한 것만 옮긴다("등락율(%)"·"체결강도(%)"). 전일 동시간
+// 거래량 비율은 배수인지 백분율인지 카탈로그가 말하지 않아 단위를 비워 둔다.
+const VALUE_UNIT = {
+  'price.current': '원',
+  'price.change_rate': '%',
+  'trade.strength': '%',
+};
+
+// 읽기 전용 "모드" 칸의 말 — 발화 방식 둘(자동·예약)로 가른다. 목록 행의
+// "실시간 감시 / 예약 실행"과는 층위가 다르다(그쪽은 소스까지 섞어 부른다).
+const SETTINGS_MODE_LABEL = {
+  'realtime-ws': '자동', periodic: '자동', scheduled: '예약', 'code-watch': WatchNodes.KIND_LABEL,
+};
+
+// 브리핑 모델·노력 선택지 — chat.js PILL_MODEL_CHIPS·settings-cards.js와 같은
+// 어휘다. 빈 값은 저장 본문에서 null로 나가 "앱 기본"을 뜻한다(백엔드 R1).
+const BRIEFING_MODELS = ['fable', 'opus', 'sonnet', 'haiku'];
+const BRIEFING_EFFORTS = ['low', 'medium', 'high', 'xhigh', 'max'];
+const BRIEFING_DEFAULT_LABEL = '앱 기본';
+
+function opsHint(ops) {
+  const glyphs = ops.map((op) => OP_GLYPH[op] || op);
+  return glyphs.length === 1 ? `${glyphs[0]} 하나뿐` : glyphs.join(' · ');
+}
+
+// 만료 칸은 빈 채로 연다 — 비워 두고 저장하면 expires_days를 아예 안 실어
+// 보내 백엔드가 기존 만료를 그대로 둔다(api/routines.py "편집이 만료를 몰래
+// 연장하지 않는다"). 그 규칙을 사람이 읽을 수 있게 지금 만료를 옆에 적는다.
+function expiryHint(iso) {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return `만료 ${iso} · 미변경 시 보존`;
+  const pad = (n) => String(n).padStart(2, '0');
+  return `만료 ${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} · 미변경 시 보존`;
+}
+
+function briefingOptions(values) {
+  return [{ value: '', label: BRIEFING_DEFAULT_LABEL }]
+    .concat(values.map((v) => ({ value: v, label: v })));
+}
+
+// 요약 한 줄(Paper "설정 — 요약") — 목록 행이 이미 쥔 값만 쓴다(왕복 없음).
+function settingsSummaryLines(routine) {
+  const parts = [SETTINGS_MODE_LABEL[routine.mode] || routine.mode];
+  if (routine.cooldown_s != null) parts.push(`쿨다운 ${routine.cooldown_s}초`);
+  if (routine.next_fire_at) parts.push(`다음 실행 ${formatDateTime(routine.next_fire_at)}`);
+  if (routine.created_at) parts.push(`생성 ${formatDateTime(routine.created_at)}`);
+  return { title: routine.note || routine.symbol || routine.id, meta: parts.join(' · ') };
+}
+
+// detail은 GET /{id}(조건 원문·source_spec), routine은 목록 행(생성·다음 실행 —
+// 상세 응답에는 없는 값이다). 둘 다 실데이터라 지어낸 칸은 없다.
+function settingsFormModel(detail, routine) {
+  if (!detail || !detail.condition || !detail.source_spec) return null;
+  const spec = detail.source_spec;
+  const cond = detail.condition;
+  const row = routine || {};
+
+  const readonly = [];
+  if (detail.symbol) readonly.push({ label: '종목', value: detail.symbol });
+  readonly.push({ label: '모드', value: SETTINGS_MODE_LABEL[detail.mode] || detail.mode });
+  readonly.push({ label: '소스', value: spec.label, tag: '변경 불가' });
+  if (row.next_fire_at) readonly.push({ label: '다음 실행', value: formatDateTime(row.next_fire_at) });
+
+  const fields = [];
+  if (spec.transport !== 'code') {
+    fields.push({
+      key: 'op',
+      label: '조건 비교',
+      kind: 'select',
+      options: spec.ops.map((op) => ({ value: op, label: OP_GLYPH[op] || op })),
+      value: cond.op,
+      hint: opsHint(spec.ops),
+    });
+    fields.push({
+      key: 'value',
+      label: '조건 값',
+      kind: spec.value_type === 'bool' ? 'select' : spec.value_type,
+      options: spec.value_type === 'bool'
+        ? [{ value: 'true', label: '예' }, { value: 'false', label: '아니오' }] : null,
+      value: String(cond.value),
+      unit: VALUE_UNIT[cond.source] || '',
+      // schedule.daily 가지는 지금 제품에서 드릴인이 안 열린다(「전체 이력 보기 →」가
+      // 감시·코드 알람에만 붙는다) — 단위 테스트만 도는 가지다.
+      hint: spec.value_type === 'number' ? '숫자'
+        : (cond.source === 'schedule.daily' ? '요일@시각 표기' : ''),
+    });
+    if (spec.transport === 'ws') {
+      fields.push({
+        key: 'consecutive_ticks',
+        label: '연속 틱',
+        kind: 'number',
+        value: String(cond.consecutive_ticks || 1),
+        hint: '1~20 · 실시간 소스만',
+      });
+    }
+  }
+  fields.push({ key: 'cooldown_s', label: '쿨다운(초)', kind: 'number', value: String(detail.cooldown_s) });
+  fields.push({
+    key: 'expires_days', label: '만료(일)', kind: 'number', value: '', hint: expiryHint(detail.expires_at),
+  });
+  fields.push({ key: 'note', label: '설명', kind: 'string', value: detail.note || '' });
+  fields.push({
+    key: 'briefing_model',
+    label: '브리핑 모델',
+    kind: 'select',
+    options: briefingOptions(BRIEFING_MODELS),
+    value: detail.briefing_model || '',
+  });
+  fields.push({
+    key: 'briefing_effort',
+    label: '노력',
+    kind: 'select',
+    options: briefingOptions(BRIEFING_EFFORTS),
+    value: detail.briefing_effort || '',
+  });
+
+  const trailing = [];
+  if (row.created_at) trailing.push({ label: '생성', value: formatDateTime(row.created_at) });
+  return {
+    title: detail.note || row.note || detail.id,
+    readonly,
+    fields,
+    trailing,
+    note: '종목·소스는 취소 후 새로 만들기',
+  };
+}
+
+// 폼 값 → POST /{id}/update 본문. 백엔드가 받는 필드만 싣는다(_UPDATABLE_FIELDS·
+// _UPDATABLE_CONDITION_FIELDS) — 만료는 비어 있으면 키 자체를 안 만든다.
+function settingsUpdateBody(model, values) {
+  const body = {};
+  const condition = {};
+  let conditionChanged = false;
+  for (const field of model.fields) {
+    const raw = values[field.key];
+    const text = raw == null ? '' : String(raw).trim();
+    const touched = text !== String(field.value);
+    if (field.key === 'op') { condition.op = text; if (touched) conditionChanged = true; continue; }
+    if (field.key === 'value') {
+      if (touched) conditionChanged = true;
+      if (field.kind === 'number') condition.value = Number(text);
+      else if (field.options) condition.value = text === 'true';
+      else condition.value = text;
+      continue;
+    }
+    if (field.key === 'consecutive_ticks') {
+      condition.consecutive_ticks = Number(text);
+      if (touched) conditionChanged = true;
+      continue;
+    }
+    if (field.key === 'expires_days') { if (text !== '') body.expires_days = Number(text); continue; }
+    if (field.key === 'cooldown_s') { body.cooldown_s = Number(text); continue; }
+    if (field.key === 'note') {
+      // 설명 칸을 안 건드렸는데 조건이 바뀌었으면 note 키를 안 싣는다 — 백엔드가
+      // 자동 생성문이었을 때만 새 조건으로 다시 쓴다(사람이 쓴 설명은 그대로).
+      if (!touched && conditionChanged) continue;
+      body.note = text;
+      continue;
+    }
+    if (field.key === 'briefing_model' || field.key === 'briefing_effort') {
+      body[field.key] = text === '' ? null : text;
+      continue;
+    }
+    body[field.key] = text;
+  }
+  if (Object.keys(condition).length > 0) body.condition = condition;
+  return body;
+}
+
 function createAgentCanvas(deps) {
   const {
     container, fetchRoutines, fetchFiredToday, onNewTaskClick, pauseRoutine, resumeRoutine,
@@ -193,6 +382,8 @@ function createAgentCanvas(deps) {
     cancelRoutine,
     confirmRoutine,
     runWatchCheck,
+    // 드릴인 설정 편집 폼의 [저장](Paper 보드 06) — POST /{id}/update 한 왕복.
+    updateRoutine,
     // 제어 결과 턴(Paper 보드 08 · 4330-1) — 누른 결과를 같은 방에 남기는 길.
     // 캐널은 canvas.js가 정한다(플러그인 결과와 같은 자리의 CustomEvent).
     onControlResult,
@@ -346,6 +537,7 @@ function createAgentCanvas(deps) {
   for (const tab of HISTORY_TABS) {
     const btn = el('button', tab.key === 'runs' ? 'agent-history-tab is-active' : 'agent-history-tab');
     btn.type = 'button';
+    btn.setAttribute('data-key', tab.key); // 뷰 탭 data-view와 같은 관례 — 값이 아니라 키로 집는다
     btn.textContent = tab.label;
     btn.addEventListener('click', () => setHistoryTab(tab.key));
     historyTabButtons[tab.key] = btn;
@@ -1026,75 +1218,247 @@ function createAgentCanvas(deps) {
     renderHistoryRuns();
   }
 
-  // ---------- 드릴인 "설정" 탭 — 읽기 전용 명세(Paper 보드 03) ----------
-  // 백엔드가 실제로 주는 필드만 보여준다(상세 패널 detailFieldsFor와 같은 원천·
-  // 같은 원칙, P3). 값을 바꾸는 입력은 두지 않는다 — 고치는 경로는 아래 버튼
-  // 하나(채팅)뿐이다(동선 규칙②).
+  // ---------- 드릴인 "설정" 탭 — 요약 + 편집 폼(Paper 보드 06) ----------
+  // 두 층이다: 늘 보이는 「설정 — 요약」(목록 행이 이미 쥔 값만 쓰므로 왕복이
+  // 없다)과 [설정 편집]이 여는 「상세 패널 — 설정 편집」 폼이다. 폼은 GET /{id}를
+  // 1회 불러 조건 원문·소스 명세를 받은 뒤 그 명세로 자기 모양을 정하고
+  // (settingsFormModel), [저장]은 POST /{id}/update 한 왕복으로 끝난다.
+  // 「채팅에서 고치기 ↗」는 없어지지 않는다 — 폼 버튼 행에 그대로 남아 두 입구가
+  // 같은 게이트를 쓴다(동선 규칙②의 "편집도 채팅으로"는 폼이 생겨도 유효하다).
   const historySettingsBody = el('div', 'agent-history-settings');
   historySettingsBody.hidden = true;
 
-  const MODE_LABEL = {
-    'realtime-ws': '실시간 감시',
-    scheduled: '예약 실행',
-    periodic: '주기 확인',
-  };
+  let settingsFormOpen = false;
+  let settingsFormState = null; // settingsFormModel() 결과 — 왕복 전에는 null이다
+  let settingsFormMessage = ''; // 저장 실패 사유(백엔드 detail) — 성공은 요약 갱신이 말한다
+  let settingsFormRequestId = 0; // stale-응답 가드 — 다른 드릴인으로 옮겨가면 버린다
+  let settingsSaving = false;
+  let settingsInputs = {}; // 필드 key → 입력 노드. [저장]이 여기서 값을 읽는다.
+  let settingsFormValues = null; // 사용자가 친 값. null이면 아직 손대지 않았다.
 
-  function historySettingsFields(item) {
-    const r = (item && item.raw) || {};
-    const fields = [];
-    if (r.note) fields.push(['조건', r.note]);
-    fields.push(['모드', MODE_LABEL[r.mode] || r.mode || '—']);
-    fields.push(['소스', r.source_label || '—']);
-    if (r.symbol) fields.push(['종목', String(r.symbol)]);
-    if (r.cooldown_s != null) fields.push(['쿨다운', `${r.cooldown_s}초`]);
-    // 아래 둘은 mode가 아니라 "그 값이 실제로 있는가"로 가른다 — 드릴인은 지금
-    // 감시(watch)만 열리므로 mode==='scheduled' 분기를 두면 영영 안 도는 죽은
-    // 가지가 된다. 필드 기준이면 예약 드릴인이 열리는 날 그대로 살아난다.
-    if (r.briefing_model) {
-      fields.push(['브리핑 모델', `${r.briefing_model}${r.briefing_effort ? ` · ${r.briefing_effort}` : ''}`]);
+  function appendReadonlyRow(parent, row) {
+    const node = el('div', 'agent-settings-readonly');
+    const label = el('span', 'agent-settings-label');
+    label.textContent = row.label;
+    const value = el('span', 'agent-settings-readonly-value');
+    value.textContent = row.value;
+    node.appendChild(label);
+    node.appendChild(value);
+    if (row.tag) {
+      const tag = el('span', 'agent-settings-tag');
+      tag.textContent = row.tag;
+      node.appendChild(tag);
     }
-    if (r.next_fire_at) fields.push(['다음 실행', formatDateTime(r.next_fire_at)]);
-    if (r.expires_at) fields.push(['만료', formatDateTime(r.expires_at)]);
-    if (r.created_at) fields.push(['생성', formatDateTime(r.created_at)]);
-    return fields;
+    parent.appendChild(node);
+  }
+
+  // 재렌더는 폼을 통째로 다시 짓는다 — 저장 중·저장 실패로 다시 그릴 때 사용자가
+  // 친 값이 처음 값으로 되돌아가면 고칠 수가 없으므로, 그린 값이 아니라 마지막으로
+  // 읽은 값을 되돌려 놓는다(모델의 field.value는 원본으로 남는다 — 설명 칸을
+  // 건드렸는지 재는 데 쓴다).
+  function fieldValue(field) {
+    if (settingsFormValues && field.key in settingsFormValues) return settingsFormValues[field.key];
+    return field.value;
+  }
+
+  function readSettingsInputs() {
+    const values = {};
+    for (const key of Object.keys(settingsInputs)) values[key] = settingsInputs[key].value;
+    settingsFormValues = values;
+    return values;
+  }
+
+  function makeFieldControl(field) {
+    if (field.kind === 'select') {
+      const select = el('select', 'agent-settings-select');
+      for (const option of field.options) {
+        const node = el('option', '');
+        node.value = option.value;
+        node.textContent = option.label;
+        select.appendChild(node);
+      }
+      select.value = fieldValue(field);
+      return select;
+    }
+    const input = el('input', 'agent-settings-input');
+    input.type = field.kind === 'number' ? 'number' : 'text';
+    input.value = fieldValue(field);
+    return input;
+  }
+
+  function appendFormField(parent, field) {
+    const row = el('div', 'agent-settings-field');
+    const label = el('span', 'agent-settings-label');
+    label.textContent = field.label;
+    row.appendChild(label);
+    const control = makeFieldControl(field);
+    settingsInputs[field.key] = control;
+    row.appendChild(control);
+    if (field.unit) {
+      const unit = el('span', 'agent-settings-unit');
+      unit.textContent = field.unit;
+      row.appendChild(unit);
+    }
+    if (field.hint) {
+      const hint = el('span', 'agent-settings-hint');
+      hint.textContent = field.hint;
+      row.appendChild(hint);
+    }
+    parent.appendChild(row);
+  }
+
+  function renderSettingsForm() {
+    const form = el('div', 'agent-settings-form');
+    const caption = el('div', 'agent-panel-caption');
+    caption.textContent = '상세 패널 — 설정 편집';
+    form.appendChild(caption);
+    if (!settingsFormState) {
+      // 왕복 중이거나 상세를 못 받았다 — 빈 폼을 그리느니 그 사실을 적는다(P3).
+      const empty = el('div', 'agent-settings-empty');
+      empty.textContent = settingsFormMessage || '설정을 불러오는 중입니다';
+      form.appendChild(empty);
+      return form;
+    }
+    const title = el('div', 'agent-settings-form-title');
+    title.textContent = settingsFormState.title;
+    form.appendChild(title);
+    for (const row of settingsFormState.readonly) appendReadonlyRow(form, row);
+    const note = el('div', 'agent-settings-note');
+    note.textContent = settingsFormState.note;
+    form.appendChild(note);
+    const fields = el('div', 'agent-settings-fields');
+    fields.setAttribute('data-source', 'live');
+    for (const field of settingsFormState.fields) appendFormField(fields, field);
+    form.appendChild(fields);
+    for (const row of settingsFormState.trailing) appendReadonlyRow(form, row);
+
+    const actions = el('div', 'agent-settings-actions');
+    const saveBtn = el('button', 'agent-settings-save');
+    saveBtn.type = 'button';
+    saveBtn.textContent = '저장';
+    saveBtn.disabled = settingsSaving;
+    saveBtn.addEventListener('click', () => saveSettingsForm());
+    actions.appendChild(saveBtn);
+    // [설정 편집]과 다른 클래스를 쓴다 — 같은 클래스였을 때 라우트·프로브의
+    // querySelector 첫 일치가 버튼 순서에 따라 조용히 뒤바뀐다(스타일만 공유한다).
+    const chatBtn = el('button', 'agent-settings-chat');
+    chatBtn.type = 'button';
+    chatBtn.textContent = '채팅에서 고치기 ↗';
+    chatBtn.addEventListener('click', () => {
+      if (typeof onEditInChat === 'function') onEditInChat(historyItem.title);
+    });
+    actions.appendChild(chatBtn);
+    form.appendChild(actions);
+
+    if (settingsFormMessage) {
+      const message = el('div', 'agent-settings-message');
+      message.textContent = settingsFormMessage;
+      form.appendChild(message);
+    }
+    return form;
   }
 
   function renderHistorySettings() {
     while (historySettingsBody.firstChild) historySettingsBody.removeChild(historySettingsBody.firstChild);
+    settingsInputs = {};
     if (!historyItem) return;
     const caption = el('div', 'agent-panel-caption');
-    caption.textContent = '설정 — 보기 전용';
+    caption.textContent = '설정 — 요약';
     historySettingsBody.appendChild(caption);
 
-    const fieldsWrap = el('div', 'agent-detail-fields');
-    fieldsWrap.setAttribute('data-source', 'live');
-    for (const [label, value] of historySettingsFields(historyItem)) {
-      const fieldRow = el('div', 'agent-detail-field');
-      const l = el('span', 'agent-detail-field-label');
-      l.textContent = label;
-      const v = el('span', 'agent-detail-field-value');
-      v.textContent = value;
-      fieldRow.appendChild(l);
-      fieldRow.appendChild(v);
-      fieldsWrap.appendChild(fieldRow);
-    }
-    historySettingsBody.appendChild(fieldsWrap);
-
-    const note = el('div', 'agent-history-settings-note');
-    note.textContent = '이 화면에서는 값을 바꾸지 않습니다 — 고칠 내용은 채팅에서 말하면 됩니다.';
-    historySettingsBody.appendChild(note);
+    const summary = el('div', 'agent-settings-summary');
+    summary.setAttribute('data-source', 'live');
+    const lines = settingsSummaryLines(historyItem.raw || {});
+    const summaryTitle = el('div', 'agent-settings-summary-title');
+    summaryTitle.textContent = lines.title;
+    summary.appendChild(summaryTitle);
+    const summaryMeta = el('div', 'agent-settings-summary-meta');
+    summaryMeta.textContent = lines.meta;
+    summary.appendChild(summaryMeta);
+    historySettingsBody.appendChild(summary);
 
     const editBtn = el('button', 'agent-history-settings-edit');
     editBtn.type = 'button';
-    editBtn.textContent = '채팅에서 고치기 ↗';
-    editBtn.addEventListener('click', () => {
-      if (typeof onEditInChat === 'function') onEditInChat(historyItem.title);
-    });
+    editBtn.textContent = '설정 편집';
+    editBtn.addEventListener('click', () => openSettingsForm());
     historySettingsBody.appendChild(editBtn);
+
+    if (settingsFormOpen) historySettingsBody.appendChild(renderSettingsForm());
+  }
+
+  // 드릴인을 열고 닫을 때 폼 상태를 버린다 — 왕복이 돌고 있으면 그 응답도
+  // 버려진다(settingsFormRequestId가 어긋난다).
+  function closeSettingsForm() {
+    settingsFormOpen = false;
+    settingsFormState = null;
+    settingsFormValues = null;
+    settingsFormMessage = '';
+    settingsFormRequestId += 1;
+  }
+
+  // [설정 편집] — 상세 1회 조회(목록에 없는 조건 원문·소스 명세를 여기서만 준다).
+  async function openSettingsForm() {
+    if (!historyItem) return;
+    const id = historyItem.id;
+    const rid = ++settingsFormRequestId;
+    settingsFormOpen = true;
+    settingsFormState = null;
+    settingsFormValues = null;
+    settingsFormMessage = '';
+    renderHistorySettings();
+    let detail = null;
+    try {
+      detail = (typeof fetchDetail === 'function') ? await fetchDetail(id) : null;
+    } catch {
+      detail = null;
+    }
+    if (rid !== settingsFormRequestId || !historyItem || historyItem.id !== id) return;
+    settingsFormState = settingsFormModel(detail, historyItem.raw);
+    if (!settingsFormState) settingsFormMessage = '설정을 불러오지 못했습니다';
+    renderHistorySettings();
+  }
+
+  // [저장] — 폼 값 한 벌을 그대로 보낸다. 성공하면 목록 행의 값을 응답으로 덮어
+  // 요약이 저장한 값으로 갱신되고(같은 객체를 리스트도 쥐고 있다) 폼은 닫힌다.
+  async function saveSettingsForm() {
+    if (!settingsFormState || !historyItem || settingsSaving) return;
+    const id = historyItem.id;
+    const body = settingsUpdateBody(settingsFormState, readSettingsInputs());
+    settingsSaving = true;
+    settingsFormMessage = '';
+    renderHistorySettings();
+    let saved = null;
+    let failure = '';
+    try {
+      saved = (typeof updateRoutine === 'function') ? await updateRoutine(id, body) : null;
+    } catch (e) {
+      failure = String((e && e.message) || e);
+    }
+    settingsSaving = false;
+    if (!historyItem || historyItem.id !== id) return;
+    if (!saved) {
+      settingsFormMessage = failure || '저장하지 못했습니다';
+      renderHistorySettings();
+      return;
+    }
+    const raw = historyItem.raw || {};
+    for (const key of ['note', 'cooldown_s', 'expires_at', 'briefing_model', 'briefing_effort']) {
+      if (key in saved) raw[key] = saved[key];
+    }
+    historyItem.title = raw.note || historyItem.title;
+    breadcrumbTitle.textContent = historyItem.title;
+    settingsFormOpen = false;
+    settingsFormState = null;
+    settingsFormValues = null;
+    renderHistorySettings();
+    renderPanels();
   }
 
   function setHistoryTab(key) {
     if (!historyTabButtons[key] || key === historyTab) return;
+    // 탭을 떠나면 폼은 다음에 처음부터 다시 그려진다 — 떠나기 전에 사용자가 친
+    // 값을 한 번 읽어 두어야 [이력]에 갔다 오는 것만으로 편집이 사라지지 않는다.
+    if (historyTab === 'settings' && settingsFormOpen) readSettingsInputs();
     historyTab = key;
     for (const k of Object.keys(historyTabButtons)) {
       historyTabButtons[k].className = k === historyTab ? 'agent-history-tab is-active' : 'agent-history-tab';
@@ -1111,6 +1475,7 @@ function createAgentCanvas(deps) {
     historyRunsExpanded = false; // 다른 작업의 드릴인을 펼친 채로 물려받지 않는다.
     // 드릴인은 항상 "이력"으로 연다 — 지난 드릴인의 "설정" 상태를 물려받지 않는다.
     historyTab = 'runs';
+    closeSettingsForm(); // 남의 작업 설정 폼을 열어 둔 채로 넘어가지 않는다.
     for (const k of Object.keys(historyTabButtons)) {
       historyTabButtons[k].className = k === 'runs' ? 'agent-history-tab is-active' : 'agent-history-tab';
     }
@@ -1142,6 +1507,7 @@ function createAgentCanvas(deps) {
     historyTabs.hidden = true;
     historySettingsBody.hidden = true;
     historyTab = 'runs';
+    closeSettingsForm();
     historyBody.hidden = true;
     viewTabsWrap.hidden = false;
     tasksHead.hidden = false;
@@ -1453,12 +1819,6 @@ function createAgentCanvas(deps) {
     }
     row.addEventListener('click', () => selectRow(item.id));
     return row;
-  }
-
-  function formatDateTime(iso) {
-    const d = new Date(iso);
-    if (Number.isNaN(d.getTime())) return iso;
-    return d.toLocaleString('ko-KR', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
   }
 
   // watch·schedule 둘 다 백엔드가 실제로 주는 필드만 쓴다(P3 — 지어내지
@@ -2210,7 +2570,7 @@ function createAgentCanvas(deps) {
   return { mount, refresh, setActiveTab, selectRow, setActiveView, setHistoryTab, updateWsStatus: renderWsStatus };
 }
 
-const __exports = { createAgentCanvas };
+const __exports = { createAgentCanvas, settingsSummaryLines, settingsFormModel, settingsUpdateBody };
 
 // UMD 각주(2026-08-18 렌더러 격리) — column-fold.js와 같은 패턴.
 if (typeof module !== 'undefined' && module.exports) {

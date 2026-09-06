@@ -3877,6 +3877,14 @@ const agentCanvas = window.AthenaLib.AgentCanvas.createAgentCanvas({
     const res = await window.athena.invoke('athena:routine-watch-check', { body });
     return (res && res.ok && res.data) ? res.data : null;
   },
+  // 드릴인 설정 편집 폼의 [저장](Paper 보드 06) — 채팅 제안 턴이 쓰는 것과 같은
+  // athena:routine-update 채널 하나다(chat.js). 실패 사유(422 detail 번역)는
+  // 폼이 그대로 보여준다.
+  updateRoutine: async (id, body) => {
+    const res = await window.athena.invoke('athena:routine-update', { id, body });
+    if (!res || !res.ok) throw new Error((res && res.error) || '저장 실패');
+    return res.data;
+  },
   // 제어 결과 턴(Paper 보드 08 · 4330-1) — 칩을 누른 결과는 카드(캐버스 갱신)와
   // 채팅(결과 턴) 두 곳으로 간다. 채널을 새로 만들지 않고 플러그인 결과와 같은
   // 자리의 CustomEvent를 쓴다 — 그리는 것은 chat.js 하나뿐이다.

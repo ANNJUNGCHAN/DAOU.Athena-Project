@@ -12,7 +12,8 @@
 //   (2) 동선 규칙 3줄 원문 + data-source 없음 — 보드 05 하단
 //   (3) 라이브 "다음 24시간" 시각 열 4개 — 보드 02
 //   (4) 알람 갈래 아이콘 2종(mode로 갈림) — 보드 02
-//   (5) 드릴인 [이력][설정] 세그먼트와 보기 전용 설정 패널 — 보드 03·06
+//   (5) 드릴인 [이력][설정] 세그먼트와 「설정 — 요약」 + [설정 편집]이 여는
+//       소스별 편집 폼(저장 왕복·만료 미변경 보존) — 보드 03·06
 //   (6) 접기 푸터가 실제로 나머지를 펼친다 — 보드 02·03
 //   (7) 코드 알람(Step 7) — 보드 09~12. 목록 행 문법(◆·「코드 감시 · 장중 N분마다」),
 //       노드 카드 문법(한국어 제목·영어명·들어감·나옴·「방금 바뀜」·「이번엔 안 쓰임」),
@@ -154,6 +155,28 @@ async function main() {
   // 코드 알람 상세(Step 7) — 목록에 없는 감시 블록·오늘 확인·노드 칸이 여기 있다.
   ipcMain.removeHandler('athena:routine-detail');
   ipcMain.handle('athena:routine-detail', async (_e, { id }) => {
+    if (id === 'fx1') {
+      // 설정 편집 폼(보드 06)이 읽는 조건 원문·소스 명세 — 목록에는 없는 값이다.
+      return {
+        ok: true,
+        data: {
+          id,
+          symbol: '005930',
+          status: 'active',
+          mode: 'realtime-ws',
+          source_label: '현재가',
+          cooldown_s: 300,
+          expires_at: '2026-09-10T09:00:00',
+          note: '삼성전자 88,000 감시',
+          briefing_model: 'opus',
+          briefing_effort: 'high',
+          condition: { source: 'price.current', op: '>=', value: 88000, consecutive_ticks: 1 },
+          source_spec: {
+            ops: ['<', '<=', '>', '>='], value_type: 'number', transport: 'ws', label: '현재가',
+          },
+        },
+      };
+    }
     if (id === 'fx3') {
       return {
         ok: true,
@@ -184,6 +207,24 @@ async function main() {
   });
   ipcMain.removeHandler('athena:routine-pause');
   ipcMain.handle('athena:routine-pause', async () => ({ ok: true, data: { status: 'paused' } }));
+  // 설정 편집 [저장] — 백엔드 없이도 왕복이 끝나게 보낸 본문을 그대로 되비춘다
+  // (실제 백엔드는 전량 재검증한 상세를 돌려준다).
+  const updateBodies = [];
+  ipcMain.removeHandler('athena:routine-update');
+  ipcMain.handle('athena:routine-update', async (_e, { id, body } = {}) => {
+    updateBodies.push(body);
+    return {
+      ok: true,
+      data: {
+        id,
+        note: body.note,
+        cooldown_s: body.cooldown_s,
+        expires_at: '2026-09-10T09:00:00',
+        briefing_model: body.briefing_model,
+        briefing_effort: body.briefing_effort,
+      },
+    };
+  });
   ipcMain.removeHandler('athena:routine-runs');
   ipcMain.handle('athena:routine-runs', async () => ({
     ok: true,
@@ -316,25 +357,44 @@ async function main() {
   check('펼친 뒤에도 그룹 머리가 중복되지 않는다',
     new Set(drillProbe.expandedGroups).size === drillProbe.expandedGroups.length);
 
-  const settingsProbe = await shellWin.webContents.executeJavaScript(`(() => {
+  const settingsProbe = await shellWin.webContents.executeJavaScript(`(async () => {
     const c = document.getElementById('agentCanvas');
     Array.from(c.querySelectorAll('.agent-history-tab')).find((n) => n.textContent === '설정').click();
     const panel = c.querySelector('.agent-history-settings');
-    const labels = Array.from(panel.querySelectorAll('.agent-detail-field-label')).map((n) => n.textContent);
-    const editBtn = panel.querySelector('.agent-history-settings-edit');
-    let seeded = null;
-    const prevSeed = window.AthenaShell && window.AthenaShell.seedChatInput;
-    if (prevSeed) window.AthenaShell.seedChatInput = (t) => { seeded = t; };
-    editBtn.click();
-    if (prevSeed) window.AthenaShell.seedChatInput = prevSeed;
     const out = {
       settingsVisible: panel.hidden === false,
       historyHidden: c.querySelector('.agent-history-body').hidden,
-      labels,
-      inputCount: panel.querySelectorAll('input, select, textarea').length,
-      editLabel: editBtn.textContent,
-      seeded,
+      summaryCaption: (panel.querySelector('.agent-panel-caption') || {}).textContent,
+      summaryTitle: (panel.querySelector('.agent-settings-summary-title') || {}).textContent,
+      summaryMeta: (panel.querySelector('.agent-settings-summary-meta') || {}).textContent,
+      summaryInputCount: panel.querySelectorAll('input, select, textarea').length,
+      editLabel: (panel.querySelector('.agent-history-settings-edit') || {}).textContent,
     };
+    panel.querySelector('.agent-history-settings-edit').click();
+    await new Promise((r) => setTimeout(r, 600)); // 상세 1회 왕복
+    out.formCaption = (panel.querySelector('.agent-settings-form .agent-panel-caption') || {}).textContent;
+    out.fieldLabels = Array.from(panel.querySelectorAll('.agent-settings-field .agent-settings-label')).map((n) => n.textContent);
+    out.readonlyLabels = Array.from(panel.querySelectorAll('.agent-settings-readonly .agent-settings-label')).map((n) => n.textContent);
+    out.tag = (panel.querySelector('.agent-settings-tag') || {}).textContent;
+    out.hints = Array.from(panel.querySelectorAll('.agent-settings-hint')).map((n) => n.textContent);
+    out.saveLabel = (panel.querySelector('.agent-settings-save') || {}).textContent;
+    const chatBtn = panel.querySelector('.agent-settings-chat');
+    out.chatLabel = chatBtn ? chatBtn.textContent : null;
+    let seeded = null;
+    const prevSeed = window.AthenaShell && window.AthenaShell.seedChatInput;
+    if (prevSeed) window.AthenaShell.seedChatInput = (t) => { seeded = t; };
+    if (chatBtn) chatBtn.click();
+    if (prevSeed) window.AthenaShell.seedChatInput = prevSeed;
+    out.seeded = seeded;
+
+    // 쿨다운만 바꾸고 저장한다 — 만료 칸은 비워 둔 채다(미변경 보존 규칙).
+    const inputs = Array.from(panel.querySelectorAll('.agent-settings-input'));
+    inputs[2].value = '600';
+    panel.querySelector('.agent-settings-save').click();
+    await new Promise((r) => setTimeout(r, 600));
+    out.formGone = panel.querySelectorAll('.agent-settings-form').length === 0;
+    out.summaryAfterSave = (panel.querySelector('.agent-settings-summary-meta') || {}).textContent;
+
     Array.from(c.querySelectorAll('.agent-history-tab')).find((n) => n.textContent === '이력').click();
     out.historyBackVisible = c.querySelector('.agent-history-body').hidden === false;
     c.querySelector('.agent-breadcrumb-back').click();
@@ -342,15 +402,36 @@ async function main() {
     return out;
   })()`);
 
-  check('"설정"을 누르면 이력 본문이 숨고 보기 전용 명세가 뜬다 — Paper 보드 06',
-    settingsProbe.settingsVisible === true && settingsProbe.historyHidden === true);
-  check('설정 패널은 백엔드가 실제로 준 필드만 낸다',
-    settingsProbe.labels.length > 0
-    && settingsProbe.labels.every((l) => ['조건', '모드', '소스', '종목', '쿨다운', '브리핑 모델', '다음 실행', '만료', '생성'].includes(l)));
-  check('설정 패널에 값을 바꾸는 입력이 없다 — 동선 규칙②', settingsProbe.inputCount === 0);
-  check('고치는 경로는 "채팅에서 고치기 ↗" 하나뿐이다', settingsProbe.editLabel === '채팅에서 고치기 ↗');
-  check('그 버튼이 시트가 아니라 채팅 입력에 문장을 심는다',
+  check('"설정"을 누르면 이력 본문이 숨고 「설정 — 요약」이 뜬다 — Paper 보드 06',
+    settingsProbe.settingsVisible === true && settingsProbe.historyHidden === true
+    && settingsProbe.summaryCaption === '설정 — 요약');
+  check('요약은 그 작업의 실제 값 한 줄이다',
+    settingsProbe.summaryTitle === '삼성전자 88,000 감시'
+    && /^자동 · 쿨다운 300초 · 생성 /.test(settingsProbe.summaryMeta));
+  check('요약만 있는 동안에는 값을 바꾸는 입력이 없다', settingsProbe.summaryInputCount === 0);
+  check('편집으로 들어가는 문은 [설정 편집] 하나다', settingsProbe.editLabel === '설정 편집');
+  check('[설정 편집]이 「상세 패널 — 설정 편집」 폼을 연다',
+    settingsProbe.formCaption === '상세 패널 — 설정 편집');
+  check('실시간 소스 폼은 Paper의 8필드 그대로다',
+    JSON.stringify(settingsProbe.fieldLabels) === JSON.stringify(
+      ['조건 비교', '조건 값', '연속 틱', '쿨다운(초)', '만료(일)', '설명', '브리핑 모델', '노력']));
+  check('종목·모드·소스는 읽기 전용이고 소스에 「변경 불가」가 붙는다',
+    JSON.stringify(settingsProbe.readonlyLabels) === JSON.stringify(['종목', '모드', '소스', '생성'])
+    && settingsProbe.tag === '변경 불가');
+  check('연속 틱·만료 안내가 Paper 문구 그대로다',
+    settingsProbe.hints.includes('1~20 · 실시간 소스만')
+    && settingsProbe.hints.includes('만료 2026-09-10 · 미변경 시 보존'));
+  check('버튼 행은 [저장]과 「채팅에서 고치기 ↗」 둘이다',
+    settingsProbe.saveLabel === '저장' && settingsProbe.chatLabel === '채팅에서 고치기 ↗');
+  check('채팅 버튼은 시트가 아니라 채팅 입력에 문장을 심는다',
     settingsProbe.seeded === '"삼성전자 88,000 감시" 루틴을 고치고 싶어요 — ');
+  check('[저장]은 만료를 안 실어 보낸다 — 미변경 시 보존',
+    updateBodies.length === 1 && !('expires_days' in updateBodies[0])
+    && updateBodies[0].cooldown_s === 600);
+  check('저장 본문은 조건 술어도 함께 싣는다',
+    JSON.stringify(updateBodies[0].condition) === JSON.stringify({ op: '>=', value: 88000, consecutive_ticks: 1 }));
+  check('저장이 끝나면 폼이 닫히고 요약이 저장한 값으로 갱신된다',
+    settingsProbe.formGone === true && /쿨다운 600초/.test(settingsProbe.summaryAfterSave));
   check('"이력"으로 되돌리면 이력 본문이 다시 보인다', settingsProbe.historyBackVisible === true);
   check('드릴인을 닫으면 세그먼트도 함께 숨는다', settingsProbe.segHiddenAfterBack === true);
 
