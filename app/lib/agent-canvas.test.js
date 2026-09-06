@@ -1910,6 +1910,26 @@ test('드릴인 설정: 저장이 실패하면 폼을 닫지 않고 사유를 �
   assert.deepEqual(after, ['88000', '1', '30', '', '내가 고친 설명']);
 });
 
+test('드릴인 설정: [이력]에 갔다 [설정]으로 돌아와도 폼에 친 값이 남는다', async () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [drillInRoutine()], fetchRuns: async () => [],
+    fetchDetail: async () => watchDetail(),
+  });
+  const panel = await openSettingsForm(container, canvas);
+  const inputs = findByClass(panel, 'agent-settings-input');
+  inputs[2].value = '900'; // 쿨다운
+  inputs[4].value = '내가 친 설명';
+  canvas.setHistoryTab('runs');
+  canvas.setHistoryTab('settings');
+
+  assert.equal(findByClass(panel, 'agent-settings-form').length, 1, '탭을 오가도 폼은 열린 채다');
+  assert.deepEqual(
+    findByClass(panel, 'agent-settings-input').map((n) => n.value),
+    ['88000', '1', '900', '', '내가 친 설명'],
+  );
+});
+
 test('드릴인 설정: 폼 버튼 행에 "채팅에서 고치기 ↗"가 남는다 — 두 입구가 같은 게이트', async () => {
   const container = fakeNode('div');
   let seeded = null;

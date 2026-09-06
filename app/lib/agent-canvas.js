@@ -197,11 +197,12 @@ function formatDateTime(iso) {
 const OP_GLYPH = { '<': '<', '<=': '≤', '>': '>', '>=': '≥', '==': '=', at: 'at', contains: '포함' };
 
 // 조건 값 뒤에 붙는 단위 — 백엔드 카탈로그에 단위 필드가 없어 표기만 여기 둔다.
+// 카탈로그 라벨이 단위를 말한 것만 옮긴다("등락율(%)"·"체결강도(%)"). 전일 동시간
+// 거래량 비율은 배수인지 백분율인지 카탈로그가 말하지 않아 단위를 비워 둔다.
 const VALUE_UNIT = {
   'price.current': '원',
   'price.change_rate': '%',
   'trade.strength': '%',
-  'volume.prev_day_ratio': '%',
 };
 
 // 읽기 전용 "모드" 칸의 말 — 발화 방식 둘(자동·예약)로 가른다. 목록 행의
@@ -1455,6 +1456,9 @@ function createAgentCanvas(deps) {
 
   function setHistoryTab(key) {
     if (!historyTabButtons[key] || key === historyTab) return;
+    // 탭을 떠나면 폼은 다음에 처음부터 다시 그려진다 — 떠나기 전에 사용자가 친
+    // 값을 한 번 읽어 두어야 [이력]에 갔다 오는 것만으로 편집이 사라지지 않는다.
+    if (historyTab === 'settings' && settingsFormOpen) readSettingsInputs();
     historyTab = key;
     for (const k of Object.keys(historyTabButtons)) {
       historyTabButtons[k].className = k === historyTab ? 'agent-history-tab is-active' : 'agent-history-tab';
