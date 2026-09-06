@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "gate": "verify:paper-screens",
-  "blessed_at": "2026-09-06T13:10:43.410Z",
+  "blessed_at": "2026-09-06T15:34:27.965Z",
   "blessed_by": "verify:paper-screens --bless",
   "target_boards": 109,
   "passing": [
@@ -51,6 +51,7 @@
     "3NE-0",
     "3VHD-1",
     "3VIQ-1",
+    "3VS6-1",
     "3VV8-1",
     "3VV9-1",
     "3XV1-1",
@@ -101,7 +102,7 @@
     "OJ-0",
     "XI-0"
   ],
-  "passing_count": 95,
+  "passing_count": 96,
   "shrink_log": [
     {
       "at": "2026-09-06T02:19:45.642Z",
