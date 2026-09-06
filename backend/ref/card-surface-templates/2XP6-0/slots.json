@@ -7,7 +7,7 @@
     "node_id": "2XP8-0",
     "jsx_sha256": "1a56eed2fca8e02a096fd4776b17d2e361da299ecee63a97675c6bbb5504f1fc"
   },
-  "html_sha256": "e0e1051647c835641d82ac38afe1cfb88222082a6d74a7bc66b25f87f5eed5fb",
+  "html_sha256": "bf946cc0635ff7d39c5b03bd7531db209f09d1101785d17ac9a13c7066a92362",
   "width_px": 1360.0,
   "height_px": 900.0,
   "artboard_px": [
@@ -3604,7 +3604,7 @@
     },
     {
       "slot_id": "s129",
-      "node_id": "3EON-0",
+      "node_id": "3EOP-0",
       "node_name": "035720",
       "node_path": "2/0/1/1/3/1/0/1",
       "paper_text": "035720",
@@ -3615,30 +3615,20 @@
       "anchor": null,
       "table": null,
       "mapping_id": "base:ka10029",
-      "f": "flu_rt",
+      "f": "stk_cd",
       "alt_mappings": null,
-      "kor": "등락률",
+      "kor": "종목코드",
       "format": {
-        "unit": "percent",
-        "sign": true,
-        "precision": 2,
-        "tone": "change"
+        "unit": "text",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
       },
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
       "display_dup": true,
-      "dup_note": "예상 등락률 재표시",
-      "extra_fields": [
-        {
-          "mapping_id": "base:ka10029",
-          "f": "pred_pre_sig",
-          "kor": "전일대비기호",
-          "sep": null,
-          "aspect": "sign",
-          "note": "± 부호와 상승·하락 색"
-        }
-      ]
+      "dup_note": "종목코드 재표시"
     },
     {
       "slot_id": "s130",
