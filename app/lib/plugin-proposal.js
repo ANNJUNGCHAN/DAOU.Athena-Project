@@ -15,7 +15,7 @@
 const PluginCatalog = typeof module !== 'undefined' && module.exports
   ? require('./plugin-catalog')
   : window.AthenaLib.PluginCatalog;
-const { displayNameFor } = PluginCatalog;
+const { displayNameFor, findEntry } = PluginCatalog;
 
 // 확정 2 — 사람이 보는 5동작을 감사에서 구분 가능한 6종으로 편다.
 const ACTIONS = Object.freeze([
@@ -114,17 +114,58 @@ function titleFor(action) {
   }
 }
 
-// 카드 본문은 제안 안에 실제로 실린 값만 쓴다 — 카탈로그·레지스트리를 조회해
-// 지어내지 않는다(모르는 값을 그리면 화면과 실제가 어긋난다).
+// 실행 명령 한 줄 — command + args. 둘 다 없으면 줄을 만들지 않는다.
+function commandLine(command, args) {
+  const parts = [command].concat(Array.isArray(args) ? args : [])
+    .filter((part) => typeof part === 'string' && part);
+  return parts.length ? `실행 명령: ${parts.join(' ')}` : null;
+}
+
+// 직접 등록 설정에서 실행 대상만 꺼낸다 — 승인 게이트와 같은 모양
+// ({ mcpServers: { <별칭>: { command, args } } })만 읽고, 못 읽으면 null이다.
+function snippetCommandLine(raw) {
+  if (typeof raw !== 'string' || !raw.trim()) return null;
+  let data;
+  try { data = JSON.parse(raw); } catch { return null; }
+  const servers = data && typeof data === 'object' ? data.mcpServers : null;
+  if (!servers || typeof servers !== 'object') return null;
+  const first = Object.values(servers)[0];
+  if (!first || typeof first !== 'object') return null;
+  return commandLine(first.command, first.args);
+}
+
+// 카드 본문은 승인하면 실제로 실행될 값만 쓴다 — 사람이 [승인]을 누르기 전에
+// 무엇이 돌고 어디에 생기는지 보여야 한다(Paper 05 install-card). install은
+// 승인 게이트가 카탈로그 id만 통과시키므로(main/plugin-proposal-registry.js)
+// 카탈로그에서 되짚은 값이 곧 실행될 값이다. **카탈로그에 없으면 그 줄을 그리지
+// 않는다** — 모르는 값을 그리면 화면과 실제가 어긋난다.
 function linesFor(action) {
   const features = Array.isArray(action.features) ? action.features : [];
   switch (action.action) {
-    case 'install': return features.length ? [`권한 ${features.length}개 요청`] : [];
+    case 'install': {
+      const lines = [];
+      const entry = findEntry(action.target);
+      if (entry) {
+        const provider = entry.provider || entry.source;
+        if (provider) lines.push(`제공: ${provider}`);
+        const purpose = entry.purpose || entry.description;
+        if (purpose) lines.push(`용도: ${purpose}`);
+        const command = commandLine(entry.command, entry.args);
+        if (command) lines.push(command);
+        if (entry.name) lines.push(`설치 위치 · 플러그인 모드 > ${entry.name}`);
+      }
+      if (features.length) lines.push(`권한 ${features.length}개 요청`);
+      return lines;
+    }
     case 'allow_tools': return [`허용 ${features.length}개`, ...features];
     case 'revoke_tools': return [`철회 ${features.length}개`, ...features];
     case 'set_enabled': return action.enabled ? [] : ['승인 철회'];
     case 'remove': return ['등록과 승인 기록을 함께 지웁니다'];
-    case 'stage_snippet': return ['등록만으로는 실행되지 않습니다'];
+    case 'stage_snippet': {
+      const command = snippetCommandLine(action.snippet);
+      const tail = '등록만으로는 실행되지 않습니다';
+      return command ? [command, tail] : [tail];
+    }
     default: return [];
   }
 }

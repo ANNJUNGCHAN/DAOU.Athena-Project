@@ -182,6 +182,46 @@ test('cardCopy: 본문 줄은 제안에 실린 값만 쓴다', () => {
   assert.deepEqual(copy.lines, ['허용 2개', '시세 조회', '종목 검색']);
 });
 
+test('cardCopy: install 카드 본문에 제공·용도·실행 명령·설치 위치가 실린다', () => {
+  const lines = cardCopy(buildProposal(INSTALL, '이유', 1, 'model')).lines;
+  assert.ok(lines.some((l) => l.startsWith('제공: ')), lines.join(' | '));
+  assert.ok(lines.some((l) => l.startsWith('용도: ')), lines.join(' | '));
+  assert.ok(lines.includes('실행 명령: uvx mcp-server-fetch'), lines.join(' | '));
+  assert.ok(lines.includes('설치 위치 · 플러그인 모드 > 웹 문서 읽기'), lines.join(' | '));
+  assert.ok(lines.includes('권한 1개 요청'), lines.join(' | '));
+});
+
+test('cardCopy: 카탈로그에 없는 id면 그 줄을 지어내지 않는다', () => {
+  const lines = cardCopy(buildProposal(
+    { action: 'install', target: 'my-server', features: ['x'] }, '이유', 1, 'model',
+  )).lines;
+  assert.ok(!lines.some((l) => l.includes('실행 명령')), lines.join(' | '));
+  assert.ok(!lines.some((l) => l.startsWith('제공: ')), lines.join(' | '));
+  assert.ok(!lines.some((l) => l.includes('설치 위치')), lines.join(' | '));
+  assert.deepEqual(lines, ['권한 1개 요청']);
+});
+
+test('cardCopy: stage_snippet은 스니펫의 command·args로 실행 명령을 만든다', () => {
+  const snippet = JSON.stringify({
+    mcpServers: { time: { command: 'uvx', args: ['mcp-server-time'] } },
+  });
+  const lines = cardCopy(buildProposal(
+    { action: 'stage_snippet', target: null, snippet }, '이유', 1, 'gui',
+  )).lines;
+  assert.deepEqual(lines, ['실행 명령: uvx mcp-server-time', '등록만으로는 실행되지 않습니다']);
+  // 읽을 수 없는 설정은 실행 명령을 지어내지 않는다.
+  assert.deepEqual(cardCopy(buildProposal(
+    { action: 'stage_snippet', target: null, snippet: '{ 망가진' }, '이유', 1, 'gui',
+  )).lines, ['등록만으로는 실행되지 않습니다']);
+});
+
+test('cardCopy: 모델 제안과 GUI 제안이 같은 4필드를 낸다', () => {
+  const fromModel = cardCopy(buildProposal(INSTALL, '웹 문서를 읽으려면 필요합니다', 1, 'model'));
+  const fromGui = cardCopy(buildProposal(INSTALL, '', 1, 'gui'));
+  assert.deepEqual(fromModel.lines, fromGui.lines);
+  assert.notEqual(fromModel.sourceLabel, fromGui.sourceLabel);
+});
+
 // --- 결과 턴 문구 --------------------------------------------------------------
 
 test('resultTurnCopy: 성공은 3줄이고 기능 수가 실제 값으로 들어간다', () => {

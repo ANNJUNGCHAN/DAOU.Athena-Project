@@ -2229,7 +2229,15 @@ app.whenReady().then(async () => {
     && pluginProposalCard.status === '제안 대기'
     && pluginProposalCard.source === '내 요청'
     && pluginProposalCard.reason === '허브에서 [설치]를 눌렀습니다'
-    && JSON.stringify(pluginProposalCard.lines) === JSON.stringify(['권한 1개 요청']));
+    // Paper 05 install-card — 승인 카드가 제공·용도·실행 명령·설치 위치를 직접 싣는다.
+    // 모달 시트는 GUI 경로에만 열리므로 모델 제안 경로는 카드가 유일한 표면이다.
+    && JSON.stringify(pluginProposalCard.lines) === JSON.stringify([
+      '제공: Model Context Protocol · mcp-server-fetch',
+      '용도: 웹 페이지 원문 조회 · HTML→마크다운 변환',
+      '실행 명령: uvx mcp-server-fetch',
+      '설치 위치 · 플러그인 모드 > 웹 문서 읽기',
+      '권한 1개 요청',
+    ]), { lines: pluginProposalCard.lines });
   // 신설 ⑵ — GUI 경로는 채팅 턴을 만들지 않는다(§2.3 축 2).
   assertOk('pluginMode: GUI 클릭은 채팅 제안 턴을 만들지 않는다',
     pluginInstallSheet.historyPluginTurns === 0 && pluginProposalCard.historyPluginTurns === 0,
