@@ -1578,7 +1578,7 @@
       "alt_mappings": null,
       "kor": "거래원별ELW순매매상위",
       "format": {
-        "unit": "count",
+        "kind": "text",
         "sign": false,
         "precision": 0,
         "tone": "neutral"
@@ -1919,7 +1919,7 @@
       "alt_mappings": null,
       "kor": "거래원별ELW순매매상위",
       "format": {
-        "unit": "count",
+        "kind": "text",
         "sign": false,
         "precision": 0,
         "tone": "neutral"
@@ -2260,7 +2260,7 @@
       "alt_mappings": null,
       "kor": "거래원별ELW순매매상위",
       "format": {
-        "unit": "count",
+        "kind": "text",
         "sign": false,
         "precision": 0,
         "tone": "neutral"
@@ -2601,7 +2601,7 @@
       "alt_mappings": null,
       "kor": "거래원별ELW순매매상위",
       "format": {
-        "unit": "count",
+        "kind": "text",
         "sign": false,
         "precision": 0,
         "tone": "neutral"
@@ -2942,7 +2942,7 @@
       "alt_mappings": null,
       "kor": "거래원별ELW순매매상위",
       "format": {
-        "unit": "count",
+        "kind": "text",
         "sign": false,
         "precision": 0,
         "tone": "neutral"
@@ -3283,7 +3283,7 @@
       "alt_mappings": null,
       "kor": "거래원별ELW순매매상위",
       "format": {
-        "unit": "count",
+        "kind": "text",
         "sign": false,
         "precision": 0,
         "tone": "neutral"
@@ -3624,7 +3624,7 @@
       "alt_mappings": null,
       "kor": "거래원별ELW순매매상위",
       "format": {
-        "unit": "count",
+        "kind": "text",
         "sign": false,
         "precision": 0,
         "tone": "neutral"
@@ -3965,7 +3965,7 @@
       "alt_mappings": null,
       "kor": "거래원별ELW순매매상위",
       "format": {
-        "unit": "count",
+        "kind": "text",
         "sign": false,
         "precision": 0,
         "tone": "neutral"
@@ -4306,7 +4306,7 @@
       "alt_mappings": null,
       "kor": "거래원별ELW순매매상위",
       "format": {
-        "unit": "count",
+        "kind": "text",
         "sign": false,
         "precision": 0,
         "tone": "neutral"
@@ -4647,7 +4647,7 @@
       "alt_mappings": null,
       "kor": "거래원별ELW순매매상위",
       "format": {
-        "unit": "count",
+        "kind": "text",
         "sign": false,
         "precision": 0,
         "tone": "neutral"
