@@ -4,9 +4,9 @@
 //
 // 매니페스트 role==="screen" 103장이 결국 전부 여기 있어야 한다. 없는 보드는 미구현 실패다 —
 // 「도달 절차가 없는 보드는 실패한다」가 게이트 2의 핵심이라, 표가 곧 남은 작업 목록이 된다.
-// 지금은 53장(부팅 5 + 온보딩 3 + 인증 3 + 에이전트 4 + 알림 파생 방·코드 알람 3 + 화면 4
-// + 셸·그래프 2 + 그래프 5 + 대화·계정 2 + 모드·빈 화면 2 + 창·대화 턴·탭 3 + 사이드바 4 + 플러그인 9
-// + 키우미 4)이고,
+// 지금은 58장(부팅 5 + 온보딩 3 + 인증 3 + 에이전트 4 + 알림 파생 방·코드 알람 3 + 화면 4
+// + 계좌 등록 3상태·주문 5 + 셸·그래프 2 + 그래프 5 + 대화·계정 2 + 모드·빈 화면 2
+// + 창·대화 턴·탭 3 + 사이드바 4 + 플러그인 9 + 키우미 4)이고,
 // 래칫(§4.5)이 잠근 뒤 저작이 이어진다.
 //
 // ── reach 어휘는 닫혀 있다
@@ -69,6 +69,15 @@ const STEP_KINDS = Object.freeze({
   //                            settings-cards.js:139 사이드바 배지·auth-screen.js:240·
   //                            onboarding.js:318도 읽는다).
   'ipc-fixture': Object.freeze(['channel', 'data']),
+  // ipc-hang channel — 그 채널의 핸들러를 **영영 안 끝나는** 것으로 갈아끼운다.
+  //                    왕복이 도는 **동안에만** 있는 화면이 있어서다: 계좌 등록의
+  //                    「확인 중」은 athena:account-register가 답하기 전까지고
+  //                    (settings-cards.js accountSheetState의 verifying), 답이
+  //                    오는 순간 실패나 확인 완료로 넘어간다. ipc-fixture로 값을
+  //                    돌려주면 그 상태는 IPC 한 왕복만큼만 살아 판정이 시계에
+  //                    좌우된다 — 시간축을 세운다는 뜻에서 boot-hold와 같은 어휘다.
+  //                    격리는 ipc-fixture와 같다(러너가 원 핸들러로 되돌린다).
+  'ipc-hang': Object.freeze(['channel']),
   // envelope  data — 캔버스 봉투 주입 (verify.js:3745-3754 liveEnvelope)
   envelope: Object.freeze(['data']),
   // send      channel,data — main→렌더러 이벤트를 그대로 쏜다(webContents.send).
@@ -140,6 +149,23 @@ const PAPER_ACCOUNTS = Object.freeze({
   accounts: [
     { id: 'fx-a1', alias: '모의-주력', active: true, connected: true, appKeyChars: 36, orderApi: true },
     { id: 'fx-a2', alias: '모의-테스트', active: false, connected: false, appKeyChars: 36, orderApi: false },
+  ],
+});
+
+// 계좌 등록 시트의 두 결말(보드 16·17). verifyOnly 왕복이 돌려주는 봉투 모양 그대로다
+// (lib/main/accounts.js register — 실패는 {ok:false,error}, 검증 성공은 {ok:true,verified}).
+// 검사에서 원 핸들러를 부르면 키움 모의투자 서버로 실제 발급 왕복을 나간다 — 판정이
+// 이 컴퓨터의 회선에 좌우된다. 세 상태의 나머지 하나(보드 15 「확인 중」)는 값이 아니라
+// **답하지 않는 것**이라 ipc-hang이 만든다.
+const ACCOUNT_VERIFY_FAILED = Object.freeze({ ok: false, error: 'auth' });
+const ACCOUNT_VERIFY_OK = Object.freeze({ ok: true, verified: true });
+
+// 주문 게이트가 닫힌 계좌 — 보드 22가 그린 「지금은 실행할 수 없음」은 활성 계좌의
+// 주문 API가 OFF일 때만 뜬다(order-ticket.js gateBlocker). PAPER_ACCOUNTS의 첫 줄은
+// 게이트가 열려 있어 그 상태를 못 만든다. 별칭은 값이라 phrases에 안 넣는다.
+const ORDER_GATE_OFF_ACCOUNTS = Object.freeze({
+  accounts: [
+    { id: 'fx-a1', alias: '모의-주력', active: true, connected: true, appKeyChars: 36, orderApi: false },
   ],
 });
 
@@ -1231,6 +1257,168 @@ const ROUTES = Object.freeze([
     root: '#shell',
     phrases: ['요약', '수집·노출', '그래프에게 묻기', '답이 캔버스를 바꿉니다'],
     structure: [{ what: 'count', selector: '#graphSummaryHeader .view-toggle-tab', equals: 3 }],
+  },
+
+  // ---------- 계좌 등록 3상태 · 주문 2장 (1-0) ----------
+  // 15·16·17은 보드 14의 계좌 카드 위에 열리는 **같은 시트의 세 단계**다
+  // (settings-cards.js accountSheetState: idle → verifying → failed | verified).
+  // 셋을 가르는 것은 athena:account-register가 무엇을 답하느냐뿐이라, 시트를 여는
+  // 데까지는 보드 14와 같은 자극을 쓰고 그 채널 하나만 달리 건다.
+  {
+    board: 'XI-0', // 15 · 계좌 등록 — 인증 확인 중 (AT-ST-002)
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:account-list', data: PAPER_ACCOUNTS },
+      // 「확인 중」은 답이 오기 전까지만 있는 상태다 — 값을 돌려주면 IPC 한 왕복만큼만
+      // 살아 판정이 시계에 좌우된다. 답하지 않는 핸들러가 그 한 프레임을 세운다.
+      { do: 'ipc-hang', channel: 'athena:account-register' },
+      { do: 'command-bar', text: '설정' },
+      { do: 'click', selector: '.settings-nav-item[data-key="accounts"]' },
+      { do: 'click', selector: '.card.accounts .uk-settings-actions .uk-btn-ghost' },
+      { do: 'click', selector: '.card.accounts .uk-sheet .uk-btn-primary' },
+      { do: 'settle' },
+    ],
+    root: '#settings',
+    // 마스크 점·「붙여넣음 · 36자」·「모의-주력」은 값이거나 <input>의 placeholder라
+    // 문구가 못 된다. Paper가 상태 행 아래에 한 줄 더 그린 「APP KEY와 SECRET KEY로
+    // 계좌 연결 권한을 확인하고 있습니다」도 안 적는다 — 앱은 그 자리에 정적 안내를
+    // 두지 않고 상태 행 한 문장이 혼자 말한다(settings-cards.js의 같은 자리 주석).
+    phrases: [
+      '계좌 등록',
+      '모의투자 계좌의 APP KEY / SECRET KEY를 등록한다',
+      '저장·표시 원칙',
+      '토큰 발급 확인 중… 입력과 저장이 잠시 잠깁니다',
+      '확인 중…',
+    ],
+    // 확인 중을 다른 두 상태와 가르는 것은 문구가 아니라 **잠김**이다: 입력 셋과
+    // 확정 버튼이 모두 잠기고, 실패 상자는 아직 없다.
+    structure: [
+      { what: 'count', selector: '.uk-sheet .uk-input', equals: 3 },
+      { what: 'count', selector: '.uk-sheet .uk-input:disabled', equals: 3 },
+      { what: 'count', selector: '.uk-sheet .uk-btn-primary:disabled', equals: 1 },
+      { what: 'count', selector: '.uk-sheet .uk-bullet-item', equals: 4 },
+      { what: 'absent', selector: '.uk-sheet .uk-error' },
+    ],
+  },
+  {
+    board: 'FLM-0', // 16 · 계좌 등록 — 인증 실패 (AT-ST-002)
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:account-list', data: PAPER_ACCOUNTS },
+      { do: 'ipc-fixture', channel: 'athena:account-register', data: ACCOUNT_VERIFY_FAILED },
+      { do: 'command-bar', text: '설정' },
+      { do: 'click', selector: '.settings-nav-item[data-key="accounts"]' },
+      { do: 'click', selector: '.card.accounts .uk-settings-actions .uk-btn-ghost' },
+      { do: 'click', selector: '.card.accounts .uk-sheet .uk-btn-primary' },
+      { do: 'settle' },
+    ],
+    root: '#settings',
+    phrases: [
+      '모의투자 계좌의 APP KEY / SECRET KEY를 등록한다',
+      '저장·표시 원칙',
+      '검증에 실패해 저장하지 않았습니다. 키를 수정한 뒤 다시 검증할 수 있습니다',
+      '인증 실패 — APP KEY 또는 SECRET KEY를 확인해 주세요',
+      '다시 검증',
+    ],
+    // 실패는 시트를 닫지 않고 입력을 되돌려 준다 — 그래서 「다시 검증」이 눌린다.
+    // 틀린 칸의 테두리 셈은 안 적는다: Paper는 FLM-0에 is-error 프레임을 그리지 않았다.
+    structure: [
+      { what: 'count', selector: '.uk-sheet .uk-error', equals: 1 },
+      { what: 'absent', selector: '.uk-sheet .uk-success' },
+      { what: 'absent', selector: '.uk-sheet .uk-input:disabled' },
+    ],
+  },
+  {
+    board: 'FPE-0', // 17 · 계좌 등록 — 확인 완료 (AT-ST-002)
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:account-list', data: PAPER_ACCOUNTS },
+      { do: 'ipc-fixture', channel: 'athena:account-register', data: ACCOUNT_VERIFY_OK },
+      { do: 'command-bar', text: '설정' },
+      { do: 'click', selector: '.settings-nav-item[data-key="accounts"]' },
+      { do: 'click', selector: '.card.accounts .uk-settings-actions .uk-btn-ghost' },
+      { do: 'click', selector: '.card.accounts .uk-sheet .uk-btn-primary' },
+      { do: 'settle' },
+    ],
+    root: '#settings',
+    phrases: [
+      '모의투자 계좌의 APP KEY / SECRET KEY를 등록한다',
+      '저장·표시 원칙',
+      '확인이 완료되었습니다. 저장하면 OS 자격증명 저장소에 암호화됩니다',
+      '확인 완료 — 모의투자 계좌 연결 권한을 확인했습니다',
+      '계좌 저장',
+    ],
+    // 검증과 저장이 갈려 있다는 것이 이 보드다 — 확인 상자가 서고, 실패 상자는 없으며,
+    // 아직 저장 전이라 입력은 다시 열려 있다.
+    structure: [
+      { what: 'count', selector: '.uk-sheet .uk-success', equals: 1 },
+      { what: 'absent', selector: '.uk-sheet .uk-error' },
+      { what: 'absent', selector: '.uk-sheet .uk-input:disabled' },
+    ],
+  },
+  {
+    board: '11D-0', // 24 · 주문 — 거래 기능 연결 안내
+    window: 'shell',
+    // 게이트 시트를 여는 문은 계좌 행의 주문 API 칩 하나다(settings-cards.js
+    // buildAccountRow의 orderApiChip). 첫 줄이 Paper가 시트를 연 그 계좌다.
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:account-list', data: PAPER_ACCOUNTS },
+      { do: 'command-bar', text: '설정' },
+      { do: 'click', selector: '.settings-nav-item[data-key="accounts"]' },
+      { do: 'click', selector: '.card.accounts .uk-col-orderapi .uk-pill' },
+      { do: 'settle' },
+    ],
+    root: '#settings',
+    // TR 코드·계열 이름·「열리는 것 · 12건 · 모의 계좌 대상」은 값이라 안 넣는다.
+    // 머리의 「현재 OFF」도 안 적는다 — Paper는 같은 보드에서 그 계좌의 주문 API를
+    // 표에서 ON, 시트 머리에서 OFF로 그려 둘이 서로 어긋난다.
+    phrases: [
+      '주문 API 활성화',
+      '열리지 않는 것',
+      'AI가 이 계좌의 주문 API를 호출하도록 허용',
+      '주문 API 허용 (토글)',
+      '로컬 인증 토큰 설정',
+      '언제든 설정에서 OFF로 되돌릴 수 있다. 되돌리면 즉시 반영된다.',
+    ],
+    // Paper의 두 칸(열리는 것 세 줄 · 열리지 않는 것 세 줄) · 토글 하나 · 체크리스트 두 줄.
+    structure: [
+      { what: 'count', selector: '.uk-sheet .uk-tr-row', equals: 3 },
+      { what: 'count', selector: '.uk-sheet .uk-closed-item', equals: 3 },
+      { what: 'count', selector: '.uk-sheet .uk-toggle', equals: 1 },
+      { what: 'count', selector: '.uk-sheet .uk-checklist-row', equals: 2 },
+    ],
+  },
+  {
+    board: '1OP-0', // 22 · 주문 — 검토·영향·확인
+    window: 'shell',
+    // 주문 티켓은 셸 안의 형제 오버레이(#order)이고, 그 문은 발화 턴의 [주문 티켓
+    // 열기] 하나다(chat.js의 fired 분기). 그래서 보드 09와 같은 봉투를 쏘고 그
+    // 버튼을 누른다 — 이 화면은 검토까지이고, 집행은 사람이 한 번 더 눌러야 한다.
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:account-list', data: ORDER_GATE_OFF_ACCOUNTS },
+      { do: 'send', channel: 'athena:routine-event', data: ROUTINE_FIRED },
+      { do: 'click', selector: '.routine-approval-actions .routine-btn' },
+      // 게이트 한 줄은 계좌 목록 왕복이 끝나야 확정된다(그전엔 「계좌 확인 중…」).
+      { do: 'wait', ms: 300 },
+      { do: 'settle' },
+    ],
+    root: '#order',
+    // 종목·사유·관측값·총액은 전부 값이라 안 넣는다. 수량 비율 칩(10% · 25% · 50% ·
+    // 최대)과 발치 각주는 앱에 없어 적지 않는다 — 거기에 앱의 모양을 적으면 앱이 정본이 된다.
+    phrases: [
+      'Esc 닫기 — 실행 전에는 아무 일도 일어나지 않습니다',
+      '구매',
+      '판매',
+      '가격',
+      '시장가 체결',
+      '활성 계좌의 주문 API가 OFF입니다 — 설정 › 계좌에서 게이트를 여세요.',
+      '구매하기',
+    ],
+    // 티켓 카드 하나에 가격 세그먼트 둘(지정가 · 시장가)이 Paper가 그린 그대로다.
+    structure: [
+      { what: 'count', selector: '.ticket-card', equals: 1 },
+      { what: 'count', selector: '.ticket-seg', equals: 2 },
+    ],
   },
 
   // ---------- 셸·그래프 2장 (1-0) ----------
