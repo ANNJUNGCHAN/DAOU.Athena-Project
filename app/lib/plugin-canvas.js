@@ -614,14 +614,15 @@ function createPluginCanvas(options) {
     row.appendChild(el('div', 'plugin-canvas-spacer'));
     // 삭제는 플러그인 행에만 있다. 마켓플레이스는 끄기로 충분하고, 내장 카탈로그를
     // 지우면 되돌릴 화면이 없다.
+    // 안내가 컨트롤보다 앞에 온다(Paper 04의 행 차례).
     if (kind !== 'marketplace' && typeof deps.onPropose === 'function') {
-      row.appendChild(actionButton('삭제', 'is-danger', () => openRemoveSheet(item)));
       row.appendChild(el('span', 'plugin-canvas-manage-hint', '승인 후 지웁니다'));
+      row.appendChild(actionButton('삭제', 'is-danger', () => openRemoveSheet(item)));
     }
-    row.appendChild(toggleButton(item, kind, row));
     if (kind !== 'marketplace') {
       row.appendChild(el('span', 'plugin-canvas-manage-hint', '승인 후 반영됩니다'));
     }
+    row.appendChild(toggleButton(item, kind, row));
     return row;
   }
 
@@ -861,9 +862,12 @@ function createPluginCanvas(options) {
 
     if (sheet.error) body.appendChild(el('div', 'plugin-canvas-sheet-error', sheet.error));
 
+    // 이 시트의 확정 버튼은 아무것도 등록하지 않는다 — 승인 카드를 만들 뿐이라
+    // 이름도 [등록 제안]이다(Paper 플러그인 02). [승인]이라고 쓰면 여기서 등록이
+    // 끝난 것처럼 읽힌다.
     const actions = el('div', 'plugin-canvas-sheet-actions');
-    actions.appendChild(actionButton('취소', 'is-sheet-cancel', closeSheet));
-    actions.appendChild(actionButton('승인', 'is-sheet-confirm', () => proposeSnippet(sheet)));
+    actions.appendChild(actionButton('닫기', 'is-sheet-cancel', closeSheet));
+    actions.appendChild(actionButton('등록 제안', 'is-sheet-confirm', () => proposeSnippet(sheet)));
     body.appendChild(actions);
     return body;
   }

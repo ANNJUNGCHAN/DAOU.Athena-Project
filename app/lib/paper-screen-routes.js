@@ -4,8 +4,9 @@
 //
 // 매니페스트 role==="screen" 103장이 결국 전부 여기 있어야 한다. 없는 보드는 미구현 실패다 —
 // 「도달 절차가 없는 보드는 실패한다」가 게이트 2의 핵심이라, 표가 곧 남은 작업 목록이 된다.
-// 지금은 40장(부팅 5 + 온보딩 3 + 인증 3 + 에이전트 4 + 알림 파생 방·코드 알람 3 + 화면 4
-// + 셸·그래프 2 + 그래프 5 + 대화·계정 2 + 모드·빈 화면 2 + 창·대화 턴·탭 3 + 사이드바 4)이고,
+// 지금은 53장(부팅 5 + 온보딩 3 + 인증 3 + 에이전트 4 + 알림 파생 방·코드 알람 3 + 화면 4
+// + 셸·그래프 2 + 그래프 5 + 대화·계정 2 + 모드·빈 화면 2 + 창·대화 턴·탭 3 + 사이드바 4 + 플러그인 9
+// + 키우미 4)이고,
 // 래칫(§4.5)이 잠근 뒤 저작이 이어진다.
 //
 // ── reach 어휘는 닫혀 있다
@@ -205,6 +206,25 @@ const ROUTINE_FIRED = Object.freeze({
   observed: '88,100',
   threshold: '88,000',
   fired_at: '2026-08-20T15:30:00+09:00',
+});
+
+// 활성 감시 3건 — 키우미 보드 01의 「감시 궤도 링 — 활성 감시 3건」 그대로다. 오브는
+// 셸 컨트롤 스트립과 같은 채널을 읽어 활성 루틴 수만큼 위성 점을 놓는다
+// (orb.js refreshSatelliteRing → renderSatelliteRing). 0건이면 궤도 자체를 안 그리므로
+// 이 봉투가 없으면 이 보드의 구조 셈은 이 컴퓨터의 백엔드 상태에 좌우된다.
+// 값은 전부 데이터라 phrases에는 한 글자도 넣지 않는다.
+const WATCH_THREE_ACTIVE = Object.freeze({
+  ok: true,
+  data: {
+    routines: [
+      { id: 'fx-w1', symbol: '005930', note: '삼성전자 88,000', status: 'active', mode: 'polling' },
+      { id: 'fx-w2', symbol: '000660', note: 'SK하이닉스 200,000', status: 'active', mode: 'polling' },
+      { id: 'fx-w3', symbol: '035720', note: '카카오 40,000', status: 'active', mode: 'polling' },
+    ],
+    disclosure_ready: true,
+    last_error: null,
+    fired_today: 0,
+  },
 });
 
 // 복원 실패 이벤트 — 보드 30이 그린 대화 턴 하나. 백엔드가 실제로 보내는 봉투 모양
@@ -559,6 +579,141 @@ const CODE_RUNS = Object.freeze({
 
 const CODE_DETAIL_FIRST_CHECK = paperCodeDetail('check', WATCH_NODES_FIRST);
 const CODE_DETAIL_ACTIVE = paperCodeDetail('run', WATCH_NODES_LIVE);
+
+// ── 플러그인 페이지(B-2) fixture ────────────────────────────────────────────
+// 플러그인 화면은 이 컴퓨터에 실제로 등록된 MCP 서버를 그린다 — 검사 프로필은
+// userData만 새로 만들고 레지스트리는 그대로라(lib/main/mcp-cli.js가 athena 상태
+// 경로를 읽는다) 판정이 이 머신에 좌우된다. 그래서 목록·도구·감사·미해결 제안을
+// 전부 봉투로 못 박는다. 별칭·도구 이름·시각은 값이라 phrases에 한 글자도 안 넣는다.
+//
+// 판번호는 하나로 통일한다 — 봉투의 revision이 목록의 revision과 어긋나면 카드가
+// 만료로 떨어진다(plugin-proposal.js isProposalStale). 만료를 **일부러** 세우는
+// 보드 09만 한 장에 옛 번호를 싣는다.
+const PLUGIN_REVISION = 12;
+
+/** athena:mcp-list 한 줄 — main/mcp-cli.js list()가 돌려주는 그 일곱 칸이다. */
+function paperMcpServer(alias, argsPreview, approved, toolCount, health) {
+  return {
+    alias, command: alias === 'korea-stock' ? 'npx' : 'uvx', argsPreview,
+    approved, toolCount, health, warnings: [],
+  };
+}
+
+// 보드 03·04가 그린 두 줄 — 승인된 「웹 문서 읽기」와 승인 철회된 「시간·시간대」다.
+// 도구 수 1+2가 관리 머리의 「기능 3」이고, 남은 카탈로그 셋이 「추천」 세 장이다.
+const PLUGIN_LIST_TWO = Object.freeze({
+  servers: [
+    paperMcpServer('fetch', 'mcp-server-fetch', true, 1, 'ok'),
+    paperMcpServer('time', 'mcp-server-time', false, 2, 'unknown'),
+  ],
+  revision: PLUGIN_REVISION,
+});
+
+// 보드 01·09는 「한국 주식 시세」 한 줄만 그린다.
+const PLUGIN_LIST_KOREA = Object.freeze({
+  servers: [paperMcpServer('korea-stock', '-y @drfirst/korea-stock-mcp', true, 4, 'ok')],
+  revision: PLUGIN_REVISION,
+});
+
+// 보드 06의 첫 칸 — 아직 아무것도 설치하지 않은 허브.
+const PLUGIN_LIST_EMPTY = Object.freeze({ servers: [], revision: PLUGIN_REVISION });
+
+// probe가 돌려주는 도구 여섯 — 보드 01이 그린 그 여섯이고 넷만 허용이다. probe
+// 전에는 노출 도구를 모르므로(plugin-canvas.js featureRowsFor 주석) 이 봉투가
+// 없으면 기능 목록이 통째로 비어 판정이 공허해진다.
+function koreaTools(allowedIndexes) {
+  const rows = [
+    ['search_stock_code', '종목명으로 종목 코드를 찾습니다'],
+    ['get_stock_price_by_code', '종목 코드로 현재가를 조회합니다'],
+    ['get_market_cap_stocks', '시가총액 상위 종목을 가져옵니다'],
+    ['get_dividend_yield_stocks', '배당수익률 상위 종목을 가져옵니다'],
+    ['get_themes_with_leaders', '테마와 주도주를 가져옵니다'],
+    ['get_etfs_by_market_cap', '시총 기준 ETF 목록을 가져옵니다'],
+  ];
+  return Object.freeze({
+    ok: true,
+    tools: rows.map(([name, description], index) => ({
+      name, description, allowed: allowedIndexes.includes(index),
+    })),
+  });
+}
+const KOREA_TOOLS = koreaTools([0, 1, 2, 3]);
+// 보드 09의 「그 사이 바뀐 기능」 — 초안을 뜬 뒤 실제 허용이 갈린 상태다. 같은
+// 채널에 다른 봉투를 두 번 거는 것이 앱 밖에서 그 갈림을 만드는 유일한 자극이다.
+const KOREA_TOOLS_CHANGED = koreaTools([2, 3, 4]);
+
+// 보드 02의 감사 로그 세 줄. 시각·별칭·도구는 값이라 phrases에 안 넣는다 —
+// 이 봉투가 지는 것은 열 머리(시각·별칭·도구·결과)와 줄 수뿐이다.
+const PLUGIN_AUDIT = Object.freeze({
+  entries: [
+    { ts: '2026-09-05T09:14:00', alias: 'fetch', tool: 'fetch', success: true },
+    { ts: '2026-09-05T08:52:00', alias: 'time', tool: 'get_current_time', success: true },
+    { ts: '2026-09-05T08:50:00', alias: 'time', tool: 'register', success: false },
+  ],
+});
+// 보드 04에는 감사 구역이 없다 — 앱은 관리 뷰에 그것을 같이 그리므로, 읽는 중
+// 문구가 이 컴퓨터의 기록에 좌우되지 않게 빈 봉투로 못 박는다.
+const PLUGIN_AUDIT_EMPTY = Object.freeze({ entries: [] });
+
+// 제안 봉투 — 모델이 낸 것과 같은 모양이다(plugin-proposal.js buildProposal).
+// 미해결 제안은 메인 프로세스 메모리에만 살고 모드 재진입이 athena:plugin-pending
+// 으로 되읽는다(canvas.js pluginRestorePending) — 검사에서 승인 카드를 세우는
+// 문은 그 채널 하나뿐이다.
+function paperProposal(id, actions, revision) {
+  return {
+    proposal_id: id,
+    source: 'model',
+    revision: revision === undefined ? PLUGIN_REVISION : revision,
+    actions,
+    reason: '',
+  };
+}
+const KOREA_FEATURES = Object.freeze([
+  'search_stock_code', 'get_stock_price_by_code', 'get_market_cap_stocks',
+  'get_dividend_yield_stocks', 'get_themes_with_leaders', 'get_etfs_by_market_cap',
+]);
+const PROPOSE_INSTALL_FETCH = paperProposal('fx-pp-install-fetch',
+  [{ action: 'install', target: 'fetch', features: ['fetch'] }]);
+const PROPOSE_INSTALL_KOREA = paperProposal('fx-pp-install-korea',
+  [{ action: 'install', target: 'korea-stock', features: [...KOREA_FEATURES] }]);
+const PROPOSE_ALLOW_KOREA = paperProposal('fx-pp-allow-korea',
+  [{ action: 'allow_tools', target: 'korea-stock', features: KOREA_FEATURES.slice(0, 4) }]);
+const PROPOSE_DISABLE_FETCH = paperProposal('fx-pp-disable-fetch',
+  [{ action: 'set_enabled', target: 'fetch', enabled: false }]);
+const PROPOSE_REMOVE_TIME = paperProposal('fx-pp-remove-time',
+  [{ action: 'remove', target: 'time' }]);
+const PROPOSE_SNIPPET = paperProposal('fx-pp-snippet', [{
+  action: 'stage_snippet',
+  target: null,
+  snippet: '{"mcpServers":{"time":{"command":"uvx","args":["mcp-server-time"]}}}',
+}]);
+// 보드 09의 만료 칸 — 봉투가 쥔 판번호가 지금 목록과 어긋난 그 상태다.
+const PROPOSE_ALLOW_KOREA_STALE = paperProposal('fx-pp-allow-stale',
+  [{ action: 'allow_tools', target: 'korea-stock', features: KOREA_FEATURES.slice(0, 4) }],
+  PLUGIN_REVISION - 3);
+
+function paperPending(proposals) {
+  return Object.freeze({ proposals, revision: PLUGIN_REVISION });
+}
+
+// 승인·거부의 반환 — main.js pluginResult가 채우는 일곱 칸 그대로다. 실제 승인은
+// 서버를 내려받아 띄우므로(mcp-cli register→approve→probe) 검사에서 원 핸들러를
+// 부르면 안 된다. runtimeEnabled는 기본 빌드의 false다 — 결과 턴이 「다음 실행부터
+// 반영됩니다」로 갈리는 자리다(보드 08의 「런타임 꺼짐 · 기본」).
+// 성공 턴 세 줄은 이 봉투의 results와 무관하다(plugin-proposal.js resultTurnCopy가
+// 고정 문면을 쓴다) — 여기서 읽히는 값은 probes의 도구 수뿐이라 보드 06의 끄기
+// 승인도 같은 봉투를 쓴다.
+const PLUGIN_APPROVE_SUCCESS = Object.freeze({
+  ok: true, kind: 'success', reason: null,
+  results: [{ action: 'install', target: 'korea-stock', ok: true }],
+  probes: [{ alias: 'korea-stock', ok: true, toolCount: 6 }],
+  revision: PLUGIN_REVISION, runtimeEnabled: false,
+});
+const PLUGIN_REJECT_DONE = Object.freeze({
+  ok: true, kind: 'rejected', reason: null, results: [], probes: [],
+  revision: PLUGIN_REVISION, runtimeEnabled: false,
+});
+
 
 const ROUTES = Object.freeze([
   // ---------- 부팅 5장 (1-0) ----------
@@ -1685,6 +1840,485 @@ const ROUTES = Object.freeze([
         selector: '.sidebar-mode-picker-label',
         equals: ['대화', '그래프', '에이전트', '플러그인', '백테스트'],
       },
+    ],
+  },
+  // ---------- 플러그인 9장 (B-2) ----------
+  // 아홉 장이 공유하는 도달의 골격은 셋이다.
+  //   ① 목록을 갈아끼운 뒤 **다시 읽히는 문**은 허브 머리의 [관리] 하나다
+  //      (onManage가 pluginRefresh를 부른다, canvas.js). 창을 다시 읽으면 부팅의
+  //      pluginRefresh가 원 핸들러로 한 번 돌아 버리므로, fixture를 건 뒤 [관리]를
+  //      눌러 한 번 더 읽히고 모드 네비로 허브에 돌아온다(사이드바가 진입마다
+  //      setView('hub')를 부른다, lib/sidebar.js).
+  //   ② 승인 카드를 세우는 문은 athena:plugin-pending 하나다 — 미해결 봉투는 메인
+  //      프로세스 메모리에만 살고 모드 재진입이 그것을 되읽는다(pluginRestorePending).
+  //   ③ 기능 목록은 probe가 돌아와야 생긴다 — 허브 카드의 [권한]이 그 유일한 자극이다.
+  {
+    board: 'FT6-0', // 01 · 플러그인 — 기능 허용 (AT-ST-006)
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:mcp-list', data: PLUGIN_LIST_KOREA },
+      { do: 'ipc-fixture', channel: 'athena:mcp-probe', data: KOREA_TOOLS },
+      { do: 'mode', view: 'plugin' },
+      { do: 'click', selector: '.plugin-canvas-action.is-manage' },
+      { do: 'mode', view: 'plugin' },
+      { do: 'click', selector: '.plugin-canvas-card[data-plugin-id="korea-stock"] .plugin-canvas-action' },
+      { do: 'wait', ms: 300 },
+      { do: 'settle' },
+    ],
+    root: '#pluginCanvas',
+    // 도구 이름·설명은 probe 봉투에서 오는 값이라 안 적는다. 남는 것은 이 화면이
+    // 봉투와 무관하게 늘 같은 말로 그리는 넷과, 플러그인 이름이 박히는 두 문장이다
+    // (그 이름은 카탈로그가 별칭에서 되짚는 값이라 fixture가 못 바꾼다).
+    // 「채팅: 시세 조회만 허용」은 Paper가 권한 초안 머리에 단 진입 표시인데 앱에
+    // 그 자리가 없어 적지 않는다.
+    phrases: [
+      '기능 허용은 한국 주식 시세 플러그인에만 적용됩니다. Athena 내장 API는 이 목록에 나타나지 않습니다.',
+      '권한 초안',
+      '승인 카드로 확정합니다',
+      '선택한 기능만 한국 주식 시세 플러그인에 노출됩니다',
+      '선택 저장',
+      'Kiwoom 시세·주문·계좌와 brain은 Athena 내장 API이므로 플러그인 권한 목록에 표시하지 않습니다.',
+    ],
+    // Paper의 머리 배지 넷(설치됨 · 기능 6 · 허용 4 · 연결 확인됨)과 도구 여섯 줄.
+    // 배지의 숫자는 값이라 세지 않고 배지가 넷이라는 것만 잰다.
+    structure: [
+      { what: 'count', selector: '.plugin-canvas-count', equals: 4 },
+      { what: 'count', selector: '.plugin-canvas-permission-features .plugin-canvas-sheet-feature', equals: 6 },
+    ],
+  },
+  {
+    board: '15J-0', // 02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:mcp-list', data: PLUGIN_LIST_TWO },
+      { do: 'ipc-fixture', channel: 'athena:mcp-audit', data: PLUGIN_AUDIT },
+      { do: 'mode', view: 'plugin' },
+      { do: 'click', selector: '.plugin-canvas-action.is-manage' },
+      { do: 'click', selector: '.plugin-canvas-manage .plugin-canvas-action.is-add' },
+      { do: 'settle' },
+    ],
+    root: '#pluginCanvas',
+    // 붙여넣기 칸의 예시 설정은 <textarea>의 placeholder라 문구가 못 된다
+    // (plugin-canvas.js renderAddSheetBody). 「최근 3건」·「채팅에서 등록을 제안해도
+    // 같은 승인 카드로 들어옵니다」는 앱에 그 자리가 없어 적지 않는다.
+    phrases: [
+      '플러그인 관리',
+      '서버 추가',
+      'Claude 설정 형식의 스니펫을 붙여넣습니다',
+      '승인 카드로 확정합니다',
+      '닫기',
+      '등록 제안',
+      '감사 로그',
+    ],
+    // 시트 한 장 + 감사 표의 열 머리 넷과 줄 셋. 열 머리의 차례가 Paper 02의 계약이다.
+    structure: [
+      { what: 'count', selector: '.plugin-canvas-add-sheet', equals: 1 },
+      { what: 'order', selector: '.plugin-canvas-audit-head div', equals: ['시각', '별칭', '도구', '결과'] },
+      { what: 'count', selector: '.plugin-canvas-audit-row', equals: 3 },
+    ],
+  },
+  {
+    board: 'CU0-0', // 03 · 플러그인 — 허브·설치
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:mcp-list', data: PLUGIN_LIST_TWO },
+      { do: 'mode', view: 'plugin' },
+      { do: 'click', selector: '.plugin-canvas-action.is-manage' },
+      { do: 'mode', view: 'plugin' },
+      { do: 'settle' },
+    ],
+    root: '#pluginCanvas',
+    // 「⌕ 플러그인 검색」은 <input>의 placeholder라 문구가 못 된다. 플러그인 이름·
+    // 설명은 카탈로그가 그리는 목록 값이라 안 적는다 — 남는 것은 머리·구역 제목·
+    // 두 버튼·경계 설명문이다.
+    phrases: [
+      '플러그인',
+      '+ 서버 추가',
+      '관리',
+      '플러그인은 설치 후 기능별로 허용합니다. Kiwoom·brain은 Athena 내장 API라 이 목록에 표시하지 않습니다.',
+      '설치됨',
+      '추천',
+      '권한',
+    ],
+    // Paper 03의 두 구역 — 설치됨 두 장, 추천 세 장(카탈로그 다섯에서 설치된 둘을 뺀다).
+    structure: [
+      { what: 'count', selector: '.plugin-canvas-installed .plugin-canvas-card', equals: 2 },
+      { what: 'count', selector: '.plugin-canvas-recommended .plugin-canvas-card', equals: 3 },
+    ],
+  },
+  {
+    board: 'CVY-0', // 04 · 플러그인 — 관리·마켓플레이스
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:mcp-list', data: PLUGIN_LIST_TWO },
+      { do: 'ipc-fixture', channel: 'athena:mcp-audit', data: PLUGIN_AUDIT_EMPTY },
+      { do: 'mode', view: 'plugin' },
+      { do: 'click', selector: '.plugin-canvas-action.is-manage' },
+      { do: 'settle' },
+    ],
+    root: '#pluginCanvas',
+    // 「플러그인 2 · 기능 3 · 마켓플레이스 1」은 목록에서 세는 값이라 안 적는다.
+    // 행 안의 차례는 Paper 04 그대로다 — 안내가 먼저 오고 그 안내가 가리키는
+    // [삭제]와 스위치가 뒤에 온다(스위치는 글자가 없어 차례 대신 개수로 잰다).
+    phrases: [
+      '플러그인 관리',
+      '플러그인만 설치·활성화합니다. 제공 기능은 상세 화면에서 허용하며 Athena 내장 API는 표시하지 않습니다.',
+      '승인 후 지웁니다',
+      '승인 후 반영됩니다',
+      '마켓플레이스',
+      '앱 내장 카탈로그 · 키가 필요 없는 5종',
+      '+ 마켓플레이스 추가 — GitHub·Git URL·로컬 폴더. 등록만으로는 아무것도 실행되지 않습니다 — 설치·활성은 항목별 승인 시트를 거칩니다.',
+    ],
+    // 플러그인 두 줄 + 마켓플레이스 한 줄, 스위치는 그 셋에 하나씩이다.
+    structure: [
+      { what: 'count', selector: '.plugin-canvas-manage-plugins .plugin-canvas-manage-row', equals: 2 },
+      { what: 'count', selector: '.plugin-canvas-marketplaces .plugin-canvas-manage-row', equals: 1 },
+      { what: 'count', selector: '.plugin-canvas-toggle', equals: 3 },
+      {
+        what: 'order',
+        selector: '.plugin-canvas-manage-plugins .plugin-canvas-manage-hint, .plugin-canvas-manage-plugins .plugin-canvas-action.is-danger',
+        equals: ['승인 후 지웁니다', '삭제', '승인 후 반영됩니다', '승인 후 지웁니다', '삭제', '승인 후 반영됩니다'],
+      },
+    ],
+  },
+  {
+    board: '2NW8-2', // 05 · 플러그인 — 설치 승인 (캔버스 카드)
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:plugin-pending', data: paperPending([PROPOSE_INSTALL_FETCH]) },
+      { do: 'mode', view: 'plugin' },
+      { do: 'settle' },
+    ],
+    root: '#pluginCanvas',
+    // Paper의 카드는 「플러그인 정보」·「요청 기능」·「요청」·「설치형 플러그인」을 함께
+    // 그리지만 앱은 그 넷을 허브 [설치] 시트에만 둔다(카드 본문은 모델 경로와 같은
+    // cardCopy 한 함수가 만든다) — 어긋나는 자리라 아무 것도 적지 않는다. 「제공:
+    // athena-official · mcp-server-fetch」·「용도: 공시·리서치 …」도 같다: 앱은
+    // 카탈로그의 실제 제공자·용도를 쓴다(plugin-catalog.js fetch 항목).
+    // 「권한 1개 요청」은 숫자가 든 값이라 애초에 문구 후보에서 걸러진다.
+    phrases: [
+      '플러그인',
+      '아테나 제안',
+      '웹 문서 읽기 설치',
+      '실행 명령: uvx mcp-server-fetch',
+      '설치 위치 · 플러그인 모드 > 웹 문서 읽기',
+      '거부',
+      '허브의 설치 버튼도 이 카드로 들어옵니다',
+    ],
+    // 카드 한 장에 버튼 둘(거부·승인)이다.
+    structure: [
+      { what: 'count', selector: '.plugin-canvas-proposal', equals: 1 },
+      { what: 'count', selector: '.plugin-canvas-proposal-action', equals: 2 },
+    ],
+  },
+  {
+    board: '2NXS-2', // 06 · 플러그인 — 상태 모음 (6상태)
+    window: 'shell',
+    // 보드 06은 화면이 아니라 여섯 상태를 나란히 세운 목록이다. 한 화면은 그중
+    // 함께 설 수 있는 것만 그리므로 라우트는 넷을 한 번에 잡는다(보드 20의 토큰
+    // 4상태와 같은 선택): ① 아무것도 설치하지 않은 허브 · ④ 이번 세션에 레지스트리를
+    // 바꿨을 때의 재시작 안내 · ⑤ 아직 안 누른 카드 · ⑥ 거부를 누른 카드.
+    // ②(probe 실패 배너)와 ③(승인 뒤 철회 실패가 행 아래 붙는 줄)은 뺐다 — ②는
+    // 앱이 「연결 실패 — <사유>」로 쓰고 Paper는 「연결을 확인하지 못했습니다」라
+    // 문면이 어긋나고, ③은 앱에 그 자리가 아예 없다.
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:mcp-list', data: PLUGIN_LIST_EMPTY },
+      { do: 'ipc-fixture', channel: 'athena:plugin-approve', data: PLUGIN_APPROVE_SUCCESS },
+      { do: 'ipc-fixture', channel: 'athena:plugin-reject', data: PLUGIN_REJECT_DONE },
+      {
+        do: 'ipc-fixture',
+        channel: 'athena:plugin-pending',
+        data: paperPending([PROPOSE_DISABLE_FETCH, PROPOSE_INSTALL_FETCH, PROPOSE_INSTALL_KOREA]),
+      },
+      { do: 'mode', view: 'plugin' },
+      // 승인 하나가 재시작 안내를 세운다 — 그 줄은 이번 세션에 레지스트리를 바꿨을
+      // 때만 뜬다(canvas.js pluginRegistryChangedThisSession).
+      { do: 'click', selector: '.plugin-canvas-proposal[data-proposal-id="fx-pp-disable-fetch"] .is-proposal-approve' },
+      { do: 'wait', ms: 300 },
+      { do: 'click', selector: '.plugin-canvas-proposal[data-proposal-id="fx-pp-install-korea"] .is-proposal-reject' },
+      { do: 'wait', ms: 300 },
+      { do: 'settle' },
+    ],
+    root: '#pluginCanvas',
+    phrases: [
+      '설치한 플러그인이 없습니다 · 아래 추천에서 설치합니다',
+      '이번에 바꾼 서버는 Athena를 다시 시작한 뒤의 대화부터 적용됩니다. 진행 중인 대화에는 아직 반영되지 않았습니다.',
+      '제안 대기',
+      '웹 문서 읽기 설치',
+      '거부됨',
+      '그대로 뒀습니다',
+    ],
+    // 빈 자리 문구는 설치됨 구역 하나뿐이다(추천은 카탈로그 다섯이 그대로 선다) —
+    // 「검색과 일치하는 …이 없습니다」로 뭉뚱그리지 않는다는 것이 이 보드의 첫 칸이다.
+    structure: [
+      { what: 'count', selector: '.plugin-canvas-restart-notice', equals: 1 },
+      { what: 'count', selector: '.plugin-canvas-empty', equals: 1 },
+      { what: 'count', selector: '.plugin-canvas-proposal[data-proposal-state="pending"]', equals: 1 },
+      { what: 'count', selector: '.plugin-canvas-proposal[data-proposal-state="done"]', equals: 2 },
+    ],
+  },
+  {
+    board: '3ZJD-0', // 07 · 플러그인 대화 — 제안 턴 5동작
+    window: 'shell',
+    // 보드 07은 다섯 동작을 「채팅 제안 한 줄 + 캔버스 승인 카드」로 나란히 세운
+    // 목록이다. 채팅 줄은 살아 있는 질의 안에서만 그려지고(chat.js의 턴 스코프
+    // athena:plugin-proposed 구독) 앱 어디에도 그것을 다시 여는 문이 없다 — 보드
+    // 09가 능동 턴 하나만 잰 것과 같은 이유로, 여기서는 도달 절차로 결정론이 되는
+    // 승인 카드 다섯을 잰다(보드가 제목으로 말하는 「캔버스가 승인합니다」 쪽이다).
+    reach: [
+      {
+        do: 'ipc-fixture',
+        channel: 'athena:plugin-pending',
+        data: paperPending([
+          PROPOSE_INSTALL_KOREA, PROPOSE_ALLOW_KOREA, PROPOSE_DISABLE_FETCH,
+          PROPOSE_REMOVE_TIME, PROPOSE_SNIPPET,
+        ]),
+      },
+      { do: 'mode', view: 'plugin' },
+      { do: 'settle' },
+    ],
+    root: '#pluginCanvas',
+    // 기능 허용 칸의 「허용 4 / 6」·「켤 기능 …」·「끌 기능 …」과 켜기·끄기 칸의
+    // 「기능 1개가 함께 멈춥니다」, 삭제 칸의 「되돌리려면 다시 설치합니다」는 앱이
+    // 그리지 않는 줄이라 적지 않는다.
+    phrases: [
+      '한국 주식 시세 설치',
+      '실행 명령: npx -y @drfirst/korea-stock-mcp',
+      '웹 문서 읽기 끄기',
+      '승인 철회',
+      '시간·시간대 삭제',
+      '등록과 승인 기록을 함께 지웁니다',
+      '등록만으로는 실행되지 않습니다',
+    ],
+    // 다섯 카드가 Paper의 열 차례 그대로 선다 — 설치 · 기능 허용 · 켜기끄기 ·
+    // 삭제 · 스니펫 등록.
+    structure: [
+      { what: 'count', selector: '.plugin-canvas-proposal', equals: 5 },
+      {
+        what: 'order',
+        selector: '.plugin-canvas-proposal-title',
+        equals: [
+          '한국 주식 시세 설치', '한국 주식 시세 · 기능 허용', '웹 문서 읽기 끄기',
+          '시간·시간대 삭제', '직접 등록',
+        ],
+      },
+    ],
+  },
+  {
+    board: '3ZLW-0', // 08 · 플러그인 대화 — 결과 턴
+    window: 'shell',
+    // 보드 08도 결과 다섯 갈래를 나란히 세운 목록이다. 승인 반환이 곧 갈래이므로
+    // 한 화면에 함께 설 수 있는 것은 승인(성공)과 거부 둘이다 — 실패·재시도는
+    // 실행이 한 줄이라도 돈 봉투에만 붙고(plugin-proposal.js resultTurnCopy),
+    // 「모드 밖 폐기」는 플러그인 모드가 **아닐** 때의 화면이라 이 모드에서 못 선다.
+    // 재시작 갈래는 성공 턴의 끝줄로 함께 잰다(런타임 꺼짐 · 기본).
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:mcp-list', data: PLUGIN_LIST_KOREA },
+      { do: 'ipc-fixture', channel: 'athena:plugin-approve', data: PLUGIN_APPROVE_SUCCESS },
+      { do: 'ipc-fixture', channel: 'athena:plugin-reject', data: PLUGIN_REJECT_DONE },
+      {
+        do: 'ipc-fixture',
+        channel: 'athena:plugin-pending',
+        data: paperPending([PROPOSE_INSTALL_KOREA, PROPOSE_INSTALL_FETCH]),
+      },
+      { do: 'mode', view: 'plugin' },
+      { do: 'click', selector: '.plugin-canvas-proposal[data-proposal-id="fx-pp-install-korea"] .is-proposal-approve' },
+      { do: 'wait', ms: 300 },
+      { do: 'click', selector: '.plugin-canvas-proposal[data-proposal-id="fx-pp-install-fetch"] .is-proposal-reject' },
+      { do: 'wait', ms: 300 },
+      { do: 'settle' },
+    ],
+    // 결과 턴은 채팅에, 굳은 카드는 캔버스에 남는다 — 둘을 함께 품는 것은 셸이다.
+    root: '#shell',
+    phrases: [
+      '등록했습니다',
+      '연결을 확인했습니다',
+      '기능 6개를 찾았습니다',
+      '다음 실행부터 반영됩니다',
+      '그대로 뒀습니다',
+      '거부됨',
+      '웹 문서 읽기 설치',
+    ],
+    // 승인 하나 · 거부 하나 = 채팅 턴 둘, 그리고 두 카드 다 결과로 굳는다.
+    structure: [
+      { what: 'count', selector: '#history .plugin-turn', equals: 2 },
+      { what: 'count', selector: '.plugin-canvas-proposal[data-proposal-state="done"]', equals: 2 },
+    ],
+  },
+  {
+    board: '3ZNO-0', // 09 · 플러그인 창 복원
+    window: 'shell',
+    // 보드 09의 세 칸 중 둘을 한 화면에 함께 세운다: 권한 초안(모드를 나갔다 와도
+    // 저장 전 토글이 남고, 그 사이 실제 허용이 갈리면 무엇이 달라졌는지 먼저
+    // 말한다)과 제안 대기·만료 카드다. 「미전송 입력」 칸은 <textarea>의 value라
+    // 애초에 가시 텍스트가 아니어서 잴 자리가 없다.
+    //
+    // 갈림을 만드는 자극은 probe 봉투를 두 번 다르게 거는 것뿐이다: 첫 봉투로 초안을
+    // 뜨고(모드 네비가 keepDraft를 부른다), 둘째 봉투가 도착하면 목록 갱신이 초안을
+    // 다시 얹으면서 발산을 집는다(plugin-canvas.js restoreDraft).
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:mcp-list', data: PLUGIN_LIST_KOREA },
+      { do: 'ipc-fixture', channel: 'athena:mcp-probe', data: KOREA_TOOLS },
+      {
+        do: 'ipc-fixture',
+        channel: 'athena:plugin-pending',
+        data: paperPending([PROPOSE_INSTALL_FETCH, PROPOSE_ALLOW_KOREA_STALE]),
+      },
+      { do: 'mode', view: 'plugin' },
+      { do: 'click', selector: '.plugin-canvas-action.is-manage' },
+      { do: 'mode', view: 'plugin' },
+      { do: 'click', selector: '.plugin-canvas-card[data-plugin-id="korea-stock"] .plugin-canvas-action' },
+      { do: 'wait', ms: 300 },
+      // 모드를 다시 눌러 나갔다 들어온다 — 그때 저장 전 토글이 초안으로 굳는다.
+      { do: 'mode', view: 'plugin' },
+      { do: 'ipc-fixture', channel: 'athena:mcp-probe', data: KOREA_TOOLS_CHANGED },
+      { do: 'click', selector: '.plugin-canvas-card[data-plugin-id="korea-stock"] .plugin-canvas-action' },
+      { do: 'wait', ms: 400 },
+      { do: 'settle' },
+    ],
+    root: '#pluginCanvas',
+    // 「그 사이 바뀐 기능: 시세 조회 · 종목 검색」은 적지 않는다 — 앱은 그 자리에
+    // probe가 준 실제 도구 이름을 잇고 Paper는 사람이 읽는 이름을 썼다.
+    phrases: [
+      '권한 초안',
+      '현재 값으로 초기화',
+      '초안대로 저장',
+      '제안 대기',
+      '만료됨',
+      '다시 제안받기',
+      '앱을 완전히 껐다 켜면 대기 중인 제안은 사라집니다',
+    ],
+    // 발산 알림 한 줄 + 카드 둘(하나는 대기, 하나는 만료) + 경계 문구 한 줄.
+    structure: [
+      { what: 'count', selector: '.plugin-canvas-draft-divergence', equals: 1 },
+      { what: 'count', selector: '.plugin-canvas-proposal[data-proposal-state="pending"]', equals: 1 },
+      { what: 'count', selector: '.plugin-canvas-proposal[data-proposal-state="stale"]', equals: 1 },
+      { what: 'count', selector: '.plugin-canvas-proposal-boundary', equals: 1 },
+    ],
+  },
+
+  // ---------- 키우미 4장 (C-2) ----------
+  // 이 페이지 아홉 중 넷만 여기 있다. 나머지 다섯은 Paper가 그린 것이 **주석 판**이라
+  // 앱에 대응하는 가시 텍스트가 없거나(02 표정 10종 · 03 시선·시간 루프 — 얼굴은
+  // orb.css의 [data-face] 규칙이 지고 글자를 하나도 안 그린다), 한 화면에 두 줄밖에
+  // 못 세우거나(05 셸 숨김·표시 — 「대화창으로 가기」와 「셸로 가기」는 서로 다른
+  // 표시 모드라 함께 못 선다), 잠긴 계약과 정면으로 어긋나거나(08 모드별 얼굴 5종 —
+  // 앱은 얼굴 1종이 계약이다, shell.html #dot 주석), 도달 어휘 밖이다(09 미니 카드
+  // 10종 — 카드는 질의가 도는 동안에만 붙는 athena:orb-canvas-result 구독으로만
+  // 그려진다, orb.js submitChatQuery). 없는 셀렉터·문구를 적어 초록을 만드는 대신
+  // 비워 둔다.
+  {
+    board: 'DO-0', // 01 · 키우미 — 상황별 표현·크기 매핑
+    window: 'orb',
+    // 이 보드가 앱에서 실제로 서는 자리는 알림 전용 패널과 접힌 원의 두 채널이다
+    // (Paper 캡션: 「알림 전용(셸 표시)에서는 세 조각까지 — 문장 1 · 대표 카드 1 · 더보기」,
+    // 「접힘 원에는 얼굴 말고 채널이 둘 더 있다」). 표정 10종 자체는 글자가 아니라
+    // orb.css의 [data-face] 규칙이라 문구로도 구조로도 잴 자리가 없다 — 적지 않는다.
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:routines-list', data: WATCH_THREE_ACTIVE },
+      // 셸이 떠 있는 동안의 표시 모드(B) — 입력줄 없는 알림 전용이다. 재읽기 뒤에는
+      // main이 이 이벤트를 다시 보내지 않으므로 라우트가 직접 쏜다.
+      { do: 'send', channel: 'athena:shell-visibility', data: { hidden: false, displayMode: 'B' } },
+      // 발화 하나가 궤도 링을 다시 세고(refreshSatelliteRing) 미확인으로 쌓인다.
+      { do: 'send', channel: 'athena:routine-event', data: ROUTINE_FIRED },
+      { do: 'wait', ms: 300 },
+      // 펼치면 쌓인 첫 건이 패널로 그려진다 — 창 크기는 main이 정하므로 렌더러에는
+      // 이 이벤트가 곧 펼침이다(orb.js athena:orb-state).
+      { do: 'send', channel: 'athena:orb-state', data: { expanded: true } },
+      { do: 'settle' },
+    ],
+    root: '#orbRoot',
+    // 「더보기」는 안 적는다 — 앱의 그 버튼은 「셸로 가기」다(orb.html #orbMore,
+    // 보드 04⑦이 적은 쪽과 같다). 배지 「15:30 발화」와 「2분 전」도 안 적는다:
+    // 앞은 이 컴퓨터의 시간대가, 뒤는 지금 시각이 정하는 값이다.
+    phrases: [
+      '주기 확인',
+      '종목',
+      "루틴 '삼성전자 88,000' · 에이전트 발화 — 묻지 않은 턴입니다",
+    ],
+    structure: [
+      // 궤도 위성 = 활성 감시 건수(Paper: 3건).
+      { what: 'count', selector: '.orb-ring-dot', equals: 3 },
+      // 세 조각 중 둘 — 대표 카드 하나와 진행 문 하나.
+      { what: 'count', selector: '#orbCard', equals: 1 },
+      { what: 'count', selector: '#orbMore', equals: 1 },
+    ],
+  },
+  {
+    board: '4TY-0', // 04 · 키우미 — 대화·콘텐츠 전개
+    window: 'orb',
+    // 여덟 칸 중 ①(펼침 · 빈 대화)이 자극 없이 서는 유일한 칸이다 — 나머지 일곱은
+    // 질의가 실제로 돌아야 생기는 턴이라 도달 어휘 밖이다(카드는 질의 중에만 붙는
+    // athena:orb-canvas-result 구독이 만든다). 그 한 칸이 이 보드의 전제를 다 진다:
+    // 「셸이 숨겨졌을 때만 입력줄이 존재한다」.
+    reach: [
+      { do: 'send', channel: 'athena:shell-visibility', data: { hidden: true, displayMode: 'A' } },
+      { do: 'send', channel: 'athena:orb-state', data: { expanded: true } },
+      { do: 'settle' },
+    ],
+    root: '#orbPanel',
+    phrases: [
+      '메인 대화',
+      '셸을 내려두셨네요. 여기서 바로 물어보셔도 됩니다.',
+      '긴 표와 차트는 줄여서 보여드리고, 전체는 대화창에서 이어집니다.',
+      '대화창으로 가기',
+    ],
+    structure: [
+      { what: 'count', selector: '#orbInputStack', equals: 1 },
+      { what: 'count', selector: '.orb-control-strip', equals: 1 },
+      // 알림 전용 발(「셸로 가기」)은 대화 모드에서 통째로 사라진다 —
+      // Paper ①이 그 자리에 그린 것은 입력줄과 스트립뿐이다.
+      { what: 'absent', selector: '#orbFoot' },
+    ],
+  },
+  {
+    board: 'CLE-0', // 06 · 키우미 메뉴 — 두 진입점과 항목
+    window: 'shell',
+    reach: [
+      { do: 'click', selector: '#dot' },
+      { do: 'settle' },
+    ],
+    root: '#kiumiMenu',
+    // 「플러그인 UI 초안」은 안 적는다 — Paper가 그 구역 머리에 적은 말은 초안 표시라
+    // 제품 문구가 못 된다(3원칙 · 내부용어). 그 구역의 두 줄(DART 전자공시 ·
+    // Google Sheets 내보내기)도 설치된 플러그인이 주는 값이라 문구가 아니다.
+    phrases: [
+      '추가',
+      '파일 첨부',
+      '폴더 경로를 칩으로 쌓는다',
+      '계속 추구할 목표를 설정',
+      '실행 전에 계획을 정리',
+      '설정',
+      '설치 · 기능 허용 · 마켓플레이스',
+    ],
+    // Paper가 그린 구역은 셋이다(추가 · 플러그인 · 설정). 항목 총수는 안 적는다 —
+    // 가운데 구역은 설치된 플러그인 수만큼 늘고 줄어든다.
+    structure: [{ what: 'count', selector: '.km-section', equals: 3 }],
+  },
+  {
+    board: 'C8G-0', // 07 · 키우미 메뉴 — 셸 오버레이
+    window: 'shell',
+    // 06과 같은 메뉴를 셸 전체 위에 얹은 보드다 — 재는 자리가 메뉴 안이 아니라
+    // 셸이라는 것이 이 보드의 전부다(「현재 대화 위에 열린다」).
+    reach: [
+      { do: 'click', selector: '#dot' },
+      { do: 'settle' },
+    ],
+    root: '#shell',
+    // 사이드바 첫 행은 Paper가 「새 채팅」, 앱이 「새 대화」로 갈려 안 적는다
+    // (보드 06·12·29와 같은 자리다). 캔버스에 쌓인 카드·대화 턴은 전부 값이다.
+    phrases: [
+      '그래프',
+      '에이전트',
+      '플러그인',
+      '추가',
+      '파일 첨부',
+      '설정',
+      '모델 · 사고 강도',
+    ],
+    structure: [
+      { what: 'count', selector: '.shell-region', equals: 3 },
+      { what: 'count', selector: '.km-section', equals: 3 },
     ],
   },
 ]);
