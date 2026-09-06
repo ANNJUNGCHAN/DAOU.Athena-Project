@@ -5757,11 +5757,10 @@ function createBacktestCanvas(options) {
       if (dep.auto_armed) row.appendChild(el('span', 'backtest-deploy-auto', '자동'));
       // 「유효기간이 지났다」도 서버가 준 한 값(expired)으로만 읽는다 — status가 active여도
       // 그런 배포는 신호마다 막힌다(deploy.py blocked_reason='expired'). active만 그리면
-      // 화면이 켜져 있다고 거짓말한다.
-      row.appendChild(el(
-        'span', `backtest-deploy-status${dep.expired ? ' is-expired' : ''}`,
-        dep.expired ? '만료' : dep.status,
-      ));
+      // 화면이 켜져 있다고 거짓말한다. 다만 status를 덮어쓰지는 않는다 — 사람이 [배포 중지]로
+      // 멈춘 stopped까지 '만료'로 읽히면 멈춘 것이 사람이었다는 사실이 사라진다.
+      if (dep.expired) row.appendChild(el('span', 'backtest-deploy-expired', '만료'));
+      row.appendChild(el('span', 'backtest-deploy-status', dep.status));
       row.appendChild(button('backtest-deploy-stop', '배포 중지', async () => {
         if (!deps.stopDeployment) return;
         try { await deps.stopDeployment(dep.id); await loadDeployments(); }
