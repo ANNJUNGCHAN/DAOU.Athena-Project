@@ -90,13 +90,14 @@ function completeOnboardingIfCurrent(result, revisionGuard, viewRevision, finish
 // 온보딩 중에는 receipt를 화면에 그릴 수 없다. 조용히 버리면 main의 3초 waiter가
 // timeout되므로 즉시 fail ACK한다. 원 요청은 reject되어 호출자가 온보딩 완료 뒤
 // 다시 요청할 수 있고, receipt 본문은 큐에 보관하지 않아 오래된 내용·비밀이 후속
-// 대화에 나타나지 않는다. 외부로 내보내는 사유는 이 안정된 공개 코드 하나뿐이다.
-function ackRestReceiptBlockedByOnboarding(onboard, send, receiptId) {
+// 대화에 나타나지 않는다. 외부로 내보내는 사유는 호출자가 준 안정된 공개 코드
+// 하나뿐이다 — 같은 오버레이를 쓰는 계좌 전환 화면은 자기 사유를 넘긴다.
+function ackRestReceiptBlockedByOnboarding(onboard, send, receiptId, reason) {
   if (!onboard || onboard.hidden || typeof send !== 'function') return false;
   send('athena:rest-receipt-painted', {
     receipt_id: receiptId,
     verified_visible: false,
-    error: 'onboarding_active',
+    error: reason || 'onboarding_active',
   });
   return true;
 }

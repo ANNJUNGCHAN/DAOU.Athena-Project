@@ -54,12 +54,16 @@ function buildHead(root, { kicker, title, sub }) {
 //   onBack     — embedded일 때만 사용. 저장된 계좌를 지우지 않고 계좌 단계로 돌아간다.
 //   initialView — 'switch'면 상태 화면을 거치지 않고 계좌 전환 화면(Paper 1M3-0)으로
 //                바로 들어간다. 사이드바 계정 메뉴의 「계좌 전환」이 쓰는 진입로다.
+//   onClose    — embedded가 아닐 때만 사용. 이 화면을 띄운 오버레이를 닫는다.
+//                온보딩과 달리 [이전]·[계속]이 없어, 이것이 없으면 사람이 화면에
+//                갇힌다(Esc 말고는 나갈 길이 없다).
 function renderAuthTokenStatus(root, opts) {
   const o = opts || {};
   let accountId = o.accountId;
   const embedded = !!o.embedded;
   const onContinue = o.onContinue;
   const onBack = o.onBack;
+  const onClose = !embedded ? o.onClose : null;
 
   const wrap = buildHead(root, {
     kicker: embedded ? '3 / 3' : null,
@@ -160,6 +164,9 @@ function renderAuthTokenStatus(root, opts) {
 
     const btnGroup = el('div', 'auth-btn-group');
     if (embedded) btnGroup.appendChild(button('text', '이전', { onClick: goBack }));
+    // 온보딩 밖에서는 [이전]도 [계속]도 없다 — 나가는 문을 여기 세우지 않으면
+    // 전환을 취소하거나 마친 사람이 이 상태 화면에 갇힌다(Esc는 보이지 않는다).
+    else if (onClose) btnGroup.appendChild(button('text', '닫기', { onClick: onClose }));
     if (currentState === 'ready' || currentState === 'refreshing') {
       btnGroup.appendChild(button('text', revoking ? '해제 중…' : '연결 해제', {
         disabled: currentState === 'refreshing' || revoking,
@@ -360,6 +367,9 @@ function renderAuthTokenStatus(root, opts) {
   }
 
   function closeSwitch() {
+    // 온보딩 밖에서 「취소」는 "전환을 그만둔다"이지 "상태 화면으로 들어간다"가
+    // 아니다 — 온 곳(사이드바 계정 메뉴)으로 돌려보낸다.
+    if (onClose) { onClose(); return; }
     view = 'status';
     paint();
   }

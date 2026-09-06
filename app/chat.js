@@ -183,6 +183,9 @@ window.athena.on('athena:add-rest-receipt', async (payload = {}) => {
     $onboard,
     (channel, ack) => window.athena.send(channel, ack),
     payload.receiptId,
+    // 같은 오버레이(#onboard)를 계좌 전환 화면도 빌려 쓴다 — 막는 이유를
+    // 온보딩이라고 잘못 보고하지 않는다(둘 다 fail-closed인 것은 같다).
+    accountSwitchOpen ? 'account_switch_active' : 'onboarding_active',
   )) return;
   if (!prepareRestReceiptSurface()) return;
   const line = document.createElement('div');
@@ -693,7 +696,7 @@ function finishOnboarding() {
 
 // ---------- 계좌 전환 화면 (Paper 보드 16 계정 메뉴 → 1M3-0) ----------
 // 온보딩 3/3과 같은 인증 화면이지만 embedded가 아니다: 「이전」·「계속」 없이
-// 계좌 목록으로 바로 들어가고 Esc로 닫는다. 온보딩 오버레이(#onboard)를 그대로
+// 계좌 목록으로 바로 들어가고, 「취소」·「닫기」 또는 Esc로 닫는다(onClose). 온보딩 오버레이(#onboard)를 그대로
 // 쓴다 — 같은 .onb-* 재질이고, 둘이 동시에 열릴 수 있는 경로가 없다(온보딩 중에는
 // 셸이 차단돼 사이드바 계정 메뉴에 닿지 못한다).
 let accountSwitchOpen = false;
@@ -706,6 +709,7 @@ function openAccountSwitchScreen(accountId) {
     accountId,
     embedded: false,
     initialView: 'switch',
+    onClose: closeAccountSwitchScreen,
   });
   focusOnboardingContent();
 }
