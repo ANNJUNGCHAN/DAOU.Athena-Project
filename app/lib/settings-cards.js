@@ -1290,10 +1290,9 @@ function renderHistory(grid) {
 }
 
 
-// 그래프 수집·노출 설정 (Paper 보드 22 복원) — 무엇을 읽고 누구에게 보일지.
-// 성향 그래프를 어떻게 "보는가"(군집 지도 뷰·강조·이름표 임계값)는 보드 22가
-// 캔버스로 보내는 취지라 이 카드에는 없다 — 여기는 수집원 3종과 모델 노출
-// on/off만 다룬다.
+// 그래프 수집·노출 값(Paper 보드 22) — 무엇을 읽고 누구에게 보일지. 토글 화면은
+// 그래프 모드 「수집·노출」 탭(lib/graph-mode/collection-settings.js)이 소유하고,
+// 여기 남은 것은 그 탭과 설정 nav 배지가 함께 읽는 저장소 계약이다.
 //
 // 저장은 그래프 모드 설정(graph-mode-prefs.js)과 같은 이유로 localStorage다:
 // 백엔드 실제 수집 주기는 아직 이 값을 읽지 않는 화면 쪽 토글 상태일 뿐이라
@@ -1360,17 +1359,6 @@ function writeGraphSettings(patch, storage) {
     window.athena.invoke('athena:settings:expose-to-model:set', { enabled: next.exposeToModel }).catch(() => {});
   }
   return next;
-}
-
-function collectChatPreferenceErrorMessage(error) {
-  const message = String((error && error.message) || error || '');
-  if (/켜지 못했습니다/.test(message)) {
-    return '대화 이력 수집을 켜지 못했습니다. 개인정보 보호를 위해 OFF로 유지됩니다.';
-  }
-  if (/남은 원문을 삭제하지 못했습니다/.test(message)) {
-    return '대화 이력 수집은 OFF지만 남아 있던 원문을 삭제하지 못했습니다. 저장소 상태를 확인해 주세요.';
-  }
-  return '대화 이력 수집 설정을 변경하지 못했습니다. 개인정보 보호를 위해 OFF로 유지됩니다.';
 }
 
 async function setCollectChatPreference(enabled, storage) {
@@ -1483,7 +1471,7 @@ function refreshHistoryCard(card, head, body) {
     if (learned) {
       for (const [label, value] of model.profileRows) profileSection.appendChild(historyRow(label, value));
     } else {
-      profileSection.appendChild(emptyState('아직 학습된 성향이 없습니다', '대화가 쌓이면 여기에 보인다'));
+      profileSection.appendChild(emptyState('아직 학습된 성향이 없습니다', '대화가 쌓이면 여기에 보입니다'));
     }
     sections.appendChild(profileSection);
 
@@ -1510,7 +1498,7 @@ function refreshHistoryCard(card, head, body) {
     label.textContent = '이력 내보내기';
     exportBtn.disabled = false;
     if (!res || !res.ok) {
-      resultBox.appendChild(errorNote((res && res.error) || '내보내기에 실패했다'));
+      resultBox.appendChild(errorNote((res && res.error) || '내보내기에 실패했습니다'));
       return;
     }
     if (res.canceled) return;
@@ -1522,7 +1510,7 @@ function refreshHistoryCard(card, head, body) {
   function onDeleteClick() {
     clear(resultBox);
     const { bar, cancelBtn, confirmBtn } = deleteConfirmBar(
-      '채팅 이력과 투자 성향을 전부 삭제할까요? 되돌릴 수 없다.',
+      '채팅 이력과 투자 성향을 전부 삭제할까요? 되돌릴 수 없습니다.',
     );
     resultBox.appendChild(bar);
     deleteBtn.disabled = true;
@@ -1544,21 +1532,22 @@ function refreshHistoryCard(card, head, body) {
       }
       clear(resultBox);
       if (threw || !(res && res.ok)) {
-        resultBox.appendChild(errorNote((res && res.error) || '삭제에 실패했다'));
+        resultBox.appendChild(errorNote((res && res.error) || '삭제에 실패했습니다'));
         deleteBtn.disabled = false;
         return;
       }
       const note = el('div', 'uk-settings-note');
       if (res.selfSpawned) {
         note.appendChild(el('div', null, res.restarted
-          ? '삭제 완료 — 브레인 재기동 중이거나 이미 재기동됐다.'
-          : '삭제 완료 — 브레인 재기동 확인에 실패했다. 수동으로 재시작해야 할 수 있다.'));
+          ? '삭제 완료 — 브레인이 재기동 중이거나 이미 재기동됐습니다.'
+          : '삭제 완료 — 브레인 재기동 확인에 실패했습니다. 직접 재시작해야 할 수 있습니다.'));
       } else {
-        note.appendChild(el('div', null, '삭제 완료 — 이 앱이 스폰한 백엔드가 아니라 자동으로 재기동하지 않는다. 백엔드를 수동으로 재시작한다.'));
+        note.appendChild(el('div', null, '삭제 완료 — 이 앱이 띄운 백엔드가 아니라 자동으로 재기동하지 않습니다. 백엔드를 직접 재시작하세요.'));
       }
       resultBox.appendChild(note);
-      // 삭제 직후엔 다시 누를 대상이 없다 — 재확인은 카드를 닫았다 다시 여는
-      // 것으로 한다(refreshHistoryCard가 토글 상태를 다시 그린다).
+      // 브레인을 비웠으니 카드가 보여 주던 성향·보관 건수는 이미 옛 값이다 —
+      // 다시 읽어야 화면이 방금 지운 것을 계속 말하지 않는다.
+      fillHistorySections();
     });
   }
 }
@@ -1569,7 +1558,7 @@ const __exports = {
   accountSubline, formatAddedAt,
   buildHistoryCardModel,
   normalizeGraphSettings, readGraphSettings, writeGraphSettings, setCollectChatPreference,
-  collectChatPreferenceErrorMessage, GRAPH_SETTINGS_DEFAULTS,
+  GRAPH_SETTINGS_DEFAULTS,
   HOLDINGS_INTERVAL_MINUTES,
 };
 if (typeof module !== 'undefined' && module.exports) {

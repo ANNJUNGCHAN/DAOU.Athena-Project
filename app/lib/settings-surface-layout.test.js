@@ -93,6 +93,14 @@ test('설정 4번째 카드는 Paper 32 성향·이력이다 — 수집 토글�
   assert.doesNotMatch(settingsCss, /\.uk-holdings-controls\b/);
 });
 
+// 전체 삭제는 브레인을 통째로 비운다 — 카드가 보여 주던 성향·보관 건수는 그
+// 순간 옛 값이 된다. 다시 읽지 않으면 같은 카드가 위에서는 지운 값을, 아래에서는
+// 「삭제 완료」를 말한다.
+test('전체 삭제 성공 뒤에는 카드가 성향·이력 구역을 다시 읽는다', () => {
+  const deleteHandler = settingsSource.slice(settingsSource.indexOf('function onDeleteClick('));
+  assert.match(deleteHandler, /resultBox\.appendChild\(note\);[\s\S]{0,240}?fillHistorySections\(\);/);
+});
+
 test('성향·이력 카드는 보드의 목업 수치를 하드코딩하지 않는다', () => {
   for (const mock of ['장기 ETF 적립형', '대화 128건', '42MB', '90일', '안정 추구', '지수 ETF · 반도체']) {
     assert.doesNotMatch(settingsSource, new RegExp(mock));
