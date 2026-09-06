@@ -3495,7 +3495,7 @@ app.whenReady().then(async () => {
   report.orderTicket = await shellWin.webContents.executeJavaScript(`(() => {
     const vis = (id) => { const n = document.getElementById(id); return !!n && !n.hidden; };
     const execBtn = Array.from(document.querySelectorAll('#orderBody button'))
-      .find((x) => x.textContent.includes('주문 실행'));
+      .find((x) => x.textContent.includes('구매하기'));
     return {
       orderVisible: vis('order'),
       appHidden: !vis('app'),
@@ -4079,7 +4079,7 @@ app.whenReady().then(async () => {
       // 실행 어포던스가 카드에 딸려오면 안 된다.
       execButtons: [...document.querySelectorAll('#grid .card.facts button')]
         .map((b) => b.textContent.trim())
-        .filter((t) => /실행|매수|매도|주문/.test(t)).length,
+        .filter((t) => /실행|매수|매도|구매|판매|주문/.test(t)).length,
     };
   })()`);
   report.orbMoreToShell = {

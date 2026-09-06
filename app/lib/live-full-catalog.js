@@ -68,6 +68,9 @@ const VERIFY_SUITE = Object.freeze([
   { script: 'verify:kiumi-cards', budgetMs: 90000 },
   { script: 'verify:chat-v3', budgetMs: 90000 },
   { script: 'verify:agent-paper-parity', budgetMs: 90000 },
+  // 미니 주문 티켓 21단언(게이트 차단·실패·IN_DOUBT까지) — 실주문은 스텁으로 막혀 있다.
+  // 스위트에 없던 동안 셸 티켓 문면 이관이 단언 하나를 깨뜨렸는데 아무 게이트도 울지 않았다.
+  { script: 'verify:orb-order-ticket', budgetMs: 120000 },
   { script: 'verify:hoga-live', budgetMs: 90000 },
   { script: 'verify:integrated-cards', budgetMs: 180000 },
   { script: 'verify:semantic-workspaces', budgetMs: 90000 },
