@@ -4978,11 +4978,16 @@ test('세션 복원: 결과를 못 읽으면 이름을 대는 안내가 서고 [
   made.canvas.onChatAction({ kind: 'navigate', tab: 'result' });
   await flush();
   assert.match(textOf(made.container), /스크롤 위치 저장됨/);
+  // 표식은 폼 카드·코드 카드의 머리에 붙는 것이라(Paper 3WJS-1 · 3WKB-1) 그 카드가 없는
+  // 결과 탭에는 설 자리가 없다. 안내는 세션 전체를 두고 하는 말이라 여기서도 선다.
+  assert.equal(findByClass(made.container, 'backtest-restore-mark').length, 0);
   assert.equal(findByClass(made.container, 'backtest-restore-open').length, 1);
   await click(findByClass(made.container, 'backtest-restore-open')[0]);
   await flush();
   assert.equal(findByClass(made.container, 'backtest-restore-notice').length, 0);
   // 표식은 안내를 접어도 남는다 — 배너가 아니라 카드의 상태이기 때문이다.
+  made.canvas.onChatAction({ kind: 'navigate', tab: 'design' });
+  await flush();
   assert.equal(findByClass(made.container, 'backtest-restore-code').length, 1);
 }));
 
@@ -5052,10 +5057,14 @@ test('세션 복원: 갈아타기 직전 flush()가 예약된 보고를 지금 �
   const handler = registered[0][1];
   await handler.restore(RESTORE_WORKSPACE);
   await flush();
+  // 사람이 굴린 자리는 아직 예약 안에만 있다 — 갈아타면 그대로 사라지거나 남의 기록에 적힌다.
+  const body = findByClass(made.container, 'backtest-body')[0];
+  body.scrollTop = 40;
+  await body.dispatchEvent({ type: 'scroll' });
   const before = reports.length;
   handler.flush();
   assert.equal(reports.length, before + 1);
-  assert.deepEqual(reports[reports.length - 1].scroll, { top: 120 });
+  assert.deepEqual(reports[reports.length - 1].scroll, { top: 40 });
   // 흘린 뒤에는 예약이 남지 않는다 — 전환 뒤에 한 번 더 터지면 남의 기록에 적힌다.
   handler.flush();
   assert.equal(reports.length, before + 1);
@@ -5165,6 +5174,30 @@ test('세션 복원: 다른 세션으로 갈아타면 복원 표식·안내를 �
   assert.equal(findByClass(made.container, 'backtest-restore-count').length, 0);
   assert.equal(findByClass(made.container, 'backtest-restore-code').length, 0);
   assert.equal(findByClass(made.container, 'backtest-restore-notice').length, 0);
+}));
+
+test('세션 복원: 바뀐 것이 없으면 같은 봉투를 다시 보고하지 않는다', async () => withWorkspaceGlobal(async ({ registered, reports }) => {
+  const made = makeCanvas({
+    result: async () => ({ status: 'done', metrics: {}, stdout: '' }),
+    trades: async () => [],
+  });
+  made.canvas.mount();
+  await flush();
+  await registered[0][1].restore(RESTORE_WORKSPACE);
+  await flush();
+  await runPending(made);
+  const before = reports.length;
+  // 탭이 움직인 것은 한 번만 나간다 — 즉시 보고와 render()의 예약이 같은 봉투다.
+  made.canvas.onChatAction({ kind: 'navigate', tab: 'result' });
+  await flush();
+  await runPending(made);
+  assert.equal(reports.length, before + 1);
+  // 화면이 다시 그려져도 봉투가 그대로면 아무것도 나가지 않는다 — 실행 폴링·진행률
+  // 갱신이 전부 render()를 지나가므로, 여기서 거르지 않으면 세션 파일을 초당 다시 쓴다.
+  made.canvas.onChatAction({ kind: 'navigate', tab: 'result' });
+  await flush();
+  await runPending(made);
+  assert.equal(reports.length, before + 1);
 }));
 
 test('세션 복원: 새 기법을 고르면 복원 표식이 사라진다 — 지금 폼은 되살린 것이 아니다', async () => withWorkspaceGlobal(async ({ registered }) => {
