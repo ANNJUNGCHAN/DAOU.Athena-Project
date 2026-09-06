@@ -80,6 +80,11 @@ app.setPath('userData', PROFILE);
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+// main.js는 app.whenReady 뒤에 실린다(아래 main()). resize 스텝이 창을 옮길 때
+// 「앱이 옮겼다」를 표시하는 noteAppBounds가 필요해 그때 여기에 걸어 둔다 —
+// verify.js의 반응형 검사가 setBounds마다 같은 함수를 부르는 그 관례다.
+let mainMod = null;
+
 // ---------- CLI ----------
 
 /** 인자 오타를 게이트 실패와 안 헷갈리게 exit 2로 가른다(run-verify-suite.js의 선례). */
@@ -219,6 +224,15 @@ async function runStep(win, step) {
       await win.loadURL(url.href);
       return;
     }
+    case 'resize': {
+      // verify.js의 반응형 검사와 같은 자극 — setBounds 뒤에 noteAppBounds로 「앱이
+      // 옮겼다」를 표시한다(안 하면 main.js가 사용자 이동으로 읽어 오브를 따라 옮긴다).
+      const bounds = win.getBounds();
+      win.setBounds({ ...bounds, width: step.width, height: step.height });
+      if (mainMod && typeof mainMod.noteAppBounds === 'function') mainMod.noteAppBounds(win);
+      await settle(win);
+      return;
+    }
     case 'ipc-fixture':
       applyFixture(step.channel, step.data);
       return;
@@ -281,6 +295,9 @@ function measureScript(route) {
 async function probeRoute(wins, route) {
   const win = wins[route.window];
   const fixtured = new Set();
+  // 창 크기는 재읽기로 안 돌아온다 — 남기면 다음 라우트가 접힌 사이드바를 재게 된다
+  // (shell.css 699px 아래는 글자가 통째로 사라진다). fixture와 같은 규율로 되돌린다.
+  const bounds = win && route.reach.some((step) => step.do === 'resize') ? win.getBounds() : null;
   try {
     if (!win) throw new Error(`${route.window} 창이 없다`);
     win.webContents.reload();
@@ -307,6 +324,10 @@ async function probeRoute(wins, route) {
     return measured;
   } finally {
     for (const channel of fixtured) restoreFixture(channel);
+    if (bounds) {
+      win.setBounds(bounds);
+      if (mainMod && typeof mainMod.noteAppBounds === 'function') mainMod.noteAppBounds(win);
+    }
   }
 }
 
@@ -386,7 +407,7 @@ async function main() {
   let wins = { boot: null, shell: null, orb: null };
   if (routed.length) {
     await app.whenReady();
-    const mainMod = require('./main.js');
+    mainMod = require('./main.js');
     await mainMod.createWindows();
     // bootWin은 부팅 단계 보드가 사는 창이다 — 부팅이 끝나야 셸로 넘어가므로
     // (main.js attemptShellHandoff) 부팅이 서 있는 동안에만 살아 있다.
