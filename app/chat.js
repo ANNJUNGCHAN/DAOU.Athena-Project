@@ -2285,8 +2285,13 @@ function restoreConversation(switched, messages, snapshot) {
     scrollHistoryToBottom(true);
   }
   // 모드 화면의 상태(그래프 시점·백테스트 폼 …)는 그 모드가 등록한 핸들러가 받는다 —
-  // 여기서는 kind로 넘길 뿐이다(lib/session-workspace.js).
-  if (ws && window.AthenaSessionWorkspace) window.AthenaSessionWorkspace.restore(ws);
+  // 여기서는 kind로 넘길 뿐이다(lib/session-workspace.js). 넘기기 전에 앞 세션의 것을
+  // 거둔다: 갈아탄 세션이 그 모드가 아니면 restore()는 오지 않으므로, 아무것도 되살린
+  // 적 없는 화면에 앞 세션의 복원 표식이 그대로 남는다.
+  if (window.AthenaSessionWorkspace) {
+    window.AthenaSessionWorkspace.clear();
+    if (ws) window.AthenaSessionWorkspace.restore(ws);
+  }
 }
 
 // sidebar.js가 부르는 다리(shell.js 버스). 돌아갔으면 true.
@@ -2903,8 +2908,12 @@ window.athena.invoke('athena:cli-list').then(applyCliState, () => {});
 // 중단한다. sidebar.js가 새 기록 id를 요청하기 직전에 이 이벤트를 보낸다.
 window.addEventListener('athena:new-conversation', () => {
   // 새 기록 id를 받기 전에 흘린다 — 이력 행 클릭과 같은 이유다(전환 뒤에 터진 보고는
-  // 앞 세션의 작업공간을 새 대화의 기록에 적는다).
-  if (window.AthenaSessionWorkspace) window.AthenaSessionWorkspace.flush();
+  // 앞 세션의 작업공간을 새 대화의 기록에 적는다). 흘린 뒤 앞 세션의 복원 표식을 거둔다:
+  // 새 대화에는 되살릴 봉투가 없으니 restore()가 거둘 기회 자체가 없다.
+  if (window.AthenaSessionWorkspace) {
+    window.AthenaSessionWorkspace.flush();
+    window.AthenaSessionWorkspace.clear();
+  }
   abortToken += 1;
   window.athena.send('athena:abort-live-query');
   window.athena.send('athena:orb-signal', { signal: 'think', active: false });

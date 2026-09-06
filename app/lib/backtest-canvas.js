@@ -5206,7 +5206,11 @@ function createBacktestCanvas(options) {
   function registerWorkspace() {
     const ws = workspaceApi();
     if (!ws || typeof ws.register !== 'function') return;
-    try { ws.register('backtest', { restore: restoreWorkspace, flush: flushWorkspaceReport }); }
+    try {
+      ws.register('backtest', {
+        restore: restoreWorkspace, flush: flushWorkspaceReport, clear: clearWorkspace,
+      });
+    }
     catch { /* 등록 실패는 복원이 없다는 뜻일 뿐, 화면은 그대로 돈다 */ }
   }
 
@@ -5301,6 +5305,13 @@ function createBacktestCanvas(options) {
   // 봉인된 작업공간을 되살리고 항목별로 성공/실패를 센다. 전부 돌아왔으면 아무 말도
   // 하지 않고(Rule 1), 하나라도 빠지면 무엇이 빠졌는지 이름을 대는 안내가 선다(Rule 3).
   async function restoreWorkspace(workspace) {
+    // 앞 세션의 조각은 여기서 끝난다. 새 봉투에 없는 자리를 그대로 두면 다음 보고가
+    // 앞 세션의 run_id·로그를 이 세션 저장본에 적고(main은 얕게 병합해 그대로 쓴다),
+    // 다음에 열 때 없던 실행이 이 세션에서 있었던 일이 된다 — 결과 탭에 남의 지표가
+    // 서고 「복원」 표식까지 붙는다. 앞 세션의 폴링도 같이 끊는다: 그 tick이 돌아오면
+    // 방금 비운 자리를 남의 실행으로 다시 채운다.
+    clearRestoreMarks();
+    stopPolling();
     const saved = workspace || {};
     const form = saved.form || null;
     const code = saved.code || null;
@@ -5337,7 +5348,8 @@ function createBacktestCanvas(options) {
     // 한 프레임 늦게 나타난다. applied는 그 왕복이 같은 객체를 고쳐 쓴다.
     restoreApplied = applied;
 
-    const patch = { view: 'design' };
+    // 결과·체결도 그 세션의 것이다 — 봉투의 run_id로 다시 읽기 전까지는 비어 있어야 한다.
+    const patch = { view: 'design', result: null, runId: null, trades: [] };
     if (MODE_TABS.some(([key]) => key === saved.tab)) patch.tab = saved.tab;
     if (DESIGN_TABS.some(([key]) => key === saved.designTab)) patch.designTab = saved.designTab;
     patch.restore = SessionRestore.restoreReport(saved, applied);
@@ -5367,6 +5379,18 @@ function createBacktestCanvas(options) {
     restoreSealed = null;
     restoreApplied = null;
     restoredLog = '';
+  }
+
+  // 세션을 갈아탔다 — 되살렸던 것은 그 세션의 것이지 이 화면의 것이 아니다. 백테스트가
+  // 아닌 세션으로 갔거나 새 대화를 연 자리에는 restoreWorkspace가 오지 않으므로, 표식과
+  // 안내를 거두는 문이 따로 있어야 한다. 없으면 아무것도 되살린 적 없는 화면에
+  // 「복원 6/6」·「일부만 복원했습니다」가 그대로 선다.
+  function clearWorkspace() {
+    clearRestoreMarks();
+    state = Object.assign({}, state, { restore: null });
+    // 숨어 있으면 다시 그리지 않는다 — 여기서 그리면 render()의 보고 예약이 앞 세션의
+    // 폼·코드를 다음 세션 저장본에 적는다. 다시 들어오는 문(sidebar → refresh)이 그린다.
+    if (isVisible()) render();
   }
 
   // [이대로 열기] — 안내만 접는다. 되살아난 것과 못 되살린 것은 그대로다.

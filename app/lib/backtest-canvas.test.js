@@ -5117,6 +5117,56 @@ test('세션 복원: 아직 도는 실행은 진행 화면으로 다시 붙는�
   assert.equal(findByClass(made.container, 'backtest-restore-notice').length, 0);
 }));
 
+test('세션 복원: 갈아탄 세션의 보고에 앞 세션의 실행·로그가 실리지 않는다', async () => withWorkspaceGlobal(async ({ registered, reports }) => {
+  const made = makeCanvas({
+    result: async () => ({ status: 'done', metrics: { total_return: 0.418 }, stdout: 'A의 표준출력' }),
+    trades: async () => [],
+  });
+  made.canvas.mount();
+  await flush();
+  const handler = registered[0][1];
+  await handler.restore(RESTORE_WORKSPACE);
+  await flush();
+  // 실행한 적 없는 세션으로 갈아탄다 — 봉투에 폼과 코드만 있다.
+  await handler.restore({
+    kind: 'backtest',
+    tab: 'design',
+    designTab: 'form',
+    form: RESTORE_WORKSPACE.form,
+    code: RESTORE_WORKSPACE.code,
+  });
+  await flush();
+  await runPending(made);
+  const last = reports[reports.length - 1];
+  // 앞 세션의 run_id·로그를 실어 보내면 main의 얕은 병합이 이 세션 저장본에 그대로
+  // 적는다 — 다음에 열면 없던 실행이 있었던 일이 되고 「복원」 표식까지 선다.
+  assert.equal(last.run, null);
+  assert.equal(last.log, null);
+  // 화면도 마찬가지다 — 결과 탭에 앞 세션의 지표·출력이 이 세션의 것으로 서지 않는다.
+  made.canvas.onChatAction({ kind: 'navigate', tab: 'result' });
+  await flush();
+  assert.equal(/A의 표준출력/.test(textOf(made.container)), false);
+  assert.equal(/41\.8/.test(textOf(made.container)), false);
+}));
+
+test('세션 복원: 다른 세션으로 갈아타면 복원 표식·안내를 거둔다', async () => withWorkspaceGlobal(async ({ registered }) => {
+  const made = makeCanvas({ result: async () => { throw new Error('없는 실행입니다'); } });
+  made.canvas.mount();
+  await flush();
+  const handler = registered[0][1];
+  await handler.restore(RESTORE_WORKSPACE);
+  await flush();
+  assert.equal(findByClass(made.container, 'backtest-restore-count').length, 1);
+  assert.equal(findByClass(made.container, 'backtest-restore-notice').length, 1);
+  // 대화 세션이나 새 대화로 갈아탄 자리 — restore()는 오지 않으므로 clear()가 거둔다.
+  // 없으면 아무것도 되살린 적 없는 화면에 「복원 6/6」·「일부만 복원했습니다」가 남는다.
+  handler.clear();
+  await flush();
+  assert.equal(findByClass(made.container, 'backtest-restore-count').length, 0);
+  assert.equal(findByClass(made.container, 'backtest-restore-code').length, 0);
+  assert.equal(findByClass(made.container, 'backtest-restore-notice').length, 0);
+}));
+
 test('세션 복원: 새 기법을 고르면 복원 표식이 사라진다 — 지금 폼은 되살린 것이 아니다', async () => withWorkspaceGlobal(async ({ registered }) => {
   const made = makeCanvas({ result: async () => { throw new Error('없는 실행입니다'); } });
   made.canvas.mount();
