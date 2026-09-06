@@ -1811,6 +1811,10 @@ function createBacktestCanvas(options) {
     // 환경 잡은 실행과 무관하게 돈다 — 모드를 나갔다 와도 진행 줄이 다시 흐른다.
     const project = projectIde ? projectIde.currentProject() : null;
     if (envTimer == null && state.envJobId && project) pollEnvJob(project.id);
+    // 출처 잡도 같다 — 채팅에 주소를 붙인 뒤 다른 모드로 갔다 오면 진행 줄이 멈춘 채로
+    // 남는다(폴링은 화면이 숨으면 재예약 없이 끝난다). 잡은 백엔드에서 계속 도는 중이라
+    // 다시 물어보면 그 자리에서 이어진다.
+    if (sourceTimer == null && state.sourceJobId && isSourcing()) pollSourceMap();
     if (pollTimer != null) return;
     if (state.view !== 'running') return;
     if (state.jobId && !state.runId) pollJob();
@@ -2102,6 +2106,12 @@ function createBacktestCanvas(options) {
     sourceTimer = null;
   }
 
+  function abandonSourceJob(jobId) {
+    if (!jobId || !deps.sourceMapCancel) return;
+    try { void Promise.resolve(deps.sourceMapCancel({ job_id: jobId })).catch(() => {}); }
+    catch { /* 이미 끝난 잡 */ }
+  }
+
   function applySourceAction(envelope) {
     const url = typeof envelope.url === 'string' ? envelope.url.trim() : '';
     if (!url) return null;
@@ -2117,6 +2127,9 @@ function createBacktestCanvas(options) {
     // mapVersion을 0으로 되돌리는 이유: 이건 **새 전략**이라 앞 전략이 몇 판까지 갔든
     // 머리는 「지도 v0」이어야 한다(잡이 만드는 지도의 version도 0이다).
     sourceReadCardSent = false;
+    // 앞 주소의 잡이 아직 돌고 있으면 화면에서 내리기 전에 멈춘다 — 버려둔 잡은 아무도
+    // 안 보는 채로 바깥 페이지를 계속 받아 온다.
+    abandonSourceJob(state.sourceJobId);
     setState({ view: 'sourcing', source: null, sourceJobId: null, mapVersion: 0 });
     void startSourceMap(url);
     // 채팅에는 카드를 내지 않는다 — 보드 17의 채팅은 사람 말풍선 다음에 「출처 읽음」
@@ -2157,10 +2170,43 @@ function createBacktestCanvas(options) {
       }
       // 멈춘 잡은 오류가 아니다 — 사람이 멈춘 것이라 설계 화면으로 돌려보낸다.
       if (job.status === 'cancelled') { setState({ view: 'design', tab: 'design' }); return; }
-      if (job.status === 'done') return;
+      if (job.status === 'done') { adoptSourceMap(job); return; }
       schedulePollSource(tick);
     };
     tick();
+  }
+
+  // 다 그린 지도는 이제 **이 화면의 전략**이다 — 화면이 적어 둔 「다 그려지면 대화로 고칠
+  // 수 있습니다」가 가리킨 다음 칸이 여기다. 잡이 만든 스펙을 폼으로 옮기고 설계 화면으로
+  // 넘긴다(지도는 그 스펙으로 다시 그린다 — 같은 지도를 만드는 자리를 둘로 두지 않는다).
+  function adoptSourceMap(job) {
+    stopSourcePolling();
+    // 옮길 스펙이 없으면 이 화면은 끝난 잡 위에 「만드는 중」을 세운 채로 굳는다.
+    if (!job.spec_yaml) {
+      setState({
+        view: 'error', message: '출처를 지도로 만들지 못했습니다', sourceJobId: null,
+      });
+      return;
+    }
+    adoptSpecYaml(job.spec_yaml);
+    // 아래 여섯 줄은 selectPreset이 새 전략을 세울 때 하는 것과 같다 — 앞 전략의 코드
+    // 경로를 남기면 새 지도를 남의 파이썬으로 그리고(mapRequest), 앞 실행의 오류가
+    // 새 전략의 칸에 붙는다(runErrorForMap).
+    runPath = 'form';
+    codeSource = '';
+    userStrategyId = null;
+    if (projectIde && typeof projectIde.closeAll === 'function') projectIde.closeAll();
+    ideOwnsCode = false;
+    techniqueDraft = false;
+    resetTechnique();
+    lastError = null;
+    clearRestoreMarks();
+    setState({
+      view: 'design', tab: 'design', designTab: 'flow',
+      source: null, sourceJobId: null, mapVersion: 1,
+      formErrors: [], codeErrors: [], codeFromMap: false, codeSpan: null, diagnosis: null,
+    });
+    void loadMap();
   }
 
   // 이 카드만 `guard` 한 칸을 더 든다(기본 봉투에는 없다) — 남이 쓴 글을 화면에 옮긴
@@ -2251,13 +2297,10 @@ function createBacktestCanvas(options) {
         onSelect: null,
         subText: SOURCE_MAP_SUB,
         mineBoundary: SOURCE_MINE_BOUNDARY,
-        drawer: {
-          fileLabel: null,
-          // 코드 단계가 끝나기 전에는 서랍에 열 것이 없다 — 「생성됨」이라 적으면
-          // 아직 없는 파일이 있는 것처럼 읽힌다.
-          pendingText: job.code_lines == null ? SOURCE_CODE_PENDING : null,
-          matchesMap: true,
-        },
+        // 만드는 중에는 서랍에 열 것이 없다 — 코드는 다 그린 지도와 함께 전략으로
+        // 넘어온다(adoptSourceMap). 잡이 ④를 끝낸 뒤라고 여기에 [코드 열기]를 세우면
+        // 이 화면에는 그 코드를 여는 자리가 없어 눌러도 아무 일도 안 하는 버튼이 된다.
+        drawer: { pendingText: SOURCE_CODE_PENDING },
       });
     } else {
       map.appendChild(el('div', 'backtest-card-empty', '아직 그린 칸이 없습니다'));

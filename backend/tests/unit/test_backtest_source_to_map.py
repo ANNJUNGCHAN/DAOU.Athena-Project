@@ -17,6 +17,7 @@ import asyncio
 from typing import Any
 
 import pytest
+import yaml
 
 from athena_api.backtest import source_to_map as sm
 
@@ -207,6 +208,22 @@ def test_the_finished_map_carries_every_cell() -> None:
     assert payload["map_filled"] == payload["map_total"] == 4
     assert all(node["title"] for node in payload["map"]["nodes"])
     assert payload["map"]["nodes"][0]["numeral"] == "①"
+
+
+def test_a_finished_job_hands_the_form_the_spec_it_drew() -> None:
+    """다 그린 지도는 화면이 가져간다 — 폼이 읽을 원문이 그 프레임에 실려 있어야 한다."""
+    job = _job()
+    doc = yaml.safe_load(job.to_dict()["spec_yaml"])
+
+    assert doc["metadata"]["name"] == "20일 신고가 돌파"
+    assert [c["indicator"] for c in doc["strategy"]["entry"]["conditions"]] == [
+        c.indicator for c in job.spec.strategy.entry.conditions
+    ]
+
+    # 도는 중에는 싣지 않는다 — 반쪽 스펙을 폼으로 옮기면 만드는 중인 것이 다 만든
+    # 전략처럼 열린다.
+    job.status = "running"
+    assert job.to_dict()["spec_yaml"] is None
 
 
 def test_a_wiring_problem_is_named_on_the_cell_it_belongs_to() -> None:
