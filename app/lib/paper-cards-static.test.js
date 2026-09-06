@@ -16,6 +16,7 @@ const fs = require('node:fs');
 const os = require('node:os');
 
 const TEMPLATES_DIR = path.join(__dirname, '..', '..', 'backend', 'ref', 'card-surface-templates');
+const LEDGER_DIR = path.join(__dirname, '..', '..', 'backend', 'ref', 'paper-ledger');
 
 /** 템플릿 한 장만 임시 디렉터리로 베껴 slots.json을 어긋내고, 그 한 장짜리 색인을 함께 낸다. */
 function copyTemplateWithDrift(boardId, mutate) {
@@ -34,7 +35,7 @@ function copyTemplateWithDrift(boardId, mutate) {
     ...index,
     boards: index.boards.filter((board) => board.board_id === boardId),
   }));
-  return { templatesDir: dir, cardIndexPath };
+  return { templatesDir: dir, cardIndexPath, cleanup: () => fs.rmSync(dir, { recursive: true, force: true }) };
 }
 
 // ---------- 트리 정규형: 두 추출기의 표기 차이를 접고 내용 차이만 남긴다 ----------
@@ -155,9 +156,38 @@ test('narrowMultisetToCardRoot is the identity when every text sits under the ca
 });
 
 test('the card root narrowing changes exactly one board of the 96', async () => {
-  const { checkPaperCardsStatic } = await load();
+  const { parseTreeRecords, narrowMultisetToCardRoot, checkPaperCardsStatic } = await load();
+  const manifest = JSON.parse(fs.readFileSync(path.join(LEDGER_DIR, 'manifest.json'), 'utf8'));
+  const pageOf = new Map(manifest.boards.map((board) => [board.id, String(board.page)]));
+  const index = JSON.parse(fs.readFileSync(path.join(TEMPLATES_DIR, 'index.json'), 'utf8'));
+
+  // 좁힌 다중집합과 안 좁힌 원장 다중집합을 보드마다 직접 대서 달라지는 보드를 센다 —
+  // 전수 초록만 보면 나중에 다른 보드가 카드 루트 밖 텍스트를 갖게 돼도 초록으로 남는다.
+  const narrowedBoards = [];
+  const unrooted = [];
+  for (const entry of index.boards) {
+    const boardId = entry.board_id;
+    const page = pageOf.get(boardId);
+    const ledger = JSON.parse(fs.readFileSync(path.join(LEDGER_DIR, page, `${boardId}.json`), 'utf8'));
+    const records = parseTreeRecords(fs.readFileSync(path.join(LEDGER_DIR, page, `${boardId}.tree.txt`), 'utf8'));
+    const regions = JSON.parse(fs.readFileSync(path.join(TEMPLATES_DIR, boardId, 'regions.json'), 'utf8'));
+    const raw = ledger.text_multiset ?? {};
+    const narrowed = narrowMultisetToCardRoot(raw, records, regions.root);
+    if (!narrowed) {
+      unrooted.push(boardId);
+      continue;
+    }
+    try {
+      assert.deepEqual(narrowed.multiset, raw);
+    } catch {
+      narrowedBoards.push(boardId);
+    }
+  }
+  assert.deepEqual(unrooted, [], '카드 루트가 원장 트리에 없으면 좁히기가 조용히 꺼진다');
+  assert.deepEqual(narrowedBoards, ['1WOB-1']);
+
+  // 그리고 그 한 장에서 좁히기가 덜어내는 것은 카드 루트 밖 검증 주석이다.
   const report = checkPaperCardsStatic({ runPython: false });
-  // 좁히기가 닫는 것은 1WOB-1 하나다 — 다른 보드는 카드 루트 밖에 텍스트가 없어 항등이다.
   assert.deepEqual(report.static.S2_text_multiset.failed_boards, []);
   assert.equal(report.boards.find((board) => board.board_id === '1WOB-1').status, 'pass');
 });
@@ -197,7 +227,7 @@ test('the state link closure over the 96 index stays shut', async () => {
   const { checkPaperCardsStatic } = await load();
   const { static: checks } = checkPaperCardsStatic({ runPython: false });
   assert.deepEqual(checks.S3_state_links.unresolved, []);
-  assert.equal(checks.S3_state_links.targets, 82);
+  assert.equal(checks.S3_state_links.targets, 83);
 });
 
 test('a drifting board reports which slot and which ledger node the text came from', async () => {
@@ -219,6 +249,7 @@ test('a drifting board reports which slot and which ledger node the text came fr
   assert.ok(sample.where, '어긋난 텍스트마다 출처가 붙어야 한다');
   assert.ok(Array.isArray(sample.where.slots) && Array.isArray(sample.where.ledger_nodes));
   assert.ok(sample.where.slots.length + sample.where.ledger_nodes.length > 0, sample.text);
+  drifted.cleanup();
 });
 
 // ---------- CLI ----------
