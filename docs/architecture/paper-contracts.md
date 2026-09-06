@@ -99,7 +99,7 @@ TR이어도 한 카드로 모인다.
 (`app/lib/integrated-card-surface.js:234` `workflowStateLabel`의 `entry`·`draft`·`review`·
 `confirmation`·`confirmed`·`submitted`·`accepted`·`filled`·`rejected`·`cancelled`).
 주문 계열 12개 op가 전부 앱 주문 티켓 렌더러로 가는 것도 한 목록이 정한다
-(`app/lib/paper-card-routing.js:84` `APP_PRIMARY_ORDER_OPS` — kt10000~kt10009·kt50000~kt50003).
+(`app/lib/paper-card-routing.js:82` `APP_PRIMARY_ORDER_OPS` — kt10000~kt10009·kt50000~kt50003).
 다만 Paper가 그린 단계 이름(「작성 완료 · 검토 중 · 최종 확인」)과 앱 라벨(「주문 초안 ·
 확인 대기 · 최종 확인」)이 앞 두 개에서 다르다.
 
@@ -134,12 +134,24 @@ TR이어도 한 카드로 모인다.
 
 > 조건 선택·일반 검색·이어보기·실시간 등록·중지·해제를 한 카드에서 관리합니다.
 
-**부분 구현.** CC-06(explorer) 카드가 한 인스턴스로 존재하고
-(`app/lib/integrated-card-surface.js:9`), 조건 결과·조건 상태가 섹션 어휘로 잡혀 있다
-(`app/lib/semantic-workspace.js:29` `matching-instruments`, `:30` `condition-status`).
-「이어보기」 문구는 CC-06 보드 템플릿이 Paper 원문 그대로 나른다
-(`app/lib/board-templates.CC-06.generated.js`). 하지만 **조건검색 TR(ka10171·ka10172·ka10173)을
-다루는 앱 코드는 없다** — 등록·중지·해제를 실제로 거는 경로가 렌더러 쪽에 존재하지 않는다.
+**부분 구현 — 메인 리스·명령 경로는 있고, 그것을 부르는 표면 호출자가 없다.**
+조건검색 TR 넷이 메인 프로세스에 정책으로 박혀 있다
+(`app/lib/main/integrated-card-realtime.js:42` `ka10171`(조건 목록)·`:43` `ka10172`(조건 검색)
+command, `:44`~`:51` `ka10173` lease(해제 TR은 `ka10174`), `:52`~`:58` `ka10174`
+release-command). 등록은 `acquire`가 `CNSRREQ`·`search_type '1'`로 걸고(`:334`), 해제는
+`release`가 `CNSRCLR`(`ka10174`)로 끊으며(`:344`), 재연결은 `reconnect`가 `ka10173`을 다시
+등록한다(`:354`). 「이어보기」는 `command`가 `ka10172`에 `cont_yn`·`next_key`를 실어 보내는
+자리다(`:369`). 이 경로는 죽은 코드가 아니라 `app/main.js:1037`·`:1042`에서 transport·
+`CardLeaseManager`로 살아 있고, `app/main.js:2219`의 `athena:integrated-card-realtime-command`
+핸들러와 `app/preload.js:83`으로 렌더러에 열려 있다.
+
+**없는 것은 표면 호출자다.** 렌더러 전수에서 그 명령 채널을 부르는 코드가 0건이다 — 카드가
+거는 것은 lease mount·unmount뿐이라(`app/canvas.js:1545`), 조건 lease가 봉투에 실려 오면
+등록·해제·재연결은 자동으로 되지만 사용자가 카드에서 조건을 고르거나 일반 검색을 돌리거나
+다음 쪽을 부르는 자리가 없다. 카드 껍데기와 어휘는 있다
+(`app/lib/integrated-card-surface.js:10` CC-06 explorer, `app/lib/semantic-workspace.js:29`
+`matching-instruments`, `:30` `condition-status`). 「이어보기」 문구는 CC-06 보드 템플릿이
+Paper 원문 그대로 나른다(`app/lib/board-templates.CC-06.generated.js`).
 
 > 새로 조건에 들어온 종목은 위에 추가되고, 조건을 벗어난 종목은 이력에 남습니다.
 
@@ -149,17 +161,20 @@ TR이어도 한 카드로 모인다.
 
 > 재연결 중에는 마지막 정상 결과와 기준 시각을 그대로 표시합니다.
 
-**구현 — 어휘는 있고 조건검색 결선은 없다.** 재연결 상태 라벨이 있고
-(`app/lib/integrated-card-surface.js:241` `reconnecting`), 인증 만료·중단이 이미 받은 값을
-지우지 않는다는 계약이 코드로 못 박혀 있다(`:263` `AUTH_EXPIRED_FACTS`, `:288`
-`buildAuthExpiredState`의 `clearValues:false`, `:270` `buildCancelledState`).
-조건검색 결과에 이 계약이 실제로 걸리는 자리는 위 문장과 같은 이유로 아직 없다.
+**부분 구현.** 재연결 자체는 조건검색에 걸려 있다 — `reconnect`가 `ka10173`을 재등록한다
+(`app/lib/main/integrated-card-realtime.js:354`). 표시 쪽 계약도 상태로 못 박혀 있다
+(`app/lib/integrated-card-surface.js:241` `reconnecting`, `:263` `AUTH_EXPIRED_FACTS`, `:283`
+`buildAuthExpiredState`의 `clearValues:false`, `:267` `buildCancelledState`). 다만 이 계약이
+걸릴 조건검색 결과 표면이 위 문장과 같은 이유로 아직 없다.
 
 > 해제하면 새 이벤트 수신만 멈추고 현재 결과와 이력은 남습니다.
 
-**미구현.** 해제(구독 취소) 경로가 조건검색에 없다. 호가 0D 리스를 놓는 자리
-(`app/canvas.js`의 `destroyBoardPrimary`가 `primaryRelease`를 부르는 대목)가 같은 성격의
-유일한 선례다.
+**부분 구현.** 해제 경로 자체는 있다 — `release`가 `ka10174` `CNSRCLR`로 구독만 끊고
+(`app/lib/main/integrated-card-realtime.js:344`), 이미 받은 값을 지우지 않는다는 계약이
+`buildCancelledState`의 `keepResults`에 있다(`app/lib/integrated-card-surface.js:267`).
+없는 것은 사용자가 누르는 해제다 — 지금 해제는 카드 정리에 묶여 있고
+(`app/canvas.js:1402` `athena:integrated-card-realtime-unmount`), 수신만 멈추고 카드는
+남기는 컨트롤이 없다.
 
 ---
 
@@ -174,7 +189,7 @@ TR이어도 한 카드로 모인다.
 - 원장 `texts[]` 163개 중 **마침표로 끝나는 텍스트가 하나도 없다**(실측 0건). 계약 문장
   추출 규칙(`app/lib/paper-screens-report.js:122`)이 요구하는 「12자 이상 · 마침표로 끝남」의
   마침표 조건에서 전부 걸린다.
-- 하드 제외 규칙 E1~E7(`app/scripts/paper-phrases.mjs:129` `excludeReason`)이 문장을 잘못
+- 하드 제외 규칙 E1~E7(`app/scripts/paper-phrases.mjs:127` `excludeReason`)이 문장을 잘못
   걸러낸 것이 **아니다.** 마침표로 끝나는 후보가 애초에 0개라 E1~E7은 한 줄도 보지 않았다.
 - 보드가 실제로 들고 있는 것은 라벨과 표다: 헤더(「차트 전체 항목·행 상세」·
   「주식일봉차트조회 · 공식 응답 항목과 선택 행을 한 화면에서 확인」), 상태 칩(「10개 행 표시」·
@@ -238,8 +253,8 @@ ka10081을 포함한다). 그 결과 **행 상세 표는 앱 차트 카드에 �
 
 **구현.** 「필드별 독립 카드 없음」은 통합 카드 계약이 지킨다 — 같은 대상을 가리키는 봉투는
 카드를 새로 만들지 않고 기존 인스턴스의 탭으로 붙는다
-(`app/lib/integrated-card-surface.js:44` `instanceKeyFor`, `:389`~`:407`). 그룹 제목은
-섹션 라벨이 나른다(`app/lib/semantic-workspace.js:23` `valuation-and-profile`).
+(`app/lib/integrated-card-surface.js:41` `instanceKeyFor`, `:389`~`:407`). 그룹 제목은
+섹션 라벨이 나른다(`app/lib/semantic-workspace.js:24` `valuation-and-profile`).
 
 ---
 
@@ -262,7 +277,7 @@ ka10081을 포함한다). 그 결과 **행 상세 표는 앱 차트 카드에 �
 
 **구현.** 두 응답의 필드명 표가 나란히 정의돼 있고(`app/lib/card-kind-호가.js:10` `KA10004`,
 `:19` `KA10007`) 같은 사다리 좌표로 접힌다(`:67` `detectLadderShape`가 두 꼴을 모두 알아본다).
-합계·현재가 자리도 두 응답을 같은 이름으로 찾는다(`:46` `detectTotals`, `:57`
+합계·현재가 자리도 두 응답을 같은 이름으로 찾는다(`:49` `detectTotals`, `:59`
 `detectQuoteEmphasis`).
 
 ---
