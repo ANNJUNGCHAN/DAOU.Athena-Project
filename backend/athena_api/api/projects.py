@@ -158,8 +158,10 @@ async def create_project(request: Request, body: dict[str, Any]) -> dict[str, An
 async def open_project(request: Request, body: dict[str, Any]) -> dict[str, Any]:
     """디스크에 이미 있는 폴더를 등록한다 — 그 안에 아무것도 만들지 않는다."""
     path = _text_field(body, "path")
+    # 이름은 선택이다 — 만들기 화면(36)이 폴더 이름을 기본값으로 채워 두고 사람이 고칠 수 있다.
+    name = _text_field(body, "name") if "name" in body else None
     try:
-        entry = _store(request).open_external(path)
+        entry = _store(request).open_external(path, name)
     except ProjectMissingError as exc:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
     except (ProjectNameError, ProjectNotADirectoryError) as exc:
