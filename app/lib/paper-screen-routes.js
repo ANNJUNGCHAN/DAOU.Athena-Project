@@ -142,6 +142,28 @@ const WATCH_ROUTINE = Object.freeze({
   },
 });
 
+// 같은 감시 한 건의 상세 — 보드 06의 설정 편집 폼이 읽는 조건 원문·소스 명세다
+// (목록 응답에는 없다, api/routines.py _detail_view). 폼의 필드 수·비교 목록·
+// 연속 틱 유무가 전부 source_spec에서 나오므로 이 봉투가 곧 그 화면이다. 값은
+// 전부 데이터라 phrases에는 한 글자도 넣지 않는다.
+const WATCH_DETAIL = Object.freeze({
+  ok: true,
+  data: {
+    id: 'fx1',
+    symbol: '005930',
+    status: 'active',
+    mode: 'realtime-ws',
+    source_label: '현재가',
+    cooldown_s: 300,
+    expires_at: '2026-09-10T09:00:00',
+    note: '삼성전자 88,000 감시',
+    briefing_model: 'opus',
+    briefing_effort: 'high',
+    condition: { source: 'price.current', op: '>=', value: 88000, consecutive_ticks: 1 },
+    source_spec: { ops: ['<', '<=', '>', '>='], value_type: 'number', transport: 'ws', label: '현재가' },
+  },
+});
+
 // 실행 이력 fixture — 이 채널도 routineHttp를 그대로 돌려주는 {ok,data} 봉투다
 // (main.js:1273, 선례 probe-agent-paper-parity.js:188·verify.js:5276). 안쪽만 주면
 // canvas.js:3484 fetchRuns·:3491 fetchAvgDuration·:3498 fetchEngagement 셋 다
@@ -1783,6 +1805,40 @@ const ROUTES = Object.freeze([
     phrases: ['이력', '설정', '최근 30회', '30회 통계'],
     // 드릴인 세그먼트 [이력][설정] — Paper 보드 03 우상단.
     structure: [{ what: 'count', selector: '.agent-history-tab', equals: 2 }],
+  },
+  {
+    board: '2IJN-2', // 06 · 에이전트 — 작업 설정
+    window: 'shell',
+    // 03과 같은 드릴인을 열고 「설정」 탭에서 [설정 편집]까지 눌러야 폼이 선다.
+    // 폼은 GET /{id} 응답의 소스 명세로 자기 모양을 정하므로(agent-canvas.js
+    // settingsFormModel) athena:routine-detail도 못 박는다 — 이게 없으면 8필드가
+    // 아니라 「설정을 불러오지 못했습니다」가 그려진다.
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:routines-list', data: WATCH_ROUTINE },
+      { do: 'ipc-fixture', channel: 'athena:routine-runs', data: ROUTINE_RUNS },
+      { do: 'ipc-fixture', channel: 'athena:routine-detail', data: WATCH_DETAIL },
+      { do: 'mode', view: 'agent' },
+      { do: 'wait', ms: 700 },
+      { do: 'click', selector: '.agent-row' },
+      { do: 'wait', ms: 200 },
+      { do: 'click', selector: '.agent-history-open' },
+      { do: 'wait', ms: 200 },
+      { do: 'click', selector: '.agent-history-tab[data-key="settings"]' },
+      { do: 'click', selector: '.agent-history-settings-edit' },
+      { do: 'wait', ms: 400 },
+      { do: 'settle' },
+    ],
+    root: '#agentCanvas',
+    // 요약 층(설정 — 요약 · 설정 편집)과 폼 층(상세 패널 — 설정 편집 · 필드 라벨 ·
+    // 저장)이 한 화면에 같이 보인다 — Paper도 둘을 위아래로 나란히 그렸다.
+    phrases: ['설정 — 요약', '설정 편집', '상세 패널 — 설정 편집', '조건 비교', '연속 틱', '만료(일)', '저장'],
+    // Paper가 「현재가 · 실시간」 폼에 8필드라고 못 박은 그 수(연속 틱을 포함한다 —
+    // 예약 소스에서는 7이 된다). 읽기 전용 넷은 종목·모드·소스·생성이다.
+    structure: [
+      { what: 'count', selector: '.agent-settings-field', equals: 8 },
+      { what: 'count', selector: '.agent-settings-readonly', equals: 4 },
+      { what: 'count', selector: '.agent-settings-save', equals: 1 },
+    ],
   },
   {
     board: 'BIM-0', // 04 · 에이전트 — 프로액티브

@@ -112,6 +112,8 @@ test('every DOM id literal in a route exists in shell.html or orb.html', () => {
 test('the data attributes the reach steps click are the ones the app writes', () => {
   // 값이 아니라 키로 집는 관례(shell.html data-view)를 캔버스·설정도 따르는지 잠근다.
   assert.match(fs.readFileSync(path.join(__dirname, 'agent-canvas.js'), 'utf8'), /btn\.setAttribute\('data-view', view\.key\);/);
+  // 드릴인 세그먼트도 같은 관례를 따른다 — 보드 06이 [설정] 탭을 키로 집는다.
+  assert.match(fs.readFileSync(path.join(__dirname, 'agent-canvas.js'), 'utf8'), /btn\.setAttribute\('data-key', tab\.key\);/);
   assert.match(fs.readFileSync(path.join(__dirname, 'settings-cards.js'), 'utf8'), /b\.setAttribute\('data-key', item\.key\);/);
 });
 
