@@ -2766,14 +2766,14 @@ function renderKiumiMenu() {
   $kiumiMenu.textContent = '';
   $kiumiMenu.appendChild(kiumiSection('추가'));
   $kiumiMenu.appendChild(kiumiItem('file', '파일 첨부', '경로가 첨부 칩으로 쌓인다', () => pickAttachments(false)));
-  $kiumiMenu.appendChild(kiumiItem('folder', '폴더 첨부', '', () => pickAttachments(true)));
-  $kiumiMenu.appendChild(kiumiItem('target', '목표', '목표를 대화에서 구체화한다', () => {
+  $kiumiMenu.appendChild(kiumiItem('folder', '폴더 첨부', '폴더 경로를 칩으로 쌓는다', () => pickAttachments(true)));
+  $kiumiMenu.appendChild(kiumiItem('target', '목표', '계속 추구할 목표를 설정', () => {
     closeKiumiMenu();
     $input.value = '달성할 목표를 구체화해줘: ';
     autoGrowInput();
     $input.focus();
   }));
-  $kiumiMenu.appendChild(kiumiItem('plan', '계획 모드', '실행 전 단계를 먼저 정리한다', () => {
+  $kiumiMenu.appendChild(kiumiItem('plan', '계획 모드', '실행 전에 계획을 정리', () => {
     closeKiumiMenu();
     $input.value = '다음 작업을 실행 가능한 단계와 검증 기준으로 계획해줘: ';
     autoGrowInput();
@@ -2832,7 +2832,7 @@ function renderKiumiMenu() {
     renderModelPopover();
     $modelPopover.hidden = false;
   }));
-  $kiumiMenu.appendChild(kiumiItem('plugin', '플러그인 관리', '설치·기능 허용·마켓플레이스', () => openPlugin('manage')));
+  $kiumiMenu.appendChild(kiumiItem('plugin', '플러그인 관리', '설치 · 기능 허용 · 마켓플레이스', () => openPlugin('manage')));
 }
 
 function toggleKiumiMenu() {
