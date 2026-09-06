@@ -1565,7 +1565,7 @@
       "alt_mappings": null,
       "kor": "순위",
       "format": {
-        "unit": "count",
+        "kind": "text",
         "sign": false,
         "precision": 0,
         "tone": "neutral"
@@ -1690,7 +1690,7 @@
       "alt_mappings": null,
       "kor": "현재가",
       "format": {
-        "unit": "krw_ko",
+        "kind": "number",
         "sign": false,
         "precision": 0,
         "tone": "neutral"
@@ -2205,7 +2205,7 @@
       "alt_mappings": null,
       "kor": "순위",
       "format": {
-        "unit": "count",
+        "kind": "text",
         "sign": false,
         "precision": 0,
         "tone": "neutral"
@@ -2297,7 +2297,7 @@
       "alt_mappings": null,
       "kor": "현재가",
       "format": {
-        "unit": "krw_ko",
+        "kind": "number",
         "sign": false,
         "precision": 0,
         "tone": "neutral"
@@ -2659,7 +2659,7 @@
       "alt_mappings": null,
       "kor": "순위",
       "format": {
-        "unit": "count",
+        "kind": "text",
         "sign": false,
         "precision": 0,
         "tone": "neutral"
@@ -2753,7 +2753,7 @@
       "alt_mappings": null,
       "kor": "현재가",
       "format": {
-        "unit": "krw_ko",
+        "kind": "number",
         "sign": false,
         "precision": 0,
         "tone": "neutral"
@@ -3121,7 +3121,7 @@
       "alt_mappings": null,
       "kor": "순위",
       "format": {
-        "unit": "count",
+        "kind": "text",
         "sign": false,
         "precision": 0,
         "tone": "neutral"
@@ -3215,7 +3215,7 @@
       "alt_mappings": null,
       "kor": "현재가",
       "format": {
-        "unit": "krw_ko",
+        "kind": "number",
         "sign": false,
         "precision": 0,
         "tone": "neutral"
@@ -3583,7 +3583,7 @@
       "alt_mappings": null,
       "kor": "순위",
       "format": {
-        "unit": "count",
+        "kind": "text",
         "sign": false,
         "precision": 0,
         "tone": "neutral"
@@ -3677,7 +3677,7 @@
       "alt_mappings": null,
       "kor": "현재가",
       "format": {
-        "unit": "krw_ko",
+        "kind": "number",
         "sign": false,
         "precision": 0,
         "tone": "neutral"
@@ -4040,7 +4040,7 @@
       "alt_mappings": null,
       "kor": "순위",
       "format": {
-        "unit": "count",
+        "kind": "text",
         "sign": false,
         "precision": 0,
         "tone": "neutral"
@@ -4134,7 +4134,7 @@
       "alt_mappings": null,
       "kor": "현재가",
       "format": {
-        "unit": "krw_ko",
+        "kind": "number",
         "sign": false,
         "precision": 0,
         "tone": "neutral"
@@ -4586,7 +4586,7 @@
       "alt_mappings": null,
       "kor": "순위",
       "format": {
-        "unit": "count",
+        "kind": "text",
         "sign": false,
         "precision": 0,
         "tone": "neutral"
@@ -4682,7 +4682,7 @@
       "alt_mappings": null,
       "kor": "현재가",
       "format": {
-        "unit": "krw_ko",
+        "kind": "number",
         "sign": false,
         "precision": 0,
         "tone": "neutral"
@@ -5050,7 +5050,7 @@
       "alt_mappings": null,
       "kor": "순위",
       "format": {
-        "unit": "count",
+        "kind": "text",
         "sign": false,
         "precision": 0,
         "tone": "neutral"
@@ -5146,7 +5146,7 @@
       "alt_mappings": null,
       "kor": "현재가",
       "format": {
-        "unit": "krw_ko",
+        "kind": "number",
         "sign": false,
         "precision": 0,
         "tone": "neutral"
