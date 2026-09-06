@@ -25,6 +25,7 @@
 - **F3 `where`는 산문.** 기계 앵커는 Paper 노드 이름 규약(`raw|<tr>|body|<field>` / `mapping|<id>`, 핸드오프 §9)뿐.
 - **F4 보드.** 최초 원장 distinct board 93장이었고, 현재 상태 보드를 포함한 runtime registry는 96장이다. 공유 보드는 `2RJ7-1`(CC-03/05), `2QM7-2`(CC-05/06)다.
 - **F5 캔버스 실폭 ≈ 788px.** `app/main.js:170` shellW 1520, `app/shell.css:79` 268, `:2713` 400, `:2731` 패딩 12. `column-fold.js:11`의 `DEFAULT_CANVAS_WIDTH_PX=1560`은 실측과 어긋남.
+- **F6 상태 링크의 정본은 생성물 색인이다.** `scripts/paper_board_extract.py`의 `mark_state_controls`가 부모 `board.html`의 잎에 `data-state-control`·`data-state-board`를 찍고(2026-09-05 실측: 해소 83 · 미해소 0), `scripts/build_board_registry.py`가 그것을 `STATE_GRAPH`로 투사한다. 프론트는 봉투가 아니라 `app/lib/board-template-registry.js`의 `stateLinksFor()`를 정본으로 쓴다 — 봉투는 마운트한 그 보드의 **직계 자식만** 나르므로(`card_surface_contract.py`의 `_state_boards`) 상태 보드로 갈아탄 뒤에는 형제 탭도 되돌아갈 길도 목록에 없어 레일이 통째로 죽는다. 색인은 제 자식 + 부모 레일 전부를 주고, 되돌아가는 칩은 부모 레일에 부모 자신을 여는 표식이 있을 때만 나온다(레일 주인이 없는 보드에 칩을 지어내지 않는다). 색인이 모르는 보드(픽스처 계약)에서만 봉투가 실어온 목록을 그대로 쓴다.
 
 ## 2. 표면 템플릿 스키마
 

@@ -3,9 +3,10 @@
 - 작성: 2026-09-04 KST. **사용자가 멈추라고 하기 전까지 계속 갱신한다.**
 - 테스터: 에이전트. 페르소나 = 한 시간 단위 국장 단타(시드 ~1천만) + 국장 중기 대형주/ETF + 미장 장기 ETF 적립.
 - 제품: `C:\Projects\DAOU.Athena` `main`, Electron `athena-shell@0.1.0`
-- 런타임: backend `127.0.0.1:8010` `/api/v1/llm/manifest` HTTP 200. 계좌 `********`, 토큰 잔여 ~23시간.
+- 런타임: backend `127.0.0.1:8010` `/api/v1/llm/manifest` HTTP 200. 계좌 `****3844`, 토큰 잔여 ~23시간.
 - 조작: Orca computer-use(`--app electron` / `pid:…`) + `scripts/beta/capture-window.ps1`. 같은 날 `probe-live-full.js`가 같은 프로필을 병렬로 두드렸다.
 - 안전: 실주문 실행 없음, 계좌/주문API 저장 없음, 플러그인 설치 확정 없음, 알람 실활성화 없음.
+- 계좌번호 표기: 이 문서는 뒤 4자리만 남긴다(`****3844`). 2026-09-06 이전 판은 전체를 적었고 그 판이 이미 push돼 git 이력에 남아 있다 — 저장소를 공개로 돌리기 전에 이력 재작성 여부를 따로 판단한다.
 - 증거 폴더: `artifacts/beta-test-live/captures/` 및 `app/captures/live-full-*.png`, `app/captures/LIVE-FULL-REPORT.json`, `app/captures/main-debug.log`
 
 코드만 읽고 쓴 목록이 아니다. **창을 띄워 클릭하고 타이핑한 기록**이다.
@@ -139,7 +140,7 @@
 
 #### B-12 계좌번호 미마스킹
 
-사이드바 `********` 전체. 카드 last4 마스킹 계약과 불일치. 캡처·공유 즉시 유출.
+사이드바가 계좌번호를 전체로 그린다. 카드 last4 마스킹 계약과 불일치. 캡처·공유 즉시 유출.
 
 ### P2 — 구조·카피·레이아웃
 

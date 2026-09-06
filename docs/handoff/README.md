@@ -61,7 +61,8 @@ kiumi/mini-cards 2 · ANNJUNGCHAN/main 1 · plugin-mode-doctrine 후속 1)를 �
 | app 단위 | **2,696 / 2,696** (6e26c6f) |
 | backend 전수 | **3,619 passed / 6 skipped / 0 failed** (6e26c6f, 격리 HOME, 20분 25초) |
 | verify | semantic-workspaces 12/12 · hoga-live · kiumi 19 · plugins 154 · agent-paper-parity PASS |
-| 알려진 빨감 | `verify:integrated-cards` — `board 2SKU-1 M 프로브: container 1360px outside 720..959px`. card-surface tip에서도 동일. 그 트랙의 W3 반응형 미완(visual blocker) |
+| 알려진 빨감 | `verify:integrated-cards` **닫힘** — `2SKU-1` M 구간(`container 1360px outside 720..959px`)은 `cdedb5a`가, 뒤이어 터진 `2R3M-1` XS 단계 surface overflow 3px은 `f860bb0`(한글 폴백을 Noto Sans KR 우선으로 되돌림)이 닫았다. 두 커밋이 기록한 재실행 결과는 6보드 × 4단계 overflow 0 · `2SKU-1` M 구간 통과다 |
+| 남은 빨감 | `verify:paper-mini` — **의도된 빨강**이다. Paper `H-1`과 `backend/ref/kiumi/kiumi-ledger.jsonl` 96행이 어긋나 있고, 게이트는 그것을 초록으로 만들지 않는다(어긋난 보드 목록이 산출물). 대장을 Paper로 덮는 것은 `paper_cross_board`가 0이 된 뒤의 일이다 — 순서는 `backend/ref/kiumi/README.md`에 있다 |
 
 **남은 원격 브랜치 4개 — 지우지 않은 이유.** tip은 전부 main에 있지만 **소유 세션이 지금도 push 중**이다
 (2026-09-04 00:29~00:46 사이 셋이 각각 커밋). 살아 있는 브랜치의 원격 ref를 지우면 그 세션의 upstream이
@@ -176,7 +177,10 @@ ELW·금현물 라우팅 지시어 의존. 근거와 판단 이유는 전부 정
 
 ### 4.2 백테스트 모드
 
-P0~P6 구현 완료, 전수 파리티 완료(60/60).
+P0~P6 구현 완료. 전수 파리티는 **부분(58/60)**이다 — 1-9(`+ 지표 추가`)와 6-3(조합 수
+렌더러 배선)이 프로브에 미구현 계약으로 잠겨 있고, BT-04의 4-3·4-4·4-10·4-11과 5-7
+다섯 항목은 아직 재확인하지 않았다. 항목 단위 정본은
+[백테스트 파리티 감사 §0·§10.5](../architecture/backtest-parity-audit.md).
 `probe-backtest-mode` 5/5, 백테스트 P5·P6 라우트 14개가 라우트 수 단언에 반영됨(`8609815`).
 
 **P2 실서버 실측은 2026-09-01 정규장에 끝났다.** 설계서 §5.2의 "600행/페이지"는 가정이었는데
