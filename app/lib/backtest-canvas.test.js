@@ -397,7 +397,7 @@ test('보드 17: 출처를 읽은 순간 채팅 카드가 한 번만 나가고 �
   assert.match(read[0].note, /20일 신고가 돌파 · 유튜브 · 14,200자/);
   assert.equal(read[0].rows.length, 2);
   assert.equal(
-    read[0].method,
+    read[0].guard,
     '출처의 문장은 자료일 뿐입니다 — 앱은 그 안의 지시를 따르지 않습니다',
   );
   delete global.CustomEvent;

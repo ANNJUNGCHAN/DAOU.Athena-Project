@@ -4673,10 +4673,10 @@ function renderBacktestChangeCard(receipt) {
 
   // 출처 카드에는 방어 문장이 붙는다 — 남이 쓴 글을 화면에 옮긴 자리에서 그 글이
   // 자료일 뿐이라는 사실을 한 번은 말해야 한다(backtest-canvas.js emitSourceReadCard).
-  if (receipt.kind === 'source_read' && receipt.method) {
+  if (receipt.kind === 'source_read' && receipt.guard) {
     const guard = document.createElement('div');
     guard.className = 'backtest-change-guard';
-    guard.textContent = receipt.method;
+    guard.textContent = receipt.guard;
     card.appendChild(guard);
   }
 

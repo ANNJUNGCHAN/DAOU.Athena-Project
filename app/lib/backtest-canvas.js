@@ -2162,6 +2162,8 @@ function createBacktestCanvas(options) {
     tick();
   }
 
+  // 이 카드만 `guard` 한 칸을 더 든다(기본 봉투에는 없다) — 남이 쓴 글을 화면에 옮긴
+  // 자리에 붙는 한 줄이라 다른 영수증이 질 이유가 없다.
   // 출처를 읽은 그 한 번만 채팅에 카드를 낸다(보드 17의 「출처 읽음」). 무엇을 읽었는지와
   // 무엇을 뽑았는지는 잡이 준 값이고, 방어 문장은 그 카드에 늘 붙는다 — 남이 쓴 글이
   // 화면에 들어오는 자리에서 그 사실을 한 번은 말해야 한다.
@@ -2174,7 +2176,7 @@ function createBacktestCanvas(options) {
     }));
     emitChatCard(remember(makeReceipt('source_read', {
       applied: true, note: [job.title, read.meta_ko].filter(Boolean).join(' · ') || null,
-      rows, method: SOURCE_DATA_ONLY_NOTE,
+      rows, guard: SOURCE_DATA_ONLY_NOTE,
     })));
   }
 
