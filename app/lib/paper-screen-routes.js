@@ -1283,21 +1283,29 @@ const ROUTES = Object.freeze([
     // 문구가 못 된다. Paper가 상태 행 아래에 한 줄 더 그린 「APP KEY와 SECRET KEY로
     // 계좌 연결 권한을 확인하고 있습니다」도 안 적는다 — 앱은 그 자리에 정적 안내를
     // 두지 않고 상태 행 한 문장이 혼자 말한다(settings-cards.js의 같은 자리 주석).
+    // 확정 버튼 라벨 「확인 중…」(11B-0)은 문구로 못 잰다 — 판정은 root 아래 가시
+    // 텍스트 전체에 대한 includes라 바로 위 안내 줄에 통째로 들어 있다. 그 자리는
+    // 아래 structure가 라벨까지 재고, 문구는 아직 안 쓴 108-0이 맡는다.
     phrases: [
       '계좌 등록',
       '모의투자 계좌의 APP KEY / SECRET KEY를 등록한다',
       '저장·표시 원칙',
+      '이 컴퓨터에서만 쓰는 이름이다',
       '토큰 발급 확인 중… 입력과 저장이 잠시 잠깁니다',
-      '확인 중…',
     ],
     // 확인 중을 다른 두 상태와 가르는 것은 문구가 아니라 **잠김**이다: 입력 셋과
-    // 확정 버튼이 모두 잠기고, 실패 상자는 아직 없다.
+    // 확정 버튼이 모두 잠기고, 실패 상자는 아직 없다. 실패 상자는 셈이 아니라
+    // 문면으로 재 둔다 — 이 보드가 깨지는 길은 등록 왕복이 답을 돌려준 것뿐이라,
+    // 그때 뜬 사유가 리포트에 그대로 남아야 원인을 이름으로 가를 수 있다. 실측
+    // 대조군: 위 ipc-hang을 빼고 돌리면 실패 상자가 「입력값을 확인한다」로 뜬다
+    // (빈 입력에 진짜 핸들러가 답한 것이다 — 키움 왕복은 그 전에 끊긴다). 리포트에
+    // 그 문면이 보이면 앱 회귀가 아니라 하네스의 가로채기가 안 걸린 것이다.
     structure: [
       { what: 'count', selector: '.uk-sheet .uk-input', equals: 3 },
       { what: 'count', selector: '.uk-sheet .uk-input:disabled', equals: 3 },
-      { what: 'count', selector: '.uk-sheet .uk-btn-primary:disabled', equals: 1 },
+      { what: 'order', selector: '.uk-sheet .uk-btn-primary:disabled', equals: ['확인 중…'] },
       { what: 'count', selector: '.uk-sheet .uk-bullet-item', equals: 4 },
-      { what: 'absent', selector: '.uk-sheet .uk-error' },
+      { what: 'order', selector: '.uk-sheet .uk-error', equals: [] },
     ],
   },
   {
@@ -1313,17 +1321,22 @@ const ROUTES = Object.freeze([
       { do: 'settle' },
     ],
     root: '#settings',
+    // 「다시 검증」(FM4-0)도 XI-0의 라벨과 같은 이유로 문구가 못 된다 — 바로 위
+    // 안내 줄의 「…다시 검증할 수 있습니다」에 포함으로 걸린다. 라벨은 structure가 잰다.
     phrases: [
       '모의투자 계좌의 APP KEY / SECRET KEY를 등록한다',
       '저장·표시 원칙',
+      '이 컴퓨터에서만 쓰는 이름이다',
       '검증에 실패해 저장하지 않았습니다. 키를 수정한 뒤 다시 검증할 수 있습니다',
       '인증 실패 — APP KEY 또는 SECRET KEY를 확인해 주세요',
-      '다시 검증',
     ],
     // 실패는 시트를 닫지 않고 입력을 되돌려 준다 — 그래서 「다시 검증」이 눌린다.
-    // 틀린 칸의 테두리 셈은 안 적는다: Paper는 FLM-0에 is-error 프레임을 그리지 않았다.
+    // 그 라벨이 이 보드의 어포던스라 문면까지 잰다: 「검증 후 저장」으로 되돌아가면
+    // 실패 분기가 깨진 것이다. 틀린 칸의 테두리 셈은 안 적는다: Paper는 FLM-0에
+    // is-error 프레임을 그리지 않았다.
     structure: [
       { what: 'count', selector: '.uk-sheet .uk-error', equals: 1 },
+      { what: 'order', selector: '.uk-sheet .uk-btn-primary', equals: ['다시 검증'] },
       { what: 'absent', selector: '.uk-sheet .uk-success' },
       { what: 'absent', selector: '.uk-sheet .uk-input:disabled' },
     ],
