@@ -1895,6 +1895,24 @@ html.is-boot-expanding #winControls { opacity: 0; }
   min-width: 0;
 }
 
+/* 제어 제안 턴(Paper 보드 07 · 432Z-1) — 알약 두 개 + 리드 + 근거 한 줄 + 사람 칩.
+   결과 턴과 같은 시각 언어를 쓴다(새 언어를 만들지 않는다). D 뷰 이동만 칩 대신
+   상태 두 마디가 선다. */
+.control-proposal { display: flex; flex-direction: column; gap: 7px; }
+.control-proposal-lead {
+  font-size: var(--text-sm, 13px);
+  font-family: var(--font-strong, inherit);
+  color: var(--color-k-text, #e6e8ee);
+  word-break: keep-all;
+  min-width: 0;
+}
+.control-proposal-status {
+  display: flex;
+  gap: 5px;
+  font-size: var(--text-2xs, 11px);
+  color: var(--color-k-dim, #9aa2b1);
+}
+
 /* 주문 티켓 (P4) */
 .ticket-card { display: flex; flex-direction: column; gap: 10px; padding: 18px 20px; border-radius: 12px; background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(230, 232, 238, 0.12); }
 .ticket-row { display: flex; align-items: center; gap: 12px; }
