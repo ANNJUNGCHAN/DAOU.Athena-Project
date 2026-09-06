@@ -6466,6 +6466,186 @@ body { margin: 0; overflow: hidden; }
   font-size: var(--text-2xs);
 }
 
+/* ---------- 고침 한 바퀴 (Paper 보드 11 · 44HD-1) ----------
+ * 순환 띠 · 다시 검사 패널 · 한 바퀴 영수증. 새 hex는 만들지 않는다 —
+ * 이 패널이 이미 쓰는 토큰만 쓴다(노드 카드와 같은 규칙). */
+.agent-fix-band {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.agent-fix-band-chip {
+  flex-shrink: 0;
+  border: 1px solid var(--color-brand);
+  border-radius: var(--radius-full);
+  padding: 1px 8px;
+  color: var(--color-brand);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
+.agent-fix-band-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--text-xs);
+}
+.agent-fix-recheck,
+.agent-fix-receipt {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  border: 1px solid var(--color-k-line);
+  border-radius: var(--radius-md);
+  background: var(--color-k-panel);
+}
+.agent-fix-recheck-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.agent-fix-recheck-title {
+  color: var(--color-k-text);
+  font-family: var(--font-strong);
+  font-size: var(--text-base);
+}
+.agent-fix-recheck-meta {
+  margin-left: auto;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
+.agent-fix-compare {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.agent-fix-before {
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--text-sm);
+  text-decoration: line-through;
+}
+.agent-fix-arrow {
+  color: var(--color-k-faint);
+  font-size: var(--text-xs);
+}
+.agent-fix-after {
+  color: var(--color-k-text);
+  font-family: var(--font-strong);
+  font-size: var(--text-sm);
+}
+.agent-fix-dates {
+  min-width: 0;
+  margin-left: auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--text-2xs);
+}
+/* 하루 한 칸 — 지금도 울리는 날은 강조, 고치기 전에만 울린 날은 흐린 회색. */
+.agent-fix-dots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+.agent-fix-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--color-k-line);
+}
+.agent-fix-dot.is-fired {
+  background: var(--color-brand);
+}
+.agent-fix-dot.is-silenced {
+  background: var(--color-k-faint);
+}
+.agent-fix-dot-note {
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--text-2xs);
+}
+.agent-fix-receipt-title {
+  color: var(--color-k-text);
+  font-family: var(--font-strong);
+  font-size: var(--text-base);
+}
+.agent-fix-receipt-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: var(--text-xs);
+}
+.agent-fix-receipt-mark {
+  flex-shrink: 0;
+  width: 14px;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-weight: 300;
+  text-align: center;
+}
+.agent-fix-receipt-text {
+  min-width: 0;
+  color: var(--color-k-text);
+}
+.agent-fix-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+  padding-top: 8px;
+  border-top: 1px solid var(--color-k-line);
+}
+.agent-fix-rollback,
+.agent-fix-past {
+  flex-shrink: 0;
+  height: 32px;
+  border: 1px solid var(--color-k-line);
+  border-radius: var(--radius-full);
+  padding: 0 12px;
+  background: transparent;
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--text-xs);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.agent-fix-history {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.agent-fix-history-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--text-xs);
+}
+.agent-fix-note {
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--text-2xs);
+}
+
 /* 머리줄 오른쪽 「코드 감시 · v2」와 그 아래 상태 제어 행(보드 12). */
 .agent-code-kind {
   flex-shrink: 0;
