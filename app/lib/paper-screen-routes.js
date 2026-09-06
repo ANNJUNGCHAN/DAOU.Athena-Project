@@ -874,6 +874,98 @@ const BACKTEST_OPTIMIZE = Object.freeze({
   },
 });
 
+// 코드 경로를 세우는 자극(보드 07·09). 배포 폼의 갈래 셋도 진단 패널도 「방금 그 실행이
+// 어느 버전이었나」를 알아야 서는데, 그 id는 **코드로 돈 실행**에서만 온다
+// (backtest-canvas.js startRun의 codeRun). 채팅이 코드를 얹는 문이 이미 있어
+// (applyCodeAction — runPath를 code로 옮기고 편집기 버퍼를 채운다) 새 어휘가 필요 없다.
+// 파이썬 원문은 값이라 phrases에 한 글자도 넣지 않는다.
+const BACKTEST_CODE_DRAFT = Object.freeze({
+  kind: 'code_draft',
+  source: [
+    'import athena_bt as bt',
+    '',
+    'PARAMS = {',
+    '    "fast":     {"default": 20,  "min": 5,   "max": 60},',
+    '    "slow":     {"default": 60,  "min": 20,  "max": 240},',
+    '    "atr_mult": {"default": 2.0, "min": 0.5, "max": 5.0},',
+    '}',
+    '',
+    'def signals(df, p):',
+    '    fast = bt.sma(df.close, p["fast"])',
+    '    slow = bt.sma(df.close, p["slow"])',
+    '    atr  = bt.atr(df, 14)',
+    '',
+    '    entry = bt.cross_above(fast, slow)',
+    '    stop = df.close - atr * p["atr_mult"]',
+    '    exit_ = bt.cross_below(fast, slow) | (df.low <= stop)',
+    '',
+    '    return df.assign(entry=entry, exit=exit_)[["entry", "exit"]]',
+    '',
+  ].join('\n'),
+});
+
+// 보드 07 — 버전 id를 실은 실행 응답. BACKTEST_RUN_OK와 나누는 이유는 보드 03이
+// 재는 것이 결과 화면이라 버전 id가 없어도 그대로 서기 때문이다(그쪽 봉투를 늘리면
+// 보드 03의 판정이 배포 쪽 사정에 끌려간다).
+const BACKTEST_RUN_VERSIONED = Object.freeze({
+  ok: true,
+  data: { run_id: 'fx-run-41', strategy_id: 'fx-st-4', version_id: 'fx-ver-4' },
+});
+
+// 보드 07 — 가동 중인 배포 한 줄. 종목·모드 라벨·상태·한도 숫자는 전부 백엔드가 준
+// 값이라(renderDeploy가 그대로 그린다) phrases에 한 글자도 넣지 않는다.
+const BACKTEST_DEPLOYMENTS = Object.freeze({
+  ok: true,
+  data: {
+    deployments: [{
+      id: 'fx-dep-4',
+      stk_cd: '005930',
+      mode: 'approve',
+      mode_label: '승인을 받고 주문합니다',
+      status: 'active',
+      armed: false,
+      auto_armed: false,
+      expired: false,
+      limits: { max_order_amount: 2000000, max_orders_per_day: 2 },
+    }],
+  },
+});
+
+// 오늘 로그가 읽는 신호. 빈 목록이라야 판정이 검사 머신의 날짜에 안 좌우된다 —
+// 값을 주면 「오늘」에 걸리는 줄이 도는 날마다 달라진다(todaySignals).
+const BACKTEST_NO_SIGNALS = Object.freeze({ ok: true, data: { signals: [] } });
+
+// 보드 09 — 코드가 터진 실행. 폴링이 첫 tick에서 failed를 보고 진단으로 넘어간다.
+const BACKTEST_RESULT_FAILED = Object.freeze({
+  ok: true,
+  data: { status: 'failed', error: 'TypeError: 20번째 줄' },
+});
+
+// 보드 09 — 진단 봉투. 제목·사유·수정안 문장은 백엔드 diagnose가 만드는 값이라
+// phrases에 한 글자도 넣지 않는다 — 이 보드에서 화면이 갖고 있는 문구는 서랍 손잡이
+// 하나와 갈래 셋뿐이다.
+const BACKTEST_DIAGNOSIS = Object.freeze({
+  ok: true,
+  data: {
+    title: '20번째 줄에서 멈췄습니다',
+    detail: '신호를 한 개도 만들지 못했습니다.',
+    raw: 'TypeError: \'>=\' not supported between instances of \'float\' and \'NoneType\'',
+    why: 'ATR(14)은 앞 14봉이 모여야 첫 값이 나옵니다.',
+    line: 20,
+    suggestion: {
+      removed: 1,
+      added: 2,
+      summary: '20줄 하나만 바꿉니다',
+      diff_lines: [
+        { mark: '-', text: '    stop = df.close - atr * p["atr_mult"]' },
+        { mark: '+', text: '    stop = (df.close - atr * p["atr_mult"]) \\' },
+        { mark: '+', text: '             .where(entry).ffill()' },
+      ],
+      new_source: 'import athena_bt as bt\n',
+    },
+  },
+});
+
 const ROUTES = Object.freeze([
   // ---------- 부팅 5장 (1-0) ----------
   // 부팅 02~05는 한 애니메이션의 시간 단계라 서로를 가르는 것은 **찍힌 글자 수**뿐이다.
@@ -2848,6 +2940,132 @@ const ROUTES = Object.freeze([
       { what: 'count', selector: '.backtest-segment-item', equals: 2 },
       { what: 'count', selector: '.backtest-optimize-range', equals: 2 },
       { what: 'count', selector: '.backtest-optimize-warn', equals: 1 },
+    ],
+  },
+  {
+    board: '2FMM-2', // 07 · 백테스트 — 전략 배포 · 실전 적용
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:backtest-presets', data: BACKTEST_PRESETS },
+      { do: 'ipc-fixture', channel: 'athena:backtest-run', data: BACKTEST_RUN_VERSIONED },
+      { do: 'ipc-fixture', channel: 'athena:backtest-result', data: BACKTEST_RESULT },
+      { do: 'ipc-fixture', channel: 'athena:backtest-trades', data: BACKTEST_TRADES },
+      { do: 'ipc-fixture', channel: 'athena:backtest-deployments', data: BACKTEST_DEPLOYMENTS },
+      { do: 'ipc-fixture', channel: 'athena:backtest-signals', data: BACKTEST_NO_SIGNALS },
+      { do: 'mode', view: 'backtest' },
+      { do: 'send', channel: 'athena:backtest-chat-action', data: BACKTEST_TARGET },
+      { do: 'wait', ms: 300 },
+      // 「새 배포」의 갈래 셋은 **저장된 버전이 있을 때만** 선다(renderDeployForm) —
+      // 없으면 그 자리에 "먼저 실행하거나 저장하라"가 대신 뜬다. 그 id는 코드로 돈
+      // 실행이 돌려주므로 코드를 얹고 한 번 돌린다.
+      { do: 'send', channel: 'athena:backtest-chat-action', data: BACKTEST_CODE_DRAFT },
+      { do: 'wait', ms: 300 },
+      { do: 'click', selector: '#backtestCanvas .backtest-run-button' },
+      { do: 'wait', ms: 600 },
+      // 모드 탭 다섯째가 배포다(기법 · 결과 · 이력 · 최적화 · 배포).
+      { do: 'click', selector: '#backtestCanvas .backtest-tab:nth-child(5)' },
+      { do: 'wait', ms: 400 },
+      { do: 'settle' },
+    ],
+    root: '#backtestCanvas',
+    // 종목·별칭·한도 숫자·유효기간·괴리는 전부 값이다. Paper가 적은 한도 머리
+    // (「사람이 미리 정하는 한도 — 모델은 못 바꿉니다」)와 신호 표·괴리 카드의 제목은
+    // 안 적는다 — 앱의 한도 머리는 「한도 — 미리 승인하는 범위」고, 배포 뒤의 표는
+    // 실전에서 벌어진 일이 아니라 오늘 로그다. 어긋난 자리에는 아무 것도 적지 않는다.
+    phrases: [
+      '기록만 합니다',
+      '주문은 내지 않습니다. 전략이 실전에서 어떻게 움직이는지만 봅니다.',
+      '승인을 받고 주문합니다',
+      '한도 안에서 자동으로 주문합니다',
+      '1회 최대 주문',
+      '하루 최대 주문 수',
+      '배포 중지',
+    ],
+    // Paper의 「신호가 나오면」 갈래 셋과, 가동 중인 배포 한 줄.
+    structure: [
+      { what: 'count', selector: '.backtest-deploy-mode-item', equals: 3 },
+      { what: 'count', selector: '.backtest-deploy-item', equals: 1 },
+    ],
+  },
+  {
+    board: '2FR9-2', // 08 · 백테스트 — 코드 플로우 지도
+    window: 'shell',
+    // 이 보드는 스스로 초기 안이라고 적었다 — 「현행 위계는 반대입니다 … 1급 표면으로
+    // 올린 모습은 보드 11, 규칙은 보드 14를 봅니다」. 그래서 지도 머리와 두 경계의
+    // 이름(「이 코드는 이렇게 흐릅니다」·「여기부터 내 코드 — golden_cross.py」·
+    // 「여기부터 다시 앱 — 코드가 손댈 수 없는 구간」)은 안 적는다: 앱을 그 문구로
+    // 되돌리면 Paper의 현행 보드 11~14와 어긋난다. 같은 보드가 「칸의 종류·사람 말
+    // 설명·실제 값 표기는 그대로 쓰고」라고 못 박은 부분만 잰다.
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:backtest-presets', data: BACKTEST_PRESETS },
+      { do: 'mode', view: 'backtest' },
+      { do: 'send', channel: 'athena:backtest-chat-action', data: BACKTEST_TARGET },
+      { do: 'wait', ms: 300 },
+      // 이 칸들이 서는 곳은 **코드 경로의 지도**다. 폼 경로에서는 같은 탭이 편집 표면
+      // (보드 11~14의 그래프)을 세우고 요약 지도를 빼기 때문이다(renderFlowTab의
+      // visualActive 분기, 2026-09-03 사용자 확정) — 보드 08이 그린 것은 파이썬 한
+      // 파일을 읽어 만든 지도이므로 코드를 얹어 그 경로로 옮긴다.
+      { do: 'send', channel: 'athena:backtest-chat-action', data: BACKTEST_CODE_DRAFT },
+      { do: 'wait', ms: 300 },
+      // 하위 탭 첫째가 지도다(지도 · 폼 · 코드 · 노드·흐름). 지도를 읽는 왕복은 이
+      // 클릭이 낸다 — 코드를 얹는 길에는 그 호출이 없다.
+      { do: 'click', selector: '#backtestCanvas .backtest-subtab:nth-child(1)' },
+      { do: 'wait', ms: 1500 },
+      { do: 'settle' },
+    ],
+    root: '#backtestCanvas',
+    // 칸의 문장은 프런트가 갖고 있지 않다 — 백엔드 flow.py의 STAGE_LABELS·APP_STAGES가
+    // 그대로 화면 문구다(backtest-explain.js 머리말 「이 파일에는 레이아웃만 있고 칸의
+    // 문장은 하나도 없다」). 경계 이름 하나만 화면 상수다. ④는 안 적는다 — 보드 08의
+    // ④는 「두 열만 돌려줍니다」인데 현행 칸 여섯 종류에서 그 자리는 「지키는 선」이다
+    // (보드 18 A칸). 어느 쪽을 적어도 한 보드에게는 거짓말이 된다.
+    phrases: [
+      '앱이 준비해서 건넵니다',
+      '봉 데이터를 모읍니다',
+      '조절할 값을 정합니다',
+      '가격을 지표로 바꿉니다',
+      '사고·파는 순간을 찍습니다',
+      '성과를 냅니다',
+    ],
+    // Paper가 그린 앱 칸 넷(봉 데이터 · 체결가 · 비용 · 성과)과 내 칸 넷(①②③④),
+    // 그 사이를 가르는 경계 셋.
+    structure: [
+      { what: 'count', selector: '.backtest-flow-node.is-app', equals: 4 },
+      { what: 'count', selector: '.backtest-flow-node.is-mine', equals: 4 },
+      { what: 'count', selector: '.backtest-flow-boundary', equals: 3 },
+    ],
+  },
+  {
+    board: '2FY9-2', // 09 · 백테스트 — 오류 진단 · 자동 수정 승인
+    window: 'shell',
+    // 08과 같은 사정이다 — 이 보드도 스스로 「초기 안 · 보드 12가 현행」이라 적었고,
+    // 진단 세 줄의 제목(「어디서 — golden_cross.py 18–21줄」·「왜 — 초심자가 가장 자주
+    // 밟는 곳입니다」)은 줄 번호를 앞세운 그 초기 안의 것이다. 같은 보드가 그대로
+    // 가져간다고 못 박은 것은 둘이다: 사람 말 진단과 **파이썬 역추적을 서랍에 넣는
+    // 규칙**, 그리고 [적용]까지 코드를 건드리지 않는 갈래 셋.
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:backtest-presets', data: BACKTEST_PRESETS },
+      { do: 'ipc-fixture', channel: 'athena:backtest-run', data: BACKTEST_RUN_VERSIONED },
+      { do: 'ipc-fixture', channel: 'athena:backtest-result', data: BACKTEST_RESULT_FAILED },
+      { do: 'ipc-fixture', channel: 'athena:backtest-diagnose', data: BACKTEST_DIAGNOSIS },
+      { do: 'mode', view: 'backtest' },
+      { do: 'send', channel: 'athena:backtest-chat-action', data: BACKTEST_TARGET },
+      { do: 'wait', ms: 300 },
+      // 진단은 **코드가 터졌을 때**만 뜬다 — 편집기가 비어 있으면 같은 실패가 그냥
+      // 오류 화면으로 간다(handleRunFailure의 `!codeSource`).
+      { do: 'send', channel: 'athena:backtest-chat-action', data: BACKTEST_CODE_DRAFT },
+      { do: 'wait', ms: 300 },
+      { do: 'click', selector: '#backtestCanvas .backtest-run-button' },
+      { do: 'wait', ms: 800 },
+      { do: 'settle' },
+    ],
+    root: '#backtestCanvas',
+    // 제목·사유·수정안 문장·줄 번호는 전부 백엔드 진단이 만드는 값이다.
+    phrases: ['파이썬 원문 보기', '적용하고 다시 실행', '버리기'],
+    // Paper가 그린 갈래 셋과, 역추적을 접어 둔 서랍 하나.
+    structure: [
+      { what: 'count', selector: '.backtest-diag-actions button', equals: 3 },
+      { what: 'count', selector: '.backtest-diag-raw-toggle', equals: 1 },
     ],
   },
 ]);
