@@ -189,6 +189,38 @@ app.whenReady().then(async () => {
   if (afterRemove !== 2) failures.push(`제거 후 계정 카드가 2장이어야 하는데 ${afterRemove}장이다`);
   await shot(shellWin, 'SETTINGS-09-model-after-remove.png');
 
+  // ---------- 성향·이력 카드 (Paper 보드 32) ----------
+  // 네비 라벨과 카드 머리가 같은 말을 하고, 두 구역(투자 성향 · 대화 이력)과
+  // 두 액션(이력 내보내기 · 전체 삭제)이 선다. 수집·노출 토글은 이 카드가 아니라
+  // 그래프 모드 「수집·노출」 탭이 소유하므로 여기에 남아 있으면 안 된다.
+  await clickAndLog(shellWin, 'select nav 성향・이력', clickNavItem('성향・이력'));
+  await wait(500);
+  const historySurface = await shellWin.webContents.executeJavaScript(`
+    (() => {
+      const card = document.querySelector('#settingsGrid .card.history');
+      if (!card) return null;
+      const text = (sel) => { const n = card.querySelector(sel); return n ? n.textContent.trim() : null; };
+      return {
+        name: text('.uk-settings-name'),
+        sub: text('.uk-settings-count'),
+        sectionTitles: Array.from(card.querySelectorAll('.uk-history-section-title')).map((n) => n.textContent.trim()),
+        buttons: Array.from(card.querySelectorAll('.uk-btn-row-end .uk-btn-label')).map((n) => n.textContent.trim()),
+        foot: text('.uk-settings-note'),
+        toggles: card.querySelectorAll('.uk-toggle').length,
+      };
+    })();
+  `);
+  console.log('[verify-settings] 성향·이력 카드 표면:', JSON.stringify(historySurface));
+  if (!historySurface || historySurface.name !== '성향·이력'
+    || historySurface.sub !== '로컬 보관 · 언제든 내보내기 가능'
+    || historySurface.sectionTitles.join('|') !== '투자 성향|대화 이력'
+    || historySurface.buttons.join('|') !== '이력 내보내기|전체 삭제'
+    || historySurface.foot !== '삭제는 확인 단계를 한 번 더 거치며 되돌릴 수 없습니다'
+    || historySurface.toggles !== 0) {
+    failures.push(`성향·이력 카드가 Paper 보드 32와 다르다: ${JSON.stringify(historySurface)}`);
+  }
+  await shot(shellWin, 'SETTINGS-10-history.png');
+
   // 설정에는 플러그인 표면이 없다(2026-09-03 — 플러그인 모드 관리 뷰가 가져갔다).
   // nav 항목도 카드도 남아 있으면 안 된다.
   const pluginSurface = await shellWin.webContents.executeJavaScript(`

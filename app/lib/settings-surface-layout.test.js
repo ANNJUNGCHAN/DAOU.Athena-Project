@@ -7,6 +7,9 @@ const path = require('node:path');
 
 const appDir = path.resolve(__dirname, '..');
 const settingsSource = fs.readFileSync(path.join(__dirname, 'settings-cards.js'), 'utf8');
+// 그래프 수집·노출 토글의 주인(Paper 보드 22) — 설정 4번째 카드가 아니라 그래프
+// 모드의 「수집·노출」 탭이다. 접근 이름 계약은 그 파일에서 잰다.
+const collectionSource = fs.readFileSync(path.join(__dirname, 'graph-mode', 'collection-settings.js'), 'utf8');
 const settingsCss = fs.readFileSync(path.join(appDir, 'styles', 'settings-cards.css'), 'utf8');
 const shellSource = fs.readFileSync(path.join(appDir, 'shell.js'), 'utf8');
 
@@ -43,12 +46,16 @@ test('설명문이 사라진 토글과 배율 컨트롤은 접근 가능한 이�
     '질의하면 캔버스 창을 자동으로 연다',
     '답변 길이에 따라 대화 창이 자란다',
     'AI가 이 계좌의 주문 API를 호출하도록 허용',
-    '대화',
+  ]) {
+    assert.match(settingsSource, new RegExp(label));
+  }
+  for (const label of [
+    '대화 수집',
     '체결내역',
     '보유 종목·수량과 대화 원문을 모델에 전달',
     '보유잔고 수집',
   ]) {
-    assert.match(settingsSource, new RegExp(label));
+    assert.match(collectionSource, new RegExp(label));
   }
   assert.match(settingsSource, /zoomValue\.setAttribute\('aria-label', '현재 UI 배율'\)/);
   assert.match(settingsSource, /zoomValue\.setAttribute\('aria-live', 'polite'\)/);
@@ -64,10 +71,32 @@ test('UI 배율은 설정 버튼만 쓰고 shell 렌더러 단축키를 되살�
 });
 
 test('보유잔고 조회 주기는 토글 옆 기능 그룹이며 컨트롤 이름이 있다', () => {
-  assert.match(settingsSource, /uk-holdings-controls/);
-  assert.match(settingsSource, /setAttribute\('aria-label', '보유잔고 조회 주기'\)/);
-  assert.match(settingsSource, /'보유잔고 수집'/);
+  assert.match(collectionSource, /graph-settings-source-controls/);
+  assert.match(collectionSource, /setAttribute\('aria-label', '보유잔고 조회 주기'\)/);
+  assert.match(collectionSource, /'보유잔고 수집'/);
   assert.doesNotMatch(settingsCss, /\.uk-holdings-sub\b/);
+});
+
+// ---------- Paper 보드 32 「설정 — 성향·이력」 ----------
+// 네비 라벨만 성향·이력이고 내용은 보드 22(그래프 수집·노출)이던 어긋남을 닫는다.
+// 같은 토글을 두 화면이 나눠 가지면 한쪽만 고쳐지는 날이 온다 — 수집·노출은
+// 그래프 모드 「수집·노출」 탭 하나가 소유한다.
+test('설정 4번째 카드는 Paper 32 성향·이력이다 — 수집 토글은 그래프 패널이 소유한다', () => {
+  assert.match(settingsSource, /'성향·이력'/);
+  assert.match(settingsSource, /'로컬 보관 · 언제든 내보내기 가능'/);
+  assert.match(settingsSource, /'투자 성향'/);
+  assert.match(settingsSource, /'대화 이력'/);
+  assert.match(settingsSource, /'이력 내보내기'/);
+  assert.match(settingsSource, /'삭제는 확인 단계를 한 번 더 거치며 되돌릴 수 없습니다'/);
+  assert.doesNotMatch(settingsSource, /그래프 수집과 노출/);
+  assert.doesNotMatch(settingsSource, /uk-holdings-controls/);
+  assert.doesNotMatch(settingsCss, /\.uk-holdings-controls\b/);
+});
+
+test('성향·이력 카드는 보드의 목업 수치를 하드코딩하지 않는다', () => {
+  for (const mock of ['장기 ETF 적립형', '대화 128건', '42MB', '90일', '안정 추구', '지수 ETF · 반도체']) {
+    assert.doesNotMatch(settingsSource, new RegExp(mock));
+  }
 });
 
 test('#settingsGrid만 전체 높이를 채우고 카드 본문만 세로 스크롤한다', () => {

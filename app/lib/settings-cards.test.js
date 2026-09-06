@@ -192,6 +192,41 @@ test('exposeToModel 패치는 전용 채널로 main에 미러링된다', () => {
   }
 });
 
+// ---- Paper 보드 32 「설정 — 성향·이력」 (화면 P1 항목 1) ----
+// 카드가 그릴 행만 순수 함수로 잰다 — DOM은 verify-settings-cards.js가 본다.
+// 보드가 그린 수치(128건 · 42MB · 90일)는 목업이다. 백엔드가 주지 않는 행은
+// 만들지 않는다 — 빈 자리는 정직하고, 지어낸 숫자는 거짓말이다.
+test('성향·이력 카드는 백엔드가 준 값만 행으로 만든다 — 없는 값은 행이 없다', () => {
+  const model = settingsCards.buildHistoryCardModel({});
+  assert.deepEqual(model.profileRows, []);
+  assert.deepEqual(model.storageRows, []);
+  assert.doesNotMatch(JSON.stringify(model), /128|42MB|90일|장기 ETF/);
+});
+
+test('학습된 관심 대상이 오면 Paper 라벨 그대로 한 행이 된다 — 중복은 접는다', () => {
+  const model = settingsCards.buildHistoryCardModel({
+    profileEntries: [
+      { entity_name: '지수 ETF' },
+      { entity_name: '반도체' },
+      { entity_name: '지수 ETF' },
+      { entity_name: '  ' },
+      {},
+    ],
+  });
+  assert.deepEqual(model.profileRows, [['주요 관심', '지수 ETF · 반도체']]);
+});
+
+test('보관 건수가 오면 「보관 중」 행이 선다 — 용량·보존 기간은 출처가 없어 안 그린다', () => {
+  const model = settingsCards.buildHistoryCardModel({ conversationCount: 12 });
+  assert.deepEqual(model.storageRows, [['보관 중', '대화 12건']]);
+});
+
+test('건수를 못 읽으면 「보관 중」 행 자체가 없다 — 0건이라고 말하지 않는다', () => {
+  assert.deepEqual(settingsCards.buildHistoryCardModel({ conversationCount: null }).storageRows, []);
+  assert.deepEqual(settingsCards.buildHistoryCardModel({ conversationCount: '12' }).storageRows, []);
+  assert.deepEqual(settingsCards.buildHistoryCardModel({ conversationCount: -1 }).storageRows, []);
+});
+
 // ---- 화면 P1 항목 11 (Paper 11D-0/11Q-0) — 흰 시트 위의 다크 잔재 색 ----
 // settings-cards.js가 그리는 DOM은 Electron 게이트가 보고, 여기서는 CSS 파일을
 // 읽어 색 토큰만 못박는다(controller.test.js가 쓰는 것과 같은 문법).

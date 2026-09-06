@@ -446,19 +446,18 @@ button.uk-account-switch:focus-visible { outline: 2px solid rgb(255 255 255 / 55
   font-family: var(--font-strong);
 }
 
-/* 보유잔고 조회 주기 — 토글과 같은 우측 기능 그룹에 둔다. */
-.uk-holdings-controls { display: flex; align-items: center; gap: 10px; flex: none; }
-.uk-holdings-interval-label { font-family: var(--font-body); font-size: var(--text-sm); color: var(--color-k-dim); }
-.uk-holdings-interval-select {
-  font-family: var(--font-body);
-  font-size: var(--text-sm);
-  color: var(--color-k-text);
-  background: rgb(16 19 26 / 5%);
-  border: 1px solid rgb(16 19 26 / 14%);
-  border-radius: 999px;
-  padding: 1px 8px;
-  appearance: auto;
-  cursor: pointer;
+/* Paper 보드 32 「성향·이력」 — 구역 머리와 라벨 ↔ 값 행. */
+.uk-history-sections { display: flex; flex-direction: column; gap: 18px; }
+.uk-history-section { display: flex; flex-direction: column; }
+.uk-history-section-head { display: flex; align-items: baseline; gap: 10px; padding-bottom: 6px; }
+.uk-history-section-title { font-family: var(--font-strong); font-size: var(--text-md); color: var(--color-k-text); }
+.uk-history-section-aside { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-k-faint); }
+.uk-history-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 0;
+  border-top: 1px solid var(--color-k-line-soft);
 }
-.uk-holdings-interval-select:hover { background: rgb(16 19 26 / 10%); }
-.uk-holdings-interval-select:focus-visible { outline: 2px solid var(--color-k-text); outline-offset: 1px; }
+.uk-history-value { font-family: var(--font-body); font-size: var(--text-sm); color: var(--color-k-dim); text-align: right; }
