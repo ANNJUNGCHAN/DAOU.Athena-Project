@@ -7,7 +7,7 @@
 지어낸 수가 하나도 없다.
 
 되돌리기는 이 판을 그대로 되쓰는 일이다: 접어 둔 원문을 파일에 다시 쓰고
-`version_hash`를 그때 값으로 돌린다.
+`version_hash`를 그 원문의 해시로 돌린다.
 
 이 모듈은 순수하다 — 파일도 저장소도 만지지 않는다(부르는 쪽 몫).
 """
@@ -20,6 +20,9 @@ from typing import Any
 # 이력은 루틴 JSON 안에 원문째 산다 — 무한히 쌓이면 저장 파일이 커진다.
 # 사람이 한 알람을 열 번 넘게 고쳤다면 그 앞은 되돌릴 일이 없다.
 MAX_REVISIONS = 10
+
+# 되돌리기가 열리는 상태 — 켜져 있는 알람은 못 되돌린다(api/routines.py의 문과 같다).
+ROLLBACK_STATUSES = ("draft", "paused")
 
 
 @dataclass(frozen=True)
@@ -39,6 +42,11 @@ class WatchRevision:
     @property
     def nodes(self) -> list[dict[str, Any]]:
         return list(self.check.get("nodes") or [])
+
+    @property
+    def ok(self) -> bool:
+        """그때의 검사가 실제로 세었는지 — 안 통과한 검사의 0건은 센 값이 아니다."""
+        return self.check.get("ok") is True
 
     @property
     def fire_count(self) -> int | None:
@@ -168,17 +176,21 @@ def _fire_dates(fires: Any) -> list[str]:
     return [str(f.get("dt")) for f in (fires or []) if isinstance(f, dict) and f.get("dt")]
 
 
-def fix_cycle(history: Any, check: Any) -> dict[str, Any] | None:
+def fix_cycle(history: Any, check: Any, *, status: str | None = None) -> dict[str, Any] | None:
     """마지막 판과 지금 검사를 맞댄 「한 바퀴」 — 이력이나 검사가 없으면 None.
 
-    울림 수는 앞판의 검사 결과와 지금 검사 결과 둘 다 실제로 센 값일 때만 낸다
-    (한쪽이 없으면 그 자리는 None으로 남기고 화면이 빈 상태를 그린다).
+    울림 수는 앞판의 검사 결과와 지금 검사 결과 둘 다 **통과한** 검사일 때만 낸다.
+    코드가 터졌거나 칸 값을 못 읽은 검사도 노드는 채운 채 `count=0`·`fires=[]`로
+    돌아오므로(watch/check.run_check), 그 0을 그대로 실으면 화면이 「고쳐서
+    조용해졌다」고 말하게 된다. 통과 여부(`ok`)와 못 센 까닭(`skip_reason`)을 같이
+    실어 화면이 판정 줄을 접을 수 있게 한다.
     """
     items = list(history or [])
     if not items or not isinstance(check, dict):
         return None
     prev = WatchRevision.from_dict(items[-1])
     changes = diff_inputs(prev.nodes, check.get("nodes"))
+    passed = check.get("ok") is True
     return {
         "fix_count": len(items),
         "past_count": len(items) - 1,
@@ -186,17 +198,21 @@ def fix_cycle(history: Any, check: Any) -> dict[str, Any] | None:
         "checked_at": check.get("checked_at"),
         "lookback_days": check.get("lookback_days") or prev.lookback_days,
         "duration_ms": check.get("duration_ms"),
-        "fires_before": prev.fire_count,
-        "fires_after": check.get("count"),
-        "fires_before_dates": _fire_dates(prev.fires),
-        "fires_after_dates": _fire_dates(check.get("fires")),
+        "ok": passed,
+        "skip_reason": check.get("skip_reason"),
+        # 점 띠의 마지막 칸 — 검사가 실제로 센 마지막 날(어제, KST)이다.
+        "counted_through": check.get("counted_through"),
+        "fires_before": prev.fire_count if prev.ok else None,
+        "fires_after": check.get("count") if passed else None,
+        "fires_before_dates": _fire_dates(prev.fires) if prev.ok else [],
+        "fires_after_dates": _fire_dates(check.get("fires")) if passed else [],
         "changes": changes,
         "changed_nodes": sum(
             1
             for n in mark_fixed_nodes(prev.nodes, check.get("nodes"))
             if isinstance(n, dict) and n.get("changed")
         ),
-        "can_rollback": True,
+        "can_rollback": status in ROLLBACK_STATUSES,
     }
 
 

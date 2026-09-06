@@ -57,19 +57,21 @@ function secondsLabel(ms) {
  * 지난 N일 점 띠 — 검사가 센 구간(어제까지) 하루가 한 칸이다.
  *
  * 고치기 전에 울렸는데 지금은 안 울리는 날이 회색이고, 지금도 울리는 날이 표시,
- * 나머지는 조용한 날이다. 구간이나 기준일을 모르면 띠를 만들지 않는다.
+ * 나머지는 조용한 날이다. 구간이나 마지막 날을 모르면 띠를 만들지 않는다.
+ *
+ * 마지막 칸은 검사가 실제로 센 마지막 날(`counted_through`)이다 — 울린 날은
+ * 거래일(KST)인데 검사 시각은 UTC라, 시각으로 창을 잡으면 새벽에 하루가 밀린다.
  */
 function dotStrip(cycle) {
   const c = cycle || {};
   const days = Number(c.lookback_days);
-  const end = parseDay(c.checked_at);
-  if (!end || !Number.isFinite(days) || days <= 0 || days > 366) return [];
+  const last = parseDay(c.counted_through);
+  if (!last || !Number.isFinite(days) || days <= 0 || days > 366) return [];
   const before = new Set((c.fires_before_dates || []).map((d) => String(d).slice(0, 10)));
   const after = new Set((c.fires_after_dates || []).map((d) => String(d).slice(0, 10)));
   const cells = [];
-  // 검사는 어제까지만 센다 — 기준일 자신은 칸이 아니다.
-  for (let back = days; back >= 1; back -= 1) {
-    const date = new Date(end.getTime() - back * 86400000);
+  for (let back = days - 1; back >= 0; back -= 1) {
+    const date = new Date(last.getTime() - back * 86400000);
     const key = dayKey(date);
     let state = DOT_QUIET;
     if (after.has(key)) state = DOT_FIRED;
@@ -91,7 +93,10 @@ function cycleModel(cycle) {
   const days = Number(c.lookback_days);
   const hasDays = Number.isFinite(days) && days > 0;
   const took = secondsLabel(c.duration_ms);
-  const dots = dotStrip(c);
+  // 다시 검사가 통과했을 때만 센 값이 있다 — 코드가 터진 검사도 0번·빈 목록으로
+  // 돌아오므로(백엔드 fix_cycle) 그 0을 그리면 「고쳐서 조용해졌다」는 거짓이 된다.
+  const passed = c.ok === true;
+  const dots = passed ? dotStrip(c) : [];
   const silenced = dots.filter((d) => d.state === DOT_SILENCED).length;
   const afterDates = (c.fires_after_dates || []).map(shortDate).filter((s) => s);
 
@@ -103,10 +108,11 @@ function cycleModel(cycle) {
     }));
   // 마지막 줄은 판정이다 — 다시 검사를 통과했고 몇 칸을 다시 그렸는지.
   // 검사 3/3(오늘 값으로 1회)은 켠 뒤의 일이라 여기서 통과했다고 말하지 않는다
-  // (watch-progress-card.js LINE_TODAY와 같은 사실).
+  // (watch-progress-card.js LINE_TODAY와 같은 사실). 통과하지 못한 검사에는
+  // 판정 줄 자체를 안 만든다 — 바꾼 칸 목록만 남는다.
   const changedNodes = isCount(c.changed_nodes) ? c.changed_nodes : 0;
   const receiptRows = changes.slice();
-  if (changedNodes > 0) {
+  if (passed && changedNodes > 0) {
     receiptRows.push({ mark: RECEIPT_MARK, text: `다시 검사 통과 · 노드 ${changedNodes}개 다시 그림` });
   }
 
@@ -115,10 +121,10 @@ function cycleModel(cycle) {
     cycleText: CYCLE_TEXT,
     recheckTitle: hasDays ? `${RECHECK_TITLE} · 지난 ${days}일` : RECHECK_TITLE,
     recheckMeta: took ? `${RECHECK_AUTO} · ${took}` : RECHECK_AUTO,
-    before: isCount(c.fires_before) ? `${c.fires_before}번` : '',
-    after: isCount(c.fires_after) ? `${c.fires_after}번 울림` : '',
+    before: passed && isCount(c.fires_before) ? `${c.fires_before}번` : '',
+    after: passed && isCount(c.fires_after) ? `${c.fires_after}번 울림` : '',
     arrow: ARROW,
-    afterDates: afterDates.join(' · '),
+    afterDates: passed ? afterDates.join(' · ') : '',
     dots,
     dotNote: silenced > 0 ? `회색 ${silenced}칸은 고치기 전에 울렸던 날 · 이제는 안 울림` : '',
     receiptTitle: fixCount > 0 ? `${RECEIPT_TITLE} · ${fixCount}번째 고침` : RECEIPT_TITLE,

@@ -41,14 +41,17 @@ def _nodes(days, ratio):
     ]
 
 
-def _check(days="3일", ratio="1.5배", count=4, fires=("2026-08-12", "2026-08-26")):
+def _check(days="3일", ratio="1.5배", count=4, fires=("2026-08-12", "2026-08-26"), ok=True):
     return {
         "checked_at": "2026-09-05T06:31:00+00:00",
+        "counted_through": "2026-09-04",
         "nodes": _nodes(days, ratio),
         "count": count,
         "fires": [{"dt": d, "close": 71000.0} for d in fires],
         "lookback_days": 30,
         "duration_ms": 9000,
+        "ok": ok,
+        "skip_reason": None if ok else "검사 실패 — 코드가 돌지 않음",
     }
 
 
@@ -86,7 +89,11 @@ def test_boolean_inputs_are_compared_as_korean_words():
 
 def test_cycle_counts_fires_before_and_after_from_real_checks():
     history = push([], WatchRevision("a" * 64, "2026-09-05T06:40:00+00:00", "src", _check()))
-    cycle = fix_cycle(history, _check("5일", "2.0배", count=2, fires=("2026-08-12", "2026-08-26")))
+    cycle = fix_cycle(
+        history,
+        _check("5일", "2.0배", count=2, fires=("2026-08-12", "2026-08-26")),
+        status="draft",
+    )
     assert cycle["fix_count"] == 1
     assert cycle["past_count"] == 0
     assert (cycle["fires_before"], cycle["fires_after"]) == (4, 2)
@@ -95,7 +102,36 @@ def test_cycle_counts_fires_before_and_after_from_real_checks():
     assert cycle["duration_ms"] == 9000
     assert cycle["changed_nodes"] == 2
     assert [r["label"] for r in cycle["changes"]] == ["평균 일수", "배수"]
+    assert cycle["ok"] is True
+    assert cycle["skip_reason"] is None
+    assert cycle["counted_through"] == "2026-09-04"
     assert cycle["can_rollback"] is True
+
+
+def test_a_recheck_that_did_not_pass_carries_no_counted_numbers():
+    """코드가 터진 검사도 노드는 채운 채 0건으로 온다 — 그 0을 실으면 안 된다."""
+    history = push([], WatchRevision("a" * 64, "t", "src", _check()))
+    cycle = fix_cycle(
+        history, _check("5일", "2.0배", count=0, fires=(), ok=False), status="draft"
+    )
+    assert cycle["ok"] is False
+    assert cycle["skip_reason"] == "검사 실패 — 코드가 돌지 않음"
+    assert cycle["fires_after"] is None
+    assert cycle["fires_after_dates"] == []
+    assert [r["label"] for r in cycle["changes"]] == ["평균 일수", "배수"]
+
+
+def test_a_fix_folded_on_top_of_a_failed_check_has_no_before_count():
+    history = push([], WatchRevision("a" * 64, "t", "src", _check(count=0, fires=(), ok=False)))
+    cycle = fix_cycle(history, _check("5일", "2.0배", count=2), status="draft")
+    assert cycle["fires_before"] is None
+    assert cycle["fires_before_dates"] == []
+
+
+def test_rollback_door_is_closed_while_the_alarm_is_running():
+    history = push([], WatchRevision("a" * 64, "t", "src", _check()))
+    for status, opened in (("draft", True), ("paused", True), ("active", False), (None, False)):
+        assert fix_cycle(history, _check(), status=status)["can_rollback"] is opened
 
 
 def test_cycle_is_none_before_the_first_fix_and_without_a_check():
