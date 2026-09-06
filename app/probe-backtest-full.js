@@ -1362,7 +1362,7 @@ async function main() {
     })()`);
     await step('D02', '지표 타일 6장이 계약 순서로 뜬다', () => ({
       ok: tiles.length === 6 && JSON.stringify(tiles.map((t) => t.label))
-            === JSON.stringify(['총수익률', 'CAGR', 'Sharpe', 'MDD', '승률', 'Profit Factor']),
+            === JSON.stringify(['총수익률', 'CAGR', 'Sharpe', '최대 낙폭', '승률', 'Profit Factor']),
       data: { labels: tiles.map((t) => t.label) },
     }));
     await step('D03', '타일 값이 전부 실제 숫자다(— 없음)', () => ({
@@ -2129,7 +2129,7 @@ async function main() {
     })()`);
     await step('I01', '최적화 탭이 전략 파라미터를 탐색 축으로 세운다', () => ({
       ok: setup.ranges.length === 2 && /^fast .+ step \d+$/.test(setup.ranges[0] || '')
-            && setup.note === '캐시만 씁니다 — 추가 TR 호출 없음' && setup.start === 1,
+            && setup.note === '추가 TR 호출 없음 — 캐시 밖 구간은 먼저 수집 승인' && setup.start === 1,
       data: setup,
     }));
     await step('I02', '방식 세그먼트는 그리드가 기본이다', () => ({

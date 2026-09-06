@@ -169,7 +169,7 @@ async function main() {
   // ---------- (4) 결과 설명이 화면 숫자를 쓴다 ----------
   const t4 = await chat(shellWin, '결과 설명해줘');
   const tileTotal = r3 && r3.values.find((v) => v.label.includes('총수익률'));
-  const tileMdd = r3 && r3.values.find((v) => v.label === 'MDD');
+  const tileMdd = r3 && r3.values.find((v) => v.label === '최대 낙폭');
   const usesTotal = !!tileTotal && mentions(t4.answer || '', tileTotal.value);
   const usesMdd = !!tileMdd && mentions(t4.answer || '', tileMdd.value);
   record('04-"결과 설명해줘" — 답이 타일 숫자를 쓴다', !t4.error && usesTotal && usesMdd, {

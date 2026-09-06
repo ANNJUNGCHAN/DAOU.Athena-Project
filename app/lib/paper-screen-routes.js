@@ -741,6 +741,139 @@ const PLUGIN_REJECT_DONE = Object.freeze({
 });
 
 
+// ── 백테스트 페이지(8-1) fixture ────────────────────────────────────────────
+// 백테스트 화면은 백엔드(127.0.0.1:8010)가 쥔 기법 목록·캐시된 일봉으로만 선다.
+// 이 게이트는 ATHENA_NO_AUTOSTART로 백엔드를 안 띄우므로 첫 왕복부터 status 0이 되어
+// 화면이 통째로 오류 패널이 된다(canvas.js backtestError) — 목록·실행·결과·이력·최적화를
+// 봉투로 못 박지 않으면 여섯 보드가 전부 그 패널을 잰다. 기법 이름·종목·숫자·날짜는
+// 전부 값이라 phrases에는 한 글자도 넣지 않는다.
+const BACKTEST_PRESET_YAML = [
+  'version: "1.0"',
+  'metadata:',
+  '  name: 20-60 골든크로스',
+  'strategy:',
+  '  id: sma_crossover',
+  '  category: trend',
+  '  params:',
+  '    fast: {default: 20, min: 5, max: 60, step: 1, type: int}',
+  '    slow: {default: 60, min: 20, max: 240, step: 1, type: int}',
+  '  indicators:',
+  '    - {id: SMA, alias: ma_fast, params: {period: "$fast"}}',
+  '    - {id: SMA, alias: ma_slow, params: {period: "$slow"}}',
+  '  entry:',
+  '    logic: AND',
+  '    conditions:',
+  '      - {indicator: ma_fast, operator: cross_above, compare_to: ma_slow}',
+  '  exit:',
+  '    logic: OR',
+  '    conditions:',
+  '      - {indicator: ma_fast, operator: cross_below, compare_to: ma_slow}',
+  'risk:',
+  '  stop_loss:   {enabled: true,  percent: 8}',
+  '  take_profit: {enabled: false, percent: 20}',
+  '  position:    {sizing: all_in}',
+].join('\n');
+
+const BACKTEST_PRESETS = Object.freeze({
+  ok: true,
+  data: {
+    presets: [{
+      id: 'sma_crossover',
+      name: '20-60 골든크로스',
+      category: 'trend',
+      yaml: BACKTEST_PRESET_YAML,
+    }],
+  },
+});
+
+// 대상·기간을 채우는 자극. 폼 칸에 글자를 넣는 어휘가 표에 없어서가 아니라, 앱에 이미
+// 그 일을 하는 문이 있어서다 — 채팅이 낸 설정 초안은 main이 이 채널로 밀고 chat.js가
+// 캔버스의 onChatAction으로 넘긴다(chat.js athena:backtest-chat-action 구독). 종목·구간이
+// 없으면 [실행]이 폼 검증에서 막혀(backtest-spec.js validate) 보드 03·04에 도달할 수 없다.
+const BACKTEST_TARGET = Object.freeze({
+  kind: 'spec_draft',
+  patch: {
+    preset: 'sma_crossover',
+    symbols: ['005930'],
+    period: 'day',
+    fromDt: '20180101',
+    toDt: '20260801',
+  },
+});
+
+// 보드 04 — 캐시가 모자라 실행하지 않았다는 409. 실패가 아니라 승인 화면 전환 신호라
+// canvas.js가 blocked로 정규화하고, 캔버스는 그 숫자로 승인 카드를 세운다.
+const BACKTEST_RUN_BLOCKED = Object.freeze({
+  ok: false,
+  status: 409,
+  error: 'cache miss',
+  detail: { needed_pages: 4, est_seconds: 5 },
+});
+
+// 보드 03 — 실행이 곧바로 끝난 판. 폴링이 첫 tick에서 done을 보고 결과 화면으로 넘어간다.
+const BACKTEST_RUN_OK = Object.freeze({ ok: true, data: { run_id: 'fx-run-41' } });
+const BACKTEST_RESULT = Object.freeze({
+  ok: true,
+  data: {
+    status: 'done',
+    metrics: {
+      total_return: 1.842, cagr: 0.213, sharpe: 0.87, mdd: -0.279,
+      win_rate: 0.58, profit_factor: 1.94, bars: 2559, warmup_bars: 60,
+      mdd_start: '2020-03', mdd_bars: 87, closed_trades: 41, winning_trades: 24,
+      buy_hold_return: 1.41, run_path: 'form',
+    },
+    equity: [1, 1.12, 0.98, 1.31, 1.55, 1.84],
+    benchmark: [70000, 74000, 68000, 82000, 95000, 99000],
+    stdout: '',
+    params: { fast: 20, slow: 60 },
+    version: 4,
+    source: '',
+  },
+});
+const BACKTEST_TRADES = Object.freeze({
+  ok: true,
+  data: {
+    trades: [
+      { dt: '2018-04-11', side: 'buy', price: 51200, qty: 19, fee: 146, tax: 0, pnl: 0, reason: 'signal' },
+      { dt: '2018-09-03', side: 'sell', price: 58900, qty: 19, fee: 168, tax: 2014, pnl: 144118, reason: 'stop_loss' },
+    ],
+  },
+});
+
+// 보드 05 — Paper가 그린 네 줄(#41·#38·#36·#29) 그대로. 마지막 줄만 실패다.
+const BACKTEST_RUNS = Object.freeze({
+  ok: true,
+  data: {
+    runs: [
+      { run_id: 'fx-run-41', status: 'done', metrics: { total_return: 1.842, sharpe: 0.87, mdd: -0.279, win_rate: 0.58 } },
+      { run_id: 'fx-run-38', status: 'done', metrics: { total_return: 0.967, sharpe: 0.51, mdd: -0.346, win_rate: 0.49 } },
+      { run_id: 'fx-run-36', status: 'done', metrics: { total_return: -0.121, sharpe: -0.12, mdd: -0.412, win_rate: 0.37 } },
+      { run_id: 'fx-run-29', status: 'failed', metrics: null },
+    ],
+  },
+});
+
+// 보드 06 — 탐색이 끝난 판. 경고 한 줄이 있어야 「과최적화 의심」이 서고, 히트맵의 두 축이
+// 그대로 제목이 된다(x_axis × y_axis).
+const BACKTEST_OPTIMIZE = Object.freeze({
+  ok: true,
+  data: {
+    best: { params: { fast: 20, slow: 60 }, sharpe: 0.87 },
+    neighbour_mean_sharpe: 0.42,
+    warnings: [{ kind: 'peak', message: '최고점이 이웃보다 0.4 이상 튑니다 — 넓은 언덕을 고르세요' }],
+    heatmap: {
+      x_axis: 'fast',
+      y_axis: 'slow',
+      min_sharpe: -0.2,
+      max_sharpe: 0.87,
+      cells: [
+        { x: 5, y: 20, sharpe: -0.2 }, { x: 20, y: 60, sharpe: 0.87 },
+        { x: 40, y: 120, sharpe: 0.31 }, { x: 60, y: 240, sharpe: 0.12 },
+      ],
+    },
+  },
+});
+
 const ROUTES = Object.freeze([
   // ---------- 부팅 5장 (1-0) ----------
   // 부팅 02~05는 한 애니메이션의 시간 단계라 서로를 가르는 것은 **찍힌 글자 수**뿐이다.
@@ -2523,6 +2656,198 @@ const ROUTES = Object.freeze([
     structure: [
       { what: 'count', selector: '.shell-region', equals: 3 },
       { what: 'count', selector: '.km-section', equals: 3 },
+    ],
+  },
+  // ---------- 백테스트 6장 (8-1) ----------
+  // 여섯 보드는 한 캔버스의 여섯 상태다(#backtestCanvas). 기법을 고르기 전 첫 화면은
+  // 기법 목록이라(backtest-canvas.js listFirst) 어느 보드든 먼저 기법 하나를 세워야 한다 —
+  // 그 자극이 위 BACKTEST_TARGET이다. Paper의 머리·탭 이름은 안 적는다: Paper 보드 01의
+  // 탭은 「폼 · 코드 · 실행」이고 보드 03은 「설계 · 결과 · 다시 실행」인데, 앱의 모드 탭은
+  // 다섯(기법 · 결과 · 이력 · 최적화 · 배포)이고 설계 하위 탭도 넷이라 어느 쪽 수를 적어도
+  // 거짓말이 된다(보드 19가 그 기법 목록 화면을 따로 그린다).
+  {
+    board: '1SW0-0', // 01 · 백테스트 — 설계 (폼)
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:backtest-presets', data: BACKTEST_PRESETS },
+      { do: 'mode', view: 'backtest' },
+      { do: 'send', channel: 'athena:backtest-chat-action', data: BACKTEST_TARGET },
+      { do: 'wait', ms: 300 },
+      // 설정을 얹으면 화면은 지도 탭에 선다(applySpecAction) — 폼은 그 옆 칸이다.
+      { do: 'click', selector: '#backtestCanvas .backtest-subtab:nth-child(2)' },
+      { do: 'settle' },
+    ],
+    root: '#backtestCanvas',
+    // 종목코드·기간·지표 개수·수수료 숫자는 전부 값이라 안 넣는다. 남는 것은 카드 제목과
+    // 조건 카드의 논리 배지뿐이다 — 배지는 fixture가 아니라 그 기법의 AND/OR이다.
+    phrases: [
+      '대상 · 기간',
+      '수정주가',
+      '지표',
+      '진입 조건',
+      '모두 만족 AND',
+      '청산 조건',
+      '리스크 · 비용',
+    ],
+    // Paper가 그린 조건 카드 둘(진입·청산) · 주기 세그먼트 셋(일·주·월) · 종목 칩 하나.
+    structure: [
+      { what: 'count', selector: '.backtest-condition-card', equals: 2 },
+      { what: 'count', selector: '.backtest-segment-item', equals: 3 },
+      { what: 'count', selector: '.backtest-symbol-chip', equals: 1 },
+    ],
+  },
+  {
+    board: '1T5K-0', // 02 · 백테스트 — 설계 (코드)
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:backtest-presets', data: BACKTEST_PRESETS },
+      { do: 'mode', view: 'backtest' },
+      { do: 'send', channel: 'athena:backtest-chat-action', data: BACKTEST_TARGET },
+      { do: 'wait', ms: 300 },
+      { do: 'click', selector: '#backtestCanvas .backtest-subtab:nth-child(3)' },
+      { do: 'settle' },
+    ],
+    root: '#backtestCanvas',
+    // 파일 이름(golden_cross.py)·버전 칩은 값이고, 코드 본문은 그 전략의 파이썬이라
+    // 문구가 못 된다. 편집기 바의 런타임 줄(python 3.12 …)도 판번호를 품어 생성기가
+    // 값으로 걸러낸다 — 남는 것은 [검증] 하나와 발치의 경계 상자다.
+    phrases: [
+      '검증',
+      '이 코드가 닿을 수 있는 것',
+      '건네받은 봉 데이터 · pandas · numpy · athena_bt',
+      '키움 자격증명 · 계좌 · DB · 네트워크 — 넘기지 않습니다',
+    ],
+    // 경계 상자의 마지막 줄은 안 적는다 — Paper는 「30초 제한」, 앱은 「시간 제한」이다.
+    structure: [
+      { what: 'count', selector: '.backtest-code-host', equals: 1 },
+      { what: 'count', selector: '.backtest-code-bounds', equals: 1 },
+    ],
+  },
+  {
+    board: '1TGA-1', // 03 · 백테스트 — 결과
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:backtest-presets', data: BACKTEST_PRESETS },
+      { do: 'ipc-fixture', channel: 'athena:backtest-run', data: BACKTEST_RUN_OK },
+      { do: 'ipc-fixture', channel: 'athena:backtest-result', data: BACKTEST_RESULT },
+      { do: 'ipc-fixture', channel: 'athena:backtest-trades', data: BACKTEST_TRADES },
+      { do: 'mode', view: 'backtest' },
+      { do: 'send', channel: 'athena:backtest-chat-action', data: BACKTEST_TARGET },
+      { do: 'wait', ms: 300 },
+      { do: 'click', selector: '#backtestCanvas .backtest-run-button' },
+      { do: 'wait', ms: 500 },
+      { do: 'settle' },
+    ],
+    root: '#backtestCanvas',
+    // 타일 값·낙폭 구간·체결 줄은 전부 fixture가 주는 값이다 — 라벨과 부제만 남긴다.
+    phrases: [
+      '총수익률',
+      '최대 낙폭',
+      'Profit Factor',
+      '총익 ÷ 총손',
+      '자산곡선',
+      '매수보유',
+      '수수료·세금 반영 후 손익',
+    ],
+    // Paper가 적은 「지표 6장」과 체결 표의 열 일곱(일자·방향·체결가·수량·비용·손익·사유).
+    structure: [
+      { what: 'count', selector: '.backtest-metric-tile', equals: 6 },
+      { what: 'count', selector: '.backtest-trades-head .backtest-trades-cell', equals: 7 },
+    ],
+  },
+  {
+    board: '1TPF-1', // 04 · 백테스트 — 데이터 수집 승인
+    window: 'shell',
+    // 보드 04는 승인 카드와 수집 중 카드를 나란히 그렸다 — 한 화면은 한 쪽만 그리므로
+    // 라우트는 승인 카드를 잰다(수집 중은 승인을 누른 뒤의 다음 상태다).
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:backtest-presets', data: BACKTEST_PRESETS },
+      { do: 'ipc-fixture', channel: 'athena:backtest-run', data: BACKTEST_RUN_BLOCKED },
+      { do: 'mode', view: 'backtest' },
+      { do: 'send', channel: 'athena:backtest-chat-action', data: BACKTEST_TARGET },
+      { do: 'wait', ms: 300 },
+      { do: 'click', selector: '#backtestCanvas .backtest-run-button' },
+      { do: 'wait', ms: 300 },
+      { do: 'settle' },
+    ],
+    root: '#backtestCanvas',
+    // 「부족 구간 약 520봉」·「ka10081 × 4회」·「~5초」는 계획이 준 값이라 안 넣는다.
+    phrases: [
+      '수집 필요',
+      '캐시에 없는 구간이 있습니다',
+      '수정주가 기준으로 받습니다. 이어 붙일 때 최근 20봉 종가를 대조해 권리락이 감지되면 전체를 다시 받고, 그 사실을 결과에 남깁니다.',
+      '수집하고 실행',
+      '보유 구간만으로 실행',
+      '취소',
+    ],
+    // Paper의 승인 카드는 커버리지 바 하나와 갈래 셋이다.
+    structure: [
+      { what: 'count', selector: '.backtest-coverage-bar', equals: 1 },
+      { what: 'count', selector: '.backtest-approval-actions button', equals: 3 },
+    ],
+  },
+  {
+    board: '1WSI-1', // 05 · 백테스트 — 이력·비교
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:backtest-presets', data: BACKTEST_PRESETS },
+      { do: 'ipc-fixture', channel: 'athena:backtest-runs', data: BACKTEST_RUNS },
+      { do: 'ipc-fixture', channel: 'athena:backtest-result', data: BACKTEST_RESULT },
+      { do: 'mode', view: 'backtest' },
+      { do: 'send', channel: 'athena:backtest-chat-action', data: BACKTEST_TARGET },
+      { do: 'wait', ms: 300 },
+      // 모드 탭 셋째가 이력이다(기법 · 결과 · 이력 · 최적화 · 배포).
+      { do: 'click', selector: '#backtestCanvas .backtest-tab:nth-child(3)' },
+      { do: 'wait', ms: 300 },
+      // 비교 패널은 두 줄을 고른 뒤에만 선다 — Paper가 그린 #41 vs #38이 그 둘이다.
+      { do: 'click', selector: '#backtestCanvas .backtest-history-row:nth-of-type(1)' },
+      { do: 'click', selector: '#backtestCanvas .backtest-history-row:nth-of-type(2)' },
+      { do: 'wait', ms: 300 },
+      { do: 'settle' },
+    ],
+    root: '#backtestCanvas',
+    // 실행 번호·버전·수익률은 전부 값이다. 목록 머리(「실행 이력 — 20-60 골든크로스」)와
+    // 비교 패널 제목(「#41 vs #38 — 무엇이 달랐나」)도 전략 이름과 실행 번호를 품고 있어
+    // 못 쓴다 — 이 보드에서 값이 아닌 것은 두 diff 칸의 이름 둘뿐이라 3개 하한을
+    // paper-screen-routes.test.js가 사유와 함께 예외 처리했고, 대가로 structure 둘을 실었다.
+    phrases: ['파라미터 diff', '코드 diff'],
+    // Paper의 실행 목록 네 줄과 비교 패널의 「왜 달랐나」 두 칸.
+    structure: [
+      { what: 'count', selector: '.backtest-history-row', equals: 4 },
+      { what: 'count', selector: '.backtest-compare-diff-box', equals: 2 },
+    ],
+  },
+  {
+    board: '1WZJ-1', // 06 · 백테스트 — 최적화
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:backtest-presets', data: BACKTEST_PRESETS },
+      { do: 'ipc-fixture', channel: 'athena:backtest-optimize', data: BACKTEST_OPTIMIZE },
+      { do: 'mode', view: 'backtest' },
+      { do: 'send', channel: 'athena:backtest-chat-action', data: BACKTEST_TARGET },
+      { do: 'wait', ms: 300 },
+      { do: 'click', selector: '#backtestCanvas .backtest-tab:nth-child(4)' },
+      { do: 'wait', ms: 200 },
+      // 히트맵과 경고는 탐색이 끝난 뒤에만 있다 — 탐색을 시작하는 것은 사람 클릭이다.
+      { do: 'click', selector: '#backtestCanvas .backtest-optimize-start' },
+      { do: 'wait', ms: 300 },
+      { do: 'settle' },
+    ],
+    root: '#backtestCanvas',
+    // 「12값」·「23값」·「조합 276개」·「예상 ~2초」는 축과 격자가 정하는 값이다.
+    phrases: [
+      '그리드',
+      '랜덤',
+      '탐색 시작',
+      '추가 TR 호출 없음 — 캐시 밖 구간은 먼저 수집 승인',
+      'Sharpe 히트맵 — fast × slow',
+      '과최적화 의심',
+    ],
+    // Paper가 그린 방식 둘(그리드·랜덤)과 축 둘(fast·slow), 경고 한 줄.
+    structure: [
+      { what: 'count', selector: '.backtest-segment-item', equals: 2 },
+      { what: 'count', selector: '.backtest-optimize-range', equals: 2 },
+      { what: 'count', selector: '.backtest-optimize-warn', equals: 1 },
     ],
   },
 ]);
