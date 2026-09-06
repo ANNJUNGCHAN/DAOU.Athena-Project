@@ -1472,11 +1472,14 @@ function createBacktestCanvas(options) {
     stopPolling();
     const tick = async () => {
       pollTimer = null;
-      if (!isVisible()) return;
+      // 「중단」은 예약된 타이머만 지운다 — 이미 status를 기다리고 있던 틱은 못 막는다.
+      // 그 틱이 늦게 깨어나 폴링을 되살리거나 startRun을 부르면 사람이 멈춘 연쇄가 혼자
+      // 이어진다. jobId가 비었으면(=중단했으면) 앞뒤 어느 지점에서든 여기서 끝낸다.
+      if (!state.jobId || !isVisible()) return;
       let job;
       try { job = deps.status ? await deps.status({ job_id: state.jobId }) : null; }
-      catch (err) { fail(err); return; }
-      if (!isVisible()) return;
+      catch (err) { if (state.jobId) fail(err); return; }
+      if (!state.jobId || !isVisible()) return;
       if (job && job.progress) {
         setState({
           progressText: `데이터를 수집하는 중입니다 · ${job.progress.page}페이지 · ${job.progress.rows}행`,
