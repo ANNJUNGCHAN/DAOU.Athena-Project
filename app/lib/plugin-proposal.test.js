@@ -160,7 +160,7 @@ test('cardCopy: GUI 근거 줄은 동작마다 다르다', () => {
   assert.equal(reason({ action: 'set_enabled', target: 'time', enabled: false }), '관리에서 [끄기]를 눌렀습니다');
   assert.equal(reason({ action: 'set_enabled', target: 'time', enabled: true }), '관리에서 [켜기]를 눌렀습니다');
   assert.equal(reason({ action: 'remove', target: 'time' }), '관리에서 [삭제]를 눌렀습니다');
-  assert.equal(reason({ action: 'stage_snippet', target: null, snippet: '{}' }), '[+ 서버 추가]에서 [승인]을 눌렀습니다');
+  assert.equal(reason({ action: 'stage_snippet', target: null, snippet: '{}' }), '[+ 서버 추가]에서 [등록 제안]을 눌렀습니다');
 });
 
 test('cardCopy: 카드 제목은 별칭이 아니라 사람이 읽는 이름을 쓴다', () => {

@@ -614,14 +614,15 @@ function createPluginCanvas(options) {
     row.appendChild(el('div', 'plugin-canvas-spacer'));
     // 삭제는 플러그인 행에만 있다. 마켓플레이스는 끄기로 충분하고, 내장 카탈로그를
     // 지우면 되돌릴 화면이 없다.
+    // 안내가 컨트롤보다 앞에 온다(Paper 04의 행 차례).
     if (kind !== 'marketplace' && typeof deps.onPropose === 'function') {
-      row.appendChild(actionButton('삭제', 'is-danger', () => openRemoveSheet(item)));
       row.appendChild(el('span', 'plugin-canvas-manage-hint', '승인 후 지웁니다'));
+      row.appendChild(actionButton('삭제', 'is-danger', () => openRemoveSheet(item)));
     }
-    row.appendChild(toggleButton(item, kind, row));
     if (kind !== 'marketplace') {
       row.appendChild(el('span', 'plugin-canvas-manage-hint', '승인 후 반영됩니다'));
     }
+    row.appendChild(toggleButton(item, kind, row));
     return row;
   }
 
