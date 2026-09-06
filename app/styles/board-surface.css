@@ -214,6 +214,12 @@
     white-space: nowrap;
     overflow-wrap: normal;
   }
+  /* 병기 줄은 접힌 열을 대신하는 **아랫줄**이다. 추출기가 그 사본을 행의 둘째 칸에
+   * 넣는데, 그 칸이 가로 칸이면 사본이 옆으로 늘어서서 칸을 밀어낸다(실측 2TZN-1
+   * 업종 행 둘째 칸 58px 안에 병기 4줄 — 최소 폭에서 표면 66px 넘침). 칸을 접게 하고
+   * 사본에 한 줄을 통째로 주면 원래 내용은 첫 줄에 남고 병기만 아래로 내려간다. */
+  [data-bs-paired-host="true"] { flex-wrap: wrap; min-width: 0; }
+  [data-bs-paired-host="true"] > .bs-paired { flex-basis: 100%; }
   .bs-r-scroll-table { min-width: 0; max-width: 100%; overflow-x: auto; }
   .bs-r-scroll-table > .bs-scroll-table-semantics { width: max-content; min-width: 100%; }
   .bs-r-scroll-table .bs-scroll-table-semantics [data-bs-hoisted] {
