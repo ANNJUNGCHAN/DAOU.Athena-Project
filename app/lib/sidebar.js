@@ -1199,14 +1199,123 @@
   }
 
   // ---------- 검색 ----------
+  // Paper 2V27-1 — 결과는 목록을 갈아끼우는 대신 별도 패널로 뜬다. 그룹마다 건수를
+  // 달고 발치에 키보드 안내와 총 건수를 남긴다. 판정은 순수 모듈이 한다.
+  const searchLib = window.AthenaLib.SidebarSearch;
+  const $searchPanel = el('div', 'sidebar-search-panel');
+  $searchPanel.hidden = true;
+  $searchPanel.setAttribute('role', 'listbox');
+  $searchPanel.setAttribute('aria-label', '검색 결과');
+  ($historyRegion.querySelector('.sidebar-head') || $historyRegion).appendChild($searchPanel);
+  let searchRows = [];
+  let searchActive = -1;
+  const searchCardNodes = new Map();
+
+  // 캔버스 카드는 지금 보고 있는 대화의 카드다 — #grid에 실제로 붙어 있는 것만
+  // 읽는다(없는 카드를 결과로 만들지 않는다).
+  function collectCanvasCards() {
+    searchCardNodes.clear();
+    const grid = document.getElementById('grid');
+    if (!grid) return [];
+    const rows = [];
+    grid.querySelectorAll('.card .card-title').forEach((titleNode, index) => {
+      const title = (titleNode.textContent || '').trim();
+      if (!title) return;
+      const id = `card-${index}`;
+      searchCardNodes.set(id, titleNode.closest('.card'));
+      rows.push({ id, title });
+    });
+    return rows;
+  }
+
+  function setSearchActive(index) {
+    searchActive = index;
+    searchRows.forEach((row, i) => {
+      row.classList.toggle('is-active', i === index);
+      row.setAttribute('aria-selected', i === index ? 'true' : 'false');
+    });
+  }
+
+  function closeSearchPanel() {
+    $searchPanel.hidden = true;
+    searchRows = [];
+    searchActive = -1;
+  }
+
+  function openSearchRow(kind, id) {
+    closeSearchPanel();
+    if (kind === 'card') {
+      const node = searchCardNodes.get(id);
+      if (node) node.scrollIntoView({ block: 'nearest' });
+      return;
+    }
+    void selectConversation(id);
+  }
+
+  function renderSearchPanel() {
+    searchRows = [];
+    searchActive = -1;
+    while ($searchPanel.firstChild) $searchPanel.removeChild($searchPanel.firstChild);
+    if (!searchQuery.trim()) { $searchPanel.hidden = true; return; }
+    const result = searchLib.buildSearchResults({
+      conversations: conversationsCache,
+      cards: collectCanvasCards(),
+      query: searchQuery,
+      now: Date.now(),
+    });
+    for (const group of result.groups) {
+      $searchPanel.appendChild(el('div', 'sidebar-search-group-label', group.label));
+      for (const row of group.rows) {
+        const btn = el('button', 'sidebar-search-row');
+        btn.type = 'button';
+        btn.setAttribute('role', 'option');
+        btn.title = row.title;
+        btn.appendChild(el('span', 'sidebar-search-row-title', row.title));
+        if (row.when) btn.appendChild(el('span', 'sidebar-search-row-when', row.when));
+        btn.addEventListener('click', () => openSearchRow(group.kind, row.id));
+        $searchPanel.appendChild(btn);
+        searchRows.push(btn);
+      }
+    }
+    if (!result.total) $searchPanel.appendChild(el('div', 'sidebar-search-empty', '검색 결과 없음'));
+    const foot = el('div', 'sidebar-search-foot');
+    foot.append(el('span', 'sidebar-search-hint', result.hint), el('span', 'sidebar-search-count', `${result.total}건`));
+    $searchPanel.appendChild(foot);
+    $searchPanel.hidden = false;
+    if (searchRows.length) setSearchActive(0);
+  }
+
   $searchToggle.addEventListener('click', () => {
     const opening = $searchInput.hidden;
     $searchInput.hidden = !opening;
-    if (opening) { $searchInput.focus(); } else { searchQuery = ''; $searchInput.value = ''; renderList(); }
+    if (opening) { $searchInput.focus(); } else { searchQuery = ''; $searchInput.value = ''; closeSearchPanel(); renderList(); }
   });
   $searchInput.addEventListener('input', () => {
     searchQuery = $searchInput.value;
     renderList();
+    renderSearchPanel();
+  });
+  $searchInput.addEventListener('keydown', (event) => {
+    if ($searchPanel.hidden) return;
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      if (!searchRows.length) return;
+      event.preventDefault();
+      const step = event.key === 'ArrowDown' ? 1 : -1;
+      setSearchActive((searchActive + step + searchRows.length) % searchRows.length);
+    } else if (event.key === 'Enter') {
+      if (searchActive < 0) return;
+      event.preventDefault();
+      searchRows[searchActive].click();
+    } else if (event.key === 'Escape') {
+      // compact 패널 닫기 전역 핸들러(document keydown)보다 먼저 소비한다 —
+      // 검색이 열려 있으면 Esc는 검색만 닫는다.
+      event.preventDefault();
+      event.stopPropagation();
+      searchQuery = '';
+      $searchInput.value = '';
+      closeSearchPanel();
+      renderList();
+    }
   });
 
   // ---------- 계정 발치 + 계정 메뉴(Paper 보드 16) ----------
@@ -1255,7 +1364,7 @@
     switchValue.textContent = `${accountCount}개`;
     switcher.appendChild(switchLabel);
     switcher.appendChild(switchValue);
-    switcher.addEventListener('click', () => { closeAccountMenu(); openSettingsBridge(); });
+    switcher.addEventListener('click', () => { closeAccountMenu(); openAccountSwitchBridge(); });
     $accountMenu.appendChild(switcher);
 
     const settings = el('button', 'sidebar-menu-item');
@@ -1273,6 +1382,15 @@
   function openSettingsBridge() {
     if (window.AthenaShell && typeof window.AthenaShell.openSettings === 'function') {
       window.AthenaShell.openSettings();
+    }
+  }
+
+  // 「계좌 전환」은 설정 창이 아니라 계좌 전환 화면(Paper 1M3-0)으로 간다 — 그
+  // 화면이 경고·4단계 흐름·[전환하고 다시 인증]을 그리는 유일한 자리다.
+  function openAccountSwitchBridge() {
+    if (!activeAccountCache) return;
+    if (window.AthenaShell && typeof window.AthenaShell.openAccountSwitch === 'function') {
+      window.AthenaShell.openAccountSwitch(activeAccountCache.id);
     }
   }
 

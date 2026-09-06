@@ -74,6 +74,33 @@ function buildOrderPayload(ticket) {
   };
 }
 
+// 총 주문 금액 추정 — 수량 × 발화 시점 관측값. 관측값은 집행 시점 값이 아니므로
+// 라벨의 '(시장가 추정)'과 값의 '약'을 양쪽 다 남긴다. 관측값이나 수량이 없으면
+// 행 자체를 만들지 않는다(0원을 지어내지 않는다).
+function estimateOrderTotal(input) {
+  const src = input || {};
+  const qty = Number(src.qty);
+  const observed = Number(src.observed);
+  if (!Number.isFinite(qty) || qty <= 0) return null;
+  if (src.observed == null || !Number.isFinite(observed) || observed <= 0) return null;
+  const total = Math.round(qty * observed);
+  return {
+    label: '총 주문 금액 (시장가 추정)',
+    text: `약 ${String(total).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}원`,
+  };
+}
+
+// 가격 행 — 실행되는 것이 시장가 고정임을 각주가 아니라 값으로 드러낸다.
+// 지정가는 P4 1차 범위 밖이라 눌리지 않는 세그먼트다(UI가 약속하면 거짓이 된다).
+function priceRowModel() {
+  return {
+    segments: ['지정가', '시장가'],
+    selected: '시장가',
+    readout: '시장가 체결',
+    limitEnabled: false,
+  };
+}
+
 // HTTP 상태 → 티켓 상태. 409(멱등 충돌/IN_DOUBT)는 재전송 금지 상태다.
 function interpretExecuteStatus(status) {
   if (status >= 200 && status < 300) return 'done';
@@ -119,6 +146,8 @@ const __exports = {
   buildSelectorOrderPrefill,
   gateBlocker,
   buildOrderPayload,
+  estimateOrderTotal,
+  priceRowModel,
   interpretExecuteStatus,
   createTicket,
   transition,

@@ -183,6 +183,9 @@ window.athena.on('athena:add-rest-receipt', async (payload = {}) => {
     $onboard,
     (channel, ack) => window.athena.send(channel, ack),
     payload.receiptId,
+    // 같은 오버레이(#onboard)를 계좌 전환 화면도 빌려 쓴다 — 막는 이유를
+    // 온보딩이라고 잘못 보고하지 않는다(둘 다 fail-closed인 것은 같다).
+    accountSwitchOpen ? 'account_switch_active' : 'onboarding_active',
   )) return;
   if (!prepareRestReceiptSurface()) return;
   const line = document.createElement('div');
@@ -689,6 +692,36 @@ function finishOnboarding() {
   $input.focus();
   scrollAfterRender();
   maybeShowCoachmark(); // 최초 실행은 온보딩을 지나므로 여기가 첫 대화 화면이다
+}
+
+// ---------- 계좌 전환 화면 (Paper 보드 16 계정 메뉴 → 1M3-0) ----------
+// 온보딩 3/3과 같은 인증 화면이지만 embedded가 아니다: 「이전」·「계속」 없이
+// 계좌 목록으로 바로 들어가고, 「취소」·「닫기」 또는 Esc로 닫는다(onClose). 온보딩 오버레이(#onboard)를 그대로
+// 쓴다 — 같은 .onb-* 재질이고, 둘이 동시에 열릴 수 있는 경로가 없다(온보딩 중에는
+// 셸이 차단돼 사이드바 계정 메뉴에 닿지 못한다).
+let accountSwitchOpen = false;
+function openAccountSwitchScreen(accountId) {
+  if (accountSwitchOpen || !$onboard.hidden || !accountId) return;
+  accountSwitchOpen = true;
+  onboarding.setAppBlockedForOnboarding($shell, $app, true);
+  $onboard.hidden = false;
+  onboardCleanup = authScreen.renderAuthTokenStatus($onboardBody, {
+    accountId,
+    embedded: false,
+    initialView: 'switch',
+    onClose: closeAccountSwitchScreen,
+  });
+  focusOnboardingContent();
+}
+
+function closeAccountSwitchScreen() {
+  if (!accountSwitchOpen) return;
+  accountSwitchOpen = false;
+  if (onboardCleanup) { onboardCleanup(); onboardCleanup = null; }
+  $onboardBody.replaceChildren();
+  $onboard.hidden = true;
+  onboarding.setAppBlockedForOnboarding($shell, $app, false);
+  $input.focus();
 }
 
 // ---------- 설정 진입 코치마크 (2026-08-19 결정 — 최초 1회) ----------
@@ -1641,6 +1674,9 @@ let settingsOpen = false;
 function openSettings() {
   if (settingsOpen) return;
   settingsOpen = true;
+  // Paper AJ-0 — 설정은 창 전체를 차지한다. 반투명 오버레이만 올리면 셸(사이드바·
+  // 대화 열)이 그대로 비쳐 두 화면이 겹쳐 읽힌다(온보딩과 같은 처방, 다른 클래스).
+  $shell.classList.add('is-settings-hidden');
   $app.hidden = true;
   $settings.hidden = false;
   // Paper 43쪽(2026-08-18 확정) — 좌 사이드바(화면·계좌·MCP 서버·모델) + 우 패널.
@@ -1667,6 +1703,7 @@ function closeSettings() {
   $settingsGrid.replaceChildren();
   $settingsNav.replaceChildren();
   $settings.hidden = true;
+  $shell.classList.remove('is-settings-hidden');
   $app.hidden = false;
   $input.focus();
 }
@@ -1755,6 +1792,8 @@ $mentionBtn.addEventListener('click', () => {
 // 사이드바 계정 메뉴(Paper 보드 16)의 "설정" 항목이 쓰는 다리 — lib/sidebar.js
 // 참고.
 window.AthenaShell.registerOpenSettings(openSettings);
+// 같은 메뉴의 "계좌 전환" 항목 — 설정이 아니라 계좌 전환 화면(Paper 1M3-0)이다.
+window.AthenaShell.registerOpenAccountSwitch(openAccountSwitchScreen);
 
 // 43번 "새 작업은 채팅에서" 원칙의 공용 진입로(shell.js 버스) — 시트를 열지
 // 않고 채팅 입력에 시작 문장을 심고 포커스만 옮긴다(7단계 제안 카드 "추가"가
@@ -2866,13 +2905,17 @@ $stopBtn.addEventListener('click', () => { if (state !== 'idle') abortLiveTurn()
 
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
-    // 지금 눈앞에 있는 것이 먼저다 — 팝오버 → 주문 티켓 → 설정 순으로 닫는다.
+    // 지금 눈앞에 있는 것이 먼저다 — 팝오버 → 주문 티켓 → 계좌 전환 → 설정 순으로 닫는다.
     if (!$modelPopover.hidden) {
       closeModelPopover();
       return;
     }
     if (orderOpen) {
       closeOrderTicket();
+      return;
+    }
+    if (accountSwitchOpen) {
+      closeAccountSwitchScreen();
       return;
     }
     if (settingsOpen) {
@@ -4540,18 +4583,65 @@ async function renderOrderTicket(prefill) {
   sideRow.append(sideLabel, buyBtn, sellBtn);
   card.appendChild(sideRow);
 
+  // 가격 행 — 무엇이 실행되는지를 수량 라벨의 각주가 아니라 값으로 드러낸다.
+  // 지정가는 P4 1차 범위 밖이라 비활성 세그먼트다(buildOrderPayload는 trde_tp 3 고정).
+  const priceModel = orderTicketLib.priceRowModel();
+  const priceRow = document.createElement('div');
+  priceRow.className = 'ticket-row';
+  const priceLabel = document.createElement('span');
+  priceLabel.className = 'ticket-label';
+  priceLabel.textContent = '가격';
+  priceRow.appendChild(priceLabel);
+  for (const seg of priceModel.segments) {
+    const chip = document.createElement('span');
+    chip.className = seg === priceModel.selected
+      ? 'ticket-seg ticket-seg-on' : 'ticket-seg';
+    chip.textContent = seg;
+    priceRow.appendChild(chip);
+  }
+  const priceReadout = document.createElement('span');
+  priceReadout.className = 'ticket-readout';
+  priceReadout.textContent = priceModel.readout;
+  priceRow.appendChild(priceReadout);
+  card.appendChild(priceRow);
+
   const qtyRow = document.createElement('div');
   qtyRow.className = 'ticket-row';
   const qtyLabel = document.createElement('span');
   qtyLabel.className = 'ticket-label';
-  qtyLabel.textContent = '수량 · 시장가';
+  qtyLabel.textContent = '수량';
   const qtyInput = document.createElement('input');
   qtyInput.type = 'number';
   qtyInput.min = '1';
   qtyInput.className = 'ticket-qty';
   if (ticket.qty) qtyInput.value = String(ticket.qty);
-  qtyRow.append(qtyLabel, qtyInput);
+  const qtyUnit = document.createElement('span');
+  qtyUnit.className = 'ticket-unit';
+  qtyUnit.textContent = '주';
+  qtyRow.append(qtyLabel, qtyInput, qtyUnit);
   card.appendChild(qtyRow);
+
+  // 총액 추정 — 발화 시점 관측값 × 수량. 관측값이 없으면 행을 그리지 않는다.
+  const totalRow = document.createElement('div');
+  totalRow.className = 'ticket-total';
+  const totalLabel = document.createElement('span');
+  totalLabel.className = 'ticket-total-label';
+  const totalValue = document.createElement('span');
+  totalValue.className = 'ticket-total-value';
+  totalRow.append(totalLabel, totalValue);
+  card.appendChild(totalRow);
+  const syncTotal = () => {
+    const est = orderTicketLib.estimateOrderTotal({
+      qty: qtyInput.value,
+      observed: prefill ? prefill.observed : null,
+    });
+    totalRow.hidden = !est;
+    if (est) {
+      totalLabel.textContent = est.label;
+      totalValue.textContent = est.text;
+    }
+  };
+  syncTotal();
 
   // 게이트 상태 — 활성 계좌의 주문 API 여부를 정직하게 보여준다.
   const gateLine = document.createElement('div');
@@ -4602,7 +4692,7 @@ async function renderOrderTicket(prefill) {
     buyBtn.classList.remove('routine-btn-approve');
     syncExec();
   });
-  qtyInput.addEventListener('input', syncExec);
+  qtyInput.addEventListener('input', () => { syncExec(); syncTotal(); });
   closeBtn.addEventListener('click', closeOrderTicket);
 
   execBtn.addEventListener('click', async () => {

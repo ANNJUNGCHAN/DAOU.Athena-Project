@@ -2229,7 +2229,15 @@ app.whenReady().then(async () => {
     && pluginProposalCard.status === '제안 대기'
     && pluginProposalCard.source === '내 요청'
     && pluginProposalCard.reason === '허브에서 [설치]를 눌렀습니다'
-    && JSON.stringify(pluginProposalCard.lines) === JSON.stringify(['권한 1개 요청']));
+    // Paper 05 install-card — 승인 카드가 제공·용도·실행 명령·설치 위치를 직접 싣는다.
+    // 모달 시트는 GUI 경로에만 열리므로 모델 제안 경로는 카드가 유일한 표면이다.
+    && JSON.stringify(pluginProposalCard.lines) === JSON.stringify([
+      '제공: Model Context Protocol · mcp-server-fetch',
+      '용도: 웹 페이지 원문 조회 · HTML→마크다운 변환',
+      '실행 명령: uvx mcp-server-fetch',
+      '설치 위치 · 플러그인 모드 > 웹 문서 읽기',
+      '권한 1개 요청',
+    ]), { lines: pluginProposalCard.lines });
   // 신설 ⑵ — GUI 경로는 채팅 턴을 만들지 않는다(§2.3 축 2).
   assertOk('pluginMode: GUI 클릭은 채팅 제안 턴을 만들지 않는다',
     pluginInstallSheet.historyPluginTurns === 0 && pluginProposalCard.historyPluginTurns === 0,
@@ -4206,6 +4214,24 @@ app.whenReady().then(async () => {
       const graphSummaryTableEl = document.getElementById('graphSummaryTable');
       const summaryTableRect = graphSummaryTableEl.getBoundingClientRect();
       const summaryTableVisible = summaryTableRect.width > 0 && summaryTableRect.height > 0;
+      // 사람이 실제로 보는 표면은 지도가 아니라 요약이다(기본 서브뷰) — 브레인
+      // 미기동 안내가 여기에도 서지 않으면 화면은 그냥 백지다(보드 2QCN-2).
+      const summaryMainEl = document.getElementById('graphSummaryMain');
+      const summaryMainNotice = summaryMainEl
+        ? summaryMainEl.querySelector('.graph-mode-unavailable')
+        : null;
+      const summaryMainNoticeText = summaryMainNotice ? summaryMainNotice.textContent : '';
+      // 글자가 DOM에 있는 것과 사람이 보는 것은 다르다 — summaryTableVisible과
+      // 같은 이유로 rect로 잰다(data-unavailable 규칙이 표면을 통째로 접어
+      // 버리면 textContent는 그대로인데 화면은 백지다).
+      const summaryMainNoticeRect = summaryMainNotice
+        ? summaryMainNotice.getBoundingClientRect()
+        : null;
+      const summaryMainNoticeVisible = Boolean(summaryMainNoticeRect)
+        && summaryMainNoticeRect.width > 0 && summaryMainNoticeRect.height > 0;
+      const summaryMainUnavailableFlag = summaryMainEl
+        ? summaryMainEl.getAttribute('data-unavailable')
+        : null;
       // 스텝2-보정 회귀 가드 — 요약 뷰 헤더의 "요약"/"그래프" 서브뷰 탭은 이제
       // graphMode.setSurface()로 state.surface를 바꾸고, applyVisibility()
       // 하나가 hidden을 소유한다(z-index 임시조치는 걷어냈다). setSurface()가
@@ -4235,7 +4261,11 @@ app.whenReady().then(async () => {
       }
       const containerText = container.textContent;
       if (!brainReady) {
-        return { wired: true, brainReady, clickOpened, summaryHidden, summaryTableVisible, surfaceToggle, containerText };
+        return {
+          wired: true, brainReady, clickOpened, summaryHidden, summaryTableVisible,
+          surfaceToggle, containerText, summaryMainNoticeText, summaryMainNoticeVisible,
+          summaryMainUnavailableFlag,
+        };
       }
       const byClick = describeLive();
       // 집계 계약은 정리 결과와 대조해야 알 수 있고, 클릭 경로는 그 값을 돌려주지
@@ -4250,6 +4280,9 @@ app.whenReady().then(async () => {
         byClick,
         summaryHidden,
         summaryTableVisible,
+        summaryMainNoticeText,
+        summaryMainNoticeVisible,
+        summaryMainUnavailableFlag,
         surfaceToggle,
         placedNodes: placed ? placed.nodes.length : 0,
         placedEdges: placed ? placed.edges.length : 0,
@@ -4324,6 +4357,20 @@ app.whenReady().then(async () => {
       assertOk(
         'graph-mode: 성향 신호 표가 실제로 렌더된다(hidden 상속에 막히지 않는다)',
         graph.summaryTableVisible === true,
+      );
+      // 보드 2QCN-2 — 기본 서브뷰(요약)가 백지로 남지 않는다. 지도에만 안내를
+      // 그리던 옛 판에서는 사람이 보는 화면이 정말 아무것도 없었다.
+      assertOk(
+        'graph-mode: 브레인 미준비 시 요약 탭도 정직한 안내로 채워진다(백지가 아니다)',
+        /아직 성향을 읽을 수 없습니다/.test(graph.summaryMainNoticeText || ''),
+      );
+      assertOk(
+        'graph-mode: 요약 탭 안내가 실제로 화면에 그려진다(rect > 0)',
+        graph.summaryMainNoticeVisible === true,
+      );
+      assertOk(
+        'graph-mode: 미기동 안내가 0건 히어로보다 앞선다',
+        graph.summaryMainUnavailableFlag === 'true',
       );
       report.graphMode.shot = await shot(shellWin, '90-graph-mode-unavailable.png');
     }
