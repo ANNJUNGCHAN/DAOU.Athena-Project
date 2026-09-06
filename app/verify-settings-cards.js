@@ -55,7 +55,14 @@ function installStubHandlers() {
   ];
   const stubs = {
     'athena:account-list': async () => ({ accounts }),
-    'athena:account-register': async () => ({ ok: true, id: 'a3' }),
+    // Paper XI-0 · FLM-0 · FPE-0 — 게이트가 확인 중·인증 실패·확인 완료 셋을 모두
+    // 밟게 한다. 250ms 지연은 실제 발급 왕복 대역이자, 잠긴 「확인 중」 상태를
+    // 읽을 시간이다. verifyOnly는 계좌를 만들지 않는다(저장은 두 번째 호출이다).
+    'athena:account-register': async (e, arg = {}) => {
+      await new Promise((r) => setTimeout(r, 250));
+      if (arg.appKey === 'BAD_KEY') return { ok: false, error: 'auth' };
+      return arg.verifyOnly ? { ok: true, verified: true } : { ok: true, id: 'a3' };
+    },
     'athena:account-set-active': async (e, arg) => { for (const a of accounts) a.active = (a.id === arg.id); return { ok: true }; },
     'athena:order-api-set': async (e, arg) => ({ ok: true, checklist: [ { key: 'orderApi', label: '주문 API 허용 (토글)', met: !!arg.enabled }, { key: 'token', label: '로컬 인증 토큰 설정', met: true } ] }),
     'athena:cli-list': async () => ({ providers: cliProviders }),
@@ -80,6 +87,46 @@ function clickByText(selector, text) {
   })();
   `;
 }
+
+// 계좌 등록 시트 3상태(Paper XI-0/FLM-0/FPE-0)를 읽고 채우는 짝. 붙여넣기만
+// 허용하는 keydown 가드 때문에 값은 프로그램으로 넣고 input 이벤트를 직접 쏜다.
+function fillRegisterSheet(appKey) {
+  return `
+  (() => {
+    const inputs = Array.from(document.querySelectorAll('.card.accounts .uk-sheet .uk-input'));
+    if (inputs.length !== 3) return 'NOT FOUND: register inputs';
+    const values = ['모의-주력', ${JSON.stringify('')} || '', 'SECRET_0123456789'];
+    values[1] = ${JSON.stringify(appKey)};
+    inputs.forEach((input, i) => {
+      input.value = values[i];
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+    return 'filled';
+  })();
+  `;
+}
+
+const READ_REGISTER_SHEET = `
+  (() => {
+    const sheet = document.querySelector('.card.accounts .uk-sheet');
+    if (!sheet) return { open: false };
+    const inputs = Array.from(sheet.querySelectorAll('.uk-input'));
+    const buttons = Array.from(sheet.querySelectorAll('.uk-btn-row-end button'));
+    const submit = buttons[buttons.length - 1];
+    return {
+      open: true,
+      status: (sheet.querySelector('.uk-status-text') || {}).textContent || '',
+      submitLabel: submit ? submit.textContent : null,
+      submitDisabled: submit ? submit.disabled : null,
+      inputsDisabled: inputs.map((i) => i.disabled),
+      inputsEmpty: inputs.every((i) => i.value === ''),
+      hints: Array.from(sheet.querySelectorAll('.uk-field-hint')).map((h) => h.textContent),
+      errorBorders: inputs.map((i) => i.classList.contains('is-error')),
+      error: (sheet.querySelector('.uk-error') || {}).textContent || null,
+      success: (sheet.querySelector('.uk-success') || {}).textContent || null,
+    };
+  })();
+`;
 
 // 사이드바 nav(2026-08-18, Paper 43쪽) — #settingsGrid에는 nav가 고른 카드
 // 하나만 산다(renderNav의 onSelect가 grid.replaceChildren() 먼저 부른다).
@@ -130,8 +177,31 @@ app.whenReady().then(async () => {
   await clickAndLog(shellWin, 'open register sheet', clickByText('.card.accounts button', '+ 계좌 등록'));
   await wait(200);
   await shot(shellWin, 'SETTINGS-04-accounts-register-sheet.png');
-  await clickAndLog(shellWin, 'close register sheet', clickByText('.card.accounts .uk-sheet button', '취소'));
+
+  // ---------- 계좌 등록 3상태 (Paper XI-0 · FLM-0 · FPE-0) ----------
+  await clickAndLog(shellWin, 'fill register sheet (bad key)', fillRegisterSheet('BAD_KEY'));
+  await clickAndLog(shellWin, 'verify', clickByText('.card.accounts .uk-sheet button', '검증 후 저장'));
+  await wait(120);
+  console.log('[verify-settings] XI-0 확인 중:', JSON.stringify(await shellWin.webContents.executeJavaScript(READ_REGISTER_SHEET)));
+  await shot(shellWin, 'SETTINGS-04a-register-verifying.png');
+  await wait(400);
+  console.log('[verify-settings] FLM-0 인증 실패:', JSON.stringify(await shellWin.webContents.executeJavaScript(READ_REGISTER_SHEET)));
+  await shot(shellWin, 'SETTINGS-04b-register-failed.png');
+
+  await clickAndLog(shellWin, 'cancel after failure', clickByText('.card.accounts .uk-sheet button', '취소'));
   await wait(200);
+  await clickAndLog(shellWin, 'reopen register sheet', clickByText('.card.accounts button', '+ 계좌 등록'));
+  await wait(200);
+  console.log('[verify-settings] 취소 뒤 재개봉(입력이 비어 있어야 한다):', JSON.stringify(await shellWin.webContents.executeJavaScript(READ_REGISTER_SHEET)));
+
+  await clickAndLog(shellWin, 'fill register sheet (good key)', fillRegisterSheet('APP_0123456789'));
+  await clickAndLog(shellWin, 're-verify', clickByText('.card.accounts .uk-sheet button', '검증 후 저장'));
+  await wait(500);
+  console.log('[verify-settings] FPE-0 확인 완료:', JSON.stringify(await shellWin.webContents.executeJavaScript(READ_REGISTER_SHEET)));
+  await shot(shellWin, 'SETTINGS-04c-register-verified.png');
+  await clickAndLog(shellWin, 'save account', clickByText('.card.accounts .uk-sheet button', '계좌 저장'));
+  await wait(600);
+  console.log('[verify-settings] 저장 뒤 시트:', JSON.stringify(await shellWin.webContents.executeJavaScript(READ_REGISTER_SHEET)));
 
   await clickAndLog(shellWin, 'open order-api sheet', clickByText('.card.accounts .uk-pill', 'OFF'));
   await wait(200);

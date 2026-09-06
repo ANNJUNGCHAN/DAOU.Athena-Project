@@ -145,6 +145,12 @@ async function run() {
   log('account.list.empty', h.accountList());
   log('account.register.invalid(emptyAlias)', await h.accountRegister(null, { alias: '', appKey: 'x', secretKey: 'y' }));
   log('account.register.auth(realNetworkCall)', await h.accountRegister(null, { alias: '검증-실패계좌', appKey: 'not-a-real-key', secretKey: 'not-a-real-secret' }));
+  // Paper FPE-0 — 검증과 저장이 갈렸다. verifyOnly는 같은 발급 왕복을 하되
+  // 계좌를 만들지 않는다(목록이 그대로여야 확인 완료 상태가 저장이 아님을 증명한다).
+  log('account.register.verifyOnly(stubbedNetwork)', await h.accountRegister(null, {
+    alias: '검증-성공계좌', appKey: 'VERIFY_OK_KEY', secretKey: 'VERIFY_OK_SECRET_0123456789', verifyOnly: true,
+  }));
+  log('account.list.afterVerifyOnly', h.accountList());
   const okReg = await h.accountRegister(null, { alias: '검증-성공계좌', appKey: 'VERIFY_OK_KEY', secretKey: 'VERIFY_OK_SECRET_0123456789' });
   log('account.register.ok(stubbedNetwork)', okReg);
   log('account.list.afterRegister', h.accountList());

@@ -213,6 +213,24 @@
    (2026-08-18 디자인 비판, 17-settings-mode.png 실측). 안내문은 본문 서체로 분기. */
 .uk-input-mono::placeholder { font-family: var(--font-body); letter-spacing: normal; }
 .uk-input:focus, .uk-textarea:focus { outline: 2px solid var(--color-brand); outline-offset: 1px; }
+/* Paper FLM-0 — 인증 실패는 SECRET KEY(와 APP KEY) 테두리를 경고색으로 바꾼다.
+   값은 그대로 남아 있으므로 어느 칸을 고칠지 테두리가 짚어 준다. */
+.uk-input.is-error { border-color: var(--color-warn); }
+.uk-input:disabled { color: var(--color-k-faint); background: var(--color-k-panel3); border-color: var(--color-k-line-soft); }
+
+/* Paper FPE-0 FPS-0 — 확인 완료 박스. tokens.css의 --color-ok(#5fce3f)는 어두운
+   표면용 초록이라 흰 시트 위에서 읽히지 않는다(항목 11과 같은 다크 잔재 함정) —
+   보드가 밝은 표면용으로 직접 지정한 세 값을 그대로 쓴다. */
+.uk-success {
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #EAF7EF;
+  border: 1px solid #B7DEC5;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  line-height: 18px;
+  color: #247A44;
+}
 
 .uk-textarea {
   width: 100%;

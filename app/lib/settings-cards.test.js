@@ -247,3 +247,105 @@ test('settings-cards.css 어디에도 #F2F4F8 하드코딩이 없다', () => {
   const css = fs.readFileSync(path.join(__dirname, '..', 'styles', 'settings-cards.css'), 'utf8');
   assert.doesNotMatch(css, /#F2F4F8/i);
 });
+
+// ---- 화면 P1 항목 4 (Paper XI-0 · FLM-0 · FPE-0) — 계좌 등록 3상태 ----
+// 시트 DOM은 verify-settings-cards.js(Electron)가 보고, 여기서는 상태 머신만 잰다.
+const { accountSheetState } = settingsCards;
+const verifying = () => accountSheetState(accountSheetState(null, { type: 'open' }), { type: 'verify' });
+
+test('확인 중에는 입력 셋이 잠기고 버튼 라벨이 확인 중…이다', () => {
+  const state = verifying();
+  assert.equal(state.inputsDisabled, true);
+  assert.equal(state.submitLabel, '확인 중…');
+  assert.equal(state.submitDisabled, true);
+  assert.equal(state.hint, '토큰 발급 확인 중… 입력과 저장이 잠시 잠깁니다');
+  assert.equal(state.wipeInputs, false);
+  assert.equal(state.closeSheet, false);
+});
+
+test('인증 실패는 입력을 비우지 않는다 — 다시 검증이 가능하다', () => {
+  const state = accountSheetState(verifying(), { type: 'verify-failed', error: 'auth' });
+  assert.equal(state.wipeInputs, false);
+  assert.equal(state.closeSheet, false);
+  assert.equal(state.inputsDisabled, false);
+  assert.equal(state.submitDisabled, false);
+  assert.equal(state.submitLabel, '다시 검증');
+  assert.ok(state.hint.startsWith('검증에 실패해 저장하지 않았습니다'));
+});
+
+test('실패 코드가 auth면 SECRET KEY에 오류 테두리가 붙는다', () => {
+  const state = accountSheetState(verifying(), { type: 'verify-failed', error: 'auth' });
+  assert.ok(state.errorFields.includes('secretKey'));
+  assert.ok(state.errorFields.includes('appKey'));
+  assert.equal(state.errorMessage, '인증 실패 — APP KEY 또는 SECRET KEY를 확인해 주세요');
+  const network = accountSheetState(verifying(), { type: 'verify-failed', error: 'network' });
+  assert.deepEqual(network.errorFields, []);
+  assert.equal(network.errorMessage, '네트워크 오류 — 잠시 후 다시 시도한다');
+});
+
+test('검증 성공은 시트를 닫지 않고 확인 완료 상태로 간다', () => {
+  const state = accountSheetState(verifying(), { type: 'verified' });
+  assert.equal(state.closeSheet, false);
+  assert.equal(state.wipeInputs, false);
+  assert.equal(state.successBox, '확인 완료 — 모의투자 계좌 연결 권한을 확인했습니다');
+  assert.equal(state.submitLabel, '계좌 저장');
+  assert.equal(state.submitDisabled, false);
+  assert.equal(state.inputsDisabled, false);
+  assert.equal(state.hint, '확인이 완료되었습니다. 저장하면 OS 자격증명 저장소에 암호화됩니다');
+});
+
+test('계좌 저장을 눌러야 시트가 닫히고 그때 입력을 비운다', () => {
+  const verified = accountSheetState(verifying(), { type: 'verified' });
+  const saving = accountSheetState(verified, { type: 'save' });
+  assert.equal(saving.closeSheet, false);
+  assert.equal(saving.wipeInputs, false);
+  assert.equal(saving.submitDisabled, true);
+  assert.equal(saving.inputsDisabled, true);
+  assert.equal(saving.successBox, '확인 완료 — 모의투자 계좌 연결 권한을 확인했습니다');
+  const saved = accountSheetState(saving, { type: 'saved' });
+  assert.equal(saved.closeSheet, true);
+  assert.equal(saved.wipeInputs, true);
+});
+
+test('취소는 어느 상태에서든 시트를 닫고 값을 비운다', () => {
+  for (const prev of [accountSheetState(null, { type: 'open' }), verifying(), accountSheetState(verifying(), { type: 'verified' })]) {
+    const state = accountSheetState(prev, { type: 'cancel' });
+    assert.equal(state.closeSheet, true);
+    assert.equal(state.wipeInputs, true);
+  }
+});
+
+test('저장 실패는 시트를 닫지 않고 다시 검증으로 되돌린다 — 값은 남는다', () => {
+  const verified = accountSheetState(verifying(), { type: 'verified' });
+  const state = accountSheetState(accountSheetState(verified, { type: 'save' }), { type: 'save-failed', error: 'network' });
+  assert.equal(state.closeSheet, false);
+  assert.equal(state.wipeInputs, false);
+  assert.equal(state.successBox, null);
+  assert.equal(state.submitLabel, '다시 검증');
+});
+
+test('여는 상태 문구에 내부용어가 없다', () => {
+  const idle = accountSheetState(null, { type: 'open' });
+  assert.equal(idle.submitLabel, '검증 후 저장');
+  assert.equal(idle.hint, '모의투자 계좌의 APP KEY / SECRET KEY로 연결 권한을 확인합니다');
+  assert.equal(idle.successBox, null);
+  assert.deepEqual(idle.errorFields, []);
+});
+
+// 시트 DOM은 Electron 게이트가 보지만, 비밀값 규율 두 가지는 소스로 못박는다 —
+// 게이트는 실계좌 키가 없어 실패 경로를 밟지 못한다.
+test('검증은 verifyOnly로, 저장은 그 없이 같은 채널을 부른다', () => {
+  const src = fs.readFileSync(path.join(__dirname, 'settings-cards.js'), 'utf8');
+  const sheet = src.slice(src.indexOf('function openAccountRegisterSheet'), src.indexOf('function openOrderApiSheet'));
+  assert.match(sheet, /callRegister\(\{ \.\.\.input, verifyOnly: true \}\)/);
+  assert.match(sheet, /const \{ res, missingHandler \} = await callRegister\(input\);/);
+  assert.equal(sheet.match(/window\.athena\.invoke\('athena:account-register'/g).length, 1);
+});
+
+test('입력을 비우는 곳은 applyState 하나뿐이다 — 닫히는 길은 전부 거기를 지난다', () => {
+  const src = fs.readFileSync(path.join(__dirname, 'settings-cards.js'), 'utf8');
+  const sheet = src.slice(src.indexOf('function openAccountRegisterSheet'), src.indexOf('function openOrderApiSheet'));
+  assert.equal(sheet.match(/wipeSecretInputs\(\)/g).length, 2); // 정의 1 + applyState 호출 1
+  assert.match(sheet, /if \(next\.wipeInputs\) wipeSecretInputs\(\);\n\s*if \(next\.closeSheet\) detachSheet\(card, root\);/);
+  assert.equal(sheet.match(/detachSheet\(card, root\)/g).length, 1);
+});
