@@ -4,8 +4,8 @@
 //
 // 매니페스트 role==="screen" 103장이 결국 전부 여기 있어야 한다. 없는 보드는 미구현 실패다 —
 // 「도달 절차가 없는 보드는 실패한다」가 게이트 2의 핵심이라, 표가 곧 남은 작업 목록이 된다.
-// 지금은 40장(부팅 5 + 온보딩 3 + 인증 3 + 에이전트 4 + 알림 파생 방·코드 알람 3 + 화면 4
-// + 셸·그래프 2 + 그래프 5 + 대화·계정 2 + 모드·빈 화면 2 + 창·대화 턴·탭 3 + 사이드바 4)이고,
+// 지금은 49장(부팅 5 + 온보딩 3 + 인증 3 + 에이전트 4 + 알림 파생 방·코드 알람 3 + 화면 4
+// + 셸·그래프 2 + 그래프 5 + 대화·계정 2 + 모드·빈 화면 2 + 창·대화 턴·탭 3 + 사이드바 4 + 플러그인 9)이고,
 // 래칫(§4.5)이 잠근 뒤 저작이 이어진다.
 //
 // ── reach 어휘는 닫혀 있다
@@ -680,6 +680,9 @@ function paperPending(proposals) {
 // 서버를 내려받아 띄우므로(mcp-cli register→approve→probe) 검사에서 원 핸들러를
 // 부르면 안 된다. runtimeEnabled는 기본 빌드의 false다 — 결과 턴이 「다음 실행부터
 // 반영됩니다」로 갈리는 자리다(보드 08의 「런타임 꺼짐 · 기본」).
+// 성공 턴 세 줄은 이 봉투의 results와 무관하다(plugin-proposal.js resultTurnCopy가
+// 고정 문면을 쓴다) — 여기서 읽히는 값은 probes의 도구 수뿐이라 보드 06의 끄기
+// 승인도 같은 봉투를 쓴다.
 const PLUGIN_APPROVE_SUCCESS = Object.freeze({
   ok: true, kind: 'success', reason: null,
   results: [{ action: 'install', target: 'korea-stock', ok: true }],
@@ -1935,8 +1938,8 @@ const ROUTES = Object.freeze([
     ],
     root: '#pluginCanvas',
     // 「플러그인 2 · 기능 3 · 마켓플레이스 1」은 목록에서 세는 값이라 안 적는다.
-    // 행의 안내 두 줄은 앱이 Paper와 같은 문장을 쓰지만 차례가 다르다(Paper는
-    // 안내→버튼, 앱은 버튼→안내) — 그래서 문구만 잰다.
+    // 행 안의 차례는 Paper 04 그대로다 — 안내가 먼저 오고 그 안내가 가리키는
+    // [삭제]와 스위치가 뒤에 온다(스위치는 글자가 없어 차례 대신 개수로 잰다).
     phrases: [
       '플러그인 관리',
       '플러그인만 설치·활성화합니다. 제공 기능은 상세 화면에서 허용하며 Athena 내장 API는 표시하지 않습니다.',
@@ -1951,6 +1954,11 @@ const ROUTES = Object.freeze([
       { what: 'count', selector: '.plugin-canvas-manage-plugins .plugin-canvas-manage-row', equals: 2 },
       { what: 'count', selector: '.plugin-canvas-marketplaces .plugin-canvas-manage-row', equals: 1 },
       { what: 'count', selector: '.plugin-canvas-toggle', equals: 3 },
+      {
+        what: 'order',
+        selector: '.plugin-canvas-manage-plugins .plugin-canvas-manage-hint, .plugin-canvas-manage-plugins .plugin-canvas-action.is-danger',
+        equals: ['승인 후 지웁니다', '삭제', '승인 후 반영됩니다', '승인 후 지웁니다', '삭제', '승인 후 반영됩니다'],
+      },
     ],
   },
   {
