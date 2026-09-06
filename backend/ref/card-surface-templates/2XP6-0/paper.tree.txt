@@ -224,7 +224,7 @@ Frame "Explorer Card Surface" (2XP8-0) 1360×900
             Frame "Frame" (3EOM-0) 264×30
               Frame "Frame" (3EOO-0) 78×17
                 Text "카카오" (3EOQ-0) 36×16 "카카오"
-                Text "035720" (3EON-0) 36×14 "035720"
+                Text "035720" (3EOP-0) 36×14 "035720"
               Text "-1.08%" (3EON-0) 44×16 "-1.08%"
             Frame "Frame" (3EOH-0) 264×30
               Frame "Frame" (3EOJ-0) 85×17
