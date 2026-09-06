@@ -930,8 +930,8 @@ test('KPI 칸은 M 이하에서만 3칸/2칸/1칸 흐름으로 바뀐다', () =>
     .map(([, width, body]) => [Number(width), (/\.bs-kpi-cell\s*\{([^}]*)\}/.exec(body) || [, ''])[1]]);
   const flow = new Map(steps);
   // L에서 KPI 칸 폭은 Paper 원문 그대로다 — 모든 칸을 바꾸지 않는다. 값이 있는
-  // 탄력 칸만 별도 표식을 받아 160px 바닥을 갖는다. 빈 spacer나 고정 칸까지
-  // 160px로 만들면 6~8칸 시세 스트립이 L 컨테이너보다 넓어진다.
+  // 탄력 칸만 별도 표식을 받아 자기 문면이 한 줄로 서는 바닥을 갖는다. 빈 spacer나
+  // 고정 칸까지 바닥을 주면 6~8칸 시세 스트립이 L 컨테이너보다 넓어진다.
   assert.equal(flow.get(1279).trim(), '');
   const lBody = [...css.matchAll(/@container board \(max-width: 1279px\)\s*\{([\s\S]*?)\n\}/g)][0][1];
   assert.match(lBody, /\[data-bs-hoisted\]\s*\{[\s\S]*?min-width: 0;/,
@@ -942,7 +942,7 @@ test('KPI 칸은 M 이하에서만 3칸/2칸/1칸 흐름으로 바뀐다', () =>
     /\[data-bs-inset-x="true"\]\s*\{\s*left: min\(var\(--bs-inset-x\), max\(0px, 100% - var\(--bs-width, 0px\)\)\);\s*\}/,
     'left+고정폭 absolute 상자는 좁은 단계에서 오른쪽 끝에 걸려 부모 안으로 들어와야 한다');
   assert.match(lBody,
-    /\.bs-kpi-cell\[data-bs-kpi-elastic="true"\]\s*\{\s*min-width: 160px;\s*\}/);
+    /\.bs-kpi-cell\[data-bs-kpi-elastic="true"\]\s*\{\s*min-width: fit-content;\s*\}/);
   // 병기 줄은 열이 접히기 시작하는 L부터 아랫줄이어야 한다 — 가로 칸에 옆으로
   // 늘어서면 그만큼이 그대로 표면 가로 넘침이다(실측 2TZN-1 66px).
   assert.match(lBody, /\[data-bs-paired-host="true"\]\s*\{\s*flex-wrap: wrap;\s*min-width: 0;\s*\}/);

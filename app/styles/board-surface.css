@@ -203,8 +203,13 @@
    * 글자가 한 자씩 세로로 눕는다 — 실측 2SKU-1 "현금 비중 28.0%" 칸이 컨테이너
    * 1169px에서 265px → 74px. 한국어는 `overflow-wrap: anywhere`(Paper 원문)로
    * 한 글자까지 쪼개져서 자동 최소 크기가 칸을 못 지킨다. 바닥을 주면 부족분을
-   * 줄 전체가 나눠 진다(다른 칸은 이미 shrink가 풀려 있다). */
-  .bs-kpi-cell[data-bs-kpi-elastic="true"] { min-width: 160px; }
+   * 줄 전체가 나눠 진다(다른 칸은 이미 shrink가 풀려 있다).
+   *
+   * 바닥은 그 칸의 Paper 문면이 **한 줄로 서는 폭**이다. 상수 160px은 24px 값
+   * 한 줄을 못 담아(실측 3ODO-0·3OIM-0 "4,820,000원" 127px + 좌우 패딩 48px = 175px)
+   * 값이 두 줄로 접히고, 그만큼 칸이 Paper 78px을 넘겨 자란다. `fit-content`는
+   * max-content를 쓰되 남은 폭에서 잘리므로 좁은 단계에서 칸이 줄을 밀어내지 않는다. */
+  .bs-kpi-cell[data-bs-kpi-elastic="true"] { min-width: fit-content; }
 
   /* 의미 단위가 먼저 다음 줄로 이동하고, 단위 안의 글자는 쪼개지지 않는다.
    * 값 표시는 responsive owner 밖에서도 쓰이므로 반드시 owner 아래로 한정한다. */
