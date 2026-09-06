@@ -5,6 +5,8 @@
 // 전담한다 — backtest-canvas.js가 세운 isNode 분기와 같은 방식으로 싣는다.
 const isNode = typeof module !== 'undefined' && module.exports;
 const WatchNodes = isNode ? require('./watch-nodes') : window.AthenaLib.WatchNodes;
+// 고침 한 바퀴(Paper 보드 11)의 문구·점 띠 계산 — 같은 방식으로 싣는다.
+const FixCycle = isNode ? require('./watch-fix-cycle') : window.AthenaLib.WatchFixCycle;
 // 제어 결과 턴(Paper 보드 08 · 4330-1)의 판정·문구는 이 순수 모델이 쥔다.
 const ControlTurn = isNode
   ? require('./routine-control-turn')
@@ -382,6 +384,8 @@ function createAgentCanvas(deps) {
     cancelRoutine,
     confirmRoutine,
     runWatchCheck,
+    // 영수증의 [되돌리기](Paper 보드 11) — POST /{id}/watch/rollback 한 왕복.
+    rollbackWatchFix,
     // 드릴인 설정 편집 폼의 [저장](Paper 보드 06) — POST /{id}/update 한 왕복.
     updateRoutine,
     // 제어 결과 턴(Paper 보드 08 · 4330-1) — 누른 결과를 같은 방에 남기는 길.
@@ -1871,6 +1875,7 @@ function createAgentCanvas(deps) {
   let selectedNodeFn = null; // 선택된 노드 칸 — 진한 테두리 + 칩 2개
   let codeSourceOpen = false; // 「코드 · 참고 · 펼치기」 토글
   let editConfirmId = null; // 멈춤 확인(A-12)이 떠 있는 항목
+  let fixHistoryOpen = false; // 「지난 고침 N건」 토글
 
   // 제어 결과 한 건을 같은 방(채팅)에 남긴다(Paper 4330-1). 사실행은 원장 행의
   // 1:1 렌더링이라 지어낼 것이 없다 — 판정·칩은 순수 모델이 붙인다. 배선이 없으면
@@ -2009,6 +2014,129 @@ function createAgentCanvas(deps) {
     return node;
   }
 
+  // 「순환」 띠(Paper 보드 11 상태 띠) — 고친 적이 있는 알람에만 선다.
+  function makeFixBand(cycle) {
+    const band = el('div', 'agent-fix-band');
+    const chip = el('span', 'agent-fix-band-chip');
+    chip.textContent = cycle.chip;
+    band.appendChild(chip);
+    const text = el('span', 'agent-fix-band-text');
+    text.textContent = cycle.cycleText;
+    band.appendChild(text);
+    return band;
+  }
+
+  // 「다시 검사 · 지난 N일」 — 고치기 전과 지금을 나란히 놓고, 하루 한 칸으로
+  // 어느 날이 조용해졌는지 보여준다. 센 값이 없는 줄은 만들지 않는다.
+  function makeRecheckPanel(cycle) {
+    const wrap = el('div', 'agent-fix-recheck');
+    const head = el('div', 'agent-fix-recheck-head');
+    const title = el('span', 'agent-fix-recheck-title');
+    title.textContent = cycle.recheckTitle;
+    head.appendChild(title);
+    const meta = el('span', 'agent-fix-recheck-meta');
+    meta.textContent = cycle.recheckMeta;
+    head.appendChild(meta);
+    wrap.appendChild(head);
+
+    if (cycle.before || cycle.after) {
+      const compare = el('div', 'agent-fix-compare');
+      const before = el('span', 'agent-fix-before');
+      before.textContent = cycle.before;
+      compare.appendChild(before);
+      const arrow = el('span', 'agent-fix-arrow');
+      arrow.textContent = cycle.arrow;
+      compare.appendChild(arrow);
+      const after = el('span', 'agent-fix-after');
+      after.textContent = cycle.after;
+      compare.appendChild(after);
+      if (cycle.afterDates) {
+        const dates = el('span', 'agent-fix-dates');
+        dates.textContent = cycle.afterDates;
+        compare.appendChild(dates);
+      }
+      wrap.appendChild(compare);
+    }
+
+    if (cycle.dots.length) {
+      const strip = el('div', 'agent-fix-dots');
+      for (const dot of cycle.dots) {
+        const cell = el('span', `agent-fix-dot is-${dot.state}`);
+        cell.setAttribute('data-day', dot.date);
+        strip.appendChild(cell);
+      }
+      wrap.appendChild(strip);
+    }
+    if (cycle.dotNote) {
+      const note = el('div', 'agent-fix-dot-note');
+      note.textContent = cycle.dotNote;
+      wrap.appendChild(note);
+    }
+    return wrap;
+  }
+
+  // 「한 바퀴 영수증」 — 무엇을 바꿨는지 번호로 세고, 마지막에 판정을 붙인다.
+  // [되돌리기]는 마지막 고침 하나를 무르는 문이고, [지난 고침 N건]은 그 앞판들이다.
+  function makeReceiptPanel(item, cycle, history) {
+    const wrap = el('div', 'agent-fix-receipt');
+    const title = el('div', 'agent-fix-receipt-title');
+    title.textContent = cycle.receiptTitle;
+    wrap.appendChild(title);
+    for (const row of cycle.receiptRows) {
+      const line = el('div', 'agent-fix-receipt-row');
+      const mark = el('span', 'agent-fix-receipt-mark');
+      mark.textContent = row.mark;
+      line.appendChild(mark);
+      const text = el('span', 'agent-fix-receipt-text');
+      text.textContent = row.text;
+      line.appendChild(text);
+      wrap.appendChild(line);
+    }
+
+    const actions = el('div', 'agent-fix-actions');
+    if (cycle.canRollback) {
+      const rollback = el('button', 'agent-fix-rollback');
+      rollback.type = 'button';
+      rollback.textContent = cycle.rollbackLabel;
+      rollback.addEventListener('click', async () => {
+        rollback.disabled = true;
+        await runControl(rollbackWatchFix, cycle.rollbackLabel, item, '되돌림');
+        codeDetailCache = { id: null, data: null };
+        fixHistoryOpen = false;
+        await refresh();
+      });
+      actions.appendChild(rollback);
+    }
+    if (cycle.pastLabel) {
+      const past = el('button', 'agent-fix-past');
+      past.type = 'button';
+      past.textContent = cycle.pastLabel;
+      past.addEventListener('click', () => { fixHistoryOpen = !fixHistoryOpen; renderDetail(); });
+      actions.appendChild(past);
+    }
+    if (actions.childNodes.length) wrap.appendChild(actions);
+
+    if (fixHistoryOpen) {
+      const list = el('div', 'agent-fix-history');
+      for (const row of FixCycle.historyRows(history)) {
+        const line = el('div', 'agent-fix-history-row');
+        const when = el('span', 'agent-fix-history-when');
+        when.textContent = row.when;
+        line.appendChild(when);
+        const fires = el('span', 'agent-fix-history-fires');
+        fires.textContent = row.fires;
+        line.appendChild(fires);
+        list.appendChild(line);
+      }
+      wrap.appendChild(list);
+    }
+
+    const note = el('div', 'agent-fix-note');
+    note.textContent = cycle.note;
+    wrap.appendChild(note);
+    return wrap;
+  }
+
   function renderCodeDetail(item) {
     const raw = item.raw || {};
     loadCodeDetail(item);
@@ -2016,6 +2144,8 @@ function createAgentCanvas(deps) {
     const watch = detail.watch || raw.watch || null;
     const lastRun = detail.last_run || null;
     const lastCheck = detail.last_check || null;
+    // 고침 한 바퀴 — 백엔드가 직전 판과 지금 검사를 맞대 준 봉투다(없으면 null).
+    const cycle = FixCycle.cycleModel(detail.fix_cycle);
 
     const caption = el('div', 'agent-panel-caption');
     caption.textContent = '상세';
@@ -2032,6 +2162,7 @@ function createAgentCanvas(deps) {
     kindEl.textContent = WatchNodes.versionLabel(watch);
     headRow.appendChild(kindEl);
     detailCol.appendChild(headRow);
+    if (cycle) detailCol.appendChild(makeFixBand(cycle));
 
     // 상태 제어 행(보드 12 두 번째 줄) — 초안은 아직 켤 것이 없어 멈춤·취소가 없다.
     const controls = el('div', 'agent-code-controls');
@@ -2116,6 +2247,12 @@ function createAgentCanvas(deps) {
     const nodeHint = el('div', 'agent-node-hint');
     nodeHint.textContent = '칸을 누르면 그 칸에 대해 채팅으로 물어볼 수 있어';
     detailCol.appendChild(nodeHint);
+
+    // 다시 검사 결과 + 한 바퀴 영수증(보드 11 45MB-1) — 노드 행 바로 아래다.
+    if (cycle) {
+      detailCol.appendChild(makeRecheckPanel(cycle));
+      detailCol.appendChild(makeReceiptPanel(item, cycle, detail.fix_history));
+    }
 
     // 코드는 참고다(R7) — v1은 원문을 가져오지 않고 경로만 편다.
     const codeRow = el('div', 'agent-code-source');

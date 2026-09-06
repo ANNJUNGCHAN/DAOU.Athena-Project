@@ -1319,6 +1319,12 @@ ipcMain.handle('athena:routine-watch-code', async (_e, { body } = {}) => {
   try { return await routineHttp('POST', '/api/v1/routines/watch/code', body); }
   catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
 });
+// 고침 되돌리기 — POST /{id}/watch/rollback. 마지막 고침 전 코드로 파일과 해시를
+// 되돌리고 그때의 검사 결과를 되살린다. 켜져 있는 알람은 백엔드가 409로 막는다.
+ipcMain.handle('athena:routine-watch-rollback', async (_e, { id }) => {
+  try { return await routineHttp('POST', `/api/v1/routines/${encodeURIComponent(id)}/watch/rollback`); }
+  catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+});
 // 상세 조회(Step 6, 결정 d-2) — GET /{id}. 상세 패널의 설정 폼을 열 때 1회
 // 불러 조건 술어·source_spec을 프리필한다(목록 뷰에는 없는 값이다). 위
 // routine-runs와 같은 모양이며 body가 없다.

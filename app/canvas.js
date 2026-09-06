@@ -3859,6 +3859,13 @@ const agentCanvas = window.AthenaLib.AgentCanvas.createAgentCanvas({
     if (!res || !res.ok) throw new Error((res && res.error) || '승인 실패');
     return res.data;
   },
+  // Paper 보드 11 영수증의 [되돌리기] — 마지막 고침 전 코드로 되돌린다. 켜져 있는
+  // 알람은 백엔드가 막으므로(먼저 일시중지) 사유를 그대로 결과 턴에 옮긴다.
+  rollbackWatchFix: async (id) => {
+    const res = await window.athena.invoke('athena:routine-watch-rollback', { id });
+    if (!res || !res.ok) throw new Error((res && res.error) || '되돌리기 실패');
+    return res.data;
+  },
   // Step 7 — 초안 상세의 「검사」. 채팅 초안 카드의 검사 칩과 같은 본문·같은
   // 통로다(chat.js runWatchCheck) — 두 화면이 다른 것을 재면 안 된다.
   runWatchCheck: async (item) => {
