@@ -24,7 +24,8 @@
     "kind": "tab",
     "parent_board": "13K0-2",
     "control": "조건검색",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "2UQF-1": "header",

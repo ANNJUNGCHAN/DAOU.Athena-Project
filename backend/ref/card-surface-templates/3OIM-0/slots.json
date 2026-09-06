@@ -23,7 +23,8 @@
     "kind": "expand",
     "parent_board": "3ODO-0",
     "control": "금현물 주문·체결",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "3OMU-0": "header",

@@ -25,7 +25,8 @@
     "kind": "sort",
     "parent_board": "2VO0-0",
     "control": "근접률",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "2Y3H-0": "header",

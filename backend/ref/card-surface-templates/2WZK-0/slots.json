@@ -23,7 +23,8 @@
     "kind": "sort",
     "parent_board": "2VIN-0",
     "control": "3달 수익률 높은 순",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "2X4X-0": "header",

@@ -18,9 +18,13 @@
  *
  * ── S2를 완화하지 않는 이유 (설계서 §8 4번)
  * 원장의 text_multiset은 **보드 전체**를, slots.json은 **카드 표면 노드 아래**를 센다.
- * 그래서 보드 머리글 텍스트가 원장에만 있는 보드가 생긴다. 그럼에도 상등을 느슨하게 풀지 않는다 —
- * 어긋난 보드마다 어느 텍스트가 어느 슬롯·어느 원장 노드에서 왔는지를 리포트에 적어
- * 사람이 원인을 갈라내게 한다. 상등을 풀면 게이트가 조용히 거짓말한다.
+ * 그래서 두 다중집합은 애초에 같은 범위를 세지 않는다. 상등을 느슨하게 푸는 대신
+ * 원장 쪽을 카드 루트(regions.json `root`) 서브트리로 **좁혀** 범위를 맞춘다 —
+ * S4가 이미 subtreeAt으로 템플릿 트리 뿌리에 맞춰 원장 트리를 좁히는 것과 같은 방식이다.
+ * 좁힌 뒤에도 상등은 그대로 정확 상등이고, 어긋난 보드마다 어느 텍스트가
+ * 어느 슬롯·어느 원장 노드에서 왔는지를 리포트에 적어 사람이 원인을 갈라내게 한다.
+ * 카드 루트 밖 텍스트는 Paper가 아트보드에 남긴 검증 주석이지 카드 표면이 아니다
+ * (실측: 96장 중 루트 밖 텍스트를 가진 보드는 1WOB-1 하나, 노드 셋 1WOE-1·1WOF-1·1WOH-1).
  *
  * ── S4가 설계서 §3.2의 해시 식을 그대로 쓰지 않는 이유
  * §3.2는 `ledger.tree_summary_sha256` vs `sha256(normalize(paper.tree.txt))`를 지시하고
@@ -87,6 +91,30 @@ export function subtreeAt(records, rootId) {
   const subtree = [records[start]];
   for (let i = start + 1; i < records.length && records[i].depth > base; i += 1) subtree.push(records[i]);
   return subtree.map((record) => ({ ...record, depth: record.depth - base }));
+}
+
+/**
+ * 원장 다중집합을 카드 루트 서브트리로 좁힌다 — 루트 밖 텍스트 노드의 몫만 덜어낸다.
+ * 원장 다중집합을 트리에서 다시 세지 않고 덜어내기만 하는 이유: 두 추출기가 텍스트를
+ * 세는 자리가 완전히 같지는 않아(개행 표기·SVG 텍스트) 다시 세면 루트 밖과 무관한
+ * 보드의 판정까지 흔들린다. 뺄셈은 루트 밖 노드가 없는 보드에서 항등이다.
+ * @returns {{multiset:Record<string,number>, excluded:{node_id:string,text:string}[]}|null}
+ *          루트가 원장 트리에 없으면 null(호출자가 좁히지 않고 그대로 잰다).
+ */
+export function narrowMultisetToCardRoot(ledgerMultiset, ledgerRecords, cardRootId) {
+  const subtree = subtreeAt(ledgerRecords, cardRootId);
+  if (!subtree) return null;
+  const inside = new Set(subtree.map((record) => record.id));
+  const multiset = { ...ledgerMultiset };
+  const excluded = [];
+  for (const record of ledgerRecords) {
+    if (record.kind !== 'Text' || !record.text || inside.has(record.id)) continue;
+    excluded.push({ node_id: record.id, text: record.text });
+    const left = (multiset[record.text] ?? 0) - 1;
+    if (left > 0) multiset[record.text] = left;
+    else delete multiset[record.text];
+  }
+  return { multiset, excluded };
 }
 
 /** 한쪽이 `…`로 잘린 이름끼리는 잘린 앞부분만 맞춘다 — 추출기 절단 폭 차이는 내용 차이가 아니다. */
@@ -205,11 +233,12 @@ export function checkPaperCardsStatic(options = {}) {
     const ledgerJson = page ? path.join(ledgerDir, page, `${boardId}.json`) : null;
     const ledgerTree = page ? path.join(ledgerDir, page, `${boardId}.tree.txt`) : null;
     const slotsPath = path.join(templatesDir, boardId, 'slots.json');
+    const regionsPath = path.join(templatesDir, boardId, 'regions.json');
     const templateTree = path.join(templatesDir, boardId, 'paper.tree.txt');
 
     const missing = [];
     if (!page) missing.push('manifest에 이 보드가 없다');
-    for (const file of [ledgerJson, ledgerTree, slotsPath, templateTree]) {
+    for (const file of [ledgerJson, ledgerTree, slotsPath, regionsPath, templateTree]) {
       if (file && !existsSync(file)) missing.push(path.relative(repoRoot, file).replace(/\\/g, '/'));
     }
     if (missing.length) {
@@ -220,9 +249,13 @@ export function checkPaperCardsStatic(options = {}) {
 
     const ledger = readJson(ledgerJson);
     const slots = readJson(slotsPath);
+    const regions = readJson(regionsPath);
+    const ledgerRecords = parseTreeRecords(readFileSync(ledgerTree, 'utf8'));
 
     // ---------- S2 텍스트 다중집합 ----------
-    const drift = diffTextMultiset(ledger.text_multiset ?? {}, slots.text_multiset ?? {});
+    // slots가 세는 범위(카드 루트 아래)에 원장 쪽을 맞춘 뒤 정확 상등으로 잰다.
+    const narrowed = narrowMultisetToCardRoot(ledger.text_multiset ?? {}, ledgerRecords, regions.root);
+    const drift = diffTextMultiset(narrowed?.multiset ?? ledger.text_multiset ?? {}, slots.text_multiset ?? {});
     if (drift.added.length || drift.removed.length || drift.count_changed.length) {
       s2Failed.push(boardId);
       record.status = 'fail';
@@ -249,7 +282,6 @@ export function checkPaperCardsStatic(options = {}) {
 
     // ---------- S4 Paper 트리 드리프트 ----------
     const templateRecords = parseTreeRecords(readFileSync(templateTree, 'utf8'));
-    const ledgerRecords = parseTreeRecords(readFileSync(ledgerTree, 'utf8'));
     const rootId = templateRecords[0]?.id ?? null;
     const ledgerSubtree = rootId ? subtreeAt(ledgerRecords, rootId) : null;
     if (!ledgerSubtree) {

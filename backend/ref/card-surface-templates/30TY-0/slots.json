@@ -24,7 +24,8 @@
     "kind": "sort",
     "parent_board": "2V71-0",
     "control": "증권사별 상위",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "30YY-0": "header",

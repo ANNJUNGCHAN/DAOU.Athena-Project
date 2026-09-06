@@ -34,7 +34,8 @@
     "kind": "expand",
     "parent_board": "2SKU-1",
     "control": "증거금·보증금 구간별",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "3H27-0": "header",

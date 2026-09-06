@@ -37,7 +37,8 @@
     "kind": "expand",
     "parent_board": "2SKU-1",
     "control": "증거금 재원·담보 상세",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "3ILR-0": "header",

@@ -26,7 +26,8 @@
     "kind": "tab",
     "parent_board": "137X-2",
     "control": "차트",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "32WW-0": "header",

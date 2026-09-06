@@ -7,7 +7,7 @@
     "node_id": "3HKO-0",
     "jsx_sha256": "3ab755270db6c2e164f9e7039a326ab7b5e2930381597b8a88fdec554c91a983"
   },
-  "html_sha256": "bb56ee5133c786bdbe60621afc49c451e27c779ec39c9ddcfc44abf2e16cfc08",
+  "html_sha256": "a60ab61a1b48b860d684968a81ddeba85393325f9f5f7a4822567178a7b82005",
   "width_px": 1360.0,
   "height_px": 1040.0,
   "artboard_px": [
@@ -21,7 +21,8 @@
     "kind": "tab",
     "parent_board": "137X-2",
     "control": "순위",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "3HKP-0": "header",
@@ -108,7 +109,7 @@
     "bs_paired": 170,
     "bs_leaf": 5,
     "bs_kpi_cell": 5,
-    "state_control_marks": 9
+    "state_control_marks": 11
   },
   "density": {
     "table_columns": 8,
@@ -119,6 +120,24 @@
   },
   "state_controls": {
     "marks": [
+      {
+        "control": "ELW",
+        "kind": "tab",
+        "boards": [
+          "2VO0-0"
+        ],
+        "node_id": "3HML-0",
+        "how": "node"
+      },
+      {
+        "control": "ETF",
+        "kind": "tab",
+        "boards": [
+          "2VIN-0"
+        ],
+        "node_id": "3HMJ-0",
+        "how": "node"
+      },
       {
         "control": "VI 발동",
         "kind": "sort",

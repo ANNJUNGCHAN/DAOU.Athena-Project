@@ -21,7 +21,8 @@
     "kind": "sort",
     "parent_board": "2VDA-0",
     "control": "VI 발동",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "31NP-0": "header",

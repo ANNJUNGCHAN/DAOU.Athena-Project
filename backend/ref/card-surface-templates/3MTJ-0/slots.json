@@ -21,7 +21,8 @@
     "kind": "expand",
     "parent_board": "2SKU-1",
     "control": "D+2 정산 후 계좌",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "3N42-0": "header",

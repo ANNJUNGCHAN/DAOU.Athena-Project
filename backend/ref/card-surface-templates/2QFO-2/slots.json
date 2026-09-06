@@ -27,7 +27,8 @@
     "parent_board": null,
     "control": "투자자별",
     "control_text": "투자자별",
-    "rail_owner": true
+    "rail_owner": true,
+    "control_node": null
   },
   "regions": {
     "2QFR-2": "header",

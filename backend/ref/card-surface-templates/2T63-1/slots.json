@@ -21,7 +21,8 @@
     "kind": "tab",
     "parent_board": "135M-2",
     "control": "현금 매도",
-    "control_text": "매도"
+    "control_text": "매도",
+    "control_node": null
   },
   "regions": {
     "2T9T-1": "header",

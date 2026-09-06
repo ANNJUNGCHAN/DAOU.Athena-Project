@@ -23,7 +23,8 @@
     "kind": "tab",
     "parent_board": "135M-2",
     "control": "정정",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "2TE6-1": "header",

@@ -23,7 +23,8 @@
     "kind": "sort",
     "parent_board": "2V71-0",
     "control": "장중 투자자 상위",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "30B3-0": "header",
