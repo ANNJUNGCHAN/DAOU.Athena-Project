@@ -3243,7 +3243,7 @@ body { margin: 0; overflow: hidden; }
   font-size: var(--text-xs);
   line-height: 17px;
 }
-.agent-history-settings-edit {
+.agent-history-settings-edit, .agent-settings-chat {
   margin: 2px 12px 4px;
   border: 1px solid var(--color-k-line);
   border-radius: 999px;
@@ -3254,7 +3254,7 @@ body { margin: 0; overflow: hidden; }
   font-size: var(--text-sm);
   cursor: pointer;
 }
-.agent-history-settings-edit:hover { border-color: var(--color-brand); color: var(--color-brand); }
+.agent-history-settings-edit:hover, .agent-settings-chat:hover { border-color: var(--color-brand); color: var(--color-brand); }
 
 /* 요약 한 줄 + 편집 폼(Paper 보드 06). 라벨 폭 72px는 Paper가 두 폼에 공통으로
    쓴 그 값이다(원장 frames의 라벨 프레임 폭). */
@@ -3281,7 +3281,7 @@ body { margin: 0; overflow: hidden; }
 }
 .agent-settings-input { flex: 1 1 auto; }
 .agent-settings-actions { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
-.agent-settings-actions .agent-history-settings-edit { margin: 0; }
+.agent-settings-actions .agent-settings-chat { margin: 0; }
 .agent-settings-save {
   border: 1px solid transparent;
   border-radius: 999px;

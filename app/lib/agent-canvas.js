@@ -277,6 +277,8 @@ function settingsFormModel(detail, routine) {
         ? [{ value: 'true', label: '예' }, { value: 'false', label: '아니오' }] : null,
       value: String(cond.value),
       unit: VALUE_UNIT[cond.source] || '',
+      // schedule.daily 가지는 지금 제품에서 드릴인이 안 열린다(「전체 이력 보기 →」가
+      // 감시·코드 알람에만 붙는다) — 단위 테스트만 도는 가지다.
       hint: spec.value_type === 'number' ? '숫자'
         : (cond.source === 'schedule.daily' ? '요일@시각 표기' : ''),
     });
@@ -326,19 +328,33 @@ function settingsFormModel(detail, routine) {
 function settingsUpdateBody(model, values) {
   const body = {};
   const condition = {};
+  let conditionChanged = false;
   for (const field of model.fields) {
     const raw = values[field.key];
     const text = raw == null ? '' : String(raw).trim();
-    if (field.key === 'op') { condition.op = text; continue; }
+    const touched = text !== String(field.value);
+    if (field.key === 'op') { condition.op = text; if (touched) conditionChanged = true; continue; }
     if (field.key === 'value') {
+      if (touched) conditionChanged = true;
       if (field.kind === 'number') condition.value = Number(text);
       else if (field.options) condition.value = text === 'true';
       else condition.value = text;
       continue;
     }
-    if (field.key === 'consecutive_ticks') { condition.consecutive_ticks = Number(text); continue; }
+    if (field.key === 'consecutive_ticks') {
+      condition.consecutive_ticks = Number(text);
+      if (touched) conditionChanged = true;
+      continue;
+    }
     if (field.key === 'expires_days') { if (text !== '') body.expires_days = Number(text); continue; }
     if (field.key === 'cooldown_s') { body.cooldown_s = Number(text); continue; }
+    if (field.key === 'note') {
+      // 설명 칸을 안 건드렸는데 조건이 바뀌었으면 note 키를 안 싣는다 — 백엔드가
+      // 자동 생성문이었을 때만 새 조건으로 다시 쓴다(사람이 쓴 설명은 그대로).
+      if (!touched && conditionChanged) continue;
+      body.note = text;
+      continue;
+    }
     if (field.key === 'briefing_model' || field.key === 'briefing_effort') {
       body[field.key] = text === '' ? null : text;
       continue;
@@ -1217,6 +1233,7 @@ function createAgentCanvas(deps) {
   let settingsFormRequestId = 0; // stale-응답 가드 — 다른 드릴인으로 옮겨가면 버린다
   let settingsSaving = false;
   let settingsInputs = {}; // 필드 key → 입력 노드. [저장]이 여기서 값을 읽는다.
+  let settingsFormValues = null; // 사용자가 친 값. null이면 아직 손대지 않았다.
 
   function appendReadonlyRow(parent, row) {
     const node = el('div', 'agent-settings-readonly');
@@ -1234,6 +1251,22 @@ function createAgentCanvas(deps) {
     parent.appendChild(node);
   }
 
+  // 재렌더는 폼을 통째로 다시 짓는다 — 저장 중·저장 실패로 다시 그릴 때 사용자가
+  // 친 값이 처음 값으로 되돌아가면 고칠 수가 없으므로, 그린 값이 아니라 마지막으로
+  // 읽은 값을 되돌려 놓는다(모델의 field.value는 원본으로 남는다 — 설명 칸을
+  // 건드렸는지 재는 데 쓴다).
+  function fieldValue(field) {
+    if (settingsFormValues && field.key in settingsFormValues) return settingsFormValues[field.key];
+    return field.value;
+  }
+
+  function readSettingsInputs() {
+    const values = {};
+    for (const key of Object.keys(settingsInputs)) values[key] = settingsInputs[key].value;
+    settingsFormValues = values;
+    return values;
+  }
+
   function makeFieldControl(field) {
     if (field.kind === 'select') {
       const select = el('select', 'agent-settings-select');
@@ -1243,12 +1276,12 @@ function createAgentCanvas(deps) {
         node.textContent = option.label;
         select.appendChild(node);
       }
-      select.value = field.value;
+      select.value = fieldValue(field);
       return select;
     }
     const input = el('input', 'agent-settings-input');
     input.type = field.kind === 'number' ? 'number' : 'text';
-    input.value = field.value;
+    input.value = fieldValue(field);
     return input;
   }
 
@@ -1305,7 +1338,9 @@ function createAgentCanvas(deps) {
     saveBtn.disabled = settingsSaving;
     saveBtn.addEventListener('click', () => saveSettingsForm());
     actions.appendChild(saveBtn);
-    const chatBtn = el('button', 'agent-history-settings-edit');
+    // [설정 편집]과 다른 클래스를 쓴다 — 같은 클래스였을 때 라우트·프로브의
+    // querySelector 첫 일치가 버튼 순서에 따라 조용히 뒤바뀐다(스타일만 공유한다).
+    const chatBtn = el('button', 'agent-settings-chat');
     chatBtn.type = 'button';
     chatBtn.textContent = '채팅에서 고치기 ↗';
     chatBtn.addEventListener('click', () => {
@@ -1355,6 +1390,7 @@ function createAgentCanvas(deps) {
   function closeSettingsForm() {
     settingsFormOpen = false;
     settingsFormState = null;
+    settingsFormValues = null;
     settingsFormMessage = '';
     settingsFormRequestId += 1;
   }
@@ -1366,6 +1402,7 @@ function createAgentCanvas(deps) {
     const rid = ++settingsFormRequestId;
     settingsFormOpen = true;
     settingsFormState = null;
+    settingsFormValues = null;
     settingsFormMessage = '';
     renderHistorySettings();
     let detail = null;
@@ -1385,9 +1422,7 @@ function createAgentCanvas(deps) {
   async function saveSettingsForm() {
     if (!settingsFormState || !historyItem || settingsSaving) return;
     const id = historyItem.id;
-    const values = {};
-    for (const key of Object.keys(settingsInputs)) values[key] = settingsInputs[key].value;
-    const body = settingsUpdateBody(settingsFormState, values);
+    const body = settingsUpdateBody(settingsFormState, readSettingsInputs());
     settingsSaving = true;
     settingsFormMessage = '';
     renderHistorySettings();
@@ -1413,6 +1448,7 @@ function createAgentCanvas(deps) {
     breadcrumbTitle.textContent = historyItem.title;
     settingsFormOpen = false;
     settingsFormState = null;
+    settingsFormValues = null;
     renderHistorySettings();
     renderPanels();
   }
