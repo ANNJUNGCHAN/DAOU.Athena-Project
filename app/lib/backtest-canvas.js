@@ -601,6 +601,30 @@ function diffCounts(before, after) {
   return CodeEditor.diffStats(CodeEditor.diffLines(before, after));
 }
 
+// 한도 여섯 칸(Paper 42NE-1 「한도 — 미리 승인하는 범위」). 라벨은 화면과 게이트가
+// 같은 문자열을 쓴다 — 무엇이 비었는지 말할 때 사람이 본 그 이름으로 말해야 한다.
+const DEPLOY_LIMIT_FIELDS = [
+  ['max_order_amount', '1회 최대 주문(원)'],
+  ['max_orders_per_day', '하루 최대 주문 수'],
+  ['valid_from', '유효 시작(YYYYMMDD)'],
+  ['valid_to', '유효 종료(YYYYMMDD)'],
+  ['stop_on_drawdown_pct', '자동 정지 낙폭(%)'],
+  ['stop_on_consecutive_losses', '자동 정지 연속 손절(회)'],
+];
+
+// Paper 42NF-1 원문. 비운 한도로 만든 배포는 백엔드가 만료로 보고(deploy.py is_expired)
+// 신호마다 막으므로, 사람은 '켰다'고 믿는데 한 건도 안 나가는 배포가 된다.
+const DEPLOY_LIMITS_WARNING =
+  '비워둘 수 없습니다. 한도 없는 자동 주문은 이 화면이 약속한 것이 아닙니다.';
+
+function deployLimitsGate(limits) {
+  const values = (limits && typeof limits === 'object') ? limits : {};
+  const missing = DEPLOY_LIMIT_FIELDS
+    .filter(([key]) => String(values[key] == null ? '' : values[key]).trim() === '')
+    .map(([, label]) => label);
+  return { ok: missing.length === 0, missing };
+}
+
 // 두 실행의 파라미터를 키 단위로 대조해 변한 값만 적는다(Paper 1WZ3-1
 // "fast 10→20 · slow 40→60"). 한쪽을 모르면 빈 문자열이다 — 모르는 자리에
 // 기본값을 지어 넣으면 "무엇이 달랐나"가 거짓말이 된다.
@@ -5731,7 +5755,13 @@ function createBacktestCanvas(options) {
       // "지금 실제로 자동 집행되는가"는 서버가 셋(모드·무장·상태)을 합쳐 준 auto_armed
       // 하나로만 읽는다 — 화면에서 다시 조합하면 규칙이 두 곳에 살게 된다.
       if (dep.auto_armed) row.appendChild(el('span', 'backtest-deploy-auto', '자동'));
-      row.appendChild(el('span', 'backtest-deploy-status', dep.status));
+      // 「유효기간이 지났다」도 서버가 준 한 값(expired)으로만 읽는다 — status가 active여도
+      // 그런 배포는 신호마다 막힌다(deploy.py blocked_reason='expired'). active만 그리면
+      // 화면이 켜져 있다고 거짓말한다.
+      row.appendChild(el(
+        'span', `backtest-deploy-status${dep.expired ? ' is-expired' : ''}`,
+        dep.expired ? '만료' : dep.status,
+      ));
       row.appendChild(button('backtest-deploy-stop', '배포 중지', async () => {
         if (!deps.stopDeployment) return;
         try { await deps.stopDeployment(dep.id); await loadDeployments(); }
@@ -5867,22 +5897,14 @@ function createBacktestCanvas(options) {
       valid_from: SpecModel.todayYyyymmdd(), valid_to: '',
       stop_on_drawdown_pct: 15, stop_on_consecutive_losses: 3,
     };
-    const row = el('div', 'backtest-field-row');
-    [
-      ['max_order_amount', '1회 최대 주문(원)'],
-      ['max_orders_per_day', '하루 최대 주문 수'],
-      ['valid_from', '유효 시작(YYYYMMDD)'],
-      ['valid_to', '유효 종료(YYYYMMDD)'],
-      ['stop_on_drawdown_pct', '자동 정지 낙폭(%)'],
-      ['stop_on_consecutive_losses', '자동 정지 연속 손절(회)'],
-    ].forEach(([key, label]) => {
-      row.appendChild(textField(label, limits[key], '', (v) => { limits[key] = v; }));
-    });
-    card.appendChild(row);
-    state.deployLimits = limits;
-
-    card.appendChild(button('backtest-deploy-create', '이 전략을 실전에 겁니다', async () => {
+    // Paper 42NE-1·42NF-1 — 한도가 무엇인지 말하고, 비워 둘 수 없다고 못 박는다.
+    card.appendChild(el('div', 'backtest-deploy-limits-head', '한도 — 미리 승인하는 범위'));
+    card.appendChild(el('div', 'backtest-deploy-limits-warning', DEPLOY_LIMITS_WARNING));
+    const gateLine = el('div', 'backtest-deploy-limits-gate');
+    const createBtn = button('backtest-deploy-create', '이 전략을 실전에 겁니다', async () => {
       if (!deps.createDeployment) return;
+      // 버튼이 비활성이어도 여기서 한 번 더 본다 — 만드는 문은 하나여야 한다.
+      if (!deployLimitsGate(limits).ok) return;
       try {
         await deps.createDeployment({
           strategy_version_id: activeVersionId,
@@ -5902,7 +5924,26 @@ function createBacktestCanvas(options) {
         });
         await loadDeployments();
       } catch (err) { fail(err); }
-    }));
+    });
+    // 키입력마다 다시 그리면 포커스를 잃는다(textField 주석) — 버튼과 이유 줄만 갱신한다.
+    function syncLimitsGate() {
+      const gate = deployLimitsGate(limits);
+      createBtn.disabled = !gate.ok;
+      gateLine.textContent = gate.ok ? '' : `아직 비어 있음 · ${gate.missing.join(' · ')}`;
+    }
+    const row = el('div', 'backtest-field-row');
+    DEPLOY_LIMIT_FIELDS.forEach(([key, label]) => {
+      row.appendChild(textField(label, limits[key], '', (v) => {
+        limits[key] = v;
+        syncLimitsGate();
+      }));
+    });
+    card.appendChild(row);
+    state.deployLimits = limits;
+
+    syncLimitsGate();
+    card.appendChild(gateLine);
+    card.appendChild(createBtn);
     return card;
   }
 
@@ -5967,6 +6008,9 @@ const __exports = {
   signedPercent,
   diffCounts,
   paramsDiffText,
+  deployLimitsGate,
+  DEPLOY_LIMIT_FIELDS,
+  DEPLOY_LIMITS_WARNING,
   codeDiffText,
   parseYamlBlock,
   specOverridesFromYaml,

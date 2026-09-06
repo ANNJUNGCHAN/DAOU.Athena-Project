@@ -2747,6 +2747,69 @@ test('파일 실행이 준 전략·버전 id로 배포 탭이 열린다 — [이
   assert.equal(findByClass(made.container, 'backtest-deploy-create').length, 1);
 });
 
+// ── 보드 23 · 한도를 비운 배포는 만들 수 없다 ───────────────────────────────
+
+async function toDeployForm(extra) {
+  const made = await mounted(userStrategyDeps(Object.assign({
+    run: async () => ({ run_id: 'r1', strategy_id: 's9', version_id: 'v9' }),
+    result: async () => ({ status: 'done', metrics: {}, equity: [] }),
+    trades: async () => [],
+    deployments: async () => [],
+  }, extra || {})));
+  await openProjectFile(made);
+  await click(findByClass(made.container, 'backtest-tab')[0]);
+  await click(findByClass(made.container, 'backtest-run-button')[0]);
+  await flush();
+  await click(findByClass(made.container, 'backtest-tab')[4]);
+  await flush();
+  return made;
+}
+
+test('유효 종료가 비면 실전 배포 버튼이 비활성이고 이유가 적힌다', async () => {
+  const { container } = await toDeployForm();
+  const create = findByClass(container, 'backtest-deploy-create')[0];
+  assert.equal(create.disabled, true);
+  const text = textOf(container);
+  assert.match(text, /한도 — 미리 승인하는 범위/);
+  assert.match(text, /비워둘 수 없습니다\. 한도 없는 자동 주문은 이 화면이 약속한 것이 아닙니다\./);
+  assert.match(text, /유효 종료\(YYYYMMDD\)/);
+});
+
+test('한도 6칸이 모두 차야 배포가 만들어진다', async () => {
+  let calls = 0;
+  const { container } = await toDeployForm({
+    createDeployment: async () => { calls += 1; return { id: 'd1' }; },
+  });
+  const create = findByClass(container, 'backtest-deploy-create')[0];
+  await click(create);
+  await flush();
+  assert.equal(calls, 0);
+
+  // 마지막 빈 칸(유효 종료)을 채우면 그때 열린다 — 다시 그리지 않고 버튼만 바뀐다.
+  const inputs = findByClass(container, 'backtest-field-input');
+  const validTo = inputs[inputs.length - 3];
+  validTo.value = '20261231';
+  await validTo.dispatchEvent({ type: 'input' });
+  assert.equal(create.disabled, false);
+  await click(create);
+  await flush();
+  assert.equal(calls, 1);
+});
+
+test('deployLimitsGate: 빈 칸을 라벨로 되돌려준다 — 지어낸 기본값을 넣지 않는다', () => {
+  const full = {
+    max_order_amount: 2000000, max_orders_per_day: 2,
+    valid_from: '20260903', valid_to: '20261231',
+    stop_on_drawdown_pct: 15, stop_on_consecutive_losses: 3,
+  };
+  assert.deepEqual(backtestCanvas.deployLimitsGate(full), { ok: true, missing: [] });
+  assert.deepEqual(
+    backtestCanvas.deployLimitsGate(Object.assign({}, full, { valid_to: '' })),
+    { ok: false, missing: ['유효 종료(YYYYMMDD)'] },
+  );
+  assert.deepEqual(backtestCanvas.deployLimitsGate(null).ok, false);
+});
+
 // ── 무장 스위치와 오늘 로그(보드 23 · 2026-09-04) ────────────────────────────
 //
 // 여기서 지키는 것은 하나다: **화면이 자동 매매에 대해 거짓말을 하지 않는가.**
@@ -2777,6 +2840,16 @@ async function atDeployTab(overrides) {
   await flush();
   return made;
 }
+
+test('유효기간이 지난 배포는 active가 아니라 만료로 그린다 — 켜져 있다고 말하지 않는다', async () => {
+  const { container } = await atDeployTab({
+    deployments: async () => [deployment({ status: 'active', expired: true })],
+    listSignals: async () => [],
+  });
+  const status = findByClass(container, 'backtest-deploy-status')[0];
+  assert.equal(status.textContent, '만료');
+  assert.match(status.className, /is-expired/);
+});
 
 test('무장 토글이 armDeployment(id, 반대값)를 정확히 한 번 부른다', async () => {
   const calls = [];
