@@ -6,7 +6,7 @@
 // 「도달 절차가 없는 보드는 실패한다」가 게이트 2의 핵심이라, 표가 곧 남은 작업 목록이 된다.
 // 지금은 58장(부팅 5 + 온보딩 3 + 인증 3 + 에이전트 4 + 알림 파생 방·코드 알람 3 + 화면 4
 // + 계좌 등록 3상태·주문 5 + 셸·그래프 2 + 그래프 5 + 대화·계정 2 + 모드·빈 화면 2
-// + 창·대화 턴·탭 3 + 사이드바 4 + 플러그인 9 + 키우미 4)이고,
+// + 창·대화 턴·탭 3 + 사이드바 4 + 플러그인 9 + 키우미 5)이고,
 // 래칫(§4.5)이 잠근 뒤 저작이 이어진다.
 //
 // ── reach 어휘는 닫혀 있다
@@ -119,6 +119,174 @@ const STEP_KINDS = Object.freeze({
 });
 
 const STRUCTURE_KINDS = Object.freeze(['count', 'order', 'absent']);
+
+// 미니 카드 열 종(보드 2LFW-2)을 세우는 봉투다. 값은 Paper가 그 보드에 그린 예시를
+// 그대로 옮긴 픽스처이고, 상한을 넘기는 자리(표 5행 · 사실 9행 · 스트림 3건)는 실제로
+// 접히도록 일부러 넘겨 둔다 — 접힘 고지가 나오는 것까지가 카드다. 문구에는 한 글자도
+// 쓰지 않는다(전부 봉투가 정하는 값이다).
+const MINI_CARD_ENVELOPES = Object.freeze([
+  // 01 표
+  {
+    card_title: '재무상태표',
+    caption: 'DART 2025',
+    canvas_type: 'table',
+    fell_back: false,
+    data: {
+      columns: [
+        { key: 'acct', label: '계정' },
+        { key: 'cur', label: '당기' },
+        { key: 'prev', label: '전기' },
+        { key: 'chg', label: '증감' },
+        { key: 'chgpct', label: '증감률' },
+      ],
+      rows: [
+        { acct: '자산총계', cur: '566,942,110', prev: '514,531,948', chg: '52,410,162', chgpct: '10.2%' },
+        { acct: '유동자산', cur: '247,684,612', prev: '227,062,266', chg: '20,622,346', chgpct: '9.1%' },
+        { acct: '현금및현금성자산', cur: '57,856,378', prev: '53,705,579', chg: '4,150,799', chgpct: '7.7%' },
+        { acct: '부채총계', cur: '92,000,000', prev: '88,000,000', chg: '4,000,000', chgpct: '4.5%' },
+        { acct: '자본총계', cur: '474,942,110', prev: '426,531,948', chg: '48,410,162', chgpct: '11.4%' },
+      ],
+    },
+  },
+  // 02 차트
+  {
+    card_title: '삼성전자 005930',
+    canvas_type: 'chart',
+    fell_back: false,
+    data: {
+      symbol: '005930',
+      chart: {
+        period: 'day',
+        target: 'stock',
+        candles: [
+          { time: '2026-05-26', open: 68000, high: 69500, low: 67800, close: 68900, volume: 1000 },
+          { time: '2026-06-25', open: 74000, high: 80000, low: 73800, close: 79500, volume: 1300 },
+          { time: '2026-07-12', open: 83000, high: 85500, low: 82500, close: 87200, volume: 1500 },
+          { time: '2026-07-19', open: 87200, high: 88500, low: 86800, close: 88100, volume: 1600 },
+        ],
+      },
+    },
+  },
+  // 03 사실
+  {
+    card_title: '종목정보',
+    caption: '삼성전자 005930',
+    canvas_type: 'facts',
+    fell_back: false,
+    data: {
+      fields: [
+        { key: 'cur_prc', label: '종가', value: 88100 },
+        { key: 'pred_pre', label: '전일비', value: '+900 (+1.03%)' },
+        { key: 'acc_trde_qty', label: '거래량', value: 11689068 },
+        { key: 'mac', label: '시가총액', value: '525.8조' },
+        { key: 'dt', label: '기준시각', value: '2026-07-19 15:30' },
+        { key: 'per', label: 'PER', value: '11.2' },
+        { key: 'pbr', label: 'PBR', value: '1.4' },
+        { key: 'eps', label: 'EPS', value: '7,860' },
+        { key: 'bps', label: 'BPS', value: '62,900' },
+      ],
+    },
+  },
+  // 04 복합
+  {
+    card_title: '계좌',
+    caption: '모의-주력',
+    canvas_type: 'compound',
+    fell_back: false,
+    data: {
+      header: [
+        { key: 'tot_evlt_amt', label: '총평가', value: '18,420,500' },
+        { key: 'evlt_pl', label: '평가손익', value: '+612,300' },
+        { key: 'prft_rt', label: '수익률', value: '+3.44%' },
+        { key: 'dpst', label: '예수금', value: '2,100,000' },
+        { key: 'ord_psbl', label: '주문가능', value: '2,100,000' },
+      ],
+      table: {
+        columns: [
+          { key: 'stk_nm', label: '종목' },
+          { key: 'evlt_amt', label: '평가금액' },
+        ],
+        rows: [
+          { stk_nm: '삼성전자', evlt_amt: '10,572,000' },
+          { stk_nm: 'SK하이닉스', evlt_amt: '7,848,500' },
+          { stk_nm: 'NAVER', evlt_amt: '1,204,000' },
+          { stk_nm: '카카오', evlt_amt: '842,000' },
+        ],
+      },
+    },
+  },
+  // 05 미니 주문 티켓 — card_title이 정확히 「주문 티켓」일 때만 이 카드다(orb.js).
+  {
+    card_title: '주문 티켓',
+    caption: '모의-주력',
+    canvas_type: 'facts',
+    fell_back: false,
+    data: {
+      fields: [
+        { key: 'symbol', label: '종목', value: '005930' },
+        { key: 'symbol_name', label: null, value: '삼성전자' },
+        { key: 'side', label: '구분', value: 'buy' },
+        { key: 'qty', label: '수량', value: 10 },
+        { key: 'estimated_amount', label: '예상 체결금액', value: 881000 },
+      ],
+    },
+  },
+  // 06 주문 확인
+  {
+    card_title: '주문 확인',
+    caption: '모의-주력',
+    canvas_type: 'action',
+    fell_back: false,
+    data: { state: 'done', receipt: { ord_no: '0000117', dmst_stex_tp: 'KRX' } },
+  },
+  // 07 실시간 이벤트
+  {
+    card_title: '실시간 이벤트',
+    caption: '체결 · 005930',
+    canvas_type: 'event',
+    fell_back: false,
+    data: {
+      state: 'connected',
+      records: [
+        { time: '15:29:58', price: '88,100', qty: '1,200' },
+        { time: '15:29:57', price: '88,000', qty: '340' },
+        { time: '15:29:55', price: '88,000', qty: '90' },
+      ],
+    },
+  },
+  // 08 인증 상태
+  {
+    card_title: '연결 상태',
+    caption: 'Kiwoom OAuth',
+    canvas_type: 'status',
+    fell_back: false,
+    data: { configured: true, ready: true, expires_at: '2026-07-20 06:00' },
+  },
+  // 09 본문
+  {
+    caption: 'DART · 07-18',
+    canvas_type: 'reader',
+    fell_back: false,
+    data: {
+      title: '주요사항보고서',
+      body_markdown: '회사는 이사회 결의로 자기주식 취득 신탁계약 체결을 결정했습니다. 계약금액은 3,000억원이며 계약기간은 체결일로부터 6개월입니다.\n\n두 번째 문단은 오브에 오지 않는다.',
+    },
+  },
+  // 10 스트림
+  {
+    caption: '스트림 · 뉴스',
+    canvas_type: 'stream',
+    fell_back: false,
+    data: {
+      records: [
+        { title: '삼성전자, 자기주식 3,000억 취득 신탁 결정', ts: '2026-07-19T15:12:00', ts_precision: 'second', source: 'DART' },
+        { title: '반도체 수출 3개월 연속 증가', ts: '2026-07-19T14:40:00', ts_precision: 'second', source: '연합인포맥스' },
+        { title: '세 번째는 접힌다', ts: '2026-07-19T14:00:00', ts_precision: 'second', source: 'DART' },
+      ],
+    },
+  },
+]);
+
 
 // 에이전트 목록 fixture — 드릴인(보드 03)이 열리는 것은 감시 갈래뿐이라 realtime-ws를 쓴다
 // (probe-agent-paper-parity.js:50 "드릴인이 열리는 것은 감시(watch)뿐"). 값은 전부 데이터라
@@ -3936,16 +4104,14 @@ const ROUTES = Object.freeze([
     ],
   },
 
-  // ---------- 키우미 4장 (C-2) ----------
-  // 이 페이지 아홉 중 넷만 여기 있다. 나머지 다섯은 Paper가 그린 것이 **주석 판**이라
+  // ---------- 키우미 5장 (C-2) ----------
+  // 이 페이지 아홉 중 다섯만 여기 있다. 나머지 넷은 Paper가 그린 것이 **주석 판**이라
   // 앱에 대응하는 가시 텍스트가 없거나(02 표정 10종 · 03 시선·시간 루프 — 얼굴은
   // orb.css의 [data-face] 규칙이 지고 글자를 하나도 안 그린다), 한 화면에 두 줄밖에
   // 못 세우거나(05 셸 숨김·표시 — 「대화창으로 가기」와 「셸로 가기」는 서로 다른
-  // 표시 모드라 함께 못 선다), 잠긴 계약과 정면으로 어긋나거나(08 모드별 얼굴 5종 —
-  // 앱은 얼굴 1종이 계약이다, shell.html #dot 주석), 도달 어휘 밖이다(09 미니 카드
-  // 10종 — 카드는 질의가 도는 동안에만 붙는 athena:orb-canvas-result 구독으로만
-  // 그려진다, orb.js submitChatQuery). 없는 셀렉터·문구를 적어 초록을 만드는 대신
-  // 비워 둔다.
+  // 표시 모드라 함께 못 선다), 잠긴 계약과 정면으로 어긋난다(08 모드별 얼굴 5종 —
+  // 앱은 얼굴 1종이 계약이다, shell.html #dot 주석). 없는 셀렉터·문구를 적어 초록을
+  // 만드는 대신 비워 둔다.
   {
     board: 'DO-0', // 01 · 키우미 — 상황별 표현·크기 매핑
     window: 'orb',
@@ -4058,6 +4224,50 @@ const ROUTES = Object.freeze([
     structure: [
       { what: 'count', selector: '.shell-region', equals: 3 },
       { what: 'count', selector: '.km-section', equals: 3 },
+    ],
+  },
+  {
+    board: '2LFW-2', // 09 · 키우미 — 미니 카드 10종
+    window: 'orb',
+    // 열 종이 한 보드에 그려져 있으므로 라우트도 한 장에 열 장을 세운다 — 봉투를
+    // 열 번 쏘면 카드가 열 장 붙는다(러너의 send는 되돌릴 것이 없는 자극이라
+    // 반복해도 서로를 오염시키지 않는다). 카드가 붙는 자리는 대화 모드의 턴
+    // 목록이라 셸을 내려 두는 것이 먼저다(보드 04와 같은 두 자극).
+    //
+    // 봉투는 질의 밖에서 온다 — 제품에서 이 구독은 질의가 도는 동안에만 산다
+    // (orb.js submitChatQuery). 검사 모드에서만 열리는 통로 하나로 그 밖에서도
+    // 같은 buildOrbCanvasCard가 그리게 했다(orb.js askCanvasProbeMode,
+    // main.js athena:orb-canvas-probe, probe-paper-screens.js가 켠다).
+    reach: [
+      { do: 'send', channel: 'athena:shell-visibility', data: { hidden: true, displayMode: 'A' } },
+      { do: 'send', channel: 'athena:orb-state', data: { expanded: true } },
+      ...MINI_CARD_ENVELOPES.map((envelope) => ({
+        do: 'send',
+        channel: 'athena:orb-canvas-result',
+        data: { status: 'success', envelope },
+      })),
+      { do: 'settle' },
+    ],
+    root: '#orbChatBody',
+    // 카드 제목·부제·라벨·값은 전부 봉투가 정한다 — 픽스처를 고치면 따라 바뀌므로
+    // 문구가 못 된다. 여기 여섯은 앱이 자기 리터럴로 쓰는 것들이다: 차트의 능력 고지,
+    // 주문 확인의 경계 고지, 인증 상태의 고정 행과 고지, 그리고 orb.html이 마크업에
+    // 직접 적은 미니 주문 티켓의 제목·확인 표기. 접힘 고지(「항목 4개를 접었습니다」
+    // 따위)는 개수가 봉투에 달려 있어 안 적는다.
+    phrases: [
+      '지표 · 드로잉 · 매물대는 캔버스에서',
+      '주문 티켓',
+      '1회 확인',
+      '표시 전용 · 실행과 최종 확인은 대화창에서만',
+      '설정됨',
+      '토큰과 자격 증명 값은 표시하지 않음',
+    ],
+    // 열 종이 전부 섰다 — 아홉은 일반 축약 카드(.orb-fold-card)이고, 미니 주문
+    // 티켓만 orb.html이 미리 갖고 있는 #orbTicket을 채워 쓴다(실행 버튼을 가진
+    // 유일한 카드라 별도 DOM이다, 보드 09 공통 규칙 「실행은 05 하나」).
+    structure: [
+      { what: 'count', selector: '.orb-fold-card', equals: 9 },
+      { what: 'count', selector: '#orbTicket', equals: 1 },
     ],
   },
   // ---------- 백테스트 6장 (8-1) ----------
