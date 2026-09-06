@@ -4206,6 +4206,16 @@ app.whenReady().then(async () => {
       const graphSummaryTableEl = document.getElementById('graphSummaryTable');
       const summaryTableRect = graphSummaryTableEl.getBoundingClientRect();
       const summaryTableVisible = summaryTableRect.width > 0 && summaryTableRect.height > 0;
+      // 사람이 실제로 보는 표면은 지도가 아니라 요약이다(기본 서브뷰) — 브레인
+      // 미기동 안내가 여기에도 서지 않으면 화면은 그냥 백지다(보드 2QCN-2).
+      const summaryMainEl = document.getElementById('graphSummaryMain');
+      const summaryMainNotice = summaryMainEl
+        ? summaryMainEl.querySelector('.graph-mode-unavailable')
+        : null;
+      const summaryMainNoticeText = summaryMainNotice ? summaryMainNotice.textContent : '';
+      const summaryMainUnavailableFlag = summaryMainEl
+        ? summaryMainEl.getAttribute('data-unavailable')
+        : null;
       // 스텝2-보정 회귀 가드 — 요약 뷰 헤더의 "요약"/"그래프" 서브뷰 탭은 이제
       // graphMode.setSurface()로 state.surface를 바꾸고, applyVisibility()
       // 하나가 hidden을 소유한다(z-index 임시조치는 걷어냈다). setSurface()가
@@ -4235,7 +4245,10 @@ app.whenReady().then(async () => {
       }
       const containerText = container.textContent;
       if (!brainReady) {
-        return { wired: true, brainReady, clickOpened, summaryHidden, summaryTableVisible, surfaceToggle, containerText };
+        return {
+          wired: true, brainReady, clickOpened, summaryHidden, summaryTableVisible,
+          surfaceToggle, containerText, summaryMainNoticeText, summaryMainUnavailableFlag,
+        };
       }
       const byClick = describeLive();
       // 집계 계약은 정리 결과와 대조해야 알 수 있고, 클릭 경로는 그 값을 돌려주지
@@ -4250,6 +4263,8 @@ app.whenReady().then(async () => {
         byClick,
         summaryHidden,
         summaryTableVisible,
+        summaryMainNoticeText,
+        summaryMainUnavailableFlag,
         surfaceToggle,
         placedNodes: placed ? placed.nodes.length : 0,
         placedEdges: placed ? placed.edges.length : 0,
@@ -4324,6 +4339,16 @@ app.whenReady().then(async () => {
       assertOk(
         'graph-mode: 성향 신호 표가 실제로 렌더된다(hidden 상속에 막히지 않는다)',
         graph.summaryTableVisible === true,
+      );
+      // 보드 2QCN-2 — 기본 서브뷰(요약)가 백지로 남지 않는다. 지도에만 안내를
+      // 그리던 옛 판에서는 사람이 보는 화면이 정말 아무것도 없었다.
+      assertOk(
+        'graph-mode: 브레인 미준비 시 요약 탭도 정직한 안내로 채워진다(백지가 아니다)',
+        /아직 성향을 읽을 수 없습니다/.test(graph.summaryMainNoticeText || ''),
+      );
+      assertOk(
+        'graph-mode: 미기동 안내가 0건 히어로보다 앞선다',
+        graph.summaryMainUnavailableFlag === 'true',
       );
       report.graphMode.shot = await shot(shellWin, '90-graph-mode-unavailable.png');
     }
