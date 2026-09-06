@@ -2626,9 +2626,10 @@ function maybeForwardBrainEntity(step, resultBlock) {
 
 const BACKTEST_TOOL_NAME = 'athena_backtest';
 
-// 백테스트 채팅 액션 카드 — athena_backtest의 카드 액션 일곱(backtest_tools.py의
-// propose_spec·propose_code·propose_file·navigate·propose_optimize와 시각 설계 왕복의
-// visual_question·visual_patch)을 셸 렌더러의 백테스트
+// 백테스트 채팅 액션 카드 — athena_backtest의 카드 액션 아홉(backtest_tools.py의
+// propose_spec·propose_code·propose_file·navigate·propose_optimize, 시각 설계 왕복의
+// visual_question·visual_patch, 기법 저작의 technique_question, 그리고 주소 하나를
+// 다섯 단계 진행 화면으로 넘기는 source_map)을 셸 렌더러의 백테스트
 // 캔버스로 흘려보낸다. 캔버스는 채팅이 몰지만 폼·편집기에 실제로 들어가는 것은
 // 사용자가 카드의 [적용]을 누른 뒤이고, 실행·검증·탐색 시작은 따로 눌러야 시작된다.
 // orbWin에는 안 보낸다 — 말걸기 가드 카드와 같은 이유(채팅 전용 사람 액션)다.
@@ -2671,7 +2672,7 @@ function maybeForwardBacktestChatAction(step, resultBlock) {
     };
   } else if (action === 'propose_spec' || action === 'navigate' || action === 'propose_optimize'
     || action === 'visual_question' || action === 'visual_patch'
-    || action === 'technique_question') {
+    || action === 'technique_question' || action === 'source_map') {
     const text = extractToolResultText(resultBlock.content);
     if (!text) return;
     let payload;
@@ -2697,6 +2698,10 @@ function maybeForwardBacktestChatAction(step, resultBlock) {
       // 새 기법 만들기의 질문 카드 — visual_question과 같은 모양이다. 고른 선택지는
       // 캔버스가 채팅 입력으로 되돌려 보낸다(모델이 대신 고르지 않는다).
       message = { kind: 'technique_question', payload: payload.payload };
+    } else if (action === 'source_map' && payload.kind === 'source_url') {
+      // 사람이 채팅에 붙인 주소 하나(보드 17) — 캔버스가 다섯 단계 진행 화면을 연다.
+      // 주소만 넘어간다: 출처 본문은 모델을 거치지 않고 그 잡 안에서만 읽힌다.
+      message = { kind: 'source_url', url: payload.url, note };
     }
   }
   if (!message) return;

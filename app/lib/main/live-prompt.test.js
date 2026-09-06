@@ -671,6 +671,17 @@ test('buildBacktestModePrefix: 주소는 종류를 가리지 않고 source_brief
   assert.ok(p.includes('지어내지 말고'));
 });
 
+// 보드 17의 전제 — 사람이 주소를 붙이며 전략으로 만들어 달라고 하면 앱이 다섯 단계를
+// 돌아야 한다. 이 줄이 없으면 모델은 예전처럼 글만 받아 파일 초안으로 가고, 진행 화면은
+// 제품에서 영영 안 열린다.
+test('buildBacktestModePrefix: 전략으로 만들 주소는 source_map으로 가고 다섯 단계는 앱이 돈다', () => {
+  const p = buildBacktestModePrefix(BT_PROJECT_CONTEXT, '20260902');
+  assert.ok(p.includes('source_map(url)으로 앱에 넘긴다'));
+  assert.ok(p.includes('출처 읽기·규칙 뽑기·지도 그리기·코드 만들기·자체 검사 다섯 단계'));
+  assert.ok(p.includes('그 글을 네가 대신 읽지 말고'));
+  assert.ok(p.includes('[멈추기]'));
+});
+
 // 파일을 냈다고 끝이 아니다 — 등록해야 프리셋과 같은 자리에 뜬다(WAVE-3의 "프리셋과
 // 같은 자리에 등록"). 그리고 등록이 배포가 아니라는 것을 여기서 못박지 않으면 모델이
 // "실전에 걸었다"로 답을 닫는다.
