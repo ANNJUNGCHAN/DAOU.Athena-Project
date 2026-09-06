@@ -2191,7 +2191,7 @@
       "alt_mappings": null,
       "kor": "기준가",
       "format": {
-        "unit": "krw_ko",
+        "kind": "number",
         "sign": false,
         "precision": 0,
         "tone": "neutral"

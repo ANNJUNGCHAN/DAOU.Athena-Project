@@ -3783,7 +3783,7 @@
       "alt_mappings": null,
       "kor": null,
       "format": {
-        "unit": "krw_ko",
+        "kind": "number",
         "sign": false,
         "precision": 0,
         "tone": "neutral"
