@@ -35,6 +35,15 @@
   const $roomTime = document.getElementById('roomHeadTime');
   const $roomTitle = document.getElementById('roomHeadTitle');
   const $roomJoin = document.getElementById('roomHeadJoin');
+  // 프로젝트 추가 대화상자(36번 보드) — 붙박이 문구는 shell.html에 있고 여기서는
+  // 경로·이름·안내만 채운다.
+  const $projectCreate = document.getElementById('projectCreate');
+  const $projectCreatePath = document.getElementById('projectCreatePath');
+  const $projectCreateName = document.getElementById('projectCreateName');
+  const $projectCreateNotice = document.getElementById('projectCreateNotice');
+  const $projectCreateRepick = document.getElementById('projectCreateRepick');
+  const $projectCreateCancel = document.getElementById('projectCreateCancel');
+  const $projectCreateSubmit = document.getElementById('projectCreateSubmit');
 
   if (!$list) return; // shell.html 계약이 깨진 경우 — 조용히 물러난다(다른 영역을 막지 않는다).
 
@@ -155,6 +164,9 @@
   // 프로젝트 행이 "무엇을 보일까"(⋯ 셋·모드 다섯·삭제 확인)는 순수 함수 쪽에 있다
   // (36·37·38번 보드, sidebar-project-menu.js) — 여기서는 DOM 조립과 IPC 왕복만.
   const projectMenu = window.AthenaLib && window.AthenaLib.SidebarProjectMenu;
+  // '프로젝트 추가' 대화상자(36번 보드)의 상태도 같은 자리에 있다 — 여기서는
+  // 그 상태를 shell.html의 붙박이 마크업에 옮겨 담고 IPC 두 갈래만 왕복한다.
+  const projectCreate = window.AthenaLib && window.AthenaLib.ProjectCreateDialog;
   let agentRoutinesCache = [];
   let agentRoutinesRequestId = 0; // stale-응답 가드 — 아래 주석 참고.
 
@@ -202,6 +214,8 @@
   let openEditProjectId = null; // '프로젝트 수정' 패널(29번 보드) — 삭제 확인과 같은 렌더 상태.
   let projectEditDraft = null;  // { label, description } — 재렌더가 타이핑을 지우지 않게 밖에 둔다.
   let projectEditHint = '';     // IPC가 거절한 이유(invalid_label 등) 한 줄.
+  let projectCreateState = null; // 열려 있는 '프로젝트 추가' 대화상자의 상태(36번 보드). null이면 닫혀 있다.
+  let projectCreateHint = '';    // IPC가 거절했을 때의 한 줄.
   let selectedNotifyId = null;
   let showOlder = false;
   let searchQuery = '';
@@ -384,26 +398,114 @@
     renderList();
   }
 
-  // 폴더 대화상자는 main이 띄운다 — 여기서는 결과 네 갈래를 받아 화면만 맞춘다.
-  async function addProjectFolder() {
+  // ---------- 프로젝트 추가 대화상자(36번 보드) ----------
+  // IPC가 두 갈래인 것이 이 보드의 전부다: 탐색기를 여는 것(athena:project-pick-folder)과
+  // 그 폴더로 프로젝트를 만드는 것(athena:project-add). 옛 한 갈래는 폴더를 고르는
+  // 순간 등록까지 끝내 이름을 묻지도, 권한 경계를 보여 주지도, 점유를 알리지도 못했다.
+  // 판정(기본값 이름·점유·빈 폴더·만들기 가능)은 전부 project-create-dialog.js가 한다.
+  async function pickProjectFolder() {
+    try {
+      const res = await window.athena.invoke('athena:project-pick-folder');
+      if (!res || !res.ok || res.canceled || !res.path) return null;
+      return res;
+    } catch (e) {
+      console.warn('폴더 고르기 실패', e);
+      return null;
+    }
+  }
+
+  function renderProjectCreate() {
+    if (!$projectCreate) return;
+    if (!projectCreateState) { $projectCreate.hidden = true; return; }
+    $projectCreate.hidden = false;
+    $projectCreatePath.textContent = projectCreateState.path;
+    if ($projectCreateName.value !== projectCreateState.name) {
+      $projectCreateName.value = projectCreateState.name;
+    }
+    const notice = projectCreate ? projectCreate.noticeFor(projectCreateState) : null;
+    $projectCreateNotice.replaceChildren();
+    $projectCreateNotice.classList.toggle('is-occupied', Boolean(notice && notice.kind === 'occupied'));
+    if (notice) {
+      $projectCreateNotice.appendChild(el('span', 'project-create-notice-title', notice.title));
+      $projectCreateNotice.appendChild(el('span', 'project-create-notice-copy', notice.copy));
+      if (notice.path) $projectCreateNotice.appendChild(el('span', 'project-create-notice-path', notice.path));
+      if (notice.projectId) {
+        // 점유한 프로젝트로 선택을 옮긴다 — 옛 folder_taken이 말없이 하던 그 일을
+        // 이제는 사람이 눌러서 한다.
+        const open = el('button', 'project-create-notice-action', notice.action);
+        open.type = 'button';
+        open.addEventListener('click', () => {
+          currentProjectId = notice.projectId;
+          closeProjectCreate();
+          renderList();
+        });
+        $projectCreateNotice.appendChild(open);
+      }
+    } else if (projectCreateHint) {
+      $projectCreateNotice.appendChild(el('span', 'project-create-notice-copy', projectCreateHint));
+    }
+    $projectCreateNotice.hidden = !notice && !projectCreateHint;
+    $projectCreateSubmit.disabled = !(projectCreate && projectCreate.canCreate(projectCreateState));
+  }
+
+  function closeProjectCreate() {
+    projectCreateState = null;
+    projectCreateHint = '';
+    renderProjectCreate();
+  }
+
+  function applyPickedFolder(picked) {
+    if (!picked || !projectCreate) return;
+    projectCreateHint = '';
+    projectCreateState = projectCreate.openState({
+      path: picked.path,
+      name: picked.name,
+      empty: picked.empty,
+      projects: projectsCache,
+    });
+    renderProjectCreate();
+    if ($projectCreateName) $projectCreateName.focus();
+  }
+
+  async function openProjectCreate() {
+    const picked = await pickProjectFolder();
+    if (!picked) return; // 탐색기를 닫았으면 아무 일도 일어나지 않는다.
+    applyPickedFolder(picked);
+  }
+
+  async function submitProjectCreate() {
+    if (!projectCreateState || !projectCreate || !projectCreate.canCreate(projectCreateState)) return;
+    const { path, name } = projectCreateState;
     let res = null;
     try {
-      res = await window.athena.invoke('athena:project-add');
+      res = await window.athena.invoke('athena:project-add', { path, name: name.trim() });
     } catch (e) {
       console.warn('프로젝트 추가 실패', e);
+      res = null;
+    }
+    if (res && res.ok) { closeProjectCreate(); loadConversations(); return; }
+    // 그 사이 다른 창이 같은 폴더를 등록했을 수 있다 — main의 판정이 최종이다.
+    if (res && res.reason === 'folder_taken' && res.project) {
+      projectCreateState = { ...projectCreateState, occupiedBy: res.project };
+      renderProjectCreate();
       return;
     }
-    if (!res) return;
-    if (res.canceled) return;
-    if (res.ok) { loadConversations(); return; }
-    // 같은 폴더를 두 번 등록하지 않는다(main.js folder_taken) — 새로 만드는 대신
-    // 이미 있는 그 프로젝트로 선택을 옮긴다.
-    if (res.reason === 'folder_taken') {
-      if (res.project && res.project.id) currentProjectId = res.project.id;
-      renderList();
-      return;
-    }
-    console.warn('프로젝트 추가 실패', res.error || res.reason || '');
+    projectCreateHint = '프로젝트를 만들지 못했습니다.';
+    renderProjectCreate();
+  }
+
+  if ($projectCreate) {
+    $projectCreateRepick.addEventListener('click', async () => {
+      const picked = await pickProjectFolder();
+      if (picked) applyPickedFolder(picked);
+    });
+    $projectCreateName.addEventListener('input', () => {
+      if (!projectCreateState || !projectCreate) return;
+      projectCreateState = projectCreate.withName(projectCreateState, $projectCreateName.value);
+      renderProjectCreate();
+    });
+    $projectCreateCancel.addEventListener('click', () => closeProjectCreate());
+    $projectCreateSubmit.addEventListener('click', () => submitProjectCreate());
   }
 
   function makeProjectAddButton() {
@@ -414,7 +516,7 @@
     btn.addEventListener('click', (event) => {
       event.stopPropagation();
       closeProjectPopovers();
-      addProjectFolder();
+      openProjectCreate();
     });
     return btn;
   }
@@ -1469,6 +1571,7 @@
 
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape') return;
+    closeProjectCreate();
     closeProjectPopovers();
     closeAccountMenu();
   });
