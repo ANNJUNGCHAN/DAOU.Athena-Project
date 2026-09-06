@@ -4460,7 +4460,7 @@
         "layer_병기": 0,
         "layer_펼침": 191,
         "tables": 1,
-        "tree_text_truncated": 1,
+        "tree_text_truncated": 0,
         "bs_col": 30,
         "bs_paired": 34,
         "bs_leaf": 1,
