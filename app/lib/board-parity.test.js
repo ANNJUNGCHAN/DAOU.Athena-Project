@@ -943,6 +943,11 @@ test('KPI 칸은 M 이하에서만 3칸/2칸/1칸 흐름으로 바뀐다', () =>
     'left+고정폭 absolute 상자는 좁은 단계에서 오른쪽 끝에 걸려 부모 안으로 들어와야 한다');
   assert.match(lBody,
     /\.bs-kpi-cell\[data-bs-kpi-elastic="true"\]\s*\{\s*min-width: 160px;\s*\}/);
+  // 병기 줄은 열이 접히기 시작하는 L부터 아랫줄이어야 한다 — 가로 칸에 옆으로
+  // 늘어서면 그만큼이 그대로 표면 가로 넘침이다(실측 2TZN-1 66px).
+  assert.match(lBody, /\[data-bs-paired-host="true"\]\s*\{\s*flex-wrap: wrap;\s*min-width: 0;\s*\}/);
+  assert.match(lBody,
+    /\[data-bs-paired-host="true"\] > \.bs-paired\s*\{\s*flex-basis: 100%;\s*\}/);
   assert.doesNotMatch(flow.get(1279), /(?:^|[^-])width: (?!var\()|flex-basis|flex-grow/);
   assert.match(flow.get(959), /width: auto/);
   assert.match(flow.get(959), /flex-basis: calc\(33\.3333% - 24px\)/);
