@@ -283,54 +283,8 @@ function syncGridEmptyVisibility() {
 new MutationObserver(syncGridEmptyVisibility).observe(grid, { childList: true });
 syncGridEmptyVisibility();
 
-// 삽화 — 그래프 모티프(선 5·원 6), 참조 목업(board-05.png)의 성긴 비대칭 배치를
-// 옮겼다. 그래프 모드 배치 알고리즘과는 무관한 순수 장식이다. 무채색(currentColor)
-// 하나로 톤을 낮춘다 — 브랜드색은 화면당 인터랙션 지점 하나에만(palette.md).
-function buildEmptyCanvasIllustration() {
-  const wrap = document.createElement('div');
-  wrap.className = 'canvas-empty-graph';
-  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-  svg.setAttribute('viewBox', '0 0 120 74');
-  svg.setAttribute('width', '120');
-  svg.setAttribute('height', '74');
-  svg.setAttribute('aria-hidden', 'true');
-  const nodes = [
-    { x: 22, y: 20, r: 4 },
-    { x: 30, y: 44, r: 9 },
-    { x: 66, y: 32, r: 7 },
-    { x: 94, y: 18, r: 4.5 },
-    { x: 100, y: 46, r: 4 },
-    { x: 78, y: 58, r: 3.5 },
-  ];
-  const edges = [[1, 0], [1, 2], [2, 3], [2, 4], [2, 5]];
-  for (const [a, b] of edges) {
-    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    line.setAttribute('x1', nodes[a].x);
-    line.setAttribute('y1', nodes[a].y);
-    line.setAttribute('x2', nodes[b].x);
-    line.setAttribute('y2', nodes[b].y);
-    line.setAttribute('stroke', 'currentColor');
-    line.setAttribute('stroke-width', '1');
-    line.setAttribute('opacity', '0.35');
-    svg.appendChild(line);
-  }
-  nodes.forEach((n, i) => {
-    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    circle.setAttribute('cx', n.x);
-    circle.setAttribute('cy', n.y);
-    circle.setAttribute('r', n.r);
-    circle.setAttribute('fill', 'currentColor');
-    circle.setAttribute('opacity', i === 1 ? '0.55' : '0.3');
-    svg.appendChild(circle);
-  });
-  wrap.appendChild(svg);
-  return wrap;
-}
-
-// 뼈대(삽화+제목+부제)는 항상 그린다 — 브레인이 꺼져 있어도 "카드가 없다"는
-// 사실 자체는 늘 참이다. 숫자·CTA·힌트는 뒤에서 준비되면 append로 더한다
-// (appendEmptyCanvasExtras) — 브레인 상태를 아직 모르는 부팅 초반에도 빈
-// 화면 대신 뼈대가 바로 보인다.
+// 뼈대(삽화+회전 문구)는 항상 그린다 — 브레인이 꺼져 있어도 "카드가 없다"는
+// 사실 자체는 늘 참이다.
 // 대화 모드 상징 삽화(보드 46 v3, 2026-08-27) — 그래프 쪽 노드 별자리와 같은
 // 어휘(회색 선·점, currentColor)로 말풍선 둘 + 입력 중 점 셋을 그린다.
 function buildChatIllustration() {
@@ -364,8 +318,8 @@ function buildChatIllustration() {
 }
 
 // 모드가 다르면 빈 화면도 다르다(Paper 보드 46, 2026-08-27 검토 결정) — 대화
-// 캔버스에 그래프 일러스트가 나오던 문제의 처방. 두 변형을 모두 만들어 두고
-// #canvasRegion[data-mode](graph-mode controller가 소유)가 하나만 보여준다.
+// 캔버스에 그래프 일러스트가 나오던 문제의 처방. 이 상자는 대화 모드 전용이고,
+// #canvasRegion[data-mode](graph-mode controller가 소유)가 그래프 모드에서 숨긴다.
 function buildEmptyCanvasSkeleton() {
   if (!gridEmptyEl) return;
   gridEmptyEl.replaceChildren();
@@ -382,19 +336,10 @@ function buildEmptyCanvasSkeleton() {
   chatSub.className = 'canvas-empty-sub';
   chatCopy.append(chatTitle, chatSub);
   chatBox.appendChild(chatCopy);
-  // 그래프 모드 — 성향 축적 히어로. 옛 대화 빈 화면에서 이사 왔다(수치·힌트는
-  // appendEmptyCanvasExtras가 브레인 준비 시에만 붙인다 — 정보 정직성 유지).
-  const graphBox = document.createElement('div');
-  graphBox.className = 'canvas-empty canvas-empty-graphmode';
-  graphBox.appendChild(buildEmptyCanvasIllustration());
-  const graphCopy = document.createElement('div');
-  graphCopy.className = 'canvas-empty-copy';
-  const graphTitle = document.createElement('div');
-  graphTitle.className = 'canvas-empty-title';
-  graphTitle.textContent = '그동안 나눈 대화와 체결로 성향은 계속 쌓이고 있습니다';
-  graphCopy.appendChild(graphTitle);
-  graphBox.appendChild(graphCopy);
-  gridEmptyEl.append(chatBox, graphBox);
+  // 그래프 모드 변형은 여기 없다 — 성향 축적 히어로(Paper COS-0)는 요약 표가
+  // 0건일 때 그 자리에 선다(lib/graph-mode/summary-table.js renderGrowthHero).
+  // 이 상자는 #mosaic 안에 있어 그래프 모드에서는 통째로 숨는다(US-007).
+  gridEmptyEl.append(chatBox);
 }
 buildEmptyCanvasSkeleton();
 
@@ -424,25 +369,14 @@ setInterval(() => {
 // 달렸다 — 군집 지도 조회가 실패해도 그래프 모드 자체는 열 수 있다.
 // "최근 7일" 델타는 뺐다 — analysis/diff는 리비전 구간(from_revision) 기준이라
 // "7일 전 리비전"을 알 방법이 없어 실측 없는 숫자를 만들게 된다(정보 정직성).
-function appendEmptyCanvasExtras(stats, hintCount) {
-  if (!gridEmptyEl) return;
-  // 수치·힌트는 그래프 변형에만 붙는다(보드 46) — 대화 빈 화면은 깨끗하게.
-  // '성향 그래프 열기' CTA는 없앴다: 진입로는 사이드바 모드 네비(셸 v2)가
-  // 이미 상시 제공하고, 그래프 모드 안에서는 자기 자신을 여는 버튼이 된다.
-  const box = gridEmptyEl.querySelector('.canvas-empty-graphmode');
-  if (!box) return;
-  if (stats) {
-    const row = document.createElement('div');
-    row.className = 'canvas-empty-stats';
-    row.textContent = `엔티티 ${stats.entities} · 테마 군집 ${stats.clusters}`;
-    box.appendChild(row);
-  }
-  if (hintCount) {
-    const hint = document.createElement('div');
-    hint.className = 'canvas-empty-hint';
-    hint.textContent = `확인이 필요한 것 ${hintCount}건이 기다리고 있습니다`;
-    box.appendChild(hint);
-  }
+// 히어로는 요약 표 렌더가 그리므로(renderGrowthHero) 여기서는 그 렌더의 **입력**만
+// 보관한다. 그래서 이 값들은 표를 그리기 전에 채워져야 한다 — 아래 두 호출자가
+// loadProfileSignals·loadThemeClusters와 같은 "입력 먼저" 단계에 이것을 둔 이유다.
+// '성향 그래프 열기' CTA는 없앴다: 진입로는 사이드바 모드 네비(셸 v2)가 이미
+// 상시 제공하고, 그래프 모드 안에서는 자기 자신을 여는 버튼이 된다.
+let graphHeroCounts = null;
+function setEmptyCanvasExtras(stats, hintCount) {
+  graphHeroCounts = { stats: stats || null, hintCount: hintCount || null };
 }
 
 // 브레인 상태 프로브(그래프 모드 부팅 IIFE, 아래)가 ready를 확인한 뒤 부른다 —
@@ -459,7 +393,7 @@ async function loadEmptyCanvasExtras() {
   const { clusterStats, suggestedCount } = window.AthenaLib.EmptyCanvas;
   const stats = clusterRes && clusterRes.ok ? clusterStats(clusterRes.nodes) : null;
   const hintCount = questionsRes && questionsRes.ok ? suggestedCount(questionsRes.questions) : null;
-  appendEmptyCanvasExtras(stats, hintCount);
+  setEmptyCanvasExtras(stats, hintCount);
   const profEntries = profileRes && profileRes.ok ? (profileRes.entries || profileRes.rows) : null;
   const topEntry = Array.isArray(profEntries) ? profEntries[0] : null;
   emptyCopyProfileTop = (topEntry && (topEntry.entity_name || topEntry.entity_id)) || null;
@@ -2905,6 +2839,10 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
     // 세 번째 서브뷰(보드 05 수집·노출) — 요약 표·군집 지도와 같은 축이라
     // 가시성도 같은 함수가 소유한다.
     graphSettings: document.getElementById('graphSettingsCanvas'),
+    // 요약 서브뷰 본문(보드 06/07의 5칸) — 브레인 미기동 안내가 지도뿐 아니라
+    // 여기에도 서야 사람이 실제로 보는 화면이 백지로 남지 않는다(보드 2QCN-2).
+    // 정적 5칸은 지우지 않고 안내만 얹었다 지운다(renderUnavailable).
+    summaryMain: document.getElementById('graphSummaryMain'),
   },
   // main은 실패를 {ok:false}로 돌려준다. 컨트롤러는 **예외**로 실패를 안다 —
   // 여기서 바꿔주지 않으면 `{ok:false}`가 정상 응답으로 흘러 빈 그래프가 그려지고,
@@ -3914,6 +3852,8 @@ const graphSummaryTable = window.AthenaLib.GraphSummaryTable.createSummaryTableC
   getFilters: () => window.AthenaLib.GraphModePrefs.readPrefs(),
   // 히어로 부제 "테마 군집 N개" — 테마 군집 카드가 이미 받아 둔 수를 재사용한다.
   getClusterCount: () => lastThemeClusterCount,
+  // 0건 히어로(Paper COS-0)의 실측 수치 — loadEmptyCanvasExtras가 채운다.
+  getEmptyCounts: () => graphHeroCounts,
   // 확인 필요 배너의 CTA "채팅에서 답하기"(2026-09-02) — 실제 질문을 심는다.
   //
   // 옛 판은 입력창에 포커스만 줬다. 버튼 문구가 "채팅에서 답하기"인데 눌러도
@@ -4237,15 +4177,15 @@ async function loadProfileSignals() {
 
 async function refreshConversationGraphSurfaces() {
   // 순서가 있다. 성향 신호 캐시는 지도의 노드 채움 인코딩이 읽고, 테마 군집 수는
-  // 히어로 부제("테마 군집 7개")가 읽는다 — 둘 다 뒤에 오는 렌더의 **입력**이라
-  // 병렬로 두면 첫 렌더가 "모름"·"0개"로 나온다(실측).
-  await Promise.allSettled([loadProfileSignals(), loadThemeClusters()]);
+  // 히어로 부제("테마 군집 7개")가 읽고, 빈 상태 수치는 0건 히어로가 읽는다 —
+  // 전부 뒤에 오는 렌더의 **입력**이라 병렬로 두면 첫 렌더가 "모름"·"0개"로
+  // 나온다(실측).
+  await Promise.allSettled([loadProfileSignals(), loadThemeClusters(), loadEmptyCanvasExtras()]);
   const visibleGraphRefresh = graphMode.setAvailable(true);
   await Promise.allSettled([
     Promise.resolve(visibleGraphRefresh),
     graphSummaryTable.load().then(renderSummaryUpdatedAt),
     loadHiddenLinks(),
-    loadEmptyCanvasExtras(),
   ]);
 }
 
@@ -4269,15 +4209,16 @@ if (window.athena && typeof window.athena.on === 'function') {
     // 보이도록 하는 프리페치 — 안 보이는 동안 부르는 낭비는 loadEmptyCanvasExtras와
     // 같은 기존 관례).
     // 프리페치도 같은 순서를 지킨다 — 캐시 둘을 먼저 채우고 그 위에 렌더를 얹는다.
+    // 빈 상태(보드 05) 숫자·힌트도 이 캐시 단계에 든다 — 0건 히어로가 읽는 입력이다.
     if (ready) {
-      void Promise.allSettled([loadProfileSignals(), loadThemeClusters()]).then(() => {
+      void Promise.allSettled([
+        loadProfileSignals(), loadThemeClusters(), loadEmptyCanvasExtras(),
+      ]).then(() => {
         void graphMode.refreshFiltered();
         void graphSummaryTable.load().then(renderSummaryUpdatedAt);
       });
     }
     if (ready) loadHiddenLinks();
-    // 빈 상태(보드 05) 숫자·CTA·힌트 — 같은 ready 확인에 얹는다(왕복 추가 없음).
-    if (ready) loadEmptyCanvasExtras();
   } catch (err) {
     console.warn('[graph-mode] brain-status 실패 — 못 씀으로 둔다', err);
     graphMode.setAvailable(false);

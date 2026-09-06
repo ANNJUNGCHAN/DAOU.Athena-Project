@@ -290,6 +290,91 @@ function renderConfirmBanner(container, hintCount, onCtaClick) {
   return container;
 }
 
+// ---------- 성향 축적 히어로 (Paper COS-0 > CRJ-0) ----------
+// 표가 0건일 때 표 자리에 선다. 옛 자리는 대화 캔버스의 빈 화면(#gridEmpty)이었는데
+// 그래프 모드에서는 그 상자를 품은 #mosaic 자체가 숨어(controller.applyVisibility)
+// 사람이 볼 방법이 없었다 — 보드가 이 히어로를 그린 자리가 요약 뷰다.
+// 클래스 이름은 옛 자리에서 그대로 가져온다(canvas.css의 .canvas-empty-* 한 벌).
+
+// 별자리 삽화 — 노드 6·엣지 5의 순수 장식(무채색 currentColor 하나).
+// createElementNS가 없는 DOM 스텁에서는 건너뛴다(backtest-canvas.js와 같은 규율).
+function buildGrowthIllustration() {
+  if (typeof document.createElementNS !== 'function') return null;
+  const wrap = el('div', 'canvas-empty-graph');
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', '0 0 120 74');
+  svg.setAttribute('width', '120');
+  svg.setAttribute('height', '74');
+  svg.setAttribute('aria-hidden', 'true');
+  const nodes = [
+    { x: 22, y: 20, r: 4 },
+    { x: 30, y: 44, r: 9 },
+    { x: 66, y: 32, r: 7 },
+    { x: 94, y: 18, r: 4.5 },
+    { x: 100, y: 46, r: 4 },
+    { x: 78, y: 58, r: 3.5 },
+  ];
+  const edges = [[1, 0], [1, 2], [2, 3], [2, 4], [2, 5]];
+  for (const [a, b] of edges) {
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', nodes[a].x);
+    line.setAttribute('y1', nodes[a].y);
+    line.setAttribute('x2', nodes[b].x);
+    line.setAttribute('y2', nodes[b].y);
+    line.setAttribute('stroke', 'currentColor');
+    line.setAttribute('stroke-width', '1');
+    line.setAttribute('opacity', '0.35');
+    svg.appendChild(line);
+  }
+  nodes.forEach((n, i) => {
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', n.x);
+    circle.setAttribute('cy', n.y);
+    circle.setAttribute('r', n.r);
+    circle.setAttribute('fill', 'currentColor');
+    circle.setAttribute('opacity', i === 1 ? '0.55' : '0.3');
+    svg.appendChild(circle);
+  });
+  wrap.appendChild(svg);
+  return wrap;
+}
+
+// counts = { stats: {entities, clusters} | null, hintCount: number | null }.
+// 수치는 실측이 있을 때만 붙인다 — 브레인이 아직 안 준 값을 0으로 지어내지 않는다.
+function renderGrowthHero(container, counts) {
+  const box = el('div', 'canvas-empty canvas-empty-graphmode');
+  const art = buildGrowthIllustration();
+  if (art) box.appendChild(art);
+  const copy = el('div', 'canvas-empty-copy');
+  const title = el('div', 'canvas-empty-title');
+  title.textContent = '그동안 나눈 대화와 체결로 성향은 계속 쌓이고 있습니다';
+  copy.appendChild(title);
+  box.appendChild(copy);
+  const stats = counts && counts.stats;
+  if (stats) {
+    const row = el('div', 'canvas-empty-stats');
+    row.textContent = `엔티티 ${stats.entities} · 테마 군집 ${stats.clusters}`;
+    box.appendChild(row);
+  }
+  if (counts && counts.hintCount) {
+    const hint = el('div', 'canvas-empty-hint');
+    hint.textContent = `확인이 필요한 것 ${counts.hintCount}건이 기다리고 있습니다`;
+    box.appendChild(hint);
+  }
+  container.appendChild(box);
+  return box;
+}
+
+// 표를 못 읽은 것은 성향이 없는 것과 다르다 — 실패한 자리에 축적 히어로를 세우면
+// 화면이 거짓말을 한다.
+function renderLoadFailed(container) {
+  while (container.firstChild) container.removeChild(container.firstChild);
+  const note = el('div', 'summary-load-failed');
+  note.textContent = '성향 신호를 불러오지 못했습니다 — 잠시 뒤 다시 시도해 주세요.';
+  container.appendChild(note);
+  return note;
+}
+
 // 순수 렌더 — DOM만 만든다, 클릭은 걸지 않는다(controller가 건다, render.js와
 // 같은 분업). container는 통째로 다시 채운다.
 function renderSummaryTable(container, entries, options) {
@@ -297,6 +382,13 @@ function renderSummaryTable(container, entries, options) {
   while (container.firstChild) container.removeChild(container.firstChild);
   const list = Array.isArray(entries) ? entries : [];
   const total = options && Number.isFinite(options.total) ? options.total : null;
+
+  // 0건이면 빈 표 대신 성향 축적 히어로다(Paper COS-0) — "상위 0"짜리 머리와
+  // 열 이름만 남은 표는 사람에게 "성향이 없다"로 읽힌다.
+  if (list.length === 0) {
+    renderGrowthHero(container, options && options.emptyCounts);
+    return null;
+  }
 
   const wrap = el('div', 'summary-table-wrap');
 
@@ -354,6 +446,7 @@ function createSummaryTableController(deps) {
     filters,                 // 선택 — graph-filters 모듈(기간·정렬 실적용)
     getFilters,              // 선택 — () => {windowDays, summarySort}
     getClusterCount,         // 선택 — () => number(히어로 부제 "테마 군집 N개")
+    getEmptyCounts,          // 선택 — () => {stats, hintCount}(0건 히어로의 실측 수치)
   } = deps;
 
   let entries = [];
@@ -443,19 +536,22 @@ function createSummaryTableController(deps) {
       res = await fetchProfileSummary({ limit, windowDays: filterState ? filterState.windowDays : undefined });
     } catch (err) {
       if (onError) onError(err);
-      renderSummaryTable(container, []);
+      renderLoadFailed(container);
       await renderExtras([], null);
       return null;
     }
     if (!res || !res.ok) {
       if (onError) onError(new Error((res && res.error) || '성향 신호를 받지 못했다'));
-      renderSummaryTable(container, []);
+      renderLoadFailed(container);
       await renderExtras([], null);
       return null;
     }
     const received = Array.isArray(res.entries) ? res.entries : [];
     entries = filters && filterState ? filters.sortEntries(received, filterState.summarySort) : received;
-    renderSummaryTable(container, entries, { total: res.total });
+    renderSummaryTable(container, entries, {
+      total: res.total,
+      emptyCounts: typeof getEmptyCounts === 'function' ? getEmptyCounts() : null,
+    });
     wireRowClicks();
     await renderExtras(entries, res.confidence_counts, {
       total: res.total,
@@ -476,6 +572,7 @@ const __exports = {
   createSummaryTableController,
   computeConfidenceBreakdown,
   renderSummaryHero,
+  renderGrowthHero,
   renderConfirmBanner,
   dotClass,
   relativeDaysText,

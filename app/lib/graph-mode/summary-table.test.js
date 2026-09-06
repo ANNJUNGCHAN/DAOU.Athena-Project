@@ -81,12 +81,13 @@ test('다시 그리면 이전 내용을 지운다', () => {
   assert.equal(describeRendered(container).rows, 1);
 });
 
-test('빈 목록도 터지지 않는다', () => {
+test('빈 목록도 터지지 않는다 — 표 대신 성향 축적 히어로가 선다', () => {
   const container = fakeNode('div');
   renderSummaryTable(container, []);
-  const summary = describeRendered(container);
-  assert.equal(summary.rendered, true, '표 자체는 만든다 — 빈 화면과 고장을 구분해야 한다');
-  assert.equal(summary.rows, 0);
+  // 빈 화면과 고장을 구분한다는 계약은 그대로다. 옛 판은 "상위 0"짜리 머리와 열
+  // 이름만 남은 표로 그것을 보였는데, 그 표가 사람에게는 "성향이 없다"로 읽혔다.
+  assert.equal(describeRendered(container).rendered, false, '0건에 빈 표를 세우지 않는다');
+  assert.ok(container.querySelector('.canvas-empty-graphmode'));
 });
 
 test('컨테이너가 없으면 조용히 넘어간다', () => {
@@ -458,4 +459,58 @@ test('백엔드가 죽어도 히어로는 빈 데이터로 정리된다(잔재 �
   const { controller, heroContainer } = setupController({ fail: true });
   await controller.load();
   assert.equal(heroContainer.children.length, 0);
+});
+
+// ---------- Paper COS-0 › CRJ-0 「그래프 모드 — 요약 뷰 히어로」 ----------
+// 성향 축적 히어로는 원래 대화 캔버스의 빈 화면(#gridEmpty)에 살았는데, 그래프
+// 모드에서는 그 상자를 품은 #mosaic 자체가 숨어(controller.applyVisibility) 사람이
+// 볼 방법이 없었다 — 요약 표가 0건일 때 표 자리에 서는 것이 그 히어로의 자리다.
+
+test('요약 표가 0건이면 성향 축적 히어로를 그린다 — 백지로 두지 않는다', () => {
+  const container = fakeNode('div');
+  renderSummaryTable(container, [], {});
+  const hero = container.querySelector('.canvas-empty-graphmode');
+  assert.ok(hero, '히어로가 없다');
+  assert.equal(
+    hero.querySelector('.canvas-empty-title').textContent,
+    '그동안 나눈 대화와 체결로 성향은 계속 쌓이고 있습니다',
+  );
+  assert.equal(container.querySelector('.summary-table'), null, '0건에 빈 표를 함께 세우지 않는다');
+});
+
+test('요약 표가 1건 이상이면 히어로 대신 표가 선다', () => {
+  const container = fakeNode('div');
+  renderSummaryTable(container, [entry()], {});
+  assert.ok(container.querySelector('.summary-table'));
+  assert.equal(container.querySelector('.canvas-empty-graphmode'), null);
+});
+
+test('히어로 수치는 실측이 있을 때만 붙는다 — 0을 지어내지 않는다', () => {
+  const bare = fakeNode('div');
+  renderSummaryTable(bare, [], {});
+  assert.equal(bare.querySelector('.canvas-empty-stats'), null);
+  assert.equal(bare.querySelector('.canvas-empty-hint'), null);
+
+  const counted = fakeNode('div');
+  renderSummaryTable(counted, [], { emptyCounts: { stats: { entities: 12, clusters: 3 }, hintCount: 2 } });
+  assert.equal(counted.querySelector('.canvas-empty-stats').textContent, '엔티티 12 · 테마 군집 3');
+  assert.equal(
+    counted.querySelector('.canvas-empty-hint').textContent,
+    '확인이 필요한 것 2건이 기다리고 있습니다',
+  );
+});
+
+test('표를 불러오지 못하면 히어로 대신 실패 안내가 선다 — 없는 것과 못 읽은 것은 다르다', async () => {
+  const container = fakeNode('div');
+  const controller = createSummaryTableController({
+    container,
+    fetchProfileSummary: async () => { throw new Error('backend down'); },
+    onError: () => {},
+  });
+  await controller.load();
+  assert.equal(container.querySelector('.canvas-empty-graphmode'), null);
+  assert.equal(
+    container.querySelector('.summary-load-failed').textContent,
+    '성향 신호를 불러오지 못했습니다 — 잠시 뒤 다시 시도해 주세요.',
+  );
 });
