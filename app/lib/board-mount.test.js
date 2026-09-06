@@ -964,6 +964,28 @@ test('primary가 세로로 쌓아 놓은 양끝 가로 줄만 XS 접기 표시�
   assert.equal(orphan.dataset.bsSplitRow, undefined, 'primary 밖 줄은 대상이 아니다');
 });
 
+test('세로로 쌓는 부모 아래 상자만 세로 축 flex-shrink 표시를 받는다', () => {
+  const parentStub = (inline) => ({
+    classList: { contains: () => false },
+    style: styleStub(inline),
+  });
+  const under = (inline) => {
+    const box = regionStub('', { height: '36px', 'flex-shrink': '0' });
+    box.parentElement = parentStub(inline);
+    return box;
+  };
+  // 실측 1WOB-1 목록 본문(display:flex · flex-direction:column · 높이 520px) 안의 행.
+  const inColumn = under({ display: 'flex', 'flex-direction': 'column' });
+  const inRow = under({ display: 'flex' });
+  const inBlock = under({});
+  const orphan = regionStub('', { height: '36px' });
+  for (const box of [inColumn, inRow, inBlock, orphan]) hoistLayout(box);
+  assert.equal(inColumn.dataset.bsColItem, 'true');
+  assert.equal(inRow.dataset.bsColItem, undefined, '가로 줄의 flex-shrink는 폭 몫이라 놓아준다');
+  assert.equal(inBlock.dataset.bsColItem, undefined);
+  assert.equal(orphan.dataset.bsColItem, undefined, '부모가 없으면 표시하지 않는다');
+});
+
 test('가로 칸에 붙은 병기 줄만 접기 숙주로 표시한다', () => {
   const pairIn = (host) => {
     const pair = regionStub('bs-paired', {});

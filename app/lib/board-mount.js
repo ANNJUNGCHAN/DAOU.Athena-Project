@@ -526,12 +526,28 @@ function markSplitRow(el) {
   el.dataset.bsSplitRow = 'true';
 }
 
+// 세로로 쌓는 부모 아래 놓인 상자. flex-shrink는 **주축** 속성이라 부모가 column이면
+// 폭이 아니라 높이를 줄인다: 좁은 단계에서 원문의 `flex-shrink: 0`을 놓아주면
+// (board-surface.css L 단계) 고정 높이가 바닥이라는 계약이 세로로만 뒤집혀, 늘어난
+// 내용이 상자를 그대로 뚫는다(실측 1WOB-1 목록 본문 520px 안 행 20개: 내용 48px가
+// 36px 행으로 눌려 13px 넘침). 부모가 세로면 원문 flex-shrink를 그대로 지킨다 —
+// 폭은 `--bs-width`와 `max-width: 100%`가 맡으므로 가로 계약은 그대로다.
+function markColumnStackItem(el) {
+  if (!el || !el.dataset) return;
+  const parent = el.parentElement;
+  if (!parent || !parent.style) return;
+  if (parent.style.getPropertyValue('display').trim() !== 'flex') return;
+  if (parent.style.getPropertyValue('flex-direction').trim() !== 'column') return;
+  el.dataset.bsColItem = 'true';
+}
+
 function hoistLayout(el) {
   if (!el || !el.style || typeof el.style.setProperty !== 'function') return false;
   if (el.dataset && el.dataset.bsHoisted === 'true') return false;
   markElasticKpiValue(el);
   markInsetAbsoluteBox(el);
   markSplitRow(el);
+  markColumnStackItem(el);
   for (const [property, token] of HOISTED_PROPERTIES) {
     const value = el.style.getPropertyValue(property);
     if (!value) continue;
@@ -557,6 +573,7 @@ function hoistRigidBox(el) {
   if (el.dataset && el.dataset.bsHoisted === 'true') return false;
   markInsetAbsoluteBox(el);
   markSplitRow(el);
+  markColumnStackItem(el);
   let moved = false;
   for (const [property, token] of HOISTED_PROPERTIES) {
     const value = el.style.getPropertyValue(property);
