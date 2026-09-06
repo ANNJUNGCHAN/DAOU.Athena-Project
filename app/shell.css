@@ -1749,6 +1749,31 @@ body { margin: 0; overflow: hidden; }
   font-family: var(--font-mono);
   font-size: var(--text-2xs);
 }
+/* 보드 04(1TQV-1) — 수집을 멈추는 버튼과 그 옆의 이어짐 안내. */
+.backtest-running-foot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+  min-width: 0;
+}
+.backtest-running-stop {
+  padding: 7px 20px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-k-soft);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+.backtest-running-hint {
+  color: var(--color-k-hint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  word-break: keep-all;
+  min-width: 0;
+}
 
 /* 자산곡선(보드 03) — SVG 두 선과 체결 마커. */
 .backtest-equity { margin-bottom: 12px; }

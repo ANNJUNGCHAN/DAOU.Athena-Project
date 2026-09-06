@@ -1473,6 +1473,8 @@ const BACKTEST_EXTRA_CHANNELS = {
   'athena:backtest-version-add': backtestBridge.addVersion,
   'athena:backtest-activate': backtestBridge.activateVersion,
   'athena:backtest-version-diff': backtestBridge.fetchVersionDiff,
+  // 수집 중단 — 사람이 진행 카드의 「중단」을 눌렀을 때만 온다(모델 표면 없음).
+  'athena:backtest-job-cancel': backtestBridge.cancelJob,
   // 버전 하나의 묶음(그래프·소스맵·해시) — 이력에서 지난 시각 버전을 그대로 다시 연다(US-010).
   'athena:backtest-version-detail': backtestBridge.fetchVersionDetail,
   'athena:backtest-deployments': backtestBridge.fetchDeployments,

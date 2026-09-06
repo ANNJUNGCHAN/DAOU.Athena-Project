@@ -398,6 +398,36 @@ test('[수집하고 실행] → backfill 바디가 폼 값 그대로다', async 
   });
 });
 
+async function toRunning(extra) {
+  const made = await toApproval(Object.assign({
+    backfill: async () => ({ job_id: 'j1' }),
+    status: async () => ({ status: 'running', progress: { page: 1, rows: 100, oldest_dt: '20240101' } }),
+  }, extra || {}));
+  await click(findByClass(made.container, 'backtest-approval-confirm')[0]);
+  await flush();
+  return made;
+}
+
+test('수집 중 화면에 중단 버튼과 이어짐 안내가 있다 — 막다른 길이 아니다', async () => {
+  const { container } = await toRunning();
+  const stop = findByClass(container, 'backtest-running-stop');
+  assert.equal(stop.length, 1);
+  assert.equal(stop[0].textContent, '중단');
+  assert.match(textOf(container), /끝나면 바로 백테스트가 이어집니다/);
+});
+
+test('중단을 누르면 잡 취소 IPC를 부른다 — 폴링만 멈추지 않는다', async () => {
+  const cancelled = [];
+  const { container } = await toRunning({
+    cancelJob: async (body) => { cancelled.push(body); return { ok: true }; },
+  });
+  await click(findByClass(container, 'backtest-running-stop')[0]);
+  await flush();
+  assert.deepEqual(cancelled, [{ job_id: 'j1' }]);
+  // 수집 화면을 빠져나와 설계로 돌아간다.
+  assert.equal(findByClass(container, 'backtest-running-stop').length, 0);
+});
+
 // ── 보드 03 · 결과 ──────────────────────────────────────────────────────────
 
 const DONE_RESULT = {
