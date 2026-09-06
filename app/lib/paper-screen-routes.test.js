@@ -144,10 +144,14 @@ test('every phrase survived the generator, so none of them is a data value', () 
 //   state-two   원장에는 더 있지만 **한 번에 보이는 상태**가 두 줄뿐이다. 보드 26은
 //               세 모드의 빈 화면을 나란히 그렸는데 앱은 그중 하나만 그린다 —
 //               그 사실 자체를 아래 별도 테스트가 canvas.css·canvas.js·summary-table.js에서 잰다.
+//   values-only 원장에는 더 있지만 값이 아닌 줄이 둘뿐이다. 보드 05가 그린 문장은 거의
+//               전부 실행 번호·버전·수익률을 품고 있어(「#41 vs #38 — 무엇이 달랐나」)
+//               fixture를 바꾸면 같이 바뀐다 — 그 사실도 아래 별도 테스트가 잰다.
 const PHRASE_FLOOR_EXCEPTIONS = new Map([
   ['16OD-2', { kind: 'ledger-two', why: '원장 texts가 ATHENA·| 둘뿐이다 (02 · 부팅 — READY)' }],
   ['16OX-2', { kind: 'ledger-two', why: '원장 texts가 ATHENA·| 둘뿐이다 (05 · 부팅 — COMPLETE)' }],
   ['COS-0', { kind: 'state-two', why: '대화 빈 화면이 제목·부제 둘뿐이다 (26 · 빈 작업공간)' }],
+  ['1WSI-1', { kind: 'values-only', why: '값이 아닌 줄이 두 diff 칸 이름뿐이다 (05 · 백테스트 — 이력·비교)' }],
 ]);
 
 test('the only routes under three phrases are the ones Paper drew with two texts', () => {
@@ -182,6 +186,20 @@ test('the empty canvas draws one mode variant at a time', () => {
   assert.match(summary, /function renderGrowthHero\(/);
   assert.ok(summary.includes("'canvas-empty canvas-empty-graphmode'"),
     '성향 축적 히어로가 요약 표 자리에서 사라졌다');
+});
+
+// 1WSI-1의 예외가 기대는 사실 — 보드 05의 목록 머리와 비교 제목은 전략 이름과 실행
+// 번호를 품고 있는데(「실행 이력 — 20-60 골든크로스」·「#41 vs #38 — 무엇이 달랐나」),
+// 앱은 그 자리에 이름도 번호도 안 적는다. 상태 칸도 백엔드가 준 영어를 그대로 적어
+// Paper의 「실패 — 캐시 부족 (수집 미승인)」과 맞을 길이 없다. 어느 하나라도 Paper 쪽으로
+// 고쳐지면 이 테스트가 깨져 예외를 다시 보게 된다.
+test('the history board names runs in a way the app never writes', () => {
+  const canvas = fs.readFileSync(path.join(__dirname, 'backtest-canvas.js'), 'utf8');
+  assert.ok(canvas.includes("el('div', 'backtest-card-title', '무엇이 달랐나')"),
+    '비교 패널 제목이 실행 번호를 품게 됐다 — 1WSI-1의 문구 예외가 거짓이 된다');
+  assert.ok(canvas.includes('`실행 이력 ${formatNumeric(runs.length)}건`'),
+    '실행 목록 머리가 전략 이름을 적게 됐다 — 1WSI-1의 문구 예외가 거짓이 된다');
+  assert.match(canvas, /backtest-history-status is-\$\{run\.status\}`, run\.status\)/);
 });
 
 test('each route carries 3 to 7 phrases', () => {
