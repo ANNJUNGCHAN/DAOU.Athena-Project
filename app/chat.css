@@ -868,6 +868,8 @@ html.is-boot-expanding #winControls { opacity: 0; }
   transition: border-color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
 }
 .model-popover .mp-chip:hover { border-color: var(--color-brand); color: #10131a; }
+.model-popover .mp-chip:disabled { opacity: 0.45; cursor: default; }
+.model-popover .mp-chip:disabled:hover { border-color: rgb(16 19 26 / 14%); color: rgb(16 19 26 / 72%); }
 .model-popover .mp-chip.on {
   border-color: var(--color-brand);
   background: var(--color-brand);
