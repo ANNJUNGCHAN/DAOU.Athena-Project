@@ -48,7 +48,7 @@ function buildSelectorOrderPrefill(payload) {
 function gateBlocker(accountInfo) {
   if (!accountInfo) return '계좌 정보를 확인할 수 없다 — 백엔드 기동을 확인해 달라';
   if (!accountInfo.orderApi) {
-    return '주문 API 비활성 — 설정 → 계좌에서 활성화해야 실행할 수 있다 (모의계좌 전용)';
+    return '활성 계좌의 주문 API가 OFF입니다 — 설정 › 계좌에서 게이트를 여세요.';
   }
   return null;
 }
