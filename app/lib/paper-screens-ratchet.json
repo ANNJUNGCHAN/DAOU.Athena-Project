@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "gate": "verify:paper-screens",
-  "blessed_at": "2026-09-06T00:13:07.660Z",
+  "blessed_at": "2026-09-06T01:01:16.077Z",
   "blessed_by": "verify:paper-screens --bless",
   "target_boards": 115,
   "passing": [
@@ -17,7 +17,10 @@
     "1M3-0",
     "1Y3-0",
     "25Q-0",
+    "2FIA-2",
+    "2QA3-2",
     "2V0K-1",
+    "31H-0",
     "3JL-0",
     "3NE-0",
     "3VHD-1",
@@ -25,6 +28,8 @@
     "3VV8-1",
     "3VV9-1",
     "3ZPB-0",
+    "4AN-0",
+    "4IA-0",
     "AJ-0",
     "AMZ-0",
     "ARM-0",
@@ -38,6 +43,6 @@
     "GCF-0",
     "OJ-0"
   ],
-  "passing_count": 32,
+  "passing_count": 37,
   "shrink_log": []
 }

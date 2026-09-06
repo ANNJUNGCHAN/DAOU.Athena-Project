@@ -320,6 +320,102 @@ const SIDEBAR_HISTORY_THREE = Object.freeze({
     { id: 'fx-p3', label: '개인 연구', path: 'C:\\Projects\\personal', pinned: false }],
 });
 
+
+// ── 그래프 페이지(D-2) fixture 넷 ────────────────────────────────────────────
+// 그래프 화면은 이 컴퓨터에 쌓인 성향 그래프를 그대로 그린다 — 검사 프로필은
+// 비어 있어 지도가 「아직 그릴 연결이 없습니다」로, 표가 빈 칸으로 떨어진다
+// (controller.js renderFilteredEmpty · summary-table.js renderSummaryHero의
+// total===0 분기). 그래서 보드 02~04가 그린 그래프를 봉투로 못 박는다.
+//
+// `observed_at`을 한 군데도 안 싣는 것은 일부러다: 헤더 기간 칩이 「최근 90일」로
+// 거르므로(graph-filters.js applyGraphFilters) 고정 날짜를 박으면 그 날로부터 90일
+// 뒤에 게이트가 이유 없이 빨개진다. 시각을 모르는 엣지는 안 거른다는 것이 그 함수의
+// 계약이라(§0 「못 읽은 것과 없는 것은 다르다」), 빼는 편이 시계에 안 좌우된다.
+// 종목명·군집 번호·연결 수는 전부 값이라 phrases에 한 글자도 넣지 않는다.
+const GRAPH_CLUSTER_MAP = Object.freeze({
+  ok: true,
+  revision: 7,
+  nodes: [
+    { entity_id: 'fx-hanmi', name: '한미반도체', kind: 'security', cluster: 0, degree: 2 },
+    { entity_id: 'fx-semi', name: '반도체 대형주', kind: 'theme', cluster: 0, degree: 3 },
+    { entity_id: 'fx-samsung', name: '삼성전자', kind: 'security', cluster: 0, degree: 1 },
+    { entity_id: 'fx-hynix', name: 'SK하이닉스', kind: 'security', cluster: 0, degree: 1 },
+    { entity_id: 'fx-basket', name: '배당 방어 바스켓', kind: 'theme', cluster: 1, degree: 2 },
+    { entity_id: 'fx-dividend', name: '고배당주', kind: 'theme', cluster: 1, degree: 2 },
+    { entity_id: 'fx-ktng', name: 'KT&G', kind: 'security', cluster: 1, degree: 1 },
+  ],
+  edges: [
+    ['fx-hanmi', 'fx-semi'], ['fx-samsung', 'fx-semi'], ['fx-hynix', 'fx-semi'],
+    ['fx-hanmi', 'fx-basket'], ['fx-ktng', 'fx-dividend'], ['fx-dividend', 'fx-basket'],
+  ],
+  edge_details: [
+    { source: 'fx-hanmi', target: 'fx-semi', kinds: ['belongs_to'], confidence: 'EXTRACTED', tier: 'conversational' },
+    { source: 'fx-samsung', target: 'fx-semi', kinds: ['belongs_to'], confidence: 'EXTRACTED', tier: 'conversational' },
+    { source: 'fx-hynix', target: 'fx-semi', kinds: ['belongs_to'], confidence: 'EXTRACTED', tier: 'conversational' },
+    { source: 'fx-hanmi', target: 'fx-basket', kinds: ['relates_to'], confidence: 'INFERRED', tier: 'conversational' },
+    { source: 'fx-ktng', target: 'fx-dividend', kinds: ['belongs_to'], confidence: 'EXTRACTED', tier: 'conversational' },
+    { source: 'fx-dividend', target: 'fx-basket', kinds: ['belongs_to'], confidence: 'EXTRACTED', tier: 'conversational' },
+  ],
+});
+
+// 성향 신호 다섯 줄 — 보드 02의 표 그대로다. 넷째·다섯째가 같은 대상(단기 회전)의
+// 체결발·대화발 두 줄인 것이 요점이다: 공통 패널의 「두 출처가 다르게 말합니다」는
+// 같은 entity_id의 tier가 갈릴 때만 뜬다(controller.js renderPanelContent).
+const GRAPH_PROFILE_SIGNALS = Object.freeze({
+  ok: true,
+  total: 312,
+  entries: [
+    { entity_id: 'fx-samsung', entity_name: '삼성전자', entity_kind: 'security', relation_kind: 'owns', rationale: '체결 4건 · 평균 71,200원', tier: 'deterministic', confidence: 'EXTRACTED', reinforcement: 12 },
+    { entity_id: 'fx-dividend', entity_name: '고배당주', entity_kind: 'theme', relation_kind: 'prefers', rationale: '현금흐름은 나와야 편하다', tier: 'conversational', confidence: 'INFERRED', reinforcement: 8 },
+    { entity_id: 'fx-hynix', entity_name: 'SK하이닉스', entity_kind: 'security', relation_kind: 'interested_in', rationale: 'HBM 질문 6개 대화 반복', tier: 'conversational', confidence: 'INFERRED', reinforcement: 6 },
+    { entity_id: 'fx-turnover', entity_name: '단기 회전', entity_kind: 'preference', relation_kind: 'traded', rationale: '체결 21건 · 평균 보유 3.2일 · 최장 9일', tier: 'deterministic', confidence: 'EXTRACTED', reinforcement: 21 },
+    { entity_id: 'fx-turnover', entity_name: '단기 회전', entity_kind: 'preference', relation_kind: 'prefers', rationale: '5개 대화에서 장기로 간다', tier: 'conversational', confidence: 'INFERRED', reinforcement: 21 },
+  ],
+});
+
+// 보드 04는 지도에서 고른 노드를 그린다 — 그 패널의 첫 행(성향 관계)은 이 목록에서
+// 오고(controller.js buildRelationships ①), 나머지 두 행은 위 edge_details에서 온다.
+// 표 다섯 줄을 그대로 쓰면 한미반도체에 걸린 성향 관계가 없어 그 행이 빠진다.
+const GRAPH_NODE_SIGNALS = Object.freeze({
+  ok: true,
+  total: 312,
+  entries: [
+    { entity_id: 'fx-hanmi', entity_name: '한미반도체', entity_kind: 'security', relation_kind: 'interested_in', rationale: 'HBM 장비 질문 4회', tier: 'conversational', confidence: 'INFERRED', reinforcement: 4 },
+  ],
+});
+
+// 숨은 연관 한 쌍 — 보드 02의 카드와 보드 04의 「왜 숨은 연관인가」가 같은 이 쌍을
+// 읽는다(controller.js topSurprising). 하나뿐이라 그 쌍이 곧 1등이고, 그래서 근거
+// 블록이 「이 그래프에서 가장 놀라운 연결입니다」로 말한다.
+const GRAPH_HIDDEN_LINKS = Object.freeze({
+  ok: true,
+  connections: [{
+    source_entity_id: 'fx-hanmi',
+    source_name: '한미반도체',
+    source_cluster: 0,
+    target_entity_id: 'fx-basket',
+    target_name: '배당 방어 바스켓',
+    target_cluster: 1,
+    kinds: ['relates_to'],
+    surprise_score: 1,
+  }],
+});
+
+// 되물을 것이 없는 상태 — 보드 02~04 어디에도 확인 필요 배너가 없다. 봉투를 안
+// 주면 배너가 이 컴퓨터의 브레인에 좌우된다(summary-table.js renderConfirmBanner).
+const GRAPH_NO_QUESTIONS = Object.freeze({ ok: true, revision: 1, questions: [] });
+
+// 엔티티 타임라인 셋 — 보드 02·04의 「최근 변화」가 그린 세 줄 그대로다. 날짜와
+// 문장은 이 봉투에서 만들어지는 값이라 phrases에 한 글자도 넣지 않는다.
+const GRAPH_TIMELINE = Object.freeze({
+  ok: true,
+  events: [
+    { at: '2026-08-23T03:00:00.000Z', op: 'edge_added', relation: 'relates_to', object_id: 'fx-basket' },
+    { at: '2026-08-19T03:00:00.000Z', op: 'edge_changed', relation: 'interested_in', confidence_before: 'INFERRED', confidence_after: 'EXTRACTED' },
+    { at: '2026-08-04T03:00:00.000Z', op: 'entity_added' },
+  ],
+});
+
 const ROUTES = Object.freeze([
   // ---------- 부팅 5장 (1-0) ----------
   // 부팅 02~05는 한 애니메이션의 시간 단계라 서로를 가르는 것은 **찍힌 글자 수**뿐이다.
@@ -814,6 +910,197 @@ const ROUTES = Object.freeze([
     structure: [
       { what: 'count', selector: '.question-card-btn', equals: 3 },
       { what: 'count', selector: '.question-card-key', equals: 2 },
+    ],
+  },
+
+  // ---------- 그래프 5장 (D-2) ----------
+  // 넷 다 같은 봉투 넷(군집 지도 · 성향 신호 · 숨은 연관 · 되물을 것 없음)에서
+  // 그려진다 — 그래프 화면은 브레인이 준 것을 그대로 옮겨 그리는 자리라, 봉투를
+  // 안 박으면 판정이 이 컴퓨터에 쌓인 대화에 좌우된다. 갱신 이벤트를 스스로
+  // 쏘는 것은 보드 08(3VHD-1)과 같은 이유다: 부팅 프리페치는 창을 다시 읽는
+  // 러너보다 먼저 끝나 있고, 표를 다시 싣는 클릭이 앱에 없다.
+  {
+    board: '4AN-0', // 02 · 셸 — 그래프 요약 · 행 선택
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:brain-cluster-map', data: GRAPH_CLUSTER_MAP },
+      { do: 'ipc-fixture', channel: 'athena:brain-profile-summary', data: GRAPH_PROFILE_SIGNALS },
+      { do: 'ipc-fixture', channel: 'athena:brain-surprising-connections', data: GRAPH_HIDDEN_LINKS },
+      { do: 'ipc-fixture', channel: 'athena:brain-suggested-questions', data: GRAPH_NO_QUESTIONS },
+      { do: 'ipc-fixture', channel: 'athena:brain-entity-timeline', data: GRAPH_TIMELINE },
+      { do: 'mode', view: 'graph' },
+      { do: 'send', channel: 'athena:brain-graph-updated', data: null },
+      // 보드가 그린 것은 「행이 하나 골라진」 요약이다. 그 행을 이름으로 집는다 —
+      // 첫 행을 누르면 출처가 하나뿐인 대상이 골라져 티어 대조가 안 뜬다.
+      { do: 'click', selector: '.summary-row[data-entity-id="fx-turnover"]' },
+      { do: 'settle' },
+    ],
+    root: '#shell',
+    // 대상·관계·근거·보강, 군집 이름, 「보강 21회로…」 같은 것은 전부 봉투가 주는
+    // 값이라 한 글자도 안 넣는다. 남는 것은 앱이 리터럴로 그리는 제목·탭·버튼이다.
+    // 열 머리는 안 적는다 — Paper는 넷(대상·관계·근거·보강)인데 앱은 출처·최근을
+    // 더해 여섯이다(summary-table.js COLUMN_HEADS). 「체결 · 잔고」도 안 적는다:
+    // 앱의 티어 라벨은 가운뎃점에 공백이 없는 「체결·잔고」다.
+    phrases: [
+      '지금 읽히는 성향',
+      '성향 신호',
+      '숨은 연관',
+      '선택 해제',
+      '두 출처가 다르게 말합니다',
+      '채팅에서 답하기',
+    ],
+    // 표 다섯 줄 · 패널 탭 둘 · 티어 카드 둘(체결·잔고와 대화) — Paper가 그린 수
+    // 그대로다. 관계 목록은 Paper 02에 없고 앱도 표에서 고른 선택에는 안 그린다.
+    structure: [
+      { what: 'count', selector: '.summary-row', equals: 5 },
+      { what: 'count', selector: '.panel-tab', equals: 2 },
+      { what: 'count', selector: '.panel-tier-card', equals: 2 },
+      { what: 'absent', selector: '.panel-relations' },
+    ],
+  },
+  {
+    board: '4IA-0', // 03 · 그래프 — 기본 군집 지도
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:brain-cluster-map', data: GRAPH_CLUSTER_MAP },
+      { do: 'ipc-fixture', channel: 'athena:brain-profile-summary', data: GRAPH_PROFILE_SIGNALS },
+      { do: 'ipc-fixture', channel: 'athena:brain-surprising-connections', data: GRAPH_HIDDEN_LINKS },
+      { do: 'ipc-fixture', channel: 'athena:brain-suggested-questions', data: GRAPH_NO_QUESTIONS },
+      { do: 'mode', view: 'graph' },
+      // 지도 표면은 요약 헤더의 [그래프] 탭이 연다(canvas.js SURFACE_TAB_IDS).
+      { do: 'click', selector: '#graphViewTab' },
+      { do: 'send', channel: 'athena:brain-graph-updated', data: null },
+      { do: 'settle' },
+    ],
+    root: '#shell',
+    // 노드 이름은 캔버스에 그려져 글자가 아니고(live-map.js), 범례 여섯 줄
+    // (색 = 군집 · 원 크기 = 연결 수 · 사실 · 추론 · 불확실 · 숨은 연관 — 군집을
+    // 넘는 연결)은 앱이 아예 안 그린다 — 둘 다 여기 안 적는다.
+    phrases: [
+      '요약',
+      '수집·노출',
+      '테마 지도',
+      '노드를 끌어 옮길 수 있습니다 · 휠 또는 Ctrl+휠로 확대 · 채팅으로 물어도 같은 곳이 열립니다',
+      '그래프에게 묻기',
+      '답이 캔버스를 바꿉니다',
+    ],
+    // 지도 헤더의 탭 셋 · 안내 바 하나, 그리고 요약 표가 물러났다는 것.
+    structure: [
+      { what: 'count', selector: '#graphHeader .view-toggle-tab', equals: 3 },
+      { what: 'count', selector: '#graphMapGuide', equals: 1 },
+      { what: 'absent', selector: '#graphSummaryTable' },
+    ],
+  },
+  {
+    board: '31H-0', // 04 · 그래프 — 노드 선택 · 공통 패널
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:brain-cluster-map', data: GRAPH_CLUSTER_MAP },
+      { do: 'ipc-fixture', channel: 'athena:brain-profile-summary', data: GRAPH_NODE_SIGNALS },
+      { do: 'ipc-fixture', channel: 'athena:brain-surprising-connections', data: GRAPH_HIDDEN_LINKS },
+      { do: 'ipc-fixture', channel: 'athena:brain-suggested-questions', data: GRAPH_NO_QUESTIONS },
+      { do: 'ipc-fixture', channel: 'athena:brain-entity-timeline', data: GRAPH_TIMELINE },
+      { do: 'mode', view: 'graph' },
+      { do: 'click', selector: '#graphViewTab' },
+      { do: 'send', channel: 'athena:brain-graph-updated', data: null },
+      // 지도의 노드는 캔버스에 그려져 누를 DOM이 없다. 채팅이 노드를 골라 달라고
+      // 할 때 앱이 스스로 타는 그 경로를 그대로 쓴다(canvas.js athena:graph-chat-action
+      // → graphMode.selectNode) — 사람이 노드를 눌렀을 때와 같은 함수다.
+      // 고르기 전에 지도가 한 번 그려져 있어야 한다: 선택은 마지막 배치에서
+      // 노드를 찾아 군집·연결 수를 읽으므로(controller.js selectNode → findNode),
+      // 배치가 없으면 헤더도 관계 목록도 비어 버린다.
+      { do: 'wait', ms: 1500 },
+      { do: 'send', channel: 'athena:graph-chat-action', data: { kind: 'select', entityId: 'fx-hanmi' } },
+      { do: 'settle' },
+    ],
+    root: '#shell',
+    // 노드 이름·종목 코드·군집 이름·근거 절은 전부 봉투가 주는 값이다. 「삭제」도
+    // 안 적는다 — Paper는 세 행 전부에 붙였는데 앱은 숨은 연관 행에는 안 붙인다
+    // (controller.js: 확정된 관계가 아니라 분석이 띄운 표면이라 손잡이를 뺀다).
+    phrases: [
+      '테마 지도',
+      '선택 해제',
+      '이 노드의 관계',
+      '왜 숨은 연관인가',
+      '이 그래프에서 가장 놀라운 연결입니다',
+      '이 연결을 확인하지 않으셨습니다.',
+      '채팅에서 물어보기',
+    ],
+    // 관계 세 줄(성향 · 구조 · 숨은)·최근 변화 세 줄·패널 탭 둘 — Paper가 그린
+    // 수 그대로다. 요약 표는 물러나 있어야 한다.
+    structure: [
+      { what: 'count', selector: '.panel-relation-row', equals: 3 },
+      { what: 'count', selector: '.panel-change-row', equals: 3 },
+      { what: 'count', selector: '.panel-tab', equals: 2 },
+      { what: 'absent', selector: '#graphSummaryTable' },
+    ],
+  },
+  {
+    board: '2FIA-2', // 05 · 그래프 — 수집·노출·브레인 제어
+    window: 'shell',
+    // 이 화면은 브레인이 준 그래프가 아니라 이 컴퓨터의 설정을 그린다
+    // (settings-cards.js readGraphSettings) — 검사 프로필이 비어 있으므로 기본값
+    // 그대로다. 봉투가 필요 없는 유일한 그래프 보드다.
+    reach: [
+      { do: 'mode', view: 'graph' },
+      { do: 'click', selector: '#settingsViewTab' },
+      { do: 'settle' },
+    ],
+    // 보드가 그린 것은 셸 전체가 아니라 그래프 패널 하나다.
+    root: '#graphSettingsCanvas',
+    // 배치 주기·수동 실행의 설명문 두 줄은 안 적는다 — 앱이 2026-09-03 실사용
+    // 지적을 받아 「무엇을 하는 주기인가 → 지금 값 → 어디서 바꾸나」로 다시 쓴
+    // 자리라 Paper의 문장과 다르다. 「브레인 준비됨」도 안 적는다: 배지 문구가
+    // 백엔드 기동 여부로 갈려 이 검사에서 못 박을 수 없다.
+    phrases: [
+      '그래프 수집과 노출',
+      '무엇을 읽고 누구에게 보일지',
+      '보유잔고',
+      '조회 주기',
+      '브레인 상태',
+      '이 화면이 바꿀 수 있는 값과 아닌 값',
+      '전체 삭제',
+    ],
+    // 카드 둘(수집과 노출 · 브레인 상태) · 수집 소스 3열 · 헤더 탭 셋.
+    structure: [
+      { what: 'count', selector: '.graph-settings-card', equals: 2 },
+      { what: 'count', selector: '.graph-settings-source', equals: 3 },
+      { what: 'count', selector: '#graphSettingsHeader .view-toggle-tab', equals: 3 },
+    ],
+  },
+
+  {
+    board: '2QA3-2', // 06 · 그래프 — 헤더 필터 (기간·정렬·연결 수)
+    window: 'shell',
+    // Paper는 헤더 세 판(요약 기본값 · 요약에 값이 걸린 것 · 지도)을 나란히 그리고
+    // 그 아래에 「무엇을 실제로 거는가」 표를 붙였다. 앱은 한 번에 한 헤더만 그리므로
+    // 도달할 수 있는 것은 그중 하나다 — 기본값 판을 잡는다. 값이 걸린 판을 만들려면
+    // 칩을 바꿔야 하는데, 그 선택은 localStorage에 남아(graph-mode-prefs.js) 다음
+    // 라우트까지 따라간다. 되돌리는 어휘가 표에 없으므로 만들지 않는다.
+    reach: [
+      { do: 'mode', view: 'graph' },
+      { do: 'settle' },
+    ],
+    root: '#graphSummaryHeader',
+    // 칩에 찍힌 「최근 90일」·「보강 순」은 문구가 못 된다 — 앱의 칩은 select라 그
+    // 글자가 <option> 안에 있고, 닫힌 select의 option은 그려지지 않는다(실측:
+    // 이 둘만 phrase_missing이었다). placeholder와 같은 갈래다(파일 머리 주석).
+    // 지도 헤더의 「연결 전체」도 안 적는다: 앱은 그 자리를 「연결 제한 없음」으로
+    // 쓴다(graph-filters.js — 「전체」로는 이것이 거는 조건인지 안 읽힌다는
+    // 2026-09-03 실사용 지적). 표의 「컨트롤·선택지·무엇을 실제로 거는가」는 화면이
+    // 아니라 이 보드가 옆에 붙인 설명 표라 앱 어디에도 없다.
+    phrases: ['요약', '그래프', '수집·노출'],
+    // 그래서 판정을 지는 것은 구조다. Paper의 요약 헤더는 탭 셋이 이 차례이고
+    // 오른쪽 칩이 둘(기간·정렬)이며, 셋째 칩인 연결 수는 이 보드가 「지도에만
+    // 있다」고 못박은 그대로 여기 없다.
+    structure: [
+      {
+        what: 'order',
+        selector: '.view-toggle-tab',
+        equals: ['요약', '그래프', '수집·노출'],
+      },
+      { what: 'count', selector: '.filter-chip', equals: 2 },
+      { what: 'absent', selector: '#graphDegreeFilter' },
     ],
   },
 
