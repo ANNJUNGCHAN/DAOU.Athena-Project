@@ -943,6 +943,10 @@ function createBacktestCanvas(options) {
   let pendingScrollTop = null;
   let bodyEl = null;
   let workspaceReportTimer = null;
+  // 마지막으로 보낸 봉투. 같은 것을 다시 보내지 않는다 — 42번 보드가 적은 보고 시점은
+  // 「폼·코드·필터가 바뀔 때」인데 예약은 render()마다 걸리므로, 실제로 바뀌었는지는
+  // 여기서 가른다.
+  let lastReportJson = null;
   let pollTimer = null;
   // 환경 구성 잡의 폴링은 실행·수집 폴링과 별개 타이머다 — 같은 자리를 쓰면 pip이 도는
   // 동안 실행 폴링이 끊기거나 그 반대가 된다(둘은 서로를 모른다).
@@ -2572,11 +2576,16 @@ function createBacktestCanvas(options) {
     bodyEl = body;
     // 스크롤 자리도 그 세션의 것이다(41번 보드 Rule 1) — 굴린 자리를 봉인하고 되돌린다.
     body.addEventListener('scroll', onBodyScroll);
-    // 복원 표식은 탭 위에 선다 — 어느 탭에 서 있든 그 세션이 되살아난 것이기 때문이다.
+    // 안내는 세션 전체를 두고 하는 말이라 어느 탭에서든 선다. 표식은 다르다 — Paper는
+    // 그 둘을 폼 카드와 코드 카드 머리에 붙였으니, 그 카드가 없는 결과·이력·배포 탭에서는
+    // 설 자리가 아니다. 카드 안까지 넣지 않는 이유는 앱의 설계 화면이 탭이기 때문이다:
+    // 폼과 코드는 서로를 가려 한 번에 하나만 서는데, 41번 보드는 표식 둘이 함께 선다.
     if (state.restore) {
       if (state.restore.partial && !state.restore.dismissed) body.appendChild(renderRestoreNotice());
-      const marks = renderRestoreMarks();
-      if (marks) body.appendChild(marks);
+      if (state.tab === 'design') {
+        const marks = renderRestoreMarks();
+        if (marks) body.appendChild(marks);
+      }
     }
     if (state.view === 'approval') body.appendChild(renderApproval());
     else if (state.view === 'running') body.appendChild(renderRunning());
@@ -5243,11 +5252,18 @@ function createBacktestCanvas(options) {
         scrollTop: pendingScrollTop != null ? pendingScrollTop
           : (bodyEl && bodyEl.isConnected !== false ? bodyEl.scrollTop : null),
       });
-      ws.report(Object.assign({
+      const patch = Object.assign({
         designTab: state.designTab,
         tab: state.tab,
         graph: visualGraph,
-      }, sealed));
+      }, sealed);
+      // 바뀐 것이 없으면 보내지 않는다. 실행 폴링·진행률 갱신도 render()를 지나가는데
+      // 그때마다 보내면 몇 분짜리 실행이 초당 한 번씩 세션 파일을 다시 쓰고, 탭을 한 번
+      // 옮기면 즉시 보고와 예약된 보고가 같은 봉투로 두 번 나간다.
+      const json = JSON.stringify(patch);
+      if (json === lastReportJson) return;
+      lastReportJson = json;
+      ws.report(patch);
     } catch { /* 보고는 부수 효과다 — 실패해도 화면은 계속 돈다 */ }
   }
 
@@ -5379,6 +5395,7 @@ function createBacktestCanvas(options) {
     restoreSealed = null;
     restoreApplied = null;
     restoredLog = '';
+    lastReportJson = null;
   }
 
   // 세션을 갈아탔다 — 되살렸던 것은 그 세션의 것이지 이 화면의 것이 아니다. 백테스트가
