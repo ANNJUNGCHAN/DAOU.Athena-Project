@@ -681,6 +681,38 @@ const CODE_RUNS = Object.freeze({
 const CODE_DETAIL_FIRST_CHECK = paperCodeDetail('check', WATCH_NODES_FIRST);
 const CODE_DETAIL_ACTIVE = paperCodeDetail('run', WATCH_NODES_LIVE);
 
+// 두 번째 고침을 마치고 다시 검사까지 끝난 초안(보드 11) — 백엔드가 직전 판과
+// 지금 검사를 맞대 낸 봉투 모양 그대로다(routines/revisions.fix_cycle과
+// _detail_view). 노드의 「3일 → 5일」과 changed는 mark_fixed_nodes가 만든 것이라
+// 여기에도 이미 겹쳐져 있다 — WATCH_NODES_AFTER_FIX가 곧 그 결과다.
+// 원 핸들러를 부르면 이 컴퓨터의 백엔드에 고침 이력이 있어야만 이 화면이 서므로
+// 판정이 머신 상태에 좌우된다. 날짜·배수·건수는 전부 값이라 phrases에 안 넣는다.
+const CODE_DETAIL_AFTER_FIX = Object.freeze({
+  ok: true,
+  data: {
+    ...paperCodeDetail('check', WATCH_NODES_AFTER_FIX).data,
+    fix_cycle: {
+      fix_count: 2,
+      past_count: 1,
+      fixed_at: '2026-09-05T06:25:00.000Z',
+      checked_at: '2026-09-05T06:31:00.000Z',
+      lookback_days: 30,
+      duration_ms: 9000,
+      fires_before: 4,
+      fires_after: 2,
+      fires_before_dates: ['2026-08-12', '2026-08-19', '2026-08-26', '2026-09-01'],
+      fires_after_dates: ['2026-08-12', '2026-08-26'],
+      changes: [
+        { label: '일수', before: '3일', after: '5일' },
+        { label: '배수', before: '1.5배', after: '2.0배' },
+      ],
+      changed_nodes: 2,
+      can_rollback: true,
+    },
+    fix_history: [{ fixed_at: '2026-09-04T02:10:00.000Z', fire_count: 6, lookback_days: 30 }],
+  },
+});
+
 // 검사 한 번의 응답(보드 09의 자동 검사 진행 패널이 읽는 그것) — 초안 카드의
 // 「검사」 칩이 부르는 athena:routine-watch-check가 돌려주는 봉투 모양 그대로다
 // (chat.js runWatchCheck가 res.data를 그대로 넘긴다). 원 핸들러를 부르면 백엔드가
@@ -1918,17 +1950,46 @@ const ROUTES = Object.freeze([
       { what: 'count', selector: '.agent-code-approve-row button', equals: 2 },
     ],
   },
-  // 44HD-1(11 · 노드에서 '이상해요' → AI가 고치고 다시 검사)에는 라우트를 두지
-  // 않는다. 노드 행(「방금 바뀜」 둘 · 칩 둘)은 앱에 있지만, 이 보드를 이 보드이게
-  // 하는 나머지 절반이 통째로 없다 — 「순환 · 물어봄 → 고침 → 검사 → 다시 그림」
-  // 띠, 「다시 검사 · 지난 30일 · 자동 · 9초」 재검사 패널, 고치기 전후를 겹쳐
-  // 그리는 발화 비교, 「한 바퀴 영수증 · 2번째 고침」과 「되돌리기」·「지난 고침
-  // 1건」. 앱 전체 grep에서 순환·영수증·되돌리기·지난 고침은 0건이고, 백엔드에도
-  // 근거가 없다(routines/models.py에 이전 버전 보관도 롤백 전이도 없고,
-  // ALLOWED_TRANSITIONS는 draft/active/paused/cancelled뿐이다). 노드 행만으로
-  // 초록을 만들면 보드 10과 같은 렌더러에 클릭 하나를 얹은 것이 되어, 앱이 이
-  // 보드를 위해 만들어야 할 것을 아무 것도 못 박지 못한 채 남은 작업 목록에서만
-  // 사라진다 — 43WD-1의 「만드는 중」 단계를 뺀 것과 같은 이유다.
+  {
+    board: '44HD-1', // 11 · 에이전트 — 노드에서 '이상해요' → AI가 고치고 다시 검사
+    window: 'shell',
+    // 이 보드는 「고친 뒤」의 초안이다 — 보드 10과 같은 렌더러지만 상세 봉투에
+    // fix_cycle이 실려 순환 띠·다시 검사 패널·한 바퀴 영수증이 함께 선다
+    // (백엔드 routines/revisions.py가 직전 판과 지금 검사를 맞대 만든다).
+    // 칩 둘(「이상해요」·「물어볼게요」)은 고른 칸에만 붙으므로 Paper가 고른 그 칸
+    // (셋째 · 배수 비교)을 실제로 누른다.
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:routines-list', data: CODE_WATCH_DRAFT },
+      { do: 'ipc-fixture', channel: 'athena:routine-detail', data: CODE_DETAIL_AFTER_FIX },
+      { do: 'mode', view: 'agent' },
+      { do: 'wait', ms: 700 },
+      { do: 'click', selector: '.agent-row' },
+      { do: 'wait', ms: 400 },
+      { do: 'click', selector: '.agent-node-cards .agent-node-card:nth-child(3)' },
+      { do: 'wait', ms: 200 },
+      { do: 'settle' },
+    ],
+    root: '#agentCanvas',
+    // 이 보드를 이 보드이게 하는 일곱 마디만 담는다 — 순환 띠 둘, 바뀐 칸 배지,
+    // 그 칸에서 여는 두 문, 되돌리는 문, 영수증 발치의 게이트 고지. 숫자를 품은
+    // 「다시 검사 · 지난 30일」·「한 바퀴 영수증 · 2번째 고침」·「평균 일수 3일 → 5일」은
+    // 전부 봉투가 주는 값이라 한 글자도 안 넣는다.
+    phrases: [
+      '순환', '물어봄 → 고침 → 검사 → 다시 그림 · 한 바퀴 끝',
+      '방금 바뀜', '이상해요', '물어볼게요',
+      '되돌리기', '코드는 AI가, 판단은 사람이 · 승인 전까지 실행 없음',
+    ],
+    // Paper 보드 11의 계약 — 칸 넷 중 둘에 「방금 바뀜」이 붙고, 고른 칸 하나에만
+    // 칩 둘이 붙는다. 영수증은 바꾼 것 둘 + 판정 하나로 세 줄이고, 점 띠는 검사가
+    // 센 구간(지난 30일)만큼 서른 칸이다.
+    structure: [
+      { what: 'count', selector: '.agent-node-card', equals: 4 },
+      { what: 'count', selector: '.agent-node-badge', equals: 2 },
+      { what: 'count', selector: '.agent-node-chip', equals: 2 },
+      { what: 'count', selector: '.agent-fix-receipt-row', equals: 3 },
+      { what: 'count', selector: '.agent-fix-dot', equals: 30 },
+    ],
+  },
   {
     board: '44RV-1', // 12 · 에이전트 — 활성 코드 알람 · 상세·발화 이력
     window: 'shell',
