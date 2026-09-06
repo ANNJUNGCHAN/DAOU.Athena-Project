@@ -829,12 +829,17 @@
     window.athena.send('athena:orb-toggle', { expanded: next });
   }
 
-  // ── 대화 모드 게이트 — 셸이 숨겨졌는지 하나로 결정된다(board-33/34) ──
-  let shellHidden = false;
-  let chatModeActive = false;
+  // ── 대화 모드 게이트 — main이 보내는 표시 모드 하나로 결정된다(board-33/34,
+  // Paper 보드 05). 창 가시성(hidden)과 다른 값이다: 셸을 최소화하면 창은 뜨지만
+  // 모드는 알림 전용(B)에 머문다(5EX-0). displayMode 없는 옛 페이로드는 hidden으로
+  // 물러선다. ──
+  let displayMode = 'B';
+  // null = 아직 한 번도 적용 안 됨. 첫 applyMode()가 반드시 돌아 data-orb-mode를
+  // 세우게 한다 — 없으면 부팅 직후 표면이 "모드를 모르는" 상태로 남는다.
+  let chatModeActive = null;
 
   function applyMode() {
-    const next = shellHidden;
+    const next = displayMode === 'A';
     if (chatModeActive === next) return;
     chatModeActive = next;
     $root.dataset.orbMode = chatModeActive ? 'chat' : 'alert';
@@ -849,8 +854,8 @@
     if (expanded) requestPanelHeight();
   }
 
-  window.athena.on('athena:shell-visibility', ({ hidden } = {}) => {
-    shellHidden = !!hidden;
+  window.athena.on('athena:shell-visibility', ({ hidden, displayMode: mode } = {}) => {
+    displayMode = mode || (hidden ? 'A' : 'B');
     applyMode();
   });
 

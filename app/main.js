@@ -301,6 +301,9 @@ function revealShell({ focus = true, force = false } = {}) {
 // 사용자가 메인 셸을 볼 수 있으면 키우미 native 창 자체를 숨기고, 셸이 숨었거나
 // 최소화됐을 때만 키우미를 표시한다. 다른 앱에 덮인 정도는 Electron isVisible()로
 // 판정할 수 없으므로 셸 표시 상태로 남긴다.
+//
+// **창 가시성과 표시 모드는 다른 값이다**(Paper 보드 05 5EX-0) — 최소화는 창을
+// 띄우지만 모드는 알림 전용(B)에 머문다. 그래서 페이로드에 둘 다 싣는다.
 function isShellHidden() {
   return orbWindow.shouldShowOrbForShell(shellWin);
 }
@@ -308,7 +311,10 @@ function isShellHidden() {
 function broadcastShellVisibility() {
   if (!orbWin || orbWin.isDestroyed()) return;
   const hidden = isShellHidden();
-  orbWin.webContents.send('athena:shell-visibility', { hidden });
+  orbWin.webContents.send('athena:shell-visibility', {
+    hidden,
+    displayMode: orbWindow.orbDisplayMode(shellWin),
+  });
   orbWindow.syncOrbVisibility(shellWin, orbWin);
 }
 
@@ -635,6 +641,12 @@ function sendRoutineEventToRenderers(event) {
   // 행을 각자 렌더할 뿐이고 백엔드 신규 경로는 0건이다 — 설계서 §판단서 요지.
   if (orbWin && !orbWin.isDestroyed()) {
     orbWin.webContents.send('athena:routine-event', event);
+    // 발화·복원 실패는 셸이 보이는 동안에도 알림 전용 패널로 실제 화면에 선다
+    // (Paper 보드 05 5FX-0 「셸이 보이는 동안 오브는 알림 전용이다」). 감시형
+    // 신호는 배경 상태라 창을 띄우지 않는다.
+    if (event && (event.type === 'routine-fired' || event.type === 'routine-restore-failed')) {
+      orbWindow.syncOrbVisibility(shellWin, orbWin, { alert: true });
+    }
   }
 }
 
