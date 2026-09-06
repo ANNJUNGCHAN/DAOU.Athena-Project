@@ -7,8 +7,13 @@ const path = require('node:path');
 
 const appDir = path.resolve(__dirname, '..');
 const settingsSource = fs.readFileSync(path.join(__dirname, 'settings-cards.js'), 'utf8');
+// 그래프 수집·노출 토글의 주인(Paper 보드 22) — 설정 4번째 카드가 아니라 그래프
+// 모드의 「수집·노출」 탭이다. 접근 이름 계약은 그 파일에서 잰다.
+const collectionSource = fs.readFileSync(path.join(__dirname, 'graph-mode', 'collection-settings.js'), 'utf8');
 const settingsCss = fs.readFileSync(path.join(appDir, 'styles', 'settings-cards.css'), 'utf8');
 const shellSource = fs.readFileSync(path.join(appDir, 'shell.js'), 'utf8');
+// 카드의 두 버튼(내보내기 · 전체 삭제)이 실제로 다루는 저장소는 main이 정한다.
+const mainSource = fs.readFileSync(path.join(appDir, 'main.js'), 'utf8');
 
 function cssRule(selector) {
   const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -43,12 +48,16 @@ test('설명문이 사라진 토글과 배율 컨트롤은 접근 가능한 이�
     '질의하면 캔버스 창을 자동으로 연다',
     '답변 길이에 따라 대화 창이 자란다',
     'AI가 이 계좌의 주문 API를 호출하도록 허용',
-    '대화',
+  ]) {
+    assert.match(settingsSource, new RegExp(label));
+  }
+  for (const label of [
+    '대화 수집',
     '체결내역',
     '보유 종목·수량과 대화 원문을 모델에 전달',
     '보유잔고 수집',
   ]) {
-    assert.match(settingsSource, new RegExp(label));
+    assert.match(collectionSource, new RegExp(label));
   }
   assert.match(settingsSource, /zoomValue\.setAttribute\('aria-label', '현재 UI 배율'\)/);
   assert.match(settingsSource, /zoomValue\.setAttribute\('aria-live', 'polite'\)/);
@@ -64,10 +73,66 @@ test('UI 배율은 설정 버튼만 쓰고 shell 렌더러 단축키를 되살�
 });
 
 test('보유잔고 조회 주기는 토글 옆 기능 그룹이며 컨트롤 이름이 있다', () => {
-  assert.match(settingsSource, /uk-holdings-controls/);
-  assert.match(settingsSource, /setAttribute\('aria-label', '보유잔고 조회 주기'\)/);
-  assert.match(settingsSource, /'보유잔고 수집'/);
+  assert.match(collectionSource, /graph-settings-source-controls/);
+  assert.match(collectionSource, /setAttribute\('aria-label', '보유잔고 조회 주기'\)/);
+  assert.match(collectionSource, /'보유잔고 수집'/);
   assert.doesNotMatch(settingsCss, /\.uk-holdings-sub\b/);
+});
+
+// ---------- Paper 보드 32 「설정 — 성향·이력」 ----------
+// 네비 라벨만 성향·이력이고 내용은 보드 22(그래프 수집·노출)이던 어긋남을 닫는다.
+// 같은 토글을 두 화면이 나눠 가지면 한쪽만 고쳐지는 날이 온다 — 수집·노출은
+// 그래프 모드 「수집·노출」 탭 하나가 소유한다.
+test('설정 4번째 카드는 Paper 32 성향·이력이다 — 수집 토글은 그래프 패널이 소유한다', () => {
+  assert.match(settingsSource, /'성향·이력'/);
+  assert.match(settingsSource, /'로컬 보관 · 언제든 내보내기 가능'/);
+  assert.match(settingsSource, /'투자 성향'/);
+  assert.match(settingsSource, /'대화 이력'/);
+  assert.match(settingsSource, /'이력 내보내기'/);
+  assert.match(settingsSource, /'삭제는 확인 단계를 한 번 더 거치며 되돌릴 수 없습니다'/);
+  assert.doesNotMatch(settingsSource, /그래프 수집과 노출/);
+  assert.doesNotMatch(settingsSource, /uk-holdings-controls/);
+  assert.doesNotMatch(settingsCss, /\.uk-holdings-controls\b/);
+});
+
+// 전체 삭제는 브레인을 통째로 비운다 — 카드가 보여 주던 성향·보관 건수는 그
+// 순간 옛 값이 된다. 다시 읽지 않으면 같은 카드가 위에서는 지운 값을, 아래에서는
+// 「삭제 완료」를 말한다.
+test('전체 삭제 성공 뒤에는 카드가 성향·이력 구역을 다시 읽는다', () => {
+  const deleteHandler = settingsSource.slice(settingsSource.indexOf('function onDeleteClick('));
+  assert.match(deleteHandler, /resultBox\.appendChild\(note\);[\s\S]{0,240}?fillHistorySections\(\);/);
+});
+
+// 카드가 세는 것과 두 버튼이 다루는 것이 다르면, 전체 삭제 뒤에도 같은 건수가
+// 다시 서고 빈 이력을 「내보내기 완료」라고 적는다. 셋 다 브레인 하나를 본다.
+test('보관 건수·내보내기·전체 삭제가 같은 저장소를 본다', () => {
+  assert.match(settingsSource, /invoke\('athena:brain-conversations-count'\)/);
+  assert.doesNotMatch(settingsSource, /athena:conversations-list/);
+  const count = mainSource.slice(mainSource.indexOf("ipcMain.handle('athena:brain-conversations-count'"));
+  assert.match(count.slice(0, 400), /\/api\/v1\/brain\/conversations/);
+});
+
+// 브레인 이력 조회는 상한을 안 넘기면 백엔드 기본값(대화 50 · 메시지 100)으로
+// 조용히 잘린다 — 바로 옆이 되돌릴 수 없는 「전체 삭제」라, 다 담지 못했다면
+// 카드가 그 사실을 말해야 한다.
+test('이력 내보내기는 상한을 명시하고 담은 양을 카드가 말한다', () => {
+  const exporter = mainSource.slice(
+    mainSource.indexOf("ipcMain.handle('athena:history-export'"),
+    mainSource.indexOf("ipcMain.handle('athena:brain-suggested-questions'"),
+  );
+  assert.match(exporter, /\/api\/v1\/brain\/conversations',\s*\{\s*params: \{ limit: BRAIN_HISTORY_PAGE_LIMIT \}/);
+  assert.match(exporter, /conversation_id: summary\.conversation_id, limit: BRAIN_HISTORY_PAGE_LIMIT/);
+  assert.match(exporter, /stored\.length < summary\.message_count\) truncated = true/);
+  assert.match(exporter, /conversations: conversations\.length, messages, truncated/);
+  assert.match(mainSource, /const BRAIN_HISTORY_PAGE_LIMIT = 500;/);
+  assert.match(settingsSource, /내보내기 완료 — 대화 \$\{res\.conversations\}건 · 메시지 \$\{res\.messages\}건/);
+  assert.match(settingsSource, /res\.truncated[\s\S]{0,120}이력이 많아 일부는 담기지 않았습니다/);
+});
+
+test('성향·이력 카드는 보드의 목업 수치를 하드코딩하지 않는다', () => {
+  for (const mock of ['장기 ETF 적립형', '대화 128건', '42MB', '90일', '안정 추구', '지수 ETF · 반도체']) {
+    assert.doesNotMatch(settingsSource, new RegExp(mock));
+  }
 });
 
 test('#settingsGrid만 전체 높이를 채우고 카드 본문만 세로 스크롤한다', () => {

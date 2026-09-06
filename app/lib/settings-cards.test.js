@@ -154,22 +154,14 @@ test('collectChat 재활성화 실패는 로컬 상태를 OFF로 복원하고 �
   }
 });
 
-test('collectChat 비활성화 purge 실패는 메인의 정제 오류를 보존해 삭제 전용 안내를 표시한다', async () => {
+test('collectChat 비활성화 purge 실패는 메인의 정제 오류를 그대로 던지고 로컬을 OFF로 남긴다', async () => {
   const storage = fakeStorage(JSON.stringify({ ...settingsCards.GRAPH_SETTINGS_DEFAULTS, collectChat: true }));
   const mainError = new Error('대화 이력 수집은 OFF로 유지됐지만 남은 원문을 삭제하지 못했습니다.');
   global.window = { athena: { invoke: () => Promise.reject(mainError) } };
   try {
-    let renderedMessage = '';
     await assert.rejects(
-      settingsCards.setCollectChatPreference(false, storage).catch((error) => {
-        renderedMessage = settingsCards.collectChatPreferenceErrorMessage(error);
-        throw error;
-      }),
+      settingsCards.setCollectChatPreference(false, storage),
       (error) => error === mainError,
-    );
-    assert.equal(
-      renderedMessage,
-      '대화 이력 수집은 OFF지만 남아 있던 원문을 삭제하지 못했습니다. 저장소 상태를 확인해 주세요.',
     );
     assert.equal(settingsCards.readGraphSettings(storage).collectChat, false);
   } finally {
@@ -190,6 +182,55 @@ test('exposeToModel 패치는 전용 채널로 main에 미러링된다', () => {
   } finally {
     delete global.window;
   }
+});
+
+// ---- Paper 보드 32 「설정 — 성향·이력」 (화면 P1 항목 1) ----
+// 카드가 그릴 행만 순수 함수로 잰다 — DOM은 verify-settings-cards.js가 본다.
+// 보드가 그린 수치(128건 · 42MB · 90일)는 목업이다. 백엔드가 주지 않는 행은
+// 만들지 않는다 — 빈 자리는 정직하고, 지어낸 숫자는 거짓말이다.
+test('성향·이력 카드는 백엔드가 준 값만 행으로 만든다 — 없는 값은 행이 없다', () => {
+  const model = settingsCards.buildHistoryCardModel({});
+  assert.deepEqual(model.profileRows, []);
+  assert.deepEqual(model.storageRows, []);
+});
+
+test('학습된 관심 대상이 오면 Paper 라벨 그대로 한 행이 된다 — 중복은 접는다', () => {
+  const model = settingsCards.buildHistoryCardModel({
+    profileEntries: [
+      { entity_name: '지수 ETF' },
+      { entity_name: '반도체' },
+      { entity_name: '지수 ETF' },
+      { entity_name: '  ' },
+      {},
+    ],
+  });
+  assert.deepEqual(model.profileRows, [['주요 관심', '지수 ETF · 반도체']]);
+});
+
+// 「성향 반영」은 학습값이 아니라 사람이 켜고 끈 설정이다 — 성향이 아직 없어도
+// 이 행은 사실이고, 같은 값을 설정 nav 배지가 읽는다. Paper가 적은 「답변 어조에만
+// 사용」은 실제로 넘기는 것(보유 종목·수량·대화 원문)을 축소해 말하므로 안 쓴다.
+test('노출 설정이 오면 Paper 32 「성향 반영」 행이 사실대로 선다', () => {
+  assert.deepEqual(
+    settingsCards.buildHistoryCardModel({ exposeToModel: true }).preferenceRows,
+    [['성향 반영', '켜짐 · 보유 종목·수량과 대화 원문 전달']],
+  );
+  assert.deepEqual(
+    settingsCards.buildHistoryCardModel({ exposeToModel: false }).preferenceRows,
+    [['성향 반영', '꺼짐']],
+  );
+  assert.deepEqual(settingsCards.buildHistoryCardModel({}).preferenceRows, []);
+});
+
+test('보관 건수가 오면 「보관 중」 행이 선다 — 용량·보존 기간은 출처가 없어 안 그린다', () => {
+  const model = settingsCards.buildHistoryCardModel({ conversationCount: 12 });
+  assert.deepEqual(model.storageRows, [['보관 중', '대화 12건']]);
+});
+
+test('건수를 못 읽으면 「보관 중」 행 자체가 없다 — 0건이라고 말하지 않는다', () => {
+  assert.deepEqual(settingsCards.buildHistoryCardModel({ conversationCount: null }).storageRows, []);
+  assert.deepEqual(settingsCards.buildHistoryCardModel({ conversationCount: '12' }).storageRows, []);
+  assert.deepEqual(settingsCards.buildHistoryCardModel({ conversationCount: -1 }).storageRows, []);
 });
 
 // ---- 화면 P1 항목 11 (Paper 11D-0/11Q-0) — 흰 시트 위의 다크 잔재 색 ----

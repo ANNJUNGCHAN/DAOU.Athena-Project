@@ -164,14 +164,35 @@ function shouldShowOrbForShell(shellWin) {
   return shellWin.isMinimized() || !shellWin.isVisible();
 }
 
+/** 오브 패널이 서는 두 표시 모드 — Paper 키우미 보드 05. */
+const DISPLAY_MINI_CHAT = 'A';
+const DISPLAY_ALERT_ONLY = 'B';
+
+/**
+ * 패널이 어떤 모드로 서는지 판정한다. **창 가시성과 다른 술어다** — Paper 보드 05
+ * 5EX-0 「최소화·가려짐은 표시 모드를 바꾸지 않는다」와 5GV-0 「작업 표시줄에 남아
+ * 있으면 아직 셸을 쓰는 중이다. 오브는 알림 전용에 머문다」가 그렇게 못박았다.
+ * 셸을 닫기-백그라운드로 숨겼을 때만 미니 채팅(A)이고, 그 밖에는(보이는 중·최소화·
+ * 셸 없음) 알림 전용(B)이다.
+ */
+function orbDisplayMode(shellWin) {
+  if (!shellWin || shellWin.isDestroyed()) return DISPLAY_ALERT_ONLY;
+  if (shellWin.isMinimized()) return DISPLAY_ALERT_ONLY;
+  return shellWin.isVisible() ? DISPLAY_ALERT_ONLY : DISPLAY_MINI_CHAT;
+}
+
 /**
  * 메인 셸과 키우미 native 창의 가시성을 한 번에 맞춘다. 이미 원하는 상태면
  * show/hide를 반복하지 않아 포커스·컴포지터 이벤트를 불필요하게 만들지 않는다.
  * 반환값은 동기화 뒤 키우미가 보여야 하는지다.
+ *
+ * `alert`는 루틴 발화·복원 실패가 도착했다는 뜻이다 — 셸이 보이는 동안에도 알림
+ * 전용 패널(모드 B)을 실제로 띄운다. 포커스는 뺏지 않는다(showInactive).
  */
-function syncOrbVisibility(shellWin, orbWin) {
+function syncOrbVisibility(shellWin, orbWin, { alert = false } = {}) {
   if (!orbWin || orbWin.isDestroyed()) return false;
-  const shouldShow = shouldShowOrbForShell(shellWin);
+  const shellAlive = Boolean(shellWin) && !shellWin.isDestroyed();
+  const shouldShow = shouldShowOrbForShell(shellWin) || (alert && shellAlive);
   if (shouldShow && !orbWin.isVisible()) orbWin.showInactive();
   if (!shouldShow && orbWin.isVisible()) orbWin.hide();
   return shouldShow;
@@ -199,6 +220,9 @@ module.exports = {
   buildOrbWindowOptions,
   applyOrbBounds,
   shouldShowOrbForShell,
+  DISPLAY_MINI_CHAT,
+  DISPLAY_ALERT_ONLY,
+  orbDisplayMode,
   syncOrbVisibility,
   createOrbWindow,
 };
