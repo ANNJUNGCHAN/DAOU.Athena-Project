@@ -681,6 +681,32 @@ const WATCH_CHECK_DONE = Object.freeze({
   },
 });
 
+// 제어 제안 봉투 다섯(보드 07의 A~E) — main.js:2497이 athena_routine의 propose
+// 결과에서 만드는 그 모양이다(control·routineId·current·proposed·rationale·view).
+// 모델이 낸 제안은 백엔드에 아무것도 안 남아 클릭으로는 어느 것도 만들 수 없다.
+// `current`는 백엔드 목록의 그 행이라(routine_tools.py가 찾아 넣는다) 값이 전부
+// 데이터다 — 종목·시각·근거 문장은 phrases에 한 글자도 넣지 않는다.
+const PROPOSAL_UPDATE = Object.freeze({
+  control: 'update',
+  routineId: 'fx-p1',
+  current: { id: 'fx-p1', symbol: '005930', note: '삼성전자 88,000원 감시', cooldown_s: 300 },
+  proposed: { cooldown_s: 600 },
+  rationale: '오늘 발화 4회 · 하루 최대 3회',
+});
+const PROPOSAL_ACK_ALL = Object.freeze({ control: 'ack_all', rationale: '가장 오래된 알람 2시간 전' });
+const PROPOSAL_ADOPT = Object.freeze({
+  control: 'adopt',
+  proposed: { title: '외국인 순매수 3일 연속' },
+  rationale: '성향 신호 312 · 12분 전',
+});
+const PROPOSAL_VIEW = Object.freeze({ control: 'view', view: { tab: 'tasks', filter: 'paused' } });
+const PROPOSAL_FIRE = Object.freeze({
+  control: 'fire',
+  routineId: 'fx-p2',
+  current: { id: 'fx-p2', note: '평일 아침 브리핑', next_fire_at: '2026-09-06T07:30:00' },
+  rationale: '마지막 발화 어제 07:30',
+});
+
 // 제어가 백엔드에 거절당한 답(보드 08의 「실패 · 재시도」 열). 취소 왕복이 실제로
 // 실패해야 결과 턴이 실패로 그려지는데, 원 핸들러는 fixture 루틴을 모르는 백엔드로
 // 나가 무엇을 답할지 이 컴퓨터에 좌우된다. 사유 문장은 값이라 phrases에 안 넣는다.
@@ -1876,6 +1902,35 @@ const ROUTES = Object.freeze([
     ],
   },
 
+  {
+    board: '432Z-1', // 07 · 에이전트 대화 — 제어 제안 턴 A~E
+    window: 'shell',
+    // 제안 턴은 모델이 낸 봉투 하나로만 그려지고(chat.js의 athena:routine-proposed
+    // 구독) 앱 어디에도 그것을 여는 버튼이 없다 — 다섯 열이 곧 다섯 봉투다.
+    // B 「모두 읽음」 칩은 읽지 않은 알람이 있을 때만 선다(없으면 누를 게이트가
+    // 없다) — 그래서 발화 하나를 먼저 쏴 알람 센터에 방을 만든다.
+    reach: [
+      { do: 'send', channel: 'athena:routine-event', data: ROUTINE_FIRED },
+      { do: 'send', channel: 'athena:routine-proposed', data: PROPOSAL_UPDATE },
+      { do: 'send', channel: 'athena:routine-proposed', data: PROPOSAL_ACK_ALL },
+      { do: 'send', channel: 'athena:routine-proposed', data: PROPOSAL_ADOPT },
+      { do: 'send', channel: 'athena:routine-proposed', data: PROPOSAL_VIEW },
+      { do: 'send', channel: 'athena:routine-proposed', data: PROPOSAL_FIRE },
+      { do: 'wait', ms: 400 },
+      { do: 'settle' },
+    ],
+    root: '#history',
+    // 제어 이름과 사람 칩만 담는다. 리드와 「근거: …」는 전부 봉투가 주는 값이라
+    // 한 글자도 안 넣는다(종목·시각·발화 수).
+    phrases: ['작업 설정', '이렇게 바꿔줘', '모두 읽음', '제안 채택', '뷰 이동', '이동함', '지금 실행'],
+    // 이 보드의 계약 — 다섯 제안 중 D 뷰 이동에만 칩이 없다(437R-1: 게이트 없음 ·
+    // 서버 상태 불변 · 렌더러만 이동). 나머지 넷은 사람 칩 행을 하나씩 갖는다.
+    structure: [
+      { what: 'count', selector: '.control-proposal', equals: 5 },
+      { what: 'count', selector: '.control-proposal .routine-approval-actions', equals: 4 },
+      { what: 'count', selector: '.control-proposal-status', equals: 1 },
+    ],
+  },
   {
     board: '4330-1', // 08 · 에이전트 대화 — 결과 턴
     window: 'shell',
