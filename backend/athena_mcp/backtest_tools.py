@@ -592,7 +592,10 @@ _INPUT_SCHEMA: dict[str, Any] = {
                 "돌리는 동안 화면에 진행이 뜬다."
             ),
             "required": ["url"],
-            "properties": {"url": {"type": "string"}},
+            "properties": {
+                "url": {"type": "string"},
+                "note": {"type": "string", "description": "무엇을 왜 만드는지 한 줄"},
+            },
         },
         "register_strategy": {
             "type": "object",
