@@ -135,6 +135,14 @@ async function flush() {
   await new Promise((resolve) => setTimeout(resolve, 0));
 }
 
+// 예약만 쌓아두는 가짜 타이머를 실제로 흘린다 — 디바운스 뒤에 무엇이 나가는지는
+// 이것 없이는 한 번도 실행되지 않는다(작업공간 재봉인이 그 경로에 산다).
+async function runPending(made) {
+  const queued = made.pending.splice(0, made.pending.length);
+  for (const fn of queued) fn();
+  await flush();
+}
+
 // 타이머를 기본으로 가짜로 둔다 — 진짜 setTimeout을 쓰면 status가 계속 running인
 // 테스트에서 폴링이 영원히 예약돼 node --test가 끝나지 않는다. 폴링 자체를 보는
 // 테스트만 자기 구현을 넘긴다.
@@ -4963,8 +4971,9 @@ test('세션 복원: 결과를 못 읽으면 이름을 대는 안내가 서고 [
   const notice = findByClass(made.container, 'backtest-restore-notice');
   assert.equal(notice.length, 1);
   assert.match(textOf(notice[0]), /일부만 복원했습니다/);
-  assert.match(textOf(notice[0]), /결과를 찾지 못했습니다/);
-  assert.match(textOf(notice[0]), /전략 폼 · 전략 코드 · 실행 로그는 그대로입니다/);
+  // Paper 3WO4-1의 문면 그대로.
+  assert.match(textOf(notice[0]), /결과 데이터셋 1장을 찾지 못했습니다/);
+  assert.match(textOf(notice[0]), /폼·코드·로그는 그대로입니다/);
   // 못 읽은 결과 자리에도 봉인해 둔 로그는 남는다 — "실행이 없다"고 말하지 않는다.
   made.canvas.onChatAction({ kind: 'navigate', tab: 'result' });
   await flush();
@@ -5019,6 +5028,59 @@ test('세션 복원: 보고는 42번 보드 항목표를 담는다 — 폼·코�
   assert.deepEqual(last.run, { runId: 'run-1' });
   assert.equal(last.log.tail, '14:02:11 run start');
   assert.deepEqual(last.scroll, { top: 0 });
+}));
+
+test('세션 복원: 못 읽은 결과 자리에서 디바운스 재봉인이 저장본을 지우지 않는다', async () => withWorkspaceGlobal(async ({ registered, reports }) => {
+  const made = makeCanvas({ result: async () => { throw new Error('없는 실행입니다'); } });
+  made.canvas.mount();
+  await flush();
+  await registered[0][1].restore(RESTORE_WORKSPACE);
+  await flush();
+  await runPending(made);
+  const last = reports[reports.length - 1];
+  // 못 읽었다고 run_id·로그를 null로 적어 보내면 main의 얕은 병합이 저장본을 지운다 —
+  // [다시 시도]가 되살릴 봉투 자체가 없어지고, 다음에 열면 실행이 없었던 일이 된다.
+  assert.deepEqual(last.run, { runId: 'run-9' });
+  assert.equal(last.log.tail, '14:02:19 done · 스크롤 위치 저장됨');
+  assert.deepEqual(last.scroll, { top: 120 });
+}));
+
+test('세션 복원: 갈아타기 직전 flush()가 예약된 보고를 지금 흘린다', async () => withWorkspaceGlobal(async ({ registered, reports }) => {
+  const made = makeCanvas({ result: async () => ({ status: 'done', metrics: {}, stdout: '' }) });
+  made.canvas.mount();
+  await flush();
+  const handler = registered[0][1];
+  await handler.restore(RESTORE_WORKSPACE);
+  await flush();
+  const before = reports.length;
+  handler.flush();
+  assert.equal(reports.length, before + 1);
+  assert.deepEqual(reports[reports.length - 1].scroll, { top: 120 });
+  // 흘린 뒤에는 예약이 남지 않는다 — 전환 뒤에 한 번 더 터지면 남의 기록에 적힌다.
+  handler.flush();
+  assert.equal(reports.length, before + 1);
+}));
+
+test('세션 복원: 되돌린 스크롤 자리는 다시 그려도 남고 사람이 굴리면 놓는다', async () => withWorkspaceGlobal(async ({ registered, reports }) => {
+  const made = makeCanvas({
+    result: async () => ({ status: 'done', metrics: {}, stdout: '' }),
+    trades: async () => [],
+  });
+  made.canvas.mount();
+  await flush();
+  await registered[0][1].restore(RESTORE_WORKSPACE);
+  await flush();
+  assert.equal(findByClass(made.container, 'backtest-body')[0].scrollTop, 120);
+  // 탭을 옮기면 새 몸통이 선다 — 저장된 자리는 그 몸통에도 다시 서야 한다.
+  made.canvas.onChatAction({ kind: 'navigate', tab: 'result' });
+  await flush();
+  const body = findByClass(made.container, 'backtest-body')[0];
+  assert.equal(body.scrollTop, 120);
+  // 사람이 굴리면 그 자리는 사람의 것이다 — 되돌리기를 그만두고 굴린 자리를 봉인한다.
+  body.scrollTop = 40;
+  await body.dispatchEvent({ type: 'scroll' });
+  await runPending(made);
+  assert.deepEqual(reports[reports.length - 1].scroll, { top: 40 });
 }));
 
 test('세션 복원: 늦게 도착한 기법 목록이 복원한 자리를 뺏지 않는다', async () => withWorkspaceGlobal(async ({ registered }) => {

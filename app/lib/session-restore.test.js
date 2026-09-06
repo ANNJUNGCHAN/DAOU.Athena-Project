@@ -80,9 +80,10 @@ test('결과만 못 찾으면 이름을 대고 나머지는 그대로라고 말�
     form: sealed.form.fields, code: true, result: false, log: true,
   });
   assert.equal(report.partial, true);
-  assert.deepEqual(report.missing, ['결과']);
-  assert.deepEqual(report.kept, ['전략 폼', '전략 코드', '실행 로그']);
-  assert.equal(report.message, '결과를 찾지 못했습니다. 전략 폼 · 전략 코드 · 실행 로그는 그대로입니다.');
+  // Paper 3WO4-1의 문면 그대로 — 못 찾은 자리에만 수량이 붙는다.
+  assert.deepEqual(report.missing, ['결과 데이터셋 1장']);
+  assert.deepEqual(report.kept, ['폼', '코드', '로그']);
+  assert.equal(report.message, '결과 데이터셋 1장을 찾지 못했습니다. 폼·코드·로그는 그대로입니다.');
 });
 
 test('폼이 덜 돌아오면 그 항목이 실패고 카운트가 남는다', () => {
@@ -90,8 +91,8 @@ test('폼이 덜 돌아오면 그 항목이 실패고 카운트가 남는다', (
   const report = Restore.restoreReport(sealed, { form: ['symbols', 'period'], code: false });
   assert.deepEqual(report.form, { restored: 2, sealed: 6 });
   assert.equal(report.items[0].ok, false);
-  assert.deepEqual(report.missing, ['전략 폼', '전략 코드']);
-  assert.equal(report.message, '전략 폼 · 전략 코드를 찾지 못했습니다.');
+  assert.deepEqual(report.missing, ['폼', '코드']);
+  assert.equal(report.message, '폼·코드를 찾지 못했습니다.');
 });
 
 test('봉인하지 않은 칸이 돌아왔다고 보고돼도 세지 않는다', () => {

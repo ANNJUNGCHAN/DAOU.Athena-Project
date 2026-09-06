@@ -3,8 +3,9 @@
 // chat.js의 restoreConversation은 어느 모드가 무엇을 저장하는지 모른다 — kind로 찾아
 // 넘길 뿐이다. 보고는 조각(patch)이고 병합·저장 시점은 main·session-bridge가 정한다.
 //
-// 등록:  window.AthenaSessionWorkspace.register('backtest', { restore(workspace) {...} })
+// 등록:  window.AthenaSessionWorkspace.register('backtest', { restore(workspace) {...}, flush() {...} })
 // 보고:  window.AthenaSessionWorkspace.report({ form: {...} })   // 바뀐 조각만
+// 흘리기: window.AthenaSessionWorkspace.flush()  // 세션 전환 직전, 지연 보고를 지금 보낸다
 // 복원:  restore(workspace) — workspace.kind의 핸들러에 통째로 넘긴다. 핸들러가 없으면 false.
 (function () {
 'use strict';
@@ -32,6 +33,17 @@ function createSessionWorkspace({ send, warn } = {}) {
     return true;
   }
 
+  // 세션을 갈아타기 직전에 부른다 — 모드가 지연 보고(디바운스)를 들고 있으면 지금 흘린다.
+  // main은 **받은 시점의** 세션에 적으므로(historyConversationId), 전환 뒤에 도착한 보고는
+  // 앞 세션의 작업공간을 다음 세션의 기록에 적는다.
+  function flush() {
+    for (const [kind, handler] of handlers) {
+      if (!handler || typeof handler.flush !== 'function') continue;
+      try { handler.flush(); }
+      catch (error) { complain(`workspace flush(${kind}) failed — ${String((error && error.message) || error)}`); }
+    }
+  }
+
   // 복원. 핸들러가 던져도 복원 전체(메시지·초안·스크롤)는 이미 끝났으니 여기서 삼키고 알린다.
   function restore(workspace) {
     if (!workspace || typeof workspace !== 'object' || typeof workspace.kind !== 'string') return false;
@@ -49,7 +61,7 @@ function createSessionWorkspace({ send, warn } = {}) {
     }
   }
 
-  return { register, has, report, restore };
+  return { register, has, report, flush, restore };
 }
 
 const __exports = { createSessionWorkspace };
