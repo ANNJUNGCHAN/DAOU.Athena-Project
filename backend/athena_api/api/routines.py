@@ -199,7 +199,7 @@ def _detail_view(spec: Any, runtime: RoutinesRuntime) -> dict[str, Any]:
         check = _watch_last(runtime, spec, "check")
         # 고침 한 바퀴 — 직전 판과 지금 검사를 맞대야 「방금 바뀜」과 「4번 → 2번」이
         # 나온다. 고친 적이 없으면 cycle은 None이고 노드도 손대지 않는다(첫 검사).
-        cycle = fix_cycle(spec.revisions, check)
+        cycle = fix_cycle(spec.revisions, check, status=spec.status)
         if cycle is not None and check is not None:
             check = dict(check)
             previous = WatchRevision.from_dict(spec.revisions[-1])
@@ -495,8 +495,12 @@ async def check_watch_code(request: Request, body: dict[str, Any]) -> dict[str, 
         "nodes": payload["nodes"],
         "observed": result.last_verdict,
         "duration_ms": result.duration_ms,
+        "ok": result.ok,
         "skip_reason": result.reason,
         "count": result.count,
+        # 검사가 실제로 센 마지막 날(KST) — 고침 전후 점 띠의 마지막 칸이다.
+        # `checked_at`은 UTC라 KST 새벽에는 날짜가 하루 뒤처진다.
+        "counted_through": (today - timedelta(days=1)).isoformat(),
         "counted_until": result.counted_until,
         # 고침 전후 비교가 읽는 두 칸 — 울린 날 목록과 센 구간이다.
         "fires": list(payload["fires"]),
@@ -720,7 +724,8 @@ async def rollback_watch_fix(request: Request, routine_id: str) -> dict[str, Any
 
     되돌리는 것은 파일이 먼저다: 해시만 되돌리면 디스크의 코드와 알람이 어긋나
     `can_activate`가 「검사 뒤 코드가 바뀜」으로 막는다. 접어 둔 검사 결과도 같이
-    되돌아간다 — 그 결과는 이 바이트가 실제로 낸 것이다.
+    되돌아간다 — 그 결과는 이 바이트가 실제로 낸 것이다. 해시는 되쓰는 원문에서
+    다시 센다 — 판에 접힌 해시는 검사 없이 두 번 착지하면 그 원문의 것이 아니다.
 
     켜져 있는 알람은 못 되돌린다(R10과 같은 규칙) — 돌고 있는 코드가 사람 확정
     없이 바뀌면 안 된다.
@@ -754,7 +759,7 @@ async def rollback_watch_fix(request: Request, routine_id: str) -> dict[str, Any
     tmp.write_bytes(data)
     os.replace(tmp, target)
 
-    spec.watch = replace(spec.watch, version_hash=entry.version_hash)
+    spec.watch = replace(spec.watch, version_hash=hashlib.sha256(data).hexdigest())
     spec.revisions = spec.revisions[:-1]
     if entry.check:
         runtime.watch_last[f"check:{spec.id}"] = dict(entry.check)

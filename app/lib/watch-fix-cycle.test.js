@@ -11,8 +11,11 @@ function envelope(over) {
     fix_count: 2,
     past_count: 1,
     checked_at: '2026-09-05T06:31:00+00:00',
+    counted_through: '2026-09-04',
     lookback_days: 30,
     duration_ms: 9000,
+    ok: true,
+    skip_reason: null,
     fires_before: 4,
     fires_after: 2,
     fires_before_dates: ['2026-08-12', '2026-08-19', '2026-08-26', '2026-09-01'],
@@ -52,12 +55,19 @@ test('센 값이 없으면 그 줄을 지어내지 않는다', () => {
   assert.equal(m.dotNote, '');
 });
 
-test('점 띠는 센 구간만큼이고 어제까지다', () => {
+test('점 띠는 센 구간만큼이고 마지막 칸이 마지막으로 센 날이다', () => {
   const dots = Cycle.dotStrip(envelope());
   assert.equal(dots.length, 30);
   assert.equal(dots[0].date, '2026-08-06');
   assert.equal(dots[29].date, '2026-09-04');
   assert.ok(!dots.some((d) => d.date === '2026-09-05'));
+});
+
+test('띠는 검사 시각이 아니라 센 마지막 날로 창을 잡는다', () => {
+  // 검사 시각은 UTC(KST 새벽이면 하루 앞) — 그래도 창은 안 밀린다.
+  const dots = Cycle.dotStrip(envelope({ checked_at: '2026-09-04T21:31:00+00:00' }));
+  assert.equal(dots[29].date, '2026-09-04');
+  assert.deepEqual(Cycle.dotStrip(envelope({ counted_through: null })), []);
 });
 
 test('고치기 전에만 울린 날이 회색이고 지금도 울리는 날은 표시다', () => {
@@ -88,6 +98,20 @@ test('영수증은 바뀐 칸을 번호로 세고 마지막에 판정을 붙인�
   assert.equal(m.receiptRows[0].text, '평균 일수 3일 → 5일');
   assert.equal(m.receiptRows[1].text, '배수 1.5배 → 2.0배');
   assert.equal(m.receiptRows[2].text, '다시 검사 통과 · 노드 2개 다시 그림');
+});
+
+test('다시 검사가 안 통과하면 판정 줄도 센 값도 없다', () => {
+  // 코드가 돌다 터진 검사도 노드는 채운 채 0번·빈 목록으로 온다(watch/check).
+  const m = Cycle.cycleModel(envelope({
+    ok: false, skip_reason: '검사 실패 — 코드가 돌지 않음',
+    fires_before: 4, fires_after: 0, fires_after_dates: [],
+  }));
+  assert.deepEqual(m.receiptRows.map((r) => r.mark), ['1', '2']);
+  assert.equal(m.before, '');
+  assert.equal(m.after, '');
+  assert.equal(m.afterDates, '');
+  assert.deepEqual(m.dots, []);
+  assert.equal(m.dotNote, '');
 });
 
 test('바뀐 칸이 없으면 판정 줄도 없다', () => {
