@@ -222,6 +222,18 @@ async function runStep(win, step) {
       if (!sent) throw new Error('커맨드바 #input이 없다');
       return;
     }
+    case 'type': {
+      // 입력한 글자 자체가 화면인 자리(사이드바 검색 패널)를 만든다. 앱이 듣는 것은
+      // `input` 하나뿐이라 그것만 쏜다 — Enter는 고른 줄을 열어 패널을 닫는다.
+      await actWhenPresent(
+        win,
+        step.selector,
+        `el.value = ${JSON.stringify(step.text)};`
+        + "el.dispatchEvent(new Event('input', { bubbles: true }));",
+        '글자를 넣을 입력창이 없다',
+      );
+      return;
+    }
     case 'boot-hold': {
       // 부팅 창을 `?bootHoldChars=N`으로 다시 읽어 그 단계에 세운다(chat.js의
       // 같은 이름 블록). 러너의 재읽기만으로는 다섯 단계가 전부 마지막 프레임으로

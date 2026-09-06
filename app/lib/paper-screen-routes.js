@@ -57,6 +57,15 @@ const STEP_KINDS = Object.freeze({
   mode: Object.freeze(['view']),
   // command-bar text — 입력창에 문장을 넣고 Enter (verify.js openSettingsViaCommandBar)
   'command-bar': Object.freeze(['text']),
+  // type      selector,text — 그 입력창에 문장을 넣고 `input` 이벤트를 쏜다.
+  //                           `command-bar`가 셸의 채팅 입력 하나에 Enter까지 박아 둔
+  //                           것과 달리 창 안의 아무 입력창이나 채운다. 입력한 글자
+  //                           자체가 화면인 자리가 있어서다: 사이드바 검색 결과 패널은
+  //                           질의가 비면 통째로 hidden이고(sidebar.js renderSearchPanel),
+  //                           그 입력창을 채우는 문이 앱 어디에도 클릭으로는 없다.
+  //                           Enter를 안 누르는 것도 일부러다 — Enter는 고른 줄을 열어
+  //                           패널을 닫는다. 되돌릴 것은 없다(라우트마다 창을 다시 읽는다).
+  type: Object.freeze(['selector', 'text']),
   // ipc-fixture channel,data — 핸들러를 갈아끼운다(probe-agent-paper-parity.js:126-140과
   //                            같은 규약). data는 핸들러가 그대로 돌려줄 값이다 — 봉투는
   //                            채널마다 다르다: athena:routines-list는 {ok,data}
@@ -151,6 +160,19 @@ const PAPER_ACCOUNTS = Object.freeze({
     { id: 'fx-a2', alias: '모의-테스트', active: false, connected: false, appKeyChars: 36, orderApi: false },
   ],
 });
+
+// 보드 32의 「투자 성향」 구역 — 학습된 성향이 없으면 카드가 빈 상태를 그려
+// 「대화에서 학습됨」 꼬리표가 안 붙는다(settings-cards.js fillHistorySections).
+// 판정이 이 컴퓨터의 브레인에 좌우되지 않게 상위 신호 한 줄을 못 박는다.
+// 대상 이름은 값이라 phrases에 한 글자도 넣지 않는다.
+const HISTORY_PROFILE = Object.freeze({
+  ok: true,
+  entries: [{ entity_name: '반도체 대형주', relation_kind: 'interested_in', reinforcement: 4 }],
+});
+
+// 같은 카드의 「보관 중」 한 줄. 백엔드가 답하지 않으면 그 자리가 오류 문구로
+// 바뀐다 — 건수는 값이라 phrases에 안 넣고, 이 봉투는 줄이 서게만 한다.
+const HISTORY_CONVERSATION_COUNT = Object.freeze({ ok: true, conversations: 128 });
 
 // 계좌 등록 시트의 두 결말(보드 16·17). verifyOnly 왕복이 돌려주는 봉투 모양 그대로다
 // (lib/main/accounts.js register — 실패는 {ok:false,error}, 검증 성공은 {ok:true,verified}).
@@ -358,6 +380,24 @@ const SIDEBAR_HISTORY = Object.freeze({
     { id: 'fx-s7', title: '백엔드 API 개수 확인', projectId: 'fx-p2', mode: 'chat' },
     { id: 'fx-s8', title: '앱 전체 기능 검수', projectId: 'fx-p2', mode: 'chat' },
   ],
+});
+
+// 보드 34의 검색 결과 — 같은 목록에 질의에 걸리는 대화 두 줄을 더한다. 부분일치라
+// 아무 목록이나 되는 것이 아니다: 결과 패널은 걸린 것이 있을 때만 그룹을 만든다
+// (sidebar-search.js buildSearchResults). 대화 제목은 값이라 phrases에 안 넣는다.
+const SIDEBAR_SEARCH_HISTORY = Object.freeze({
+  ...SIDEBAR_HISTORY,
+  conversations: [...SIDEBAR_HISTORY.conversations,
+    { id: 'fx-s9', title: '삼성전자 수급 누가 사는지 알려줘', projectId: 'fx-p1', mode: 'chat' }],
+});
+
+// 보드 34의 「캔버스 카드 1건」 — 검색은 #grid에 실제로 붙어 있는 카드만 읽는다
+// (sidebar.js collectCanvasCards). 카드가 없으면 그 그룹이 아예 안 생겨 Paper가
+// 그린 두 그룹을 못 만든다. 카드 제목은 값이라 phrases에 한 글자도 안 넣는다.
+const SEARCH_CANVAS_CARD = Object.freeze({
+  canvas_type: 'reader',
+  caption: '차트 · 삼성전자 일봉',
+  data: { title: '차트 · 삼성전자 일봉', body_markdown: '일봉' },
 });
 
 // 보드 37만 프로젝트를 셋 그린다(아테나 · 키움 리서치 · 개인 연구) — 같은 목록에 한 줄을 더한다.
@@ -618,6 +658,47 @@ const CODE_RUNS = Object.freeze({
 
 const CODE_DETAIL_FIRST_CHECK = paperCodeDetail('check', WATCH_NODES_FIRST);
 const CODE_DETAIL_ACTIVE = paperCodeDetail('run', WATCH_NODES_LIVE);
+
+// 검사 한 번의 응답(보드 09의 자동 검사 진행 패널이 읽는 그것) — 초안 카드의
+// 「검사」 칩이 부르는 athena:routine-watch-check가 돌려주는 봉투 모양 그대로다
+// (chat.js runWatchCheck가 res.data를 그대로 넘긴다). 원 핸들러를 부르면 백엔드가
+// 지난 30일을 실제로 돌려 판정이 이 컴퓨터의 회선과 시계에 좌우된다.
+// 종목·배수·걸린 시간은 전부 값이라 phrases에 한 글자도 넣지 않는다.
+const WATCH_CHECK_DONE = Object.freeze({
+  ok: true,
+  data: {
+    ok: true,
+    symbol: '005930',
+    lookback_days: 30,
+    count: 4,
+    last_fire: '2026-08-26',
+    fires: [{ dt: '2026-08-26', close: 71000 }],
+    nodes: WATCH_NODES_FIRST,
+    warnings: [],
+    duration_ms: 12000,
+    counted_until: '2026-09-04',
+    reason: null,
+  },
+});
+
+// 제어가 백엔드에 거절당한 답(보드 08의 「실패 · 재시도」 열). 취소 왕복이 실제로
+// 실패해야 결과 턴이 실패로 그려지는데, 원 핸들러는 fixture 루틴을 모르는 백엔드로
+// 나가 무엇을 답할지 이 컴퓨터에 좌우된다. 사유 문장은 값이라 phrases에 안 넣는다.
+const ROUTINE_CANCEL_REFUSED = Object.freeze({ ok: false, error: '이미 발화된 예약' });
+
+// 성향 제안 한 줄 — 보드 08의 「거부」 열은 제안 카드의 [보류]를 누른 결과다.
+// 이 봉투가 없으면 제안 뷰가 이 컴퓨터의 브레인에 좌우돼 카드가 아예 없을 수 있다
+// (agent-canvas.js renderProactiveCards의 빈 상태). 대상 이름·보강 수는 값이다.
+const PROACTIVE_SUGGESTION = Object.freeze({
+  ok: true,
+  entries: [{
+    entity_id: 'fx-e1',
+    entity_name: '외국인 순매수',
+    relation_kind: 'interested_in',
+    reinforcement: 3,
+    rationale: '3일 연속 순매수를 물었습니다',
+  }],
+});
 
 // ── 플러그인 페이지(B-2) fixture ────────────────────────────────────────────
 // 플러그인 화면은 이 컴퓨터에 실제로 등록된 MCP 서버를 그린다 — 검사 프로필은
@@ -1790,6 +1871,80 @@ const ROUTES = Object.freeze([
     ],
   },
 
+  {
+    board: '4330-1', // 08 · 에이전트 대화 — 결과 턴
+    window: 'shell',
+    // 결과 턴은 캔버스에서 칩을 누른 뒤에만 같은 방에 붙는다(chat.js의
+    // athena:routine-control-result 구독) — 부팅 직후 #history는 비어 있다.
+    // 그래서 이 라우트는 네 상태 중 클릭으로 만들 수 있는 둘을 실제로 만든다:
+    // 제안 카드의 [보류](거부)와, 백엔드가 거절한 [취소](실패·재시도).
+    // 「성공」·「뷰 이동」은 적지 않는다 — 성공의 배지·리드(「작업 설정」·「쿨다운
+    // 600초 반영」)를 앱이 그 낱말로 쓰지 않고, 뷰 이동은 채팅이 에이전트 뷰를
+    // 옮기는 길 자체가 아직 없다(routine-control-turn.js 머리말의 그 사실).
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:brain-profile-summary', data: PROACTIVE_SUGGESTION },
+      { do: 'ipc-fixture', channel: 'athena:routines-list', data: CODE_WATCH_ACTIVE },
+      { do: 'ipc-fixture', channel: 'athena:routine-detail', data: CODE_DETAIL_ACTIVE },
+      { do: 'ipc-fixture', channel: 'athena:routine-runs', data: CODE_RUNS },
+      { do: 'ipc-fixture', channel: 'athena:routine-cancel', data: ROUTINE_CANCEL_REFUSED },
+      { do: 'mode', view: 'agent' },
+      { do: 'click', selector: '.agent-view-tab[data-view="proactive"]' },
+      { do: 'wait', ms: 700 },
+      // 카드 머리의 둘째 칩이 [보류]다(첫째는 [루틴으로] — is-primary).
+      { do: 'click', selector: '.agent-proactive-card-head .agent-proactive-chip:not(.is-primary)' },
+      { do: 'wait', ms: 200 },
+      { do: 'click', selector: '.agent-view-tab[data-view="tasks"]' },
+      { do: 'wait', ms: 700 },
+      { do: 'click', selector: '.agent-row' },
+      { do: 'wait', ms: 400 },
+      { do: 'click', selector: '.agent-code-cancel' },
+      { do: 'wait', ms: 500 },
+      { do: 'settle' },
+    ],
+    root: '#history',
+    // 배지·판정·상태 리드만 담는다. 실패의 리드(「이미 발화된 예약」)와 사실행은
+    // 백엔드 거절 사유와 원장 값이라 한 글자도 안 넣는다.
+    phrases: ['제안 채택', '보류', '보류 — 목록 유지', '실패', '다시 시도'],
+    // 이 보드의 계약 — 제어 한 번에 결과 한 건이고, 다음 행동(칩)은 실패에만 붙는다
+    // (거부는 서버 상태가 안 바뀐 채로 끝난 일이다).
+    structure: [
+      { what: 'count', selector: '.control-result', equals: 2 },
+      { what: 'count', selector: '.control-result .routine-approval-actions', equals: 1 },
+    ],
+  },
+  {
+    board: '43WD-1', // 09 · 에이전트 — 새 알람 · 자동 검사 진행
+    window: 'shell',
+    // 진행 패널은 초안 카드의 [검사]를 누른 뒤 검사 결과 카드 안에 선다
+    // (chat.js appendWatchProgress). 초안 카드 자체는 부팅의 refreshRoutineDrafts가
+    // 목록에서 draft를 보고 세우므로, 목록을 코드 알람 초안으로 갈아끼운다.
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:routines-list', data: CODE_WATCH_DRAFT },
+      { do: 'ipc-fixture', channel: 'athena:routine-detail', data: CODE_DETAIL_FIRST_CHECK },
+      { do: 'ipc-fixture', channel: 'athena:routine-watch-check', data: WATCH_CHECK_DONE },
+      // 초안 카드를 세우는 것은 목록 재조회 하나뿐이고(refreshRoutineDrafts), 그것을
+      // 다시 부르는 문은 턴 종료다 — 부팅의 한 번은 fixture를 걸기 전에 이미 지나갔다.
+      // 그래서 질의를 한 번 돌린다(검사 프로필은 캔버스가 fixture 출처라 왕복이 없다).
+      { do: 'command-bar', text: '삼성전자 시세' },
+      { do: 'wait', ms: 2500 },
+      { do: 'click', selector: '.routine-approval-actions button.routine-btn:not(.routine-btn-approve)' },
+      { do: 'wait', ms: 600 },
+      { do: 'settle' },
+    ],
+    root: '#history',
+    // Paper 보드 09의 절반은 아직 앱에 없다 — 「AI가 감시 함수를 만드는 중」 상태 띠와
+    // [그만두기], 값이 안 채워진 노드 자리(「만드는 중 …」·「질문 답 기다림」),
+    // 「언제 확인할까요?」류 질문 카드가 그것이다(앱 전체 grep 0건). 있는 것만 잠근다:
+    // 자동 검사 진행 패널의 머리 둘과 발치 고지, 그리고 검사 카드의 갈래말이다.
+    // 다섯 줄의 본문은 전부 숫자를 품어 문구 후보에서 빠진다(E 규칙) — 개수로만 잰다.
+    phrases: ['새 알람', '자동 검사', '코드가 바뀔 때마다', '격리 실행 · 계좌·주문 접근 없음 · 30초 제한'],
+    // 보드 09의 자동 검사 패널은 다섯 줄에 발치 고지 하나다.
+    structure: [
+      { what: 'count', selector: '.watch-progress-line', equals: 5 },
+      { what: 'count', selector: '.watch-progress-notice', equals: 1 },
+    ],
+  },
+
   // ---------- 화면 4장 (1-0 설정 3 + D-2 그래프 1) ----------
   {
     board: 'AJ-0', // 13 · 설정 — 셸 오버레이
@@ -1853,6 +2008,41 @@ const ROUTES = Object.freeze([
       '이 컴퓨터에서 감지된 Claude 계정이다. 새 계정은 여기에 추가된다.',
     ],
     structure: [],
+  },
+  {
+    board: '2UWT-1', // 32 · 설정 — 성향·이력
+    window: 'shell',
+    reach: [
+      // 두 구역 다 브레인 왕복 뒤에 채워진다(settings-cards.js fillHistorySections).
+      // 봉투가 없으면 성향 구역이 빈 상태로, 보관 구역이 오류 문구로 떨어져
+      // 판정이 이 컴퓨터에 쌓인 대화에 좌우된다.
+      { do: 'ipc-fixture', channel: 'athena:brain-profile-summary', data: HISTORY_PROFILE },
+      { do: 'ipc-fixture', channel: 'athena:brain-conversations-count', data: HISTORY_CONVERSATION_COUNT },
+      { do: 'command-bar', text: '설정' },
+      { do: 'click', selector: '.settings-nav-item[data-key="history"]' },
+      { do: 'settle' },
+    ],
+    root: '#settings',
+    // Paper가 그린 값 넉 줄(성향 이름·한 문장 요약·위험 성향·보존 기간)은 앱에 오는
+    // 길이 없어 앱이 그 행을 만들지 않는다 — 그래서 라벨만 적는다. 「보관 중」·
+    // 「주요 관심」·「성향 반영」도 뺐다: 셋 다 값이 와야 서는 행이라, 값을 못 박는
+    // 봉투를 지우면 문구가 같이 사라져 라우트가 봉투를 재게 된다.
+    phrases: [
+      '성향·이력',
+      '로컬 보관 · 언제든 내보내기 가능',
+      '투자 성향',
+      '대화에서 학습됨',
+      '대화 이력',
+      '이력 내보내기',
+      '삭제는 확인 단계를 한 번 더 거치며 되돌릴 수 없습니다',
+    ],
+    // 보드 32의 본문은 두 구역(투자 성향 · 대화 이력)이고 발치의 문은 둘이다
+    // ([이력 내보내기][전체 삭제]). 사이드바 줄 수는 안 적는다 — Paper는 「플러그인」을
+    // 넣어 5줄인데 앱 NAV_ITEMS는 4줄이다(보드 13·14·18과 같은 어긋남).
+    structure: [
+      { what: 'count', selector: '.uk-history-section', equals: 2 },
+      { what: 'count', selector: '.uk-btn-row-end button', equals: 2 },
+    ],
   },
   {
     board: '3NE-0', // 01 · 셸 — 그래프 모드 · 요약 뷰
@@ -2654,6 +2844,42 @@ const ROUTES = Object.freeze([
         equals: ['대화', '그래프', '에이전트', '플러그인', '백테스트'],
       },
       { what: 'count', selector: '.sidebar-project', equals: 2 },
+    ],
+  },
+  {
+    board: '2V27-1', // 34 · 사이드바 검색 — 결과·빈 결과
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:conversations-list', data: SIDEBAR_SEARCH_HISTORY },
+      { do: 'send', channel: 'athena:session-run-state', data: { id: 'fx-reload' } },
+      { do: 'wait', ms: 300 },
+      // 캔버스 카드 그룹은 #grid에 카드가 실제로 붙어 있어야 생긴다.
+      { do: 'envelope', data: SEARCH_CANVAS_CARD },
+      { do: 'wait', ms: 300 },
+      // 입력창은 hidden으로 시작하고 이 버튼이 그것을 여는 유일한 문이다.
+      { do: 'click', selector: '#sidebarSearchToggle' },
+      { do: 'type', selector: '#sidebarSearchInput', text: '삼성전자' },
+      { do: 'settle' },
+    ],
+    root: '#historyRegion',
+    // 대화 제목·카드 제목·건수는 전부 값이라 한 글자도 안 넣는다. 패널이 실제로
+    // 열렸을 때만 그려지는 것은 발치 안내 하나고, 나머지 다섯은 사이드바 구역·모드
+    // 이름이다. Paper의 「대화·카드 검색」은 <input>의 placeholder라 문구가 못 되고
+    // (표 머리말의 그 따름), 빈 결과판의 「아직 이 주제로 나눈 대화가 없습니다」와
+    // [새 대화로 물어보기]는 앱에 없어 적지 않는다 — 앱의 빈 결과는 한 줄뿐이다.
+    phrases: [
+      '↑↓ 이동 · Enter 열기 · Esc 닫기',
+      '프로젝트',
+      '최근',
+      '그래프',
+      '에이전트',
+      '플러그인',
+    ],
+    // Paper가 그린 패널 그대로 — 그룹 둘(대화 · 캔버스 카드)에 줄 셋, 발치에 총 건수.
+    structure: [
+      { what: 'count', selector: '.sidebar-search-group-label', equals: 2 },
+      { what: 'count', selector: '.sidebar-search-row', equals: 3 },
+      { what: 'count', selector: '.sidebar-search-count', equals: 1 },
     ],
   },
   {
