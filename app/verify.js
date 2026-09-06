@@ -1956,6 +1956,52 @@ app.whenReady().then(async () => {
     }
   }
 
+  // ---------- 검증 3b-2: 작성창 툴바·모델 팝오버가 활성 공급자를 그대로 말한다 ----------
+  // 위 반응형 행렬은 라벨 개수와 클릭 가능만 재서 disabled를 구분하지 못한다. 여기서는
+  // 실제 DOM으로 둘을 잰다: 툴바 라벨이 활성 계정 공급자의 어휘인지, 미연결 공급자의
+  // 칩이 실제로 잠겼는지. 이 컴퓨터에 Grok이 있든 없든 도는 자기일관성 판정이다.
+  await shellWin.webContents.executeJavaScript(`document.getElementById('modelBtn').click()`);
+  await waitUntil(
+    () => shellWin.webContents.executeJavaScript(`document.getElementById('modelPopover').hidden === false`),
+    { timeoutMs: 1500, intervalMs: 25 },
+  );
+  const providerSurface = await shellWin.webContents.executeJavaScript(`(() => {
+    const providers = (cliStateCache && cliStateCache.providers) || [];
+    const active = providers.find((p) => ((p && p.accounts) || []).some((a) => a && a.active));
+    const grok = providers.find((p) => p && p.id === 'grok');
+    const rows = Array.from(document.querySelectorAll('#modelPopover .mp-row'))
+      .map((r) => Array.from(r.querySelectorAll('.mp-chip')).map((c) => ({ label: c.textContent, disabled: c.disabled })));
+    return {
+      activeProvider: active && active.id === 'grok' ? 'grok' : 'claude',
+      grokConnected: !!(grok && (grok.accounts || []).length > 0),
+      modelLabel: document.getElementById('modelBtn').textContent,
+      effortLabel: document.getElementById('effortBtn').textContent,
+      titles: Array.from(document.querySelectorAll('#modelPopover .mp-title')).map((n) => n.textContent),
+      claudeRows: rows.slice(0, 2),
+      grokRows: rows.slice(2),
+    };
+  })()`);
+  await shellWin.webContents.executeJavaScript(`closeModelPopover()`);
+  console.log('[verify] 검증3b-2(공급자 표면):', JSON.stringify(providerSurface));
+  report.providerSurface = providerSurface;
+  {
+    const claudeModels = ['Claude', '기본', 'Fable', 'Opus', 'Sonnet', 'Haiku'];
+    const grokModels = ['Grok', '기본', 'Grok-4.6', 'Grok-4.5'];
+    const efforts = ['기본', 'Low', 'Medium', 'High', 'Xhigh', 'Max'];
+    const g = providerSurface.grokConnected;
+    assertOk('providerSurface: composer toolbar speaks the active account provider',
+      (providerSurface.activeProvider === 'grok' ? grokModels : claudeModels).includes(providerSurface.modelLabel)
+      && efforts.includes(providerSurface.effortLabel));
+    assertOk('providerSurface: unconnected provider chips are locked, connected ones are not',
+      providerSurface.titles.length === 4
+      && providerSurface.titles[2] === (g ? 'Grok 모델' : 'Grok 모델 · 연결 후 사용')
+      && providerSurface.titles[3] === (g ? 'Grok 사고 강도' : 'Grok 사고 강도 · 연결 후 사용')
+      && providerSurface.claudeRows.length === 2
+      && providerSurface.claudeRows.every((row) => row.length > 0 && row.every((c) => c.disabled === false))
+      && providerSurface.grokRows.length === 2
+      && providerSurface.grokRows.every((row) => row.length > 0 && row.every((c) => c.disabled === !g)));
+  }
+
   // ---------- 검증 3c: Paper 플러그인 01~04 (기능 허용·설치 승인·허브·관리) ----------
   // 레지스트리를 검증 프로필로 격리했으므로(상단 ATHENA_MCP_REGISTRY_PATH) 이
   // 시점의 설치 목록은 항상 비어 있다 — 추천은 내장 카탈로그 5종 전부다.

@@ -1357,8 +1357,6 @@ async function refreshModelCard(card, head, body) {
   body.appendChild(buildModelSection({
     title: 'Grok',
     provider: grokProvider,
-    description: '이 컴퓨터의 Grok CLI 로그인을 그대로 쓴다. 계정을 여러 개 오가려면 여기서 추가한다 — 로그인은 새 터미널 창에서 끝난다.',
-    accountsHint: '이 컴퓨터에서 감지된 Grok 계정이다. 새 계정은 여기에 추가된다.',
     sourceLabel: (acc) => (acc.current ? '현재 CLI 로그인' : '이전 CLI 로그인'),
     modelState: modelState && modelState.grok,
     modelChips: GROK_MODEL_CHIPS,

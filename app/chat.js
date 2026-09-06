@@ -2560,11 +2560,16 @@ async function refreshModelState() {
   } catch {
     // 상태를 못 읽으면 캐시를 갱신하지 않는다 — 추측값을 쓰지 않는다(정보 정직성).
   }
-  try {
-    cliStateCache = await window.athena.invoke('athena:cli-list');
-  } catch {
-    // 위와 같은 이유 — 못 읽으면 이전에 읽은 것을 그대로 쓴다.
-  }
+  if (!$modelPopover.hidden) renderModelPopover();
+  renderComposerModel();
+}
+
+// CLI 목록은 왕복이 비싸다 — 핸들러가 `codex login status` 자식 프로세스를 띄우고
+// 최대 5초까지 기다린다(main.js handleCliList). 그래서 팝오버 열기도 첫 페인트도
+// 이 왕복을 기다리지 않는다: 있는 캐시로 먼저 그리고, 값이 오면 다시 그린다.
+function applyCliState(list) {
+  if (!list) return; // 못 읽으면 이전에 읽은 것을 그대로 쓴다 — 추측값을 쓰지 않는다.
+  cliStateCache = list;
   if (!$modelPopover.hidden) renderModelPopover();
   renderComposerModel();
 }
@@ -2884,9 +2889,11 @@ document.addEventListener('mousedown', (e) => {
 });
 window.athena.on('athena:model-changed', () => refreshModelState());
 // 계정 전환·로그인이 활성 공급자를 바꾸면 툴바 라벨과 Grok 잠금도 따라가야 한다
-// (설정 모델 카드가 구독하는 그 신호 — settings-cards.js renderModel).
-window.athena.on('athena:cli-changed', () => refreshModelState());
+// (설정 모델 카드가 구독하는 그 신호 — settings-cards.js renderModel). 이벤트가
+// 목록을 그대로 싣고 오므로(main.js broadcastCliChanged) 다시 묻지 않는다.
+window.athena.on('athena:cli-changed', (list) => applyCliState(list));
 refreshModelState();
+window.athena.invoke('athena:cli-list').then(applyCliState, () => {});
 
 // Paper 54의 새 대화는 DOM만 비우는 동작이 아니다. 진행 중인 턴의 렌더 토큰을
 // 먼저 폐기해 이전 응답이 새 방에 뒤늦게 붙는 것을 막고, main의 실행도 함께
