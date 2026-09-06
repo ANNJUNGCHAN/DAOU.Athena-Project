@@ -1,0 +1,73 @@
+'use strict';
+
+// 공급자(Claude·Grok·Codex)가 화면에서 말하는 것과 앱이 실제로 도는 것이 어긋나지
+// 않는지 잰다. chat.js는 렌더러 전역이라 require로 부를 순수 모듈이 없어
+// product-copy-hygiene.test.js와 같은 방식으로 소스 텍스트를 읽는다.
+
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+
+const appDir = path.resolve(__dirname, '..');
+const settingsSource = fs.readFileSync(path.join(__dirname, 'settings-cards.js'), 'utf8');
+const chatSource = fs.readFileSync(path.join(appDir, 'chat.js'), 'utf8');
+const chatCss = fs.readFileSync(path.join(appDir, 'chat.css'), 'utf8');
+
+function body(source, signature) {
+  const escaped = signature.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const match = source.match(new RegExp(`${escaped}[\\s\\S]*?\\n\\}`));
+  assert.ok(match, `${signature} 가 있다`);
+  return match[0];
+}
+
+test('모델 카드 리드는 그 카드가 그리는 공급자를 하나도 빠뜨리지 않는다', () => {
+  for (const title of ["title: 'Claude'", "title: 'Grok'", "title: 'Codex'"]) {
+    assert.ok(settingsSource.includes(title), `${title} 섹션이 카드에 있다`);
+  }
+  assert.ok(settingsSource.includes('Claude·Grok·Codex CLI 로그인을 그대로 쓴다'));
+  assert.ok(!settingsSource.includes('Claude·Codex CLI 로그인을 그대로 쓴다'),
+    'Grok 섹션이 화면에 있는데 리드가 둘만 말하면 거짓말이다');
+});
+
+// 계정이 하나라도 감지되면 buildModelSection이 buildAccountCard를 부르고, 그것은
+// sourceLabel(acc)을 호출한다 — 없으면 던져서 그 아래 섹션과 안내문이 통째로
+// 사라진다(2026-09-06 Paper OJ-0 프로브 실측).
+test('계정 카드를 그리는 공급자 섹션은 모두 출처 문구를 넘긴다', () => {
+  const sections = settingsSource.match(/buildModelSection\(\{[\s\S]*?\n {2}\}\)\)/g) || [];
+  assert.equal(sections.length, 3, '모델 카드는 공급자 섹션 셋을 그린다');
+  for (const section of sections) {
+    assert.match(section, /sourceLabel:/, `sourceLabel 없는 섹션: ${section.slice(0, 60)}`);
+  }
+});
+
+test('작성창 툴바는 활성 계정의 공급자 값을 말한다', () => {
+  assert.match(body(chatSource, 'async function refreshModelState()'), /athena:cli-list/);
+
+  const provider = body(chatSource, 'function activeQueryProvider()');
+  assert.match(provider, /a\.active/);
+  assert.match(provider, /'grok'/);
+
+  const render = body(chatSource, 'function renderComposerModel()');
+  assert.match(render, /activeQueryProvider\(\)/);
+  assert.match(render, /modelStateCache\[provider\]/);
+  assert.match(render, /PILL_GROK_MODEL_CHIPS/);
+  assert.match(render, /PILL_GROK_EFFORT_CHIPS/);
+  assert.doesNotMatch(render, /modelStateCache\.claude/,
+    'Grok이 활성인데 Claude 값을 말하면 실행기와 다른 이름이 뜬다');
+
+  assert.match(chatSource, /window\.athena\.on\('athena:cli-changed', \(\) => refreshModelState\(\)\)/);
+});
+
+test('모델 팝오버의 Grok 칩은 연결 전에는 눌리지 않는다', () => {
+  const popover = body(chatSource, 'function renderModelPopover()');
+  assert.match(popover, /const grokLocked = !providerConnected\('grok'\)/);
+  assert.match(popover, /popoverSection\('Grok 모델',[^)]*grokLocked\)/);
+  assert.match(popover, /popoverSection\('Grok 사고 강도',[^)]*grokLocked\)/);
+
+  const section = body(chatSource, 'function popoverSection(');
+  assert.match(section, /b\.disabled = !!locked/);
+  assert.match(section, /연결 후 사용/);
+
+  assert.match(chatCss, /\.model-popover \.mp-chip:disabled\s*\{/);
+});

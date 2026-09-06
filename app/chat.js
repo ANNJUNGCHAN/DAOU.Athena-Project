@@ -2550,6 +2550,9 @@ const PILL_GROK_EFFORT_CHIPS = [
 ];
 
 let modelStateCache = null;
+// 활성 계정과 공급자 연결 여부(athena:cli-list — 설정 모델 카드가 읽는 그 채널).
+// 툴바 라벨이 어느 공급자의 값을 말할지, Grok 섹션을 잠글지가 여기서 갈린다.
+let cliStateCache = null;
 
 async function refreshModelState() {
   try {
@@ -2557,21 +2560,44 @@ async function refreshModelState() {
   } catch {
     // 상태를 못 읽으면 캐시를 갱신하지 않는다 — 추측값을 쓰지 않는다(정보 정직성).
   }
+  try {
+    cliStateCache = await window.athena.invoke('athena:cli-list');
+  } catch {
+    // 위와 같은 이유 — 못 읽으면 이전에 읽은 것을 그대로 쓴다.
+  }
   if (!$modelPopover.hidden) renderModelPopover();
   renderComposerModel();
 }
 
+// 질의가 실제로 도는 공급자. 활성 계정이 Grok이면 grok CLI, 그 밖(Claude·Codex·
+// 미연결)은 claude CLI다 — main.js resolveLiveQueryProviderId·noteLiveQueryProvider와
+// 같은 판정이라 툴바가 실행기와 다른 이름을 말하지 않는다.
+function activeQueryProvider() {
+  const providers = (cliStateCache && cliStateCache.providers) || [];
+  const active = providers.find((p) => ((p && p.accounts) || []).some((a) => a && a.active));
+  return active && active.id === 'grok' ? 'grok' : 'claude';
+}
+
+function providerConnected(id) {
+  const provider = ((cliStateCache && cliStateCache.providers) || []).find((p) => p && p.id === id);
+  return !!(provider && ((provider.accounts || []).length > 0));
+}
+
 // 툴바의 모델·강도 라벨(Paper 44) — 팝오버와 같은 어휘, 첫 글자만 대문자. 값이 없으면(기본값 위임)
-// 모델은 'Claude', 강도는 '기본' — "기본 기본"으로 읽히지 않게.
+// 모델은 활성 공급자 이름('Claude'·'Grok'), 강도는 '기본' — "기본 기본"으로 읽히지 않게.
 function composerChoiceLabel(chips, value, fallback) {
   const hit = chips.find((c) => c.value === value);
   const label = hit && hit.value !== null ? hit.label : fallback;
   return label.charAt(0).toUpperCase() + label.slice(1);
 }
 function renderComposerModel() {
-  const c = (modelStateCache && modelStateCache.claude) || { model: null, effort: null };
-  $modelBtn.textContent = composerChoiceLabel(PILL_MODEL_CHIPS, c.model, 'Claude');
-  $effortBtn.textContent = composerChoiceLabel(PILL_EFFORT_CHIPS, c.effort, '기본');
+  const provider = activeQueryProvider();
+  const grok = provider === 'grok';
+  const s = (modelStateCache && modelStateCache[provider]) || { model: null, effort: null };
+  $modelBtn.textContent = composerChoiceLabel(
+    grok ? PILL_GROK_MODEL_CHIPS : PILL_MODEL_CHIPS, s.model, grok ? 'Grok' : 'Claude');
+  $effortBtn.textContent = composerChoiceLabel(
+    grok ? PILL_GROK_EFFORT_CHIPS : PILL_EFFORT_CHIPS, s.effort, '기본');
 }
 async function openModelPopover() {
   await refreshModelState();
@@ -2585,10 +2611,12 @@ function toggleModelPopover() {
 $modelBtn.addEventListener('click', toggleModelPopover);
 $effortBtn.addEventListener('click', toggleModelPopover);
 
-function popoverSection(title, chips, currentValue, key, provider) {
+// locked면 그 섹션의 칩을 잠근다 — 설정 모델 카드가 미연결 공급자의 모델·강도
+// 컨트롤만 잠그는 것과 같은 규칙이다(settings-cards.js buildModelSection disabled).
+function popoverSection(title, chips, currentValue, key, provider, locked) {
   const t = document.createElement('div');
   t.className = 'mp-title';
-  t.textContent = title;
+  t.textContent = locked ? `${title} · 연결 후 사용` : title;
   $modelPopover.appendChild(t);
   const row = document.createElement('div');
   row.className = 'mp-row';
@@ -2597,6 +2625,7 @@ function popoverSection(title, chips, currentValue, key, provider) {
     b.type = 'button';
     b.className = 'mp-chip' + (c.value === currentValue ? ' on' : '');
     b.textContent = c.label;
+    b.disabled = !!locked;
     b.addEventListener('click', async () => {
       const res = await window.athena.invoke('athena:model-set', { provider, patch: { [key]: c.value } });
       if (res && res.ok === false) return; // 거부된 값은 상태를 안 바꾼다(model-prefs 검증)
@@ -2610,20 +2639,21 @@ function popoverSection(title, chips, currentValue, key, provider) {
 function renderModelPopover() {
   const c = (modelStateCache && modelStateCache.claude) || { model: null, effort: null };
   const g = (modelStateCache && modelStateCache.grok) || { model: null, effort: null };
+  const grokLocked = !providerConnected('grok');
   $modelPopover.textContent = '';
-  popoverSection('Claude 모델', PILL_MODEL_CHIPS, c.model, 'model', 'claude');
+  popoverSection('Claude 모델', PILL_MODEL_CHIPS, c.model, 'model', 'claude', false);
   const sep = document.createElement('div');
   sep.className = 'mp-sep';
   $modelPopover.appendChild(sep);
-  popoverSection('Claude 사고 강도', PILL_EFFORT_CHIPS, c.effort, 'effort', 'claude');
+  popoverSection('Claude 사고 강도', PILL_EFFORT_CHIPS, c.effort, 'effort', 'claude', false);
   const grokSep = document.createElement('div');
   grokSep.className = 'mp-sep';
   $modelPopover.appendChild(grokSep);
-  popoverSection('Grok 모델', PILL_GROK_MODEL_CHIPS, g.model, 'model', 'grok');
+  popoverSection('Grok 모델', PILL_GROK_MODEL_CHIPS, g.model, 'model', 'grok', grokLocked);
   const grokEffortSep = document.createElement('div');
   grokEffortSep.className = 'mp-sep';
   $modelPopover.appendChild(grokEffortSep);
-  popoverSection('Grok 사고 강도', PILL_GROK_EFFORT_CHIPS, g.effort, 'effort', 'grok');
+  popoverSection('Grok 사고 강도', PILL_GROK_EFFORT_CHIPS, g.effort, 'effort', 'grok', grokLocked);
 }
 
 function closeModelPopover() { $modelPopover.hidden = true; }
@@ -2853,6 +2883,9 @@ document.addEventListener('mousedown', (e) => {
   closeKiumiMenu();
 });
 window.athena.on('athena:model-changed', () => refreshModelState());
+// 계정 전환·로그인이 활성 공급자를 바꾸면 툴바 라벨과 Grok 잠금도 따라가야 한다
+// (설정 모델 카드가 구독하는 그 신호 — settings-cards.js renderModel).
+window.athena.on('athena:cli-changed', () => refreshModelState());
 refreshModelState();
 
 // Paper 54의 새 대화는 DOM만 비우는 동작이 아니다. 진행 중인 턴의 렌더 토큰을

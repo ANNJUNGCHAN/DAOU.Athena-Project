@@ -1325,9 +1325,12 @@ async function refreshModelCard(card, head, body) {
   }
 
   // 리드 — Paper 화면 18 상단. 카드 헤드 "모델"은 설정 카테고리, 이 리드가 패널의 제목이다.
+  // 설명문은 Paper 18보다 한 공급자 길다: 보드는 Claude·Codex 둘만 그렸는데 이 카드는
+  // Grok 섹션도 그린다(아래 buildModelSection 셋). 화면에 있는 것을 리드가 빠뜨리면
+  // 거짓말이라 Grok을 넣었다 — Paper 18은 Grok 섹션째로 갱신돼야 한다.
   const lead = el('div', 'uk-provider-lead');
   lead.appendChild(el('div', 'uk-provider-lead-title', 'AI 제공업체 계정'));
-  lead.appendChild(el('div', 'uk-provider-lead-desc', 'Athena는 이 컴퓨터의 Claude·Codex CLI 로그인을 그대로 쓴다. 질의는 활성 계정으로 실행되고, 모델·사고 강도는 공급자별로 정한다.'));
+  lead.appendChild(el('div', 'uk-provider-lead-desc', 'Athena는 이 컴퓨터의 Claude·Grok·Codex CLI 로그인을 그대로 쓴다. 질의는 활성 계정으로 실행되고, 모델·사고 강도는 공급자별로 정한다.'));
   body.appendChild(lead);
 
   body.appendChild(buildModelSection({
@@ -1347,9 +1350,16 @@ async function refreshModelCard(card, head, body) {
 
   body.appendChild(el('div', 'uk-model-divider'));
 
+  // Grok도 계정 카드를 그리는 갈래다 — sourceLabel이 없으면 계정이 하나라도
+  // 감지된 순간 buildAccountCard가 던져 이 아래(Codex 섹션·안내문)가 통째로 안
+  // 그려진다(2026-09-06 실측). 자격증명이 파일 하나인 것도 Claude와 같아 출처
+  // 문구도 같다.
   body.appendChild(buildModelSection({
     title: 'Grok',
     provider: grokProvider,
+    description: '이 컴퓨터의 Grok CLI 로그인을 그대로 쓴다. 계정을 여러 개 오가려면 여기서 추가한다 — 로그인은 새 터미널 창에서 끝난다.',
+    accountsHint: '이 컴퓨터에서 감지된 Grok 계정이다. 새 계정은 여기에 추가된다.',
+    sourceLabel: (acc) => (acc.current ? '현재 CLI 로그인' : '이전 CLI 로그인'),
     modelState: modelState && modelState.grok,
     modelChips: GROK_MODEL_CHIPS,
     effortChips: GROK_EFFORT_CHIPS,

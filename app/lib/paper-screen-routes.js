@@ -1844,9 +1844,12 @@ const ROUTES = Object.freeze([
     root: '#settings',
     phrases: [
       'AI 제공업체 계정',
-      'Athena는 이 컴퓨터의 Claude·Codex CLI 로그인을 그대로 쓴다. 질의는 활성 계정으로 실행되고, 모델·사고 강도는 공급자별로 정한다.',
+      // 리드 설명문은 여기 없다 — Paper 18은 Claude·Codex 둘만 그렸는데 앱 카드는
+      // Grok 섹션도 그려서 리드가 「Claude·Grok·Codex」다(settings-cards.js). 어긋나는
+      // 자리에는 아무 것도 적지 않는다(머리 주석). Paper 18이 Grok을 그리면 되돌아온다.
       '+ 계정 추가',
       '사고 강도',
+      '모델 접근 권한은 활성 계정의 플랜을 따른다 — 접근 불가 모델이면 질의가 오류로 표면화된다.',
       // 「모델 이름 직접 입력」은 <input>의 placeholder라 문구가 못 된다
       // (settings-cards.js:1127이 :1101 makeCommittableInput에 넘긴다). 대신
       // 계정 블록 안내문을 쓴다 — 계정 유무와 무관하게 늘 그려진다(:1077).
