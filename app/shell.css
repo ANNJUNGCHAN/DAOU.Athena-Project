@@ -1930,6 +1930,36 @@ body { margin: 0; overflow: hidden; }
 }
 .backtest-optimize-start,
 .backtest-optimize-apply,
+/* 보드 23(42NE-1·42NF-1) — 한도의 머리·경고와 아직 빈 칸을 말하는 줄. */
+.backtest-deploy-status.is-expired { color: var(--color-warn); }
+.backtest-deploy-limits-head {
+  margin-top: 12px;
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+}
+.backtest-deploy-limits-warning {
+  margin: 4px 0 8px;
+  color: var(--color-warn);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  word-break: keep-all;
+  min-width: 0;
+}
+.backtest-deploy-limits-gate {
+  margin-top: 8px;
+  color: var(--color-k-hint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  word-break: keep-all;
+  min-width: 0;
+}
+.backtest-deploy-limits-gate:empty { display: none; }
+.backtest-deploy-create[disabled] {
+  background: var(--color-k-panel3);
+  color: var(--color-k-ghost);
+  cursor: not-allowed;
+}
 .backtest-deploy-create {
   margin-top: 10px;
   padding: 8px 16px;

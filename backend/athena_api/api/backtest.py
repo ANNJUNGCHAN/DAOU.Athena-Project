@@ -15,6 +15,7 @@ import ast
 import difflib
 import hashlib
 import json
+import re
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
@@ -52,6 +53,9 @@ from athena_api.dependencies import KiwoomClientDep, get_order_kiwoom_client
 from athena_api.projects.store import venv_packages, venv_python
 
 router = APIRouter(prefix="/api/v1/backtest", tags=["backtest"])
+
+# 한도의 날짜 칸 모양(YYYYMMDD). 빈 문자열을 걸러내는 것이 주 목적이다.
+_YYYYMMDD_RE = re.compile(r"^\d{8}$")
 
 
 def _store(request: Request) -> BacktestStore:
@@ -1195,6 +1199,21 @@ async def optimize_route(request: Request, body: dict[str, Any]) -> dict[str, An
 # ── 배포 · 실전 적용 (Paper 보드 07) ─────────────────────────────────────────
 
 
+def _valid_ymd(raw: Any, label: str) -> str:
+    """한도의 날짜 칸 — 비워둔 값을 받지 않는다(Paper 42NF-1).
+
+    빈 valid_to는 `is_expired`가 `today > ""`를 참으로 보게 해 만든 순간 만료인
+    배포가 된다 — 사람은 「켰다」고 믿는데 신호는 한 건도 안 나간다.
+    """
+    text = str(raw).strip()
+    if not _YYYYMMDD_RE.match(text):
+        raise HTTPException(
+            status_code=422,
+            detail=f"{label}는 YYYYMMDD 8자리여야 한다 — 비워둘 수 없다",
+        )
+    return text
+
+
 def _limits_from(body: dict[str, Any]) -> deploy_mod.Limits:
     raw = body.get("limits")
     if not isinstance(raw, dict):
@@ -1203,8 +1222,8 @@ def _limits_from(body: dict[str, Any]) -> deploy_mod.Limits:
         return deploy_mod.Limits(
             max_order_amount=float(raw["max_order_amount"]),
             max_orders_per_day=int(raw["max_orders_per_day"]),
-            valid_from=str(raw["valid_from"]),
-            valid_to=str(raw["valid_to"]),
+            valid_from=_valid_ymd(raw["valid_from"], "유효 시작"),
+            valid_to=_valid_ymd(raw["valid_to"], "유효 종료"),
             stop_on_drawdown_pct=float(raw["stop_on_drawdown_pct"]),
             stop_on_consecutive_losses=int(raw["stop_on_consecutive_losses"]),
         )
@@ -1215,6 +1234,19 @@ def _limits_from(body: dict[str, Any]) -> deploy_mod.Limits:
 
 
 def _deployment_view(row: Any) -> dict[str, Any]:
+    limits_raw = json.loads(row.limits_json)
+    deployment = deploy_mod.Deployment(
+        id=row.id,
+        strategy_version_id=row.strategy_version_id,
+        run_id=row.run_id,
+        stk_cd=row.stk_cd,
+        period=row.period,
+        adjusted=row.adjusted,
+        mode=row.mode,
+        params={},
+        limits=deploy_mod.Limits(**limits_raw),
+        status=row.status,
+    )
     return {
         "id": row.id,
         "strategy_version_id": row.strategy_version_id,
@@ -1225,27 +1257,19 @@ def _deployment_view(row: Any) -> dict[str, Any]:
         "mode": row.mode,
         "mode_label": deploy_mod.MODE_LABELS.get(row.mode, row.mode),
         "params": json.loads(row.params_json),
-        "limits": json.loads(row.limits_json),
+        "limits": limits_raw,
         "status": row.status,
         "created_at": row.created_at,
         "stopped_at": row.stopped_at,
         "armed": bool(getattr(row, "armed", False)),
+        # 유효기간 밖이면 status가 active여도 신호는 매번 막힌다(evaluate_latest
+        # blocked_reason="expired"). 화면이 active만 읽으면 켜져 있다고 거짓말하므로
+        # 판정을 여기서 한 값으로 준다 — auto_armed와 같은 규율이다.
+        "expired": deploy_mod.is_expired(deployment, deploy_mod.today_str()),
         # 자동 주문이 실제로 나갈 수 있는 상태인지 화면이 한 값으로 읽게 한다 —
         # 모드·무장·상태 셋을 화면에서 다시 조합하면 규칙이 두 곳에 살게 된다.
         "auto_armed": deploy_orders.is_armed_for_auto(
-            deploy_mod.Deployment(
-                id=row.id,
-                strategy_version_id=row.strategy_version_id,
-                run_id=row.run_id,
-                stk_cd=row.stk_cd,
-                period=row.period,
-                adjusted=row.adjusted,
-                mode=row.mode,
-                params={},
-                limits=deploy_mod.Limits(**json.loads(row.limits_json)),
-                status=row.status,
-            ),
-            armed=bool(getattr(row, "armed", False)),
+            deployment, armed=bool(getattr(row, "armed", False))
         ),
     }
 
