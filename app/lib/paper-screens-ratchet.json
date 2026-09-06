@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "gate": "verify:paper-screens",
-  "blessed_at": "2026-09-06T08:56:57.183Z",
+  "blessed_at": "2026-09-06T10:07:02.475Z",
   "blessed_by": "verify:paper-screens --bless",
   "target_boards": 115,
   "passing": [
@@ -42,7 +42,9 @@
     "2NW8-2",
     "2NXS-2",
     "2QA3-2",
+    "2UWT-1",
     "2V0K-1",
+    "2V27-1",
     "31H-0",
     "322V-0",
     "3JL-0",
@@ -63,8 +65,10 @@
     "3ZPB-0",
     "40EV-1",
     "42FW-1",
+    "4330-1",
     "43DP-1",
     "43O1-1",
+    "43WD-1",
     "446V-1",
     "44RV-1",
     "452D-1",
@@ -94,7 +98,7 @@
     "OJ-0",
     "XI-0"
   ],
-  "passing_count": 88,
+  "passing_count": 92,
   "shrink_log": [
     {
       "at": "2026-09-06T02:19:45.642Z",
