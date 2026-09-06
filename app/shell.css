@@ -1942,7 +1942,6 @@ body { margin: 0; overflow: hidden; }
   cursor: pointer;
 }
 /* 보드 23(42NE-1·42NF-1) — 한도의 머리·경고와 아직 빈 칸을 말하는 줄. */
-.backtest-deploy-status.is-expired { color: var(--color-warn); }
 .backtest-deploy-limits-head {
   margin-top: 12px;
   color: var(--color-k-text);
@@ -2077,6 +2076,14 @@ body { margin: 0; overflow: hidden; }
   border-radius: var(--radius-full);
   background: var(--color-brand);
   color: var(--color-k-panel);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+}
+/* 만료 배지 — 상태 값을 덮지 않고 그 옆에 선다. 사람이 [배포 중지]로 멈춘 것과
+   유효기간이 지난 것은 다른 사실이라 한 자리에 겹쳐 적지 않는다. */
+.backtest-deploy-expired {
+  flex: 0 0 auto;
+  color: var(--color-warn);
   font-family: var(--font-body);
   font-size: var(--text-2xs);
 }

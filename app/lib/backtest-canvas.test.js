@@ -2841,14 +2841,22 @@ async function atDeployTab(overrides) {
   return made;
 }
 
-test('유효기간이 지난 배포는 active가 아니라 만료로 그린다 — 켜져 있다고 말하지 않는다', async () => {
+test('유효기간이 지난 배포는 만료 배지를 함께 그린다 — 켜져 있다고 말하지 않는다', async () => {
   const { container } = await atDeployTab({
     deployments: async () => [deployment({ status: 'active', expired: true })],
     listSignals: async () => [],
   });
-  const status = findByClass(container, 'backtest-deploy-status')[0];
-  assert.equal(status.textContent, '만료');
-  assert.match(status.className, /is-expired/);
+  assert.equal(findByClass(container, 'backtest-deploy-expired')[0].textContent, '만료');
+  assert.equal(findByClass(container, 'backtest-deploy-status')[0].textContent, 'active');
+});
+
+test('중지한 배포는 만료로 덮이지 않는다 — 멈춘 것이 사람이었다는 사실을 지우지 않는다', async () => {
+  const { container } = await atDeployTab({
+    deployments: async () => [deployment({ status: 'stopped', expired: true })],
+    listSignals: async () => [],
+  });
+  assert.equal(findByClass(container, 'backtest-deploy-status')[0].textContent, 'stopped');
+  assert.equal(findByClass(container, 'backtest-deploy-expired').length, 1);
 });
 
 test('무장 토글이 armDeployment(id, 반대값)를 정확히 한 번 부른다', async () => {
