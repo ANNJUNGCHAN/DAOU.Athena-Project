@@ -66,6 +66,10 @@
   flex-shrink: var(--bs-flex-shrink, 1);
 }
 
+/* left+고정폭 absolute 상자도 같은 규약이다 — markInsetAbsoluteBox가 인라인 `left`를
+ * `--bs-inset-x`로 옮기고 여기서 되돌린다. XL 계산값은 Paper 원문 그대로다. */
+[data-bs-inset-x="true"] { left: var(--bs-inset-x); }
+
 .bs-workspace,
 .bs-primary,
 .bs-rail,
@@ -187,7 +191,12 @@
     min-height: var(--bs-height, auto);
   }
 
-  [data-bs-inset-x="true"] { right: var(--bs-inset-x); width: auto; }
+  /* left+고정폭 absolute 상자는 부모가 좁아져도 자기 left에 서 있어 그대로 가로
+   * 넘침이 된다(실측 137X-2 Chart Tooltip Label left 748px: 2분할 303 · 4분할 387 ·
+   * 최소 547px). left를 오른쪽 끝에 걸리는 값으로 죄면 상자는 Paper 폭을 유지한 채
+   * 안으로 들어온다 — 폭은 base가 되돌린 `--bs-width`와 위 `max-width: 100%`가 맡는다.
+   * 넉넉한 폭에서는 min()이 Paper의 left를 그대로 고르므로 XL 이하도 자리가 안 바뀐다. */
+  [data-bs-inset-x="true"] { left: min(var(--bs-inset-x), max(0px, 100% - var(--bs-width, 0px))); }
 
   /* KPI 줄에는 남는 폭을 통째로 받는 탄력 칸이 있다(Paper 원문 `flex-basis: 0%`).
    * 보드가 Paper 폭(1360px)보다 좁아지면 그 칸 하나가 부족분을 다 뒤집어써서
@@ -269,6 +278,16 @@
 
 /* ---------- XS: < 480 — 4열째부터 접고 KPI는 1칸 세로 ---------- */
 @container board (max-width: 479px) {
+  /* primary가 이고 있는 양끝 줄은 여기서 접는다 — .bs-header가 M에서 접히는 것과
+   * 같은 판단이고, 접는 폭만 한 단계 늦다(실측: 137X-2 Chart Toolbar가 S(535·619px)
+   * 에서는 다 들어가고 XS(375px)에서만 149px을 낸다). 값·문구는 그대로 남고
+   * 묶음이 아랫줄로 내려갈 뿐이다. */
+  [data-bs-split-row="true"] { flex-wrap: wrap; }
+  /* 줄이 접혀도 묶음 하나가 컨테이너보다 넓으면 그만큼이 그대로 넘침이다 — 인라인
+   * 폭이 없는 묶음은 걷어내기 표시가 없어 flex 기본 min-width:auto가 min-content를
+   * 지킨다(실측 137X-2 주기 칩 묶음 352px ↔ 줄 318px). 바닥을 놓고 묶음 안에서도
+   * 접게 하면 칩은 아랫줄로 내려가고 글자는 하나도 안 사라진다. */
+  [data-bs-split-row="true"] > * { min-width: 0; flex-wrap: wrap; }
   .bs-kpi-cell { flex-basis: 100%; }
   .bs-col[data-col-priority="4"] { display: none; }
   .bs-paired[data-paired-col~="4"] { display: block; }
