@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "gate": "verify:paper-screens",
-  "blessed_at": "2026-09-05T23:13:05.426Z",
+  "blessed_at": "2026-09-06T00:13:07.660Z",
   "blessed_by": "verify:paper-screens --bless",
-  "target_boards": 116,
+  "target_boards": 115,
   "passing": [
     "16OD-2",
     "16OJ-2",
@@ -23,15 +23,21 @@
     "3VHD-1",
     "3VIQ-1",
     "3VV8-1",
+    "3VV9-1",
+    "3ZPB-0",
     "AJ-0",
+    "AMZ-0",
     "ARM-0",
     "B57-0",
     "BIM-0",
     "BV0-0",
+    "COS-0",
+    "DH2-0",
     "F9-0",
+    "G5B-0",
     "GCF-0",
     "OJ-0"
   ],
-  "passing_count": 26,
+  "passing_count": 32,
   "shrink_log": []
 }
