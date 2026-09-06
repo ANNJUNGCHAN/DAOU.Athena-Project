@@ -179,7 +179,7 @@ function guiReasonFor(action) {
     case 'revoke_tools': return '권한 화면에서 [저장]을 눌렀습니다';
     case 'set_enabled': return action.enabled ? '관리에서 [켜기]를 눌렀습니다' : '관리에서 [끄기]를 눌렀습니다';
     case 'remove': return '관리에서 [삭제]를 눌렀습니다';
-    case 'stage_snippet': return '[+ 서버 추가]에서 [승인]을 눌렀습니다';
+    case 'stage_snippet': return '[+ 서버 추가]에서 [등록 제안]을 눌렀습니다';
     default: return '';
   }
 }
