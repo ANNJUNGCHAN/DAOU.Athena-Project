@@ -4729,8 +4729,8 @@ async function renderOrderTicket(prefill) {
   const sideLabel = document.createElement('span');
   sideLabel.className = 'ticket-label';
   sideLabel.textContent = '방향';
-  const buyBtn = _btn('매수', 'routine-btn');
-  const sellBtn = _btn('매도', 'routine-btn');
+  const buyBtn = _btn('구매', 'routine-btn');
+  const sellBtn = _btn('판매', 'routine-btn');
   sideRow.append(sideLabel, buyBtn, sellBtn);
   card.appendChild(sideRow);
 
@@ -4810,20 +4810,29 @@ async function renderOrderTicket(prefill) {
   }
   gateLine.textContent = gateBlocked
     ? `지금은 실행할 수 없음: ${gateBlocked}`
-    : '주문 API 활성 — 실행 시 확인 게이트·멱등키가 적용됩니다 (모의계좌)';
+    : '주문 API 활성 (모의계좌)';
+
+  // Paper 22 9GG-0 — 카드 발치의 상시 각주. 게이트가 열렸든 막혔든 늘 서 있고,
+  // 앱이 실제로 그렇게 동작한다(집행 때마다 newIdempotencyKey()를 새로 만든다).
+  // 게이트가 열렸을 때의 위 한 줄에서 같은 말을 걷어낸 자리가 여기다.
+  const execNote = document.createElement('div');
+  execNote.className = 'agent-source';
+  execNote.textContent = '실행하면 확인 게이트와 멱등키가 적용됩니다 — 같은 멱등키로는 두 번 체결되지 않습니다.';
 
   const status = document.createElement('div');
   status.className = 'agent-body';
 
   const execRow = document.createElement('div');
   execRow.className = 'routine-approval-actions';
-  const execBtn = _btn('주문 실행', 'routine-btn routine-btn-approve');
+  const execBtn = _btn('구매하기', 'routine-btn routine-btn-approve');
   const closeBtn = _btn('닫기 (Esc)', 'routine-btn');
   execRow.append(execBtn, closeBtn);
-  card.append(execRow, status);
+  card.append(execRow, status, execNote);
   $orderBody.appendChild(card);
 
   const syncExec = () => {
+    // Paper 22 — 실행 버튼은 고른 방향을 그대로 말한다(「구매하기」).
+    execBtn.textContent = ticket.side === 'sell' ? '판매하기' : '구매하기';
     execBtn.disabled = !!gateBlocked || !ticket.side || !Number(qtyInput.value)
       || ticket.state === 'done' || ticket.state === 'in_doubt';
   };

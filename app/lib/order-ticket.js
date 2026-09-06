@@ -40,15 +40,16 @@ function buildSelectorOrderPrefill(payload) {
     side,
     qty,
     orderType: 'market',
-    reason: `시장가 ${side === 'buy' ? '매수' : '매도'} 주문 초안 — 실행 전 내용을 확인하세요`,
+    reason: `시장가 ${side === 'buy' ? '구매' : '판매'} 주문 초안 — 실행 전 내용을 확인하세요`,
   };
 }
 
 // 게이트 사전 판정 — 비활성이면 실행 버튼을 잠그고 사유를 보여준다(정직 고지).
 function gateBlocker(accountInfo) {
-  if (!accountInfo) return '계좌 정보를 확인할 수 없다 — 백엔드 기동을 확인해 달라';
+  // 두 분기가 한 카드의 같은 한 줄에 번갈아 뜬다 — 문체를 Paper가 확정한 아래 줄에 맞춘다.
+  if (!accountInfo) return '계좌 정보를 확인할 수 없습니다 — 백엔드 기동을 확인해 주세요';
   if (!accountInfo.orderApi) {
-    return '주문 API 비활성 — 설정 → 계좌에서 활성화해야 실행할 수 있다 (모의계좌 전용)';
+    return '활성 계좌의 주문 API가 OFF입니다 — 설정 › 계좌에서 게이트를 여세요.';
   }
   return null;
 }
