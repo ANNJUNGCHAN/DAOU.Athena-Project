@@ -441,6 +441,102 @@ const SIDEBAR_HISTORY_THREE = Object.freeze({
     { id: 'fx-p3', label: '개인 연구', path: 'C:\\Projects\\personal', pinned: false }],
 });
 
+// ── 41번 보드 · 세션 복원 fixture 다섯 ────────────────────────────────────────
+// 봉인해 둔 백테스트 작업공간 한 벌을 이력 행 뒤에 못 박는다. 이 컴퓨터에 쌓인 세션에
+// 좌우되면 안 되기도 하지만, 그보다 **부분 복원**이 결정론이어야 한다: 결과 데이터셋
+// 하나만 못 읽는 상태(Paper의 예시 그대로)는 실제 백엔드에서는 만들 수 없다.
+// 종목·기간·k·수수료·줄 수는 전부 값이라 phrases에 한 글자도 넣지 않는다.
+const RESTORE_YAML = [
+  'version: "1.0"',
+  'metadata:',
+  '  name: 변동성 돌파',
+  'data:',
+  '  symbols: ["005930"]',
+  '  period: day',
+  '  adjusted: true',
+  '  from: "20230101"',
+  '  to: "20251231"',
+  'strategy:',
+  '  id: custom',
+  '  params:',
+  '    k: {default: 0.62, min: 0.1, max: 1, step: 0.01, type: float}',
+  '  indicators:',
+  '    - {id: SMA, alias: ma_fast, params: {period: 20}}',
+  '  entry:',
+  '    logic: AND',
+  '    conditions:',
+  '      - {indicator: ma_fast, operator: cross_above, compare_to: ma_slow}',
+  '  exit:',
+  '    logic: OR',
+  '    conditions: []',
+  'risk:',
+  '  stop_loss:   {enabled: true,  percent: 3}',
+  '  take_profit: {enabled: false, percent: 20}',
+  '  position:    {sizing: all_in}',
+  'costs:',
+  '  fee_bps: 1.5',
+  '  tax_bps: 20',
+  '  slippage_bps: 5',
+  '',
+].join('\n');
+
+// 세션 스냅샷 — 메시지는 currentId 경로 한 줄이고, 작업공간은 42번 보드 항목표 그대로다.
+const RESTORE_SNAPSHOT = Object.freeze({
+  schemaVersion: 1,
+  id: 'fx-s2',
+  mode: 'backtest',
+  projectId: 'fx-p1',
+  title: '변동성 돌파 실험',
+  messages: [
+    { id: 'm1', parentId: null, role: 'user', text: 'k를 0.62로 올리고 손절을 -3%로 바꿔서 다시 돌려줘', done: true },
+    { id: 'm2', parentId: 'm1', role: 'assistant', text: '승률 54.0%, 최대 낙폭 -9.4%로 나아졌습니다.', done: true },
+  ],
+  currentId: 'm2',
+  canvasCards: [],
+  jobs: [],
+  viewport: { chat: {}, canvas: {}, editor: {}, sidebar: {} },
+  workspace: {
+    kind: 'backtest',
+    tab: 'design',
+    designTab: 'form',
+    form: { yaml: RESTORE_YAML, fields: ['symbols', 'period', 'fromDt', 'toDt', 'params', 'costs'] },
+    code: {
+      source: 'def signal(df, k=0.62):\n    rng = df.high.shift(1) - df.low.shift(1)\n    return (df.high >= df.open + rng * k).astype(int)\n',
+      file: 'strategy.py',
+      runPath: 'code',
+    },
+    log: { tail: '14:02:11 run start\n14:02:19 trades 126\n14:02:19 done' },
+    run: { runId: 'fx-run-9' },
+    scroll: { top: 0 },
+  },
+});
+
+// 이력 행을 눌렀을 때 main이 돌려주는 전환 결과. 모드가 backtest라 셸이 백테스트 캔버스를 연다.
+const RESTORE_SET_ACTIVE = Object.freeze({
+  ...SIDEBAR_HISTORY,
+  activeId: 'fx-s2',
+  activeMode: 'backtest',
+  requestedId: 'fx-s2',
+  restorable: true,
+  isCurrent: false,
+  resumed: false,
+});
+
+// 기법 목록 — 없으면 캔버스가 오류 화면으로 떨어져 복원 표식이 설 자리가 사라진다.
+const RESTORE_PRESETS = Object.freeze({
+  ok: true,
+  data: {
+    presets: [{
+      id: 'sma_crossover', name: 'SMA 골든크로스', category: 'trend',
+      description: '단기 이평이 장기 이평을 상향 돌파하면 진입합니다',
+      params: {}, indicators: [], entry: null, exit: null, risk: null,
+    }],
+  },
+});
+
+// 못 읽는 결과 데이터셋 — 41번 보드 Rule 3의 「일부만 복원했습니다」가 서는 유일한 조건이다.
+const RESTORE_RESULT_MISSING = Object.freeze({ ok: false, error: '없는 실행입니다' });
+
 
 // ── 그래프 페이지(D-2) fixture 넷 ────────────────────────────────────────────
 // 그래프 화면은 이 컴퓨터에 쌓인 성향 그래프를 그대로 그린다 — 검사 프로필은
@@ -3315,6 +3411,51 @@ const ROUTES = Object.freeze([
         selector: '.sidebar-mode-picker-label',
         equals: ['대화', '그래프', '에이전트', '플러그인', '백테스트'],
       },
+    ],
+  },
+  {
+    board: '3WBZ-1', // 41 · 세션 복원 — 다시 누르면 그대로
+    window: 'shell',
+    // 이력 행을 실제로 누른다 — 복원은 그 클릭 뒤에 오는 것이 전부라(chat.js
+    // registerOpenConversation), 다른 문으로 들어가면 재려던 것을 못 잰다.
+    // 되돌아오는 값 넷(전환 결과 · 세션 스냅샷 · 기법 목록 · 결과 데이터셋)만 못 박는다.
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:conversations-list', data: SIDEBAR_HISTORY },
+      { do: 'ipc-fixture', channel: 'athena:conversations-set-active', data: RESTORE_SET_ACTIVE },
+      { do: 'ipc-fixture', channel: 'athena:session-load', data: RESTORE_SNAPSHOT },
+      { do: 'ipc-fixture', channel: 'athena:session-replay-cards', data: { replayed: 0 } },
+      { do: 'ipc-fixture', channel: 'athena:backtest-presets', data: RESTORE_PRESETS },
+      { do: 'ipc-fixture', channel: 'athena:backtest-result', data: RESTORE_RESULT_MISSING },
+      { do: 'send', channel: 'athena:session-run-state', data: { id: 'fx-reload' } },
+      { do: 'wait', ms: 300 },
+      { do: 'click', selector: '[data-conversation-id="fx-s2"]' },
+      // 복원은 전환 → 스냅샷 → 결과 되읽기 세 왕복이다. 마지막 왕복이 실패로
+      // 끝나야 안내가 서므로 그 왕복까지 기다린다.
+      { do: 'wait', ms: 1500 },
+      { do: 'settle' },
+    ],
+    root: '#backtestCanvas',
+    // 종목·기간·k·「복원 6/6」의 숫자·줄 수는 전부 값이라 안 넣는다. 남는 것은 복원이
+    // 그리는 표식·안내의 라벨과 캔버스 머리다. Paper가 오른쪽 레일에 적은 규칙 문장
+    // (「무엇이 반드시 돌아오는가」류)은 명세 해설이라 앱 화면의 문구가 아니다.
+    // 안내 본문은 실제로 못 읽은 항목의 이름으로 조립되는데(session-restore.js
+    // restoreReport), 그 어휘가 Paper 3WO4-1의 것이라 결과 하나만 빠진 이 봉투에서는
+    // 그 한 줄이 글자 그대로 선다 — 그러니 여기서 잰다.
+    phrases: [
+      '백테스트',
+      '전략 폼',
+      'restored',
+      '일부만 복원했습니다',
+      '결과 데이터셋 1장을 찾지 못했습니다. 폼·코드·로그는 그대로입니다.',
+      '다시 시도',
+      '이대로 열기',
+    ],
+    // 이 보드의 계약 자체 — 표식 둘(폼·코드)이 서고, 빠진 것이 있으므로 안내가 하나
+    // 선다. 그리고 캔버스는 빈 화면이 아니다: 봉인해 둔 작업공간이 실제로 돌아왔다.
+    structure: [
+      { what: 'count', selector: '.backtest-restore-mark', equals: 2 },
+      { what: 'count', selector: '.backtest-restore-notice', equals: 1 },
+      { what: 'absent', selector: '.backtest-canvas-empty' },
     ],
   },
   // ---------- 플러그인 9장 (B-2) ----------
