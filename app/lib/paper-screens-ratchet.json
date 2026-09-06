@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "gate": "verify:paper-screens",
-  "blessed_at": "2026-09-06T17:17:26.394Z",
+  "blessed_at": "2026-09-06T17:17:38.967Z",
   "blessed_by": "verify:paper-screens --bless",
   "target_boards": 109,
   "passing": [
@@ -75,6 +75,7 @@
     "43O1-1",
     "43WD-1",
     "446V-1",
+    "44HD-1",
     "44RV-1",
     "452D-1",
     "4AN-0",
@@ -104,7 +105,7 @@
     "OJ-0",
     "XI-0"
   ],
-  "passing_count": 98,
+  "passing_count": 99,
   "shrink_log": [
     {
       "at": "2026-09-06T02:19:45.642Z",
