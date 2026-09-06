@@ -12,8 +12,10 @@ from __future__ import annotations
 
 from typing import Any
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
+from fastapi.responses import JSONResponse
 
+from athena_api.backtest import source_to_map as source_map_mod
 from athena_api.backtest import sources as sources_mod
 
 router = APIRouter(prefix="/api/v1/backtest/source", tags=["backtest"])
@@ -33,6 +35,49 @@ async def source_brief_route(body: dict[str, Any]) -> dict[str, Any]:
         return await sources_mod.brief_from_url(url)
     except sources_mod.BriefError as exc:
         raise HTTPException(status_code=exc.status, detail=exc.message) from None
+
+
+# ── 출처에서 지도로(Paper 보드 17) ──────────────────────────────────────────
+# 브리프와 같은 파일에 두는 이유: 입구가 같은 주소 하나이고, 여기도 sqlite·키움을
+# 쓰지 않는다. 잡 표면을 `backtest.py`의 `/jobs/{id}`에 얹지 않은 이유는 그쪽이
+# store를 쥔 러너의 것이라 서브시스템이 꺼지면 통째로 닫히기 때문이다.
+
+
+def _runner(request: Request) -> source_map_mod.SourceMapRunner:
+    """러너 한 벌을 앱에 매단다 — 잡 상태는 프로세스가 사는 동안만 있으면 된다."""
+    runner = getattr(request.app.state, "source_map_runner", None)
+    if runner is None:
+        runner = source_map_mod.SourceMapRunner()
+        request.app.state.source_map_runner = runner
+    return runner
+
+
+@router.post("/map")
+async def source_map_start(request: Request, body: dict[str, Any]) -> JSONResponse:
+    """{url} → 202 {job_id}. 다섯 단계는 백그라운드에서 돌고 진행은 아래 GET이 보여준다."""
+    url = body.get("url")
+    if not isinstance(url, str) or not url.strip():
+        raise HTTPException(status_code=422, detail="url은 비어 있지 않은 문자열이어야 한다")
+    job = _runner(request).start(url.strip())
+    return JSONResponse(status_code=202, content={"job_id": job.id})
+
+
+@router.get("/map/{job_id}")
+async def source_map_status(request: Request, job_id: str) -> dict[str, Any]:
+    """진행 한 장 — 지금 하는 일·몇 단계 중 몇·남은 시간, 그리고 여기까지 그린 지도."""
+    job = _runner(request).get(job_id)
+    if job is None:
+        raise HTTPException(status_code=404, detail="잡이 존재하지 않는다")
+    return job.to_dict()
+
+
+@router.delete("/map/{job_id}")
+async def source_map_cancel(request: Request, job_id: str) -> dict[str, Any]:
+    """사람이 [멈추기]를 눌렀을 때. 이미 끝난 잡은 200 + cancelled:false다(`/jobs`와 같은 태도)."""
+    runner = _runner(request)
+    if runner.get(job_id) is None:
+        raise HTTPException(status_code=404, detail="잡이 존재하지 않는다")
+    return {"ok": True, "cancelled": runner.cancel(job_id)}
 
 
 __all__ = ["router"]
