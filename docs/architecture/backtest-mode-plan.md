@@ -1,6 +1,6 @@
 # Athena 백테스트 모드 도입 계획서
 
-- 상태: P0~P6 구현 완료(P1.5·P2는 실서버 실측만 남음) · 전수 파리티 완료(2026-09-01)
+- 상태: P0~P6 구현 완료(P1.5·P2는 실서버 실측만 남음) · 전수 파리티 부분(58/60, 2026-09-06 정정 — 항목은 파리티 감사 §0·§10.5)
 - 파리티 감사와 구현 결과: `docs/architecture/backtest-parity-audit.md`
 - 작성 기준: 2026-08-31 KST
 - 브랜치: `claude/backtester-new-mode-integration-536ff0`
