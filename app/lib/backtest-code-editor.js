@@ -147,7 +147,7 @@ const CODE_PAD_TOP = 10;
 const PREVIEW_BANNER_TEXT = '미실행 오류 미리보기 — 이 코드는 실행·저장 대상이 아닙니다';
 const STALE_NOTICE_TEXT = '현재 오류의 정확한 코드 위치를 만들 수 없습니다 — 다시 검증하거나 코드 전용으로 검토하세요';
 const LINK_TEXT = '노드 ↔ 코드 줄 범위';
-const UNLINK_TEXT = '그래프로 표현할 수 없는 수정은 적용 전에 코드 전용 전환을 물습니다';
+const UNLINK_TEXT = '그래프로 표현할 수 없는 수정은 적용 전에 코드 전용 전환을 묻습니다';
 const NOTICE_MS = 6000;
 
 // span은 {start:{line,column}, end:{line,column}, message}. line은 1부터, column은 0부터다

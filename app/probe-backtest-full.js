@@ -3791,7 +3791,7 @@ async function main() {
             && opened.summaryTitle === '아직 검증하지 않았습니다'
             && opened.summaryDetail === '서버 검증을 거쳐야 실행할 수 있습니다'
             && !!validated && validated.state === 'synced'
-            && validated.status === '그래프·코드 검증 완료'
+            && validated.status === '그래프 · 코드 검증 완료'
             && validated.summaryTitle === '그래프와 코드가 같은 버전입니다'
             && validated.diagnostics.every((code) => code === 'BTG-DATA-001'),
       data: { entry, opened, validated },
@@ -4164,7 +4164,7 @@ async function main() {
         ok: !!syncedCard && syncedCard.pills[0] === '동기화 완료'
               && syncedCard.state === 'synced' && syncedCard.designTab === 'flow'
               && syncedCard.pendingPatch === null
-              && syncedCard.status === '그래프·코드 검증 완료'
+              && syncedCard.status === '그래프 · 코드 검증 완료'
               && syncedCard.summaryTitle === '그래프와 코드가 같은 버전입니다'
               && !!broken && syncedCard.graphHash !== broken.graphHash
               && versionsAfterApply.length === versionsBefore.length + 1

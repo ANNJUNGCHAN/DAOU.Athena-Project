@@ -368,7 +368,7 @@ test('맨 아래 줄은 연결됨과 코드 전용 되물음을 갈라 말한다
   handle.setLinkStatus({ linked: false });
   assert.equal(
     one(host, 'backtest-code-linkstatus').textContent,
-    '그래프로 표현할 수 없는 수정은 적용 전에 코드 전용 전환을 물습니다',
+    '그래프로 표현할 수 없는 수정은 적용 전에 코드 전용 전환을 묻습니다',
   );
 });
 
