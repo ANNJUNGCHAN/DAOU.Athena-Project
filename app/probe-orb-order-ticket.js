@@ -289,7 +289,7 @@ async function main() {
   const blockedState = await pollFor(orbWin, gateSettledExpr(), 8000);
   record('15-주문 API 비활성 계좌면 실행 버튼이 잠긴다', !!blockedState && blockedState.execDisabled === true, blockedState);
   record('16-차단 사유 문구가 뜬다("지금은 실행할 수 없음" + gateBlocker 사유)',
-    !!blockedState && blockedState.gateHidden === false && blockedState.gateText.includes('지금은 실행할 수 없음') && blockedState.gateText.includes('비활성'),
+    !!blockedState && blockedState.gateHidden === false && blockedState.gateText.includes('지금은 실행할 수 없음') && blockedState.gateText.includes('주문 API가 OFF'),
     blockedState);
 
   // 잠긴 버튼은 클릭해도 IPC를 못 쏜다(disabled 네이티브 동작 — 새 방어 장치를

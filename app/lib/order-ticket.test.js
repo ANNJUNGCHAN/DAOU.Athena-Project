@@ -27,7 +27,7 @@ test('buildSelectorOrderPrefill: guarded 현금 주식 시장가 초안만 티�
   });
   assert.deepEqual(buy, {
     symbol: '005930', side: 'buy', qty: 10, orderType: 'market',
-    reason: '시장가 매수 주문 초안 — 실행 전 내용을 확인하세요',
+    reason: '시장가 구매 주문 초안 — 실행 전 내용을 확인하세요',
   });
   assert.equal(ot.buildSelectorOrderPrefill({
     status: 'guarded',

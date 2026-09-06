@@ -40,7 +40,7 @@ function buildSelectorOrderPrefill(payload) {
     side,
     qty,
     orderType: 'market',
-    reason: `시장가 ${side === 'buy' ? '매수' : '매도'} 주문 초안 — 실행 전 내용을 확인하세요`,
+    reason: `시장가 ${side === 'buy' ? '구매' : '판매'} 주문 초안 — 실행 전 내용을 확인하세요`,
   };
 }
 
