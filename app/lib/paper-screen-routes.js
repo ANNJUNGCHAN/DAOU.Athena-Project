@@ -456,18 +456,21 @@ const WATCH_NODES_FIRST = Object.freeze([
   },
 ]);
 
-// 보드 11의 노드 넷 — 평균 일수를 고친 뒤라 그 칸 하나만 「방금 바뀜」이다.
+// 보드 11의 노드 넷 — 고침이 두 칸(평균 일수 · 배수 임계)을 건드려서
+// 「방금 바뀜」이 둘이다(원장 45JZ-1 「바뀐 칸 2개에 「방금 바뀜」」,
+// 영수증 45OH-1 「바뀐 칸: 5일 거래량 평균 · 배수 비교」).
+// 바뀐 칸의 들어감은 고침 전후를 화살표로 같이 그린다(45KU-1 · 45LD-1).
 const WATCH_NODES_AFTER_FIX = Object.freeze([
   WATCH_NODES_FIRST[0],
   {
     fn: 'avg_volume', title_ko: '5일 거래량 평균', title_en: 'avg_volume',
-    inputs: [{ name: '봉', value: '60개' }, { name: '일수', value: '5일' }],
+    inputs: [{ name: '봉', value: '60개' }, { name: '일수', value: '3일 → 5일' }],
     output: '1,300만주', called: true, changed: true,
   },
   {
     fn: 'volume_ratio', title_ko: '배수 비교', title_en: 'volume_ratio',
-    inputs: [{ name: '오늘 거래량', value: '1,650만주' }, { name: '배수', value: '1.27배' }],
-    output: '1.27배 · 안 넘음', called: true, changed: false,
+    inputs: [{ name: '오늘 거래량', value: '1,650만주' }, { name: '배수', value: '1.5배 → 2.0배' }],
+    output: '1.27배 · 안 넘음', called: true, changed: true,
   },
   {
     fn: 'fire', title_ko: '알림', title_en: 'fire',
@@ -479,8 +482,16 @@ const WATCH_NODES_AFTER_FIX = Object.freeze([
 // 보드 12의 노드 넷 — 켜진 뒤 오늘 한 번 돈 결과다(고친 자국은 이미 지나갔다).
 const WATCH_NODES_LIVE = Object.freeze([
   WATCH_NODES_AFTER_FIX[0],
-  Object.freeze({ ...WATCH_NODES_AFTER_FIX[1], changed: false }),
-  WATCH_NODES_AFTER_FIX[2],
+  Object.freeze({
+    ...WATCH_NODES_AFTER_FIX[1],
+    inputs: [{ name: '봉', value: '60개' }, { name: '일수', value: '5일' }],
+    changed: false,
+  }),
+  Object.freeze({
+    ...WATCH_NODES_AFTER_FIX[2],
+    inputs: [{ name: '오늘 거래량', value: '1,650만주' }, { name: '배수', value: '2.0배' }],
+    changed: false,
+  }),
   Object.freeze({ ...WATCH_NODES_AFTER_FIX[3], output: '조용' }),
 ]);
 
@@ -944,10 +955,10 @@ const ROUTES = Object.freeze([
     ],
     root: '#agentCanvas',
     phrases: ['들어감', '나옴', '방금 바뀜', '이상해요', '물어볼게요'],
-    // 고친 칸 하나에만 「방금 바뀜」이 붙고, 고른 칸 하나에만 칩 두 개가 붙는다.
+    // 고친 칸 둘에 「방금 바뀜」이 붙고, 고른 칸 하나에만 칩 두 개가 붙는다.
     structure: [
       { what: 'count', selector: '.agent-node-card', equals: 4 },
-      { what: 'count', selector: '.agent-node-badge', equals: 1 },
+      { what: 'count', selector: '.agent-node-badge', equals: 2 },
       { what: 'count', selector: '.agent-node-chip', equals: 2 },
     ],
   },
