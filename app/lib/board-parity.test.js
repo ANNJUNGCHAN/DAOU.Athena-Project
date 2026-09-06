@@ -936,9 +936,11 @@ test('KPI 칸은 M 이하에서만 3칸/2칸/1칸 흐름으로 바뀐다', () =>
   const lBody = [...css.matchAll(/@container board \(max-width: 1279px\)\s*\{([\s\S]*?)\n\}/g)][0][1];
   assert.match(lBody, /\[data-bs-hoisted\]\s*\{[\s\S]*?min-width: 0;/,
     'flex item의 min-content 바닥을 놓지 않으면 XS에서 surface overflow가 난다');
+  // 걷어낸 left는 base가 되돌리고(XL 픽셀 파리티), 좁은 단계에서만 오른쪽 끝에 걸린다.
+  assert.match(css, /\[data-bs-inset-x="true"\]\s*\{\s*left: var\(--bs-inset-x\);\s*\}/);
   assert.match(lBody,
-    /\[data-bs-inset-x="true"\]\s*\{\s*right: var\(--bs-inset-x\);\s*width: auto;\s*\}/,
-    'absolute 하단 액션은 left+고정폭 대신 양쪽 inset으로 좁아져야 한다');
+    /\[data-bs-inset-x="true"\]\s*\{\s*left: min\(var\(--bs-inset-x\), max\(0px, 100% - var\(--bs-width, 0px\)\)\);\s*\}/,
+    'left+고정폭 absolute 상자는 좁은 단계에서 오른쪽 끝에 걸려 부모 안으로 들어와야 한다');
   assert.match(lBody,
     /\.bs-kpi-cell\[data-bs-kpi-elastic="true"\]\s*\{\s*min-width: 160px;\s*\}/);
   assert.doesNotMatch(flow.get(1279), /(?:^|[^-])width: (?!var\()|flex-basis|flex-grow/);
@@ -946,6 +948,16 @@ test('KPI 칸은 M 이하에서만 3칸/2칸/1칸 흐름으로 바뀐다', () =>
   assert.match(flow.get(959), /flex-basis: calc\(33\.3333% - 24px\)/);
   assert.match(flow.get(719), /flex-basis: calc\(50% - 24px\)/);
   assert.match(flow.get(479), /flex-basis: 100%/);
+  // primary가 이고 있는 양끝 줄은 XS에서만 접는다 — S(535·619px)에서는 다 들어간다.
+  const stepBodies = [...css.matchAll(/@container board \(max-width: (\d+)px\)\s*\{([\s\S]*?)\n\}/g)]
+    .map(([, width, body]) => [Number(width), body]);
+  const xsBody = new Map(stepBodies).get(479);
+  assert.match(xsBody, /\[data-bs-split-row="true"\]\s*\{\s*flex-wrap: wrap;\s*\}/);
+  assert.match(xsBody, /\[data-bs-split-row="true"\] > \*\s*\{\s*min-width: 0;\s*flex-wrap: wrap;\s*\}/);
+  for (const [width, body] of stepBodies) {
+    if (width === 479) continue;
+    assert.doesNotMatch(body, /bs-split-row/, `${width}px 단계에서 줄을 미리 접으면 안 된다`);
+  }
 });
 
 test('실보드 검증은 strip 내부 스크롤과 달리 surface 가로 넘침을 실패시킨다', () => {
