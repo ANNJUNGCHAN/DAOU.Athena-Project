@@ -122,3 +122,39 @@ test('newIdempotencyKey: 호출마다 다르다', () => {
   assert.notEqual(a, b);
   assert.ok(a.startsWith('ticket-'));
 });
+
+test('총 주문 금액은 수량 × 관측값 추정이고 라벨에 추정을 남긴다', () => {
+  assert.deepEqual(ot.estimateOrderTotal({ qty: 10, observed: 88100 }), {
+    label: '총 주문 금액 (시장가 추정)', text: '약 881,000원',
+  });
+});
+
+test('관측값이 없으면 총액 행을 만들지 않는다 — 0원을 지어내지 않는다', () => {
+  assert.equal(ot.estimateOrderTotal({ qty: 10, observed: null }), null);
+  assert.equal(ot.estimateOrderTotal({ qty: 10 }), null);
+  assert.equal(ot.estimateOrderTotal({ qty: 10, observed: '없음' }), null);
+});
+
+test('수량이 0이면 총액 행이 없다', () => {
+  assert.equal(ot.estimateOrderTotal({ qty: 0, observed: 88100 }), null);
+  assert.equal(ot.estimateOrderTotal({ qty: '', observed: 88100 }), null);
+});
+
+test('가격 행은 시장가 고정을 세그먼트와 읽기값으로 드러낸다', () => {
+  assert.deepEqual(ot.priceRowModel(), {
+    segments: ['지정가', '시장가'],
+    selected: '시장가',
+    readout: '시장가 체결',
+    limitEnabled: false,
+  });
+});
+
+test('실주문 본문은 여전히 trde_tp 3(시장가) 고정이다', () => {
+  // 가격 행이 지정가 세그먼트를 그린다고 주문 본문이 바뀌면 UI가 거짓말이 된다.
+  for (const side of ['buy', 'sell']) {
+    const p = ot.buildOrderPayload({ symbol: '005930', qty: 3, side });
+    assert.equal(p.body.trde_tp, '3');
+    assert.equal(p.body.dmst_stex_tp, 'KRX');
+  }
+  assert.equal(ot.priceRowModel().limitEnabled, false);
+});

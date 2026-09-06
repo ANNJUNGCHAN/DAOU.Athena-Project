@@ -392,12 +392,37 @@ function createGraphModeController(deps) {
 
   // 브레인이 안 됐는데 그래프 모드로 들어오면 빈 캔버스 대신 이렇게 정직하게
   // 알린다 — 없는 것(성향 자체가 없다)과 못 읽은 것(브레인 미기동)은 다르다.
+  //
+  // 지도(#graphBody)에만 그리면 사람이 실제로 보는 화면은 여전히 백지다: 기본
+  // 표면은 요약이고 #graphCanvas는 그때 숨어 있다(applyVisibility). 그래서 브레인
+  // 미기동 안내는 요약 표면에도 같이 선다(Paper 2QCN-2). 반대로 지도 전용 실패
+  // 문구는 "요약 탭은 계속 사용할 수 있습니다"라고 말하므로 요약을 덮으면 안 된다 —
+  // message가 주어진 경우가 그것이라 요약 쪽은 지운다.
+  const BRAIN_UNAVAILABLE_COPY = '아직 성향을 읽을 수 없습니다 — 브레인이 준비되면 여기 그래프로 보입니다.';
+
+  function clearSummaryNotice() {
+    const host = elements.summaryMain;
+    if (!host || typeof host.querySelector !== 'function') return;
+    const prev = host.querySelector('.graph-mode-unavailable');
+    if (prev) host.removeChild(prev);
+    // 안내가 서 있는 동안 요약의 나머지(0건 히어로 포함)를 접는 축 — CSS가 읽는다.
+    if (host.dataset) delete host.dataset.unavailable;
+  }
+
   function renderUnavailable(message) {
+    clearSummaryNotice();
+    if (!message && elements.summaryMain) {
+      const summaryNote = document.createElement('div');
+      summaryNote.className = 'graph-mode-unavailable';
+      summaryNote.textContent = BRAIN_UNAVAILABLE_COPY;
+      elements.summaryMain.appendChild(summaryNote);
+      if (elements.summaryMain.dataset) elements.summaryMain.dataset.unavailable = 'true';
+    }
     if (!elements.graphBody) return;
     while (elements.graphBody.firstChild) elements.graphBody.removeChild(elements.graphBody.firstChild);
     const note = document.createElement('div');
     note.className = 'graph-mode-unavailable';
-    note.textContent = message || '아직 성향을 읽을 수 없습니다 — 브레인이 준비되면 여기 그래프로 보입니다.';
+    note.textContent = message || BRAIN_UNAVAILABLE_COPY;
     elements.graphBody.appendChild(note);
     lastDrawnRevision = null; // available해지면 실제 그림으로 다시 그리게 한다.
   }
@@ -1200,6 +1225,9 @@ const PANEL_TIER_LABELS = {
     // 자체는 브레인 상태와 무관하게 항상 열 수 있다.
     setAvailable(nextAvailable) {
       available = Boolean(nextAvailable);
+      // 요약 표면의 안내는 그래프 뷰 밖에서도 남아 있을 수 있다(모드를 나갔다가
+      // 브레인이 켜진 뒤 다시 들어오는 경로) — 뷰 판정보다 먼저 지운다.
+      if (available) clearSummaryNotice();
       if (!store.isGraphView(state)) return undefined;
       if (available) {
         return draw(true); // 못 쓰던 그래프가 쓸 수 있게 됐다 — 안내 대신 실제로 그린다.

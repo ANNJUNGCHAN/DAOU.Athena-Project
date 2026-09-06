@@ -37,6 +37,15 @@ function fakeNode(name) {
     setAttribute(key, value) {
       this.attrs[key] = value;
     },
+    // 실제 DOM에서 className과 class 속성은 같은 자료다 — 이 저장소는 두 표기를
+    // 섞어 쓰므로(el()은 setAttribute, controller.js는 className) 스텁에서도
+    // 하나로 모아야 querySelector('.x')가 양쪽을 다 찾는다.
+    get className() {
+      return String(this.attrs.class || '');
+    },
+    set className(value) {
+      this.attrs.class = value;
+    },
     getAttribute(key) {
       return this.attrs[key];
     },

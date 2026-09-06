@@ -152,6 +152,19 @@ html, body { background: transparent; }
   color: var(--color-k-dim);
 }
 
+/* 성향 축적 히어로(Paper COS-0)가 요약 표 자리에 설 때 — #gridEmpty가 하던
+ * 가운데 정렬을 여기서 대신한다(.canvas-empty 자체는 420px 세로 단이다). */
+#graphSummaryTableArea .canvas-empty-graphmode { margin: 32px auto; }
+
+/* 표를 못 읽었을 때(성향이 없는 것과 다르다) — 히어로 자리에 서는 정직한 안내. */
+.summary-load-failed {
+  padding: 32px 24px;
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--color-k-dim);
+}
+
 /* 그래프 모드 요약 뷰 안 "요약"/"지도" 서브뷰(스텝2-보정) — #graphSummaryTable과
  * #graphCanvas는 이제 applyVisibility()가 state.surface까지 반영해 배타적으로
  * hidden을 정한다(controller.js 참고) — 둘 다 92% 불투명 카드라 동시에 떠 있으면
@@ -242,7 +255,11 @@ html, body { background: transparent; }
  * + 공통 패널(오른쪽, 스텝8) 좌우 배치(07 §10 스펙). */
 #graphSummaryTable { display: flex; flex-direction: column; }
 #graphSummaryBody { display: flex; flex: 1 1 auto; min-height: 0; }
-#graphSummaryMain { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; overflow: auto; }
+/* position: relative — 브레인 미기동 안내(.graph-mode-unavailable)가 절대 배치라
+ * 컨테이닝 블록이 없으면 요약 헤더의 탭 클릭 영역까지 덮는다(#graphBody와 같은 이유). */
+#graphSummaryMain { position: relative; flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; overflow: auto; }
+/* 미기동 안내 > 0건 히어로 — 둘이 겹쳐 읽히지 않게 안내가 선 동안 나머지를 접는다. */
+#graphSummaryMain[data-unavailable="true"] > :not(.graph-mode-unavailable) { display: none; }
 
 /* 그래프 뷰 본문 골격(스텝10) — #graphSummaryTable/#graphSummaryBody와 같은
  * flex-stretch 패턴이 #graphCanvas/#graphBody엔 빠져 있었다(스텝0-2/9가 헤더
@@ -1266,9 +1283,9 @@ table.fin-table { width: 100%; border-collapse: collapse; font-variant-numeric: 
 /* .titlebar(창 크롬·이동 캡션)은 두 창 공용 — styles/ui-kit.css가 정의한다. */
 
 /* ---------- 빈 캔버스 모드별 변형 (Paper 보드 46, 2026-08-27) ----------
- * 두 변형이 다 그려져 있고, #canvasRegion[data-mode](graph-mode controller 소유)가
- * 하나만 보여준다 — 대화 캔버스에 그래프 일러스트가 나오던 문제의 처방. */
+ * #gridEmpty에는 대화 변형만 산다 — 그래프 변형(성향 축적 히어로, Paper COS-0)은
+ * 요약 표가 0건일 때 #graphSummaryTableArea에 선다. 그래도 이 규칙이 필요한 이유는
+ * #mosaic이 숨기 전 한 프레임 동안 대화 삽화가 그래프 모드에서 비치기 때문이다. */
 #canvasRegion[data-mode="graph"] .canvas-empty-chat { display: none; }
-#canvasRegion:not([data-mode="graph"]) .canvas-empty-graphmode { display: none; }
 /* 대화 상징 삽화(보드 46 v3) — 그래프 삽화(.canvas-empty-graph)와 같은 잉크. */
 .canvas-empty-art { color: var(--color-k-faint); display: flex; }

@@ -1422,7 +1422,9 @@ const ROUTES = Object.freeze([
     reach: [{ do: 'settle' }],
     root: '#gridEmpty',
     // Paper는 세 모드의 빈 화면을 나란히 그렸지만 앱은 한 번에 하나만 그린다
-    // (canvas.css:1271-1272). 그래서 잴 수 있는 것은 기본 모드인 대화 쪽 두 줄이다 —
+    // (대화 변형은 canvas.css가 그래프 모드에서 숨기고, 그래프 변형은 요약 표가 0건일
+    // 때 summary-table.js renderGrowthHero가 표 자리에 세운다). 그래서 잴 수 있는 것은
+    // 기본 모드인 대화 쪽 두 줄이다 —
     // 3개 하한을 paper-screen-routes.test.js가 사유와 함께 예외 처리했고, 그 대가로
     // structure를 셋 실었다. 「엔티티 N · 테마 군집 N」류는 앱이 실수치로 그리는
     // 값이라 애초에 문구가 못 된다.

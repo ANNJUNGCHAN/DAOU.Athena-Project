@@ -96,3 +96,35 @@ test('설정 4번째 네비 라벨은 Paper 13 성향・이력이다', () => {
   assert.match(settingsSource, /key: 'history', label: '성향・이력'/);
   assert.doesNotMatch(settingsSource, /key: 'history', label: '그래프'/);
 });
+
+// ---------- Paper AJ-0 「Shell 창 · 설정 모드」 ----------
+// 보드가 그린 설정 모드는 1520×760 창 **전체**다 — 뒤에 사이드바도 대화 열도 없다.
+// 반투명 오버레이만 올리던 옛 판은 셸이 그대로 비쳐 두 화면이 겹쳐 읽혔다.
+
+test('설정을 열면 셸이 온보딩과 다른 전용 클래스로 숨는다', () => {
+  const chatSource = fs.readFileSync(path.join(appDir, 'chat.js'), 'utf8');
+  const shellCss = fs.readFileSync(path.join(appDir, 'shell.css'), 'utf8');
+
+  const open = chatSource.match(/function openSettings\(\)\s*\{([\s\S]*?)\n\}/);
+  const close = chatSource.match(/function closeSettings\(\)\s*\{([\s\S]*?)\n\}/);
+  assert.ok(open && close, 'openSettings/closeSettings가 있다');
+  assert.match(open[1], /\$shell\.classList\.add\('is-settings-hidden'\)/);
+  assert.match(close[1], /\$shell\.classList\.remove\('is-settings-hidden'\)/);
+  assert.doesNotMatch(open[1], /is-onboarding-hidden/, '온보딩 경로와 클래스를 나눠 서로 끄고 켜지 않는다');
+
+  assert.match(shellCss, /#shell\.is-settings-hidden\s*\{[^}]*display:\s*none\s*!important/s);
+});
+
+test('설정 nav는 Paper AJ-0의 흰 패널과 어두운 선택 틴트다 — 다크 잔재가 아니다', () => {
+  const chatCss = fs.readFileSync(path.join(appDir, 'chat.css'), 'utf8');
+  const nav = chatCss.match(/\n\.settings-nav\s*\{([^}]*)\}/);
+  const selected = chatCss.match(/\n\.settings-nav-item\.is-selected\s*\{([^}]*)\}/);
+  assert.ok(nav && selected, '.settings-nav / .settings-nav-item.is-selected 규칙이 있다');
+
+  // AY-0: background #FFFFFF59(=35%) · border #10131A0D(=5%)
+  assert.match(nav[1], /background:\s*rgb\(255 255 255 \/ 35%\)/);
+  assert.match(nav[1], /border:\s*1px solid rgb\(16 19 26 \/ 5%\)/);
+  // B1-0: 선택 항목 #10131A12(=7%)
+  assert.match(selected[1], /background:\s*rgb\(16 19 26 \/ 7%\)/);
+  assert.doesNotMatch(selected[1], /255 255 255/, '흰 틴트는 흰 패널 위에서 보이지 않는다');
+});

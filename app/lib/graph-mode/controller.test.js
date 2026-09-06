@@ -57,7 +57,10 @@ function setup(options) {
     graphHeaderMeta: fakeNode('span'),
     mapGuide: fakeNode('div'),
     graphSettings: fakeNode('div'),
+    // 요약 서브뷰 본문 — 브레인 미기동 안내가 지도 말고 여기에도 선다(2QCN-2).
+    summaryMain: fakeNode('div'),
   };
+  elements.summaryMain.dataset = {};
   elements.kiumi.dataset = {};
   elements.canvasRegion.dataset = {};
   elements.chatHead.dataset = {};
@@ -227,15 +230,24 @@ test('백엔드가 죽어도 지도 헤더를 남기고 요약↔지도로 왕�
   assert.equal(seen.length, 3, '재진입 실패도 오류 경로에 전달한다');
 });
 
-test('그래프 오류 안내는 #graphBody 안에만 배치되어 헤더 클릭 영역을 덮지 않는다', () => {
+test('그래프 안내는 지금 보이는 표면 안에만 배치되어 헤더 클릭 영역을 덮지 않는다', () => {
   const css = fs.readFileSync(path.join(__dirname, '..', '..', 'canvas.css'), 'utf8');
   const graphBodyRule = css.match(/#graphBody\s*\{([^}]*)\}/);
+  const summaryMainRule = css.match(/#graphSummaryMain\s*\{([^}]*)\}/);
   const unavailableRule = css.match(/\.graph-mode-unavailable\s*\{([^}]*)\}/);
-  assert.ok(graphBodyRule, '#graphBody 규칙이 있다');
-  assert.match(graphBodyRule[1], /position\s*:\s*relative\s*;/, '절대 배치 안내의 containing block이다');
-  assert.ok(unavailableRule, '그래프 오류 안내 규칙이 있다');
+  assert.ok(graphBodyRule && summaryMainRule, '두 표면 규칙이 다 있다');
+  // 안내는 절대 배치라 containing block이 없으면 헤더 클릭 영역까지 덮는다 —
+  // 이제 요약 표면도 안내를 받으므로 그쪽에도 같은 조건이 필요하다.
+  assert.match(graphBodyRule[1], /position\s*:\s*relative\s*;/);
+  assert.match(summaryMainRule[1], /position\s*:\s*relative\s*;/);
+  assert.ok(unavailableRule, '그래프 안내 규칙이 있다');
   assert.match(unavailableRule[1], /position\s*:\s*absolute\s*;/);
-  assert.match(unavailableRule[1], /inset\s*:\s*0\s*;/, '안내는 #graphBody 범위만 채운다');
+  assert.match(unavailableRule[1], /inset\s*:\s*0\s*;/, '안내는 그 표면 범위만 채운다');
+  // 미기동 안내 > 0건 히어로 — 둘이 겹쳐 보이지 않도록 표면이 나머지를 접는다.
+  assert.match(
+    css,
+    /#graphSummaryMain\[data-unavailable="true"\]\s*>\s*:not\(\.graph-mode-unavailable\)\s*\{[^}]*display:\s*none/,
+  );
 });
 
 test('브레인이 안 됐을 때 지도 서브뷰로 전환하면 캔버스 안에 정직한 안내가 뜬다', async () => {
@@ -1496,4 +1508,36 @@ test('패널 CTA — 어긋남·숨은연관이 없으면 kind:plain이다', () 
   elements.panel.querySelector('.panel-cta').dispatchEvent({ type: 'click' });
   assert.equal(asks.length, 1);
   assert.equal(asks[0].kind, 'plain');
+});
+
+// ---------- Paper 2QCN-2 「정직성 상태 — 모르는 것을 아는 척하지 않는 자리」 ----------
+// 기본 표면은 요약이라, 브레인이 안 됐을 때 안내를 #graphBody에만 그리면 사람이
+// 실제로 보는 화면은 백지다. 빈 캔버스는 "성향이 없다"로 읽힌다 — 없는 것과 아직
+// 못 읽은 것은 다르다.
+
+test('브레인이 안 됐을 때 요약 탭도 정직한 안내로 채워진다 — 백지가 아니다', async () => {
+  const { controller, elements } = setup({ available: false });
+  await controller.toggle();
+  assert.equal(elements.summaryTable.hidden, false, '기본 표면은 요약이다');
+  const note = elements.summaryMain.querySelector('.graph-mode-unavailable');
+  assert.ok(note, '요약 표면이 백지로 남았다');
+  assert.match(note.textContent, /아직 성향을 읽을 수 없습니다/);
+  assert.equal(elements.summaryMain.dataset.unavailable, 'true', '0건 히어로보다 안내가 앞선다');
+});
+
+test('브레인이 켜지면 요약 탭의 안내가 사라진다', async () => {
+  const { controller, elements } = setup({ available: false });
+  await controller.toggle();
+  assert.ok(elements.summaryMain.querySelector('.graph-mode-unavailable'));
+  await controller.setAvailable(true);
+  assert.equal(elements.summaryMain.querySelector('.graph-mode-unavailable'), null);
+  assert.equal(elements.summaryMain.dataset.unavailable, undefined);
+});
+
+test('지도 로드 실패 문구는 요약 표면을 덮지 않는다 — 스스로 요약을 쓰라고 말한다', async () => {
+  const { controller, elements } = setup({ fail: true, onError: () => {} });
+  await controller.toggle();
+  await controller.setSurface(store.SURFACE_MAP);
+  assert.match(elements.graphBody.children[0].textContent, /그래프 데이터를 불러오지 못했습니다/);
+  assert.equal(elements.summaryMain.querySelector('.graph-mode-unavailable'), null);
 });
