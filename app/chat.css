@@ -1816,6 +1816,49 @@ html.is-boot-expanding #winControls { opacity: 0; }
 }
 .guard-confirm-body { font-family: var(--font-strong, inherit); }
 
+/* 자동 검사 진행 패널(Paper 보드 09 · 43WD-1 › 458M-1) — 머리 두 조각 · 다섯 줄 ·
+   발치 안전 고지. 마크는 ✓ ◐ ○ 셋뿐이고 색으로만 갈린다. */
+.watch-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(230, 232, 238, 0.16);
+}
+.watch-progress-head { display: flex; align-items: baseline; gap: 8px; }
+.watch-progress-head-left {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs, 11px);
+  letter-spacing: 0.08em;
+  color: var(--color-k-faint, #6b7480);
+}
+.watch-progress-head-right {
+  margin-left: auto;
+  font-size: var(--text-2xs, 11px);
+  color: var(--color-k-faint, #6b7480);
+}
+.watch-progress-line { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+.watch-progress-mark { flex: 0 0 auto; font-family: var(--font-mono); font-size: var(--text-2xs, 11px); }
+.watch-progress-line.is-done .watch-progress-mark { color: var(--color-ok, #5fce3f); }
+.watch-progress-line.is-running .watch-progress-mark { color: var(--color-warn, #ff9838); }
+.watch-progress-line.is-pending .watch-progress-mark { color: var(--color-k-faint, #6b7480); }
+.watch-progress-text {
+  font-size: var(--text-xs, 12px);
+  color: var(--color-k-text, #e6e8ee);
+  word-break: keep-all;
+  min-width: 0;
+}
+.watch-progress-line.is-running .watch-progress-text { color: var(--color-k-dim, #9aa2b1); }
+.watch-progress-line.is-pending .watch-progress-text { color: var(--color-k-faint, #6b7480); }
+.watch-progress-notice {
+  font-size: var(--text-2xs, 11px);
+  color: var(--color-k-faint, #6b7480);
+  word-break: keep-all;
+  min-width: 0;
+}
+
 /* 제어 결과 턴(Paper 보드 08 · 4330-1) — 배지 두 개 + 리드 + 사실행 한 줄.
    시각 언어는 초안 알약을 그대로 쓴다(새 언어를 만들지 않는다). */
 .control-result { display: flex; flex-direction: column; gap: 7px; }

@@ -3344,6 +3344,68 @@ async function runWatchCheck(r) {
   return { ok: false, reason: (res && res.error) || '검사 통로가 막혀 있음' };
 }
 
+// 자동 검사 진행 패널(Paper 보드 09 · 458M-1) — 검사 카드와 「도는 중」 카드가 같은
+// 문법을 쓴다. 마크는 세 종류뿐이고 발치 안전 고지는 순수 모델의 상수다.
+const watchProgressLib = window.AthenaLib.WatchProgressCard;
+
+const WATCH_PROGRESS_MARK_CLASS = {
+  '✓': 'done', '◐': 'running', '○': 'pending',
+};
+
+function appendWatchProgress(card, progress) {
+  const panel = document.createElement('div');
+  panel.className = 'watch-progress';
+
+  const head = document.createElement('div');
+  head.className = 'watch-progress-head';
+  const left = document.createElement('span');
+  left.className = 'watch-progress-head-left';
+  left.textContent = progress.headLeft;
+  head.appendChild(left);
+  const right = document.createElement('span');
+  right.className = 'watch-progress-head-right';
+  right.textContent = progress.headRight;
+  head.appendChild(right);
+  panel.appendChild(head);
+
+  for (const line of progress.lines) {
+    const row = document.createElement('div');
+    row.className = `watch-progress-line is-${WATCH_PROGRESS_MARK_CLASS[line.mark] || 'pending'}`;
+    const mark = document.createElement('span');
+    mark.className = 'watch-progress-mark';
+    mark.textContent = line.mark;
+    row.appendChild(mark);
+    const text = document.createElement('span');
+    text.className = 'watch-progress-text';
+    text.textContent = line.text;
+    row.appendChild(text);
+    panel.appendChild(row);
+  }
+
+  const notice = document.createElement('div');
+  notice.className = 'watch-progress-notice';
+  notice.textContent = progress.notice;
+  panel.appendChild(notice);
+
+  card.appendChild(panel);
+}
+
+// 검사가 도는 동안의 카드. 결과가 오면 이 턴을 걷고 검사 카드가 그 자리에 선다 —
+// 같은 사실을 두 카드가 반복하지 않는다.
+function renderWatchProgressTurn(r) {
+  const line = document.createElement('div');
+  line.className = 'turn';
+  const card = document.createElement('div');
+  card.className = 'turn-agent routine-approval';
+  appendWatchProgress(card, watchProgressLib.buildProgress({
+    pending: true,
+    symbol: r.symbol,
+    lookback_days: (r.watch && r.watch.lookback_days) || null,
+  }));
+  _mountTurn(line, card);
+  return line;
+}
+
 function renderWatchCheckCard(r, check) {
   const model = watchCheckCardLib.checkCardModel(check, r);
   const line = document.createElement('div');
@@ -3386,6 +3448,10 @@ function renderWatchCheckCard(r, check) {
   counted.className = 'agent-source';
   counted.textContent = model.countedUntil;
   card.appendChild(counted);
+
+  // 보드 09(458M-1) — 무엇을 확인했고 무엇이 아직인지 다섯 줄로 말하고,
+  // 발치에 격리 실행 고지를 붙인다(백엔드 응답과 무관한 상수다).
+  appendWatchProgress(card, watchProgressLib.buildProgress(check));
 
   if (r.activation_blocker) {
     const blocker = document.createElement('div');
@@ -3521,7 +3587,10 @@ function renderApprovalCard(r) {
     preview.addEventListener('click', async () => {
       preview.disabled = true;
       status.textContent = '검사 중 — 지난 30일 다시 돌려 봄';
+      const progressLine = renderWatchProgressTurn(r);
       const check = await runWatchCheck(r);
+      // 결과가 오면 도는 중 카드를 걷는다 — 같은 사실을 두 카드가 반복하지 않는다.
+      progressLine.remove();
       preview.disabled = false;
       if (!check) {
         status.textContent = '감시 코드 자리를 못 찾음 — 대화로 다시 만들기';
