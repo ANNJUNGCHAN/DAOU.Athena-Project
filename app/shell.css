@@ -6554,6 +6554,11 @@ body { margin: 0; overflow: hidden; }
   white-space: nowrap;
   cursor: pointer;
 }
+.agent-code-fire-nodoor {
+  flex-shrink: 0;
+  color: var(--color-k-faint);
+  font-size: var(--text-2xs);
+}
 .agent-code-fire-empty {
   color: var(--color-k-faint);
   font-size: var(--text-sm);
