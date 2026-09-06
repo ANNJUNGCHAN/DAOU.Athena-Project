@@ -21,7 +21,8 @@
     "kind": "sort",
     "parent_board": "2VO0-0",
     "control": "거래원별 순매매",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "2Z9K-0": "header",

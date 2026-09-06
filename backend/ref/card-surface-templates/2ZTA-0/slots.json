@@ -24,7 +24,8 @@
     "kind": "sort",
     "parent_board": "2V71-0",
     "control": "한도소진율 증가",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "2ZYA-0": "header",

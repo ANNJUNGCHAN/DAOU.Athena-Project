@@ -1683,6 +1683,7 @@ def test_resolve_state_fills_only_the_blanks():
         "parent_board": "2SKU-1",
         "control": "D+2 정산 후 계좌",
         "control_text": None,
+        "control_node": None,
     }
     authored = {
         "name": "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
@@ -1696,6 +1697,7 @@ def test_resolve_state_fills_only_the_blanks():
         "parent_board": None,
         "control": None,
         "control_text": None,
+        "control_node": None,
     }
     hand = {
         "name": "CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
@@ -1723,6 +1725,7 @@ def test_resolve_state_turns_a_self_parent_into_a_rail_owner():
         "parent_board": None,
         "control": "투자자별",
         "control_text": "투자자별",
+        "control_node": None,
         "rail_owner": True,
     }
     # 부모를 이름 규약으로 다시 채우지도 않는다.
@@ -2057,6 +2060,66 @@ def test_state_boards_that_share_one_control_share_one_leaf():
     assert unresolved == []
     assert marks[0]["boards"] == ["A-0", "B-0"]
     assert 'data-state-board="A-0 B-0"' in pbe.serialize(root)
+
+
+TWIN_TREE = """Frame "Card" (T-0) 400×100
+  Frame "Rail" (T1-0) 400×30
+    Text "ETF" (T1A-0) 40×12 "ETF"
+  Frame "Chips" (T2-0) 400×30
+    Text "ETF" (T2A-0) 40×12 "ETF"
+"""
+
+TWIN_JSX = """(
+    <div style={{ width: '400px' }}>
+      <div style={{ height: '30px' }}>
+        <div style={{ fontSize: '12px' }}>ETF</div>
+      </div>
+      <div style={{ height: '30px' }}>
+        <div style={{ fontSize: '12px' }}>ETF</div>
+      </div>
+    </div>
+  )"""
+
+
+def _twin_board():
+    root = pbe.parse_jsx(TWIN_JSX)
+    nodes = pbe.parse_tree(TWIN_TREE)
+    elements = pbe.flatten(root)
+    pbe.align(elements, nodes)
+    node_of = {id(el): n for el, n in zip(elements, nodes)}
+    roles = {"T1-0": "header", "T2-0": "strip"}
+    region_of = {id(el): roles[n.node_id] for el, n in zip(elements, nodes) if n.node_id in roles}
+    return root, elements, node_of, region_of
+
+
+def test_control_node_pins_the_leaf_when_the_same_text_appears_twice():
+    """레일 칩과 안쪽 칩이 같은 이름일 때 문서 순서가 문을 고르지 못하게 한다."""
+    _, elements, node_of, region_of = _twin_board()
+    marks, unresolved = pbe.mark_state_controls(
+        elements, node_of, region_of,
+        [{"board_id": "X-0", "kind": "tab", "control": "ETF"}],
+    )
+    # 못 박지 않으면 앞선 잎(레일 칩)이 이긴다.
+    assert marks[0]["node_id"] == "T1A-0"
+    assert unresolved == []
+
+    marks, unresolved = pbe.mark_state_controls(
+        elements, node_of, region_of,
+        [{"board_id": "X-0", "kind": "tab", "control": "ETF", "control_node": "T2A-0"}],
+    )
+    assert marks[0]["node_id"] == "T2A-0"
+    assert marks[0]["how"] == "node"
+    assert unresolved == []
+
+
+def test_control_node_that_names_no_leaf_leaves_the_board_unresolved():
+    _, elements, node_of, region_of = _twin_board()
+    marks, unresolved = pbe.mark_state_controls(
+        elements, node_of, region_of,
+        [{"board_id": "X-0", "kind": "tab", "control": "ETF", "control_node": "NOPE-0"}],
+    )
+    assert marks == []
+    assert [u["board_id"] for u in unresolved] == ["X-0"]
 
 
 def test_one_leaf_takes_one_control_only():

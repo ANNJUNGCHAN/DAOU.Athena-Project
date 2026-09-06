@@ -21,7 +21,8 @@
     "kind": "expand",
     "parent_board": "2U5L-1",
     "control": "삼성전자 행 펼침",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "3DEW-0": "header",

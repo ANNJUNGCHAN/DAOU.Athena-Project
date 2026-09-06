@@ -24,7 +24,8 @@
     "kind": "expand",
     "parent_board": "15P5-2",
     "control": "ELW 바스켓·만기평가",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "3E8D-0": "header",

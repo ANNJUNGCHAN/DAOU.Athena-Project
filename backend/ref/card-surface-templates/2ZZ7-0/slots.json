@@ -21,7 +21,8 @@
     "kind": "sort",
     "parent_board": "2VDA-0",
     "control": "가격급등락",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "3KN3-0": "header",

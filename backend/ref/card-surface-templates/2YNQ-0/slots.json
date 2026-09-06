@@ -21,7 +21,8 @@
     "kind": "sort",
     "parent_board": "13K0-2",
     "control": "시간외 등락률",
-    "control_text": "시간외 단일가"
+    "control_text": "시간외 단일가",
+    "control_node": null
   },
   "regions": {
     "2YRO-0": "header",

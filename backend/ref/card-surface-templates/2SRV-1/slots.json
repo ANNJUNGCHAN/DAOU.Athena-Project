@@ -38,7 +38,8 @@
     "kind": "tab",
     "parent_board": "133H-2",
     "control": "손익·성과",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "2SW6-1": "header",

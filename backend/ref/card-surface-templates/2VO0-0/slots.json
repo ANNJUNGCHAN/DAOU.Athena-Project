@@ -20,8 +20,9 @@
   ],
   "state": {
     "kind": "tab",
-    "parent_board": "137X-2",
-    "control": "순위",
+    "parent_board": "2VDA-0",
+    "control": "ELW",
+    "control_node": "3HML-0",
     "control_text": null
   },
   "regions": {

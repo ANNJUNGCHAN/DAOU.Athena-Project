@@ -21,7 +21,8 @@
     "kind": "sort",
     "parent_board": "2VDA-0",
     "control": "상하한가",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "3G3D-0": "header",

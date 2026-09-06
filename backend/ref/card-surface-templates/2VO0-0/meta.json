@@ -6,8 +6,9 @@
   "height": 1120,
   "state": {
     "kind": "tab",
-    "parent_board": "137X-2",
-    "control": "순위"
+    "parent_board": "2VDA-0",
+    "control": "ELW",
+    "control_node": "3HML-0"
   },
   "saved_at": "2026-09-02T11:04:55Z",
   "operation_refs": [

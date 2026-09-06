@@ -21,7 +21,8 @@
     "kind": "expand",
     "parent_board": "13BC-2",
     "control": "단계별 낱값·거래소별",
-    "control_text": "호가 잔량"
+    "control_text": "호가 잔량",
+    "control_node": null
   },
   "regions": {
     "3K70-0": "header",

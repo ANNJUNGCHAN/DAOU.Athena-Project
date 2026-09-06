@@ -27,7 +27,8 @@
     "kind": "tab",
     "parent_board": "2QFO-2",
     "control": "프로그램",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "2RU9-1": "header",

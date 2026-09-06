@@ -12,6 +12,32 @@ const load = async () => {
   return mod;
 };
 
+const fs = require('node:fs');
+const os = require('node:os');
+
+const TEMPLATES_DIR = path.join(__dirname, '..', '..', 'backend', 'ref', 'card-surface-templates');
+const LEDGER_DIR = path.join(__dirname, '..', '..', 'backend', 'ref', 'paper-ledger');
+
+/** 템플릿 한 장만 임시 디렉터리로 베껴 slots.json을 어긋내고, 그 한 장짜리 색인을 함께 낸다. */
+function copyTemplateWithDrift(boardId, mutate) {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'paper-cards-static-'));
+  fs.mkdirSync(path.join(dir, boardId));
+  for (const file of ['slots.json', 'regions.json', 'paper.tree.txt']) {
+    fs.copyFileSync(path.join(TEMPLATES_DIR, boardId, file), path.join(dir, boardId, file));
+  }
+  const slotsPath = path.join(dir, boardId, 'slots.json');
+  const slots = JSON.parse(fs.readFileSync(slotsPath, 'utf8'));
+  mutate(slots);
+  fs.writeFileSync(slotsPath, JSON.stringify(slots));
+  const index = JSON.parse(fs.readFileSync(path.join(TEMPLATES_DIR, 'index.json'), 'utf8'));
+  const cardIndexPath = path.join(dir, 'index.json');
+  fs.writeFileSync(cardIndexPath, JSON.stringify({
+    ...index,
+    boards: index.boards.filter((board) => board.board_id === boardId),
+  }));
+  return { templatesDir: dir, cardIndexPath, cleanup: () => fs.rmSync(dir, { recursive: true, force: true }) };
+}
+
 // ---------- 트리 정규형: 두 추출기의 표기 차이를 접고 내용 차이만 남긴다 ----------
 
 test('parseTreeRecords drops geometry and keeps depth, kind, node id and text', async () => {
@@ -106,6 +132,66 @@ test('diffTextMultiset stays exact — one extra occurrence is drift, not noise'
   assert.deepEqual(drift.count_changed, [{ text: '거래량', ledger: 1, slots: 2 }]);
 });
 
+test('narrowMultisetToCardRoot drops only the text that sits outside the card root', async () => {
+  const { parseTreeRecords, narrowMultisetToCardRoot } = await load();
+  const records = parseTreeRecords([
+    'Frame "보드" (BOARD-0) 100×50',
+    '  Frame "검증 헤더" (NOTE-0) 90×10',
+    '    Text "검증 주석" (NOTE1-0) 10×5 "검증 주석"',
+    '  Frame "표면" (SURF-0) 90×40',
+    '    Text "값" (VAL-0) 10×5 "값"',
+  ].join('\n'));
+  const narrowed = narrowMultisetToCardRoot({ '검증 주석': 1, 값: 1 }, records, 'SURF-0');
+  assert.deepEqual(narrowed.multiset, { 값: 1 });
+  assert.deepEqual(narrowed.excluded, [{ node_id: 'NOTE1-0', text: '검증 주석' }]);
+});
+
+test('narrowMultisetToCardRoot is the identity when every text sits under the card root', async () => {
+  const { parseTreeRecords, narrowMultisetToCardRoot } = await load();
+  const records = parseTreeRecords('Frame "표면" (SURF-0) 90×40\n  Text "값" (VAL-0) 10×5 "값"');
+  const ledger = { 값: 1 };
+  assert.deepEqual(narrowMultisetToCardRoot(ledger, records, 'SURF-0').multiset, ledger);
+  // 루트가 원장 트리에 없으면 좁히지 않는다 — 호출자가 원장 다중집합을 그대로 잰다.
+  assert.equal(narrowMultisetToCardRoot(ledger, records, 'NOPE-0'), null);
+});
+
+test('the card root narrowing changes exactly one board of the 96', async () => {
+  const { parseTreeRecords, narrowMultisetToCardRoot, checkPaperCardsStatic } = await load();
+  const manifest = JSON.parse(fs.readFileSync(path.join(LEDGER_DIR, 'manifest.json'), 'utf8'));
+  const pageOf = new Map(manifest.boards.map((board) => [board.id, String(board.page)]));
+  const index = JSON.parse(fs.readFileSync(path.join(TEMPLATES_DIR, 'index.json'), 'utf8'));
+
+  // 좁힌 다중집합과 안 좁힌 원장 다중집합을 보드마다 직접 대서 달라지는 보드를 센다 —
+  // 전수 초록만 보면 나중에 다른 보드가 카드 루트 밖 텍스트를 갖게 돼도 초록으로 남는다.
+  const narrowedBoards = [];
+  const unrooted = [];
+  for (const entry of index.boards) {
+    const boardId = entry.board_id;
+    const page = pageOf.get(boardId);
+    const ledger = JSON.parse(fs.readFileSync(path.join(LEDGER_DIR, page, `${boardId}.json`), 'utf8'));
+    const records = parseTreeRecords(fs.readFileSync(path.join(LEDGER_DIR, page, `${boardId}.tree.txt`), 'utf8'));
+    const regions = JSON.parse(fs.readFileSync(path.join(TEMPLATES_DIR, boardId, 'regions.json'), 'utf8'));
+    const raw = ledger.text_multiset ?? {};
+    const narrowed = narrowMultisetToCardRoot(raw, records, regions.root);
+    if (!narrowed) {
+      unrooted.push(boardId);
+      continue;
+    }
+    try {
+      assert.deepEqual(narrowed.multiset, raw);
+    } catch {
+      narrowedBoards.push(boardId);
+    }
+  }
+  assert.deepEqual(unrooted, [], '카드 루트가 원장 트리에 없으면 좁히기가 조용히 꺼진다');
+  assert.deepEqual(narrowedBoards, ['1WOB-1']);
+
+  // 그리고 그 한 장에서 좁히기가 덜어내는 것은 카드 루트 밖 검증 주석이다.
+  const report = checkPaperCardsStatic({ runPython: false });
+  assert.deepEqual(report.static.S2_text_multiset.failed_boards, []);
+  assert.equal(report.boards.find((board) => board.board_id === '1WOB-1').status, 'pass');
+});
+
 // ---------- 전수 판정 ----------
 
 test('the static gate runs all 96 card templates and names every red board', async () => {
@@ -146,14 +232,24 @@ test('the state link closure over the 96 index stays shut', async () => {
 
 test('a drifting board reports which slot and which ledger node the text came from', async () => {
   const { checkPaperCardsStatic } = await load();
-  const report = checkPaperCardsStatic({ runPython: false });
-  const drifted = report.boards.find((board) => board.failures.some((f) => f.code === 'text_multiset_drift'));
-  assert.ok(drifted, '텍스트 다중집합이 어긋난 보드가 하나는 있어야 이 검사가 뜻을 갖는다');
-  const failure = drifted.failures.find((f) => f.code === 'text_multiset_drift');
+  // 96장은 전부 초록이라 이 리포트 경로를 실물로 밟으려면 어긋남을 하나 만들어야 한다.
+  // 원장은 실물 그대로 두고 템플릿 한 장만 임시로 베껴 slots 다중집합을 어긋내 본다.
+  const drifted = copyTemplateWithDrift('1WOB-1', (slots) => {
+    slots.text_multiset = { ...slots.text_multiset, '외국인 기간별 매매 상위': 99 };
+  });
+  const report = checkPaperCardsStatic({
+    templatesDir: drifted.templatesDir,
+    cardIndexPath: drifted.cardIndexPath,
+    runPython: false,
+  });
+  const record = report.boards.find((entry) => entry.board_id === '1WOB-1');
+  const failure = record.failures.find((f) => f.code === 'text_multiset_drift');
+  assert.ok(failure, JSON.stringify(record));
   const sample = [...failure.added, ...failure.removed, ...failure.count_changed][0];
   assert.ok(sample.where, '어긋난 텍스트마다 출처가 붙어야 한다');
   assert.ok(Array.isArray(sample.where.slots) && Array.isArray(sample.where.ledger_nodes));
   assert.ok(sample.where.slots.length + sample.where.ledger_nodes.length > 0, sample.text);
+  drifted.cleanup();
 });
 
 // ---------- CLI ----------

@@ -22,7 +22,8 @@
     "kind": "sort",
     "parent_board": "2VDA-0",
     "control": "시가대비 등락",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "3NHD-0": "header",

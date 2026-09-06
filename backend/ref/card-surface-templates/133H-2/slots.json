@@ -38,7 +38,8 @@
     "kind": "default",
     "parent_board": null,
     "control": null,
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "14TG-2": "header",

@@ -27,7 +27,8 @@
     "kind": "default",
     "parent_board": null,
     "control": null,
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "1WSC-1": "header",

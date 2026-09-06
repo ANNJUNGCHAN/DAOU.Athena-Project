@@ -26,7 +26,8 @@
     "kind": "expand",
     "parent_board": "2SKU-1",
     "control": "예수금 통화별·특수예수금",
-    "control_text": "외화예수금"
+    "control_text": "외화예수금",
+    "control_node": null
   },
   "regions": {
     "3O5Z-0": "header",

@@ -22,7 +22,8 @@
     "kind": "tab",
     "parent_board": "13K0-2",
     "control": "시장·VI",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "2UKV-1": "header",

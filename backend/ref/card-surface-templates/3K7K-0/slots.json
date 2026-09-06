@@ -32,7 +32,8 @@
     "kind": "expand",
     "parent_board": "2SRV-1",
     "control": "이달 기초·기말 구성",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "3KF9-0": "header",
