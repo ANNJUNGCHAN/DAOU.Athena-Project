@@ -4396,7 +4396,7 @@ ipcMain.handle('athena:orb-chat-submit', async (e, payload = {}) => {
 // 기본값은 그대로 GET이므로 기존 호출자(전부 GET)는 한 줄도 안 바뀐다.
 async function fetchBrainJson(path, { params, signal, method, payload } = {}) {
   const token = historySink.getBearerToken();
-  if (!token) return { ok: false, error: '로컬 베어러 토큰이 설정되지 않았다' };
+  if (!token) return { ok: false, error: '로컬 베어러 토큰이 설정되지 않았습니다' };
   const url = new URL(path, historySink.getBackendUrl());
   if (params) {
     for (const [k, v] of Object.entries(params)) {
@@ -4446,19 +4446,46 @@ ipcMain.handle('athena:brain-profile-summary', async (_e, { limit, windowDays } 
   return { ok: true, ...result.body };
 });
 
+// 브레인 이력 조회의 1회 상한(brain/history.py MAX_BATCH_SIZE). 넘겨서 부르면
+// 저장소가 ValueError를 던지므로 이 값이 한 번에 읽을 수 있는 최대치다. 명시하지
+// 않으면 백엔드 기본값(대화 50 · 메시지 100)으로 조용히 잘린다.
+const BRAIN_HISTORY_PAGE_LIMIT = 500;
+
+// Paper 보드 32 「대화 이력 · 보관 중」이 셀 건수 — 같은 카드의 두 버튼(내보내기 ·
+// 전체 삭제)이 다루는 저장소를 그대로 센다. 로컬 세션 원장을 세면 전체 삭제가
+// 건드리지도 않는 수를 화면이 말하게 된다.
+ipcMain.handle('athena:brain-conversations-count', async () => {
+  const listed = await fetchBrainJson('/api/v1/brain/conversations', {
+    params: { limit: BRAIN_HISTORY_PAGE_LIMIT },
+  });
+  if (!listed.ok) return { ok: false, error: listed.error };
+  const conversations = (listed.body && listed.body.conversations) || [];
+  return { ok: true, conversations: conversations.length };
+});
+
 // Paper 보드 32 「이력 내보내기」 — 로컬에 남은 대화를 파일 하나로 꺼낸다. 사본을
 // 따로 만들지 않고 브레인이 이미 소유한 원장을 그대로 읽는다(수집 경로 신설 0건).
 // 저장 위치는 사람이 고른다 — 앱이 조용히 어딘가에 떨구지 않는다.
 ipcMain.handle('athena:history-export', async () => {
-  const listed = await fetchBrainJson('/api/v1/brain/conversations');
+  const listed = await fetchBrainJson('/api/v1/brain/conversations', {
+    params: { limit: BRAIN_HISTORY_PAGE_LIMIT },
+  });
   if (!listed.ok) return { ok: false, error: listed.error };
+  const summaries = (listed.body && listed.body.conversations) || [];
   const conversations = [];
-  for (const summary of (listed.body && listed.body.conversations) || []) {
+  let messages = 0;
+  // 상한을 넘긴 이력은 조용히 사라지면 안 된다 — 이 버튼 바로 옆이 되돌릴 수 없는
+  // 「전체 삭제」라, 잘렸다는 사실을 카드가 말해야 내보내고 지운 사람이 잃지 않는다.
+  let truncated = summaries.length >= BRAIN_HISTORY_PAGE_LIMIT;
+  for (const summary of summaries) {
     const chats = await fetchBrainJson('/api/v1/brain/chats', {
-      params: { conversation_id: summary.conversation_id },
+      params: { conversation_id: summary.conversation_id, limit: BRAIN_HISTORY_PAGE_LIMIT },
     });
     if (!chats.ok) return { ok: false, error: chats.error };
-    conversations.push({ ...summary, messages: (chats.body && chats.body.messages) || [] });
+    const stored = (chats.body && chats.body.messages) || [];
+    if (stored.length < summary.message_count) truncated = true;
+    messages += stored.length;
+    conversations.push({ ...summary, messages: stored });
   }
   const exportedAt = new Date().toISOString();
   const picked = await dialog.showSaveDialog(shellWin, {
@@ -4472,9 +4499,9 @@ ipcMain.handle('athena:history-export', async () => {
       picked.filePath, JSON.stringify({ exportedAt, conversations }, null, 2), 'utf-8',
     );
   } catch (err) {
-    return { ok: false, error: `파일을 쓰지 못했다 — ${String((err && err.message) || err)}` };
+    return { ok: false, error: `파일을 쓰지 못했습니다 — ${String((err && err.message) || err)}` };
   }
-  return { ok: true, path: picked.filePath, conversations: conversations.length };
+  return { ok: true, path: picked.filePath, conversations: conversations.length, messages, truncated };
 });
 
 // 캔버스 빈 상태(보드 05)의 "확인이 필요한 것 N건" 힌트 — 되물을 것들(불확실하다고
@@ -4656,7 +4683,7 @@ ipcMain.handle('athena:brain-history-query', async (e, payload = {}) => {
 // restartAfterReset()이 그 순서를 캡슐화한다(전역 exit 훅은 무변경).
 ipcMain.handle('athena:brain-reset', async () => {
   const token = historySink.getBearerToken();
-  if (!token) return { ok: false, error: '로컬 베어러 토큰이 설정되지 않았다' };
+  if (!token) return { ok: false, error: '로컬 베어러 토큰이 설정되지 않았습니다' };
   let res;
   try {
     res = await fetch(`${historySink.getBackendUrl()}/api/v1/brain/reset-and-restart`, {
