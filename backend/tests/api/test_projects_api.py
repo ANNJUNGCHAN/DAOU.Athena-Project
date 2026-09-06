@@ -119,6 +119,22 @@ def test_open_existing_folder_registers_it_untouched(tmp_path: Path) -> None:
     assert client.post(f"{BASE}/open", json={"path": str(outside)}).status_code == 409
 
 
+def test_open_takes_the_name_the_person_typed(tmp_path: Path) -> None:
+    """만들기 화면(36)은 폴더 이름을 기본값으로 채워 두고 사람이 고칠 수 있게 한다."""
+    client = _client(tmp_path)
+    outside = tmp_path / "kiwoom-research"
+    outside.mkdir()
+
+    opened = client.post(f"{BASE}/open", json={"path": str(outside), "name": "키움 리서치"})
+    assert opened.status_code == 200, opened.text
+    assert opened.json()["project"]["name"] == "키움 리서치"
+
+    # 빈 이름은 폴더 이름으로 조용히 되돌리지 않는다 — 화면이 만들기를 잠그는 자리다.
+    other = tmp_path / "other"
+    other.mkdir()
+    assert client.post(f"{BASE}/open", json={"path": str(other), "name": "  "}).status_code == 422
+
+
 def test_open_reports_missing_folder_and_file_path(tmp_path: Path) -> None:
     client = _client(tmp_path)
     a_file = tmp_path / "메모.txt"
