@@ -46,6 +46,8 @@
         호가 10단처럼 위에서 아래로 번호가 줄면 `direction: "up"` · `start: 10` · `step: -1`.
   `meta.json`의 `state.control_text`
         상태 컨트롤 표식을 이름 대신 부모 보드에 실제로 적힌 문구로 맞춘다(손지정 우선).
+  `meta.json`의 `state.control_node`
+        같은 문구 잎이 부모 보드에 둘 이상일 때 문이 되는 Paper 노드를 못 박는다.
 
 `state.parent_board`가 자기 자신이면 부모가 없는 레일 주인이다 — 부모는 `null`로 두고
 `rail_owner: true`를 적는다(`kind`는 그대로 `tab`). 탭 묶음의 첫 장이 제 레일을 이고
@@ -1577,6 +1579,7 @@ def resolve_state(meta: dict, board_id: str, index: dict[tuple[str | None, str],
     state.setdefault("parent_board", None)
     state.setdefault("control", None)
     state.setdefault("control_text", None)
+    state.setdefault("control_node", None)
     return state
 
 
@@ -1613,6 +1616,7 @@ def state_children_index(
                 "kind": state["kind"],
                 "control": control,
                 "control_text": state.get("control_text"),
+                "control_node": state.get("control_node"),
             }
         )
     _STATE_CHILDREN = children
@@ -1703,11 +1707,19 @@ def mark_state_controls(
     — 같은 문구를 쓰는 자식 보드들은 한 잎을 나눠 쓴다.
 
     `control_text`(손지정)를 적은 자식은 그 문구로 맞추고 잎을 먼저 가져간다.
+    `control_node`(손지정)를 적은 자식은 그 Paper 노드 하나만 후보로 본다 — 같은 문구
+    잎이 한 보드에 둘 이상일 때(레일 칩과 안쪽 칩이 같은 이름) 문서 순서가 문을
+    고르게 두지 않는다.
     """
     leaves = [el for el in elements if is_text_leaf(el)]
-    groups: dict[tuple[str, str, str | None], list[str]] = {}
+    groups: dict[tuple[str, str, str | None, str | None], list[str]] = {}
     for child in children:
-        key = (child["kind"], child["control"], child.get("control_text"))
+        key = (
+            child["kind"],
+            child["control"],
+            child.get("control_text"),
+            child.get("control_node"),
+        )
         groups.setdefault(key, []).append(child["board_id"])
 
     expand_leaf_indices = {
@@ -1715,10 +1727,17 @@ def mark_state_controls(
         for index, el in enumerate(leaves)
         if any(mark in direct_text(el) for mark in EXPAND_MARKS)
     }
-    scored: dict[tuple[str, str, str | None], list[tuple[int, int, int]]] = {}
+    scored: dict[tuple[str, str, str | None, str | None], list[tuple[int, int, int]]] = {}
     for key in groups:
-        kind, control, control_text = key
+        kind, control, control_text, control_node = key
         wanted = control_text or control
+        if control_node:
+            scored[key] = [
+                (4, 0, index)
+                for index, el in enumerate(leaves)
+                if node_of[id(el)].node_id == control_node
+            ]
+            continue
         authored_leaf_indices = {
             index
             for index, el in enumerate(leaves)
@@ -1759,13 +1778,14 @@ def mark_state_controls(
     order = sorted(
         groups,
         key=lambda key: (
+            key[3] is None,  # 노드를 못 박은 자식이 그 잎을 먼저 가져간다
             key[2] is None,  # 손지정이 잎을 먼저 가져간다
             -(scored[key][0][0] if scored[key] else 0),
             key[1],
         ),
     )
     for key in order:
-        kind, control, control_text = key
+        kind, control, control_text, control_node = key
         boards = sorted(groups[key])
         hit = next((h for h in scored[key] if h[2] not in taken), None)
         if hit is None:
@@ -1785,7 +1805,7 @@ def mark_state_controls(
                 "kind": kind,
                 "boards": boards,
                 "node_id": node_of[id(el)].node_id,
-                "how": "hand" if control_text else HOW_BY_TIER[hit[0]],
+                "how": "node" if control_node else "hand" if control_text else HOW_BY_TIER[hit[0]],
             }
         )
     marks.sort(key=lambda mark: mark["control"])
