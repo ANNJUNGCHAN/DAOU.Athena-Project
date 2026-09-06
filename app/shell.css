@@ -194,6 +194,19 @@ body { margin: 0; overflow: hidden; }
   font-size: 10px;
 }
 .sidebar-search-empty { color: var(--color-k-dim); font-size: var(--text-sm); }
+.sidebar-search-empty-note { color: var(--color-k-hint); font-size: var(--text-sm); }
+.sidebar-search-empty-cta {
+  align-self: flex-start;
+  min-height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 8px;
+  background: var(--color-k-panel3);
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
 .sidebar-search-foot {
   display: flex;
   align-items: center;
