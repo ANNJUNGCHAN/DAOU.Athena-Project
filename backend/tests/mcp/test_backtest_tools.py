@@ -30,7 +30,7 @@ def test_tool_schema_lists_allowed_actions_only():
         "map", "codegen", "optimize",
         "propose_spec", "navigate", "propose_optimize", "list_runs",
         "list_files", "read_file", "propose_file", "youtube_brief",
-        "source_brief", "register_strategy",
+        "source_brief", "source_map", "register_strategy",
         "visual_registry", "visual_validate", "visual_compile",
         "visual_question", "visual_patch", "visual_from_spec",
         "technique_nodes", "technique_check", "technique_question",
@@ -525,6 +525,42 @@ async def test_propose_optimize_prepares_method_without_starting_search(mock_htt
     assert payload["method"] == "random"
     assert payload["note"] == "표본 200개로"
     assert "탐색 시작" in payload["notice"]
+
+
+# ── source_map: 주소 하나를 앱의 다섯 단계 화면으로 넘긴다(보드 17) ─────────────────
+#
+# 모델이 그 글을 대신 읽지 않는다는 것이 이 액션의 요점이다 — 본문은 앱 안에서만 읽히므로
+# 심어 둔 지시문이 모델 컨텍스트에 들어올 자리가 없다. 그래서 백엔드도 타지 않는다.
+
+
+@pytest.mark.asyncio
+async def test_source_map_hands_the_url_to_the_canvas_without_reading_it(mock_http_client):
+    async def handler(request):  # 호출 자체가 없어야 한다
+        raise AssertionError("source_map이 백엔드에 도달했다")
+
+    async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
+        result = await backtest_tools.dispatch(
+            {"action": "source_map", "source_map": {"url": " https://youtu.be/8kQzVw "}},
+            client,
+        )
+    assert not result.isError
+    payload = json.loads(result.content[0].text)
+    assert payload["delivered"] == "canvas"
+    assert payload["kind"] == "source_url"
+    assert payload["url"] == "https://youtu.be/8kQzVw"
+    assert "멈추는 것은 사람이다" in payload["notice"]
+
+
+@pytest.mark.asyncio
+async def test_source_map_without_url_is_blocked(mock_http_client):
+    async def handler(request):
+        raise AssertionError("url 없이 백엔드에 도달했다")
+
+    async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
+        result = await backtest_tools.dispatch({"action": "source_map"}, client)
+    assert result.isError
+    assert result.meta[ERROR_ORIGIN_META_KEY] == "gateway-blocked"
+    assert "url" in result.content[0].text
 
 
 @pytest.mark.asyncio
