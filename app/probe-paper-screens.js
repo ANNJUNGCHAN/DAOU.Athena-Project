@@ -123,6 +123,13 @@ function applyFixture(channel, data) {
   rawHandle(channel, async () => data);
 }
 
+// 답하지 않는 핸들러 — 왕복이 도는 동안에만 있는 화면(계좌 등록의 「확인 중」)을
+// 세운다. 되돌리기는 fixture와 같은 자리에서 한다.
+function applyHang(channel) {
+  ipcMain.removeHandler(channel);
+  rawHandle(channel, () => new Promise(() => {}));
+}
+
 function restoreFixture(channel) {
   ipcMain.removeHandler(channel);
   const original = ORIGINAL_HANDLERS.get(channel);
@@ -236,6 +243,9 @@ async function runStep(win, step) {
     case 'ipc-fixture':
       applyFixture(step.channel, step.data);
       return;
+    case 'ipc-hang':
+      applyHang(step.channel);
+      return;
     case 'envelope':
       // verify.js:2882 liveEnvelope 와 같은 봉투.
       win.webContents.send('athena:add-canvas-live', {
@@ -304,7 +314,7 @@ async function probeRoute(wins, route) {
     await waitReady(win, route.window);
     await settle(win);
     for (const [index, step] of route.reach.entries()) {
-      if (step.do === 'ipc-fixture') fixtured.add(step.channel);
+      if (step.do === 'ipc-fixture' || step.do === 'ipc-hang') fixtured.add(step.channel);
       try {
         await runStep(win, step);
       } catch (error) {
