@@ -698,6 +698,27 @@ test('잎 안의 <br>은 자식으로 세지 않는다 — 두 줄 라벨도 마
   assert.deepEqual(outer.children, [leaf, paired], '바깥 컨테이너의 병기 줄이 살아 있어야 한다');
 });
 
+test('병기 사본이 먼저 나와도 원본 머리글에 쓴다 — 두 줄이 한 노드로 남는다', () => {
+  // 추출 원문 실측(1JPU-0/1JT3-0, 1JZW-0/3PQ7-0): 병기 사본 `<span class="bs-paired"
+  // data-node>`가 표 머리 원본보다 문서 순서상 먼저 나오고, 원본은 병기 사본이 안
+  // 붙어 있어 <span data-leaf> 래퍼 없이 <br>을 직계로 인다. 사본을 앵커로 고르면
+  // 원본은 board.html 원문 그대로 남아 DOM이 "직전대비"·"매수 잔량" 두 조각이 된다.
+  const copy = el({ node: '머리', pairedCol: '5' }, [], 'bs-paired');
+  const br = el();
+  br.tag = 'br';
+  const head = el({ node: '머리' }, [br]);
+  const root = el({}, [copy, head]);
+  assert.equal(nodeIndex(root).get('머리'), head);
+
+  const contract = { slots: [
+    { slot_id: 'h', node: '머리', kind: 'label', paper_text: '직전대비\n매수 잔량' },
+  ] };
+  const report = applyPlan(root, mountPlan(contract, {}));
+  assert.deepEqual(report.containers, []);
+  assert.equal(head.textContent, '직전대비\n매수 잔량');
+  assert.equal(copy.textContent, '', '병기 사본은 앵커가 아니다');
+});
+
 test('isValueSlot은 추출기 unit 어휘도 숫자 계열로 센다(H1 모수)', () => {
   assert.equal(isValueSlot({ format: { unit: 'krw_ko' } }), true);
   assert.equal(isValueSlot({ format: { unit: 'shares' } }), true);
