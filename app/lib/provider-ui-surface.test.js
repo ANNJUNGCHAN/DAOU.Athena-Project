@@ -42,8 +42,6 @@ test('계정 카드를 그리는 공급자 섹션은 모두 출처 문구를 넘
 });
 
 test('작성창 툴바는 활성 계정의 공급자 값을 말한다', () => {
-  assert.match(body(chatSource, 'async function refreshModelState()'), /athena:cli-list/);
-
   const provider = body(chatSource, 'function activeQueryProvider()');
   assert.match(provider, /a\.active/);
   assert.match(provider, /'grok'/);
@@ -56,7 +54,19 @@ test('작성창 툴바는 활성 계정의 공급자 값을 말한다', () => {
   assert.doesNotMatch(render, /modelStateCache\.claude/,
     'Grok이 활성인데 Claude 값을 말하면 실행기와 다른 이름이 뜬다');
 
-  assert.match(chatSource, /window\.athena\.on\('athena:cli-changed', \(\) => refreshModelState\(\)\)/);
+  assert.match(chatSource, /window\.athena\.on\('athena:cli-changed', \(list\) => applyCliState\(list\)\)/,
+    '목록을 실어 오는 이벤트를 버리고 다시 물으면 계정 변경마다 codex 프로브가 한 번 더 돈다');
+});
+
+// athena:cli-list 핸들러는 `codex login status` 자식 프로세스를 최대 5초 기다린다
+// (main.js handleCliList → cli-accounts.js reconcileCodexRuntimeAccountLocked, 캐시 없음).
+// 그 왕복이 팝오버 여는 길에 들어가면 [모델]을 눌러도 2초 동안 아무 것도 안 열리고,
+// 1Y3-0 라우트의 도달 절차(클릭 + settle)도 결정론을 잃는다.
+test('팝오버 여는 길에 CLI 목록 왕복을 기다리지 않는다', () => {
+  assert.doesNotMatch(body(chatSource, 'async function refreshModelState()'), /athena:cli-list/);
+  assert.doesNotMatch(body(chatSource, 'async function openModelPopover()'), /athena:cli-list/);
+  assert.match(body(chatSource, 'function applyCliState(list)'), /cliStateCache = list/);
+  assert.match(chatSource, /window\.athena\.invoke\('athena:cli-list'\)\.then\(applyCliState/);
 });
 
 test('모델 팝오버의 Grok 칩은 연결 전에는 눌리지 않는다', () => {
