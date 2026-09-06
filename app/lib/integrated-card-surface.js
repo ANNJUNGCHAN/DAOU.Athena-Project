@@ -257,6 +257,42 @@ function workflowStateLabel(value) {
   return productLabels[state.toLowerCase()] || state;
 }
 
+// Paper 1IG3-0 — 중단·인증 만료는 이미 확인한 값을 지우지 않는다("중단돼도 질문과
+// 이미 확인한 값은 사라지지 않습니다"). 상태 카드가 무엇을 말할지 여기서 정하고,
+// DOM은 canvas.js가 그린다 — canvas.js는 <script> 태그 렌더러라 단위 테스트가 안 걸린다.
+const AUTH_EXPIRED_FACTS = Object.freeze(['이전 값 읽기 전용 유지', '주문과 새 조회는 재연결 후 가능']);
+
+// partial = 이 조회에서 이미 그려 둔 데이터 카드들. 하나라도 있으면 취소 카드는
+// "표시하지 않았습니다"라고 말하면 안 된다 — 그 값은 화면에 그대로 남아 있다(1SUJ-0).
+function buildCancelledState({ partial } = {}) {
+  const keepResults = Array.isArray(partial) && partial.length > 0;
+  return {
+    keepResults,
+    title: '사용자 취소',
+    badge: '취소됨',
+    message: keepResults
+      ? '중단했습니다. 이미 받은 값은 그대로 두었습니다.'
+      : '중단했습니다. 아직 받은 값이 없습니다. 같은 조건으로 다시 검색할 수 있습니다.',
+    action: keepResults ? '결과 유지 · 다시 검색' : '다시 검색',
+  };
+}
+
+// facts = 이미 카드에 그려진 사실행. 인증이 만료돼도 지우지 않고(clearValues:false)
+// Paper 1SUQ-0의 두 줄을 뒤에 잇는다. 재시도가 아니라 재연결이므로 canvas.js의
+// REST_RETRY_STATES에는 넣지 않는다 — 다시 시도 버튼이 붙으면 안 된다.
+function buildAuthExpiredState({ facts } = {}) {
+  const prior = Array.isArray(facts) ? facts.map(clean).filter(Boolean) : [];
+  return {
+    readOnly: true,
+    clearValues: false,
+    title: '인증 만료',
+    badge: '인증 만료',
+    facts: [...prior, ...AUTH_EXPIRED_FACTS],
+    action: '계좌 다시 연결',
+    blocks: ['order', 'newQuery'],
+  };
+}
+
 function stampPanelKey(node, panelKey) {
   Object.defineProperty(node, '__athenaPanelKey', {
     value: panelKey, configurable: true, writable: true,
@@ -384,6 +420,7 @@ const api = {
   matchesRealtimeTick, requireRealtimeSuccess, verifiedOperationRefsFor,
   rememberPanelSession, panelSessionFor, forgetPanelSession, clearPanelSessions,
   detachForDestroy, findReusableRoot, buttonLabel, workflowStateLabel, isBoardSurface,
+  buildCancelledState, buildAuthExpiredState,
 };
 if (typeof module !== 'undefined' && module.exports) module.exports = api;
 else {

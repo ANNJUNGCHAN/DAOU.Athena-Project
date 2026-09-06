@@ -224,7 +224,11 @@ function list() {
 // athena:account-register
 // ---------------------------------------------------------------------------
 
-async function register({ alias, appKey, secretKey }) {
+// verifyOnly=true는 "검증까지만" 이다(Paper XI-0 → FPE-0: 확인 완료 상태를 보여준
+// 뒤 사용자가 「계좌 저장」을 눌러야 저장한다). 같은 검사·같은 토큰 발급 왕복을
+// 하되 상태 파일에도 자격증명 저장소에도 아무것도 쓰지 않는다 — 저장 경로가
+// 발급을 한 번 더 하는 대가로, 검증 결과를 어디에도 붙들어 두지 않는다.
+async function register({ alias, appKey, secretKey, verifyOnly }) {
   const cleanAlias = String(alias || '').trim();
   if (!cleanAlias || !appKey || !secretKey) {
     return { ok: false, error: 'invalid' };
@@ -248,6 +252,7 @@ async function register({ alias, appKey, secretKey }) {
   if (!result.ok) {
     return { ok: false, error: result.reason };
   }
+  if (verifyOnly) return { ok: true, verified: true };
 
   const id = crypto.randomUUID();
   secrets.setValue(id, 'appKey', appKey);
