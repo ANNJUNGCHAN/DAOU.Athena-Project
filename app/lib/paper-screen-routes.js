@@ -1182,21 +1182,24 @@ const BACKTEST_TARGET = Object.freeze({
 // 아니라 이 표가 된다.
 const SOURCE_MAP_JOB_START = Object.freeze({ ok: true, data: { job_id: 'fx-sm-1' } });
 
+// 이 봉투는 **잡이 실제로 내는 프레임**이다 — source_to_map.SourceMapJob.to_dict()를
+// 3/5 단계에서 그대로 떠 왔다(칸 둘이 서고 ③이 그리는 중, ④는 뼈대). 손으로 줄인
+// 모양을 적으면 게이트가 못 박는 프레임이 백엔드가 내는 프레임이 아니게 된다.
 const SOURCE_MAP_AT_3 = Object.freeze({
   ok: true,
   data: {
     job_id: 'fx-sm-1',
+    url: 'https://youtu.be/8kQzVw',
     status: 'running',
-    step_index: 3,
-    step_total: 5,
-    eta_seconds: 20,
     title: '20일 신고가 돌파',
     source_kind: 'youtube',
-    target_ko: 'KOSPI 대형주 · 일봉 · 3년',
-    target_confirmed: false,
+    source_kind_ko: '유튜브',
+    step_index: 3,
+    step_total: 5,
+    eta_seconds: 8,
     steps: [
       { id: 'read', state: 'done', title_ko: '출처 읽음', meta_ko: '유튜브 · 14,200자' },
-      { id: 'rules', state: 'done', title_ko: '규칙 뽑음', meta_ko: '진입 2 · 청산 1 · 손절 1' },
+      { id: 'rules', state: 'done', title_ko: '규칙 뽑음', meta_ko: '진입 1 · 청산 1 · 손절 1' },
       {
         id: 'map', state: 'running', title_ko: '지도 그리는 중',
         meta_ko: '칸 3/4 · 지금 ③ 사고·파는 순간을 찍습니다',
@@ -1204,14 +1207,13 @@ const SOURCE_MAP_AT_3 = Object.freeze({
       { id: 'code', state: 'todo', title_ko: '코드 만들기', meta_ko: '지도 뒤에서 자동' },
       { id: 'check', state: 'todo', title_ko: '자체 검사', meta_ko: '가상환경 · 짧은 구간 시험 실행' },
     ],
+    target_ko: '코스피 대형주 · 일봉 · 3년',
+    target_confirmed: false,
     rules: [
       { kind: 'entry', kind_ko: '진입', text: '· 진입: 종가가 20일 최고가를 넘는 날', mapped: true },
       { kind: 'exit', kind_ko: '청산', text: '· 청산: 20일 이동평균 아래로 마감', mapped: true },
-      { kind: 'stop', kind_ko: '손절', text: '· 손절: 진입가 −5%', mapped: true },
+      { kind: 'stop', kind_ko: '손절', text: '· 손절: 진입가 -5%', mapped: true },
     ],
-    map_filled: 2,
-    map_total: 4,
-    code_lines: null,
     map: {
       version: 0,
       source_kind: 'spec',
@@ -1221,35 +1223,74 @@ const SOURCE_MAP_AT_3 = Object.freeze({
         detail: '캐시에 있는 봉을 날짜순으로 정리해 표 하나로 만듭니다',
       }],
       app_after: [
-        { key: 'fill', title: '사고·파는 가격을 정합니다', detail: '신호가 난 다음 봉의 시가로 체결합니다' },
-        { key: 'cost', title: '비용을 뗍니다', detail: '수수료·거래세·슬리피지를 뺀 다음 손익을 씁니다' },
-        { key: 'report', title: '성과를 냅니다', detail: '지표·자산곡선·체결 표를 만듭니다' },
-      ],
-      boundary_after_note: 'entry·exit 두 열만 받습니다',
-      nodes: [
-        { id: 'params', numeral: '①', title: '조절할 값을 정합니다', lines: [], facts: [], status: 'ok' },
-        { id: 'indicators', numeral: '②', title: '가격을 지표로 바꿉니다', lines: [], facts: [], status: 'ok' },
         {
-          id: 'conditions', numeral: '③', title: '사고·파는 순간을 찍습니다',
-          lines: [], facts: [], status: 'ok', drawing: true,
+          key: 'fill', title: '사고·파는 가격을 정합니다',
+          detail: '신호가 난 다음 봉의 시가로 체결합니다 — 같은 봉 종가로 체결하면 미래를 본 것입니다',
         },
         {
-          id: 'guard', numeral: '④', title: '', lines: [], facts: [],
-          status: 'ok', skeleton: true,
+          key: 'cost', title: '비용을 뗍니다',
+          detail: '수수료·거래세·슬리피지를 뺀 다음 손익을 씁니다',
+        },
+        {
+          key: 'metrics', title: '성과를 냅니다',
+          detail: '지표 6장·자산곡선·체결 표를 결과 화면으로 보냅니다',
+        },
+      ],
+      boundary_after_note: 'entry·exit 두 열만 받습니다',
+      boundary_after_lines: null,
+      nodes: [
+        {
+          id: 'params', numeral: '①', title: '조절할 값을 정합니다',
+          lines: [
+            { role: null, text: 'hh20_period 20 (2–240, 1씩)' },
+            { role: null, text: 'ma20_period 20 (2–240, 1씩)' },
+          ],
+          facts: [], status: 'ok', note: null,
+          first_line: null, last_line: null, editable: true,
+        },
+        {
+          id: 'indicators', numeral: '②', title: '가격을 지표로 바꿉니다',
+          lines: [
+            { role: null, text: 'hh20 — DONCHIAN(20) · 고가·저가·종가' },
+            { role: null, text: 'ma20 — SMA(20) · 종가' },
+          ],
+          facts: [], status: 'ok', note: null,
+          first_line: null, last_line: null, editable: true,
+        },
+        {
+          id: 'conditions', numeral: '③', title: '사고·파는 순간을 찍습니다',
+          lines: [
+            { role: 'entry', text: 'close가 hh20_upper를 위로 뚫는 날' },
+            { role: 'exit', text: 'close가 ma20를 아래로 뚫는 날' },
+          ],
+          facts: [], status: 'ok', note: null,
+          first_line: null, last_line: null, editable: true, drawing: true,
+        },
+        {
+          id: 'guard', numeral: '④', title: '',
+          lines: [], facts: [], status: 'ok', note: null,
+          first_line: null, last_line: null, editable: false, skeleton: true,
         },
       ],
       free_code: [],
       unknown: [],
       error: null,
-      code: null,
+      // 폼 지도는 codegen이 뒤에서 코드를 지어 세어 보므로 이 칸이 언제나 찬다 —
+      // 서랍에 [코드 열기]가 안 서는 근거는 이것이 아니라 최상위 code_lines가 null인
+      // 것이다(④ 코드 단계가 아직 안 끝났다는 뜻).
+      code: { lines: 20, matches_map: true },
     },
+    map_filled: 2,
+    map_total: 4,
+    code_lines: null,
     checks: null,
     error: null,
   },
 });
 
-// 사람이 채팅에 붙인 주소 하나. 캔버스가 이 액션 하나로 진행 화면을 연다
-// (backtest-canvas.js applySourceAction) — 다른 문은 없다.
+// 사람이 채팅에 붙인 주소 하나. 제품에서 이 액션을 만드는 것은 모델이 부르는
+// athena_backtest action=source_map이고(backtest_tools.py), main.js가 그 봉투를 이
+// 채널로 옮긴다 — 게이트는 그 마지막 한 칸만 대신 쏜다.
 const SOURCE_URL_ACTION = Object.freeze({
   kind: 'source_url',
   url: 'https://youtu.be/8kQzVw',
@@ -4240,11 +4281,15 @@ const ROUTES = Object.freeze([
       '칸이 하나씩 채워집니다 · 다 그려지면 대화로 고칠 수 있습니다',
       '여기부터 내 전략 — 출처에서 뽑은 칸들',
     ],
-    // Paper가 그린 단계 다섯 줄, 지금 그리는 칸 하나(③의 「그리는 중」), 그리고 아직
-    // 만들어지지 않은 코드 — 서랍에 여는 버튼이 없다는 사실이 그 뜻이다.
+    // Paper가 그린 단계 다섯 줄, 지금 그리는 칸 하나(③의 「그리는 중」), 멈추는 버튼
+    // 하나, 그리고 아직 만들어지지 않은 코드 — 서랍에 여는 버튼이 없다는 사실이 그
+    // 뜻이다. 앞 둘은 위 봉투가 정한 값을 앱이 도는 것이라(다섯 줄·drawing 표식) 앱이
+    // 혼자 정하는 것은 뒤 둘이다: [멈추기]는 잡 상태와 무관하게 늘 서고(보드 18 F칸의
+    // 로딩 4요소 중 넷째), [코드 열기]는 code_lines가 null인 동안 서지 않는다.
     structure: [
       { what: 'count', selector: '.backtest-source-step', equals: 5 },
       { what: 'count', selector: '.backtest-flow-drawing', equals: 1 },
+      { what: 'count', selector: '.backtest-source-stop', equals: 1 },
       { what: 'absent', selector: '.backtest-map-open-code' },
     ],
   },
