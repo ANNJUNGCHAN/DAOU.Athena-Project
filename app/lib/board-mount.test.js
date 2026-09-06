@@ -845,12 +845,46 @@ test('한쪽 inset과 고정 폭을 가진 absolute 상자는 좁은 단계용 �
   tooltip.dataset.name = 'Chart Tooltip Label';
   assert.equal(hoistLayout(actions), true);
   assert.equal(hoistLayout(tooltip), true);
-  assert.equal(actions.dataset.bsInsetX, 'true');
-  assert.equal(actions.style.getPropertyValue('--bs-inset-x'), '24px');
-  assert.equal(actions.style.getPropertyValue('left'), '24px', 'Paper의 XL 위치는 보존한다');
-  assert.equal(actions.style.getPropertyValue('bottom'), '18px');
-  assert.equal(tooltip.dataset.bsInsetX, undefined,
-    '툴팁·차트 핸들 같은 다른 absolute 요소의 위치/폭은 늘리지 않는다');
+  for (const [what, box, left] of [['하단 액션', actions, '24px'], ['툴팁', tooltip, '748px']]) {
+    assert.equal(box.dataset.bsInsetX, 'true', `${what}: 이름이 아니라 모양으로 표시한다`);
+    assert.equal(box.style.getPropertyValue('--bs-inset-x'), left);
+    assert.equal(box.style.getPropertyValue('left'), '',
+      `${what}: 인라인 left가 남으면 좁은 단계 규칙이 못 이긴다(!important 없이)`);
+  }
+  assert.equal(actions.style.getPropertyValue('bottom'), '18px', '세로 inset은 안 건드린다');
+  assert.equal(tooltip.style.getPropertyValue('top'), '120px');
+});
+
+test('양쪽 inset이 이미 있거나 폭이 없는 absolute 상자는 표시하지 않는다', () => {
+  const bothSides = regionStub('', {
+    position: 'absolute', left: '24px', right: '24px', width: '490px',
+  });
+  const noWidth = regionStub('', { position: 'absolute', left: '24px' });
+  const inFlow = regionStub('', { left: '24px', width: '490px' });
+  for (const box of [bothSides, noWidth, inFlow]) {
+    hoistLayout(box);
+    assert.equal(box.dataset.bsInsetX, undefined);
+    assert.equal(box.style.getPropertyValue('left'), '24px', 'Paper 원문 left를 그대로 둔다');
+  }
+});
+
+test('primary가 직접 이고 있는 양끝 가로 줄만 XS 접기 표시를 받는다', () => {
+  const childOf = (parentClass, inline) => {
+    const row = regionStub('', inline);
+    row.parentElement = { classList: { contains: (name) => name === parentClass } };
+    return row;
+  };
+  const splitRow = { display: 'flex', 'justify-content': 'space-between' };
+  const toolbar = childOf('bs-primary', { ...splitRow, height: '46px' });
+  const column = childOf('bs-primary', { ...splitRow, 'flex-direction': 'column' });
+  const stacked = childOf('bs-primary', { display: 'flex' });
+  const tableRow = childOf('bs-table', splitRow);
+  for (const row of [toolbar, column, stacked, tableRow]) hoistLayout(row);
+  assert.equal(toolbar.dataset.bsSplitRow, 'true');
+  assert.equal(column.dataset.bsSplitRow, undefined,
+    '세로 줄을 접으면 넘친 것이 오른쪽 새 열로 가서 오히려 가로 넘침이 된다');
+  assert.equal(stacked.dataset.bsSplitRow, undefined);
+  assert.equal(tableRow.dataset.bsSplitRow, undefined, '표는 열 폭이 계약이라 안 접는다');
 });
 
 test('applyResponsiveHooks는 보드 루트·반응형 영역·영역 밖 고정 상자를 모두 훑는다', () => {
