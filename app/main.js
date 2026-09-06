@@ -301,6 +301,9 @@ function revealShell({ focus = true, force = false } = {}) {
 // 사용자가 메인 셸을 볼 수 있으면 키우미 native 창 자체를 숨기고, 셸이 숨었거나
 // 최소화됐을 때만 키우미를 표시한다. 다른 앱에 덮인 정도는 Electron isVisible()로
 // 판정할 수 없으므로 셸 표시 상태로 남긴다.
+//
+// **창 가시성과 표시 모드는 다른 값이다**(Paper 보드 05 5EX-0) — 최소화는 창을
+// 띄우지만 모드는 알림 전용(B)에 머문다. 그래서 페이로드에 둘 다 싣는다.
 function isShellHidden() {
   return orbWindow.shouldShowOrbForShell(shellWin);
 }
@@ -308,7 +311,10 @@ function isShellHidden() {
 function broadcastShellVisibility() {
   if (!orbWin || orbWin.isDestroyed()) return;
   const hidden = isShellHidden();
-  orbWin.webContents.send('athena:shell-visibility', { hidden });
+  orbWin.webContents.send('athena:shell-visibility', {
+    hidden,
+    displayMode: orbWindow.orbDisplayMode(shellWin),
+  });
   orbWindow.syncOrbVisibility(shellWin, orbWin);
 }
 
@@ -635,6 +641,12 @@ function sendRoutineEventToRenderers(event) {
   // 행을 각자 렌더할 뿐이고 백엔드 신규 경로는 0건이다 — 설계서 §판단서 요지.
   if (orbWin && !orbWin.isDestroyed()) {
     orbWin.webContents.send('athena:routine-event', event);
+    // 발화·복원 실패는 셸이 보이는 동안에도 알림 전용 패널로 실제 화면에 선다
+    // (Paper 보드 05 5FX-0 「셸이 보이는 동안 오브는 알림 전용이다」). 감시형
+    // 신호는 배경 상태라 창을 띄우지 않는다.
+    if (event && (event.type === 'routine-fired' || event.type === 'routine-restore-failed')) {
+      orbWindow.syncOrbVisibility(shellWin, orbWin, { alert: true });
+    }
   }
 }
 
@@ -4384,7 +4396,7 @@ ipcMain.handle('athena:orb-chat-submit', async (e, payload = {}) => {
 // 기본값은 그대로 GET이므로 기존 호출자(전부 GET)는 한 줄도 안 바뀐다.
 async function fetchBrainJson(path, { params, signal, method, payload } = {}) {
   const token = historySink.getBearerToken();
-  if (!token) return { ok: false, error: '로컬 베어러 토큰이 설정되지 않았다' };
+  if (!token) return { ok: false, error: '로컬 베어러 토큰이 설정되지 않았습니다' };
   const url = new URL(path, historySink.getBackendUrl());
   if (params) {
     for (const [k, v] of Object.entries(params)) {
@@ -4432,6 +4444,64 @@ ipcMain.handle('athena:brain-profile-summary', async (_e, { limit, windowDays } 
   });
   if (!result.ok) return { ok: false, error: result.error };
   return { ok: true, ...result.body };
+});
+
+// 브레인 이력 조회의 1회 상한(brain/history.py MAX_BATCH_SIZE). 넘겨서 부르면
+// 저장소가 ValueError를 던지므로 이 값이 한 번에 읽을 수 있는 최대치다. 명시하지
+// 않으면 백엔드 기본값(대화 50 · 메시지 100)으로 조용히 잘린다.
+const BRAIN_HISTORY_PAGE_LIMIT = 500;
+
+// Paper 보드 32 「대화 이력 · 보관 중」이 셀 건수 — 같은 카드의 두 버튼(내보내기 ·
+// 전체 삭제)이 다루는 저장소를 그대로 센다. 로컬 세션 원장을 세면 전체 삭제가
+// 건드리지도 않는 수를 화면이 말하게 된다.
+ipcMain.handle('athena:brain-conversations-count', async () => {
+  const listed = await fetchBrainJson('/api/v1/brain/conversations', {
+    params: { limit: BRAIN_HISTORY_PAGE_LIMIT },
+  });
+  if (!listed.ok) return { ok: false, error: listed.error };
+  const conversations = (listed.body && listed.body.conversations) || [];
+  return { ok: true, conversations: conversations.length };
+});
+
+// Paper 보드 32 「이력 내보내기」 — 로컬에 남은 대화를 파일 하나로 꺼낸다. 사본을
+// 따로 만들지 않고 브레인이 이미 소유한 원장을 그대로 읽는다(수집 경로 신설 0건).
+// 저장 위치는 사람이 고른다 — 앱이 조용히 어딘가에 떨구지 않는다.
+ipcMain.handle('athena:history-export', async () => {
+  const listed = await fetchBrainJson('/api/v1/brain/conversations', {
+    params: { limit: BRAIN_HISTORY_PAGE_LIMIT },
+  });
+  if (!listed.ok) return { ok: false, error: listed.error };
+  const summaries = (listed.body && listed.body.conversations) || [];
+  const conversations = [];
+  let messages = 0;
+  // 상한을 넘긴 이력은 조용히 사라지면 안 된다 — 이 버튼 바로 옆이 되돌릴 수 없는
+  // 「전체 삭제」라, 잘렸다는 사실을 카드가 말해야 내보내고 지운 사람이 잃지 않는다.
+  let truncated = summaries.length >= BRAIN_HISTORY_PAGE_LIMIT;
+  for (const summary of summaries) {
+    const chats = await fetchBrainJson('/api/v1/brain/chats', {
+      params: { conversation_id: summary.conversation_id, limit: BRAIN_HISTORY_PAGE_LIMIT },
+    });
+    if (!chats.ok) return { ok: false, error: chats.error };
+    const stored = (chats.body && chats.body.messages) || [];
+    if (stored.length < summary.message_count) truncated = true;
+    messages += stored.length;
+    conversations.push({ ...summary, messages: stored });
+  }
+  const exportedAt = new Date().toISOString();
+  const picked = await dialog.showSaveDialog(shellWin, {
+    title: '대화 이력 내보내기',
+    defaultPath: path.join(app.getPath('downloads'), `athena-history-${exportedAt.slice(0, 10)}.json`),
+    filters: [{ name: 'JSON', extensions: ['json'] }],
+  });
+  if (picked.canceled || !picked.filePath) return { ok: true, canceled: true };
+  try {
+    await fs.promises.writeFile(
+      picked.filePath, JSON.stringify({ exportedAt, conversations }, null, 2), 'utf-8',
+    );
+  } catch (err) {
+    return { ok: false, error: `파일을 쓰지 못했습니다 — ${String((err && err.message) || err)}` };
+  }
+  return { ok: true, path: picked.filePath, conversations: conversations.length, messages, truncated };
 });
 
 // 캔버스 빈 상태(보드 05)의 "확인이 필요한 것 N건" 힌트 — 되물을 것들(불확실하다고
@@ -4613,7 +4683,7 @@ ipcMain.handle('athena:brain-history-query', async (e, payload = {}) => {
 // restartAfterReset()이 그 순서를 캡슐화한다(전역 exit 훅은 무변경).
 ipcMain.handle('athena:brain-reset', async () => {
   const token = historySink.getBearerToken();
-  if (!token) return { ok: false, error: '로컬 베어러 토큰이 설정되지 않았다' };
+  if (!token) return { ok: false, error: '로컬 베어러 토큰이 설정되지 않았습니다' };
   let res;
   try {
     res = await fetch(`${historySink.getBackendUrl()}/api/v1/brain/reset-and-restart`, {

@@ -87,11 +87,14 @@ const INVOKE_CHANNELS = new Set([
   // — 대화 모드 HISTORY_COMMAND 조회, 설정 모드 "성향・이력" 상태·전체 삭제.
   'athena:brain-status',
   'athena:brain-history-query',
+  'athena:history-export',
   'athena:brain-reset',
   // 그래프 모드(leaf 8 / W2-3) — 군집 지도 조회. 읽기 전용이다.
   'athena:brain-cluster-map',
   // 그래프 모드 요약 뷰(보드 07) — 성향 신호 상위 N. 읽기 전용이다.
   'athena:brain-profile-summary',
+  // 설정 성향·이력 카드(보드 32) "보관 중" 건수 — 내보내기·전체 삭제와 같은 저장소를 센다.
+  'athena:brain-conversations-count',
   // 캔버스 빈 상태(보드 05) "확인이 필요한 것 N건" 힌트 — 되물을 것들. 읽기 전용이다.
   'athena:brain-suggested-questions',
   // 그래프 모드 요약 뷰 "숨은 연관"(스텝7) — 군집 경계를 넘는 연결. 읽기 전용이다.

@@ -139,12 +139,18 @@ test('renderer keeps collectChat OFF and surfaces a human-readable error when ma
   assert.match(settingsSource, /async function setCollectChatPreference/);
   assert.match(settingsSource, /writeGraphSettingsLocal\(\{ collectChat: false \}/);
   assert.match(settingsSource, /error instanceof Error[\s\S]*?throw error/);
-  assert.match(
-    settingsSource,
-    /refreshHistoryCard\(card, head, body, collectChatPreferenceErrorMessage\(error\), false\)/,
+  // 토글의 주인은 설정 4번째 카드가 아니라 그래프 모드 「수집·노출」 탭이다
+  // (Paper 보드 22). 실패하면 그 자리에서 토글을 OFF로 되돌리고 사람이 읽을
+  // 이유를 남긴다 — 조용히 켜진 척하면 사용자는 수집되고 있다고 믿는다.
+  const collectionSource = fs.readFileSync(
+    path.join(__dirname, '..', 'graph-mode', 'collection-settings.js'), 'utf8',
   );
-  assert.match(settingsSource, /typeof collectChatOverride === ['"]boolean['"][\s\S]*?current\.collectChat = collectChatOverride/);
-  assert.match(settingsSource, /resultBox\.appendChild\(errorNote\(initialError\)\)/);
+  assert.match(collectionSource, /await deps\.setCollectChat\(next\)/);
+  assert.match(
+    collectionSource,
+    /catch \(error\)[\s\S]*?button\.setAttribute\('aria-checked', 'false'\)[\s\S]*?showError\(card, \(error && error\.message\)/,
+  );
+  assert.match(collectionSource, /box\.textContent = message/);
 });
 
 test('completed graph refreshes are allowlisted and reload every graph surface', () => {

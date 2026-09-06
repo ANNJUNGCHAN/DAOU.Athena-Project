@@ -16,6 +16,7 @@ const {
   buildOrbWindowOptions,
   applyOrbBounds,
   shouldShowOrbForShell,
+  orbDisplayMode,
   syncOrbVisibility,
 } = require('./orb-window');
 
@@ -200,13 +201,50 @@ test('orb visibility: 닫기-백그라운드로 숨은 메인창이면 키우미
   assert.deepEqual(orb.calls, ['showInactive']);
 });
 
-test('orb visibility: 최소화된 메인창도 눈에 보이지 않는 상태라 키우미를 표시한다', () => {
+test('orb visibility: 최소화된 메인창에서도 native 창은 뜬다 — 표시 모드는 B로 남는다', () => {
   const shell = fakeShellWindow({ visible: false, minimized: true });
   const orb = fakeOrbWindow({ visible: false });
 
   assert.equal(shouldShowOrbForShell(shell), true);
   assert.equal(syncOrbVisibility(shell, orb), true);
   assert.deepEqual(orb.calls, ['showInactive']);
+  assert.equal(orbDisplayMode(shell), 'B');
+});
+
+// Paper 보드 05 — 5EX-0 「최소화·가려짐은 표시 모드를 바꾸지 않는다」,
+// 5GV-0 「작업 표시줄에 남아 있으면 아직 셸을 쓰는 중이다. 오브는 알림 전용에
+// 머문다」. 창 가시성(위 테스트들)과 표시 모드는 서로 다른 술어다.
+test('표시 모드: 최소화된 셸은 여전히 알림 전용(B)이다 — 미니 채팅으로 뒤집히지 않는다', () => {
+  assert.equal(orbDisplayMode(fakeShellWindow({ visible: false, minimized: true })), 'B');
+});
+
+test('표시 모드: 보이는 셸은 알림 전용(B)이다', () => {
+  assert.equal(orbDisplayMode(fakeShellWindow({ visible: true })), 'B');
+});
+
+test('표시 모드: 닫기-백그라운드로 숨은 셸에서만 미니 채팅(A)이다', () => {
+  assert.equal(orbDisplayMode(fakeShellWindow({ visible: false, minimized: false })), 'A');
+});
+
+test('표시 모드: 셸이 없거나 파괴됐으면 알림 전용(B)으로 둔다', () => {
+  assert.equal(orbDisplayMode(null), 'B');
+  assert.equal(orbDisplayMode(fakeShellWindow({ visible: false, destroyed: true })), 'B');
+});
+
+test('알림 전용 패널 요청은 셸이 보이는 동안에도 창을 띄운다', () => {
+  const shell = fakeShellWindow({ visible: true });
+  const orb = fakeOrbWindow({ visible: false });
+
+  assert.equal(syncOrbVisibility(shell, orb, { alert: true }), true);
+  assert.deepEqual(orb.calls, ['showInactive']);
+  assert.equal(orbDisplayMode(shell), 'B');
+});
+
+test('알림 전용 패널 요청도 앱 종료 중(파괴된 셸)에는 창을 띄우지 않는다', () => {
+  const orb = fakeOrbWindow({ visible: false });
+
+  assert.equal(syncOrbVisibility(fakeShellWindow({ visible: false, destroyed: true }), orb, { alert: true }), false);
+  assert.deepEqual(orb.calls, []);
 });
 
 test('orb visibility: 이미 원하는 상태면 show/hide를 중복 호출하지 않는다', () => {
