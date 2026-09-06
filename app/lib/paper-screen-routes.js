@@ -550,6 +550,88 @@ const GRAPH_EDIT_PROPOSAL = Object.freeze({
   reason: '3주 전 한 번 언급 후 계속 회피',
 });
 
+// entity 응답 봉투 — 보드 10이 그린 「응답의 재료」 그대로다(관계 둘 · 이력 셋,
+// 첫 관계는 잘리지 않은 발췌, 둘째는 잘린 발췌). main.js가 athena_brain
+// action=entity의 응답을 이 모양으로 렌더러에 보낸다(백엔드 EntityDetailResponse,
+// brain.py). 이름·수치·원문은 전부 값이라 phrases에 한 글자도 넣지 않는다.
+const GRAPH_ENTITY_DETAIL = Object.freeze({
+  kind: 'entity',
+  detail: {
+    revision: 12,
+    query: '한미반도체',
+    resolved: true,
+    entity_id: 'e:hanmi',
+    kind: 'security',
+    name: '한미반도체',
+    degree: 7,
+    aliases: [],
+    relations: [
+      {
+        relation_id: 'r1',
+        relation_kind: 'interested_in',
+        direction: 'in',
+        other_entity_id: 'e:me',
+        other_entity_kind: 'investor_profile',
+        other_entity_name: '투자자',
+        confidence: 'EXTRACTED',
+        tier: 'conversational',
+        rationale: 'HBM 장비 질문 반복',
+        observed_at: '2026-08-04T00:00:00Z',
+        reinforcement: 4,
+        source: {
+          source_id: 's1',
+          kind: 'chat_message',
+          text: 'HBM 장비주가 궁금해서 한미반도체를 계속 보고 있어',
+          locator: 'conv-1#3',
+          occurred_at: '2026-08-04T09:00:00Z',
+          truncated: false,
+          full_chars: 28,
+        },
+      },
+      {
+        relation_id: 'r2',
+        relation_kind: 'belongs_to',
+        direction: 'out',
+        other_entity_id: 'e:bigcap',
+        other_entity_kind: 'theme',
+        other_entity_name: '반도체 대형주',
+        confidence: 'INFERRED',
+        tier: 'conversational',
+        rationale: null,
+        observed_at: '2026-08-10T00:00:00Z',
+        reinforcement: 2,
+        source: {
+          source_id: 's2',
+          kind: 'chat_message',
+          text: '반도체 대형주 중심으로 가되 장비주도 조금 섞고 싶어. 지금 비중은',
+          locator: 'conv-2#1',
+          occurred_at: '2026-08-10T09:00:00Z',
+          truncated: true,
+          full_chars: 1240,
+        },
+      },
+    ],
+    timeline: [
+      {
+        seq: 9, at: '2026-08-23T00:00:00Z', revision: 12, op: 'edge_added',
+        subject_id: 'e:hanmi', object_id: 'e:div', relation: 'belongs_to',
+        confidence_before: null, confidence_after: 'INFERRED', source: null,
+      },
+      {
+        seq: 5, at: '2026-08-19T00:00:00Z', revision: 8, op: 'edge_changed',
+        subject_id: 'e:me', object_id: 'e:hanmi', relation: 'interested_in',
+        confidence_before: 'AMBIGUOUS', confidence_after: 'EXTRACTED', source: null,
+      },
+      {
+        seq: 1, at: '2026-08-04T00:00:00Z', revision: 2, op: 'entity_added',
+        subject_id: 'e:hanmi', object_id: null, relation: null,
+        confidence_before: null, confidence_after: null, source: null,
+      },
+    ],
+    candidates: [],
+  },
+});
+
 // ── 코드 알람 fixture (A-2 보드 10·11·12) ────────────────────────────────────
 // 코드 알람 상세는 목록에 없는 값을 한 번 더 조회해서 그린다(athena:routine-detail,
 // canvas.js가 fetchDetail로 잇는다) — 봉투를 안 박으면 판정이 백엔드에 좌우된다.
@@ -2749,6 +2831,47 @@ const ROUTES = Object.freeze([
         equals: ['요약', '그래프', '수집·노출'],
       },
       { what: 'count', selector: '.view-toggle-tab.is-active', equals: 1 },
+    ],
+  },
+  {
+    board: '3ZAA-1', // 10 · 그래프 — "이 노드 설명해줘" (관계·근거·이력·대화 원문)
+    window: 'shell',
+    // 이 패널을 여는 길은 모델의 athena_brain action=entity 하나뿐이다(main.js
+    // maybeForwardBrainEntity → canvas.js athena:graph-chat-action kind='entity').
+    // 앱 어디에도 누를 자리가 없으므로 main이 보내는 봉투를 그대로 쏜다 —
+    // 보드 11(3ZC2-1)이 편집 제안 카드를 여는 것과 같은 문법이다.
+    reach: [
+      { do: 'mode', view: 'graph' },
+      { do: 'send', channel: 'athena:graph-chat-action', data: GRAPH_ENTITY_DETAIL },
+      { do: 'settle' },
+    ],
+    // 공통 패널이 실제로 섰는가는 root가 진다 — 안 서면 root_not_visible로
+    // 떨어진다(문구를 세는 것보다 앞이다).
+    root: '#graphPanel',
+    // 노드 이름·종류·관계명·상대 노드·발췌 원문·날짜는 전부 봉투가 주는 값이라
+    // 한 글자도 안 넣는다. 남는 것은 두 절 제목과 발치의 정직성 규칙이다.
+    //
+    // 보드 제목 두 줄과 왼쪽 판 머리의 「action=entity」·「entity = 이름 또는
+    // entity_id」는 보드가 붙인 주석이라 앱에 없다 — 도구 인자 이름을 사용자
+    // 화면에 낼 수 없다. 오른쪽 「채팅 답변」 판도 안 잰다: 툴 칩 「노드 조회」는
+    // 살아 있는 턴 안에서만 생기고(chat.js가 턴마다 진행 줄을 만든다), 모델
+    // 답변 세 문단은 애초에 결정론이 아니다.
+    phrases: [
+      '관계 — 방향 · 확정성 · 티어 · 보강',
+      '변경 이력 — 최신 먼저',
+      '이 답이 지켜야 하는 것',
+      '사실과 추론을 섞지 않는다. 관계마다 confidence(사실·추론·불확실)와 tier(체결·잔고 = 행동 / 대화 = 말)가 온다. 어긋나면 어긋난다는 사실 자체가 답이다.',
+      '이름이 여럿에 걸리면 고르지 않는다. resolved=false와 candidates가 오면 어느 것인지 되묻는다.',
+    ],
+    // Paper 그대로 — 관계 두 행에 원문 발췌가 각각 하나씩, 변경 이력 세 줄,
+    // 정직성 규칙 네 줄. 노드 선택 패널의 탭 줄은 이 화면에 없어야 한다(같은
+    // 자리에 두 주제를 겹쳐 두지 않는다 — controller.js renderSelection).
+    structure: [
+      { what: 'count', selector: '.entity-relation-row', equals: 2 },
+      { what: 'count', selector: '.entity-relation-excerpt', equals: 2 },
+      { what: 'count', selector: '.entity-timeline-row', equals: 3 },
+      { what: 'count', selector: '.entity-honesty-line', equals: 4 },
+      { what: 'absent', selector: '.panel-tab' },
     ],
   },
   {
