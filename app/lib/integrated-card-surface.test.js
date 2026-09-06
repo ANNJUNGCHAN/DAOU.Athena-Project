@@ -10,6 +10,7 @@ const {
   matchesRealtimeTick, requireRealtimeSuccess, verifiedOperationRefsFor,
   rememberPanelSession, panelSessionFor, forgetPanelSession,
   detachForDestroy, findReusableRoot, buttonLabel, workflowStateLabel, isBoardSurface,
+  buildCancelledState, buildAuthExpiredState,
 } = require('./integrated-card-surface');
 
 test('canonical taxonomy has exactly six root surfaces', () => {
@@ -235,4 +236,54 @@ test('account panel tabs use mode/section Korean labels instead of collapsing to
     section: 'holdings',
     presentation_contract: { title_ko: '계좌 통합', sections: [] },
   }), '보유종목');
+});
+
+// ---- 화면 P1 항목 17-B/17-C (Paper 1IG3-0) — 중단·인증 만료가 이미 받은 값을 지우지 않는다 ----
+test('사용자 취소는 이미 받은 결과를 유지한다', () => {
+  const state = buildCancelledState({ partial: [{ ordinal: 1 }, { ordinal: 2 }] });
+  assert.equal(state.keepResults, true);
+  assert.equal(state.badge, '취소됨');
+  assert.equal(state.action, '결과 유지 · 다시 검색');
+  assert.equal(state.title, '사용자 취소');
+  assert.equal(state.message, '중단했습니다. 이미 받은 값은 그대로 두었습니다.');
+});
+
+test('부분 결과가 하나도 없을 때만 빈 취소 카드다', () => {
+  const state = buildCancelledState({ partial: [] });
+  assert.equal(state.keepResults, false);
+  assert.equal(state.badge, '취소됨');
+  assert.equal(state.action, '다시 검색');
+  assert.equal(state.message, '중단했습니다. 아직 받은 값이 없습니다. 같은 조건으로 다시 검색할 수 있습니다.');
+  assert.deepEqual(buildCancelledState(), buildCancelledState({ partial: [] }));
+});
+
+test('인증 만료는 이전 값을 읽기 전용으로 남기고 계좌 다시 연결을 준다', () => {
+  const facts = ['평가금액 89,760,240원', '8종목', '키움증권 끝 4721'];
+  const state = buildAuthExpiredState({ facts });
+  assert.equal(state.readOnly, true);
+  assert.equal(state.badge, '인증 만료');
+  assert.equal(state.action, '계좌 다시 연결');
+  assert.deepEqual(state.blocks, ['order', 'newQuery']);
+  assert.equal(state.facts.at(-1), '주문과 새 조회는 재연결 후 가능');
+  assert.equal(state.facts.at(-2), '이전 값 읽기 전용 유지');
+});
+
+test('인증 만료가 이미 그려진 값을 지우지 않는다', () => {
+  const facts = ['평가금액 89,760,240원', '8종목'];
+  const state = buildAuthExpiredState({ facts });
+  assert.equal(state.clearValues, false);
+  assert.deepEqual(state.facts.slice(0, 2), facts);
+  assert.deepEqual(facts, ['평가금액 89,760,240원', '8종목'], '입력 배열을 제자리에서 바꾸지 않는다');
+  assert.deepEqual(buildAuthExpiredState().facts, ['이전 값 읽기 전용 유지', '주문과 새 조회는 재연결 후 가능']);
+});
+
+test('인증 만료는 재시도 상태가 아니다 — 다시 시도 버튼이 붙는 상태 집합에 없다', () => {
+  const canvas = fs.readFileSync(path.join(__dirname, '..', 'canvas.js'), 'utf8');
+  const line = canvas.slice(canvas.indexOf('const REST_RETRY_STATES'));
+  assert.match(line.slice(0, 120), /new Set\(\['timeout', 'cancelled', 'error'\]\)/);
+  // 만료는 잠그기만 하고 값을 지우지 않는다 — 카드 파괴 경로를 타면 안 된다.
+  const applyAt = canvas.indexOf('function applyAuthExpiryToAccountCards');
+  assert.ok(applyAt > 0);
+  const fn = canvas.slice(applyAt, canvas.indexOf('\n}', applyAt));
+  assert.doesNotMatch(fn, /destroyCard|\.remove\(\)|replaceChildren/);
 });
