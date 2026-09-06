@@ -4,8 +4,8 @@
 //
 // 매니페스트 role==="screen" 103장이 결국 전부 여기 있어야 한다. 없는 보드는 미구현 실패다 —
 // 「도달 절차가 없는 보드는 실패한다」가 게이트 2의 핵심이라, 표가 곧 남은 작업 목록이 된다.
-// 지금은 29장(부팅 5 + 온보딩 3 + 인증 3 + 에이전트 4 + 화면 4 + 셸·그래프 2 + 대화·계정 2
-// + 모드·빈 화면 2 + 사이드바 4)이고, 래칫(§4.5)이 잠근 뒤 저작이 이어진다.
+// 지금은 32장(부팅 5 + 온보딩 3 + 인증 3 + 에이전트 4 + 화면 4 + 셸·그래프 2 + 대화·계정 2
+// + 모드·빈 화면 2 + 창·대화 턴·탭 3 + 사이드바 4)이고, 래칫(§4.5)이 잠근 뒤 저작이 이어진다.
 //
 // ── reach 어휘는 닫혀 있다
 // 임의 JS를 표에 심으면 표가 곧 프로브가 되어 유지가 안 된다. STEP_KINDS만 허용하고,
@@ -87,6 +87,13 @@ const STEP_KINDS = Object.freeze({
   //                    부팅은 화면이 아니라 시간축이라 도달한 뒤에 되돌아갈 클릭이 없다 —
   //                    이 한 마디가 없으면 부팅 다섯 단계가 전부 마지막 프레임으로 수렴한다.
   'boot-hold': Object.freeze(['chars']),
+  // resize    width,height — 셸 창을 그 바깥 크기로 세운다(verify.js setResponsiveWidth와
+  //                          같은 자극). 창 폭이 곧 화면인 보드가 있어서다: 보드 28은 같은
+  //                          셸을 네 가지 Windows 배치로 그리고 그 넷을 가르는 것은 폭뿐이라
+  //                          (shell.css의 1279·699 경계), 클릭으로는 어느 것도 못 만든다.
+  //                          격리는 러너 몫이다 — 창 크기는 재읽기로 안 돌아오므로 프로브가
+  //                          라우트 전 bounds를 적어 두고 끝나면 되돌린다.
+  resize: Object.freeze(['width', 'height']),
   // eval      js,why — 탈출구. why가 없으면 라우트표 린트가 거절한다
   eval: Object.freeze(['js', 'why']),
 });
@@ -198,6 +205,52 @@ const ROUTINE_FIRED = Object.freeze({
   threshold: '88,000',
   fired_at: '2026-08-20T15:30:00+09:00',
 });
+
+// 복원 실패 이벤트 — 보드 30이 그린 대화 턴 하나. 백엔드가 실제로 보내는 봉투 모양
+// 그대로다(routines/runtime.py:371 — 실시간 구독 복원 실패는 note에 사람이 읽는 문장을
+// 싣는다). 그 문장은 루틴 이름을 품은 값이라 phrases에 한 글자도 넣지 않는다.
+const ROUTINE_RESTORE_FAILED = Object.freeze({
+  type: 'routine-restore-failed',
+  routine_id: 'fx-r2',
+  detail: 'TimeoutError',
+  note: "'검증 루틴' 실시간 구독에 실패했습니다",
+});
+
+// 캔버스 탭 넷 — 보드 55가 그린 탭 스트립 그대로(시세 · 계좌 · 호가 · 수급).
+// 봉투 하나가 탭 하나다: 통합 카드 판정이 열리면(card_id·card_kind) 카드가 탭
+// 뷰포트로 들어가고, 탭 제목은 `카드명 · 대상`으로 만들어진다(canvas-tabs.js
+// tabTitleFor). 표면 계약의 board_id는 색인이 실제로 아는 보드다
+// (board-templates.index.generated.js) — 없는 보드를 적으면 카드가 안 선다.
+// 카드명·종목·계좌번호는 전부 값이라 phrases에 한 글자도 넣지 않는다.
+function paperCanvasTab(cardId, cardKind, boardId, title, target) {
+  return Object.freeze({
+    card_id: cardId,
+    card_kind: cardKind,
+    operation_ref: 'base:board-surface',
+    canvas_type: 'facts',
+    card_title: title,
+    view_instance_id: `paper55-${boardId.toLowerCase()}`,
+    ...target,
+    surface_contract: {
+      surface_version: 'card-surface.v1',
+      board_id: boardId,
+      card_id: cardId,
+      slot_values: {},
+      unbound_slots: [],
+      state_boards: [],
+      column_priority: [],
+      section_titles_ko: {},
+    },
+  });
+}
+
+const SAMSUNG = Object.freeze({ stk_cd: '005930', stk_nm: '삼성전자' });
+const CANVAS_TABS = Object.freeze([
+  paperCanvasTab('CC-03', 'instrument', '137X-2', '시세', SAMSUNG),
+  paperCanvasTab('CC-01', 'account', '133H-2', '계좌', { account_no: '81234721' }),
+  paperCanvasTab('CC-04', 'orderbook', '13BC-2', '호가', SAMSUNG),
+  paperCanvasTab('CC-05', 'flow', '1WOB-1', '수급', SAMSUNG),
+]);
 
 // 되물을 것들 3건 — 보드 08의 「1 / 3」이 그 수다. 백엔드 봉투 모양 그대로
 // {ok, revision, questions}(main.js가 result.body를 펼쳐 준다, chat.js:1941 주석).
@@ -882,6 +935,101 @@ const ROUTES = Object.freeze([
       { what: 'count', selector: '.canvas-empty-chat', equals: 1 },
       { what: 'count', selector: '.canvas-empty-art', equals: 1 },
       { what: 'absent', selector: '.canvas-empty-graphmode' },
+    ],
+  },
+
+  // ---------- 창·대화 턴·탭 3장 (1-0) ----------
+  {
+    board: 'G5B-0', // 28 · Windows 반응형 창 · Snap
+    window: 'shell',
+    // 보드 28은 한 화면이 아니라 같은 셸을 네 폭(와이드 · 가로 2분할 · 세로 2분할 ·
+    // 4분할)으로 세워 놓은 규격표다. 한 창은 한 폭만 가지므로 라우트는 그중 하나만
+    // 잰다(보드 20의 토큰 4상태와 같은 선택). 고른 것은 2분할 — 와이드는 기본 폭이라
+    // 보드 06이 이미 지고 있고, 4분할(699px 아래)은 사이드바 글자가 전부 접혀
+    // 원장 문구를 하나밖에 못 남긴다. 1000px은 두 경계(1279·699) 사이 한가운데다.
+    reach: [
+      { do: 'resize', width: 1000, height: 760 },
+      { do: 'settle' },
+    ],
+    root: '#shell',
+    // 「＋ 새 대화」·「프로젝트 · 아테나」처럼 축소 목업이 줄여 쓴 표기는 원장에 그대로
+    // 있지만 포함 판정이라 앱의 「새 대화」가 그 안에 있다. 「창 규격 검수」·「아테나」는
+    // 대화 제목·프로젝트 이름이라 값이고, 규격 설명문(「최소 330px 지원」류)은 Paper가
+    // 자기 자신에 대해 쓴 주석이라 앱이 그리는 화면 문구가 아니다.
+    phrases: ['새 대화', '그래프', '에이전트', '플러그인', '무엇이든 물어보세요'],
+    // Paper가 이 폭에 대해 적은 세 가지: 「한 셸」로 영역은 그대로 셋이고, 채팅은
+    // 아래로 내려가 빈 대화에서는 작성창만 남으며(2분할 목업의 하단 띠), 그래도
+    // 「Snap 후에도 초안과 스크롤은 보존」할 수 있게 입력 DOM은 하나뿐이다.
+    // 사이드바 행 수는 안 적는다 — 축소 목업은 넷(새 대화·그래프·에이전트·플러그인)만
+    // 그렸는데 앱의 모드는 다섯이라 거기에 앱의 수를 적으면 앱이 정본이 된다.
+    structure: [
+      { what: 'count', selector: '.shell-region', equals: 3 },
+      { what: 'absent', selector: '#chatRegion .history' },
+      { what: 'count', selector: '#input', equals: 1 },
+    ],
+  },
+  {
+    board: 'DH2-0', // 30 · 대화 턴 — 복원 실패
+    window: 'shell',
+    // 복원 실패 턴은 백엔드가 밀어 주는 athena:routine-event 하나로만 그려진다
+    // (chat.js renderAgentTurn) — 보드 09와 같은 이유로 같은 어휘를 쓴다.
+    reach: [
+      { do: 'send', channel: 'athena:routine-event', data: ROUTINE_RESTORE_FAILED },
+      { do: 'settle' },
+    ],
+    // 보드가 셸 창 전체(사이드바 · 빈 캔버스 · 실패 턴 하나)라 root도 셸이다.
+    root: '#shell',
+    // 실패 문장은 적지 않는다. Paper가 쓴 「감시 '검증 루틴'을 복원하지 못했습니다 —
+    // …」는 루틴 이름을 품은 값이고, 앱은 백엔드가 note로 보내는 **문장**을 그대로
+    // 옮겨 붙이므로(routines/runtime.py:296·371은 이름이 아니라 완성된 문장을 싣는다)
+    // Paper의 그 한 줄은 어느 봉투에서도 글자 그대로 만들어지지 않는다. 남는 것은
+    // 종류 라벨과 셸 문구다. 「새 채팅」·「전체」·「아직 답변 카드가 없습니다」·
+    // 「성향 그래프 열기」는 사이드바 보드 35와 빈 화면 보드 26이 이미 다시 쓴
+    // 자리라(앱은 「새 대화」, CTA는 없앴다) 여기서 되살리지 않는다.
+    phrases: ['복원 실패', '그래프', '에이전트', '플러그인', '무엇이든 물어보세요'],
+    // Paper의 대화 본문에는 턴이 하나뿐이고, 그 턴 머리에는 점과 종류 라벨만 있다 —
+    // 발화 턴(보드 09)의 시각 배지가 여기엔 없다는 것이 이 보드가 그린 차이다.
+    // 캔버스는 빈 상태 그대로다.
+    structure: [
+      { what: 'count', selector: '.turn-agent.agent-restore-failed', equals: 1 },
+      { what: 'absent', selector: '.agent-badge' },
+      { what: 'count', selector: '.canvas-empty-chat', equals: 1 },
+    ],
+  },
+
+  {
+    board: '3ZPB-0', // 55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기
+    window: 'shell',
+    // 탭은 카드가 도착해야 생긴다 — 봉투 넷이 Paper가 그린 탭 넷이다. 슬롯 값은
+    // 비워 둔다: 보드가 그리는 시세·잔고는 백엔드가 실어 주는 값이라 여기서 지어
+    // 넣으면 없는 사실을 화면에 박는 것이 된다(값이 없으면 앱이 결측어를 그린다).
+    // 이 라우트가 재는 것도 값이 아니라 탭 스트립과 뷰포트 하나다.
+    // 마지막 발화 턴은 보드가 오른쪽 대화에 함께 그린 그 턴이다(보드 09와 같은 봉투).
+    reach: [
+      { do: 'envelope', data: CANVAS_TABS[0] },
+      { do: 'envelope', data: CANVAS_TABS[1] },
+      { do: 'envelope', data: CANVAS_TABS[2] },
+      { do: 'envelope', data: CANVAS_TABS[3] },
+      { do: 'send', channel: 'athena:routine-event', data: ROUTINE_FIRED },
+      // 보드 원문 HTML은 카드 청크(수 MB)라 첫 마운트가 비동기다 — 넷이 다 설 때까지.
+      { do: 'wait', ms: 1500 },
+      { do: 'settle' },
+    ],
+    root: '#shell',
+    // 탭 제목(「시세 · 삼성전자」류)과 카드 안의 표 머리·수치는 전부 값이라 안 넣는다.
+    // 「결과물」·「출처」·「하위 에이전트」도 안 적는다: 그 셋은 실제 질의가 도는 동안에만
+    // 그려져(chat.js updateResultDock·ensureAgentCard) CLI와 백엔드가 무엇을 답하느냐에
+    // 좌우된다. 「ESC 중단」·「CLAUDE」·「OPUS · HIGH」는 Paper 44·45 v5가 입력행에서
+    // 걷어낸 뒤로 앱이 그리지 않는다.
+    phrases: ['그래프', '에이전트', '플러그인', '주기 확인', '감시 조건',
+      '값은 발화 시점 기준입니다 — 최신 확인은 다시 물어봐 주세요.'],
+    // 이 보드의 계약 자체 — 탭 넷에 닫기 넷이고, 열려 있는 뷰포트는 하나이며,
+    // 그 하나에 선 것은 Paper 보드 표면이다(범용 표로 떨어지면 카드가 아니다).
+    structure: [
+      { what: 'count', selector: '.canvas-tab', equals: 4 },
+      { what: 'count', selector: '.canvas-tab-close', equals: 4 },
+      { what: 'count', selector: '.canvas-tab-panel', equals: 1 },
+      { what: 'count', selector: '.card.board-surface', equals: 1 },
     ],
   },
 
