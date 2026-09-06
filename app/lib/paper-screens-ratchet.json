@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "gate": "verify:paper-screens",
-  "blessed_at": "2026-09-06T02:55:07.529Z",
+  "blessed_at": "2026-09-06T03:50:54.164Z",
   "blessed_by": "verify:paper-screens --bless",
   "target_boards": 115,
   "passing": [
@@ -38,6 +38,7 @@
     "44RV-1",
     "4AN-0",
     "4IA-0",
+    "4TY-0",
     "56X-0",
     "AJ-0",
     "AMZ-0",
@@ -45,17 +46,20 @@
     "B57-0",
     "BIM-0",
     "BV0-0",
+    "C8G-0",
+    "CLE-0",
     "COS-0",
     "CU0-0",
     "CVY-0",
     "DH2-0",
+    "DO-0",
     "F9-0",
     "FT6-0",
     "G5B-0",
     "GCF-0",
     "OJ-0"
   ],
-  "passing_count": 49,
+  "passing_count": 53,
   "shrink_log": [
     {
       "at": "2026-09-06T02:19:45.642Z",
