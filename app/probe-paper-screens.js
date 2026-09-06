@@ -40,6 +40,10 @@
 
 process.env.ATHENA_NO_AUTOSTART = '1';
 process.env.ATHENA_CANVAS_SOURCE = 'fixture';
+// 키우미 미니 카드(보드 2LFW-2)는 질의가 도는 동안에만 사는 구독으로만 그려진다.
+// 이 변수가 있을 때만 오브가 질의 밖에서 온 봉투도 같은 카드로 그린다(orb.js
+// askCanvasProbeMode · main.js athena:orb-canvas-probe) — 제품에는 없는 통로다.
+process.env.ATHENA_ORB_CANVAS_PROBE = '1';
 
 const { app, ipcMain } = require('electron');
 const fs = require('node:fs');
