@@ -914,6 +914,29 @@ test('primary가 세로로 쌓아 놓은 양끝 가로 줄만 XS 접기 표시�
   assert.equal(orphan.dataset.bsSplitRow, undefined, 'primary 밖 줄은 대상이 아니다');
 });
 
+test('가로 칸에 붙은 병기 줄만 접기 숙주로 표시한다', () => {
+  const pairIn = (host) => {
+    const pair = regionStub('bs-paired', {});
+    pair.parentElement = host;
+    host.children = [pair];
+    return host;
+  };
+  const rowCell = pairIn(regionStub('', { display: 'flex', 'align-items': 'center' }));
+  const columnCell = pairIn(regionStub('', { display: 'flex', 'flex-direction': 'column' }));
+  const blockCell = pairIn(regionStub('', {}));
+  const surface = regionStub('board-surface', {});
+  surface.children = [rowCell, columnCell, blockCell];
+  surface.querySelectorAll = (selector) => (selector === '.bs-paired'
+    ? surface.children.flatMap((cell) => cell.children)
+    : []);
+
+  applyResponsiveHooks(surface);
+  assert.equal(rowCell.dataset.bsPairedHost, 'true',
+    '가로 칸에서는 병기 사본이 옆으로 늘어서서 칸을 밀어낸다');
+  assert.equal(columnCell.dataset.bsPairedHost, undefined, '세로 칸은 이미 아랫줄이다');
+  assert.equal(blockCell.dataset.bsPairedHost, undefined);
+});
+
 test('applyResponsiveHooks는 보드 루트·반응형 영역·영역 밖 고정 상자를 모두 훑는다', () => {
   const rail = regionStub('bs-rail', { width: '460px' });
   const primary = regionStub('bs-primary', { width: '912px', 'flex-grow': '1' });

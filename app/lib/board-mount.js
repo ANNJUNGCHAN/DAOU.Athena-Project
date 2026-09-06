@@ -539,6 +539,25 @@ function hoistRigidBox(el) {
   return moved;
 }
 
+// 병기 줄이 앉는 칸 — 추출기는 접힌 열의 사본(`.bs-paired`)을 행의 **둘째 칸**에
+// 넣는다(paper_board_extract.apply_column_collapse). 그 칸이 세로로 쌓는 칸이면
+// 사본은 그대로 아랫줄이 되지만, 가로 칸이면 옆으로 늘어서서 칸을 밀어낸다
+// (실측 2TZN-1 업종 행 둘째 칸 58px 안에 병기 4줄 — 최소 폭에서 표면 66px 넘침).
+// 가로 칸만 표시해 두고, 좁은 단계에서 사본을 아랫줄로 내린다.
+function markPairedHost(surface) {
+  let marked = 0;
+  for (const pair of surface.querySelectorAll('.bs-paired')) {
+    const host = pair.parentElement;
+    if (!host || !host.dataset || !host.style) continue;
+    if (host.dataset.bsPairedHost === 'true') continue;
+    if (host.style.getPropertyValue('display').trim() !== 'flex') continue;
+    if (host.style.getPropertyValue('flex-direction').trim() === 'column') continue;
+    host.dataset.bsPairedHost = 'true';
+    marked += 1;
+  }
+  return marked;
+}
+
 function applyResponsiveHooks(surface) {
   hoistLayout(surface);
   let hoisted = 1;
@@ -553,6 +572,7 @@ function applyResponsiveHooks(surface) {
   for (const el of surface.querySelectorAll('*')) {
     if (hoistRigidBox(el)) hoisted += 1;
   }
+  markPairedHost(surface);
   return hoisted;
 }
 
