@@ -941,21 +941,6 @@ html, body { background: transparent; }
   flex: 1 1 0;
   font-family: var(--font-body); font-size: var(--text-xs); line-height: 17px; color: var(--color-k-soft);
 }
-/* 「이 답이 지켜야 하는 것」 — 패널 발치. 위 최근 변화와 달리 flexGrow를 안 쓴다:
- * 이 블록은 늘 마지막이고, 앞 섹션이 짧으면 바로 뒤에 붙는 편이 정직하다. */
-.entity-honesty {
-  flex-shrink: 0; margin-top: auto;
-  padding: 12px 16px 14px; border-top: 1px solid var(--color-k-line);
-  display: flex; flex-direction: column; gap: 6px;
-}
-.entity-honesty-title {
-  font-family: var(--font-body); font-size: var(--text-2xs); color: var(--color-k-hint);
-  letter-spacing: 0.1em;
-}
-.entity-honesty-line {
-  font-family: var(--font-body); font-size: var(--text-2xs); line-height: 15px; color: var(--color-k-ghost);
-}
-
 /* 카드도 유리다 — soul.md §7 "모든 표면이 유리다. 두 창도, 창 안의 카드도 전부."
  * 2026-08-17 디자인 리뷰 [HIGH]로 정정: 이전 판은 고정 rgba 채움 + backdrop-filter
  * 0건이라 §7이 금지한 "뒤에 굴절할 것 없는 반투명 회색 사각형"이었다. 이제 알파를

@@ -1027,8 +1027,6 @@ async function main() {
           metas: q('.entity-relation-meta').map((n) => n.textContent),
           excerpts: q('.entity-excerpt-meta').map((n) => n.textContent),
           timeline: q('.entity-timeline-row').length,
-          honesty: q('.entity-honesty-line').map((n) => n.textContent),
-          honestyTitle: (panel.querySelector('.entity-honesty-title') || {}).textContent || null,
           tabs: q('.panel-tab').length,
           text: panel.textContent };
       `);
@@ -1058,12 +1056,13 @@ async function main() {
       check('잘린 발췌는 잘렸다고 화면이 말한다',
         truncated.length === 0 || entityPanel.excerpts.some((m) => m.startsWith('잘린 발췌 — ')),
         { truncated: truncated.length, excerpts: entityPanel.excerpts.slice(0, 3) });
+      // 보드가 발치에 붙인 「정직성 규칙」은 안 그린다(2026-09-07) — 화면이 아니라 모델의
+      // 답이 지켜야 할 계약 서술이고, 도구 인자·상태 코드가 그대로 박혀 있다. 그래서 이
+      // 검사도 그 어휘를 함께 센다: 예전 정규식은 마침 그 블록의 말만 비켜 갔다.
       check('원시 코드가 화면에 새지 않는다',
-        !/chat_message|EXTRACTED|AMBIGUOUS|interested_in|deterministic/.test(entityPanel.text),
+        !/chat_message|EXTRACTED|AMBIGUOUS|interested_in|deterministic|confidence|full_chars|resolved=|action=entity/
+          .test(entityPanel.text),
         entityPanel.text.slice(0, 200));
-      check('정직성 규칙 네 줄이 패널 발치에 선다',
-        entityPanel.honestyTitle === '이 답이 지켜야 하는 것' && entityPanel.honesty.length === 4,
-        { title: entityPanel.honestyTitle, lines: entityPanel.honesty.length });
       check('노드 선택 패널과 겹쳐 그리지 않는다', entityPanel.tabs === 0, entityPanel.tabs);
       await capture(wc, '10b-chat-entity');
 

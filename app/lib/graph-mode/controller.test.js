@@ -1683,7 +1683,7 @@ test('buildEntityDetailModel — 관계도 이력도 없으면 빈 목록이다(
   assert.equal(model.meta, '종목', '연결 수가 없으면 그 절이 빠진다');
 });
 
-test('showEntityDetail() — 공통 패널이 관계·이력·정직성 규칙으로 채워진다', async () => {
+test('showEntityDetail() — 공통 패널이 관계·이력으로 채워진다', async () => {
   const { controller, elements } = setup({ withPanel: true });
   await controller.toggle();
   const model = controller.showEntityDetail(entityDetailPayload());
@@ -1694,10 +1694,20 @@ test('showEntityDetail() — 공통 패널이 관계·이력·정직성 규칙�
   assert.equal(panel.querySelectorAll('.entity-relation-row').length, 2);
   assert.equal(panel.querySelectorAll('.entity-relation-excerpt').length, 2);
   assert.equal(panel.querySelectorAll('.entity-timeline-row').length, 3);
-  assert.equal(panel.querySelectorAll('.entity-honesty-line').length, 4);
   const titles = panel.querySelectorAll('.entity-section-title').map((n) => n.textContent);
   assert.deepEqual(titles, ['관계 — 방향 · 확정성 · 티어 · 보강', '변경 이력 — 최신 먼저']);
-  assert.equal(panel.querySelector('.entity-honesty-title').textContent, '이 답이 지켜야 하는 것');
+});
+
+// 보드가 발치에 붙인 「정직성 규칙」은 화면이 아니라 모델의 답이 지켜야 할 계약이고,
+// 도구 인자·enum·상태 코드가 그대로 박혀 있다 — 같은 이유로 안 그린 「action=entity」와
+// 한 범주다. 다시 그리면 이 패널이 스스로 모순되므로 여기서 막는다.
+test('showEntityDetail() — 보드 주석층(정직성 규칙·도구 인자)은 패널에 안 그린다', async () => {
+  const { controller, elements } = setup({ withPanel: true });
+  await controller.toggle();
+  controller.showEntityDetail(entityDetailPayload());
+  const text = elements.panel.textContent;
+  assert.ok(!text.includes('이 답이 지켜야 하는 것'), text);
+  assert.ok(!/confidence|full_chars|resolved=|action=entity/.test(text), text);
 });
 
 test('showEntityDetail() — 못 찾은 조회는 패널을 열지 않는다', async () => {
@@ -1720,6 +1730,17 @@ test('노드를 새로 고르면 entity 응답 패널이 물러난다', async ()
 test('선택 해제가 entity 응답 패널을 닫는다', async () => {
   const { controller, elements } = setup({ withPanel: true });
   await controller.toggle();
+  controller.showEntityDetail(entityDetailPayload());
+  elements.panel.querySelector('.panel-deselect').dispatchEvent({ type: 'click' });
+  assert.equal(elements.panel.hidden, true);
+});
+
+// 같은 말·같은 손잡이는 같은 일을 해야 한다 — 노드를 고른 채로 조회한 사람에게
+// 「선택 해제」가 이전 패널로 되돌아가는 버튼이면 이름이 거짓말이 된다.
+test('선택 해제는 노드를 고른 채로 조회했어도 선택까지 놓는다', async () => {
+  const { controller, elements } = setup({ payload: payloadTwoClusters, withPanel: true });
+  await controller.toggle();
+  controller.selectNode('e:a');
   controller.showEntityDetail(entityDetailPayload());
   elements.panel.querySelector('.panel-deselect').dispatchEvent({ type: 'click' });
   assert.equal(elements.panel.hidden, true);

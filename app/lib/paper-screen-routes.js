@@ -2849,28 +2849,28 @@ const ROUTES = Object.freeze([
     // 떨어진다(문구를 세는 것보다 앞이다).
     root: '#graphPanel',
     // 노드 이름·종류·관계명·상대 노드·발췌 원문·날짜는 전부 봉투가 주는 값이라
-    // 한 글자도 안 넣는다. 남는 것은 두 절 제목과 발치의 정직성 규칙이다.
+    // 한 글자도 안 넣는다. 남는 것은 두 절 제목뿐이라 문구가 둘이다
+    // (PHRASE_FLOOR_EXCEPTIONS의 values-only — structure 넷이 대신 진다).
     //
-    // 보드 제목 두 줄과 왼쪽 판 머리의 「action=entity」·「entity = 이름 또는
-    // entity_id」는 보드가 붙인 주석이라 앱에 없다 — 도구 인자 이름을 사용자
-    // 화면에 낼 수 없다. 오른쪽 「채팅 답변」 판도 안 잰다: 툴 칩 「노드 조회」는
-    // 살아 있는 턴 안에서만 생기고(chat.js가 턴마다 진행 줄을 만든다), 모델
-    // 답변 세 문단은 애초에 결정론이 아니다.
+    // 보드 제목 두 줄, 왼쪽 판 머리의 「action=entity」·「entity = 이름 또는
+    // entity_id」, 발치의 「정직성 규칙」 네 줄은 보드가 붙인 주석층이라 앱에 없다.
+    // 앞의 둘은 도구 인자 이름이고, 정직성 규칙은 화면이 아니라 모델의 답이 지켜야 할
+    // 계약 서술인 데다 confidence·full_chars·resolved=false·503이 그대로 박혀 있다 —
+    // 셋 다 사용자 화면에 낼 수 없다(보드 11에서 「도구 계약 표」를 뺀 것과 같은 판정).
+    // 오른쪽 「채팅 답변」 판도 안 잰다: 툴 칩 「노드 조회」는 살아 있는 턴 안에서만
+    // 생기고(chat.js가 턴마다 진행 줄을 만든다), 모델 답변 세 문단은 애초에
+    // 결정론이 아니다.
     phrases: [
       '관계 — 방향 · 확정성 · 티어 · 보강',
       '변경 이력 — 최신 먼저',
-      '이 답이 지켜야 하는 것',
-      '사실과 추론을 섞지 않는다. 관계마다 confidence(사실·추론·불확실)와 tier(체결·잔고 = 행동 / 대화 = 말)가 온다. 어긋나면 어긋난다는 사실 자체가 답이다.',
-      '이름이 여럿에 걸리면 고르지 않는다. resolved=false와 candidates가 오면 어느 것인지 되묻는다.',
     ],
-    // Paper 그대로 — 관계 두 행에 원문 발췌가 각각 하나씩, 변경 이력 세 줄,
-    // 정직성 규칙 네 줄. 노드 선택 패널의 탭 줄은 이 화면에 없어야 한다(같은
-    // 자리에 두 주제를 겹쳐 두지 않는다 — controller.js renderSelection).
+    // Paper 그대로 — 관계 두 행에 원문 발췌가 각각 하나씩, 변경 이력 세 줄.
+    // 노드 선택 패널의 탭 줄은 이 화면에 없어야 한다(같은 자리에 두 주제를 겹쳐
+    // 두지 않는다 — controller.js renderSelection).
     structure: [
       { what: 'count', selector: '.entity-relation-row', equals: 2 },
       { what: 'count', selector: '.entity-relation-excerpt', equals: 2 },
       { what: 'count', selector: '.entity-timeline-row', equals: 3 },
-      { what: 'count', selector: '.entity-honesty-line', equals: 4 },
       { what: 'absent', selector: '.panel-tab' },
     ],
   },
