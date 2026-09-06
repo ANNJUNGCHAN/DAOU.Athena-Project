@@ -1816,6 +1816,40 @@ html.is-boot-expanding #winControls { opacity: 0; }
 }
 .guard-confirm-body { font-family: var(--font-strong, inherit); }
 
+/* 제어 결과 턴(Paper 보드 08 · 4330-1) — 배지 두 개 + 리드 + 사실행 한 줄.
+   시각 언어는 초안 알약을 그대로 쓴다(새 언어를 만들지 않는다). */
+.control-result { display: flex; flex-direction: column; gap: 7px; }
+.control-result-badge {
+  font-size: var(--text-2xs, 11px);
+  font-family: var(--font-mono);
+  background: var(--color-k-text, #10131a);
+  color: var(--color-k-panel, #fff);
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+.control-result-status {
+  font-size: var(--text-2xs, 11px);
+  border: 1px solid rgba(230, 232, 238, 0.35);
+  border-radius: 999px;
+  padding: 2px 8px;
+  color: var(--color-k-dim, #9aa2b1);
+}
+.control-result-status.is-ok { border-color: rgba(36, 122, 68, 0.5); color: var(--color-ok, #5fce3f); }
+.control-result-status.is-up { border-color: rgba(238, 19, 123, 0.55); color: #ee137b; }
+.control-result-lead {
+  font-size: var(--text-sm, 13px);
+  font-family: var(--font-strong, inherit);
+  color: var(--color-k-text, #e6e8ee);
+  word-break: keep-all;
+  min-width: 0;
+}
+.control-result-fact {
+  font-size: var(--text-2xs, 11px);
+  color: var(--color-k-dim, #9aa2b1);
+  word-break: keep-all;
+  min-width: 0;
+}
+
 /* 주문 티켓 (P4) */
 .ticket-card { display: flex; flex-direction: column; gap: 10px; padding: 18px 20px; border-radius: 12px; background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(230, 232, 238, 0.12); }
 .ticket-row { display: flex; align-items: center; gap: 12px; }
