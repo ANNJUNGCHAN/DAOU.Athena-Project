@@ -98,6 +98,7 @@ body { margin: 0; overflow: hidden; }
 }
 
 .sidebar-head {
+  position: relative; /* 검색 결과 패널의 컨테이닝 블록 — 입력 바로 밑에 붙는다 */
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
@@ -139,6 +140,71 @@ body { margin: 0; overflow: hidden; }
   font-size: var(--text-sm);
 }
 .sidebar-search-input:focus { outline: none; border-color: var(--color-k-line); }
+
+/* 검색 결과 패널(Paper 2V27-1 › 2V28-1) — 목록을 갈아끼우지 않고 그 위에 뜬다.
+ * 그룹 머리에 건수, 발치에 키보드 안내와 총 건수. 조립은 lib/sidebar.js. */
+.sidebar-search-panel {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 2px);
+  left: 6px;
+  width: 440px;
+  max-width: calc(100vw - 24px);
+  max-height: 60vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px;
+  background: var(--color-k-panel);
+  border: 1px solid rgb(16 19 26 / 14%);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgb(16 19 26 / 12%);
+}
+.sidebar-search-group-label {
+  margin-top: 6px;
+  color: var(--color-k-dim);
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+.sidebar-search-group-label:first-child { margin-top: 0; }
+.sidebar-search-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 38px;
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: var(--color-k-panel3);
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  text-align: left;
+  cursor: pointer;
+}
+.sidebar-search-row.is-active,
+.sidebar-search-row:hover { border-color: var(--color-k-line); }
+.sidebar-search-row-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sidebar-search-row-when {
+  flex-shrink: 0;
+  color: var(--color-k-hint);
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+.sidebar-search-empty { color: var(--color-k-dim); font-size: var(--text-sm); }
+.sidebar-search-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 6px;
+  border-top: 1px solid var(--color-k-line-soft);
+  color: var(--color-k-hint);
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
 
 /* 모드 네비(리프 1.2.2, Paper 보드 37/44 실측) — #graphPill을 대체한다.
  * 대화/그래프/에이전트 3항목, 캔버스 3영역의 유일한 사람 진입로(lib/
