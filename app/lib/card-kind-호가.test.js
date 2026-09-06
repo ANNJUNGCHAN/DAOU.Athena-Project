@@ -6,6 +6,8 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
 const {
   fieldsMap,
   detectLadderShape,
@@ -15,6 +17,8 @@ const {
   mergeTickIntoState,
   mergeTicks,
   supportsLive0D,
+  visibleLevels,
+  visibleColumns,
   render호가,
 } = require('./card-kind-호가');
 
@@ -259,4 +263,49 @@ test('mergeTicks — 한 프레임 안의 여러 틱은 최신 non-null 값으�
   assert.deepEqual(merged.sellPrices.slice(0, 2), [88100, 88300]);
   assert.deepEqual(merged.sellQuantities.slice(0, 2), [120, 200]);
   assert.equal(merged.currentPrice, 88000);
+});
+
+
+// --- 좁은 창 반응형 (Paper 15Y5-2 · 카드 표면 헌장 11조) -------------------------
+
+test('좁은 폭에서는 표시 단수가 10단에서 줄어든다', () => {
+  assert.equal(visibleLevels({ marketMode: 'regular', width: 390 }), 3);
+  assert.equal(visibleLevels({ marketMode: 'regular', width: 500 }), 5);
+  assert.equal(visibleLevels({ marketMode: 'regular', width: 600 }), 10);
+  // 폭을 아직 못 잰 첫 페인트는 줄이지 않는다 — 0단으로 붕괴하면 안 된다.
+  assert.equal(visibleLevels({ marketMode: 'regular', width: 0 }), 10);
+  assert.equal(visibleLevels({ marketMode: 'regular' }), 10);
+});
+
+test('단수 축소는 marketMode를 바꾸지 않는다', () => {
+  const state = buildOrderbookState(facts({ sel_fpr_bid: '88200', buy_fpr_bid: '88100' }));
+  assert.equal(state.marketMode, 'regular');
+  assert.equal(visibleLevels({ marketMode: state.marketMode, width: 390 }), 3);
+  assert.equal(state.marketMode, 'regular');
+  assert.equal(state.depth, 10);
+  // 시간외 5단은 넓어져도 5단을 넘지 않는다.
+  assert.equal(visibleLevels({ marketMode: 'after-hours', width: 900 }), 5);
+  assert.equal(visibleLevels({ marketMode: 'after-hours-summary', width: 900 }), 0);
+});
+
+test('좁은 폭에서는 가격·잔량 2열만 남는다', () => {
+  assert.deepEqual(visibleColumns({ width: 390 }), ['price', 'qty']);
+  assert.deepEqual(visibleColumns({ width: 600 }), ['count', 'qty', 'change', 'price', 'bar']);
+  assert.deepEqual(visibleColumns({}), ['count', 'qty', 'change', 'price', 'bar']);
+});
+
+test('호가 행 글자는 12px 이상이다 — 헌장 11조', () => {
+  const css = fs.readFileSync(path.join(__dirname, '..', 'styles', 'card-kind-hoga.css'), 'utf8');
+  const rules = css.match(/\.card-kit-hoga-live-row \{[^}]*\}/g) || [];
+  const sizes = rules.map((rule) => rule.match(/font-size:\s*(\d+)px/)).filter(Boolean);
+  assert.ok(sizes.length, '행 font-size가 없다');
+  for (const size of sizes) {
+    assert.ok(Number(size[1]) >= 12, `행 글자가 ${size[1]}px다 — 판단 텍스트는 12px 이상`);
+  }
+});
+
+test('호가 CSS에 컨테이너 폭 규칙이 있다', () => {
+  const css = fs.readFileSync(path.join(__dirname, '..', 'styles', 'card-kind-hoga.css'), 'utf8');
+  assert.match(css, /container-type:\s*inline-size/);
+  assert.match(css, /@container[^{]*max-width/);
 });

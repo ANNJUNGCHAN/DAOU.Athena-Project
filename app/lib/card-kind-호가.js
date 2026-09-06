@@ -371,6 +371,65 @@ function updateOrderbookDom(wrap, state, animate) {
   if (bidShare) bidShare.style.width = `${100 - split}%`;
 }
 
+// 좁은 창 반응형 — Paper 15Y5-2는 390px 창에서 사다리를 가격·잔량 2열 3단으로
+// 줄인다. 10단 5열을 그대로 밀어 넣으면 열이 뭉개지고 글자가 12px 밑으로
+// 내려간다(카드 표면 헌장 11조). 데이터 모델(state.depth·marketMode)은 그대로
+// 두고 **보이는 것만** 줄인다.
+const MARKET_MODE_DEPTH = { regular: LEVEL_COUNT, 'after-hours': 5, 'after-hours-summary': 0 };
+const FULL_COLUMNS = ['count', 'qty', 'change', 'price', 'bar'];
+
+function widthTier(width) {
+  const px = Number(width);
+  // 폭을 아직 못 잰 첫 페인트(0·NaN)는 줄이지 않는다 — 0단으로 붕괴하면 안 된다.
+  if (!Number.isFinite(px) || px <= 0) return 'full';
+  if (px < 420) return 'xs';
+  if (px < 560) return 'sm';
+  return 'full';
+}
+
+function visibleLevels(options) {
+  const opts = options || {};
+  const base = MARKET_MODE_DEPTH[opts.marketMode] !== undefined
+    ? MARKET_MODE_DEPTH[opts.marketMode] : LEVEL_COUNT;
+  const tier = widthTier(opts.width);
+  if (tier === 'xs') return Math.min(base, 3);
+  if (tier === 'sm') return Math.min(base, 5);
+  return base;
+}
+
+function visibleColumns(options) {
+  return widthTier((options || {}).width) === 'xs' ? ['price', 'qty'] : [...FULL_COLUMNS];
+}
+
+// 실제 폭에 맞춰 보이는 단수와 열 수를 맞춘다. 열 감추기는 CSS 컨테이너 쿼리가
+// 하고, 여기서는 사다리 행과 접근성 열 수만 손댄다.
+function applyResponsiveShape(wrap) {
+  const state = wrap.__athenaOrderbookState;
+  const rows = wrap.__athenaOrderbookRows;
+  if (!state || !rows || state.depth <= 0) return;
+  const width = wrap.clientWidth;
+  const shown = visibleLevels({ marketMode: state.marketMode, width });
+  for (const side of ['ask', 'bid']) {
+    for (let level = 1; level <= state.depth; level += 1) {
+      const row = rows[side][level - 1];
+      if (row) row.hidden = level > shown;
+    }
+  }
+  const depthChip = wrap.querySelector('.card-kit-hoga-live-depth');
+  if (depthChip) depthChip.textContent = `${shown}호가`;
+  const table = wrap.querySelector('.card-kit-hoga-live-table');
+  if (table) {
+    table.setAttribute('aria-colcount', String(visibleColumns({ width }).length));
+    table.setAttribute('aria-label', `${shown}단 매도·매수 호가`);
+  }
+}
+
+function observeWidth(wrap) {
+  if (typeof ResizeObserver !== 'function') return;
+  const observer = new ResizeObserver(() => applyResponsiveShape(wrap));
+  observer.observe(wrap);
+}
+
 function buildIntegratedOrderbook(envelope, state) {
   const wrap = dom('section', 'card-kit-hoga-live');
   const isAfterHours = state.marketMode !== 'regular';
@@ -450,6 +509,7 @@ function buildIntegratedOrderbook(envelope, state) {
   if (state.depth > 0) wrap.append(header, toolbar, table, footer);
   else wrap.append(header, toolbar, footer);
   updateOrderbookDom(wrap, state, false);
+  observeWidth(wrap);
   return wrap;
 }
 
@@ -530,6 +590,8 @@ const __exports = {
   mergeTickIntoState,
   mergeTicks,
   supportsLive0D,
+  visibleLevels,
+  visibleColumns,
   render호가,
   applyLiveTick,
 };
