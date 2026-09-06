@@ -748,21 +748,33 @@ async function probeOrbCollapsed(win) {
       state: document.getElementById('orbRoot').dataset.state,
       // 2026-08-24 리프 1.3.2 — 무채색↔발화 상태. 1건 받았으니 'fired'여야 한다.
       alert: document.getElementById('orbRoot').dataset.alert,
+      // 지금 어느 표정인가 — 눈 기하를 **어느 얼굴에서 쟀는지** 값과 같은 샷에
+      // 담아야 판정의 전제를 사후에 확인할 수 있다(2026-09-06 흔들림 때 리포트에
+      // 대기 쪽 표정이 안 남아 원인을 못 짚었다).
+      face: document.getElementById('orbRoot').dataset.face,
       // 유리는 끝까지 무채색이다 — 셸 배경에 색이 섞이면 그건 틴트다(soul.md §7).
       orbBackground: cs.backgroundColor,
       // 바이저는 **페이드가 아니라** 스케일·블러 변조로 드러난다(soul.md §7).
       visorTransition: visor.transition,
       visorTransform: visor.transform,
       eyeCount: document.querySelectorAll('#orbVisor .orb-eye').length,
-      // 발화(fired) 상태의 눈 기하 — orbQuietEyeProbe와 짝을 맞춰 대기↔발화의
-      // 실제 모양 차이를 잰다(더는 바이저 폭이 아니다).
+      // 눈 기하 — 대기↔발화의 실제 모양 차이를 잰다(더는 바이저 폭이 아니다).
+      // 같은 쿼리를 두 상태에서 부른다: 위 face가 그 샷의 전제다.
+      //
+      // 레이아웃 박스에서 읽는다(getBoundingClientRect가 아니다). 눈 위에는
+      // 애니메이션 변형이 두 겹 얹혀 있고 둘 다 실측 rect를 흔든다: 깜빡임
+      // (.orb-lid scaleY)은 **높이만** 눌러 종횡비를 순간적으로 뒤집고, 숨
+      // (#orbVisor scale, 4.2초 주기)은 매 프레임 값을 미세하게 바꾼다
+      // (2026-09-06 실측: 80ms 간격 500샷의 rect가 전부 달랐다). 계약이
+      // 말하는 눈 모양은 그 변형 아래의 폭·높이 자체이고, 이 값은 전이가
+      // 끝나면 멈춘다 — 그래서 "두 번 재서 같으면 안정" 판정이 성립한다.
       eyeWidth: (() => {
         const e = document.querySelector('#orbVisor .orb-eye');
-        return e ? e.getBoundingClientRect().width : null;
+        return e ? parseFloat(getComputedStyle(e).width) : null;
       })(),
       eyeHeight: (() => {
         const e = document.querySelector('#orbVisor .orb-eye');
-        return e ? e.getBoundingClientRect().height : null;
+        return e ? parseFloat(getComputedStyle(e).height) : null;
       })(),
       // 드래그 손잡이/구멍 계약 — 같은 픽셀에 겹치면 클릭이 영영 안 온다.
       orbRegion: (cs.getPropertyValue('app-region') || cs.getPropertyValue('-webkit-app-region') || '').trim(),
@@ -776,6 +788,27 @@ async function probeOrbCollapsed(win) {
         .backgroundImage.includes('238, 19, 123'),
     };
   })()`);
+}
+
+// 눈 기하를 **잴 수 있는 순간**까지 기다린다 — 원하는 표정이고, 그 표정으로
+// 가는 눈 모양 전이(orb.css .orb-eye의 width/height 220ms)가 끝난 때다.
+// 조건을 만족한 그 샷을 그대로 돌려주므로 "확인한 상태"와 "잰 값"이 어긋날
+// 틈이 없다 — 옛 판은 표정 폴링과 실제 측정 사이에 캡처·픽셀 측정이 끼어
+// 있어서, 그 틈에 표정이 바뀌거나 전이가 걸치면 다른 상태의 눈을 쟀다.
+async function waitForMeasurableOrbEye(win, accepts, timeoutMs) {
+  let last = null;
+  const hit = await waitUntil(async () => {
+    const probe = await probeOrbCollapsed(win);
+    // **같은 표정에서** 두 번 연속 같은 값이어야 멈춘 것이다. 표정을 안 보고
+    // 값만 비교하면 표정이 바뀐 바로 그 순간에 오판한다 — 전이 시작값은 직전
+    // 표정의 값 그대로라 "안 변했다"가 성립해 버린다(2026-09-06 실측: 졸림→대기
+    // 전이 첫 순간에 졸림 눈 10.36×2.92가 idle 표정으로 잡혔다).
+    const stopped = !!last && probe.face === last.face
+      && probe.eyeWidth === last.eyeWidth && probe.eyeHeight === last.eyeHeight;
+    last = probe;
+    return stopped && accepts(probe) ? probe : null;
+  }, { timeoutMs, intervalMs: 60 });
+  return { measurable: !!hit, probe: last };
 }
 
 app.whenReady().then(async () => {
@@ -3890,31 +3923,40 @@ app.whenReady().then(async () => {
   const orbAlertBeforeEvent = await orbWin.webContents.executeJavaScript(
     "document.getElementById('orbRoot').dataset.alert"
   );
-  // 눈 기하 측정은 face=idle 전제 — 장외 시각엔 부팅 얼굴이 drowsy(눈이 반쯤
-  // 감겨 세로/가로 비가 낮다)라 firedEyesAreRounder가 실행 시각에 따라 흔들렸다
-  // (2026-08-27 실측: 같은 트리 2회 실행에서 통과/실패 갈림). probe-orb-drag-lift
-  // 03a·probe-orb-drowsy와 같은 기법 — isMarketOpen을 열림으로 바꿔치고 15초
-  // 주기 재판정 틱을 기다린다. listen:false는 셸 커맨드바 자동 포커스 잔재 제거.
+  // 눈 기하 측정은 face=idle 전제다 — 대기 눈이 길쭉하다는 것이 발화 눈의
+  // 둥긂을 재는 기준선이라, 다른 표정에서 재면 판정이 통째로 무의미해진다.
+  // 2026-09-06 실측으로 확인한 흔들림의 실체(값은 오브 76px 기준 실측 px):
+  //   - 졸림(장 마감) 눈은 10.5×2.96 → 세로/가로 0.28
+  //   - 찡그림(대화 실패·피드 끊김) 눈은 회전이 붙어 **바운딩 박스**가
+  //     10.6×14.7 → 1.39 (임계 1.5 바로 아래로 조용히 떨어진다)
+  //   - 완료 웃음·윙크도 전부 1.5 아래다 (lib/orb-eye-shape.test.js가 잠근다)
+  //   - 졸림→대기 전이 도중이면 높이가 2.9→15.9로 지나가는 중간값이 잡힌다
+  // 옛 판은 표정 폴링과 실제 측정 사이에 캡처·픽셀 측정이 끼어 있어서, 폴링이
+  // idle을 본 뒤 그 틈에 표정이 바뀌거나 전이가 걸치면 다른 상태의 눈을 쟀다.
+  // 이제는 조건을 만족한 **그 샷**을 그대로 쓴다(waitForMeasurableOrbEye).
+  //
+  // 표정을 idle로 모으는 절차: 장을 열림으로 바꿔치고(probe-orb-drowsy와 같은
+  // 기법 — orb.js가 marketHours.isMarketOpen을 매 틱 프로퍼티 조회로 부른다),
+  // 실제 사용자 경로와 같은 신호로 깨운다. listen active:true가 orb.js의
+  // touchActivity()를 부르는 유일한 경로라 무활동 5분이 쌓여 잠들었어도
+  // 여기서 빠져나온다(settleAmbientFace는 잠듦을 스스로 못 벗어난다) —
+  // 곧바로 false로 되돌려 셸 커맨드바 자동 포커스 잔재도 함께 지운다.
   await orbWin.webContents.executeJavaScript(
     "(() => { window.AthenaLib.MarketHours.isMarketOpen = () => true; return true; })()"
   );
+  orbWin.webContents.send('athena:orb-signal', { signal: 'listen', active: true });
   orbWin.webContents.send('athena:orb-signal', { signal: 'listen', active: false });
-  for (let i = 0; i < 40; i += 1) {
-    const f = await orbWin.webContents.executeJavaScript("document.getElementById('orbRoot').dataset.face");
-    if (f === 'idle') break;
-    await wait(500);
-  }
+  // 대기 정착은 최대 한 번의 15초 재판정 틱(orb.js updateMarketClosed)만큼
+  // 늦고, 완료·윙크 같은 일시 표정은 2초 유지 뒤 스스로 풀린다.
+  const orbQuietEye = await waitForMeasurableOrbEye(
+    orbWin, (p) => p.face === 'idle' && p.alert === 'none', 20000,
+  );
+  // 눈 기하 — 대기(quiet) 상태의 눈 모양. board-31/32 규범 개정 이후 발화 신호는
+  // 바이저 폭이 아니라 **눈 모양**이 진다(아래 orbWindow.firedEyesAreRounder 주석과
+  // 짝). 값은 실측 px라 %보다 화면 배율에 안 흔들린다.
+  const orbQuietEyeProbe = { width: orbQuietEye.probe.eyeWidth, height: orbQuietEye.probe.eyeHeight };
   await shot(orbWin, '22-orb-collapsed.png');
   const pixelsQuiet = await measurePixels(orbWin);
-  // 눈 기하 — 대기(quiet) 상태의 눈 모양. board-31/32 규범 개정 이후 발화 신호는
-  // 바이저 폭이 아니라 **눈 모양**이 진다(위 orbWindow.firedEyesAreRounder 주석과
-  // 짝). getBoundingClientRect는 실측 px라 %보다 화면 배율에 안 흔들린다.
-  const orbQuietEyeProbe = await orbWin.webContents.executeJavaScript(`(() => {
-    const eye = document.querySelector('#orbVisor .orb-eye');
-    if (!eye) return null;
-    const r = eye.getBoundingClientRect();
-    return { width: r.width, height: r.height };
-  })()`);
 
   orbWin.webContents.send('athena:routine-event', {
     type: 'routine-fired',
@@ -3928,23 +3970,16 @@ app.whenReady().then(async () => {
     fired_at: new Date(Date.now() - 3 * 60 * 1000).toISOString(),
   });
 
-  // 발화 눈 모양이 안정될 때까지 기다린다 — 조건 충족(발화 종횡비) 후 짧은
-  // 간격을 두고 한 번 더 재확인해 같은 값이면 안정화로 간주한다(전이 애니메이션
-  // 중간값을 잡지 않기 위함). firedEyesAreRounder 판정과 같은 종횡비 임계(1.3)를 쓴다.
+  // 발화 눈 모양을 잴 수 있을 때까지 기다린다 — 대기 쪽과 같은 함수·같은
+  // 전제(전이가 끝난 순간)를 쓰고, firedEyesAreRounder 판정과 같은 종횡비
+  // 임계(1.3)로 "발화 얼굴에 도달했다"를 판정한다.
   const looksFired = (p) => !!(p && p.eyeWidth && (p.eyeHeight / p.eyeWidth) < 1.3);
-  await waitUntil(async () => {
-    const probe = await probeOrbCollapsed(orbWin);
-    if (!looksFired(probe)) return false;
-    await wait(60);
-    const probe2 = await probeOrbCollapsed(orbWin);
-    return looksFired(probe2) && probe2.eyeWidth === probe.eyeWidth && probe2.eyeHeight === probe.eyeHeight;
-  }, { timeoutMs: 900, intervalMs: 60 });
+  const orbFiredEye = await waitForMeasurableOrbEye(orbWin, looksFired, 2000);
+  const orbCollapsedProbe = orbFiredEye.probe;
 
   // 22-B — **알림이 오면 딥블루 바이저가 드러난다.** 같은 창, 같은 크기, 상태만 다르다.
   await shot(orbWin, '22b-orb-alerted.png');
   const pixelsAlerted = await measurePixels(orbWin);
-
-  const orbCollapsedProbe = await probeOrbCollapsed(orbWin);
 
   // 펼침 — 실제 사용자 경로(코어 클릭)를 그대로 태운다.
   await orbWin.webContents.executeJavaScript("document.getElementById('orbToggle').click()");
@@ -4033,6 +4068,23 @@ app.whenReady().then(async () => {
     firedEyesAreRounder: !!(orbQuietEyeProbe && orbCollapsedProbe.eyeWidth
       && (orbQuietEyeProbe.height / orbQuietEyeProbe.width) > 1.5
       && (orbCollapsedProbe.eyeHeight / orbCollapsedProbe.eyeWidth) < 1.3),
+    // 위 판정의 전제를 값으로 남긴다 — 대기 눈을 어느 표정에서 쟀는가.
+    // 2026-09-06 흔들림 때 이 값이 안 남아 있어 리포트만으로는 원인을 못
+    // 짚었다(대기 표정이 idle이 아니었는지 아닌지를 구분할 근거가 없었다).
+    quietEye: {
+      face: orbQuietEye.probe.face,
+      alert: orbQuietEye.probe.alert,
+      width: orbQuietEyeProbe.width,
+      height: orbQuietEyeProbe.height,
+      measurable: orbQuietEye.measurable,
+    },
+    firedEye: {
+      face: orbCollapsedProbe.face,
+      measurable: orbFiredEye.measurable,
+    },
+    // 두 측정 모두 **전제를 확인한 그 샷**에서 나왔는가. 못 기다렸으면 위 종횡비
+    // 비교는 다른 상태의 눈을 섞어 잰 것이라 결과를 믿으면 안 된다.
+    eyeShapeMeasuredInDeclaredStates: orbQuietEye.measurable && orbFiredEye.measurable,
     // **알림이 오면 딥블루가 실제로 화면에 있다.** 참조 실측과 같은 판정 기준을 쓴다.
     alertedShowsVisor: pixelsAlerted.bluishRatio >= 0.10,
     // 대기→발화에서 눈 자체의 실측 px(너비 또는 높이)가 눈에 띄게 바뀌었는가 —
@@ -4088,6 +4140,7 @@ app.whenReady().then(async () => {
   for (const key of [
     'isCircle76', 'dragHandleContract',
     'quietStateWasClean', 'quietFaceIsPresent', 'firedEyesAreRounder',
+    'eyeShapeMeasuredInDeclaredStates',
     'alertedShowsVisor', 'stateActuallyChangedEyeShape',
     'unreadCountShown', 'glassStaysAchromatic', 'visorNotFadeIn', 'hasTwoEyes', 'magentaArcRemoved',
     'expandGrewWindow', 'orbCornerStayed', 'roundTripRestoresPosition',
