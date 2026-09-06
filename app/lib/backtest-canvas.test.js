@@ -3356,7 +3356,7 @@ test('검증 통과 → 컴파일이 만든 spec_yaml을 폼이 따라온다(대
   // 그래프는 종목·기간을 모른다 — 폼이 정한 대상은 그대로 남아야 한다.
   assert.deepEqual(ctx.spec.symbols, ['005930']);
   assert.equal(ctx.spec.fromDt, '20160101');
-  assert.match(textOf(made.container), /그래프·코드 검증 완료/);
+  assert.match(textOf(made.container), /그래프 · 코드 검증 완료/);
 });
 
 test('노드에서 코드로 — 검증·컴파일을 마친 산출물은 authoritative로 연다', async () => {
@@ -3768,7 +3768,7 @@ test('[코드 전용으로 분기]: origin=code_only 새 버전을 남기고 지
   );
   assert.equal(findByClass(made.container, 'backtest-vis').length, 1, 'snapshot 그래프는 선다');
   assert.equal(findByClass(made.container, 'backtest-vis-undo').length, 0, '읽기 전용이다');
-  assert.doesNotMatch(textOf(made.container), /그래프·코드 검증 완료/);
+  assert.doesNotMatch(textOf(made.container), /그래프 · 코드 검증 완료/);
   assert.doesNotMatch(textOf(made.container), /일치/);
 
   const ctx = made.canvas.getContext();
@@ -3933,7 +3933,7 @@ test('origin=code_only 버전은 코드 탭에서 열리고 지도는 읽기 전
     '동기화되지 않음 · 코드 전용',
   );
   assert.equal(findByClass(made.container, 'backtest-vis-undo').length, 0);
-  assert.doesNotMatch(textOf(made.container), /그래프·코드 검증 완료/);
+  assert.doesNotMatch(textOf(made.container), /그래프 · 코드 검증 완료/);
 });
 
 test('이력 탭 버전 행에 [이 버전 켜기]가 있고 누르면 activate를 부른다', async () => {

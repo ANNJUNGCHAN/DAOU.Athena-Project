@@ -134,7 +134,7 @@ const VISUAL_STATUS_TEXT = {
   validating: '검증 중',
   valid: '서버 검증 가능',
   invalid: '서버 검증 실패',
-  synced: '그래프·코드 검증 완료',
+  synced: '그래프 · 코드 검증 완료',
 };
 
 // 유효하지 않은 그래프에서 [실행]이 서는 자리 — 실행이 아니라 검토가 다음 행동이다.
@@ -3450,9 +3450,11 @@ function createBacktestCanvas(options) {
   }
 
   // 명령창 — 검사가 무엇을 했는지 그대로 찍는다. 화면이 요약하지 않는다.
+  // 제목은 Paper 보드 20·21·22가 적은 그대로 「터미널」이다 — 무엇을 찍는지는 아래
+  // 로그가 말하므로 제목이 그것을 다시 요약할 이유가 없다.
   function renderTechniqueTerminal() {
     const panel = el('div', `backtest-terminal${techniqueTerminalOpen ? ' is-open' : ''}`);
-    panel.appendChild(el('div', 'backtest-terminal-title', '명령창 — 자동 검사'));
+    panel.appendChild(el('div', 'backtest-terminal-title', '터미널'));
     const t = techniqueState();
     const log = el('div', 'backtest-terminal-log');
     const lines = t.log || [];
