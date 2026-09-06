@@ -449,15 +449,35 @@ function markElasticKpiValue(el) {
 
 function markInsetAbsoluteBox(el) {
   if (!el || !el.dataset || !el.style) return;
-  if (el.dataset.name !== 'Chart Context Actions') return;
   if (el.style.getPropertyValue('position').trim() !== 'absolute') return;
   const left = el.style.getPropertyValue('left').trim();
   if (!left || !el.style.getPropertyValue('width').trim()) return;
   if (el.style.getPropertyValue('right').trim()) return;
-  // Paper의 하단 액션처럼 left+고정폭인 absolute 상자는 좁은 단계에서만 같은
-  // inset을 right에도 써야 부모 패딩 상자 안으로 줄어든다. XL의 left/width는 보존한다.
+  // left+고정폭인 absolute 상자(Paper 하단 액션·차트 툴팁 라벨)는 부모가 좁아져도
+  // 자기 left에 그대로 서서 부모 패딩 상자 밖으로 나간다 — 실측 137X-2 33FX-0
+  // (left 748px · width 148px)이 2·4분할·최소에서 303~547px 가로 넘침의 유일한 뿌리다.
+  // 다른 다섯 속성과 같은 방식으로 걷어낸다: 인라인 `left`를 지워야 컨테이너 규칙이
+  // 겨룰 수 있고(인라인은 !important 없이 못 이긴다), base 규칙이 XL에서 같은 값을
+  // 그대로 되돌려 Paper 자리는 안 바뀐다.
   el.style.setProperty('--bs-inset-x', left);
+  el.style.removeProperty('left');
   el.dataset.bsInsetX = 'true';
+}
+
+// primary가 이고 있는 줄 — Paper가 양끝으로 벌린(`space-between`) 가로 줄이다.
+// 좁아지면 양쪽 묶음의 min-content 합이 그대로 가로 넘침이 된다: 표면 머리
+// (.bs-header)가 M에서 접히는 것과 같은 이유이고, 실측 137X-2 Chart Toolbar가
+// 최소 폭에서 149px을 냈다. 표(열 폭이 계약인 줄)를 건드리지 않도록 primary의
+// **직속** 줄로만 한정하고, 세로 줄(`flex-direction: column`)은 뺀다 — 세로 줄에
+// flex-wrap을 주면 넘친 것이 오른쪽 새 열로 가서 오히려 가로 넘침이 된다.
+function markSplitRow(el) {
+  if (!el || !el.dataset || !el.style) return;
+  if (el.style.getPropertyValue('display').trim() !== 'flex') return;
+  if (el.style.getPropertyValue('justify-content').trim() !== 'space-between') return;
+  if (el.style.getPropertyValue('flex-direction').trim() === 'column') return;
+  const parent = el.parentElement;
+  if (!parent || !parent.classList || !parent.classList.contains('bs-primary')) return;
+  el.dataset.bsSplitRow = 'true';
 }
 
 function hoistLayout(el) {
@@ -465,6 +485,7 @@ function hoistLayout(el) {
   if (el.dataset && el.dataset.bsHoisted === 'true') return false;
   markElasticKpiValue(el);
   markInsetAbsoluteBox(el);
+  markSplitRow(el);
   for (const [property, token] of HOISTED_PROPERTIES) {
     const value = el.style.getPropertyValue(property);
     if (!value) continue;
@@ -489,6 +510,7 @@ function hoistRigidBox(el) {
   if (!el || !el.style || typeof el.style.setProperty !== 'function') return false;
   if (el.dataset && el.dataset.bsHoisted === 'true') return false;
   markInsetAbsoluteBox(el);
+  markSplitRow(el);
   let moved = false;
   for (const [property, token] of HOISTED_PROPERTIES) {
     const value = el.style.getPropertyValue(property);
@@ -522,8 +544,8 @@ function applyResponsiveHooks(surface) {
 // 증명 규약(`raw · <mapping_id> · <json path>`, PAPER_CARD_COVERAGE.md)이 추출 HTML에
 // 그대로 남아 제품 DOM으로 흘러든다(2026-09-04 gold-market 실측:
 // data-name="raw · base:ka50081 · $.gds_day_chart_qry[].acc_trde_prica" — 97장 중 20장,
-// 157개). 런타임은 data-name을 markInsetAbsoluteBox의 'Chart Context Actions' 비교에만
-// 쓰고 슬롯은 data-node로 찾으므로, 식별자 모양의 값만 지운다. 다른 레이어 이름
+// 157개). 런타임은 슬롯을 data-node로 찾고 data-name으로는 아무 판정도 하지 않으므로,
+// 식별자 모양의 값만 지운다. 다른 레이어 이름
 // (Rectangle·행·Instrument Header…)은 verify-integrated-cards 진단 리포트가 읽으므로 둔다.
 // 패턴은 verify-semantic-workspaces의 원시 식별자 게이트와 같은 축이다.
 const RAW_IDENTITY_NAME = /(?:\b(?:raw|alias|FID|REST)\b|(?:base|detail):[a-z0-9]|\bka\d{5}\b|\$\.|mapping[ _-]?id|operation[ _-]?ref)/i;
