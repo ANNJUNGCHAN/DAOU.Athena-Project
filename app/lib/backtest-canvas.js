@@ -2114,13 +2114,14 @@ function createBacktestCanvas(options) {
     }
     // 첫 프레임은 왕복을 기다리지 않는다 — 기다리면 사람이 붙인 주소가 몇 초 동안
     // 아무 데도 안 보인다. 다섯 줄은 잡이 답하는 순간 채워진다.
+    // mapVersion을 0으로 되돌리는 이유: 이건 **새 전략**이라 앞 전략이 몇 판까지 갔든
+    // 머리는 「지도 v0」이어야 한다(잡이 만드는 지도의 version도 0이다).
     sourceReadCardSent = false;
-    setState({ view: 'sourcing', source: null, sourceJobId: null, sourceUrl: url });
+    setState({ view: 'sourcing', source: null, sourceJobId: null, mapVersion: 0 });
     void startSourceMap(url);
-    return remember(makeReceipt('source_url', {
-      applied: true, note, rows: [{ label: '출처', before: null, after: url }],
-      tab: state.tab, designTab: state.designTab,
-    }));
+    // 채팅에는 카드를 내지 않는다 — 보드 17의 채팅은 사람 말풍선 다음에 「출처 읽음」
+    // 하나뿐이다. 그 카드는 출처를 실제로 읽은 뒤 emitSourceReadCard가 낸다.
+    return null;
   }
 
   async function startSourceMap(url) {

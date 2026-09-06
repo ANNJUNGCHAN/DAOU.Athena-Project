@@ -259,7 +259,9 @@ test('보드 17: 채팅이 붙인 주소 하나가 다섯 단계 진행 화면�
   const receipt = canvas.onChatAction({ kind: 'source_url', url: ' https://youtu.be/8kQz ' });
   await flush();
 
-  assert.equal(receipt.applied, true);
+  // 채팅에는 아무 카드도 안 낸다 — 보드 17의 채팅은 사람 말풍선 다음에 「출처 읽음」
+  // 하나뿐이다(그 카드는 출처를 실제로 읽은 뒤에 나간다).
+  assert.equal(receipt, null);
   assert.deepEqual(calls.start, [{ url: 'https://youtu.be/8kQz' }]);
   // 진행 4요소 — 지금 하는 일 · 몇 단계 중 몇 · 남은 시간 · 멈추기(보드 18 F칸).
   const text = textOf(findByClass(container, 'backtest-source-progress')[0]);
@@ -352,6 +354,25 @@ test('보드 17: 머리는 무엇을 만들고 있는지만 말한다(이름도 
   assert.match(textOf(head), /지도 v0/);
   // 고른 기법이 없으니 실행 버튼도 없다 — 돌릴 것이 아직 없다.
   assert.equal(findByClass(container, 'backtest-run-button').length, 0);
+});
+
+// 앞 전략을 열어 둔 사람이 주소를 붙이면 머리가 그 전략의 판번호를 물려 쓴다 —
+// 「새 전략」이라고 말하면서 「지도 v3」이라 적히는 자리다. 잡이 만드는 지도의 version도
+// 0이라 그 숫자는 어느 쪽과도 맞지 않는 가짜 값이었다.
+test('보드 17: 앞 전략이 몇 판이었든 만드는 중 머리는 지도 v0이다', async () => {
+  const { container, canvas } = sourceCanvas();
+  canvas.mount();
+  await flush();
+  await toForm(container);
+  const patch = { symbols: ['005930'], fromDt: '20240101', toDt: '20240630' };
+  canvas.onChatAction({ kind: 'spec_draft', patch });
+  await flush();
+  assert.equal(canvas.onChatAction({ kind: 'spec_draft', patch }).version.to, 3);
+
+  canvas.onChatAction({ kind: 'source_url', url: 'https://youtu.be/8kQz' });
+  await flush();
+
+  assert.match(textOf(findByClass(container, 'backtest-head-title')[0]), /지도 v0/);
 });
 
 test('보드 17: [멈추기]는 잡을 멈추고 폴링 연쇄를 끊는다', async () => {
