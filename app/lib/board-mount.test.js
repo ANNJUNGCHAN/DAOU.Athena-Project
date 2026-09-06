@@ -716,7 +716,36 @@ test('병기 사본이 먼저 나와도 원본 머리글에 쓴다 — 두 줄�
   const report = applyPlan(root, mountPlan(contract, {}));
   assert.deepEqual(report.containers, []);
   assert.equal(head.textContent, '직전대비\n매수 잔량');
-  assert.equal(copy.textContent, '', '병기 사본은 앵커가 아니다');
+  assert.equal(copy.textContent, '직전대비\n매수 잔량',
+    '사본은 앵커가 아니라 원본을 따른다');
+});
+
+test('구형 병기 사본도 원본을 따라 갱신된다 — 좁은 폭에 목업 숫자가 남지 않게', () => {
+  // 추출기는 paired-table이 아닌 표의 접힌 열 사본을 `data-paired-source` 없이
+  // `<span class="bs-paired" data-paired-col data-node>`로 만든다. S/XS에서는
+  // 원본 열이 display:none이고 화면에 서는 쪽은 이 사본이라, 값이 원본에만 실리면
+  // 좁은 창은 추출 당시 Paper 목업 숫자를 계속 보여준다.
+  const copy = el({ node: '현재가', pairedCol: '3' }, [], 'bs-paired');
+  copy.textContent = '150,850';
+  const leaf = el({ node: '현재가', leaf: '' });
+  const root = el({}, [copy, leaf]);
+  const contract = { slots: [{
+    slot_id: 'v',
+    node: '현재가',
+    kind: 'value',
+    format: { kind: 'number', sign: false, precision: 0, tone: 'neutral' },
+  }] };
+  const values = { v: 47957 };
+
+  applyPlan(root, mountPlan(contract, values));
+  assert.equal(leaf.textContent, '47,957');
+  assert.equal(copy.textContent, '47,957');
+  assert.equal(copy.dataset.slotId, undefined, '사본에는 마운트 정체성을 남기지 않는다');
+  assert.equal(copy.dataset.bsValueAtomic, undefined);
+
+  values.v = 48100;
+  applyRealtimeSlots(root, contract, values, ['v']);
+  assert.equal(copy.textContent, '48,100', '실시간 프레임도 사본을 함께 칠한다');
 });
 
 test('isValueSlot은 추출기 unit 어휘도 숫자 계열로 센다(H1 모수)', () => {
