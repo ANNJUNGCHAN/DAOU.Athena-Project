@@ -189,7 +189,10 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
     # /api/v1/backtest/deployments/{deployment_id}/arm, 2026-09-04 자동 매매). 무장은
     # 사람 클릭 전용이라 MCP 표면에는 없고 HTTP 라우트로만 존재한다.
     # integrate/backtest-auto-trading 병합: PR #13의 코드 알람 2개 + 자동 매매 arm 1개.
-    assert len(operation_ids) == 411
+    # 412 = 411 + 되돌리기 1개(rollback_watch_fix: POST
+    # /api/v1/routines/{id}/watch/rollback, 2026-09-07 고침 한 바퀴). 사람이 캔버스
+    # [되돌리기]를 누를 때만 도는 쓰기라 MCP 표면에는 없다.
+    assert len(operation_ids) == 412
     assert "canvas_chart_page" in operation_ids
     assert "canvas_series_page" in operation_ids
     assert "get_internal_oauth_status" in operation_ids

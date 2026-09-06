@@ -65,6 +65,9 @@ const INVOKE_CHANNELS = new Set([
   // 감시 코드 검사·착지(Step 6) — POST /routines/watch/check · POST /routines/watch/code.
   'athena:routine-watch-check',
   'athena:routine-watch-code',
+  // 고침 되돌리기 — POST /routines/{id}/watch/rollback.
+  // 캔버스 영수증의 [되돌리기] 하나만 부른다.
+  'athena:routine-watch-rollback',
   // 알림 방 읽음 처리(7단계, F3-FE) — 6단계 POST /{id}/ack.
   'athena:routine-ack',
   // 발화 열람·응답 계측(F-stage5b-FE) — POST /{id}/engagement.
