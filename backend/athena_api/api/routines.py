@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
+import os
 import re
 from dataclasses import replace
 from datetime import UTC, date, datetime, timedelta, timezone
@@ -9,6 +11,13 @@ from typing import Any
 from fastapi import APIRouter, HTTPException, Request
 
 from athena_api.routines.models import SOURCES, parse_schedule_value, source_spec
+from athena_api.routines.revisions import (
+    WatchRevision,
+    fix_cycle,
+    history_view,
+    mark_fixed_nodes,
+    push,
+)
 from athena_api.routines.rules import validate_draft
 from athena_api.routines.runtime import RoutinesRuntime, resolve_watch_file
 from athena_api.routines.scheduler import record_scheduled_fire
@@ -187,8 +196,18 @@ def _detail_view(spec: Any, runtime: RoutinesRuntime) -> dict[str, Any]:
         # 코드 감시 알람에만 붙는 세 칸 — 감시 파일 정보와, 프로세스 로컬로 남아
         # 있는 마지막 검사·마지막 실행 요약이다(영속 안 함).
         detail["watch"] = spec.watch.to_dict()
-        detail["last_check"] = _watch_last(runtime, spec, "check")
+        check = _watch_last(runtime, spec, "check")
+        # 고침 한 바퀴 — 직전 판과 지금 검사를 맞대야 「방금 바뀜」과 「4번 → 2번」이
+        # 나온다. 고친 적이 없으면 cycle은 None이고 노드도 손대지 않는다(첫 검사).
+        cycle = fix_cycle(spec.revisions, check)
+        if cycle is not None and check is not None:
+            check = dict(check)
+            previous = WatchRevision.from_dict(spec.revisions[-1])
+            check["nodes"] = mark_fixed_nodes(previous.nodes, check.get("nodes"))
+        detail["last_check"] = check
         detail["last_run"] = _watch_last(runtime, spec, "run")
+        detail["fix_cycle"] = cycle
+        detail["fix_history"] = history_view(spec.revisions)
     return detail
 
 
@@ -285,6 +304,54 @@ async def source_catalog(request: Request) -> dict[str, Any]:
     }
 
 
+def _watch_source_before(project_id: str, path: Any) -> tuple[str, str] | None:
+    """덮어쓰기 직전의 (경로, 원문). 경로가 이상하거나 파일이 없으면 None.
+
+    경로 검증은 save_watch_code가 하고 여기서 두 번 하지 않는다 — 잘못된 경로면
+    바로 아래 착지가 422로 끝나므로 이 판은 쓰이지 않는다.
+    """
+    rel = str(path or "").strip().replace("\\", "/")
+    if not rel:
+        return None
+    try:
+        target = resolve_watch_file(project_id, rel)
+        return rel, target.read_text(encoding="utf-8")
+    except Exception:
+        return None
+
+
+def _record_fix(
+    runtime: RoutinesRuntime,
+    project_id: str,
+    before: tuple[str, str] | None,
+    result: dict[str, Any],
+) -> None:
+    """고침 한 바퀴의 시작을 이력에 남긴다 — 이 파일을 가리키는 알람마다 한 판.
+
+    바이트가 그대로면 고침이 아니다(같은 코드를 다시 착지시킨 것). 접어 두는 검사
+    결과는 그 알람의 마지막 검사 그대로다 — 여기서 새로 세지 않는다.
+    """
+    if before is None or before[0] != result.get("path"):
+        return
+    if hashlib.sha256(before[1].encode("utf-8")).hexdigest() == result.get("code_hash"):
+        return
+    fixed_at = datetime.now(UTC).isoformat()
+    for spec in runtime.store.list_all():
+        watch = getattr(spec, "watch", None)
+        if watch is None or watch.project_id != project_id or watch.path != before[0]:
+            continue
+        spec.revisions = push(
+            spec.revisions,
+            WatchRevision(
+                version_hash=watch.version_hash,
+                fixed_at=fixed_at,
+                source=before[1],
+                check=_watch_last(runtime, spec, "check") or {},
+            ),
+        )
+        runtime.store.upsert(spec)
+
+
 @router.post("/watch/code")
 async def save_watch_code_route(request: Request, body: dict[str, Any]) -> dict[str, Any]:
     """감시 코드 착지 — 모델이 쓴 감시 함수를 프로젝트 폴더 안 `watch/<이름>.py`에 쓴다.
@@ -306,14 +373,18 @@ async def save_watch_code_route(request: Request, body: dict[str, Any]) -> dict[
     labels = body.get("labels")
     if labels is not None and not isinstance(labels, dict):
         raise HTTPException(status_code=422, detail="노드 제목 묶음은 이름-제목 짝이어야 한다")
+    pid = project_id.strip()
+    before = _watch_source_before(pid, body.get("path"))
     try:
-        return save_watch_code(
-            project_id.strip(),
+        result = save_watch_code(
+            pid,
             body.get("path"),
             body.get("source"),
             labels,
             routine_store=runtime.store,
         )
+        _record_fix(runtime, pid, before, result)
+        return result
     except KeyError:
         raise HTTPException(status_code=404, detail="프로젝트 없음") from None
     except CodeLocked:
@@ -427,6 +498,9 @@ async def check_watch_code(request: Request, body: dict[str, Any]) -> dict[str, 
         "skip_reason": result.reason,
         "count": result.count,
         "counted_until": result.counted_until,
+        # 고침 전후 비교가 읽는 두 칸 — 울린 날 목록과 센 구간이다.
+        "fires": list(payload["fires"]),
+        "lookback_days": result.lookback_days,
     }
     if routine_id and result.ok:
         # 검사에 통과한 그 코드로 확정을 열어 준다 — can_activate가 해시를 대조한다.
@@ -564,6 +638,7 @@ async def update_routine(
     updated.status = spec.status
     updated.created_at = spec.created_at
     updated.approved_at = spec.approved_at
+    updated.revisions = spec.revisions  # 편집이 고침 이력을 지우지 않는다
     if "expires_days" not in body:
         updated.expires_at = spec.expires_at  # 편집이 만료를 몰래 연장하지 않는다
     runtime.store.upsert(updated)
@@ -637,6 +712,56 @@ async def cancel_routine(request: Request, routine_id: str) -> dict[str, Any]:
     if spec.mode == "realtime-ws":
         await runtime.release_realtime_subscription(spec.symbol)
     return _view(spec, runtime)
+
+
+@router.post("/{routine_id}/watch/rollback")
+async def rollback_watch_fix(request: Request, routine_id: str) -> dict[str, Any]:
+    """되돌리기 — 마지막 고침을 무르고 그 앞 코드로 파일과 해시를 되돌린다.
+
+    되돌리는 것은 파일이 먼저다: 해시만 되돌리면 디스크의 코드와 알람이 어긋나
+    `can_activate`가 「검사 뒤 코드가 바뀜」으로 막는다. 접어 둔 검사 결과도 같이
+    되돌아간다 — 그 결과는 이 바이트가 실제로 낸 것이다.
+
+    켜져 있는 알람은 못 되돌린다(R10과 같은 규칙) — 돌고 있는 코드가 사람 확정
+    없이 바뀌면 안 된다.
+    """
+    from athena_api.projects.store import ProjectPathError
+
+    runtime = _runtime(request)
+    spec = runtime.store.get(routine_id)
+    if spec is None:
+        raise HTTPException(status_code=404, detail="루틴이 존재하지 않는다")
+    if spec.watch is None:
+        raise HTTPException(status_code=409, detail="코드 감시 알람이 아님")
+    if not spec.revisions:
+        raise HTTPException(status_code=409, detail="되돌릴 고침이 없음")
+    if spec.status not in ("draft", "paused"):
+        raise HTTPException(
+            status_code=409, detail="켜져 있는 알람은 못 되돌림 — 먼저 일시중지"
+        )
+
+    entry = WatchRevision.from_dict(spec.revisions[-1])
+    try:
+        target = resolve_watch_file(spec.watch.project_id, spec.watch.path)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="프로젝트 없음") from None
+    except ProjectPathError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from None
+    # 접어 둘 때 read_text가 이미 개행을 LF로 읽었다 — 여기서 다시 고르지 않는다.
+    data = entry.source.encode("utf-8")
+    target.parent.mkdir(parents=True, exist_ok=True)
+    tmp = target.with_name(target.name + ".tmp")
+    tmp.write_bytes(data)
+    os.replace(tmp, target)
+
+    spec.watch = replace(spec.watch, version_hash=entry.version_hash)
+    spec.revisions = spec.revisions[:-1]
+    if entry.check:
+        runtime.watch_last[f"check:{spec.id}"] = dict(entry.check)
+    else:
+        runtime.watch_last.pop(f"check:{spec.id}", None)
+    runtime.store.upsert(spec)
+    return _detail_view(spec, runtime)
 
 
 @router.post("/{routine_id}/catchup-fire")
