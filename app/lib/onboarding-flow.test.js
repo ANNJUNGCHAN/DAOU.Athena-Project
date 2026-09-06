@@ -358,6 +358,23 @@ test('온보딩 중 receipt는 화면을 열거나 버리지 않고 즉시 안�
   ]]);
 });
 
+test('같은 오버레이를 쓰는 계좌 전환 화면은 자기 사유로 fail ACK한다', () => {
+  const onboard = new FakeElement('div');
+  onboard.hidden = false;
+  const sent = [];
+  const handled = onboarding.ackRestReceiptBlockedByOnboarding(
+    onboard,
+    (channel, payload) => sent.push([channel, payload]),
+    'receipt-2',
+    'account_switch_active',
+  );
+  assert.equal(handled, true);
+  assert.deepEqual(sent, [[
+    'athena:rest-receipt-painted',
+    { receipt_id: 'receipt-2', verified_visible: false, error: 'account_switch_active' },
+  ]]);
+});
+
 test('최초 실행은 부팅 뒤 전용 온보딩만 보이고 완료 전 메인 셸은 모든 상호작용에서 차단된다', () => {
   const shell = new FakeElement('div');
   const app = new FakeElement('div');
@@ -470,6 +487,84 @@ test('온보딩(embedded)은 initialView를 주지 않아 3 / 3 상태 화면으
   await flushAsync();
   assert.equal(containsText(root, '3 / 3'), true);
   assert.ok(findByText(root, 'button', '이전'));
+  assert.equal(findByText(root, 'button', '닫기'), null, '온보딩은 [이전]으로 나간다');
   assert.equal(findByText(root, 'button', '전환하고 다시 인증'), null);
+  cleanup();
+});
+
+// 온보딩 밖에서는 [이전]도 [계속]도 없다 — 나가는 문이 화면에 보여야 한다.
+// 없으면 사이드바 → 계좌 전환 → 취소 두 클릭으로 사람이 오버레이에 갇힌다.
+
+test('embedded=false 상태 화면에는 오버레이를 닫는 「닫기」가 있다', async () => {
+  invokeImpl = async (channel) => {
+    if (channel === 'athena:auth-token-status') return { state: 'ready', expiresInSec: 3600 };
+    if (channel === 'athena:account-list') return { accounts: [{ id: 'account-1', alias: '모의-1' }] };
+    return { ok: true };
+  };
+  const root = new FakeElement('div');
+  let closed = 0;
+  const cleanup = authScreen.renderAuthTokenStatus(root, {
+    accountId: 'account-1',
+    embedded: false,
+    onClose: () => { closed += 1; },
+  });
+  await flushAsync();
+
+  const closeBtn = findByText(root, 'button', '닫기');
+  assert.ok(closeBtn, '상태 화면에 보이는 출구가 있다');
+  closeBtn.click();
+  assert.equal(closed, 1);
+  cleanup();
+});
+
+test('계좌 전환의 「취소」는 상태 화면이 아니라 오버레이를 닫는다', async () => {
+  invokeImpl = async (channel) => {
+    if (channel === 'athena:auth-token-status') return { state: 'ready', expiresInSec: 3600 };
+    if (channel === 'athena:account-list') return { accounts: [{ id: 'account-1', alias: '모의-1' }] };
+    return { ok: true };
+  };
+  const root = new FakeElement('div');
+  let closed = 0;
+  const cleanup = authScreen.renderAuthTokenStatus(root, {
+    accountId: 'account-1',
+    embedded: false,
+    initialView: 'switch',
+    onClose: () => { closed += 1; },
+  });
+  await flushAsync();
+
+  const cancel = findByText(root, 'button', '취소');
+  assert.ok(cancel, '전환 화면에 취소가 있다');
+  cancel.click();
+  await flushAsync();
+  assert.equal(closed, 1, '취소는 닫는다 — 상태 화면으로 갈아타지 않는다');
+  assert.equal(findByText(root, 'button', '지금 재발급'), null);
+  cleanup();
+});
+
+test('온보딩(embedded)에서는 onClose를 줘도 취소가 상태 화면으로 돌아간다', async () => {
+  invokeImpl = async (channel) => {
+    if (channel === 'athena:auth-token-status') return { state: 'ready', expiresInSec: 3600 };
+    if (channel === 'athena:account-list') return { accounts: [{ id: 'account-1', alias: '모의-1' }] };
+    return { ok: true };
+  };
+  const root = new FakeElement('div');
+  let closed = 0;
+  const cleanup = authScreen.renderAuthTokenStatus(root, {
+    accountId: 'account-1',
+    embedded: true,
+    onBack: () => {},
+    onContinue: async () => true,
+    onClose: () => { closed += 1; },
+  });
+  await flushAsync();
+  const rows = findByClass(root, 'auth-status-rows');
+  const accRow = rows.children.find((child) => child.classList.contains('is-clickable'));
+  accRow.click();
+  await flushAsync();
+  findByText(root, 'button', '취소').click();
+  await flushAsync();
+  assert.equal(closed, 0, '온보딩 오버레이는 이 콜백으로 닫히지 않는다');
+  assert.ok(findByText(root, 'button', '이전'), '3 / 3 상태 화면으로 돌아온다');
   cleanup();
 });
