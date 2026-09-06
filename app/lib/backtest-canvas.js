@@ -938,8 +938,8 @@ function createBacktestCanvas(options) {
   let restoreApplied = null;
   // 결과를 못 읽어도 로그는 남는다(42번 보드 R6는 값이 아니라 꼬리를 남긴다).
   let restoredLog = '';
-  // 다음 그리기에서 되돌릴 스크롤 자리. 한 번 쓰고 비운다 — 사람이 굴린 뒤에 또
-  // 되돌리면 화면이 사람 손을 뿌리친다.
+  // 되돌릴 스크롤 자리. 사람이 굴려 그 자리를 뺏을 때까지 매 그리기에 다시 세운다 —
+  // 한 번 쓰고 비우면 복원한 자리가 첫 페인트 한 번만 살고 다음 setState에서 0이 된다.
   let pendingScrollTop = null;
   let bodyEl = null;
   let workspaceReportTimer = null;
@@ -2571,7 +2571,7 @@ function createBacktestCanvas(options) {
     const body = el('div', 'backtest-body');
     bodyEl = body;
     // 스크롤 자리도 그 세션의 것이다(41번 보드 Rule 1) — 굴린 자리를 봉인하고 되돌린다.
-    body.addEventListener('scroll', scheduleWorkspaceReport);
+    body.addEventListener('scroll', onBodyScroll);
     // 복원 표식은 탭 위에 선다 — 어느 탭에 서 있든 그 세션이 되살아난 것이기 때문이다.
     if (state.restore) {
       if (state.restore.partial && !state.restore.dismissed) body.appendChild(renderRestoreNotice());
@@ -2588,9 +2588,10 @@ function createBacktestCanvas(options) {
     else if (state.tab === 'deploy') body.appendChild(renderDeploy());
     shell.appendChild(body);
     container.appendChild(shell);
-    if (pendingScrollTop != null) {
+    // 되돌린 자리는 한 프레임짜리가 아니다 — 되살린 뒤에도 setState 한 번이면 새 몸통이
+    // 0에서 시작하므로, 사람이 굴려 그 자리를 뺏기 전까지 매 그리기에 다시 세운다.
+    if (pendingScrollTop != null && body.scrollTop !== pendingScrollTop) {
       body.scrollTop = pendingScrollTop;
-      pendingScrollTop = null;
     }
     // 폼·코드·탭이 움직인 것은 전부 이 그리기로 지나간다 — 봉인 시점을 여기 하나로
     // 모으고 1초 디바운스가 왕복 수를 잡는다.
@@ -5205,7 +5206,7 @@ function createBacktestCanvas(options) {
   function registerWorkspace() {
     const ws = workspaceApi();
     if (!ws || typeof ws.register !== 'function') return;
-    try { ws.register('backtest', { restore: restoreWorkspace }); }
+    try { ws.register('backtest', { restore: restoreWorkspace, flush: flushWorkspaceReport }); }
     catch { /* 등록 실패는 복원이 없다는 뜻일 뿐, 화면은 그대로 돈다 */ }
   }
 
@@ -5213,6 +5214,11 @@ function createBacktestCanvas(options) {
     const ws = workspaceApi();
     if (!ws || typeof ws.report !== 'function') return;
     try {
+      // 복원이 못 읽은 조각은 다시 봉인하지 않는다 — 화면에 없는 것을 null로 적어 보내면
+      // main의 얕은 병합이 저장본의 run_id를 지워, [다시 시도]가 되살릴 봉투 자체가
+      // 사라진다(다음에 열면 있었던 실행이 없었던 일이 된다).
+      const heldRun = restoreSealed && restoreApplied && !restoreApplied.result
+        ? restoreSealed.run : null;
       // 봉인 항목표는 42번 보드가 정한 것 하나뿐이다 — 여기서 다시 고르지 않는다.
       const sealed = SessionRestore.sealBacktest({
         spec,
@@ -5222,11 +5228,16 @@ function createBacktestCanvas(options) {
         versionId: activeVersionId,
         strategyId,
         runPath,
-        runId: state.runId,
-        stdout: (state.result && state.result.stdout) || '',
-        // 떨어져 나간 옛 몸통의 0을 봉인하지 않는다 — 오류·빈 화면에서는 굴릴 자리가
+        runId: state.runId || (heldRun && heldRun.runId) || null,
+        // 되살린 로그는 결과 없이도 화면에 남아 있다(결과 탭이 그리는 그 문자열이다) —
+        // 지금 이 세션의 로그라 다시 봉인한다.
+        stdout: (state.result && state.result.stdout) || restoredLog || '',
+        // 되돌릴 자리를 아직 사람이 뺏지 않았으면 그 자리가 이 세션의 스크롤이다 —
+        // 다시 그린 몸통이 0에서 시작한다고 저장된 자리를 0으로 덮지 않는다.
+        // 떨어져 나간 옛 몸통의 0도 봉인하지 않는다 — 오류·빈 화면에서는 굴릴 자리가
         // 아예 없고, 거기서 0을 적으면 다음 복원이 사람을 맨 위로 데려간다.
-        scrollTop: bodyEl && bodyEl.isConnected !== false ? bodyEl.scrollTop : null,
+        scrollTop: pendingScrollTop != null ? pendingScrollTop
+          : (bodyEl && bodyEl.isConnected !== false ? bodyEl.scrollTop : null),
       });
       ws.report(Object.assign({
         designTab: state.designTab,
@@ -5244,6 +5255,25 @@ function createBacktestCanvas(options) {
       workspaceReportTimer = null;
       reportWorkspace();
     }, WORKSPACE_REPORT_DEBOUNCE_MS);
+  }
+
+  // 예약된 보고를 지금 흘린다 — 세션을 갈아타기 직전에 session-workspace가 부른다.
+  // main은 **받은 시점의** 세션에 적으므로(historyConversationId), 전환 뒤에 터진
+  // 타이머는 이 세션의 폼·코드·스크롤을 다음 세션의 기록에 적는다.
+  function flushWorkspaceReport() {
+    if (workspaceReportTimer == null) return;
+    if (clearTimeoutImpl) clearTimeoutImpl(workspaceReportTimer);
+    workspaceReportTimer = null;
+    reportWorkspace();
+  }
+
+  // 몸통을 굴렸다 — 되돌려 놓은 그 자리와 같은 값으로 오는 것은 우리가 방금 세운
+  // 스크롤이라 사람의 것이 아니다. 사람이 실제로 굴렸을 때만 되돌릴 자리를 놓는다.
+  function onBodyScroll() {
+    if (pendingScrollTop == null || !bodyEl || bodyEl.scrollTop !== pendingScrollTop) {
+      pendingScrollTop = null;
+      scheduleWorkspaceReport();
+    }
   }
 
   // 결과 데이터셋을 다시 읽는다(42번 보드 R7 — 결과는 참조로 남는다). 못 읽으면 false다:
@@ -5363,7 +5393,7 @@ function createBacktestCanvas(options) {
     }
     const codeItem = report.items.find((item) => item.key === 'code');
     if (codeItem && codeItem.ok) {
-      const lines = codeSource ? codeSource.split('\n').length : 0;
+      const lines = countLines(codeSource);
       const item = el('div', 'backtest-restore-mark');
       item.appendChild(el('span', 'backtest-restore-mark-label', `${codeFileLabel()} · ${lines}줄`));
       item.appendChild(el('span', 'backtest-restore-code', 'restored'));

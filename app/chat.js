@@ -2294,6 +2294,9 @@ window.AthenaShell.registerOpenConversation(async (conv) => {
   if (!conv || !conv.id) return false;
   // 답변 중에는 전환하지 않는다 — 진행 중 턴이 다른 대화 밑으로 사라진다.
   if (state !== 'idle' || remoteQueryBusy) return false;
+  // 갈아타기 전에 이 세션의 지연 보고를 흘린다 — main은 받은 시점의 세션에 적으므로
+  // 전환 뒤에 도착한 보고는 앞 세션의 작업공간을 다음 세션 기록에 적는다.
+  if (window.AthenaSessionWorkspace) window.AthenaSessionWorkspace.flush();
   const switched = await window.athena.invoke('athena:conversations-set-active', { id: conv.id })
     .catch(() => null);
   if (!switched || !switched.restorable) return false;
@@ -2899,6 +2902,9 @@ window.athena.invoke('athena:cli-list').then(applyCliState, () => {});
 // 먼저 폐기해 이전 응답이 새 방에 뒤늦게 붙는 것을 막고, main의 실행도 함께
 // 중단한다. sidebar.js가 새 기록 id를 요청하기 직전에 이 이벤트를 보낸다.
 window.addEventListener('athena:new-conversation', () => {
+  // 새 기록 id를 받기 전에 흘린다 — 이력 행 클릭과 같은 이유다(전환 뒤에 터진 보고는
+  // 앞 세션의 작업공간을 새 대화의 기록에 적는다).
+  if (window.AthenaSessionWorkspace) window.AthenaSessionWorkspace.flush();
   abortToken += 1;
   window.athena.send('athena:abort-live-query');
   window.athena.send('athena:orb-signal', { signal: 'think', active: false });

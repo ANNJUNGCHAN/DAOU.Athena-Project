@@ -17,13 +17,16 @@ const FORM_FIELDS = Object.freeze([
   ['costs', '비용'],
 ]);
 
-// 41번 보드 Rule 3이 이름을 대는 단위. 봉인되지 않은 항목은 판정에 끼지 않는다 —
-// 없던 것을 "못 찾았다"고 말하면 그것이 거짓 안내다.
+// 41번 보드 Rule 3이 이름을 대는 단위. 이름은 Paper 3WO4-1의 어휘 그대로다 —
+// 「폼·코드·로그」, 그리고 결과는 봉인이 마지막 실행 한 장뿐이라 「결과 데이터셋 1장」.
+// 셋째 칸은 못 찾았다고 말할 때만 쓰는 이름이다(그대로 남은 것을 셀 때는 수량을 붙이지
+// 않는다). 봉인되지 않은 항목은 판정에 끼지 않는다 — 없던 것을 "못 찾았다"고 말하면
+// 그것이 거짓 안내다.
 const ITEMS = Object.freeze([
-  ['form', '전략 폼'],
-  ['code', '전략 코드'],
-  ['result', '결과'],
-  ['log', '실행 로그'],
+  ['form', '폼'],
+  ['code', '코드'],
+  ['result', '결과 데이터셋', '결과 데이터셋 1장'],
+  ['log', '로그'],
 ]);
 
 // 42번 보드 R6 "실행 로그" — 값이 아니라 꼬리만 남긴다. 결과 데이터셋을 못 찾아도
@@ -52,6 +55,12 @@ function filledFormFields(spec) {
 function labelOf(key) {
   const row = ITEMS.find(([id]) => id === key);
   return row ? row[1] : key;
+}
+
+function missingLabelOf(key) {
+  const row = ITEMS.find(([id]) => id === key);
+  if (!row) return key;
+  return row[2] || row[1];
 }
 
 // 마지막 글자에 받침이 있나 — 안내 문장의 조사가 이것으로 갈린다.
@@ -134,7 +143,7 @@ function restoreReport(sealed, applied) {
     items.push({ key, label, ok: Boolean(got[key]) });
   }
 
-  const missing = items.filter((item) => !item.ok).map((item) => item.label);
+  const missing = items.filter((item) => !item.ok).map((item) => missingLabelOf(item.key));
   const kept = items.filter((item) => item.ok).map((item) => item.label);
   const form = saved.form
     ? { restored: restoredFields.length, sealed: formFields.length }
@@ -143,8 +152,8 @@ function restoreReport(sealed, applied) {
     // 전부 돌아왔으면 아무 말도 하지 않는다(Rule 1) — 안내 문장 자체를 만들지 않는다.
     return { items, form, partial: false, missing, kept, message: '' };
   }
-  const head = `${withObject(missing.join(' · '))} 찾지 못했습니다.`;
-  const message = kept.length ? `${head} ${withTopic(kept.join(' · '))} 그대로입니다.` : head;
+  const head = `${withObject(missing.join('·'))} 찾지 못했습니다.`;
+  const message = kept.length ? `${head} ${withTopic(kept.join('·'))} 그대로입니다.` : head;
   return { items, form, partial: true, missing, kept, message };
 }
 
@@ -154,6 +163,7 @@ const __exports = {
   LOG_TAIL_CHARS,
   filledFormFields,
   labelOf,
+  missingLabelOf,
   hasJongseong,
   sealBacktest,
   restoreReport,
