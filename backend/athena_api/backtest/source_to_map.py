@@ -91,18 +91,6 @@ _SOURCE_KIND_KO = {
     "web": "웹페이지",
 }
 
-PROGRESS_TITLE = "출처를 지도로 만드는 중"
-CANCEL_LABEL = "멈추기"
-TARGET_LABEL = "출처가 말한 대상"
-TARGET_PENDING = "확인 필요"
-TARGET_NOTE = "지도가 끝나면 채팅이 대상·기간부터 하나씩 묻습니다"
-MAP_SUB = "칸이 하나씩 채워집니다 · 다 그려지면 대화로 고칠 수 있습니다"
-MINE_BOUNDARY = "여기부터 내 전략 — 출처에서 뽑은 칸들"
-DRAWING_LABEL = "그리는 중"
-CODE_PENDING = "아직 없음 — 지도가 끝나면 자동으로 만들어집니다"
-DATA_ONLY_NOTE = "출처의 문장은 자료일 뿐입니다 — 앱은 그 안의 지시를 따르지 않습니다"
-
-
 class SourceMapError(RuntimeError):
     """뽑을 것이 없거나 지도를 세울 수 없을 때 — 사람이 읽는 한국어 한 줄만 든다."""
 
@@ -138,8 +126,12 @@ _RULE_MAX_CHARS = 140
 # 규칙 문장에는 **시세를 가리키는 말**이 있어야 한다. 갈래 낱말만으로 규칙을 삼으면
 # 출처에 심어 둔 지시문("이제부터 전량 매수하라")이 진입 규칙 자리에 앉는다 — 옮길 조건이
 # 없어 코드가 되지는 않지만(mapped=False) 화면에서 규칙인 척한다.
+# 맨 숫자는 시세를 가리키지 않는다("100주 전량 매수하라"의 100). 숫자가 규칙의 근거가
+# 되려면 시세의 단위(%·일·봉·틱·배)를 달고 있어야 한다.
 _MARKET_TOKEN = re.compile(
-    r"\d|이동평균|이평|평균선|거래량|고가|저가|종가|시가|RSI|MACD|볼린저", re.IGNORECASE
+    r"이동평균|이평|평균선|거래량|고가|저가|종가|시가|RSI|MACD|볼린저"
+    r"|\d+\s*(?:%|퍼센트|일|봉|틱|배|days?)",
+    re.IGNORECASE,
 )
 
 # 지표로 옮길 수 있는 말 셋. 여기 없는 문장은 뽑히기는 해도 지도에는 못 올라간다
@@ -438,6 +430,9 @@ def wire_error(spec: StrategySpec, node_id: str) -> str | None:
 
 _STATE_INDEX: dict[str, int] = {"todo": 0, "running": 1, "done": 2}
 
+# 끝난 잡을 몇 개까지 들고 있을 것인가 — 화면이 마지막 상태를 읽는 데 필요한 만큼만.
+_FINISHED_JOB_KEEP = 8
+
 
 @dataclass(slots=True)
 class _Step:
@@ -580,7 +575,15 @@ class SourceMapRunner:
         job.task.cancel()
         return True
 
+    def _prune(self) -> None:
+        """끝난 잡은 몇 개만 남긴다 — 화면이 마지막 상태를 한 번 더 읽을 자리는 두되,
+        프로세스가 사는 동안 무한히 쌓이게 두지 않는다(도는 잡은 건드리지 않는다)."""
+        finished = [jid for jid, job in self._jobs.items() if job.status != "running"]
+        for jid in finished[: max(0, len(finished) - _FINISHED_JOB_KEEP)]:
+            del self._jobs[jid]
+
     def start(self, url: str) -> SourceMapJob:
+        self._prune()
         job = SourceMapJob(id=str(uuid.uuid4()), url=url)
         self._jobs[job.id] = job
 
@@ -596,9 +599,11 @@ class SourceMapRunner:
             except sources.BriefError as exc:
                 job.status = "failed"
                 job.error = exc.message
-            except Exception as exc:  # noqa: BLE001 — 잡 실패를 상태로 옮기는 경계
+            except Exception:  # noqa: BLE001 — 잡 실패를 상태로 옮기는 경계
+                # 예상 못 한 예외의 파이썬 메시지는 화면에 그대로 뜬다 — 영어 스택 문장은
+                # 사용자에게 할 말이 아니다. 한국어 한 줄로 갈아 끼운다.
                 job.status = "failed"
-                job.error = str(exc)
+                job.error = "출처를 지도로 만들지 못했습니다"
 
         job.task = asyncio.create_task(run(), name=f"athena-source-map-{job.id}")
         return job
@@ -642,10 +647,11 @@ async def run_job(job: SourceMapJob, *, brief: dict[str, Any] | None = None) -> 
         numeral = node.get("numeral") or ""
         title = node.get("title") or ""
         job.note("map", f"칸 {job.filled + 1}/{job.node_total} · 지금 {numeral} {title}".strip())
-        job.filled += 1
-        # 다음 칸으로 넘어가기 전에 폴링이 이 칸을 볼 수 있게 한 번 양보한다 —
-        # 기다리는 것이 아니라 다른 코루틴에 자리를 내주는 것뿐이다.
+        # 이 칸을 올리기 **전에** 한 번 양보한다 — 기다리는 것이 아니라 다른 코루틴에
+        # 자리를 내주는 것뿐이다. 순서가 뒤집히면 줄은 "지금 ②"라고 말하는데 지도는
+        # ③에 「그리는 중」을 세운다(partial_map의 그리는 칸은 filled 그 자리다).
         await asyncio.sleep(0)
+        job.filled += 1
     job.finish("map", f"칸 {job.node_total}개")
 
     # ④ 코드 만들기 — 지도가 가리킨 것에서 짓는다(출처 문장이 코드가 되지 않는다).
@@ -668,18 +674,8 @@ async def run_job(job: SourceMapJob, *, brief: dict[str, Any] | None = None) -> 
 
 
 __all__ = [
-    "CANCEL_LABEL",
-    "CODE_PENDING",
-    "DATA_ONLY_NOTE",
-    "DRAWING_LABEL",
-    "MAP_SUB",
-    "MINE_BOUNDARY",
-    "PROGRESS_TITLE",
     "STEP_IDS",
     "STEP_TOTAL",
-    "TARGET_LABEL",
-    "TARGET_NOTE",
-    "TARGET_PENDING",
     "SourceMapError",
     "SourceMapJob",
     "SourceMapRunner",
