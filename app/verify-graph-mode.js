@@ -1005,6 +1005,89 @@ async function main() {
         && chatIgnored.prefs.nonsense === undefined,
       chatIgnored);
 
+    // entity 응답 패널(Paper 보드 10, 2026-09-07) — 모델이 action=entity로 받는
+    // 것과 **같은 응답**을 그대로 봉투에 실어 보낸다(위에서 이미 확인한 그 엔드포인트를
+    // 다시 부른다 — 지어낸 값으로 재면 화면만 초록이 되고 배선은 안 재게 된다).
+    if (pickNode.entityId) {
+      const entityDetail = await (await fetch(
+        `${detailUrl}?entity=${encodeURIComponent(pickNode.entityId)}`,
+        { headers: modelHeaders },
+      )).json();
+      await sendAction({ kind: 'entity', detail: entityDetail }, 800);
+      const entityPanel = await evaluate(wc, `
+        const panel = document.getElementById('graphPanel');
+        const q = (sel) => [...panel.querySelectorAll(sel)];
+        return { ok: true,
+          hidden: panel.hidden,
+          name: (panel.querySelector('.entity-panel-name') || {}).textContent || null,
+          meta: (panel.querySelector('.entity-panel-meta') || {}).textContent || '',
+          titles: q('.entity-section-title').map((n) => n.textContent),
+          relations: q('.entity-relation-row').length,
+          arrows: q('.entity-relation-arrow').map((n) => n.textContent),
+          metas: q('.entity-relation-meta').map((n) => n.textContent),
+          excerpts: q('.entity-excerpt-meta').map((n) => n.textContent),
+          timeline: q('.entity-timeline-row').length,
+          honesty: q('.entity-honesty-line').map((n) => n.textContent),
+          honestyTitle: (panel.querySelector('.entity-honesty-title') || {}).textContent || null,
+          tabs: q('.panel-tab').length,
+          text: panel.textContent };
+      `);
+      check('모델이 조회한 노드가 화면에도 선다',
+        entityPanel.hidden === false && entityPanel.name === entityDetail.name,
+        { hidden: entityPanel.hidden, got: entityPanel.name, want: entityDetail.name });
+      check('관계 줄 수가 응답과 같다',
+        entityPanel.relations === (entityDetail.relations || []).length,
+        { got: entityPanel.relations, want: (entityDetail.relations || []).length });
+      check('변경 이력 줄이 응답에서 나온다',
+        entityPanel.timeline > 0 && entityPanel.timeline <= (entityDetail.timeline || []).length,
+        { got: entityPanel.timeline, want: (entityDetail.timeline || []).length });
+      check('절 제목이 Paper 그대로다',
+        JSON.stringify(entityPanel.titles)
+          === JSON.stringify(['관계 — 방향 · 확정성 · 티어 · 보강', '변경 이력 — 최신 먼저']),
+        entityPanel.titles);
+      check('관계마다 방향이 화살표로 그려진다',
+        entityPanel.arrows.length === entityPanel.relations
+          && entityPanel.arrows.every((a) => a.startsWith('←') || a.startsWith('→')),
+        entityPanel.arrows.slice(0, 3));
+      check('관계마다 확정성·티어가 한국어로 그려진다',
+        entityPanel.metas.length === entityPanel.relations
+          && entityPanel.metas.every((m) => /사실|추론|불확실/.test(m)),
+        entityPanel.metas.slice(0, 3));
+      // 노드 원문이 나가는 화면이다 — 잘린 발췌를 전문처럼 보이게 두면 안 된다.
+      const truncated = (entityDetail.relations || []).filter((r) => r.source && r.source.truncated);
+      check('잘린 발췌는 잘렸다고 화면이 말한다',
+        truncated.length === 0 || entityPanel.excerpts.some((m) => m.startsWith('잘린 발췌 — ')),
+        { truncated: truncated.length, excerpts: entityPanel.excerpts.slice(0, 3) });
+      check('원시 코드가 화면에 새지 않는다',
+        !/chat_message|EXTRACTED|AMBIGUOUS|interested_in|deterministic/.test(entityPanel.text),
+        entityPanel.text.slice(0, 200));
+      check('정직성 규칙 네 줄이 패널 발치에 선다',
+        entityPanel.honestyTitle === '이 답이 지켜야 하는 것' && entityPanel.honesty.length === 4,
+        { title: entityPanel.honestyTitle, lines: entityPanel.honesty.length });
+      check('노드 선택 패널과 겹쳐 그리지 않는다', entityPanel.tabs === 0, entityPanel.tabs);
+      await capture(wc, '10b-chat-entity');
+
+      // 못 찾은 조회는 패널을 바꾸지 않는다 — 후보 중 하나를 골라 그리면 그것이 단정이다.
+      await sendAction({ kind: 'entity', detail: { revision: 1, query: '없는회사이름12345', resolved: false, candidates: [] } }, 600);
+      const stillThere = await evaluate(wc, `
+        const panel = document.getElementById('graphPanel');
+        return { ok: true, name: (panel.querySelector('.entity-panel-name') || {}).textContent || null };
+      `);
+      check('못 찾은 조회로 패널이 바뀌지 않는다', stillThere.name === entityDetail.name,
+        { got: stillThere.name, want: entityDetail.name });
+
+      // 노드를 새로 고르면 물러난다(같은 자리에 두 주제를 겹쳐 두지 않는다).
+      await sendAction({ kind: 'select', entityId: pickNode.entityId }, 1200);
+      const afterSelect = await evaluate(wc, `
+        const panel = document.getElementById('graphPanel');
+        return { ok: true,
+          entity: panel.querySelectorAll('.entity-relation-row').length,
+          name: (panel.querySelector('.panel-name') || {}).textContent || null };
+      `);
+      check('노드를 새로 고르면 entity 응답 패널이 물러난다',
+        afterSelect.entity === 0 && afterSelect.name === pickNode.name, afterSelect);
+    }
+
     // ── 12. 편집 제안 카드 (2026-09-03) ────────────────────────────────────
     //
     // **모델은 제안, 확정은 사람.** 카드가 뜨는지, 문구가 정직한지, 그리고
