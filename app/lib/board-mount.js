@@ -464,19 +464,35 @@ function markInsetAbsoluteBox(el) {
   el.dataset.bsInsetX = 'true';
 }
 
+// primary가 **세로로 쌓아 놓은** 줄인가. Paper는 필터·칩 줄을 primary 바로 아래에
+// 두기도 하고(137X-2 Chart Toolbar) 세로 래퍼 한 겹을 끼우기도 한다(실측 30O1-0
+// Quote Detail Mount > Frame > Mode Row). 둘은 같은 줄이므로 같은 규약을 받는다.
+// 가로로 나뉜 칸 안(표 행의 셀 등)은 아니다: 위로 올라가다 세로 래퍼가 아닌 것을
+// 만나면 멈추고, 표(열 폭이 계약이다)는 이름으로도 막는다.
+function inPrimaryColumnStack(el) {
+  for (let node = el.parentElement; node; node = node.parentElement) {
+    if (!node.classList) return false;
+    // primary가 스스로 표인 보드도 있다(실측 2SYW-1 Order Ledger `bs-primary bs-table`).
+    // 그 경계에서 멈추는 것이 먼저다 — primary 직속 요약 줄은 표 행이 아니다.
+    if (node.classList.contains('bs-primary')) return true;
+    if (node.classList.contains('bs-table')) return false;
+    if (!node.style) return false;
+    if (node.style.getPropertyValue('flex-direction').trim() !== 'column') return false;
+  }
+  return false;
+}
+
 // primary가 이고 있는 줄 — Paper가 양끝으로 벌린(`space-between`) 가로 줄이다.
 // 좁아지면 양쪽 묶음의 min-content 합이 그대로 가로 넘침이 된다: 표면 머리
 // (.bs-header)가 M에서 접히는 것과 같은 이유이고, 실측 137X-2 Chart Toolbar가
-// 최소 폭에서 149px을 냈다. 표(열 폭이 계약인 줄)를 건드리지 않도록 primary의
-// **직속** 줄로만 한정하고, 세로 줄(`flex-direction: column`)은 뺀다 — 세로 줄에
+// 최소 폭에서 149px을 냈다. 세로 줄(`flex-direction: column`)은 뺀다 — 세로 줄에
 // flex-wrap을 주면 넘친 것이 오른쪽 새 열로 가서 오히려 가로 넘침이 된다.
 function markSplitRow(el) {
   if (!el || !el.dataset || !el.style) return;
   if (el.style.getPropertyValue('display').trim() !== 'flex') return;
   if (el.style.getPropertyValue('justify-content').trim() !== 'space-between') return;
   if (el.style.getPropertyValue('flex-direction').trim() === 'column') return;
-  const parent = el.parentElement;
-  if (!parent || !parent.classList || !parent.classList.contains('bs-primary')) return;
+  if (!inPrimaryColumnStack(el)) return;
   el.dataset.bsSplitRow = 'true';
 }
 
