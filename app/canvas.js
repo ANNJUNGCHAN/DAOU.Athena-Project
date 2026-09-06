@@ -4036,6 +4036,12 @@ function renderSummaryUpdatedAt(entries) {
     el.textContent = '';
     return;
   }
+  const relative = window.AthenaLib.GraphSummaryTable.relativeDaysText(
+    new Date(latestMs).toISOString(), Date.now());
+  el.hidden = !relative;
+  el.textContent = relative ? `최근 갱신 ${relative}` : '';
+}
+
 // --- 채팅 → 그래프 제어 (2026-09-03) ---------------------------------------
 //
 // main.js가 athena_graph_view의 delivered:'canvas' 봉투를 이 채널 하나로 보낸다
@@ -4110,12 +4116,6 @@ const disposeGraphChatAction = window.athena.on('athena:graph-chat-action', asyn
   }
 });
 window.addEventListener('pagehide', disposeGraphChatAction, { once: true });
-
-  const relative = window.AthenaLib.GraphSummaryTable.relativeDaysText(
-    new Date(latestMs).toISOString(), Date.now());
-  el.hidden = !relative;
-  el.textContent = relative ? `최근 갱신 ${relative}` : '';
-}
 
 // 테마 군집 섹션(보드 06 §8/07 §8-2, 스텝6) — cluster-map을 재사용한다(이미
 // graphMode.fetchClusterMap이 쓰는 것과 같은 IPC, 여기서는 별도로 다시
