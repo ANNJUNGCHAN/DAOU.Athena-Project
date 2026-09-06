@@ -6542,6 +6542,18 @@ body { margin: 0; overflow: hidden; }
   font-weight: 300;
   font-size: var(--text-xs);
 }
+.agent-code-fire-open {
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  padding: 0;
+  color: var(--color-k-dim);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+  cursor: pointer;
+}
 .agent-code-fire-empty {
   color: var(--color-k-faint);
   font-size: var(--text-sm);

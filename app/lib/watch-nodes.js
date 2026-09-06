@@ -50,6 +50,19 @@ function pollMinutes(watch) {
   return Number.isFinite(sec) && sec >= 60 ? Math.round(sec / 60) : 1;
 }
 
+// 쿨다운(보드 10·12 「쿨다운 1일」) — 백엔드는 초로 준다. 나누어떨어지는 가장 큰
+// 한국어 단위 하나만 쓰고, 안 떨어지면 초 그대로 남긴다(반올림으로 값을 바꾸지 않는다).
+function cooldownLabel(seconds) {
+  if (seconds === null || seconds === undefined || seconds === '') return DASH;
+  const sec = Number(seconds);
+  if (!Number.isFinite(sec) || sec < 0) return DASH;
+  if (sec < 60) return `${sec}초`;
+  for (const [unit, suffix] of [[86400, '일'], [3600, '시간'], [60, '분']]) {
+    if (sec % unit === 0) return `${sec / unit}${suffix}`;
+  }
+  return `${sec}초`;
+}
+
 // 목록 행의 두 번째 줄(보드 12) — 「주기 확인」으로 떨어지면 안 된다(A-1).
 function watchSubLabel(watch) {
   return `${KIND_LABEL} · 장중 ${pollMinutes(watch)}분마다`;
@@ -123,7 +136,7 @@ function checkSummary(check) {
 const __exports = {
   DASH, LABEL_IN, LABEL_OUT, BADGE_CHANGED, BADGE_UNUSED,
   CHIP_ODD, CHIP_ASK, CODE_COLLAPSED, CODE_EXPANDED, COUNTED_UNTIL, KIND_LABEL,
-  formatValue, pollMinutes, watchSubLabel, versionLabel, nodeCards,
+  formatValue, pollMinutes, cooldownLabel, watchSubLabel, versionLabel, nodeCards,
   clockLabel, dayLabel, shortDate, checkSummary,
 };
 
