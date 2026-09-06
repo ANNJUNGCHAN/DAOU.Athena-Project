@@ -3847,6 +3847,174 @@ function renderControlResultTurn(turn, retry) {
   _mountTurn(line, card);
 }
 
+// ---------- 제어 제안 턴 (Paper 보드 07 · 432Z-1, 2026-09-06) ----------
+// 모델이 낸 제어 제안 다섯이 이 방에 붙는다 — A 작업 설정 · B 알람 모두 읽음 ·
+// C 제안 채택 · D 뷰 이동 · E 놓친 예약 지금 실행. 사람 칩 클릭이 게이트이고
+// (4333-1), 결과는 위 결과 턴(4330-1)으로 이어진다. D만 게이트가 없다 —
+// 렌더러가 뷰만 옮기고 서버 상태는 그대로다(437R-1).
+//
+// 제안은 백엔드에 아무것도 안 남긴다(routine_tools.py propose는 목록 조회뿐) —
+// 폴링으로는 발견할 수 없고 main.js가 tool_result에서 뽑아 보내는
+// athena:routine-proposed 하나가 유일한 신호다. 이벤트가 와야만 그린다:
+// 부팅 직후 #history는 자식이 0개여야 한다(verify.js emptyHistory 계약).
+const proposalTurnLib = window.AthenaLib.RoutineProposalTurn;
+const controlTurnLib = window.AthenaLib.RoutineControlTurn;
+
+// 읽지 않은 알람 수는 알람 센터가 센다(sidebar.js window.AthenaNotify 다리) —
+// 모델이 말한 수를 화면에 올리지 않는다.
+function unreadAlertCount() {
+  if (!window.AthenaNotify || typeof window.AthenaNotify.list !== 'function') return 0;
+  try { return window.AthenaNotify.list().filter((room) => !room.read).length; } catch { return 0; }
+}
+
+function adoptSeedText(subject) {
+  return `"${subject}" 감시로 등록해줘`;
+}
+
+// 결과 턴은 캔버스 클릭과 같은 채널로 보낸다 — 마운트 지점은 그 구독 하나뿐이다.
+function emitControlResult(model, retry) {
+  const turn = controlTurnLib.buildControlResultTurn(model);
+  window.dispatchEvent(new CustomEvent('athena:routine-control-result', {
+    detail: { turn, retry: retry || null },
+  }));
+}
+
+// D — 캔버스 전환 두 걸음 뒤에 뷰 탭·필터를 옮긴다. 서버는 부르지 않는다.
+function moveAgentView(view) {
+  openAgentCanvas();
+  const canvas = window.AthenaAgentCanvas;
+  if (!canvas || !view) return;
+  if (view.tab && typeof canvas.setActiveView === 'function') canvas.setActiveView(view.tab);
+  if (view.filter && typeof canvas.setActiveTab === 'function') canvas.setActiveTab(view.filter);
+}
+
+async function acceptProposal(turn) {
+  if (turn.control === 'update') {
+    const res = await window.athena.invoke('athena:routine-update', { id: turn.routineId, body: turn.proposed });
+    const fact = controlTurnLib.controlFactLine(turn.current);
+    if (res && res.ok) {
+      emitControlResult({ kind: 'success', badge: turn.badge, lead: proposalTurnLib.updateAppliedLead(turn.proposed), fact });
+    } else {
+      emitControlResult({ kind: 'fail', badge: turn.badge, reason: (res && res.error) || '', fact },
+        () => acceptProposal(turn));
+    }
+    return;
+  }
+  if (turn.control === 'ack_all') {
+    // 읽음은 알람 센터가 소유한다 — 캔버스 [모두 읽음으로]와 같은 문이다.
+    const unread = unreadAlertCount();
+    if (window.AthenaNotify && typeof window.AthenaNotify.markAllRead === 'function') {
+      window.AthenaNotify.markAllRead();
+    }
+    emitControlResult({ kind: 'success', badge: turn.badge, lead: proposalTurnLib.ackAppliedLead(unread) });
+    return;
+  }
+  if (turn.control === 'adopt') {
+    // 초안 게이트 — 캔버스 제안 카드의 [루틴으로]와 같은 문(입력창에 문장을 얹는다).
+    $input.value = adoptSeedText(turn.subject);
+    autoGrowInput();
+    $input.focus();
+    return;
+  }
+  if (turn.control === 'fire') {
+    const res = await window.athena.invoke('athena:routine-missed-confirm', { id: turn.routineId });
+    if (res && res.ok) {
+      emitControlResult({
+        kind: 'success', badge: turn.badge,
+        lead: proposalTurnLib.fireAppliedLead(res.data && res.data.fired_at),
+      });
+    } else {
+      emitControlResult({ kind: 'fail', badge: turn.badge, reason: (res && res.error) || '' },
+        () => acceptProposal(turn));
+    }
+  }
+}
+
+// 거절은 서버 상태를 안 바꾼다 — 방 안에서만 끝난다(4350-1). 건너뛰기만
+// main 쪽 보관 뷰를 정리한다(놓친 예약 카드의 [건너뛰기]와 같은 자리).
+function declineProposal(turn) {
+  if (turn.control === 'fire') {
+    window.athena.invoke('athena:routine-missed-skip', { id: turn.routineId }).catch(() => {});
+  }
+}
+
+function renderControlProposalTurn(turn) {
+  const line = document.createElement('div');
+  line.className = 'turn';
+  const card = document.createElement('div');
+  card.className = 'turn-agent control-proposal';
+
+  // 알약 두 개 — 제어 이름(채움)과 상태(외곽선). 초안 알약을 그대로 쓴다.
+  const head = document.createElement('div');
+  head.className = 'agent-head';
+  const badge = document.createElement('span');
+  badge.className = 'routine-draft-pill is-filled';
+  badge.textContent = turn.badge;
+  head.appendChild(badge);
+  const statusPill = document.createElement('span');
+  statusPill.className = 'routine-draft-pill';
+  statusPill.textContent = turn.statusPill;
+  head.appendChild(statusPill);
+  card.appendChild(head);
+
+  const lead = document.createElement('div');
+  lead.className = 'control-proposal-lead';
+  lead.textContent = turn.lead;
+  card.appendChild(lead);
+
+  if (turn.rationale) {
+    const why = document.createElement('div');
+    why.className = 'agent-source';
+    why.textContent = turn.rationale;
+    card.appendChild(why);
+  }
+
+  // D — 칩 대신 상태 두 마디(435E-1·435F-1).
+  if (turn.status.length) {
+    const statusRow = document.createElement('div');
+    statusRow.className = 'control-proposal-status';
+    for (const word of turn.status) {
+      const span = document.createElement('span');
+      span.textContent = word;
+      statusRow.appendChild(span);
+    }
+    card.appendChild(statusRow);
+  }
+
+  if (turn.chips.length) {
+    const row = document.createElement('div');
+    row.className = 'routine-approval-actions';
+    const buttons = turn.chips.map((chip) => _btn(
+      chip.label, chip.role === 'accept' ? 'agent-proactive-chip is-primary' : 'agent-proactive-chip',
+    ));
+    buttons.forEach((button, index) => {
+      const chip = turn.chips[index];
+      button.addEventListener('click', () => {
+        for (const other of buttons) other.disabled = true;
+        if (chip.role === 'decline') {
+          // 무엇을 골랐는지는 상태 알약이 말한다 — 새 문구를 만들지 않는다.
+          statusPill.textContent = chip.label;
+          declineProposal(turn);
+          return;
+        }
+        Promise.resolve(acceptProposal(turn)).catch(() => {});
+      });
+      row.appendChild(button);
+    });
+    card.appendChild(row);
+  }
+
+  _mountTurn(line, card);
+  // 뷰 이동은 그리는 즉시 일어난다 — 이 턴은 이미 일어난 일의 기록이다.
+  if (turn.control === 'view') moveAgentView(turn.view);
+}
+
+window.athena.on('athena:routine-proposed', (envelope) => {
+  const turn = proposalTurnLib.buildProposalTurn(envelope, { unread: unreadAlertCount() });
+  if (!turn) return;
+  renderControlProposalTurn(turn);
+});
+
 // ---------- 플러그인 제안 턴 · 결과 턴 (US-004) ----------
 // 채팅이 제안하고 캔버스가 승인한다. 이 파일은 승인 카드를 만들지 않는다 —
 // 카드는 canvas.js가 그리고, 여기에는 무엇을 제안했는지와 승인 뒤 무엇이

@@ -1863,6 +1863,24 @@ html.is-boot-expanding #winControls { opacity: 0; }
 
 /* 제어 결과 턴(Paper 보드 08 · 4330-1) — 배지 두 개 + 리드 + 사실행 한 줄.
    시각 언어는 초안 알약을 그대로 쓴다(새 언어를 만들지 않는다). */
+/* 제어 제안 턴(Paper 보드 07 · 432Z-1) — 알약 두 개 + 리드 + 근거 한 줄 + 사람 칩.
+   결과 턴과 같은 시각 언어를 쓴다(새 언어를 만들지 않는다). D 뷰 이동만 칩 대신
+   상태 두 마디가 선다. */
+.control-proposal { display: flex; flex-direction: column; gap: 7px; }
+.control-proposal-lead {
+  font-size: var(--text-sm, 13px);
+  font-family: var(--font-strong, inherit);
+  color: var(--color-k-text, #e6e8ee);
+  word-break: keep-all;
+  min-width: 0;
+}
+.control-proposal-status {
+  display: flex;
+  gap: 5px;
+  font-size: var(--text-2xs, 11px);
+  color: var(--color-k-dim, #9aa2b1);
+}
+
 .control-result { display: flex; flex-direction: column; gap: 7px; }
 .control-result-badge {
   font-size: var(--text-2xs, 11px);
