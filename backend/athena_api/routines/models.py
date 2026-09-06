@@ -208,6 +208,9 @@ class RoutineSpec:
     briefing_effort: str | None = None
     # 코드 감시(code.watch) 전용 — 그 밖의 소스에서는 항상 None이다.
     watch: WatchSpec | None = None
+    # 고침 이력 — 감시 코드를 덮어쓸 때마다 직전 판(코드 원문·마지막 검사)이 한 개씩
+    # 쌓인다. 되돌리기가 되쓰는 것이 이 목록의 마지막 판이다(routines/revisions.py).
+    revisions: list[dict[str, Any]] = field(default_factory=list)
 
     @property
     def mode(self) -> Mode:
@@ -245,6 +248,8 @@ class RoutineSpec:
         }
         if self.watch is not None:
             data["watch"] = self.watch.to_dict()
+        if self.revisions:
+            data["revisions"] = [dict(r) for r in self.revisions]
         return data
 
     @classmethod
@@ -274,6 +279,7 @@ class RoutineSpec:
             watch=(
                 WatchSpec.from_dict(raw["watch"]) if raw.get("watch") else None
             ),
+            revisions=[dict(r) for r in (raw.get("revisions") or [])],
         )
 
     def is_expired(self, now: datetime | None = None) -> bool:
