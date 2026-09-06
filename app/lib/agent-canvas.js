@@ -1515,7 +1515,7 @@ function createAgentCanvas(deps) {
   // 제어 결과 한 건을 같은 방(채팅)에 남긴다(Paper 4330-1). 사실행은 원장 행의
   // 1:1 렌더링이라 지어낼 것이 없다 — 판정·칩은 순수 모델이 붙인다. 배선이 없으면
   // 조용히 넘어간다(다른 선택 배선들과 같은 규칙).
-  function reportControl(kind, badge, item, lead, reason) {
+  function reportControl(kind, badge, item, lead, reason, retry) {
     if (typeof onControlResult !== 'function') return;
     onControlResult(ControlTurn.buildControlResultTurn({
       kind,
@@ -1523,17 +1523,22 @@ function createAgentCanvas(deps) {
       lead,
       reason,
       fact: ControlTurn.controlFactLine((item && item.raw) || null),
-    }));
+    }), retry);
   }
 
   // 제어 한 번 = 결과 한 건. 던지는 배선(canvas.js)의 오류를 여기서 판정으로 옮긴다.
+  // 실패에는 다시 부를 손잡이를 함께 실어 보낸다 — 채팅의 「다시 시도」가 같은
+  // 제어를 그대로 다시 부르고(결과는 새 턴으로 온다) 화면도 함께 다시 받아온다.
   async function runControl(action, badge, item, doneLead) {
     if (typeof action !== 'function') return;
     try {
       await action(item.id);
       reportControl('success', badge, item, doneLead);
     } catch (err) {
-      reportControl('fail', badge, item, '', String((err && err.message) || err));
+      reportControl('fail', badge, item, '', String((err && err.message) || err), async () => {
+        await runControl(action, badge, item, doneLead);
+        await refresh();
+      });
     }
   }
 

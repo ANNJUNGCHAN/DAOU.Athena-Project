@@ -31,7 +31,7 @@ test('제어 결과 턴은 이벤트가 와야만 그린다 — 부팅 계약(em
   assert.ok(start > 0);
   const body = chatSource.slice(start, start + 400);
   // 핸들러 안에서만 renderControlResultTurn을 부른다.
-  assert.match(body, /renderControlResultTurn\(turn\)/);
+  assert.match(body, /renderControlResultTurn\(turn[,)]/);
   // 모듈 최상위에서 그리기를 한 번 부르는 코드가 없다(구독 밖 직접 호출 금지).
   const calls = chatSource.match(/renderControlResultTurn\(/g) || [];
   assert.equal(calls.length, 2); // 정의 1 + 구독 안 호출 1
@@ -48,4 +48,10 @@ test('shell.html이 순수 모델을 watch-nodes 뒤에 싣는다 — 로드 순
   const control = shellHtml.indexOf('lib/routine-control-turn.js');
   assert.ok(nodes > 0 && control > 0);
   assert.ok(control > nodes, 'routine-control-turn.js는 watch-nodes.js보다 뒤에 와야 한다');
+});
+
+test('다시 부를 손잡이가 채널을 함께 탄다 — 「다시 시도」가 막다른 길이 되지 않는다', () => {
+  // 캔버스는 turn 옆에 retry를 싣고, 채팅은 그것을 결과 턴에 넘긴다.
+  assert.match(canvasSource, /detail: \{ turn, retry \}/);
+  assert.match(chatSource, /renderControlResultTurn\(turn, typeof detail\.retry === 'function'/);
 });

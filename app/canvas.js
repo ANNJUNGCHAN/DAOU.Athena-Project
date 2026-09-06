@@ -3880,8 +3880,8 @@ const agentCanvas = window.AthenaLib.AgentCanvas.createAgentCanvas({
   // 제어 결과 턴(Paper 보드 08 · 4330-1) — 칩을 누른 결과는 카드(캐버스 갱신)와
   // 채팅(결과 턴) 두 곳으로 간다. 채널을 새로 만들지 않고 플러그인 결과와 같은
   // 자리의 CustomEvent를 쓴다 — 그리는 것은 chat.js 하나뿐이다.
-  onControlResult: (turn) => {
-    window.dispatchEvent(new CustomEvent('athena:routine-control-result', { detail: { turn } }));
+  onControlResult: (turn, retry) => {
+    window.dispatchEvent(new CustomEvent('athena:routine-control-result', { detail: { turn, retry } }));
   },
   // 11단계 — "그래프 모드에서 근거 보기 →". 사이드바 모드 네비와 같은 두 걸음
   // (캔버스 전환 + 네비 활성 표시)을 그대로 재현한다(sidebar.js 참고).

@@ -508,6 +508,37 @@ test('제어가 거절당하면 실패 결과에 다시 시도 칩이 붙고 코
   assert.equal(results[0].serverChanged, false);
 });
 
+test('실패 결과에는 다시 부를 손잡이가 함께 온다 — 같은 제어를 그대로 다시 부른다', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 'a', status: 'active' })];
+  const results = [];
+  const retries = [];
+  let calls = 0;
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => routines,
+    pauseRoutine: async () => {
+      calls += 1;
+      if (calls === 1) throw new Error('일시적으로 막힘');
+      routines[0].status = 'paused';
+    },
+    onControlResult: (turn, retry) => { results.push(turn); retries.push(retry); },
+  });
+  canvas.mount();
+  await canvas.refresh();
+  await findByClass(container, 'agent-pause-btn')[0].dispatchEvent({ type: 'click' });
+  assert.equal(results[0].kind, 'fail');
+  assert.equal(typeof retries[0], 'function');
+  // 「다시 시도」가 부르는 것이 바로 이 손잡이다 — 두 번째 호출이 실제로 나간다.
+  await retries[0]();
+  assert.equal(calls, 2);
+  assert.equal(results.length, 2);
+  assert.equal(results[1].kind, 'success');
+  assert.equal(results[1].badge, '일시중지');
+  assert.equal(routines[0].status, 'paused');
+  // 성공 결과에는 손잡이가 없다 — 다시 시도 칩 자체가 없다.
+  assert.equal(retries[1], undefined);
+});
+
 test('onControlResult 배선이 없으면 제어는 그대로 돌아간다 — 조용히 넘어간다', async () => {
   const container = fakeNode('div');
   const routines = [routine({ id: 'a', status: 'active' })];
