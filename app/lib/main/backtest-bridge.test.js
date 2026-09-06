@@ -290,6 +290,39 @@ test('흐름 지도: 폼이든 코드든 같은 라우트에 몸체를 그대로
   assert.deepEqual(form, { ok: true, data: { version: 3, nodes: [] } });
 });
 
+// ── 출처에서 지도로(2026-09-07, Paper 보드 17) ──────────────────────────────
+
+test('출처→지도 잡 3종: 시작은 202+job_id, 폴링·멈추기는 그 id로 간다', async () => {
+  const calls = [];
+  const fetchImpl = async (url, opts) => {
+    calls.push([opts.method, url, opts.body ? JSON.parse(opts.body) : null]);
+    return { ok: true, status: 202, json: async () => ({ job_id: 'sm-1' }) };
+  };
+  const started = await backtestBridge.startSourceMap({
+    backendBase: 'http://x', fetchImpl, url: 'https://youtu.be/8kQz',
+  });
+  await backtestBridge.fetchSourceMap({ backendBase: 'http://x', fetchImpl, job_id: 'sm 1' });
+  await backtestBridge.cancelSourceMap({ backendBase: 'http://x', fetchImpl, job_id: 'sm-1' });
+  assert.deepEqual(calls, [
+    ['POST', 'http://x/api/v1/backtest/source/map', { url: 'https://youtu.be/8kQz' }],
+    // id는 경로에 들어가므로 인코딩된다 — 잡 id가 경로를 벗어나면 다른 잡을 읽는다.
+    ['GET', 'http://x/api/v1/backtest/source/map/sm%201', null],
+    ['DELETE', 'http://x/api/v1/backtest/source/map/sm-1', null],
+  ]);
+  assert.deepEqual(started, { ok: true, data: { job_id: 'sm-1' } });
+});
+
+test('출처→지도 잡: 읽지 못한 출처의 한국어 이유가 봉투에 그대로 남는다', async () => {
+  const res = await backtestBridge.startSourceMap({
+    backendBase: 'http://x',
+    fetchImpl: async () => ({
+      ok: false, status: 422, json: async () => ({ detail: 'url은 비어 있지 않은 문자열이어야 한다' }),
+    }),
+    url: '  ',
+  });
+  assert.deepEqual(res, { ok: false, status: 422, error: 'url은 비어 있지 않은 문자열이어야 한다' });
+});
+
 // ── 시각 설계 ↔ 코드 왕복(2026-09-03) ───────────────────────────────────────
 
 test('시각 라우트 6종: 메서드·경로·몸체가 계약 그대로다', async () => {

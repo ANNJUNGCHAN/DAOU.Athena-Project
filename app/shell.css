@@ -3925,6 +3925,12 @@ body { margin: 0; overflow: hidden; }
  * 카드의 클래스를 그대로 쓴다(routine-draft-pill·routine-btn·agent-source —
  * chat.css와 이 파일이 같은 shell.html에 로드돼 공유가 가능하다). */
 .backtest-change { border-left-color: rgba(230, 232, 238, 0.4); }
+.backtest-change-guard {
+  padding: 4px 0 2px;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+}
 .backtest-change-row {
   display: flex;
   flex-wrap: wrap;
@@ -6015,6 +6021,132 @@ body { margin: 0; overflow: hidden; }
   font-size: var(--text-2xs);
   white-space: nowrap;
   cursor: pointer;
+}
+
+/* 보드 17 · 출처에서 지도로 — 진행 띠·대상 스트립·뼈대 칸.
+   진행 띠는 새 기법의 검사 진행(.backtest-technique-progress)과 같은 문법이다:
+   한 줄에 지금 하는 일과 끝내는 버튼, 그 아래에 줄별 상세. */
+.backtest-source-target {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+}
+.backtest-source-target-label {
+  color: var(--color-k-dim);
+  white-space: nowrap;
+}
+.backtest-source-target-text {
+  font-weight: 600;
+  color: var(--color-k-text);
+}
+.backtest-source-target-badge {
+  padding: 1px 8px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  color: var(--color-k-soft);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
+.backtest-source-target-note {
+  flex: 1 0 100%;
+  color: var(--color-k-faint);
+  font-size: var(--text-2xs);
+}
+.backtest-source-progress {
+  margin-bottom: 14px;
+  padding: 12px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 10px;
+  background: var(--color-k-panel2);
+}
+.backtest-source-progress-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--color-k-text);
+}
+.backtest-source-spinner {
+  flex: 0 0 auto;
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--color-k-line);
+  border-top-color: var(--color-brand);
+  border-radius: 50%;
+  animation: backtest-spin 0.8s linear infinite;
+}
+.backtest-source-progress-text {
+  flex: 1 1 auto;
+}
+.backtest-source-stop {
+  padding: 4px 12px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-k-soft);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.backtest-source-steps {
+  margin-top: 10px;
+  display: grid;
+  gap: 6px;
+}
+.backtest-source-step-title {
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  color: var(--color-k-soft);
+}
+.backtest-source-step.is-done .backtest-source-step-title { color: var(--color-k-text); }
+.backtest-source-step.is-running .backtest-source-step-title {
+  color: var(--color-brand);
+  font-weight: 600;
+}
+.backtest-source-step-meta {
+  padding-left: 16px;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+}
+/* 아직 안 그린 칸 — 자리만 잡고 아무 말도 하지 않는다. */
+.backtest-flow-node.is-skeleton {
+  cursor: default;
+  opacity: 0.55;
+}
+.backtest-flow-bone {
+  height: 10px;
+  margin-bottom: 6px;
+  border-radius: 4px;
+  background: var(--color-k-line);
+}
+.backtest-flow-bone.is-title { width: 180px; height: 12px; }
+.backtest-flow-bone.is-line { width: 100%; max-width: 420px; margin-bottom: 0; }
+.backtest-flow-drawing {
+  margin-left: 8px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--color-k-panel3);
+  color: var(--color-brand);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+}
+.backtest-map-drawer-pending {
+  flex: 1 1 100%;
+  color: var(--color-k-soft);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+}
+.backtest-head-state {
+  color: var(--color-k-soft);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
 }
 
 /* 누가 이 코드를 쥐고 있는가 — 코드창 바로 위. */

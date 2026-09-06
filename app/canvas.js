@@ -3473,6 +3473,24 @@ const backtestCanvas = window.AthenaLib.BacktestCanvas.createBacktestCanvas({
   },
   // 새 기법 만들기(2026-09-03, 보드 20·21) — 코드 한 덩이를 두 가지로 읽는 둘.
   // 노드는 그 기법 파이썬의 함수 한 단위이고(범용 팔레트가 아니다), 검사는 차단 5(문법·계약·시험 실행·룩어헤드·워밍업)다. 라우트가 없는 백엔드(404)는 캔버스가 그대로 본다.
+  // 출처에서 지도로(2026-09-07, 보드 17) — 주소 하나를 다섯 단계로 지도까지 옮긴다.
+  // 시작은 job_id만 받고 화면은 그 id로 폴링한다. [멈추기]는 실패를 오류로 올리지
+  // 않는다 — 이미 끝난 잡은 멈출 것이 없고, 그것은 오류가 아니다(cancelJob과 같다).
+  sourceMapStart: async (body) => {
+    const res = await window.athena.invoke('athena:backtest-source-map-start', body);
+    if (!res || !res.ok) throw new Error(backtestError(res, '출처를 읽지 못했습니다'));
+    const jobId = res.data && res.data.job_id;
+    if (!jobId) throw new Error('job_id를 받지 못했습니다');
+    return { job_id: jobId };
+  },
+  sourceMapStatus: async ({ job_id } = {}) => {
+    const res = await window.athena.invoke('athena:backtest-source-map-status', { job_id });
+    if (!res || !res.ok) throw new Error(backtestError(res, '진행 상태를 불러오지 못했습니다'));
+    return res.data;
+  },
+  sourceMapCancel: async ({ job_id } = {}) => {
+    await window.athena.invoke('athena:backtest-source-map-cancel', { job_id });
+  },
   techniqueNodes: async (body) => {
     const res = await window.athena.invoke('athena:backtest-technique-nodes', body);
     if (!res || !res.ok) throw new Error(backtestError(res, '코드를 노드로 읽지 못했습니다'));

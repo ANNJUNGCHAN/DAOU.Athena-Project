@@ -26,6 +26,9 @@ const CHANGED_LABEL = '방금 바뀜';
 const DRAWER_HEAD = '이 지도 뒤의 코드';
 const DRAWER_NOTE = '웬만하면 열 일이 없습니다 — 최후의 보루';
 const AHEAD_LABEL = '코드가 지도보다 앞섬';
+// 아직 그리는 중인 칸(보드 17). payload의 node.drawing이 켜면 붙는다 — 어느 칸이
+// 지금 채워지는지는 서버가 알고, 화면은 그 표식만 그린다.
+const DRAWING_LABEL = '그리는 중';
 const DRIFT_LABEL = '지도가 담지 못한 코드가 있습니다';
 
 // 칸 색 축 — 번호와 제목은 payload가 준다(mapmodel.NUMERALS). 화면이 정하는 것은 색뿐이다.
@@ -126,9 +129,22 @@ function renderMapNode(node, opts, changed) {
   badge.appendChild(el('span', '', node.numeral || '·'));
   row.appendChild(badge);
 
+  // 아직 안 그린 칸(보드 17)은 제목 자리에 뼈대만 둔다 — 그럴듯한 문장을 채워 넣으면
+  // 사람은 그것을 자기 전략이라고 읽는다. 누를 것도 없다.
+  if (node.skeleton) {
+    row.className += ' is-skeleton';
+    row.disabled = true;
+    const bones = el('div', 'backtest-flow-body');
+    bones.appendChild(el('div', 'backtest-flow-bone is-title', ''));
+    bones.appendChild(el('div', 'backtest-flow-bone is-line', ''));
+    row.appendChild(bones);
+    return row;
+  }
+
   const body = el('div', 'backtest-flow-body');
   const head = el('div', 'backtest-flow-title-row');
   head.appendChild(el('span', 'backtest-flow-title', node.title));
+  if (node.drawing) head.appendChild(el('span', 'backtest-flow-drawing', DRAWING_LABEL));
   if (changed) head.appendChild(changedPill());
   body.appendChild(head);
   // 상태가 ok가 아닐 때만 사유를 적는다 — 늘 뜨는 줄은 아무도 읽지 않는다.
@@ -167,6 +183,14 @@ function renderFreeCode(block) {
 function renderDrawer(data, drawer) {
   const code = data.code || {};
   const wrap = el('div', 'backtest-map-drawer');
+  // 지도가 아직 만들어지는 중이면 서랍에 열 것이 없다(보드 17) — 파일 이름도 줄 수도
+  // 없는 자리에 「생성됨」을 적으면 없는 파일이 있는 것처럼 읽힌다.
+  if (drawer.pendingText) {
+    wrap.appendChild(el('div', 'backtest-map-drawer-text', DRAWER_HEAD));
+    wrap.appendChild(el('div', 'backtest-map-drawer-pending', drawer.pendingText));
+    wrap.appendChild(el('div', 'backtest-map-drawer-note', DRAWER_NOTE));
+    return wrap;
+  }
   const parts = [DRAWER_HEAD, drawer.fileLabel || '생성됨'];
   if (code.lines != null) parts.push(`${code.lines}줄`);
   if (!drawer.aheadOfMap && drawer.matchesMap && data.version != null) {
@@ -211,11 +235,15 @@ function renderFlowMap(container, payload, options) {
   const head = el('div', 'backtest-map-head');
   const headBody = el('div', 'backtest-map-head-body');
   headBody.appendChild(el('div', 'backtest-map-head-title', MAP_TITLE));
+  // 부제와 「내 전략」 경계는 지도가 어떻게 생겼느냐가 아니라 **무엇을 하는 중이냐**에
+  // 달려 있다 — 만드는 중인 지도는 「칸이 하나씩 채워집니다」이고 그 칸들은 대화가 아니라
+  // 출처에서 나왔다(보드 17). 안 주면 지금까지의 문장 그대로다.
+  const mapSub = opts.subText || MAP_SUB;
   headBody.appendChild(el(
     'div', 'backtest-map-head-sub',
     opts.lastRunLabel
-      ? `${MAP_SUB} · 오른쪽 숫자는 지난 실행(#${opts.lastRunLabel})의 실제 값`
-      : MAP_SUB,
+      ? `${mapSub} · 오른쪽 숫자는 지난 실행(#${opts.lastRunLabel})의 실제 값`
+      : mapSub,
   ));
   head.appendChild(headBody);
   if (data.version != null) {
@@ -237,7 +265,7 @@ function renderFlowMap(container, payload, options) {
   container.appendChild(renderBoundary(BOUNDARY_APP_BEFORE));
   (data.app_before || []).forEach((spec) => container.appendChild(renderAppNode(spec)));
 
-  container.appendChild(renderBoundary(BOUNDARY_MINE, 'mine'));
+  container.appendChild(renderBoundary(opts.mineBoundary || BOUNDARY_MINE, 'mine'));
   (data.nodes || []).forEach((node) => {
     container.appendChild(renderMapNode(node, opts, changedIds.has(node.id)));
   });

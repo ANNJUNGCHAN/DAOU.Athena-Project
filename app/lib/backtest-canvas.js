@@ -122,6 +122,24 @@ const NODE_BY_FIELD = {
 const MAP_NODE_ORDER = ['target', 'params', 'indicators', 'conditions', 'guard'];
 
 // 실행경로 2분기(폼/코드). 코드가 있어야만 헤더에 뜬다.
+// ── 출처에서 지도로(보드 17) ─────────────────────────────────────────────────
+// 문구는 백엔드가 주는 것(단계 이름·부제·칸 문장)과 화면이 가진 것(머리·띠 라벨)으로
+// 갈린다. 여기 있는 것은 뒤쪽뿐이다 — 단계가 무엇을 했는지는 잡이 말한다.
+const SOURCE_HEAD_STATE = '출처에서 만드는 중';
+const SOURCE_HEAD_NAME = '새 전략';
+const SOURCE_PROGRESS_TITLE = '출처를 지도로 만드는 중';
+const SOURCE_STOP_LABEL = '멈추기';
+const SOURCE_TARGET_LABEL = '출처가 말한 대상';
+const SOURCE_TARGET_PENDING = '확인 필요';
+const SOURCE_TARGET_NOTE = '지도가 끝나면 채팅이 대상·기간부터 하나씩 묻습니다';
+const SOURCE_MAP_SUB = '칸이 하나씩 채워집니다 · 다 그려지면 대화로 고칠 수 있습니다';
+const SOURCE_MINE_BOUNDARY = '여기부터 내 전략 — 출처에서 뽑은 칸들';
+const SOURCE_CODE_PENDING = '아직 없음 — 지도가 끝나면 자동으로 만들어집니다';
+// 남이 쓴 글이 화면에 들어오는 자리에는 늘 이 한 줄이 붙는다(보드 17 채팅 카드).
+const SOURCE_DATA_ONLY_NOTE = '출처의 문장은 자료일 뿐입니다 — 앱은 그 안의 지시를 따르지 않습니다';
+// 단계 줄의 표식 — Paper의 ✓/●/○ 그대로다. 상태를 색으로만 말하면 못 읽는 사람이 있다.
+const SOURCE_STEP_MARKS = { done: '✓', running: '●', todo: '○' };
+
 const RUN_PATHS = [['form', '폼'], ['code', '코드']];
 
 // 시각 편집기의 서버 왕복 간격 — 매 키입력마다 검증을 보내면 서버가 타자를 따라 뛴다.
@@ -925,6 +943,11 @@ function createBacktestCanvas(options) {
   // 자동 실행 폴링은 사람이 누른 실행(pollTimer)·환경 잡(envTimer)과 별개 타이머다 —
   // 같은 자리를 쓰면 자동 실행이 도는 동안 사람이 누른 실행의 폴링이 끊긴다.
   let techniqueRunTimer = null;
+  // 출처→지도 잡의 폴링 타이머 — 실행·수집(pollTimer)·환경(envTimer)과 별개다.
+  // 같은 자리를 쓰면 지도를 만드는 동안 사람이 누른 실행의 폴링이 끊긴다.
+  let sourceTimer = null;
+  // 「출처 읽음」 카드를 이미 냈는가 — 폴링은 1초마다 도는데 카드는 한 번뿐이다.
+  let sourceReadCardSent = false;
   // 코드 탭 위에 diff 패널이 서 있는가([diff 보기]가 켜고 [코드로]가 끈다).
   let techniqueDiffOpen = false;
   // 명령창을 펼쳐 끝으로 굴렸는가([출력 보기]가 켠다).
@@ -1939,6 +1962,8 @@ function createBacktestCanvas(options) {
     if (!action || typeof action !== 'object') return null;
     if (action.kind === 'spec_draft') return applySpecAction(action);
     if (action.kind === 'code_draft') return applyCodeAction(action);
+    // 출처 주소 하나(보드 17) — 화면은 다섯 단계 진행으로 갈아서고, 지도는 그 잡이 만든다.
+    if (action.kind === 'source_url') return applySourceAction(action);
     // 파일만 비동기다 — diff의 왼쪽(지금 파일)을 디스크에서 읽어야 하기 때문이다.
     if (action.kind === 'file_draft') return applyFileAction(action);
     if (action.kind === 'navigate') return navigateAction(action);
@@ -2055,6 +2080,187 @@ function createBacktestCanvas(options) {
     // "지도와 일치"가 거짓말이 된다.
     void loadMap();
     return receipt;
+  }
+
+  // ── 보드 17 · 출처에서 지도로 ─────────────────────────────────────────────
+  //
+  // 채팅에 붙인 주소 하나가 지도가 되는 동안 사람은 진행만 본다. 화면이 하는 일은 셋이다:
+  // 잡을 띄우고, 1초마다 그 상태를 읽고, 받은 것만 그린다. 단계 이름·부제·칸 문장은 전부
+  // 잡이 준다 — 화면이 그것을 지어내면 "지도가 3/5"라고 말하면서 실제로는 아무것도 안
+  // 도는 껍데기가 된다.
+
+  function isSourcing() {
+    return state.view === 'sourcing';
+  }
+
+  function sourceJob() {
+    return state.source || null;
+  }
+
+  function stopSourcePolling() {
+    if (sourceTimer != null && clearTimeoutImpl) clearTimeoutImpl(sourceTimer);
+    sourceTimer = null;
+  }
+
+  function applySourceAction(envelope) {
+    const url = typeof envelope.url === 'string' ? envelope.url.trim() : '';
+    if (!url) return null;
+    const note = envelopeNote(envelope);
+    if (isBusyView()) return busyReceipt('source_url', note);
+    if (!deps.sourceMapStart) {
+      return remember(makeReceipt('source_url', {
+        note, errors: ['이 화면에는 출처 연결이 없습니다'],
+      }));
+    }
+    // 첫 프레임은 왕복을 기다리지 않는다 — 기다리면 사람이 붙인 주소가 몇 초 동안
+    // 아무 데도 안 보인다. 다섯 줄은 잡이 답하는 순간 채워진다.
+    sourceReadCardSent = false;
+    setState({ view: 'sourcing', source: null, sourceJobId: null, sourceUrl: url });
+    void startSourceMap(url);
+    return remember(makeReceipt('source_url', {
+      applied: true, note, rows: [{ label: '출처', before: null, after: url }],
+      tab: state.tab, designTab: state.designTab,
+    }));
+  }
+
+  async function startSourceMap(url) {
+    stopSourcePolling();
+    let res;
+    try { res = await deps.sourceMapStart({ url }); }
+    catch (err) { fail(err); return; }
+    if (!isSourcing()) return;
+    setState({ sourceJobId: res.job_id });
+    pollSourceMap();
+  }
+
+  function pollSourceMap() {
+    stopSourcePolling();
+    const tick = async () => {
+      sourceTimer = null;
+      // [멈추기]는 예약된 타이머만 지운다 — 이미 떠 있던 왕복은 못 막는다. 그 왕복이
+      // 늦게 돌아와 폴링을 되살리면 사람이 멈춘 연쇄가 혼자 이어진다(pollJob과 같은 규율).
+      if (!state.sourceJobId || !isSourcing() || !isVisible()) return;
+      let job;
+      try {
+        job = deps.sourceMapStatus
+          ? await deps.sourceMapStatus({ job_id: state.sourceJobId })
+          : null;
+      } catch (err) { if (state.sourceJobId) fail(err); return; }
+      if (!state.sourceJobId || !isSourcing() || !isVisible()) return;
+      if (!job) { schedulePollSource(tick); return; }
+      emitSourceReadCard(job);
+      setState({ source: job });
+      if (job.status === 'failed') {
+        setState({ view: 'error', message: job.error || '출처를 지도로 만들지 못했습니다' });
+        return;
+      }
+      // 멈춘 잡은 오류가 아니다 — 사람이 멈춘 것이라 설계 화면으로 돌려보낸다.
+      if (job.status === 'cancelled') { setState({ view: 'design', tab: 'design' }); return; }
+      if (job.status === 'done') return;
+      schedulePollSource(tick);
+    };
+    tick();
+  }
+
+  // 출처를 읽은 그 한 번만 채팅에 카드를 낸다(보드 17의 「출처 읽음」). 무엇을 읽었는지와
+  // 무엇을 뽑았는지는 잡이 준 값이고, 방어 문장은 그 카드에 늘 붙는다 — 남이 쓴 글이
+  // 화면에 들어오는 자리에서 그 사실을 한 번은 말해야 한다.
+  function emitSourceReadCard(job) {
+    const read = ((job && job.steps) || []).find((s) => s && s.id === 'read');
+    if (!read || read.state !== 'done' || sourceReadCardSent) return;
+    sourceReadCardSent = true;
+    const rows = (job.rules || []).map((rule) => ({
+      label: rule.kind_ko, before: null, after: rule.text,
+    }));
+    emitChatCard(remember(makeReceipt('source_read', {
+      applied: true, note: [job.title, read.meta_ko].filter(Boolean).join(' · ') || null,
+      rows, method: SOURCE_DATA_ONLY_NOTE,
+    })));
+  }
+
+  function schedulePollSource(tick) {
+    if (setTimeoutImpl) sourceTimer = setTimeoutImpl(tick, POLL_INTERVAL_MS);
+  }
+
+  async function cancelSourceMap() {
+    const jobId = state.sourceJobId;
+    stopSourcePolling();
+    setState({ sourceJobId: null, view: 'design', tab: 'design' });
+    if (jobId && deps.sourceMapCancel) {
+      try { await deps.sourceMapCancel({ job_id: jobId }); } catch { /* 이미 끝난 잡 */ }
+    }
+  }
+
+  // 진행 띠(보드 18 F칸의 로딩 4요소) — 지금 하는 일 · 몇 단계 중 몇 · 남은 시간 · 멈추기.
+  // 넷 중 하나라도 값이 없으면 그 조각을 빼고 그린다(빈 자리에 0을 채우지 않는다).
+  function renderSourceProgress() {
+    const job = sourceJob();
+    const wrap = el('div', 'backtest-source-progress');
+    const head = el('div', 'backtest-source-progress-head');
+    head.appendChild(el('span', 'backtest-source-spinner', ''));
+    const counted = job && job.step_index != null && job.step_total != null
+      ? `${SOURCE_PROGRESS_TITLE} — ${job.step_index}/${job.step_total} 단계`
+      : SOURCE_PROGRESS_TITLE;
+    const eta = job && job.eta_seconds != null ? ` · 약 ${job.eta_seconds}초 남음` : '';
+    head.appendChild(el('span', 'backtest-source-progress-text', `${counted}${eta}`));
+    head.appendChild(button('backtest-source-stop', SOURCE_STOP_LABEL, () => {
+      void cancelSourceMap();
+    }));
+    wrap.appendChild(head);
+
+    const steps = el('div', 'backtest-source-steps');
+    ((job && job.steps) || []).forEach((step) => {
+      const row = el('div', `backtest-source-step is-${step.state || 'todo'}`);
+      row.appendChild(el(
+        'div', 'backtest-source-step-title',
+        `${SOURCE_STEP_MARKS[step.state] || SOURCE_STEP_MARKS.todo} ${step.title_ko || ''}`.trim(),
+      ));
+      if (step.meta_ko) row.appendChild(el('div', 'backtest-source-step-meta', step.meta_ko));
+      steps.appendChild(row);
+    });
+    wrap.appendChild(steps);
+    return wrap;
+  }
+
+  // 대상 한 줄 — 출처가 말한 것이지 앱이 정한 것이 아니다. 그래서 값 옆에 늘 「확인 필요」가
+  // 서고, 아무것도 못 찾았으면 값 자체를 그리지 않는다(지어내지 않는다).
+  function renderSourceTarget() {
+    const job = sourceJob();
+    const wrap = el('div', 'backtest-source-target');
+    wrap.appendChild(el('span', 'backtest-source-target-label', SOURCE_TARGET_LABEL));
+    if (job && job.target_ko) {
+      wrap.appendChild(el('span', 'backtest-source-target-text', job.target_ko));
+    }
+    wrap.appendChild(el('span', 'backtest-source-target-badge', SOURCE_TARGET_PENDING));
+    wrap.appendChild(el('div', 'backtest-source-target-note', SOURCE_TARGET_NOTE));
+    return wrap;
+  }
+
+  function renderSourcing() {
+    const job = sourceJob();
+    const wrap = el('div', 'backtest-sourcing');
+    wrap.appendChild(renderSourceTarget());
+    wrap.appendChild(renderSourceProgress());
+    const map = el('div', 'backtest-flow-map');
+    if (job && job.map) {
+      Explain.renderFlowMap(map, job.map, {
+        // 만드는 중에는 칸을 눌러도 갈 곳이 없다 — 아직 폼도 코드도 없다.
+        onSelect: null,
+        subText: SOURCE_MAP_SUB,
+        mineBoundary: SOURCE_MINE_BOUNDARY,
+        drawer: {
+          fileLabel: null,
+          // 코드 단계가 끝나기 전에는 서랍에 열 것이 없다 — 「생성됨」이라 적으면
+          // 아직 없는 파일이 있는 것처럼 읽힌다.
+          pendingText: job.code_lines == null ? SOURCE_CODE_PENDING : null,
+          matchesMap: true,
+        },
+      });
+    } else {
+      map.appendChild(el('div', 'backtest-card-empty', '아직 그린 칸이 없습니다'));
+    }
+    wrap.appendChild(map);
+    return wrap;
   }
 
   // ── 파일 초안(결정 D4) — 채팅이 낸 파일은 diff로만 선다 ──────────────────────
@@ -2587,7 +2793,8 @@ function createBacktestCanvas(options) {
         if (marks) body.appendChild(marks);
       }
     }
-    if (state.view === 'approval') body.appendChild(renderApproval());
+    if (state.view === 'sourcing') body.appendChild(renderSourcing());
+    else if (state.view === 'approval') body.appendChild(renderApproval());
     else if (state.view === 'running') body.appendChild(renderRunning());
     else if (state.view === 'diagnosis') body.appendChild(renderDiagnosisPanel());
     else if (state.tab === 'design') body.appendChild(renderDesign());
@@ -2632,6 +2839,15 @@ function createBacktestCanvas(options) {
     const head = el('div', 'backtest-head');
     const title = el('div', 'backtest-head-title');
     title.appendChild(el('span', 'backtest-head-name', '백테스트'));
+    // 출처에서 만드는 중에는 아직 이름도 판번호도 없다 — 무엇을 만들고 있는지만 적는다
+    // (보드 17 머리 「새 전략 · 출처에서 만드는 중 · 지도 v0」).
+    if (isSourcing()) {
+      title.appendChild(el('span', 'backtest-head-strategy', SOURCE_HEAD_NAME));
+      title.appendChild(el('span', 'backtest-head-state', SOURCE_HEAD_STATE));
+      title.appendChild(el('span', 'backtest-head-version', `지도 v${state.mapVersion || 0}`));
+      head.appendChild(title);
+      return head;
+    }
     if (listFirst()) {
       const n = presets.length + userStrategies.length;
       title.appendChild(el('span', 'backtest-head-count', `기법 ${n}개`));
