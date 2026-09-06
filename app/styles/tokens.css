@@ -27,6 +27,24 @@
   font-display: swap;
 }
 
+/* Daki가 없는 머신의 한글 폴백은 Noto Sans KR인데, 그 폰트의 글리프 상자가
+ * ascent 118.75% + descent 31.25% = 150%em이라 Paper가 지정한 줄 높이 125%
+ * (16px 본문의 line-height 20px)를 넘는다. fit-content 보드는 슬랙이 0이라
+ * 마지막 행의 상자가 2px 삐져나온다(15R0-2 · 15RX-2, 4폭 전부). 컨테이너를
+ * 늘리는 대신 폴백 폰트가 Paper의 줄 높이를 지키게 metric을 죈다 — 100:25는
+ * Noto의 ascent:descent 비(3.8:1)를 거의 그대로 두므로 기준선이 1px만 오른다.
+ * 자폭(advance)은 override 대상이 아니라 f860bb0이 지킨 가로 metric은 불변이다.
+ * Daki가 설치된 머신에서는 이 별칭이 스택 앞의 Daki에 밀려 아무 것도 안 바뀐다. */
+@font-face {
+  font-family: 'Noto Sans KR Athena';
+  src: local('Noto Sans KR');
+  ascent-override: 100%;
+  descent-override: 25%;
+  line-gap-override: 0%;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
 :root {
 
   /* 표면 — 백색 유리 */
@@ -87,9 +105,9 @@
   --dur-base: 180ms;
   --tracking-num: -1px;
 
-  --font-body: 'Daki', 'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', -apple-system, 'Segoe UI', sans-serif;
-  --font-strong: 'Daki B', 'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', -apple-system, 'Segoe UI', sans-serif;
-  --font-display: 'Daki Title', 'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', -apple-system, 'Segoe UI', sans-serif;
+  --font-body: 'Daki', 'Noto Sans KR Athena', 'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', -apple-system, 'Segoe UI', sans-serif;
+  --font-strong: 'Daki B', 'Noto Sans KR Athena', 'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Daki Title', 'Noto Sans KR Athena', 'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, 'Cascadia Code', monospace;
 
   /* 글자 크기 스케일 — 2026-08-19 결정(질의응답): 0.5px 단위 임의값 12종 난립을
