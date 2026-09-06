@@ -861,9 +861,12 @@ function createPluginCanvas(options) {
 
     if (sheet.error) body.appendChild(el('div', 'plugin-canvas-sheet-error', sheet.error));
 
+    // 이 시트의 확정 버튼은 아무것도 등록하지 않는다 — 승인 카드를 만들 뿐이라
+    // 이름도 [등록 제안]이다(Paper 플러그인 02). [승인]이라고 쓰면 여기서 등록이
+    // 끝난 것처럼 읽힌다.
     const actions = el('div', 'plugin-canvas-sheet-actions');
-    actions.appendChild(actionButton('취소', 'is-sheet-cancel', closeSheet));
-    actions.appendChild(actionButton('승인', 'is-sheet-confirm', () => proposeSnippet(sheet)));
+    actions.appendChild(actionButton('닫기', 'is-sheet-cancel', closeSheet));
+    actions.appendChild(actionButton('등록 제안', 'is-sheet-confirm', () => proposeSnippet(sheet)));
     body.appendChild(actions);
     return body;
   }
