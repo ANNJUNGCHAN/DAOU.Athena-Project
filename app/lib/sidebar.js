@@ -121,8 +121,14 @@
   // 새 대화 갈아타기 같은 부수 효과가 한쪽에만 붙는다.
   if ($roomJoin) {
     $roomJoin.addEventListener('click', () => {
+      // 알림 파생 방은 모드와 무관하게 열리므로 이미 에이전트 모드일 수 있다.
+      // 그때는 위 클릭이 모드를 안 바꿔 새 대화 갈아타기(onSelect의 modeChanged
+      // 분기)도 안 일어나 방을 못 떠나는 죽은 버튼이 된다 — 같은 갈아타기를
+      // 여기서 부른다(모드 전환은 여전히 네비 하나만 한다).
+      const alreadyAgent = currentMode() === 'agent';
       const agentNav = document.getElementById('modeNavAgent');
       if (agentNav) agentNav.click();
+      if (alreadyAgent) startNewConversation(currentProjectId, 'agent');
     });
   }
 
