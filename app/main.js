@@ -1545,19 +1545,43 @@ ipcMain.handle('athena:project-open-dialog', async () => {
 // 사이드바 프로젝트(36·37번 보드) — 프로젝트는 폴더 하나다. 폴더는 대화상자로 사람이
 // 고르고, 백엔드 레지스트리가 등록하며(같은 폴더 두 번 등록은 백엔드가 409로 막는다),
 // 사이드바 레코드는 백엔드 id로 이어진다. 두 목록이 다른 id를 들면 같은 폴더가 두 얼굴이 된다.
-ipcMain.handle('athena:project-add', async () => {
+// 폴더 고르기와 만들기는 두 갈래다(36번 보드) — 탐색기를 여는 것이 여기고, 만드는 것은
+// 아래 athena:project-add다. 한 갈래였을 때는 폴더를 고르는 순간 등록까지 끝나 이름을
+// 묻지도 권한 경계를 보여 주지도 못했다. 여기서는 아무것도 등록하지 않는다.
+ipcMain.handle('athena:project-pick-folder', async () => {
   let picked = null;
   try {
     const res = await dialog.showOpenDialog(shellWin, { properties: ['openDirectory'] });
     picked = res.canceled ? null : ((res.filePaths || [])[0] || null);
   } catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
   if (!picked) return { ok: true, canceled: true };
+  // 빈 폴더인지는 파일시스템만 안다. 못 읽었으면 비었다고 본다 — 안 읽힌 것을
+  // "파일이 있다"고 말하면 없는 사실을 화면에 그리는 것이 된다.
+  let empty = true;
+  try { empty = (await fs.promises.readdir(picked)).length === 0; }
+  catch (e) { mdlog(`폴더 내용 확인 실패 — ${String((e && e.message) || e)}`); }
+  return { ok: true, path: picked, name: path.basename(picked), empty };
+});
+// 만들기 — 경로를 주면 그 폴더로 만든다(대화상자가 이미 고른 경로다). 안 주면 옛 경로
+// 그대로 탐색기를 먼저 띄운다. 이름을 주면 그것이 프로젝트 이름이고, 없으면 폴더 이름이다.
+ipcMain.handle('athena:project-add', async (_e, { path: givenPath, name } = {}) => {
+  let picked = typeof givenPath === 'string' && givenPath.trim() ? givenPath.trim() : null;
+  if (!picked) {
+    try {
+      const res = await dialog.showOpenDialog(shellWin, { properties: ['openDirectory'] });
+      picked = res.canceled ? null : ((res.filePaths || [])[0] || null);
+    } catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+  }
+  if (!picked) return { ok: true, canceled: true };
+  const label = typeof name === 'string' && name.trim() ? name.trim() : null;
   const taken = conversations.list().projects.find((row) => row.path
     && path.resolve(row.path).toLowerCase() === path.resolve(picked).toLowerCase());
   if (taken) return { ok: false, reason: 'folder_taken', project: taken, path: picked };
   let registered = null;
   try {
-    const opened = await backtestBridge.openProject({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch, path: picked });
+    const opened = await backtestBridge.openProject({
+      backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch, path: picked, ...(label ? { name: label } : {}),
+    });
     registered = opened && opened.ok && opened.data && opened.data.project ? opened.data.project : null;
     if (!registered && opened && !opened.ok) mdlog(`프로젝트 백엔드 등록 실패 — ${String(opened.error || '')}`);
   } catch (e) { mdlog(`프로젝트 백엔드 등록 실패 — ${String((e && e.message) || e)}`); }
@@ -1565,7 +1589,7 @@ ipcMain.handle('athena:project-add', async () => {
   const added = conversations.addProject({
     id: registered ? registered.id : undefined,
     path: registered ? registered.path : picked,
-    label: registered ? registered.name : path.basename(picked),
+    label: label || (registered ? registered.name : path.basename(picked)),
   });
   return { ...added, path: picked, backendRegistered: Boolean(registered) };
 });

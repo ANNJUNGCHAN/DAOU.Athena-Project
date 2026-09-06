@@ -10,7 +10,7 @@
  * 실행: cd app && npx electron probe-session-restore.js
  */
 
-const { app } = require('electron');
+const { app, ipcMain } = require('electron');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
@@ -385,6 +385,63 @@ async function main() {
       && edited.project && edited.project.label === '아테나 리서치' && edited.project.description === '키움 리서치 노트', edited);
     const rejected = await wc.executeJavaScript(`window.athena.invoke('athena:project-update', { id: 'proj-athena', label: '' })`);
     check('프로젝트 수정 IPC: 빈 이름은 invalid_label로 거절한다', rejected && rejected.ok === false && rejected.reason === 'invalid_label', rejected);
+
+    // 10b) 프로젝트 추가 대화상자(36번 보드) — 폴더 고르기(athena:project-pick-folder)와
+    //      만들기(athena:project-add)가 두 갈래라, 탐색기를 여는 앞 갈래만 프로브가 대신한다.
+    //      만들기는 누르지 않는다: 여기서 재는 것은 고른 폴더가 세 상태 중 어느 것으로
+    //      그려지는가다(기본 · 빈 폴더가 아닐 때 · 이미 점유된 폴더).
+    const emptyFolder = fs.mkdtempSync(path.join(os.tmpdir(), 'athena-project-empty-'));
+    const filledFolder = fs.mkdtempSync(path.join(os.tmpdir(), 'athena-project-filled-'));
+    fs.writeFileSync(path.join(filledFolder, 'strategy.py'), 'x = 1', 'utf8');
+    const openCreateDialog = async (folder, empty) => {
+      ipcMain.removeHandler('athena:project-pick-folder');
+      ipcMain.handle('athena:project-pick-folder', async () => ({
+        ok: true, path: folder, name: path.basename(folder), empty,
+      }));
+      return wc.executeJavaScript(`(async () => {
+        document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+        document.querySelector('.sidebar-project-add').click();
+        await new Promise((r) => setTimeout(r, 250));
+        const root = document.getElementById('projectCreate');
+        const notice = document.getElementById('projectCreateNotice');
+        const pick = (sel) => { const node = notice.querySelector(sel); return node ? node.textContent : ''; };
+        return {
+          open: !root.hidden,
+          path: document.getElementById('projectCreatePath').textContent,
+          name: document.getElementById('projectCreateName').value,
+          steps: root.querySelectorAll('.project-create-step').length,
+          permissions: root.querySelectorAll('.project-create-permission').length,
+          noticeShown: !notice.hidden,
+          noticeTitle: pick('.project-create-notice-title'),
+          noticeCopy: pick('.project-create-notice-copy'),
+          noticeAction: pick('.project-create-notice-action'),
+          submitDisabled: document.getElementById('projectCreateSubmit').disabled,
+        };
+      })()`);
+    };
+    const createDefault = await openCreateDialog(emptyFolder, true);
+    check('프로젝트 추가: 빈 폴더를 고르면 경로·폴더 이름·권한 세 줄이 서고 안내는 없다',
+      createDefault.open === true && createDefault.path === emptyFolder
+      && createDefault.name === path.basename(emptyFolder)
+      && createDefault.steps === 3 && createDefault.permissions === 3
+      && createDefault.noticeShown === false && createDefault.submitDisabled === false, createDefault);
+    const createNotEmpty = await openCreateDialog(filledFolder, false);
+    check('프로젝트 추가: 빈 폴더가 아니면 안내만 하고 만들기는 열려 있다',
+      createNotEmpty.noticeShown === true && createNotEmpty.noticeTitle === '빈 폴더가 아닐 때'
+      && createNotEmpty.noticeCopy === '기존 파일은 그대로 둡니다. 아테나가 만든 것만 지웁니다.'
+      && createNotEmpty.submitDisabled === false, createNotEmpty);
+    const createOccupied = await openCreateDialog(root, false);
+    check('프로젝트 추가: 이미 점유된 폴더는 누가 쓰는지를 말하고 만들기를 잠근다',
+      createOccupied.noticeShown === true && createOccupied.noticeTitle === '이미 점유된 폴더'
+      && createOccupied.noticeCopy.includes('아테나 리서치')
+      && createOccupied.noticeAction === '그 프로젝트 열기'
+      && createOccupied.submitDisabled === true, createOccupied);
+    const createClosed = await wc.executeJavaScript(`(async () => {
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+      await new Promise((r) => setTimeout(r, 100));
+      return { hidden: document.getElementById('projectCreate').hidden };
+    })()`);
+    check('프로젝트 추가: Esc로 닫힌다', createClosed.hidden === true, createClosed);
 
     // 11) 그래프 워크스페이스(42번 보드) — 서브뷰(지도)가 세션에 남고, 돌아오면 그대로 지도다.
     //     브레인 백엔드가 없어 지도 그리기는 실패하지만 서브뷰 상태 자체는 남아야 한다.

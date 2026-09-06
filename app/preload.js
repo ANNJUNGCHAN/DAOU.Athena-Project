@@ -183,6 +183,7 @@ const INVOKE_CHANNELS = new Set([
   'athena:project-list',
   'athena:project-create',
   'athena:project-open-dialog',
+  'athena:project-pick-folder',
   'athena:project-add',
   'athena:project-pin',
   'athena:project-update',

@@ -406,8 +406,12 @@ class ProjectStore:
         self.save((*snapshot.entries, entry))
         return entry
 
-    def open_external(self, raw_path: str) -> ProjectEntry:
-        """디스크에 이미 있는 폴더를 등록한다 — 그 안에 아무것도 만들지 않는다."""
+    def open_external(self, raw_path: str, name: str | None = None) -> ProjectEntry:
+        """디스크에 이미 있는 폴더를 등록한다 — 그 안에 아무것도 만들지 않는다.
+
+        `name`은 사람이 만들기 화면에서 고친 이름이다(화면 36 · 프로젝트 추가).
+        안 주면 폴더 이름이 곧 프로젝트 이름이다.
+        """
         text = (raw_path or "").strip()
         if not text:
             raise ProjectNameError("폴더 경로가 비어 있다")
@@ -422,7 +426,7 @@ class ProjectStore:
             raise ProjectExistsError("이미 등록된 폴더다")
         entry = ProjectEntry(
             id=str(uuid4()),
-            name=resolved.name or str(resolved),
+            name=(name or "").strip() or resolved.name or str(resolved),
             path=resolved,
             kind="external",
             created_at=datetime.now(UTC).isoformat(),
