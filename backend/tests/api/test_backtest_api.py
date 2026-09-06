@@ -247,6 +247,23 @@ def test_run_success_flow_computes_metrics_trades_and_equity(tmp_path: Path) -> 
         assert any(r["run_id"] == run_id and r["status"] == "done" for r in listed)
 
 
+def test_run_result_carries_params_and_version_source(tmp_path: Path) -> None:
+    """이력 비교의 두 칸(파라미터 diff · 코드 diff)이 읽는 재료다."""
+    rows = _synthetic_candle_rows(40)
+    with _client(tmp_path) as client:
+        _seed_candles(client, "005930", "day", True, rows)
+        yaml_text = _RUN_YAML_TEMPLATE.format(
+            stk_cd="005930", from_dt=rows[0].dt, to_dt=rows[-1].dt
+        )
+        run_id = client.post(f"{BASE}/runs", json={"yaml": yaml_text}).json()["run_id"]
+        _await_run(client, run_id)
+        result = client.get(f"{BASE}/runs/{run_id}").json()
+    assert result["params"] == {"fast": 3, "slow": 5}
+    assert result["strategy_version_id"]
+    assert result["version"] == 1
+    assert "signals" in result["source"] or result["source"]
+
+
 def test_run_returns_409_with_needed_pages_when_cache_insufficient(tmp_path: Path) -> None:
     with _client(tmp_path) as client:
         yaml_text = _RUN_YAML_TEMPLATE.format(
