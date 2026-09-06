@@ -3891,7 +3891,9 @@ function moveAgentView(view) {
 async function acceptProposal(turn) {
   if (turn.control === 'update') {
     const res = await window.athena.invoke('athena:routine-update', { id: turn.routineId, body: turn.proposed });
-    const fact = controlTurnLib.controlFactLine(turn.current);
+    // 쿨다운은 리드가 말한다(436B-1) — 사실행은 종목과 설명만 든다(436C-1).
+    // 한 카드에 「600초 반영」과 옛 「5분」이 같이 서면 안 된다.
+    const fact = controlTurnLib.controlFactLine({ ...turn.current, cooldown_s: null });
     if (res && res.ok) {
       emitControlResult({ kind: 'success', badge: turn.badge, lead: proposalTurnLib.updateAppliedLead(turn.proposed), fact });
     } else {
@@ -3910,10 +3912,9 @@ async function acceptProposal(turn) {
     return;
   }
   if (turn.control === 'adopt') {
-    // 초안 게이트 — 캔버스 제안 카드의 [루틴으로]와 같은 문(입력창에 문장을 얹는다).
-    $input.value = adoptSeedText(turn.subject);
-    autoGrowInput();
-    $input.focus();
+    // 초안 게이트 — 캔버스 제안 카드의 [루틴으로]와 같은 문이다. 그 문은 shell.js
+    // seedChatInput 버스 하나뿐이니 여기서도 그것을 부른다(캐럿 끝 보정까지 같이 온다).
+    window.AthenaShell.seedChatInput(adoptSeedText(turn.subject));
     return;
   }
   if (turn.control === 'fire') {
@@ -3992,8 +3993,9 @@ function renderControlProposalTurn(turn) {
       button.addEventListener('click', () => {
         for (const other of buttons) other.disabled = true;
         if (chip.role === 'decline') {
-          // 무엇을 골랐는지는 상태 알약이 말한다 — 새 문구를 만들지 않는다.
-          statusPill.textContent = chip.label;
+          // 상태 자리에는 상태만 선다(437W-1) — 칩 이름이 아니라 결과 턴 거부 열의
+          // 「보류」(436N-1) 하나를 쓴다.
+          statusPill.textContent = proposalTurnLib.DECLINE_STATUS;
           declineProposal(turn);
           return;
         }

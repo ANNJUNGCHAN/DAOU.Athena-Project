@@ -29,6 +29,10 @@ const PROPOSAL_KINDS = {
 // D 열의 상태 행(435E-1·435F-1) — 게이트가 없으니 칩 대신 이 두 마디가 선다.
 const VIEW_STATUS = Object.freeze(['이동함', '· 칩 없음']);
 
+// 거절 칩을 누른 뒤 상태 알약에 서는 말. 칩 이름은 사람의 말이라 상태 자리에
+// 세우지 않는다(437W-1 「상태 표기만」) — 결과 턴 거부 열의 「보류」(436N-1)를 쓴다.
+const DECLINE_STATUS = '보류';
+
 // 편집 제안이 만질 수 있는 다섯 필드(routine_tools.py _UPDATABLE_FIELDS)의 화면 이름.
 // 라벨과 단위는 06 설정 폼이 이미 쓰는 것 그대로다 — 같은 값에 두 표기를 만들지 않는다.
 const FIELD_LABELS = { note: '설명', cooldown_s: '쿨다운', expires_days: '만료', briefing_model: '브리핑 모델', briefing_effort: '노력' };
@@ -167,7 +171,7 @@ function buildProposalTurn(envelope, context) {
 }
 
 const __exports = {
-  PROPOSAL_KINDS, VIEW_STATUS, FIELD_LABELS, VIEW_LABELS, FILTER_LABELS,
+  PROPOSAL_KINDS, VIEW_STATUS, DECLINE_STATUS, FIELD_LABELS, VIEW_LABELS, FILTER_LABELS,
   updateDiffLine, updateAppliedLead, ackAppliedLead, fireAppliedLead,
   viewPath, proposalLead, buildProposalTurn,
 };
