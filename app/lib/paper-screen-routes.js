@@ -463,6 +463,19 @@ const GRAPH_TIMELINE = Object.freeze({
   ],
 });
 
+// 편집 제안 봉투 — 보드 11의 카드 목업 그대로다(op=remove · 「2차전지」 · avoids).
+// main.js가 athena_graph_view action=propose_edit을 이 모양으로 렌더러에 보낸다
+// (canvas.js athena:graph-chat-action의 kind==='edit_proposal'). relationId를 안
+// 싣는 것도 Paper 그대로다 — 보드가 그린 propose_edit 인자에 그것이 없다.
+// 종목명·사유는 전부 값이라 phrases에 한 글자도 넣지 않는다.
+const GRAPH_EDIT_PROPOSAL = Object.freeze({
+  kind: 'edit_proposal',
+  op: 'remove',
+  object: '2차전지',
+  relation: 'avoids',
+  reason: '3주 전 한 번 언급 후 계속 회피',
+});
+
 // ── 코드 알람 fixture (A-2 보드 10·11·12) ────────────────────────────────────
 // 코드 알람 상세는 목록에 없는 값을 한 번 더 조회해서 그린다(athena:routine-detail,
 // canvas.js가 fetchDetail로 잇는다) — 봉투를 안 박으면 판정이 백엔드에 좌우된다.
@@ -2294,6 +2307,77 @@ const ROUTES = Object.freeze([
       },
       { what: 'count', selector: '.filter-chip', equals: 2 },
       { what: 'absent', selector: '#graphDegreeFilter' },
+    ],
+  },
+
+  // ---------- 그래프 채팅 제어 2장 (8-1) ----------
+  // 보드 09·11은 「채팅이 화면을 몬다」와 「편집은 제안까지다」를 계약 도해로 그렸다.
+  // 그 도해 안에 앱 화면이 하나씩 박혀 있어서(09의 탭 스트립 전/후, 11의 카드 목업)
+  // 그 하나를 잰다 — 옆의 설명 표·계약 문단은 화면이 아니라 보드가 붙인 주석이라
+  // 앱 어디에도 없다(보드 06 2QA3-2에서 같은 판단을 했다).
+  //
+  // 같은 페이지의 보드 10(3ZAA-1)은 라우트를 넣지 않았다. 그 보드가 그린 것은
+  // athena_brain action=entity의 **응답**과 그 응답을 읽은 모델의 답변이라, 화면으로
+  // 재려면 모델이 실제로 그렇게 답해야 한다 — 봉투로 박으면 지어낸 답을 화면에
+  // 그려 놓고 초록을 만드는 것이 된다.
+  {
+    board: '3Z8U-1', // 09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)
+    window: 'shell',
+    // 보드가 그린 세 액션 중 앱 화면으로 남는 것은 navigate의 「전 → 후」 탭 스트립
+    // 하나다. select의 결말(공통 패널이 열린 지도)은 보드 04(31H-0)가 이미 그 상태를
+    // 재고, filter의 전후 칩 「최근 90일 → 최근 365일」은 앱에서 <option> 안 글자라
+    // 닫힌 select에서는 그려지지 않는다(보드 06의 같은 자리 주석).
+    //
+    // 사람이 탭을 누르는 길(#settingsViewTab)은 보드 05가 이미 쓴다. 이 보드의 주장은
+    // **채팅이 같은 함수를 부른다**는 것이라, main이 athena_graph_view의 봉투를 보내는
+    // 그 채널을 그대로 쏜다(canvas.js athena:graph-chat-action → graphMode.setSurface).
+    reach: [
+      { do: 'mode', view: 'graph' },
+      { do: 'send', channel: 'athena:graph-chat-action', data: { kind: 'navigate', surface: 'settings' } },
+      // setSurface는 hidden을 동기로 바꾸지만 탭 활성 표시는 await 뒤에 따라온다
+      // (canvas.js updateSurfaceTabs 주석) — 두 프레임만으로는 그 사이에 잰다.
+      { do: 'wait', ms: 500 },
+      { do: 'settle' },
+    ],
+    // 화면이 실제로 옮겨졌는가는 root가 진다 — 수집·노출 판은 그 액션이 걸려야만
+    // 그려지고, 안 걸리면 root_not_visible로 떨어진다(문구를 세는 것보다 앞이다).
+    root: '#graphSettingsCanvas',
+    // 「navigate」·「surface = summary · map · settings」·계약 문단은 보드가 붙인
+    // 주석이라 앱에 없다. 남는 것은 「후」 판이 그린 탭 스트립 셋이다.
+    phrases: ['요약', '그래프', '수집·노출'],
+    // Paper의 「후」 판 그대로 — 탭은 이 차례이고, 활성 표시가 하나만 켜져 있다
+    // (「탭 활성 표시까지 함께 따라온다」).
+    structure: [
+      {
+        what: 'order',
+        selector: '.view-toggle-tab',
+        equals: ['요약', '그래프', '수집·노출'],
+      },
+      { what: 'count', selector: '.view-toggle-tab.is-active', equals: 1 },
+    ],
+  },
+  {
+    board: '3ZC2-1', // 11 · 그래프 — 편집은 제안까지 · 도구 계약
+    window: 'shell',
+    // 카드를 여는 길은 모델의 propose_edit 하나뿐이라(chat.js registerOpenGraphEditProposal)
+    // 앱 어디에도 누를 자리가 없다 — main이 보내는 봉투를 그대로 쏜다.
+    reach: [
+      { do: 'mode', view: 'graph' },
+      { do: 'send', channel: 'athena:graph-chat-action', data: GRAPH_EDIT_PROPOSAL },
+      { do: 'settle' },
+    ],
+    // 보드가 그린 앱 화면은 카드 하나다. root를 카드로 잡으면 카드가 안 뜬 것과
+    // 되물을 것들 카드가 대신 뜬 것을 갈라 준다(둘은 .question-card*를 함께 쓴다).
+    root: '#graphEditProposalCard',
+    // 카드 제목·부제는 봉투가 주는 값이라 안 넣는다. 안내문도 안 넣는다 —
+    // Paper의 「누르면 그 답이 채팅으로 보내지고, 그 답이 그래프를 갱신합니다」는
+    // 앱이 2026-09-03 실사용 제보를 받아 실제로 걸리는 경로 둘로 갈라 다시 쓴
+    // 자리다(chat.js renderGraphEditProposalCard). 남는 것은 선택지 셋과 키 힌트 둘이다.
+    phrases: ['건너뛰기', 'Esc', '아니다', '적용', 'Ctrl Enter'],
+    // Paper의 버튼 행 — [건너뛰기 Esc][아니다][적용 Ctrl Enter], 키 힌트는 둘.
+    structure: [
+      { what: 'count', selector: '.question-card-btn', equals: 3 },
+      { what: 'count', selector: '.question-card-key', equals: 2 },
     ],
   },
 
