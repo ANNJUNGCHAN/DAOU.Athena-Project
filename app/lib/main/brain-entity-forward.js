@@ -34,14 +34,17 @@ function extractEntityDetail(step, text) {
 }
 
 // 툴 칩 부제(Paper 「한미반도체 · 관계 7 · 이력 3」) — 무엇을 몇 개 받았는지는
-// 결과에만 있다. 실려 온 개수를 그대로 세고, 없으면 그 절을 뺀다(0을 지어내지
-// 않는다 — 관계가 하나도 없는 노드는 실제로 있다).
+// 결과에만 있다. 없는 절은 뺀다(0을 지어내지 않는다 — 관계가 하나도 없는 노드는
+// 실제로 있다).
+//
+// 관계 수는 실려 온 목록 길이가 아니라 `degree`다. 목록은 백엔드가 limit으로 자르므로
+// 연결이 그보다 많은 노드에서는 칩과 패널 머리(「연결 57」)가 한 노드를 두 숫자로
+// 부르게 된다 — Paper도 둘을 같은 7로 적었다.
 function entityStepNote(payload) {
   if (!payload) return '';
   const parts = [String(payload.name || payload.entity_id || '')];
-  const relations = Array.isArray(payload.relations) ? payload.relations.length : 0;
   const timeline = Array.isArray(payload.timeline) ? payload.timeline.length : 0;
-  if (relations > 0) parts.push(`관계 ${relations}`);
+  if (Number.isFinite(payload.degree) && payload.degree > 0) parts.push(`관계 ${payload.degree}`);
   if (timeline > 0) parts.push(`이력 ${timeline}`);
   return parts.filter(Boolean).join(' · ');
 }

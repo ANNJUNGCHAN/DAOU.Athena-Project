@@ -194,21 +194,28 @@ function buildTimelineRows(events) {
 // 순수 함수다(computeGraphHeaderMeta·buildTimelineRows와 같은 이유) — 값 맵핑을
 // 단위 테스트가 전부 잰다. **지어내지 않는다**: resolved가 아니면 null이고(이름이
 // 여럿에 걸린 경우는 모델이 되묻는다), 없는 절은 그냥 빠진다.
+//
+// 보드가 발치에 붙인 「정직성 규칙」 네 줄은 안 그린다(2026-09-07 검수). Paper 트리에서
+// 그 프레임(3ZBV-1)은 이 패널(3ZAF-1)의 자식이 아니라 「보드 제목」·「action=entity」와
+// 같은 층의 보드 주석이고, 내용도 화면이 아니라 모델의 답이 지켜야 할 계약 서술이다.
+// 게다가 네 줄에는 confidence·tier·truncated·full_chars·resolved=false·503이 그대로
+// 박혀 있어, 같은 이유로 「action=entity」를 안 그린 이 패널이 스스로 모순된다.
 
 // 원문 발췌 한 조각. 잘렸으면 그 사실을 먼저 말한다 — 잘린 발췌를 전문처럼 인용하면
 // "원문에 그렇게 적혀 있다"가 거짓이 된다(백엔드 SourceExcerpt 주석과 같은 규율).
 function entitySourceExcerpt(source) {
   if (!source || !source.text) return null;
-  const fullChars = Number.isFinite(source.full_chars) ? source.full_chars : null;
+  // full_chars는 SourceExcerptOut의 필수 int다(brain.py, extra='forbid') — 없는 경우를
+  // 위한 폴백 문구를 두지 않는다.
+  const fullChars = source.full_chars.toLocaleString('ko-KR');
   if (source.truncated === true) {
     const shown = source.text.length.toLocaleString('ko-KR');
-    const full = fullChars === null ? '?' : fullChars.toLocaleString('ko-KR');
-    return { text: `"${source.text}"`, meta: `잘린 발췌 — ${shown} / ${full}자` };
+    return { text: `"${source.text}"`, meta: `잘린 발췌 — ${shown} / ${fullChars}자` };
   }
   const parts = [
     source.kind ? (SOURCE_KIND_LABELS[source.kind] || source.kind) : '',
     formatEventDate(source.occurred_at),
-    fullChars === null ? '' : `전문 ${fullChars.toLocaleString('ko-KR')}자`,
+    `전문 ${fullChars}자`,
   ].filter(Boolean);
   return { text: `"${source.text}"`, meta: parts.join(' · ') };
 }
@@ -251,17 +258,6 @@ function buildEntityDetailModel(payload) {
     timeline: buildTimelineRows(Array.isArray(payload.timeline) ? payload.timeline : []),
   };
 }
-
-// 「이 답이 지켜야 하는 것」 네 줄(Paper 원장 3ZBW-1~3ZC0-1 그대로) — 패널 발치에
-// 붙는다. 이 조회는 노드 원문이 모델로 나가는 경로라, 무엇을 지키는 답인지 화면에도
-// 적어 둔다. 데이터가 아니라 규칙이라 봉투가 바꾸지 않는다.
-const ENTITY_HONESTY_TITLE = '이 답이 지켜야 하는 것';
-const ENTITY_HONESTY_LINES = Object.freeze([
-  '사실과 추론을 섞지 않는다. 관계마다 confidence(사실·추론·불확실)와 tier(체결·잔고 = 행동 / 대화 = 말)가 온다. 어긋나면 어긋난다는 사실 자체가 답이다.',
-  '잘린 발췌를 전문처럼 인용하지 않는다. truncated·full_chars가 함께 오므로 "원문에 그렇게 적혀 있다"가 거짓이 되지 않는다.',
-  '이름이 여럿에 걸리면 고르지 않는다. resolved=false와 candidates가 오면 어느 것인지 되묻는다.',
-  '노출이 꺼져 있으면 나가지 않는다. 이 조회는 모델 노출 게이트를 탄다 — 노드 원문이 나가는 경로다. 503이 오면 "성향이 없다"가 아니라 "사용자가 꺼 뒀다"라고 말한다.',
-]);
 
 // 관계별 보강 횟수(보드 04 관계 목록의 우측 숫자) — 타임라인 이벤트에서
 // (관계, 상대 노드) 쌍이 몇 번 기록됐는지 센다. profile-summary의 `reinforcement`가
@@ -942,12 +938,15 @@ function createGraphModeController(deps) {
     }
     head.appendChild(elp('span', 'panel-tabs-spacer'));
     // 닫는 문 — Paper는 안 그렸지만 없으면 이 패널을 물릴 길이 노드를 새로 고르는
-    // 것뿐이다. 노드 선택 패널이 이미 쓰는 손잡이와 같은 말·같은 클래스를 쓴다.
+    // 것뿐이다. 노드 선택 패널이 이미 쓰는 손잡이와 같은 말·같은 클래스를 쓰므로,
+    // 하는 일도 같아야 한다: 고른 노드까지 함께 놓는다. 봉투만 버리면 노드를 고른
+    // 채로 조회한 사람에게는 「선택 해제」가 이전 패널로 되돌아가는 버튼이 된다.
     const deselect = elp('button', 'panel-deselect');
     deselect.setAttribute('type', 'button');
     deselect.textContent = '선택 해제';
     deselect.addEventListener('click', () => {
       entityDetail = null;
+      state = store.clearSelection(state);
       renderSelection();
     });
     head.appendChild(deselect);
@@ -1010,17 +1009,6 @@ function createGraphModeController(deps) {
         panel.appendChild(rowEl);
       }
     }
-
-    const honesty = elp('div', 'entity-honesty');
-    const honestyTitle = elp('div', 'entity-honesty-title');
-    honestyTitle.textContent = ENTITY_HONESTY_TITLE;
-    honesty.appendChild(honestyTitle);
-    for (const line of ENTITY_HONESTY_LINES) {
-      const lineEl = elp('div', 'entity-honesty-line');
-      lineEl.textContent = line;
-      honesty.appendChild(lineEl);
-    }
-    panel.appendChild(honesty);
   }
 
   // 공통 패널 콘텐츠(보드 07 §10, 스텝8). §10-1 탭("이력" 탭은 Paper에 콘텐츠

@@ -46,12 +46,17 @@ test('extractEntityDetail — JSON이 아니거나 다른 액션이면 조용히
     JSON.stringify(RESOLVED)), null);
 });
 
-test('entityStepNote — 부제는 대상과 실려 온 개수다', () => {
-  assert.equal(entityStepNote(RESOLVED), '한미반도체 · 관계 2 · 이력 3');
+test('entityStepNote — 부제는 대상과 연결 수·이력 수다', () => {
+  assert.equal(entityStepNote(RESOLVED), '한미반도체 · 관계 7 · 이력 3');
+});
+
+test('entityStepNote — 관계 수는 잘린 목록 길이가 아니라 연결 수다(패널 머리와 한 말)', () => {
+  const hub = { ...RESOLVED, degree: 57, relations: new Array(30).fill({ relation_id: 'r' }) };
+  assert.equal(entityStepNote(hub), '한미반도체 · 관계 57 · 이력 3');
 });
 
 test('entityStepNote — 없는 개수는 지어내지 않고 그 절을 뺀다', () => {
-  assert.equal(entityStepNote({ name: '고배당', relations: [], timeline: [] }), '고배당');
-  assert.equal(entityStepNote({ entity_id: 'e:x', relations: [{}], timeline: [] }), 'e:x · 관계 1');
+  assert.equal(entityStepNote({ name: '고배당', degree: 0, timeline: [] }), '고배당');
+  assert.equal(entityStepNote({ entity_id: 'e:x', degree: 1, timeline: [] }), 'e:x · 관계 1');
   assert.equal(entityStepNote(null), '');
 });
