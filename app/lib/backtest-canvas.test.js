@@ -4870,3 +4870,200 @@ test('단계 카드의 순수 계산 — 줄 수·폴더 이름·부호 퍼센�
   // 아직 아무것도 안 잰 상태의 분모는 차단 검사 5개다(지어낸 숫자가 아니다).
   assert.equal(backtestCanvas.techniqueStepCheckTitle([], false), '검사 0/5');
 });
+
+// ── 세션 복원(Paper 보드 41 · 42) ────────────────────────────────────────────
+//
+// 여기서 보는 것은 셋이다: ① 봉인이 42번 보드의 항목표(폼·코드·결과·로그·스크롤)를
+// 그대로 담는가, ② 복원이 폼의 **대상**(종목·기간)까지 되살리는가 — 그래프 왕복
+// (adoptSpecYaml)이 일부러 안 읽는 자리라 여기서 놓치면 종목이 빈 칸으로 열린다,
+// ③ 결과를 못 읽었을 때 조용히 넘어가지 않고 이름을 대는 안내가 서는가(Rule 3).
+
+const RESTORE_YAML = `
+version: "1.0"
+metadata:
+  name: 변동성 돌파
+data:
+  symbols: ["005930"]
+  period: day
+  adjusted: true
+  from: "20230101"
+  to: "20251231"
+strategy:
+  id: custom
+  params:
+    k: {default: 0.62, min: 0.1, max: 1, step: 0.01, type: float}
+  indicators:
+    - {id: SMA, alias: ma_fast, params: {period: 20}}
+  entry:
+    logic: AND
+    conditions:
+      - {indicator: ma_fast, operator: cross_above, compare_to: ma_slow}
+  exit:
+    logic: OR
+    conditions: []
+risk:
+  stop_loss:   {enabled: true,  percent: 3}
+  take_profit: {enabled: false, percent: 20}
+  position:    {sizing: all_in}
+costs:
+  fee_bps: 1.5
+  tax_bps: 20
+  slippage_bps: 5
+`;
+
+const RESTORE_WORKSPACE = {
+  kind: 'backtest',
+  tab: 'design',
+  designTab: 'form',
+  form: {
+    yaml: RESTORE_YAML,
+    fields: ['symbols', 'period', 'fromDt', 'toDt', 'params', 'costs'],
+  },
+  code: { source: 'def signal(df, k=0.62):\n    return 0\n', file: 'strategy.py', runPath: 'code' },
+  log: { tail: '14:02:19 done · 스크롤 위치 저장됨' },
+  run: { runId: 'run-9' },
+  scroll: { top: 120 },
+};
+
+function withWorkspaceGlobal(run) {
+  const registered = [];
+  const reports = [];
+  global.window = {
+    AthenaSessionWorkspace: {
+      register: (kind, handler) => { registered.push([kind, handler]); },
+      report: (patch) => { reports.push(patch); },
+    },
+  };
+  return Promise.resolve(run({ registered, reports })).finally(() => { delete global.window; });
+}
+
+test('세션 복원: 폼의 대상·코드·로그가 돌아오고 표식이 카운트를 말한다', async () => withWorkspaceGlobal(async ({ registered }) => {
+  const made = makeCanvas({ result: async () => ({ status: 'done', metrics: {}, stdout: '' }) });
+  made.canvas.mount();
+  await flush();
+  const handler = registered[0][1];
+  await handler.restore(RESTORE_WORKSPACE);
+  await flush();
+  const ctx = made.canvas.getContext();
+  assert.equal(ctx.designTab, 'form');
+  // 종목·기간은 그래프 왕복이 안 읽는 자리다 — 봉투에서 읽어야 돌아온다.
+  assert.match(textOf(made.container), /005930/);
+  assert.equal(findByClass(made.container, 'backtest-restore-count')[0].textContent, '복원 6/6');
+  assert.equal(findByClass(made.container, 'backtest-restore-code')[0].textContent, 'restored');
+  // 전부 돌아왔으면 아무 말도 하지 않는다(Rule 1).
+  assert.equal(findByClass(made.container, 'backtest-restore-notice').length, 0);
+}));
+
+test('세션 복원: 결과를 못 읽으면 이름을 대는 안내가 서고 [이대로 열기]가 접는다', async () => withWorkspaceGlobal(async ({ registered }) => {
+  const made = makeCanvas({ result: async () => { throw new Error('없는 실행입니다'); } });
+  made.canvas.mount();
+  await flush();
+  await registered[0][1].restore(RESTORE_WORKSPACE);
+  await flush();
+  const notice = findByClass(made.container, 'backtest-restore-notice');
+  assert.equal(notice.length, 1);
+  assert.match(textOf(notice[0]), /일부만 복원했습니다/);
+  assert.match(textOf(notice[0]), /결과를 찾지 못했습니다/);
+  assert.match(textOf(notice[0]), /전략 폼 · 전략 코드 · 실행 로그는 그대로입니다/);
+  // 못 읽은 결과 자리에도 봉인해 둔 로그는 남는다 — "실행이 없다"고 말하지 않는다.
+  made.canvas.onChatAction({ kind: 'navigate', tab: 'result' });
+  await flush();
+  assert.match(textOf(made.container), /스크롤 위치 저장됨/);
+  assert.equal(findByClass(made.container, 'backtest-restore-open').length, 1);
+  await click(findByClass(made.container, 'backtest-restore-open')[0]);
+  await flush();
+  assert.equal(findByClass(made.container, 'backtest-restore-notice').length, 0);
+  // 표식은 안내를 접어도 남는다 — 배너가 아니라 카드의 상태이기 때문이다.
+  assert.equal(findByClass(made.container, 'backtest-restore-code').length, 1);
+}));
+
+test('세션 복원: [다시 시도]가 빠진 결과만 다시 읽고 성공하면 안내가 사라진다', async () => withWorkspaceGlobal(async ({ registered }) => {
+  let attempts = 0;
+  const made = makeCanvas({
+    result: async () => {
+      attempts += 1;
+      if (attempts === 1) throw new Error('없는 실행입니다');
+      return { status: 'done', metrics: { total_return: 0.418 }, stdout: 'run start' };
+    },
+    trades: async () => [],
+  });
+  made.canvas.mount();
+  await flush();
+  await registered[0][1].restore(RESTORE_WORKSPACE);
+  await flush();
+  assert.equal(findByClass(made.container, 'backtest-restore-notice').length, 1);
+  await click(findByClass(made.container, 'backtest-restore-retry')[0]);
+  await flush();
+  assert.equal(attempts, 2);
+  assert.equal(findByClass(made.container, 'backtest-restore-notice').length, 0);
+  // 되읽은 결과가 실제로 화면에 선다 — 안내만 사라지는 것이 아니다.
+  made.canvas.onChatAction({ kind: 'navigate', tab: 'result' });
+  await flush();
+  assert.match(textOf(made.container), /run start/);
+}));
+
+test('세션 복원: 보고는 42번 보드 항목표를 담는다 — 폼·코드·결과·로그·스크롤', async () => withWorkspaceGlobal(async ({ reports }) => {
+  const made = makeCanvas({
+    run: async () => ({ run_id: 'run-1' }),
+    result: async () => ({ status: 'done', metrics: {}, stdout: '14:02:11 run start' }),
+    trades: async () => [],
+  });
+  made.canvas.mount();
+  await flush();
+  await fillForm(made.container);
+  await click(findByClass(made.container, 'backtest-run-button')[0]);
+  await flush();
+  const last = reports[reports.length - 1];
+  assert.ok(last.form && last.form.yaml.includes('005930'));
+  assert.deepEqual(last.form.fields, ['symbols', 'period', 'fromDt', 'toDt', 'params', 'costs']);
+  assert.deepEqual(last.run, { runId: 'run-1' });
+  assert.equal(last.log.tail, '14:02:11 run start');
+  assert.deepEqual(last.scroll, { top: 0 });
+}));
+
+test('세션 복원: 늦게 도착한 기법 목록이 복원한 자리를 뺏지 않는다', async () => withWorkspaceGlobal(async ({ registered }) => {
+  let releasePresets;
+  const made = makeCanvas({
+    fetchPresets: () => new Promise((resolve) => { releasePresets = () => resolve(PRESETS); }),
+    result: async () => ({ status: 'done', metrics: {}, stdout: '' }),
+    trades: async () => [],
+  });
+  made.canvas.mount();
+  await flush();
+  // 프리셋이 아직 안 왔는데 복원이 먼저 도착한 판 — 실앱의 실제 순서다(모드 전환이
+  // mount를 부르고, 그 다음 줄에서 chat.js가 workspace.restore를 부른다).
+  await registered[0][1].restore({ ...RESTORE_WORKSPACE, tab: 'result', designTab: 'code' });
+  await flush();
+  releasePresets();
+  await flush();
+  assert.equal(made.canvas.getContext().tab, 'result');
+  assert.equal(made.canvas.getContext().designTab, 'code');
+}));
+
+test('세션 복원: 아직 도는 실행은 진행 화면으로 다시 붙는다(Rule 2)', async () => withWorkspaceGlobal(async ({ registered }) => {
+  let calls = 0;
+  const made = makeCanvas({
+    result: async () => { calls += 1; return { status: 'running' }; },
+  });
+  made.canvas.mount();
+  await flush();
+  await registered[0][1].restore(RESTORE_WORKSPACE);
+  await flush();
+  assert.equal(calls >= 1, true);
+  assert.equal(made.canvas.getContext().view, 'running');
+  // 도는 중은 실패가 아니다 — 안내를 세우지 않는다.
+  assert.equal(findByClass(made.container, 'backtest-restore-notice').length, 0);
+}));
+
+test('세션 복원: 새 기법을 고르면 복원 표식이 사라진다 — 지금 폼은 되살린 것이 아니다', async () => withWorkspaceGlobal(async ({ registered }) => {
+  const made = makeCanvas({ result: async () => { throw new Error('없는 실행입니다'); } });
+  made.canvas.mount();
+  await flush();
+  await registered[0][1].restore(RESTORE_WORKSPACE);
+  await flush();
+  assert.equal(findByClass(made.container, 'backtest-restore-count').length, 1);
+  await click(findByClass(made.container, 'backtest-preset-item')[0]);
+  await flush();
+  assert.equal(findByClass(made.container, 'backtest-restore-count').length, 0);
+  assert.equal(findByClass(made.container, 'backtest-restore-notice').length, 0);
+}));

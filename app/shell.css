@@ -6704,3 +6704,61 @@ body { margin: 0; overflow: hidden; }
   font-size: var(--text-2xs);
   word-break: keep-all;
 }
+
+/* ---------- 세션 복원 표식·안내(Paper 보드 41) ----------
+ * 표식(「복원 6/6」·「restored」)은 배너가 아니라 카드의 상태다 — 전부 돌아온 조용한
+ * 복원에서도 남는다. 안내는 빠진 것이 있을 때만 서고 [이대로 열기]가 접는다. */
+.backtest-restore-marks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-bottom: 10px;
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  color: var(--color-k-dim);
+}
+.backtest-restore-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.backtest-restore-count,
+.backtest-restore-code {
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: rgb(64 160 96 / 14%);
+  color: #2F7A4C;
+}
+.backtest-restore-notice {
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgb(255 152 56 / 10%);
+  font-family: var(--font-body);
+}
+.backtest-restore-notice-title {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: #A85C10;
+}
+.backtest-restore-notice-body {
+  margin-top: 3px;
+  font-size: var(--text-2xs);
+  color: var(--color-k-dim);
+}
+.backtest-restore-notice-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.backtest-restore-retry,
+.backtest-restore-open {
+  padding: 4px 10px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 8px;
+  background: var(--color-k-panel);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  color: var(--color-k-text);
+  cursor: pointer;
+}

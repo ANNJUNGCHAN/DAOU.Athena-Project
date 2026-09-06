@@ -36,6 +36,9 @@ const ProjectIde = isNode ? require('./project-ide') : window.AthenaLib.ProjectI
 const VisualEditor = isNode
   ? require('./backtest-visual-editor')
   : window.AthenaLib.BacktestVisualEditor;
+// 작업공간 봉인·복원 판정(41·42번 보드) — 무엇을 남기고 무엇이 돌아왔는가는 이 순수
+// 모듈 하나가 정한다. 화면은 그 판정을 그리기만 한다.
+const SessionRestore = isNode ? require('./session-restore') : window.AthenaLib.SessionRestore;
 
 const { formatNumeric, formatDatetime } = FactsCard;
 
@@ -123,6 +126,9 @@ const RUN_PATHS = [['form', '폼'], ['code', '코드']];
 
 // 시각 편집기의 서버 왕복 간격 — 매 키입력마다 검증을 보내면 서버가 타자를 따라 뛴다.
 const VISUAL_DEBOUNCE_MS = 400;
+
+// 작업공간 보고 간격 — 42번 보드 「폼·코드·필터가 바뀔 때 · 1s 디바운스」 그대로다.
+const WORKSPACE_REPORT_DEBOUNCE_MS = 1000;
 
 // 좁은 폭 판단은 부르는 쪽 몫이다(shell.css .backtest-vis.is-narrow 주석: <900px).
 // 창 폭이 아니라 편집기가 실제로 받은 폭을 잰다 — 사이드바·서랍이 폭을 나눠 가질 수 있다.
@@ -811,6 +817,29 @@ function specOverridesFromYaml(yamlText) {
   };
 }
 
+// 봉인된 yaml에서 **대상**(종목·주기·수정주가·기간·비용)만 읽는다. specOverridesFromYaml이
+// 일부러 안 읽는 자리다(그쪽은 그래프 왕복이라 폼의 대상을 지켜야 한다). 세션 복원은
+// 반대다 — 되살릴 폼이 화면에 아예 없어서, 대상까지 읽지 않으면 종목·기간이 빈 칸으로
+// 열린다. 없는 키는 돌려주지 않는다(빈 값으로 덮으면 지어낸 값이 된다).
+function targetFromYaml(yamlText) {
+  const doc = parseYamlBlock(yamlText);
+  const data = (doc && doc.data) || {};
+  const out = {};
+  if (Array.isArray(data.symbols)) out.symbols = data.symbols.map((code) => String(code));
+  if (data.period) out.period = String(data.period);
+  if (typeof data.adjusted === 'boolean') out.adjusted = data.adjusted;
+  if (data.from !== undefined && data.from !== null) out.fromDt = String(data.from);
+  if (data.to !== undefined && data.to !== null) out.toDt = String(data.to);
+  if (doc && doc.costs && typeof doc.costs === 'object') {
+    const costs = {};
+    ['fee_bps', 'tax_bps', 'slippage_bps'].forEach((key) => {
+      if (Number.isFinite(doc.costs[key])) costs[key] = doc.costs[key];
+    });
+    if (Object.keys(costs).length) out.costs = costs;
+  }
+  return out;
+}
+
 function createBacktestCanvas(options) {
   const deps = options || {};
   const container = deps.container;
@@ -903,6 +932,17 @@ function createBacktestCanvas(options) {
   let state = {
     view: 'empty', tab: 'design', designTab: 'flow', mapVersion: 0, technique: TECHNIQUE_EMPTY,
   };
+  // ── 세션 복원(41번 보드) ──────────────────────────────────────────────────
+  // 봉인해 둔 봉투와 그중 무엇이 실제로 되살아났는가. [다시 시도]가 이 둘을 다시 맞댄다.
+  let restoreSealed = null;
+  let restoreApplied = null;
+  // 결과를 못 읽어도 로그는 남는다(42번 보드 R6는 값이 아니라 꼬리를 남긴다).
+  let restoredLog = '';
+  // 다음 그리기에서 되돌릴 스크롤 자리. 한 번 쓰고 비운다 — 사람이 굴린 뒤에 또
+  // 되돌리면 화면이 사람 손을 뿌리친다.
+  let pendingScrollTop = null;
+  let bodyEl = null;
+  let workspaceReportTimer = null;
   let pollTimer = null;
   // 환경 구성 잡의 폴링은 실행·수집 폴링과 별개 타이머다 — 같은 자리를 쓰면 pip이 도는
   // 동안 실행 폴링이 끊기거나 그 반대가 된다(둘은 서로를 모른다).
@@ -1014,7 +1054,11 @@ function createBacktestCanvas(options) {
     presets = Array.isArray(list) ? list : [];
     // 보드 19: 고르기 전에는 목록만 선다. 0번을 자동으로 열면 심볼 없는 지도 요청이
     // 영어 pydantic 배너가 된다. 고른 뒤에는 selectPreset이 지도를 연다.
-    setState({ view: 'design', tab: 'design', designTab: 'form', mapVersion: 0 });
+    //
+    // 세션 복원이 먼저 자리를 정했으면 그 자리를 뺏지 않는다(41번 보드) — 프리셋 조회는
+    // 복원보다 늦게 끝날 수 있고, 그때 봉인해 둔 탭이 폼으로 튀면 "그대로"가 거짓이 된다.
+    if (state.restore) setState({ view: 'design' });
+    else setState({ view: 'design', tab: 'design', designTab: 'form', mapVersion: 0 });
     // 등록부는 부수 정보다 — 못 읽었다고 프리셋 화면까지 실패로 만들지 않는다.
     await loadUserStrategies();
   }
@@ -1098,9 +1142,13 @@ function createBacktestCanvas(options) {
     // 아예 나타나지 않았다(2026-09-03 실측). 지도가 첫 표면이라 그 자리가 비면 사용자는
     // 백테스트 전체가 죽었다고 읽는다.
     lastError = null;
+    // 복원 표식·안내는 되살린 그 세션의 것이다 — 새 기법을 고른 화면에 「복원 6/6」이
+    // 남으면 지금 폼이 되살아난 것이라고 거짓말한다.
+    clearRestoreMarks();
     // 새 전략은 새 지도다 — 앞 전략에서 세던 버전을 이어 세면 "지도 v7"이 무엇을 센
     // 숫자인지 아무도 모르게 된다.
     setState({
+      restore: null,
       formErrors: [], codeErrors: [], codeFromMap: false, designTab: 'flow', mapVersion: 1,
       codeSpan: null, visualCodeAhead: false, diagnosis: null,
     });
@@ -2521,6 +2569,15 @@ function createBacktestCanvas(options) {
     const shell = el('div', 'backtest-shell');
     shell.appendChild(renderHeader());
     const body = el('div', 'backtest-body');
+    bodyEl = body;
+    // 스크롤 자리도 그 세션의 것이다(41번 보드 Rule 1) — 굴린 자리를 봉인하고 되돌린다.
+    body.addEventListener('scroll', scheduleWorkspaceReport);
+    // 복원 표식은 탭 위에 선다 — 어느 탭에 서 있든 그 세션이 되살아난 것이기 때문이다.
+    if (state.restore) {
+      if (state.restore.partial && !state.restore.dismissed) body.appendChild(renderRestoreNotice());
+      const marks = renderRestoreMarks();
+      if (marks) body.appendChild(marks);
+    }
     if (state.view === 'approval') body.appendChild(renderApproval());
     else if (state.view === 'running') body.appendChild(renderRunning());
     else if (state.view === 'diagnosis') body.appendChild(renderDiagnosisPanel());
@@ -2531,6 +2588,13 @@ function createBacktestCanvas(options) {
     else if (state.tab === 'deploy') body.appendChild(renderDeploy());
     shell.appendChild(body);
     container.appendChild(shell);
+    if (pendingScrollTop != null) {
+      body.scrollTop = pendingScrollTop;
+      pendingScrollTop = null;
+    }
+    // 폼·코드·탭이 움직인 것은 전부 이 그리기로 지나간다 — 봉인 시점을 여기 하나로
+    // 모으고 1초 디바운스가 왕복 수를 잡는다.
+    scheduleWorkspaceReport();
   }
 
   function renderMessagePanel(extraClass, sub) {
@@ -5149,28 +5213,177 @@ function createBacktestCanvas(options) {
     const ws = workspaceApi();
     if (!ws || typeof ws.report !== 'function') return;
     try {
-      ws.report({
-        form: spec ? { yaml: currentYaml() } : null,
+      // 봉인 항목표는 42번 보드가 정한 것 하나뿐이다 — 여기서 다시 고르지 않는다.
+      const sealed = SessionRestore.sealBacktest({
+        spec,
+        yaml: spec ? currentYaml() : '',
+        codeSource,
+        codeFile: codeSource.trim() ? codeFileLabel() : null,
+        versionId: activeVersionId,
+        strategyId,
+        runPath,
+        runId: state.runId,
+        stdout: (state.result && state.result.stdout) || '',
+        // 떨어져 나간 옛 몸통의 0을 봉인하지 않는다 — 오류·빈 화면에서는 굴릴 자리가
+        // 아예 없고, 거기서 0을 적으면 다음 복원이 사람을 맨 위로 데려간다.
+        scrollTop: bodyEl && bodyEl.isConnected !== false ? bodyEl.scrollTop : null,
+      });
+      ws.report(Object.assign({
         designTab: state.designTab,
         tab: state.tab,
         graph: visualGraph,
-      });
+      }, sealed));
     } catch { /* 보고는 부수 효과다 — 실패해도 화면은 계속 돈다 */ }
   }
 
-  function restoreWorkspace(workspace) {
+  // 폼·코드·스크롤이 바뀔 때마다 IPC를 때리지 않는다 — 42번 보드가 적은 1초 디바운스다.
+  function scheduleWorkspaceReport() {
+    // 들을 사람이 없으면 타이머도 걸지 않는다 — 배선 없는 하네스에 유령 타이머를 남기지 않는다.
+    if (!workspaceApi() || !setTimeoutImpl || workspaceReportTimer != null) return;
+    workspaceReportTimer = setTimeoutImpl(() => {
+      workspaceReportTimer = null;
+      reportWorkspace();
+    }, WORKSPACE_REPORT_DEBOUNCE_MS);
+  }
+
+  // 결과 데이터셋을 다시 읽는다(42번 보드 R7 — 결과는 참조로 남는다). 못 읽으면 false다:
+  // 여기서 조용히 넘어가면 41번 보드 Rule 3의 안내가 설 자리가 없어진다.
+  async function restoreRunResult(runId) {
+    if (!runId || !deps.result) return false;
+    let data;
+    try { data = await deps.result({ run_id: runId }); }
+    catch { return false; }
+    // 아직 도는 중이면 진행률에 그 자리에서 다시 붙는다(41번 보드 Rule 2 "실행 중이던
+    // 것도 그대로 돌아온다") — 실행은 창과 무관한 백그라운드 잡이라 run_id 하나면 된다.
+    if (data && (data.status === 'running' || data.status === 'queued')) {
+      setState({ view: 'running', runId, progressText: '백테스트를 실행하는 중입니다…' });
+      resumePollingIfNeeded();
+      return true;
+    }
+    if (!data || data.status !== 'done') return false;
+    let trades = [];
+    try { trades = deps.trades ? await deps.trades({ run_id: runId }) : []; }
+    catch { trades = []; }
+    setState({ runId, result: data, trades: Array.isArray(trades) ? trades : [] });
+    return true;
+  }
+
+  // 봉인된 작업공간을 되살리고 항목별로 성공/실패를 센다. 전부 돌아왔으면 아무 말도
+  // 하지 않고(Rule 1), 하나라도 빠지면 무엇이 빠졌는지 이름을 대는 안내가 선다(Rule 3).
+  async function restoreWorkspace(workspace) {
     const saved = workspace || {};
-    const form = saved.form || {};
-    if (typeof form.yaml === 'string' && form.yaml.trim()) adoptSpecYaml(form.yaml);
+    const form = saved.form || null;
+    const code = saved.code || null;
+    const applied = { form: [], code: false, result: false, log: false };
+
+    if (form && typeof form.yaml === 'string' && form.yaml.trim()) {
+      adoptSpecYaml(form.yaml);
+      // 대상(종목·주기·기간·비용)은 adoptSpecYaml이 일부러 안 읽는 자리다 — 복원은
+      // 되살릴 폼이 화면에 없어서 그 자리까지 봉투에서 읽어야 한다.
+      if (spec) {
+        spec = Object.assign({}, spec, targetFromYaml(form.yaml));
+        visualGraphYaml = currentYaml();
+        applied.form = SessionRestore.filledFormFields(spec);
+      }
+    }
+    if (code && typeof code.source === 'string' && code.source.trim()) {
+      codeSource = code.source;
+      activeVersionId = code.versionId || null;
+      strategyId = code.strategyId || null;
+      runPath = code.runPath === 'code' ? 'code' : runPath;
+      applied.code = true;
+    }
+    if (saved.log && typeof saved.log.tail === 'string' && saved.log.tail) {
+      restoredLog = saved.log.tail;
+      applied.log = true;
+    }
     if (saved.graph && typeof saved.graph === 'object') {
       visualGraph = saved.graph;
       if (visualEditor) visualEditor.setGraph(visualGraph);
     }
+    pendingScrollTop = saved.scroll && Number.isFinite(saved.scroll.top) ? saved.scroll.top : null;
+    restoreSealed = saved;
+    // 표식은 첫 그리기부터 서야 한다 — 결과를 다시 읽는 왕복 뒤에 붙이면 코드 표식이
+    // 한 프레임 늦게 나타난다. applied는 그 왕복이 같은 객체를 고쳐 쓴다.
+    restoreApplied = applied;
+
     const patch = { view: 'design' };
     if (MODE_TABS.some(([key]) => key === saved.tab)) patch.tab = saved.tab;
     if (DESIGN_TABS.some(([key]) => key === saved.designTab)) patch.designTab = saved.designTab;
+    patch.restore = SessionRestore.restoreReport(saved, applied);
     setState(patch);
+
+    if (saved.run && saved.run.runId) {
+      applied.result = await restoreRunResult(saved.run.runId);
+      setState({ restore: SessionRestore.restoreReport(saved, applied) });
+    }
     return true;
+  }
+
+  // [다시 시도] — 빠진 것만 다시 읽는다. 여전히 못 읽으면 안내가 그대로 선다.
+  async function retryRestore() {
+    if (!restoreSealed || !restoreApplied) return false;
+    const applied = Object.assign({}, restoreApplied);
+    if (!applied.result && restoreSealed.run && restoreSealed.run.runId) {
+      applied.result = await restoreRunResult(restoreSealed.run.runId);
+    }
+    restoreApplied = applied;
+    setState({ restore: SessionRestore.restoreReport(restoreSealed, applied) });
+    return true;
+  }
+
+  // 되살린 것이 더는 화면의 것이 아닐 때 표식을 거둔다(새 기법을 고르는 순간).
+  function clearRestoreMarks() {
+    restoreSealed = null;
+    restoreApplied = null;
+    restoredLog = '';
+  }
+
+  // [이대로 열기] — 안내만 접는다. 되살아난 것과 못 되살린 것은 그대로다.
+  function dismissRestoreNotice() {
+    if (!state.restore) return;
+    setState({ restore: Object.assign({}, state.restore, { dismissed: true }) });
+  }
+
+  // 복원 표식 — Paper가 폼 카드와 코드 카드 머리에 붙인 그 둘이다(「복원 6/6」·「restored」).
+  // 배너가 아니라 카드의 상태 표식이라, 전부 돌아온 조용한 복원에서도 남는다.
+  function renderRestoreMarks() {
+    const report = state.restore;
+    const row = el('div', 'backtest-restore-marks');
+    let marks = 0;
+    if (report.form) {
+      const item = el('div', 'backtest-restore-mark');
+      item.appendChild(el('span', 'backtest-restore-mark-label', '전략 폼'));
+      item.appendChild(el(
+        'span', 'backtest-restore-count',
+        `복원 ${report.form.restored}/${report.form.sealed}`,
+      ));
+      row.appendChild(item);
+      marks += 1;
+    }
+    const codeItem = report.items.find((item) => item.key === 'code');
+    if (codeItem && codeItem.ok) {
+      const lines = codeSource ? codeSource.split('\n').length : 0;
+      const item = el('div', 'backtest-restore-mark');
+      item.appendChild(el('span', 'backtest-restore-mark-label', `${codeFileLabel()} · ${lines}줄`));
+      item.appendChild(el('span', 'backtest-restore-code', 'restored'));
+      row.appendChild(item);
+      marks += 1;
+    }
+    return marks ? row : null;
+  }
+
+  // 부분 복원 안내(Rule 3) — 무엇이 빠졌는지 이름을 대고 다시 시도를 단다.
+  function renderRestoreNotice() {
+    const report = state.restore;
+    const wrap = el('div', 'backtest-restore-notice');
+    wrap.appendChild(el('div', 'backtest-restore-notice-title', '일부만 복원했습니다'));
+    wrap.appendChild(el('div', 'backtest-restore-notice-body', report.message));
+    const actions = el('div', 'backtest-restore-notice-actions');
+    actions.appendChild(button('backtest-restore-retry', '다시 시도', () => { void retryRestore(); }));
+    actions.appendChild(button('backtest-restore-open', '이대로 열기', dismissRestoreNotice));
+    wrap.appendChild(actions);
+    return wrap;
   }
 
   // ── 시각 설계 그리기 ──────────────────────────────────────────────────────
@@ -5348,6 +5561,13 @@ function createBacktestCanvas(options) {
 
   function renderResult() {
     if (!state.result) {
+      // 결과 데이터셋을 못 읽었어도 봉인해 둔 로그는 그대로다(41번 보드 Rule 3의 예시).
+      // 여기서 「아직 실행한 백테스트가 없습니다」로 떨어지면 있었던 실행을 없다고 말한다.
+      if (restoredLog) {
+        const only = el('div', 'backtest-result');
+        only.appendChild(renderStdout());
+        return only;
+      }
       return renderMessagePanel('', '아직 실행한 백테스트가 없습니다');
     }
     const wrap = el('div', 'backtest-result');
@@ -5406,7 +5626,7 @@ function createBacktestCanvas(options) {
   }
 
   function renderStdout() {
-    const text = (state.result && state.result.stdout) || '';
+    const text = (state.result && state.result.stdout) || restoredLog || '';
     const wrap = el('div', 'backtest-stdout');
     const head = el('div', 'backtest-card-head');
     head.appendChild(el('div', 'backtest-card-title', '코드 출력'));
