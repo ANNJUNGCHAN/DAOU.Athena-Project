@@ -4213,6 +4213,14 @@ app.whenReady().then(async () => {
         ? summaryMainEl.querySelector('.graph-mode-unavailable')
         : null;
       const summaryMainNoticeText = summaryMainNotice ? summaryMainNotice.textContent : '';
+      // 글자가 DOM에 있는 것과 사람이 보는 것은 다르다 — summaryTableVisible과
+      // 같은 이유로 rect로 잰다(data-unavailable 규칙이 표면을 통째로 접어
+      // 버리면 textContent는 그대로인데 화면은 백지다).
+      const summaryMainNoticeRect = summaryMainNotice
+        ? summaryMainNotice.getBoundingClientRect()
+        : null;
+      const summaryMainNoticeVisible = Boolean(summaryMainNoticeRect)
+        && summaryMainNoticeRect.width > 0 && summaryMainNoticeRect.height > 0;
       const summaryMainUnavailableFlag = summaryMainEl
         ? summaryMainEl.getAttribute('data-unavailable')
         : null;
@@ -4247,7 +4255,8 @@ app.whenReady().then(async () => {
       if (!brainReady) {
         return {
           wired: true, brainReady, clickOpened, summaryHidden, summaryTableVisible,
-          surfaceToggle, containerText, summaryMainNoticeText, summaryMainUnavailableFlag,
+          surfaceToggle, containerText, summaryMainNoticeText, summaryMainNoticeVisible,
+          summaryMainUnavailableFlag,
         };
       }
       const byClick = describeLive();
@@ -4264,6 +4273,7 @@ app.whenReady().then(async () => {
         summaryHidden,
         summaryTableVisible,
         summaryMainNoticeText,
+        summaryMainNoticeVisible,
         summaryMainUnavailableFlag,
         surfaceToggle,
         placedNodes: placed ? placed.nodes.length : 0,
@@ -4345,6 +4355,10 @@ app.whenReady().then(async () => {
       assertOk(
         'graph-mode: 브레인 미준비 시 요약 탭도 정직한 안내로 채워진다(백지가 아니다)',
         /아직 성향을 읽을 수 없습니다/.test(graph.summaryMainNoticeText || ''),
+      );
+      assertOk(
+        'graph-mode: 요약 탭 안내가 실제로 화면에 그려진다(rect > 0)',
+        graph.summaryMainNoticeVisible === true,
       );
       assertOk(
         'graph-mode: 미기동 안내가 0건 히어로보다 앞선다',
