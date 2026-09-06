@@ -3418,6 +3418,11 @@ const backtestCanvas = window.AthenaLib.BacktestCanvas.createBacktestCanvas({
     if (!res || !res.ok) throw new Error(backtestError(res, '수집 상태를 불러오지 못했습니다'));
     return res.data;
   },
+  // 보드 04 「중단」 — 수집을 멈추는 사람 클릭 전용 채널. 이미 끝난 잡은 멈출 것이
+  // 없으므로 실패를 오류로 올리지 않는다 — 화면은 그냥 설계로 돌아간다.
+  cancelJob: async ({ job_id } = {}) => {
+    await window.athena.invoke('athena:backtest-job-cancel', { job_id });
+  },
   // 실행 상태+지표+자산곡선+stdout — running 상태가 1초 간격으로 부른다.
   result: async ({ run_id } = {}) => {
     const res = await window.athena.invoke('athena:backtest-result', { run_id });
@@ -3871,6 +3876,12 @@ const agentCanvas = window.AthenaLib.AgentCanvas.createAgentCanvas({
     };
     const res = await window.athena.invoke('athena:routine-watch-check', { body });
     return (res && res.ok && res.data) ? res.data : null;
+  },
+  // 제어 결과 턴(Paper 보드 08 · 4330-1) — 칩을 누른 결과는 카드(캐버스 갱신)와
+  // 채팅(결과 턴) 두 곳으로 간다. 채널을 새로 만들지 않고 플러그인 결과와 같은
+  // 자리의 CustomEvent를 쓴다 — 그리는 것은 chat.js 하나뿐이다.
+  onControlResult: (turn, retry) => {
+    window.dispatchEvent(new CustomEvent('athena:routine-control-result', { detail: { turn, retry } }));
   },
   // 11단계 — "그래프 모드에서 근거 보기 →". 사이드바 모드 네비와 같은 두 걸음
   // (캔버스 전환 + 네비 활성 표시)을 그대로 재현한다(sidebar.js 참고).

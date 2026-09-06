@@ -545,6 +545,30 @@ def test_deployment_rejects_missing_limits(tmp_path: Path) -> None:
         assert res.status_code == 422
 
 
+def test_deployment_rejects_empty_valid_to(tmp_path: Path) -> None:
+    """빈 유효 종료는 만든 순간 만료다 — 사람이 '켰다'고 믿는 배포를 만들지 않는다."""
+    with _client(tmp_path) as client:
+        body = _deploy_body("v")
+        body["limits"]["valid_to"] = ""
+        res = client.post(f"{BASE}/deployments", json=body)
+        assert res.status_code == 422
+        assert "비워둘 수 없다" in res.json()["detail"]
+
+
+def test_deployment_view_says_expired_even_while_status_is_active(tmp_path: Path) -> None:
+    """status는 active인데 신호는 매번 막히는 배포 — 화면이 그 사실을 읽을 값이 있다."""
+    with _client(tmp_path) as client:
+        rows = _synthetic_candle_rows(60)
+        _seed_candles(client, "005930", "day", True, rows)
+        version_id = _seeded_version(client, rows)
+        body = _deploy_body(version_id)
+        body["limits"]["valid_to"] = "20250102"
+        client.post(f"{BASE}/deployments", json=body)
+        listed = client.get(f"{BASE}/deployments").json()["deployments"]
+    assert listed[0]["status"] == "active"
+    assert listed[0]["expired"] is True
+
+
 def test_deployment_rejects_unknown_mode(tmp_path: Path) -> None:
     with _client(tmp_path) as client:
         body = _deploy_body("v")

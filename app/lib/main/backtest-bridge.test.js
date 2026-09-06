@@ -107,6 +107,20 @@ test('fetchJobStatus/fetchRunResult/fetchRunTrades: id를 경로에 인코딩해
   ]);
 });
 
+test('cancelJob: DELETE /api/v1/backtest/jobs/{id} — 수집 「중단」의 통로다', async () => {
+  const seen = [];
+  const res = await backtestBridge.cancelJob({
+    backendBase: 'http://x',
+    fetchImpl: async (url, init) => {
+      seen.push([url, init.method]);
+      return { ok: true, status: 200, json: async () => ({ ok: true, cancelled: true }) };
+    },
+    job_id: 'j 1',
+  });
+  assert.deepEqual(seen, [['http://x/api/v1/backtest/jobs/j%201', 'DELETE']]);
+  assert.deepEqual(res, { ok: true, data: { ok: true, cancelled: true } });
+});
+
 test('fetchRuns: GET /api/v1/backtest/runs', async () => {
   let seenUrl = null;
   const res = await backtestBridge.fetchRuns({

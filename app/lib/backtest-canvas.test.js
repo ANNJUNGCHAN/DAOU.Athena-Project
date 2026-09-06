@@ -398,6 +398,54 @@ test('[수집하고 실행] → backfill 바디가 폼 값 그대로다', async 
   });
 });
 
+async function toRunning(extra) {
+  const made = await toApproval(Object.assign({
+    backfill: async () => ({ job_id: 'j1' }),
+    status: async () => ({ status: 'running', progress: { page: 1, rows: 100, oldest_dt: '20240101' } }),
+  }, extra || {}));
+  await click(findByClass(made.container, 'backtest-approval-confirm')[0]);
+  await flush();
+  return made;
+}
+
+test('수집 중 화면에 중단 버튼과 이어짐 안내가 있다 — 막다른 길이 아니다', async () => {
+  const { container } = await toRunning();
+  const stop = findByClass(container, 'backtest-running-stop');
+  assert.equal(stop.length, 1);
+  assert.equal(stop[0].textContent, '중단');
+  assert.match(textOf(container), /끝나면 바로 백테스트가 이어집니다/);
+});
+
+test('중단을 누르면 잡 취소 IPC를 부른다 — 폴링만 멈추지 않는다', async () => {
+  const cancelled = [];
+  const { container } = await toRunning({
+    cancelJob: async (body) => { cancelled.push(body); return { ok: true }; },
+  });
+  await click(findByClass(container, 'backtest-running-stop')[0]);
+  await flush();
+  assert.deepEqual(cancelled, [{ job_id: 'j1' }]);
+  // 수집 화면을 빠져나와 설계로 돌아간다.
+  assert.equal(findByClass(container, 'backtest-running-stop').length, 0);
+});
+
+test('중단 뒤에 늦게 돌아온 수집 응답이 백테스트를 시작하지 않는다', async () => {
+  let release = null;
+  const { container, calls } = await toRunning({
+    status: () => new Promise((resolve) => { release = () => resolve({ status: 'done' }); }),
+    cancelJob: async () => ({ ok: true }),
+  });
+  // 첫 틱이 status 안에 들어가 있는 사이에 사람이 「중단」을 누른다.
+  await click(findByClass(container, 'backtest-running-stop')[0]);
+  await flush();
+  release();
+  await flush();
+  await flush();
+  // run은 승인 카드를 띄운 첫 호출 하나뿐이어야 한다 — 늦게 온 done이 실행을 열지 않는다.
+  assert.equal(calls.length, 1);
+  assert.equal(findByClass(container, 'backtest-canvas-error').length, 0);
+  assert.ok(findByClass(container, 'backtest-preset-item').length);
+});
+
 // ── 보드 03 · 결과 ──────────────────────────────────────────────────────────
 
 const DONE_RESULT = {
@@ -1047,6 +1095,75 @@ test('navigate: 탭만 옮기고 되돌리기는 없다', async () => {
     run_id: 'run_9', status: 'done', total_return: 0.12, sharpe: 1.1,
   }]);
   assert.equal(findByClass(container, 'backtest-history-row').length, 1);
+});
+
+// ── 보드 05 · 이력 비교 diff 두 칸 ──────────────────────────────────────────
+
+const COMPARE_DETAIL = {
+  run_a: {
+    status: 'done', equity: [{ dt: '20240101', equity: 1, drawdown: 0 }],
+    params: { fast: 10, slow: 40 }, version: 3, source: 'a\nb\nc\n',
+  },
+  run_b: {
+    status: 'done', equity: [{ dt: '20240101', equity: 1, drawdown: 0 }],
+    params: { fast: 20, slow: 60 }, version: 4, source: 'a\nB\nc\n',
+  },
+};
+
+async function toCompare() {
+  const made = await mounted({
+    runs: async () => ([
+      { run_id: 'run_a', status: 'done', metrics: { total_return: 0.1 } },
+      { run_id: 'run_b', status: 'done', metrics: { total_return: 0.2 } },
+    ]),
+    result: async ({ run_id }) => COMPARE_DETAIL[run_id],
+  });
+  made.canvas.onChatAction({ kind: 'navigate', tab: 'history' });
+  await flush();
+  // 한 번 누를 때마다 다시 그리므로 두 번째 행은 새로 찾는다.
+  await click(findByClass(made.container, 'backtest-history-row')[0]);
+  await flush();
+  await click(findByClass(made.container, 'backtest-history-row')[1]);
+  await flush();
+  return made;
+}
+
+test('비교 패널에 파라미터 diff와 코드 diff 두 칸이 선다', async () => {
+  const { container } = await toCompare();
+  const labels = findByClass(container, 'backtest-compare-diff-label').map((n) => n.textContent);
+  assert.deepEqual(labels, ['파라미터 diff', '코드 diff']);
+  const values = findByClass(container, 'backtest-compare-diff-value').map((n) => n.textContent);
+  assert.equal(values[0], 'fast 10→20 · slow 40→60');
+  assert.equal(values[1], 'v3→v4 · 2줄');
+  // 두 버전의 소스가 그대로 줄 diff로 선다(보드 02·09와 같은 문법).
+  assert.equal(findByClass(container, 'backtest-diff').length, 1);
+});
+
+test('파라미터 diff는 키 단위로 변한 값만 적는다', () => {
+  assert.equal(
+    backtestCanvas.paramsDiffText({ fast: 10, slow: 40 }, { fast: 20, slow: 60 }),
+    'fast 10→20 · slow 40→60',
+  );
+  // 같은 값인 키는 적지 않는다.
+  assert.equal(
+    backtestCanvas.paramsDiffText({ fast: 10, slow: 40 }, { fast: 10, slow: 60 }),
+    'slow 40→60',
+  );
+  // 한쪽을 모르면 지어내지 않고 빈 문자열이다.
+  assert.equal(backtestCanvas.paramsDiffText(null, { fast: 20 }), '');
+  assert.equal(backtestCanvas.paramsDiffText({ fast: 10 }, { fast: 10 }), '');
+});
+
+test('코드 diff 칸은 버전 쌍과 바뀐 줄 수를 적는다', () => {
+  assert.equal(
+    backtestCanvas.codeDiffText({ version: 3, source: 'a\nb\n' }, { version: 4, source: 'a\nB\n' }),
+    'v3→v4 · 2줄',
+  );
+  assert.equal(
+    backtestCanvas.codeDiffText({ version: 4, source: 'a\n' }, { version: 4, source: 'a\n' }),
+    '같은 버전 v4',
+  );
+  assert.equal(backtestCanvas.codeDiffText(null, { version: 4, source: '' }), '');
 });
 
 test('navigate design/flow: 코드 경로면 지금 코드로 지도를 다시 만든다', async () => {
@@ -2648,6 +2765,69 @@ test('파일 실행이 준 전략·버전 id로 배포 탭이 열린다 — [이
   assert.equal(findByClass(made.container, 'backtest-deploy-create').length, 1);
 });
 
+// ── 보드 23 · 한도를 비운 배포는 만들 수 없다 ───────────────────────────────
+
+async function toDeployForm(extra) {
+  const made = await mounted(userStrategyDeps(Object.assign({
+    run: async () => ({ run_id: 'r1', strategy_id: 's9', version_id: 'v9' }),
+    result: async () => ({ status: 'done', metrics: {}, equity: [] }),
+    trades: async () => [],
+    deployments: async () => [],
+  }, extra || {})));
+  await openProjectFile(made);
+  await click(findByClass(made.container, 'backtest-tab')[0]);
+  await click(findByClass(made.container, 'backtest-run-button')[0]);
+  await flush();
+  await click(findByClass(made.container, 'backtest-tab')[4]);
+  await flush();
+  return made;
+}
+
+test('유효 종료가 비면 실전 배포 버튼이 비활성이고 이유가 적힌다', async () => {
+  const { container } = await toDeployForm();
+  const create = findByClass(container, 'backtest-deploy-create')[0];
+  assert.equal(create.disabled, true);
+  const text = textOf(container);
+  assert.match(text, /한도 — 미리 승인하는 범위/);
+  assert.match(text, /비워둘 수 없습니다\. 한도 없는 자동 주문은 이 화면이 약속한 것이 아닙니다\./);
+  assert.match(text, /유효 종료\(YYYYMMDD\)/);
+});
+
+test('한도 6칸이 모두 차야 배포가 만들어진다', async () => {
+  let calls = 0;
+  const { container } = await toDeployForm({
+    createDeployment: async () => { calls += 1; return { id: 'd1' }; },
+  });
+  const create = findByClass(container, 'backtest-deploy-create')[0];
+  await click(create);
+  await flush();
+  assert.equal(calls, 0);
+
+  // 마지막 빈 칸(유효 종료)을 채우면 그때 열린다 — 다시 그리지 않고 버튼만 바뀐다.
+  const inputs = findByClass(container, 'backtest-field-input');
+  const validTo = inputs[inputs.length - 3];
+  validTo.value = '20261231';
+  await validTo.dispatchEvent({ type: 'input' });
+  assert.equal(create.disabled, false);
+  await click(create);
+  await flush();
+  assert.equal(calls, 1);
+});
+
+test('deployLimitsGate: 빈 칸을 라벨로 되돌려준다 — 지어낸 기본값을 넣지 않는다', () => {
+  const full = {
+    max_order_amount: 2000000, max_orders_per_day: 2,
+    valid_from: '20260903', valid_to: '20261231',
+    stop_on_drawdown_pct: 15, stop_on_consecutive_losses: 3,
+  };
+  assert.deepEqual(backtestCanvas.deployLimitsGate(full), { ok: true, missing: [] });
+  assert.deepEqual(
+    backtestCanvas.deployLimitsGate(Object.assign({}, full, { valid_to: '' })),
+    { ok: false, missing: ['유효 종료(YYYYMMDD)'] },
+  );
+  assert.deepEqual(backtestCanvas.deployLimitsGate(null).ok, false);
+});
+
 // ── 무장 스위치와 오늘 로그(보드 23 · 2026-09-04) ────────────────────────────
 //
 // 여기서 지키는 것은 하나다: **화면이 자동 매매에 대해 거짓말을 하지 않는가.**
@@ -2678,6 +2858,24 @@ async function atDeployTab(overrides) {
   await flush();
   return made;
 }
+
+test('유효기간이 지난 배포는 만료 배지를 함께 그린다 — 켜져 있다고 말하지 않는다', async () => {
+  const { container } = await atDeployTab({
+    deployments: async () => [deployment({ status: 'active', expired: true })],
+    listSignals: async () => [],
+  });
+  assert.equal(findByClass(container, 'backtest-deploy-expired')[0].textContent, '만료');
+  assert.equal(findByClass(container, 'backtest-deploy-status')[0].textContent, 'active');
+});
+
+test('중지한 배포는 만료로 덮이지 않는다 — 멈춘 것이 사람이었다는 사실을 지우지 않는다', async () => {
+  const { container } = await atDeployTab({
+    deployments: async () => [deployment({ status: 'stopped', expired: true })],
+    listSignals: async () => [],
+  });
+  assert.equal(findByClass(container, 'backtest-deploy-status')[0].textContent, 'stopped');
+  assert.equal(findByClass(container, 'backtest-deploy-expired').length, 1);
+});
 
 test('무장 토글이 armDeployment(id, 반대값)를 정확히 한 번 부른다', async () => {
   const calls = [];

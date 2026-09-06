@@ -5,6 +5,10 @@
 // 전담한다 — backtest-canvas.js가 세운 isNode 분기와 같은 방식으로 싣는다.
 const isNode = typeof module !== 'undefined' && module.exports;
 const WatchNodes = isNode ? require('./watch-nodes') : window.AthenaLib.WatchNodes;
+// 제어 결과 턴(Paper 보드 08 · 4330-1)의 판정·문구는 이 순수 모델이 쥔다.
+const ControlTurn = isNode
+  ? require('./routine-control-turn')
+  : window.AthenaLib.RoutineControlTurn;
 
 // 에이전트모드 캔버스(Paper 보드 39) — #agentCanvas 컨테이너를 완전히 소유하고
 // 헤더·탭·통계 카드·리스트+상세를 전부 이 파일이 그린다. shell.html은 빈
@@ -189,6 +193,9 @@ function createAgentCanvas(deps) {
     cancelRoutine,
     confirmRoutine,
     runWatchCheck,
+    // 제어 결과 턴(Paper 보드 08 · 4330-1) — 누른 결과를 같은 방에 남기는 길.
+    // 캐널은 canvas.js가 정한다(플러그인 결과와 같은 자리의 CustomEvent).
+    onControlResult,
   } = deps || {};
   if (!container) return { mount() {}, async refresh() {} };
 
@@ -1270,6 +1277,15 @@ function createAgentCanvas(deps) {
     holdBtn.addEventListener('click', () => {
       // 세션 동안만 숨긴다 — 저장 백엔드가 없어 재시작하면 다시 보인다(위 머리말, P3).
       heldSuggestionIds.add(entry.entity_id);
+      // 보류는 서버 상태를 바꾸지 않는다 — 빈 변경이 정상이라고 결과 턴이 말한다(4380-1).
+      if (typeof onControlResult === 'function') {
+        onControlResult(ControlTurn.buildControlResultTurn({
+          kind: 'reject',
+          badge: '제안 채택',
+          lead: '보류 — 목록 유지',
+          fact: `${entry.entity_name || entry.entity_id} · 보류함 ${heldSuggestionIds.size}건`,
+        }));
+      }
       renderProactiveCards();
       updateProactiveTabLabel();
       renderStats(); // 3단계 — "성향 제안" 통계 타일도 heldSuggestionIds를 본다(위와 같은 이유).
@@ -1496,6 +1512,36 @@ function createAgentCanvas(deps) {
   let codeSourceOpen = false; // 「코드 · 참고 · 펼치기」 토글
   let editConfirmId = null; // 멈춤 확인(A-12)이 떠 있는 항목
 
+  // 제어 결과 한 건을 같은 방(채팅)에 남긴다(Paper 4330-1). 사실행은 원장 행의
+  // 1:1 렌더링이라 지어낼 것이 없다 — 판정·칩은 순수 모델이 붙인다. 배선이 없으면
+  // 조용히 넘어간다(다른 선택 배선들과 같은 규칙).
+  function reportControl(kind, badge, item, lead, reason, retry) {
+    if (typeof onControlResult !== 'function') return;
+    onControlResult(ControlTurn.buildControlResultTurn({
+      kind,
+      badge,
+      lead,
+      reason,
+      fact: ControlTurn.controlFactLine((item && item.raw) || null),
+    }), retry);
+  }
+
+  // 제어 한 번 = 결과 한 건. 던지는 배선(canvas.js)의 오류를 여기서 판정으로 옮긴다.
+  // 실패에는 다시 부를 손잡이를 함께 실어 보낸다 — 채팅의 「다시 시도」가 같은
+  // 제어를 그대로 다시 부르고(결과는 새 턴으로 온다) 화면도 함께 다시 받아온다.
+  async function runControl(action, badge, item, doneLead) {
+    if (typeof action !== 'function') return;
+    try {
+      await action(item.id);
+      reportControl('success', badge, item, doneLead);
+    } catch (err) {
+      reportControl('fail', badge, item, '', String((err && err.message) || err), async () => {
+        await runControl(action, badge, item, doneLead);
+        await refresh();
+      });
+    }
+  }
+
   function loadCodeDetail(item) {
     if (codeDetailCache.id === item.id) return;
     codeDetailCache = { id: item.id, data: null };
@@ -1637,7 +1683,9 @@ function createAgentCanvas(deps) {
       pauseBtn.addEventListener('click', async () => {
         pauseBtn.disabled = true;
         const action = willPause ? pauseRoutine : resumeRoutine;
-        try { if (typeof action === 'function') await action(item.id); } catch { /* refresh가 실제 상태를 다시 받아온다 */ }
+        // 실패해도 여기서 던지지 않는다 — refresh()가 실제 상태를 다시 받아온다.
+        await runControl(action, willPause ? '일시중지' : '재개', item,
+          willPause ? '일시중지됨' : '다시 켬');
         await refresh();
       });
       controls.appendChild(pauseBtn);
@@ -1647,7 +1695,7 @@ function createAgentCanvas(deps) {
       cancelBtn.textContent = '취소';
       cancelBtn.addEventListener('click', async () => {
         cancelBtn.disabled = true;
-        try { if (typeof cancelRoutine === 'function') await cancelRoutine(item.id); } catch { /* 위와 같다 */ }
+        await runControl(cancelRoutine, '취소', item, '취소됨');
         await refresh();
       });
       controls.appendChild(cancelBtn);
@@ -1674,7 +1722,7 @@ function createAgentCanvas(deps) {
       pauseFirst.textContent = '일시중지하고 고치기';
       pauseFirst.addEventListener('click', async () => {
         pauseFirst.disabled = true;
-        try { if (typeof pauseRoutine === 'function') await pauseRoutine(item.id); } catch { /* 위와 같다 */ }
+        await runControl(pauseRoutine, '일시중지', item, '일시중지됨');
         editConfirmId = null;
         seedEdit(item, { kind: 'edit' });
         await refresh();
@@ -1763,7 +1811,7 @@ function createAgentCanvas(deps) {
       approveBtn.textContent = '이 알람 승인';
       approveBtn.addEventListener('click', async () => {
         approveBtn.disabled = true;
-        try { if (typeof confirmRoutine === 'function') await confirmRoutine(item.id); } catch { /* 위와 같다 */ }
+        await runControl(confirmRoutine, '이 알람 승인', item, '감시 시작');
         codeDetailCache = { id: null, data: null };
         await refresh();
       });
@@ -1775,7 +1823,7 @@ function createAgentCanvas(deps) {
       dropBtn.textContent = '취소';
       dropBtn.addEventListener('click', async () => {
         dropBtn.disabled = true;
-        try { if (typeof cancelRoutine === 'function') await cancelRoutine(item.id); } catch { /* 위와 같다 */ }
+        await runControl(cancelRoutine, '취소', item, '취소됨');
         await refresh();
       });
       approveRow.appendChild(dropBtn);
@@ -1905,12 +1953,11 @@ function createAgentCanvas(deps) {
         pauseBtn.addEventListener('click', async () => {
           pauseBtn.disabled = true;
           const action = willPause ? pauseRoutine : resumeRoutine;
-          try {
-            if (typeof action === 'function') await action(item.id);
-          } catch {
-            // 실패해도 조용히 넘어간다 — 아래 refresh()가 실제 상태를 다시 받아와
-            // 반영한다(낙관적 갱신 없음, P3 — 성공한 척하지 않는다).
-          }
+          // 실패해도 조용히 넘어간다 — 아래 refresh()가 실제 상태를 다시 받아와
+          // 반영한다(낙관적 갱신 없음, P3 — 성공한 척하지 않는다). 결과 한 줄은
+          // 같은 방(채팅)에 남는다.
+          await runControl(action, willPause ? '일시중지' : '재개', item,
+            willPause ? '일시중지됨' : '다시 켬');
           await refresh();
         });
       } else {

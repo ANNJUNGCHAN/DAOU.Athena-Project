@@ -15,6 +15,7 @@ import ast
 import difflib
 import hashlib
 import json
+import re
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
@@ -52,6 +53,9 @@ from athena_api.dependencies import KiwoomClientDep, get_order_kiwoom_client
 from athena_api.projects.store import venv_packages, venv_python
 
 router = APIRouter(prefix="/api/v1/backtest", tags=["backtest"])
+
+# 한도의 날짜 칸 모양(YYYYMMDD). 빈 문자열을 걸러내는 것이 주 목적이다.
+_YYYYMMDD_RE = re.compile(r"^\d{8}$")
 
 
 def _store(request: Request) -> BacktestStore:
@@ -301,6 +305,21 @@ async def get_job(request: Request, job_id: str) -> dict[str, Any]:
     }
 
 
+@router.delete("/jobs/{job_id}")
+async def cancel_job(request: Request, job_id: str) -> dict[str, Any]:
+    """돌고 있는 잡을 사람이 멈춘다(Paper 보드 04 「중단」).
+
+    화면을 나가는 것은 폴링만 멈출 뿐이라 수집 잡은 TR을 계속 불러간다 — 그 연쇄를
+    시작한 사람이 멈출 수 있어야 한다. 이미 끝난 잡은 200 + `cancelled: false`다 —
+    멈출 것이 없는 것은 오류가 아니다(`DELETE /runs/{run_id}`와 같은 태도).
+    """
+    runner = _runner(request)
+    job = runner.get(job_id)
+    if job is None:
+        raise HTTPException(status_code=404, detail="잡이 존재하지 않는다")
+    return {"ok": True, "cancelled": runner.cancel(job_id)}
+
+
 # ── 상태 변경: 실행 ──────────────────────────────────────────────────────────
 
 
@@ -464,6 +483,24 @@ async def list_runs(request: Request) -> dict[str, Any]:
     return {"runs": items}
 
 
+def _effective_run_params(source: str, overrides: dict[str, Any]) -> dict[str, Any]:
+    """그 실행이 실제로 쓴 파라미터 — 비교 패널의 「파라미터 diff」가 읽는 값.
+
+    폼 경로는 값이 yaml 안에 있고(슬라이더가 yaml을 고친다) 코드 경로는 override로 온다.
+    두 경로를 같은 자리에서 읽지 않으면 비교 화면이 절반의 실행에서만 말한다.
+    소스가 파이썬이면 yaml로 읽힐 수 없으므로 override만 남는다 — 그게 사실이다.
+    """
+    base: dict[str, Any] = {}
+    try:
+        spec = from_kis_yaml(source, require_conditions=False)
+    except Exception:  # noqa: BLE001 — 파이썬 소스는 yaml이 아니다
+        spec = None
+    if spec is not None:
+        base = {name: p.default for name, p in spec.strategy.params.items()}
+    base.update(overrides)
+    return base
+
+
 @router.get("/runs/{run_id}")
 async def get_run(request: Request, run_id: str) -> dict[str, Any]:
     store = _store(request)
@@ -472,10 +509,26 @@ async def get_run(request: Request, run_id: str) -> dict[str, Any]:
         raise HTTPException(status_code=404, detail="실행이 존재하지 않는다")
     equity = await store.equity(run_id)
     metrics, flags, benchmark = _metrics_view(row.metrics_json)
+    # 이력 비교(Paper 보드 05 1WYY-1)가 「무엇이 달랐나」를 말하려면 지표 말고
+    # 그 실행이 쓴 파라미터와 버전의 코드가 필요하다. 목록 라우트가 아니라 여기에
+    # 싣는 이유: 비교는 두 건만 여는 화면이라 전체 목록에 버전 조회를 N번 붙일 이유가 없다.
+    version = await store.version(row.strategy_version_id) if row.strategy_version_id else None
+    try:
+        overrides = json.loads(row.params_json)
+    except (TypeError, ValueError):
+        overrides = {}
+    params = _effective_run_params(
+        version.source if version is not None else "",
+        overrides if isinstance(overrides, dict) else {},
+    )
     return {
         "run_id": row.id,
         "status": row.status,
         "metrics": metrics,
+        "params": params,
+        "strategy_version_id": row.strategy_version_id,
+        "version": version.version if version is not None else None,
+        "source": version.source if version is not None else "",
         "equity": [{"dt": p.dt, "equity": p.equity, "drawdown": p.drawdown} for p in equity],
         # 자산곡선의 두 번째 선 — equity와 같은 길이·같은 봉이다(보드 03 "전략 vs 매수보유").
         "benchmark": benchmark,
@@ -1146,6 +1199,21 @@ async def optimize_route(request: Request, body: dict[str, Any]) -> dict[str, An
 # ── 배포 · 실전 적용 (Paper 보드 07) ─────────────────────────────────────────
 
 
+def _valid_ymd(raw: Any, label: str) -> str:
+    """한도의 날짜 칸 — 비워둔 값을 받지 않는다(Paper 42NF-1).
+
+    빈 valid_to는 `is_expired`가 `today > ""`를 참으로 보게 해 만든 순간 만료인
+    배포가 된다 — 사람은 「켰다」고 믿는데 신호는 한 건도 안 나간다.
+    """
+    text = str(raw).strip()
+    if not _YYYYMMDD_RE.match(text):
+        raise HTTPException(
+            status_code=422,
+            detail=f"{label}는 YYYYMMDD 8자리여야 한다 — 비워둘 수 없다",
+        )
+    return text
+
+
 def _limits_from(body: dict[str, Any]) -> deploy_mod.Limits:
     raw = body.get("limits")
     if not isinstance(raw, dict):
@@ -1154,8 +1222,8 @@ def _limits_from(body: dict[str, Any]) -> deploy_mod.Limits:
         return deploy_mod.Limits(
             max_order_amount=float(raw["max_order_amount"]),
             max_orders_per_day=int(raw["max_orders_per_day"]),
-            valid_from=str(raw["valid_from"]),
-            valid_to=str(raw["valid_to"]),
+            valid_from=_valid_ymd(raw["valid_from"], "유효 시작"),
+            valid_to=_valid_ymd(raw["valid_to"], "유효 종료"),
             stop_on_drawdown_pct=float(raw["stop_on_drawdown_pct"]),
             stop_on_consecutive_losses=int(raw["stop_on_consecutive_losses"]),
         )
@@ -1166,6 +1234,19 @@ def _limits_from(body: dict[str, Any]) -> deploy_mod.Limits:
 
 
 def _deployment_view(row: Any) -> dict[str, Any]:
+    limits_raw = json.loads(row.limits_json)
+    deployment = deploy_mod.Deployment(
+        id=row.id,
+        strategy_version_id=row.strategy_version_id,
+        run_id=row.run_id,
+        stk_cd=row.stk_cd,
+        period=row.period,
+        adjusted=row.adjusted,
+        mode=row.mode,
+        params={},
+        limits=deploy_mod.Limits(**limits_raw),
+        status=row.status,
+    )
     return {
         "id": row.id,
         "strategy_version_id": row.strategy_version_id,
@@ -1176,27 +1257,19 @@ def _deployment_view(row: Any) -> dict[str, Any]:
         "mode": row.mode,
         "mode_label": deploy_mod.MODE_LABELS.get(row.mode, row.mode),
         "params": json.loads(row.params_json),
-        "limits": json.loads(row.limits_json),
+        "limits": limits_raw,
         "status": row.status,
         "created_at": row.created_at,
         "stopped_at": row.stopped_at,
         "armed": bool(getattr(row, "armed", False)),
+        # 유효기간 밖이면 status가 active여도 신호는 매번 막힌다(evaluate_latest
+        # blocked_reason="expired"). 화면이 active만 읽으면 켜져 있다고 거짓말하므로
+        # 판정을 여기서 한 값으로 준다 — auto_armed와 같은 규율이다.
+        "expired": deploy_mod.is_expired(deployment, deploy_mod.today_str()),
         # 자동 주문이 실제로 나갈 수 있는 상태인지 화면이 한 값으로 읽게 한다 —
         # 모드·무장·상태 셋을 화면에서 다시 조합하면 규칙이 두 곳에 살게 된다.
         "auto_armed": deploy_orders.is_armed_for_auto(
-            deploy_mod.Deployment(
-                id=row.id,
-                strategy_version_id=row.strategy_version_id,
-                run_id=row.run_id,
-                stk_cd=row.stk_cd,
-                period=row.period,
-                adjusted=row.adjusted,
-                mode=row.mode,
-                params={},
-                limits=deploy_mod.Limits(**json.loads(row.limits_json)),
-                status=row.status,
-            ),
-            armed=bool(getattr(row, "armed", False)),
+            deployment, armed=bool(getattr(row, "armed", False))
         ),
     }
 

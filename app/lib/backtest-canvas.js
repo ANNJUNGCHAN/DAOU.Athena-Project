@@ -601,6 +601,52 @@ function diffCounts(before, after) {
   return CodeEditor.diffStats(CodeEditor.diffLines(before, after));
 }
 
+// 한도 여섯 칸(Paper 42NE-1 「한도 — 미리 승인하는 범위」). 라벨은 화면과 게이트가
+// 같은 문자열을 쓴다 — 무엇이 비었는지 말할 때 사람이 본 그 이름으로 말해야 한다.
+const DEPLOY_LIMIT_FIELDS = [
+  ['max_order_amount', '1회 최대 주문(원)'],
+  ['max_orders_per_day', '하루 최대 주문 수'],
+  ['valid_from', '유효 시작(YYYYMMDD)'],
+  ['valid_to', '유효 종료(YYYYMMDD)'],
+  ['stop_on_drawdown_pct', '자동 정지 낙폭(%)'],
+  ['stop_on_consecutive_losses', '자동 정지 연속 손절(회)'],
+];
+
+// Paper 42NF-1 원문. 비운 한도로 만든 배포는 백엔드가 만료로 보고(deploy.py is_expired)
+// 신호마다 막으므로, 사람은 '켰다'고 믿는데 한 건도 안 나가는 배포가 된다.
+const DEPLOY_LIMITS_WARNING =
+  '비워둘 수 없습니다. 한도 없는 자동 주문은 이 화면이 약속한 것이 아닙니다.';
+
+function deployLimitsGate(limits) {
+  const values = (limits && typeof limits === 'object') ? limits : {};
+  const missing = DEPLOY_LIMIT_FIELDS
+    .filter(([key]) => String(values[key] == null ? '' : values[key]).trim() === '')
+    .map(([, label]) => label);
+  return { ok: missing.length === 0, missing };
+}
+
+// 두 실행의 파라미터를 키 단위로 대조해 변한 값만 적는다(Paper 1WZ3-1
+// "fast 10→20 · slow 40→60"). 한쪽을 모르면 빈 문자열이다 — 모르는 자리에
+// 기본값을 지어 넣으면 "무엇이 달랐나"가 거짓말이 된다.
+function paramsDiffText(a, b) {
+  if (!a || typeof a !== 'object' || !b || typeof b !== 'object') return '';
+  const keys = Object.keys(a).concat(Object.keys(b).filter((k) => !(k in a)));
+  const text = (v) => (v == null ? '—' : String(v));
+  return keys
+    .filter((key) => text(a[key]) !== text(b[key]))
+    .map((key) => `${key} ${text(a[key])}→${text(b[key])}`)
+    .join(' · ');
+}
+
+// 코드 diff 칸의 한 줄(Paper 1WZ6-1 "v3→v4 · 12줄"). 줄 수는 단계 카드와 같은
+// 셈(diffCounts)을 쓴다 — 같은 변경에 두 숫자가 생기면 안 된다.
+function codeDiffText(a, b) {
+  if (!a || !b || a.version == null || b.version == null) return '';
+  if (a.version === b.version) return `같은 버전 v${a.version}`;
+  const stats = diffCounts(String(a.source || ''), String(b.source || ''));
+  return `v${a.version}→v${b.version} · ${stats.added + stats.removed}줄`;
+}
+
 // 폴더 이름 — 사람이 탐색기에서 봐도 언제 만든 것인지 알아야 한다. 경로 '한 조각'
 // 규칙(백엔드 is_safe_project_name)을 지키려 구분자·점·양끝 공백을 쓰지 않는다.
 function techniqueProjectName(now) {
@@ -1385,8 +1431,26 @@ function createBacktestCanvas(options) {
     setState({ view: 'design', tab: 'design' });
   }
 
+  // 보드 04(1TQX-1) 「중단」 — 모드를 나가면 폴링만 멈출 뿐 백엔드 잡은 TR을 계속
+  // 불러간다. 사람이 시작한 연쇄는 사람이 멈출 수 있어야 한다(보드 10 「막다른 길을 만들지
+  // 않습니다」). 이미 끝난 잡은 멈출 것이 없으므로 취소 실패를 오류로 올리지 않는다.
+  async function stopJob() {
+    const jobId = state.jobId;
+    stopPolling();
+    if (jobId && deps.cancelJob) {
+      try { await deps.cancelJob({ job_id: jobId }); } catch { /* 이미 끝난 잡 */ }
+    }
+    setState({
+      view: 'design', tab: 'design', jobId: null, progress: null, progressText: '',
+    });
+  }
+
   async function confirmBackfill() {
-    setState({ view: 'running', progressText: '데이터를 수집하는 중입니다…' });
+    // runId를 비운다 — 「수집 중」은 jobId && !runId로 읽히므로(resumePollingIfNeeded)
+    // 앞 실행의 id가 남아 있으면 수집을 실행으로 오독한다.
+    setState({
+      view: 'running', progressText: '데이터를 수집하는 중입니다…', runId: null,
+    });
     let res;
     try {
       res = deps.backfill
@@ -1408,11 +1472,14 @@ function createBacktestCanvas(options) {
     stopPolling();
     const tick = async () => {
       pollTimer = null;
-      if (!isVisible()) return;
+      // 「중단」은 예약된 타이머만 지운다 — 이미 status를 기다리고 있던 틱은 못 막는다.
+      // 그 틱이 늦게 깨어나 폴링을 되살리거나 startRun을 부르면 사람이 멈춘 연쇄가 혼자
+      // 이어진다. jobId가 비었으면(=중단했으면) 앞뒤 어느 지점에서든 여기서 끝낸다.
+      if (!state.jobId || !isVisible()) return;
       let job;
       try { job = deps.status ? await deps.status({ job_id: state.jobId }) : null; }
-      catch (err) { fail(err); return; }
-      if (!isVisible()) return;
+      catch (err) { if (state.jobId) fail(err); return; }
+      if (!state.jobId || !isVisible()) return;
       if (job && job.progress) {
         setState({
           progressText: `데이터를 수집하는 중입니다 · ${job.progress.page}페이지 · ${job.progress.rows}행`,
@@ -1591,8 +1658,15 @@ function createBacktestCanvas(options) {
         label: String(runIds[i]).slice(0, 8),
         equity: (r && r.equity) || [],
       }));
-      setState({ compareEquity: series });
-    } catch { setState({ compareEquity: null }); }
+      // 같은 응답이 파라미터와 그 실행이 쓴 버전의 코드도 싣는다(보드 05 diff 두 칸).
+      const detail = loaded.map((r, i) => ({
+        run_id: runIds[i],
+        params: (r && r.params) || null,
+        version: (r && r.version) != null ? r.version : null,
+        source: (r && r.source) || '',
+      }));
+      setState({ compareEquity: series, compareDetail: detail });
+    } catch { setState({ compareEquity: null, compareDetail: null }); }
   }
 
   async function runOptimize() {
@@ -5233,6 +5307,15 @@ function createBacktestCanvas(options) {
         `ka10081 base_dt=${state.progress.oldest_dt || '—'} → ${formatNumeric(state.progress.rows)}봉`,
       ));
     }
+    // 수집 중에만 선다 — 실행 중(runId)의 중단은 다른 잡이고 다른 라우트다.
+    if (state.jobId && !state.runId) {
+      const foot = el('div', 'backtest-running-foot');
+      foot.appendChild(button('backtest-running-stop', '중단', () => { void stopJob(); }));
+      foot.appendChild(el(
+        'div', 'backtest-running-hint', '끝나면 바로 백테스트가 이어집니다',
+      ));
+      wrap.appendChild(foot);
+    }
     return wrap;
   }
 
@@ -5477,6 +5560,30 @@ function createBacktestCanvas(options) {
   function renderCompare(a, b) {
     const wrap = el('div', 'backtest-compare');
     wrap.appendChild(el('div', 'backtest-card-title', '무엇이 달랐나'));
+
+    // 보드 05(1WYY-1) — 지표 앞에 "왜 달랐나" 두 칸이 선다. 같은 버전·같은 파라미터·
+    // 같은 구간이면 같은 결과가 나와야 하므로(1WSL-1), 다른 결과의 이유는 이 둘뿐이다.
+    const detail = Array.isArray(state.compareDetail) ? state.compareDetail : [];
+    const da = detail.find((d) => d.run_id === a.run_id) || null;
+    const db = detail.find((d) => d.run_id === b.run_id) || null;
+    const diffs = el('div', 'backtest-compare-diffs');
+    [
+      ['파라미터 diff', paramsDiffText(da && da.params, db && db.params)],
+      ['코드 diff', codeDiffText(da, db)],
+    ].forEach(([label, text]) => {
+      const box = el('div', 'backtest-compare-diff-box');
+      box.appendChild(el('div', 'backtest-compare-diff-label', label));
+      box.appendChild(el('div', 'backtest-compare-diff-value', text || '—'));
+      diffs.appendChild(box);
+    });
+    wrap.appendChild(diffs);
+    // 줄 diff는 보드 02·09가 이미 쓰는 문법 그대로다 — 새 표면을 만들지 않는다.
+    if (da && db && da.source && db.source && da.source !== db.source) {
+      const host = el('div', 'backtest-compare-code');
+      CodeEditor.renderDiff(host, da.source, db.source, {});
+      wrap.appendChild(host);
+    }
+
     const table = el('div', 'backtest-compare-table');
     [
       ['총수익률', 'total_return', 'percent'],
@@ -5651,6 +5758,11 @@ function createBacktestCanvas(options) {
       // "지금 실제로 자동 집행되는가"는 서버가 셋(모드·무장·상태)을 합쳐 준 auto_armed
       // 하나로만 읽는다 — 화면에서 다시 조합하면 규칙이 두 곳에 살게 된다.
       if (dep.auto_armed) row.appendChild(el('span', 'backtest-deploy-auto', '자동'));
+      // 「유효기간이 지났다」도 서버가 준 한 값(expired)으로만 읽는다 — status가 active여도
+      // 그런 배포는 신호마다 막힌다(deploy.py blocked_reason='expired'). active만 그리면
+      // 화면이 켜져 있다고 거짓말한다. 다만 status를 덮어쓰지는 않는다 — 사람이 [배포 중지]로
+      // 멈춘 stopped까지 '만료'로 읽히면 멈춘 것이 사람이었다는 사실이 사라진다.
+      if (dep.expired) row.appendChild(el('span', 'backtest-deploy-expired', '만료'));
       row.appendChild(el('span', 'backtest-deploy-status', dep.status));
       row.appendChild(button('backtest-deploy-stop', '배포 중지', async () => {
         if (!deps.stopDeployment) return;
@@ -5787,22 +5899,14 @@ function createBacktestCanvas(options) {
       valid_from: SpecModel.todayYyyymmdd(), valid_to: '',
       stop_on_drawdown_pct: 15, stop_on_consecutive_losses: 3,
     };
-    const row = el('div', 'backtest-field-row');
-    [
-      ['max_order_amount', '1회 최대 주문(원)'],
-      ['max_orders_per_day', '하루 최대 주문 수'],
-      ['valid_from', '유효 시작(YYYYMMDD)'],
-      ['valid_to', '유효 종료(YYYYMMDD)'],
-      ['stop_on_drawdown_pct', '자동 정지 낙폭(%)'],
-      ['stop_on_consecutive_losses', '자동 정지 연속 손절(회)'],
-    ].forEach(([key, label]) => {
-      row.appendChild(textField(label, limits[key], '', (v) => { limits[key] = v; }));
-    });
-    card.appendChild(row);
-    state.deployLimits = limits;
-
-    card.appendChild(button('backtest-deploy-create', '이 전략을 실전에 겁니다', async () => {
+    // Paper 42NE-1·42NF-1 — 한도가 무엇인지 말하고, 비워 둘 수 없다고 못 박는다.
+    card.appendChild(el('div', 'backtest-deploy-limits-head', '한도 — 미리 승인하는 범위'));
+    card.appendChild(el('div', 'backtest-deploy-limits-warning', DEPLOY_LIMITS_WARNING));
+    const gateLine = el('div', 'backtest-deploy-limits-gate');
+    const createBtn = button('backtest-deploy-create', '이 전략을 실전에 겁니다', async () => {
       if (!deps.createDeployment) return;
+      // 버튼이 비활성이어도 여기서 한 번 더 본다 — 만드는 문은 하나여야 한다.
+      if (!deployLimitsGate(limits).ok) return;
       try {
         await deps.createDeployment({
           strategy_version_id: activeVersionId,
@@ -5822,7 +5926,26 @@ function createBacktestCanvas(options) {
         });
         await loadDeployments();
       } catch (err) { fail(err); }
-    }));
+    });
+    // 키입력마다 다시 그리면 포커스를 잃는다(textField 주석) — 버튼과 이유 줄만 갱신한다.
+    function syncLimitsGate() {
+      const gate = deployLimitsGate(limits);
+      createBtn.disabled = !gate.ok;
+      gateLine.textContent = gate.ok ? '' : `아직 비어 있음 · ${gate.missing.join(' · ')}`;
+    }
+    const row = el('div', 'backtest-field-row');
+    DEPLOY_LIMIT_FIELDS.forEach(([key, label]) => {
+      row.appendChild(textField(label, limits[key], '', (v) => {
+        limits[key] = v;
+        syncLimitsGate();
+      }));
+    });
+    card.appendChild(row);
+    state.deployLimits = limits;
+
+    syncLimitsGate();
+    card.appendChild(gateLine);
+    card.appendChild(createBtn);
     return card;
   }
 
@@ -5886,6 +6009,11 @@ const __exports = {
   techniqueProjectName,
   signedPercent,
   diffCounts,
+  paramsDiffText,
+  deployLimitsGate,
+  DEPLOY_LIMIT_FIELDS,
+  DEPLOY_LIMITS_WARNING,
+  codeDiffText,
   parseYamlBlock,
   specOverridesFromYaml,
   METRIC_TILES,

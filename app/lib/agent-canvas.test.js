@@ -464,6 +464,95 @@ test('pauseRoutine 호출 후 상세 패널이 refresh()로 실제 상태를 다
   assert.equal(badge.textContent, '일시중지');
 });
 
+// ── 제어 결과 턴(Paper 보드 08 · 4330-1) — 누른 결과가 같은 방에 남는다 ──
+
+test('일시중지 성공은 성공 결과 한 건을 낸다 — 배지·리드·사실행 세 조각', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 'a', status: 'active', cooldown_s: 600 })];
+  const results = [];
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => routines,
+    pauseRoutine: async () => { routines[0].status = 'paused'; },
+    onControlResult: (turn) => results.push(turn),
+  });
+  canvas.mount();
+  await canvas.refresh();
+  await findByClass(container, 'agent-pause-btn')[0].dispatchEvent({ type: 'click' });
+  assert.equal(results.length, 1);
+  assert.equal(results[0].kind, 'success');
+  assert.equal(results[0].badge, '일시중지');
+  assert.equal(results[0].statusBadge, '완료');
+  assert.equal(results[0].lead, '일시중지됨');
+  assert.equal(results[0].fact, '005930 · 005930 감시 · 쿨다운 10분');
+  assert.deepEqual(results[0].chips, []);
+  assert.equal(results[0].serverChanged, true);
+});
+
+test('제어가 거절당하면 실패 결과에 다시 시도 칩이 붙고 코드 번호는 빠진다', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 'a', status: 'active' })];
+  const results = [];
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => routines,
+    pauseRoutine: async () => { throw new Error('이미 발화된 예약 — ROUTINE_409'); },
+    onControlResult: (turn) => results.push(turn),
+  });
+  canvas.mount();
+  await canvas.refresh();
+  await findByClass(container, 'agent-pause-btn')[0].dispatchEvent({ type: 'click' });
+  assert.equal(results.length, 1);
+  assert.equal(results[0].kind, 'fail');
+  assert.deepEqual(results[0].chips, ['다시 시도']);
+  assert.equal(results[0].lead, '이미 발화된 예약');
+  assert.doesNotMatch(results[0].lead, /[A-Z]{2,}_\d|code:/);
+  assert.equal(results[0].serverChanged, false);
+});
+
+test('실패 결과에는 다시 부를 손잡이가 함께 온다 — 같은 제어를 그대로 다시 부른다', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 'a', status: 'active' })];
+  const results = [];
+  const retries = [];
+  let calls = 0;
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => routines,
+    pauseRoutine: async () => {
+      calls += 1;
+      if (calls === 1) throw new Error('일시적으로 막힘');
+      routines[0].status = 'paused';
+    },
+    onControlResult: (turn, retry) => { results.push(turn); retries.push(retry); },
+  });
+  canvas.mount();
+  await canvas.refresh();
+  await findByClass(container, 'agent-pause-btn')[0].dispatchEvent({ type: 'click' });
+  assert.equal(results[0].kind, 'fail');
+  assert.equal(typeof retries[0], 'function');
+  // 「다시 시도」가 부르는 것이 바로 이 손잡이다 — 두 번째 호출이 실제로 나간다.
+  await retries[0]();
+  assert.equal(calls, 2);
+  assert.equal(results.length, 2);
+  assert.equal(results[1].kind, 'success');
+  assert.equal(results[1].badge, '일시중지');
+  assert.equal(routines[0].status, 'paused');
+  // 성공 결과에는 손잡이가 없다 — 다시 시도 칩 자체가 없다.
+  assert.equal(retries[1], undefined);
+});
+
+test('onControlResult 배선이 없으면 제어는 그대로 돌아간다 — 조용히 넘어간다', async () => {
+  const container = fakeNode('div');
+  const routines = [routine({ id: 'a', status: 'active' })];
+  let paused = null;
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => routines,
+    pauseRoutine: async (id) => { paused = id; routines[0].status = 'paused'; },
+  });
+  canvas.mount();
+  await canvas.refresh();
+  await findByClass(container, 'agent-pause-btn')[0].dispatchEvent({ type: 'click' });
+  assert.equal(paused, 'a');
+});
+
 test('최근 실행 로그는 fixture로 표시된다(ledger 라이브 연결은 10단계 몫)', async () => {
   const container = fakeNode('div');
   const routines = [routine({ id: 'a', status: 'active' })];

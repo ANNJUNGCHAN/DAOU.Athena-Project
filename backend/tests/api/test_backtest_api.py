@@ -247,6 +247,23 @@ def test_run_success_flow_computes_metrics_trades_and_equity(tmp_path: Path) -> 
         assert any(r["run_id"] == run_id and r["status"] == "done" for r in listed)
 
 
+def test_run_result_carries_params_and_version_source(tmp_path: Path) -> None:
+    """이력 비교의 두 칸(파라미터 diff · 코드 diff)이 읽는 재료다."""
+    rows = _synthetic_candle_rows(40)
+    with _client(tmp_path) as client:
+        _seed_candles(client, "005930", "day", True, rows)
+        yaml_text = _RUN_YAML_TEMPLATE.format(
+            stk_cd="005930", from_dt=rows[0].dt, to_dt=rows[-1].dt
+        )
+        run_id = client.post(f"{BASE}/runs", json={"yaml": yaml_text}).json()["run_id"]
+        _await_run(client, run_id)
+        result = client.get(f"{BASE}/runs/{run_id}").json()
+    assert result["params"] == {"fast": 3, "slow": 5}
+    assert result["strategy_version_id"]
+    assert result["version"] == 1
+    assert "signals" in result["source"] or result["source"]
+
+
 def test_run_returns_409_with_needed_pages_when_cache_insufficient(tmp_path: Path) -> None:
     with _client(tmp_path) as client:
         yaml_text = _RUN_YAML_TEMPLATE.format(
@@ -321,3 +338,25 @@ def test_get_job_404_for_unknown_job(tmp_path: Path) -> None:
     with _client(tmp_path) as client:
         response = client.get(f"{BASE}/jobs/does-not-exist")
     assert response.status_code == 404
+
+
+def test_cancel_job_404_for_unknown_job(tmp_path: Path) -> None:
+    with _client(tmp_path) as client:
+        response = client.delete(f"{BASE}/jobs/does-not-exist")
+    assert response.status_code == 404
+
+
+def test_cancel_job_reports_nothing_to_stop_for_finished_job(tmp_path: Path) -> None:
+    """끝난 잡을 멈추려는 것은 오류가 아니다 — 200 + `cancelled: false`."""
+    rows = _synthetic_candle_rows(40)
+    with _client(tmp_path) as client:
+        _seed_candles(client, "005930", "day", True, rows)
+        yaml_text = _RUN_YAML_TEMPLATE.format(
+            stk_cd="005930", from_dt=rows[0].dt, to_dt=rows[-1].dt
+        )
+        run_id = client.post(f"{BASE}/runs", json={"yaml": yaml_text}).json()["run_id"]
+        _await_run(client, run_id)
+
+        response = client.delete(f"{BASE}/jobs/{run_id}")
+    assert response.status_code == 200
+    assert response.json() == {"ok": True, "cancelled": False}
