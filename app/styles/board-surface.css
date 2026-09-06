@@ -191,6 +191,13 @@
     min-height: var(--bs-height, auto);
   }
 
+  /* 위에서 놓아준 flex-shrink는 **가로 축** 몫이다. 부모가 세로로 쌓으면 같은
+   * 선언이 높이를 줄여 「Paper 높이가 바닥」이라는 위 계약을 세로로만 뒤집는다 —
+   * 실측 1WOB-1 목록 본문(높이 520px 고정) 안의 행 20개가 내용 48px에서 36px로
+   * 눌려 13px씩 뚫렸다. 세로로 쌓인 상자는 원문 flex-shrink를 그대로 지킨다.
+   * 폭은 `--bs-width`와 위 `max-width: 100%`가 맡으므로 가로 계약은 안 바뀐다. */
+  [data-bs-hoisted][data-bs-col-item="true"] { flex-shrink: var(--bs-flex-shrink, 1); }
+
   /* left+고정폭 absolute 상자는 부모가 좁아져도 자기 left에 서 있어 그대로 가로
    * 넘침이 된다(실측 137X-2 Chart Tooltip Label left 748px: 2분할 303 · 4분할 387 ·
    * 최소 547px). left를 오른쪽 끝에 걸리는 값으로 죄면 상자는 Paper 폭을 유지한 채
@@ -203,8 +210,13 @@
    * 글자가 한 자씩 세로로 눕는다 — 실측 2SKU-1 "현금 비중 28.0%" 칸이 컨테이너
    * 1169px에서 265px → 74px. 한국어는 `overflow-wrap: anywhere`(Paper 원문)로
    * 한 글자까지 쪼개져서 자동 최소 크기가 칸을 못 지킨다. 바닥을 주면 부족분을
-   * 줄 전체가 나눠 진다(다른 칸은 이미 shrink가 풀려 있다). */
-  .bs-kpi-cell[data-bs-kpi-elastic="true"] { min-width: 160px; }
+   * 줄 전체가 나눠 진다(다른 칸은 이미 shrink가 풀려 있다).
+   *
+   * 바닥은 그 칸의 Paper 문면이 **한 줄로 서는 폭**이다. 상수 160px은 24px 값
+   * 한 줄을 못 담아(실측 3ODO-0·3OIM-0 "4,820,000원" 127px + 좌우 패딩 48px = 175px)
+   * 값이 두 줄로 접히고, 그만큼 칸이 Paper 78px을 넘겨 자란다. `fit-content`는
+   * max-content를 쓰되 남은 폭에서 잘리므로 좁은 단계에서 칸이 줄을 밀어내지 않는다. */
+  .bs-kpi-cell[data-bs-kpi-elastic="true"] { min-width: fit-content; }
 
   /* 의미 단위가 먼저 다음 줄로 이동하고, 단위 안의 글자는 쪼개지지 않는다.
    * 값 표시는 responsive owner 밖에서도 쓰이므로 반드시 owner 아래로 한정한다. */
