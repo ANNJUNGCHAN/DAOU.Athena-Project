@@ -48,3 +48,27 @@ test('핸들러가 던져도 복원은 죽지 않고 경고로 남는다; 등록
   assert.throws(() => ws.register('', later), TypeError);
   assert.throws(() => ws.register('agent', {}), TypeError);
 });
+
+test('flush()는 지연 보고를 들고 있는 모드만 흘리고, 던져도 나머지를 흘린다', () => {
+  const warned = [];
+  const flushed = [];
+  const ws = createSessionWorkspace({ warn: (m) => warned.push(m) });
+  ws.register('graph', { restore: () => {}, flush: () => { throw new Error('boom'); } });
+  ws.register('backtest', { restore: () => {}, flush: () => flushed.push('backtest') });
+  ws.register('agent', { restore: () => {} }); // 지연 보고가 없는 모드는 그냥 넘어간다
+  assert.doesNotThrow(() => ws.flush());
+  assert.deepEqual(flushed, ['backtest']);
+  assert.match(warned[0], /flush\(graph\) failed — boom/);
+});
+
+test('clear()는 앞 세션의 것을 들고 있는 모드만 거두고, 던져도 나머지를 거둔다', () => {
+  const warned = [];
+  const cleared = [];
+  const ws = createSessionWorkspace({ warn: (m) => warned.push(m) });
+  ws.register('graph', { restore: () => {}, clear: () => { throw new Error('boom'); } });
+  ws.register('backtest', { restore: () => {}, clear: () => cleared.push('backtest') });
+  ws.register('agent', { restore: () => {} }); // 거둘 것이 없는 모드는 그냥 넘어간다
+  assert.doesNotThrow(() => ws.clear());
+  assert.deepEqual(cleared, ['backtest']);
+  assert.match(warned[0], /clear\(graph\) failed — boom/);
+});
