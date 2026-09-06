@@ -1300,10 +1300,29 @@
         searchRows.push(btn);
       }
     }
-    if (!result.total) $searchPanel.appendChild(el('div', 'sidebar-search-empty', '검색 결과 없음'));
-    const foot = el('div', 'sidebar-search-foot');
-    foot.append(el('span', 'sidebar-search-hint', result.hint), el('span', 'sidebar-search-count', `${result.total}건`));
-    $searchPanel.appendChild(foot);
+    // Paper 2V27-1은 이 패널을 두 판으로 그렸다 — 결과판과 빈 결과판이다. 빈 판에는
+    // 발치의 키보드 안내·총 건수가 없다: 넘길 줄이 없을 때 할 말이 아니고, 대신
+    // 「결과 없음」·안내문·새 대화 문 셋이 선다.
+    if (result.total) {
+      const foot = el('div', 'sidebar-search-foot');
+      foot.append(el('span', 'sidebar-search-hint', result.hint), el('span', 'sidebar-search-count', `${result.total}건`));
+      $searchPanel.appendChild(foot);
+    } else {
+      $searchPanel.appendChild(el('div', 'sidebar-search-empty', '결과 없음'));
+      $searchPanel.appendChild(el('div', 'sidebar-search-empty-note', '아직 이 주제로 나눈 대화가 없습니다'));
+      const ask = el('button', 'sidebar-search-empty-cta', '새 대화로 물어보기');
+      ask.type = 'button';
+      ask.addEventListener('click', () => {
+        // 새 대화로 넘어가면 검색은 끝난 일이다 — 질의를 남기면 목록이 계속 걸러진다.
+        searchQuery = '';
+        $searchInput.value = '';
+        $searchInput.hidden = true;
+        closeSearchPanel();
+        renderList();
+        void startNewConversation(currentProjectId);
+      });
+      $searchPanel.appendChild(ask);
+    }
     $searchPanel.hidden = false;
     if (searchRows.length) setSearchActive(0);
   }
