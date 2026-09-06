@@ -4,7 +4,7 @@
 //
 // 매니페스트 role==="screen" 103장이 결국 전부 여기 있어야 한다. 없는 보드는 미구현 실패다 —
 // 「도달 절차가 없는 보드는 실패한다」가 게이트 2의 핵심이라, 표가 곧 남은 작업 목록이 된다.
-// 지금은 41장(부팅 5 + 온보딩 3 + 인증 3 + 에이전트 4 + 알림 파생 방·코드 알람 4 + 화면 4
+// 지금은 40장(부팅 5 + 온보딩 3 + 인증 3 + 에이전트 4 + 알림 파생 방·코드 알람 3 + 화면 4
 // + 셸·그래프 2 + 그래프 5 + 대화·계정 2 + 모드·빈 화면 2 + 창·대화 턴·탭 3 + 사이드바 4)이고,
 // 래칫(§4.5)이 잠근 뒤 저작이 이어진다.
 //
@@ -456,10 +456,10 @@ const WATCH_NODES_FIRST = Object.freeze([
   },
 ]);
 
-// 보드 11의 노드 넷 — 고침이 두 칸(평균 일수 · 배수 임계)을 건드려서
-// 「방금 바뀜」이 둘이다(원장 45JZ-1 「바뀐 칸 2개에 「방금 바뀜」」,
-// 영수증 45OH-1 「바뀐 칸: 5일 거래량 평균 · 배수 비교」).
-// 바뀐 칸의 들어감은 고침 전후를 화살표로 같이 그린다(45KU-1 · 45LD-1).
+// 고친 뒤의 노드 넷(보드 11이 그린 상태) — 두 칸(평균 일수 · 배수 임계)이
+// 바뀌어 「방금 바뀜」이 둘이고, 들어감은 고침 전후를 화살표로 같이 그린다
+// (45KU-1 · 45LD-1). 보드 11에는 라우트가 없다(아래 44HD-1 자리 참고) —
+// 이 값은 보드 12의 정착 상태를 여기서 파생시키려고 남겨 둔다.
 const WATCH_NODES_AFTER_FIX = Object.freeze([
   WATCH_NODES_FIRST[0],
   {
@@ -539,8 +539,25 @@ function paperCodeDetail(kind, nodes) {
   }
   return Object.freeze({ ok: true, data: body });
 }
+// 보드 12의 「울린 기록 · 최근」 세 줄 — 울린 둘과 억제된 하나다(45QT-1·45QY-1·
+// 45R3-1). 울린 줄에만 「채팅에서 열기 ↗」가 붙는 규칙이 이 셋으로 갈린다.
+// 줄의 차례는 Paper가 울린 것 먼저 그렸지만 앱은 시각 내림차순이라 어긋난다 —
+// 라우트는 차례를 재지 않는다. 날짜·배수·주수는 전부 값이라 phrases에는 없다.
+const CODE_RUNS = Object.freeze({
+  ok: true,
+  data: {
+    runs: [
+      { ts: '2026-08-26T15:02:00', verdict: 'fired', reason: '울림 — 2.1배 · 2,730만주' },
+      { ts: '2026-08-12T10:41:00', verdict: 'fired', reason: '울림 — 2.3배 · 2,980만주' },
+      { ts: '2026-08-27T09:00:00', verdict: 'suppressed', reason: '억제 — 쿨다운 1일 남음 · 2.0배' },
+    ],
+    avg_duration_ms: 820,
+    opened_rate: 0.71,
+    replied_count: 9,
+  },
+});
+
 const CODE_DETAIL_FIRST_CHECK = paperCodeDetail('check', WATCH_NODES_FIRST);
-const CODE_DETAIL_AFTER_FIX = paperCodeDetail('check', WATCH_NODES_AFTER_FIX);
 const CODE_DETAIL_ACTIVE = paperCodeDetail('run', WATCH_NODES_LIVE);
 
 const ROUTES = Object.freeze([
@@ -925,50 +942,41 @@ const ROUTES = Object.freeze([
       { do: 'settle' },
     ],
     root: '#agentCanvas',
-    // 칸 제목·값·함수명은 전부 봉투가 주는 값이다. 남는 것은 칸 문법의 두 라벨과
-    // 상세가 늘 그리는 설정 두 줄, 그리고 고치는 유일한 문이다.
-    // Paper의 승인 패널(「승인」·「이 알람 승인」·「취소」)은 앱 캔버스에 없다 —
-    // 앱은 그 게이트를 채팅 카드에만 두었다. 어긋난 자리라 아무 것도 안 적는다.
-    phrases: ['들어감', '나옴', '고치기 — 말로', '확인 주기', '쿨다운'],
+    // 칸 제목·값·함수명은 전부 봉투가 주는 값이다. 남는 것은 칸 문법의 두 라벨,
+    // 승인 패널의 문과 게이트 고지, 고치는 문, 설정 두 줄이다.
+    phrases: [
+      '들어감', '나옴', '이 알람 승인',
+      '승인 전까지 실행 없음 · 채팅 칩으로도, 이 버튼으로도 — 같은 게이트',
+      '고치기 — 말로', '확인 주기', '쿨다운',
+    ],
     // Paper 보드 10의 노드 행은 네 칸이고, 아직 아무 칸도 고르지 않았으며
-    // (칩 없음) 첫 검사라 바뀐 칸도 없다.
+    // (칩 없음) 첫 검사라 바뀐 칸도 없다. 승인 패널의 문은 둘이다
+    // ([이 알람 승인][취소] — 「고치기 — 말로」는 위 상태 제어 행에 있다).
     structure: [
       { what: 'count', selector: '.agent-node-card', equals: 4 },
       { what: 'absent', selector: '.agent-node-chip' },
       { what: 'absent', selector: '.agent-node-badge' },
+      { what: 'count', selector: '.agent-code-approve-row button', equals: 2 },
     ],
   },
-  {
-    board: '44HD-1', // 11 · 에이전트 — 노드에서 '이상해요' → AI가 고치고 다시 검사
-    window: 'shell',
-    reach: [
-      { do: 'ipc-fixture', channel: 'athena:routines-list', data: CODE_WATCH_DRAFT },
-      { do: 'ipc-fixture', channel: 'athena:routine-detail', data: CODE_DETAIL_AFTER_FIX },
-      { do: 'mode', view: 'agent' },
-      { do: 'wait', ms: 700 },
-      { do: 'click', selector: '.agent-row' },
-      { do: 'wait', ms: 400 },
-      // 보드 11이 그린 것은 「배수 비교」 칸을 고른 상태다 — 칩 두 개는 고른
-      // 칸에만 붙는다(agent-canvas.js makeNodeCard).
-      { do: 'click', selector: '.agent-node-cards .agent-node-card:nth-child(3)' },
-      { do: 'settle' },
-    ],
-    root: '#agentCanvas',
-    phrases: ['들어감', '나옴', '방금 바뀜', '이상해요', '물어볼게요'],
-    // 고친 칸 둘에 「방금 바뀜」이 붙고, 고른 칸 하나에만 칩 두 개가 붙는다.
-    structure: [
-      { what: 'count', selector: '.agent-node-card', equals: 4 },
-      { what: 'count', selector: '.agent-node-badge', equals: 2 },
-      { what: 'count', selector: '.agent-node-chip', equals: 2 },
-    ],
-  },
+  // 44HD-1(11 · 노드에서 '이상해요' → AI가 고치고 다시 검사)에는 라우트를 두지
+  // 않는다. 노드 행(「방금 바뀜」 둘 · 칩 둘)은 앱에 있지만, 이 보드를 이 보드이게
+  // 하는 나머지 절반이 통째로 없다 — 「순환 · 물어봄 → 고침 → 검사 → 다시 그림」
+  // 띠, 「다시 검사 · 지난 30일 · 자동 · 9초」 재검사 패널, 고치기 전후를 겹쳐
+  // 그리는 발화 비교, 「한 바퀴 영수증 · 2번째 고침」과 「되돌리기」·「지난 고침
+  // 1건」. 앱 전체 grep에서 순환·영수증·되돌리기·지난 고침은 0건이고, 백엔드에도
+  // 근거가 없다(routines/models.py에 이전 버전 보관도 롤백 전이도 없고,
+  // ALLOWED_TRANSITIONS는 draft/active/paused/cancelled뿐이다). 노드 행만으로
+  // 초록을 만들면 보드 10과 같은 렌더러에 클릭 하나를 얹은 것이 되어, 앱이 이
+  // 보드를 위해 만들어야 할 것을 아무 것도 못 박지 못한 채 남은 작업 목록에서만
+  // 사라진다 — 43WD-1의 「만드는 중」 단계를 뺀 것과 같은 이유다.
   {
     board: '44RV-1', // 12 · 에이전트 — 활성 코드 알람 · 상세·발화 이력
     window: 'shell',
     reach: [
       { do: 'ipc-fixture', channel: 'athena:routines-list', data: CODE_WATCH_ACTIVE },
       { do: 'ipc-fixture', channel: 'athena:routine-detail', data: CODE_DETAIL_ACTIVE },
-      { do: 'ipc-fixture', channel: 'athena:routine-runs', data: ROUTINE_RUNS },
+      { do: 'ipc-fixture', channel: 'athena:routine-runs', data: CODE_RUNS },
       { do: 'mode', view: 'agent' },
       { do: 'wait', ms: 700 },
       { do: 'click', selector: '.agent-row' },
@@ -976,15 +984,18 @@ const ROUTES = Object.freeze([
       { do: 'settle' },
     ],
     root: '#agentCanvas',
-    // 「울린 기록 · 최근」·「채팅에서 열기 ↗」는 Paper가 발화 줄마다 그린 것인데
-    // 앱은 머리에 「울린 기록」만 두고 줄에는 문을 안 달았다 — 어긋난 자리라 뺀다.
-    phrases: ['코드 감시', '일시중지', '취소', '고치기 — 말로', '전체 이력 보기 →', '설정'],
+    phrases: [
+      '코드 감시', '일시중지', '취소', '고치기 — 말로',
+      '울린 기록 · 최근', '채팅에서 열기 ↗', '전체 이력 보기 →',
+    ],
     // Paper 보드 12의 상태 제어 행은 [일시중지][취소][고치기 — 말로] 셋이고,
-    // 켜진 알람에는 초안의 「검사」가 없다.
+    // 켜진 알람에는 초안의 「검사」가 없다. 설정 요약은 확인 주기·쿨다운·만료
+    // 세 줄이다 — 값(「1일」·「2026-10-03」)은 봉투가 주므로 개수로만 잰다.
     structure: [
       { what: 'count', selector: '.agent-code-controls button', equals: 3 },
       { what: 'absent', selector: '.agent-code-check-btn' },
       { what: 'count', selector: '.agent-view-tab', equals: 4 },
+      { what: 'count', selector: '.agent-detail-field', equals: 3 },
     ],
   },
 
