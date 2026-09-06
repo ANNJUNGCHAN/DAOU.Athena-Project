@@ -21,7 +21,8 @@
     "kind": "expand",
     "parent_board": "31II-0",
     "control": "VI 발동 전체 12건",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "3TK0-0": "header",

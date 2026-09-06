@@ -24,7 +24,8 @@
     "kind": "tab",
     "parent_board": "135M-2",
     "control": "금현물 · 매수",
-    "control_text": "금현물"
+    "control_text": "금현물",
+    "control_node": null
   },
   "regions": {
     "2TR9-1": "header",

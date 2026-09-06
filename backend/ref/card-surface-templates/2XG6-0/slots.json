@@ -22,7 +22,8 @@
     "kind": "sort",
     "parent_board": "13K0-2",
     "control": "전일 거래량",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "2XK4-0": "header",

@@ -21,7 +21,8 @@
     "kind": "sort",
     "parent_board": "2VDA-0",
     "control": "거래량갱신",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "3LVY-0": "header",

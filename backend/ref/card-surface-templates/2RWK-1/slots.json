@@ -27,7 +27,8 @@
     "kind": "tab",
     "parent_board": "2QFO-2",
     "control": "신용·대차",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "2S2A-1": "header",

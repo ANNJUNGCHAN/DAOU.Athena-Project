@@ -22,7 +22,8 @@
     "kind": "sort",
     "parent_board": "2V71-0",
     "control": "신용비율 높은 순",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "2YX8-0": "header",

@@ -7,7 +7,7 @@
     "node_id": "14NW-2",
     "jsx_sha256": "2031bb4597c4fb69c9bca0e41200766b68cfffd251775a8c6f44cc447b98e90e"
   },
-  "html_sha256": "35454ef9291802dd30e52c1d12d6102d5c6def788c5e46c032032fbd044fc9f2",
+  "html_sha256": "8b3701778949e9fcfb7b28ea17daa630ff5569dfbcf4f6d4aa05591b017d6e55",
   "width_px": 1360.0,
   "height_px": 1040.0,
   "artboard_px": [
@@ -39,7 +39,8 @@
     "kind": "default",
     "parent_board": null,
     "control": null,
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "14NY-2": "header",
@@ -101,10 +102,7 @@
         "control": "순위",
         "kind": "tab",
         "boards": [
-          "2VDA-0",
-          "2VIN-0",
-          "2VO0-0",
-          "32XM-0"
+          "2VDA-0"
         ],
         "node_id": "2WFB-0",
         "how": "exact"

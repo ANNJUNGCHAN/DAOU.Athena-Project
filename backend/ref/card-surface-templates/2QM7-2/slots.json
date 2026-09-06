@@ -36,7 +36,8 @@
     "kind": "tab",
     "parent_board": "2QFO-2",
     "control": "거래원",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "2QM9-2": "header",

@@ -8,7 +8,8 @@
         "kind": "default",
         "parent_board": null,
         "control": null,
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:00",
@@ -109,7 +110,8 @@
         "kind": "default",
         "parent_board": null,
         "control": null,
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:kt10000"
@@ -193,7 +195,8 @@
         "kind": "default",
         "parent_board": null,
         "control": null,
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:0g",
@@ -259,10 +262,7 @@
             "control": "순위",
             "kind": "tab",
             "boards": [
-              "2VDA-0",
-              "2VIN-0",
-              "2VO0-0",
-              "32XM-0"
+              "2VDA-0"
             ],
             "node_id": "2WFB-0",
             "how": "exact"
@@ -297,7 +297,7 @@
         ],
         "unresolved": []
       },
-      "html_sha256": "35454ef9291802dd30e52c1d12d6102d5c6def788c5e46c032032fbd044fc9f2"
+      "html_sha256": "8b3701778949e9fcfb7b28ea17daa630ff5569dfbcf4f6d4aa05591b017d6e55"
     },
     {
       "board_id": "13BC-2",
@@ -307,7 +307,8 @@
         "kind": "default",
         "parent_board": null,
         "control": null,
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:0C",
@@ -392,7 +393,8 @@
         "kind": "default",
         "parent_board": null,
         "control": null,
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka00198",
@@ -560,7 +562,8 @@
         "kind": "default",
         "parent_board": null,
         "control": null,
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka20002"
@@ -598,7 +601,8 @@
         "kind": "default",
         "parent_board": null,
         "control": null,
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10172"
@@ -636,7 +640,8 @@
         "kind": "default",
         "parent_board": null,
         "control": null,
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:0G",
@@ -682,7 +687,8 @@
         "kind": "default",
         "parent_board": null,
         "control": null,
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:0G",
@@ -751,7 +757,8 @@
         "kind": "default",
         "parent_board": null,
         "control": null,
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:1h"
@@ -789,7 +796,8 @@
         "kind": "default",
         "parent_board": null,
         "control": null,
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:0D",
@@ -845,7 +853,8 @@
         "kind": "default",
         "parent_board": null,
         "control": null,
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [],
       "counts": {
@@ -881,7 +890,8 @@
         "kind": "default",
         "parent_board": null,
         "control": null,
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:0F",
@@ -926,7 +936,8 @@
         "parent_board": null,
         "control": "투자자별",
         "control_text": "투자자별",
-        "rail_owner": true
+        "rail_owner": true,
+        "control_node": null
       },
       "operation_refs": [
         "base:0w",
@@ -1024,7 +1035,8 @@
         "kind": "tab",
         "parent_board": "2QFO-2",
         "control": "거래원",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:0F",
@@ -1077,7 +1089,8 @@
         "kind": "tab",
         "parent_board": "13BC-2",
         "control": "시간외",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:0D",
@@ -1134,7 +1147,8 @@
         "kind": "tab",
         "parent_board": "13BC-2",
         "control": "금현물 · 5단",
-        "control_text": "금현물"
+        "control_text": "금현물",
+        "control_node": null
       },
       "operation_refs": [
         "base:ka50101"
@@ -1172,7 +1186,8 @@
         "kind": "tab",
         "parent_board": "137X-2",
         "control": "현재시세",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:0A",
@@ -1231,7 +1246,8 @@
         "kind": "tab",
         "parent_board": "137X-2",
         "control": "기업정보",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10005",
@@ -1277,7 +1293,8 @@
         "kind": "tab",
         "parent_board": "137X-2",
         "control": "금현물",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:0I",
@@ -1327,7 +1344,8 @@
         "kind": "tab",
         "parent_board": "2QFO-2",
         "control": "프로그램",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:0w",
@@ -1371,7 +1389,8 @@
         "kind": "tab",
         "parent_board": "2QFO-2",
         "control": "신용·대차",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10013",
@@ -1415,7 +1434,8 @@
         "kind": "tab",
         "parent_board": "2QFO-2",
         "control": "종목 동향",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10008",
@@ -1463,7 +1483,8 @@
         "kind": "tab",
         "parent_board": "133H-2",
         "control": "보유종목",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:00",
@@ -1523,7 +1544,8 @@
         "kind": "tab",
         "parent_board": "133H-2",
         "control": "예수금·결제",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka01690",
@@ -1649,7 +1671,8 @@
         "kind": "tab",
         "parent_board": "133H-2",
         "control": "손익·성과",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:00",
@@ -1714,7 +1737,8 @@
         "kind": "tab",
         "parent_board": "133H-2",
         "control": "주문·체결",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:00",
@@ -1764,7 +1788,8 @@
         "kind": "tab",
         "parent_board": "135M-2",
         "control": "현금 매도",
-        "control_text": "매도"
+        "control_text": "매도",
+        "control_node": null
       },
       "operation_refs": [
         "base:kt10001"
@@ -1802,7 +1827,8 @@
         "kind": "tab",
         "parent_board": "135M-2",
         "control": "정정",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:kt10002",
@@ -1842,7 +1868,8 @@
         "kind": "tab",
         "parent_board": "135M-2",
         "control": "취소",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:kt10003",
@@ -1882,7 +1909,8 @@
         "kind": "tab",
         "parent_board": "135M-2",
         "control": "신용 · 매수",
-        "control_text": "신용"
+        "control_text": "신용",
+        "control_node": null
       },
       "operation_refs": [
         "base:kt10006",
@@ -1921,7 +1949,8 @@
         "kind": "tab",
         "parent_board": "135M-2",
         "control": "금현물 · 매수",
-        "control_text": "금현물"
+        "control_text": "금현물",
+        "control_node": null
       },
       "operation_refs": [
         "base:kt50000",
@@ -1962,7 +1991,8 @@
         "kind": "tab",
         "parent_board": "13BC-2",
         "control": "정규장 · 5단",
-        "control_text": "5단"
+        "control_text": "5단",
+        "control_node": null
       },
       "operation_refs": [
         "detail:ka10004:after_hours_totals",
@@ -2001,7 +2031,8 @@
         "kind": "tab",
         "parent_board": "13K0-2",
         "control": "업종",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:0J",
@@ -2064,7 +2095,8 @@
         "kind": "tab",
         "parent_board": "13K0-2",
         "control": "관심종목 시세 보드",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka01300",
@@ -2123,7 +2155,8 @@
         "kind": "tab",
         "parent_board": "13K0-2",
         "control": "테마 등락·확산 탐색",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka90001",
@@ -2162,7 +2195,8 @@
         "kind": "tab",
         "parent_board": "13K0-2",
         "control": "시장·VI",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:0s",
@@ -2201,7 +2235,8 @@
         "kind": "tab",
         "parent_board": "13K0-2",
         "control": "조건검색",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10171",
@@ -2242,7 +2277,8 @@
         "kind": "tab",
         "parent_board": "2QFO-2",
         "control": "순위",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10008",
@@ -2368,7 +2404,8 @@
         "kind": "tab",
         "parent_board": "137X-2",
         "control": "순위",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10016"
@@ -2390,10 +2427,28 @@
         "bs_paired": 170,
         "bs_leaf": 5,
         "bs_kpi_cell": 5,
-        "state_control_marks": 9
+        "state_control_marks": 11
       },
       "state_controls": {
         "marks": [
+          {
+            "control": "ELW",
+            "kind": "tab",
+            "boards": [
+              "2VO0-0"
+            ],
+            "node_id": "3HML-0",
+            "how": "node"
+          },
+          {
+            "control": "ETF",
+            "kind": "tab",
+            "boards": [
+              "2VIN-0"
+            ],
+            "node_id": "3HMJ-0",
+            "how": "node"
+          },
           {
             "control": "VI 발동",
             "kind": "sort",
@@ -2478,7 +2533,7 @@
         ],
         "unresolved": []
       },
-      "html_sha256": "bb56ee5133c786bdbe60621afc49c451e27c779ec39c9ddcfc44abf2e16cfc08"
+      "html_sha256": "a60ab61a1b48b860d684968a81ddeba85393325f9f5f7a4822567178a7b82005"
     },
     {
       "board_id": "2VIN-0",
@@ -2486,8 +2541,9 @@
       "name": "CC-03 / R01-T5 · 순위 — ETF 전체시세",
       "state": {
         "kind": "tab",
-        "parent_board": "137X-2",
-        "control": "순위",
+        "parent_board": "2VDA-0",
+        "control": "ETF",
+        "control_node": "3HMJ-0",
         "control_text": null
       },
       "operation_refs": [
@@ -2535,8 +2591,9 @@
       "name": "CC-03 / R01-T6 · 순위 — ELW 순위",
       "state": {
         "kind": "tab",
-        "parent_board": "137X-2",
-        "control": "순위",
+        "parent_board": "2VDA-0",
+        "control": "ELW",
+        "control_node": "3HML-0",
         "control_text": null
       },
       "operation_refs": [
@@ -2622,7 +2679,8 @@
         "kind": "sort",
         "parent_board": "2VIN-0",
         "control": "3달 수익률 높은 순",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka40001",
@@ -2662,7 +2720,8 @@
         "kind": "sort",
         "parent_board": "13K0-2",
         "control": "당일 거래량",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10030"
@@ -2700,7 +2759,8 @@
         "kind": "sort",
         "parent_board": "2VO0-0",
         "control": "등락률",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka30001",
@@ -2742,7 +2802,8 @@
         "kind": "sort",
         "parent_board": "13K0-2",
         "control": "전일 거래량",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10031",
@@ -2781,7 +2842,8 @@
         "kind": "sort",
         "parent_board": "13K0-2",
         "control": "등락률",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10027"
@@ -2819,7 +2881,8 @@
         "kind": "sort",
         "parent_board": "13K0-2",
         "control": "예상체결 등락률",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10029"
@@ -2857,7 +2920,8 @@
         "kind": "sort",
         "parent_board": "13K0-2",
         "control": "호가잔량 상위",
-        "control_text": "호가잔량"
+        "control_text": "호가잔량",
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10020"
@@ -2895,7 +2959,8 @@
         "kind": "sort",
         "parent_board": "2VO0-0",
         "control": "근접률",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka30001",
@@ -2937,7 +3002,8 @@
         "kind": "sort",
         "parent_board": "2VO0-0",
         "control": "가격급등락",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka30001",
@@ -2979,7 +3045,8 @@
         "kind": "sort",
         "parent_board": "13K0-2",
         "control": "호가잔량 급증",
-        "control_text": "잔량 급증"
+        "control_text": "잔량 급증",
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10021"
@@ -3017,7 +3084,8 @@
         "kind": "sort",
         "parent_board": "13K0-2",
         "control": "잔량률 급증",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10022"
@@ -3055,7 +3123,8 @@
         "kind": "sort",
         "parent_board": "13K0-2",
         "control": "거래량 급증",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10023"
@@ -3093,7 +3162,8 @@
         "kind": "sort",
         "parent_board": "13K0-2",
         "control": "시간외 등락률",
-        "control_text": "시간외 단일가"
+        "control_text": "시간외 단일가",
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10098"
@@ -3131,7 +3201,8 @@
         "kind": "sort",
         "parent_board": "2V71-0",
         "control": "신용비율 높은 순",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10013",
@@ -3170,7 +3241,8 @@
         "kind": "sort",
         "parent_board": "2VDA-0",
         "control": "상하한가",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10017"
@@ -3208,7 +3280,8 @@
         "kind": "sort",
         "parent_board": "2VO0-0",
         "control": "거래원별 순매매",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka30002"
@@ -3256,7 +3329,8 @@
         "kind": "sort",
         "parent_board": "2V71-0",
         "control": "대차잔고 많은 순",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10068",
@@ -3297,7 +3371,8 @@
         "kind": "sort",
         "parent_board": "2VDA-0",
         "control": "고저가근접",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10018"
@@ -3335,7 +3410,8 @@
         "kind": "sort",
         "parent_board": "2VO0-0",
         "control": "조건검색",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka30005"
@@ -3373,7 +3449,8 @@
         "kind": "sort",
         "parent_board": "2V71-0",
         "control": "한도소진율 증가",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10008",
@@ -3414,7 +3491,8 @@
         "kind": "sort",
         "parent_board": "2VDA-0",
         "control": "가격급등락",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10019"
@@ -3452,7 +3530,8 @@
         "kind": "sort",
         "parent_board": "2V71-0",
         "control": "장중 투자자 상위",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10058",
@@ -3492,7 +3571,8 @@
         "kind": "sort",
         "parent_board": "2VDA-0",
         "control": "거래량갱신",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10024"
@@ -3530,7 +3610,8 @@
         "kind": "sort",
         "parent_board": "2V71-0",
         "control": "외국인·기관 상위",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10131",
@@ -3569,7 +3650,8 @@
         "kind": "sort",
         "parent_board": "2VDA-0",
         "control": "매물대집중",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10025"
@@ -3607,7 +3689,8 @@
         "kind": "sort",
         "parent_board": "2V71-0",
         "control": "증권사별 상위",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10037",
@@ -3648,7 +3731,8 @@
         "kind": "sort",
         "parent_board": "2VDA-0",
         "control": "고저 PER",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10026",
@@ -3687,7 +3771,8 @@
         "kind": "sort",
         "parent_board": "2VDA-0",
         "control": "시가대비 등락",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10026",
@@ -3726,7 +3811,8 @@
         "kind": "sort",
         "parent_board": "2V71-0",
         "control": "동일순매매",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10062"
@@ -3764,7 +3850,8 @@
         "kind": "sort",
         "parent_board": "2VDA-0",
         "control": "VI 발동",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10054"
@@ -3812,7 +3899,8 @@
         "kind": "sort",
         "parent_board": "2V71-0",
         "control": "신용융자 가능",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:kt20016",
@@ -3851,7 +3939,8 @@
         "kind": "sort",
         "parent_board": "2VDA-0",
         "control": "당일/전일 비율순",
-        "control_text": "당일·전일 체결량"
+        "control_text": "당일·전일 체결량",
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10055"
@@ -3889,7 +3978,8 @@
         "kind": "tab",
         "parent_board": "137X-2",
         "control": "차트",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka20004",
@@ -3929,10 +4019,11 @@
       "card_id": "CC-03",
       "name": "CC-03 / R01-T8 · 순위 — 신주인수권 전체",
       "state": {
-        "kind": "tab",
-        "parent_board": "137X-2",
-        "control": "순위",
-        "control_text": null
+        "kind": "default",
+        "parent_board": null,
+        "control": null,
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10011"
@@ -3970,7 +4061,8 @@
         "kind": "expand",
         "parent_board": "2TZN-1",
         "control": "업종 목록 펼침",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:0J",
@@ -4009,7 +4101,8 @@
         "kind": "expand",
         "parent_board": "2U5L-1",
         "control": "삼성전자 행 펼침",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10095"
@@ -4047,7 +4140,8 @@
         "kind": "expand",
         "parent_board": "137X-2",
         "control": "투자자 12주체",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10060",
@@ -4086,7 +4180,8 @@
         "kind": "expand",
         "parent_board": "15P5-2",
         "control": "ELW 바스켓·만기평가",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "detail:ka30012:administration",
@@ -4127,7 +4222,8 @@
         "kind": "expand",
         "parent_board": "2U5L-1",
         "control": "ELW 행 펼침",
-        "control_text": "ELW 관찰"
+        "control_text": "ELW 관찰",
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10095"
@@ -4165,7 +4261,8 @@
         "kind": "expand",
         "parent_board": "2R3M-1",
         "control": "분봉 시세",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10005",
@@ -4204,7 +4301,8 @@
         "kind": "expand",
         "parent_board": "2SKU-1",
         "control": "증거금·보증금 구간별",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:00",
@@ -4255,7 +4353,8 @@
         "kind": "expand",
         "parent_board": "2SKU-1",
         "control": "증거금 재원·담보 상세",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:00",
@@ -4309,7 +4408,8 @@
         "kind": "expand",
         "parent_board": "2QRP-1",
         "control": "시간외 단일가 단계별 낱값",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "detail:ka10087:buy_bid_changes",
@@ -4348,7 +4448,8 @@
         "kind": "expand",
         "parent_board": "13BC-2",
         "control": "단계별 낱값·거래소별",
-        "control_text": "호가 잔량"
+        "control_text": "호가 잔량",
+        "control_node": null
       },
       "operation_refs": [
         "base:0D"
@@ -4386,7 +4487,8 @@
         "kind": "expand",
         "parent_board": "2SRV-1",
         "control": "이달 기초·기말 구성",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:04",
@@ -4435,7 +4537,8 @@
         "kind": "expand",
         "parent_board": "2SKU-1",
         "control": "거래내역 상세",
-        "control_text": "수표 입금·증권 입고·증권 출고"
+        "control_text": "수표 입금·증권 입고·증권 출고",
+        "control_node": null
       },
       "operation_refs": [
         "base:00",
@@ -4481,7 +4584,8 @@
         "kind": "expand",
         "parent_board": "2SKU-1",
         "control": "D+2 정산 후 계좌",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "detail:kt00017:d2_account_position"
@@ -4519,7 +4623,8 @@
         "kind": "expand",
         "parent_board": "1JPU-0",
         "control": "단계별 낱값",
-        "control_text": "매도·매수 총잔량"
+        "control_text": "매도·매수 총잔량",
+        "control_node": null
       },
       "operation_refs": [
         "detail:ka10004:buy_bid_changes",
@@ -4561,7 +4666,8 @@
         "kind": "expand",
         "parent_board": "2SKU-1",
         "control": "예수금 통화별·특수예수금",
-        "control_text": "외화예수금"
+        "control_text": "외화예수금",
+        "control_node": null
       },
       "operation_refs": [
         "base:kt50021",
@@ -4604,7 +4710,8 @@
         "kind": "expand",
         "parent_board": "133H-2",
         "control": "금현물 잔고·거래내역",
-        "control_text": "금현물"
+        "control_text": "금현물",
+        "control_node": null
       },
       "operation_refs": [
         "detail:kt50020:gold_account_summary",
@@ -4655,7 +4762,8 @@
         "kind": "expand",
         "parent_board": "3ODO-0",
         "control": "금현물 주문·체결",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:kt50030",
@@ -4695,7 +4803,8 @@
         "kind": "expand",
         "parent_board": "31II-0",
         "control": "VI 발동 전체 12건",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka10054"
@@ -4733,7 +4842,8 @@
         "kind": "expand",
         "parent_board": "2Z49-0",
         "control": "ELW 거래원별 10창구 전체",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:ka30002"
@@ -4771,7 +4881,8 @@
         "kind": "expand",
         "parent_board": "2SKU-1",
         "control": "부채·미수·연체 상세",
-        "control_text": null
+        "control_text": null,
+        "control_node": null
       },
       "operation_refs": [
         "base:04",
@@ -4814,7 +4925,7 @@
     }
   ],
   "state_controls": {
-    "resolved": 83,
+    "resolved": 82,
     "unresolved_count": 0,
     "unresolved": []
   }

@@ -5,9 +5,9 @@
   "width": 1440,
   "height": 904,
   "state": {
-    "kind": "tab",
-    "parent_board": "137X-2",
-    "control": "순위"
+    "kind": "default",
+    "parent_board": null,
+    "control": null
   },
   "saved_at": "2026-09-02T20:05:00+09:00"
 }

@@ -31,7 +31,8 @@
     "kind": "tab",
     "parent_board": "2QFO-2",
     "control": "종목 동향",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "2SA4-1": "header",
