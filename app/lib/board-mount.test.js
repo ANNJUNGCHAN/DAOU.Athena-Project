@@ -868,23 +868,50 @@ test('양쪽 inset이 이미 있거나 폭이 없는 absolute 상자는 표시�
   }
 });
 
-test('primary가 직접 이고 있는 양끝 가로 줄만 XS 접기 표시를 받는다', () => {
-  const childOf = (parentClass, inline) => {
+test('primary가 세로로 쌓아 놓은 양끝 가로 줄만 XS 접기 표시를 받는다', () => {
+  const ancestor = (className, inline) => ({
+    classList: { contains: (name) => name === className },
+    style: styleStub(inline || {}),
+  });
+  const under = (chain, inline) => {
     const row = regionStub('', inline);
-    row.parentElement = { classList: { contains: (name) => name === parentClass } };
+    let child = row;
+    for (const parent of chain) {
+      child.parentElement = parent;
+      child = parent;
+    }
     return row;
   };
+  const primary = () => ancestor('bs-primary');
+  const columnWrap = () => ancestor('', { display: 'flex', 'flex-direction': 'column' });
+  const rowWrap = () => ancestor('', { display: 'flex' });
   const splitRow = { display: 'flex', 'justify-content': 'space-between' };
-  const toolbar = childOf('bs-primary', { ...splitRow, height: '46px' });
-  const column = childOf('bs-primary', { ...splitRow, 'flex-direction': 'column' });
-  const stacked = childOf('bs-primary', { display: 'flex' });
-  const tableRow = childOf('bs-table', splitRow);
-  for (const row of [toolbar, column, stacked, tableRow]) hoistLayout(row);
+  const toolbar = under([primary()], { ...splitRow, height: '46px' });
+  // 실측 30O1-0: Quote Detail Mount > Frame(세로) > Mode Row.
+  const wrapped = under([columnWrap(), primary()], splitRow);
+  const inRowCell = under([rowWrap(), columnWrap(), primary()], splitRow);
+  const column = under([primary()], { ...splitRow, 'flex-direction': 'column' });
+  const stacked = under([primary()], { display: 'flex' });
+  const tableRow = under([ancestor('bs-table')], splitRow);
+  // primary가 스스로 표인 보드(실측 2SYW-1 Order Ledger)의 직속 요약 줄.
+  const summaryRow = under([{
+    classList: { contains: (name) => name === 'bs-primary' || name === 'bs-table' },
+    style: styleStub({ display: 'flex', 'flex-direction': 'column' }),
+  }], splitRow);
+  const deepTableRow = under([columnWrap(), ancestor('bs-table'), primary()], splitRow);
+  const orphan = under([columnWrap()], splitRow);
+  const rows = [toolbar, wrapped, inRowCell, column, stacked, tableRow, summaryRow, deepTableRow, orphan];
+  for (const row of rows) hoistLayout(row);
   assert.equal(toolbar.dataset.bsSplitRow, 'true');
+  assert.equal(wrapped.dataset.bsSplitRow, 'true', '세로 래퍼 한 겹은 같은 줄이다');
+  assert.equal(inRowCell.dataset.bsSplitRow, undefined, '가로로 나뉜 칸 안은 대상이 아니다');
   assert.equal(column.dataset.bsSplitRow, undefined,
     '세로 줄을 접으면 넘친 것이 오른쪽 새 열로 가서 오히려 가로 넘침이 된다');
   assert.equal(stacked.dataset.bsSplitRow, undefined);
   assert.equal(tableRow.dataset.bsSplitRow, undefined, '표는 열 폭이 계약이라 안 접는다');
+  assert.equal(summaryRow.dataset.bsSplitRow, 'true', 'primary 직속 요약 줄은 표 행이 아니다');
+  assert.equal(deepTableRow.dataset.bsSplitRow, undefined, '표 안쪽 줄도 열 폭이 계약이다');
+  assert.equal(orphan.dataset.bsSplitRow, undefined, 'primary 밖 줄은 대상이 아니다');
 });
 
 test('applyResponsiveHooks는 보드 루트·반응형 영역·영역 밖 고정 상자를 모두 훑는다', () => {
