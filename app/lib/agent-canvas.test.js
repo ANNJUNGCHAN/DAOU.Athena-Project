@@ -7,7 +7,9 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { createAgentCanvas } = require('./agent-canvas');
+const {
+  createAgentCanvas, settingsSummaryLines, settingsFormModel, settingsUpdateBody,
+} = require('./agent-canvas');
 
 function fakeNode(tag) {
   const node = {
@@ -1712,7 +1714,55 @@ test('드릴인 세그먼트: 작업 뷰에서는 숨고, 드릴인을 열면 [�
   );
 });
 
-test('드릴인 세그먼트: "설정"을 누르면 이력 본문이 숨고 읽기 전용 명세가 나온다', async () => {
+// ---------- 드릴인 "설정" — 요약 + 편집 폼(Paper 보드 06) ----------
+//
+// Paper가 그린 것: 「설정 — 요약」 한 줄 + [설정 편집], 그리고 그 버튼이 여는
+// 「상세 패널 — 설정 편집」 폼이다. 폼의 모양은 소스 명세가 정한다 — 그래서
+// 아래 세 테스트가 소스 셋(현재가·실시간 / 매일 예약 / 코드 감시)을 각각 잰다.
+
+function watchDetail(overrides) {
+  return {
+    id: 'a',
+    symbol: '005930',
+    status: 'active',
+    mode: 'realtime-ws',
+    source_label: '현재가',
+    cooldown_s: 300,
+    expires_at: '2026-09-10T01:00:00Z',
+    note: '삼성전자 88,000 감시',
+    briefing_model: 'opus',
+    briefing_effort: 'high',
+    condition: { source: 'price.current', op: '>=', value: 88000, consecutive_ticks: 1 },
+    source_spec: { ops: ['<', '<=', '>', '>='], value_type: 'number', transport: 'ws', label: '현재가' },
+    ...overrides,
+  };
+}
+
+function scheduleDetail() {
+  return watchDetail({
+    mode: 'scheduled',
+    note: '평일 아침 브리핑',
+    condition: { source: 'schedule.daily', op: 'at', value: 'ALL@07:30', consecutive_ticks: 1 },
+    source_spec: { ops: ['at'], value_type: 'string', transport: 'clock', label: '예약 시각(요일 지정)' },
+  });
+}
+
+async function openSettingsForm(container, canvas, deps) {
+  canvas.mount();
+  await canvas.refresh();
+  await openDrillIn(container, canvas);
+  canvas.setHistoryTab('settings');
+  const panel = findByClass(container, 'agent-history-settings')[0];
+  await findByClass(panel, 'agent-history-settings-edit')[0].dispatchEvent({ type: 'click' });
+  return panel;
+}
+
+function fieldLabels(panel) {
+  return findByClass(panel, 'agent-settings-field')
+    .map((row) => findByClass(row, 'agent-settings-label')[0].textContent);
+}
+
+test('드릴인 세그먼트: "설정"을 누르면 이력 본문이 숨고 「설정 — 요약」이 나온다', async () => {
   const container = fakeNode('div');
   const canvas = createAgentCanvas({
     container, fetchRoutines: async () => [drillInRoutine()], fetchRuns: async () => [],
@@ -1725,38 +1775,20 @@ test('드릴인 세그먼트: "설정"을 누르면 이력 본문이 숨고 읽�
   assert.equal(findByClass(container, 'agent-history-body')[0].hidden, true);
   const panel = findByClass(container, 'agent-history-settings')[0];
   assert.equal(panel.hidden, false);
-  assert.equal(findByClass(panel, 'agent-panel-caption')[0].textContent, '설정 — 보기 전용');
+  assert.equal(findByClass(panel, 'agent-panel-caption')[0].textContent, '설정 — 요약');
+  assert.equal(findByClass(panel, 'agent-settings-summary-title')[0].textContent, '삼성전자 88,000 감시');
+  assert.match(findByClass(panel, 'agent-settings-summary-meta')[0].textContent, /^자동 · 쿨다운 300초 · 생성 /);
+  assert.equal(findByClass(panel, 'agent-history-settings-edit')[0].textContent, '설정 편집');
 
   canvas.setHistoryTab('runs');
   assert.equal(findByClass(container, 'agent-history-body')[0].hidden, false);
   assert.equal(findByClass(container, 'agent-history-settings')[0].hidden, true);
 });
 
-test('드릴인 설정: 백엔드가 실제로 준 필드만 라벨로 낸다(지어내지 않는다, P3)', async () => {
+test('드릴인 설정: 요약만 있는 동안에는 값을 바꾸는 입력이 하나도 없다', async () => {
   const container = fakeNode('div');
-  const canvas = createAgentCanvas({
-    container,
-    fetchRoutines: async () => [drillInRoutine({ expires_at: null, symbol: '005930' })],
-    fetchRuns: async () => [],
-  });
-  canvas.mount();
-  await canvas.refresh();
-  await openDrillIn(container, canvas);
-  canvas.setHistoryTab('settings');
-
-  const panel = findByClass(container, 'agent-history-settings')[0];
-  const labels = findByClass(panel, 'agent-detail-field-label').map((n) => n.textContent);
-  assert.deepEqual(labels, ['조건', '모드', '소스', '종목', '쿨다운', '생성']);
-  assert.equal(labels.includes('만료'), false, 'expires_at이 없으면 만료 행을 만들지 않는다');
-  assert.equal(labels.includes('브리핑 모델'), false, '예약이 아니면 브리핑 모델 행이 없다');
-});
-
-test('드릴인 설정: 값을 바꾸는 입력이 없고 고치는 경로는 채팅 버튼 하나다(동선 규칙②)', async () => {
-  const container = fakeNode('div');
-  let seeded = null;
   const canvas = createAgentCanvas({
     container, fetchRoutines: async () => [drillInRoutine()], fetchRuns: async () => [],
-    onEditInChat: (title) => { seeded = title; },
   });
   canvas.mount();
   await canvas.refresh();
@@ -1766,37 +1798,169 @@ test('드릴인 설정: 값을 바꾸는 입력이 없고 고치는 경로는 �
   const panel = findByClass(container, 'agent-history-settings')[0];
   const inputs = [];
   (function walk(n) { if (n.tag === 'input' || n.tag === 'select' || n.tag === 'textarea') inputs.push(n); (n.children || []).forEach(walk); })(panel);
-  assert.equal(inputs.length, 0, '보기 전용 패널에 입력 컨트롤이 있으면 안 된다');
+  assert.equal(inputs.length, 0, '편집 폼을 열기 전에는 입력이 없다');
+});
 
-  const editBtn = findByClass(panel, 'agent-history-settings-edit')[0];
-  assert.equal(editBtn.textContent, '채팅에서 고치기 ↗');
-  editBtn.dispatchEvent({ type: 'click' });
+test('드릴인 설정: [설정 편집]이 상세를 1회 불러 실시간 소스 폼(8필드)을 세운다', async () => {
+  const container = fakeNode('div');
+  let detailCalls = 0;
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [drillInRoutine()], fetchRuns: async () => [],
+    fetchDetail: async (id) => { detailCalls += 1; assert.equal(id, 'a'); return watchDetail(); },
+  });
+  const panel = await openSettingsForm(container, canvas);
+
+  assert.equal(detailCalls, 1);
+  const captions = findByClass(panel, 'agent-panel-caption').map((n) => n.textContent);
+  assert.deepEqual(captions, ['설정 — 요약', '상세 패널 — 설정 편집']);
+  assert.deepEqual(fieldLabels(panel), [
+    '조건 비교', '조건 값', '연속 틱', '쿨다운(초)', '만료(일)', '설명', '브리핑 모델', '노력',
+  ]);
+  const readonly = findByClass(panel, 'agent-settings-readonly').map((row) => [
+    findByClass(row, 'agent-settings-label')[0].textContent,
+    findByClass(row, 'agent-settings-readonly-value')[0].textContent,
+  ]);
+  assert.deepEqual(readonly.slice(0, 3), [['종목', '005930'], ['모드', '자동'], ['소스', '현재가']]);
+  assert.equal(findByClass(panel, 'agent-settings-tag')[0].textContent, '변경 불가');
+  assert.equal(findByClass(panel, 'agent-settings-note')[0].textContent, '종목·소스는 취소 후 새로 만들기');
+  const hints = findByClass(panel, 'agent-settings-hint').map((n) => n.textContent);
+  assert.equal(hints[0], '< · ≤ · > · ≥');
+  assert.equal(hints[1], '숫자');
+  assert.equal(hints[2], '1~20 · 실시간 소스만');
+  assert.equal(hints[3], '만료 2026-09-10 · 미변경 시 보존');
+  assert.equal(findByClass(panel, 'agent-settings-unit')[0].textContent, '원');
+  assert.equal(findByClass(panel, 'agent-settings-save')[0].textContent, '저장');
+});
+
+test('드릴인 설정: 예약 소스 폼에는 연속 틱이 없다(7필드) — 분기는 소스 명세가 낸다', async () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [drillInRoutine()], fetchRuns: async () => [],
+    fetchDetail: async () => scheduleDetail(),
+  });
+  const panel = await openSettingsForm(container, canvas);
+
+  assert.deepEqual(fieldLabels(panel), [
+    '조건 비교', '조건 값', '쿨다운(초)', '만료(일)', '설명', '브리핑 모델', '노력',
+  ]);
+  const hints = findByClass(panel, 'agent-settings-hint').map((n) => n.textContent);
+  assert.equal(hints[0], 'at 하나뿐');
+  assert.equal(hints[1], '요일@시각 표기');
+  assert.equal(findByClass(panel, 'agent-settings-unit').length, 0, '예약 값에는 원 단위가 없다');
+});
+
+test('드릴인 설정: 코드 감시 폼에는 조건 행 자체가 없다(백엔드가 폼 편집을 막는다)', async () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [drillInRoutine()], fetchRuns: async () => [],
+    fetchDetail: async () => watchDetail({
+      mode: 'code-watch',
+      condition: { source: 'code.watch', op: '==', value: true, consecutive_ticks: 1 },
+      source_spec: { ops: ['=='], value_type: 'bool', transport: 'code', label: '코드 감시' },
+    }),
+  });
+  const panel = await openSettingsForm(container, canvas);
+
+  assert.deepEqual(fieldLabels(panel), ['쿨다운(초)', '만료(일)', '설명', '브리핑 모델', '노력']);
+});
+
+test('드릴인 설정: [저장]은 폼 값을 update로 보내고 만료를 비워 두면 안 싣는다', async () => {
+  const container = fakeNode('div');
+  let sent = null;
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [drillInRoutine()], fetchRuns: async () => [],
+    fetchDetail: async () => watchDetail(),
+    updateRoutine: async (id, body) => {
+      sent = { id, body };
+      return watchDetail({ note: '삼성전자 88,000 감시', cooldown_s: 600 });
+    },
+  });
+  const panel = await openSettingsForm(container, canvas);
+  const inputs = findByClass(panel, 'agent-settings-input');
+  inputs[2].value = '600'; // 입력 차례는 조건 값 · 연속 틱 · 쿨다운(초) · 만료(일) · 설명
+  await findByClass(panel, 'agent-settings-save')[0].dispatchEvent({ type: 'click' });
+
+  assert.equal(sent.id, 'a');
+  assert.equal('expires_days' in sent.body, false, '만료 칸이 비면 키 자체가 안 나간다');
+  assert.equal(sent.body.cooldown_s, 600);
+  assert.deepEqual(sent.body.condition, { op: '>=', value: 88000, consecutive_ticks: 1 });
+  assert.equal(sent.body.briefing_model, 'opus');
+  // 저장이 끝나면 폼이 닫히고 요약이 저장한 값으로 다시 그려진다.
+  assert.equal(findByClass(panel, 'agent-settings-form').length, 0);
+  assert.match(findByClass(panel, 'agent-settings-summary-meta')[0].textContent, /쿨다운 600초/);
+});
+
+test('드릴인 설정: 저장이 실패하면 폼을 닫지 않고 사유를 남긴다', async () => {
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [drillInRoutine()], fetchRuns: async () => [],
+    fetchDetail: async () => watchDetail(),
+    updateRoutine: async () => { throw new Error('쿨다운은 60~86400초 범위입니다'); },
+  });
+  const panel = await openSettingsForm(container, canvas);
+  await findByClass(panel, 'agent-settings-save')[0].dispatchEvent({ type: 'click' });
+
+  assert.equal(findByClass(panel, 'agent-settings-form').length, 1);
+  assert.equal(findByClass(panel, 'agent-settings-message')[0].textContent, '쿨다운은 60~86400초 범위입니다');
+});
+
+test('드릴인 설정: 폼 버튼 행에 "채팅에서 고치기 ↗"가 남는다 — 두 입구가 같은 게이트', async () => {
+  const container = fakeNode('div');
+  let seeded = null;
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [drillInRoutine()], fetchRuns: async () => [],
+    fetchDetail: async () => watchDetail(),
+    onEditInChat: (title) => { seeded = title; },
+  });
+  const panel = await openSettingsForm(container, canvas);
+
+  const chatBtn = findByClass(panel, 'agent-history-settings-edit')
+    .find((n) => n.textContent === '채팅에서 고치기 ↗');
+  assert.ok(chatBtn, '폼 버튼 행에 채팅 경로가 있다');
+  chatBtn.dispatchEvent({ type: 'click' });
   assert.equal(seeded, '삼성전자 88,000 감시');
 });
 
-test('드릴인 설정: 브리핑 모델·다음 실행은 그 값이 실제로 있을 때만 붙는다', async () => {
+test('드릴인 설정: 상세를 못 받으면 빈 폼 대신 그 사실을 적는다', async () => {
   const container = fakeNode('div');
   const canvas = createAgentCanvas({
-    container,
-    fetchRoutines: async () => [drillInRoutine({
-      briefing_model: 'opus', briefing_effort: 'high', next_fire_at: '2026-08-27T07:30:00Z',
-    })],
-    fetchRuns: async () => [],
+    container, fetchRoutines: async () => [drillInRoutine()], fetchRuns: async () => [],
+    fetchDetail: async () => null,
   });
-  canvas.mount();
-  await canvas.refresh();
-  await openDrillIn(container, canvas);
-  canvas.setHistoryTab('settings');
+  const panel = await openSettingsForm(container, canvas);
 
-  const panel = findByClass(container, 'agent-history-settings')[0];
-  const pairs = findByClass(panel, 'agent-detail-field').map((row) => [
-    findByClass(row, 'agent-detail-field-label')[0].textContent,
-    findByClass(row, 'agent-detail-field-value')[0].textContent,
-  ]);
-  const byLabel = Object.fromEntries(pairs);
-  assert.equal(byLabel['브리핑 모델'], 'opus · high');
-  assert.ok(byLabel['다음 실행'], '다음 실행 값이 채워진다');
-  assert.equal(byLabel['모드'], '주기 확인');
+  assert.equal(findByClass(panel, 'agent-settings-empty')[0].textContent, '설정을 불러오지 못했습니다');
+  assert.equal(findByClass(panel, 'agent-settings-field').length, 0);
+});
+
+// ---------- 설정 폼 순수 모델 ----------
+
+test('settingsUpdateBody: 브리핑 모델을 "앱 기본"으로 되돌리면 null로 나간다', () => {
+  const model = settingsFormModel(watchDetail(), drillInRoutine());
+  const values = {
+    op: '>=', value: '88000', consecutive_ticks: '1', cooldown_s: '300',
+    expires_days: '3', note: '삼성전자 88,000 감시', briefing_model: '', briefing_effort: '',
+  };
+  const body = settingsUpdateBody(model, values);
+  assert.equal(body.briefing_model, null);
+  assert.equal(body.briefing_effort, null);
+  assert.equal(body.expires_days, 3);
+  assert.equal(body.note, '삼성전자 88,000 감시');
+});
+
+test('settingsFormModel: 소스 명세가 없으면 폼을 만들지 않는다', () => {
+  assert.equal(settingsFormModel(null, null), null);
+  assert.equal(settingsFormModel({ condition: {} }, null), null);
+});
+
+test('settingsSummaryLines: 다음 실행은 그 값이 있을 때만 요약에 붙는다', () => {
+  const withNext = settingsSummaryLines({
+    note: '평일 아침 브리핑', mode: 'scheduled', cooldown_s: 300,
+    next_fire_at: '2026-08-27T07:30:00Z', created_at: '2026-08-20T01:00:00Z',
+  });
+  assert.match(withNext.meta, /^예약 · 쿨다운 300초 · 다음 실행 .+ · 생성 /);
+  const without = settingsSummaryLines({ note: '감시', mode: 'realtime-ws', cooldown_s: 300 });
+  assert.equal(without.meta, '자동 · 쿨다운 300초');
 });
 
 test('드릴인 세그먼트: 드릴인을 닫으면 세그먼트가 숨고 다음 진입은 "이력"으로 시작한다', async () => {
