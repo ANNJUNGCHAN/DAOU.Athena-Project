@@ -378,7 +378,7 @@ async function main() {
     out.tag = (panel.querySelector('.agent-settings-tag') || {}).textContent;
     out.hints = Array.from(panel.querySelectorAll('.agent-settings-hint')).map((n) => n.textContent);
     out.saveLabel = (panel.querySelector('.agent-settings-save') || {}).textContent;
-    const chatBtn = Array.from(panel.querySelectorAll('.agent-history-settings-edit')).find((n) => n.textContent === '채팅에서 고치기 ↗');
+    const chatBtn = panel.querySelector('.agent-settings-chat');
     out.chatLabel = chatBtn ? chatBtn.textContent : null;
     let seeded = null;
     const prevSeed = window.AthenaShell && window.AthenaShell.seedChatInput;

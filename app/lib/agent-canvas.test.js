@@ -1890,7 +1890,7 @@ test('드릴인 설정: [저장]은 폼 값을 update로 보내고 만료를 비
   assert.match(findByClass(panel, 'agent-settings-summary-meta')[0].textContent, /쿨다운 600초/);
 });
 
-test('드릴인 설정: 저장이 실패하면 폼을 닫지 않고 사유를 남긴다', async () => {
+test('드릴인 설정: 저장이 실패하면 폼을 닫지 않고 사유를 남기며 친 값도 그대로 둔다', async () => {
   const container = fakeNode('div');
   const canvas = createAgentCanvas({
     container, fetchRoutines: async () => [drillInRoutine()], fetchRuns: async () => [],
@@ -1898,10 +1898,16 @@ test('드릴인 설정: 저장이 실패하면 폼을 닫지 않고 사유를 �
     updateRoutine: async () => { throw new Error('쿨다운은 60~86400초 범위입니다'); },
   });
   const panel = await openSettingsForm(container, canvas);
+  const before = findByClass(panel, 'agent-settings-input');
+  before[2].value = '30'; // 쿨다운 — 백엔드가 범위 밖이라고 되돌려보낼 값
+  before[4].value = '내가 고친 설명';
   await findByClass(panel, 'agent-settings-save')[0].dispatchEvent({ type: 'click' });
 
   assert.equal(findByClass(panel, 'agent-settings-form').length, 1);
   assert.equal(findByClass(panel, 'agent-settings-message')[0].textContent, '쿨다운은 60~86400초 범위입니다');
+  // 사유 옆에 처음 값이 되돌아와 있으면 사람이 고칠 수가 없다.
+  const after = findByClass(panel, 'agent-settings-input').map((n) => n.value);
+  assert.deepEqual(after, ['88000', '1', '30', '', '내가 고친 설명']);
 });
 
 test('드릴인 설정: 폼 버튼 행에 "채팅에서 고치기 ↗"가 남는다 — 두 입구가 같은 게이트', async () => {
@@ -1914,9 +1920,12 @@ test('드릴인 설정: 폼 버튼 행에 "채팅에서 고치기 ↗"가 남는
   });
   const panel = await openSettingsForm(container, canvas);
 
-  const chatBtn = findByClass(panel, 'agent-history-settings-edit')
-    .find((n) => n.textContent === '채팅에서 고치기 ↗');
-  assert.ok(chatBtn, '폼 버튼 행에 채팅 경로가 있다');
+  assert.equal(
+    findByClass(panel, 'agent-history-settings-edit').length, 1,
+    '[설정 편집]과 채팅 버튼은 클래스가 다르다 — 첫 일치가 뒤바뀌지 않는다',
+  );
+  const chatBtn = findByClass(panel, 'agent-settings-chat')[0];
+  assert.equal(chatBtn.textContent, '채팅에서 고치기 ↗');
   chatBtn.dispatchEvent({ type: 'click' });
   assert.equal(seeded, '삼성전자 88,000 감시');
 });
@@ -1946,6 +1955,22 @@ test('settingsUpdateBody: 브리핑 모델을 "앱 기본"으로 되돌리면 nu
   assert.equal(body.briefing_effort, null);
   assert.equal(body.expires_days, 3);
   assert.equal(body.note, '삼성전자 88,000 감시');
+});
+
+test('settingsUpdateBody: 설명을 안 건드리고 조건만 고치면 note를 안 싣는다', () => {
+  const model = settingsFormModel(watchDetail(), drillInRoutine());
+  const base = {
+    op: '>=', value: '88000', consecutive_ticks: '1', cooldown_s: '300',
+    expires_days: '', note: '삼성전자 88,000 감시', briefing_model: 'opus', briefing_effort: 'high',
+  };
+  // 조건 값만 바꾼다 — 백엔드가 자동 생성 설명을 새 조건으로 다시 쓰게 둔다.
+  const changed = settingsUpdateBody(model, { ...base, value: '90000' });
+  assert.equal('note' in changed, false);
+  // 설명을 사람이 고쳤으면 조건이 바뀌어도 그 설명이 나간다.
+  const edited = settingsUpdateBody(model, { ...base, value: '90000', note: '내가 고친 설명' });
+  assert.equal(edited.note, '내가 고친 설명');
+  // 조건을 안 바꿨으면 설명은 늘 나간다(백엔드 재생성 규칙이 안 돈다).
+  assert.equal(settingsUpdateBody(model, base).note, '삼성전자 88,000 감시');
 });
 
 test('settingsFormModel: 소스 명세가 없으면 폼을 만들지 않는다', () => {
