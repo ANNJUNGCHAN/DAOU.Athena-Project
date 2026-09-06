@@ -12,6 +12,8 @@ const settingsSource = fs.readFileSync(path.join(__dirname, 'settings-cards.js')
 const collectionSource = fs.readFileSync(path.join(__dirname, 'graph-mode', 'collection-settings.js'), 'utf8');
 const settingsCss = fs.readFileSync(path.join(appDir, 'styles', 'settings-cards.css'), 'utf8');
 const shellSource = fs.readFileSync(path.join(appDir, 'shell.js'), 'utf8');
+// 카드의 두 버튼(내보내기 · 전체 삭제)이 실제로 다루는 저장소는 main이 정한다.
+const mainSource = fs.readFileSync(path.join(appDir, 'main.js'), 'utf8');
 
 function cssRule(selector) {
   const escaped = selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -99,6 +101,32 @@ test('설정 4번째 카드는 Paper 32 성향·이력이다 — 수집 토글�
 test('전체 삭제 성공 뒤에는 카드가 성향·이력 구역을 다시 읽는다', () => {
   const deleteHandler = settingsSource.slice(settingsSource.indexOf('function onDeleteClick('));
   assert.match(deleteHandler, /resultBox\.appendChild\(note\);[\s\S]{0,240}?fillHistorySections\(\);/);
+});
+
+// 카드가 세는 것과 두 버튼이 다루는 것이 다르면, 전체 삭제 뒤에도 같은 건수가
+// 다시 서고 빈 이력을 「내보내기 완료」라고 적는다. 셋 다 브레인 하나를 본다.
+test('보관 건수·내보내기·전체 삭제가 같은 저장소를 본다', () => {
+  assert.match(settingsSource, /invoke\('athena:brain-conversations-count'\)/);
+  assert.doesNotMatch(settingsSource, /athena:conversations-list/);
+  const count = mainSource.slice(mainSource.indexOf("ipcMain.handle('athena:brain-conversations-count'"));
+  assert.match(count.slice(0, 400), /\/api\/v1\/brain\/conversations/);
+});
+
+// 브레인 이력 조회는 상한을 안 넘기면 백엔드 기본값(대화 50 · 메시지 100)으로
+// 조용히 잘린다 — 바로 옆이 되돌릴 수 없는 「전체 삭제」라, 다 담지 못했다면
+// 카드가 그 사실을 말해야 한다.
+test('이력 내보내기는 상한을 명시하고 담은 양을 카드가 말한다', () => {
+  const exporter = mainSource.slice(
+    mainSource.indexOf("ipcMain.handle('athena:history-export'"),
+    mainSource.indexOf("ipcMain.handle('athena:brain-suggested-questions'"),
+  );
+  assert.match(exporter, /\/api\/v1\/brain\/conversations',\s*\{\s*params: \{ limit: BRAIN_HISTORY_PAGE_LIMIT \}/);
+  assert.match(exporter, /conversation_id: summary\.conversation_id, limit: BRAIN_HISTORY_PAGE_LIMIT/);
+  assert.match(exporter, /stored\.length < summary\.message_count\) truncated = true/);
+  assert.match(exporter, /conversations: conversations\.length, messages, truncated/);
+  assert.match(mainSource, /const BRAIN_HISTORY_PAGE_LIMIT = 500;/);
+  assert.match(settingsSource, /내보내기 완료 — 대화 \$\{res\.conversations\}건 · 메시지 \$\{res\.messages\}건/);
+  assert.match(settingsSource, /res\.truncated[\s\S]{0,120}이력이 많아 일부는 담기지 않았습니다/);
 });
 
 test('성향·이력 카드는 보드의 목업 수치를 하드코딩하지 않는다', () => {

@@ -1385,7 +1385,7 @@ async function setCollectChatPreference(enabled, storage) {
 // verify-settings-cards.js가 본다). **없는 값은 행 자체를 만들지 않는다**: 보드가
 // 그려 둔 성향 문구·보관 건수·용량·보존 기간은 목업 수치이고, 백엔드가 주지 않는
 // 줄을 채우면 화면이 거짓말을 한다. 빈 자리가 정직하다.
-function buildHistoryCardModel({ profileEntries, conversationCount } = {}) {
+function buildHistoryCardModel({ profileEntries, conversationCount, exposeToModel } = {}) {
   const interests = [];
   for (const entry of profileEntries || []) {
     const name = String((entry && entry.entity_name) || '').trim();
@@ -1393,6 +1393,13 @@ function buildHistoryCardModel({ profileEntries, conversationCount } = {}) {
   }
   return {
     profileRows: interests.length ? [['주요 관심', interests.join(' · ')]] : [],
+    // Paper 32의 「성향 반영」 행. 학습된 값이 아니라 사람이 켜고 끈 설정이라
+    // 따로 낸다 — 성향이 아직 없어도 이 행은 사실이다. 값의 주인은 그래프
+    // 「수집·노출」 탭이고 설정 nav 배지도 같은 값을 읽는다. Paper가 적은
+    // 「답변 어조에만 사용」은 실제로 넘기는 것을 축소해 말하므로 쓰지 않는다.
+    preferenceRows: typeof exposeToModel === 'boolean'
+      ? [['성향 반영', exposeToModel ? '켜짐 · 보유 종목·수량과 대화 원문 전달' : '꺼짐']]
+      : [],
     storageRows: Number.isInteger(conversationCount) && conversationCount >= 0
       ? [['보관 중', `대화 ${conversationCount}건`]]
       : [],
@@ -1451,18 +1458,18 @@ function refreshHistoryCard(card, head, body) {
 
   fillHistorySections();
 
-  // 두 값의 주인이 다르다 — 성향은 브레인, 보관 건수는 이 앱의 대화 원장이다.
-  // 한쪽이 실패해도 다른 쪽은 그린다.
+  // 성향도 보관 건수도 브레인에서 읽는다 — 이 카드의 두 버튼(내보내기 · 전체
+  // 삭제)이 다루는 저장소와 같아야 지운 뒤에 줄어든다. 로컬 세션 원장을 세면
+  // 전체 삭제가 건드리지도 않는 수를 말하게 된다. 한쪽이 실패해도 다른 쪽은 그린다.
   async function fillHistorySections() {
     const [profile, listed] = await Promise.all([
       window.athena.invoke('athena:brain-profile-summary', { limit: 5 }).catch(() => null),
-      window.athena.invoke('athena:conversations-list').catch(() => null),
+      window.athena.invoke('athena:brain-conversations-count').catch(() => null),
     ]);
     const model = buildHistoryCardModel({
       profileEntries: (profile && profile.ok && profile.entries) || [],
-      conversationCount: Array.isArray(listed && listed.conversations)
-        ? listed.conversations.length
-        : null,
+      conversationCount: (listed && listed.ok) ? listed.conversations : null,
+      exposeToModel: readGraphSettings().exposeToModel,
     });
 
     clear(sections);
@@ -1473,6 +1480,7 @@ function refreshHistoryCard(card, head, body) {
     } else {
       profileSection.appendChild(emptyState('아직 학습된 성향이 없습니다', '대화가 쌓이면 여기에 보입니다'));
     }
+    for (const [label, value] of model.preferenceRows) profileSection.appendChild(historyRow(label, value));
     sections.appendChild(profileSection);
 
     const storageSection = historySection('대화 이력');
@@ -1503,7 +1511,10 @@ function refreshHistoryCard(card, head, body) {
     }
     if (res.canceled) return;
     const note = el('div', 'uk-settings-note');
-    note.appendChild(el('div', null, `내보내기 완료 — ${res.path}`));
+    note.appendChild(el('div', null, `내보내기 완료 — 대화 ${res.conversations}건 · 메시지 ${res.messages}건`));
+    note.appendChild(el('div', null, res.path));
+    // 바로 옆이 되돌릴 수 없는 「전체 삭제」다 — 다 담기지 않았다면 지우기 전에 말한다.
+    if (res.truncated) note.appendChild(el('div', null, '이력이 많아 일부는 담기지 않았습니다'));
     resultBox.appendChild(note);
   }
 
