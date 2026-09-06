@@ -87,6 +87,7 @@ const INVOKE_CHANNELS = new Set([
   // — 대화 모드 HISTORY_COMMAND 조회, 설정 모드 "성향・이력" 상태·전체 삭제.
   'athena:brain-status',
   'athena:brain-history-query',
+  'athena:history-export',
   'athena:brain-reset',
   // 그래프 모드(leaf 8 / W2-3) — 군집 지도 조회. 읽기 전용이다.
   'athena:brain-cluster-map',

@@ -138,8 +138,9 @@ const NAV_ITEMS = [
   { key: 'screen', label: '화면' },
   { key: 'accounts', label: '계좌', countChannel: 'athena:account-list', countKey: 'accounts' },
   { key: 'model', label: '모델' },
-  // Paper 보드 22 — 그래프 수집·노출 설정. 배지는 개수가 아니라 노출 on/off
-  // 상태다: 대화 모델에 성향 그래프가 열려 있는지를 켜짐/꺼짐으로 보여준다.
+  // Paper 보드 32 — 성향·이력. 배지는 개수가 아니라 노출 on/off 상태다: 대화
+  // 모델에 성향 그래프가 열려 있는지를 켜짐/꺼짐으로 보여준다(그 토글 자체는
+  // 그래프 모드 「수집·노출」 탭이 소유한다 — 보드 22).
   { key: 'history', label: '성향・이력', statusFn: () => (readGraphSettings().exposeToModel ? '켜짐' : '꺼짐') },
 ];
 
@@ -1392,101 +1393,131 @@ async function setCollectChatPreference(enabled, storage) {
   }
 }
 
-function updateGraphNavBadge() {
-  const item = NAV_ITEMS.find((i) => i.key === 'history');
-  if (item && item._badgeEl && item.statusFn) item._badgeEl.textContent = item.statusFn();
-}
-
-function appendGraphSourceToggle(body, current, key, label, note) {
-  const labelCol = el('div');
-  labelCol.appendChild(el('div', 'uk-toggle-label', label));
-  // note는 선택 — WP-I I4에서 exposeToModel 실효 없음 배지를 걷어낸 뒤로 쓰는
-  // 곳이 없지만, 자리는 남겨 둔다(다음 정직성 배지가 같은 자리를 쓴다).
-  if (note) {
-    const noteRow = el('div', 'uk-toggle-note');
-    noteRow.appendChild(note);
-    labelCol.appendChild(noteRow);
+// 카드가 그릴 행을 순수 함수로 뽑는다 — node --test가 여기를 잰다(DOM은
+// verify-settings-cards.js가 본다). **없는 값은 행 자체를 만들지 않는다**: 보드가
+// 그려 둔 성향 문구·보관 건수·용량·보존 기간은 목업 수치이고, 백엔드가 주지 않는
+// 줄을 채우면 화면이 거짓말을 한다. 빈 자리가 정직하다.
+function buildHistoryCardModel({ profileEntries, conversationCount } = {}) {
+  const interests = [];
+  for (const entry of profileEntries || []) {
+    const name = String((entry && entry.entity_name) || '').trim();
+    if (name && !interests.includes(name)) interests.push(name);
   }
-  const toggle = toggleSwitch(current[key], (next) => {
-    writeGraphSettings({ [key]: next });
-    updateGraphNavBadge();
-  }, label);
-  body.appendChild(row('uk-toggle-row', [labelCol, toggle]));
+  return {
+    profileRows: interests.length ? [['주요 관심', interests.join(' · ')]] : [],
+    storageRows: Number.isInteger(conversationCount) && conversationCount >= 0
+      ? [['보관 중', `대화 ${conversationCount}건`]]
+      : [],
+  };
 }
 
-// 보유잔고 행 전용 — 토글 옆에 조회 주기 선택기가 함께 있는 기능 행이다.
-function appendHoldingsToggle(body, current) {
-  const labelCol = el('div');
-  labelCol.appendChild(el('div', 'uk-toggle-label', '보유잔고'));
-  const select = el('select', 'uk-holdings-interval-select');
-  select.setAttribute('aria-label', '보유잔고 조회 주기');
-  for (const min of HOLDINGS_INTERVAL_MINUTES) {
-    const opt = el('option', null, `${min}분`);
-    opt.value = String(min);
-    if (min === current.holdingsIntervalMin) opt.selected = true;
-    select.appendChild(opt);
-  }
-  select.addEventListener('change', () => {
-    writeGraphSettings({ holdingsIntervalMin: Number(select.value) });
-  });
-  const toggle = toggleSwitch(current.collectHoldings, (next) => {
-    writeGraphSettings({ collectHoldings: next });
-    updateGraphNavBadge();
-  }, '보유잔고 수집');
-  const controls = el('div', 'uk-holdings-controls');
-  controls.appendChild(el('span', 'uk-holdings-interval-label', '조회 주기'));
-  controls.appendChild(select);
-  controls.appendChild(toggle);
-  body.appendChild(row('uk-toggle-row', [labelCol, controls]));
+function historySection(title, aside) {
+  const section = el('section', 'uk-history-section');
+  const sectionHead = el('div', 'uk-history-section-head');
+  sectionHead.appendChild(el('div', 'uk-history-section-title', title));
+  if (aside) sectionHead.appendChild(el('div', 'uk-history-section-aside', aside));
+  section.appendChild(sectionHead);
+  return section;
 }
 
-function refreshHistoryCard(card, head, body, initialError = '', collectChatOverride = null) {
+function historyRow(label, value) {
+  return row('uk-history-row', [
+    el('div', 'uk-toggle-label', label),
+    el('div', 'uk-history-value', value),
+  ]);
+}
+
+// Paper 보드 32 「설정 — 성향·이력」. 이 카드는 **로컬에 무엇이 남아 있는지**를
+// 말한다. 무엇을 모아 누구에게 보일지(보드 22 수집·노출)는 그래프 모드의
+// 「수집·노출」 탭(lib/graph-mode/collection-settings.js)이 소유한다 — 같은 토글을
+// 두 화면이 나눠 가지면 한쪽만 고쳐지는 날이 온다.
+function refreshHistoryCard(card, head, body) {
   clear(head);
   clear(body);
 
   head.appendChild(row('uk-settings-title', [
-    el('span', 'uk-settings-name', '그래프 수집과 노출'),
-    el('span', 'uk-settings-count', '무엇을 읽고 누구에게 보일지'),
+    el('span', 'uk-settings-name', '성향·이력'),
+    el('span', 'uk-settings-count', '로컬 보관 · 언제든 내보내기 가능'),
   ]));
   const actions = row('uk-settings-actions', []);
   actions.appendChild(cardCloseButton(card));
   head.appendChild(actions);
 
-  const current = readGraphSettings();
-  if (typeof collectChatOverride === 'boolean') current.collectChat = collectChatOverride;
-  const collectChatLabel = el('div');
-  collectChatLabel.appendChild(el('div', 'uk-toggle-label', '대화'));
-  let collectChatToggle;
-  collectChatToggle = toggleSwitch(current.collectChat, async (enabled) => {
-    collectChatToggle.disabled = true;
-    try {
-      await setCollectChatPreference(enabled);
-      updateGraphNavBadge();
-      collectChatToggle.disabled = false;
-    } catch (error) {
-      refreshHistoryCard(card, head, body, collectChatPreferenceErrorMessage(error), false);
-    }
-  }, '대화');
-  body.appendChild(row('uk-toggle-row', [collectChatLabel, collectChatToggle]));
-  appendGraphSourceToggle(body, current, 'collectFills', '체결내역');
-  appendHoldingsToggle(body, current);
-  // WP-I I4 — 옛 "실효 없음(준비 중)" 배지는 걷어냈다: MCP가 인증 헤더를
-  // 싣고 backend 게이트가 이 토글 값을 실제로 검사하므로 전제가 사라졌다.
-  appendGraphSourceToggle(body, current, 'exposeToModel', '보유 종목·수량과 대화 원문을 모델에 전달');
-
-  const dangerNote = el('div', 'uk-settings-note');
-  dangerNote.appendChild(el('div', null, '전체 삭제 — 저장된 채팅 이력과 투자 성향 그래프를 모두 지우고 백엔드를 재기동한다. 되돌릴 수 없다.'));
-  body.appendChild(dangerNote);
+  const sections = el('div', 'uk-history-sections');
+  body.appendChild(sections);
 
   const resultBox = el('div');
   body.appendChild(resultBox);
-  if (initialError) resultBox.appendChild(errorNote(initialError));
 
   const deleteRow = row('uk-btn-row-end', []);
+  const exportBtn = button('ghost', '이력 내보내기', { onClick: () => onExportClick() });
   const deleteBtn = button('ghost', '전체 삭제', { onClick: () => onDeleteClick() });
   deleteBtn.classList.add('is-danger');
+  deleteRow.appendChild(exportBtn);
   deleteRow.appendChild(deleteBtn);
   body.appendChild(deleteRow);
+
+  const foot = el('div', 'uk-settings-note');
+  foot.appendChild(el('div', null, '삭제는 확인 단계를 한 번 더 거치며 되돌릴 수 없습니다'));
+  body.appendChild(foot);
+
+  fillHistorySections();
+
+  // 두 값의 주인이 다르다 — 성향은 브레인, 보관 건수는 이 앱의 대화 원장이다.
+  // 한쪽이 실패해도 다른 쪽은 그린다.
+  async function fillHistorySections() {
+    const [profile, listed] = await Promise.all([
+      window.athena.invoke('athena:brain-profile-summary', { limit: 5 }).catch(() => null),
+      window.athena.invoke('athena:conversations-list').catch(() => null),
+    ]);
+    const model = buildHistoryCardModel({
+      profileEntries: (profile && profile.ok && profile.entries) || [],
+      conversationCount: Array.isArray(listed && listed.conversations)
+        ? listed.conversations.length
+        : null,
+    });
+
+    clear(sections);
+    const learned = model.profileRows.length > 0;
+    const profileSection = historySection('투자 성향', learned ? '대화에서 학습됨' : null);
+    if (learned) {
+      for (const [label, value] of model.profileRows) profileSection.appendChild(historyRow(label, value));
+    } else {
+      profileSection.appendChild(emptyState('아직 학습된 성향이 없습니다', '대화가 쌓이면 여기에 보인다'));
+    }
+    sections.appendChild(profileSection);
+
+    const storageSection = historySection('대화 이력');
+    if (model.storageRows.length) {
+      for (const [label, value] of model.storageRows) storageSection.appendChild(historyRow(label, value));
+    } else {
+      storageSection.appendChild(errorNote('보관 상태를 읽지 못했습니다'));
+    }
+    sections.appendChild(storageSection);
+  }
+
+  async function onExportClick() {
+    clear(resultBox);
+    const label = exportBtn.querySelector('.uk-btn-label');
+    exportBtn.disabled = true;
+    label.textContent = '내보내는 중…';
+    let res;
+    try {
+      res = await window.athena.invoke('athena:history-export');
+    } catch (err) {
+      res = { ok: false, error: String((err && err.message) || err) };
+    }
+    label.textContent = '이력 내보내기';
+    exportBtn.disabled = false;
+    if (!res || !res.ok) {
+      resultBox.appendChild(errorNote((res && res.error) || '내보내기에 실패했다'));
+      return;
+    }
+    if (res.canceled) return;
+    const note = el('div', 'uk-settings-note');
+    note.appendChild(el('div', null, `내보내기 완료 — ${res.path}`));
+    resultBox.appendChild(note);
+  }
 
   function onDeleteClick() {
     clear(resultBox);
@@ -1536,6 +1567,7 @@ function refreshHistoryCard(card, head, body, initialError = '', collectChatOver
 const __exports = {
   renderAccounts, renderScreen, renderModel, renderHistory, renderNav,
   accountSubline, formatAddedAt,
+  buildHistoryCardModel,
   normalizeGraphSettings, readGraphSettings, writeGraphSettings, setCollectChatPreference,
   collectChatPreferenceErrorMessage, GRAPH_SETTINGS_DEFAULTS,
   HOLDINGS_INTERVAL_MINUTES,
