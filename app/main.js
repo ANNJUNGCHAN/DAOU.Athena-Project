@@ -4961,7 +4961,7 @@ function handleAccountList() {
 }
 
 async function handleAccountRegister(e, payload = {}) {
-  // payload = { alias, appKey, secretKey } — 값은 여기서 accounts.register()로
+  // payload = { alias, appKey, secretKey, verifyOnly? } — 값은 여기서 accounts.register()로
   // 그대로 전달될 뿐, main.js의 어떤 변수에도 남지 않는다. mdlog()에 절대
   // 넘기지 않는다(비밀값 로깅 금지 — AT-ST-007).
   return accounts.register(payload);
