@@ -1079,6 +1079,75 @@ test('navigate: 탭만 옮기고 되돌리기는 없다', async () => {
   assert.equal(findByClass(container, 'backtest-history-row').length, 1);
 });
 
+// ── 보드 05 · 이력 비교 diff 두 칸 ──────────────────────────────────────────
+
+const COMPARE_DETAIL = {
+  run_a: {
+    status: 'done', equity: [{ dt: '20240101', equity: 1, drawdown: 0 }],
+    params: { fast: 10, slow: 40 }, version: 3, source: 'a\nb\nc\n',
+  },
+  run_b: {
+    status: 'done', equity: [{ dt: '20240101', equity: 1, drawdown: 0 }],
+    params: { fast: 20, slow: 60 }, version: 4, source: 'a\nB\nc\n',
+  },
+};
+
+async function toCompare() {
+  const made = await mounted({
+    runs: async () => ([
+      { run_id: 'run_a', status: 'done', metrics: { total_return: 0.1 } },
+      { run_id: 'run_b', status: 'done', metrics: { total_return: 0.2 } },
+    ]),
+    result: async ({ run_id }) => COMPARE_DETAIL[run_id],
+  });
+  made.canvas.onChatAction({ kind: 'navigate', tab: 'history' });
+  await flush();
+  // 한 번 누를 때마다 다시 그리므로 두 번째 행은 새로 찾는다.
+  await click(findByClass(made.container, 'backtest-history-row')[0]);
+  await flush();
+  await click(findByClass(made.container, 'backtest-history-row')[1]);
+  await flush();
+  return made;
+}
+
+test('비교 패널에 파라미터 diff와 코드 diff 두 칸이 선다', async () => {
+  const { container } = await toCompare();
+  const labels = findByClass(container, 'backtest-compare-diff-label').map((n) => n.textContent);
+  assert.deepEqual(labels, ['파라미터 diff', '코드 diff']);
+  const values = findByClass(container, 'backtest-compare-diff-value').map((n) => n.textContent);
+  assert.equal(values[0], 'fast 10→20 · slow 40→60');
+  assert.equal(values[1], 'v3→v4 · 2줄');
+  // 두 버전의 소스가 그대로 줄 diff로 선다(보드 02·09와 같은 문법).
+  assert.equal(findByClass(container, 'backtest-diff').length, 1);
+});
+
+test('파라미터 diff는 키 단위로 변한 값만 적는다', () => {
+  assert.equal(
+    backtestCanvas.paramsDiffText({ fast: 10, slow: 40 }, { fast: 20, slow: 60 }),
+    'fast 10→20 · slow 40→60',
+  );
+  // 같은 값인 키는 적지 않는다.
+  assert.equal(
+    backtestCanvas.paramsDiffText({ fast: 10, slow: 40 }, { fast: 10, slow: 60 }),
+    'slow 40→60',
+  );
+  // 한쪽을 모르면 지어내지 않고 빈 문자열이다.
+  assert.equal(backtestCanvas.paramsDiffText(null, { fast: 20 }), '');
+  assert.equal(backtestCanvas.paramsDiffText({ fast: 10 }, { fast: 10 }), '');
+});
+
+test('코드 diff 칸은 버전 쌍과 바뀐 줄 수를 적는다', () => {
+  assert.equal(
+    backtestCanvas.codeDiffText({ version: 3, source: 'a\nb\n' }, { version: 4, source: 'a\nB\n' }),
+    'v3→v4 · 2줄',
+  );
+  assert.equal(
+    backtestCanvas.codeDiffText({ version: 4, source: 'a\n' }, { version: 4, source: 'a\n' }),
+    '같은 버전 v4',
+  );
+  assert.equal(backtestCanvas.codeDiffText(null, { version: 4, source: '' }), '');
+});
+
 test('navigate design/flow: 코드 경로면 지금 코드로 지도를 다시 만든다', async () => {
   const asked = [];
   const made = await mounted({

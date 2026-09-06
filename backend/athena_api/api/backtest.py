@@ -479,6 +479,24 @@ async def list_runs(request: Request) -> dict[str, Any]:
     return {"runs": items}
 
 
+def _effective_run_params(source: str, overrides: dict[str, Any]) -> dict[str, Any]:
+    """그 실행이 실제로 쓴 파라미터 — 비교 패널의 「파라미터 diff」가 읽는 값.
+
+    폼 경로는 값이 yaml 안에 있고(슬라이더가 yaml을 고친다) 코드 경로는 override로 온다.
+    두 경로를 같은 자리에서 읽지 않으면 비교 화면이 절반의 실행에서만 말한다.
+    소스가 파이썬이면 yaml로 읽힐 수 없으므로 override만 남는다 — 그게 사실이다.
+    """
+    base: dict[str, Any] = {}
+    try:
+        spec = from_kis_yaml(source, require_conditions=False)
+    except Exception:  # noqa: BLE001 — 파이썬 소스는 yaml이 아니다
+        spec = None
+    if spec is not None:
+        base = {name: p.default for name, p in spec.strategy.params.items()}
+    base.update(overrides)
+    return base
+
+
 @router.get("/runs/{run_id}")
 async def get_run(request: Request, run_id: str) -> dict[str, Any]:
     store = _store(request)
@@ -487,10 +505,26 @@ async def get_run(request: Request, run_id: str) -> dict[str, Any]:
         raise HTTPException(status_code=404, detail="실행이 존재하지 않는다")
     equity = await store.equity(run_id)
     metrics, flags, benchmark = _metrics_view(row.metrics_json)
+    # 이력 비교(Paper 보드 05 1WYY-1)가 「무엇이 달랐나」를 말하려면 지표 말고
+    # 그 실행이 쓴 파라미터와 버전의 코드가 필요하다. 목록 라우트가 아니라 여기에
+    # 싣는 이유: 비교는 두 건만 여는 화면이라 전체 목록에 버전 조회를 N번 붙일 이유가 없다.
+    version = await store.version(row.strategy_version_id) if row.strategy_version_id else None
+    try:
+        overrides = json.loads(row.params_json)
+    except (TypeError, ValueError):
+        overrides = {}
+    params = _effective_run_params(
+        version.source if version is not None else "",
+        overrides if isinstance(overrides, dict) else {},
+    )
     return {
         "run_id": row.id,
         "status": row.status,
         "metrics": metrics,
+        "params": params,
+        "strategy_version_id": row.strategy_version_id,
+        "version": version.version if version is not None else None,
+        "source": version.source if version is not None else "",
         "equity": [{"dt": p.dt, "equity": p.equity, "drawdown": p.drawdown} for p in equity],
         # 자산곡선의 두 번째 선 — equity와 같은 길이·같은 봉이다(보드 03 "전략 vs 매수보유").
         "benchmark": benchmark,

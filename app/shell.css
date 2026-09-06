@@ -1871,6 +1871,33 @@ body { margin: 0; overflow: hidden; }
   border: 1px solid var(--color-k-line);
   border-radius: 12px;
 }
+/* 보드 05(1WYY-1) — 지표 앞에 서는 "왜 달랐나" 두 칸과 그 아래 줄 diff. */
+.backtest-compare-diffs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.backtest-compare-diff-box {
+  padding: 12px 16px;
+  background: var(--color-k-panel3);
+  border-radius: 8px;
+  min-width: 0;
+}
+.backtest-compare-diff-label {
+  color: var(--color-k-hint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  margin-bottom: 4px;
+}
+.backtest-compare-diff-value {
+  color: var(--color-k-text);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.backtest-compare-code { margin-bottom: 12px; }
 .backtest-compare-row {
   display: flex;
   gap: 12px;

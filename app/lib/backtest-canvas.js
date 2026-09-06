@@ -601,6 +601,28 @@ function diffCounts(before, after) {
   return CodeEditor.diffStats(CodeEditor.diffLines(before, after));
 }
 
+// 두 실행의 파라미터를 키 단위로 대조해 변한 값만 적는다(Paper 1WZ3-1
+// "fast 10→20 · slow 40→60"). 한쪽을 모르면 빈 문자열이다 — 모르는 자리에
+// 기본값을 지어 넣으면 "무엇이 달랐나"가 거짓말이 된다.
+function paramsDiffText(a, b) {
+  if (!a || typeof a !== 'object' || !b || typeof b !== 'object') return '';
+  const keys = Object.keys(a).concat(Object.keys(b).filter((k) => !(k in a)));
+  const text = (v) => (v == null ? '—' : String(v));
+  return keys
+    .filter((key) => text(a[key]) !== text(b[key]))
+    .map((key) => `${key} ${text(a[key])}→${text(b[key])}`)
+    .join(' · ');
+}
+
+// 코드 diff 칸의 한 줄(Paper 1WZ6-1 "v3→v4 · 12줄"). 줄 수는 단계 카드와 같은
+// 셈(diffCounts)을 쓴다 — 같은 변경에 두 숫자가 생기면 안 된다.
+function codeDiffText(a, b) {
+  if (!a || !b || a.version == null || b.version == null) return '';
+  if (a.version === b.version) return `같은 버전 v${a.version}`;
+  const stats = diffCounts(String(a.source || ''), String(b.source || ''));
+  return `v${a.version}→v${b.version} · ${stats.added + stats.removed}줄`;
+}
+
 // 폴더 이름 — 사람이 탐색기에서 봐도 언제 만든 것인지 알아야 한다. 경로 '한 조각'
 // 규칙(백엔드 is_safe_project_name)을 지키려 구분자·점·양끝 공백을 쓰지 않는다.
 function techniqueProjectName(now) {
@@ -1609,8 +1631,15 @@ function createBacktestCanvas(options) {
         label: String(runIds[i]).slice(0, 8),
         equity: (r && r.equity) || [],
       }));
-      setState({ compareEquity: series });
-    } catch { setState({ compareEquity: null }); }
+      // 같은 응답이 파라미터와 그 실행이 쓴 버전의 코드도 싣는다(보드 05 diff 두 칸).
+      const detail = loaded.map((r, i) => ({
+        run_id: runIds[i],
+        params: (r && r.params) || null,
+        version: (r && r.version) != null ? r.version : null,
+        source: (r && r.source) || '',
+      }));
+      setState({ compareEquity: series, compareDetail: detail });
+    } catch { setState({ compareEquity: null, compareDetail: null }); }
   }
 
   async function runOptimize() {
@@ -5504,6 +5533,30 @@ function createBacktestCanvas(options) {
   function renderCompare(a, b) {
     const wrap = el('div', 'backtest-compare');
     wrap.appendChild(el('div', 'backtest-card-title', '무엇이 달랐나'));
+
+    // 보드 05(1WYY-1) — 지표 앞에 "왜 달랐나" 두 칸이 선다. 같은 버전·같은 파라미터·
+    // 같은 구간이면 같은 결과가 나와야 하므로(1WSL-1), 다른 결과의 이유는 이 둘뿐이다.
+    const detail = Array.isArray(state.compareDetail) ? state.compareDetail : [];
+    const da = detail.find((d) => d.run_id === a.run_id) || null;
+    const db = detail.find((d) => d.run_id === b.run_id) || null;
+    const diffs = el('div', 'backtest-compare-diffs');
+    [
+      ['파라미터 diff', paramsDiffText(da && da.params, db && db.params)],
+      ['코드 diff', codeDiffText(da, db)],
+    ].forEach(([label, text]) => {
+      const box = el('div', 'backtest-compare-diff-box');
+      box.appendChild(el('div', 'backtest-compare-diff-label', label));
+      box.appendChild(el('div', 'backtest-compare-diff-value', text || '—'));
+      diffs.appendChild(box);
+    });
+    wrap.appendChild(diffs);
+    // 줄 diff는 보드 02·09가 이미 쓰는 문법 그대로다 — 새 표면을 만들지 않는다.
+    if (da && db && da.source && db.source && da.source !== db.source) {
+      const host = el('div', 'backtest-compare-code');
+      CodeEditor.renderDiff(host, da.source, db.source, {});
+      wrap.appendChild(host);
+    }
+
     const table = el('div', 'backtest-compare-table');
     [
       ['총수익률', 'total_return', 'percent'],
@@ -5913,6 +5966,8 @@ const __exports = {
   techniqueProjectName,
   signedPercent,
   diffCounts,
+  paramsDiffText,
+  codeDiffText,
   parseYamlBlock,
   specOverridesFromYaml,
   METRIC_TILES,
