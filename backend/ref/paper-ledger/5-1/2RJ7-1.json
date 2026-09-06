@@ -2502,6 +2502,19 @@
     "Instrument Card Surface",
     "Chart Status Footer"
    ]
+  },
+  {
+   "id": "3T0E-0",
+   "text": "거래량",
+   "path": [
+    "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+    "Instrument Root · 금현물",
+    "Instrument Card Surface",
+    "Chart Workspace",
+    "Athena Chart Module Mount",
+    "Existing Athena Chart Module",
+    "Athena Chart Preview"
+   ]
   }
  ],
  "frames": [
@@ -4090,7 +4103,7 @@
   "순위": 1,
   "시가 · 고가 · 저가": 1,
   "167,300 · 168,600 · 166,900": 1,
-  "거래량": 1,
+  "거래량": 2,
   "185.4kg": 2,
   "거래대금 310억원": 1,
   "전일대비": 2,
