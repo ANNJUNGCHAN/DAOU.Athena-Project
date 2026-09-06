@@ -3656,6 +3656,71 @@ function renderGuardConfirmCard({ current, proposed } = {}, triggerText) {
   _mountTurn(line, card);
 }
 
+// ---------- 제어 결과 턴 (Paper 보드 08 · 4330-1, 2026-09-06) ----------
+// 칩을 누른 뒤 같은 방에 붙는 네 상태다: 성공 · 거부 · 실패·재시도 · 뷰 이동.
+// 클릭은 캔버스에서 일어나므로(살아 있는 LLM 턴 밖) 결과 턴은 플러그인 결과와
+// 똑같이 모듈 스코프의 이 구독이 마운트한다. 이벤트가 와야만 그린다 —
+// 부팅 직후 #history는 비어 있어야 한다(verify.js emptyHistory 계약).
+window.addEventListener('athena:routine-control-result', (event) => {
+  const turn = (event && event.detail && event.detail.turn) || null;
+  if (!turn || !turn.lead) return;
+  renderControlResultTurn(turn);
+});
+
+function renderControlResultTurn(turn) {
+  const line = document.createElement('div');
+  line.className = 'turn';
+  const card = document.createElement('div');
+  card.className = 'turn-agent control-result';
+
+  // 배지 두 개 — 누른 칩 이름(검정)과 판정(테두리). 설명문은 없다.
+  const head = document.createElement('div');
+  head.className = 'agent-head';
+  if (turn.badge) {
+    const action = document.createElement('span');
+    action.className = 'control-result-badge';
+    action.textContent = turn.badge;
+    head.appendChild(action);
+  }
+  const status = document.createElement('span');
+  status.className = `control-result-status is-${turn.tone}`;
+  status.textContent = turn.statusBadge;
+  head.appendChild(status);
+  card.appendChild(head);
+
+  const lead = document.createElement('div');
+  lead.className = 'control-result-lead';
+  lead.textContent = turn.lead;
+  card.appendChild(lead);
+
+  if (turn.fact) {
+    const fact = document.createElement('div');
+    fact.className = 'control-result-fact';
+    fact.textContent = turn.fact;
+    card.appendChild(fact);
+  }
+
+  // 실패에만 다음 행동이 있다. 「다시 시도」는 캔버스의 그 버튼을 다시 누르는
+  // 일이라 여기서 대신 부르지 않는다 — 사람을 그 자리로 돌려보낸다.
+  if (turn.chips.length) {
+    const row = document.createElement('div');
+    row.className = 'routine-approval-actions';
+    for (const label of turn.chips) {
+      const chip = _btn(label, 'agent-proactive-chip');
+      chip.addEventListener('click', () => {
+        chip.disabled = true;
+        if (window.AthenaAgentCanvas && typeof window.AthenaAgentCanvas.refresh === 'function') {
+          window.AthenaAgentCanvas.refresh();
+        }
+      });
+      row.appendChild(chip);
+    }
+    card.appendChild(row);
+  }
+
+  _mountTurn(line, card);
+}
+
 // ---------- 플러그인 제안 턴 · 결과 턴 (US-004) ----------
 // 채팅이 제안하고 캔버스가 승인한다. 이 파일은 승인 카드를 만들지 않는다 —
 // 카드는 canvas.js가 그리고, 여기에는 무엇을 제안했는지와 승인 뒤 무엇이
