@@ -1203,6 +1203,141 @@ const BACKTEST_USER_STRATEGIES = Object.freeze({
   },
 });
 
+// ── 새 기법 만들기 3장(보드 20·21·22) fixture ───────────────────────────────
+// 새 기법은 「목록 화면에서 대화가 낸 설정·코드」로 시작한다(startTechniqueFromChat) —
+// 앱의 [+ 새 기법 만들기]는 첫 문장을 채팅으로 던지므로 검사에서 누르면 모델 왕복이
+// 붙는다. 같은 뼈대를 세우는 이 문이 클릭 없이 결정론을 준다.
+//
+// 폴더는 만들지 않는다: athena:project-create를 실패로 못 박아 화면이 「폴더 없이
+// 시작합니다」로 물러나게 한다. 이 게이트가 도는 컴퓨터의 백엔드에 검사용 폴더를
+// 쌓지 않으려는 것이고, 그 물러남 자체가 앱이 이미 가진 갈래다.
+const TECHNIQUE_PROJECT_OFF = Object.freeze({ ok: false, error: 'probe' });
+
+// 대상만 채우는 설정 초안 — preset을 싣지 않아야 새 기법의 뼈대가 선다(preset이 오면
+// 그 기법을 고르는 길이다). 종목·기간은 값이라 phrases에 안 넣는다.
+const TECHNIQUE_DRAFT_TARGET = Object.freeze({
+  kind: 'spec_draft',
+  patch: { symbols: ['005930'], period: 'day', fromDt: '20240101', toDt: '20260801' },
+});
+
+// 검사 결과. 항목 이름(문법·계약·룩어헤드…)은 백엔드 label_ko가 그대로 화면 문구라
+// phrases에 한 글자도 넣지 않는다 — 화면이 가진 것은 제목 「터미널」과 갈래 표시뿐이다.
+function techniqueCheck(id, labelKo, ok, severity) {
+  return { id, label_ko: labelKo, ok, severity };
+}
+const TECHNIQUE_CHECKS_BLOCKED = Object.freeze({
+  ok: true,
+  data: {
+    passed: false,
+    checks: [
+      techniqueCheck('syntax', '문법', true, 'block'),
+      techniqueCheck('contract', '계약', true, 'block'),
+      techniqueCheck('smoke', '시험 실행', false, 'block'),
+      techniqueCheck('lookahead', '룩어헤드', false, 'block'),
+      techniqueCheck('warmup', '워밍업', false, 'block'),
+    ],
+    stats: null,
+    log: ['$ athena check strategy.py'],
+  },
+});
+const TECHNIQUE_CHECKS_PASSED = Object.freeze({
+  ok: true,
+  data: {
+    passed: true,
+    checks: [
+      techniqueCheck('syntax', '문법', true, 'block'),
+      techniqueCheck('contract', '계약', true, 'block'),
+      techniqueCheck('smoke', '시험 실행', true, 'block'),
+      techniqueCheck('lookahead', '룩어헤드', true, 'block'),
+      techniqueCheck('warmup', '워밍업', true, 'block'),
+    ],
+    stats: { warmup_bars: 20, entry: 31, exit: 29, rows: 2559 },
+    log: ['$ athena check strategy.py'],
+  },
+});
+
+// 보드 21이 그린 다섯 함수와 두 갈래. 첫 함수가 두 갈래에 함께 나와 둘째 카드가
+// 고스트('재사용')가 된다 — 보드 21이 그 규칙을 그렸다. 이름·줄 범위·설명은 전부
+// 그 파이썬을 읽은 값이다.
+function techniqueNode(id, summary, first, last, params, returns, role) {
+  return {
+    id,
+    label: `${id}()`,
+    summary_ko: summary,
+    first_line: first,
+    last_line: last,
+    params,
+    returns_hint: returns,
+    calls: [],
+    role,
+  };
+}
+const TECHNIQUE_NODES = Object.freeze({
+  ok: true,
+  data: {
+    granularity: 'function',
+    nodes: [
+      techniqueNode('compute_atr', '변동폭(ATR)을 n봉 평균으로 구한다', 10, 13, ['df', 'n'], 'Series', 'indicator'),
+      techniqueNode('breakout_level', '직전 lookback봉의 최고가 = 돌파선', 15, 17, ['df', 'lookback'], 'Series', 'indicator'),
+      techniqueNode('should_enter', '돌파선을 넘고 변동폭이 살아 있으면 산다', 19, 24, ['df', 'i', 'atr'], 'bool', 'entry'),
+      techniqueNode('should_exit', '산 가격에서 ATR의 1.5배만큼 내려오면 판다', 26, 34, ['df', 'i', 'entry', 'atr'], 'bool', 'exit'),
+      techniqueNode('position_size', '한 번에 걸 돈을 변동폭으로 나눠 정한다', 36, 41, ['cash', 'atr'], 'int', 'sizing'),
+    ],
+    flows: {
+      entry: ['compute_atr', 'breakout_level', 'should_enter', 'position_size'],
+      exit: ['compute_atr', 'should_exit'],
+    },
+    unknown: [],
+  },
+});
+
+// 보드 22 — 두 번째 고침. 첫 코드와 다른 원문이라야 diff가 생긴다(같은 원문이면
+// 단계 카드도 diff도 안 남는다). 파이썬은 값이라 phrases에 안 넣는다.
+const BACKTEST_CODE_DRAFT_2 = Object.freeze({
+  kind: 'code_draft',
+  source: [
+    'import athena_bt as bt',
+    '',
+    'PARAMS = {',
+    '    "fast":      {"default": 20,  "min": 5,   "max": 60},',
+    '    "slow":      {"default": 60,  "min": 20,  "max": 240},',
+    '    "exit_mult": {"default": 1.5, "min": 0.5, "max": 5.0},',
+    '    "min_hold":  {"default": 3,   "min": 1,   "max": 20},',
+    '}',
+    '',
+    'def signals(df, p):',
+    '    fast = bt.sma(df.close, p["fast"])',
+    '    slow = bt.sma(df.close, p["slow"])',
+    '    atr  = bt.atr(df, 14)',
+    '',
+    '    entry = bt.cross_above(fast, slow)',
+    '    stop = df.close - atr * p["exit_mult"]',
+    '    exit_ = bt.cross_below(fast, slow) | (df.low <= stop)',
+    '',
+    '    return df.assign(entry=entry, exit=exit_)[["entry", "exit"]]',
+    '',
+  ].join('\n'),
+});
+
+// 보드 23 — 키우미가 켜진 배포 한 줄. armed·auto_armed가 켜져야 「키우미 켜짐 = 자동
+// 매매」 줄이 켜진 모습으로 서고, 하루 한도가 있어야 오늘 로그가 분모를 그린다.
+const BACKTEST_DEPLOYMENT_ARMED = Object.freeze({
+  ok: true,
+  data: {
+    deployments: [{
+      id: 'fx-dep-4',
+      stk_cd: '005930',
+      mode: 'auto',
+      mode_label: '한도 안에서 자동으로 주문합니다',
+      status: 'active',
+      armed: true,
+      auto_armed: true,
+      expired: false,
+      limits: { max_order_amount: 2000000, max_orders_per_day: 5 },
+    }],
+  },
+});
+
 const ROUTES = Object.freeze([
   // ---------- 부팅 5장 (1-0) ----------
   // 부팅 02~05는 한 애니메이션의 시간 단계라 서로를 가르는 것은 **찍힌 글자 수**뿐이다.
@@ -3521,6 +3656,150 @@ const ROUTES = Object.freeze([
       { what: 'count', selector: '.backtest-tab', equals: 3 },
       { what: 'count', selector: '.backtest-technique-card', equals: 11 },
       { what: 'count', selector: '.backtest-technique-new', equals: 1 },
+    ],
+  },
+  // ---------- 백테스트 새 기법 3장 (8-1 · 보드 20·21·22) ----------
+  // 셋은 한 초안의 세 순간이다: 코드가 아직 검사를 못 넘은 때(20) · 넘어서 노드가 열린
+  // 때(21) · 두 번째 고침의 diff를 연 때(22). Paper가 그린 왼쪽 파일 트리(기법 폴더 ·
+  // tests/ · .venv/)와 AI가 쓰는 중 배너는 앱에 없다 — 어그난 자리에는 아무 것도 적지
+  // 않는다. 검사 항목 이름(문법·계약·룩어헤드…)도 백엔드 label_ko라 문구가 못 된다.
+  {
+    board: '43DP-1', // 20 · 백테스트 — 새 기법 만들기 · 폴더·편집기·터미널·단계 카드
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:backtest-presets', data: BACKTEST_TECHNIQUE_PRESETS },
+      { do: 'ipc-fixture', channel: 'athena:project-create', data: TECHNIQUE_PROJECT_OFF },
+      { do: 'ipc-fixture', channel: 'athena:backtest-technique-check', data: TECHNIQUE_CHECKS_BLOCKED },
+      { do: 'mode', view: 'backtest' },
+      { do: 'wait', ms: 400 },
+      // 목록 화면에서 온 설정·코드가 새 기법의 뼈대를 세운다(startTechniqueFromChat).
+      // 대상을 먼저 채우는 것은 검사가 무엇을 볼지 알아야 하기 때문이다(techniqueCheckTarget).
+      { do: 'send', channel: 'athena:backtest-chat-action', data: TECHNIQUE_DRAFT_TARGET },
+      { do: 'wait', ms: 300 },
+      { do: 'send', channel: 'athena:backtest-chat-action', data: BACKTEST_CODE_DRAFT },
+      // 검사는 코드가 바뀜고 700ms 뒤에 자동으로 돌다(TECHNIQUE_CHECK_DEBOUNCE_MS).
+      { do: 'wait', ms: 1400 },
+      { do: 'settle' },
+    ],
+    root: '#backtestCanvas',
+    phrases: ['코드', '노드·흐름', '직접 편집', '터미널'],
+    // 초안에는 하위 탭이 둘뿐이다 — Paper 보드 20이 그린 그 둘, 그 차례.
+    structure: [
+      { what: 'order', selector: '.backtest-subtab', equals: ['코드', '노드·흐름'] },
+      { what: 'count', selector: '.backtest-terminal', equals: 1 },
+      { what: 'count', selector: '.backtest-technique-band', equals: 1 },
+    ],
+  },
+  {
+    board: '43O1-1', // 21 · 백테스트 — 노드·흐름 창
+    window: 'shell',
+    // 노드 창은 사람이 여는 것이 아니라 **차단 검사를 전부 넘긴 순간** 스스로 열린다
+    // (loadTechniqueNodes의 auto 갈래). 그래서 이 라우트에는 탭을 누르는 손이 없다.
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:backtest-presets', data: BACKTEST_TECHNIQUE_PRESETS },
+      { do: 'ipc-fixture', channel: 'athena:project-create', data: TECHNIQUE_PROJECT_OFF },
+      { do: 'ipc-fixture', channel: 'athena:backtest-technique-check', data: TECHNIQUE_CHECKS_PASSED },
+      { do: 'ipc-fixture', channel: 'athena:backtest-technique-nodes', data: TECHNIQUE_NODES },
+      { do: 'ipc-fixture', channel: 'athena:backtest-run', data: BACKTEST_RUN_OK },
+      { do: 'ipc-fixture', channel: 'athena:backtest-result', data: BACKTEST_RESULT },
+      { do: 'mode', view: 'backtest' },
+      { do: 'wait', ms: 400 },
+      { do: 'send', channel: 'athena:backtest-chat-action', data: TECHNIQUE_DRAFT_TARGET },
+      { do: 'wait', ms: 300 },
+      { do: 'send', channel: 'athena:backtest-chat-action', data: BACKTEST_CODE_DRAFT },
+      { do: 'wait', ms: 1800 },
+      { do: 'settle' },
+    ],
+    root: '#backtestCanvas',
+    // 함수 이름·줄 범위·한 줄 설명은 전부 그 파이썬을 읽은 값이다. 역할 칩은 값이
+    // 아니다 — 백엔드가 보내는 것은 열쇠말(indicator·exit·sizing)이고 한국어 낱말은
+    // 이 화면이 가진 표다(backtest-technique-nodes.js ROLE_LABELS).
+    phrases: ['노드·흐름', '코드 보기', '지표', '수량'],
+    // Paper가 그린 다섯 함수. 고스트(재사용) 카드에는 손잡이가 없어 [코드 보기]도 다섯이다.
+    structure: [
+      { what: 'count', selector: '.backtest-tnodes-rail-item', equals: 5 },
+      { what: 'count', selector: '.backtest-tnodes-act.is-code', equals: 5 },
+    ],
+  },
+  {
+    board: '452D-1', // 22 · 백테스트 — 고치기 순환 · 단계 카드를 누르면 diff가 열린다
+    window: 'shell',
+    // 이 보드가 그린 것은 「카드를 누르면 그 자리가 열린다」이다 — diff를 여는 손잡이는
+    // 캔버스가 아니라 대화에 쌓인 단계 카드다(chat.js backtest-step-action). 그래서
+    // 여는 클릭이 #history를 지난다.
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:backtest-presets', data: BACKTEST_TECHNIQUE_PRESETS },
+      { do: 'ipc-fixture', channel: 'athena:project-create', data: TECHNIQUE_PROJECT_OFF },
+      { do: 'ipc-fixture', channel: 'athena:backtest-technique-check', data: TECHNIQUE_CHECKS_PASSED },
+      { do: 'ipc-fixture', channel: 'athena:backtest-technique-nodes', data: TECHNIQUE_NODES },
+      { do: 'ipc-fixture', channel: 'athena:backtest-run', data: BACKTEST_RUN_OK },
+      { do: 'ipc-fixture', channel: 'athena:backtest-result', data: BACKTEST_RESULT },
+      { do: 'mode', view: 'backtest' },
+      { do: 'wait', ms: 400 },
+      { do: 'send', channel: 'athena:backtest-chat-action', data: TECHNIQUE_DRAFT_TARGET },
+      { do: 'wait', ms: 300 },
+      { do: 'send', channel: 'athena:backtest-chat-action', data: BACKTEST_CODE_DRAFT },
+      { do: 'wait', ms: 1800 },
+      // 두 번째 고침 — Paper의 「3번째 고침」이 그린 그 순환이다.
+      { do: 'send', channel: 'athena:backtest-chat-action', data: BACKTEST_CODE_DRAFT_2 },
+      { do: 'wait', ms: 1800 },
+      { do: 'click', selector: '#history .backtest-step-card.is-icon-edit .backtest-step-action' },
+      { do: 'wait', ms: 300 },
+      { do: 'settle' },
+    ],
+    root: '#backtestCanvas',
+    // [이 기법 승인]은 검사를 넘고 자동 백테스트가 끝난 뒤에만 선다 — 이 보드가 「승인
+    // 전까지 목록에도 실매매에도 올라가지 않습니다」라고 적은 그 버튼이다.
+    phrases: ['코드', '노드·흐름', '터미널', '이 기법 승인'],
+    structure: [
+      { what: 'count', selector: '.backtest-technique-diff', equals: 1 },
+      { what: 'count', selector: '.backtest-terminal', equals: 1 },
+      { what: 'count', selector: '.backtest-technique-approve', equals: 1 },
+    ],
+  },
+  // ---------- 백테스트 실매매 적용 1장 (8-1 · 보드 23) ----------
+  {
+    board: '42FW-1', // 23 · 백테스트 — 승인 → 목록에 추가 → 실매매 적용
+    window: 'shell',
+    // Paper는 왼쪽에 승인된 목록(12개·「승인됨 · 목록에 추가」)을 나란히 그렸지만 앱은
+    // 목록과 배포를 한 번에 그리지 않는다(모드 탭이 가른다) — 그 자리에는 아무 것도
+    // 적지 않고, 이 보드가 새로 그린 것만 재다: 키우미를 켜면 주문까지 자동으로 나가는
+    // 배포와 그 한도, 그리고 오늘 로그.
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:backtest-presets', data: BACKTEST_PRESETS },
+      { do: 'ipc-fixture', channel: 'athena:backtest-run', data: BACKTEST_RUN_VERSIONED },
+      { do: 'ipc-fixture', channel: 'athena:backtest-result', data: BACKTEST_RESULT },
+      { do: 'ipc-fixture', channel: 'athena:backtest-trades', data: BACKTEST_TRADES },
+      { do: 'ipc-fixture', channel: 'athena:backtest-deployments', data: BACKTEST_DEPLOYMENT_ARMED },
+      { do: 'ipc-fixture', channel: 'athena:backtest-signals', data: BACKTEST_NO_SIGNALS },
+      { do: 'mode', view: 'backtest' },
+      { do: 'send', channel: 'athena:backtest-chat-action', data: BACKTEST_TARGET },
+      { do: 'wait', ms: 300 },
+      // 「이 전략을 실전에 겁니다」와 한도 여섯 칸은 **저장된 버전이 있을 때만** 선다
+      // (renderDeployForm) — 그 id는 코드로 돌 실행이 돌려준다.
+      { do: 'send', channel: 'athena:backtest-chat-action', data: BACKTEST_CODE_DRAFT },
+      { do: 'wait', ms: 300 },
+      { do: 'click', selector: '#backtestCanvas .backtest-run-button' },
+      { do: 'wait', ms: 600 },
+      { do: 'click', selector: '#backtestCanvas .backtest-tab:nth-child(5)' },
+      { do: 'wait', ms: 500 },
+      { do: 'settle' },
+    ],
+    root: '#backtestCanvas',
+    // 종목·별칭·한도 숫자·상태는 전부 백엔드가 준 값이다.
+    phrases: [
+      '키우미 켜짐 = 자동 매매',
+      '신호가 나면 위 한도 안에서 주문까지 자동으로 나갑니다. 한도를 넘거나 연속 손절 3회·낙폭 15%에 닿으면 스스로 멈춥니다.',
+      '한도 — 미리 승인하는 범위',
+      '오늘 로그',
+      '모의서버',
+      '이 전략을 실전에 겁니다',
+      '백테스트는 다음 봉 시가에 원하는 수량이 전부 체결된다고 가정하고, 실전은 그렇지 않습니다. 실전과 백테스트의 차이는 배포 후 신호 목록에서 그대로 보여드립니다.',
+    ],
+    structure: [
+      { what: 'count', selector: '.backtest-deploy-arm', equals: 1 },
+      { what: 'count', selector: '.backtest-deploy-log', equals: 1 },
+      { what: 'count', selector: '.backtest-deploy-item', equals: 1 },
     ],
   },
 ]);
