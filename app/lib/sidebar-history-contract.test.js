@@ -94,3 +94,19 @@ test('계좌 전환 화면은 embedded가 아니고 온보딩 3 / 3 호출자는
   assert.ok(confirm);
   assert.match(confirm[1], /embedded: true/);
 });
+
+// Paper 보드 34(2V27-1)는 검색 패널을 두 판으로 그렸다 — 결과판과 빈 결과판이다.
+// 빈 판은 질의가 있고 결과가 0건일 때만 서는 자리라 Paper 화면 게이트가 못 재고
+// (라우트는 결과판 하나만 도달한다), 「검색 결과 없음」 한 줄로 되돌아가기 쉽다.
+test('검색 빈 결과판은 Paper 34의 세 조각을 그린다 — 안내문과 새 대화 문이 있다', () => {
+  const start = sidebar.indexOf('function renderSearchPanel()');
+  assert.ok(start >= 0, 'renderSearchPanel이 없다');
+  const body = sidebar.slice(start, sidebar.indexOf('\n  function ', start + 1));
+  assert.match(body, /'sidebar-search-empty', '결과 없음'/);
+  assert.match(body, /'sidebar-search-empty-note', '아직 이 주제로 나눈 대화가 없습니다'/);
+  assert.match(body, /'sidebar-search-empty-cta', '새 대화로 물어보기'/);
+  assert.match(body, /startNewConversation\(currentProjectId\)/, '새 대화 문이 실제로 대화를 연다');
+  // 발치의 키보드 안내·총 건수는 결과판에만 있다(Paper 빈 판에는 없다).
+  assert.match(body, /if \(result\.total\) \{\s+const foot = /, '발치가 빈 판에도 붙는다');
+  assert.match(shellCss, /\.sidebar-search-empty-cta\s*\{/, 'CTA 스타일이 없다');
+});
