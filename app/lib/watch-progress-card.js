@@ -66,8 +66,10 @@ function buildProgress(check) {
   }
 
   // 458Z-1 — 코드가 돌았는가(문법·금지 명령·격리). 도는 중이면 ◐, 못 돌았으면 ○.
+  // 실패 응답에 error가 없는 경우(완성 일봉 없음 · 통로 막힘)가 더 흔하다 —
+  // ok가 참이 아니면 무조건 ○다(돌지 않은 코드를 통과했다고 말하지 않는다).
   lines.push({
-    mark: pending ? MARK_RUNNING : (failed && res.error ? MARK_PENDING : MARK_DONE),
+    mark: pending ? MARK_RUNNING : (failed ? MARK_PENDING : MARK_DONE),
     text: '검사 1/3 — 문법 통과 · 금지 명령 없음 · 격리 실행',
   });
 

@@ -74,3 +74,14 @@ test('코드가 못 돌면 검사 1/3부터 아직으로 남는다 — 통과한
   assert.equal(failed.lines[2].mark, MARK_PENDING);
   assert.equal(failed.lines[3].mark, MARK_PENDING);
 });
+
+test('실패에 error가 없어도 검사 1/3은 아직이다 — 완성 일봉 없음·통로 막힘', () => {
+  // run_check는 완성된 일봉이 없으면 reason만 채우고 error를 남기지 않는다.
+  const noBars = buildProgress({ ok: false, reason: '완성된 일봉 없음', symbol: '005930', lookback_days: 30 });
+  assert.equal(noBars.lines[1].mark, MARK_PENDING);
+  assert.equal(noBars.lines[2].mark, MARK_PENDING);
+  // 검사 통로가 막힌 폴백도 error가 없다.
+  const blocked = buildProgress({ ok: false, reason: '검사 통로가 막혀 있음' });
+  assert.equal(blocked.lines[0].mark, MARK_PENDING);
+  assert.match(blocked.lines[0].text, /검사 1\/3/);
+});
