@@ -1789,7 +1789,7 @@ function createAgentCanvas(deps) {
       loadCodeFires(item);
       const firesCaptionRow = el('div', 'agent-panel-caption-row');
       const firesCaption = el('span', 'agent-panel-caption');
-      firesCaption.textContent = '울린 기록';
+      firesCaption.textContent = '울린 기록 · 최근';
       firesCaptionRow.appendChild(firesCaption);
       const openHistoryBtn = el('button', 'agent-history-open');
       openHistoryBtn.type = 'button';
@@ -1822,6 +1822,15 @@ function createAgentCanvas(deps) {
           line.appendChild(mark);
           line.appendChild(text);
           line.appendChild(time);
+          // 보드 12는 울린 줄마다 문을 단다. 방은 루틴 단위라 이 알람의 알림 방을
+          // 여는 것까지가 앱이 아는 전부다 — 상세 패널의 같은 이름 버튼과 같은 경로다.
+          const openFire = el('button', 'agent-code-fire-open');
+          openFire.type = 'button';
+          openFire.textContent = '채팅에서 열기 ↗';
+          openFire.addEventListener('click', () => {
+            if (typeof onOpenInChat === 'function') onOpenInChat(item.id);
+          });
+          line.appendChild(openFire);
           firesWrap.appendChild(line);
         }
       }
@@ -1834,7 +1843,7 @@ function createAgentCanvas(deps) {
     detailCol.appendChild(fieldsCaption);
     const fieldsWrap = el('div', 'agent-detail-fields');
     fieldsWrap.setAttribute('data-source', item.source);
-    const fields = [['확인 주기', `장중 ${WatchNodes.pollMinutes(watch)}분`], ['쿨다운', `${raw.cooldown_s}초`]];
+    const fields = [['확인 주기', `장중 ${WatchNodes.pollMinutes(watch)}분`], ['쿨다운', WatchNodes.cooldownLabel(raw.cooldown_s)]];
     if (raw.expires_at) fields.push(['만료', WatchNodes.dayLabel(raw.expires_at)]);
     for (const [label, value] of fields) {
       const fieldRow = el('div', 'agent-detail-field');

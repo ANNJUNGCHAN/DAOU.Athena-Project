@@ -1949,7 +1949,7 @@ test('A-5 상세: 울린 기록·일시중지·취소·고치기·만료가 있�
     findByClass(row, 'agent-detail-field-label')[0].textContent,
     findByClass(row, 'agent-detail-field-value')[0].textContent,
   ]);
-  assert.deepEqual(Object.fromEntries(pairs), { '확인 주기': '장중 1분', 쿨다운: '86400초', 만료: '2026-10-03' });
+  assert.deepEqual(Object.fromEntries(pairs), { '확인 주기': '장중 1분', 쿨다운: '1일', 만료: '2026-10-03' });
 
   const inputs = [];
   (function walk(n) { if (['input', 'select', 'textarea'].includes(n.tag)) inputs.push(n); (n.children || []).forEach(walk); })(detail);

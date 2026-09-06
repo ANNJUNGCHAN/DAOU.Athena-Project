@@ -52,3 +52,11 @@ test('dayLabel·clockLabel: 못 읽는 값은 지어내지 않고 빈 문자열�
   assert.equal(W.dayLabel(''), '');
   assert.equal(W.clockLabel('그런 시각 없음'), '');
 });
+test('cooldownLabel: 나누어떨어지는 가장 큰 한국어 단위로 적는다(보드 12 「쿨다운 1일」)', () => {
+  assert.equal(W.cooldownLabel(86400), '1일');
+  assert.equal(W.cooldownLabel(300), '5분');
+  assert.equal(W.cooldownLabel(7200), '2시간');
+  assert.equal(W.cooldownLabel(90), '90초', '안 떨어지면 반올림하지 않고 초 그대로다');
+  assert.equal(W.cooldownLabel(0), '0초');
+  assert.equal(W.cooldownLabel(null), '—');
+});
