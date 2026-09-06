@@ -132,6 +132,21 @@ function isLeafAnchor(el) {
   return el.dataset ? el.dataset.leaf !== undefined : el.getAttribute('data-leaf') !== null;
 }
 
+// 병기 사본(`.bs-paired`)은 접힌 열이 내려앉을 자리라 원본과 같은 Paper 노드 id를
+// 이고 있고, 문서 순서상 원본보다 먼저 나올 수 있다(1JPU-0/`1JT3-0` 실측 — 머리
+// 사본이 표 머리 원본보다 위에 있다). 사본에 값을 쓰면 원본은 board.html 원문 그대로
+// 남아 Paper 문면과 어긋난다.
+function isPairedCopy(el) {
+  const className = el.className
+    || (typeof el.getAttribute === 'function' ? el.getAttribute('class') : '') || '';
+  return String(className).split(/\s+/).includes('bs-paired');
+}
+
+// 앵커 우선순위 — 원본이 사본을 이기고, 같은 자리면 잎이 컨테이너를 이긴다.
+function anchorRank(el) {
+  return (isPairedCopy(el) ? 0 : 2) + (isLeafAnchor(el) ? 1 : 0);
+}
+
 function nodeIndex(root) {
   const index = new Map();
   for (const el of root.querySelectorAll('[data-node]')) {
@@ -140,9 +155,9 @@ function nodeIndex(root) {
     // 추출기는 값 자리를 `<span data-node data-leaf>`로 감싸면서 바깥 원문 노드의
     // data-node를 그대로 둔다(영역·병기 묶음이 그 id를 쓴다). 같은 id가 둘이면
     // 문서 순서상 바깥이 먼저 잡히는데, 거기에 값을 쓰면 병기 줄까지 지워지므로
-    // 마운트는 건너뛴다 — 값이 영영 안 나온다. 앵커는 늘 잎이다(추출기 계약).
-    if (!index.has(key)) index.set(key, el);
-    else if (isLeafAnchor(el) && !isLeafAnchor(index.get(key))) index.set(key, el);
+    // 마운트는 건너뛴다 — 값이 영영 안 나온다.
+    const current = index.get(key);
+    if (!current || anchorRank(el) > anchorRank(current)) index.set(key, el);
   }
   return index;
 }
@@ -167,18 +182,31 @@ function setTone(el, tone) {
 
 function pairedMirrorIndex(root) {
   const index = new Map();
+  const add = (key, mirror) => {
+    if (!key) return;
+    if (!index.has(key)) index.set(key, []);
+    index.get(key).push(mirror);
+  };
   for (const mirror of root.querySelectorAll('[data-paired-source]')) {
-    const source = mirror.dataset
-      ? mirror.dataset.pairedSource : mirror.getAttribute('data-paired-source');
-    if (!source) continue;
-    if (!index.has(source)) index.set(source, []);
-    index.get(source).push(mirror);
+    add(mirror.dataset
+      ? mirror.dataset.pairedSource : mirror.getAttribute('data-paired-source'), mirror);
+  }
+  // 구형 사본 — paired-table이 아닌 표에서는 추출기가 접힌 열의 사본을
+  // `<span class="bs-paired" data-paired-col data-node="<원본 id>">`로 만든다
+  // (data-paired-source가 없다). 앵커는 원본 쪽이라 값 쓰기가 사본까지 가지 않는데,
+  // 좁은 단계(S/XS)에서 원본 열은 접히고 화면에 서는 쪽은 이 사본이다 — 함께 칠하지
+  // 않으면 실데이터가 실린 뒤에도 추출 당시 Paper 목업 숫자가 그대로 남는다.
+  for (const mirror of root.querySelectorAll('.bs-paired')) {
+    if (mirror.dataset && mirror.dataset.pairedSource !== undefined) continue;
+    add(mirror.dataset ? mirror.dataset.node : mirror.getAttribute('data-node'), mirror);
   }
   return index;
 }
 
 function syncPairedMirrors(source, mirrors) {
   for (const mirror of mirrors || []) {
+    // 원본이 없어 사본이 앵커로 뽑힌 자리는 이미 값이 실렸다.
+    if (mirror === source) continue;
     mirror.textContent = source.textContent;
     const color = source.style.color;
     if (color) mirror.style.color = color;
@@ -205,14 +233,16 @@ function isLineBreak(child) {
 
 // 요소 자식 수. 추출기는 Paper 노드 id를 모든 노드에 남기므로 앵커가 컨테이너일 수
 // 있다 — textContent를 쓰면 자식(병기 span 포함)을 통째로 날린다. 그래서 잎에만 쓴다.
-// 잎(data-leaf) 안의 <br>만 예외로 세지 않는다. 글자를 나르지 않는 줄바꿈이고, 같은
-// 자리를 paper_text가 "\n"으로 싣는다(부모가 white-space: pre-wrap — 실측 두 곳,
-// 1JPU-0/1JT0-0·1JZW-0/3PQA-0). 자식으로 세면 그 슬롯이 통째로 마운트에서 빠진다.
+// <br>만 예외로 세지 않는다. 글자를 나르지 않는 줄바꿈이고, 같은 자리를 paper_text가
+// "\n"으로 싣는다(부모가 white-space: pre-wrap — 실측 네 곳, 1JPU-0/1JT0-0·1JT3-0·
+// 1JZW-0/3PQA-0·3PQ7-0). 추출기는 병기 사본이 붙은 잎만 <span data-leaf>로 감싸므로
+// 사본이 없는 두 줄 머리글은 잎 표시 없이 <br>를 직계로 이고 있다 — 자식으로 세면
+// 그 슬롯이 마운트에서 빠지고 머리글이 Paper 문면과 어긋난 두 조각으로 남는다.
 function elementChildCount(el) {
   if (!el) return 0;
   const children = elementChildren(el);
   if (!children) return typeof el.childElementCount === 'number' ? el.childElementCount : 0;
-  return isLeafAnchor(el) ? children.filter((child) => !isLineBreak(child)).length : children.length;
+  return children.filter((child) => !isLineBreak(child)).length;
 }
 
 function hasTextContent(el) {
