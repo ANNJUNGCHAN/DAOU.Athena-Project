@@ -385,6 +385,7 @@ async function main() {
       ]),
       firesCaption: (detail.querySelector('.agent-panel-caption-row .agent-panel-caption') || {}).textContent,
       fireOpens: Array.from(detail.querySelectorAll('.agent-code-fire-open')).map((n) => n.textContent),
+      fireNoDoors: Array.from(detail.querySelectorAll('.agent-code-fire-nodoor')).map((n) => n.textContent),
       hasEdit: detail.textContent.includes('고치기 — 말로'),
       hasTodayCaption: Array.from(detail.querySelectorAll('.agent-panel-caption')).some((n) => n.textContent.startsWith('오늘 확인')),
     };
@@ -413,8 +414,9 @@ async function main() {
     codeProbe.codeToggle === '코드 · 참고 · 펼치기' && codeProbe.codePathShown === false);
   check('「울린 기록 · 최근」과 「전체 이력 보기 →」가 있다 — 보드 12',
     codeProbe.firesCaption === '울린 기록 · 최근' && codeProbe.historyOpen === '전체 이력 보기 →');
-  check('울린 줄마다 「채팅에서 열기 ↗」가 있다 — 보드 12',
-    codeProbe.fireOpens.length === 3 && codeProbe.fireOpens.every((t) => t === '채팅에서 열기 ↗'));
+  check('울린 줄에만 「채팅에서 열기 ↗」가 있다 — 보드 12(억제된 줄은 「—」)',
+    codeProbe.fireOpens.length === 2 && codeProbe.fireOpens.every((t) => t === '채팅에서 열기 ↗')
+    && codeProbe.fireNoDoors.length === 1);
   check('설정 요약이 확인 주기·쿨다운·만료 세 줄이고 쿨다운은 한국어 단위다 — 보드 12',
     JSON.stringify(codeProbe.fieldPairs)
       === JSON.stringify([['확인 주기', '장중 1분'], ['쿨다운', '1일'], ['만료', '2026-10-03']]));

@@ -1822,15 +1822,22 @@ function createAgentCanvas(deps) {
           line.appendChild(mark);
           line.appendChild(text);
           line.appendChild(time);
-          // 보드 12는 울린 줄마다 문을 단다. 방은 루틴 단위라 이 알람의 알림 방을
+          // 보드 12는 울린 줄에만 문을 단다 — 억제된 줄은 열 턴이 없어 「—」다
+          // (원장 45QX-1·45R2-1 대 45R7-1). 방은 루틴 단위라 이 알람의 알림 방을
           // 여는 것까지가 앱이 아는 전부다 — 상세 패널의 같은 이름 버튼과 같은 경로다.
-          const openFire = el('button', 'agent-code-fire-open');
-          openFire.type = 'button';
-          openFire.textContent = '채팅에서 열기 ↗';
-          openFire.addEventListener('click', () => {
-            if (typeof onOpenInChat === 'function') onOpenInChat(item.id);
-          });
-          line.appendChild(openFire);
+          if (run.verdict === 'fired') {
+            const openFire = el('button', 'agent-code-fire-open');
+            openFire.type = 'button';
+            openFire.textContent = '채팅에서 열기 ↗';
+            openFire.addEventListener('click', () => {
+              if (typeof onOpenInChat === 'function') onOpenInChat(item.id);
+            });
+            line.appendChild(openFire);
+          } else {
+            const noDoor = el('span', 'agent-code-fire-nodoor');
+            noDoor.textContent = WatchNodes.DASH;
+            line.appendChild(noDoor);
+          }
           firesWrap.appendChild(line);
         }
       }
