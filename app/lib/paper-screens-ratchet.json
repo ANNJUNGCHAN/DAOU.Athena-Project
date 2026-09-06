@@ -1,10 +1,11 @@
 {
   "schema_version": 1,
   "gate": "verify:paper-screens",
-  "blessed_at": "2026-09-06T03:50:54.164Z",
+  "blessed_at": "2026-09-06T04:19:19.548Z",
   "blessed_by": "verify:paper-screens --bless",
   "target_boards": 115,
   "passing": [
+    "11D-0",
     "15J-0",
     "16OD-2",
     "16OJ-2",
@@ -16,6 +17,7 @@
     "1I0-0",
     "1KK-0",
     "1M3-0",
+    "1OP-0",
     "1Y3-0",
     "25Q-0",
     "2FIA-2",
@@ -54,12 +56,15 @@
     "DH2-0",
     "DO-0",
     "F9-0",
+    "FLM-0",
+    "FPE-0",
     "FT6-0",
     "G5B-0",
     "GCF-0",
-    "OJ-0"
+    "OJ-0",
+    "XI-0"
   ],
-  "passing_count": 53,
+  "passing_count": 58,
   "shrink_log": [
     {
       "at": "2026-09-06T02:19:45.642Z",
