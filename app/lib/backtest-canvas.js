@@ -67,7 +67,7 @@ const METRIC_TILES = [
     sub: (m) => (m.warmup_bars ? `워밍업 ${formatNumeric(m.warmup_bars)}봉 제외` : ''),
   },
   {
-    key: 'mdd', label: 'MDD', kind: 'percent',
+    key: 'mdd', label: '최대 낙폭', kind: 'percent',
     sub: (m) => (m.mdd_start ? `${m.mdd_start} · ${formatNumeric(m.mdd_bars)}봉` : ''),
   },
   {
@@ -5622,7 +5622,7 @@ function createBacktestCanvas(options) {
     const wrap = el('div', 'backtest-optimize');
     const head = el('div', 'backtest-card-head');
     head.appendChild(el('div', 'backtest-card-title', '파라미터 최적화'));
-    head.appendChild(el('div', 'backtest-card-note', '캐시만 씁니다 — 추가 TR 호출 없음'));
+    head.appendChild(el('div', 'backtest-card-note', '추가 TR 호출 없음 — 캐시 밖 구간은 먼저 수집 승인'));
     wrap.appendChild(head);
 
     const ranges = optimizeRanges();
