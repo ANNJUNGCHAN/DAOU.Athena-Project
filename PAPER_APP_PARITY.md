@@ -23,7 +23,7 @@ Paper 파일: `01M0VGPX92K1TER4ZV9PWGQJJZ` — `Athena — 코드 기반 화면 
 
 | 낱말 | 뜻 |
 | --- | --- |
-| `적용 · 게이트` | 실앱이 그 보드의 화면에 도달하고 대표 문구가 Paper와 같다는 것을 `verify:paper-screens` 전수 실행이 실제로 쟀다. `app/lib/paper-screens-ratchet.json`의 잠금 집합에 들어 있다(53장과 1:1). **게이트가 재는 것은 도달과 대표 문구뿐이다** — 2026-09-05 전수 대조가 `부분`이라 한 보드 40장과 `불일치`라 한 1장도 이 낱말을 받는다. 그 미비는 판정 칸 뒤에 `· 부분 —` 또는 `· 불일치 —`로 적고, 분포표는 「그중 …」으로 센다 |
+| `적용 · 게이트` | 실앱이 그 보드의 화면에 도달하고 대표 문구가 Paper와 같다는 것을 `verify:paper-screens` 전수 실행이 실제로 쟀다. `app/lib/paper-screens-ratchet.json`의 잠금 집합에 들어 있다(53장과 1:1). **게이트가 재는 것은 도달과 대표 문구뿐이다** — 2026-09-05 전수 대조가 `부분`이라 한 보드 40장과 `불일치`라 한 1장도 이 낱말을 받는다. 미비의 수는 분포표의 「그중 …」이 세고, 개별 사유가 확인된 보드에 한해 판정 칸 뒤에 `· 부분 —` 또는 `· 불일치 —`로 적는다 |
 | `적용` | 실앱에 대응 표면이 있고 2026-09-05 전수 대조에서 어긋난 항목이 없다. 괄호 안 해시는 그 발견을 닫은 이 트랙의 커밋이다 |
 | `부분` | 대응 표면은 있으나 Paper가 말한 요소·상태 일부가 아직 없다 |
 | `불일치` | 표면은 있는데 Paper와 다른 것을 그린다 |
@@ -73,7 +73,7 @@ Paper 파일: `01M0VGPX92K1TER4ZV9PWGQJJZ` — `Athena — 코드 기반 화면 
 
 | Paper 보드 | 실앱 소유 표면 | 판정 |
 | --- | --- | --- |
-| `164F-2` · 01 · 화면 정본 — 최신 흐름과 상태 지도 | app/shell.html:82-147 (사이드바 모드 네비) · app/lib/main/conversations.js:237 (대화 레코드 mode) · app/captures/live-full-boot.png | Paper 낡음 |
+| `164F-2` · 01 · 화면 정본 — 최신 흐름과 상태 지도 | app/shell.html:82-147 (사이드바 모드 네비) · app/lib/main/conversations.js:237 (대화 레코드 mode) | Paper 낡음 |
 | `16OD-2` · 02 · 부팅 — READY · 0–240ms | app/shell.html:30-70 · app/chat.css:7-128 · app/chat.js:532-535 | 적용 · 게이트 |
 | `16OJ-2` · 03 · 부팅 — TYPE A→AT · 240–560ms | app/chat.css:66-101 · app/chat.js:536-547 | 적용 · 게이트 |
 | `16OQ-2` · 04 · 부팅 — TYPE ATH→ATHE · 560–880ms | app/chat.css:66-101 · app/chat.js:536-547 | 적용 · 게이트 |
@@ -85,16 +85,16 @@ Paper 파일: `01M0VGPX92K1TER4ZV9PWGQJJZ` — `Athena — 코드 기반 화면 
 | `25Q-0` · 09 · 셸 — 질문 입력 · Task Canvas | app/shell.html · app/shell.css(268/캔버스/400) · app/chat.js(결과물·출처·하위 에이전트 도크, 경과 헤더, 실행 라인, 잠금 힌트) · app/chat.css:326~400 · app/canvas.js(#grid 모자이크 2열) | 적용 · 게이트 |
 | `3KM-0` · 10 · 셸 — 답변 중 · Task Canvas | app/chat.css:416~435(.history:empty) · app/canvas.js:360~450(buildEmptyCanvasSkeleton·appendEmptyCanvasExtras) · app/lib/empty-canvas.js | 부분 |
 | `1Y3-0` · 11 · 대화 — 모델 팝오버 · 루틴 승인 | app/chat.js:2415~2500(모델 팝오버) · chat.js:940~962(실패 턴) · chat.js:909~938(중단 접힌 헤더) · lib/routine-turn.js:86~91(복원 실패) · chat.js:3313~3420(승인 카드) · chat.css:567·1658~1680·1772~1776 | 적용 · 게이트 |
-| `3JL-0` · 12 · 계정 메뉴 — 설정 진입 | app/lib/sidebar.js buildAccountMenu (1021-1064) · app/shell.html:147-155 · app/shell.css:3236-3272 | 적용 · 게이트 |
-| `AJ-0` · 13 · 설정 — 셸 오버레이 | app/shell.html:391-399 · app/chat.js openSettings (1581-1602) · app/lib/settings-cards.js renderNav(160-225)·refreshScreenCard(238-388) · app/chat.css:1587-1637 | 적용 · 게이트 (71c262c) |
+| `3JL-0` · 12 · 계정 메뉴 — 설정 진입 | app/lib/sidebar.js buildAccountMenu (1359-1403) · app/shell.html:147-155 · app/shell.css:3236-3272 | 적용 · 게이트 |
+| `AJ-0` · 13 · 설정 — 셸 오버레이 | app/shell.html:391-399 · app/chat.js openSettings (1674-1698) · app/lib/settings-cards.js renderNav(160-225)·refreshScreenCard(238-388) · app/chat.css:1587-1637 | 적용 · 게이트 (71c262c) |
 | `F9-0` · 14 · 설정 — 계좌 (AT-ST-001) | app/lib/settings-cards.js refreshAccountsCard (397-437)·buildAccountRow(451-528)·buildAccountsTable(530-546) | 적용 · 게이트 |
 | `XI-0` · 15 · 계좌 등록 — 인증 확인 중 (AT-ST-002) | app/lib/settings-cards.js openAccountRegisterSheet() (615-803)·accountSheetPhase() verifying(576-593) · app/styles/settings-cards.css .uk-status-dot(251-252) · 캡처 app/captures/SETTINGS-04-accounts-register-sheet.png | 적용 (395e537) |
 | `FLM-0` · 16 · 계좌 등록 — 인증 실패 (AT-ST-002) | app/lib/settings-cards.js accountErrorMessage()(555-562)·accountSheetState() 실패 전이(603-609)·onVerify()/onSave() 실패 경로(766-798) | 적용 (395e537) |
 | `FPE-0` · 17 · 계좌 등록 — 확인 완료 (AT-ST-002) | app/lib/settings-cards.js ACCOUNT_SHEET_SUCCESS(574)·accountSheetPhase() verified/saving successBox(576-593)·accountSheetState() verified(601)·applyState() successNote 렌더(722-738) | 적용 (395e537) |
-| `OJ-0` · 18 · 설정 — 모델 · AI 제공업체 계정 | app/lib/settings-cards.js buildModelSection(913-1031)·refreshModelCard(1045-1122) | 적용 · 게이트 |
-| `1I0-0` · 19 · 인증 — OAuth 토큰 ready | app/lib/auth-screen.js renderAuthTokenStatus()/paint() (55-185) · app/chat.js showAuthConfirm() (610-630) · app/chat.css .auth-timer-*(1390-1440) | 적용 · 게이트 |
-| `1KK-0` · 20 · 인증 — 토큰 4상태 | app/lib/auth-screen.js STATE_META(13-18)·stateDot(20-25)·paint()(94-185) · app/chat.css .auth-timer-digits(1417-1428) · app/styles/ui-kit.css .uk-dot(21-29) | 적용 · 게이트 |
-| `1M3-0` · 21 · 인증 — 계좌 전환 | app/lib/auth-screen.js openSwitch()/paintSwitch()/confirmSwitch() (286-381) · app/lib/sidebar.js buildAccountMenu() (1043-1052) · app/chat.css 1466-1490 | 적용 · 게이트 (4487e7e·c78e01e·2864d1b) |
+| `OJ-0` · 18 · 설정 — 모델 · AI 제공업체 계정 | app/lib/settings-cards.js buildModelSection(1112-1260)·refreshModelCard(1274-1387) | 적용 · 게이트 |
+| `1I0-0` · 19 · 인증 — OAuth 토큰 ready | app/lib/auth-screen.js renderAuthTokenStatus()/paint() (55-185) · app/chat.js showAuthConfirm() (664-685) · app/chat.css .auth-timer-*(1384-1436) | 적용 · 게이트 |
+| `1KK-0` · 20 · 인증 — 토큰 4상태 | app/lib/auth-screen.js STATE_META(13-18)·stateDot(20-25)·paint()(94-185) · app/chat.css .auth-timer-digits(1411-1422) · app/styles/ui-kit.css .uk-dot(21-29) | 적용 · 게이트 |
+| `1M3-0` · 21 · 인증 — 계좌 전환 | app/lib/auth-screen.js openSwitch()/paintSwitch()/confirmSwitch() (286-381) · app/lib/sidebar.js buildAccountMenu() 계좌 전환 항목(1382-1391) · app/chat.css 1466-1490 | 적용 · 게이트 (4487e7e·c78e01e·2864d1b) |
 | `1OP-0` · 22 · 주문 — 검토·영향·확인 | app/shell.html:402-408 · app/chat.js:4355-4528 · app/lib/order-ticket.js · app/chat.css:1822-1826 | 부분 (60b80e8) |
 | `9GJ-0` · 23 · 주문 — 완료·보류·재시도 | app/lib/order-ticket.js:47-110 · app/chat.js:4489-4527 · app/lib/protected-cards.js:66-96 · app/lib/card-kind-주문.js:63-68 | 부분 |
 | `11D-0` · 24 · 주문 — 거래 기능 연결 안내 | app/lib/settings-cards.js:699-815 · app/lib/settings-cards.js:389-542 · app/styles/settings-cards.css:236-292 | 부분 (ae75d89) |
@@ -225,12 +225,12 @@ Paper `05`·`06`은 2026-09-03 이후 이중 제어(시트·폼·확정 버튼)�
 | --- | --- | --- |
 | `FT6-0` · 01 · 플러그인 — 기능 허용 (AT-ST-006) | app/lib/plugin-canvas.js renderPermissionView() (:766-840) · 캡처 app/captures/03h-plugin-permission.png | 적용 · 게이트 |
 | `15J-0` · 02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰) | app/lib/plugin-canvas.js renderManage()(:626-671) + renderAudit()(:469-478) + renderAddSheetBody()(:845-868) | 적용 · 게이트 |
-| `CU0-0` · 03 · 플러그인 — 허브·설치 | app/lib/plugin-canvas.js renderHub()(:500-542) + pluginCard()(:205-235) · 캡처 artifacts/qa/jangjung-20260904/captures/mode-plugin.png | 적용 · 게이트 (ff9da67) |
+| `CU0-0` · 03 · 플러그인 — 허브·설치 | app/lib/plugin-canvas.js renderHub()(:500-542) + pluginCard()(:205-235) | 적용 · 게이트 (ff9da67) |
 | `CVY-0` · 04 · 플러그인 — 관리·마켓플레이스 | app/lib/plugin-canvas.js renderManage()(:626-671) + manageRow()(:608-625) + toggleButton()(:554-594) | 적용 · 게이트 (640b65d) |
 | `2NW8-2` · 05 · 플러그인 — 설치 승인 (캔버스 카드) | app/lib/plugin-canvas.js proposalCard()(:1064-1097) + renderInstallSheetBody()(:872-918) | 적용 · 게이트 (b1eb4e3) |
 | `2NXS-2` · 06 · 플러그인 — 상태 모음 (6상태) | app/lib/plugin-canvas.js renderHubLists()(:479-499) · renderPermissionView 오류 배너(:789-799) · 재시작 안내(:528-533) · proposalCard 상태(:1008-1027) · setRowError(:595-607) | 적용 · 게이트 |
-| `3ZJD-0` · 07 · 플러그인 대화 — 제안 턴 5동작 | app/chat.js renderPluginProposalTurn()(:3543-3548) + app/lib/plugin-proposal.js titleFor/linesFor(:104-130) + plugin-canvas.js proposalCard()(:1064-1097) | 적용 · 게이트 |
-| `3ZLW-0` · 08 · 플러그인 대화 — 결과 턴 | app/chat.js athena:plugin-result 구독(:3552-3573) + app/lib/plugin-proposal.js resultTurnCopy/resultTurnModel(:163-210) | 적용 · 게이트 |
+| `3ZJD-0` · 07 · 플러그인 대화 — 제안 턴 5동작 | app/chat.js renderPluginProposalTurn()(:3843-3847) + app/lib/plugin-proposal.js titleFor/linesFor(:104-171) + plugin-canvas.js proposalCard()(:1064-1097) | 적용 · 게이트 |
+| `3ZLW-0` · 08 · 플러그인 대화 — 결과 턴 | app/chat.js athena:plugin-result 구독(:3552-3573) + app/lib/plugin-proposal.js resultTurnCopy/resultTurnModel(:204-251) | 적용 · 게이트 |
 | `3ZNO-0` · 09 · 플러그인 창 복원 | app/lib/plugin-canvas.js permissionDraft/keepDraft(:181·:314-338) + app/canvas.js setView 래퍼·pluginRestorePending(:2741-2747·:2841-2854) + app/chat.js:2373 | 적용 · 게이트 |
 
 ### 내장 카탈로그 5종 (2026-09-01 실측)
@@ -566,7 +566,7 @@ Paper `05`·`06`은 2026-09-03 이후 이중 제어(시트·폼·확정 버튼)�
 | `3ZAA-1` · 10 · 그래프 — "이 노드 설명해줘" (관계·근거·이력·대화 원문) | backend/athena_mcp/brain_tools.py action=entity · backend/athena_api/api/brain.py:1362-1450 get_brain_entity_detail · backend/athena_api/brain/store.py:1390 entity_detail + :90 _source_excerpt_from_row · app/lib/main/live-prompt.js:622-634 buildGraphModePrefix · app/lib/graph-mode/controller.js:378 채팅 헤더 | 부분 |
 | `2GZM-2` · 10 · 백테스트 — 전략 고르기 · 실패·비활성 상태 | app/lib/backtest-canvas.js renderTechniqueList() (2614) · render()의 error 분기 (2408-2425) · stopPolling/resumePollingIfNeeded (940·1661) | 부분 |
 | `3ZC2-1` · 11 · 그래프 — 편집은 제안까지 · 도구 계약 | app/lib/graph-mode/graph-edit-proposal.js · app/chat.js:1878-2095 편집 제안 카드 · backend/athena_mcp/graph_view_tools.py propose_edit · backend/athena_api/api/brain.py:403 /relations/manual · :540 /relations/retractions | Paper 낡음 |
-| `3Y38-1` · 11 · 백테스트 — 시각 전략 설계 · 편집 가능 | app/lib/backtest-visual-editor.js (팔레트·캔버스·검사기·요약 바) + app/lib/backtest-canvas.js renderVisualDesign()(5106~5127) · 지도 탭 안 | 부분 |
+| `3Y38-1` · 11 · 백테스트 — 시각 전략 설계 · 편집 가능 | app/lib/backtest-visual-editor.js (팔레트·캔버스·검사기·요약 바) + app/lib/backtest-canvas.js renderVisualDesign()(5226~5248) · 지도 탭 안 | 부분 |
 | `3YFV-1` · 12 · 백테스트 — 시각 전략 검증 · 연결 오류 | app/lib/backtest-visual-editor.js 오류 검사기·오류 요약 바 + app/chat.js visual_question 카드(3717~3781) | 부분 |
 | `3YQ0-1` · 13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결 | app/lib/backtest-code-editor.js(리본·파일 메타·미리보기 배너·링크 상태) + app/lib/backtest-canvas.js openCodeAt/openSpan + app/chat.js visual_patch 카드(3782~3811) | 부분 |
 | `3Z0X-1` · 14 · 백테스트 — 그래프·코드 동기화 완료 · 실행 전 | app/lib/backtest-visual-editor.js synced 상태 + app/lib/backtest-canvas.js applyVisualPatch/reviewBeforeRun + app/chat.js visual_synced 카드(3813~3831) | 부분 |
