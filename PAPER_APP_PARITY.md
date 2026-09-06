@@ -23,7 +23,7 @@ Paper 파일: `01M0VGPX92K1TER4ZV9PWGQJJZ` — `Athena — 코드 기반 화면 
 
 | 낱말 | 뜻 |
 | --- | --- |
-| `적용 · 게이트` | 실앱이 그 보드의 화면에 도달하고 대표 문구가 Paper와 같다는 것을 `verify:paper-screens` 전수 실행이 실제로 쟀다. `app/lib/paper-screens-ratchet.json`의 잠금 집합에 들어 있다 |
+| `적용 · 게이트` | 실앱이 그 보드의 화면에 도달하고 대표 문구가 Paper와 같다는 것을 `verify:paper-screens` 전수 실행이 실제로 쟀다. `app/lib/paper-screens-ratchet.json`의 잠금 집합에 들어 있다(53장과 1:1). **게이트가 재는 것은 도달과 대표 문구뿐이다** — 2026-09-05 전수 대조가 `부분`이라 한 보드 40장과 `불일치`라 한 1장도 이 낱말을 받는다. 그 미비는 판정 칸 뒤에 `· 부분 —` 또는 `· 불일치 —`로 적고, 분포표는 「그중 …」으로 센다 |
 | `적용` | 실앱에 대응 표면이 있고 2026-09-05 전수 대조에서 어긋난 항목이 없다. 괄호 안 해시는 그 발견을 닫은 이 트랙의 커밋이다 |
 | `부분` | 대응 표면은 있으나 Paper가 말한 요소·상태 일부가 아직 없다 |
 | `불일치` | 표면은 있는데 Paper와 다른 것을 그린다 |
@@ -39,13 +39,13 @@ Paper 파일: `01M0VGPX92K1TER4ZV9PWGQJJZ` — `Athena — 코드 기반 화면 
 
 | Paper 페이지 | 보드 | 판정 분포 |
 | --- | ---: | --- |
-| 화면 (`1-0`) | 45 | 적용 · 게이트 27 / 부분 11 / 적용 5 / Paper 낡음 1 / 폐기 1 |
-| 그래프 (`D-2`) | 7 | 적용 · 게이트 6 / 부분 1 |
-| 에이전트 (`A-2`) | 12 | 적용 · 게이트 7 / 부분 2 / 불일치 1 / 미구현 1 / 적용 1 |
-| 플러그인 (`B-2`) | 9 | 적용 · 게이트 9 |
-| 키우미 (`C-2`) | 9 | 적용 · 게이트 4 / 적용 3 / 폐기 1 / 부분 1 |
+| 화면 (`1-0`) | 45 | 적용 · 게이트 27(그중 전수 대조 부분 23) / 부분 11 / 적용 5 / Paper 낡음 1 / 폐기 1 |
+| 그래프 (`D-2`) | 7 | 적용 · 게이트 6(그중 전수 대조 부분 4) / 부분 1 |
+| 에이전트 (`A-2`) | 12 | 적용 · 게이트 7(그중 전수 대조 부분 6 · 불일치 1) / 부분 2 / 불일치 1 / 미구현 1 / 적용 1 |
+| 플러그인 (`B-2`) | 9 | 적용 · 게이트 9(그중 전수 대조 부분 5) |
+| 키우미 (`C-2`) | 9 | 적용 · 게이트 4(그중 전수 대조 부분 2) / 적용 3 / 폐기 1 / 부분 1 |
 | 카드 (`5-1`) | 104 | 부분 72 / 적용 22 / 불일치 5 / 미판정 4 / 미구현 1 |
-| 카드미니 (`H-1`) | 203 | 미판정 180 / Paper 낡음 12 / 부분 8 / 불일치 2 / 적용 1 |
+| 카드미니 (`H-1`) | 203 | 미판정 180 / Paper 낡음 13 / 부분 7 / 불일치 2 / 적용 1 |
 | 증명 (`F-1`) | 12 | 대조 대상 아님 9 / 부분 3 |
 | 백테스트 (`8-1`) | 26 | 부분 20 / 폐기 4 / 미구현 1 / Paper 낡음 1 |
 | 백테스트 구현 현황 (`G-1`) | 17 | 적용 11 / Paper 낡음 6 |
@@ -88,9 +88,9 @@ Paper 파일: `01M0VGPX92K1TER4ZV9PWGQJJZ` — `Athena — 코드 기반 화면 
 | `3JL-0` · 12 · 계정 메뉴 — 설정 진입 | app/lib/sidebar.js buildAccountMenu (1021-1064) · app/shell.html:147-155 · app/shell.css:3236-3272 | 적용 · 게이트 |
 | `AJ-0` · 13 · 설정 — 셸 오버레이 | app/shell.html:391-399 · app/chat.js openSettings (1581-1602) · app/lib/settings-cards.js renderNav(160-225)·refreshScreenCard(238-388) · app/chat.css:1587-1637 | 적용 · 게이트 (71c262c) |
 | `F9-0` · 14 · 설정 — 계좌 (AT-ST-001) | app/lib/settings-cards.js refreshAccountsCard (397-437)·buildAccountRow(451-528)·buildAccountsTable(530-546) | 적용 · 게이트 |
-| `XI-0` · 15 · 계좌 등록 — 인증 확인 중 (AT-ST-002) | app/lib/settings-cards.js openAccountRegisterSheet() (541-694) · app/styles/settings-cards.css .uk-status-dot(233-235) · 캡처 app/captures/SETTINGS-04-accounts-register-sheet.png | 적용 (395e537) |
-| `FLM-0` · 16 · 계좌 등록 — 인증 실패 (AT-ST-002) | app/lib/settings-cards.js onSubmit()/accountErrorMessage() (544-550, 662-693) | 적용 (395e537) |
-| `FPE-0` · 17 · 계좌 등록 — 확인 완료 (AT-ST-002) | app/lib/settings-cards.js onSubmit() 성공 경로 (687-690) — 대응 표면 없음 | 적용 (395e537) |
+| `XI-0` · 15 · 계좌 등록 — 인증 확인 중 (AT-ST-002) | app/lib/settings-cards.js openAccountRegisterSheet() (615-803)·accountSheetPhase() verifying(576-593) · app/styles/settings-cards.css .uk-status-dot(251-252) · 캡처 app/captures/SETTINGS-04-accounts-register-sheet.png | 적용 (395e537) |
+| `FLM-0` · 16 · 계좌 등록 — 인증 실패 (AT-ST-002) | app/lib/settings-cards.js accountErrorMessage()(555-562)·accountSheetState() 실패 전이(603-609)·onVerify()/onSave() 실패 경로(766-798) | 적용 (395e537) |
+| `FPE-0` · 17 · 계좌 등록 — 확인 완료 (AT-ST-002) | app/lib/settings-cards.js ACCOUNT_SHEET_SUCCESS(574)·accountSheetPhase() verified/saving successBox(576-593)·accountSheetState() verified(601)·applyState() successNote 렌더(722-738) | 적용 (395e537) |
 | `OJ-0` · 18 · 설정 — 모델 · AI 제공업체 계정 | app/lib/settings-cards.js buildModelSection(913-1031)·refreshModelCard(1045-1122) | 적용 · 게이트 |
 | `1I0-0` · 19 · 인증 — OAuth 토큰 ready | app/lib/auth-screen.js renderAuthTokenStatus()/paint() (55-185) · app/chat.js showAuthConfirm() (610-630) · app/chat.css .auth-timer-*(1390-1440) | 적용 · 게이트 |
 | `1KK-0` · 20 · 인증 — 토큰 4상태 | app/lib/auth-screen.js STATE_META(13-18)·stateDot(20-25)·paint()(94-185) · app/chat.css .auth-timer-digits(1417-1428) · app/styles/ui-kit.css .uk-dot(21-29) | 적용 · 게이트 |
@@ -104,8 +104,8 @@ Paper 파일: `01M0VGPX92K1TER4ZV9PWGQJJZ` — `Athena — 코드 기반 화면 
 | `G5B-0` · 28 · Windows 반응형 창 · Snap | app/shell.css:3405-3560 · app/main.js:180-182·310-330·396·489-491·557-568 · app/lib/main/windows-native-shortcuts.test.js | 적용 · 게이트 |
 | `GCF-0` · 29 · 프로젝트·최근·새 채팅 | app/lib/sidebar.js makeProjectRow()/renderList()/startNewConversation() · app/lib/sidebar-project-menu.js · app/shell.html:80-155 | 적용 · 게이트 |
 | `DH2-0` · 30 · 대화 턴 — 복원 실패 | app/lib/routine-turn.js:86~91 · app/chat.js:2815~2912(renderAgentTurn) · app/chat.css:1658~1680 · backend/athena_api/routines/runtime.py:294~299·368~377 · backend/athena_api/routines/scheduler.py:513~523 | 적용 · 게이트 |
-| `2USX-1` · 31 · 설정 — 플러그인 (스니펫 등록·감사 로그) | 해당 없음 — app/lib/settings-cards.js NAV_ITEMS(137-144)·app/chat.js SETTINGS_PANELS(1590-1595)에 항목 없음 | 폐기 |
-| `2UWT-1` · 32 · 설정 — 성향·이력 | app/lib/settings-cards.js refreshHistoryCard (1305-1395) · NAV_ITEMS history (143) | 적용 (01b24d3·81ecdc7·d960f3d) |
+| `2USX-1` · 31 · 설정 — 플러그인 (스니펫 등록·감사 로그) | 해당 없음 — app/lib/settings-cards.js NAV_ITEMS(145-153)·app/chat.js SETTINGS_PANELS(1686-1691)에 항목 없음 | 폐기 |
+| `2UWT-1` · 32 · 설정 — 성향·이력 | app/lib/settings-cards.js refreshHistoryCard (1532-1667) · NAV_ITEMS history (152) | 적용 (01b24d3·81ecdc7·d960f3d) |
 | `2V0K-1` · 33 · 온보딩 — CLI 연결 실패 (AT-SY-002) | app/lib/onboarding.js renderCliStep 오류 경로 (216-234) · app/lib/main/cli-accounts.js login (314-333) | 적용 · 게이트 (17c0307) |
 | `2V27-1` · 34 · 사이드바 검색 — 결과·빈 결과 | app/shell.html:88~96(sidebarSearchToggle·sidebarSearchInput) · app/lib/sidebar.js:22~23·639~642·676·994~1003 | 적용 (09f66b4) |
 | `3VIQ-1` · 35 · 대화 이력 — 모드 5구역 · 세션 목록 | app/shell.html:104-146 (#sidebarModeNav), app/lib/sidebar.js, app/lib/sidebar-mode-nav.js, app/lib/session-history-view.js, app/lib/main/conversations.js | 적용 · 게이트 (3ad5c20) |
@@ -179,10 +179,10 @@ Paper 파일: `01M0VGPX92K1TER4ZV9PWGQJJZ` — `Athena — 코드 기반 화면 
 | `ARM-0` · 02 · 에이전트 — 알람 센터 · 라이브 관제 | app/lib/agent-canvas.js:127-134(VIEWS)·:288-307(머리·모두 읽음으로)·:560-643(알람 컬럼)·:644-730(라이브 컬럼) | 적용 · 게이트 |
 | `B57-0` · 03 · 에이전트 — 실행 이력·결과 | app/lib/agent-canvas.js:309-341(브레드크럼·[이력][설정] 세그먼트)·:745-885(최근 30회·산출물·30회 통계)·:1084-1130(setHistoryTab/openHistory) | 적용 · 게이트 |
 | `BIM-0` · 04 · 에이전트 — 프로액티브 | app/lib/agent-canvas.js:344-350(그래프 링크)·:1152-1162(성향 스트립)·:1163-1210(말걸기 가드)·:1240-1290(제안 카드·칩) · app/chat.js:3421-3495(가드 변경 확인 카드) | 적용 · 게이트 |
-| `BV0-0` · 05 · 에이전트 — 작업 | app/lib/agent-canvas.js:353-397(작업 뷰 머리·필터·검색·CTA)·:200-277(통계 4장)·:425-490(리스트·제안 미니목록)·:533-547(규칙 3줄)·:1820-1870(상세 머리 제어) | 적용 · 게이트 (3767668) |
+| `BV0-0` · 05 · 에이전트 — 작업 | app/lib/agent-canvas.js:353-397(작업 뷰 머리·필터·검색·CTA)·:200-277(통계 4장)·:425-490(리스트·제안 미니목록)·:533-547(규칙 3줄)·:1820-1870(상세 머리 제어) | 적용 · 게이트 (3767668) · 불일치 — Paper가 2026-09-03에 이중 제어 시트(`42W3-1`)로 갱신됐고 앱 반영은 보류다(아래 05·06 절) |
 | `2IJN-2` · 06 · 에이전트 — 작업 설정 | app/lib/agent-canvas.js:327-341(설정 세그먼트)·:1084-1110(setHistoryTab)·:1000-1060(설정 패널) · app/main.js:1296·1302·1322·1328(routine-update/draft/detail/source-catalog IPC) | 불일치 |
 | `432Z-1` · 07 · 에이전트 대화 — 제어 제안 턴 A~E | 없음 — app/main.js:2437-2457이 athena:routine-proposed를 보내고 app/preload.js:325가 통로를 열어 두었으나 렌더러 구독자 0건 | 미구현 |
-| `4330-1` · 08 · 에이전트 대화 — 결과 턴 | 없음 | 적용 (0db0399) |
+| `4330-1` · 08 · 에이전트 대화 — 결과 턴 | app/lib/routine-control-turn.js CONTROL_RESULT_KINDS(16-21)·failLead(30-40)·buildControlResultTurn(60-77) · app/lib/agent-canvas.js reportControl(1518-1527)·제안 보류(1281-1288) · app/canvas.js onControlResult(3883-3885) · app/chat.js renderControlResultTurn(3753-3808) | 적용 (0db0399) |
 | `43WD-1` · 09 · 에이전트 — 새 알람 · 말로 설명하면 AI가 감시 함수를 만든다 | app/lib/agent-canvas.js (toDraftItem 1355-1365 · renderCodeDetail 1599-1811) · app/chat.js 초안 카드 3319-3417 · app/lib/main/live-prompt.js buildAgentModePrefix 656-678 | 부분 |
 | `446V-1` · 10 · 에이전트 — 알람 노드·흐름 · 검사 결과 · 승인 | app/lib/watch-check-card.js checkCardModel 51-92 · app/chat.js renderWatchCheckCard 3199-3277 / 초안 카드 3367-3417 · app/lib/agent-canvas.js makeNodeCard 1528-1597 · 초안 검사 요약 1719-1743 | 적용 · 게이트 (cbe8a1b·f2bada5·1c9a3ef·d8633eb) |
 | `44HD-1` · 11 · 에이전트 — 노드에서 ‘이상해요’ → AI가 고치고 다시 검사 | app/lib/agent-canvas.js makeNodeCard 1528-1597 (배지·선택·칩) · app/canvas.js onEditInChat 3407-3424 · app/lib/watch-nodes.js 17-22 | 부분 (13b31ea) |
@@ -192,7 +192,7 @@ Paper 파일: `01M0VGPX92K1TER4ZV9PWGQJJZ` — `Athena — 코드 기반 화면 
 
 `432Z-1`(07 · 제어 제안 턴 A~E)은 열 A~E(작업 설정·알람·제안 채택·뷰 이동·실행)와 「두 입구 · 한 게이트」를 정의한다 — 대화 경로는 `제안 턴 → 사람 칩 클릭 → 게이트`, GUI 경로는 `시트·폼·버튼 → 같은 게이트`이며 D(뷰 이동)만 게이트 없이 렌더러가 옮긴다. 앱에는 아직 그 제안 턴 렌더러가 없다 — `chat.js`에는 플러그인용 `renderPluginProposalTurn`만 있고 에이전트 제어 제안 턴 심볼은 0건이다.
 
-`4330-1`(08 · 결과 턴)은 0db0399로 세웠다. 판정·칩·서버 상태 변화 여부를 `app/lib/routine-control-turn.js` 한 표로 두고, 캔버스의 일시중지·재개·취소·승인과 제안 「보류」가 그 결과를 채팅에 남긴다. 실패 리드에서 백엔드 코드 번호는 걷어냈고, 1c9a3ef가 실패 결과 턴의 「다시 시도」를 실제로 같은 제어를 다시 부르는 손잡이로 바꿨다.
+`4330-1`(08 · 결과 턴)은 0db0399로 세웠다(위 표의 「없음」은 수정 전 스냅샷이 남긴 것이라 실제 소유 파일로 바꿨다). 판정·칩·서버 상태 변화 여부를 `app/lib/routine-control-turn.js` 한 표로 두고, 캔버스의 일시중지·재개·취소·승인과 제안 「보류」가 그 결과를 채팅에 남긴다. 실패 리드에서 백엔드 코드 번호는 걷어냈고, 1c9a3ef가 실패 결과 턴의 「다시 시도」를 실제로 같은 제어를 다시 부르는 손잡이로 바꿨다.
 
 ### 05·06 — Paper가 앞서고 앱이 뒤처진 자리
 
@@ -580,7 +580,7 @@ Paper `05`·`06`은 2026-09-03 이후 이중 제어(시트·폼·확정 버튼)�
 | `452D-1` · 22 · 백테스트 — 고치기 순환 · 단계 카드를 누르면 diff와 터미널이 열린다 | — | 부분 |
 | `42FW-1` · 23 · 백테스트 — 승인 → 기법 목록에 추가 → 실매매 적용(키우미가 켜지면 자동 매매) | — | 부분 |
 
-**BT-01·04·05·06을 「적용」에서 내렸다.** 앱의 프로브가 같은 항목들을 미구현 계약으로 잠가 두고 있다 — `probe-backtest-full.js`의 B08(「지표 추가/삭제 버튼은 화면에 없다」) · H06(「이력 비교에는 파라미터·코드 diff가 없다」) · I11(「조합 수를 미리 세지만 렌더러에 배선은 없다」). 항목 단위 감사표는 `docs/architecture/backtest-parity-audit.md` §0·§10.5가 소유한다(2026-09-06에 `60/60`을 `58/60`으로 정정했다). 그중 H06은 5e84d04가 닫았다(`GET /runs/{id}`가 실효 파라미터와 버전·소스를 함께 실어, 비교 패널에 파라미터 diff·코드 diff 두 칸이 선다 — 프로브 단언을 「있다」로 뒤집었다). B08·I11은 남아 있다.
+**BT-01·04·05·06을 「적용」에서 내렸다.** 앱의 프로브가 같은 항목들을 미구현 계약으로 잠가 두고 있다 — `probe-backtest-full.js`의 B08(「지표 추가/삭제 버튼은 화면에 없다」) · H06(「이력 비교에는 파라미터·코드 diff가 없다」) · I11(「조합 수를 미리 세지만 렌더러에 배선은 없다」). 항목 단위 감사표는 `docs/architecture/backtest-parity-audit.md` §0·§10.5가 소유한다(2026-09-06에 `60/60`을 `58/60`으로 정정했다 — BT-04의 4-3·4-4·4-10·4-11과 5-7은 아직 재확인하지 않아 그 수가 상한이다). 그중 H06은 5e84d04가 닫았다(`GET /runs/{id}`가 실효 파라미터와 버전·소스를 함께 실어, 비교 패널에 파라미터 diff·코드 diff 두 칸이 선다 — 프로브 단언을 「있다」로 뒤집었다). B08·I11은 남아 있다.
 
 **첫 표면은 보드 19다.** `기법 · 결과 · 이력` 탭이고, 기법을 고르기 전에는 지도·폼·코드가 서지 않는다. e88ed20·49bfb7d가 그 화면에서 대화로 시작하면 새 기법이 열리고 대화가 낸 코드가 폴더 씨앗에 덮이지 않게 했다.
 
@@ -640,7 +640,7 @@ Paper `05`·`06`은 2026-09-03 이후 이중 제어(시트·폼·확정 버튼)�
 | 에이전트 | `446V-1` 10 | `cbe8a1b` `f2bada5` `1c9a3ef` `d8633eb` | 승인 패널·자동 검사 5줄·「다시 시도」 재호출·검사 실패 마크 |
 | 에이전트 | `44RV-1` 12 | `f7419f4` `dd31d7a` | 쿨다운 `86400초` · 울린 기록 머리 · 억제된 줄에 붙은 문 |
 | 에이전트 | `56X-0` 01 | `09acd83` `d22eccf` | 알림 방 머리 문구 · 「관제 창으로 →」가 매번 빈 대화를 새로 만들었다 |
-| 에이전트 | `BV0-0` 05 | `3767668` | 작업 뷰 하단 규칙이 GUI 입구를 부정하는 옛 문구였다(부분) |
+| 에이전트 | `BV0-0` 05 | `3767668` | 작업 뷰 하단 규칙이 GUI 입구를 부정하는 옛 문구였다(문면만 닫혔고 시트·폼·확정 버튼은 남았다) |
 | 플러그인 | `CU0-0` 03 | `ff9da67` | 서버 추가 시트의 확정 버튼이 `[승인]`이라 여기서 등록이 끝난 것처럼 읽혔다 |
 | 플러그인 | `CVY-0` 04 | `640b65d` | 관리 행 차례와 등록 제안 근거 줄 |
 | 플러그인 | `2NW8-2` 05 | `b1eb4e3` | 승인 카드 본문이 「권한 N개 요청」 한 줄뿐이었다 |
