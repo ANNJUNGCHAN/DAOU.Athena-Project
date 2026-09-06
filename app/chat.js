@@ -3726,17 +3726,31 @@ function renderGuardConfirmCard({ current, proposed } = {}, triggerText) {
 }
 
 // ---------- 제어 결과 턴 (Paper 보드 08 · 4330-1, 2026-09-06) ----------
+// 에이전트 표면으로 데려가는 두 걸음(캔버스 전환 + 네비 활성)은 모드 네비와
+// 같은 순서다(canvas.js onOpenGraph 참고) — 새 전환 경로를 만들지 않는다.
+function openAgentCanvas() {
+  if (window.AthenaCanvasMode && typeof window.AthenaCanvasMode.setView === 'function') {
+    window.AthenaCanvasMode.setView('agent');
+  }
+  if (window.AthenaModeNav && typeof window.AthenaModeNav.setActive === 'function') {
+    window.AthenaModeNav.setActive('agent');
+  }
+  if (window.AthenaAgentCanvas && typeof window.AthenaAgentCanvas.refresh === 'function') {
+    window.AthenaAgentCanvas.refresh();
+  }
+}
 // 칩을 누른 뒤 같은 방에 붙는 네 상태다: 성공 · 거부 · 실패·재시도 · 뷰 이동.
 // 클릭은 캔버스에서 일어나므로(살아 있는 LLM 턴 밖) 결과 턴은 플러그인 결과와
 // 똑같이 모듈 스코프의 이 구독이 마운트한다. 이벤트가 와야만 그린다 —
 // 부팅 직후 #history는 비어 있어야 한다(verify.js emptyHistory 계약).
 window.addEventListener('athena:routine-control-result', (event) => {
-  const turn = (event && event.detail && event.detail.turn) || null;
+  const detail = (event && event.detail) || {};
+  const turn = detail.turn || null;
   if (!turn || !turn.lead) return;
-  renderControlResultTurn(turn);
+  renderControlResultTurn(turn, typeof detail.retry === 'function' ? detail.retry : null);
 });
 
-function renderControlResultTurn(turn) {
+function renderControlResultTurn(turn, retry) {
   const line = document.createElement('div');
   line.className = 'turn';
   const card = document.createElement('div');
@@ -3769,8 +3783,9 @@ function renderControlResultTurn(turn) {
     card.appendChild(fact);
   }
 
-  // 실패에만 다음 행동이 있다. 「다시 시도」는 캔버스의 그 버튼을 다시 누르는
-  // 일이라 여기서 대신 부르지 않는다 — 사람을 그 자리로 돌려보낸다.
+  // 실패에만 다음 행동이 있다. 「다시 시도」는 실패한 제어를 그대로 다시 부른다
+  // (결과는 새 턴으로 온다). 손잡이가 없는 결과면 최소한 그 버튼 자리로
+  // 데려간다 — 막다른 길을 만들지 않는다(보드 10).
   if (turn.chips.length) {
     const row = document.createElement('div');
     row.className = 'routine-approval-actions';
@@ -3778,9 +3793,11 @@ function renderControlResultTurn(turn) {
       const chip = _btn(label, 'agent-proactive-chip');
       chip.addEventListener('click', () => {
         chip.disabled = true;
-        if (window.AthenaAgentCanvas && typeof window.AthenaAgentCanvas.refresh === 'function') {
-          window.AthenaAgentCanvas.refresh();
+        if (retry) {
+          Promise.resolve(retry()).catch(() => {});
+          return;
         }
+        openAgentCanvas();
       });
       row.appendChild(chip);
     }
