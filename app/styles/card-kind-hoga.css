@@ -2,6 +2,9 @@
   --hoga-ask: var(--color-down, #1f6fd4);
   --hoga-bid: var(--color-up, #d92b2b);
   width: 100%;
+  /* 좁은 창에서 사다리가 스스로 열을 줄인다(Paper 15Y5-2) — 창 폭이 아니라
+     카드가 실제로 받은 폭을 본다. 캔버스 열 수는 카드마다 다르다. */
+  container-type: inline-size;
   overflow: hidden;
   color: var(--color-k-text, #14171d);
   background: var(--color-k-panel, #fff);
@@ -114,8 +117,8 @@
   background: #f8f9fb;
   border-bottom: 1px solid var(--color-k-line-soft, rgb(16 19 26 / 8%));
   font-family: var(--font-mono, ui-monospace, monospace);
-  font-size: 9px;
-  line-height: 12px;
+  font-size: 11px;
+  line-height: 14px;
 }
 
 .card-kit-hoga-live-columns span:not(:first-child) {
@@ -128,9 +131,15 @@
   padding: 0 12px;
   border-bottom: 1px solid rgb(16 19 26 / 5%);
   font-family: var(--font-mono, ui-monospace, monospace);
-  font-size: 10px;
-  line-height: 14px;
+  font-size: 12px;
+  line-height: 16px;
   font-variant-numeric: tabular-nums;
+}
+
+/* 저작자 규칙(display: grid)이 UA의 [hidden]을 이긴다 — 좁은 폭에서 렌더러가
+   접은 단은 이 규칙이 있어야 실제로 사라진다. */
+.card-kit-hoga-live-row[hidden] {
+  display: none;
 }
 
 .card-kit-hoga-live-row--ask {
@@ -277,6 +286,37 @@
 @keyframes hoga-packet {
   0% { box-shadow: 0 0 0 0 rgb(95 206 63 / 38%); }
   100% { box-shadow: 0 0 0 5px rgb(95 206 63 / 0%); }
+}
+
+/* 좁은 폭 — 건수·증감·상대 잔량을 접고 가격·잔량 2열만 남긴다(Paper 15ZZ-2).
+   단수를 3단으로 줄이는 것은 렌더러가 한다(card-kind-호가.js visibleLevels). */
+@container (max-width: 420px) {
+  .card-kit-hoga-live-columns,
+  .card-kit-hoga-live-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .card-kit-hoga-live-columns span:nth-child(1),
+  .card-kit-hoga-live-columns span:nth-child(3),
+  .card-kit-hoga-live-columns span:nth-child(5),
+  .card-kit-hoga-live-count,
+  .card-kit-hoga-live-change,
+  .card-kit-hoga-live-bar-track {
+    display: none;
+  }
+
+  /* 가격이 앞, 잔량이 뒤 — Paper는 좁은 카드에서 호가를 먼저 읽힌다. */
+  .card-kit-hoga-live-columns span:nth-child(4),
+  .card-kit-hoga-live-price {
+    order: 1;
+    text-align: left;
+  }
+
+  .card-kit-hoga-live-columns span:nth-child(2),
+  .card-kit-hoga-live-quantity {
+    order: 2;
+    text-align: right;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
