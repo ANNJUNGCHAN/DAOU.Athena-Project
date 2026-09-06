@@ -4118,6 +4118,9 @@ const BACKTEST_CHANGE_TITLES = {
   code_draft: '코드 반영',
   file_draft: '파일 반영',
   navigate: '탭 이동',
+  // 출처에서 지도로(보드 17) — 붙인 주소가 접수된 것과, 읽고 규칙을 뽑은 것.
+  source_url: '출처 접수',
+  source_read: '출처 읽음',
   optimize_request: '최적화 준비',
   // 시각 설계 ↔ 코드 왕복(보드 12·13·14, 2026-09-03) — 묻고, 비활성 수정안을 보이고,
   // 동기화된 초안을 알리고, 그 사이 다른 수정이 먼저 저장됐음을 알린다.
@@ -4667,6 +4670,15 @@ function renderBacktestChangeCard(receipt) {
     nodeEl.textContent = `${node.numeral} ${node.title} — ${node.text}`;
     card.appendChild(nodeEl);
   });
+
+  // 출처 카드에는 방어 문장이 붙는다 — 남이 쓴 글을 화면에 옮긴 자리에서 그 글이
+  // 자료일 뿐이라는 사실을 한 번은 말해야 한다(backtest-canvas.js emitSourceReadCard).
+  if (receipt.kind === 'source_read' && receipt.method) {
+    const guard = document.createElement('div');
+    guard.className = 'backtest-change-guard';
+    guard.textContent = receipt.method;
+    card.appendChild(guard);
+  }
 
   (Array.isArray(receipt.rows) ? receipt.rows : []).forEach((row) => {
     const rowEl = document.createElement('div');

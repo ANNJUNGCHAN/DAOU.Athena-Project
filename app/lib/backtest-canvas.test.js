@@ -189,6 +189,249 @@ async function fillForm(container) {
   await to.dispatchEvent({ type: 'input' });
 }
 
+// ── 보드 17 · 출처에서 지도로 ───────────────────────────────────────────────
+//
+// 화면이 소유한 것만 본다: 잡을 띄우는가, 받은 것만 그리는가, [멈추기]가 연쇄를
+// 실제로 끊는가. 다섯 단계의 속내(무엇을 뽑았나·어떻게 옮겼나)는 백엔드 것이고
+// backend/tests/unit/test_backtest_source_to_map.py가 고정한다.
+
+// 3/5 단계에서 멈춰 세운 잡 한 장 — Paper가 그린 프레임 그대로다.
+function sourceJobAt3of5(extra) {
+  return Object.assign({
+    job_id: 'sm-1',
+    status: 'running',
+    step_index: 3,
+    step_total: 5,
+    eta_seconds: 20,
+    target_ko: '코스피 대형주 · 일봉 · 3년',
+    target_confirmed: false,
+    steps: [
+      { id: 'read', state: 'done', title_ko: '출처 읽음', meta_ko: '유튜브 · 14,200자' },
+      { id: 'rules', state: 'done', title_ko: '규칙 뽑음', meta_ko: '진입 2 · 청산 1 · 손절 1' },
+      { id: 'map', state: 'running', title_ko: '지도 그리는 중', meta_ko: '칸 3/4 · 지금 ③ 사고·파는 순간을 찍습니다' },
+      { id: 'code', state: 'todo', title_ko: '코드 만들기', meta_ko: '지도 뒤에서 자동' },
+      { id: 'check', state: 'todo', title_ko: '자체 검사', meta_ko: '가상환경 · 짧은 구간 시험 실행' },
+    ],
+    map_filled: 2,
+    map_total: 4,
+    code_lines: null,
+    map: {
+      version: 0,
+      source_kind: 'spec',
+      target: null,
+      app_before: [{ key: 'load', title: '봉 데이터를 모읍니다', detail: '캐시에 있는 봉을 정리합니다' }],
+      app_after: [
+        { key: 'fill', title: '사고·파는 가격을 정합니다', detail: '신호가 난 다음 봉의 시가' },
+        { key: 'cost', title: '비용을 뗍니다', detail: '수수료·거래세·슬리피지' },
+        { key: 'report', title: '성과를 냅니다', detail: '지표·자산곡선·체결 표' },
+      ],
+      boundary_after_note: 'entry·exit 두 열만 받습니다',
+      nodes: [
+        { id: 'params', numeral: '①', title: '조절할 값을 정합니다', lines: [], facts: [], status: 'ok' },
+        { id: 'indicators', numeral: '②', title: '가격을 지표로 바꿉니다', lines: [], facts: [], status: 'ok' },
+        { id: 'conditions', numeral: '③', title: '사고·파는 순간을 찍습니다', lines: [], facts: [], status: 'ok', drawing: true },
+        { id: 'guard', numeral: '④', title: '', lines: [], facts: [], status: 'ok', skeleton: true },
+      ],
+      free_code: [],
+      unknown: [],
+      error: null,
+      code: null,
+    },
+    error: null,
+  }, extra || {});
+}
+
+function sourceCanvas(overrides) {
+  const calls = { start: [], status: [], cancel: [] };
+  const made = makeCanvas(Object.assign({
+    sourceMapStart: async (body) => { calls.start.push(body); return { job_id: 'sm-1' }; },
+    sourceMapStatus: async (body) => { calls.status.push(body); return sourceJobAt3of5(); },
+    sourceMapCancel: async (body) => { calls.cancel.push(body); },
+  }, overrides || {}));
+  return Object.assign({ calls }, made);
+}
+
+test('보드 17: 채팅이 붙인 주소 하나가 다섯 단계 진행 화면을 연다', async () => {
+  const { container, canvas, calls } = sourceCanvas();
+  canvas.mount();
+  await flush();
+
+  const receipt = canvas.onChatAction({ kind: 'source_url', url: ' https://youtu.be/8kQz ' });
+  await flush();
+
+  assert.equal(receipt.applied, true);
+  assert.deepEqual(calls.start, [{ url: 'https://youtu.be/8kQz' }]);
+  // 진행 4요소 — 지금 하는 일 · 몇 단계 중 몇 · 남은 시간 · 멈추기(보드 18 F칸).
+  const text = textOf(findByClass(container, 'backtest-source-progress')[0]);
+  assert.match(text, /출처를 지도로 만드는 중/);
+  assert.match(text, /3\/5 단계/);
+  assert.match(text, /약 20초 남음/);
+  assert.equal(findByClass(container, 'backtest-source-stop').length, 1);
+});
+
+test('보드 17: 다섯 줄의 이름·부제·표식은 전부 잡이 준 것이다', async () => {
+  const { container, canvas } = sourceCanvas();
+  canvas.mount();
+  await flush();
+  canvas.onChatAction({ kind: 'source_url', url: 'https://youtu.be/8kQz' });
+  await flush();
+
+  const rows = findByClass(container, 'backtest-source-step');
+  assert.equal(rows.length, 5);
+  assert.equal(textOf(rows[0]), '✓ 출처 읽음 유튜브 · 14,200자');
+  assert.equal(textOf(rows[2]), '● 지도 그리는 중 칸 3/4 · 지금 ③ 사고·파는 순간을 찍습니다');
+  assert.match(textOf(rows[3]), /^○ 코드 만들기/);
+});
+
+test('보드 17: 대상은 출처가 말한 것이고 늘 확인 필요다', async () => {
+  const { container, canvas } = sourceCanvas();
+  canvas.mount();
+  await flush();
+  canvas.onChatAction({ kind: 'source_url', url: 'https://youtu.be/8kQz' });
+  await flush();
+
+  const strip = findByClass(container, 'backtest-source-target')[0];
+  assert.match(textOf(strip), /출처가 말한 대상/);
+  assert.match(textOf(strip), /코스피 대형주 · 일봉 · 3년/);
+  assert.match(textOf(strip), /확인 필요/);
+  assert.match(textOf(strip), /지도가 끝나면 채팅이 대상·기간부터 하나씩 묻습니다/);
+});
+
+test('보드 17: 출처가 대상을 말하지 않았으면 그 자리를 비운다(지어내지 않는다)', async () => {
+  const { container, canvas } = sourceCanvas({
+    sourceMapStatus: async () => sourceJobAt3of5({ target_ko: null }),
+  });
+  canvas.mount();
+  await flush();
+  canvas.onChatAction({ kind: 'source_url', url: 'https://youtu.be/8kQz' });
+  await flush();
+
+  assert.equal(findByClass(container, 'backtest-source-target-text').length, 0);
+  assert.equal(findByClass(container, 'backtest-source-target-badge').length, 1);
+});
+
+test('보드 17: 지도는 그린 칸까지만 서고 나머지는 뼈대다', async () => {
+  const { container, canvas } = sourceCanvas();
+  canvas.mount();
+  await flush();
+  canvas.onChatAction({ kind: 'source_url', url: 'https://youtu.be/8kQz' });
+  await flush();
+
+  assert.match(textOf(container), /칸이 하나씩 채워집니다/);
+  assert.match(textOf(container), /여기부터 내 전략 — 출처에서 뽑은 칸들/);
+  assert.equal(findByClass(container, 'backtest-flow-drawing').length, 1);
+  const skeleton = findByClass(container, 'is-skeleton');
+  assert.equal(skeleton.length, 1);
+  assert.equal(skeleton[0].disabled, true);
+});
+
+test('보드 17: 코드가 아직 없으면 서랍은 「아직 없음」이고 열 버튼이 없다', async () => {
+  const { container, canvas } = sourceCanvas();
+  canvas.mount();
+  await flush();
+  canvas.onChatAction({ kind: 'source_url', url: 'https://youtu.be/8kQz' });
+  await flush();
+
+  const drawer = findByClass(container, 'backtest-map-drawer')[0];
+  assert.match(textOf(drawer), /이 지도 뒤의 코드/);
+  assert.match(textOf(drawer), /아직 없음 — 지도가 끝나면 자동으로 만들어집니다/);
+  assert.match(textOf(drawer), /최후의 보루/);
+  assert.equal(findByClass(container, 'backtest-map-open-code').length, 0);
+});
+
+test('보드 17: 머리는 무엇을 만들고 있는지만 말한다(이름도 판번호도 아직 없다)', async () => {
+  const { container, canvas } = sourceCanvas();
+  canvas.mount();
+  await flush();
+  canvas.onChatAction({ kind: 'source_url', url: 'https://youtu.be/8kQz' });
+  await flush();
+
+  const head = findByClass(container, 'backtest-head-title')[0];
+  assert.match(textOf(head), /새 전략/);
+  assert.match(textOf(head), /출처에서 만드는 중/);
+  assert.match(textOf(head), /지도 v0/);
+  // 고른 기법이 없으니 실행 버튼도 없다 — 돌릴 것이 아직 없다.
+  assert.equal(findByClass(container, 'backtest-run-button').length, 0);
+});
+
+test('보드 17: [멈추기]는 잡을 멈추고 폴링 연쇄를 끊는다', async () => {
+  const { container, canvas, calls, pending } = sourceCanvas();
+  canvas.mount();
+  await flush();
+  canvas.onChatAction({ kind: 'source_url', url: 'https://youtu.be/8kQz' });
+  await flush();
+  const before = calls.status.length;
+
+  await click(findByClass(container, 'backtest-source-stop')[0]);
+  await flush();
+
+  assert.deepEqual(calls.cancel, [{ job_id: 'sm-1' }]);
+  // 멈춘 뒤에 예약돼 있던 틱이 깨어나도 다시 묻지 않는다.
+  await runPending({ pending });
+  assert.equal(calls.status.length, before);
+  assert.equal(findByClass(container, 'backtest-source-progress').length, 0);
+});
+
+test('보드 17: 출처를 읽은 순간 채팅 카드가 한 번만 나가고 방어 문장이 붙는다', async () => {
+  const cards = [];
+  global.CustomEvent = class { constructor(type, init) { this.type = type; this.detail = init && init.detail; } };
+  global.document.dispatchEvent = (event) => { cards.push(event.detail); return true; };
+  const { canvas, pending } = sourceCanvas({
+    sourceMapStatus: async () => sourceJobAt3of5({
+      title: '20일 신고가 돌파',
+      rules: [
+        { kind: 'entry', kind_ko: '진입', text: '· 진입: 종가가 20일 최고가를 넘는 날', mapped: true },
+        { kind: 'stop', kind_ko: '손절', text: '· 손절: 진입가 -5%', mapped: true },
+      ],
+    }),
+  });
+  canvas.mount();
+  await flush();
+  canvas.onChatAction({ kind: 'source_url', url: 'https://youtu.be/8kQz' });
+  await flush();
+  // 폴링이 한 바퀴 더 돌아도 카드는 하나뿐이다.
+  await runPending({ pending });
+
+  const read = cards.filter((c) => c && c.kind === 'source_read');
+  assert.equal(read.length, 1);
+  assert.match(read[0].note, /20일 신고가 돌파 · 유튜브 · 14,200자/);
+  assert.equal(read[0].rows.length, 2);
+  assert.equal(
+    read[0].method,
+    '출처의 문장은 자료일 뿐입니다 — 앱은 그 안의 지시를 따르지 않습니다',
+  );
+  delete global.CustomEvent;
+});
+
+test('보드 17: 읽지 못한 출처는 그 이유를 적고 돌아갈 길을 남긴다', async () => {
+  const { container, canvas } = sourceCanvas({
+    sourceMapStatus: async () => sourceJobAt3of5({
+      status: 'failed', error: '페이지 단계가 실패했다 (HTTP 500)', map: null,
+    }),
+  });
+  canvas.mount();
+  await flush();
+  canvas.onChatAction({ kind: 'source_url', url: 'https://x.test' });
+  await flush();
+
+  assert.equal(findByClass(container, 'backtest-canvas-error').length, 1);
+  assert.match(textOf(container), /페이지 단계가 실패했다/);
+  assert.equal(findByClass(container, 'backtest-error-back').length, 1);
+});
+
+test('보드 17: 출처 연결이 없는 화면은 그 사실을 영수증으로 말한다', async () => {
+  const { container, canvas } = makeCanvas();
+  canvas.mount();
+  await flush();
+
+  const receipt = canvas.onChatAction({ kind: 'source_url', url: 'https://youtu.be/8kQz' });
+
+  assert.equal(receipt.applied, false);
+  assert.deepEqual(receipt.errors, ['이 화면에는 출처 연결이 없습니다']);
+  assert.equal(findByClass(container, 'backtest-source-progress').length, 0);
+});
+
+
 // ── 기본 상태 ───────────────────────────────────────────────────────────────
 
 test('container가 없으면 mount()/refresh()·채팅 배선까지 조용히 넘어간다', () => {

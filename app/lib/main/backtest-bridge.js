@@ -137,6 +137,30 @@ function fetchCodegen({ backendBase, fetchImpl, ...body }) {
   return backtestHttp('POST', '/api/v1/backtest/codegen', body, { backendBase, fetchImpl });
 }
 
+// ── 2026-09-07 출처에서 지도로(Paper 보드 17) ────────────────────────────────
+// 주소 하나를 지도로 옮기는 다섯 단계를 도는 잡이다. POST는 202 + {job_id}고 진행은
+// 이 잡 전용 라우트가 보여 준다 — 기존 athena:backtest-status(백필 잡)에 얹지 않는
+// 이유는 그쪽이 store를 쥐고 있어 백테스트 서브시스템이 꺼지면 통째로 닫히기 때문이다.
+
+function startSourceMap({ backendBase, fetchImpl, ...body }) {
+  return backtestHttp('POST', '/api/v1/backtest/source/map', body, { backendBase, fetchImpl });
+}
+
+function fetchSourceMap({ backendBase, fetchImpl, job_id }) {
+  return backtestHttp(
+    'GET', `/api/v1/backtest/source/map/${encodeURIComponent(job_id)}`,
+    undefined, { backendBase, fetchImpl },
+  );
+}
+
+// [멈추기] — 사람 클릭 전용이다(cancelJob과 같은 규율).
+function cancelSourceMap({ backendBase, fetchImpl, job_id }) {
+  return backtestHttp(
+    'DELETE', `/api/v1/backtest/source/map/${encodeURIComponent(job_id)}`,
+    undefined, { backendBase, fetchImpl },
+  );
+}
+
 function diagnoseBacktest({ backendBase, fetchImpl, ...body }) {
   return backtestHttp('POST', '/api/v1/backtest/diagnose', body, { backendBase, fetchImpl });
 }
@@ -428,6 +452,9 @@ module.exports = {
   fetchFlow,
   fetchMap,
   fetchCodegen,
+  startSourceMap,
+  fetchSourceMap,
+  cancelSourceMap,
   fetchTechniqueNodes,
   fetchTechniqueCheck,
   diagnoseBacktest,

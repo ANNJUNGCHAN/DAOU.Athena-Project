@@ -1455,6 +1455,11 @@ const BACKTEST_EXTRA_CHANNELS = {
   'athena:backtest-map': backtestBridge.fetchMap,
   // 지도 뒤의 코드 생성 — 저장하지 않는다(소스만 돌려준다, §7.3).
   'athena:backtest-codegen': backtestBridge.fetchCodegen,
+  // 출처에서 지도로(2026-09-07, Paper 보드 17) — 주소 하나가 지도가 되기까지의 다섯
+  // 단계. 시작·폴링·멈추기 셋뿐이고, 멈추기는 사람이 [멈추기]를 눌렀을 때만 온다.
+  'athena:backtest-source-map-start': backtestBridge.startSourceMap,
+  'athena:backtest-source-map-status': backtestBridge.fetchSourceMap,
+  'athena:backtest-source-map-cancel': backtestBridge.cancelSourceMap,
   // 새 기법 만들기(2026-09-03, 보드 20·21) — 코드 한 덩이를 노드로 자르는 길과
   // 자동 검사(차단 5 + 경고 2)를 도는 길. 둘 다 저장하지 않는다(검사의 시험 실행도
   // 이력을 남기지 않는다) — 그 경계는 백엔드가 진다.
