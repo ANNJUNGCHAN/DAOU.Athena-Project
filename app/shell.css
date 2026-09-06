@@ -3353,6 +3353,18 @@ body { margin: 0; overflow: hidden; }
   font-size: var(--text-xs);
   line-height: 1.5;
 }
+.room-head-join {
+  margin-top: 8px;
+}
+.room-head-join-btn {
+  padding: 5px 10px;
+  border: 1px solid var(--color-brand);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-brand);
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
 
 /* 중앙 캔버스 — 유일한 출력 지점. 남는 폭을 전부 가진다. */
 #canvasRegion {

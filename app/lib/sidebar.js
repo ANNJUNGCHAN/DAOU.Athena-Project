@@ -34,6 +34,7 @@
   const $roomBanner = document.getElementById('roomHeadBanner');
   const $roomTime = document.getElementById('roomHeadTime');
   const $roomTitle = document.getElementById('roomHeadTitle');
+  const $roomJoin = document.getElementById('roomHeadJoin');
 
   if (!$list) return; // shell.html 계약이 깨진 경우 — 조용히 물러난다(다른 영역을 막지 않는다).
 
@@ -113,6 +114,17 @@
   // 바뀌는데 이 네비의 활성 표시는 안 바뀌는 불일치가 생긴다 — setActive도
   // 같이 노출한다(모드 네비 자신의 클릭 핸들러가 이미 하는 것과 동일한 순서).
   if (modeNav) window.AthenaModeNav = { setActive: modeNav.setActive };
+
+  // 「관제 창으로 →」(Paper 보드 01) — 알림 파생 방은 관제 창과 별개라, 관제로
+  // 합류하는 문을 방 머리에 하나 둔다. 모드를 여기서 따로 바꾸지 않고 사람이
+  // 누르는 그 진입로(에이전트 모드 네비)를 그대로 누른다 — 진입로가 둘이 되면
+  // 새 대화 갈아타기 같은 부수 효과가 한쪽에만 붙는다.
+  if ($roomJoin) {
+    $roomJoin.addEventListener('click', () => {
+      const agentNav = document.getElementById('modeNavAgent');
+      if (agentNav) agentNav.click();
+    });
+  }
 
   // 3단계(리프 1.2.2, Paper 보드 39 보강본) — 순수 포매팅/상태아이콘은
   // agent-sidebar-list.js가 갖고 DOM은 여기서 조립한다(다른 make*Item과 같은 자리).
