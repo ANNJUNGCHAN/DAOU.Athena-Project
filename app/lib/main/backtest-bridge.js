@@ -71,6 +71,16 @@ function fetchJobStatus({ backendBase, fetchImpl, job_id }) {
   );
 }
 
+// 수집 중단(보드 04 「중단」) — 사람 클릭 전용 라우트도 이 층은 그대로 프록시한다.
+function cancelJob({ backendBase, fetchImpl, job_id }) {
+  return backtestHttp(
+    'DELETE',
+    `/api/v1/backtest/jobs/${encodeURIComponent(job_id)}`,
+    undefined,
+    { backendBase, fetchImpl },
+  );
+}
+
 function fetchRunResult({ backendBase, fetchImpl, run_id }) {
   return backtestHttp(
     'GET',
@@ -409,6 +419,7 @@ module.exports = {
   backfillBacktest,
   runBacktest,
   fetchJobStatus,
+  cancelJob,
   fetchRunResult,
   fetchRunTrades,
   fetchRuns,

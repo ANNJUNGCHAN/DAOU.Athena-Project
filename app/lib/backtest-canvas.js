@@ -1385,8 +1385,26 @@ function createBacktestCanvas(options) {
     setState({ view: 'design', tab: 'design' });
   }
 
+  // 보드 04(1TQX-1) 「중단」 — 모드를 나가면 폴링만 멈출 뿐 백엔드 잡은 TR을 계속
+  // 불러간다. 사람이 시작한 연쇄는 사람이 멈출 수 있어야 한다(보드 10 「막다른 길을 만들지
+  // 않습니다」). 이미 끝난 잡은 멈출 것이 없으므로 취소 실패를 오류로 올리지 않는다.
+  async function stopJob() {
+    const jobId = state.jobId;
+    stopPolling();
+    if (jobId && deps.cancelJob) {
+      try { await deps.cancelJob({ job_id: jobId }); } catch { /* 이미 끝난 잡 */ }
+    }
+    setState({
+      view: 'design', tab: 'design', jobId: null, progress: null, progressText: '',
+    });
+  }
+
   async function confirmBackfill() {
-    setState({ view: 'running', progressText: '데이터를 수집하는 중입니다…' });
+    // runId를 비운다 — 「수집 중」은 jobId && !runId로 읽히므로(resumePollingIfNeeded)
+    // 앞 실행의 id가 남아 있으면 수집을 실행으로 오독한다.
+    setState({
+      view: 'running', progressText: '데이터를 수집하는 중입니다…', runId: null,
+    });
     let res;
     try {
       res = deps.backfill
@@ -5232,6 +5250,15 @@ function createBacktestCanvas(options) {
         'div', 'backtest-progress-log',
         `ka10081 base_dt=${state.progress.oldest_dt || '—'} → ${formatNumeric(state.progress.rows)}봉`,
       ));
+    }
+    // 수집 중에만 선다 — 실행 중(runId)의 중단은 다른 잡이고 다른 라우트다.
+    if (state.jobId && !state.runId) {
+      const foot = el('div', 'backtest-running-foot');
+      foot.appendChild(button('backtest-running-stop', '중단', () => { void stopJob(); }));
+      foot.appendChild(el(
+        'div', 'backtest-running-hint', '끝나면 바로 백테스트가 이어집니다',
+      ));
+      wrap.appendChild(foot);
     }
     return wrap;
   }

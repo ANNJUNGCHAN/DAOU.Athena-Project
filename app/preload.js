@@ -133,6 +133,8 @@ const INVOKE_CHANNELS = new Set([
   'athena:backtest-trades',
   'athena:backtest-runs',
   'athena:backtest-backfill',
+  // 수집 중단(보드 04 「중단」) — 백필과 같은 사람 클릭 전용 자리다.
+  'athena:backtest-job-cancel',
   // 2026-09-01 전수 파리티 — Paper 보드 02·05·06·07·08·09가 쓰는 채널.
   // activate·deployment-create·deployment-stop도 사람 클릭 전용 경로다(모델 툴에 없다).
   'athena:backtest-validate',

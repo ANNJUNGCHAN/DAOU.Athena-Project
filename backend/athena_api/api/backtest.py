@@ -301,6 +301,21 @@ async def get_job(request: Request, job_id: str) -> dict[str, Any]:
     }
 
 
+@router.delete("/jobs/{job_id}")
+async def cancel_job(request: Request, job_id: str) -> dict[str, Any]:
+    """돌고 있는 잡을 사람이 멈춘다(Paper 보드 04 「중단」).
+
+    화면을 나가는 것은 폴링만 멈출 뿐이라 수집 잡은 TR을 계속 불러간다 — 그 연쇄를
+    시작한 사람이 멈출 수 있어야 한다. 이미 끝난 잡은 200 + `cancelled: false`다 —
+    멈출 것이 없는 것은 오류가 아니다(`DELETE /runs/{run_id}`와 같은 태도).
+    """
+    runner = _runner(request)
+    job = runner.get(job_id)
+    if job is None:
+        raise HTTPException(status_code=404, detail="잡이 존재하지 않는다")
+    return {"ok": True, "cancelled": runner.cancel(job_id)}
+
+
 # ── 상태 변경: 실행 ──────────────────────────────────────────────────────────
 
 
