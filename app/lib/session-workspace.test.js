@@ -60,3 +60,15 @@ test('flush()는 지연 보고를 들고 있는 모드만 흘리고, 던져도 �
   assert.deepEqual(flushed, ['backtest']);
   assert.match(warned[0], /flush\(graph\) failed — boom/);
 });
+
+test('clear()는 앞 세션의 것을 들고 있는 모드만 거두고, 던져도 나머지를 거둔다', () => {
+  const warned = [];
+  const cleared = [];
+  const ws = createSessionWorkspace({ warn: (m) => warned.push(m) });
+  ws.register('graph', { restore: () => {}, clear: () => { throw new Error('boom'); } });
+  ws.register('backtest', { restore: () => {}, clear: () => cleared.push('backtest') });
+  ws.register('agent', { restore: () => {} }); // 거둘 것이 없는 모드는 그냥 넘어간다
+  assert.doesNotThrow(() => ws.clear());
+  assert.deepEqual(cleared, ['backtest']);
+  assert.match(warned[0], /clear\(graph\) failed — boom/);
+});
