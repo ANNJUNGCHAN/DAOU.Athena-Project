@@ -1822,6 +1822,13 @@ html.is-boot-expanding #winControls { opacity: 0; }
 .ticket-label { width: 140px; flex-shrink: 0; font-size: var(--text-2xs, 11px); color: var(--color-k-dim, #9aa2b1); }
 .ticket-value { font-family: var(--font-mono); font-size: var(--text-sm, 13px); color: var(--color-k-text, #e6e8ee); }
 .ticket-qty { width: 120px; font-family: var(--font-mono); font-size: var(--text-sm, 13px); color: var(--color-k-text, #e6e8ee); background: rgba(16, 19, 26, 0.5); border: 1px solid rgba(230, 232, 238, 0.25); border-radius: 8px; padding: 6px 10px; }
+.ticket-unit { font-size: var(--text-2xs, 11px); color: var(--color-k-dim, #9aa2b1); }
+.ticket-seg { font-size: var(--text-2xs, 11px); color: var(--color-k-dim, #9aa2b1); border: 1px solid rgba(230, 232, 238, 0.18); border-radius: 6px; padding: 3px 10px; }
+.ticket-seg-on { color: var(--color-k-text, #e6e8ee); background: rgba(230, 232, 238, 0.12); border-color: rgba(230, 232, 238, 0.32); }
+.ticket-readout { margin-left: auto; font-family: var(--font-mono); font-size: var(--text-2xs, 11px); color: var(--color-k-ghost, rgba(230, 232, 238, 0.45)); }
+.ticket-total { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-top: 12px; border-top: 1px solid rgba(230, 232, 238, 0.12); }
+.ticket-total-label { font-size: var(--text-2xs, 11px); color: var(--color-k-dim, #9aa2b1); }
+.ticket-total-value { font-family: var(--font-mono); font-size: var(--text-md, 14px); color: var(--color-k-text, #e6e8ee); }
 
 /* ---------- 과거 대화 복원(2026-09-02 · 2026-09-05 개정) ---------- */
 /* 사이드바에서 과거 대화를 누르면 채팅 화면이 그 대화로 조용히 갈아치워진다 — '복원됨'

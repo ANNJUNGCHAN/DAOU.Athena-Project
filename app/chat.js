@@ -4583,18 +4583,65 @@ async function renderOrderTicket(prefill) {
   sideRow.append(sideLabel, buyBtn, sellBtn);
   card.appendChild(sideRow);
 
+  // 가격 행 — 무엇이 실행되는지를 수량 라벨의 각주가 아니라 값으로 드러낸다.
+  // 지정가는 P4 1차 범위 밖이라 비활성 세그먼트다(buildOrderPayload는 trde_tp 3 고정).
+  const priceModel = orderTicketLib.priceRowModel();
+  const priceRow = document.createElement('div');
+  priceRow.className = 'ticket-row';
+  const priceLabel = document.createElement('span');
+  priceLabel.className = 'ticket-label';
+  priceLabel.textContent = '가격';
+  priceRow.appendChild(priceLabel);
+  for (const seg of priceModel.segments) {
+    const chip = document.createElement('span');
+    chip.className = seg === priceModel.selected
+      ? 'ticket-seg ticket-seg-on' : 'ticket-seg';
+    chip.textContent = seg;
+    priceRow.appendChild(chip);
+  }
+  const priceReadout = document.createElement('span');
+  priceReadout.className = 'ticket-readout';
+  priceReadout.textContent = priceModel.readout;
+  priceRow.appendChild(priceReadout);
+  card.appendChild(priceRow);
+
   const qtyRow = document.createElement('div');
   qtyRow.className = 'ticket-row';
   const qtyLabel = document.createElement('span');
   qtyLabel.className = 'ticket-label';
-  qtyLabel.textContent = '수량 · 시장가';
+  qtyLabel.textContent = '수량';
   const qtyInput = document.createElement('input');
   qtyInput.type = 'number';
   qtyInput.min = '1';
   qtyInput.className = 'ticket-qty';
   if (ticket.qty) qtyInput.value = String(ticket.qty);
-  qtyRow.append(qtyLabel, qtyInput);
+  const qtyUnit = document.createElement('span');
+  qtyUnit.className = 'ticket-unit';
+  qtyUnit.textContent = '주';
+  qtyRow.append(qtyLabel, qtyInput, qtyUnit);
   card.appendChild(qtyRow);
+
+  // 총액 추정 — 발화 시점 관측값 × 수량. 관측값이 없으면 행을 그리지 않는다.
+  const totalRow = document.createElement('div');
+  totalRow.className = 'ticket-total';
+  const totalLabel = document.createElement('span');
+  totalLabel.className = 'ticket-total-label';
+  const totalValue = document.createElement('span');
+  totalValue.className = 'ticket-total-value';
+  totalRow.append(totalLabel, totalValue);
+  card.appendChild(totalRow);
+  const syncTotal = () => {
+    const est = orderTicketLib.estimateOrderTotal({
+      qty: qtyInput.value,
+      observed: prefill ? prefill.observed : null,
+    });
+    totalRow.hidden = !est;
+    if (est) {
+      totalLabel.textContent = est.label;
+      totalValue.textContent = est.text;
+    }
+  };
+  syncTotal();
 
   // 게이트 상태 — 활성 계좌의 주문 API 여부를 정직하게 보여준다.
   const gateLine = document.createElement('div');
@@ -4645,7 +4692,7 @@ async function renderOrderTicket(prefill) {
     buyBtn.classList.remove('routine-btn-approve');
     syncExec();
   });
-  qtyInput.addEventListener('input', syncExec);
+  qtyInput.addEventListener('input', () => { syncExec(); syncTotal(); });
   closeBtn.addEventListener('click', closeOrderTicket);
 
   execBtn.addEventListener('click', async () => {
