@@ -1091,6 +1091,88 @@ const BACKTEST_TARGET = Object.freeze({
   },
 });
 
+// ── 보드 17 fixture — 출처가 지도가 되는 도중 한 프레임 ─────────────────────
+// 이 화면은 **잡이 도는 동안에만** 있다. 진짜 잡은 바깥 페이지를 받아 오므로 게이트에서
+// 도는 순간 그 왕복이 게이트를 이 컴퓨터의 인터넷에 매단다 — 그래서 3/5 단계 한 프레임을
+// 봉투로 못 박는다(ipc-hang이 「확인 중」을 세우는 것과 같은 자리다: 시간축 위의 한 점을
+// 잡는다). 대신 잰다고 적은 문구는 **전부 앱이 가진 것**이다 — 단계 이름·부제처럼 이
+// 봉투가 주는 글자는 phrases에 한 글자도 넣지 않았다. 넣으면 게이트가 재는 것이 앱이
+// 아니라 이 표가 된다.
+const SOURCE_MAP_JOB_START = Object.freeze({ ok: true, data: { job_id: 'fx-sm-1' } });
+
+const SOURCE_MAP_AT_3 = Object.freeze({
+  ok: true,
+  data: {
+    job_id: 'fx-sm-1',
+    status: 'running',
+    step_index: 3,
+    step_total: 5,
+    eta_seconds: 20,
+    title: '20일 신고가 돌파',
+    source_kind: 'youtube',
+    target_ko: 'KOSPI 대형주 · 일봉 · 3년',
+    target_confirmed: false,
+    steps: [
+      { id: 'read', state: 'done', title_ko: '출처 읽음', meta_ko: '유튜브 · 14,200자' },
+      { id: 'rules', state: 'done', title_ko: '규칙 뽑음', meta_ko: '진입 2 · 청산 1 · 손절 1' },
+      {
+        id: 'map', state: 'running', title_ko: '지도 그리는 중',
+        meta_ko: '칸 3/4 · 지금 ③ 사고·파는 순간을 찍습니다',
+      },
+      { id: 'code', state: 'todo', title_ko: '코드 만들기', meta_ko: '지도 뒤에서 자동' },
+      { id: 'check', state: 'todo', title_ko: '자체 검사', meta_ko: '가상환경 · 짧은 구간 시험 실행' },
+    ],
+    rules: [
+      { kind: 'entry', kind_ko: '진입', text: '· 진입: 종가가 20일 최고가를 넘는 날', mapped: true },
+      { kind: 'exit', kind_ko: '청산', text: '· 청산: 20일 이동평균 아래로 마감', mapped: true },
+      { kind: 'stop', kind_ko: '손절', text: '· 손절: 진입가 −5%', mapped: true },
+    ],
+    map_filled: 2,
+    map_total: 4,
+    code_lines: null,
+    map: {
+      version: 0,
+      source_kind: 'spec',
+      target: null,
+      app_before: [{
+        key: 'load', title: '봉 데이터를 모읍니다',
+        detail: '캐시에 있는 봉을 날짜순으로 정리해 표 하나로 만듭니다',
+      }],
+      app_after: [
+        { key: 'fill', title: '사고·파는 가격을 정합니다', detail: '신호가 난 다음 봉의 시가로 체결합니다' },
+        { key: 'cost', title: '비용을 뗍니다', detail: '수수료·거래세·슬리피지를 뺀 다음 손익을 씁니다' },
+        { key: 'report', title: '성과를 냅니다', detail: '지표·자산곡선·체결 표를 만듭니다' },
+      ],
+      boundary_after_note: 'entry·exit 두 열만 받습니다',
+      nodes: [
+        { id: 'params', numeral: '①', title: '조절할 값을 정합니다', lines: [], facts: [], status: 'ok' },
+        { id: 'indicators', numeral: '②', title: '가격을 지표로 바꿉니다', lines: [], facts: [], status: 'ok' },
+        {
+          id: 'conditions', numeral: '③', title: '사고·파는 순간을 찍습니다',
+          lines: [], facts: [], status: 'ok', drawing: true,
+        },
+        {
+          id: 'guard', numeral: '④', title: '', lines: [], facts: [],
+          status: 'ok', skeleton: true,
+        },
+      ],
+      free_code: [],
+      unknown: [],
+      error: null,
+      code: null,
+    },
+    checks: null,
+    error: null,
+  },
+});
+
+// 사람이 채팅에 붙인 주소 하나. 캔버스가 이 액션 하나로 진행 화면을 연다
+// (backtest-canvas.js applySourceAction) — 다른 문은 없다.
+const SOURCE_URL_ACTION = Object.freeze({
+  kind: 'source_url',
+  url: 'https://youtu.be/8kQzVw',
+});
+
 // 보드 04 — 캐시가 모자라 실행하지 않았다는 409. 실패가 아니라 승인 화면 전환 신호라
 // canvas.js가 blocked로 정규화하고, 캔버스는 그 숫자로 승인 카드를 세운다.
 const BACKTEST_RUN_BLOCKED = Object.freeze({
@@ -4004,6 +4086,43 @@ const ROUTES = Object.freeze([
       { what: 'count', selector: '.backtest-segment-item', equals: 2 },
       { what: 'count', selector: '.backtest-optimize-range', equals: 2 },
       { what: 'count', selector: '.backtest-optimize-warn', equals: 1 },
+    ],
+  },
+  {
+    board: '3XL4-1', // 17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:backtest-presets', data: BACKTEST_PRESETS },
+      { do: 'ipc-fixture', channel: 'athena:backtest-source-map-start', data: SOURCE_MAP_JOB_START },
+      { do: 'ipc-fixture', channel: 'athena:backtest-source-map-status', data: SOURCE_MAP_AT_3 },
+      { do: 'mode', view: 'backtest' },
+      // 기법을 고르지 않은 채로 온다 — 출처에서 만드는 전략에는 아직 고를 기법이 없다.
+      { do: 'send', channel: 'athena:backtest-chat-action', data: SOURCE_URL_ACTION },
+      // 두 왕복(잡 시작 → 첫 폴링)이 돌아야 다섯 줄이 선다.
+      { do: 'wait', ms: 600 },
+      { do: 'settle' },
+    ],
+    root: '#backtestCanvas',
+    // 전부 앱이 가진 문장이다 — 단계 이름·부제(「✓ 출처 읽음」·「지도 뒤에서 자동」)는
+    // 위 봉투가 주는 글자라 한 글자도 안 넣었다. 헤더의 「새 전략 · 출처에서 만드는 중 ·
+    // 지도 v0」도 안 넣는다: 앱은 그 셋을 따로 그려 한 문장으로 붙지 않는다.
+    // 진행 띠의 첫 줄도 마찬가지다 — Paper의 그 줄은 단계 수·남은 시간까지 한 문장이라
+    // 값을 품고 있다.
+    phrases: [
+      '출처가 말한 대상',
+      '확인 필요',
+      '지도가 끝나면 채팅이 대상·기간부터 하나씩 묻습니다',
+      '멈추기',
+      '이 전략은 이렇게 흐릅니다',
+      '칸이 하나씩 채워집니다 · 다 그려지면 대화로 고칠 수 있습니다',
+      '여기부터 내 전략 — 출처에서 뽑은 칸들',
+    ],
+    // Paper가 그린 단계 다섯 줄, 지금 그리는 칸 하나(③의 「그리는 중」), 그리고 아직
+    // 만들어지지 않은 코드 — 서랍에 여는 버튼이 없다는 사실이 그 뜻이다.
+    structure: [
+      { what: 'count', selector: '.backtest-source-step', equals: 5 },
+      { what: 'count', selector: '.backtest-flow-drawing', equals: 1 },
+      { what: 'absent', selector: '.backtest-map-open-code' },
     ],
   },
   {

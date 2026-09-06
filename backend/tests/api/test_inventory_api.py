@@ -192,7 +192,11 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
     # 412 = 411 + 되돌리기 1개(rollback_watch_fix: POST
     # /api/v1/routines/{id}/watch/rollback, 2026-09-07 고침 한 바퀴). 사람이 캔버스
     # [되돌리기]를 누를 때만 도는 쓰기라 MCP 표면에는 없다.
-    assert len(operation_ids) == 412
+    # 414 = 412 + 출처에서 지도로 2개(2026-09-07, Paper 보드 17): 잡을 띄우는
+    # POST /api/v1/backtest/source/map과 진행을 읽는 GET .../map/{job_id}. 멈추기는
+    # DELETE라 위 DELETE들과 같은 이유로 이 필터(get/post만)에 안 잡힌다. 셋 다 사람이
+    # 채팅에 붙인 주소에서만 도는 경로라 MCP 표면에는 없다.
+    assert len(operation_ids) == 414
     assert "canvas_chart_page" in operation_ids
     assert "canvas_series_page" in operation_ids
     assert "get_internal_oauth_status" in operation_ids
