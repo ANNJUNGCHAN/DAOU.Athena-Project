@@ -18,10 +18,11 @@
     "base:ka10011"
   ],
   "state": {
-    "kind": "tab",
-    "parent_board": "137X-2",
-    "control": "순위",
-    "control_text": null
+    "kind": "default",
+    "parent_board": null,
+    "control": null,
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "332Z-0": "header",

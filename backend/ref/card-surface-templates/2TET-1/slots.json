@@ -23,7 +23,8 @@
     "kind": "tab",
     "parent_board": "135M-2",
     "control": "취소",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "2TIJ-1": "header",

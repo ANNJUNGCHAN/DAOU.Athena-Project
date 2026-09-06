@@ -29,7 +29,8 @@
     "kind": "tab",
     "parent_board": "137X-2",
     "control": "기업정보",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "2RG7-1": "header",

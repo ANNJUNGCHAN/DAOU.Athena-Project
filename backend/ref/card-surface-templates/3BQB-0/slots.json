@@ -22,7 +22,8 @@
     "kind": "expand",
     "parent_board": "2TZN-1",
     "control": "업종 목록 펼침",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "3BQC-0": "other",

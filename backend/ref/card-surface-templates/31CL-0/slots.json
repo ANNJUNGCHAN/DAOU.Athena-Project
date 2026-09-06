@@ -21,7 +21,8 @@
     "kind": "sort",
     "parent_board": "2V71-0",
     "control": "동일순매매",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "31HL-0": "header",

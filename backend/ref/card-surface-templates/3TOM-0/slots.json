@@ -21,7 +21,8 @@
     "kind": "expand",
     "parent_board": "2Z49-0",
     "control": "ELW 거래원별 10창구 전체",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "3TW5-0": "header",

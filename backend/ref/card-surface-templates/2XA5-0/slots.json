@@ -25,7 +25,8 @@
     "kind": "sort",
     "parent_board": "2VO0-0",
     "control": "등락률",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "2XFG-0": "header",

@@ -21,7 +21,8 @@
     "kind": "sort",
     "parent_board": "13K0-2",
     "control": "호가잔량 급증",
-    "control_text": "잔량 급증"
+    "control_text": "잔량 급증",
+    "control_node": null
   },
   "regions": {
     "2YE6-0": "header",

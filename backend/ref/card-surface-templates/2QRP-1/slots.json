@@ -30,7 +30,8 @@
     "kind": "tab",
     "parent_board": "13BC-2",
     "control": "시간외",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "2QRR-1": "header",

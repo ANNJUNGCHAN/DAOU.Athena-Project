@@ -29,7 +29,8 @@
     "kind": "expand",
     "parent_board": "2SKU-1",
     "control": "거래내역 상세",
-    "control_text": "수표 입금·증권 입고·증권 출고"
+    "control_text": "수표 입금·증권 입고·증권 출고",
+    "control_node": null
   },
   "regions": {
     "3LQV-0": "header",

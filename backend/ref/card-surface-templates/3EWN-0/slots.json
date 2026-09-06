@@ -21,7 +21,8 @@
     "kind": "expand",
     "parent_board": "2U5L-1",
     "control": "ELW 행 펼침",
-    "control_text": "ELW 관찰"
+    "control_text": "ELW 관찰",
+    "control_node": null
   },
   "regions": {
     "3F2D-0": "header",

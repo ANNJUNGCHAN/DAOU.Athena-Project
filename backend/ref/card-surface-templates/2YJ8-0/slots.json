@@ -21,7 +21,8 @@
     "kind": "sort",
     "parent_board": "13K0-2",
     "control": "거래량 급증",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "2YN6-0": "header",

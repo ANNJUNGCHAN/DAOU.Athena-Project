@@ -21,7 +21,8 @@
     "kind": "sort",
     "parent_board": "2VDA-0",
     "control": "당일/전일 비율순",
-    "control_text": "당일·전일 체결량"
+    "control_text": "당일·전일 체결량",
+    "control_node": null
   },
   "regions": {
     "31ZK-0": "header",

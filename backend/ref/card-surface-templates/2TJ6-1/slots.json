@@ -22,7 +22,8 @@
     "kind": "tab",
     "parent_board": "135M-2",
     "control": "신용 · 매수",
-    "control_text": "신용"
+    "control_text": "신용",
+    "control_node": null
   },
   "regions": {
     "2TMW-1": "header",

@@ -54,7 +54,8 @@
     "kind": "tab",
     "parent_board": "133H-2",
     "control": "예수금·결제",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "2SP5-1": "header",

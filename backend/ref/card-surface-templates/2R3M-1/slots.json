@@ -32,7 +32,8 @@
     "kind": "tab",
     "parent_board": "137X-2",
     "control": "현재시세",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "2R85-1": "header",

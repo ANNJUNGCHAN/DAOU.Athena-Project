@@ -22,7 +22,8 @@
     "kind": "sort",
     "parent_board": "2V71-0",
     "control": "외국인·기관 상위",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "30MY-0": "header",

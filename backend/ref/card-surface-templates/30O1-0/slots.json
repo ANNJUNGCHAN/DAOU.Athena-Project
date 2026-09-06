@@ -21,7 +21,8 @@
     "kind": "sort",
     "parent_board": "2VDA-0",
     "control": "매물대집중",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "30T8-0": "header",

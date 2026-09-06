@@ -6,8 +6,9 @@
   "height": 1120,
   "state": {
     "kind": "tab",
-    "parent_board": "137X-2",
-    "control": "순위"
+    "parent_board": "2VDA-0",
+    "control": "ETF",
+    "control_node": "3HMJ-0"
   },
   "saved_at": "2026-09-02T20:10:00+09:00",
   "operation_refs": [

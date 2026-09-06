@@ -197,7 +197,7 @@ test('the state link closure over the 96 index stays shut', async () => {
   const { checkPaperCardsStatic } = await load();
   const { static: checks } = checkPaperCardsStatic({ runPython: false });
   assert.deepEqual(checks.S3_state_links.unresolved, []);
-  assert.equal(checks.S3_state_links.targets, 83);
+  assert.equal(checks.S3_state_links.targets, 82);
 });
 
 test('a drifting board reports which slot and which ledger node the text came from', async () => {

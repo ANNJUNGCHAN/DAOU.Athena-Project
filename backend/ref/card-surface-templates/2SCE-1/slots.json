@@ -43,7 +43,8 @@
     "kind": "tab",
     "parent_board": "133H-2",
     "control": "보유종목",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "2SGP-1": "header",

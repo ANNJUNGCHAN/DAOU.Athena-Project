@@ -22,7 +22,8 @@
     "kind": "sort",
     "parent_board": "2V71-0",
     "control": "신용융자 가능",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "31TF-0": "header",

@@ -22,7 +22,8 @@
     "kind": "tab",
     "parent_board": "13K0-2",
     "control": "테마 등락·확산 탐색",
-    "control_text": null
+    "control_text": null,
+    "control_node": null
   },
   "regions": {
     "2UEX-1": "header",
