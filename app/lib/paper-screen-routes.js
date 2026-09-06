@@ -1276,8 +1276,8 @@ const SOURCE_MAP_AT_3 = Object.freeze({
       unknown: [],
       error: null,
       // 폼 지도는 codegen이 뒤에서 코드를 지어 세어 보므로 이 칸이 언제나 찬다 —
-      // 서랍에 [코드 열기]가 안 서는 근거는 이것이 아니라 최상위 code_lines가 null인
-      // 것이다(④ 코드 단계가 아직 안 끝났다는 뜻).
+      // 서랍에 [코드 열기]가 안 서는 근거는 이것이 아니라 만드는 중 화면에는 그 코드를
+      // 여는 자리가 없다는 것이다(코드는 다 그린 지도와 함께 전략으로 넘어온다).
       code: { lines: 20, matches_map: true },
     },
     map_filled: 2,
@@ -4285,7 +4285,7 @@ const ROUTES = Object.freeze([
     // 하나, 그리고 아직 만들어지지 않은 코드 — 서랍에 여는 버튼이 없다는 사실이 그
     // 뜻이다. 앞 둘은 위 봉투가 정한 값을 앱이 도는 것이라(다섯 줄·drawing 표식) 앱이
     // 혼자 정하는 것은 뒤 둘이다: [멈추기]는 잡 상태와 무관하게 늘 서고(보드 18 F칸의
-    // 로딩 4요소 중 넷째), [코드 열기]는 code_lines가 null인 동안 서지 않는다.
+    // 로딩 4요소 중 넷째), [코드 열기]는 만드는 중인 동안 아예 서지 않는다.
     structure: [
       { what: 'count', selector: '.backtest-source-step', equals: 5 },
       { what: 'count', selector: '.backtest-flow-drawing', equals: 1 },

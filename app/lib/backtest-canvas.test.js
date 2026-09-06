@@ -341,6 +341,24 @@ test('보드 17: 코드가 아직 없으면 서랍은 「아직 없음」이고 
   assert.equal(findByClass(container, 'backtest-map-open-code').length, 0);
 });
 
+test('보드 17: 코드 줄 수가 나와도 만드는 중 서랍에는 열 버튼이 서지 않는다', async () => {
+  // 잡은 ④를 끝낸 뒤에도 ⑤ 자체 검사를 도는 중이다 — 그 사이에 [코드 열기]를 세우면
+  // 이 화면에는 그 코드를 여는 자리가 없어 눌러도 아무 일도 안 하는 버튼이 된다.
+  const { container, canvas } = sourceCanvas({
+    sourceMapStatus: async () => sourceJobAt3of5({ code_lines: 20 }),
+  });
+  canvas.mount();
+  await flush();
+  canvas.onChatAction({ kind: 'source_url', url: 'https://youtu.be/8kQz' });
+  await flush();
+
+  assert.equal(findByClass(container, 'backtest-map-open-code').length, 0);
+  assert.match(
+    textOf(findByClass(container, 'backtest-map-drawer')[0]),
+    /아직 없음 — 지도가 끝나면 자동으로 만들어집니다/,
+  );
+});
+
 test('보드 17: 머리는 무엇을 만들고 있는지만 말한다(이름도 판번호도 아직 없다)', async () => {
   const { container, canvas } = sourceCanvas();
   canvas.mount();
@@ -450,6 +468,83 @@ test('보드 17: 출처 연결이 없는 화면은 그 사실을 영수증으로
   assert.equal(receipt.applied, false);
   assert.deepEqual(receipt.errors, ['이 화면에는 출처 연결이 없습니다']);
   assert.equal(findByClass(container, 'backtest-source-progress').length, 0);
+});
+
+test('보드 17: 화면이 숨은 사이 멈춘 진행은 돌아오면 다시 흐른다', async () => {
+  const { container, canvas, calls } = sourceCanvas();
+  canvas.mount();
+  await flush();
+
+  // 채팅에 주소를 붙이는 곳은 대화 모드다 — 그동안 백테스트 캔버스는 숨어 있다.
+  container.hidden = true;
+  canvas.onChatAction({ kind: 'source_url', url: 'https://youtu.be/8kQz' });
+  await flush();
+  assert.equal(calls.status.length, 0, '숨은 화면은 잡을 묻지 않는다');
+
+  container.hidden = false;
+  canvas.refresh();
+  await flush();
+
+  assert.equal(calls.status.length, 1);
+  assert.equal(findByClass(container, 'backtest-source-step').length, 5);
+});
+
+// 다 그린 잡 한 장 — 5/5에 폼이 읽을 스펙 원문(백엔드 spec_to_yaml)이 실려 있다.
+function sourceJobDone(extra) {
+  return sourceJobAt3of5(Object.assign({
+    status: 'done',
+    step_index: 5,
+    eta_seconds: null,
+    steps: [
+      { id: 'read', state: 'done', title_ko: '출처 읽음', meta_ko: '유튜브 · 14,200자' },
+      { id: 'rules', state: 'done', title_ko: '규칙 뽑음', meta_ko: '진입 2 · 청산 1 · 손절 1' },
+      { id: 'map', state: 'done', title_ko: '지도 그림', meta_ko: '칸 4개' },
+      { id: 'code', state: 'done', title_ko: '코드 만듦', meta_ko: '20줄' },
+      { id: 'check', state: 'done', title_ko: '자체 검사 마침', meta_ko: '검사 3/3 통과' },
+    ],
+    map_filled: 4,
+    code_lines: 20,
+    spec_yaml: SMA_YAML,
+  }, extra || {}));
+}
+
+test('보드 17: 다 그린 지도는 설계 화면의 전략이 된다 — 「만드는 중」이 남지 않는다', async () => {
+  const asked = [];
+  const { container, canvas } = sourceCanvas({
+    sourceMapStatus: async () => sourceJobDone(),
+    map: async (body) => { asked.push(body); return MAP_PAYLOAD; },
+  });
+  canvas.mount();
+  await flush();
+
+  canvas.onChatAction({ kind: 'source_url', url: 'https://youtu.be/8kQz' });
+  await flush();
+
+  assert.equal(findByClass(container, 'backtest-source-progress').length, 0);
+  assert.equal(findByClass(container, 'backtest-source-stop').length, 0);
+  // 잡이 만든 스펙이 폼에 들어갔다 — 머리에 그 이름이 서고 지도는 그 스펙으로 다시 그린다.
+  assert.match(textOf(findByClass(container, 'backtest-head-title')[0]), /SMA 골든크로스/);
+  assert.equal(asked.length, 1);
+  assert.match(asked[0].yaml, /SMA 골든크로스/);
+  assert.equal(asked[0].source, undefined, '앞 전략의 코드로 새 지도를 그리지 않는다');
+  assert.equal(findByClass(container, 'backtest-flow-map').length, 1);
+});
+
+test('보드 17: 새 주소가 오면 앞 잡을 멈추고 새로 띄운다', async () => {
+  let started = 0;
+  const { canvas, calls } = sourceCanvas({
+    sourceMapStart: async () => { started += 1; return { job_id: `sm-${started}` }; },
+  });
+  canvas.mount();
+  await flush();
+
+  canvas.onChatAction({ kind: 'source_url', url: 'https://youtu.be/8kQz' });
+  await flush();
+  canvas.onChatAction({ kind: 'source_url', url: 'https://blog.example/2' });
+  await flush();
+
+  assert.deepEqual(calls.cancel, [{ job_id: 'sm-1' }]);
+  assert.equal(started, 2);
 });
 
 

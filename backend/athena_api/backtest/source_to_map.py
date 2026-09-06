@@ -28,7 +28,7 @@ import uuid
 from dataclasses import dataclass, field
 from typing import Any, Literal
 
-from athena_api.backtest import codegen, indicators, mapmodel, sources
+from athena_api.backtest import codegen, indicators, mapmodel, sources, visual_schema
 from athena_api.backtest import technique_check as check_mod
 from athena_api.backtest.schema import (
     ConditionGroup,
@@ -462,6 +462,7 @@ class SourceMapJob:
     source_kind: str | None = None
     target_ko: str | None = None
     rules: list[SourceRule] = field(default_factory=list)
+    spec: StrategySpec | None = None
     map: dict[str, Any] | None = None
     filled: int = 0
     node_total: int = 0
@@ -553,6 +554,15 @@ class SourceMapJob:
             "map": self.map if done else self.partial_map(),
             "map_filled": self.filled,
             "map_total": self.node_total,
+            # 다 그린 지도는 화면이 **가져가는** 것이다 — 폼이 읽을 원문(`.athena.yaml`)을
+            # 같이 실어야 "다 그려지면 대화로 고칠 수 있습니다"가 말뿐이 아니게 된다.
+            # 도는 중에는 싣지 않는다: 칸이 다 서기 전의 스펙을 폼으로 옮기면 화면은
+            # 만드는 중인 것을 다 만든 전략처럼 그린다.
+            "spec_yaml": (
+                visual_schema.spec_to_yaml(self.spec)
+                if done and self.spec is not None
+                else None
+            ),
             "code_lines": self.code_lines,
             "checks": self.checks,
             "error": self.error,
@@ -634,6 +644,7 @@ async def run_job(job: SourceMapJob, *, brief: dict[str, Any] | None = None) -> 
     # ③ 지도 그리기 — 칸마다 배선을 확인하고 하나씩 올린다.
     job.begin("map")
     spec = spec_from_rules(job.rules, name=job.title or "출처에서 만든 전략")
+    job.spec = spec
     full = mapmodel.build_map(spec=spec, version=0)
     job.map = full
     nodes = full.get("nodes") or []
