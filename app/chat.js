@@ -1218,15 +1218,20 @@ async function runQueryLive(text) {
       icon.className = 'progress-tool-step-icon';
       const label = document.createElement('span');
       label.className = 'progress-tool-step-label';
+      // 부제(Paper 보드 10 「노드 조회」 아래 「한미반도체 · 관계 7 · 이력 3」) —
+      // 무엇을 대상으로 몇 개를 받았는지. 부제가 없는 단계에서는 빈 채로 남는다.
+      const note = document.createElement('span');
+      note.className = 'progress-tool-step-note';
       const time = document.createElement('span');
       time.className = 'progress-tool-step-time';
-      el.append(icon, label, time);
+      el.append(icon, label, note, time);
       toolSteps.appendChild(el);
       toolStepEls.set(result.id, el);
     }
     el.classList.toggle('done', result.done);
     el.classList.toggle('is-warn', result.error);
     el.querySelector('.progress-tool-step-label').textContent = result.label;
+    el.querySelector('.progress-tool-step-note').textContent = result.note || '';
     el.querySelector('.progress-tool-step-time').textContent = result.timeText;
     scrollAfterRender();
     claimProviderVisible({ ...step, rendererReceivedAt: performance.now() }, 'chat', el);

@@ -13,6 +13,7 @@ const prefs = require('./graph-mode-prefs');
 const {
   createGraphModeController, computeGraphHeaderMeta, formatEventDate, buildTimelineRows,
   countRelationEvents, hiddenLinkReasonClauses, relativeScoreText, topSurprising,
+  buildEntityDetailModel,
 } = require('./controller');
 const { fakeNode, installFakeDocument, uninstallFakeDocument } = require('./fake-dom');
 
@@ -1540,4 +1541,207 @@ test('지도 로드 실패 문구는 요약 표면을 덮지 않는다 — 스�
   await controller.setSurface(store.SURFACE_MAP);
   assert.match(elements.graphBody.children[0].textContent, /그래프 데이터를 불러오지 못했습니다/);
   assert.equal(elements.summaryMain.querySelector('.graph-mode-unavailable'), null);
+});
+
+
+// ── entity 응답 패널(Paper 보드 10 3ZAA-1) ────────────────────────────────────
+
+// 백엔드 EntityDetailResponse(brain.py) 모양 그대로. 값은 Paper가 그린 것과 같은
+// 자리를 채운다 — 맵핑이 맞는지 재는 것이 목적이라 이름·수치는 아무래도 좋다.
+function entityDetailPayload(overrides) {
+  return {
+    revision: 12,
+    query: '한미반도체',
+    resolved: true,
+    entity_id: 'e:hanmi',
+    kind: 'security',
+    name: '한미반도체',
+    degree: 7,
+    aliases: [],
+    relations: [
+      {
+        relation_id: 'r1',
+        relation_kind: 'interested_in',
+        direction: 'in',
+        other_entity_id: 'e:me',
+        other_entity_kind: 'investor_profile',
+        other_entity_name: '투자자',
+        confidence: 'EXTRACTED',
+        tier: 'conversational',
+        rationale: 'HBM 장비 질문 반복',
+        observed_at: '2026-08-04T00:00:00Z',
+        reinforcement: 4,
+        source: {
+          source_id: 's1',
+          kind: 'chat_message',
+          text: 'HBM 장비주가 궁금해서 한미반도체를 계속 보고 있어',
+          locator: 'conv-1#3',
+          occurred_at: '2026-08-04T09:00:00Z',
+          truncated: false,
+          full_chars: 28,
+        },
+      },
+      {
+        relation_id: 'r2',
+        relation_kind: 'belongs_to',
+        direction: 'out',
+        other_entity_id: 'e:bigcap',
+        other_entity_kind: 'theme',
+        other_entity_name: '반도체 대형주',
+        confidence: 'INFERRED',
+        tier: 'conversational',
+        rationale: null,
+        observed_at: '2026-08-10T00:00:00Z',
+        reinforcement: 2,
+        source: {
+          source_id: 's2',
+          kind: 'chat_message',
+          text: '반도체 대형주 중심으로 가되 장비주도 조금 섞고 싶어. 지금 비중은',
+          locator: 'conv-2#1',
+          occurred_at: '2026-08-10T09:00:00Z',
+          truncated: true,
+          full_chars: 1240,
+        },
+      },
+    ],
+    timeline: [
+      {
+        seq: 9, at: '2026-08-23T00:00:00Z', revision: 12, op: 'edge_added',
+        subject_id: 'e:hanmi', object_id: 'e:div', relation: 'belongs_to',
+        confidence_before: null, confidence_after: 'INFERRED', source: null,
+      },
+      {
+        seq: 5, at: '2026-08-19T00:00:00Z', revision: 8, op: 'edge_changed',
+        subject_id: 'e:me', object_id: 'e:hanmi', relation: 'interested_in',
+        confidence_before: 'AMBIGUOUS', confidence_after: 'EXTRACTED', source: null,
+      },
+      {
+        seq: 1, at: '2026-08-04T00:00:00Z', revision: 2, op: 'entity_added',
+        subject_id: 'e:hanmi', object_id: null, relation: null,
+        confidence_before: null, confidence_after: null, source: null,
+      },
+    ],
+    candidates: [],
+    ...(overrides || {}),
+  };
+}
+
+test('buildEntityDetailModel — 노드 머리는 한글 종류 라벨과 연결 수다(원문 kind 비노출)', () => {
+  const model = buildEntityDetailModel(entityDetailPayload());
+  assert.equal(model.name, '한미반도체');
+  assert.equal(model.meta, '종목 · 연결 7');
+});
+
+test('buildEntityDetailModel — 관계 행은 화살표·확정성·티어·보강으로 조립된다', () => {
+  const [first, second] = buildEntityDetailModel(entityDetailPayload()).relations;
+  assert.equal(first.label, '관심');
+  assert.equal(first.arrow, '← 투자자');
+  assert.equal(first.meta, '사실 · 대화 · 4회');
+  assert.equal(first.rationale, '근거 — HBM 장비 질문 반복');
+  assert.equal(second.label, '소속');
+  assert.equal(second.arrow, '→ 반도체 대형주');
+  assert.equal(second.meta, '추론 · 대화 · 2회');
+  assert.equal(second.rationale, '', 'rationale이 없으면 근거 줄도 없다 — 지어내지 않는다');
+});
+
+test('buildEntityDetailModel — 잘리지 않은 발췌는 출처·날짜·전문 글자 수를 말한다', () => {
+  const [first] = buildEntityDetailModel(entityDetailPayload()).relations;
+  assert.equal(first.excerpt.text, '"HBM 장비주가 궁금해서 한미반도체를 계속 보고 있어"');
+  assert.equal(first.excerpt.meta, '대화 · 08-04 · 전문 28자');
+});
+
+test('buildEntityDetailModel — 잘린 발췌는 잘렸다고 먼저 말한다(전문처럼 인용하지 않는다)', () => {
+  const [, second] = buildEntityDetailModel(entityDetailPayload()).relations;
+  assert.equal(second.excerpt.meta, '잘린 발췌 — 37 / 1,240자');
+});
+
+test('buildEntityDetailModel — 원문 출처 종류·확정성 코드가 화면에 새지 않는다', () => {
+  const flat = JSON.stringify(buildEntityDetailModel(entityDetailPayload()));
+  assert.ok(!flat.includes('chat_message'), flat);
+  assert.ok(!flat.includes('interested_in'), flat);
+  assert.ok(!flat.includes('EXTRACTED'), flat);
+  assert.ok(!flat.includes('conversational'), flat);
+});
+
+test('buildEntityDetailModel — 변경 이력은 공통 패널과 같은 조립을 쓴다(최신 먼저)', () => {
+  const model = buildEntityDetailModel(entityDetailPayload());
+  assert.deepEqual(model.timeline.map((r) => r.date), ['08-23', '08-19', '08-04']);
+  assert.equal(model.timeline[1].text, '관심 관계 불확실 → 사실로 승격');
+  assert.equal(model.timeline[2].text, '노드 처음 생김');
+});
+
+test('buildEntityDetailModel — 못 찾은 조회는 패널을 만들지 않는다(후보는 모델이 되묻는다)', () => {
+  assert.equal(buildEntityDetailModel({ resolved: false, query: '삼성', candidates: [{}, {}] }), null);
+  assert.equal(buildEntityDetailModel(null), null);
+  assert.equal(buildEntityDetailModel({ resolved: true }), null, '이름이 없으면 그리지 않는다');
+});
+
+test('buildEntityDetailModel — 관계도 이력도 없으면 빈 목록이다(0을 지어내지 않는다)', () => {
+  const model = buildEntityDetailModel(entityDetailPayload({ relations: [], timeline: [], degree: null }));
+  assert.deepEqual(model.relations, []);
+  assert.deepEqual(model.timeline, []);
+  assert.equal(model.meta, '종목', '연결 수가 없으면 그 절이 빠진다');
+});
+
+test('showEntityDetail() — 공통 패널이 관계·이력으로 채워진다', async () => {
+  const { controller, elements } = setup({ withPanel: true });
+  await controller.toggle();
+  const model = controller.showEntityDetail(entityDetailPayload());
+  assert.ok(model);
+  const panel = elements.panel;
+  assert.equal(panel.hidden, false);
+  assert.equal(panel.querySelector('.entity-panel-name').textContent, '한미반도체');
+  assert.equal(panel.querySelectorAll('.entity-relation-row').length, 2);
+  assert.equal(panel.querySelectorAll('.entity-relation-excerpt').length, 2);
+  assert.equal(panel.querySelectorAll('.entity-timeline-row').length, 3);
+  const titles = panel.querySelectorAll('.entity-section-title').map((n) => n.textContent);
+  assert.deepEqual(titles, ['관계 — 방향 · 확정성 · 티어 · 보강', '변경 이력 — 최신 먼저']);
+});
+
+// 보드가 발치에 붙인 「정직성 규칙」은 화면이 아니라 모델의 답이 지켜야 할 계약이고,
+// 도구 인자·enum·상태 코드가 그대로 박혀 있다 — 같은 이유로 안 그린 「action=entity」와
+// 한 범주다. 다시 그리면 이 패널이 스스로 모순되므로 여기서 막는다.
+test('showEntityDetail() — 보드 주석층(정직성 규칙·도구 인자)은 패널에 안 그린다', async () => {
+  const { controller, elements } = setup({ withPanel: true });
+  await controller.toggle();
+  controller.showEntityDetail(entityDetailPayload());
+  const text = elements.panel.textContent;
+  assert.ok(!text.includes('이 답이 지켜야 하는 것'), text);
+  assert.ok(!/confidence|full_chars|resolved=|action=entity/.test(text), text);
+});
+
+test('showEntityDetail() — 못 찾은 조회는 패널을 열지 않는다', async () => {
+  const { controller, elements } = setup({ withPanel: true });
+  await controller.toggle();
+  assert.equal(controller.showEntityDetail({ resolved: false, query: '삼성' }), null);
+  assert.equal(elements.panel.hidden, true);
+});
+
+test('노드를 새로 고르면 entity 응답 패널이 물러난다', async () => {
+  const { controller, elements } = setup({ payload: payloadTwoClusters, withPanel: true });
+  await controller.toggle();
+  controller.showEntityDetail(entityDetailPayload());
+  assert.equal(elements.panel.querySelectorAll('.entity-relation-row').length, 2);
+  controller.selectNode('e:a');
+  assert.equal(elements.panel.querySelectorAll('.entity-relation-row').length, 0);
+  assert.equal(elements.panel.querySelector('.panel-name').textContent, '반도체');
+});
+
+test('선택 해제가 entity 응답 패널을 닫는다', async () => {
+  const { controller, elements } = setup({ withPanel: true });
+  await controller.toggle();
+  controller.showEntityDetail(entityDetailPayload());
+  elements.panel.querySelector('.panel-deselect').dispatchEvent({ type: 'click' });
+  assert.equal(elements.panel.hidden, true);
+});
+
+// 같은 말·같은 손잡이는 같은 일을 해야 한다 — 노드를 고른 채로 조회한 사람에게
+// 「선택 해제」가 이전 패널로 되돌아가는 버튼이면 이름이 거짓말이 된다.
+test('선택 해제는 노드를 고른 채로 조회했어도 선택까지 놓는다', async () => {
+  const { controller, elements } = setup({ payload: payloadTwoClusters, withPanel: true });
+  await controller.toggle();
+  controller.selectNode('e:a');
+  controller.showEntityDetail(entityDetailPayload());
+  elements.panel.querySelector('.panel-deselect').dispatchEvent({ type: 'click' });
+  assert.equal(elements.panel.hidden, true);
 });
