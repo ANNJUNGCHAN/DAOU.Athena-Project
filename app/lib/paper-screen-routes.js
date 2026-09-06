@@ -4,8 +4,9 @@
 //
 // 매니페스트 role==="screen" 103장이 결국 전부 여기 있어야 한다. 없는 보드는 미구현 실패다 —
 // 「도달 절차가 없는 보드는 실패한다」가 게이트 2의 핵심이라, 표가 곧 남은 작업 목록이 된다.
-// 지금은 32장(부팅 5 + 온보딩 3 + 인증 3 + 에이전트 4 + 화면 4 + 셸·그래프 2 + 대화·계정 2
-// + 모드·빈 화면 2 + 창·대화 턴·탭 3 + 사이드바 4)이고, 래칫(§4.5)이 잠근 뒤 저작이 이어진다.
+// 지금은 41장(부팅 5 + 온보딩 3 + 인증 3 + 에이전트 4 + 알림 파생 방·코드 알람 4 + 화면 4
+// + 셸·그래프 2 + 그래프 5 + 대화·계정 2 + 모드·빈 화면 2 + 창·대화 턴·탭 3 + 사이드바 4)이고,
+// 래칫(§4.5)이 잠근 뒤 저작이 이어진다.
 //
 // ── reach 어휘는 닫혀 있다
 // 임의 JS를 표에 심으면 표가 곧 프로브가 되어 유지가 안 된다. STEP_KINDS만 허용하고,
@@ -416,6 +417,121 @@ const GRAPH_TIMELINE = Object.freeze({
   ],
 });
 
+// ── 코드 알람 fixture (A-2 보드 10·11·12) ────────────────────────────────────
+// 코드 알람 상세는 목록에 없는 값을 한 번 더 조회해서 그린다(athena:routine-detail,
+// canvas.js가 fetchDetail로 잇는다) — 봉투를 안 박으면 판정이 백엔드에 좌우된다.
+// 감시 블록은 백엔드가 실제로 돌려주는 필드 그대로다(probe-agent-paper-parity.js의
+// WATCH_BLOCK과 같은 모양). 칸 제목·값·함수명은 전부 값이라 phrases에 안 넣는다.
+const WATCH_BLOCK = Object.freeze({
+  project_id: 'fx-p1',
+  path: 'watch/volume_spike.py',
+  version_hash: 'ab12cd34ef',
+  params: {},
+  poll_interval_s: 60,
+  lookback_days: 30,
+  last_fired_at: null,
+});
+
+// 보드 10의 노드 넷 — 첫 검사라 바뀐 칸이 없다(「방금 바뀜」 0개).
+const WATCH_NODES_FIRST = Object.freeze([
+  {
+    fn: 'load_bars', title_ko: '일봉 불러오기', title_en: 'load_bars',
+    inputs: [{ name: '종목', value: '삼성전자' }, { name: '기간', value: '최근 60일' }],
+    output: '봉 60개 + 오늘 봉', called: true, changed: false,
+  },
+  {
+    fn: 'avg_volume', title_ko: '3일 거래량 평균', title_en: 'avg_volume',
+    inputs: [{ name: '봉', value: '60개' }, { name: '일수', value: '3일' }],
+    output: '1,240만주', called: true, changed: false,
+  },
+  {
+    fn: 'volume_ratio', title_ko: '배수 비교', title_en: 'volume_ratio',
+    inputs: [{ name: '오늘 거래량', value: '1,890만주' }, { name: '평균 · 배수', value: '1,240만주 · 1.5배' }],
+    output: '1.52배 · 넘음', called: true, changed: false,
+  },
+  {
+    fn: 'fire', title_ko: '알림', title_en: 'fire',
+    inputs: [{ name: '넘음', value: true }, { name: '쿨다운', value: '1일' }],
+    output: '오늘이면 울림', called: true, changed: false,
+  },
+]);
+
+// 보드 11의 노드 넷 — 평균 일수를 고친 뒤라 그 칸 하나만 「방금 바뀜」이다.
+const WATCH_NODES_AFTER_FIX = Object.freeze([
+  WATCH_NODES_FIRST[0],
+  {
+    fn: 'avg_volume', title_ko: '5일 거래량 평균', title_en: 'avg_volume',
+    inputs: [{ name: '봉', value: '60개' }, { name: '일수', value: '5일' }],
+    output: '1,300만주', called: true, changed: true,
+  },
+  {
+    fn: 'volume_ratio', title_ko: '배수 비교', title_en: 'volume_ratio',
+    inputs: [{ name: '오늘 거래량', value: '1,650만주' }, { name: '배수', value: '1.27배' }],
+    output: '1.27배 · 안 넘음', called: true, changed: false,
+  },
+  {
+    fn: 'fire', title_ko: '알림', title_en: 'fire',
+    inputs: [{ name: '넘음', value: false }, { name: '쿨다운', value: '1일' }],
+    output: '오늘은 조용', called: true, changed: false,
+  },
+]);
+
+// 보드 12의 노드 넷 — 켜진 뒤 오늘 한 번 돈 결과다(고친 자국은 이미 지나갔다).
+const WATCH_NODES_LIVE = Object.freeze([
+  WATCH_NODES_AFTER_FIX[0],
+  Object.freeze({ ...WATCH_NODES_AFTER_FIX[1], changed: false }),
+  WATCH_NODES_AFTER_FIX[2],
+  Object.freeze({ ...WATCH_NODES_AFTER_FIX[3], output: '조용' }),
+]);
+
+function paperCodeRoutine(status) {
+  return Object.freeze({
+    ok: true,
+    data: {
+      routines: [{
+        id: 'fx-c1',
+        symbol: '005930',
+        note: '거래량 급증 감시 · 삼성전자',
+        status,
+        mode: 'code-watch',
+        source_label: '코드 감시',
+        cooldown_s: 86400,
+        created_at: '2026-08-30T01:00:00.000Z',
+        expires_at: '2026-10-03T09:00:00',
+        watch: WATCH_BLOCK,
+      }],
+      disclosure_ready: true,
+      last_error: null,
+      fired_today: 0,
+    },
+  });
+}
+const CODE_WATCH_DRAFT = paperCodeRoutine('draft');
+const CODE_WATCH_ACTIVE = paperCodeRoutine('active');
+
+// 초안은 검사 결과(last_check)를, 켜진 알람은 오늘 실행(last_run)을 그린다
+// (agent-canvas.js renderCodeDetail이 status로 가른다).
+function paperCodeDetail(kind, nodes) {
+  const body = { id: 'fx-c1', watch: WATCH_BLOCK, last_run: null, last_check: null };
+  if (kind === 'check') {
+    body.last_check = {
+      count: 4, lookback_days: 30, last_fire: '2026-08-26',
+      fires: [{ dt: '2026-08-26', close: 71000 }],
+      nodes, warnings: [], checked_at: '2026-09-05T06:31:00.000Z',
+      counted_until: '2026-09-04', ok: true, reason: null,
+    };
+  } else {
+    body.last_run = {
+      checked_at: '2026-09-05T06:31:00.000Z', observed: 1.27, duration_ms: 820,
+      nodes, skip_reason: null,
+    };
+  }
+  return Object.freeze({ ok: true, data: body });
+}
+const CODE_DETAIL_FIRST_CHECK = paperCodeDetail('check', WATCH_NODES_FIRST);
+const CODE_DETAIL_AFTER_FIX = paperCodeDetail('check', WATCH_NODES_AFTER_FIX);
+const CODE_DETAIL_ACTIVE = paperCodeDetail('run', WATCH_NODES_LIVE);
+
 const ROUTES = Object.freeze([
   // ---------- 부팅 5장 (1-0) ----------
   // 부팅 02~05는 한 애니메이션의 시간 단계라 서로를 가르는 것은 **찍힌 글자 수**뿐이다.
@@ -760,6 +876,105 @@ const ROUTES = Object.freeze([
     // 통계 카드 4장의 라벨은 값이 없어도 그려진다(agent-canvas.js:218-269 buildStats).
     phrases: ['＋ 새 작업', '다음 실행', '오늘 발화', '성향 제안', '진행 중'],
     structure: [{ what: 'count', selector: '.agent-stat-card', equals: 4 }],
+  },
+
+  // ---------- 알림 파생 방 · 코드 알람 4장 (A-2) ----------
+  {
+    board: '56X-0', // 01 · 셸 — 알림 파생 방
+    window: 'shell',
+    // 방은 발화가 만든다 — 사이드바 「알림에서」 구역은 athena:routine-event 하나로만
+    // 생기고(sidebar.js handleRoutineEvent), 그 방을 여는 다른 문이 앱에 없다.
+    reach: [
+      { do: 'send', channel: 'athena:routine-event', data: ROUTINE_FIRED },
+      { do: 'wait', ms: 300 },
+      { do: 'click', selector: '.sidebar-item.is-notify' },
+      { do: 'settle' },
+    ],
+    root: '#roomHeadBanner',
+    // 시각과 방 제목은 발화 봉투가 주는 값이라 한 글자도 안 넣는다. 남는 셋이
+    // 이 머리의 전부다 — 갈래말·예외 창 표기·관제 창으로 합류하는 문.
+    phrases: ['알림에서 시작된 방', '오브에서 넘어온 예외 창 — 관제 창과 별개', '관제 창으로 →'],
+    // Paper의 합류 행에는 「이 감시 건 · 관제 대화 1개」도 있지만 그것은 세어 봐야
+    // 아는 수라 앱에 없다 — 지어내지 않고 문도 구조도 버튼 하나만 적는다.
+    structure: [
+      { what: 'count', selector: '.room-head-join-btn', equals: 1 },
+      { what: 'count', selector: '.room-head-kicker', equals: 1 },
+    ],
+  },
+  {
+    board: '446V-1', // 10 · 에이전트 — 알람 노드·흐름 · 검사 결과 · 승인
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:routines-list', data: CODE_WATCH_DRAFT },
+      { do: 'ipc-fixture', channel: 'athena:routine-detail', data: CODE_DETAIL_FIRST_CHECK },
+      { do: 'mode', view: 'agent' },
+      { do: 'wait', ms: 700 },
+      { do: 'click', selector: '.agent-row' },
+      { do: 'wait', ms: 400 },
+      { do: 'settle' },
+    ],
+    root: '#agentCanvas',
+    // 칸 제목·값·함수명은 전부 봉투가 주는 값이다. 남는 것은 칸 문법의 두 라벨과
+    // 상세가 늘 그리는 설정 두 줄, 그리고 고치는 유일한 문이다.
+    // Paper의 승인 패널(「승인」·「이 알람 승인」·「취소」)은 앱 캔버스에 없다 —
+    // 앱은 그 게이트를 채팅 카드에만 두었다. 어긋난 자리라 아무 것도 안 적는다.
+    phrases: ['들어감', '나옴', '고치기 — 말로', '확인 주기', '쿨다운'],
+    // Paper 보드 10의 노드 행은 네 칸이고, 아직 아무 칸도 고르지 않았으며
+    // (칩 없음) 첫 검사라 바뀐 칸도 없다.
+    structure: [
+      { what: 'count', selector: '.agent-node-card', equals: 4 },
+      { what: 'absent', selector: '.agent-node-chip' },
+      { what: 'absent', selector: '.agent-node-badge' },
+    ],
+  },
+  {
+    board: '44HD-1', // 11 · 에이전트 — 노드에서 '이상해요' → AI가 고치고 다시 검사
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:routines-list', data: CODE_WATCH_DRAFT },
+      { do: 'ipc-fixture', channel: 'athena:routine-detail', data: CODE_DETAIL_AFTER_FIX },
+      { do: 'mode', view: 'agent' },
+      { do: 'wait', ms: 700 },
+      { do: 'click', selector: '.agent-row' },
+      { do: 'wait', ms: 400 },
+      // 보드 11이 그린 것은 「배수 비교」 칸을 고른 상태다 — 칩 두 개는 고른
+      // 칸에만 붙는다(agent-canvas.js makeNodeCard).
+      { do: 'click', selector: '.agent-node-cards .agent-node-card:nth-child(3)' },
+      { do: 'settle' },
+    ],
+    root: '#agentCanvas',
+    phrases: ['들어감', '나옴', '방금 바뀜', '이상해요', '물어볼게요'],
+    // 고친 칸 하나에만 「방금 바뀜」이 붙고, 고른 칸 하나에만 칩 두 개가 붙는다.
+    structure: [
+      { what: 'count', selector: '.agent-node-card', equals: 4 },
+      { what: 'count', selector: '.agent-node-badge', equals: 1 },
+      { what: 'count', selector: '.agent-node-chip', equals: 2 },
+    ],
+  },
+  {
+    board: '44RV-1', // 12 · 에이전트 — 활성 코드 알람 · 상세·발화 이력
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:routines-list', data: CODE_WATCH_ACTIVE },
+      { do: 'ipc-fixture', channel: 'athena:routine-detail', data: CODE_DETAIL_ACTIVE },
+      { do: 'ipc-fixture', channel: 'athena:routine-runs', data: ROUTINE_RUNS },
+      { do: 'mode', view: 'agent' },
+      { do: 'wait', ms: 700 },
+      { do: 'click', selector: '.agent-row' },
+      { do: 'wait', ms: 400 },
+      { do: 'settle' },
+    ],
+    root: '#agentCanvas',
+    // 「울린 기록 · 최근」·「채팅에서 열기 ↗」는 Paper가 발화 줄마다 그린 것인데
+    // 앱은 머리에 「울린 기록」만 두고 줄에는 문을 안 달았다 — 어긋난 자리라 뺀다.
+    phrases: ['코드 감시', '일시중지', '취소', '고치기 — 말로', '전체 이력 보기 →', '설정'],
+    // Paper 보드 12의 상태 제어 행은 [일시중지][취소][고치기 — 말로] 셋이고,
+    // 켜진 알람에는 초안의 「검사」가 없다.
+    structure: [
+      { what: 'count', selector: '.agent-code-controls button', equals: 3 },
+      { what: 'absent', selector: '.agent-code-check-btn' },
+      { what: 'count', selector: '.agent-view-tab', equals: 4 },
+    ],
   },
 
   // ---------- 화면 4장 (1-0 설정 3 + D-2 그래프 1) ----------
