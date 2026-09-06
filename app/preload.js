@@ -121,6 +121,9 @@ const INVOKE_CHANNELS = new Set([
   // 완전히 같은 파이프라인을 오브에서 부르는 다리. orb.js가 셸 숨김일 때만 쓴다
   // (게이트는 athena:shell-visibility, scripts/gates/check-orb.mjs가 잰다).
   'athena:orb-chat-submit',
+  // 화면계 게이트 전용 — 질의 밖에서 온 캔버스 봉투를 그려도 되는지(검사 모드인지)
+  // 묻는 조회 하나다. 제품에서는 main이 늘 false를 답한다(main.js 같은 이름 핸들러).
+  'athena:orb-canvas-probe',
   // 놓친 예약 캐치업(R1, 5단계) — 확인은 main이 ① catchup-fire(ledger 기록)
   // ② 브리핑 실행 순서를 보장한다. 건너뛰기는 백엔드 API를 부르지 않는다.
   'athena:routine-missed-confirm',

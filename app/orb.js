@@ -2025,6 +2025,35 @@
     }
   }
 
+  // ---------- 검사 전용 봉투 통로 (Paper 키우미 보드 09) ----------
+  // 미니 카드는 질의가 도는 동안에만 사는 구독으로만 그려진다(아래 submitChatQuery).
+  // 그래서 화면계 게이트가 도달 어휘(main→렌더러 이벤트)로 봉투를 쏴도 듣는 쪽이
+  // 없어 열 종 중 한 장도 못 세웠다. 질의 밖에서 봉투가 오면 main에게 검사 모드인지
+  // 한 번 묻고, 그렇다고 답할 때만 **같은 buildOrbCanvasCard로** 같은 자리에 붙인다 —
+  // 별도 렌더러를 두지 않는 것이 이 통로의 전부다(다른 것을 그리면 재는 뜻이 없다).
+  // 제품에서는 main이 늘 false를 답하므로(main.js 같은 이름 핸들러) 아무 일도 없다.
+  let canvasProbeAnswer = null;
+  function askCanvasProbeMode() {
+    if (!canvasProbeAnswer) {
+      canvasProbeAnswer = window.athena.invoke('athena:orb-canvas-probe').catch(() => false);
+    }
+    return canvasProbeAnswer;
+  }
+  window.athena.on('athena:orb-canvas-result', async (r) => {
+    // 질의가 도는 동안은 그쪽 구독이 그린다 — 두 번 그리지 않는다. 물음이 도는 사이에
+    // 질의가 시작될 수 있으므로 답이 온 뒤에도 한 번 더 본다.
+    if (chatBusy) return;
+    if (!await askCanvasProbeMode() || chatBusy) return;
+    const el = buildOrbCanvasCard(r);
+    if (!el) return;
+    const line = orbTurn('orb-turn');
+    line.appendChild(el);
+    $chatTurns.appendChild(line);
+    $chatEmpty.hidden = true;
+    scrollChatToBottom();
+    requestPanelHeight();
+  });
+
   // main의 canvas 이벤트 전송과 invoke 응답은 서로 다른 IPC 큐다. 응답이 먼저
   // 도착해 구독을 바로 해제하면 끝부분 카드가 유실될 수 있으므로 main이 보고한
   // 개수만큼 관찰할 때까지 짧게 큐를 비운다. 보통 1~2장은 첫 확인에서 끝난다.

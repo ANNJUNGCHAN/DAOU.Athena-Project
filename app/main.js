@@ -4425,6 +4425,13 @@ ipcMain.handle('athena__render_canvas', async (e, payload = {}) => {
   });
 });
 
+// 화면계 게이트 전용 — 미니 카드(Paper 키우미 보드 09)는 질의가 도는 동안에만
+// 사는 구독으로만 그려져서(orb.js submitChatQuery) 라우트 도달 어휘로는 한 장도
+// 못 세운다. 오브 렌더러가 질의 밖에서 봉투를 받았을 때 이 채널로 검사 모드인지
+// 묻는다 — 제품에서는 이 환경변수가 없어 항상 false다(ATHENA_CANVAS_SOURCE와
+// 같은 관례). 값을 돌려주기만 하고 아무 상태도 바꾸지 않는다.
+ipcMain.handle('athena:orb-canvas-probe', () => process.env.ATHENA_ORB_CANVAS_PROBE === '1');
+
 // 오브 대화 모드(2026-08-26 board-33) — 셸이 숨겨졌을 때만 오브 렌더러가 이
 // 채널을 부른다(orb.js 쪽 게이트는 athena:shell-visibility). **셸 창을 앞으로
 // 가져오지 않는다**(expand:false 고정) — "오브 미니 채팅은 언제나 메인 방
