@@ -7,7 +7,7 @@
     "node_id": "14NW-2",
     "jsx_sha256": "2031bb4597c4fb69c9bca0e41200766b68cfffd251775a8c6f44cc447b98e90e"
   },
-  "html_sha256": "8b3701778949e9fcfb7b28ea17daa630ff5569dfbcf4f6d4aa05591b017d6e55",
+  "html_sha256": "8039a65e86a52c2ee2cbe11ed931f284ccfb510b3473094e750c711a8033e9c8",
   "width_px": 1360.0,
   "height_px": 1040.0,
   "artboard_px": [
@@ -102,7 +102,8 @@
         "control": "순위",
         "kind": "tab",
         "boards": [
-          "2VDA-0"
+          "2VDA-0",
+          "32XM-0"
         ],
         "node_id": "2WFB-0",
         "how": "exact"
