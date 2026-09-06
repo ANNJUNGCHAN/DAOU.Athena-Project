@@ -878,6 +878,84 @@ html, body { background: transparent; }
 /* 리드인이 이미 위 경계선을 그렸으면 버튼이 선을 한 번 더 긋지 않는다. */
 .panel-cta-lead + .panel-cta { border-top: none; }
 
+/* entity 응답 패널(Paper 보드 10 3ZAA-1) — 같은 공통 패널 자리에 「관계 · 근거 ·
+ * 원문 발췌 · 변경 이력」을 그린다. 값·간격은 위 노드 선택 패널의 어휘를 그대로
+ * 쓴다(한 자리에 두 디자인 언어를 두지 않는다) — 새 토큰은 없다. */
+.entity-panel-head {
+  display: flex; align-items: baseline; gap: 8px; flex-shrink: 0;
+  padding: 16px 16px 14px; border-bottom: 1px solid var(--color-k-line);
+}
+.entity-panel-name {
+  font-family: var(--font-display); font-size: var(--text-xl); color: var(--color-k-text);
+}
+.entity-panel-meta {
+  font-family: var(--font-body); font-size: var(--text-xs); color: var(--color-k-soft);
+}
+.entity-section-title {
+  flex-shrink: 0; margin: 14px 16px 8px;
+  font-family: var(--font-body); font-size: var(--text-2xs); color: var(--color-k-hint);
+  letter-spacing: 0.1em;
+}
+.entity-relation-row {
+  flex-shrink: 0; margin: 0 16px 12px;
+  display: flex; flex-direction: column; gap: 5px;
+}
+.entity-relation-line { display: flex; align-items: baseline; gap: 8px; }
+.entity-relation-label {
+  flex-shrink: 0;
+  font-family: var(--font-body); font-size: var(--text-xs); color: var(--color-k-soft);
+}
+.entity-relation-arrow {
+  flex: 1 1 0; min-width: 0;
+  font-family: var(--font-body); font-size: var(--text-sm); color: var(--color-k-bright);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.entity-relation-meta {
+  flex-shrink: 0;
+  font-family: var(--font-mono); font-size: var(--text-2xs); color: var(--color-k-hint);
+}
+.entity-relation-rationale {
+  font-family: var(--font-body); font-size: var(--text-xs); line-height: 17px; color: var(--color-k-soft);
+}
+/* 원문 발췌 — 이 액션의 요점이다(rationale은 추출기의 한 줄 요약이라 그것만 보면
+ * 요약의 요약이 된다). 인용부를 왼쪽 선으로 눈에 띄게 갈라 둔다. */
+.entity-relation-excerpt {
+  border-left: 2px solid var(--color-k-line); padding-left: 9px;
+  display: flex; flex-direction: column; gap: 3px;
+}
+.entity-excerpt-text {
+  font-family: var(--font-body); font-size: var(--text-xs); line-height: 17px; color: var(--color-k-bright);
+}
+.entity-excerpt-meta {
+  font-family: var(--font-mono); font-size: var(--text-2xs); color: var(--color-k-ghost);
+}
+.entity-timeline-row {
+  flex-shrink: 0; margin: 0 16px 8px;
+  display: flex; align-items: baseline; gap: 9px;
+}
+.entity-timeline-date {
+  width: 44px; flex-shrink: 0;
+  font-family: var(--font-mono); font-size: var(--text-2xs); line-height: 12px; color: var(--color-k-ghost);
+}
+.entity-timeline-text {
+  flex: 1 1 0;
+  font-family: var(--font-body); font-size: var(--text-xs); line-height: 17px; color: var(--color-k-soft);
+}
+/* 「이 답이 지켜야 하는 것」 — 패널 발치. 위 최근 변화와 달리 flexGrow를 안 쓴다:
+ * 이 블록은 늘 마지막이고, 앞 섹션이 짧으면 바로 뒤에 붙는 편이 정직하다. */
+.entity-honesty {
+  flex-shrink: 0; margin-top: auto;
+  padding: 12px 16px 14px; border-top: 1px solid var(--color-k-line);
+  display: flex; flex-direction: column; gap: 6px;
+}
+.entity-honesty-title {
+  font-family: var(--font-body); font-size: var(--text-2xs); color: var(--color-k-hint);
+  letter-spacing: 0.1em;
+}
+.entity-honesty-line {
+  font-family: var(--font-body); font-size: var(--text-2xs); line-height: 15px; color: var(--color-k-ghost);
+}
+
 /* 카드도 유리다 — soul.md §7 "모든 표면이 유리다. 두 창도, 창 안의 카드도 전부."
  * 2026-08-17 디자인 리뷰 [HIGH]로 정정: 이전 판은 고정 rgba 채움 + backdrop-filter
  * 0건이라 §7이 금지한 "뒤에 굴절할 것 없는 반투명 회색 사각형"이었다. 이제 알파를
