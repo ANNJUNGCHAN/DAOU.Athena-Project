@@ -428,6 +428,24 @@ test('중단을 누르면 잡 취소 IPC를 부른다 — 폴링만 멈추지 �
   assert.equal(findByClass(container, 'backtest-running-stop').length, 0);
 });
 
+test('중단 뒤에 늦게 돌아온 수집 응답이 백테스트를 시작하지 않는다', async () => {
+  let release = null;
+  const { container, calls } = await toRunning({
+    status: () => new Promise((resolve) => { release = () => resolve({ status: 'done' }); }),
+    cancelJob: async () => ({ ok: true }),
+  });
+  // 첫 틱이 status 안에 들어가 있는 사이에 사람이 「중단」을 누른다.
+  await click(findByClass(container, 'backtest-running-stop')[0]);
+  await flush();
+  release();
+  await flush();
+  await flush();
+  // run은 승인 카드를 띄운 첫 호출 하나뿐이어야 한다 — 늦게 온 done이 실행을 열지 않는다.
+  assert.equal(calls.length, 1);
+  assert.equal(findByClass(container, 'backtest-canvas-error').length, 0);
+  assert.ok(findByClass(container, 'backtest-preset-item').length);
+});
+
 // ── 보드 03 · 결과 ──────────────────────────────────────────────────────────
 
 const DONE_RESULT = {
