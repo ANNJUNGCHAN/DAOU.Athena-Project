@@ -400,6 +400,18 @@ const SEARCH_CANVAS_CARD = Object.freeze({
   data: { title: '차트 · 삼성전자 일봉', body_markdown: '일봉' },
 });
 
+// 보드 36의 「사람이 고른 폴더」 — 탐색기는 OS 대화상자라 프로브가 누를 수 없다.
+// 고른 결과를 못 박아야 대화상자가 열린다(athena:project-pick-folder는 아무것도 등록하지
+// 않는 조회 갈래다, main.js). 경로는 SIDEBAR_HISTORY의 두 프로젝트가 안 쓰는 폴더라
+// 기본 상태(점유 아님)로 떨어지고, 빈 폴더라 안내가 안 뜬다. 경로·이름은 값이라
+// phrases에 한 글자도 넣지 않는다.
+const PICKED_FOLDER = Object.freeze({
+  ok: true,
+  path: 'C:\\Projects\\new-strategy',
+  name: 'new-strategy',
+  empty: true,
+});
+
 // 보드 37만 프로젝트를 셋 그린다(아테나 · 키움 리서치 · 개인 연구) — 같은 목록에 한 줄을 더한다.
 const SIDEBAR_HISTORY_THREE = Object.freeze({
   ...SIDEBAR_HISTORY,
@@ -2862,8 +2874,8 @@ const ROUTES = Object.freeze([
     ],
   },
 
-  // ---------- 사이드바 4장 (1-0) ----------
-  // 넷 다 이력 사이드바 하나를 다른 상태로 그린 보드라 fixture와 다시 읽히는 방법이 같다.
+  // ---------- 사이드바 5장 (1-0) ----------
+  // 다섯 다 이력 사이드바 하나를 다른 상태로 그린 보드라 fixture와 다시 읽히는 방법이 같다.
   // 사이드바는 대화 목록을 부팅 때 한 번 읽고 다음 폴링이 5초 뒤다(sidebar.js:1359) —
   // 5초를 세 번 기다리는 대신, 앱이 「모르는 대화의 실행 상태」를 받으면 목록을 통째로
   // 다시 읽는다는 것을 그대로 쓴다(sidebar.js:944 handleSessionRunState).
@@ -2986,6 +2998,42 @@ const ROUTES = Object.freeze([
       { what: 'count', selector: '.sidebar-project', equals: 3 },
       { what: 'count', selector: '.sidebar-project-menu-item', equals: 3 },
       { what: 'count', selector: '.sidebar-project-menu-item-hint', equals: 3 },
+    ],
+  },
+  {
+    board: '3VS6-1', // 36 · 프로젝트 추가 — 폴더 점유
+    window: 'shell',
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:conversations-list', data: SIDEBAR_HISTORY },
+      { do: 'send', channel: 'athena:session-run-state', data: { id: 'fx-reload' } },
+      { do: 'wait', ms: 300 },
+      // 「＋ 폴더 추가」는 탐색기부터 연다 — 대화상자는 사람이 고른 폴더 위에서만 선다
+      // (보드의 Step 1이 이미 경로를 들고 있다). 그 OS 대화상자를 fixture가 대신한다.
+      { do: 'ipc-fixture', channel: 'athena:project-pick-folder', data: PICKED_FOLDER },
+      { do: 'click', selector: '.sidebar-project-add' },
+      { do: 'wait', ms: 300 },
+      { do: 'settle' },
+    ],
+    root: '#projectCreate',
+    // 경로·이름은 값이라 안 넣는다(fixture가 바꾼다). 「프로젝트 이름」도 뺐다 —
+    // 일곱 자리가 이미 찼고, 라벨보다 그 아래 안내문이 이 화면에만 있는 문장이다.
+    // 세 갈래 권한 문장 중 하나만 넣는 것도 같은 이유다: 셋의 개수는 structure가 잰다.
+    phrases: [
+      '프로젝트 추가',
+      '프로젝트는 폴더 하나를 점유합니다',
+      '작업 폴더',
+      '탐색기가 열립니다. 빈 폴더든 기존 폴더든 됩니다.',
+      '폴더 이름에서 가져왔습니다 · 바꿀 수 있습니다',
+      '이 폴더에서 아테나가 하는 일',
+      '이 폴더로 만들기',
+    ],
+    // Paper의 모달 그대로 — 단계 셋(폴더·이름·권한)에 권한 문장 셋. 안내는 기본
+    // 상태에 없다: 「이미 점유된 폴더」·「빈 폴더가 아닐 때」는 고른 폴더가 그럴 때만
+    // 뜨는 두 상태고, 한 번에 하나만 보인다(project-create-dialog.js noticeFor).
+    structure: [
+      { what: 'count', selector: '.project-create-step', equals: 3 },
+      { what: 'count', selector: '.project-create-permission', equals: 3 },
+      { what: 'absent', selector: '.project-create-notice' },
     ],
   },
   {
