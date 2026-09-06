@@ -4,8 +4,9 @@
 //
 // 매니페스트 role==="screen" 103장이 결국 전부 여기 있어야 한다. 없는 보드는 미구현 실패다 —
 // 「도달 절차가 없는 보드는 실패한다」가 게이트 2의 핵심이라, 표가 곧 남은 작업 목록이 된다.
-// 지금은 49장(부팅 5 + 온보딩 3 + 인증 3 + 에이전트 4 + 알림 파생 방·코드 알람 3 + 화면 4
-// + 셸·그래프 2 + 그래프 5 + 대화·계정 2 + 모드·빈 화면 2 + 창·대화 턴·탭 3 + 사이드바 4 + 플러그인 9)이고,
+// 지금은 53장(부팅 5 + 온보딩 3 + 인증 3 + 에이전트 4 + 알림 파생 방·코드 알람 3 + 화면 4
+// + 셸·그래프 2 + 그래프 5 + 대화·계정 2 + 모드·빈 화면 2 + 창·대화 턴·탭 3 + 사이드바 4 + 플러그인 9
+// + 키우미 4)이고,
 // 래칫(§4.5)이 잠근 뒤 저작이 이어진다.
 //
 // ── reach 어휘는 닫혀 있다
@@ -205,6 +206,25 @@ const ROUTINE_FIRED = Object.freeze({
   observed: '88,100',
   threshold: '88,000',
   fired_at: '2026-08-20T15:30:00+09:00',
+});
+
+// 활성 감시 3건 — 키우미 보드 01의 「감시 궤도 링 — 활성 감시 3건」 그대로다. 오브는
+// 셸 컨트롤 스트립과 같은 채널을 읽어 활성 루틴 수만큼 위성 점을 놓는다
+// (orb.js refreshSatelliteRing → renderSatelliteRing). 0건이면 궤도 자체를 안 그리므로
+// 이 봉투가 없으면 이 보드의 구조 셈은 이 컴퓨터의 백엔드 상태에 좌우된다.
+// 값은 전부 데이터라 phrases에는 한 글자도 넣지 않는다.
+const WATCH_THREE_ACTIVE = Object.freeze({
+  ok: true,
+  data: {
+    routines: [
+      { id: 'fx-w1', symbol: '005930', note: '삼성전자 88,000', status: 'active', mode: 'polling' },
+      { id: 'fx-w2', symbol: '000660', note: 'SK하이닉스 200,000', status: 'active', mode: 'polling' },
+      { id: 'fx-w3', symbol: '035720', note: '카카오 40,000', status: 'active', mode: 'polling' },
+    ],
+    disclosure_ready: true,
+    last_error: null,
+    fired_today: 0,
+  },
 });
 
 // 복원 실패 이벤트 — 보드 30이 그린 대화 턴 하나. 백엔드가 실제로 보내는 봉투 모양
@@ -2174,6 +2194,131 @@ const ROUTES = Object.freeze([
       { what: 'count', selector: '.plugin-canvas-proposal[data-proposal-state="pending"]', equals: 1 },
       { what: 'count', selector: '.plugin-canvas-proposal[data-proposal-state="stale"]', equals: 1 },
       { what: 'count', selector: '.plugin-canvas-proposal-boundary', equals: 1 },
+    ],
+  },
+
+  // ---------- 키우미 4장 (C-2) ----------
+  // 이 페이지 아홉 중 넷만 여기 있다. 나머지 다섯은 Paper가 그린 것이 **주석 판**이라
+  // 앱에 대응하는 가시 텍스트가 없거나(02 표정 10종 · 03 시선·시간 루프 — 얼굴은
+  // orb.css의 [data-face] 규칙이 지고 글자를 하나도 안 그린다), 한 화면에 두 줄밖에
+  // 못 세우거나(05 셸 숨김·표시 — 「대화창으로 가기」와 「셸로 가기」는 서로 다른
+  // 표시 모드라 함께 못 선다), 잠긴 계약과 정면으로 어긋나거나(08 모드별 얼굴 5종 —
+  // 앱은 얼굴 1종이 계약이다, shell.html #dot 주석), 도달 어휘 밖이다(09 미니 카드
+  // 10종 — 카드는 질의가 도는 동안에만 붙는 athena:orb-canvas-result 구독으로만
+  // 그려진다, orb.js submitChatQuery). 없는 셀렉터·문구를 적어 초록을 만드는 대신
+  // 비워 둔다.
+  {
+    board: 'DO-0', // 01 · 키우미 — 상황별 표현·크기 매핑
+    window: 'orb',
+    // 이 보드가 앱에서 실제로 서는 자리는 알림 전용 패널과 접힌 원의 두 채널이다
+    // (Paper 캡션: 「알림 전용(셸 표시)에서는 세 조각까지 — 문장 1 · 대표 카드 1 · 더보기」,
+    // 「접힘 원에는 얼굴 말고 채널이 둘 더 있다」). 표정 10종 자체는 글자가 아니라
+    // orb.css의 [data-face] 규칙이라 문구로도 구조로도 잴 자리가 없다 — 적지 않는다.
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:routines-list', data: WATCH_THREE_ACTIVE },
+      // 셸이 떠 있는 동안의 표시 모드(B) — 입력줄 없는 알림 전용이다. 재읽기 뒤에는
+      // main이 이 이벤트를 다시 보내지 않으므로 라우트가 직접 쏜다.
+      { do: 'send', channel: 'athena:shell-visibility', data: { hidden: false, displayMode: 'B' } },
+      // 발화 하나가 궤도 링을 다시 세고(refreshSatelliteRing) 미확인으로 쌓인다.
+      { do: 'send', channel: 'athena:routine-event', data: ROUTINE_FIRED },
+      { do: 'wait', ms: 300 },
+      // 펼치면 쌓인 첫 건이 패널로 그려진다 — 창 크기는 main이 정하므로 렌더러에는
+      // 이 이벤트가 곧 펼침이다(orb.js athena:orb-state).
+      { do: 'send', channel: 'athena:orb-state', data: { expanded: true } },
+      { do: 'settle' },
+    ],
+    root: '#orbRoot',
+    // 「더보기」는 안 적는다 — 앱의 그 버튼은 「셸로 가기」다(orb.html #orbMore,
+    // 보드 04⑦이 적은 쪽과 같다). 배지 「15:30 발화」와 「2분 전」도 안 적는다:
+    // 앞은 이 컴퓨터의 시간대가, 뒤는 지금 시각이 정하는 값이다.
+    phrases: [
+      '주기 확인',
+      '종목',
+      "루틴 '삼성전자 88,000' · 에이전트 발화 — 묻지 않은 턴입니다",
+    ],
+    structure: [
+      // 궤도 위성 = 활성 감시 건수(Paper: 3건).
+      { what: 'count', selector: '.orb-ring-dot', equals: 3 },
+      // 세 조각 중 둘 — 대표 카드 하나와 진행 문 하나.
+      { what: 'count', selector: '#orbCard', equals: 1 },
+      { what: 'count', selector: '#orbMore', equals: 1 },
+    ],
+  },
+  {
+    board: '4TY-0', // 04 · 키우미 — 대화·콘텐츠 전개
+    window: 'orb',
+    // 여덟 칸 중 ①(펼침 · 빈 대화)이 자극 없이 서는 유일한 칸이다 — 나머지 일곱은
+    // 질의가 실제로 돌아야 생기는 턴이라 도달 어휘 밖이다(카드는 질의 중에만 붙는
+    // athena:orb-canvas-result 구독이 만든다). 그 한 칸이 이 보드의 전제를 다 진다:
+    // 「셸이 숨겨졌을 때만 입력줄이 존재한다」.
+    reach: [
+      { do: 'send', channel: 'athena:shell-visibility', data: { hidden: true, displayMode: 'A' } },
+      { do: 'send', channel: 'athena:orb-state', data: { expanded: true } },
+      { do: 'settle' },
+    ],
+    root: '#orbPanel',
+    phrases: [
+      '메인 대화',
+      '셸을 내려두셨네요. 여기서 바로 물어보셔도 됩니다.',
+      '긴 표와 차트는 줄여서 보여드리고, 전체는 대화창에서 이어집니다.',
+      '대화창으로 가기',
+    ],
+    structure: [
+      { what: 'count', selector: '#orbInputStack', equals: 1 },
+      { what: 'count', selector: '.orb-control-strip', equals: 1 },
+      // 알림 전용 발(「셸로 가기」)은 대화 모드에서 통째로 사라진다 —
+      // Paper ①이 그 자리에 그린 것은 입력줄과 스트립뿐이다.
+      { what: 'absent', selector: '#orbFoot' },
+    ],
+  },
+  {
+    board: 'CLE-0', // 06 · 키우미 메뉴 — 두 진입점과 항목
+    window: 'shell',
+    reach: [
+      { do: 'click', selector: '#dot' },
+      { do: 'settle' },
+    ],
+    root: '#kiumiMenu',
+    // 「플러그인 UI 초안」은 안 적는다 — Paper가 그 구역 머리에 적은 말은 초안 표시라
+    // 제품 문구가 못 된다(3원칙 · 내부용어). 그 구역의 두 줄(DART 전자공시 ·
+    // Google Sheets 내보내기)도 설치된 플러그인이 주는 값이라 문구가 아니다.
+    phrases: [
+      '추가',
+      '파일 첨부',
+      '폴더 경로를 칩으로 쌓는다',
+      '계속 추구할 목표를 설정',
+      '실행 전에 계획을 정리',
+      '설정',
+      '설치 · 기능 허용 · 마켓플레이스',
+    ],
+    // Paper가 그린 구역은 셋이다(추가 · 플러그인 · 설정). 항목 총수는 안 적는다 —
+    // 가운데 구역은 설치된 플러그인 수만큼 늘고 줄어든다.
+    structure: [{ what: 'count', selector: '.km-section', equals: 3 }],
+  },
+  {
+    board: 'C8G-0', // 07 · 키우미 메뉴 — 셸 오버레이
+    window: 'shell',
+    // 06과 같은 메뉴를 셸 전체 위에 얹은 보드다 — 재는 자리가 메뉴 안이 아니라
+    // 셸이라는 것이 이 보드의 전부다(「현재 대화 위에 열린다」).
+    reach: [
+      { do: 'click', selector: '#dot' },
+      { do: 'settle' },
+    ],
+    root: '#shell',
+    // 사이드바 첫 행은 Paper가 「새 채팅」, 앱이 「새 대화」로 갈려 안 적는다
+    // (보드 06·12·29와 같은 자리다). 캔버스에 쌓인 카드·대화 턴은 전부 값이다.
+    phrases: [
+      '그래프',
+      '에이전트',
+      '플러그인',
+      '추가',
+      '파일 첨부',
+      '설정',
+      '모델 · 사고 강도',
+    ],
+    structure: [
+      { what: 'count', selector: '.shell-region', equals: 3 },
+      { what: 'count', selector: '.km-section', equals: 3 },
     ],
   },
 ]);
