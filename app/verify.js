@@ -5506,9 +5506,12 @@ app.whenReady().then(async () => {
       const settingsPanel = canvas.querySelector('.agent-history-settings');
       const settingsVisible = settingsPanel ? settingsPanel.hidden === false : false;
       const historyBodyHiddenOnSettings = (canvas.querySelector('.agent-history-body') || {}).hidden;
-      const settingsLabels = settingsPanel
-        ? Array.from(settingsPanel.querySelectorAll('.agent-detail-field-label')).map((n) => n.textContent) : [];
-      // 동선 규칙2 - 보기 전용이므로 입력 컨트롤이 하나도 없어야 한다.
+      // 보드 06 - 설정 탭은 요약 한 줄로 열린다(편집 폼은 [설정 편집]이 연다).
+      const settingsCaption = settingsPanel
+        ? (settingsPanel.querySelector('.agent-panel-caption') || {}).textContent : null;
+      const settingsSummaryMeta = settingsPanel
+        ? (settingsPanel.querySelector('.agent-settings-summary-meta') || {}).textContent : null;
+      // 요약만 있는 동안에는 값을 바꾸는 입력이 하나도 없어야 한다.
       const settingsInputCount = settingsPanel
         ? settingsPanel.querySelectorAll('input, select, textarea').length : -1;
       const settingsEditLabel = settingsPanel
@@ -5534,8 +5537,8 @@ app.whenReady().then(async () => {
         breadcrumbHiddenAfterBack, tasksHeadVisibleAfterBack,
         outputSource, outputTitle, outputTag, outputItemCount, outputBtnLabels, outputBtnsAllDisabled,
         segVisible, segLabels, segHiddenAfterBack, runGroupLabels, runTimes,
-        settingsVisible, historyBodyHiddenOnSettings, settingsLabels, settingsInputCount,
-        settingsEditLabel, historyBodyBackOnRuns,
+        settingsVisible, historyBodyHiddenOnSettings, settingsCaption, settingsSummaryMeta,
+        settingsInputCount, settingsEditLabel, historyBodyBackOnRuns,
       };
     })()`);
     report.historyDrillIn = historyProbe;
@@ -5561,21 +5564,21 @@ app.whenReady().then(async () => {
           && new Set(historyProbe.runGroupLabels).size === historyProbe.runGroupLabels.length,
       );
       assertOk(
-        'agent-canvas-10: "설정" 탭을 누르면 이력 본문이 숨고 보기 전용 명세가 뜬다(Paper 보드 06)',
-        historyProbe.settingsVisible === true && historyProbe.historyBodyHiddenOnSettings === true,
+        'agent-canvas-10: "설정" 탭을 누르면 이력 본문이 숨고 "설정 — 요약"이 뜬다(Paper 보드 06)',
+        historyProbe.settingsVisible === true && historyProbe.historyBodyHiddenOnSettings === true
+          && historyProbe.settingsCaption === '설정 — 요약',
       );
       assertOk(
-        'agent-canvas-10: 설정 패널은 백엔드가 실제로 준 필드만 라벨로 낸다',
-        historyProbe.settingsLabels.length > 0
-          && historyProbe.settingsLabels.every((l) => ['조건', '모드', '소스', '종목', '쿨다운', '브리핑 모델', '다음 실행', '만료', '생성'].includes(l)),
+        'agent-canvas-10: 요약 한 줄은 그 작업의 실제 값으로 채워진다',
+        /쿨다운 \d+초/.test(String(historyProbe.settingsSummaryMeta)),
       );
       assertOk(
-        'agent-canvas-10: 설정 패널에 값을 바꾸는 입력이 없다(동선 규칙2 보기 전용)',
+        'agent-canvas-10: 요약만 있는 동안에는 값을 바꾸는 입력이 없다',
         historyProbe.settingsInputCount === 0,
       );
       assertOk(
-        'agent-canvas-10: 고치는 경로는 "채팅에서 고치기 ↗" 하나뿐이다',
-        historyProbe.settingsEditLabel === '채팅에서 고치기 ↗',
+        'agent-canvas-10: 편집으로 들어가는 문은 [설정 편집] 하나다',
+        historyProbe.settingsEditLabel === '설정 편집',
       );
       assertOk('agent-canvas-10: "이력"으로 되돌리면 이력 본문이 다시 보인다', historyProbe.historyBodyBackOnRuns === true);
       assertOk('agent-canvas-10: 드릴인을 닫으면 세그먼트도 함께 숨는다', historyProbe.segHiddenAfterBack === true);

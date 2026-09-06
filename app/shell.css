@@ -3220,7 +3220,7 @@ body { margin: 0; overflow: hidden; }
   font-weight: 400;
 }
 
-/* ---------- 드릴인 "설정" 탭 — 읽기 전용 명세 ---------- */
+/* ---------- 드릴인 "설정" 탭 — 요약 + 편집 폼(Paper 보드 06) ---------- */
 .agent-history-settings {
   flex: 1 1 auto;
   min-height: 0;
@@ -3255,6 +3255,46 @@ body { margin: 0; overflow: hidden; }
   cursor: pointer;
 }
 .agent-history-settings-edit:hover { border-color: var(--color-brand); color: var(--color-brand); }
+
+/* 요약 한 줄 + 편집 폼(Paper 보드 06). 라벨 폭 72px는 Paper가 두 폼에 공통으로
+   쓴 그 값이다(원장 frames의 라벨 프레임 폭). */
+.agent-settings-summary { align-self: stretch; display: flex; flex-direction: column; gap: 4px; padding: 4px 12px; }
+.agent-settings-summary-title { color: var(--color-k-text); font-family: var(--font-body); font-size: var(--text-sm); }
+.agent-settings-summary-meta { color: var(--color-k-dim); font-family: var(--font-body); font-weight: 300; font-size: var(--text-xs); }
+.agent-settings-form { align-self: stretch; display: flex; flex-direction: column; gap: 6px; margin-top: 4px; padding: 10px 12px; background: var(--color-k-panel3); border-radius: 10px; }
+.agent-settings-form-title { color: var(--color-k-text); font-family: var(--font-strong); font-size: var(--text-sm); }
+.agent-settings-fields { display: flex; flex-direction: column; gap: 6px; }
+.agent-settings-field, .agent-settings-readonly { display: flex; align-items: center; gap: 8px; }
+.agent-settings-label { flex: 0 0 72px; color: var(--color-k-faint); font-family: var(--font-body); font-weight: 300; font-size: var(--text-xs); }
+.agent-settings-readonly-value { color: var(--color-k-text); font-family: var(--font-body); font-size: var(--text-xs); }
+.agent-settings-tag, .agent-settings-hint, .agent-settings-unit { color: var(--color-k-faint); font-family: var(--font-body); font-weight: 300; font-size: var(--text-2xs); }
+.agent-settings-note { padding-left: 80px; color: var(--color-k-faint); font-family: var(--font-body); font-weight: 300; font-size: var(--text-2xs); }
+.agent-settings-input, .agent-settings-select {
+  min-width: 0;
+  border: 1px solid var(--color-k-line);
+  border-radius: 6px;
+  padding: 5px 8px;
+  background: var(--color-k-panel);
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+}
+.agent-settings-input { flex: 1 1 auto; }
+.agent-settings-actions { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+.agent-settings-actions .agent-history-settings-edit { margin: 0; }
+.agent-settings-save {
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 6px 16px;
+  background: var(--color-k-text);
+  color: #fff;
+  font-family: var(--font-strong);
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+.agent-settings-save:disabled { opacity: 0.5; cursor: default; }
+.agent-settings-message, .agent-settings-empty { color: var(--color-warn); font-family: var(--font-body); font-weight: 300; font-size: var(--text-xs); }
+.agent-settings-empty { color: var(--color-k-faint); }
 
 /* 날짜 그룹 머리(Paper 보드 03) — 행이 아니라 구분자라 배경이 없다. */
 .agent-history-run-group { padding: 10px 10px 4px; color: var(--color-k-faint); font-family: var(--font-body); font-weight: 300; font-size: var(--text-2xs); letter-spacing: 0.08em; }
