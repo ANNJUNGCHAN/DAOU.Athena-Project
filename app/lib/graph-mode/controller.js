@@ -103,6 +103,23 @@ const PANEL_KIND_LABELS = {
   goal: '목표', preference: '성향', risk_signal: '위험 신호', investor_profile: '프로필',
 };
 
+// tier 한글 라벨 — 원래 createGraphModeController 안(패널 티어 대조 카드 전용)에
+// 있던 것을 entity 응답 패널(보드 10)과 나눠 쓰려고 모듈 스코프로 올렸다. 값은 그대로다.
+// manual — 사람이 화면에서 직접 고친 것(2026-09-03). 체결도 대화도 아니라 별 라벨이
+// 필요하다: 체결이라고 쓰면 체결한 적 없는 것을 체결이라 말하는 것이고, 대화라고
+// 쓰면 모델이 추론한 것처럼 읽힌다.
+const PANEL_TIER_LABELS = {
+  deterministic: '체결·잔고', conversational: '대화', manual: '직접 수정',
+};
+
+// 출처 종류 한글 라벨 — 백엔드 SourceKind(ontology.py:107)와 짝이다. 원문 값
+// (chat_message·trade…)은 화면에 못 낸다(제품 문구 규칙 — 내부용어 비노출).
+// 미등록 값은 원문 폴백 — RELATION_LABELS와 같은 규칙이다.
+const SOURCE_KIND_LABELS = {
+  chat_message: '대화', conversation: '대화', manual_edit: '직접 수정',
+  trade: '체결', holding: '잔고',
+};
+
 // confidence 위계(edge_changed의 "승격" 판정 전용) — 상승만 "…로 승격"(G-G4),
 // 하강·동일·한쪽 미상은 전부 방어적 중립 "신뢰도 변경"으로 통일한다.
 const CONFIDENCE_RANK = { AMBIGUOUS: 0, INFERRED: 1, EXTRACTED: 2 };
@@ -166,6 +183,80 @@ function buildTimelineRows(events) {
     rows.push({ date, text, count: 1 });
   }
   return rows;
+}
+
+// ── entity 응답 패널(Paper 보드 10 3ZAA-1) ────────────────────────────────
+//
+// 모델이 "이 노드 설명해줘"에 답하려고 athena_brain action=entity를 부르면 그 응답이
+// 모델에게만 갔다 — 사람은 무엇을 보고 한 말인지 확인할 길이 없었다. Paper가 그린
+// 「응답의 재료」를 같은 공통 패널(#graphPanel)에 함께 그린다.
+//
+// 순수 함수다(computeGraphHeaderMeta·buildTimelineRows와 같은 이유) — 값 맵핑을
+// 단위 테스트가 전부 잰다. **지어내지 않는다**: resolved가 아니면 null이고(이름이
+// 여럿에 걸린 경우는 모델이 되묻는다), 없는 절은 그냥 빠진다.
+//
+// 보드가 발치에 붙인 「정직성 규칙」 네 줄은 안 그린다(2026-09-07 검수). Paper 트리에서
+// 그 프레임(3ZBV-1)은 이 패널(3ZAF-1)의 자식이 아니라 「보드 제목」·「action=entity」와
+// 같은 층의 보드 주석이고, 내용도 화면이 아니라 모델의 답이 지켜야 할 계약 서술이다.
+// 게다가 네 줄에는 confidence·tier·truncated·full_chars·resolved=false·503이 그대로
+// 박혀 있어, 같은 이유로 「action=entity」를 안 그린 이 패널이 스스로 모순된다.
+
+// 원문 발췌 한 조각. 잘렸으면 그 사실을 먼저 말한다 — 잘린 발췌를 전문처럼 인용하면
+// "원문에 그렇게 적혀 있다"가 거짓이 된다(백엔드 SourceExcerpt 주석과 같은 규율).
+function entitySourceExcerpt(source) {
+  if (!source || !source.text) return null;
+  // full_chars는 SourceExcerptOut의 필수 int다(brain.py, extra='forbid') — 없는 경우를
+  // 위한 폴백 문구를 두지 않는다.
+  const fullChars = source.full_chars.toLocaleString('ko-KR');
+  if (source.truncated === true) {
+    const shown = source.text.length.toLocaleString('ko-KR');
+    return { text: `"${source.text}"`, meta: `잘린 발췌 — ${shown} / ${fullChars}자` };
+  }
+  const parts = [
+    source.kind ? (SOURCE_KIND_LABELS[source.kind] || source.kind) : '',
+    formatEventDate(source.occurred_at),
+    `전문 ${fullChars}자`,
+  ].filter(Boolean);
+  return { text: `"${source.text}"`, meta: parts.join(' · ') };
+}
+
+// 관계 한 줄. Paper는 방향을 원문 `in`/`out` 칸과 화살표 칸 둘로 그리는데, 화살표가
+// 이미 같은 것을 말하므로 한국어인 화살표만 남긴다(제품 문구 규칙 — 내부용어 비노출).
+function entityRelationRow(rel) {
+  const otherName = rel.other_entity_name || rel.other_entity_id || '';
+  const meta = [
+    rel.confidence ? (PANEL_CONFIDENCE_LABELS[rel.confidence] || rel.confidence) : '',
+    rel.tier ? (PANEL_TIER_LABELS[rel.tier] || rel.tier) : '',
+    Number.isFinite(rel.reinforcement) && rel.reinforcement > 0 ? `${rel.reinforcement}회` : '',
+  ].filter(Boolean).join(' · ');
+  return {
+    label: RELATION_LABELS[rel.relation_kind] || rel.relation_kind || '',
+    arrow: `${rel.direction === 'in' ? '←' : '→'} ${otherName}`,
+    meta,
+    // rationale은 추출기의 한 줄 요약이라 원문 발췌와 나란히 둔다(보드 제목 주석).
+    rationale: rel.rationale ? `근거 — ${rel.rationale}` : '',
+    excerpt: entitySourceExcerpt(rel.source),
+  };
+}
+
+// EntityDetailResponse(brain.py) → 패널이 그대로 소비할 모양.
+function buildEntityDetailModel(payload) {
+  if (!payload || typeof payload !== 'object' || payload.resolved !== true) return null;
+  const name = payload.name || payload.entity_id;
+  if (!name) return null;
+  const meta = [
+    payload.kind ? (PANEL_KIND_LABELS[payload.kind] || payload.kind) : '',
+    Number.isFinite(payload.degree) ? `연결 ${payload.degree}` : '',
+  ].filter(Boolean).join(' · ');
+  return {
+    name: String(name),
+    meta,
+    relations: (Array.isArray(payload.relations) ? payload.relations : [])
+      .filter(Boolean).map(entityRelationRow),
+    // 변경 이력은 공통 패널의 「최근 변화」와 같은 자료·같은 조립을 쓴다 — 한 화면이
+    // 같은 사건을 두 말로 부르지 않게.
+    timeline: buildTimelineRows(Array.isArray(payload.timeline) ? payload.timeline : []),
+  };
 }
 
 // 관계별 보강 횟수(보드 04 관계 목록의 우측 숫자) — 타임라인 이벤트에서
@@ -301,6 +392,10 @@ function createGraphModeController(deps) {
   // 군집 지도는 **라이브 렌더러 하나뿐이다**(2026-09-02 결정). 잠깐 정적 SVG와
   // 토글로 공존시켰지만, 만져 본 뒤 라이브를 채택하고 정적을 폐기했다.
   let liveMap = null; // 처음 그릴 때 만든다.
+  // entity 응답 패널(보드 10)의 마지막 봉투. store 상태가 아니라 여기 두는 이유는
+  // lastPlaced와 같다 — 선택·필터·리비전과 달리 되돌아갈 화면 상태가 아니라
+  // 마지막 조회 결과 하나이고, 노드를 새로 고르면 그것으로 대체된다.
+  let entityDetail = null;
 
   // 라이브 뷰의 노드 선택을 정적 뷰와 같은 경로로 넣는다. 군집 번호는 패널 부제
   // ("군집 N · 연결 M")가 쓰는 값이라 마지막 응답에서 찾아 넘긴다.
@@ -488,6 +583,9 @@ function createGraphModeController(deps) {
   }
 
   function selectNode(entityId) {
+    // 노드를 새로 고르면 entity 응답 패널은 물러난다 — 같은 자리에 두 주제를
+    // 겹쳐 두면 지금 보고 있는 것이 무엇인지 흐려진다.
+    entityDetail = null;
     const node = findNode(entityId);
     // profile-summary에 같은 entity_id가 있으면(그래프 노드와 성향 신호 표는
     // 서로 다른 엔드포인트라 항상 겹치진 않는다) 그 항목의 근거·신뢰도·보강
@@ -791,13 +889,6 @@ function createGraphModeController(deps) {
     return 'panel-dot-soft';
   }
 
-  // manual — 사람이 화면에서 직접 고친 것(2026-09-03). 체결도 대화도 아니라 별 라벨이
-// 필요하다: 체결이라고 쓰면 체결한 적 없는 것을 체결이라 말하는 것이고, 대화라고
-// 쓰면 모델이 추론한 것처럼 읽힌다.
-const PANEL_TIER_LABELS = {
-  deterministic: '체결·잔고', conversational: '대화', manual: '직접 수정',
-};
-
   // §10-4 최근 변화(보드 15 §2.5, WP-G) — 2단계 렌더의 채움 단계. 응답 시점의
   // 실제 DOM에서 섹션을 다시 찾는다(선점해 둔 closure 노드는 같은 엔티티
   // 재렌더로 이미 교체됐을 수 있다). 행이 없으면 섹션을 걷어낸다 — 빈 섹션보다
@@ -828,6 +919,96 @@ const PANEL_TIER_LABELS = {
       section.appendChild(rowEl);
     }
     section.hidden = false;
+  }
+
+  // entity 응답 패널(보드 10) — 위 renderPanelContent와 같은 자리(#graphPanel)를
+  // 쓰되 그리는 것이 다르다: 사람이 고른 노드가 아니라 모델이 방금 조회한 노드의
+  // 관계·근거·원문 발췌·변경 이력이다. 값은 전부 봉투(백엔드 응답)에서만 온다.
+  function renderEntityDetailContent(panel, model) {
+    while (panel.firstChild) panel.removeChild(panel.firstChild);
+
+    const head = elp('div', 'entity-panel-head');
+    const name = elp('span', 'entity-panel-name');
+    name.textContent = model.name;
+    head.appendChild(name);
+    if (model.meta) {
+      const meta = elp('span', 'entity-panel-meta');
+      meta.textContent = model.meta;
+      head.appendChild(meta);
+    }
+    head.appendChild(elp('span', 'panel-tabs-spacer'));
+    // 닫는 문 — Paper는 안 그렸지만 없으면 이 패널을 물릴 길이 노드를 새로 고르는
+    // 것뿐이다. 노드 선택 패널이 이미 쓰는 손잡이와 같은 말·같은 클래스를 쓰므로,
+    // 하는 일도 같아야 한다: 고른 노드까지 함께 놓는다. 봉투만 버리면 노드를 고른
+    // 채로 조회한 사람에게는 「선택 해제」가 이전 패널로 되돌아가는 버튼이 된다.
+    const deselect = elp('button', 'panel-deselect');
+    deselect.setAttribute('type', 'button');
+    deselect.textContent = '선택 해제';
+    deselect.addEventListener('click', () => {
+      entityDetail = null;
+      state = store.clearSelection(state);
+      renderSelection();
+    });
+    head.appendChild(deselect);
+    panel.appendChild(head);
+
+    if (model.relations.length > 0) {
+      const title = elp('div', 'entity-section-title');
+      title.textContent = '관계 — 방향 · 확정성 · 티어 · 보강';
+      panel.appendChild(title);
+      for (const rel of model.relations) {
+        const row = elp('div', 'entity-relation-row');
+        const line = elp('div', 'entity-relation-line');
+        if (rel.label) {
+          const label = elp('span', 'entity-relation-label');
+          label.textContent = rel.label;
+          line.appendChild(label);
+        }
+        const arrow = elp('span', 'entity-relation-arrow');
+        arrow.textContent = rel.arrow;
+        line.appendChild(arrow);
+        if (rel.meta) {
+          const meta = elp('span', 'entity-relation-meta');
+          meta.textContent = rel.meta;
+          line.appendChild(meta);
+        }
+        row.appendChild(line);
+        if (rel.rationale) {
+          const rationale = elp('div', 'entity-relation-rationale');
+          rationale.textContent = rel.rationale;
+          row.appendChild(rationale);
+        }
+        if (rel.excerpt) {
+          const excerpt = elp('div', 'entity-relation-excerpt');
+          const text = elp('div', 'entity-excerpt-text');
+          text.textContent = rel.excerpt.text;
+          excerpt.appendChild(text);
+          if (rel.excerpt.meta) {
+            const meta = elp('div', 'entity-excerpt-meta');
+            meta.textContent = rel.excerpt.meta;
+            excerpt.appendChild(meta);
+          }
+          row.appendChild(excerpt);
+        }
+        panel.appendChild(row);
+      }
+    }
+
+    if (model.timeline.length > 0) {
+      const title = elp('div', 'entity-section-title');
+      title.textContent = '변경 이력 — 최신 먼저';
+      panel.appendChild(title);
+      for (const row of model.timeline) {
+        const rowEl = elp('div', 'entity-timeline-row');
+        const date = elp('span', 'entity-timeline-date');
+        date.textContent = row.date;
+        rowEl.appendChild(date);
+        const desc = elp('span', 'entity-timeline-text');
+        desc.textContent = row.count > 1 ? `${row.text} ×${row.count}` : row.text;
+        rowEl.appendChild(desc);
+        panel.appendChild(rowEl);
+      }
+    }
   }
 
   // 공통 패널 콘텐츠(보드 07 §10, 스텝8). §10-1 탭("이력" 탭은 Paper에 콘텐츠
@@ -1120,6 +1301,13 @@ const PANEL_TIER_LABELS = {
       panel.hidden = true;
       return;
     }
+    // entity 응답 패널(보드 10)이 노드 선택 패널보다 앞이다 — 방금 물어본 것이
+    // 지금 화면의 주제이고, 노드를 새로 고르면 selectNode()가 이것을 지운다.
+    if (entityDetail) {
+      panel.hidden = false;
+      renderEntityDetailContent(panel, entityDetail);
+      return;
+    }
     if (!state.selectedEntityId || !state.panel) {
       panel.hidden = true;
       while (panel.firstChild) panel.removeChild(panel.firstChild);
@@ -1356,8 +1544,19 @@ const PANEL_TIER_LABELS = {
       renderSelection();
     },
     clearSelection() {
+      entityDetail = null;
       state = store.clearSelection(state);
       renderSelection();
+    },
+    // entity 응답 패널(보드 10) — main이 athena_brain action=entity 응답을 그대로
+    // 넘긴다(canvas.js athena:graph-chat-action kind='entity'). 못 읽은 응답이면
+    // 아무 일도 안 한다(null 반환) — 무엇을 설명하는지 모르는 패널은 안 그린다.
+    showEntityDetail(payload) {
+      const model = buildEntityDetailModel(payload);
+      if (!model) return null;
+      entityDetail = model;
+      renderSelection();
+      return model;
     },
     collapseCluster() {
       state = store.collapseCluster(state);
@@ -1403,6 +1602,7 @@ const __exports = {
   computeGraphHeaderMeta,
   formatEventDate,
   buildTimelineRows,
+  buildEntityDetailModel,
   topSurprising,
   countRelationEvents,
   hiddenLinkReasonClauses,

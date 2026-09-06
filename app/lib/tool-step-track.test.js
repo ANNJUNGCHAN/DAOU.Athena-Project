@@ -7,8 +7,8 @@ const { applyToolStep } = require('./tool-step-track');
 test('시작 단계 — done:false, timeText 빈 문자열', () => {
   const steps = new Map();
   const r = applyToolStep(steps, { id: 't1', label: '조회', done: false, elapsedMs: null });
-  assert.deepEqual(r, { id: 't1', label: '조회', done: false, timeText: '', error: false, retrying: false });
-  assert.deepEqual(steps.get('t1'), { label: '조회', done: false, elapsedMs: null, error: false, retrying: false });
+  assert.deepEqual(r, { id: 't1', label: '조회', done: false, timeText: '', error: false, retrying: false, note: '' });
+  assert.deepEqual(steps.get('t1'), { label: '조회', done: false, elapsedMs: null, error: false, retrying: false, note: '' });
 });
 
 test('완료 단계 — 초 단위 소요시간 문자열', () => {
@@ -48,8 +48,8 @@ test('같은 id 재호출 — 진행 중에서 완료로 갱신된다', () => {
 test('실패 완료 — label에 "실패"가 붙고 error:true', () => {
   const steps = new Map();
   const r = applyToolStep(steps, { id: 't1', label: '조회', done: true, elapsedMs: 800, error: true });
-  assert.deepEqual(r, { id: 't1', label: '조회 실패', done: true, timeText: '0.8s', error: true, retrying: false });
-  assert.deepEqual(steps.get('t1'), { label: '조회 실패', done: true, elapsedMs: 800, error: true, retrying: false });
+  assert.deepEqual(r, { id: 't1', label: '조회 실패', done: true, timeText: '0.8s', error: true, retrying: false, note: '' });
+  assert.deepEqual(steps.get('t1'), { label: '조회 실패', done: true, elapsedMs: 800, error: true, retrying: false, note: '' });
 });
 
 test('error 필드 없는 이벤트 — error:false 기본값(옵셔널 필드)', () => {
@@ -89,4 +89,14 @@ test('retrying — 진짜 실패는 여전히 실패다(대기가 실패를 덮�
   });
   assert.equal(r.error, true);
   assert.equal(r.label, '그래프 화면 제어 실패', '실패 문구가 우선한다');
+});
+
+test('부제(Paper 보드 10) — 보낸 것만 그대로 실리고, 안 보내면 빈 문자열이다', () => {
+  const steps = new Map();
+  const r = applyToolStep(steps, {
+    id: 't1', label: '노드 조회', done: true, elapsedMs: 300, note: '한미반도체 · 관계 7 · 이력 3',
+  });
+  assert.equal(r.label, '노드 조회');
+  assert.equal(r.note, '한미반도체 · 관계 7 · 이력 3');
+  assert.equal(applyToolStep(steps, { id: 't2', label: '조회', done: false }).note, '');
 });

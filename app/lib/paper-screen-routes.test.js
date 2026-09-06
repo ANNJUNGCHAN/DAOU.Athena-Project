@@ -138,7 +138,7 @@ test('every phrase survived the generator, so none of them is a data value', () 
   }
 });
 
-// 3개 하한의 예외. 사유는 두 갈래뿐이고, 어느 쪽이든 대가로 structure를 2개 이상
+// 3개 하한의 예외. 사유는 네 갈래뿐이고, 어느 쪽이든 대가로 structure를 2개 이상
 // 실어 공허 통과를 막는다(아래 마지막 단언).
 //   ledger-two  원장이 그 보드에 그린 텍스트가 애초에 둘뿐이다 — 부팅 02·05는
 //               'ATHENA'(폭 guide)와 커서 '|'가 전부라, 3개를 채우려면 없는 문구를
@@ -149,11 +149,16 @@ test('every phrase survived the generator, so none of them is a data value', () 
 //   values-only 원장에는 더 있지만 값이 아닌 줄이 둘뿐이다. 보드 05가 그린 문장은 거의
 //               전부 실행 번호·버전·수익률을 품고 있어(「#41 vs #38 — 무엇이 달랐나」)
 //               fixture를 바꾸면 같이 바뀐다 — 그 사실도 아래 별도 테스트가 잰다.
+//   annotation-only 남는 줄이 전부 보드가 붙인 주석층이다. 보드 10은 값이 아닌 줄로
+//               「action=entity」·「entity = 이름 또는 entity_id」와 발치의 정직성 규칙
+//               네 줄을 그렸는데, 셋 다 도구 인자·상태 코드를 품은 계약 서술이라 앱
+//               화면에 낼 수 없다 — 그 사실도 아래 별도 테스트가 잰다.
 const PHRASE_FLOOR_EXCEPTIONS = new Map([
   ['16OD-2', { kind: 'ledger-two', why: '원장 texts가 ATHENA·| 둘뿐이다 (02 · 부팅 — READY)' }],
   ['16OX-2', { kind: 'ledger-two', why: '원장 texts가 ATHENA·| 둘뿐이다 (05 · 부팅 — COMPLETE)' }],
   ['COS-0', { kind: 'state-two', why: '대화 빈 화면이 제목·부제 둘뿐이다 (26 · 빈 작업공간)' }],
   ['1WSI-1', { kind: 'values-only', why: '값이 아닌 줄이 두 diff 칸 이름뿐이다 (05 · 백테스트 — 이력·비교)' }],
+  ['3ZAA-1', { kind: 'annotation-only', why: '값이 아닌 줄이 두 절 제목뿐이다 (10 · 그래프 — 이 노드 설명해줘)' }],
 ]);
 
 test('the only routes under three phrases are the ones Paper drew with two texts', () => {
@@ -202,6 +207,17 @@ test('the history board names runs in a way the app never writes', () => {
   assert.ok(canvas.includes('`실행 이력 ${formatNumeric(runs.length)}건`'),
     '실행 목록 머리가 전략 이름을 적게 됐다 — 1WSI-1의 문구 예외가 거짓이 된다');
   assert.match(canvas, /backtest-history-status is-\$\{run\.status\}`, run\.status\)/);
+});
+
+// 3ZAA-1의 예외가 기대는 사실 — 보드 10에서 값이 아닌 줄은 두 절 제목과 주석층뿐이고,
+// 앱은 그 주석층을 안 그린다. 다시 그리면 문구를 셋 이상 적을 수 있게 되므로 예외도
+// 거짓이 된다 — 그때 이 테스트가 먼저 깨진다.
+test('the entity board writes its annotations in a way the app never draws', () => {
+  const controller = fs.readFileSync(path.join(__dirname, 'graph-mode', 'controller.js'), 'utf8');
+  assert.ok(!controller.includes('이 답이 지켜야 하는 것'),
+    '정직성 규칙이 패널로 돌아왔다 — 3ZAA-1의 문구 예외가 거짓이 된다');
+  assert.ok(!/textContent = 'action=entity'/.test(controller),
+    '도구 인자 이름을 패널에 적게 됐다 — 3ZAA-1의 문구 예외가 거짓이 된다');
 });
 
 test('each route carries 3 to 7 phrases', () => {

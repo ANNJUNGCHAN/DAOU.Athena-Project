@@ -29,11 +29,15 @@ function applyToolStep(steps, step) {
   // 숨기지도 않는다: 무슨 일이 있었는지는 말한다.
   const retrying = !!step.retrying;
   const label = error ? `${rawLabel} 실패` : (retrying ? `${rawLabel} — 서버 연결 대기` : rawLabel);
+  // 부제(2026-09-07, Paper 보드 10 「한미반도체 · 관계 7 · 이력 3」) — 무엇을 몇 개
+  // 받았는지는 결과에만 있어서 라벨로는 못 만든다. 라벨과 같은 규율로 여기서만
+  // 정한다: 안 보내는 호출자는 빈 문자열이고, 그러면 호출자가 그리지 않는다.
+  const note = typeof step.note === 'string' ? step.note : '';
   const timeText = done && typeof step.elapsedMs === 'number'
     ? `${(step.elapsedMs / 1000).toFixed(1)}s`
     : (done ? '—' : '');
-  steps.set(step.id, { label, done, elapsedMs: step.elapsedMs, error, retrying });
-  return { id: step.id, label, done, timeText, error, retrying };
+  steps.set(step.id, { label, done, elapsedMs: step.elapsedMs, error, retrying, note });
+  return { id: step.id, label, done, timeText, error, retrying, note };
 }
 
 const __exports = { applyToolStep };

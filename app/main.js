@@ -20,6 +20,7 @@ const mcpCli = require('./lib/main/mcp-cli');
 const mcpEnv = require('./lib/main/mcp-env');
 // 플러그인 제안 — 판정부와 승인 실행부는 electron 없는 순수 모듈이 진다.
 const pluginProposalForward = require('./lib/main/plugin-proposal-forward');
+const brainEntityForward = require('./lib/main/brain-entity-forward');
 const { createPluginProposalRegistry } = require('./lib/main/plugin-proposal-registry');
 const { CATALOG: PLUGIN_CATALOG } = require('./lib/plugin-catalog');
 // 결정 D1의 실배선 — claude -p 스폰 + stream-json 파싱 + .mcp.json 생성.
@@ -2460,10 +2461,14 @@ const TOOL_STEP_LABELS = {
   athena_nudge_guard: '말걸기 가드',
 };
 
-function toolStepLabel(name) {
+// 노드 하나를 설명해 달라는 조회는 성향 그래프 전체를 보는 것과 다른 일이다
+// (Paper 보드 10의 툴 칩이 「노드 조회」로 따로 서 있다) — 같은 도구라도 액션으로
+// 가른다. 입력은 tool_use 블록에 이미 실려 있다.
+function toolStepLabel(name, input) {
   if (streamJsonParser.isRenderCanvasToolName(name)) return '카드 그리는 중';
   // MCP 툴 이름은 mcp__<server>__<tool> 형태로 온다 — 마지막 조각만 라벨을 찾는 열쇠다.
   const base = String(name || '').split('__').pop();
+  if (base === 'athena_brain' && input && input.action === 'entity') return '노드 조회';
   return TOOL_STEP_LABELS[base] || '처리 중';
 }
 
@@ -2597,6 +2602,28 @@ function maybeForwardGraphChatAction(step, resultBlock) {
   }
 }
 
+// entity 응답 패널(Paper 보드 10) — athena_brain action=entity의 응답을 위 그래프
+// 액션과 **같은 채널**로 캔버스에 넘긴다. 지금까지 이 자료는 모델에게만 가서, 사람은
+// 답만 보고 무엇을 근거로 한 말인지 확인할 수 없었다. 여기서 백엔드를 다시 부르지
+// 않는다 — 결과가 곧 그 응답이고, 두 번 부르면 모델이 본 것과 화면이 그린 것이 갈린다.
+// 읽기 전용 조회라 사람이 확정할 것은 없다(제안 카드들과 다른 점).
+// orbWin에는 안 보낸다 — 오브에는 그래프 캔버스가 없다.
+//
+// 돌려주는 값은 툴 칩 부제(「대상 · 관계 N · 이력 M」)다. 그 수는 결과에만 있어서
+// tool_use 시점의 라벨로는 만들 수 없다.
+function maybeForwardBrainEntity(step, resultBlock) {
+  if (resultBlock.is_error === true) return '';
+  if (!brainEntityForward.isEntityCall(step)) return '';
+  const text = extractToolResultText(resultBlock.content);
+  if (!text) return '';
+  const detail = brainEntityForward.extractEntityDetail(step, text);
+  if (!detail) return '';
+  if (shellWin && !shellWin.isDestroyed()) {
+    shellWin.webContents.send('athena:graph-chat-action', { kind: 'entity', detail });
+  }
+  return brainEntityForward.entityStepNote(detail);
+}
+
 const BACKTEST_TOOL_NAME = 'athena_backtest';
 
 // 백테스트 채팅 액션 카드 — athena_backtest의 카드 액션 일곱(backtest_tools.py의
@@ -2717,7 +2744,7 @@ function createToolStepTracker(sendFn = sendLiveToolStep, { forwardNudgeGuard = 
       for (const block of content) {
         if (block && block.type === 'tool_use' && block.id && !steps.has(block.id)) {
           if (streamJsonParser.isAgentToolName(block.name)) continue;
-          const label = toolStepLabel(block.name);
+          const label = toolStepLabel(block.name, block.input);
           // name·input도 함께 들고 있는다 — F-stage9가 athena_nudge_guard의
           // propose 호출을 가려내는 데 쓴다(위 maybeForwardNudgeGuardProposal).
           steps.set(block.id, { label, startedAt: Date.now(), name: block.name, input: block.input });
@@ -2747,6 +2774,9 @@ function createToolStepTracker(sendFn = sendLiveToolStep, { forwardNudgeGuard = 
             // 않는다(무슨 일이 있었는지는 말한다): 실패가 아니라 대기로 분류한다.
             const errorText = block.is_error ? extractToolResultText(block.content) : '';
             const stillConnecting = /still connecting|No such tool available/i.test(errorText || '');
+            // 툴 칩 부제(보드 10) — 봉투를 넘기는 김에 같은 결과에서 뽑는다.
+            // 이 한 줄이 sendFn보다 앞이어야 부제가 done 이벤트에 함께 실린다.
+            const note = forwardNudgeGuard ? maybeForwardBrainEntity(step, block) : '';
             sendFn({
               id: block.tool_use_id,
               label: step.label,
@@ -2754,6 +2784,7 @@ function createToolStepTracker(sendFn = sendLiveToolStep, { forwardNudgeGuard = 
               elapsedMs,
               error: !!block.is_error && !stillConnecting,
               retrying: stillConnecting,
+              note,
             });
             if (forwardNudgeGuard) {
               maybeForwardNudgeGuardProposal(step, block);

@@ -714,11 +714,22 @@ html.is-boot-expanding #winControls { opacity: 0; }
 /* 실패한 툴 호출(is_error:true) — done 뒤에 둬서 채움색을 경고색으로 덮는다. */
 .progress-tool-step.is-warn .progress-tool-step-icon { border-color: transparent; background: var(--color-warn); }
 .progress-tool-step-label {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* 부제(Paper 보드 10 「한미반도체 · 관계 7 · 이력 3」) — 라벨 뒤에 붙어 무엇을
+ * 대상으로 몇 개를 받았는지 말한다. 부제가 없는 단계에서는 빈 채로 남아 자리를
+ * 안 쓴다(빈 span은 폭 0). */
+.progress-tool-step-note {
   flex: 1 1 0%;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  color: var(--color-k-ghost);
 }
 
 /* ---------- 하위 에이전트 카드(Paper 44 agent-card, 2026-09-05) ----------
