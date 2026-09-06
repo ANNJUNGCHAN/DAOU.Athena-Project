@@ -4200,6 +4200,13 @@ const disposeGraphChatAction = window.athena.on('athena:graph-chat-action', asyn
     graphMode.focusNode(message.entityId);
     return;
   }
+  // entity 응답 패널(Paper 보드 10) — 모델이 athena_brain action=entity로 받은
+  // 자료를 사람도 같은 자리에서 본다. 여기서 백엔드를 다시 부르지 않는다:
+  // 봉투가 곧 그 응답이고, 두 번 부르면 모델이 본 것과 화면이 그린 것이 갈릴 수 있다.
+  if (message.kind === 'entity' && message.detail) {
+    graphMode.showEntityDetail(message.detail);
+    return;
+  }
   if (message.kind === 'filter' && message.patch && typeof message.patch === 'object') {
     // 화이트리스트로만 받는다 — 봉투가 어디서 왔는지 모르는 채로 prefs에 쓰면
     // 모르는 키가 localStorage에 쌓이고, normalize()가 그것을 조용히 버린다.
