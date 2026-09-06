@@ -143,7 +143,7 @@ test('every phrase survived the generator, so none of them is a data value', () 
 //               지어내는 수밖에 없다. 이 갈래는 원장 크기로 참·거짓을 잰다.
 //   state-two   원장에는 더 있지만 **한 번에 보이는 상태**가 두 줄뿐이다. 보드 26은
 //               세 모드의 빈 화면을 나란히 그렸는데 앱은 그중 하나만 그린다 —
-//               그 사실 자체를 아래 별도 테스트가 canvas.css에서 잰다.
+//               그 사실 자체를 아래 별도 테스트가 canvas.css·canvas.js·summary-table.js에서 잰다.
 const PHRASE_FLOOR_EXCEPTIONS = new Map([
   ['16OD-2', { kind: 'ledger-two', why: '원장 texts가 ATHENA·| 둘뿐이다 (02 · 부팅 — READY)' }],
   ['16OX-2', { kind: 'ledger-two', why: '원장 texts가 ATHENA·| 둘뿐이다 (05 · 부팅 — COMPLETE)' }],
@@ -167,11 +167,21 @@ test('the only routes under three phrases are the ones Paper drew with two texts
 });
 
 // COS-0의 예외가 기대는 사실 — 보드 26이 나란히 그린 대화·그래프 빈 화면을 앱은
-// 한 번에 하나만 그린다. 이 규칙이 사라지면 두 변형이 함께 보이므로 예외도 거짓이 된다.
+// 한 번에 하나만 그린다. 대화 변형은 #gridEmpty(#mosaic 안)에 살고 그래프 모드에서는
+// canvas.css가 숨기며, 그래프 변형(성향 축적 히어로)은 #gridEmpty에 없고 요약 표가
+// 0건일 때 summary-table.js가 표 자리에 세운다(ec8c701). 어느 쪽이 무너져도 두 변형이
+// 함께 보이므로 예외도 거짓이 된다.
 test('the empty canvas draws one mode variant at a time', () => {
-  const css = fs.readFileSync(path.join(__dirname, '..', 'canvas.css'), 'utf8');
+  const app = path.join(__dirname, '..');
+  const css = fs.readFileSync(path.join(app, 'canvas.css'), 'utf8');
   assert.match(css, /#canvasRegion\[data-mode="graph"\] \.canvas-empty-chat \{ display: none; \}/);
-  assert.match(css, /#canvasRegion:not\(\[data-mode="graph"\]\) \.canvas-empty-graphmode \{ display: none; \}/);
+  const canvas = fs.readFileSync(path.join(app, 'canvas.js'), 'utf8');
+  assert.ok(!canvas.includes('canvas-empty-graphmode'),
+    '그래프 변형이 #gridEmpty로 돌아왔다 — 대화 변형과 나란히 그려진다');
+  const summary = fs.readFileSync(path.join(app, 'lib', 'graph-mode', 'summary-table.js'), 'utf8');
+  assert.match(summary, /function renderGrowthHero\(/);
+  assert.ok(summary.includes("'canvas-empty canvas-empty-graphmode'"),
+    '성향 축적 히어로가 요약 표 자리에서 사라졌다');
 });
 
 test('each route carries 3 to 7 phrases', () => {
