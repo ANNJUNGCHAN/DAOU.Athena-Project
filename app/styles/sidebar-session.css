@@ -249,3 +249,154 @@
   font-family: var(--font-strong);
 }
 .sidebar-project-edit-save:disabled { opacity: 0.45; cursor: default; }
+
+/* ---- 프로젝트 추가 대화상자(36번 보드) — 폴더를 점유한다 ----
+ * 셸을 감추지 않고 그 위에 뜬다: 뒤가 흐리게 비쳐야 무엇 위에 서 있는지가 남는다
+ * (보드의 Blurred Shell). z-index는 셸 오버레이와 같은 10이고 마크업이 그것들 뒤에
+ * 있어 위에 깔린다 — 창 버튼(chat.css .win-controls, 11)은 덮지 않는다. 대화상자가
+ * 창 버튼을 가리면 최소화·닫기가 안 먹는다(2026-08-26 버그와 같은 자리). */
+.project-create-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgb(16 19 26 / 22%);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.project-create {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 560px;
+  max-width: calc(100% - 48px);
+  padding: 20px 23px;
+  border: 1px solid var(--color-k-line-soft);
+  border-radius: var(--radius-lg);
+  background: #fff;
+  box-shadow: 0 18px 48px rgb(16 19 26 / 18%);
+  color: #10131a;
+  font-size: var(--text-sm);
+  box-sizing: border-box;
+}
+.project-create-head { display: flex; flex-direction: column; gap: 3px; }
+.project-create-title { font-family: var(--font-strong); font-size: var(--text-md); }
+.project-create-subtitle { color: var(--color-k-faint); font-size: var(--text-xs); }
+.project-create-step { display: flex; flex-direction: column; gap: 6px; }
+.project-create-label { color: var(--color-k-dim); font-size: var(--text-xs); }
+.project-create-folder {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 0 8px 0 10px;
+  border: 1px solid var(--color-k-line-soft);
+  border-radius: var(--radius-sm);
+  background: var(--color-k-panel3);
+}
+.project-create-path {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+.project-create-repick {
+  flex-shrink: 0;
+  height: 24px;
+  padding: 0 10px;
+  border: 1px solid var(--color-k-line-soft);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  color: #10131a;
+  font: inherit;
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+.project-create-hint { color: var(--color-k-faint); font-size: var(--text-2xs); line-height: 1.4; }
+.project-create-input {
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--color-k-line-soft);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  font: inherit;
+  font-size: var(--text-sm);
+  box-sizing: border-box;
+}
+.project-create-input:focus { outline: none; border-color: #121826; }
+.project-create-permission {
+  padding-left: 14px;
+  color: var(--color-k-dim);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  position: relative;
+}
+.project-create-permission::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 7px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--color-k-ghost);
+}
+/* 안내는 한 번에 하나다 — 점유(만들기를 막는다)가 빈 폴더보다 세다. */
+.project-create-notice {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border: 1px solid var(--color-k-line-soft);
+  border-radius: var(--radius-md);
+  background: var(--color-k-panel3);
+}
+.project-create-notice.is-occupied { border-color: rgb(192 52 69 / 30%); background: rgb(192 52 69 / 5%); }
+.project-create-notice-title { font-family: var(--font-strong); font-size: var(--text-xs); }
+.project-create-notice-copy { color: var(--color-k-dim); font-size: var(--text-xs); line-height: 1.5; }
+.project-create-notice-path {
+  color: var(--color-k-faint);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.project-create-notice-action {
+  height: 24px;
+  margin-top: 2px;
+  padding: 0 10px;
+  border: 1px solid var(--color-k-line-soft);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  color: #10131a;
+  font: inherit;
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+.project-create-foot { display: flex; justify-content: flex-end; gap: 6px; }
+.project-create-cancel,
+.project-create-submit {
+  height: 34px;
+  padding: 0 14px;
+  border: 1px solid var(--color-k-line-soft);
+  border-radius: var(--radius-sm);
+  background: #fff;
+  color: #10131a;
+  font: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+.project-create-submit {
+  border-color: #121826;
+  background: #121826;
+  color: #fff;
+  font-family: var(--font-strong);
+}
+.project-create-submit:disabled { opacity: 0.45; cursor: default; }
