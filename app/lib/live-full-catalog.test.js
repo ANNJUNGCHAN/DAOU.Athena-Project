@@ -75,8 +75,11 @@ test('chromeMatches는 emptyHistory 계약을 헤더와 함께 잰다', () => {
 
 test('live-full catalog settings nav fourth item is 성향・이력', () => {
   const settings = fs.readFileSync(path.join(__dirname, 'settings-cards.js'), 'utf8');
+  const phase4 = fs.readFileSync(path.join(appDir, 'phase4-traversal.js'), 'utf8');
   assert.deepEqual(SETTINGS_NAV.map((item) => item.label), ['화면', '계좌', '모델', '성향・이력']);
   assert.match(settings, /label: '성향・이력'/);
+  assert.match(phase4, /SETTINGS_NAV/);
+  assert.doesNotMatch(phase4, /\['그래프',\s*'03e-settings-graph\.png'\]/);
 });
 
 test('live-full catalog locked clicks cover real orders and kiumi five faces', () => {
