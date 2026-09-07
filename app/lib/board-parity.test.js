@@ -480,6 +480,11 @@ test('board-surface.css는 5단이고 !important를 쓰지 않는다', () => {
   const cardCss = fs.readFileSync(path.join(__dirname, '..', 'styles', 'canvas-tabs.css'), 'utf8')
     .replace(/\/\*[\s\S]*?\*\//g, '');
   assert.match(cardCss, /\.canvas-tab-panel\s*>\s*\.card\s*\{[^}]*min-width:\s*0/);
+  // cdedb5a가 넣은 min-width:0 다섯 곳. 상위 flex 항목(.canvas-tab-viewport)이
+  // 빠지면 보드 카드의 min-width:0만으로는 가로 수축이 막힌다.
+  assert.match(cardCss, /\.canvas-tab-viewport\s*\{[^}]*min-width:\s*0/);
+  assert.match(cardCss, /\.canvas-tab-panel\s*\{[^}]*min-width:\s*0/);
+  assert.match(rules, /\.card\[data-board-surface="true"\]\s*\{[^}]*min-width:\s*0/);
   // 접기·병기 활성은 추출기가 새로 넣는 요소에만 건다(인라인 스타일 충돌 0).
   assert.match(rules, /\.bs-col\s*\{\s*display:\s*contents;\s*\}/);
   assert.match(rules, /\.bs-paired\s*\{\s*display:\s*none;/);

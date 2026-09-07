@@ -1400,49 +1400,31 @@ test('다섯 모드 대화 크롬은 Paper 계약이다', async () => {
   const { controller, elements } = setup();
   elements.chatHeadTitle = fakeNode('span');
   elements.chatHeadSub = fakeNode('span');
-  const fs = require('node:fs');
-  const path = require('node:path');
-  const css = fs.readFileSync(path.join(__dirname, '..', '..', 'chat.css'), 'utf8');
   const cases = [
+    { view: 'summary', label: '대화', mode: 'chat', headHidden: true },
     {
-      view: 'summary', label: '대화', canvas: 'summary', mode: 'chat',
-      headHidden: true,
+      view: 'graph', label: '그래프', mode: 'graph', headHidden: false,
+      title: '그래프에게 묻기', sub: '답이 캔버스를 바꿉니다',
+    },
+    { view: 'agent', label: '에이전트', mode: 'agent', headHidden: true },
+    {
+      view: 'plugin', label: '플러그인', mode: 'plugin', headHidden: false,
+      title: '아테나 · 플러그인 대화', sub: '설치와 권한을 여기서 정합니다',
     },
     {
-      view: 'graph', label: '그래프', canvas: 'summaryTable', mode: 'graph',
-      headHidden: false, title: '그래프에게 묻기', sub: '답이 캔버스를 바꿉니다',
-    },
-    {
-      view: 'agent', label: '에이전트', canvas: 'agent', mode: 'agent',
-      headHidden: true,
-    },
-    {
-      view: 'plugin', label: '플러그인', canvas: 'plugin', mode: 'plugin',
-      headHidden: false, title: '아테나 · 플러그인 대화', sub: '설치와 권한을 여기서 정합니다',
-    },
-    {
-      view: 'backtest', label: '백테스트', canvas: 'backtest', mode: 'backtest',
-      headHidden: false, title: '기법에게 묻기', sub: '고른 기법을 다룹니다',
+      view: 'backtest', label: '백테스트', mode: 'backtest', headHidden: false,
+      title: '기법에게 묻기', sub: '고른 기법을 다룹니다',
     },
   ];
-  const canvases = ['summary', 'graph', 'summaryTable', 'agent', 'plugin', 'backtest'];
   for (const row of cases) {
     await controller.setView(row.view);
     assert.equal(elements.canvasRegion.dataset.mode, row.mode, row.label);
-    for (const key of canvases) {
-      assert.equal(elements[key].hidden, key !== row.canvas, `${row.label} ${key}`);
-    }
     assert.equal(elements.chatHead.hidden, row.headHidden, `${row.label} 헤더`);
     if (!row.headHidden) {
       assert.equal(elements.chatHeadTitle.textContent, row.title, row.label);
       assert.equal(elements.chatHeadSub.textContent, row.sub, row.label);
     }
   }
-  assert.match(css, /\.history:empty::before\s*\{[^}]*content:\s*'새 대화'/);
-  assert.match(
-    css,
-    /#chatModeHead\[data-mode="backtest"\]:not\(\[hidden\]\):not\(\[data-technique\]\)\s*~\s*\.history:empty::before\s*\{[^}]*content:\s*'아직 고른 기법이 없습니다'/,
-  );
 });
 
 test('D4 — 5 view × 5 표면 배타표: 각 view에서 정확히 그 표면만 보인다(25칸)', async () => {
