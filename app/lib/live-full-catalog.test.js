@@ -43,11 +43,11 @@ test('live-full catalog mode labels match sidebar copy', () => {
     ['대화', '그래프', '에이전트', '플러그인', '백테스트'],
   );
   for (const mode of MODES) {
-    const match = shell.match(
-      new RegExp(`id="${mode.navId}"[\\s\\S]*?<span class="sidebar-mode-item-label">([^<]+)</span>`),
-    );
-    assert.ok(match, `${mode.navId} sidebar-mode-item-label`);
-    assert.equal(mode.label, match[1]);
+    const button = shell.match(new RegExp(`<button[^>]*id="${mode.navId}"[^>]*>([\\s\\S]*?)</button>`));
+    assert.ok(button, `${mode.navId} button`);
+    const labels = [...button[1].matchAll(/<span class="sidebar-mode-item-label">([^<]+)<\/span>/g)].map((row) => row[1]);
+    assert.equal(labels.length, 1, `${mode.navId} sidebar-mode-item-label`);
+    assert.equal(mode.label, labels[0]);
   }
 });
 
