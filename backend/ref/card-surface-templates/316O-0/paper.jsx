@@ -1,7 +1,7 @@
 (
     <div style={{ backgroundColor: 'var(--color-k-bg)', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', fontSynthesis: 'none', MozOsxFontSmoothing: 'grayscale', overflow: 'clip', overflowWrap: 'anywhere', position: 'relative', WebkitFontSmoothing: 'antialiased' }}>
       <div style={{ backgroundColor: 'var(--color-k-bg)', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', height: '1120px', left: '0px', padding: '40px', position: 'absolute', top: '0px', width: '1440px' }}>
-        <div style={{ backgroundColor: 'var(--color-k-panel)', borderColor: 'var(--color-k-line)', borderRadius: '16px', borderStyle: 'solid', borderWidth: '1px', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', flexShrink: '0', height: '1040px', overflow: 'clip', width: '1360px' }}>
+        <div style={{ backgroundColor: 'var(--color-k-panel)', borderColor: 'var(--color-k-line)', borderRadius: '28px', borderStyle: 'solid', borderWidth: '1px', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', flexShrink: '0', height: '1040px', overflow: 'clip', width: '1360px' }}>
           <div style={{ alignItems: 'center', borderBottomColor: 'var(--color-k-line-soft)', borderBottomStyle: 'solid', borderBottomWidth: '1px', boxSizing: 'border-box', display: 'flex', flexShrink: '0', height: '96px', justifyContent: 'space-between', paddingInline: '28px', width: '100%' }}>
             <div style={{ boxSizing: 'border-box', display: 'flex', flexDirection: 'column', gap: '7px' }}>
               <div style={{ alignItems: 'center', boxSizing: 'border-box', display: 'flex', gap: '14px' }}>

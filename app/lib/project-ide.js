@@ -1,4 +1,9 @@
-// 프로젝트 IDE — 코드 탭이 "내 컴퓨터의 폴더 하나"를 여는 자리(결정 D1~D4).
+// 기법 폴더 편집기 — 기법 하나의 폴더 하나를 여는 자리(보드 20 · 폴더 하나 = 기법 하나 = 대화 하나).
+//
+// **왜 폴더를 고르는 줄이 없는가.** 이 화면은 기법 목록에서 기법 하나를 눌러 들어온다.
+// 들어온 뒤에 다른 폴더를 고르는 길을 두면 한 페이지가 여러 알고리즘을 동시에 세팅하는
+// 화면이 된다(2026-09-07 사용자 지적). 폴더는 부르는 쪽(backtest-canvas)이 openAt으로
+// 정하고, 여기는 그 폴더 안만 보여준다. 목록으로 돌아가는 문은 캔버스 헤더의 [그만두기]다.
 //
 // **왜 sqlite가 아니라 파일인가.** 전략 버전 테이블은 실행 기록으로 남고, 편집·저장은
 // 디스크의 .py를 직접 오간다(D2). 그래서 이 모듈에는 버전 개념이 없다 — 여는 것도 쓰는
@@ -12,10 +17,12 @@
 // 날아간다. 그래서 이 모듈은 자기 루트를 한 번 만들어 계속 들고 있고, 캔버스는 매 렌더에
 // 그 노드를 붙이기만 한다(진짜 DOM에서 appendChild는 같은 노드를 옮긴다).
 //
-// **PYTHON ONLY(D3).** 만들기·저장·이름 바꾸기는 .py에만 열려 있다. 다른 파일은 보이되
-// (사람이 자기 데이터를 봐야 한다) 편집기로는 못 들어온다 — 누르면 한 줄로 거절한다.
-// 이 규율은 백엔드도 415로 다시 막는다. 두 겹인 이유는, 화면에서 막는 것은 설명이고
-// 백엔드에서 막는 것은 보장이기 때문이다.
+// **저장은 자동이다(보드 20 「자동 저장」).** 사람이 고치면 잠시 뒤 디스크에 쓴다 — 코드는
+// AI가 쥐고 있고 사람은 가끔 손을 대는 자리라, 저장 버튼을 찾게 하지 않는다. Ctrl+S는
+// 그대로 통한다. 저장이 잠깐 늦은 사이의 실행은 부르는 쪽이 isDirty()로 막는다(D2).
+//
+// **PYTHON ONLY(D3).** .py만 편집기로 들어온다. 다른 파일은 보이되(사람이 자기 데이터를
+// 봐야 한다) 누르면 한 줄로 거절한다. 이 규율은 백엔드도 415로 다시 막는다.
 (function () {
 'use strict';
 
@@ -23,6 +30,10 @@ const isNode = typeof module !== 'undefined' && module.exports;
 const CodeEditor = isNode
   ? require('./backtest-code-editor')
   : window.AthenaLib.BacktestCodeEditor;
+
+// 사람이 타자를 멈춘 뒤 디스크에 쓰기까지의 시간. 한 자마다 쓰면 디스크와 검사가 타자를
+// 따라 뛴다(기법 검사 디바운스 700ms보다 짧아, 검사가 늘 저장된 원문을 본다).
+const AUTOSAVE_MS = 500;
 
 // ---------- 순수 계산 ----------
 
@@ -37,6 +48,7 @@ function isPython(pathText) {
 
 // 파일 이름으로 거른다 — 폴더는 "안에 걸린 것이 있을 때만" 남는다. 폴더 이름까지 맞추면
 // 이름이 걸린 폴더의 무관한 파일이 전부 딸려 나와 거르는 의미가 없어진다.
+// (화면의 거르기 상자는 보드 20에 없어 빠졌다 — 순수 계산은 남겨 둔다.)
 function filterEntries(entries, query) {
   const q = String(query == null ? '' : query).trim().toLowerCase();
   if (!q) return Array.isArray(entries) ? entries : [];
@@ -53,6 +65,20 @@ function filterEntries(entries, query) {
     return out;
   };
   return walk(entries);
+}
+
+// 트리의 파일 수 — 헤더의 「N개 파일」이 읽는다. 폴더는 세지 않는다.
+function countFiles(entries) {
+  let n = 0;
+  const walk = (list) => {
+    (Array.isArray(list) ? list : []).forEach((entry) => {
+      if (!entry) return;
+      if (entry.is_dir) walk(entry.children);
+      else n += 1;
+    });
+  };
+  walk(entries);
+  return n;
 }
 
 // ---------- DOM ----------
@@ -75,41 +101,39 @@ function clear(node) {
   while (node.firstChild) node.removeChild(node.firstChild);
 }
 
-// ---------- IDE ----------
+// ---------- 편집기 ----------
 
 function createProjectIde(options) {
   const opts = options || {};
   const deps = opts.deps || {};
+  const setTimeoutImpl = deps.setTimeout || (typeof setTimeout === 'function' ? setTimeout : null);
+  const clearTimeoutImpl = deps.clearTimeout || (typeof clearTimeout === 'function' ? clearTimeout : null);
   const root = el('div', 'project-ide');
   if (opts.container) opts.container.appendChild(root);
 
   let projects = [];
-  let project = null;          // 고른 프로젝트(Project)
+  let project = null;          // 지금 연 폴더(Project)
   let entries = [];            // 트리(TreeEntry[])
   let truncated = false;
   let tabs = [];               // [{path, text, saved, dirty}]
   let activePath = null;
   let workspaceGeneration = 0;
   let suspended = false;
-  let filter = '';
   let message = null;          // {text, bad}
   let closing = null;          // 더러운 탭을 닫으려는 중인 경로
-  let namingProject = false;
-  let projectName = '';
-  let namingFile = false;
-  let fileName = '';
-  let renaming = false;
-  let renameTo = '';
-  let deleting = null;          // 지우려는 중인 경로
-  let loaded = false;
-  // 접힌 폴더(경로 → true)와 트리 노드 참조. 트리만 따로 갈아 끼우는 데 쓴다.
+  let saving = false;
+  let autosaveTimer = null;
+  // 접힌 폴더(경로 → true)와 왼쪽 열 노드 참조. 왼쪽 열만 따로 갈아 끼우는 데 쓴다.
   const collapsed = {};
-  let treeNode = null;
-  // 더러움 표시만 따로 갱신하기 위한 참조 — 한 글자 칠 때마다 다시 그리면 포커스가 날아간다.
+  let sideNode = null;
+  // 더러움·저장 표시만 따로 갱신하기 위한 참조 — 한 글자 칠 때마다 다시 그리면 포커스가 날아간다.
   let dotNodes = {};
+  let saveStateNode = null;
+  let messageNode = null;
 
   function say(text, bad) {
     message = text ? { text: String(text), bad: !!bad } : null;
+    syncMessage();
   }
 
   function fail(err) {
@@ -149,7 +173,6 @@ function createProjectIde(options) {
       projects = (res && Array.isArray(res.projects)) ? res.projects : [];
       if (res && res.notice) say(res.notice, false);
     } catch (err) { fail(err); }
-    loaded = true;
     paint();
   }
 
@@ -174,50 +197,18 @@ function createProjectIde(options) {
     tabs = [];
     activePath = null;
     closing = null;
-    deleting = null;
-    renaming = false;
-    filter = '';
     await loadTree();
     if (generation !== workspaceGeneration) return;
     paint();
-    // 프로젝트를 고르고 나면 코드 탭의 구성이 바뀐다(옛 단일 편집기 ↔ IDE) — 그 판단은
+    // 폴더가 정해지면 코드 탭의 구성이 바뀐다(단일 편집기 ↔ 폴더 편집기) — 그 판단은
     // 캔버스가 하므로 여기서 한 번 알린다.
     if (deps.onProjectChange) deps.onProjectChange(project);
-  }
-
-  async function createProject() {
-    const name = projectName.trim();
-    if (!name) { say('프로젝트 이름을 적어주세요', true); paint(); return; }
-    if (!deps.createProject) return;
-    try {
-      const res = await deps.createProject(name);
-      namingProject = false;
-      projectName = '';
-      projects = projects.concat([res.project]);
-      say(`${res.seed}로 시작합니다`, false);
-      await selectProject(res.project);
-    } catch (err) { fail(err); paint(); }
-  }
-
-  // 네이티브 폴더 선택은 main 프로세스만 열 수 있다 — 렌더러가 고를 수 있는 경로는 없다.
-  async function openFolder() {
-    if (!deps.openDialog || !deps.openProject) return;
-    let picked;
-    try { picked = await deps.openDialog(); } catch (err) { fail(err); paint(); return; }
-    if (!picked || picked.canceled || !picked.path) return;
-    try {
-      const res = await deps.openProject(picked.path);
-      const already = projects.find((p) => p.id === res.project.id);
-      if (!already) projects = projects.concat([res.project]);
-      await selectProject(res.project);
-    } catch (err) { fail(err); paint(); }
   }
 
   async function openFile(pathText) {
     const generation = workspaceGeneration;
     if (!isPython(pathText)) {
       say('이 기능은 파이썬(.py) 파일만 엽니다 — 다른 파일은 보기만 합니다', true);
-      paint();
       return;
     }
     const already = findTab(pathText);
@@ -235,82 +226,49 @@ function createProjectIde(options) {
     paint();
   }
 
+  // 저장 — 다시 그리지 않는다. 자동 저장은 사람이 타자를 멈춘 직후에 오므로, 여기서
+  // paint()를 부르면 막 이어 치려는 순간 편집기가 새로 만들어져 캐럿과 조합이 날아간다.
+  // 바뀌는 것은 점과 저장 상태 글자뿐이라 그 둘만 갈아 끼운다.
   async function save() {
+    cancelAutosave();
     const tab = activeTab();
     if (!tab || !project || !deps.writeFile) return;
+    if (!tab.dirty) return;
+    const text = tab.text;
+    saving = true;
+    syncDirtyMarks();
     try {
-      await deps.writeFile(project.id, tab.path, tab.text);
-      tab.saved = tab.text;
-      tab.dirty = false;
-      say('저장했습니다', false);
-    } catch (err) { fail(err); }
-    paint();
-  }
-
-  async function createFile() {
-    const name = fileName.trim();
-    if (!isPython(name)) {
-      say('파이썬(.py) 파일만 만들 수 있습니다', true);
-      paint();
-      return;
-    }
-    if (!project || !deps.createFile) return;
-    try {
-      const res = await deps.createFile(project.id, name, 'file');
-      namingFile = false;
-      fileName = '';
-      await loadTree();
-      await openFile(res.path);
-      return;
-    } catch (err) { fail(err); }
-    paint();
-  }
-
-  // 이름 바꾸기도 .py 밖으로는 못 나간다(D3) — 백엔드가 415로 다시 막는 그 규칙이다.
-  async function renameActive() {
-    const tab = activeTab();
-    const to = renameTo.trim();
-    if (!tab || !project || !deps.renameFile) return;
-    if (!isPython(to)) {
-      say('파일은 파이썬(.py)으로만 이름을 바꿀 수 있습니다', true);
-      paint();
-      return;
-    }
-    try {
-      const res = await deps.renameFile(project.id, tab.path, to);
-      tab.path = res.path;
-      activePath = res.path;
-      renaming = false;
-      renameTo = '';
-      await loadTree();
+      await deps.writeFile(project.id, tab.path, text);
+      // 쓰는 동안 더 쳤으면 그 뒤는 아직 안 저장된 것이다 — 그때 dirty는 남는다.
+      tab.saved = text;
+      tab.dirty = tab.text !== tab.saved;
       say(null);
+      if (deps.onSaved) deps.onSaved(tab.path, text);
+      // 쓰는 동안 친 것이 이미 타이머를 걸었으면 그것이 쓴다 — 두 번 걸지 않는다.
+      if (tab.dirty && autosaveTimer == null) scheduleAutosave();
     } catch (err) { fail(err); }
-    paint();
+    saving = false;
+    syncDirtyMarks();
   }
 
-  async function deleteActive() {
-    const target = deleting;
-    if (!target || !project || !deps.deleteFile) return;
-    try {
-      await deps.deleteFile(project.id, target);
-      deleting = null;
-      tabs = tabs.filter((t) => t.path !== target);
-      if (activePath === target) activePath = tabs.length ? tabs[tabs.length - 1].path : null;
-      await loadTree();
-      say(`${basename(target)}를 지웠습니다`, false);
-    } catch (err) { fail(err); }
-    paint();
+  function scheduleAutosave() {
+    cancelAutosave();
+    if (!setTimeoutImpl) return;
+    autosaveTimer = setTimeoutImpl(() => {
+      autosaveTimer = null;
+      void save();
+    }, AUTOSAVE_MS);
   }
 
-  // 밖에서 "이 폴더의 이 파일을 열어라"라고 부르는 자리(설계 폼의 [내 전략] 선택).
-  // 사람이 목록에서 폴더를 고르고 트리에서 파일을 누르는 그 경로를 그대로 탄다 — 두 길을
-  // 따로 만들면 언젠가 한쪽만 고쳐진다. 열렸는지를 불리언으로 돌려주는 이유: 부른 쪽이
-  // "열었다"고 말하기 전에 정말 열렸는지 알아야 한다(등록부의 파일은 지워졌을 수 있다).
-  async function openAt(projectId, pathText) {
+  function cancelAutosave() {
+    if (autosaveTimer != null && clearTimeoutImpl) clearTimeoutImpl(autosaveTimer);
+    autosaveTimer = null;
+  }
+
+  // 밖에서 "이 폴더를 열어라" — 목록을 안 읽었거나 찾는 id가 없으면 한 번 다시 읽는다.
+  // 이 세션에서 만든 폴더(등록 뒤 열기)는 처음 그린 목록에 없기 때문이다(프로브 M10~M13 실측).
+  async function openFolder(projectId) {
     const generation = workspaceGeneration;
-    // 목록이 비었을 때만 다시 읽으면, 이 세션에서 만든 프로젝트(등록 뒤 열기)는 영영
-    // 없는 폴더가 된다 — 처음 그린 목록이 그대로 남기 때문이다(프로브 M10~M13 실측).
-    // 찾는 id가 없을 때도 한 번 다시 읽는다.
     if (!projects.length || !projects.some((p) => p.id === projectId)) await loadProjects();
     if (generation !== workspaceGeneration) return false;
     const next = projects.find((p) => p.id === projectId);
@@ -320,6 +278,16 @@ function createProjectIde(options) {
       return false;
     }
     if (!project || project.id !== projectId) await selectProject(next);
+    return generation === workspaceGeneration;
+  }
+
+  // 밖에서 "이 폴더의 이 파일을 열어라"라고 부르는 자리(기법 목록에서 기법을 고른 때,
+  // 새 기법의 폴더를 만든 때). 사람이 트리에서 파일을 누르는 그 경로를 그대로 탄다 —
+  // 두 길을 따로 만들면 언젠가 한쪽만 고쳐진다. 열렸는지를 불리언으로 돌려주는 이유:
+  // 부른 쪽이 "열었다"고 말하기 전에 정말 열렸는지 알아야 한다(등록부의 파일은 지워졌을 수 있다).
+  async function openAt(projectId, pathText) {
+    const generation = workspaceGeneration;
+    if (!await openFolder(projectId)) return false;
     if (generation !== workspaceGeneration) return false;
     await openFile(pathText);
     return activePath === pathText;
@@ -351,6 +319,7 @@ function createProjectIde(options) {
   function discardTab(pathText) {
     const index = tabs.findIndex((t) => t.path === pathText);
     if (index < 0) return;
+    if (activePath === pathText) cancelAutosave();
     tabs = tabs.filter((t) => t.path !== pathText);
     closing = null;
     if (activePath === pathText) {
@@ -360,10 +329,10 @@ function createProjectIde(options) {
     paint();
   }
 
-  // 열린 파일을 전부 닫는다 — 프리셋을 고르면 새 전략이라(backtest-canvas selectPreset) 앞
-  // 폴더의 .py가 열린 채 남으면 화면은 프리셋인데 실행은 그 파이썬이 돈다(프로브 실측).
+  // 열린 파일을 전부 닫는다 — 다른 기법을 고르면 새 기법이라(backtest-canvas selectPreset)
+  // 앞 폴더의 .py가 열린 채 남으면 화면은 그 기법인데 실행은 이 파이썬이 돈다(프로브 실측).
   // 고치다 만(dirty) 탭은 닫지 않고 false를 돌려준다 — 저장 안 한 편집을 소리 없이 버리지
-  // 않는다. 그 탭이 남아 있으면 지도는 계속 코드 전용으로 읽히는데, 그게 사실이다.
+  // 않는다.
   function closeAll() {
     const dirty = tabs.filter((t) => t.dirty);
     tabs = dirty;
@@ -375,50 +344,18 @@ function createProjectIde(options) {
 
   // ---------- 그리기 ----------
 
-  function renderPicker() {
-    const wrap = el('div', 'project-ide-picker');
-    projects.forEach((p) => {
-      const isOn = !!(project && project.id === p.id);
-      const item = button(
-        `project-ide-project${isOn ? ' is-on' : ''}`, p.name,
-        () => { void selectProject(p); },
-      );
-      item.setAttribute('aria-pressed', String(isOn));
-      wrap.appendChild(item);
-    });
-    wrap.appendChild(button('project-ide-new-project', '새 프로젝트', () => {
-      namingProject = !namingProject;
-      paint();
-    }));
-    wrap.appendChild(button('project-ide-open-folder', '폴더 열기', () => { void openFolder(); }));
-    if (namingProject) {
-      const input = el('input', 'project-ide-project-name');
-      input.type = 'text';
-      input.placeholder = '프로젝트 이름';
-      input.value = projectName;
-      // 입력마다 다시 그리면 커서가 날아간다 — 값만 모델에 담고 화면은 그대로 둔다.
-      input.addEventListener('input', () => { projectName = input.value; });
-      input.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') { projectName = input.value; void createProject(); }
-      });
-      wrap.appendChild(input);
-      wrap.appendChild(button('project-ide-project-go', '만들기', () => { void createProject(); }));
-    }
-    return wrap;
-  }
-
   function renderTreeNode(entry, depth, out) {
     const row = el('div', 'project-ide-row');
     row.setAttribute('style', `padding-left:${depth * 12}px`);
     if (entry.is_dir) {
-      const isOpen = !collapsed[entry.path] || !!filter.trim();
+      const isOpen = !collapsed[entry.path];
       const node = button(
         `project-ide-dir${isOpen ? ' is-open' : ''}`,
-        `${isOpen ? '▾' : '▸'} ${entry.name}`,
+        `${isOpen ? '▾' : '▸'} ${entry.name}/`,
         () => {
           if (collapsed[entry.path]) delete collapsed[entry.path];
           else collapsed[entry.path] = true;
-          paint();
+          paintSide();
         },
       );
       node.setAttribute('aria-expanded', String(isOpen));
@@ -430,7 +367,7 @@ function createProjectIde(options) {
       return;
     }
     const py = isPython(entry.path);
-    const isOn = activePath === entry.path;
+    const isOn = !suspended && activePath === entry.path;
     const node = button(
       `project-ide-file ${py ? 'is-py' : 'is-other'}${isOn ? ' is-on' : ''}`,
       entry.name,
@@ -441,61 +378,46 @@ function createProjectIde(options) {
     out.appendChild(row);
   }
 
-  function renderSide() {
-    const side = el('div', 'project-ide-side');
-    const box = el('input', 'project-ide-filter');
-    box.type = 'text';
-    box.placeholder = '파일 이름으로 거르기';
-    box.value = filter;
-    box.addEventListener('input', () => { filter = box.value; paintTree(); });
-    side.appendChild(box);
-
+  // 왼쪽 열 — 「기법 폴더」 머리, 폴더 이름 한 줄, 그 안의 트리(보드 20). 아래에는 부르는
+  // 쪽이 붙이는 것(자동 검사·환경·한 줄 다짐)이 선다 — 검사는 캔버스의 상태라 여기서 모른다.
+  // 노드를 새로 만들지 않고 주어진 노드를 채운다 — 왼쪽 열만 갈아 끼울 때 같은 노드가
+  // 제자리에 남아야 한다(paintSide).
+  function renderSideInto(side) {
+    clear(side);
+    side.appendChild(el('div', 'project-ide-side-title', '기법 폴더'));
+    side.appendChild(el('div', 'project-ide-folder', `▾ ${project ? project.name : ''}/`));
     const tree = el('div', 'project-ide-tree');
-    side.appendChild(tree);
-    treeNode = tree;
-    paintTree();
-
-    const newRow = el('div', 'project-ide-new-row');
-    newRow.appendChild(button('project-ide-new', '새 파일', () => {
-      namingFile = !namingFile;
-      paint();
-    }));
-    if (namingFile) {
-      const input = el('input', 'project-ide-new-name');
-      input.type = 'text';
-      input.placeholder = '이름.py';
-      input.value = fileName;
-      input.addEventListener('input', () => { fileName = input.value; });
-      input.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') { fileName = input.value; void createFile(); }
-      });
-      newRow.appendChild(input);
-      newRow.appendChild(button('project-ide-new-go', '만들기', () => { void createFile(); }));
+    if (!entries.length) {
+      tree.appendChild(el('div', 'project-ide-empty', '빈 폴더입니다'));
+    } else {
+      entries.forEach((entry) => renderTreeNode(entry, 1, tree));
     }
-    side.appendChild(newRow);
+    side.appendChild(tree);
     if (truncated) {
       side.appendChild(el('div', 'project-ide-truncated', '파일이 너무 많아 일부만 보여줍니다'));
+    }
+    if (deps.sideFooter) {
+      const footer = deps.sideFooter();
+      if (footer) side.appendChild(footer);
     }
     return side;
   }
 
-  // 트리만 따로 다시 그린다 — 거르기 입력이 매 글자마다 포커스를 잃으면 못 쓴다.
-  function paintTree() {
-    if (!treeNode) return;
-    clear(treeNode);
-    const shown = filterEntries(entries, filter);
-    if (!shown.length) {
-      treeNode.appendChild(el('div', 'project-ide-empty', filter.trim() ? '걸린 파일이 없습니다' : '빈 폴더입니다'));
-      return;
-    }
-    shown.forEach((entry) => renderTreeNode(entry, 0, treeNode));
+  // 왼쪽 열만 다시 그린다 — 폴더를 접거나 검사 결과가 바뀔 때 편집기까지 새로 만들면
+  // 타자 중인 포커스가 날아간다.
+  function paintSide() {
+    if (!sideNode) return;
+    renderSideInto(sideNode);
   }
 
+  // 탭 줄은 파일이 둘 이상 열렸을 때만 선다 — 하나뿐이면 편집기 머리의 이름이 그것이다
+  // (보드 20의 탭 줄은 코드·노드·흐름 둘이지 파일 탭이 아니다). 앞 세션의 탭이 잠자고
+  // 있을 때(suspended)는 하나여도 세운다 — 다시 고를 손잡이가 그것뿐이다.
   function renderTabStrip() {
     const strip = el('div', 'project-ide-tabstrip');
     dotNodes = {};
     tabs.forEach((tab) => {
-      const isOn = activePath === tab.path;
+      const isOn = !suspended && activePath === tab.path;
       const item = el('div', `project-ide-tab${isOn ? ' is-on' : ''}`);
       const name = button('project-ide-tab-name', basename(tab.path), () => {
         activePath = tab.path;
@@ -514,6 +436,13 @@ function createProjectIde(options) {
     return strip;
   }
 
+  function saveStateText(tab) {
+    if (!tab) return '';
+    if (saving) return '저장 중…';
+    if (tab.dirty) return '저장 대기';
+    return '자동 저장';
+  }
+
   function syncDirtyMarks() {
     tabs.forEach((tab) => {
       const dot = dotNodes[tab.path];
@@ -521,57 +450,32 @@ function createProjectIde(options) {
       dot.className = `project-ide-tab-dot${tab.dirty ? ' is-dirty' : ''}`;
       dot.textContent = tab.dirty ? '●' : '';
     });
+    if (saveStateNode) {
+      const tab = activeTab();
+      saveStateNode.textContent = saveStateText(tab);
+      saveStateNode.className = `project-ide-save-state${tab && tab.dirty ? ' is-dirty' : ''}`;
+    }
+  }
+
+  function syncMessage() {
+    if (!messageNode) return;
+    messageNode.textContent = message ? message.text : '';
+    messageNode.className = `project-ide-message${message && message.bad ? ' is-bad' : ''}${message ? '' : ' is-empty'}`;
   }
 
   function renderMain() {
     const main = el('div', 'project-ide-main');
-    main.appendChild(renderTabStrip());
-
     const tab = activeTab();
+    if (tabs.length > 1 || (tabs.length && !tab)) main.appendChild(renderTabStrip());
+    else dotNodes = {};
+
+    // 편집기 머리(보드 20) — 파일 이름 · 저장 상태 · 이 코드가 쓰는 것.
     const head = el('div', 'project-ide-head');
-    head.appendChild(el('span', 'project-ide-head-project', project ? project.name : ''));
     head.appendChild(el('span', 'project-ide-head-path', tab ? tab.path : '연 파일이 없습니다'));
-    head.appendChild(button('project-ide-save', '저장', () => { void save(); }));
-    if (tab) {
-      head.appendChild(button('project-ide-rename', '이름 바꾸기', () => {
-        renaming = !renaming;
-        renameTo = tab.path;
-        paint();
-      }));
-      head.appendChild(button('project-ide-delete', '지우기', () => {
-        deleting = tab.path;
-        paint();
-      }));
-    }
+    saveStateNode = el('span', 'project-ide-save-state', saveStateText(tab));
+    head.appendChild(saveStateNode);
+    head.appendChild(el('span', 'project-ide-head-note', 'python 3.12 · pandas · numpy · athena_bt'));
     main.appendChild(head);
-
-    if (tab && renaming) {
-      const row = el('div', 'project-ide-rename-row');
-      const input = el('input', 'project-ide-rename-name');
-      input.type = 'text';
-      input.placeholder = '새 경로.py';
-      input.value = renameTo;
-      input.addEventListener('input', () => { renameTo = input.value; });
-      input.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') { renameTo = input.value; void renameActive(); }
-      });
-      row.appendChild(input);
-      row.appendChild(button('project-ide-rename-go', '적용', () => { void renameActive(); }));
-      main.appendChild(row);
-    }
-
-    if (deleting) {
-      const bar = el('div', 'project-ide-confirm');
-      bar.appendChild(el(
-        'span', 'project-ide-confirm-text', `${basename(deleting)}를 디스크에서 지웁니다`,
-      ));
-      bar.appendChild(button('project-ide-delete-go', '지우기', () => { void deleteActive(); }));
-      bar.appendChild(button('project-ide-delete-cancel', '취소', () => {
-        deleting = null;
-        paint();
-      }));
-      main.appendChild(bar);
-    }
 
     if (closing) {
       const bar = el('div', 'project-ide-confirm');
@@ -599,8 +503,10 @@ function createProjectIde(options) {
         onChange: (next) => {
           tab.text = next;
           tab.dirty = tab.text !== tab.saved;
-          // 편집기를 다시 만들면 조합 중인 한글이 날아간다 — 점만 갈아 끼운다.
+          // 편집기를 다시 만들면 조합 중인 한글이 날아간다 — 점과 저장 상태만 갈아 끼운다.
           syncDirtyMarks();
+          if (tab.dirty) scheduleAutosave();
+          else cancelAutosave();
         },
       });
     } else {
@@ -611,24 +517,15 @@ function createProjectIde(options) {
 
   function paint() {
     clear(root);
-    treeNode = null;
-    root.appendChild(renderPicker());
-    if (message) {
-      root.appendChild(el(
-        'div', `project-ide-message${message.bad ? ' is-bad' : ''}`, message.text,
-      ));
-    }
-    if (!project) {
-      if (loaded && !projects.length) {
-        root.appendChild(el(
-          'div', 'project-ide-empty',
-          '아직 프로젝트가 없습니다 — [새 프로젝트]나 [폴더 열기]로 시작하세요',
-        ));
-      }
-      return;
-    }
+    sideNode = null;
+    saveStateNode = null;
+    messageNode = el('div', 'project-ide-message');
+    root.appendChild(messageNode);
+    syncMessage();
+    if (!project) return;
     const body = el('div', 'project-ide-body');
-    body.appendChild(renderSide());
+    sideNode = renderSideInto(el('div', 'project-ide-side'));
+    body.appendChild(sideNode);
     body.appendChild(renderMain());
     root.appendChild(body);
   }
@@ -649,7 +546,11 @@ function createProjectIde(options) {
     element: root,
     mount() { void loadProjects(); },
     refresh() { paint(); },
+    // 왼쪽 열만 — 부르는 쪽의 검사·환경이 바뀔 때 편집기를 건드리지 않고 갱신한다.
+    refreshSide() { paintSide(); },
     currentProject() { return suspended ? null : project; },
+    fileCount() { return project ? countFiles(entries) : 0; },
+    openFolder,
     openAt,
     closeAll,
     suspend,
@@ -677,6 +578,7 @@ const __exports = {
   basename,
   isPython,
   filterEntries,
+  countFiles,
 };
 
 // UMD 각주(2026-08-18 렌더러 격리) — column-fold.js와 같은 패턴.

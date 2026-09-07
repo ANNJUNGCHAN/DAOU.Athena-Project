@@ -14,6 +14,7 @@ process.env.ATHENA_CANVAS_SOURCE = 'fixture';
 const { app } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const { SETTINGS_NAV } = require('./lib/live-full-catalog');
 
 const OUT_DIR = path.join(__dirname, 'captures', 'phase4');
 fs.mkdirSync(OUT_DIR, { recursive: true });
@@ -114,12 +115,13 @@ async function main() {
   });
 
   // ---------- (3) 설정 오버레이 — 4개 탭 ----------
-  const NAV_LABELS = [
-    ['화면', '03a-settings-screen.png'],
-    ['계좌', '03b-settings-accounts.png'],
-    ['모델', '03d-settings-model.png'],
-    ['그래프', '03e-settings-graph.png'],
-  ];
+  const NAV_SHOTS = {
+    screen: '03a-settings-screen.png',
+    accounts: '03b-settings-accounts.png',
+    model: '03d-settings-model.png',
+    history: '03e-settings-graph.png',
+  };
+  const NAV_LABELS = SETTINGS_NAV.map((item) => [item.label, NAV_SHOTS[item.key]]);
   // 리프 1.2.2: 점은 이제 대화 상태 표시 전용이라 설정으로 가는 길이 아니다 —
   // 설정 진입은 사이드바 계정 메뉴(보드 16) 아니면 커맨드바다. 이 프로필은
   // 계좌가 미등록이라(위 PROFILE 주석 — cliDone/accountDone만 심는다) 계정

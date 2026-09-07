@@ -502,6 +502,72 @@ const HOISTED_PROPERTIES = Object.freeze([
   ['flex-shrink', '--bs-flex-shrink'],
 ]);
 
+// 카드 껍데기(라운드·배경·테두리·그림자)는 **카드** 계약이지 보드 원문이 아니다.
+// 생성물 96장 루트 실측: 라운드 28px 62장 · 16px 27장 · 24px 3장 · 미지정 4장,
+// 배경 panel 92장 · 페이지 배경 4장. 카드 = 보드 그 자체이므로(board-surface.css
+// "카드 = 보드 그 자체") 그 편차가 그대로 "카드마다 껍데기가 다르다"가 된다.
+// 다섯 기하 속성과 같은 방식으로 걷어낸다 — 인라인은 !important 없이 못 이긴다.
+// 옮긴 값은 원문 기록으로 남기고(진단·재추출 대조용) 계약은 CSS가 세운다.
+const CARD_SHELL_PROPERTIES = Object.freeze([
+  ['border-radius', '--bs-shell-radius'],
+  ['background-color', '--bs-shell-bg'],
+  ['border-width', '--bs-shell-border-width'],
+  ['border-style', '--bs-shell-border-style'],
+  ['border-color', '--bs-shell-border-color'],
+  ['box-shadow', '--bs-shell-shadow'],
+]);
+
+// 카드 표면 패널의 원문 서명 — 인라인 폭 + 라운드 + 그림자 + 배경 네 개를 함께
+// 싣는다(생성물 96장 실측: 이 넷을 다 가진 노드는 카드 표면 패널뿐이다).
+function looksLikeCardPanel(el) {
+  if (!el || !el.style || typeof el.style.getPropertyValue !== 'function') return false;
+  return /^\d/.test(el.style.getPropertyValue('width').trim())
+    && Boolean(el.style.getPropertyValue('border-radius').trim())
+    && Boolean(el.style.getPropertyValue('box-shadow').trim())
+    && Boolean(el.style.getPropertyValue('background-color').trim());
+}
+
+// 표면 루트 하나에만 적용한다 — 안쪽 섹션의 라운드·배경은 Paper 원문 그대로다
+// (헌장 신념 1 "섹션마다 radius·shadow를 다시 주어 미니카드처럼 보이게 하지
+// 않는다"는 원문 쪽 계약이고, 여기서 손대면 그 판정을 흐린다).
+function normalizeCardShell(surface) {
+  if (!surface || !surface.style || typeof surface.style.setProperty !== 'function') return false;
+  if (surface.dataset && surface.dataset.bsCardShell === 'true') return false;
+  // 루트에 폭이 없는 보드는 Paper **아트보드 프레임**이 루트로 잡힌 것이다
+  // (실측 4장 — 폭 미지정 + 페이지 배경 + 프레임 패딩 40px). 폭 판정은 hoist가
+  // 끝난 뒤라 `--bs-width`로 읽는다(원문 인라인 `width`는 이미 걷혀 있다).
+  const isFrameRoot = !surface.style.getPropertyValue('--bs-width').trim();
+  // 그 프레임이 카드 표면 패널을 **품고 있으면** 손대지 않는다(실측 1장 — R04
+  // 펼침 상태: 프레임 > absolute 1440px 래퍼 > 카드 표면 1360px). 껍데기를 입히면
+  // 안쪽 패널과 두 겹이 되고, 프레임 폭을 카드 폭으로 죄면 래퍼 1440px이 그대로
+  // 가로 넘침이 된다(실측 82px). 이 한 장은 Paper 원본에서 루트를 카드 표면으로
+  // 다시 그려야 풀린다 — 앱에서 흉내내면 프레임 사슬을 통째로 무너뜨려야 한다.
+  if (isFrameRoot && typeof surface.querySelectorAll === 'function'
+      && Array.from(surface.querySelectorAll('*')).some(looksLikeCardPanel)) {
+    return false;
+  }
+  for (const [property, token] of CARD_SHELL_PROPERTIES) {
+    const value = surface.style.getPropertyValue(property);
+    if (!value) continue;
+    surface.style.setProperty(token, value);
+    surface.style.removeProperty(property);
+  }
+  // 패널 없는 프레임 루트(실측 3장)는 그 자체가 카드다. 그대로 두면
+  // `.board-surface`의 1440px fallback이 서서 다른 92장보다 80px 넓은 카드가 되고,
+  // 카드 폭만 세우면 프레임 패딩(40px)만큼 자식이 넘친다 — 자식은 이미 카드 폭
+  // 1360px으로 서 있다. 그래서 폭과 패딩은 한 짝으로 움직인다(CSS가 함께 세운다).
+  if (isFrameRoot) {
+    const padding = surface.style.getPropertyValue('padding');
+    if (padding) {
+      surface.style.setProperty('--bs-shell-padding', padding);
+      surface.style.removeProperty('padding');
+    }
+    if (surface.dataset) surface.dataset.bsCardFrame = 'true';
+  }
+  if (surface.dataset) surface.dataset.bsCardShell = 'true';
+  return true;
+}
+
 function markElasticKpiValue(el) {
   if (!el || !el.dataset || !el.style) return;
   const classes = String(el.className || '').split(/\s+/);
@@ -742,6 +808,8 @@ function markPairedHost(surface) {
 function applyResponsiveHooks(surface) {
   stripCharacterWrap(surface);
   hoistLayout(surface);
+  // 껍데기는 기하 hoist **뒤에** 본다 — 프레임 판정이 `--bs-width`를 읽는다.
+  normalizeCardShell(surface);
   let hoisted = 1;
   for (const region of RESPONSIVE_REGIONS) {
     for (const el of surface.querySelectorAll(`.${region}`)) {
@@ -925,7 +993,7 @@ function nextHydrationSlots(pending, filled, surfaceContract) {
 }
 
 const __exports = {
-  ROLLUP_MARK, RESPONSIVE_REGIONS, HOISTED_PROPERTIES,
+  ROLLUP_MARK, RESPONSIVE_REGIONS, HOISTED_PROPERTIES, CARD_SHELL_PROPERTIES, normalizeCardShell,
   isValueSlot, anchorOf, staticTextOf, collapsePlan, mountPlan, pairedGroups,
   nodeIndex, elementChildCount, setHidden, applyPlan,
   hoistLayout, hoistRigidBox, applyResponsiveHooks, surfaceRoot,

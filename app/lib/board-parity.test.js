@@ -504,6 +504,56 @@ test('board-surface.css는 5단이고 !important를 쓰지 않는다', () => {
   }
 });
 
+// 카드 크기 = 뷰포트 크기(계획 §1 "따라서 모든 카드 크기가 동일하다"). 보드마다
+// 다른 Paper 루트 높이(생성물 96장 실측: 766~1040px 16종 + fit-content 8장 + 미지정
+// 4장)가 표면 루트로 새면 같은 카드 상자 안에서 유리 패널만 보드마다 달라진다.
+// 사슬 네 줄 중 하나라도 빠지면 확정 높이가 끊겨 표면이 다시 Paper 높이로 주저앉는다
+// (실측: 카드 상자 1138px에 표면 833~1042px).
+test('보드 표면은 Paper 루트 높이가 아니라 카드 자리를 채운다', () => {
+  const css = fs.readFileSync(path.join(__dirname, '..', 'styles', 'board-surface.css'), 'utf8')
+    .replace(/\/\*[\s\S]*?\*\//g, '');
+  // 표면 루트만 되돌리기(`[data-bs-hoisted]`)에서 빼낸다 — 특이도(0,2,0)로 이기므로
+  // 단계 규칙 순서에 기대지 않는다. 안쪽 영역의 최소 높이 바닥은 그대로 남는다.
+  assert.match(css,
+    /\.board-surface\[data-bs-hoisted\]\s*\{[^}]*height:\s*auto;[^}]*min-height:\s*100%;/);
+  assert.match(css, /\.board-surface-host\s*\{[^}]*height:\s*100%;/);
+  assert.match(css,
+    /\.card\[data-board-surface="true"\] \.integrated-card-panels\s*\{[^}]*flex:\s*1 1 auto;[^}]*min-height:\s*0;/);
+  assert.match(css,
+    /\.card\[data-board-surface="true"\] \.integrated-card-panel\s*\{[^}]*height:\s*100%;/);
+  // `height: 100%`로 가두면 원문 루트의 인라인 `overflow: clip`이 자리보다 긴 본문을
+  // 잘라 값이 사라진다(§8 정보 정직성) — 길면 표면이 자라고 자리가 스크롤한다.
+  assert.match(css, /\.board-surface-host\s*\{[^}]*overflow:\s*auto;/);
+  assert.doesNotMatch(css, /\.board-surface\[data-bs-hoisted\]\s*\{[^}]*(?<![-\w])height:\s*100%/);
+});
+
+// 병기 사본은 접힌 칸의 값을 대신 보여 준다 — 그러면 **그 칸의 활자**로 보여야
+// 한다. 사본은 원래 칸이 아니라 둘째 칸 안에 앉으므로, 활자를 함께 복제하지 않으면
+// 둘째 칸이 선언한 크기(없으면 브라우저 기본 16px)로 선다: 실측 CC-03 순위표에서
+// 접힌 「시장 · 코스닥」이 원문 11px 대신 16px으로 서서 종목명 13px보다 컸다
+// (2026-09-07 제보). 추출기가 font-size·font-family·color를 사본에 싣는 것이 계약이고,
+// 이 테스트는 생성물 전수에서 그 계약이 유지되는지 본다.
+test('병기 사본은 접힌 칸의 활자를 그대로 쓴다', () => {
+  const templateRoot = path.join(__dirname, '..', '..', 'backend', 'ref', 'card-surface-templates');
+  let copies = 0;
+  const bare = [];
+  for (const entry of fs.readdirSync(templateRoot, { withFileTypes: true })) {
+    if (!entry.isDirectory()) continue;
+    const htmlPath = path.join(templateRoot, entry.name, 'board.html');
+    if (!fs.existsSync(htmlPath)) continue;
+    const html = fs.readFileSync(htmlPath, 'utf8');
+    for (const [tag] of html.matchAll(/<span class="bs-paired"[^>]*>/g)) {
+      copies += 1;
+      // 병기 사본에는 라벨·값 두 조각을 품는 모양(paired-table)도 있다 — 그 모양은
+      // 활자를 사본 루트에 싣고 색만 값 조각이 갖는다. 어느 모양이든 크기는 사본
+      // 루트에 실려 있어야 한다.
+      if (!/font-size:/.test(tag)) bare.push(`${entry.name} ${tag.slice(0, 120)}`);
+    }
+  }
+  assert.ok(copies > 0, '병기 사본이 하나도 없다 — 추출물이 비었나');
+  assert.deepEqual(bare, [], '활자를 잃은 병기 사본이 있다');
+});
+
 test('paired-table labels form scoped label-value grids while scroll-table keeps its native grid reachable', () => {
   const css = fs.readFileSync(path.join(__dirname, '..', 'styles', 'board-surface.css'), 'utf8');
   const rules = css.replace(/\/\*[\s\S]*?\*\//g, '');

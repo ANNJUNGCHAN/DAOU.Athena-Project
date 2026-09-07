@@ -46,6 +46,38 @@ test('checkCardModel(통과): 칩 2개 — 승인·고치기 모두 누를 수 �
   ]);
 });
 
+test('검사 결과: 센 마지막 날을 끝으로 30칸과 실제 울린 날짜·종가만 전달한다', () => {
+  const check = { ...OK_CHECK, counted_through: '2026-09-02' };
+  const before = JSON.stringify(check);
+  const model = checkCardModel(check, DRAFT);
+  assert.ok(Array.isArray(model.fireDots), '센 날짜를 점 띠 모델로 전달한다');
+  assert.equal(model.fireDots.length, 30);
+  assert.equal(model.fireDots[0].date, '2026-08-04');
+  assert.equal(model.fireDots.at(-1).date, '2026-09-02');
+  assert.deepEqual(model.fireDots.filter((dot) => dot.state === 'fired').map((dot) => dot.date),
+    ['2026-08-05', '2026-08-12', '2026-08-19', '2026-08-26']);
+  assert.deepEqual(model.fireRows, ['8/5 · 종가 71,000', '8/12 · 종가 72,500', '8/19 · 종가 73,100', '8/26 · 종가 74,200']);
+  assert.equal(JSON.stringify(check), before, '응답 원본을 바꾸지 않는다');
+});
+
+test('검사 결과: 성공한 0회는 조용한 칸만, 실패는 결과 띠·목록 모두 없음', () => {
+  const empty = checkCardModel({ ...OK_CHECK, count: 0, fires: [], last_fire: null, counted_through: '2026-09-02' }, DRAFT);
+  assert.ok(Array.isArray(empty.fireDots), '성공한 0회도 검사 구간을 전달한다');
+  assert.equal(empty.fireDots.length, 30);
+  assert.ok(empty.fireDots.every((dot) => dot.state === 'quiet'));
+  assert.deepEqual(empty.fireRows, []);
+  const failed = checkCardModel({ ...OK_CHECK, ok: false, counted_through: '2026-09-02' }, DRAFT);
+  assert.deepEqual(failed.fireDots, []);
+  assert.deepEqual(failed.fireRows, []);
+});
+
+test('검사 결과: 날짜 구간이나 종가가 없으면 달력·배수를 추정하지 않는다', () => {
+  const model = checkCardModel({ ok: true, count: 1, fires: [{ dt: '2026-08-26' }] }, DRAFT);
+  assert.deepEqual(model.fireDots, []);
+  assert.deepEqual(model.fireRows, ['8/26']);
+  assert.equal(model.dateWindowNote, '검사 구간 날짜를 붙이지 못함 — 울린 날만 표시');
+});
+
 test('checkCardModel(실패): 사유를 싣고 승인 칩은 내지 않는다', () => {
   const m = checkCardModel({ ok: false, reason: '칸 2개의 값을 못 읽음 — 다시 만들어 볼게', nodes: NODES }, DRAFT);
   assert.deepEqual(m.tags, ['새 알람', '검사 실패']);
@@ -95,7 +127,8 @@ test('A-9 문자열 린트: 서술형 종결·내부 용어 없음', () => {
   ];
   const strings = [];
   for (const m of models) {
-    strings.push(m.title, m.subtitle, m.countedUntil, m.reason, ...m.tags, ...m.chips.map((c) => c.label));
+    strings.push(m.title, m.subtitle, m.countedUntil, m.reason, m.dateWindowNote,
+      ...m.tags, ...m.chips.map((c) => c.label), ...m.fireRows);
   }
   for (const s of strings) {
     for (const word of banned) {

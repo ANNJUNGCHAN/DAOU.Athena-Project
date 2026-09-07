@@ -10,11 +10,21 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const {
-  toCandleSeriesData, toVolumeSeriesData, withAlpha, UP_COLOR, DOWN_COLOR,
+  toCandleSeriesData, toVolumeSeriesData, withAlpha, formatVolumeKo, UP_COLOR, DOWN_COLOR,
   resolveInitialPeriod, createCachedChartLibraryLoader, renderNowAndOnNextFrame,
+  withReloadDeadline, RELOAD_DEADLINE_MS, RELOAD_DEADLINE_ERROR,
 } = require('./chart-card');
 
 const FIXTURE = require(path.join(__dirname, '..', 'data', 'chart-mock-ohlcv.json'));
+
+test('formatVolumeKo uses 만·억 instead of K/M/B', () => {
+  assert.equal(formatVolumeKo(14030000), '1,403만');
+  assert.equal(formatVolumeKo(214000000), '2억 1,400만');
+  assert.equal(formatVolumeKo(9800), '9,800');
+  const src = fs.readFileSync(path.join(__dirname, 'chart-card.js'), 'utf8');
+  assert.match(src, /priceFormat: VOLUME_FORMAT/);
+  assert.doesNotMatch(src, /type: 'volume'/);
+});
 
 test('cold-start chart import is started once and every renderer awaits the same ready result', async () => {
   let imports = 0;
@@ -33,6 +43,58 @@ test('cold-start chart import is started once and every renderer awaits the same
   assert.deepEqual(await prewarm, { library: { createChart: (await firstRender).library.createChart }, readyAt: 123.5 });
   assert.strictEqual(load(), prewarm);
   assert.equal(imports, 1);
+});
+
+test('withReloadDeadline: 한도가 지나면 거부하고 타이머를 지운다', async () => {
+  const timers = new Map();
+  let nextId = 1;
+  let cleared = 0;
+  const pending = withReloadDeadline(new Promise(() => {}), {
+    setTimeout: (fn, ms) => {
+      const id = nextId++;
+      timers.set(id, { fn, ms });
+      return id;
+    },
+    clearTimeout: (id) => {
+      cleared += 1;
+      timers.delete(id);
+    },
+  });
+  assert.equal(timers.size, 1);
+  const [{ fn, ms }] = timers.values();
+  assert.equal(ms, RELOAD_DEADLINE_MS);
+  fn();
+  await assert.rejects(pending, { message: RELOAD_DEADLINE_ERROR });
+  assert.equal(timers.size, 0);
+  assert.equal(cleared, 1);
+});
+
+test('withReloadDeadline: 작업이 먼저 끝나면 그 값을 주고 타이머를 지운다', async () => {
+  let cleared = 0;
+  const value = await withReloadDeadline(Promise.resolve({ ok: true, candles: [] }), {
+    setTimeout: () => 7,
+    clearTimeout: (id) => {
+      assert.equal(id, 7);
+      cleared += 1;
+    },
+  });
+  assert.deepEqual(value, { ok: true, candles: [] });
+  assert.equal(cleared, 1);
+});
+
+test('withReloadDeadline: 작업이 실패해도 타이머를 지운다', async () => {
+  let cleared = 0;
+  await assert.rejects(
+    withReloadDeadline(Promise.reject(new Error('reload가 완료되지 않았다')), {
+      setTimeout: () => 3,
+      clearTimeout: (id) => {
+        assert.equal(id, 3);
+        cleared += 1;
+      },
+    }),
+    { message: 'reload가 완료되지 않았다' },
+  );
+  assert.equal(cleared, 1);
 });
 
 test('volume-profile toggle renders immediately even when the next animation frame is withheld', () => {
