@@ -3620,6 +3620,108 @@ test('parseYamlBlock: safe_dump 블록 스타일을 읽는다(프리셋의 한 �
   assert.equal(doc.risk.position.sizing, 'all_in');
 });
 
+// yaml.safe_dump(..., allow_unicode=True, sort_keys=False)가 실제로 쓴 제목 형식.
+const FOLDED_SOURCE_TITLES = [
+  {
+    "kind": "plain",
+    "title": "TITLE_MARKER word word word word word word word word word word word word word word word word word word word word word word word word word",
+    "scalar": "  name: TITLE_MARKER word word word word word word word word word word word word word\n    word word word word word word word word word word word word"
+  },
+  {
+    "kind": "single",
+    "title": "TITLE_MARKER: user's word word word word word word word word word word word word word word word word word word word word word word word word word",
+    "scalar": "  name: 'TITLE_MARKER: user''s word word word word word word word word word word word\n    word word word word word word word word word word word word word word'"
+  },
+  {
+    "kind": "double",
+    "title": "TITLE_MARKER\tword word word word word word word word word word word word word word word word word word word word word word word word word",
+    "scalar": "  name: \"TITLE_MARKER\\tword word word word word word word word word word word word\\\n    \\ word word word word word word word word word word word word word\""
+  },
+  {
+    "kind": "paragraph",
+    "title": "TITLE_MARKER\nnext line word word word word word word word word word word word word word word word word word word word word word word word word word",
+    "scalar": "  name: 'TITLE_MARKER\n\n    next line word word word word word word word word word word word word word word\n    word word word word word word word word word word word'"
+  },
+  {
+    "kind": "next-line",
+    "title": "TITLE_MARKER\u0085word word word word word word word word word word word word word word word word word word word word word word word word word",
+    "scalar": "  name: 'TITLE_MARKER\u0085    word word word word word word word word word word word word word word word word\n    word word word word word word word word word'"
+  },
+  {
+    "kind": "line-separator",
+    "title": "TITLE_MARKER\u2028word word word word word word word word word word word word word word word word word word word word word word word word word",
+    "scalar": "  name: 'TITLE_MARKER\u2028    word word word word word word word word word word word word word word word word\n    word word word word word word word word word'"
+  },
+  {
+    "kind": "paragraph-separator",
+    "title": "TITLE_MARKER\u2029word word word word word word word word word word word word word word word word word word word word word word word word word",
+    "scalar": "  name: 'TITLE_MARKER\u2029    word word word word word word word word word word word word word word word word\n    word word word word word word word word word'"
+  },
+  {
+    "kind": "newline-unicode",
+    "title": "  tail\n\u2029world\"",
+    "scalar": "  name: '  tail\n\n\u2029    world\"'"
+  },
+  {
+    "kind": "unicode-spaces",
+    "title": "TITLE\u2028  words",
+    "scalar": "  name: \"TITLE\\L  words\""
+  },
+  {
+    "kind": "trailing-unicode-newlines",
+    "title": "  tailhello한글\u0085\u2028: '\u2028\n\n",
+    "scalar": "  name: '  tailhello한글\u0085\u2028    : ''\u2028\n\n    '"
+  },
+  {
+    "kind": "double-literal-backslash",
+    "title": "path \\UFFFFFFFF\t C:\\new value \\u0041",
+    "scalar": "  name: \"path \\\\UFFFFFFFF\\t C:\\\\new value \\\\u0041\""
+  }
+];
+
+for (const sample of FOLDED_SOURCE_TITLES) {
+  test(`parseYamlBlock: safe_dump ${sample.kind} 제목 뒤의 전략·리스크와 원제목을 보존한다`, () => {
+    const yaml = COMPILED_YAML.replace('  name: 시각 전략', sample.scalar)
+      .replace('  id: visual_strategy', '  id: from_source');
+    const original = yaml;
+    const doc = backtestCanvas.parseYamlBlock(yaml);
+    const spec = backtestCanvas.specOverridesFromYaml(yaml);
+    assert.equal(doc.metadata.name, sample.title);
+    assert.equal(spec.presetId, 'from_source');
+    assert.equal(spec.params.fast.default, 33);
+    assert.equal(spec.indicators.length, 2);
+    assert.equal(spec.risk.stop_loss.percent, 8);
+    assert.equal(yaml, original);
+  });
+}
+
+test('parseYamlBlock: 폼이 저장한 사용자 이름의 Unicode 구분자 뒤 의도한 공백을 보존한다', () => {
+  const Spec = require('./backtest-spec');
+  for (const separator of ['\x85', '\u2028', '\u2029']) {
+    const name = `내 전략${separator}  사용자 이름`;
+    const original = Spec.createSpec(null, { presetId: 'custom', name });
+    const yaml = Spec.toYaml(original);
+    const parsed = backtestCanvas.specOverridesFromYaml(yaml);
+    assert.equal(parsed.name, name);
+    assert.equal(parsed.presetId, 'custom');
+    assert.equal(original.name, name);
+    assert.equal(Spec.toYaml(original), yaml);
+  }
+});
+
+for (const name of [String.raw`C:\new strategy`, String.raw`value \u0041`, String.raw`path \UFFFFFFFF`]) {
+  test(`parseYamlBlock: 폼 quote가 그대로 쓴 사용자 이름 ${name}의 backslash를 보존한다`, () => {
+    const Spec = require('./backtest-spec');
+    const original = Spec.createSpec(null, { presetId: 'custom', name });
+    const yaml = Spec.toYaml(original);
+    const parsed = backtestCanvas.specOverridesFromYaml(yaml);
+    assert.equal(parsed.name, name);
+    assert.equal(parsed.presetId, 'custom');
+    assert.equal(original.name, name);
+    assert.equal(Spec.toYaml(original), yaml);
+  });
+}
+
 test('프리셋을 세우면 지도 탭이 from-spec 그래프로 편집기를 띄운다', async () => {
   const made = await mountVisual();
   assert.equal(made.calls.fromSpec, 1);
@@ -5319,6 +5421,637 @@ function makeWorkspaceCanvas(overrides) {
     await flush();
   };
   return made;
+}
+
+function workspaceDeferred() {
+  let resolve;
+  let reject;
+  const promise = new Promise((yes, no) => { resolve = yes; reject = no; });
+  return { promise, resolve, reject };
+}
+
+async function switchWorkspace(made, handler) {
+  handler.flush();
+  handler.clear();
+  await handler.restore({
+    kind: 'backtest', tab: 'design', designTab: 'form',
+    form: { yaml: RESTORE_YAML.replace('005930', '000660').replace('변동성 돌파', '다음 세션') },
+    graph: { ...VISUAL_GRAPH, id: 'next-session-graph' },
+  });
+  await made.tick();
+}
+
+for (const pendingStage of ['start', 'status']) {
+  for (const switched of [false, true]) {
+    test(`비동기 세션 경계: 수집 ${pendingStage} (전환=${switched})`, async () => withWorkspaceGlobal(async ({ registered, reports }) => {
+      const previous = workspaceDeferred();
+      const next = workspaceDeferred();
+      const runs = [];
+      const statuses = [];
+      let backfills = 0;
+      let allowRun = false;
+      const made = makeWorkspaceCanvas({
+        run: async (body) => {
+          runs.push(body);
+          return allowRun ? { run_id: 'completed-run' } : { blocked: true, needed_pages: 3 };
+        },
+        backfill: () => {
+          backfills += 1;
+          return backfills === 1
+            ? (pendingStage === 'start' ? previous.promise : Promise.resolve({ job_id: 'previous-job' }))
+            : Promise.resolve({ job_id: 'next-job' });
+        },
+        status: ({ job_id: jobId }) => {
+          statuses.push(jobId);
+          return jobId === 'next-job' ? next.promise
+            : (pendingStage === 'status' ? previous.promise : Promise.resolve({ status: 'done' }));
+        },
+        result: async () => ({ status: 'done', metrics: {}, stdout: '수집 후 실행' }),
+      });
+      made.canvas.mount();
+      await flush();
+      const handler = registered[0][1];
+      await handler.restore({ ...RESTORE_WORKSPACE, run: null });
+      made.canvas.runFromChat();
+      await flush();
+      await click(findByClass(made.container, 'backtest-approval-confirm')[0]);
+      await flush();
+      assert.equal(backfills, 1);
+      if (switched) {
+        await switchWorkspace(made, handler);
+        made.canvas.onChatAction({ kind: 'code_draft', source: '# 다음 세션 실행\n' });
+        made.canvas.runFromChat();
+        await flush();
+        await click(findByClass(made.container, 'backtest-approval-confirm')[0]);
+        await flush();
+      }
+      await made.tick();
+      const before = reports.length;
+      const beforeRuns = runs.length;
+      allowRun = true;
+      previous.resolve(pendingStage === 'start' ? { job_id: 'previous-job' } : { status: 'done' });
+      await flush();
+      await made.tick();
+      if (switched) {
+        assert.equal(runs.length, beforeRuns, '앞 수집 응답이 다음 세션 실행을 시작했다');
+        assert.equal(reports.length, before);
+        assert.equal(made.canvas.getContext().view, 'running');
+        assert.deepEqual(statuses, pendingStage === 'start' ? ['next-job'] : ['previous-job', 'next-job']);
+        next.resolve({ status: 'done' });
+        await flush();
+        await made.tick();
+      }
+      assert.equal(runs.length, beforeRuns + 1, '현재 세션 수집 완료는 실행으로 이어져야 한다');
+      assert.equal(made.canvas.getContext().view, 'result');
+    }));
+  }
+}
+
+for (const pendingStage of ['check', 'nodes', 'codegen']) {
+  for (const switched of [false, true]) {
+    test(`비동기 세션 경계: 기법 ${pendingStage} (전환=${switched})`, captureCards(async (cards) => withWorkspaceGlobal(async ({ registered, reports }) => {
+      const previous = workspaceDeferred();
+      let requests = 0;
+      const made = makeWorkspaceCanvas({
+        techniqueCheck: () => pendingStage === 'check'
+          ? (requests += 1, previous.promise) : Promise.resolve({ passed: true, checks: CHECKS_OK }),
+        techniqueNodes: () => pendingStage === 'nodes'
+          ? (requests += 1, previous.promise) : Promise.resolve(NODES_RESPONSE),
+        codegen: () => { requests += 1; return previous.promise; },
+      });
+      made.canvas.mount();
+      await flush();
+      const handler = registered[0][1];
+      if (pendingStage === 'codegen') {
+        await click(findByClass(made.container, 'backtest-preset-item')[0]);
+        await click(findByClass(made.container, 'backtest-subtab')[3]);
+      } else {
+        made.canvas.onChatAction({ kind: 'code_draft', source: TECHNIQUE_SOURCE });
+        await made.tick();
+      }
+      await flush();
+      assert.equal(requests, 1);
+      if (switched) await switchWorkspace(made, handler);
+      await made.tick();
+      const before = made.canvas.getContext();
+      const beforeReports = reports.length;
+      const beforeCards = cards.length;
+      previous.resolve(pendingStage === 'check' ? { passed: true, checks: CHECKS_OK }
+        : pendingStage === 'nodes' ? NODES_RESPONSE : { source: TECHNIQUE_SOURCE });
+      await flush();
+      await made.tick();
+      if (switched) {
+        assert.deepEqual(made.canvas.getContext().technique, before.technique);
+        assert.equal(made.canvas.getContext().designTab, 'form');
+        assert.equal(reports.length, beforeReports);
+        assert.equal(cards.length, beforeCards);
+      } else {
+        assert.deepEqual(made.canvas.getContext().technique.nodes.map((n) => n.id), ['compute_atr', 'signals']);
+        assert.equal(made.canvas.getContext().designTab, 'nodes');
+      }
+    })));
+  }
+}
+
+for (const pendingStage of ['coverage', 'run', 'result', 'trades']) {
+  for (const switched of [false, true]) {
+    test(`비동기 세션 경계: 자동 실행 ${pendingStage} (전환=${switched})`, captureCards(async (cards) => withWorkspaceGlobal(async ({ registered, reports }) => {
+      const previous = workspaceDeferred();
+      const runs = [];
+      let requests = 0;
+      const made = makeWorkspaceCanvas({
+        techniqueCheck: async () => ({ passed: true, checks: CHECKS_OK }),
+        techniqueNodes: async () => NODES_RESPONSE,
+        coverage: ({ stk_cd: symbol }) => {
+          if (symbol === '005930' && pendingStage === 'coverage') { requests += 1; return previous.promise; }
+          return Promise.resolve({ rows: 606, first_dt: '20240307', last_dt: '20260902' });
+        },
+        run: (body) => {
+          runs.push(body);
+          if (pendingStage === 'run') { requests += 1; return previous.promise; }
+          return Promise.resolve({ run_id: 'previous-auto-run' });
+        },
+        result: () => pendingStage === 'result'
+          ? (requests += 1, previous.promise) : Promise.resolve(AUTO_RUN_RESULT),
+        trades: () => pendingStage === 'trades'
+          ? (requests += 1, previous.promise) : Promise.resolve([]),
+      });
+      made.canvas.mount();
+      await flush();
+      const handler = registered[0][1];
+      made.canvas.onChatAction({ kind: 'code_draft', source: TECHNIQUE_SOURCE });
+      await made.tick();
+      await flush();
+      assert.equal(requests, 1);
+      if (switched) await switchWorkspace(made, handler);
+      await made.tick();
+      const before = made.canvas.getContext();
+      const beforeReports = reports.length;
+      const beforeCards = cards.length;
+      previous.resolve(pendingStage === 'coverage' ? { rows: 606, first_dt: '20240307', last_dt: '20260902' }
+        : pendingStage === 'run' ? { run_id: 'previous-auto-run' }
+          : pendingStage === 'result' ? AUTO_RUN_RESULT : []);
+      await flush();
+      await made.tick();
+      if (switched) {
+        assert.deepEqual(made.canvas.getContext().spec, before.spec);
+        assert.deepEqual(made.canvas.getContext().technique, before.technique);
+        assert.deepEqual(made.canvas.getContext().lastResult, before.lastResult);
+        assert.equal(reports.length, beforeReports);
+        assert.equal(cards.length, beforeCards);
+        assert.equal(runs.length, pendingStage === 'coverage' ? 0 : 1);
+      } else {
+        assert.equal(runs.length, 1);
+        assert.equal(made.canvas.getContext().technique.autoRun.status, 'done');
+        assert.equal(made.canvas.getContext().technique.autoRun.runId, 'previous-auto-run');
+        assert.equal(made.canvas.getContext().lastResult.metrics.total_return, 0.184);
+      }
+    })));
+  }
+}
+
+for (const switched of [false, true]) {
+  test(`비동기 세션 경계: 버전 열기 (전환=${switched})`, async () => withWorkspaceGlobal(async ({ registered, reports }) => {
+    const previous = workspaceDeferred();
+    let requests = 0;
+    const made = makeWorkspaceCanvas({
+      versions: async () => [{ id: 'previous-version', version: 2, origin: 'code_only' }],
+      versionDetail: () => { requests += 1; return previous.promise; },
+    });
+    made.canvas.mount();
+    await flush();
+    const handler = registered[0][1];
+    await handler.restore({ ...RESTORE_WORKSPACE, run: null, code: { ...RESTORE_WORKSPACE.code, strategyId: 'previous-strategy' } });
+    made.canvas.onChatAction({ kind: 'navigate', tab: 'history' });
+    await flush();
+    await click(findByClass(made.container, 'backtest-version-row')[0]);
+    assert.equal(requests, 1);
+    if (switched) await switchWorkspace(made, handler);
+    await made.tick();
+    const before = made.canvas.getContext();
+    const beforeReports = reports.length;
+    previous.resolve({ id: 'previous-version', origin: 'code_only', source: '# 이전 버전 원문\n' });
+    await flush();
+    await made.tick();
+    if (switched) {
+      assert.deepEqual(made.canvas.getContext().code, before.code);
+      assert.deepEqual(made.canvas.getContext().spec, before.spec);
+      assert.equal(made.canvas.getContext().designTab, 'form');
+      assert.equal(reports.length, beforeReports);
+    } else {
+      assert.equal(made.canvas.getContext().code.source, '# 이전 버전 원문\n');
+      assert.equal(made.canvas.getContext().designTab, 'code');
+    }
+  }));
+}
+
+for (const pendingStage of ['validate', 'compile']) {
+  for (const switched of [false, true]) {
+    test(`비동기 세션 경계: 시각 컴파일 ${pendingStage} (전환=${switched})`, async () => withWorkspaceGlobal(async ({ registered, reports }) => {
+      const previous = workspaceDeferred();
+      let requests = 0;
+      const compiled = { spec_yaml: COMPILED_YAML, source: VISUAL_SOURCE, hashes: {} };
+      const made = makeWorkspaceCanvas({
+        visualFromSpec: async () => ({ graph: VISUAL_GRAPH }),
+        visualValidate: () => pendingStage === 'validate'
+          ? (requests += 1, previous.promise) : Promise.resolve({ valid: true, diagnostics: [] }),
+        visualCompile: () => pendingStage === 'compile'
+          ? (requests += 1, previous.promise) : Promise.resolve(compiled),
+      });
+      made.canvas.mount();
+      await flush();
+      const handler = registered[0][1];
+      await handler.restore({ kind: 'backtest', form: RESTORE_WORKSPACE.form, graph: VISUAL_GRAPH, designTab: 'flow' });
+      await click(findByClass(made.container, 'backtest-visual-validate')[0]);
+      await flush();
+      assert.equal(requests, 1);
+      if (switched) await switchWorkspace(made, handler);
+      await made.tick();
+      const before = made.canvas.getContext();
+      const beforeReports = reports.length;
+      previous.resolve(pendingStage === 'validate' ? { valid: true, diagnostics: [] } : compiled);
+      await flush();
+      await made.tick();
+      if (switched) {
+        assert.deepEqual(made.canvas.getContext().spec, before.spec);
+        assert.deepEqual(made.canvas.getContext().map, before.map);
+        assert.equal(reports.length, beforeReports);
+      } else {
+        assert.equal(made.canvas.getContext().spec.name, '시각 전략');
+        assert.match(reports[reports.length - 1].form.yaml, /시각 전략/);
+      }
+    }));
+  }
+}
+
+for (const pendingStage of ['validate', 'compile', 'create', 'save']) {
+  for (const switched of [false, true]) {
+    test(`비동기 세션 경계: 시각 패치 ${pendingStage} (전환=${switched})`, captureCards(async (cards) => withWorkspaceGlobal(async ({ registered, reports }) => {
+      const previous = workspaceDeferred();
+      const creates = [];
+      const saves = [];
+      let requests = 0;
+      const compiled = { spec_yaml: COMPILED_YAML, source: VISUAL_SOURCE, hashes: {} };
+      const made = makeWorkspaceCanvas({
+        visualFromSpec: async () => ({ graph: VISUAL_GRAPH }),
+        visualValidate: () => pendingStage === 'validate'
+          ? (requests += 1, previous.promise) : Promise.resolve({ valid: true, diagnostics: [] }),
+        visualCompile: () => pendingStage === 'compile'
+          ? (requests += 1, previous.promise) : Promise.resolve(compiled),
+        createStrategy: (body) => {
+          creates.push(body);
+          if (pendingStage === 'create') { requests += 1; return previous.promise; }
+          return Promise.resolve({ strategy_id: 'previous-strategy', version_id: 'previous-v1' });
+        },
+        visualSave: (body) => {
+          saves.push(body);
+          if (pendingStage === 'save') { requests += 1; return previous.promise; }
+          return Promise.resolve({ version_id: 'previous-v2', version: 2 });
+        },
+      });
+      made.canvas.mount();
+      await flush();
+      const handler = registered[0][1];
+      await handler.restore({ kind: 'backtest', form: RESTORE_WORKSPACE.form, graph: VISUAL_GRAPH, designTab: 'flow' });
+      made.canvas.onChatAction({ kind: 'visual_patch', patch: VISUAL_PATCH });
+      const applying = made.canvas.applyVisualPatch('patch-1').then((value) => ({ value }), (error) => ({ error }));
+      await flush();
+      assert.equal(requests, 1);
+      if (switched) {
+        await switchWorkspace(made, handler);
+        made.canvas.onChatAction({ kind: 'visual_patch', patch: { ...VISUAL_PATCH, patch_id: 'next-patch' } });
+      }
+      await made.tick();
+      const before = made.canvas.getContext();
+      const beforeReports = reports.length;
+      const beforeCards = cards.length;
+      const beforeCreates = creates.length;
+      const beforeSaves = saves.length;
+      previous.resolve(pendingStage === 'validate' ? { valid: true, diagnostics: [] }
+        : pendingStage === 'compile' ? compiled
+          : pendingStage === 'create' ? { strategy_id: 'previous-strategy', version_id: 'previous-v1' }
+            : { version_id: 'previous-v2', version: 2 });
+      const outcome = await applying;
+      await made.tick();
+      assert.equal(outcome.error, undefined, '세션 전환 뒤 적용 응답이 예외로 끝나면 안 된다');
+      if (switched) {
+        assert.equal(outcome.value, null);
+        assert.deepEqual(made.canvas.getContext().code, before.code);
+        assert.deepEqual(made.canvas.getContext().spec, before.spec);
+        assert.equal(made.canvas.getContext().map.pendingPatch.patch_id, 'next-patch');
+        assert.equal(reports.length, beforeReports);
+        assert.equal(cards.length, beforeCards);
+        assert.equal(creates.length, beforeCreates);
+        assert.equal(saves.length, beforeSaves);
+      } else {
+        assert.equal(outcome.value.kind, 'visual_synced');
+        assert.equal(creates.length, 1);
+        assert.equal(saves.length, 1);
+        assert.equal(saves[0].strategy_id, 'previous-strategy');
+        assert.equal(made.canvas.getContext().code.source, VISUAL_SOURCE);
+      }
+    })));
+  }
+}
+
+for (const pendingKind of ['backfill', 'check', 'auto-run', 'version', 'compile', 'save']) {
+  for (const switched of [false, true]) {
+    test(`비동기 세션 경계: 실패 응답 ${pendingKind} (전환=${switched})`, captureCards(async (cards) => withWorkspaceGlobal(async ({ registered, reports }) => {
+      const previous = workspaceDeferred();
+      let requests = 0;
+      const waitForFailure = () => { requests += 1; return previous.promise; };
+      const made = makeWorkspaceCanvas({
+        run: pendingKind === 'auto-run' ? waitForFailure : async () => ({ blocked: true, needed_pages: 3 }),
+        backfill: waitForFailure,
+        techniqueCheck: pendingKind === 'check' ? waitForFailure : async () => ({ passed: true, checks: CHECKS_OK }),
+        techniqueNodes: async () => NODES_RESPONSE,
+        coverage: async () => ({ rows: 606, first_dt: '20240307', last_dt: '20260902' }),
+        versions: async () => [{ id: 'previous-v1', version: 1, origin: 'human' }],
+        versionDetail: waitForFailure,
+        visualFromSpec: async () => ({ graph: VISUAL_GRAPH }),
+        visualValidate: async () => ({ valid: true, diagnostics: [] }),
+        visualCompile: pendingKind === 'compile' ? waitForFailure
+          : async () => ({ spec_yaml: COMPILED_YAML, source: VISUAL_SOURCE, hashes: {} }),
+        createStrategy: async () => ({ strategy_id: 'previous-strategy' }),
+        visualSave: waitForFailure,
+      });
+      made.canvas.mount();
+      await flush();
+      const handler = registered[0][1];
+      let applying = Promise.resolve(null);
+      if (pendingKind === 'check' || pendingKind === 'auto-run') {
+        made.canvas.onChatAction({ kind: 'code_draft', source: TECHNIQUE_SOURCE });
+        await made.tick();
+      } else if (pendingKind === 'backfill' || pendingKind === 'version') {
+        await handler.restore({ ...RESTORE_WORKSPACE, run: null, code: { ...RESTORE_WORKSPACE.code, strategyId: 'previous-strategy' } });
+        if (pendingKind === 'backfill') {
+          made.canvas.runFromChat();
+          await flush();
+          await click(findByClass(made.container, 'backtest-approval-confirm')[0]);
+        } else {
+          made.canvas.onChatAction({ kind: 'navigate', tab: 'history' });
+          await flush();
+          await click(findByClass(made.container, 'backtest-version-row')[0]);
+        }
+      } else {
+        await handler.restore({ kind: 'backtest', form: RESTORE_WORKSPACE.form, graph: VISUAL_GRAPH, designTab: 'flow' });
+        if (pendingKind === 'compile') await click(findByClass(made.container, 'backtest-visual-validate')[0]);
+        else {
+          made.canvas.onChatAction({ kind: 'visual_patch', patch: VISUAL_PATCH });
+          applying = made.canvas.applyVisualPatch('patch-1');
+        }
+      }
+      await flush();
+      assert.equal(requests, 1);
+      if (switched) await switchWorkspace(made, handler);
+      await made.tick();
+      const before = made.canvas.getContext();
+      const beforeReports = reports.length;
+      const beforeCards = cards.length;
+      const failure = Object.assign(new Error('지연된 이전 세션 실패'), { status: 409 });
+      previous.reject(failure);
+      const receipt = await applying;
+      await flush();
+      await made.tick();
+      if (switched) {
+        assert.deepEqual(made.canvas.getContext(), before);
+        assert.equal(reports.length, beforeReports);
+        assert.equal(cards.length, beforeCards);
+        assert.equal(receipt, null);
+      } else {
+        assert.match(JSON.stringify({ text: textOf(made.container), context: made.canvas.getContext(), cards }), /지연된 이전 세션 실패/);
+        if (pendingKind === 'save') {
+          assert.equal(receipt.kind, 'visual_conflict');
+          assert.equal(receipt.canRetry, true);
+        }
+      }
+    })));
+  }
+}
+
+for (const rejected of [false, true]) {
+  for (const switched of [false, true]) {
+    test(`비동기 세션 경계: 수집 중단 (거절=${rejected}, 전환=${switched})`, async () => withWorkspaceGlobal(async ({ registered, reports }) => {
+      const cancel = workspaceDeferred();
+      const pendingStatus = workspaceDeferred();
+      const cancellations = [];
+      let job = 0;
+      const made = makeWorkspaceCanvas({
+        run: async () => ({ blocked: true, needed_pages: 3 }),
+        backfill: async () => ({ job_id: `job-${++job}` }),
+        status: () => pendingStatus.promise,
+        cancelJob: (body) => { cancellations.push(body); return cancel.promise; },
+      });
+      made.canvas.mount();
+      await flush();
+      const handler = registered[0][1];
+      await handler.restore({ ...RESTORE_WORKSPACE, run: null });
+      made.canvas.runFromChat();
+      await flush();
+      await click(findByClass(made.container, 'backtest-approval-confirm')[0]);
+      await flush();
+      await click(findByClass(made.container, 'backtest-running-stop')[0]);
+      assert.deepEqual(cancellations, [{ job_id: 'job-1' }]);
+      if (switched) {
+        await switchWorkspace(made, handler);
+        made.canvas.onChatAction({ kind: 'code_draft', source: '# 다음 세션 실행\n' });
+        made.canvas.runFromChat();
+        await flush();
+        await click(findByClass(made.container, 'backtest-approval-confirm')[0]);
+        await flush();
+      }
+      await made.tick();
+      const before = reports.length;
+      if (rejected) cancel.reject(new Error('이미 끝난 이전 수집'));
+      else cancel.resolve({ cancelled: true });
+      await flush();
+      await made.tick();
+      if (switched) {
+        assert.equal(made.canvas.getContext().view, 'running');
+        assert.equal(reports.length, before);
+        await click(findByClass(made.container, 'backtest-running-stop')[0]);
+        await flush();
+        assert.deepEqual(cancellations[1], { job_id: 'job-2' });
+      }
+      assert.equal(made.canvas.getContext().view, 'design');
+    }));
+  }
+}
+
+for (const pendingStage of ['list', 'hash', 'detail', 'validate', 'question']) {
+  for (const switched of [false, true]) {
+    test(`비동기 세션 경계: 다시 검토 ${pendingStage} (전환=${switched})`, captureCards(async (cards) => withWorkspaceGlobal(async ({ registered, reports }) => {
+      const previous = workspaceDeferred();
+      const calls = { list: [], detail: [], validate: [], question: [] };
+      let requests = 0;
+      const wait = () => { requests += 1; return previous.promise; };
+      const head = { id: 'previous-v9', version: 9, source: pendingStage === 'hash' ? '# previous head\n' : null };
+      const detail = { hashes: { graph_hash: 'previous-gh', artifact_hash: 'previous-ah' } };
+      const question = { question: { code: 'E_PREVIOUS', question_ko: '이전 세션 질문', choices: [] } };
+      const originalHash = CodeEditorLib.hashSource;
+      if (pendingStage === 'hash') CodeEditorLib.hashSource = wait;
+      try {
+        const made = makeWorkspaceCanvas({
+          versions: (id) => { calls.list.push(id); return pendingStage === 'list' ? wait() : Promise.resolve([head]); },
+          versionDetail: (id, version) => { calls.detail.push([id, version]); return pendingStage === 'detail' ? wait() : Promise.resolve(detail); },
+          visualFromSpec: async () => ({ graph: VISUAL_GRAPH }),
+          visualValidate: (body) => { calls.validate.push(body); return pendingStage === 'validate' ? wait() : Promise.resolve({ valid: false, diagnostics: [] }); },
+          visualQuestion: (body) => { calls.question.push(body); return pendingStage === 'question' ? wait() : Promise.resolve(question); },
+        });
+        made.canvas.mount();
+        await flush();
+        const handler = registered[0][1];
+        await handler.restore({
+          kind: 'backtest', form: RESTORE_WORKSPACE.form, graph: VISUAL_GRAPH, designTab: 'flow',
+          code: { source: '# previous strategy\n', strategyId: 'previous-strategy', runPath: 'form' },
+        });
+        const retrying = made.canvas.retryVisualPatch();
+        await flush();
+        assert.equal(requests, 1);
+        if (switched) await switchWorkspace(made, handler);
+        await made.tick();
+        const before = made.canvas.getContext();
+        const beforeCalls = JSON.parse(JSON.stringify(calls));
+        const beforeReports = reports.length;
+        const beforeCards = cards.length;
+        previous.resolve(pendingStage === 'list' ? [head] : pendingStage === 'hash' ? 'previous-ah'
+          : pendingStage === 'detail' ? detail : pendingStage === 'validate' ? { valid: false, diagnostics: [] } : question);
+        const receipt = await retrying;
+        await made.tick();
+        if (switched) {
+          assert.equal(receipt, null);
+          assert.deepEqual(made.canvas.getContext(), before);
+          assert.deepEqual(calls, beforeCalls, '이전 재검토가 다음 세션의 후속 요청을 시작했다');
+          assert.equal(reports.length, beforeReports);
+          assert.equal(cards.length, beforeCards);
+        } else {
+          assert.equal(receipt.kind, 'visual_question');
+          assert.equal(made.canvas.getContext().map.pendingQuestion.code, 'E_PREVIOUS');
+          assert.deepEqual(calls.detail, [['previous-strategy', 'previous-v9']]);
+        }
+      } finally { CodeEditorLib.hashSource = originalHash; }
+    })));
+  }
+}
+
+for (const rejected of [false, true]) {
+  for (const switched of [false, true]) {
+    test(`비동기 세션 경계: 질문 선택 (거절=${rejected}, 전환=${switched})`, captureCards(async (cards) => withWorkspaceGlobal(async ({ registered, reports }) => {
+      const previous = workspaceDeferred();
+      const requests = [];
+      const made = makeWorkspaceCanvas({
+        visualPatch: (body) => { requests.push(body); return previous.promise; },
+      });
+      made.canvas.mount();
+      await flush();
+      const handler = registered[0][1];
+      await handler.restore({
+        kind: 'backtest', form: RESTORE_WORKSPACE.form, graph: VISUAL_GRAPH, designTab: 'flow',
+      });
+      made.canvas.onChatAction({ kind: 'visual_question', question: { code: 'E_PREVIOUS', choices: [] } });
+      const answering = made.canvas.answerVisualQuestion({ code: 'E_PREVIOUS', choice_id: 'connect-close' });
+      await flush();
+      assert.equal(requests.length, 1, '이전 질문의 선택 요청이 실제로 대기해야 한다');
+      assert.deepEqual(requests[0].intent, { code: 'E_PREVIOUS', choice_id: 'connect-close' });
+      if (switched) {
+        await switchWorkspace(made, handler);
+        made.canvas.onChatAction({ kind: 'visual_question', question: { code: 'E_NEXT', choices: [] } });
+      }
+      await made.tick();
+      const before = made.canvas.getContext();
+      const beforeReports = reports.length;
+      const beforeCards = cards.length;
+      if (rejected) previous.reject(new Error('PREVIOUS_SESSION_PATCH_ERROR'));
+      else previous.resolve({ ...VISUAL_PATCH, patch_id: 'PREVIOUS_SESSION_PATCH' });
+      const receipt = await answering;
+      await made.tick();
+      const after = made.canvas.getContext();
+      if (switched) {
+        assert.equal(receipt, null);
+        assert.deepEqual(after, before, '다음 세션의 질문·수정안·지도 판번호를 보존해야 한다');
+        assert.equal(after.map.pendingQuestion.code, 'E_NEXT');
+        assert.equal(reports.length, beforeReports);
+        assert.equal(cards.length, beforeCards);
+      } else if (rejected) {
+        assert.equal(receipt.kind, 'visual_conflict');
+        assert.equal(after.map.pendingQuestion.code, 'E_PREVIOUS');
+        assert.equal(after.map.pendingPatch, null);
+        assert.equal(after.map.version, before.map.version);
+        assert.equal(cards.length, beforeCards + 1);
+      } else {
+        assert.equal(receipt.kind, 'visual_patch');
+        assert.equal(after.map.pendingQuestion, null);
+        assert.equal(after.map.pendingPatch.patch_id, 'PREVIOUS_SESSION_PATCH');
+        assert.deepEqual(receipt.version, { from: before.map.version, to: before.map.version + 1 });
+        assert.equal(cards.length, beforeCards + 1);
+      }
+    })));
+  }
+}
+
+for (const pendingStage of ['create', 'version']) {
+  for (const rejected of [false, true]) {
+    for (const switched of [false, true]) {
+      test(`비동기 세션 경계: 코드 분기 ${pendingStage} (거절=${rejected}, 전환=${switched})`, captureCards(async (cards) => withWorkspaceGlobal(async ({ registered, reports }) => {
+        const previous = workspaceDeferred();
+        const saved = [];
+        let requests = 0;
+        const hash = await CodeEditorLib.hashSource(VISUAL_SOURCE);
+        const stub = visualStubs(hash, {
+          createStrategy: () => {
+            if (pendingStage === 'create') { requests += 1; return previous.promise; }
+            return Promise.resolve({ strategy_id: 'previous-strategy', version_id: 'previous-v1' });
+          },
+          addVersion: (id, body) => {
+            saved.push({ id, body });
+            if (pendingStage === 'version') { requests += 1; return previous.promise; }
+            return Promise.resolve({ version_id: 'previous-v2', version: 2 });
+          },
+        });
+        const made = makeWorkspaceCanvas(stub.deps);
+        made.canvas.mount();
+        await flush();
+        const handler = registered[0][1];
+        await click(findByClass(made.container, 'backtest-preset-item')[0]);
+        await flush();
+        await typeAheadOfMap(made);
+        await click(findByClass(made.container, 'backtest-code-ahead-fork')[0]);
+        await flush();
+        assert.equal(requests, 1);
+        if (switched) {
+          await switchWorkspace(made, handler);
+          made.canvas.onChatAction({ kind: 'code_draft', source: `${VISUAL_SOURCE}# 다음 세션 편집\n` });
+        }
+        await made.tick();
+        const before = made.canvas.getContext();
+        const beforeText = textOf(made.container);
+        const beforeReports = reports.length;
+        const beforeCards = cards.length;
+        const beforeSaves = saved.length;
+        if (rejected) previous.reject(new Error('이전 세션 분기 실패'));
+        else previous.resolve(pendingStage === 'create'
+          ? { strategy_id: 'previous-strategy', version_id: 'previous-v1' }
+          : { version_id: 'previous-v2', version: 2 });
+        await flush();
+        await made.tick();
+        if (switched) {
+          assert.deepEqual(made.canvas.getContext(), before);
+          assert.equal(textOf(made.container), beforeText);
+          assert.equal(reports.length, beforeReports);
+          assert.equal(cards.length, beforeCards);
+          assert.equal(saved.length, beforeSaves);
+        } else if (rejected) {
+          assert.match(textOf(made.container), /이전 세션 분기 실패/);
+        } else {
+          assert.equal(saved.length, 1);
+          assert.equal(saved[0].id, 'previous-strategy');
+          assert.equal(saved[0].body.origin, 'code_only');
+          assert.equal(made.canvas.getContext().designTab, 'flow');
+          assert.equal(cards[cards.length - 1].detail.kind, 'code_only');
+        }
+      })));
+    }
+  }
 }
 
 test('세션 복원: 폼의 대상·코드·로그가 돌아오고 표식이 카운트를 말한다', async () => withWorkspaceGlobal(async ({ registered }) => {

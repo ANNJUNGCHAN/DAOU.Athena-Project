@@ -762,7 +762,18 @@ function parseYamlScalar(raw) {
   const text = String(raw == null ? '' : raw).trim();
   if (!text) return '';
   if (text.length >= 2 && (text[0] === '"' || text[0] === "'") && text[text.length - 1] === text[0]) {
-    return text.slice(1, -1);
+    const body = text.slice(1, -1);
+    if (text[0] === "'") return body.replace(/''/g, "'");
+    // safe_dump의 double-quoted 스칼라 escape. JSON과 다른 \0·\xNN도 나온다.
+    const escapes = {
+      0: '\0', a: '\x07', b: '\b', t: '\t', n: '\n', v: '\v', f: '\f', r: '\r',
+      e: '\x1b', N: '\x85', _: '\xa0', L: '\u2028', P: '\u2029',
+      ' ': ' ', '"': '"', '/': '/', '\\': '\\',
+    };
+    return body.replace(/\\(x[\da-fA-F]{2}|u[\da-fA-F]{4}|U[\da-fA-F]{8}|.)/g, (match, code) => {
+      if (code.length > 1) return String.fromCodePoint(parseInt(code.slice(1), 16));
+      return Object.prototype.hasOwnProperty.call(escapes, code) ? escapes[code] : match;
+    });
   }
   if (text[0] === '{' || text[0] === '[') return parseYamlFlow(text);
   if (text === 'true') return true;
@@ -773,10 +784,55 @@ function parseYamlScalar(raw) {
 }
 
 function parseYamlBlock(text) {
-  const rows = String(text == null ? '' : text).split('\n')
-    .map((line) => ({ indent: line.length - line.replace(/^ +/, '').length, text: line.trim() }))
+  const lines = String(text == null ? '' : text).split('\n');
+  const rows = lines
+    .map((line, index) => ({ indent: line.length - line.replace(/^ +/, '').length, text: line.trim(), index }))
     .filter((row) => row.text && row.text[0] !== '#' && row.text !== '---');
+  // 기존 Spec.toYaml은 이 헤더와 함께 "만 escape한다. safe_dump의 '1.0'
+  // 문서와 구분해 폼이 저장한 literal backslash를 YAML escape로 바꾸지 않는다.
+  const formQuotes = rows.length > 0 && rows[0].text === 'version: "1.0"';
   let i = 0;
+
+  // safe_dump는 긴 문자열을 더 깊은 들여쓰기로 이어 쓴다. 그 줄을 소비하지 않으면
+  // parseAt이 중간에서 끝나 뒤의 strategy.id까지 사라진다. 빈 줄은 실제 개행이다.
+  function readScalar(rest, indent, index) {
+    if (rest[0] === '{' || rest[0] === '[') return parseYamlScalar(rest);
+    if (formQuotes && rest[0] === '"' && rest.endsWith('"')) {
+      return rest.slice(1, -1).replace(/\\"/g, '"');
+    }
+    let value = rest;
+    let blank = 0;
+    let line = index + 1;
+    if (rest[0] === "'") {
+      // safe_dump의 single quote 안에서는 Unicode 개행 다음 줄이 0열에서
+      // 시작할 수도 있다. 들여쓰기 대신 닫는 따옴표(''는 문자)를 찾아 읽는다.
+      // row.text.trim()이 지운 줄 끝 Unicode 개행도 원문에서 다시 읽는다.
+      value = lines[index].slice(lines[index].indexOf(':') + 1).replace(/^ +/, '').replace(/\r$/, '');
+      while (!/^'(?:[^']|'')*'$/.test(value) && line < lines.length) {
+        value += '\n' + lines[line].replace(/\r$/, '');
+        line += 1;
+      }
+      while (i < rows.length && rows[i].index < line) i += 1;
+      return parseYamlScalar(value.replace(/([\n\x85\u2028\u2029]+) */g, (_match, breaks) => (
+        breaks[0] === '\n' ? (breaks.length === 1 ? ' ' : breaks.slice(1)) : breaks
+      )));
+    }
+    while (line < lines.length) {
+      const raw = lines[line];
+      if (!raw.trim()) { blank += 1; line += 1; continue; }
+      const depth = raw.length - raw.replace(/^ +/, '').length;
+      if (depth <= indent) break;
+      const slashes = (value.match(/\\+$/) || [''])[0].length;
+      const escapedBreak = rest[0] === '"' && slashes % 2 === 1;
+      value = escapedBreak
+        ? value.slice(0, -1) + raw.trim()
+        : value + (blank ? '\n'.repeat(blank) : ' ') + raw.trim();
+      blank = 0;
+      line += 1;
+    }
+    while (i < rows.length && rows[i].index < line) i += 1;
+    return parseYamlScalar(value);
+  }
 
   function parseAt(indent) {
     if (i >= rows.length || rows[i].indent < indent) return null;
@@ -791,7 +847,7 @@ function parseYamlBlock(text) {
           continue;
         }
         // `- key: value` — 이 항목의 나머지 키는 한 단계 안쪽 들여쓰기로 이어진다.
-        rows[i] = { indent: indent + 2, text: rest };
+        rows[i] = { ...rows[i], indent: indent + 2, text: rest };
         list.push(parseAt(indent + 2));
       }
       return list;
@@ -804,7 +860,7 @@ function parseYamlBlock(text) {
       const key = row.text.slice(0, at).trim();
       const rest = row.text.slice(at + 1).trim();
       i += 1;
-      if (rest) { map[key] = parseYamlScalar(rest); continue; }
+      if (rest) { map[key] = readScalar(rest, indent, row.index); continue; }
       const next = rows[i];
       // 목록은 safe_dump에서 부모 키와 같은 들여쓰기에 온다 — 다음 줄의 실제 들여쓰기를
       // 보고 정한다(고정 +2로 가정하면 `indicators:` 아래 목록을 통째로 놓친다).
@@ -1535,17 +1591,20 @@ function createBacktestCanvas(options) {
   // 불러간다. 사람이 시작한 연쇄는 사람이 멈출 수 있어야 한다(보드 10 「막다른 길을 만들지
   // 않습니다」). 이미 끝난 잡은 멈출 것이 없으므로 취소 실패를 오류로 올리지 않는다.
   async function stopJob() {
+    const generation = workspaceGeneration;
     const jobId = state.jobId;
     stopPolling();
     if (jobId && deps.cancelJob) {
       try { await deps.cancelJob({ job_id: jobId }); } catch { /* 이미 끝난 잡 */ }
     }
+    if (generation !== workspaceGeneration) return;
     setState({
       view: 'design', tab: 'design', jobId: null, progress: null, progressText: '',
     });
   }
 
   async function confirmBackfill() {
+    const generation = workspaceGeneration;
     // runId를 비운다 — 「수집 중」은 jobId && !runId로 읽히므로(resumePollingIfNeeded)
     // 앞 실행의 id가 남아 있으면 수집을 실행으로 오독한다.
     setState({
@@ -1562,24 +1621,27 @@ function createBacktestCanvas(options) {
           to_dt: spec.toDt,
         })
         : null;
+      if (generation !== workspaceGeneration) return;
       if (!res || !res.job_id) throw new Error('job_id를 받지 못했습니다');
-    } catch (err) { fail(err); return; }
+    } catch (err) { if (generation === workspaceGeneration) fail(err); return; }
     setState({ jobId: res.job_id });
     pollJob();
   }
 
   function pollJob() {
     stopPolling();
+    const generation = workspaceGeneration;
+    const jobId = state.jobId;
     const tick = async () => {
       pollTimer = null;
       // 「중단」은 예약된 타이머만 지운다 — 이미 status를 기다리고 있던 틱은 못 막는다.
       // 그 틱이 늦게 깨어나 폴링을 되살리거나 startRun을 부르면 사람이 멈춘 연쇄가 혼자
       // 이어진다. jobId가 비었으면(=중단했으면) 앞뒤 어느 지점에서든 여기서 끝낸다.
-      if (!state.jobId || !isVisible()) return;
+      if (generation !== workspaceGeneration || !jobId || state.jobId !== jobId || !isVisible()) return;
       let job;
-      try { job = deps.status ? await deps.status({ job_id: state.jobId }) : null; }
-      catch (err) { if (state.jobId) fail(err); return; }
-      if (!state.jobId || !isVisible()) return;
+      try { job = deps.status ? await deps.status({ job_id: jobId }) : null; }
+      catch (err) { if (generation === workspaceGeneration && state.jobId === jobId) fail(err); return; }
+      if (generation !== workspaceGeneration || state.jobId !== jobId || !isVisible()) return;
       if (job && job.progress) {
         setState({
           progressText: `데이터를 수집하는 중입니다 · ${job.progress.page}페이지 · ${job.progress.rows}행`,
@@ -3483,10 +3545,12 @@ function createBacktestCanvas(options) {
 
   async function runTechniqueCheck() {
     if (!deps.techniqueCheck || !codeSource) return null;
+    const generation = workspaceGeneration;
     const source = codeSource;
     let data;
     try { data = await deps.techniqueCheck(Object.assign({ source }, techniqueCheckTarget())); }
     catch (err) {
+      if (generation !== workspaceGeneration) return null;
       // 못 돌린 것과 실패한 것은 다르다 — 검사 줄을 지어내지 않고 명령창에만 적는다.
       setTechnique({
         checks: [], passed: false, stats: null,
@@ -3495,6 +3559,7 @@ function createBacktestCanvas(options) {
       });
       return null;
     }
+    if (generation !== workspaceGeneration) return null;
     const checks = Array.isArray(data && data.checks) ? data.checks : [];
     // 통과 여부는 서버 값 그대로다. 여기서 checks.every(ok)로 다시 재면 경고(severity
     // 'warn') 하나에 노드 창이 닫힌다 — 무엇이 차단인지는 검사를 돌린 쪽이 안다.
@@ -3530,10 +3595,15 @@ function createBacktestCanvas(options) {
   // 정직하게 그렇게 적는다.
   async function loadTechniqueNodes(source, auto) {
     if (!deps.techniqueNodes || !source) return null;
+    const generation = workspaceGeneration;
     techniqueNodesSource = source;
     let data;
     try { data = await deps.techniqueNodes({ source }); }
-    catch (err) { return failTechniqueNodes(String((err && err.message) || err)); }
+    catch (err) {
+      if (generation !== workspaceGeneration) return null;
+      return failTechniqueNodes(String((err && err.message) || err));
+    }
+    if (generation !== workspaceGeneration) return null;
     if (data && data.error) {
       const detail = data.error;
       return failTechniqueNodes(String((detail && detail.message) || detail));
@@ -3579,7 +3649,9 @@ function createBacktestCanvas(options) {
   // 코드다(§7.3: 생성은 저장이 아니다).
   async function loadTechniqueNodesForTechnique() {
     if (!deps.techniqueNodes) return null;
+    const generation = workspaceGeneration;
     const source = codeSource || await techniqueCodegenSource();
+    if (generation !== workspaceGeneration) return null;
     if (!source) return null;
     if (techniqueNodesSource === source && techniqueState().nodes.length) return null;
     return loadTechniqueNodes(source, false);
@@ -3587,10 +3659,12 @@ function createBacktestCanvas(options) {
 
   async function techniqueCodegenSource() {
     if (runPath === 'code' || !spec || !deps.codegen) return '';
+    const generation = workspaceGeneration;
     const yaml = currentYaml();
     if (!codegenCache || codegenCache.yaml !== yaml) {
       let res;
       try { res = await deps.codegen({ yaml }); } catch { return ''; }
+      if (generation !== workspaceGeneration) return '';
       codegenCache = { yaml, source: String((res && res.source) || '') };
     }
     return codegenCache.source;
@@ -3607,9 +3681,11 @@ function createBacktestCanvas(options) {
   // 결과만 담아두고 단계 카드의 [결과 보기]가 그 탭을 연다.
   async function maybeAutoRunTechnique(source) {
     if (!techniqueDraft || !deps.run || !source) return;
+    const generation = workspaceGeneration;
     if (techniqueAutoRunSource === source) return;
     techniqueAutoRunSource = source;
     const target = await autoRunTarget();
+    if (generation !== workspaceGeneration) return;
     if (!target) {
       emitTechniqueStep({
         icon: 'run',
@@ -3626,6 +3702,7 @@ function createBacktestCanvas(options) {
     let res;
     try { res = await deps.run(body); }
     catch (err) {
+      if (generation !== workspaceGeneration) return;
       emitTechniqueStep({
         icon: 'run',
         title_ko: '백테스트를 자동으로 돌리지 못했습니다',
@@ -3635,6 +3712,7 @@ function createBacktestCanvas(options) {
       });
       return;
     }
+    if (generation !== workspaceGeneration) return;
     // 캐시가 모자라면 수집이 필요하다 — 수집은 시간과 TR 할당량을 쓰므로 자동으로 하지
     // 않는다. 그 결정은 사람의 것이라는 사실을 카드에 그대로 적는다.
     if (res && res.blocked) {
@@ -3663,6 +3741,7 @@ function createBacktestCanvas(options) {
   // 캐시에 실제로 들어 있는 구간을 읽어 쓴다 — 날짜를 지어내지 않는다. 캐시도 모르면
   // null이고, 부른 쪽이 그 사실을 카드에 적는다.
   async function autoRunTarget() {
+    const generation = workspaceGeneration;
     if (spec && spec.symbols.length === 1 && spec.fromDt && spec.toDt) return { meta: null };
     if (!deps.coverage) return null;
     let data;
@@ -3673,6 +3752,7 @@ function createBacktestCanvas(options) {
         adjusted: spec ? spec.adjusted : true,
       });
     } catch { return null; }
+    if (generation !== workspaceGeneration) return null;
     const from = String((data && data.first_dt) || '').slice(0, 8);
     const to = String((data && data.last_dt) || '').slice(0, 8);
     if (!/^\d{8}$/.test(from) || !/^\d{8}$/.test(to)) return null;
@@ -3686,18 +3766,22 @@ function createBacktestCanvas(options) {
   }
 
   function pollTechniqueAutoRun(runId, meta) {
+    const generation = workspaceGeneration;
     if (techniqueRunTimer != null && clearTimeoutImpl) clearTimeoutImpl(techniqueRunTimer);
     techniqueRunTimer = null;
     const tick = async () => {
       techniqueRunTimer = null;
-      if (!isVisible()) return;
+      if (generation !== workspaceGeneration || !isVisible()) return;
       let data;
       try { data = deps.result ? await deps.result({ run_id: runId }) : null; }
-      catch (err) { finishAutoRun(runId, meta, null, String((err && err.message) || err)); return; }
-      if (!isVisible()) return;
-      if (data && data.status === 'done') { await finishAutoRun(runId, meta, data, null); return; }
+      catch (err) {
+        if (generation === workspaceGeneration) finishAutoRun(runId, meta, null, String((err && err.message) || err), generation);
+        return;
+      }
+      if (generation !== workspaceGeneration || !isVisible()) return;
+      if (data && data.status === 'done') { await finishAutoRun(runId, meta, data, null, generation); return; }
       if (data && (data.status === 'failed' || data.status === 'cancelled')) {
-        finishAutoRun(runId, meta, null, data.error || '백테스트 실행에 실패했습니다');
+        finishAutoRun(runId, meta, null, data.error || '백테스트 실행에 실패했습니다', generation);
         return;
       }
       if (setTimeoutImpl) techniqueRunTimer = setTimeoutImpl(tick, POLL_INTERVAL_MS);
@@ -3705,7 +3789,7 @@ function createBacktestCanvas(options) {
     void tick();
   }
 
-  async function finishAutoRun(runId, meta, data, error) {
+  async function finishAutoRun(runId, meta, data, error, generation = workspaceGeneration) {
     if (error) {
       setTechnique({ autoRun: { runId, status: 'failed', metrics: null } });
       emitTechniqueStep({
@@ -3717,6 +3801,7 @@ function createBacktestCanvas(options) {
     let trades = [];
     try { trades = deps.trades ? await deps.trades({ run_id: runId }) : []; }
     catch { trades = []; }
+    if (generation !== workspaceGeneration) return;
     lastError = null;
     // 결과 탭에서 보이게만 담는다 — 지금 보고 있는 노드 창을 뺏지 않는다.
     setState({ result: data, trades: Array.isArray(trades) ? trades : [] });
@@ -4687,6 +4772,7 @@ function createBacktestCanvas(options) {
   // 422로 거절하고(api/backtest.py `_add_inactive_version`), 거절이 옳다: 그래프를 같이
   // 저장하는 것은 동기화됐다고 서명하는 것과 같다. 활성화도 실행도 하지 않는다.
   async function forkCodeOnly() {
+    const generation = workspaceGeneration;
     const source = codeSource;
     if (!source.trim()) return null;
     if (!deps.addVersion) {
@@ -4695,7 +4781,11 @@ function createBacktestCanvas(options) {
     }
     let id;
     try { id = await ensureStrategyId(source); }
-    catch (err) { setState({ codeOnlyError: String((err && err.message) || err) }); return null; }
+    catch (err) {
+      if (generation === workspaceGeneration) setState({ codeOnlyError: String((err && err.message) || err) });
+      return null;
+    }
+    if (generation !== workspaceGeneration) return null;
     if (!id) { setState({ codeOnlyError: '전략을 먼저 저장해야 합니다' }); return null; }
     let saved;
     try {
@@ -4703,9 +4793,11 @@ function createBacktestCanvas(options) {
         source, origin: 'code_only', note: CODE_ONLY_NOTE,
       });
     } catch (err) {
+      if (generation !== workspaceGeneration) return null;
       setState({ codeOnlyError: String((err && err.message) || err) });
       return null;
     }
+    if (generation !== workspaceGeneration) return null;
     const from = state.mapVersion || 0;
     const generated = lastGeneratedSource;
     // 마지막 호환 그래프는 그대로 붙잡아 둔다 — 지도 탭이 그것을 읽기 전용으로 보여준다.
@@ -4798,13 +4890,18 @@ function createBacktestCanvas(options) {
   // 편집 표면에 얹으면 지금 작업 중인 초안이 조용히 사라진다. 편집은 [이 버전으로
   // 편집]이 한 번 더 눌려야 시작된다(그때 새 지도 판이 선다).
   async function openVersion(entry) {
+    const generation = workspaceGeneration;
     if (!strategyId || !deps.versionDetail) {
       setState({ historyError: '이 화면에는 버전 되열기 배선이 없습니다' });
       return null;
     }
     let detail;
     try { detail = await deps.versionDetail(strategyId, entry.id); }
-    catch (err) { setState({ historyError: String((err && err.message) || err) }); return null; }
+    catch (err) {
+      if (generation === workspaceGeneration) setState({ historyError: String((err && err.message) || err) });
+      return null;
+    }
+    if (generation !== workspaceGeneration) return null;
     if (!detail) { setState({ historyError: '버전을 읽지 못했습니다' }); return null; }
     const origin = detail.origin || entry.origin || null;
     const source = String(detail.source || '');
@@ -5037,16 +5134,19 @@ function createBacktestCanvas(options) {
 
   async function runVisualValidate() {
     if (!deps.visualValidate || !visualGraph) return null;
+    const generation = workspaceGeneration;
     setVisualState('validating');
     render();
     let res;
     try { res = await deps.visualValidate({ graph: visualGraph }); }
     catch (err) {
+      if (generation !== workspaceGeneration) return null;
       const message = String((err && err.message) || err);
       setVisualState('invalid', message);
       setState({ visualNotice: message });
       return null;
     }
+    if (generation !== workspaceGeneration) return null;
     visualDiagnostics = (res && Array.isArray(res.diagnostics)) ? res.diagnostics : [];
     // 검증이 주는 hash에는 artifact_hash가 없다 — 그것은 **컴파일 산출물**의 hash라
     // /validate가 낼 수 없는 값이다. 통째로 갈아끼우면 그래프가 유효하지 않게 된 순간
@@ -5075,13 +5175,16 @@ function createBacktestCanvas(options) {
 
   async function runVisualCompile() {
     if (!deps.visualCompile || !visualGraph) return null;
+    const generation = workspaceGeneration;
     let res;
     try { res = await deps.visualCompile({ graph: visualGraph }); }
     catch (err) {
+      if (generation !== workspaceGeneration) return null;
       setVisualState('invalid', String((err && err.message) || err));
       render();
       return null;
     }
+    if (generation !== workspaceGeneration) return null;
     visualCompiled = {
       spec_yaml: String((res && res.spec_yaml) || ''),
       // 구조화 스펙도 들고 있는다 — 저장할 bundle이 이것을 요구한다(서버가 spec_hash를
@@ -5280,8 +5383,11 @@ function createBacktestCanvas(options) {
   // §주요 리스크와 방어선 — base version/hash optimistic concurrency).
   async function refreshVisualBase() {
     if (!strategyId || !deps.versions) return null;
+    const generation = workspaceGeneration;
+    const id = strategyId;
     let list;
-    try { list = await deps.versions(strategyId); } catch { return null; }
+    try { list = await deps.versions(id); } catch { return null; }
+    if (generation !== workspaceGeneration) return null;
     const head = (Array.isArray(list) ? list : []).reduce(
       (best, v) => (best && Number(best.version) >= Number(v.version) ? best : v), null,
     );
@@ -5296,11 +5402,13 @@ function createBacktestCanvas(options) {
     if (typeof head.source === 'string' && head.source) {
       try { base.artifact_hash = await CodeEditor.hashSource(head.source); }
       catch { /* 못 재면 아래 detail의 해시로 간다 */ }
+      if (generation !== workspaceGeneration) return null;
     }
     if (deps.versionDetail) {
       // 해시를 못 읽어도 버전 id는 갱신한다 — 절반이라도 새 base가 옛 base보다 낫다.
       try {
-        const detail = await deps.versionDetail(strategyId, head.id);
+        const detail = await deps.versionDetail(id, head.id);
+        if (generation !== workspaceGeneration) return null;
         const hashes = (detail && detail.hashes) || null;
         if (hashes) {
           base.graph_hash = hashes.graph_hash || null;
@@ -5308,6 +5416,7 @@ function createBacktestCanvas(options) {
         }
       } catch { /* 위 주석 그대로 */ }
     }
+    if (generation !== workspaceGeneration) return null;
     visualBase = base;
     return base;
   }
@@ -5315,9 +5424,14 @@ function createBacktestCanvas(options) {
   // 지금 그래프에서 막고 있는 오류 하나를 서버에 물어 카드로 낸다(검사기의 [대화로 수정]).
   async function askVisualQuestion() {
     if (!deps.visualQuestion || !visualGraph) return null;
+    const generation = workspaceGeneration;
     let data;
     try { data = await deps.visualQuestion({ graph: visualGraph, diagnostics: visualDiagnostics }); }
-    catch (err) { setState({ visualNotice: String((err && err.message) || err) }); return null; }
+    catch (err) {
+      if (generation === workspaceGeneration) setState({ visualNotice: String((err && err.message) || err) });
+      return null;
+    }
+    if (generation !== workspaceGeneration) return null;
     const question = data && data.question;
     if (!question) { pendingQuestion = null; return null; }
     pendingQuestion = question;
@@ -5328,6 +5442,7 @@ function createBacktestCanvas(options) {
   async function answerVisualQuestion(intent) {
     const payload = intent || {};
     if (!deps.visualPatch || !visualGraph) return null;
+    const generation = workspaceGeneration;
     let data;
     try {
       data = await deps.visualPatch({
@@ -5337,10 +5452,12 @@ function createBacktestCanvas(options) {
         intent: { code: payload.code, choice_id: payload.choice_id },
       });
     } catch (err) {
+      if (generation !== workspaceGeneration) return null;
       return emitChatCard(remember(makeReceipt('visual_conflict', {
         errors: [String((err && err.message) || err)],
       })));
     }
+    if (generation !== workspaceGeneration) return null;
     pendingQuestion = null;
     pendingPatch = data || null;
     return emitChatCard(remember(makeReceipt('visual_patch', {
@@ -5352,9 +5469,11 @@ function createBacktestCanvas(options) {
   async function ensureStrategyId(source) {
     if (strategyId) return strategyId;
     if (!deps.createStrategy) return null;
+    const generation = workspaceGeneration;
     const created = await deps.createStrategy({
       name: spec ? spec.name : '시각 전략', kind: 'python', source,
     });
+    if (generation !== workspaceGeneration) return null;
     strategyId = created && created.strategy_id;
     if (created && created.version_id) activeVersionId = created.version_id;
     return strategyId;
@@ -5363,6 +5482,7 @@ function createBacktestCanvas(options) {
   // 사람이 [적용]을 누른 그 순간 — 그래프에 얹고, 검증·컴파일하고, 새 버전으로 저장한다.
   // 활성화하지 않는다. 실행하지 않는다. 그 둘은 여전히 별도의 버튼이다.
   async function applyVisualPatch(patchId) {
+    const generation = workspaceGeneration;
     const patch = pendingPatch;
     if (!patch) return null;
     if (patchId && patch.patch_id && patch.patch_id !== patchId) return null;
@@ -5377,6 +5497,7 @@ function createBacktestCanvas(options) {
     visualCompiled = null;
 
     await runVisualValidate();
+    if (generation !== workspaceGeneration) return null;
     if (visualState !== 'synced' || !visualCompiled) {
       return emitChatCard(remember(makeReceipt('visual_conflict', {
         errors: ['수정안을 적용한 그래프가 아직 유효하지 않습니다'],
@@ -5390,10 +5511,12 @@ function createBacktestCanvas(options) {
     let id;
     try { id = await ensureStrategyId(visualCompiled.source); }
     catch (err) {
+      if (generation !== workspaceGeneration) return null;
       return emitChatCard(remember(makeReceipt('visual_conflict', {
         errors: [String((err && err.message) || err)],
       })));
     }
+    if (generation !== workspaceGeneration) return null;
     if (!id) {
       return emitChatCard(remember(makeReceipt('visual_conflict', {
         errors: ['전략을 먼저 저장해야 합니다'],
@@ -5428,6 +5551,7 @@ function createBacktestCanvas(options) {
         },
       });
     } catch (err) {
+      if (generation !== workspaceGeneration) return null;
       // 409는 실패가 아니라 "그 사이 다른 수정이 먼저 저장됐다"는 사실이다 — 다시 검토로
       // 돌려보낸다(retryVisualPatch가 그 자리다).
       //
@@ -5446,6 +5570,7 @@ function createBacktestCanvas(options) {
         errors: [String((err && err.message) || err)],
       })));
     }
+    if (generation !== workspaceGeneration) return null;
     pendingPatch = null;
     // 편집기가 들고 있던 것이 앞선 **생성** 산출물(미리보기·직전 컴파일)이면 새 산출물로
     // 함께 옮긴다 — 옮기지 않으면 사람이 손대지도 않은 코드가 "코드가 지도보다 앞섬"으로
@@ -5520,9 +5645,12 @@ function createBacktestCanvas(options) {
   // [다시 검토] — **최신 base를 다시 읽고** 나서 지금 그래프를 다시 검증하고, 막고 있는
   // 오류를 다시 하나 묻는다. base를 먼저 읽는 이유는 위 refreshVisualBase 머리말 그대로다.
   async function retryVisualPatch() {
+    const generation = workspaceGeneration;
     pendingPatch = null;
     await refreshVisualBase();
+    if (generation !== workspaceGeneration) return null;
     await runVisualValidate();
+    if (generation !== workspaceGeneration) return null;
     return askVisualQuestion();
   }
 
