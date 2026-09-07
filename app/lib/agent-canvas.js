@@ -903,6 +903,7 @@ function createAgentCanvas(deps) {
 
   const timelineCaption = el('div', 'agent-panel-caption');
   timelineCaption.textContent = '다음 24시간';
+  timelineCaption.appendChild(fixtureMark());
   liveCol.appendChild(timelineCaption);
   const timelineWrap = el('div', 'agent-live-timeline');
   for (const t of fixtureTimeline()) {
@@ -930,10 +931,8 @@ function createAgentCanvas(deps) {
   wsRow.appendChild(wsDot);
   const wsLabel = el('span', 'agent-live-ws-label');
   wsRow.appendChild(wsLabel);
-  liveCol.appendChild(wsRow);
   const wsCaption = el('div', 'agent-live-ws-caption');
   wsCaption.textContent = '발화는 채팅으로 도착 — 여긴 관제만';
-  liveCol.appendChild(wsCaption);
 
   function renderWsStatus() {
     const connected = typeof getWsConnected === 'function' ? !!getWsConnected() : false;
@@ -943,6 +942,8 @@ function createAgentCanvas(deps) {
   }
 
   alarmLiveBody.appendChild(liveCol);
+  alarmLiveBody.appendChild(wsRow);
+  alarmLiveBody.appendChild(wsCaption);
 
   // ---------- 실행 이력 · 결과 드릴인(10단계, Paper 보드 41) ----------
   const historyBody = el('div', 'agent-history-body');
