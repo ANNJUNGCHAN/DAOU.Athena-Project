@@ -35,6 +35,7 @@
 //   npm run verify:paper-screens -- --only 1KK-0    한 보드
 //   npm run verify:paper-screens -- --bless         통과 집합을 래칫에 잠근다
 //   npm run verify:paper-screens -- --bless --allow-shrink --why "<사유>"
+//   npm run verify:paper-screens -- --only 43DP-1 --shot ../artifacts/shots   도달한 화면을 PNG로 남긴다
 //
 // 성공 표지: paper screens verification passed
 
@@ -95,13 +96,14 @@ let mainMod = null;
 class UsageError extends Error {}
 
 function parseArgs(argv) {
-  const args = { only: null, bless: false, allowShrink: false, why: '' };
+  const args = { only: null, bless: false, allowShrink: false, why: '', shot: null };
   for (let i = 0; i < argv.length; i += 1) {
     const arg = argv[i];
     if (arg === '--only') args.only = String(argv[++i] || '').split(',').map((s) => s.trim()).filter(Boolean);
     else if (arg === '--bless') args.bless = true;
     else if (arg === '--allow-shrink') args.allowShrink = true;
     else if (arg === '--why') args.why = String(argv[++i] || '');
+    else if (arg === '--shot') args.shot = String(argv[++i] || '');
     else if (arg.startsWith('--')) throw new UsageError(`모르는 인자 ${arg}`);
   }
   // 부분 실행으로 잠금을 갱신하면 안 돈 보드가 통째로 빠진다. 애초에 거절한다.
@@ -318,6 +320,50 @@ function measureScript(route) {
   })()`;
 }
 
+// 도달한 화면을 PNG로 남긴다(--shot) — 판정이 아니라 눈으로 보는 증거다. 판정에는 안 쓴다.
+let shotDir = null;
+// 채팅 영역은 캔버스 위에 겹쳐 서므로 찍는 동안만 감춘다(visibility — 레이아웃은 그대로).
+// 잘라 내는 범위는 라우트의 root다 — 보드가 그린 것이 그 안이다.
+async function shoot(win, route) {
+  if (!shotDir || !win) return;
+  try {
+    fs.mkdirSync(shotDir, { recursive: true });
+    const rect = await win.webContents.executeJavaScript(`(() => {
+      const root = document.querySelector(${JSON.stringify(route.root)});
+      if (!root) return null;
+      // root 조상들의 형제를 전부 감춘다 — 채팅 영역처럼 캔버스 위에 겹쳐 서는 것들이다.
+      for (let node = root; node && node !== document.body; node = node.parentElement) {
+        const parent = node.parentElement;
+        if (!parent) break;
+        Array.from(parent.children).forEach((sib) => {
+          if (sib === node || sib.style.visibility === 'hidden') return;
+          sib.style.visibility = 'hidden';
+          sib.dataset.probeShotHidden = '1';
+        });
+      }
+      const r = root.getBoundingClientRect();
+      return {
+        x: Math.max(0, Math.round(r.left)), y: Math.max(0, Math.round(r.top)),
+        width: Math.max(1, Math.round(Math.min(r.width, window.innerWidth - r.left))),
+        height: Math.max(1, Math.round(Math.min(r.height, window.innerHeight - r.top))),
+      };
+    })()`);
+    // 감춘 뒤 새 프레임을 기다린다 — 안 기다리면 capturePage가 감추기 전 프레임을 돌려준다.
+    // 셸 창은 숨은 창이라(부팅 창이 화면을 쥔다) rAF가 늦다 — 두 번 기다리고 700ms로 끊는다.
+    await Promise.race([settle(win), wait(700)]);
+    await wait(200);
+    await Promise.race([settle(win), wait(500)]);
+    const image = rect ? await win.webContents.capturePage(rect) : await win.webContents.capturePage();
+    fs.writeFileSync(path.join(shotDir, `${route.board}.png`), image.toPNG());
+  } catch (error) {
+    console.error(`[shot] ${route.board}: ${String(error.message || error)}`);
+  } finally {
+    await win.webContents.executeJavaScript(
+      "(() => { document.querySelectorAll('[data-probe-shot-hidden]').forEach((el) => { el.style.visibility = ''; delete el.dataset.probeShotHidden; }); })()",
+    ).catch(() => {});
+  }
+}
+
 async function probeRoute(wins, route) {
   const win = wins[route.window];
   const fixtured = new Set();
@@ -347,6 +393,7 @@ async function probeRoute(wins, route) {
       if (!routeFailures(route, measured).length) break;
       await wait(100);
     }
+    await shoot(win, route);
     return measured;
   } finally {
     for (const channel of fixtured) restoreFixture(channel);
@@ -365,6 +412,7 @@ function readLedger(page, boardId) {
 
 async function main() {
   const args = parseArgs(process.argv.slice(2));
+  shotDir = args.shot ? path.resolve(args.shot) : null;
   const startedAt = Date.now();
 
   // 전제가 깨진 채 도는 전수 실행은 아무 말도 못 한다(설계서 §4.5 판정표).
