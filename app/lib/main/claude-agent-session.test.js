@@ -9,8 +9,18 @@ const {
   ProviderProcessFenceError,
   canonicalMessageHash,
   collectExactMcpTools,
+  userFacingProviderError,
 } = require('./claude-agent-session');
 const { validateEventPayload } = require('./provider-session-contract');
+
+test('userFacingProviderError maps weekly-limit English to Korean', () => {
+  assert.equal(
+    userFacingProviderError("You've hit your weekly limit · resets Sep 8, 4am (Asia/Seoul)"),
+    '이번 주 모델 한도에 닿았습니다',
+  );
+  assert.equal(userFacingProviderError('rate_limit'), '모델 요청 한도에 닿았습니다');
+  assert.equal(userFacingProviderError('Claude 응답의 durable checkpoint가 없습니다.'), 'Claude 응답의 durable checkpoint가 없습니다.');
+});
 
 class AsyncChannel {
   constructor() {
