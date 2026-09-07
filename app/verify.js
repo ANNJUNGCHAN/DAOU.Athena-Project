@@ -28,9 +28,9 @@ const {
 } = require('./lib/main/verify-profile');
 // 지표 행 수의 단일 출처 — 검증이 숫자를 따로 갖지 않는다(2026-08-25).
 const INDICATOR_DEFS_LENGTH = require('./lib/chart-indicator-registry').INDICATOR_DEFS.length;
+const { captureRoot } = require('./lib/probe-captures');
 
-const CAPTURES = path.join(__dirname, 'captures');
-if (!fs.existsSync(CAPTURES)) fs.mkdirSync(CAPTURES, { recursive: true });
+const CAPTURES = captureRoot(__dirname);
 fs.rmSync(path.join(CAPTURES, '01b-boot-complete-hold.png'), { force: true });
 
 // ---------- 매 실행 새 검증 프로필 — 시작 상태를 이 머신이나 이전 실행에 맡기지 않는다 ----------

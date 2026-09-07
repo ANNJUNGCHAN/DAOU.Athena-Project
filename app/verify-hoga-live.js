@@ -3,6 +3,7 @@
 const { app, BrowserWindow } = require('electron');
 const fs = require('node:fs');
 const path = require('node:path');
+const { captureRoot } = require('./lib/probe-captures');
 
 async function main() {
   await app.whenReady();
@@ -56,8 +57,7 @@ async function main() {
     }
     if (!report.ask1BarWidth || report.ask1BarWidth === '0%') throw new Error('ask1 bar did not move');
 
-    const captures = path.join(__dirname, 'captures');
-    fs.mkdirSync(captures, { recursive: true });
+    const captures = captureRoot(__dirname);
     const image = await win.webContents.capturePage();
     const screenshotPath = path.join(captures, 'hoga-live.png');
     fs.writeFileSync(screenshotPath, image.toPNG());

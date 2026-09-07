@@ -15,6 +15,7 @@ const {
   isAllowlistedClick,
   isLockedClick,
 } = require('./lib/live-full-catalog');
+const { captureRoot } = require('./lib/probe-captures');
 
 const PROFILE = process.env.ATHENA_USERDATA_DIR || path.join(__dirname, '.probe-live-full-profile');
 if (!process.env.ATHENA_USERDATA_DIR) {
@@ -24,7 +25,7 @@ if (!process.env.ATHENA_USERDATA_DIR) {
 app.setPath('userData', PROFILE);
 
 const fetchCalls = [];
-const CAPTURES = path.join(__dirname, 'captures');
+const CAPTURES = captureRoot(__dirname);
 const REPORT = path.join(CAPTURES, 'LIVE-FULL-REPORT.json');
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 

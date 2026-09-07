@@ -9,9 +9,9 @@
 const { app } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const { captureRoot } = require('./lib/probe-captures');
 
-const OUT_DIR = path.join(__dirname, 'captures');
-fs.mkdirSync(OUT_DIR, { recursive: true });
+const OUT_DIR = captureRoot(__dirname);
 
 const PROFILE = path.join(__dirname, '.verify-kiumi-profile');
 fs.rmSync(PROFILE, { recursive: true, force: true });
