@@ -169,8 +169,10 @@ async function shot(win, name) {
 // 바뀌어야 실제 셸이 boot(20) 위에서 확장된 것이다. DOM clip만 움직이고 불투명
 // boot가 계속 덮으면 이 영역은 waiting과 동일해 반드시 실패한다.
 function measureBootCompositeReveal(waiting, mid, full) {
-  if (!waiting || !mid || !full
-    || waiting.width !== mid.width || waiting.height !== mid.height
+  if (!waiting || !mid || !full) {
+    return { pass: false, reason: 'frame-missing' };
+  }
+  if (waiting.width !== mid.width || waiting.height !== mid.height
     || waiting.width !== full.width || waiting.height !== full.height) {
     return { pass: false, reason: 'frame-size-mismatch' };
   }

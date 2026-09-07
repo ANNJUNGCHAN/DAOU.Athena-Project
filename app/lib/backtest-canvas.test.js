@@ -2433,6 +2433,16 @@ test('기법 2열 격자는 긴 이름에 트랙이 끌려가지 않는다', () 
   assert.match(name, /text-overflow:\s*ellipsis/);
 });
 
+test('내가 만든 기법 줄은 column stretch만 쓰고 가로 flex 잔재를 남기지 않는다', () => {
+  const css = fs.readFileSync(path.join(__dirname, '..', 'shell.css'), 'utf8');
+  const row = css.match(/\.backtest-user-strategy-row \{[\s\S]*?\}/)[0];
+  assert.match(row, /flex-direction:\s*column/);
+  const item = css.match(/\.backtest-user-strategy-item \{[\s\S]*?\}/)[0];
+  assert.doesNotMatch(item, /flex:\s*1 1 auto/);
+  const missing = css.match(/\.backtest-user-strategy-missing \{[\s\S]*?\}/)[0];
+  assert.doesNotMatch(missing, /flex:\s*0 0 100%/);
+});
+
 test('[+ 새 기법 만들기] 배너는 브랜드 알파만 쓰고 팔레트 밖 hex를 만들지 않는다', () => {
   const css = fs.readFileSync(path.join(__dirname, '..', 'shell.css'), 'utf8');
   const block = css.match(/\.backtest-technique-new \{[\s\S]*?\}/)[0];

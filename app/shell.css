@@ -808,12 +808,10 @@ body { margin: 0; overflow: hidden; }
   gap: 6px;
 }
 .backtest-user-strategy-item {
-  flex: 1 1 auto;
   min-width: 0;
 }
 .backtest-user-strategy-remove { align-self: flex-end; }
 .backtest-user-strategy-missing {
-  flex: 0 0 100%;
   color: var(--color-down);
   font-family: var(--font-body);
   font-size: var(--text-2xs);
