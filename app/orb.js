@@ -9,13 +9,11 @@
 // 사용자 승인으로 절반만 풀렸다 — 미니 주문 티켓(board-33⑤)의 실행 버튼
 // 하나뿐이고, 그 밖에는 여전히 오브가 스스로 주문을 내지 않는다.
 //
-// 2026-08-26 board-33/34 — "입력 지점은 셸 창 커맨드바 하나"는 "셸이 보이는
-// 동안은 오브에 입력이 없다"로 바뀌었다(tree-34-deep.raw "상태는 둘뿐이다").
-// 셸이 숨겨졌을 때만 오브가 질의를 받는다(athena:shell-visibility가 게이트) —
-// 그래서 **동시에 살아있는 입력창은 여전히 최대 하나**다, 그 하나가 어느 창인지가
-// 셸 표시 여부로 갈릴 뿐이다. 질의는 athena:orb-chat-submit으로 내는데, 이건
-// 셸의 커맨드바가 부르는 것과 완전히 같은 runLiveQuery로 이어진다 — 오브가 자기
-// 파이프라인을 새로 만들지 않는다.
+// 2026-09-07 — 키우미 패널은 셸 표시 여부와 무관하게 질문을 받을 수 있다.
+// 상태 B에서는 알림을 먼저 보여주되 입력줄은 열어 두고, 유효한 질문을 제출하면
+// 현재 패널만 대화 이력으로 전환한다. 질의는 athena:orb-chat-submit으로 내는데,
+// 이건 셸의 커맨드바가 부르는 것과 완전히 같은 runLiveQuery로 이어진다 — 오브가
+// 자기 파이프라인을 새로 만들지 않는다.
 //
 // 본문은 지어내지 않는다: 발화 배지 · 방식 표기 · 소스 라벨 · 시점 고지는 전부
 // lib/routine-turn.js의 결정론 템플릿이 만든다(LLM 0). 렌더는 전부 textContent —
@@ -107,6 +105,9 @@
   const pendingAlerts = [];
   let current = null;
   let expanded = false;
+  // setExpanded()의 낙관 상태와 main이 확인한 실제 상태를 분리한다. 패널 높이만
+  // 바뀌어도 expanded:true가 다시 오므로, 알림 읽음/모드 전환은 실제 경계에서만 한다.
+  let confirmedExpanded = false;
   // 접힌 채 도착한 대화 답(board-33⑥) 건수 — unread와 별도 카운터다. unread는
   // 루틴 이벤트 전용 배열이라 대화 답을 그 안에 넣으면 가짜 루틴 이벤트를
   // 위장해 넣는 꼴이 된다(정직성 위반) — renderPresence()가 아래에서 둘을
@@ -745,7 +746,10 @@
    */
   function renderCard(event) {
     $card.replaceChildren();
-    if (!event) return;
+    if (!event) {
+      $card.hidden = true;
+      return;
+    }
     const fields = [
       ['종목', event.symbol],
       ['관측값', event.observed],
@@ -754,9 +758,10 @@
       ['루틴', event.note || event.routine_id],
     ];
     for (const [label, value] of fields) {
-      if (value === null || value === undefined || value === '') continue;
+      if (value === null || value === undefined || String(value).trim() === '') continue;
       $card.appendChild(row(label, String(value)));
     }
+    $card.hidden = $card.childElementCount === 0;
   }
 
   function renderPanel(event) {
@@ -801,16 +806,16 @@
 
   function measureContentHeight() {
     const head = $panel.querySelector('.orb-panel-head');
-    // 대화 모드(상태 A)와 알림 모드(상태 B)는 서로 다른 본문을 잰다 — 숨긴
-    // 쪽의 offsetHeight는 항상 0이라 섞어 재도 안전하지만, 명시하는 편이 다음
-    // 사람에게 "왜 이 부분들인가"를 남긴다.
+    // 대화 모드와 알림 모드는 서로 다른 본문을 재되, 입력줄은 양쪽에 포함한다.
+    // hidden 요소는 author CSS가 display를 갖는 경우에도 높이 계산에서 제외한다.
     const parts = chatModeActive
       ? [head, $chatBody, $inputStack].filter(Boolean)
-      : [head, $body, $card, $foot].filter(Boolean);
+      : [head, $body, $card, $foot, $inputStack].filter(Boolean);
+    const visibleParts = parts.filter((el) => !el.hidden && !el.classList.contains('orb-mode-hidden'));
     // scrollHeight는 overflow:auto인 영역에서도 잘리지 않은 실제 콘텐츠 높이를
     // 준다 — 지금 보이는 크기가 아니라 필요한 크기를 재는 이유다.
-    const content = parts.reduce((sum, el) => sum + Math.max(el.offsetHeight, el.scrollHeight), 0);
-    const gaps = 8 * Math.max(0, parts.length - 1); // .orb-panel gap(orb.css)
+    const content = visibleParts.reduce((sum, el) => sum + Math.max(el.offsetHeight, el.scrollHeight), 0);
+    const gaps = 8 * Math.max(0, visibleParts.length - 1); // .orb-panel gap(orb.css)
     const padY = 28; // .orb-panel padding 14px 위아래(orb.css)
     return content + gaps + padY;
   }
@@ -829,28 +834,28 @@
     window.athena.send('athena:orb-toggle', { expanded: next });
   }
 
-  // ── 대화 모드 게이트 — main이 보내는 표시 모드 하나로 결정된다(board-33/34,
-  // Paper 보드 05). 창 가시성(hidden)과 다른 값이다: 셸을 최소화하면 창은 뜨지만
-  // 모드는 알림 전용(B)에 머문다(5EX-0). displayMode 없는 옛 페이로드는 hidden으로
-  // 물러선다. ──
+  // ── 대화 모드 게이트. 상태 A는 곧바로 대화를 보여준다. 상태 B는 알림과 입력줄을
+  // 보여주고, 사용자가 질문을 제출한 동안에만 localChatOverride로 대화 이력을 연다.
+  // 접으면 override를 해제해 보존된 알림 큐로 돌아간다. ──
   let displayMode = 'B';
+  let localChatOverride = false;
   // null = 아직 한 번도 적용 안 됨. 첫 applyMode()가 반드시 돌아 data-orb-mode를
   // 세우게 한다 — 없으면 부팅 직후 표면이 "모드를 모르는" 상태로 남는다.
   let chatModeActive = null;
 
   function applyMode() {
-    const next = displayMode === 'A';
+    const next = displayMode === 'A' || localChatOverride;
     if (chatModeActive === next) return;
     chatModeActive = next;
     $root.dataset.orbMode = chatModeActive ? 'chat' : 'alert';
-    $headerTitle.textContent = chatModeActive ? '메인 대화' : '알림';
+    $headerTitle.textContent = chatModeActive ? '키우미 대화' : '알림';
     for (const el of ALERT_ONLY_ELS) el.classList.toggle('orb-mode-hidden', chatModeActive);
     $chatBody.hidden = !chatModeActive;
-    $inputStack.hidden = !chatModeActive;
+    $inputStack.hidden = false;
     if (chatModeActive) {
       $chatEmpty.hidden = $chatTurns.childElementCount > 0;
-      refreshChatControlStrip();
     }
+    refreshChatControlStrip();
     if (expanded) requestPanelHeight();
   }
 
@@ -862,8 +867,11 @@
   // main이 창 크기를 실제로 바꾼 뒤에 온다 — 렌더러가 먼저 펼치면 창보다 큰
   // 패널이 한 프레임 잘려 보인다.
   window.athena.on('athena:orb-state', ({ expanded: isOpen, anchor } = {}) => {
+    const nextExpanded = !!isOpen;
+    const stateChanged = confirmedExpanded !== nextExpanded;
+    confirmedExpanded = nextExpanded;
     if (anchor) $root.dataset.anchor = anchor;
-    if (isOpen && !reduceMotion.matches) {
+    if (isOpen && stateChanged && !reduceMotion.matches) {
       // 펼침 성장 전환(board-30 3단계 근사, Option B) — hidden 해제와 data-state
       // 전환이 한 틱에서 겹치면 display:none→flex 첫 프레임이라 orb.css의
       // transition이 안 붙는다(전이할 "이전 프레임"이 아예 없었으므로). 그래서
@@ -880,8 +888,18 @@
       $root.dataset.state = isOpen ? 'expanded' : 'collapsed';
       $panel.hidden = !isOpen;
     }
-    expanded = !!isOpen;
+    expanded = nextExpanded;
+    // B 모드에서 시작한 대화는 접어도 이력 자체를 유지한다. 다만 답변을 모두 읽은
+    // 뒤 대기 알림이 있으면 현재 접힘이나 다음 펼침에서 알림 표면으로 돌아간다.
+    // 진행 중/접힌 채 도착한 답은 먼저 대화에서 읽혀야 하므로 override를 유지한다.
+    if (stateChanged && displayMode === 'B' && localChatOverride && !chatBusy
+        && foldedChatAnswers === 0 && pendingAlerts.length > 0) {
+      localChatOverride = false;
+    }
     applyMode();
+    // requestPanelHeight() 뒤의 크기 확인처럼 같은 expanded 상태가 다시 온 경우다.
+    // 이미 보던 답이나 대기 알림을 이 resize 확인으로 읽음 처리하지 않는다.
+    if (!stateChanged) return;
     if (isOpen && chatModeActive) {
       // 대화 모드에서는 "펼침 = 확인 처리"가 아니다 — 알림(unread, 루틴
       // 이벤트)은 다른 방이다(board-34 "방은 알림에서만 생긴다"), 그건 그대로
@@ -1000,7 +1018,8 @@
   });
 
   // ─────────────────────────────────────────────────────────────────────
-  // 대화 모드(2026-08-26 board-33) — 상태 A(셸 숨김)에서만 산다.
+  // 대화 모드(2026-08-26 board-33, 2026-09-07 확장) — 상태 A에서는 바로 열리고,
+  // 상태 B에서는 입력을 제출한 뒤 현재 패널에서 이어진다.
   // 질의는 athena:orb-chat-submit 하나로 나간다 — main의 runLiveQuery를
   // 그대로 부르는 것뿐, 별도 파이프라인이 아니다(orb.js 상단 주석 참고).
   // ─────────────────────────────────────────────────────────────────────
@@ -2076,6 +2095,10 @@
   async function submitChatQuery(rawText) {
     const text = String(rawText || '').trim();
     if (!text || chatBusy || remoteQueryBusy) return;
+    if (displayMode === 'B' && !localChatOverride) {
+      localChatOverride = true;
+      applyMode();
+    }
     chatBusy = true;
     $chatEmpty.hidden = true;
     $chatInput.value = '';
@@ -2240,8 +2263,8 @@
       note.textContent = '전체는 대화창에서 이어집니다';
       answer.line.appendChild(note);
     }
-    if (expanded) {
-      // 펴진 채 실시간으로 지켜본 턴 — 기존 그대로 잠깐 웃고/찡그리고 앰비언트로
+    if (confirmedExpanded) {
+      // main이 실제 펼침을 확인한 화면에서 지켜본 턴 — 잠깐 웃고/찡그리고 앰비언트로
       // 돌아간다(DONE_HOLD). 사용자가 이미 봤으니 지속 배지가 필요 없다.
       if (result && result.ok) triggerDoneFace();
       else if (result && result.ok === false) triggerFrownFace();
@@ -2293,7 +2316,7 @@
   }
 
   $chatInput.addEventListener('keydown', (e) => {
-    if (e.key !== 'Enter' || chatBusy || remoteQueryBusy) return;
+    if (e.key !== 'Enter' || e.isComposing || e.keyCode === 229 || chatBusy || remoteQueryBusy) return;
     e.preventDefault();
     submitChatQuery($chatInput.value);
   });
