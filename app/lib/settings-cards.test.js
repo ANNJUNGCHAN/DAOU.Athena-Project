@@ -455,6 +455,14 @@ test('여는 상태 문구에 내부용어가 없다', () => {
 
 // 시트 DOM은 Electron 게이트가 보지만, 비밀값 규율 두 가지는 소스로 못박는다 —
 // 게이트는 실계좌 키가 없어 실패 경로를 밟지 못한다.
+test('화면 카드 머리에 Paper BI-0 부제가 선다', () => {
+  const src = fs.readFileSync(path.join(__dirname, 'settings-cards.js'), 'utf8');
+  const block = src.slice(src.indexOf('async function refreshScreenCard'), src.indexOf('async function setPref'));
+  assert.match(block, /uk-settings-name', '화면'/);
+  assert.match(block, /uk-settings-count', '두 영역과 카드에 함께 적용된다'/);
+  assert.equal(block.includes('두 창과 카드에 함께 적용된다'), false);
+});
+
 test('검증은 verifyOnly로, 저장은 그 없이 같은 채널을 부른다', () => {
   const src = fs.readFileSync(path.join(__dirname, 'settings-cards.js'), 'utf8');
   const sheet = src.slice(src.indexOf('function openAccountRegisterSheet'), src.indexOf('function openOrderApiSheet'));
