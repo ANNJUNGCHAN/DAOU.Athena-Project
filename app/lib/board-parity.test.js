@@ -993,6 +993,8 @@ test('KPI 칸은 M 이하에서만 3칸/2칸/1칸 흐름으로 바뀐다', () =>
     'flex item의 min-content 바닥을 놓지 않으면 XS에서 surface overflow가 난다');
   // 걷어낸 left는 base가 되돌리고(XL 픽셀 파리티), 좁은 단계에서만 오른쪽 끝에 걸린다.
   assert.match(css, /\[data-bs-inset-x="true"\]\s*\{\s*left: var\(--bs-inset-x\);\s*\}/);
+  assert.match(css, /\[data-bs-reserve-bottom="true"\]\s*\{\s*padding-bottom: var\(--bs-reserve-bottom\);\s*\}/,
+    '하단 absolute 상자는 부모 패딩으로 자리를 비운다 — z-index로 덮지 않는다');
   assert.match(lBody,
     /\[data-bs-inset-x="true"\]\s*\{\s*left: min\(var\(--bs-inset-x\), max\(0px, 100% - var\(--bs-width, 0px\)\)\);\s*\}/,
     'left+고정폭 absolute 상자는 좁은 단계에서 오른쪽 끝에 걸려 부모 안으로 들어와야 한다');

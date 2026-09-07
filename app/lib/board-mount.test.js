@@ -882,13 +882,21 @@ test('L 구간 최소 폭 표시는 값이 있는 탄력 KPI 칸에만 붙는다
 });
 
 test('한쪽 inset과 고정 폭을 가진 absolute 상자는 좁은 단계용 양쪽 inset을 기억한다', () => {
+  const rail = regionStub('bs-rail', {
+    position: 'relative',
+    height: '558px',
+    'padding-block': '22px',
+  });
   const actions = regionStub('', {
     position: 'absolute',
     left: '24px',
     bottom: '18px',
     width: '490px',
+    height: '44px',
   });
   actions.dataset.name = 'Chart Context Actions';
+  actions.parentElement = rail;
+  const tooltipHost = regionStub('bs-primary', { position: 'relative' });
   const tooltip = regionStub('', {
     position: 'absolute',
     left: '748px',
@@ -896,6 +904,7 @@ test('한쪽 inset과 고정 폭을 가진 absolute 상자는 좁은 단계용 �
     width: '148px',
   });
   tooltip.dataset.name = 'Chart Tooltip Label';
+  tooltip.parentElement = tooltipHost;
   assert.equal(hoistLayout(actions), true);
   assert.equal(hoistLayout(tooltip), true);
   for (const [what, box, left] of [['하단 액션', actions, '24px'], ['툴팁', tooltip, '748px']]) {
@@ -906,6 +915,16 @@ test('한쪽 inset과 고정 폭을 가진 absolute 상자는 좁은 단계용 �
   }
   assert.equal(actions.style.getPropertyValue('bottom'), '18px', '세로 inset은 안 건드린다');
   assert.equal(tooltip.style.getPropertyValue('top'), '120px');
+  assert.equal(rail.dataset.bsReserveBottom, 'true',
+    '하단 액션은 부모 패딩을 상자 높이+bottom만큼 비운다(2RJ7-1 「호가 열기」 겹침)');
+  assert.equal(rail.style.getPropertyValue('--bs-reserve-bottom'), '62px');
+  assert.equal(rail.style.getPropertyValue('padding-bottom'), '62px');
+  assert.equal(rail.style.getPropertyValue('padding-top'), '22px',
+    'padding-block을 쪼개도 위 패딩은 Paper 원문이다');
+  assert.equal(rail.style.getPropertyValue('padding-block'), '',
+    'padding-block이 남으면 인라인 하단 패딩이 못 이긴다');
+  assert.equal(tooltipHost.dataset.bsReserveBottom, undefined,
+    'top 앵커 상자는 부모 하단을 비우지 않는다');
 });
 
 test('양쪽 inset이 이미 있거나 폭이 없는 absolute 상자는 표시하지 않는다', () => {

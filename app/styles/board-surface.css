@@ -118,6 +118,11 @@
  * `--bs-inset-x`로 옮기고 여기서 되돌린다. XL 계산값은 Paper 원문 그대로다. */
 [data-bs-inset-x="true"] { left: var(--bs-inset-x); }
 
+/* bottom+고정높이 absolute 상자 — 흐름 안 내용이 그 자리를 쓰면 클릭이 이웃으로
+ * 간다(실측 2RJ7-1 「호가 열기」 hit → 「예상 체결 시간」). markInsetAbsoluteBox가
+ * 부모 padding-bottom을 상자 높이+bottom만큼 늘린다. z-index로 덮지 않는다. */
+[data-bs-reserve-bottom="true"] { padding-bottom: var(--bs-reserve-bottom); }
+
 .bs-workspace,
 .bs-primary,
 .bs-rail,
