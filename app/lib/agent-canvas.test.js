@@ -940,10 +940,13 @@ test('라이브 컬럼: 진행바 2건 + "다음 24시간" 타임라인 4건이 
   canvas.mount();
   const liveCol = findByClass(container, 'agent-live-col')[0];
   assert.equal(liveCol.getAttribute('data-source'), 'fixture');
+  assert.equal(findByClass(liveCol, 'agent-demo-mark').length, 2);
   assert.equal(findByClass(liveCol, 'agent-demo-mark')[0].textContent, '데모');
   assert.equal(findByClass(liveCol, 'agent-live-progress-row').length, 2);
   assert.equal(findByClass(liveCol, 'agent-live-progress-badge')[0].textContent, '데모');
   assert.equal(findByClass(liveCol, 'agent-live-timeline-row').length, 4);
+  assert.equal(findByClass(liveCol, 'agent-live-ws').length, 0);
+  assert.equal(findByClass(container, 'agent-live-ws')[0].getAttribute('data-source'), 'live');
 });
 
 test('"WS 연결됨" — getWsConnected()가 실데이터다, false면 정직하게 "연결 안 됨"', () => {
