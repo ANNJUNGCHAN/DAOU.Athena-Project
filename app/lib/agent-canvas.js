@@ -2014,6 +2014,92 @@ function createAgentCanvas(deps) {
     return node;
   }
 
+  // 첫 검사 상태 띠(Paper 45BA-1). 검사 개수나 판 번호는 응답에 없으므로 세지 않는다.
+  function makeCheckBand(item, watch, check) {
+    const band = el('div', `agent-check-band${check && check.ok === true ? ' is-passed' : ''}`);
+    const title = el('span', 'agent-check-band-title');
+    title.textContent = `새 알람 · ${item.title}`;
+    band.appendChild(title);
+    const status = el('span', 'agent-check-band-status');
+    status.textContent = `${!check ? '검사 전' : check.ok === true ? '검사 통과' : '검사 통과 못 함'} · 장중 ${WatchNodes.pollMinutes(watch)}분마다`;
+    band.appendChild(status);
+    if (check) {
+      const values = el('span', 'agent-check-band-values');
+      const nodes = Array.isArray(check.nodes) ? `노드 ${check.nodes.length}개` : '';
+      const day = WatchNodes.dayLabel(check.checked_at);
+      const clock = WatchNodes.clockLabel(check.checked_at);
+      values.textContent = [nodes, day && clock ? `검사 ${day} ${clock}` : ''].filter(Boolean).join(' · ');
+      band.appendChild(values);
+    }
+    return band;
+  }
+
+  // 첫 검사 결과(Paper 45F4-1). 실패 응답의 기본 count=0은 센 결과가 아니다.
+  function makeCheckPanel(check) {
+    const wrap = el('div', 'agent-check-result');
+    const head = el('div', 'agent-fix-recheck-head');
+    const title = el('span', 'agent-fix-recheck-title');
+    const days = check && check.lookback_days;
+    title.textContent = Number.isInteger(days) && days > 0 ? `검사 결과 · 지난 ${days}일 돌려 봄` : '검사 결과';
+    head.appendChild(title);
+    const passed = check && check.ok === true;
+    const cooldown = WatchNodes.cooldownLabel(check && check.cooldown_s);
+    if (passed && cooldown !== WatchNodes.DASH) {
+      const meta = el('span', 'agent-fix-recheck-meta');
+      meta.textContent = `쿨다운 ${cooldown} 반영`;
+      head.appendChild(meta);
+    }
+    wrap.appendChild(head);
+    const summary = el('div', 'agent-code-check-summary');
+    summary.textContent = !check ? '아직 검사한 적 없음' : !passed ? '검사 통과 못 함'
+      : Number.isInteger(check.count) && check.count >= 0 ? `${check.count}번 울림` : '울림 수 없음';
+    wrap.appendChild(summary);
+
+    if (passed) {
+      const fires = Array.isArray(check.fires) ? check.fires : [];
+      const fireText = (fire) => `${WatchNodes.shortDate(fire.dt)}${typeof fire.close === 'number' && Number.isFinite(fire.close) ? ` · 종가 ${WatchNodes.formatValue(fire.close)}` : ''}`;
+      if (fires.length) {
+        const last = el('div', 'agent-check-last-fire');
+        last.textContent = `마지막 ${fireText(fires[fires.length - 1])}`;
+        wrap.appendChild(last);
+      }
+      const dots = FixCycle.dotStrip({
+        lookback_days: days, counted_through: check.counted_through,
+        fires_after_dates: fires.map((fire) => fire.dt),
+      });
+      if (dots.length) {
+        const strip = el('div', 'agent-fix-dots');
+        for (const dot of dots) {
+          const cell = el('span', `agent-fix-dot is-${dot.state}`);
+          cell.setAttribute('data-day', dot.date);
+          cell.setAttribute('title', `${dot.date} · ${dot.state === 'fired' ? '울림' : '울림 없음'}`);
+          strip.appendChild(cell);
+        }
+        wrap.appendChild(strip);
+      }
+      const list = el('div', 'agent-check-fires');
+      for (const fire of fires) {
+        const row = el('span', 'agent-check-fire');
+        row.textContent = fireText(fire);
+        list.appendChild(row);
+      }
+      if (fires.length) wrap.appendChild(list);
+      const note = el('div', 'agent-code-counted-until');
+      note.textContent = check.counted_until || WatchNodes.COUNTED_UNTIL;
+      wrap.appendChild(note);
+    }
+    if (check) {
+      const diagnosis = check.diagnosis || {};
+      const warnings = Array.isArray(check.warnings) ? check.warnings : [];
+      for (const text of [check.skip_reason || check.reason, diagnosis.title, diagnosis.detail, ...warnings].filter(Boolean)) {
+        const warning = el('div', 'agent-check-warning');
+        warning.textContent = text;
+        wrap.appendChild(warning);
+      }
+    }
+    return wrap;
+  }
+
   // 「순환」 띠(Paper 보드 11 상태 띠) — 고친 적이 있는 알람에만 선다.
   function makeFixBand(cycle) {
     const band = el('div', 'agent-fix-band');
@@ -2163,6 +2249,7 @@ function createAgentCanvas(deps) {
     headRow.appendChild(kindEl);
     detailCol.appendChild(headRow);
     if (cycle) detailCol.appendChild(makeFixBand(cycle));
+    else if (item.status === 'draft') detailCol.appendChild(makeCheckBand(item, watch, lastCheck));
 
     // 상태 제어 행(보드 12 두 번째 줄) — 초안은 아직 켤 것이 없어 멈춤·취소가 없다.
     const controls = el('div', 'agent-code-controls');
@@ -2232,7 +2319,7 @@ function createAgentCanvas(deps) {
     const cards = WatchNodes.nodeCards(shown && shown.nodes);
     const clock = WatchNodes.clockLabel(shown && shown.checked_at);
     const checkCaption = el('div', 'agent-panel-caption');
-    checkCaption.textContent = clock ? `오늘 확인 · ${clock}` : '오늘 확인';
+    checkCaption.textContent = item.status === 'draft' ? '노드 · 흐름' : clock ? `오늘 확인 · ${clock}` : '오늘 확인';
     detailCol.appendChild(checkCaption);
     const nodeWrap = el('div', 'agent-node-cards');
     nodeWrap.setAttribute('data-source', item.source);
@@ -2252,6 +2339,8 @@ function createAgentCanvas(deps) {
     if (cycle) {
       detailCol.appendChild(makeRecheckPanel(cycle));
       detailCol.appendChild(makeReceiptPanel(item, cycle, detail.fix_history));
+    } else if (item.status === 'draft') {
+      detailCol.appendChild(makeCheckPanel(lastCheck));
     }
 
     // 코드는 참고다(R7) — v1은 원문을 가져오지 않고 경로만 편다.
@@ -2271,12 +2360,17 @@ function createAgentCanvas(deps) {
     if (item.status === 'draft') {
       // 초안 — 승인 전에 사람이 몇 번이든 다시 잴 수 있다(P4의 비대칭을 함께 적는다).
       const checkWrap = el('div', 'agent-code-check');
-      const summary = el('div', 'agent-code-check-summary');
-      summary.textContent = WatchNodes.checkSummary(lastCheck) || '아직 검사한 적 없음';
-      checkWrap.appendChild(summary);
-      const countedUntil = el('div', 'agent-code-counted-until');
-      countedUntil.textContent = WatchNodes.COUNTED_UNTIL;
-      checkWrap.appendChild(countedUntil);
+      if (cycle) {
+        const summary = el('div', 'agent-code-check-summary');
+        summary.textContent = !lastCheck ? '아직 검사한 적 없음' : lastCheck.ok === true
+          ? WatchNodes.checkSummary(lastCheck) : '검사 통과 못 함';
+        checkWrap.appendChild(summary);
+        if (lastCheck && lastCheck.ok === true) {
+          const countedUntil = el('div', 'agent-code-counted-until');
+          countedUntil.textContent = lastCheck.counted_until || WatchNodes.COUNTED_UNTIL;
+          checkWrap.appendChild(countedUntil);
+        }
+      }
       const checkBtn = el('button', 'agent-code-check-btn');
       checkBtn.type = 'button';
       checkBtn.textContent = '검사';

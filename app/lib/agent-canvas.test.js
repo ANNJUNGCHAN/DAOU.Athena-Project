@@ -24,6 +24,7 @@ function fakeNode(tag) {
     attrs: {},
     style: {},
     _listeners: {},
+    get childNodes() { return this.children; },
     get firstChild() { return this.children[0] || null; },
     appendChild(child) { this.children.push(child); return child; },
     removeChild(child) { this.children = this.children.filter((c) => c !== child); return child; },
@@ -2356,7 +2357,7 @@ test('초안: 검사 요약과 「검사」 버튼이 있고 누르면 검사 1�
     },
     runWatchCheck: async (item) => { checked.push(item.id); },
   });
-  assert.equal(findByClass(detail, 'agent-code-check-summary')[0].textContent, '지난 30일 4번 · 마지막 8/26');
+  assert.equal(findByClass(detail, 'agent-code-check-summary')[0].textContent, '4번 울림');
   assert.equal(findByClass(detail, 'agent-code-counted-until')[0].textContent, '어제까지로 세었음 · 오늘은 진행 중');
   assert.equal(findByClass(detail, 'agent-node-card').length, 4, '초안도 검사 결과의 칸을 그대로 보여준다');
   assert.equal(findByClass(detail, 'agent-code-fires').length, 0, '울린 적 없는 초안에 울린 기록을 만들지 않는다');
@@ -2364,4 +2365,95 @@ test('초안: 검사 요약과 「검사」 버튼이 있고 누르면 검사 1�
   await findByClass(detail, 'agent-code-check-btn')[0].dispatchEvent({ type: 'click' });
   assert.deepEqual(checked, ['cw1']);
   assert.equal(findByClass(findByClass(container, 'agent-detail-col')[0], 'agent-node-card').length, 4);
+});
+
+function firstCheck(overrides) {
+  return {
+    ok: true, count: 2, lookback_days: 7, cooldown_s: 172800,
+    counted_through: '2026-09-02', counted_until: '어제까지로 세었음 · 오늘은 진행 중',
+    checked_at: '2026-09-03T15:31:00', nodes: fourNodes().slice(0, 2),
+    fires: [{ dt: '2026-08-28', close: 70100 }, { dt: '2026-09-01', close: 71500 }],
+    warnings: ['일봉을 더 받을 통로 없음 — 받아 둔 일봉까지만 셈'],
+    skip_reason: null, diagnosis: null, ...overrides,
+  };
+}
+
+test('446V 첫 검사: 상태 띠와 패널이 실제 기간·쿨다운·발화값을 표시한다', async () => {
+  const { detail } = await mountCode({ status: 'draft', cooldown_s: 60 }, {
+    detail: { last_run: null, last_check: firstCheck() },
+  });
+  const band = findByClass(detail, 'agent-check-band')[0];
+  assert.ok(band, '첫 검사 상태 띠');
+  assert.match(allText(band), /검사 통과/);
+  assert.match(allText(band), /노드 2개/);
+  assert.match(allText(band), /2026-09-03 15:31/);
+  assert.doesNotMatch(allText(band), /3\/3|오늘/);
+  assert.ok(findByClass(detail, 'agent-panel-caption').some((n) => n.textContent === '노드 · 흐름'));
+  assert.doesNotMatch(allText(detail), /오늘 확인/);
+  const panel = findByClass(detail, 'agent-check-result')[0];
+  assert.ok(panel, '첫 검사 결과 패널');
+  assert.match(allText(panel), /검사 결과 · 지난 7일 돌려 봄/);
+  assert.match(allText(panel), /쿨다운 2일 반영/);
+  assert.match(allText(panel), /2번 울림/);
+  assert.match(allText(panel), /마지막 9\/1 · 종가 71,500/);
+  assert.match(allText(panel), /받아 둔 일봉까지만 셈/);
+  assert.doesNotMatch(allText(panel), /쿨다운 1분 반영|1\.9배/);
+  const dots = findByClass(panel, 'agent-fix-dot');
+  assert.equal(dots.length, 7);
+  assert.equal(dots[0].getAttribute('data-day'), '2026-08-27');
+  assert.equal(dots.at(-1).getAttribute('data-day'), '2026-09-02');
+  assert.deepEqual(dots.filter((n) => n.className.includes('is-fired')).map((n) => n.getAttribute('data-day')), ['2026-08-28', '2026-09-01']);
+  assert.deepEqual(findByClass(panel, 'agent-check-fire').map(allText), ['8/28 · 종가 70,100', '9/1 · 종가 71,500']);
+});
+
+test('446V 첫 검사: 성공한 0회만 조용한 점 띠를 그리고 없는 쿨다운을 현재 설정으로 메우지 않는다', async () => {
+  const { detail } = await mountCode({ status: 'draft', cooldown_s: 86400 }, {
+    detail: { last_run: null, last_check: firstCheck({ count: 0, fires: [], cooldown_s: undefined }) },
+  });
+  const panel = findByClass(detail, 'agent-check-result')[0];
+  assert.ok(panel);
+  assert.match(allText(panel), /0번 울림/);
+  assert.doesNotMatch(allText(panel), /쿨다운 .*반영|마지막/);
+  assert.equal(findByClass(panel, 'agent-check-fire').length, 0);
+  assert.equal(findByClass(panel, 'agent-fix-dot').length, 7);
+  assert.equal(findByClass(panel, 'is-fired').length, 0);
+});
+
+test('446V 첫 검사 실패: 진단과 경고를 보이고 실패 기본 count=0을 울림 수로 표시하지 않는다', async () => {
+  const { detail } = await mountCode({ status: 'draft' }, {
+    detail: { last_run: null, last_check: firstCheck({
+      ok: false, count: 0, fires: [], nodes: [],
+      skip_reason: '검사 실패 — 코드가 돌지 않음',
+      diagnosis: { title: '들여쓰기를 확인해 주세요', detail: '함수 안 줄을 들여써 주세요' },
+    }) },
+  });
+  assert.match(allText(detail), /검사 통과 못 함/);
+  assert.match(allText(detail), /코드가 돌지 않음/);
+  assert.match(allText(detail), /들여쓰기를 확인해 주세요/);
+  assert.match(allText(detail), /함수 안 줄을 들여써 주세요/);
+  assert.doesNotMatch(allText(detail), /0번|쿨다운 2일 반영/);
+  assert.equal(findByClass(detail, 'agent-fix-dot').length, 0);
+});
+
+test('446V 첫 검사 전: 없는 결과·노드 수·점 띠를 만들지 않는다', async () => {
+  const { detail } = await mountCode({ status: 'draft' }, { detail: { last_run: null, last_check: null } });
+  assert.match(allText(detail), /아직 검사한 적 없음/);
+  assert.equal(findByClass(detail, 'agent-check-result').length, 1);
+  assert.doesNotMatch(allText(findByClass(detail, 'agent-check-band')[0]), /검사 통과|노드 0개/);
+  assert.equal(findByClass(detail, 'agent-fix-dot').length, 0);
+});
+
+test('446V 이후 고침: 첫 검사 패널과 상태 띠 대신 기존 순환·다시 검사·영수증을 표시한다', async () => {
+  const { detail } = await mountCode({ status: 'draft' }, {
+    detail: { last_run: null, last_check: firstCheck(), fix_cycle: {
+      ok: true, fix_count: 1, past_count: 0, lookback_days: 7, counted_through: '2026-09-02',
+      fires_before: 2, fires_after: 1, fires_before_dates: ['2026-08-28', '2026-09-01'],
+      fires_after_dates: ['2026-09-01'], changes: [], changed_nodes: 1, can_rollback: false,
+    } },
+  });
+  assert.equal(findByClass(detail, 'agent-check-result').length, 0);
+  assert.equal(findByClass(detail, 'agent-check-band').length, 0);
+  assert.equal(findByClass(detail, 'agent-fix-band').length, 1);
+  assert.match(allText(detail), /다시 검사 · 지난 7일/);
+  assert.match(allText(detail), /한 바퀴 영수증/);
 });

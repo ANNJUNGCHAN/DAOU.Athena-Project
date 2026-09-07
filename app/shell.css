@@ -6638,6 +6638,43 @@ body { margin: 0; overflow: hidden; }
   font-weight: 300;
   font-size: var(--text-xs);
 }
+.agent-check-band {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  padding: 10px;
+  border: 1px solid var(--color-k-line);
+  border-radius: var(--radius-md);
+  background: var(--color-k-panel);
+  font-size: var(--text-xs);
+}
+.agent-check-band::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--color-k-faint);
+}
+.agent-check-band.is-passed::before { background: var(--color-brand); }
+.agent-check-band-title { color: var(--color-k-text); }
+.agent-check-band-status,
+.agent-check-band-values,
+.agent-check-last-fire,
+.agent-check-fire,
+.agent-check-warning {
+  color: var(--color-k-dim);
+  font-size: var(--text-xs);
+  overflow-wrap: anywhere;
+}
+.agent-check-band-values { margin-left: auto; }
+.agent-check-fires {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+}
+.agent-check-result .agent-fix-recheck-head { flex-wrap: wrap; }
+.agent-check-result,
 .agent-fix-recheck,
 .agent-fix-receipt {
   display: flex;

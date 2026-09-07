@@ -559,6 +559,39 @@ def test_check_without_a_candle_cache_says_so(check_client):
     assert "일봉 캐시 없음 — 받아 둔 일봉이 없으면 셀 수 없음" in body["warnings"]
 
 
+def test_check_detail_preserves_applied_cooldown_after_settings_change(check_client):
+    client, runtime, root = check_client
+    _write_watch(root)
+    spec = _seed_code_routine(runtime, "draft")
+    body = client.post(CHECK, json=_check_body(routine_id=spec.id, cooldown_s=172800)).json()
+    assert body["ok"] is True
+    spec = runtime.store.get(spec.id)
+    spec.cooldown_s = 60
+    runtime.store.upsert(spec)
+    detail = client.get(f"/api/v1/routines/{spec.id}").json()
+    assert detail["cooldown_s"] == 60
+    assert detail["last_check"]["cooldown_s"] == 172800
+    assert detail["last_check"]["warnings"] == body["warnings"]
+
+
+def test_failed_check_detail_preserves_diagnosis_and_no_data_warnings(check_client):
+    client, runtime, root = check_client
+    _write_watch(root, "def signals(df, p)\n    return df\n")
+    spec = _seed_code_routine(runtime, "draft")
+    body = client.post(CHECK, json=_check_body(routine_id=spec.id)).json()
+    assert body["ok"] is False
+    detail = client.get(f"/api/v1/routines/{spec.id}").json()
+    assert detail["last_check"]["diagnosis"] == body["diagnosis"]
+    assert detail["last_check"]["warnings"] == body["warnings"]
+
+    runtime.watch_candle_store = None
+    body = client.post(CHECK, json=_check_body(routine_id=spec.id)).json()
+    detail = client.get(f"/api/v1/routines/{spec.id}").json()
+    assert detail["last_check"]["ok"] is False
+    assert detail["last_check"]["skip_reason"] == "완성된 일봉 없음 — 먼저 일봉을 받아야 함"
+    assert "일봉 캐시 없음 — 받아 둔 일봉이 없으면 셀 수 없음" in detail["last_check"]["warnings"]
+
+
 # ── B-13 모드 격리 — 검사는 공유 일봉 캐시만 키운다 ──────────────────────────
 
 

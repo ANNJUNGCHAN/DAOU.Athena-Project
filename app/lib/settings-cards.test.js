@@ -1,9 +1,7 @@
 'use strict';
 
-// 그래프 수집·노출 설정(Paper 보드 22 복원) — 로컬 저장 왕복만 검증한다. DOM을
-// 그리는 나머지 settings-cards.js 표면은 verify-settings-cards.js(Electron)가
-// 실사용 경로로 검증한다 — 이 파일과 같은 이유로 graph-mode-prefs.test.js도
-// 순수 로직만 node --test로 잰다.
+// 그래프 수집·노출 설정의 로컬 저장 왕복과 계좌 등록 시트의 상태·렌더링을 검증한다.
+// 화면의 실제 가시성은 Paper Electron 게이트가 별도로 잰다.
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
@@ -249,7 +247,7 @@ test('settings-cards.css 어디에도 #F2F4F8 하드코딩이 없다', () => {
 });
 
 // ---- 화면 P1 항목 4 (Paper XI-0 · FLM-0 · FPE-0) — 계좌 등록 3상태 ----
-// 시트 DOM은 verify-settings-cards.js(Electron)가 보고, 여기서는 상태 머신만 잰다.
+// 상태 머신과 실제 계좌 카드의 등록 클릭 → IPC 대기 → 결과 전환을 함께 잰다.
 const { accountSheetState } = settingsCards;
 const verifying = () => accountSheetState(accountSheetState(null, { type: 'open' }), { type: 'verify' });
 
@@ -259,8 +257,131 @@ test('확인 중에는 입력 셋이 잠기고 버튼 라벨이 확인 중…이
   assert.equal(state.submitLabel, '확인 중…');
   assert.equal(state.submitDisabled, true);
   assert.equal(state.hint, '토큰 발급 확인 중… 입력과 저장이 잠시 잠깁니다');
+  assert.equal(state.verificationNote, 'APP KEY와 SECRET KEY로 계좌 연결 권한을 확인하고 있습니다');
   assert.equal(state.wipeInputs, false);
   assert.equal(state.closeSheet, false);
+});
+
+// 이 파일의 시트 렌더링에 필요한 DOM만 제공한다. ui-kit과 계좌 카드/시트는
+// 실구현을 쓰고, 외부 IPC 응답만 테스트가 결정한다(실계좌 키나 백엔드 불필요).
+function sheetNode(tag) {
+  let text = '';
+  const node = {
+    tag, className: '', children: [], parentNode: null, value: '', hidden: false, disabled: false,
+    listeners: {},
+    get textContent() { return text + this.children.map((child) => child.textContent).join(''); },
+    set textContent(value) { this.replaceChildren(); text = String(value); },
+    appendChild(child) { this.children.push(child); child.parentNode = this; return child; },
+    replaceChildren() { text = ''; this.children.forEach((child) => { child.parentNode = null; }); this.children = []; },
+    remove() {
+      if (this.parentNode) this.parentNode.children = this.parentNode.children.filter((child) => child !== this);
+      this.parentNode = null;
+    },
+    setAttribute() {},
+    addEventListener(type, handler) { this.listeners[type] = handler; },
+    click() { if (!this.disabled) return this.listeners.click?.(); },
+    focus() {},
+    querySelector(selector) {
+      return sheetDescendants(this).find((child) => selector.split('.').filter(Boolean)
+        .every((name) => child.className.split(/\s+/).includes(name))) || null;
+    },
+  };
+  node.classList = {
+    add(name) { this.toggle(name, true); },
+    remove(name) { this.toggle(name, false); },
+    toggle(name, on) {
+      const classes = new Set(node.className.split(/\s+/).filter(Boolean));
+      if (on) classes.add(name); else classes.delete(name);
+      node.className = [...classes].join(' ');
+    },
+  };
+  return node;
+}
+
+function sheetDescendants(node) {
+  return node.children.flatMap((child) => [child, ...sheetDescendants(child)]);
+}
+
+async function renderRegisterSheet(t) {
+  let resolveRegister;
+  const registrations = [];
+  let lists = 0;
+  const priorDocument = global.document;
+  const priorWindow = global.window;
+  global.document = { createElement: sheetNode };
+  global.window = { athena: { invoke(channel, payload) {
+    if (channel === 'athena:account-list') { lists += 1; return Promise.resolve({ accounts: [] }); }
+    assert.equal(channel, 'athena:account-register');
+    registrations.push(payload);
+    return new Promise((resolve) => { resolveRegister = resolve; });
+  } } };
+  t.after(() => {
+    if (priorDocument === undefined) delete global.document; else global.document = priorDocument;
+    if (priorWindow === undefined) delete global.window; else global.window = priorWindow;
+  });
+  const grid = sheetNode('div');
+  await settingsCards.renderAccounts(grid);
+  grid.querySelector('.uk-btn-ghost').click();
+  const sheet = grid.querySelector('.uk-sheet');
+  const inputs = sheetDescendants(sheet).filter((node) => node.tag === 'input');
+  inputs.forEach((input, index) => { input.value = ['모의-검증', 'TEST_APP_KEY', 'TEST_SECRET_KEY'][index]; });
+  return {
+    grid, sheet, inputs, registrations,
+    submit: sheet.querySelector('.uk-btn-primary'),
+    resolve: (result) => resolveRegister(result),
+    listCount: () => lists,
+  };
+}
+
+test('등록 시트는 검증 IPC 대기 중 Paper의 상태 줄과 설명 줄을 별도로 표시한다', async (t) => {
+  const { sheet, inputs, submit, resolve, registrations } = await renderRegisterSheet(t);
+  const explanation = 'APP KEY와 SECRET KEY로 계좌 연결 권한을 확인하고 있습니다';
+  assert.equal(sheet.textContent.includes(explanation), false, '입력 단계에는 확인 중 설명이 없어야 한다');
+  const pending = submit.click();
+  const status = sheet.querySelector('.uk-status-text');
+  assert.equal(status.textContent, '토큰 발급 확인 중… 입력과 저장이 잠시 잠깁니다');
+  const detail = sheetDescendants(sheet).find((node) => node.children.length === 0 && node.textContent === explanation);
+  assert.ok(detail, 'Paper XI-0 114-0의 설명 줄이 실제 시트에 표시되어야 한다');
+  assert.notEqual(detail.parentNode, status.parentNode, '설명은 상태 행 아래의 별도 줄이다');
+  assert.ok(sheetDescendants(sheet).indexOf(detail) > sheetDescendants(sheet).indexOf(status));
+  assert.deepEqual(inputs.map((input) => input.disabled), [true, true, true]);
+  assert.equal(submit.disabled, true);
+  assert.equal(submit.textContent, '확인 중…');
+  assert.equal(registrations[0].verifyOnly, true);
+  resolve({ ok: false, error: 'auth' });
+  await pending;
+  assert.equal(sheet.textContent.includes(explanation), false, '실패 후에는 확인 중 설명을 제거한다');
+  assert.equal(submit.textContent, '다시 검증');
+  assert.deepEqual(inputs.map((input) => input.disabled), [false, false, false]);
+  assert.deepEqual(inputs.map((input) => input.value), ['모의-검증', 'TEST_APP_KEY', 'TEST_SECRET_KEY']);
+});
+
+test('확인 중 시트를 취소하면 실제 입력을 비우고 시트를 닫는다', async (t) => {
+  const cancelled = await renderRegisterSheet(t);
+  const pendingCancel = cancelled.submit.click();
+  cancelled.sheet.querySelector('.uk-btn-ghost').click();
+  assert.equal(cancelled.grid.querySelector('.uk-sheet'), null);
+  assert.deepEqual(cancelled.inputs.map((input) => input.value), ['', '', '']);
+  cancelled.resolve({ ok: false, error: 'auth' });
+  await pendingCancel;
+});
+
+test('등록 시트의 저장 완료는 실제 입력을 비우고 시트를 닫는다', async (t) => {
+  const saved = await renderRegisterSheet(t);
+  const pendingVerify = saved.submit.click();
+  saved.resolve({ ok: true, verified: true });
+  await pendingVerify;
+  assert.equal(saved.submit.textContent, '계좌 저장');
+  assert.equal(saved.sheet.textContent.includes('APP KEY와 SECRET KEY로 계좌 연결 권한을 확인하고 있습니다'), false);
+  assert.equal(saved.listCount(), 1, '검증 성공만으로 목록을 새로고침하지 않는다');
+  const pendingSave = saved.submit.click();
+  assert.equal(saved.submit.disabled, true);
+  assert.equal(Object.hasOwn(saved.registrations[1], 'verifyOnly'), false);
+  saved.resolve({ ok: true, id: 'test-account' });
+  await pendingSave;
+  assert.equal(saved.grid.querySelector('.uk-sheet'), null);
+  assert.deepEqual(saved.inputs.map((input) => input.value), ['', '', '']);
+  assert.equal(saved.listCount(), 2);
 });
 
 test('인증 실패는 입력을 비우지 않는다 — 다시 검증이 가능하다', () => {
