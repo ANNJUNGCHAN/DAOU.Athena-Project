@@ -1034,6 +1034,39 @@ test('스트립·헤더가 세로로 쌓은 양끝 줄도 접기 표시를 받�
   assert.equal(stripTableRow.dataset.bsSplitRow, undefined, '표는 열 폭이 계약이다');
 });
 
+test('primary가 세로로 쌓은 가로 툴바 줄은 wrap 표시를 받는다', () => {
+  const ancestor = (className, inline) => ({
+    classList: { contains: (name) => name === className },
+    style: styleStub(inline || {}),
+  });
+  const under = (parent, inline) => {
+    const row = regionStub('', inline);
+    row.classList = { contains: () => false };
+    row.parentElement = parent;
+    return row;
+  };
+  const toolbar = under(
+    ancestor('bs-primary', { display: 'flex', 'flex-direction': 'column' }),
+    { display: 'flex', 'justify-content': 'space-between' },
+  );
+  const column = under(
+    ancestor('bs-primary', { display: 'flex', 'flex-direction': 'column' }),
+    { display: 'flex', 'flex-direction': 'column' },
+  );
+  const orphan = under(
+    ancestor('', { display: 'flex', 'flex-direction': 'column' }),
+    { display: 'flex', 'justify-content': 'space-between' },
+  );
+  hoistLayout(toolbar);
+  hoistLayout(column);
+  hoistLayout(orphan);
+  assert.equal(toolbar.dataset.bsWrapRow, 'true',
+    '2Z49-0 Chart Toolbar는 primary 세로 칸의 가로 줄이다');
+  assert.equal(column.dataset.bsWrapRow, undefined,
+    '세로 줄에 wrap을 주면 넘친 것이 오른쪽 새 열로 간다');
+  assert.equal(orphan.dataset.bsWrapRow, undefined, '영역 밖 줄은 표시하지 않는다');
+});
+
 test('세로로 쌓는 부모 아래 상자만 세로 축 flex-shrink 표시를 받는다', () => {
   const parentStub = (inline) => ({
     classList: { contains: () => false },

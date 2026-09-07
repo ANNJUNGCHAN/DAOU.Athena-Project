@@ -1,4 +1,4 @@
-# Grok 프롬프트 — 카드 표면 버튼 트랙 남은 셋 이어받기 (2026-09-08)
+# Grok 프롬프트 — 카드 표면 버튼 트랙 남은 둘 이어받기 (2026-09-08)
 
 아래 블록을 통째로 복사해 Grok 워커에 붙여넣는다. **worktree 안에서** 실행한다
 (`claude/card-buttons-functionality-2b13d9`, PR
@@ -12,8 +12,8 @@
 ```
 # 목표
 
-카드 표면 버튼 트랙에서 **남은 셋**(A 전수 수치 · C 비교 바구니 · D 주문 확인)을 끝낸다.
-B(2RJ7-1 「호가 열기」 겹침)는 끝났다. 이미 끝난 것은 다시 하지 않는다.
+카드 표면 버튼 트랙에서 **남은 둘**(C 비교 바구니 · D 주문 확인)을 끝낸다.
+A(전수 수치)와 B(2RJ7-1 「호가 열기」 겹침)는 끝났다. 이미 끝난 것은 다시 하지 않는다.
 
 # 0. 시작 전에 읽을 것 (추측으로 시작하지 않는다)
 
@@ -43,20 +43,12 @@ B(2RJ7-1 「호가 열기」 겹침)는 끝났다. 이미 끝난 것은 다시 �
 
 # 2. 할 일 — 이 순서로
 
-## A. 전수 감사로 최종 수치 뽑기 (가장 싸다, 먼저 한다)
+## A. 전수 감사로 최종 수치 뽑기 — 완료
 
-```
-taskkill /F /IM electron.exe
-cd app && node_modules/electron/dist/electron.exe probe-card-buttons.js
-```
-
-30~40분. 산출물 `app/captures/paper-gates/CARD-BUTTONS.json`. 판정 규칙은
-`app/probe-card-buttons.js` 머리 주석에 있다. `findings`가 비어 있어야 초록이다
-(state-control은 전부 반응해야 하고, 자기 보드를 가리키는 칩은 면제된다).
-`board_audit_failed`가 뜨면 좀비 electron부터 의심하고 그 보드만 다시 돌린다
-(`ATHENA_VERIFY_BOARD_IDS=<board>`, 리포트는 `ATHENA_CARD_BUTTONS_REPORT`로 분리).
-
-결과를 `docs/handoff/2026-09-07-card-buttons.md` §4에 수치로 적는다(반응·inert·보드 수).
+2026-09-08 전수 101장 · 1,648s: `responds=995 · hit_blocked=1 · inert=5771`.
+유일한 게이트 실패 `2Z49-0` `3T2T-0`은 wrap-row를 L부터 켜서 닫았다
+(샤드 `responds=9 · hit_blocked=0`, `3T2T-0` → `3TOM-0`). 수치는
+[../2026-09-07-card-buttons.md](../2026-09-07-card-buttons.md) §4.
 
 ## B. 2RJ7-1 「호가 열기」 겹침 — 완료
 
