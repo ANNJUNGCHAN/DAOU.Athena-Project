@@ -373,7 +373,10 @@ test('상태 보드 전환은 계약 링크 안에서만 일어나고 보드별 
   // 값 표는 board_id별 캐시에 보존되고 전환 때 해당 보드 표만 꺼낸다.
   assert.match(mount, /function mountBoardState\(host, boardId, envelope,[\s\S]*?state\.values/);
   assert.doesNotMatch(
-    CANVAS.slice(CANVAS.indexOf('function switchStateBoard'), CANVAS.indexOf('function findStateControl')),
+    CANVAS.slice(
+      CANVAS.indexOf('function switchStateBoard'),
+      CANVAS.indexOf("const RESPONSIVE_STATE_CONTROL_OWNER"),
+    ),
     /state\.values = /, '상태 보드 전환이 값 표를 비우면 안 된다',
   );
 });
@@ -412,7 +415,7 @@ test('계약이 지정한 초기 상태 보드를 보드별 값으로 같은 로
 
 test('상태 보드 키보드 의미는 flow/scroll/scroll-table 안의 plain leaf에만 보강한다', () => {
   const controls = CANVAS.slice(
-    CANVAS.indexOf('function findStateControl'),
+    CANVAS.indexOf('const RESPONSIVE_STATE_CONTROL_OWNER'),
     CANVAS.indexOf('async function hydrateBoardSlots'),
   );
   assert.match(controls,
@@ -420,7 +423,10 @@ test('상태 보드 키보드 의미는 flow/scroll/scroll-table 안의 plain le
   assert.match(controls, /function isResponsiveStateControl\(node\)/);
   assert.match(controls, /node\.childElementCount === 0/);
   assert.match(controls, /node\.closest\(RESPONSIVE_STATE_CONTROL_OWNER\)/);
-  assert.match(controls, /boardMount\.stateControlActivationOwner\(node\)/);
+  // 칩 찾기(표식·같은 문구·별칭 문구)는 board-mount가 갖는다 — 단위 테스트가 걸린
+  // 자리다(board-mount.test.js). canvas는 그 판정에 링크 목록을 넘기고 클릭만 잇는다.
+  assert.match(controls,
+    /boardMount\.findStateControlNode\(surface, control, \{ links: state\.links \}\)/);
   assert.doesNotMatch(controls, /bs-r-paired-table/,
     'paired display mirrors never become interactive controls');
 });
