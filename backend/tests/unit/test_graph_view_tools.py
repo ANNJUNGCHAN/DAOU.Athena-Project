@@ -216,6 +216,28 @@ async def test_propose_edit_delivers_a_card_and_says_nothing_changed() -> None:
     assert payload["reason"] == "3주 전 한 번 언급 후 계속 회피"
     # 이 문장이 사라지면 모델이 "지웠다"고 말하기 시작한다.
     assert "아직 아무것도 바뀌지 않았다" in payload["notice"]
+    assert "추출 경로" in payload["notice"]
+    assert "바로 반영" not in payload["notice"]
+
+
+async def test_propose_edit_notice_with_relation_id_is_immediate() -> None:
+    payload = _payload(
+        await graph_view_tools.dispatch(
+            {
+                "action": "propose_edit",
+                "edit": {
+                    "op": "remove",
+                    "object": "2차전지",
+                    "relation": "interested_in",
+                    "relation_id": "rel-1",
+                },
+            }
+        )
+    )
+    assert payload["relation_id"] == "rel-1"
+    assert "아직 아무것도 바뀌지 않았다" in payload["notice"]
+    assert "바로 반영" in payload["notice"]
+    assert "추출 경로" not in payload["notice"]
 
 
 async def test_propose_edit_leaves_the_subject_implicit_when_omitted() -> None:

@@ -312,6 +312,21 @@ async def dispatch(arguments: dict[str, Any]) -> types.CallToolResult:
         return _blocked(
             f"propose_edit의 edit에는 object와 relation(문자열)이 필요하다. {_RECOVERY}"
         )
+    relation_id = _text(edit.get("relation_id"))
+    # id가 실리면 확정 순간 바로 반영되고, 없으면 예전 추출 경로다(OBS-065).
+    # 모델이 한 경로의 시점을 다른 경로에 갖다 붙이지 않도록 notice를 가른다.
+    if relation_id:
+        notice = (
+            "아직 아무것도 바뀌지 않았다 — 확정 카드를 띄웠을 뿐이다. "
+            "사람이 누르면 그 관계 id로 바로 반영된다. "
+            "'고쳤다'고 말하지 마라."
+        )
+    else:
+        notice = (
+            "아직 아무것도 바뀌지 않았다 — 확정 카드를 띄웠을 뿐이다. "
+            "사람이 누르면 그 답이 추출 경로로 그래프를 갱신한다. "
+            "'고쳤다'고 말하지 마라."
+        )
     return _success(
         {
             "delivered": "canvas",
@@ -325,17 +340,13 @@ async def dispatch(arguments: dict[str, Any]) -> types.CallToolResult:
             # 있으면 카드가 '적용'에서 바로 지운다(2026-09-03). 없으면 null로 실려
             # 화면이 예전 경로(문장 제출 → 수집)를 그대로 쓴다 — 카드가 어느 쪽인지
             # 스스로 판단할 수 있어야 하므로 필드 자체는 항상 싣는다.
-            "relation_id": _text(edit.get("relation_id")),
+            "relation_id": relation_id,
             # 두 id도 항상 싣는다(없으면 null) — 카드가 즉시 반영 경로를 쓸 수
             # 있는지 스스로 판단해야 하고, 그 판단 재료가 이 필드다.
             "subject_id": _text(edit.get("subject_id")),
             "object_id": _text(edit.get("object_id")),
             "reason": _text(edit.get("reason")),
-            "notice": (
-                "아직 아무것도 바뀌지 않았다 — 확정 카드를 띄웠을 뿐이다. "
-                "사람이 누르면 그 답이 추출 경로로 그래프를 갱신한다. "
-                "'고쳤다'고 말하지 마라."
-            ),
+            "notice": notice,
         }
     )
 
