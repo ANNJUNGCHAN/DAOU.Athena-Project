@@ -232,6 +232,33 @@ async function idle(win, ms) {
   );
 }
 
+// 카드가 멎을 때까지 기다린 뒤의 지문. 보드 전환·하이드레이션은 비동기라, 고정
+// 대기(250ms)로는 앞 클릭의 결과가 **다음** 후보의 창에서 도착한다 — 그러면 아무
+// 동작도 없는 잎이 「눌린다」로 잡힌다(실측 2X5N-0 「세션」이 이웃 칩의 전환을
+// 자기 것으로 받았다).
+async function settledFingerprint(win, instanceId, samples = 12) {
+  let last = await win.webContents.executeJavaScript(fingerprintProbe(instanceId));
+  for (let i = 0; i < samples; i += 1) {
+    await idle(win, 120);
+    const now = await win.webContents.executeJavaScript(fingerprintProbe(instanceId));
+    if (!changed(last, now)) return now;
+    last = now;
+  }
+  return last;
+}
+
+// 클릭이 무언가를 바꾸는지 예산 안에서 지켜본다 — 바뀌면 바로 끝낸다(전수 실행 시간).
+async function fingerprintAfterClick(win, instanceId, before, budgetMs = 1500) {
+  const deadline = Date.now() + budgetMs;
+  let now = before;
+  while (Date.now() < deadline) {
+    await idle(win, 150);
+    now = await win.webContents.executeJavaScript(fingerprintProbe(instanceId));
+    if (changed(before, now)) return now;
+  }
+  return now;
+}
+
 async function realClick(win, rect) {
   const x = Math.round(rect.x + rect.w / 2);
   const y = Math.round(rect.y + rect.h / 2);
@@ -251,10 +278,23 @@ async function hitTest(win, instanceId, index, rect) {
     const root = document.querySelector('${CARD_SELECTOR(instanceId)}');
     const surface = root && root.querySelector('.board-surface');
     if (!surface) return { error: 'surface gone' };
+    const mark = surface.querySelector('[data-probe-candidate="${index}"]');
+    // 이 잎(또는 그 조상)에 핸들러가 달려 있는가. 안 달렸으면 두 번 누를 이유가 없다 —
+    // 「합성 클릭은 먹는가」를 물어보는 것은 핸들러가 있을 때만 뜻이 있다.
+    // 조상만 보면 안 된다 — 알약 상자에는 핸들러가 없고 그 안 글자 잎에 달린다.
+    // 실제 마우스는 그 잎을 맞히므로 알약을 누르면 동작한다.
+    let wired = false;
+    for (let el = mark; el && el !== surface.parentElement; el = el.parentElement) {
+      if (el.__athenaStateWired) { wired = true; break; }
+    }
+    if (!wired && mark) {
+      wired = [...mark.querySelectorAll('*')].some((el) => el.__athenaStateWired);
+    }
     const hit = document.elementFromPoint(${x}, ${y});
-    if (!hit) return { blocked: true, hit: 'none', hit_class: '', hit_text: '' };
+    if (!hit) return { blocked: true, hit: 'none', hit_class: '', hit_text: '', wired };
     const inSurface = surface.contains(hit);
     return {
+      wired,
       blocked: !inSurface,
       hit: hit.tagName.toLowerCase(),
       hit_class: String(hit.className || '').slice(0, 80),
@@ -328,19 +368,22 @@ async function auditBoard(win, boardId, ordinal) {
       continue;
     }
     const hit = await hitTest(win, surface.instanceId, index, spot);
-    const before = await win.webContents.executeJavaScript(fingerprintProbe(surface.instanceId));
+    // 핸들러가 아예 없는 잎은 누를 필요가 없다 — 판정은 이미 났고, 96장에서 이 지름길이
+    // 실행 시간의 대부분을 아낀다(후보 절대다수가 이 갈래다).
+    if (!hit.wired) {
+      results.push({ ...candidate, rect: spot, hit, verdict: 'inert' });
+      continue;
+    }
+    const before = await settledFingerprint(win, surface.instanceId);
     await realClick(win, spot);
-    await idle(win, 250);
-    const afterReal = await win.webContents.executeJavaScript(fingerprintProbe(surface.instanceId));
+    const afterReal = await fingerprintAfterClick(win, surface.instanceId, before);
     let verdict = changed(before, afterReal) ? 'responds' : null;
     let synthetic = null;
     if (!verdict) {
+      const quiet = await settledFingerprint(win, surface.instanceId);
       synthetic = await syntheticClick(win, surface.instanceId, index);
-      await idle(win, 250);
-      const afterSynth = await win.webContents.executeJavaScript(
-        fingerprintProbe(surface.instanceId),
-      );
-      verdict = changed(afterReal, afterSynth) ? 'hit_blocked' : 'inert';
+      const afterSynth = await fingerprintAfterClick(win, surface.instanceId, quiet);
+      verdict = changed(quiet, afterSynth) ? 'hit_blocked' : 'inert';
     }
     results.push({
       ...candidate,
