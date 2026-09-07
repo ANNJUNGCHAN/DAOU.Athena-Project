@@ -769,6 +769,20 @@ const GRAPH_NODE_SIGNALS = Object.freeze({
   ],
 });
 
+// 확정성이 섞인 성향 신호 — 보드 07의 채움 세 칸이 지도에 **전부** 서는 유일한
+// 봉투다. 위 GRAPH_PROFILE_SIGNALS에는 애매하다고 기록된 줄이 없어 지도가 사실과
+// 모름 둘로만 칠해진다. 대상은 GRAPH_CLUSTER_MAP의 노드 id 그대로다 — 신호가 한
+// 줄도 없는 나머지 넷은 지도가 정직하게 모름으로 읽는다.
+const GRAPH_CERTAINTY_SIGNALS = Object.freeze({
+  ok: true,
+  total: 312,
+  entries: [
+    { entity_id: 'fx-samsung', entity_name: '삼성전자', entity_kind: 'security', relation_kind: 'owns', rationale: '체결 4건 · 평균 71,200원', tier: 'deterministic', confidence: 'EXTRACTED', reinforcement: 12 },
+    { entity_id: 'fx-hanmi', entity_name: '한미반도체', entity_kind: 'security', relation_kind: 'interested_in', rationale: '어느 쪽인지 대화가 갈렸다', tier: 'conversational', confidence: 'AMBIGUOUS', reinforcement: 3 },
+    { entity_id: 'fx-hynix', entity_name: 'SK하이닉스', entity_kind: 'security', relation_kind: 'interested_in', rationale: 'HBM 질문 6개 대화 반복', tier: 'conversational', confidence: 'INFERRED', reinforcement: 6 },
+  ],
+});
+
 // 숨은 연관 한 쌍 — 보드 02의 카드와 보드 04의 「왜 숨은 연관인가」가 같은 이 쌍을
 // 읽는다(controller.js topSurprising). 하나뿐이라 그 쌍이 곧 1등이고, 그래서 근거
 // 블록이 「이 그래프에서 가장 놀라운 연결입니다」로 말한다.
@@ -3043,14 +3057,16 @@ const ROUTES = Object.freeze([
       { do: 'settle' },
     ],
     root: '#shell',
-    // 노드 이름은 캔버스에 그려져 글자가 아니고(live-map.js), 범례 여섯 줄
-    // (색 = 군집 · 원 크기 = 연결 수 · 사실 · 추론 · 불확실 · 숨은 연관 — 군집을
-    // 넘는 연결)은 앱이 아예 안 그린다 — 둘 다 여기 안 적는다.
+    // 노드 이름은 캔버스에 그려져 글자가 아니라 여기 안 적는다(live-map.js).
+    // 범례는 이제 앱도 그린다 — 여섯 줄 중 이 보드에만 있는 마지막 줄을 잡는다
+    // (31H-0의 같은 자리는 「숨은 연관」까지다). 개수는 안 적는다: Paper의 범례는
+    // 여섯인데 앱은 보드 07이 더한 채움 세 칸까지 아홉이다.
     phrases: [
       '요약',
       '수집·노출',
       '테마 지도',
       '노드를 끌어 옮길 수 있습니다 · 휠 또는 Ctrl+휠로 확대 · 채팅으로 물어도 같은 곳이 열립니다',
+      '숨은 연관 — 군집을 넘는 연결',
       '그래프에게 묻기',
       '답이 캔버스를 바꿉니다',
     ],
@@ -3171,6 +3187,44 @@ const ROUTES = Object.freeze([
       },
       { what: 'count', selector: '.filter-chip', equals: 2 },
       { what: 'absent', selector: '#graphDegreeFilter' },
+    ],
+  },
+  {
+    board: '2QCN-2', // 07 · 그래프 — 정직성 상태 (이름·인코딩·빈 값)
+    window: 'shell',
+    // 이 보드에는 셸 창 프레임이 없다 — 원장 트리의 세 묶음(이름 폴백 사다리 ·
+    // 채움 인코딩 · 못 채우는 값)이 전부 보드 옆 설명 판이고, 그 안에서 **화면이
+    // 실제로 그려야 하는 것**은 지도 범례 하나다: 채움 세 칸(2QEE-2·2QEJ-2·2QEO-2)과
+    // 「2~4단계가 하나라도 있으면 지도 범례에 한 번만」 붙는 캡션(2QDY-2·2QE0-2).
+    // 3열 표(상황 · 화면이 하는 말 · 왜 그렇게 말하는가)는 앱 어디에도 없다 —
+    // 보드 06(2QA3-2)의 설명 표와 같은 갈래다.
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:brain-cluster-map', data: GRAPH_CLUSTER_MAP },
+      // 채움 세 칸이 지도에 전부 서려면 확정성이 섞여 있어야 한다.
+      { do: 'ipc-fixture', channel: 'athena:brain-profile-summary', data: GRAPH_CERTAINTY_SIGNALS },
+      { do: 'ipc-fixture', channel: 'athena:brain-surprising-connections', data: GRAPH_HIDDEN_LINKS },
+      { do: 'ipc-fixture', channel: 'athena:brain-suggested-questions', data: GRAPH_NO_QUESTIONS },
+      { do: 'mode', view: 'graph' },
+      { do: 'click', selector: '#graphViewTab' },
+      { do: 'send', channel: 'athena:brain-graph-updated', data: null },
+      { do: 'settle' },
+    ],
+    root: '#shell',
+    // 네 단계 폴백의 예시 이름(반도체 대형주 · 반도체 밸류체인 · 배당·인컴)과
+    // 「종목 9 · 응집 0.74」는 전부 값이라 한 글자도 안 넣는다. 「이름 없는 군집」도
+    // 안 적는다 — 4단계는 군집 안 어느 멤버에도 이름이 없을 때만 서는데, 이름
+    // 있는 노드로 그린 지도에서는 3단계(대표 항목)에서 사다리가 멈춘다.
+    // 브레인 미기동 문장은 원장에 큰따옴표를 달고 있어 문구로 못 쓴다.
+    phrases: [
+      '사실 · 체결·잔고',
+      '불확실',
+      '그 밖 · 모름',
+      '군집 이름은 대표 항목에서 추정',
+    ],
+    // 채움 세 칸과, 군집마다가 아니라 지도에 **한 번만** 붙는 캡션.
+    structure: [
+      { what: 'count', selector: '.graph-legend-fill-item', equals: 3 },
+      { what: 'count', selector: '.graph-legend-caption', equals: 1 },
     ],
   },
 
