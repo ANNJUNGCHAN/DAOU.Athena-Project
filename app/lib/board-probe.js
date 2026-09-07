@@ -737,7 +737,7 @@ function loadRealBoardContract(boardId, ordinal, templateRoot) {
   const slotValues = {};
   for (const slot of slots.slots) {
     if (typeof slot.paper_text === 'string' && slot.paper_text !== '') {
-      slotValues[slot.slot_id] = slot.paper_text;
+      slotValues[slot.slot_id] = { value: slot.paper_text, text: slot.paper_text };
     }
   }
   return {
