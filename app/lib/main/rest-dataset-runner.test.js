@@ -493,6 +493,45 @@ test('partial failure is truthful and never uses the success receipt', async () 
   assert.notEqual(result.answerText, '캔버스에 표시했습니다.');
 });
 
+test('첫 화면이 실패해도 둘째 화면은 새 페인트 예산을 받는다', async () => {
+  const input = dataset(2);
+  input.firstCanvasDeadlineMs = 3000;
+  let now = 0;
+  let renderCount = 0;
+  const fetchImpl = async (url, options) => {
+    const body = JSON.parse(options.body);
+    if (url.endsWith('/resolve')) return response({ plan_token: `p-${body.question}-${body.arguments.stk_cd}` });
+    renderCount += 1;
+    if (renderCount === 1) {
+      now += 2990;
+      return response({ detail: 'upstream failed' }, 503);
+    }
+    now += 200;
+    return response(canonicalInline(body, input.items[1].operationRef));
+  };
+  const paints = [];
+  const result = await runRestDataset({
+    dataset: input,
+    backendBase: 'http://backend',
+    fetchImpl,
+    clock: () => now,
+    emitCanvas: async (payload) => {
+      paints.push(payload);
+      return { verifiedVisible: true, visiblePaintAt: now + 10 };
+    },
+  });
+  assert.equal(result.errors.length, 1);
+  assert.equal(result.renderedCount, 1);
+  assert.equal(paints.length, 1);
+  assert.equal(paints[0].ordinal, 2);
+  assert.ok(
+    paints[0].paintDeadlineAt - paints[0].inlineAt >= 2500,
+    `둘째 장 페인트 예산이 소진되면 안 된다: deadline=${paints[0].paintDeadlineAt} inline=${paints[0].inlineAt}`,
+  );
+  assert.notEqual(result.state, 'timeout');
+  assert.match(result.answerText, /일부 결과/);
+});
+
 test('first-canvas deadline exposes an explicit retryable timeout and retry advances dataset generation', async () => {
   const input = dataset();
   input.firstCanvasDeadlineMs = 10;

@@ -3130,7 +3130,6 @@ function createBacktestCanvas(options) {
     // 목록이 비어도 [+ 새 기법 만들기]는 서야 한다 — 하나도 없을 때가 만들기를 가장
     // 먼저 눌러야 하는 때다. 나머지 카드(대상·지표·조건)는 고른 기법이 있어야 뜻이 있다.
     wrap.appendChild(renderTechniqueList());
-    if (!spec && !userStrategyId && !techniqueDraft) return wrap;
     if (!presets.length && !userStrategies.length) return wrap;
     wrap.appendChild(renderTargetCard());
     // 내 전략은 지표·조건을 쓰지 않는다 — 신호를 만드는 것은 그 파일의 파이썬이다.

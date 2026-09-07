@@ -1704,6 +1704,13 @@ test('결과에 실행경로 뱃지가 붙는다 — run_path=code면 [코드 �
 
 // ── getContext() 확장 ───────────────────────────────────────────────────────
 
+test('renderDesign 폼 경로는 listFirst 조기 반환 뒤에 같은 목록 가드를 다시 두지 않는다', () => {
+  const src = fs.readFileSync(path.join(__dirname, 'backtest-canvas.js'), 'utf8');
+  const fn = src.slice(src.indexOf('function renderDesign()'), src.indexOf('function renderTechniqueList()'));
+  assert.match(fn, /if \(listFirst\(\)\)/);
+  assert.doesNotMatch(fn, /if \(!spec && !userStrategyId && !techniqueDraft\) return wrap;/);
+});
+
 test('getContext(): 키 목록이 계약으로 고정돼 있다 — spec은 복사본이다', async () => {
   const { canvas } = await mounted();
   const ctx = canvas.getContext();
