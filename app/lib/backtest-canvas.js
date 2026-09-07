@@ -1523,9 +1523,19 @@ function createBacktestCanvas(options) {
   }
 
   // 코드 경로는 폼의 진입·청산 조건을 검사하지 않는다 — 신호는 파이썬이 만든다.
+  // 신호를 만드는 것이 파이썬인가 — 그러면 폼의 진입·청산 조건은 검사하지 않는다. 실행·
+  // 설정 반영·다음 턴 컨텍스트가 같은 규칙을 읽어야 한다: 한 곳만 조건을 세면 코드 기법의
+  // 화면에 「진입 조건이 하나도 없습니다」가 서고 모델은 폼 조건을 채우러 간다.
+  function codeRuns() {
+    return runPath === 'code' || !!activeProjectFile();
+  }
+
+  function specPending(target) {
+    return SpecModel.validate(target, { conditions: !codeRuns() });
+  }
+
   function runErrors() {
-    const codeRuns = runPath === 'code' || !!activeProjectFile();
-    return SpecModel.validate(spec, { conditions: !codeRuns });
+    return specPending(spec);
   }
 
   async function handleRun(allowPartial) {
@@ -2141,7 +2151,7 @@ function createBacktestCanvas(options) {
 
     // 검증 오류가 있어도 반영한다 — 오류는 폼 오류 줄과 영수증 errors("실행 전에 채울 것")로
     // 남고, 모델은 다음 턴 컨텍스트의 pending에서 같은 목록을 읽어 마저 채운다.
-    const pending = SpecModel.validate(merged);
+    const pending = specPending(merged);
     const before = snapshot();
     spec = merged;
     // 반영된 결과를 보는 자리는 지도다 — 대화가 고치는 것이 폼 칸이 아니라 흐름이라는
@@ -2727,7 +2737,7 @@ function createBacktestCanvas(options) {
       // 설정은 검증과 무관하게 바로 들어가므로 대기 초안은 없다 — 계약 키는 남긴다.
       draft: null,
       // 실행 전에 채워야 할 것(SpecModel.validate) — 모델이 다음 턴에 마저 채운다.
-      pending: spec ? SpecModel.validate(spec) : [],
+      pending: spec ? specPending(spec) : [],
       presets: presets.map((p) => ({ id: p.id, name: p.name })),
       // 새 기법을 대화로 만드는 중인가 — 참이면 코드창의 뼈대는 아직 아무 신호도 만들지
       // 않는다. 다음 턴이 "무엇을 보고 사는가"부터 물어야 한다는 신호다.
