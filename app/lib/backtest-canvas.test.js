@@ -2386,6 +2386,10 @@ test('[+ 새 기법 만들기] 배너는 브랜드 알파만 쓰고 팔레트 �
   assert.match(block, /background:\s*rgb\(238 19 123 \/ 5%\)/);
   assert.match(hover, /background:\s*rgb\(238 19 123 \/ 10%\)/);
   assert.equal(/#fff5fa|#ffedf6/i.test(block + hover), false);
+  const plus = css.match(/\.backtest-technique-new-plus \{[\s\S]*?\}/)[0];
+  const chip = css.match(/\.backtest-technique-new-chip \{[\s\S]*?\}/)[0];
+  assert.match(plus, /font-size:\s*var\(--text-lg\)/);
+  assert.match(chip, /font-size:\s*var\(--text-xs\)/);
 });
 
 test('[+ 새 기법 만들기]: 빈 뼈대를 코드창에 세우고 첫 문장을 채팅에 보낸다', async () => {
