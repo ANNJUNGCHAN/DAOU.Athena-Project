@@ -4,9 +4,14 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const {
   MISSING_TEXT, ZERO_COLLAPSE_MIN, MYRIAD_GROUPS, UNIT_KIND, UNIT_SUFFIX,
-  toNumber, formatKoreanUnit, formatSlot, toneOf, toneColorVar, missingText, isZeroLike,
-  kindOf, toneFor,
+  toNumber, formatKoreanUnit, formatTime, formatSlot, toneOf, toneColorVar, missingText, isZeroLike,
+  kindOf, toneFor, normalizeSlotValue, isScalarSlotValue,
 } = require('./board-format');
+const registry = require('./board-template-registry');
+
+function boardSlot(boardId, slotId) {
+  return registry.contractFor(boardId).slots.find((slot) => slot.slot_id === slotId);
+}
 
 test('한국어 만 단위 사다리는 상위 2묶음까지만 남긴다', () => {
   assert.equal(formatKoreanUnit(900124000000000), '900조 1,240억');
@@ -51,12 +56,27 @@ test('부호는 텍스트에, 색은 tone에 — 색만으로 상승·하락을 
   assert.equal(toneOf('-0.01'), 'down');
 });
 
+test('가격 슬롯의 absolute는 표시 부호만 걷고 tone은 원본 Kiwoom 부호를 지킨다', () => {
+  const price = formatSlot({ kind: 'number', absolute: true, tone: 'change' }, '-267750');
+  assert.deepEqual(price, { text: '267,750', tone: 'down', missing: false });
+  assert.equal(formatSlot({ kind: 'number' }, '-267750').text, '-267,750');
+  assert.equal(formatSlot({ kind: 'number', absolute: true }, '+267750').text, '267,750');
+  assert.equal(formatSlot(boardSlot('2R3M-1', 's005').format, '-267750').text, '267,750원');
+  assert.equal(formatSlot(boardSlot('137X-2', 's005').format, '-267750').text, '267,750원');
+});
+
 test('정밀도·퍼센트·일자 포맷', () => {
   assert.equal(formatSlot({ kind: 'number', precision: 2 }, 14.2).text, '14.20');
   assert.equal(formatSlot({ kind: 'number' }, 12840120).text, '12,840,120');
   assert.equal(formatSlot({ kind: 'percent', sign: true, precision: 2 }, 1.24).text, '+1.24%');
   assert.equal(formatSlot({ kind: 'percent' }, -0.5).text, '-0.50%');
   assert.equal(formatSlot({ kind: 'date' }, '20260902').text, '2026-09-02');
+  assert.equal(formatSlot({ kind: 'date', date_style: 'month-day' }, '20260907').text, '09-07');
+  assert.equal(formatSlot({ kind: 'date', date_style: 'month-day' }, '0907').text, '0907');
+  assert.equal(formatSlot({ kind: 'time' }, '150220').text, '15:02:20');
+  assert.equal(formatSlot({ unit: 'time' }, '150218').text, '15:02:18');
+  assert.equal(formatTime('93000'), '93000');
+  assert.equal(formatTime('20260902'), '20260902');
   assert.equal(formatSlot({ kind: 'korean', scale: '천' }, 1284).text, '128만 4,000');
 });
 
@@ -72,6 +92,108 @@ test('결측 3종은 서로 구분되고 0으로 위장하지 않는다', () => 
   // 0은 결측이 아니다.
   assert.equal(formatSlot({ kind: 'number' }, 0).text, '0');
   assert.equal(formatSlot({ kind: 'number' }, 0).missing, false);
+});
+
+test('의도적으로 비워 둔 슬롯은 저작된 중립 결측 문구를 쓰되 잘못된 배열에는 적용하지 않는다', () => {
+  const spec = { kind: 'text', missing_text: '상태 확인 안 됨' };
+  assert.deepEqual(formatSlot(spec, undefined), {
+    text: '상태 확인 안 됨', tone: null, missing: true,
+  });
+  assert.deepEqual(formatSlot(spec, { missing: 'pending' }), {
+    text: '상태 확인 안 됨', tone: null, missing: true,
+  });
+  assert.deepEqual(formatSlot(spec, ['정규장', '시간외']), {
+    text: '미제공', tone: null, missing: true,
+  });
+});
+
+test('배열/객체 관찰값은 한 슬롯 문자열로 펼치지 않고 결측으로 격리한다', () => {
+  const direct = formatSlot({ unit: 'krw_ko', sign: true }, ['+267750', '+268000']);
+  assert.deepEqual(direct, { text: '미제공', tone: null, missing: true });
+
+  const wrapped = formatSlot({ unit: 'text' }, { value: ['132300', '132200'] });
+  assert.deepEqual(wrapped, { text: '미제공', tone: null, missing: true });
+  assert.doesNotMatch(direct.text + wrapped.text, /267750|268000|132300|,/);
+
+  assert.deepEqual(normalizeSlotValue({ value: { current: 268000 } }), {
+    value: null, missing: 'unavailable',
+  });
+  for (const value of ['005930', 268000, true, 1n, null]) assert.equal(isScalarSlotValue(value), true);
+  for (const value of [[], {}, new Date()]) assert.equal(isScalarSlotValue(value), false);
+});
+
+test('명시적 composite는 각 part 포맷을 적용한 뒤 저작된 구분자로 조합한다', () => {
+  const raw = { composite: { separator: ' · ', parts: [
+    { mapping_id: 'detail:ka10001:current_trading', f: 'cur_prc', value: '+267750', format: { kind: 'number', prefix: '현재가 ' } },
+    { mapping_id: 'detail:ka10001:current_trading', f: 'flu_rt', value: '+4.79', format: { kind: 'percent', sign: true, suffix: ' 기준' } },
+  ] } };
+  assert.deepEqual(formatSlot({}, raw), {
+    text: '현재가 267,750 · +4.79% 기준', tone: null, missing: false,
+  });
+});
+
+test('일반 scalar 슬롯도 저작된 prefix와 suffix를 포맷된 값 바깥에 붙인다', () => {
+  assert.deepEqual(formatSlot({ kind: 'korean', prefix: '거래대금 ', suffix: '원' }, 2140000000000), {
+    text: '거래대금 2조 1,400억원', tone: null, missing: false,
+  });
+  assert.deepEqual(formatSlot({ kind: 'number', prefix: ['가격 '] }, 67700), {
+    text: '미제공', tone: null, missing: true,
+  });
+  assert.deepEqual(formatSlot({ kind: 'korean', scale: '백만', prefix: '거래대금 ', suffix: '원' }, 2140000), {
+    text: '거래대금 2조 1,400억원', tone: null, missing: false,
+  });
+});
+
+test('실제 종목 Paper 슬롯은 거래대금 문구와 유통주식 단위를 중복·배율 왜곡 없이 표시한다', () => {
+  assert.equal(formatSlot(boardSlot('137X-2', 's007').format, '150220').text, '15:02:20');
+  assert.equal(formatSlot(boardSlot('2R3M-1', 's007').format, '150218').text, '15:02:18');
+  assert.equal(formatSlot(boardSlot('2R3M-1', 's044').format, '150220').text, '15:02:20');
+  for (const slotId of ['s216', 's227', 's238']) {
+    assert.equal(formatSlot(boardSlot('2R3M-1', slotId).format, '20260907').text, '09-07');
+  }
+  assert.equal(formatSlot(boardSlot('2R3M-1', 's019').format, 2140000).text, '2조 1,400억원');
+  assert.equal(formatSlot(boardSlot('137X-2', 's019').format, 2140000).text, '거래대금 2조 1,400억원');
+  assert.equal(formatSlot(boardSlot('2R3M-1', 's152').format, 4440000000).text, '4,440,000,000주');
+  assert.equal(formatSlot(boardSlot('137X-2', 's059').format, 4440000000).text, '4,440,000,000주');
+});
+
+test('composite는 일부 part가 없거나 배열/객체이면 전체를 미제공으로 닫는다', () => {
+  const base = { mapping_id: 'detail:ka10001:current_trading', format: { kind: 'text' } };
+  for (const badPart of [
+    { ...base, f: 'stk_nm', value: null },
+    { ...base, f: 'stk_nm', value: ['삼성전자', '다른 종목'] },
+    { ...base, f: 'stk_nm', value: { name: '삼성전자' } },
+    { ...base, f: '', value: '삼성전자' },
+    { mapping_id: '', f: 'stk_nm', value: '삼성전자', format: { kind: 'text' } },
+    { ...base, f: 'stk_nm', value: '삼성전자', format: { kind: 'text', prefix: ['종목 '] } },
+  ]) {
+    const raw = { composite: { separator: ' · ', parts: [
+      { ...base, f: 'stk_cd', value: '005930' }, badPart,
+    ] } };
+    assert.deepEqual(formatSlot({}, raw), { text: '미제공', tone: null, missing: true });
+  }
+});
+
+test('composite 일부 part가 결측이면 슬롯의 저작된 중립 문구로 전체를 닫는다', () => {
+  const raw = { composite: { separator: ' · ', parts: [
+    { mapping_id: 'base:0B', f: 'cur_prc', value: 150850, format: { kind: 'number' } },
+    { mapping_id: 'base:0B', f: 'flu_rt', value: null, format: { kind: 'percent' } },
+  ] } };
+  assert.deepEqual(formatSlot({ missing_text: '조회값 없음' }, raw), {
+    text: '조회값 없음', tone: null, missing: true,
+  });
+});
+
+test('모양이 불완전한 composite는 객체 문자열을 노출하지 않는다', () => {
+  for (const raw of [
+    { composite: { separator: ' · ', parts: [] } },
+    { composite: { separator: null, parts: [{}, {}] } },
+    { composite: ['005930', '삼성전자'] },
+  ]) {
+    const formatted = formatSlot({}, raw);
+    assert.equal(formatted.text, '미제공');
+    assert.equal(formatted.text.includes('[object Object]'), false);
+  }
 });
 
 test('isZeroLike는 0과 결측을 함께 세고(H1 모수) 값 있는 항목은 세지 않는다', () => {
@@ -97,7 +219,7 @@ test('미리 만들어진 표기(text)는 그대로 쓰고 포맷터를 다시 �
 test('추출기 unit 7종이 렌더러 kind로 옮겨진다', () => {
   assert.deepEqual(UNIT_KIND, {
     text: 'text', percent: 'percent', krw_ko: 'korean',
-    shares: 'number', count: 'number', date: 'date', time: 'date',
+    shares: 'number', count: 'number', date: 'date', time: 'time',
   });
   assert.equal(kindOf({ unit: 'krw_ko' }), 'korean');
   assert.equal(kindOf({ unit: 'shares' }), 'number');

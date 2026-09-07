@@ -7,6 +7,20 @@ function isRenderCanvasToolName(name) {
   return typeof name === 'string' && name.endsWith(RENDER_CANVAS_SUFFIX);
 }
 
+// Grok의 MCP 호출은 실제 서버 도구를 곧바로 tool_use.name에 싣지 않고 내장
+// use_tool 하나로 감싼다. tool_result는 바깥 id만 되돌리므로, 시작 블록에서
+// 실제 이름·입력을 풀어 인덱스와 main 진행 추적기가 같은 상관관계를 쓰게 한다.
+// 불완전한 봉투는 오인식하지 않고 원문으로 돌려 기존 처리에 맡긴다.
+function normalizeToolUseBlock(block) {
+  if (!block || block.name !== 'use_tool') return block;
+  const outerInput = block.input;
+  if (!outerInput || typeof outerInput !== 'object' || Array.isArray(outerInput)) return block;
+  if (typeof outerInput.tool_name !== 'string' || !outerInput.tool_name.trim()) return block;
+  const toolInput = outerInput.tool_input;
+  if (!toolInput || typeof toolInput !== 'object' || Array.isArray(toolInput)) return block;
+  return { ...block, name: outerInput.tool_name, input: toolInput };
+}
+
 // ---------------------------------------------------------------------------
 // 0b. 서브에이전트(Agent/Task) 인식 — task #32, 실측 근거는
 //     .omc/research/2026-08-27-서브에이전트-스트림-계약.md.
@@ -140,7 +154,8 @@ function indexToolUseBlock(index, event) {
   if (!Array.isArray(content)) return;
   for (const block of content) {
     if (block && block.type === 'tool_use' && block.id) {
-      index.set(block.id, { name: block.name, isRenderCanvas: isRenderCanvasToolName(block.name) });
+      const toolUse = normalizeToolUseBlock(block);
+      index.set(block.id, { name: toolUse.name, isRenderCanvas: isRenderCanvasToolName(toolUse.name) });
     }
   }
 }
@@ -367,6 +382,7 @@ class StreamJsonSession {
 module.exports = {
   RENDER_CANVAS_SUFFIX,
   isRenderCanvasToolName,
+  normalizeToolUseBlock,
   AGENT_TOOL_NAME,
   isAgentToolName,
   classifySubagentEvent,

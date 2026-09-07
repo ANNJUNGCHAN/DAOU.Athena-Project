@@ -12,7 +12,10 @@
 const onboarding = window.AthenaLib.Onboarding;
 const authScreen = window.AthenaLib.AuthScreen;
 const settingsCards = window.AthenaLib.SettingsCards;
-const { waitForVisiblePaint: waitForRestReceiptPaint } = window.AthenaLib.RestCanvasPaint;
+const {
+  waitForVisiblePaint: waitForRestReceiptPaint,
+  upsertRestReceipt,
+} = window.AthenaLib.RestCanvasPaint;
 const toolStepTrack = window.AthenaLib.ToolStepTrack;
 const { createTextReleaseLadder } = window.AthenaLib.TextReleaseLadder;
 
@@ -186,22 +189,31 @@ window.athena.on('athena:add-rest-receipt', async (payload = {}) => {
     // 같은 오버레이(#onboard)를 계좌 전환 화면도 빌려 쓴다 — 막는 이유를
     // 온보딩이라고 잘못 보고하지 않는다(둘 다 fail-closed인 것은 같다).
     accountSwitchOpen ? 'account_switch_active' : 'onboarding_active',
+    payload.receiptRevision,
   )) return;
   if (!prepareRestReceiptSurface()) return;
-  const line = document.createElement('div');
-  line.className = 'turn rest-receipt';
-  line.dataset.receiptId = String(payload.receiptId || '');
-  const text = document.createElement('div');
-  text.className = 'turn-a';
-  text.textContent = String(payload.text || '캔버스에 표시하지 못했습니다.');
-  line.appendChild(text);
-  $history.appendChild(line);
+  const line = upsertRestReceipt($history, {
+    receiptId: payload.receiptId,
+    text: payload.text,
+    createElement: (tagName) => document.createElement(tagName),
+    replaceOnly: payload.replaceOnly === true,
+  });
+  if (!line) {
+    window.athena.send('athena:rest-receipt-painted', {
+      receipt_id: payload.receiptId,
+      receipt_revision: payload.receiptRevision,
+      verified_visible: false,
+      error: 'receipt_not_found',
+    });
+    return;
+  }
   line.scrollIntoView({ block: 'nearest' });
   scrollAfterRender();
   try {
     const paint = await waitForRestReceiptPaint(line);
     window.athena.send('athena:rest-receipt-painted', {
       receipt_id: payload.receiptId,
+      receipt_revision: payload.receiptRevision,
       verified_visible: paint.verifiedVisible,
       visible_paint_at: paint.visiblePaintAt,
       rect: paint.rect,
@@ -209,6 +221,7 @@ window.athena.on('athena:add-rest-receipt', async (payload = {}) => {
   } catch (error) {
     window.athena.send('athena:rest-receipt-painted', {
       receipt_id: payload.receiptId,
+      receipt_revision: payload.receiptRevision,
       verified_visible: false,
       error: String((error && error.message) || error),
     });

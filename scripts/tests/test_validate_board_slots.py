@@ -8,9 +8,7 @@ from __future__ import annotations
 import json
 
 import pytest
-
 import validate_board_slots as vbs
-
 
 VISIBLE = {("base:kt00001", "9201"): "계좌번호", ("base:kt00001", "8019"): "예수금"}
 HIDDEN = {("base:kt00001", "return_code")}
@@ -93,6 +91,25 @@ def test_unmapped_counts_values_only(tmp_path):
         },
     )
     assert report["unmapped"] == 1
+
+
+def test_composite_parts_count_as_slot_and_pack_bindings(tmp_path):
+    composite = {
+        "separator": " · ",
+        "parts": [
+            {"mapping_id": "base:kt00001", "f": "9201", "format": {"kind": "text"}},
+            {"mapping_id": "base:kt00001", "f": "8019", "format": {"kind": "number"}},
+        ],
+    }
+    pack = [
+        {"mapping_id": "base:kt00001", "f": "9201", "kor": "계좌번호", "attributed_here": True},
+        {"mapping_id": "base:kt00001", "f": "8019", "kor": "예수금", "attributed_here": True},
+    ]
+    report = _check(tmp_path, {"slots": [_slot("s1", composite=composite)]}, pack)
+    assert report["mapped"] == 1
+    assert report["unmapped"] == 0
+    assert report["unknown"] == []
+    assert report["unbound"] == []
 
 
 # --------------------------------------------------------------------------- #
@@ -447,7 +464,7 @@ def test_problems_sum_and_exit_code(tmp_path, monkeypatch, capsys):
     monkeypatch.setattr(vbs, "TEMPLATE_ROOT", tmp_path)
     monkeypatch.setattr(vbs, "visible_fields", lambda: VISIBLE)
     monkeypatch.setattr(vbs, "hidden_fields", lambda: HIDDEN)
-    board_dir, pack_dir = _board(
+    _, pack_dir = _board(
         tmp_path, {"slots": [_slot("s1"), _slot("s2", mapping_id="base:kt00001", f="9201")]}
     )
     assert vbs.main(["X-0", "--pack-dir", str(pack_dir)]) == 1
@@ -460,7 +477,7 @@ def test_clean_board_exits_zero(tmp_path, monkeypatch, capsys):
     monkeypatch.setattr(vbs, "TEMPLATE_ROOT", tmp_path)
     monkeypatch.setattr(vbs, "visible_fields", lambda: VISIBLE)
     monkeypatch.setattr(vbs, "hidden_fields", lambda: HIDDEN)
-    board_dir, pack_dir = _board(
+    _, pack_dir = _board(
         tmp_path, {"slots": [_slot("s1", mapping_id="base:kt00001", f="9201")]}
     )
     assert vbs.main(["X-0", "--pack-dir", str(pack_dir)]) == 0

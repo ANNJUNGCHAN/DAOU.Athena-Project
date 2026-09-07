@@ -92,10 +92,11 @@ function completeOnboardingIfCurrent(result, revisionGuard, viewRevision, finish
 // 다시 요청할 수 있고, receipt 본문은 큐에 보관하지 않아 오래된 내용·비밀이 후속
 // 대화에 나타나지 않는다. 외부로 내보내는 사유는 호출자가 준 안정된 공개 코드
 // 하나뿐이다 — 같은 오버레이를 쓰는 계좌 전환 화면은 자기 사유를 넘긴다.
-function ackRestReceiptBlockedByOnboarding(onboard, send, receiptId, reason) {
+function ackRestReceiptBlockedByOnboarding(onboard, send, receiptId, reason, receiptRevision) {
   if (!onboard || onboard.hidden || typeof send !== 'function') return false;
   send('athena:rest-receipt-painted', {
     receipt_id: receiptId,
+    ...(receiptRevision ? { receipt_revision: receiptRevision } : {}),
     verified_visible: false,
     error: reason || 'onboarding_active',
   });

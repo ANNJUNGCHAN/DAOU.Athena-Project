@@ -1290,6 +1290,7 @@ body { margin: 0; overflow: hidden; }
 
 /* 코드 편집기(보드 02) — 투명 textarea를 색칠한 pre 위에 정확히 겹친다. */
 .backtest-code-host { margin-bottom: 10px; }
+.backtest-code-root { text-align: left; }
 .backtest-code-editor {
   display: flex;
   max-height: 380px;
@@ -1321,6 +1322,7 @@ body { margin: 0; overflow: hidden; }
 .backtest-code-textarea {
   margin: 0;
   padding: 10px 12px;
+  text-align: left;
   font-family: var(--font-mono);
   font-size: 11px;
   line-height: 18px;

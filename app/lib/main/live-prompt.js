@@ -245,6 +245,17 @@ const LIVE_RULES_TEXT = [
     '- 두세 문장으로 끝나는 단답에는 목록을 억지로 만들지 않는다.',
 ].join('\n');
 
+// Grok CLI는 MCP 도구를 내장 search_tool/use_tool 뒤에 숨기고, use_tool에는
+// `server__tool` 이름을 요구한다. 공통 규칙의 Claude식 bare name만 보면 모델이
+// 존재하지 않는 도구를 여러 번 추측하므로 Grok 콜드 경로에만 이 변환 규칙을 준다.
+const GROK_MCP_RULES_TEXT = [
+  '[Grok MCP 호출 규칙]',
+  '- Athena 도구는 먼저 search_tool로 찾고, 반환된 정확한 server__tool 이름을 use_tool의 tool_name에 넣는다. bare 이름이나 추측한 별칭을 쓰지 않는다.',
+  '- 이 앱의 Athena 서버 이름은 athena다. 백테스트 도구의 qualified 이름은 athena__athena_backtest다.',
+  '- 폼 변경 예시: {"tool_name":"athena__athena_backtest","tool_input":{"action":"propose_spec","propose_spec":{"patch":{"symbols":["005930"],"period":"day"}}}}',
+  '- propose_spec의 patch는 반드시 propose_spec 객체 안에 넣는다. period는 day·week·month 중 하나만 지원한다. 분봉을 지원한다고 말하거나 period=min을 보내지 않는다.',
+].join('\n');
+
 function buildLiveSystemPrompt() {
   return LIVE_RULES_TEXT;
 }
@@ -270,11 +281,40 @@ const PROJECT_FILE_LIMIT = 40;
 // 백엔드가 severity를 실어 보내면 그것을 먼저 믿는다.
 const WARN_CHECK_IDS = new Set(['magic', 'structure']);
 
+// 백테스트 상대 기간에만 쓰는 작은 달력 계산. 호출자가 준 KST YYYYMMDD 외에는
+// 근거가 없으므로 Date/현재 시각으로 물러나지 않고, 잘못된 값이면 null을 돌려준다.
+function recentThreeMonthRange(today) {
+  const value = typeof today === 'string' ? today : '';
+  if (!/^\d{8}$/.test(value)) return null;
+  const year = Number(value.slice(0, 4));
+  const month = Number(value.slice(4, 6));
+  const day = Number(value.slice(6, 8));
+  const daysInMonth = (y, m) => {
+    if (m === 2) return (y % 4 === 0 && (y % 100 !== 0 || y % 400 === 0)) ? 29 : 28;
+    return [4, 6, 9, 11].includes(m) ? 30 : 31;
+  };
+  if (year < 1 || month < 1 || month > 12 || day < 1 || day > daysInMonth(year, month)) {
+    return null;
+  }
+
+  const targetIndex = (year * 12) + month - 1 - 3;
+  const targetYear = Math.floor(targetIndex / 12);
+  const targetMonth = (targetIndex % 12) + 1;
+  if (targetYear < 1) return null;
+  const targetDay = Math.min(day, daysInMonth(targetYear, targetMonth));
+  const pad = (number, width) => String(number).padStart(width, '0');
+  return {
+    from: `${pad(targetYear, 4)}${pad(targetMonth, 2)}${pad(targetDay, 2)}`,
+    to: value,
+  };
+}
+
 function buildBacktestModePrefix(context, today) {
   const ctx = context && typeof context === 'object' ? context : null;
   const obj = (v) => (v && typeof v === 'object' ? v : null);
   const label = (v) => (typeof v === 'string' && v ? v : '모름');
   const json = (v, empty) => (obj(v) ? JSON.stringify(v) : empty);
+  const recentThreeMonths = recentThreeMonthRange(today);
 
   const formSpec = obj(ctx && ctx.spec);
   // 구 출처 전략은 외부 제목을 이름으로 저장했다. 화면·저장본은 보존하고, 모델에
@@ -543,8 +583,12 @@ function buildBacktestModePrefix(context, today) {
   ] : [];
 
   return [
-    `[모드: 백테스트] 오늘: ${today ? String(today) : '미상'}`,
+    `[모드: 백테스트] 오늘: ${recentThreeMonths ? recentThreeMonths.to : '미상'}`,
     '사용자는 백테스트 캔버스에 있고, 캔버스는 채팅이 제어한다. 이 턴의 규칙:',
+    recentThreeMonths
+      ? `상대 기간 기준: 최근 3개월=${recentThreeMonths.from}~${recentThreeMonths.to}`
+      : '상대 기간 기준: 미상 — 날짜를 지어내지 않는다',
+    '- "최근 3개월" 같은 상대 기간은 위 기준값을 사용한다. 사용자가 YYYYMMDD 날짜를 직접 지정했으면 그 값을 우선하고 덮어쓰지 않는다. 기준이 미상이면 날짜를 만들지 말고 확인한다.',
     '- 캔버스 카드를 올리지 않는다 — athena__render_canvas를 호출하지 않는다. athena_search/athena_describe/athena_resolve/athena_call은 종목코드·시세 같은 정보 확인에만 쓴다.',
     '- **설명은 지도의 칸으로 한다.** 사용자에게 말할 때는 칸 번호(①~④)와 사람 말을 쓰고, 코드 줄 번호·파이썬 문법·함수 이름을 말하지 않는다 — 코드는 최후의 보루라 사람이 열 일이 거의 없다.',
     '- **칸을 고쳐달라는 말은 바로 반영한다.** 폼 경로면 propose_spec, 코드 경로면 propose_code로 보내고, 답 첫 줄에 어느 칸이 어떻게 바뀌는지 한 줄로 적는다(예: "③ 사고·파는 순간 — 청산을 …로 바꿨습니다").',
@@ -709,7 +753,10 @@ function buildLiveTurnPrompt(input) {
 // 동일해야 한다(live-prompt.test.js가 합성 규칙을 고정). query는 문자열이든
 // buildLiveTurnPrompt와 같은 객체든 그대로 통과시킨다.
 function buildLivePrompt(query) {
-  return `${LIVE_RULES_TEXT}\n\n${buildLiveTurnPrompt(query)}`;
+  const providerRules = query && typeof query === 'object' && query.providerId === 'grok'
+    ? `\n\n${GROK_MCP_RULES_TEXT}`
+    : '';
+  return `${LIVE_RULES_TEXT}${providerRules}\n\n${buildLiveTurnPrompt(query)}`;
 }
 
 module.exports = {

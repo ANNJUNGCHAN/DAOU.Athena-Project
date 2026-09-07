@@ -25,7 +25,7 @@ const MYRIAD_LADDER = Object.freeze([
   Object.freeze({ unit: '만', size: 10000 }),
   Object.freeze({ unit: '', size: 1 }),
 ]);
-const SCALE_FACTOR = Object.freeze({ 천: 1000, 만: 10000, 억: 100000000, 조: 1000000000000 });
+const SCALE_FACTOR = Object.freeze({ 천: 1000, 만: 10000, 백만: 1000000, 억: 100000000, 조: 1000000000000 });
 
 // 한 표기에 쓰는 자리 묶음 수 — 상위 2묶음이면 판단이 바뀌지 않는다(헌장 신념 6
 // "판단이 바뀌지 않을 정밀도"). 3묶음 이상은 읽는 비용만 늘린다.
@@ -44,7 +44,7 @@ const UNIT_KIND = Object.freeze({
   shares: 'number',
   count: 'number',
   date: 'date',
-  time: 'date',   // 시각은 원문 그대로 통과시킨다(formatDatetime이 8자리만 자른다).
+  time: 'time',
 });
 
 // 단위는 값과 함께 쓴다(헌장 신념 6). 수량 단위만 접미로 붙는다 — 금액은 만 단위
@@ -52,7 +52,7 @@ const UNIT_KIND = Object.freeze({
 const UNIT_SUFFIX = Object.freeze({ shares: '주', count: '건' });
 
 // 렌더러 전용 종류 — 추출기 단위에는 대응어가 없고 손으로 쓴 계약만 쓴다.
-const RENDER_KIND = Object.freeze(['text', 'number', 'korean', 'percent', 'date', 'rollup']);
+const RENDER_KIND = Object.freeze(['text', 'number', 'korean', 'percent', 'date', 'time', 'rollup']);
 
 // 부호에서 색을 뽑는 tone 어휘. 추출기는 변화량을 'change'로, 손으로 쓴 계약은
 // 'signed'로 적는다. 'neutral'은 색 없음이고, 색이 없다고 부호가 사라지지는 않는다.
@@ -117,15 +117,36 @@ function toneColorVar(tone) {
   return null;
 }
 
+function formatTime(value) {
+  const text = String(value);
+  return /^\d{6}$/.test(text)
+    ? `${text.slice(0, 2)}:${text.slice(2, 4)}:${text.slice(4, 6)}`
+    : text;
+}
+
 function missingText(reason) {
   return MISSING_TEXT[String(reason || DEFAULT_MISSING)] || MISSING_TEXT[DEFAULT_MISSING];
 }
 
+function isScalarSlotValue(value) {
+  return typeof value !== 'object' || value === null;
+}
+
+function compositeSpecOf(raw) {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
+  const composite = raw.composite;
+  return composite && typeof composite === 'object' && !Array.isArray(composite) ? composite : null;
+}
+
 function normalizeSlotValue(raw) {
   if (raw === null || raw === undefined || raw === '') return { value: null, missing: DEFAULT_MISSING };
+  // 보드 슬롯은 단일 관찰값 하나를 받는다. 배열은 REST 목록/시계열이 잘못 결합된
+  // 계약 위반이고 String(array)는 쉼표로 이어진 전체 목록을 한 칸에 쏟아낸다.
+  // 어느 원소가 현재값인지 추정하지 않고 결측으로 닫는다.
+  if (Array.isArray(raw)) return { value: null, missing: DEFAULT_MISSING };
   if (typeof raw === 'object' && !Array.isArray(raw)) {
     if (raw.missing) return { value: null, missing: raw.missing };
-    if (raw.value === null || raw.value === undefined || raw.value === '') {
+    if (raw.value === null || raw.value === undefined || raw.value === '' || !isScalarSlotValue(raw.value)) {
       return { value: null, missing: DEFAULT_MISSING };
     }
     return { value: raw.value, missing: null, text: raw.text, tone: raw.tone };
@@ -153,14 +174,64 @@ function toneFor(spec, value) {
   return spec.tone && spec.tone !== NEUTRAL_TONE ? spec.tone : null;
 }
 
+function applyAffixes(spec, formatted) {
+  if (formatted.missing) return formatted;
+  if ((spec.prefix !== undefined && typeof spec.prefix !== 'string')
+    || (spec.suffix !== undefined && typeof spec.suffix !== 'string')) {
+    return { text: missingText(), tone: null, missing: true };
+  }
+  return {
+    ...formatted,
+    text: `${spec.prefix || ''}${formatted.text}${spec.suffix || ''}`,
+  };
+}
+
+function missingResult(spec, reason, authored = false) {
+  const authoredText = authored && typeof spec.missing_text === 'string'
+    ? spec.missing_text.trim() : '';
+  return { text: authoredText || missingText(reason), tone: null, missing: true };
+}
+
 // 슬롯 하나의 최종 표기. 반환은 항상 {text, tone} — tone은 색을 고르는 근거이고
 // 색만으로는 뜻을 전하지 않으므로 부호는 text에 이미 들어 있다.
 function formatSlot(format, raw) {
   const spec = format || {};
+  const composite = compositeSpecOf(raw);
+  if (composite) {
+    const separator = composite.separator;
+    const parts = composite.parts;
+    if (typeof separator !== 'string' || !Array.isArray(parts) || parts.length < 2) {
+      return missingResult(spec);
+    }
+    const texts = [];
+    for (const part of parts) {
+      const partFormat = part && part.format;
+      if (!part || typeof part !== 'object' || Array.isArray(part)
+        || typeof part.mapping_id !== 'string' || !part.mapping_id
+        || typeof part.f !== 'string' || !part.f
+        || !partFormat || typeof partFormat !== 'object' || Array.isArray(partFormat)) {
+        return missingResult(spec);
+      }
+      if (part.value === null || part.value === undefined || part.value === '') {
+        return missingResult(spec, DEFAULT_MISSING, true);
+      }
+      if (!isScalarSlotValue(part.value)) {
+        return missingResult(spec);
+      }
+      const formatted = formatSlot(partFormat, part.value);
+      if (formatted.missing) return missingResult(spec, DEFAULT_MISSING, true);
+      texts.push(formatted.text);
+    }
+    return applyAffixes(spec, { text: texts.join(separator), tone: null, missing: false });
+  }
   const normalized = normalizeSlotValue(raw);
-  if (normalized.missing) return { text: missingText(normalized.missing), tone: null, missing: true };
+  if (normalized.missing) {
+    const explicitlyMissing = raw === null || raw === undefined || raw === ''
+      || (raw && typeof raw === 'object' && !Array.isArray(raw) && raw.missing);
+    return missingResult(spec, normalized.missing, explicitlyMissing);
+  }
   if (typeof normalized.text === 'string' && normalized.text) {
-    return { text: normalized.text, tone: normalized.tone || null, missing: false };
+    return applyAffixes(spec, { text: normalized.text, tone: normalized.tone || null, missing: false });
   }
 
   const kind = kindOf(spec);
@@ -168,30 +239,42 @@ function formatSlot(format, raw) {
   const tone = toneFor(spec, normalized.value);
 
   if (kind === 'text' || kind === 'rollup') {
-    return { text: String(normalized.value), tone, missing: false };
+    return applyAffixes(spec, { text: String(normalized.value), tone, missing: false });
   }
   if (kind === 'date') {
-    return { text: factsCard.formatDatetime(normalized.value), tone, missing: false };
+    const rawDate = String(normalized.value);
+    const text = spec.date_style === 'month-day' && /^\d{8}$/.test(rawDate)
+      ? `${rawDate.slice(4, 6)}-${rawDate.slice(6, 8)}`
+      : factsCard.formatDatetime(normalized.value);
+    return applyAffixes(spec, { text, tone, missing: false });
+  }
+  if (kind === 'time') {
+    return applyAffixes(spec, { text: formatTime(normalized.value), tone, missing: false });
   }
 
   const numeric = toNumber(normalized.value);
-  if (numeric === null) return { text: String(normalized.value), tone, missing: false };
-  const scaled = numeric * scale;
+  if (numeric === null) return applyAffixes(spec, { text: String(normalized.value), tone, missing: false });
+  // Kiwoom 가격 필드는 방향 부호를 값에 싣는다. 가격으로 저작된 슬롯만 magnitude를
+  // 표시하고, 상승·하락 tone은 위에서 원본 부호로 이미 계산한 값을 유지한다.
+  const displayNumeric = spec.absolute === true ? Math.abs(numeric) : numeric;
+  const scaled = displayNumeric * scale;
 
   if (kind === 'korean') {
-    return { text: `${signPrefix(scaled, spec.sign)}${formatKoreanUnit(scaled)}`, tone, missing: false };
+    return applyAffixes(spec, {
+      text: `${signPrefix(scaled, spec.sign)}${formatKoreanUnit(scaled)}`, tone, missing: false,
+    });
   }
   if (kind === 'percent') {
     const precision = Number.isFinite(spec.precision) ? spec.precision : 2;
-    return {
+    return applyAffixes(spec, {
       text: `${signPrefix(scaled, spec.sign)}${withPrecision(scaled, precision)}%`, tone, missing: false,
-    };
+    });
   }
-  return {
+  return applyAffixes(spec, {
     text: `${signPrefix(scaled, spec.sign)}${withPrecision(scaled, spec.precision)}${suffixOf(spec)}`,
     tone,
     missing: false,
-  };
+  });
 }
 
 // H1 영값 묶음(헌장 §3.1) — 한 그룹에서 0·결측 항목이 3개 이상이면 접는다.
@@ -208,7 +291,8 @@ function isZeroLike(format, raw) {
 const __exports = {
   MISSING_TEXT, MYRIAD_LADDER, SCALE_FACTOR, MYRIAD_GROUPS, ZERO_COLLAPSE_MIN,
   UNIT_KIND, UNIT_SUFFIX, RENDER_KIND, DERIVED_TONE,
-  toNumber, formatKoreanUnit, formatSlot, normalizeSlotValue, kindOf, toneFor,
+  toNumber, formatKoreanUnit, formatTime, formatSlot, normalizeSlotValue, isScalarSlotValue, compositeSpecOf,
+  kindOf, toneFor, applyAffixes, missingResult,
   toneOf, toneColorVar, missingText, isZeroLike,
 };
 

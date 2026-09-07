@@ -260,7 +260,9 @@ def test_render_plan_public_label_authority_gap_returns_coverage_422():
 
 
 def test_render_plan_inline_returns_envelope_without_queueing() -> None:
-    upstream = FakeClient({"cur_prc": "+71000", "pred_pre": "+1200"})
+    upstream = FakeClient(
+        {"cur_prc": "+71000", "pred_pre": "+1200", "flu_rt": "+1.72"}
+    )
     with _client(_service(), upstream) as client:
         token = _resolve(client, "detail:ka10001:current_trading", {"stk_cd": "005930"})
         queue = client.app.state.canvas_events
@@ -296,6 +298,14 @@ def test_render_plan_inline_returns_envelope_without_queueing() -> None:
         assert body["envelope"]["raw_data"]["cur_prc"] == "+71000"
         assert body["envelope"]["raw_data"]["pred_pre"] == "+1200"
         assert body["envelope"]["source_data"]["data"] == body["envelope"]["raw_data"]
+        initial = body["envelope"]["initial_surface_contract"]
+        assert initial["board_id"] == "2R3M-1"
+        initial_values = {
+            entry["slot_id"]: entry["value"] for entry in initial["slot_values"]
+        }
+        assert initial_values["s006"]["composite"]["parts"][0]["value"] == "+1200"
+        assert initial_values["s006"]["composite"]["parts"][1]["value"] == "+1.72"
+        assert "s006" not in initial["hydration_slot_ids"]
         receipt_text = json.dumps(body["receipt"], ensure_ascii=False)
         for canvas_token in ("+71000", "+1200", "cur_prc", "pred_pre"):
             assert canvas_token not in receipt_text
@@ -308,6 +318,22 @@ def test_render_plan_inline_returns_envelope_without_queueing() -> None:
         }
         assert all(value >= 0 for value in body["timing"].values())
         assert queue.empty()
+
+
+def test_render_plan_empty_full_query_does_not_rehydrate_same_tr_slots() -> None:
+    upstream = FakeClient({})
+    with _client(_service(), upstream) as client:
+        token = _resolve(client, "detail:ka10001:current_trading", {"stk_cd": "005930"})
+        response = client.post(
+            "/api/v1/canvas/render-plan",
+            json={"plan_token": token, "delivery": "inline"},
+        )
+
+        assert response.status_code == 200, response.text
+        initial = response.json()["envelope"]["initial_surface_contract"]
+        assert "s006" in initial["unbound_slots"]
+        assert "s006" not in initial["hydration_slot_ids"]
+        assert len(upstream.calls) == 1
 
 
 def test_render_plan_inline_timeout_returns_authoritative_error_state_before_deadline() -> None:
