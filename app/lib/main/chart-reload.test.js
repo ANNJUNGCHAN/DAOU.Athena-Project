@@ -182,6 +182,7 @@ test('an accepted toolbar reload mints a fresh one-use resolve token before rend
   const result = await runRestDataset({
     dataset: request,
     backendBase: 'http://backend',
+    backendAccountAlias: 'server-a',
     fetchImpl,
     emitCanvas: async (payload) => ({
       verifiedVisible: true, visiblePaintAt: payload.requestStartedAt + 10,
