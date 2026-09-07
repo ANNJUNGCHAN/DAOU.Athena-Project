@@ -15,7 +15,7 @@
           </div>
         </div>
       </div>
-      <div style={{ backgroundColor: 'var(--color-k-panel)', borderRadius: '16px', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', gap: '14px', height: 'fit-content', padding: '24px', width: '1360px' }}>
+      <div style={{ backgroundColor: 'var(--color-k-panel)', borderRadius: '28px', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', gap: '14px', height: 'fit-content', padding: '24px', width: '1360px' }}>
         <div style={{ boxSizing: 'border-box', display: 'flex', justifyContent: 'space-between', width: '1312px' }}>
           <div style={{ boxSizing: 'border-box', display: 'flex', flexDirection: 'column', gap: '5px' }}>
             <div style={{ boxSizing: 'border-box', color: 'var(--color-k-text)', fontFamily: 'var(--font-strong)', fontSize: '20px', lineHeight: '26px' }}>
