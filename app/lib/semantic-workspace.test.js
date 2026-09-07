@@ -404,6 +404,7 @@ test('production 0B FID 10 binding updates the production snapshot observation',
     });
     const mounted = await manager.mount({
       leaseId: 'quote', cardId: 'CC-03', mode: 'quote', symbol: '005930',
+      backendAccountAlias: 'server-a',
       semanticBindingIds: [snapshotBindingId],
     });
     assert.equal(mounted.ok, true, JSON.stringify(mounted));

@@ -86,6 +86,10 @@ const INVOKE_CHANNELS = new Set([
   'athena:integrated-card-realtime-release-all',
   'athena:integrated-card-realtime-status',
   'athena:integrated-card-realtime-command',
+  'athena:realtime-acquire',
+  'athena:realtime-release',
+  'athena:orderbook-realtime-acquire',
+  'athena:orderbook-realtime-release',
   // 보드 슬롯 하이드레이션 — 봉투가 못 채운 슬롯만 채운다. 읽기 전용이다.
   'athena:canvas-board-hydrate',
   // 채팅→그래프 파이프라인 단계 5(.omc/plans/plan-chat-graph-pipeline.md §2(e)/(f))
@@ -232,11 +236,8 @@ const SEND_CHANNELS = new Set([
   'athena:chart-panel-destroyed',
   // 카드 소멸 시 실시간 구독 참조를 서버까지 해제한다(panelId가 없는 카드종 —
   // 표/시세 등. AITS 차트는 위 athena:chart-panel-destroyed가 겸한다).
-  'athena:realtime-release',
   // 호가잔량(0D) — 0B와 달리 카드가 뜰 때 명시적으로 acquire하고, 닫힐 때
   // release한다(task #25, canvas.js wireOrderbookRealtime).
-  'athena:orderbook-realtime-acquire',
-  'athena:orderbook-realtime-release',
   // 알림 오브 창(2026-08-24 리프 1.3.1) — 오브가 보낼 수 있는 것은 이 둘뿐이다.
   //   athena:orb-toggle     접힘/펼침 요청. 창 크기 변경은 main이 한다(기하는
   //                         lib/main/orb-window.js).
