@@ -2551,13 +2551,13 @@ const ROUTES = Object.freeze([
       '울린 기록 · 최근', '채팅에서 열기 ↗', '전체 이력 보기 →',
     ],
     // Paper 보드 12의 상태 제어 행은 [일시중지][취소][고치기 — 말로] 셋이고,
-    // 켜진 알람에는 초안의 「검사」가 없다. 설정 요약은 확인 주기·쿨다운·만료
-    // 세 줄이다 — 값(「1일」·「2026-10-03」)은 봉투가 주므로 개수로만 잰다.
+    // 켜진 알람에는 초안의 「검사」가 없다. 설정 요약은 확인 주기·쿨다운·만료와
+    // 데이터 출처 네 줄이다 — 값(「1일」·「2026-10-03」)은 봉투가 주므로 개수로만 잰다.
     structure: [
       { what: 'count', selector: '.agent-code-controls button', equals: 3 },
       { what: 'absent', selector: '.agent-code-check-btn' },
       { what: 'count', selector: '.agent-view-tab', equals: 4 },
-      { what: 'count', selector: '.agent-detail-field', equals: 3 },
+      { what: 'count', selector: '.agent-detail-field', equals: 4 },
     ],
   },
 
