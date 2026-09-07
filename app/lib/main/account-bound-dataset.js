@@ -39,14 +39,40 @@ async function runAccountBoundDataset({
   runRestDataset,
   runnerOptions,
 } = {}) {
+  const bound = await createAccountBoundInvoker({
+    requestedAccountId,
+    getActiveAccountId,
+    resolveBackendAlias,
+    resolveOptions,
+    run: runRestDataset,
+  });
+  if (!bound.ok) return blockedResult(bound.error);
+  return bound.run(runnerOptions);
+}
+
+async function createAccountBoundInvoker({
+  requestedAccountId,
+  getActiveAccountId,
+  resolveBackendAlias,
+  resolveOptions,
+  run,
+} = {}) {
   if (typeof resolveBackendAlias !== 'function') throw new TypeError('resolveBackendAlias가 필요하다');
-  if (typeof runRestDataset !== 'function') throw new TypeError('runRestDataset이 필요하다');
+  if (typeof run !== 'function') throw new TypeError('run이 필요하다');
   const accountId = requestedAccountId == null
     ? String(typeof getActiveAccountId === 'function' ? getActiveAccountId() || '' : '')
     : String(requestedAccountId || '');
   const binding = await resolveBackendAlias({ ...(resolveOptions || {}), id: accountId });
-  if (!binding || !binding.ok) return blockedResult(binding && binding.error);
-  return runRestDataset({ ...(runnerOptions || {}), backendAccountAlias: binding.backendAlias });
+  if (!binding || !binding.ok) {
+    return { ok: false, accountId, error: binding && binding.error };
+  }
+  const backendAccountAlias = binding.backendAlias;
+  return {
+    ok: true,
+    accountId,
+    backendAccountAlias,
+    run: (options) => run({ ...(options || {}), backendAccountAlias }),
+  };
 }
 
-module.exports = { runAccountBoundDataset };
+module.exports = { createAccountBoundInvoker, runAccountBoundDataset };
