@@ -183,6 +183,24 @@ const VERSION_EDIT_LABEL = '이 버전으로 편집';
 
 const OPTIMIZE_METHODS = [['grid', '그리드'], ['random', '랜덤']];
 
+// ── 안 될 때의 상태(보드 10) ────────────────────────────────────────────────
+//
+// Paper는 오류 화면을 한 덩어리로 두지 않고 배지로 갈랐다: 실행이 터진 「실패」와,
+// 기능 자체가 꺼진 「비활성」. 세 번째 카드 「진행 유지」는 이 화면의 상태가 아니라
+// 모드를 떠났다 와도 폴링이 이어붙는 사실이라(resumePollingIfNeeded · 41번 보드
+// 세션 복원) 배지가 설 자리가 없다.
+//
+// 둘을 가르는 값은 canvas.js가 503에 붙인 이 문장 하나다 — 봉투의 status는 문구가
+// 되어 여기 오므로(throw new Error(backtestError(...))) 상태 코드는 남지 않는다.
+const BACKTEST_DISABLED_TEXT = '백테스트 기능이 꺼져 있습니다 — 설정에서 백테스트를 켜야 합니다';
+const ERROR_BADGE_FAILED = '실패';
+const ERROR_BADGE_DISABLED = '비활성';
+
+function errorStateBadge(message) {
+  return String(message || '').startsWith(BACKTEST_DISABLED_TEXT)
+    ? ERROR_BADGE_DISABLED : ERROR_BADGE_FAILED;
+}
+
 // ── 기법 목록(2026-09-03 사용자 확정) ─────────────────────────────────────────
 //
 // "프리셋"이라는 말은 화면에서 쓰지 않는다. 처음 주어진 10개도 그냥 **기법**이고,
@@ -2802,11 +2820,20 @@ function createBacktestCanvas(options) {
       return;
     }
     if (state.view === 'error') {
-      const panel = renderMessagePanel(
-        'backtest-canvas-error', state.message || '알 수 없는 오류입니다',
-      );
+      const message = state.message || '알 수 없는 오류입니다';
+      const badge = errorStateBadge(message);
+      // 어느 상태인지 먼저 말한다(보드 10) — 같은 화면이 실패와 비활성 둘을 그린다.
+      const panel = renderMessagePanel('backtest-canvas-error', message, badge);
       // 막다른 길 금지(보드 10) — 오류 화면에서 설계로 돌아갈 길이 없어 사용자가 갇혔다
       // (2026-09-02 실측 "뒤로가기가 없어"). 전략이 있으면 설계 폼으로, 없으면 프리셋부터.
+      //
+      // 비활성은 다르다: 조회 자체가 막혀 프리셋도 못 읽었으니 돌아갈 설계가 없다.
+      // 켠 다음 다시 묻는 것이 유일한 출구다.
+      if (badge === ERROR_BADGE_DISABLED) {
+        panel.appendChild(button('backtest-error-back', '다시 시도', () => { void loadPresets(); }));
+        container.appendChild(panel);
+        return;
+      }
       panel.appendChild(button('backtest-error-back', '설계로 돌아가기', () => {
         if (spec) setState({ view: 'design', tab: 'design', designTab: 'form', message: null });
         else void loadPresets();
@@ -2860,8 +2887,9 @@ function createBacktestCanvas(options) {
     scheduleWorkspaceReport();
   }
 
-  function renderMessagePanel(extraClass, sub) {
+  function renderMessagePanel(extraClass, sub, badge) {
     const wrap = el('div', `backtest-canvas-empty${extraClass ? ` ${extraClass}` : ''}`);
+    if (badge) wrap.appendChild(el('div', 'backtest-error-badge', badge));
     wrap.appendChild(el('div', 'backtest-canvas-empty-title', '백테스트'));
     wrap.appendChild(el('div', 'backtest-canvas-empty-sub', sub));
     return wrap;
@@ -6586,6 +6614,8 @@ const __exports = {
   todayOrderCount,
   ASSUMPTIONS_TEXT,
   COSTS_NOTE,
+  BACKTEST_DISABLED_TEXT,
+  errorStateBadge,
 };
 
 // UMD 각주(2026-08-18 렌더러 격리) — column-fold.js와 같은 패턴.
