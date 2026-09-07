@@ -5,6 +5,7 @@ const { performance } = require('node:perf_hooks');
 const MAX_ITEMS = 6;
 const MAX_CONCURRENCY = 3;
 const DEFAULT_FIRST_CANVAS_DEADLINE_MS = 3000;
+const MAX_FIRST_CANVAS_DEADLINE_MS = 30_000;
 const BACKEND_MAX_DEADLINE_MS = 2700;
 const BACKEND_MIN_DEADLINE_MS = 100;
 const PRIMARY_UPSTREAM_DEADLINE_MS = 1500;
@@ -303,7 +304,7 @@ function normalizeDataset(input) {
     question,
     items,
     firstCanvasDeadlineMs: Math.min(
-      DEFAULT_FIRST_CANVAS_DEADLINE_MS,
+      MAX_FIRST_CANVAS_DEADLINE_MS,
       Math.max(1, Number(input.firstCanvasDeadlineMs || input.first_canvas_deadline_ms) || DEFAULT_FIRST_CANVAS_DEADLINE_MS),
     ),
   };
@@ -1234,6 +1235,7 @@ module.exports = {
   MAX_ITEMS,
   MAX_CONCURRENCY,
   DEFAULT_FIRST_CANVAS_DEADLINE_MS,
+  MAX_FIRST_CANVAS_DEADLINE_MS,
   ENTITY_INDEX_VERSION,
   STOCK_ENTITY_RESOLVER_ALGORITHM,
   STOCK_ENTITY_RESOLVER_VERSION,

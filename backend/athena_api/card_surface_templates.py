@@ -94,6 +94,26 @@ class SlotBinding:
 
 
 @dataclass(frozen=True, slots=True)
+class CompositePart:
+    """한 Paper 텍스트 잎 안에서 함께 표시할 원자 값 하나."""
+
+    mapping_id: str
+    f: str
+    occurrence_id: str | None
+    declared_occurrence_id: str | None
+    json_path: str | None
+    format: Mapping[str, Any]
+
+
+@dataclass(frozen=True, slots=True)
+class SlotComposite:
+    """명시적으로 저작된 여러 원자 값의 표시 순서와 구분자."""
+
+    separator: str
+    parts: tuple[CompositePart, ...]
+
+
+@dataclass(frozen=True, slots=True)
 class TableCell:
     """셀 슬롯의 표 좌표. 같은 ``table_id``·``col``의 다른 행은 한 열의 반복이다."""
 
@@ -137,6 +157,9 @@ class SurfaceSlot:
     # 같은 잎이 도달하는 다른 (mapping_id, f). 보드 하나가 여러 op를 받는 자리(D2)에서
     # 답한 op에 따라 값의 출처가 갈리는 잎이다.
     alt_mappings: tuple[SlotBinding, ...]
+    # 한 텍스트 잎에 여러 원자 값을 함께 표시하는 명시적 계약. 대체 바인딩이나
+    # 추출기의 extra_fields를 조합으로 추정하지 않는다.
+    composite: SlotComposite | None
     # 지시 열의 원본 패턴(`ovt_sigpric_sel_bid_{n}`). 셀의 `f`는 이미 확장돼 있고,
     # 이 값은 그 확장이 어느 열에서 나왔는지를 잃지 않으려고 그대로 보존한다.
     f_pattern: str | None
@@ -144,12 +167,14 @@ class SurfaceSlot:
 
     @property
     def binds_a_field(self) -> bool:
-        return bool(self.mapping_id) and bool(self.f)
+        return self.composite is not None or (bool(self.mapping_id) and bool(self.f))
 
     @property
-    def bindings(self) -> tuple[SlotBinding, ...]:
+    def bindings(self) -> tuple[SlotBinding | CompositePart, ...]:
         """주 바인딩이 먼저, 그다음 대체 바인딩. 바인딩이 없으면 빈 튜플."""
 
+        if self.composite is not None:
+            return self.composite.parts
         if not self.binds_a_field:
             return ()
         primary = SlotBinding(
@@ -790,6 +815,12 @@ def _parse_slot(
     alt_mappings = tuple(
         _parse_binding(entry, board_id, slot_id) for entry in raw_alts
     )
+    composite = _parse_composite(slot.get("composite"), board_id, slot_id)
+    if composite is not None and (mapping_id or alias or alt_mappings):
+        raise CardSurfaceTemplateError(
+            f"board {board_id!r} slot {slot_id!r} composite cannot be combined with "
+            f"mapping_id/f or alt_mappings"
+        )
     if alt_mappings and not (mapping_id and alias):
         raise CardSurfaceTemplateError(
             f"board {board_id!r} slot {slot_id!r} declares alt_mappings without a "
@@ -854,6 +885,7 @@ def _parse_slot(
         expanded_board=slot.get("expanded_board"),
         paper_text=slot.get("paper_text"),
         alt_mappings=alt_mappings,
+        composite=composite,
         f_pattern=f_pattern,
         table=_parse_table_cell(slot.get("table"), board_id, slot_id),
     )
@@ -881,6 +913,73 @@ def _parse_binding(raw: Any, board_id: str, slot_id: str) -> SlotBinding:
         ),
         declared_occurrence_id=declared_occurrence_id,
         json_path=json_path,
+    )
+
+
+def _parse_composite(
+    raw: Any, board_id: str, slot_id: str
+) -> SlotComposite | None:
+    if raw is None:
+        return None
+    entry = _require_mapping(raw, f"board {board_id!r} slot {slot_id!r} composite")
+    separator = entry.get("separator")
+    if not isinstance(separator, str):
+        raise CardSurfaceTemplateError(
+            f"board {board_id!r} slot {slot_id!r} composite separator must be a string"
+        )
+    raw_parts = entry.get("parts")
+    if not isinstance(raw_parts, list) or len(raw_parts) < 2:
+        raise CardSurfaceTemplateError(
+            f"board {board_id!r} slot {slot_id!r} composite parts must contain at "
+            f"least two entries"
+        )
+    parts = tuple(
+        _parse_composite_part(part, board_id, slot_id) for part in raw_parts
+    )
+    occurrences = [part.occurrence_id for part in parts]
+    if None not in occurrences and len(set(occurrences)) != len(occurrences):
+        raise CardSurfaceTemplateError(
+            f"board {board_id!r} slot {slot_id!r} composite repeats one occurrence"
+        )
+    return SlotComposite(separator=separator, parts=parts)
+
+
+def _parse_composite_part(raw: Any, board_id: str, slot_id: str) -> CompositePart:
+    entry = _require_mapping(
+        raw, f"board {board_id!r} slot {slot_id!r} composite part"
+    )
+    mapping_id = entry.get("mapping_id") or None
+    alias = entry.get("f") or None
+    if not mapping_id or not alias:
+        raise CardSurfaceTemplateError(
+            f"board {board_id!r} slot {slot_id!r} composite part needs both "
+            f"mapping_id and f"
+        )
+    part_format = entry.get("format")
+    if part_format is not None and not isinstance(part_format, dict):
+        raise CardSurfaceTemplateError(
+            f"board {board_id!r} slot {slot_id!r} composite part format must be an object"
+        )
+    for affix in ("prefix", "suffix"):
+        if affix in (part_format or {}) and not isinstance(part_format[affix], str):
+            raise CardSurfaceTemplateError(
+                f"board {board_id!r} slot {slot_id!r} composite part format "
+                f"{affix} must be a string"
+            )
+    declared_occurrence_id = entry.get("occurrence_id")
+    json_path = entry.get("json_path")
+    return CompositePart(
+        mapping_id=mapping_id,
+        f=alias,
+        occurrence_id=resolve_occurrence_id(
+            mapping_id,
+            alias,
+            declared_occurrence_id=declared_occurrence_id,
+            json_path=json_path,
+        ),
+        declared_occurrence_id=declared_occurrence_id,
+        json_path=json_path,
+        format=MappingProxyType(dict(part_format or {})),
     )
 
 

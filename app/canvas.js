@@ -1,6 +1,6 @@
 const { sanitize } = window.AthenaLib.Sanitize;
 const { renderMarkdownInto } = window.AthenaLib.Markdown;
-const { errorNote, removeCard } = window.AthenaLib.UiKit;
+const { button, emptyState, errorNote, removeCard } = window.AthenaLib.UiKit;
 const { widthGradeFor, dropTargetsFor, exceedsHeightBudget, MIN_CARDS } = window.AthenaLib.CanvasLayout;
 const { foldColumns } = window.AthenaLib.ColumnFold;
 const { createChartCard } = window.AthenaLib.ChartCard;
@@ -541,12 +541,16 @@ window.athena.on('athena:add-rest-canvas', async (payload) => {
     const chartImportReadyAt = card && card.dataset.chartImportReadyAt
       ? Number(card.dataset.chartImportReadyAt) : null;
     const paint = await waitForVisiblePaint(card);
-    // 차트는 껍질만 먼저 뜬다. 마운트 결과가 아직이면 pending으로 알리고, 결과가
+    // 차트·Paper는 껍질/로딩만 먼저 뜰 수 있다. 결과가 아직이면 pending으로 알리고, 결과가
     // 나오면 같은 correlation으로 최종 상태를 한 번 더 보낸다 — main은 그 값으로
     // 재조회 권위·실시간 등록·데이터 카드 집계를 결정한다.
     const chartSettled = card && card.dataset.renderState === 'loading' && card.dataset.chartPanelId
       ? chartMountSettlements.get(card.dataset.chartPanelId) || null
       : null;
+    const boardSettled = card && card.dataset.renderState === 'loading'
+      ? card.__athenaBoardLoadSettled || null
+      : null;
+    const renderSettled = chartSettled || boardSettled;
     window.athena.send('athena:rest-canvas-painted', {
       dataset_id: correlation.dataset_id,
       item_id: correlation.item_id,
@@ -554,7 +558,7 @@ window.athena.on('athena:add-rest-canvas', async (payload) => {
       operation_ref: payload.operationRef,
       canvas_type: payload.canvasType,
       render_state: card && card.dataset.renderState ? card.dataset.renderState : 'data',
-      pending: !!chartSettled,
+      pending: !!renderSettled,
       renderer_id: card && card.dataset.rendererId ? card.dataset.rendererId : null,
       panel_id: card && card.dataset.chartPanelId ? card.dataset.chartPanelId : null,
       generation: card && card.dataset.chartGeneration ? Number(card.dataset.chartGeneration) : null,
@@ -569,11 +573,15 @@ window.athena.on('athena:add-rest-canvas', async (payload) => {
       dom_to_paint_ack_ms: Math.max(0, paint.visiblePaintAt - domAttachedAt),
       rect: paint.rect,
     });
-    if (chartSettled) {
+    if (renderSettled) {
       // 첫 ack는 이미 성공으로 나갔다. 후속 관측이 실패하더라도 눈에 보이는 카드를
       // paint 실패로 뒤집지 않는다 — main은 한도가 지나면 'timeout'으로 맺는다.
       try {
-        const mountedState = await chartSettled;
+        const settled = await renderSettled;
+        if (!card.isConnected) return;
+        const mountedState = chartSettled
+          ? settled
+          : (card.dataset.renderState || (settled.status === 'ready' ? 'data' : 'error'));
         window.athena.send('athena:rest-canvas-painted', {
           dataset_id: correlation.dataset_id,
           item_id: correlation.item_id,
@@ -766,10 +774,15 @@ function renderPrimaryEnvelope(envelope, options = {}) {
 }
 
 // 보드 표면 카드 — surface_contract(백엔드 canvas_push가 싣는다)를 board-mount에
-// 넘겨 Paper 원문 HTML을 마운트한다. 슬롯 값이 없으면 결측어가 뜨고(신념 5),
-// 계약이 없으면 null을 돌려 기존 렌더 경로가 그대로 돈다.
+// 넘겨 Paper 원문 HTML을 마운트한다. 아직 조회할 슬롯이 있으면 로딩 경계에서
+// 하이드레이션을 기다리고, 계약이 없으면 null을 돌려 기존 렌더 경로가 그대로 돈다.
 function surfaceContractOf(envelope) {
   const contract = envelope && (envelope.surface_contract || envelope.surfaceContract);
+  return contract && typeof contract === 'object' && contract.board_id ? contract : null;
+}
+
+function initialSurfaceContractOf(envelope) {
+  const contract = envelope && (envelope.initial_surface_contract || envelope.initialSurfaceContract);
   return contract && typeof contract === 'object' && contract.board_id ? contract : null;
 }
 
@@ -816,12 +829,14 @@ function boardHydrateAccount(envelope) {
     || args.acnt_no || '';
 }
 
-// 보드 마운트 상태 — 카드 1장이 사는 동안 값 표와 상태 보드 링크를 이어 쓴다.
-// 상태 보드로 갈아타도 같은 값 표를 그대로 쓰고(D5) 부족분만 더 채운다.
+// 보드 마운트 상태 — 같은 slot id라도 보드마다 뜻이 다르므로 값·미결·실시간 색인은
+// board_id별로 격리한다. 상태 전환 때 현재 보드의 표만 활성 별칭으로 꺼낸다.
 function boardStateOf(host) {
   if (!host.__athenaBoard) {
     host.__athenaBoard = {
       values: {}, links: [], unbound: [], boardId: null,
+      valuesByBoard: new Map(), unboundByBoard: new Map(), hydrationByBoard: new Map(),
+      realtimeByBoard: new Map(),
       // binding_id → [slot_id]. 봉투가 두 표를 같이 실을 때만 채워진다 —
       // 비어 있으면 실시간 프레임은 보드에 아무것도 안 한다(추측하지 않는다).
       realtimeSlots: new Map(), surface: null, mountContract: null,
@@ -833,9 +848,39 @@ function boardStateOf(host) {
       // 껍질 단계가 확정한 차트 신원과 그 마운트 결과를 기다리는 자리.
       // primaryMount는 "지금 진행 중인 마운트 시도"다(늦은 거부를 가려낸다).
       primaryDescriptor: null, primarySettle: null, primaryMount: null,
+      // Paper 값 조회는 마지막 요청만 화면을 소유한다. 상태 전환·카드 닫기 뒤 늦게
+      // 끝난 응답이 이전 보드를 되살리지 못하도록 revision gate를 둔다.
+      load: boardMount.createLatestBoardLoad(), loadNode: null, loadBody: null,
+      loadCard: null, hydrationWarnings: [],
     };
   }
   return host.__athenaBoard;
+}
+
+function seedBoardState(state, contract, envelope) {
+  if (!contract || !contract.board_id) return;
+  const boardId = String(contract.board_id);
+  state.valuesByBoard.set(boardId, slotValuesOf(contract));
+  state.unboundByBoard.set(
+    boardId, Array.isArray(contract.unbound_slots) ? contract.unbound_slots.slice() : [],
+  );
+  if (Array.isArray(contract.hydration_slot_ids)) {
+    state.hydrationByBoard.set(boardId, contract.hydration_slot_ids.slice());
+  }
+  state.realtimeByBoard.set(
+    boardId, boardMount.realtimeSlotIndex(contract, realtimeBindingsOf(envelope)),
+  );
+}
+
+function activateBoardState(state, boardId) {
+  const id = String(boardId);
+  state.boardId = id;
+  state.values = state.valuesByBoard.get(id) || {};
+  state.valuesByBoard.set(id, state.values);
+  state.unbound = state.unboundByBoard.get(id) || [];
+  state.unboundByBoard.set(id, state.unbound);
+  state.realtimeSlots = state.realtimeByBoard.get(id) || boardMount.realtimeSlotIndex(null, []);
+  state.realtimeByBoard.set(id, state.realtimeSlots);
 }
 
 // 마운트 계약(어느 노드에 어떤 슬롯이 앉는가)은 정적이라 board-template-registry가
@@ -849,22 +894,19 @@ function boardMountOptions(host, envelope) {
 }
 
 // 봉투가 실어온 계약으로 보드를 연다. 값 표·상태 링크·미결 슬롯은 여기서만 온다.
-function openBoardSurface(host, contract, envelope) {
+async function openBoardSurface(host, contract, envelope, isCurrent) {
   const state = boardStateOf(host);
-  state.values = slotValuesOf(contract);
   state.links = stateLinksOf(contract);
-  state.unbound = Array.isArray(contract.unbound_slots) ? contract.unbound_slots.slice() : [];
-  state.realtimeSlots = boardMount.realtimeSlotIndex(contract, realtimeBindingsOf(envelope));
-  return mountBoardState(host, contract.board_id, envelope).then((mounted) => {
-    // 계약이 갈아탈 탭을 지정했으면 기본 보드를 세운 **뒤에** 그리로 간다 — 사람이
-    // 탭을 누른 것과 같은 경로이고, 형제 탭 레일은 색인이 다시 얹어 준다.
-    // 값 표를 다 채운 뒤(기본 보드 하이드레이션까지 끝난 뒤)에 옮긴다 — 그래야 새
-    // 보드가 결측어부터 그리지 않는다. 대신 첫 화면은 잠깐 기본 보드다.
-    const initial = String(contract.initial_state_board || '');
-    const switched = initial && switchStateBoard(host, initial, envelope);
-    // 갈아타다 실패해도 이미 선 기본 보드는 지우지 않는다 — 사람이 탭을 눌렀을 때와 같다.
-    return switched ? switched.catch(() => mounted) : mounted;
-  });
+  seedBoardState(state, contract, envelope);
+  const initialContract = initialSurfaceContractOf(envelope);
+  if (initialContract) seedBoardState(state, initialContract, envelope);
+  state.hydrationWarnings = [];
+  const initial = String(contract.initial_state_board || '');
+  const hasInitial = initial && initial !== String(contract.board_id)
+    && state.links.some((link) => link.board_id === initial);
+  // 초기 보드가 있으면 직접 준비한다. legacy 봉투가 별도 초기 계약을 싣지 않았어도
+  // base의 같은 slot id 값을 재사용하지 않고 빈 표에서 해당 보드만 hydrate한다.
+  return mountBoardState(host, hasInitial ? initial : contract.board_id, envelope, isCurrent);
 }
 
 // 봉투가 싣는 실시간 바인딩 표. semantic-workspace가 읽는 자리와 같은 자리다.
@@ -883,8 +925,12 @@ function applyBoardRealtimeTick(host, tick) {
   if (!state || !state.surface || !state.mountContract || !state.realtimeSlots.size) return 0;
   const touched = [];
   for (const update of semanticWorkspace.semanticRealtimeUpdates(tick)) {
+    const observationId = state.realtimeSlots.observationByBinding
+      ? state.realtimeSlots.observationByBinding.get(update.bindingId) : '';
     for (const slotId of state.realtimeSlots.get(update.bindingId) || []) {
-      state.values[slotId] = update.value;
+      const applied = boardMount.updateRealtimeValue(state.values[slotId], observationId, update.value);
+      if (!applied.updated) continue;
+      state.values[slotId] = applied.value;
       touched.push(slotId);
     }
   }
@@ -894,22 +940,27 @@ function applyBoardRealtimeTick(host, tick) {
 }
 
 // 원문 HTML은 카드 청크에 있다 — 그 카드의 첫 보드는 여기서 한 번 기다린다.
-function mountBoardState(host, boardId, envelope) {
+function mountBoardState(host, boardId, envelope, isCurrent = () => true) {
   const state = boardStateOf(host);
-  state.boardId = String(boardId);
+  activateBoardState(state, boardId);
   // 상태 링크의 정본은 생성물 색인이다 — 봉투는 마운트한 그 보드의 직계 자식만 나르므로
   // 갈아탄 뒤에는 형제 탭도 되돌아갈 길도 목록에 없다. 색인이 모르는 보드(픽스처 계약)
   // 에서만 봉투가 실어온 목록을 그대로 쓴다.
   const links = boardTemplateRegistry.stateLinksFor(state.boardId);
   if (links.length) state.links = links;
-  return boardMount.mountBoardAsync(host, state.boardId, state.values, boardMountOptions(host, envelope))
-    .then((mounted) => {
+  const targetBoardId = state.boardId;
+  const ready = boardTemplateRegistry.isLoaded(targetBoardId)
+    ? Promise.resolve()
+    : boardTemplateRegistry.loadBoard(targetBoardId);
+  return ready
+    .then(() => {
+      if (!isCurrent() || state.boardId !== targetBoardId) return null;
+      const mounted = boardMount.mountBoard(
+        host, targetBoardId, state.values, boardMountOptions(host, envelope),
+      );
       rememberMountedBoard(state, mounted);
       wireStateControls(host, envelope, mounted);
-      // 껍질이 먼저다 — 여기서 기다리면 AITS 라이브러리 로드가 첫 피드백 3초
-      // 계약을 넘긴다(renderLiveChart가 같은 판단을 한다). 던져 놓고 진행한다.
-      void mountBoardPrimary(host, envelope, mounted);
-      return hydrateBoardSlots(host, envelope, mounted);
+      return hydrateBoardSlots(host, envelope, mounted, isCurrent);
     });
 }
 
@@ -921,7 +972,9 @@ function switchStateBoard(host, boardId, envelope) {
   // 표면을 통째로 갈면 컨테이너가 바뀐다 — 같은 panelId를 다른 컨테이너로 열면
   // AITS adapter가 던지므로(aits-chart-panel openPanel) 먼저 닫는다.
   destroyBoardPrimary(state);
-  return mountBoardState(host, target, envelope);
+  return runBoardSurfaceLoad(host, envelope, (isCurrent) => (
+    mountBoardState(host, target, envelope, isCurrent)
+  ));
 }
 
 // 스트립 칩·탭 = 상태 보드 조작. 추출 원문에서 칩은 그냥 텍스트 노드라, 계약이 준
@@ -1188,40 +1241,70 @@ async function mountBoardPrimary(host, envelope, mounted) {
   }
 }
 
-// 봉투가 못 채운 슬롯을 마운트 뒤에 한 번 더 채운다. 엔드포인트가 아직 없으면
-// 응답이 unavailable로 오고 화면은 결측어(미제공)를 그대로 둔다 — 값을 지어내지 않는다.
-async function hydrateBoardSlots(host, envelope, mounted) {
+const RETRYABLE_BOARD_HYDRATE_REASONS = new Set(['upstream_error', 'upstream_business_result']);
+
+// 봉투가 못 채운 슬롯을 마운트 뒤에 한 번 더 채운다. 조회 자체가 실패하면 결측값을
+// 완성 화면처럼 보이지 않고 로딩 오류로 돌려 재시도할 수 있게 한다.
+async function hydrateBoardSlots(host, envelope, mounted, isCurrent = () => true) {
   const state = boardStateOf(host);
-  const pending = state.unbound.length
-    ? state.unbound
-    : ((mounted && mounted.plan && mounted.plan.missing) || []);
-  if (!pending.length || !window.athena || typeof window.athena.invoke !== 'function') return mounted;
-  let reply = null;
-  try {
-    reply = await window.athena.invoke('athena:canvas-board-hydrate', {
-      boardId: state.boardId,
-      target: boardHydrateTarget(envelope),
-      account: boardHydrateAccount(envelope),
-    });
-  } catch {
-    reply = null;
+  // 상태 보드마다 slot id 의미가 다를 수 있으므로 현재 마운트 계획의 결측만 요청한다.
+  // 봉투의 unbound_slots는 최초 보드 계약용 폴백이다.
+  const authoredPending = state.hydrationByBoard.get(state.boardId);
+  const pending = authoredPending !== undefined
+    ? authoredPending
+    : (mounted && mounted.plan ? (mounted.plan.missing || []) : state.unbound);
+  if (!pending.length) return mounted;
+  if (!window.athena || typeof window.athena.invoke !== 'function') {
+    throw new Error('카드 데이터 조회 연결을 사용할 수 없습니다.');
   }
+  const boardId = state.boardId;
+  const reply = await window.athena.invoke('athena:canvas-board-hydrate', {
+    boardId,
+    slotIds: pending,
+    target: boardHydrateTarget(envelope),
+    account: boardHydrateAccount(envelope),
+  });
+  if (!isCurrent() || state.boardId !== boardId) return mounted;
+  if (!reply || !reply.ok) {
+    throw new Error('카드 정보를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.');
+  }
+  const failures = (Array.isArray(reply.operations) ? reply.operations : [])
+    .filter((op) => op && op.status !== 'bound' && RETRYABLE_BOARD_HYDRATE_REASONS.has(op.reason));
+  const requiredRef = String((envelope && envelope.operation_ref) || '');
+  if (failures.some((op) => op.operation_ref === requiredRef)) {
+    throw new Error('요청한 종목 정보를 불러오지 못했습니다. 다시 시도해 주세요.');
+  }
+  state.hydrationWarnings.push(...failures);
   const filled = reply && reply.ok && reply.slot_values ? reply.slot_values : null;
+  state.hydrationByBoard.set(
+    boardId,
+    boardMount.nextHydrationSlots(pending, filled, reply.surface_contract),
+  );
   if (!filled || !Object.keys(filled).length) return mounted;
   state.values = { ...state.values, ...filled };
+  state.valuesByBoard.set(boardId, state.values);
   state.unbound = state.unbound.filter((slotId) => !(slotId in filled));
+  state.unboundByBoard.set(boardId, state.unbound);
   // 하이드레이션이 채운 슬롯도 실시간 프레임을 받아야 한다 — 응답 계약으로 색인을
   // 다시 만들어 덧댄다. 안 하면 이 슬롯들은 첫 값에서 영영 멈춘다.
-  for (const [bindingId, slotIds] of boardMount.realtimeSlotIndex(
+  const hydratedRealtimeSlots = boardMount.realtimeSlotIndex(
     reply.surface_contract, realtimeBindingsOf(envelope),
-  )) {
+  );
+  for (const [bindingId, slotIds] of hydratedRealtimeSlots) {
     const bucket = state.realtimeSlots.get(bindingId) || [];
     for (const slotId of slotIds) if (!bucket.includes(slotId)) bucket.push(slotId);
     state.realtimeSlots.set(bindingId, bucket);
   }
-  return boardMount
-    .mountBoardAsync(host, state.boardId, state.values, boardMountOptions(host, envelope))
-    .then((remounted) => rememberMountedBoard(state, remounted));
+  state.realtimeSlots.observationByBinding = state.realtimeSlots.observationByBinding || new Map();
+  for (const [bindingId, observationId] of hydratedRealtimeSlots.observationByBinding) {
+    state.realtimeSlots.observationByBinding.set(bindingId, observationId);
+  }
+  state.realtimeByBoard.set(boardId, state.realtimeSlots);
+  if (!isCurrent() || state.boardId !== boardId) return mounted;
+  const remounted = boardMount.mountBoard(
+    host, boardId, state.values, boardMountOptions(host, envelope),
+  );
+  return rememberMountedBoard(state, remounted);
 }
 
 // 마운트 결과에서 실시간 갱신이 쓸 것만 남긴다: 표면 노드와 그 보드의 정적 슬롯 계약.
@@ -1230,6 +1313,65 @@ function rememberMountedBoard(state, mounted) {
   if (mounted && mounted.surface) state.surface = mounted.surface;
   state.mountContract = boardTemplateRegistry.contractFor(state.boardId) || null;
   return mounted;
+}
+
+function removeBoardLoadNode(state) {
+  if (state.loadNode) state.loadNode.remove();
+  state.loadNode = null;
+}
+
+function showBoardLoading(state, host) {
+  removeBoardLoadNode(state);
+  state.hydrationWarnings = [];
+  host.hidden = true;
+  host.setAttribute('aria-hidden', 'true');
+  const loading = emptyState('데이터를 불러오는 중입니다.', '카드가 준비되면 자동으로 표시합니다.');
+  loading.classList.add('board-surface-load-state');
+  loading.setAttribute('role', 'status');
+  state.loadBody.insertBefore(loading, host);
+  state.loadNode = loading;
+  if (state.loadCard && !state.primaryDescriptor) state.loadCard.dataset.renderState = 'loading';
+}
+
+function showBoardReady(state, host, envelope, mounted, retry) {
+  removeBoardLoadNode(state);
+  host.hidden = false;
+  host.removeAttribute('aria-hidden');
+  host.style.minHeight = '';
+  if (state.loadCard) state.loadCard.dataset.boardId = state.boardId;
+  if (state.loadCard && !state.primaryDescriptor) state.loadCard.dataset.renderState = 'data';
+  if (state.hydrationWarnings.length) {
+    const partial = errorNote('일부 추가 정보를 불러오지 못했습니다. 확인된 정보만 표시합니다.');
+    partial.classList.add('board-surface-partial');
+    partial.appendChild(button('text', '다시 시도', { onClick: retry }));
+    state.loadBody.insertBefore(partial, host);
+    state.loadNode = partial;
+  }
+  if (mounted) void mountBoardPrimary(host, envelope, mounted);
+}
+
+function showBoardLoadError(state, host, error, retry) {
+  removeBoardLoadNode(state);
+  host.hidden = true;
+  host.setAttribute('aria-hidden', 'true');
+  const failure = emptyState('정보를 불러오지 못했습니다.', String((error && error.message) || error));
+  failure.classList.add('board-surface-load-state', 'is-error');
+  failure.setAttribute('role', 'alert');
+  failure.appendChild(button('ghost', '다시 시도', { onClick: retry }));
+  state.loadBody.insertBefore(failure, host);
+  state.loadNode = failure;
+  settleBoardChartMount(state, 'error');
+  if (state.loadCard) state.loadCard.dataset.renderState = 'error';
+}
+
+function runBoardSurfaceLoad(host, envelope, task) {
+  const state = boardStateOf(host);
+  const handlers = {
+    onLoading: () => showBoardLoading(state, host),
+    onReady: (mounted) => showBoardReady(state, host, envelope, mounted, () => state.load.run(task, handlers)),
+    onError: (error, retry) => showBoardLoadError(state, host, error, retry),
+  };
+  return state.load.run(task, handlers);
 }
 
 function renderBoardSurfaceCard(envelope) {
@@ -1258,8 +1400,14 @@ function renderBoardSurfaceCard(envelope) {
   body.appendChild(host);
   // 카드를 닫으면 보드가 품은 앱 렌더러도 닫는다 — 안 걸면 패널과 그 리스가 남는다.
   // host를 붙잡으므로 상태 보드를 갈아타 패널이 갈려도 "지금 열린 것"을 닫는다.
-  cardDestroyers.set(card, () => destroyBoardPrimary(boardStateOf(host)));
   const state = boardStateOf(host);
+  state.loadBody = body;
+  state.loadCard = card;
+  cardDestroyers.set(card, () => {
+    state.load.dispose();
+    removeBoardLoadNode(state);
+    return destroyBoardPrimary(state);
+  });
   // 이 봉투가 보드 자리에 라이브 차트를 얹을 것이면 껍질 단계에서 신원을 찍는다 —
   // paint ack는 껍질이 선 시점의 dataset만 읽는다(beginBoardChartMount 주석).
   // 계약 오류는 여기서 삼키고 마운트가 사유와 함께 드러낸다.
@@ -1268,14 +1416,11 @@ function renderBoardSurfaceCard(envelope) {
     try { chartDescriptor = boardChartDescriptor(envelope); } catch { chartDescriptor = null; }
   }
   if (chartDescriptor) beginBoardChartMount(card, state, chartDescriptor);
-  openBoardSurface(host, contract, envelope).then(() => {
-    host.style.minHeight = '';
-  }).catch((error) => {
-    // 보드가 안 서면 차트도 안 선다 — 첫 ack가 기다리는 결과를 여기서 맺는다.
-    settleBoardChartMount(state, 'error');
-    // 보드를 못 세우면 범용 카드로 조용히 떨어뜨리지 않는다 — 그건 계약 파생
-    // 실패이고, 감추면 사용자는 알 수 없는 표를 본다(paper-card-routing과 같은 판단).
-    body.replaceChildren(errorNote(String((error && error.message) || error)));
+  const loadSettled = runBoardSurfaceLoad(
+    host, envelope, (isCurrent) => openBoardSurface(host, contract, envelope, isCurrent),
+  );
+  Object.defineProperty(card, '__athenaBoardLoadSettled', {
+    value: loadSettled, configurable: true, writable: false,
   });
   return card;
 }

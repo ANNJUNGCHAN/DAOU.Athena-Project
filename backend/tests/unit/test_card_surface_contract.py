@@ -7,6 +7,8 @@
 
 from __future__ import annotations
 
+import json
+import shutil
 from pathlib import Path
 
 import pytest
@@ -71,23 +73,47 @@ def _by_slot(contract: dict) -> dict:
     return {entry["slot_id"]: entry for entry in contract["slot_values"]}
 
 
-def test_contract_binds_array_columns_as_whole_columns(registry) -> None:
+def _registry_with_composite(tmp_path: Path, parts: list[dict]):
+    root = tmp_path / "card-surface"
+    shutil.copytree(FIXTURE_ROOT, root)
+    path = root / "2SKU-1-T1" / "slots.json"
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    slot = next(
+        item for item in payload["slots"] if item["slot_id"] == "t1_kpi_summary"
+    )
+    slot.update(
+        {
+            "mapping_id": None,
+            "f": None,
+            "alt_mappings": None,
+            "composite": {"separator": " · ", "parts": parts},
+        }
+    )
+    path.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+        newline="",
+    )
+    universe = SurfaceUniverse(
+        operation_refs=frozenset(FIXTURE_OPERATIONS),
+        visible_occurrence_ids=visible_occurrence_ids(FIXTURE_OPERATIONS),
+    )
+    return load_registry(root, universe=universe)
+
+
+def test_contract_does_not_bind_a_whole_array_to_an_unindexed_scalar_slot(
+    registry,
+) -> None:
+    """목록/시계열 열은 행을 지정하지 않은 텍스트 잎 한 칸에 들어갈 수 없다."""
+
     bound = bind_surface_values("base:ka10085", SOURCE)
     contract = build_surface_contract("base:ka10085", bound, registry)
 
     values = _by_slot(contract)
-    assert values["col_stk_nm"]["value"] == ["삼성전자", "SK하이닉스"]
-    assert values["col_cur_prc"]["value"] == ["71000", "185000"]
-    assert values["col_cur_prc"]["occurrence_id"] == (
-        "base:ka10085|$.acnt_prft_rt[].cur_prc|1"
-    )
-    assert values["col_cur_prc"]["format"] == {
-        "unit": "원",
-        "sign": "plain",
-        "precision": 0,
-        "tone": "neutral",
-    }
-    assert values["col_stk_nm"]["layer"] == "직접"
+    assert "col_stk_nm" not in values
+    assert "col_cur_prc" not in values
+    assert "col_stk_nm" in contract["unbound_slots"]
+    assert "col_cur_prc" in contract["unbound_slots"]
 
 
 def test_contract_reports_slots_the_payload_did_not_supply(registry) -> None:
@@ -96,8 +122,8 @@ def test_contract_reports_slots_the_payload_did_not_supply(registry) -> None:
     bound = bind_surface_values("base:ka10085", SOURCE)
     contract = build_surface_contract("base:ka10085", bound, registry)
 
-    assert "col_stk_nm" in _by_slot(contract)
-    # 다른 op(base:kt00003)의 KPI와 아직 안 온 열은 미제공으로 남는다.
+    # 행 인덱스가 없는 배열 열과 다른 op(base:kt00003)의 KPI는 미제공으로 남는다.
+    assert "col_stk_nm" in contract["unbound_slots"]
     assert "kpi_prsm_dpst_aset_amt" in contract["unbound_slots"]
     assert set(contract["unbound_slots"]).isdisjoint(_by_slot(contract))
 
@@ -140,10 +166,8 @@ def test_attach_puts_the_contract_on_the_card_metadata(registry) -> None:
     attach_surface_contract(card_contract, "base:ka10085", SOURCE, registry=registry)
 
     assert card_contract["surface_contract"]["board_id"] == "2SKU-1"
-    assert _by_slot(card_contract["surface_contract"])["col_stk_nm"]["value"] == [
-        "삼성전자",
-        "SK하이닉스",
-    ]
+    assert "col_stk_nm" not in _by_slot(card_contract["surface_contract"])
+    assert "col_stk_nm" in card_contract["surface_contract"]["unbound_slots"]
 
 
 def test_attach_without_a_source_produces_the_value_free_skeleton(registry) -> None:
@@ -170,21 +194,16 @@ def test_slot_values_carry_the_same_observation_id_as_realtime_bindings(
     """
 
     bound = bind_surface_values("base:ka10085", SOURCE)
-    contract = build_surface_contract("base:ka10085", bound, registry)
+    contract = build_board_surface_contract("2SKU-1-T1", bound, registry)
     values = _by_slot(contract)
 
-    entry = values["col_cur_prc"]
+    entry = values["t1_stk_nm_r0"]
     assert entry["observation_id"] == canvas_push._observation_id(
-        entry["occurrence_id"]
+        entry["occurrence_id"], 0
     )
     assert entry["observation_id"].startswith("obs_")
-    # 같은 occurrence를 가리키는 병기 슬롯은 같은 관찰을 가리킨다(하나의 실시간
-    # 프레임이 주값과 병기를 함께 고친다).
-    assert (
-        values["col_cur_prc_paired"]["observation_id"] == entry["observation_id"]
-    )
-    # 서로 다른 occurrence는 서로 다른 관찰이다.
-    assert values["col_pur_pric"]["observation_id"] != entry["observation_id"]
+    # 같은 열이어도 다른 행은 서로 다른 관찰이다.
+    assert values["t1_stk_nm_r1"]["observation_id"] != entry["observation_id"]
     assert all("observation_id" in item for item in contract["slot_values"])
 
 
@@ -200,6 +219,249 @@ def test_row_indexed_slot_observation_matches_the_array_row_observation(
         occurrence, 1
     )
     assert observation_id_for(occurrence, 1) != observation_id_for(occurrence)
+
+
+def test_authored_composite_carries_all_available_scalar_parts(tmp_path) -> None:
+    registry = _registry_with_composite(
+        tmp_path,
+        [
+            {
+                "mapping_id": "base:kt00003",
+                "f": "prsm_dpst_aset_amt",
+                "format": {"unit": "원", "prefix": "예수금 "},
+            },
+            {
+                "mapping_id": "detail:ka10087:sell_bid_prices",
+                "f": "ovt_sigpric_sel_bid_1",
+                "format": {"suffix": "원"},
+            },
+        ],
+    )
+    bound = {
+        **bind_surface_values("base:kt00003", {"prsm_dpst_aset_amt": "12340000"}),
+        **bind_surface_values(
+            "detail:ka10087:sell_bid_prices", {"ovt_sigpric_sel_bid_1": "71000"}
+        ),
+    }
+
+    contract = build_board_surface_contract(
+        "2SKU-1-T1",
+        bound,
+        registry,
+        ("detail:ka10087:sell_bid_prices", "base:kt00003"),
+    )
+    entry = _by_slot(contract)["t1_kpi_summary"]
+    composite = entry["value"]["composite"]
+
+    assert composite["separator"] == " · "
+    assert [part["value"] for part in composite["parts"]] == ["12340000", "71000"]
+    assert [part["mapping_id"] for part in composite["parts"]] == [
+        "base:kt00003",
+        "detail:ka10087:sell_bid_prices",
+    ]
+    assert composite["parts"][0]["format"] == {
+        "unit": "원",
+        "prefix": "예수금 ",
+    }
+    assert all(part["observation_id"] for part in composite["parts"])
+    assert "occurrence_id" not in entry
+    assert "observation_id" not in entry
+
+
+def test_composite_is_unbound_when_any_part_is_missing(tmp_path) -> None:
+    registry = _registry_with_composite(
+        tmp_path,
+        [
+            {"mapping_id": "base:kt00003", "f": "prsm_dpst_aset_amt"},
+            {
+                "mapping_id": "detail:ka10087:sell_bid_prices",
+                "f": "ovt_sigpric_sel_bid_1",
+            },
+        ],
+    )
+    bound = bind_surface_values(
+        "base:kt00003", {"prsm_dpst_aset_amt": "12340000"}
+    )
+
+    contract = build_board_surface_contract("2SKU-1-T1", bound, registry)
+
+    assert "t1_kpi_summary" not in _by_slot(contract)
+    assert "t1_kpi_summary" in contract["unbound_slots"]
+
+
+def test_composite_is_unbound_when_an_unindexed_part_is_an_array(tmp_path) -> None:
+    registry = _registry_with_composite(
+        tmp_path,
+        [
+            {"mapping_id": "base:ka10085", "f": "stk_nm"},
+            {"mapping_id": "base:kt00003", "f": "prsm_dpst_aset_amt"},
+        ],
+    )
+    bound = {
+        **bind_surface_values("base:ka10085", SOURCE),
+        **bind_surface_values("base:kt00003", {"prsm_dpst_aset_amt": "12340000"}),
+    }
+
+    contract = build_board_surface_contract("2SKU-1-T1", bound, registry)
+
+    assert "t1_kpi_summary" not in _by_slot(contract)
+    assert "t1_kpi_summary" in contract["unbound_slots"]
+
+
+def test_composite_support_does_not_change_indexed_scalar_entries(registry) -> None:
+    bound = bind_surface_values("base:ka10085", SOURCE)
+
+    entry = _by_slot(
+        build_board_surface_contract("2SKU-1-T1", bound, registry)
+    )["t1_stk_nm_r0"]
+
+    assert entry["value"] == "삼성전자"
+    assert entry["row_index"] == 0
+    assert entry["occurrence_id"] == "base:ka10085|$.acnt_prft_rt[].stk_nm|1"
+
+
+def test_current_quote_real_templates_keep_composites_and_trade_rows_aligned() -> None:
+    """실제 깨짐을 만든 137X/2R3M 메타데이터를 합성·행 계약에 고정한다."""
+
+    registry = load_registry(TEMPLATE_ROOT)
+    source = {"pred_pre": "+1850", "flu_rt": "+1.24", "pre_sig": "2"}
+    operation_ref = "detail:ka10001:current_trading"
+    bound = bind_surface_values(operation_ref, source)
+
+    default_contract = build_surface_contract(operation_ref, bound, registry)
+    state_contract = build_board_surface_contract("2R3M-1", bound, registry)
+
+    assert default_contract["board_id"] == "137X-2"
+    assert default_contract["initial_state_board"] == "2R3M-1"
+    for contract in (default_contract, state_contract):
+        parts = _by_slot(contract)["s006"]["value"]["composite"]["parts"]
+        assert [(part["f"], part["value"]) for part in parts] == [
+            ("pred_pre", "+1850"),
+            ("flu_rt", "+1.24"),
+        ]
+        assert all(part["f"] != "pre_sig" for part in parts)
+
+    board = registry.boards["2R3M-1"]
+    row_fields = {
+        "tm",
+        "cur_prc",
+        "pred_pre",
+        "pre_rt",
+        "cntr_trde_qty",
+        "stex_tp",
+        "cntr_str",
+    }
+    for alias in row_fields:
+        assert {
+            slot.row_index
+            for slot in board.slots
+            if slot.mapping_id == "base:ka10003" and slot.f == alias
+        } == set(range(9))
+
+    side_slots = [board.slot(f"s{57 + row * 8:03d}") for row in range(9)]
+    assert all(slot.kind == "value" and not slot.binds_a_field for slot in side_slots)
+    assert all(slot.f != "cntr_infr" for slot in board.slots)
+
+    trade_source = {
+        "cntr_infr": [
+            {
+                "tm": f"0942{18 - row:02d}",
+                "cur_prc": str(150_850 + row),
+                "pred_pre": str(1_850 + row),
+                "pre_rt": "1.24",
+                "cntr_trde_qty": str(100 + row),
+                "stex_tp": "KRX",
+                "cntr_str": "108.4",
+                "pri_sel_bid_unit": str(150_900 + row),
+                "pri_buy_bid_unit": str(150_850 + row),
+            }
+            for row in range(9)
+        ]
+    }
+    trade_bound = bind_surface_values("base:ka10003", trade_source)
+    trade_contract = build_board_surface_contract(
+        "2R3M-1", trade_bound, registry, ("base:ka10003",)
+    )
+    first_bid_ask = _by_slot(trade_contract)["s053"]["value"]["composite"]
+
+    assert [part["f"] for part in first_bid_ask["parts"]] == [
+        "pri_sel_bid_unit",
+        "pri_buy_bid_unit",
+    ]
+    assert [part["value"] for part in first_bid_ask["parts"]] == [
+        "150900",
+        "150850",
+    ]
+    assert _by_slot(trade_contract)["s116"]["value"] == "094210"
+    assert all(slot.slot_id in trade_contract["unbound_slots"] for slot in side_slots)
+
+    daily_fields = (
+        "date",
+        "open_pric",
+        "high_pric",
+        "low_pric",
+        "close_pric",
+        "pre",
+        "flu_rt",
+        "trde_qty",
+        "trde_prica",
+        "frgn",
+        "prm",
+    )
+    for row, first_slot in enumerate((216, 227, 238)):
+        daily_slots = [board.slot(f"s{first_slot + column:03d}") for column in range(11)]
+        assert [(slot.f, slot.row_index) for slot in daily_slots] == [
+            (field, row) for field in daily_fields
+        ]
+        assert all(slot.mapping_id == "base:ka10005" for slot in daily_slots)
+
+    daily_source = {
+        "stk_ddwkmm": [
+            {
+                field: f"row-{row}-{field}"
+                for field in daily_fields
+            }
+            for row in range(3)
+        ]
+    }
+    daily_bound = bind_surface_values("base:ka10005", daily_source)
+    daily_contract = build_board_surface_contract(
+        "2R3M-1", daily_bound, registry, ("base:ka10005",)
+    )
+    daily_by_slot = _by_slot(daily_contract)
+    assert daily_by_slot["s216"]["value"] == "row-0-date"
+    assert daily_by_slot["s227"]["value"] == "row-1-date"
+    assert daily_by_slot["s248"]["value"] == "row-2-prm"
+
+    strength_source = {
+        "cntr_str_tm": [
+            {
+                "cntr_tm": "090000",
+                "cntr_str": "108.4",
+                "cntr_str_5min": "111.2",
+                "cntr_str_20min": "109.0",
+                "cntr_str_60min": "106.5",
+            },
+            {
+                "cntr_tm": "083000",
+                "cntr_str": "99.9",
+                "cntr_str_5min": "98.8",
+                "cntr_str_20min": "97.7",
+                "cntr_str_60min": "96.6",
+            },
+        ]
+    }
+    strength_bound = bind_surface_values("base:ka10046", strength_source)
+    strength_contract = build_board_surface_contract(
+        "2R3M-1", strength_bound, registry, ("base:ka10046",)
+    )
+    strength_by_slot = _by_slot(strength_contract)
+    assert strength_by_slot["s129"]["value"] == "108.4"
+    assert strength_by_slot["s130"]["value"] == "111.2"
+    assert [
+        part["value"]
+        for part in strength_by_slot["s131"]["value"]["composite"]["parts"]
+    ] == ["109.0", "106.5"]
 
 
 def test_binding_uses_the_same_path_evaluator_as_semantic_observations() -> None:
@@ -229,7 +491,8 @@ def test_board_contract_merges_values_from_every_operation_of_the_board(
     contract = build_board_surface_contract("2SKU-1", bound, registry)
 
     values = _by_slot(contract)
-    assert values["col_stk_nm"]["value"] == ["삼성전자", "SK하이닉스"]
+    assert "col_stk_nm" not in values
+    assert "col_stk_nm" in contract["unbound_slots"]
     assert values["kpi_prsm_dpst_aset_amt"]["value"] == "12340000"
     assert "kpi_prsm_dpst_aset_amt" not in contract["unbound_slots"]
 
@@ -400,7 +663,8 @@ def test_same_response_composite_part_is_not_an_alternate_surface_value() -> Non
         registry,
         ("base:0E",),
     )
-    assert _by_slot(full_response)["s024"]["occurrence_id"] == sell_total
+    assert "s024" in full_response["unbound_slots"]
+    assert "s024" not in _by_slot(full_response)
 
     buy_only = build_board_surface_contract(
         "13BC-2", {buy_total: ["BUY"]}, registry, ("base:0E",)
@@ -436,8 +700,8 @@ def test_same_response_composite_part_is_not_an_alternate_surface_value() -> Non
         assert "s024" in buy_only_detail["unbound_slots"]
         assert "s024" not in _by_slot(buy_only_detail)
 
-    # 135 자체는 2TRW의 별도 원자 leaf가 정당하게 cover한다. 여기서 막아야 하는 것은
-    # 13BC의 한 composite leaf를 135 단독 값이 통째로 대체하는 동작뿐이다.
+    # 135 자체는 2TRW의 row_index=0 leaf가 명시적으로 cover한다. repeat 응답은
+    # 이렇게 행을 지정한 계약에서만 꺼낸다.
     buy_atomic = build_board_surface_contract(
         "2TRW-1", {buy_total: ["BUY"]}, registry, ("base:0E",)
     )

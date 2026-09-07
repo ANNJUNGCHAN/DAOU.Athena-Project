@@ -75,7 +75,7 @@ async function waitForVisiblePaint(element, {
 // 카드로 집계된다(권위 등록·실시간 REG까지 따라간다). 그래서 첫 ack는 pending으로
 // 나가고, 마운트 결과 ack가 최종 render_state를 정한다. 시각·구간 계측은 첫 ack가
 // 정본이다 — 사용자가 실제로 무언가를 본 시점이 그때다.
-const PENDING_MOUNT_ACK_TIMEOUT_MS = 8000;
+const PENDING_MOUNT_ACK_TIMEOUT_MS = 30_000;
 
 function paintFromPayload(payload, now) {
   return {
@@ -122,12 +122,40 @@ function timedOutPaint(pendingPaint) {
   return Object.assign({}, pendingPaint, { renderState: 'timeout' });
 }
 
+function upsertRestReceipt(history, { receiptId, text, createElement, replaceOnly = false } = {}) {
+  if (!history || typeof history.querySelectorAll !== 'function' || typeof history.appendChild !== 'function') {
+    throw new Error('REST 영수증 이력 영역이 필요하다');
+  }
+  const stableId = String(receiptId || '');
+  if (!stableId) throw new Error('REST 영수증 ID가 필요하다');
+  const makeElement = typeof createElement === 'function'
+    ? createElement
+    : (tagName) => history.ownerDocument.createElement(tagName);
+  let line = Array.from(history.querySelectorAll('.rest-receipt'))
+    .find((candidate) => candidate && candidate.dataset && candidate.dataset.receiptId === stableId);
+  let body = line && typeof line.querySelector === 'function' ? line.querySelector('.turn-a') : null;
+  if (!line && replaceOnly) return null;
+  if (!line) {
+    line = makeElement('div');
+    line.className = 'turn rest-receipt';
+    line.dataset.receiptId = stableId;
+    body = makeElement('div');
+    body.className = 'turn-a';
+    line.appendChild(body);
+    history.appendChild(line);
+  }
+  if (!body) throw new Error('REST 영수증 본문이 없다');
+  body.textContent = String(text || '캔버스에 표시하지 못했습니다.');
+  return line;
+}
+
 const api = {
   isValidCorrelation,
   correlationKey,
   waitForVisiblePaint,
   decidePaintAck,
   timedOutPaint,
+  upsertRestReceipt,
   PENDING_MOUNT_ACK_TIMEOUT_MS,
 };
 if (typeof module !== 'undefined' && module.exports) module.exports = api;

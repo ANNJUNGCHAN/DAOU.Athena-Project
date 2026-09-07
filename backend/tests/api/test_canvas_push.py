@@ -384,6 +384,25 @@ def test_generic_push_rejects_a_nested_or_camelcase_board_surface():
             "canvas_type": "facts",
             "data": {"rows": [{"payload": {"surfaceContract": {"slot_values": []}}}]},
         },
+        {
+            "canvas_type": "facts",
+            "initial_surface_contract": {
+                "board_id": "FORGED-INITIAL",
+                "slot_values": [{"slot_id": "s006", "value": "위조"}],
+            },
+        },
+        {
+            "canvas_type": "facts",
+            "data": {
+                "rows": [
+                    {
+                        "payload": {
+                            "initialSurfaceContract": {"board_id": "FORGED-INITIAL"}
+                        }
+                    }
+                ]
+            },
+        },
     ):
         response = client.post("/api/v1/canvas/push", json=envelope)
         assert response.status_code == 422
@@ -458,6 +477,52 @@ def _add_operation_ref(root: Path, board_id: str, operation_ref: str) -> None:
     )
 
 
+def _bind_slot(
+    root: Path, board_id: str, slot_id: str, operation_ref: str, field: str
+) -> None:
+    path = root / board_id / "slots.json"
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    slot = next(entry for entry in payload["slots"] if entry["slot_id"] == slot_id)
+    slot["mapping_id"] = operation_ref
+    slot["f"] = field
+    slot["node_name"] = f"mapping|{operation_ref}"
+    slot["anchor"] = {
+        "kind": "raw",
+        "tr": operation_ref.split(":")[1],
+        "section": "body",
+        "field": field,
+    }
+    path.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+        newline="",
+    )
+
+
+def _bind_composite_slot(root: Path, board_id: str, slot_id: str) -> None:
+    path = root / board_id / "slots.json"
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    slot = next(entry for entry in payload["slots"] if entry["slot_id"] == slot_id)
+    slot["mapping_id"] = None
+    slot["f"] = None
+    slot["composite"] = {
+        "separator": " / ",
+        "parts": [
+            {"mapping_id": "base:ka10085", "f": "acnt_prft_rt", "format": {}},
+            {
+                "mapping_id": "base:kt00003",
+                "f": "prsm_dpst_aset_amt",
+                "format": {},
+            },
+        ],
+    }
+    path.write_text(
+        json.dumps(payload, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+        newline="",
+    )
+
+
 def _hydrate_app(data: _DataSpy, token: str = "board-hydrate-token"):
     app = _app(token=token)
     app.state.kiwoom_client = data
@@ -513,9 +578,175 @@ def test_board_hydrate_fills_the_slots_from_every_read_operation(surface_templat
     assert statuses["base:kt00003"]["status"] == "bound"
     contract = payload["surface_contract"]
     values = {entry["slot_id"]: entry["value"] for entry in contract["slot_values"]}
-    assert values["col_stk_nm"] == ["삼성전자"]
+    assert "col_stk_nm" not in values
     assert values["kpi_prsm_dpst_aset_amt"] == "12340000"
-    assert "col_stk_nm" not in contract["unbound_slots"]
+    assert "col_stk_nm" in contract["unbound_slots"]
+
+
+def test_board_hydrate_fetches_only_operations_used_by_requested_slots(
+    surface_templates,
+):
+    data = _DataSpy({"ka10085": _KA10085_BODY, "kt00003": _KT00003_BODY})
+    client = TestClient(_hydrate_app(data))
+
+    response = _hydrate(client, slot_ids=["kpi_prsm_dpst_aset_amt", "s001"])
+
+    assert response.status_code == 200, response.text
+    assert data.calls == ["kt00003"]
+    assert list(_statuses(response.json())) == ["base:kt00003"]
+
+
+def test_board_hydrate_empty_slot_plan_makes_no_upstream_call(surface_templates):
+    data = _DataSpy({"ka10085": _KA10085_BODY, "kt00003": _KT00003_BODY})
+    client = TestClient(_hydrate_app(data))
+
+    response = _hydrate(client, slot_ids=[])
+
+    assert response.status_code == 200, response.text
+    assert data.calls == []
+    assert response.json()["operations"] == []
+
+
+def test_board_hydrate_rejects_unknown_requested_slot(surface_templates):
+    client = TestClient(_hydrate_app(_DataSpy({})))
+
+    response = _hydrate(client, slot_ids=["not-a-real-slot"])
+
+    assert response.status_code == 422
+
+
+def test_board_hydrate_fetch_plan_includes_alt_and_composite_sources(
+    surface_templates,
+):
+    _bind_composite_slot(surface_templates, "2SKU-1", "kpi_acnt_prft_rt")
+    data = _DataSpy({"ka10085": _KA10085_BODY, "kt00003": _KT00003_BODY})
+    client = TestClient(_hydrate_app(data))
+
+    alt = _hydrate(client, board_id="2SKU-1-T1", slot_ids=["t1_kpi_summary"])
+    assert alt.status_code == 200, alt.text
+    assert sorted(data.calls) == ["ka10085", "kt00003"]
+
+    data.calls.clear()
+    composite = _hydrate(client, slot_ids=["kpi_acnt_prft_rt"])
+    assert composite.status_code == 200, composite.text
+    assert sorted(data.calls) == ["ka10085", "kt00003"]
+
+
+def test_board_hydrate_successful_empty_slot_is_settled_on_next_roundtrip(
+    surface_templates,
+):
+    data = _DataSpy({"kt00003": {}})
+    client = TestClient(_hydrate_app(data))
+
+    first = _hydrate(client, slot_ids=["kpi_prsm_dpst_aset_amt"])
+    pending = first.json()["surface_contract"]["hydration_slot_ids"]
+    second = _hydrate(client, slot_ids=pending)
+
+    assert first.status_code == second.status_code == 200
+    assert pending == []
+    assert data.calls == ["kt00003"]
+
+
+def test_board_hydrate_failed_slot_remains_pending_for_one_retry(surface_templates):
+    data = _DataSpy({}, failing={"kt00003"})
+    client = TestClient(_hydrate_app(data))
+
+    first = _hydrate(client, slot_ids=["kpi_prsm_dpst_aset_amt"])
+    pending = first.json()["surface_contract"]["hydration_slot_ids"]
+    second = _hydrate(client, slot_ids=pending)
+
+    assert first.status_code == second.status_code == 200
+    assert pending == ["kpi_prsm_dpst_aset_amt"]
+    assert data.calls == ["kt00003", "kt00003"]
+
+
+def test_board_hydrate_fetches_one_actual_tr_once_for_multiple_detail_groups(
+    surface_templates,
+):
+    """ka10001 detail group들은 같은 요청/응답을 공유하므로 upstream은 한 번만 친다."""
+
+    detail_refs = (
+        "detail:ka10001:current_trading",
+        "detail:ka10001:daily_price_band",
+    )
+    for operation_ref in detail_refs:
+        _add_operation_ref(surface_templates, "2SKU-1", operation_ref)
+    _bind_slot(
+        surface_templates,
+        "2SKU-1",
+        "kpi_acnt_prft_rt",
+        detail_refs[0],
+        "pred_pre",
+    )
+    _bind_slot(
+        surface_templates,
+        "2SKU-1",
+        "kpi_prsm_dpst_aset_amt",
+        detail_refs[1],
+        "open_pric",
+    )
+    data = _DataSpy(
+        {
+            "ka10085": _KA10085_BODY,
+            "kt00003": _KT00003_BODY,
+            "ka10001": {
+                "cur_prc": "71000",
+                "pred_pre": "1000",
+                "flu_rt": "1.43",
+                "open_pric": "70000",
+                "high_pric": "72000",
+                "low_pric": "69500",
+            },
+        }
+    )
+    client = TestClient(_hydrate_app(data))
+
+    response = _hydrate(client)
+
+    assert response.status_code == 200, response.text
+    assert data.calls.count("ka10001") == 1
+    statuses = _statuses(response.json())
+    assert all(statuses[operation_ref]["status"] == "bound" for operation_ref in detail_refs)
+
+
+def test_board_hydrate_does_not_retry_one_failed_tr_for_each_detail_group(
+    surface_templates,
+):
+    detail_refs = (
+        "detail:ka10001:current_trading",
+        "detail:ka10001:daily_price_band",
+    )
+    for operation_ref in detail_refs:
+        _add_operation_ref(surface_templates, "2SKU-1", operation_ref)
+    _bind_slot(
+        surface_templates,
+        "2SKU-1",
+        "kpi_acnt_prft_rt",
+        detail_refs[0],
+        "pred_pre",
+    )
+    _bind_slot(
+        surface_templates,
+        "2SKU-1",
+        "kpi_prsm_dpst_aset_amt",
+        detail_refs[1],
+        "open_pric",
+    )
+    data = _DataSpy(
+        {"ka10085": _KA10085_BODY, "kt00003": _KT00003_BODY},
+        failing={"ka10001"},
+    )
+    client = TestClient(_hydrate_app(data))
+
+    response = _hydrate(client)
+
+    assert response.status_code == 200, response.text
+    assert data.calls.count("ka10001") == 1
+    statuses = _statuses(response.json())
+    assert all(
+        statuses[operation_ref]["reason"] == "upstream_error"
+        for operation_ref in detail_refs
+    )
 
 
 def test_board_hydrate_leaves_only_the_failing_operations_slots_unbound(
@@ -539,7 +770,8 @@ def test_board_hydrate_leaves_only_the_failing_operations_slots_unbound(
     }
     contract = payload["surface_contract"]
     values = {entry["slot_id"]: entry["value"] for entry in contract["slot_values"]}
-    assert values["col_stk_nm"] == ["삼성전자"]
+    assert "col_stk_nm" not in values
+    assert "col_stk_nm" in contract["unbound_slots"]
     assert "kpi_prsm_dpst_aset_amt" in contract["unbound_slots"]
 
 
@@ -571,11 +803,7 @@ def test_board_hydrate_never_calls_an_order_operation(surface_templates):
 
     assert response.status_code == 200, response.text
     statuses = _statuses(response.json())
-    assert statuses["base:kt10000"] == {
-        "operation_ref": "base:kt10000",
-        "status": "unbound",
-        "reason": "order_operation_refused",
-    }
+    assert "base:kt10000" not in statuses
     assert "kt10000" not in data.calls
 
 

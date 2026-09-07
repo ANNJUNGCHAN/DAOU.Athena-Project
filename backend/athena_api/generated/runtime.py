@@ -6,6 +6,7 @@ import asyncio
 import json
 import secrets
 from collections import OrderedDict
+from collections.abc import Callable
 from dataclasses import dataclass
 from enum import StrEnum
 from typing import Any, TypeVar
@@ -37,6 +38,12 @@ class OrderReservation:
     state: OrderState
     completed: asyncio.Event
     envelope: ResponseEnvelope | None = None
+
+
+@dataclass(slots=True)
+class QueryFlight:
+    task: asyncio.Task[ResponseEnvelope] | None = None
+    waiters: int = 0
 
 
 def _request_options(request: Request) -> RequestOptions:
@@ -77,6 +84,69 @@ def _require_bearer(request: Request, authorization: str) -> None:
         )
 
 
+def _read_flight_key(
+    tr_id: str, body: dict[str, Any], options: RequestOptions
+) -> tuple[str, str, str, str | None]:
+    return (
+        tr_id,
+        json.dumps(body, ensure_ascii=False, sort_keys=True, separators=(",", ":")),
+        options.cont_yn,
+        options.next_key,
+    )
+
+
+async def _post_query_once(
+    client: Any,
+    tr_id: str,
+    upstream_path: str,
+    body: dict[str, Any],
+    options: RequestOptions,
+) -> ResponseEnvelope:
+    """같은 조회 client/TR/인자의 동시 요청만 합치고 완료 결과는 보관하지 않는다."""
+
+    flights: dict[tuple[str, str, str, str | None], QueryFlight]
+    flights = getattr(client, "_athena_query_flights", None)
+    if flights is None:
+        flights = {}
+        client._athena_query_flights = flights
+    key = _read_flight_key(tr_id, body, options)
+    flight = flights.get(key)
+    if flight is None:
+        flight = QueryFlight()
+
+        async def produce() -> ResponseEnvelope:
+            try:
+                return await client.post_with_headers(
+                    tr_id, upstream_path, body, options
+                )
+            finally:
+                if flights.get(key) is flight:
+                    del flights[key]
+
+        task = asyncio.create_task(produce())
+        flight.task = task
+        # 마지막 waiter가 취소된 뒤 producer가 실패해도 예외가 방치되지 않는다.
+        task.add_done_callback(
+            lambda completed: None
+            if completed.cancelled()
+            else completed.exception()
+        )
+        flights[key] = flight
+    task = flight.task
+    assert task is not None
+    flight.waiters += 1
+    cancelled = False
+    try:
+        return await asyncio.shield(task)
+    except asyncio.CancelledError:
+        cancelled = True
+        raise
+    finally:
+        flight.waiters -= 1
+        if cancelled and flight.waiters == 0 and not task.done():
+            task.cancel()
+
+
 async def call_typed_tr(
     tr_id: str,
     payload: BaseModel,
@@ -85,20 +155,23 @@ async def call_typed_tr(
     client: Any,
     *,
     response_model: type[ModelT] | None = None,
+    full_response_sink: Callable[[BaseModel], None] | None = None,
 ) -> ModelT | JSONResponse:
     spec = TR_REGISTRY[tr_id]
-    envelope = await client.post_with_headers(
-        tr_id,
-        spec.upstream_path,
-        payload.model_dump(by_alias=True, exclude_none=True),
-        _request_options(request),
+    body = payload.model_dump(by_alias=True, exclude_none=True)
+    options = _request_options(request)
+    envelope = await _post_query_once(
+        client, tr_id, spec.upstream_path, body, options
     )
     if _is_business_result(envelope.body):
         return _business_result_response(envelope)
     apply_continuation_headers(response, envelope)
+    full_response = spec.response_model.model_validate(envelope.body)
+    if full_response_sink is not None:
+        full_response_sink(full_response)
     model = response_model or spec.response_model
     if response_model is None:
-        body = envelope.body
+        return full_response
     else:
         aliases = {field.alias or name for name, field in model.model_fields.items()}
         body = {key: value for key, value in envelope.body.items() if key in aliases}

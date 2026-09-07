@@ -10,6 +10,7 @@ const ATHENA_GATEWAY_BUILTIN_TOOLS = Object.freeze([
   'athena_routine',
   'athena_brain',
   'athena_nudge_guard',
+  'athena_backtest',
 ]);
 const MAX_GATEWAY_QUALIFIED_TOOL_NAME_LENGTH = 64;
 
@@ -272,6 +273,7 @@ function createProviderRuntimeController({
     onEvent(event) {
       const entry = submissions.get(event.clientSubmitId);
       if (!entry) return;
+      if (event.conversationId !== entry.request.conversationId) return;
       if (!entry.turnId) {
         entry.turnId = event.turnId;
         activeTurnId = event.turnId;
