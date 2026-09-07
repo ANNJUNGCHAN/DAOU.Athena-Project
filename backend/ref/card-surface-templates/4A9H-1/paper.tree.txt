@@ -1,0 +1,255 @@
+Frame "Explorer Card Surface" (4A9J-1) 1360×900
+  Frame "Header and Capability Navigation" (4AFS-1) 1359×112
+    Frame "Frame" (4AG6-1) 205×62
+      Frame "Frame" (4AG8-1) 205×34
+        Text "종목 찾기" (4AGB-1) 110×34 "종목 찾기"
+        Frame "Frame" (4AG9-1) 83×28
+          Text "장중 · 09:42" (4AGA-1) 63×16 "장중 · 09:42"
+      Text "시장 고르기 · 당일 거래량 상위" (4AG7-1) 205×20 "시장 고르기 · 당일 거래량 상위"
+    Frame "Frame" (4AFT-1) 403×37
+      Frame "Frame" (4AG4-1) 52×37
+        Text "업종" (4AG5-1) 24×16 "업종"
+      Frame "Frame" (4AG2-1) 75×37
+        Text "종목찾기" (4AG3-1) 47×16 "종목찾기"
+      Frame "Frame" (4AG0-1) 52×37
+        Text "관심" (4AG1-1) 24×16 "관심"
+      Frame "Frame" (4AFY-1) 52×37
+        Text "테마" (4AFZ-1) 24×16 "테마"
+      Frame "Frame" (4AFW-1) 67×37
+        Text "시장·VI" (4AFX-1) 39×16 "시장·VI"
+      Frame "Frame" (4AFU-1) 75×37
+        Text "조건검색" (4AFV-1) 47×16 "조건검색"
+  Frame "Ranking Query Controls" (4AEK-1) 1359×107
+    Frame "Frame" (4AF3-1) 1303×33
+      Frame "Frame" (4AF7-1) 800×33
+        Frame "Frame" (4AFQ-1) 30×16
+          Text "정렬" (4AFR-1) 24×16 "정렬"
+        Frame "Frame" (4AFO-1) 69×33
+          Text "거래대금" (4AFP-1) 44×16 "거래대금"
+        Frame "Frame" (4AFM-1) 91×32
+          Text "당일 거래량" (4AFN-1) 63×16 "당일 거래량"
+        Frame "Frame" (4AFK-1) 83×33
+          Text "전일 거래량" (4AFL-1) 58×16 "전일 거래량"
+        Frame "Frame" (4AFI-1) 58×33
+          Text "등락률" (4AFJ-1) 33×16 "등락률"
+        Frame "Frame" (4AFG-1) 105×33
+          Text "예상체결 등락률" (4AFH-1) 80×16 "예상체결 등락률"
+        Frame "Frame" (4AFE-1) 69×33
+          Text "호가잔량" (4AFF-1) 44×16 "호가잔량"
+        Frame "Frame" (4AFC-1) 72×33
+          Text "잔량 급증" (4AFD-1) 47×16 "잔량 급증"
+        Frame "Frame" (4AFA-1) 83×33
+          Text "잔량률 급증" (4AFB-1) 58×16 "잔량률 급증"
+        Frame "거래량 급증" (4AF8-1) 83×33
+          Text "거래량 급증" (4AF9-1) 58×16 "거래량 급증"
+      Frame "Frame" (4AF4-1) 159×16
+        Text "● 실시간 갱신" (4AF6-1) 78×16 "● 실시간 갱신"
+        Text "100개 결과" (4AF5-1) 65×16 "100개 결과"
+    Frame "Frame" (4AEL-1) 1303×33
+      Frame "Frame" (4AES-1) 363×33
+        Frame "Frame" (4AF1-1) 30×16
+          Text "필터" (4AF2-1) 24×16 "필터"
+        Frame "Frame" (4AEZ-1) 59×33
+          Text "KOSPI" (4AF0-1) 34×16 "KOSPI"
+        Frame "Frame" (4AEX-1) 72×33
+          Text "등락 전체" (4AEY-1) 47×16 "등락 전체"
+        Frame "Frame" (4AEV-1) 94×33
+          Text "시가총액 전체" (4AEW-1) 69×16 "시가총액 전체"
+        Frame "Frame" (4AET-1) 83×33
+          Text "유동성 정상" (4AEU-1) 58×16 "유동성 정상"
+      Frame "Frame" (4AEM-1) 182×32
+        Text "세션" (4AER-1) 20×16 "세션"
+        Frame "Frame" (4AEP-1) 57×32
+          Text "정규장" (4AEQ-1) 33×16 "정규장"
+        Frame "Frame" (4AEN-1) 93×32
+          Text "시간외 단일가" (4AEO-1) 69×16 "시간외 단일가"
+  Frame "Ranking Workspace" (4A9M-1) 1359×612
+    Frame "Ranking Result Table" (4AB2-1) 880×612
+      Frame "순위표" (4ABV-1) 824×380
+        Frame "표 헤더블록" (4AE8-1) 824×64
+          Frame "Frame" (4AEH-1) 824×22
+            Text "당일 거래량 상위" (4AEJ-1) 118×22 "당일 거래량 상위"
+            Text "업데이트 09:42:18" (4AEI-1) 94×16 "업데이트 09:42:18"
+          Frame "열 이름" (4AE9-1) 824×34
+            Text "순위" (4AEG-1) 56×16 "순위"
+            Text "종목" (4AEF-1) 190×16 "종목"
+            Text "현재가" (4AEE-1) 114×16 "현재가"
+            Text "등락률" (4AED-1) 90×16 "등락률"
+            Text "거래량" (4AEC-1) 132×16 "거래량"
+            Text "거래대금" (4AEB-1) 122×16 "거래대금"
+            Text "체결강도" (4AEA-1) 88×16 "체결강도"
+        Frame "1위 삼성전자" (4ADS-1) 824×56
+          Text "01" (4AE7-1) 56×17 "01"
+          Frame "Frame" (4AE4-1) 190×33
+            Text "삼성전자" (4AE6-1) 190×18 "삼성전자"
+            Text "005930" (4AE5-1) 190×13 "005930"
+          Frame "Frame" (4AE1-1) 114×35
+            Text "150,850" (4AE3-1) 55×17 "150,850"
+            Text "+1,850" (4AE2-1) 44×16 "+1,850"
+          Text "+1.24%" (4AE0-1) 90×17 "+1.24%"
+          Frame "Frame" (4ADX-1) 132×35
+            Text "1,420만주" (4ADZ-1) 65×17 "1,420만주"
+            Text "전일 1.2배" (4ADY-1) 65×16 "전일 1.2배"
+          Frame "Frame" (4ADU-1) 122×35
+            Text "2.14조" (4ADW-1) 45×17 "2.14조"
+            Text "회전율 0.24%" (4ADV-1) 80×16 "회전율 0.24%"
+          Text "108.4%" (4ADT-1) 88×17 "108.4%"
+        Frame "2위 SK하이닉스" (4ADC-1) 824×56
+          Text "02" (4ADR-1) 56×17 "02"
+          Frame "Frame" (4ADO-1) 190×33
+            Text "SK하이닉스" (4ADQ-1) 190×18 "SK하이닉스"
+            Text "000660" (4ADP-1) 190×13 "000660"
+          Frame "Frame" (4ADL-1) 114×35
+            Text "198,400" (4ADN-1) 55×17 "198,400"
+            Text "+3,990" (4ADM-1) 44×16 "+3,990"
+          Text "+2.05%" (4ADK-1) 90×17 "+2.05%"
+          Frame "Frame" (4ADH-1) 132×35
+            Text "497만주" (4ADJ-1) 50×17 "497만주"
+            Text "전일 1.2배" (4ADI-1) 65×16 "전일 1.2배"
+          Frame "Frame" (4ADE-1) 122×35
+            Text "9,860억" (4ADG-1) 52×17 "9,860억"
+            Text "회전율 0.68%" (4ADF-1) 80×16 "회전율 0.68%"
+          Text "116.2%" (4ADD-1) 88×17 "116.2%"
+        Frame "3위 현대차" (4ACW-1) 824×56
+          Text "03" (4ADB-1) 56×17 "03"
+          Frame "Frame" (4AD8-1) 190×33
+            Text "현대차" (4ADA-1) 190×18 "현대차"
+            Text "005380" (4AD9-1) 190×13 "005380"
+          Frame "Frame" (4AD5-1) 114×35
+            Text "232,500" (4AD7-1) 55×17 "232,500"
+            Text "-1,220" (4AD6-1) 44×16 "-1,220"
+          Text "-0.52%" (4AD4-1) 90×17 "-0.52%"
+          Frame "Frame" (4AD1-1) 132×35
+            Text "319만주" (4AD3-1) 50×17 "319만주"
+            Text "전일 1.1배" (4AD2-1) 65×16 "전일 1.1배"
+          Frame "Frame" (4ACY-1) 122×35
+            Text "7,420억" (4AD0-1) 52×17 "7,420억"
+            Text "회전율 1.52%" (4ACZ-1) 80×16 "회전율 1.52%"
+          Text "93.8%" (4ACX-1) 88×17 "93.8%"
+        Frame "4위 NAVER" (4ACG-1) 824×56
+          Text "04" (4ACV-1) 56×17 "04"
+          Frame "Frame" (4ACS-1) 190×33
+            Text "NAVER" (4ACU-1) 190×18 "NAVER"
+            Text "035420" (4ACT-1) 190×13 "035420"
+          Frame "Frame" (4ACP-1) 114×35
+            Text "214,000" (4ACR-1) 55×17 "214,000"
+            Text "+1,800" (4ACQ-1) 44×16 "+1,800"
+          Text "+0.85%" (4ACO-1) 90×17 "+0.85%"
+          Frame "Frame" (4ACL-1) 132×35
+            Text "318만주" (4ACN-1) 50×17 "318만주"
+            Text "전일 1.2배" (4ACM-1) 65×16 "전일 1.2배"
+          Frame "Frame" (4ACI-1) 122×35
+            Text "6,810억" (4ACK-1) 52×17 "6,810억"
+            Text "회전율 1.94%" (4ACJ-1) 80×16 "회전율 1.94%"
+          Text "104.1%" (4ACH-1) 88×17 "104.1%"
+        Frame "5위 한화에어로스페이스" (4AC0-1) 824×56
+          Text "05" (4ACF-1) 56×17 "05"
+          Frame "Frame" (4ACC-1) 190×33
+            Text "한화에어로스페이스" (4ACE-1) 190×18 "한화에어로스페이스"
+            Text "012450" (4ACD-1) 190×13 "012450"
+          Frame "Frame" (4AC9-1) 114×35
+            Text "810,000" (4ACB-1) 55×17 "810,000"
+            Text "+23,700" (4ACA-1) 51×16 "+23,700"
+          Text "+3.01%" (4AC8-1) 90×17 "+3.01%"
+          Frame "Frame" (4AC5-1) 132×35
+            Text "73.8만주" (4AC7-1) 58×17 "73.8만주"
+            Text "전일 1.2배" (4AC6-1) 65×16 "전일 1.2배"
+          Frame "Frame" (4AC2-1) 122×35
+            Text "5,980억" (4AC4-1) 52×17 "5,980억"
+            Text "회전율 1.61%" (4AC3-1) 80×16 "회전율 1.61%"
+          Text "127.5%" (4AC1-1) 88×17 "127.5%"
+        Frame "표 푸터" (4ABW-1) 824×36
+          Text "상위 5개 표시 · 전체 100개" (4ABZ-1) 135×16 "상위 5개 표시 · 전체 100개"
+          Frame "Frame" (4ABX-1) 62×26
+            Text "더보기" (4ABY-1) 33×16 "더보기"
+      Frame "세션별 거래" (4AB3-1) 824×172
+        Frame "Frame" (4ABS-1) 824×20
+          Text "세션별 거래" (4ABU-1) 68×20 "세션별 거래"
+          Text "정규장 09:42 기준" (4ABT-1) 84×15 "정규장 09:42 기준"
+        Frame "Frame" (4ABM-1) 796×36
+          Text "세션" (4ABR-1) 150×15 "세션"
+          Text "거래량" (4ABQ-1) 150×15 "거래량"
+          Text "전일비" (4ABP-1) 116×15 "전일비"
+          Text "회전율" (4ABO-1) 116×15 "회전율"
+          Text "거래대금" (4ABN-1) 264×15 "거래대금"
+        Frame "장전" (4ABG-1) 796×33
+          Text "장전" (4ABL-1) 150×16 "장전"
+          Text "12만주" (4ABK-1) 150×16 "12만주"
+          Text "0.9배" (4ABJ-1) 116×16 "0.9배"
+          Text "0.002%" (4ABI-1) 116×16 "0.002%"
+          Text "180억" (4ABH-1) 264×16 "180억"
+        Frame "장중" (4ABA-1) 796×33
+          Text "장중" (4ABF-1) 150×16 "장중"
+          Text "1,408만주" (4ABE-1) 150×16 "1,408만주"
+          Text "1.2배" (4ABD-1) 116×16 "1.2배"
+          Text "0.236%" (4ABC-1) 116×16 "0.236%"
+          Text "2.12조" (4ABB-1) 264×16 "2.12조"
+        Frame "장후" (4AB4-1) 796×33
+          Text "장후" (4AB9-1) 150×16 "장후"
+          Text "집계 전" (4AB8-1) 150×16 "집계 전"
+          Text "집계 전" (4AB7-1) 116×16 "집계 전"
+          Text "집계 전" (4AB6-1) 116×16 "집계 전"
+          Text "집계 전" (4AB5-1) 264×16 "집계 전"
+    Frame "Selected Stock Detail" (4A9N-1) 480×612
+      Frame "Selected Stock Identity" (4AAR-1) 424×119
+        Frame "Frame" (4AAW-1) 424×48
+          Frame "Frame" (4AAZ-1) 101×48
+            Text "삼성전자" (4AB1-1) 101×28 "삼성전자"
+            Text "005930 · KOSPI" (4AB0-1) 101×16 "005930 · KOSPI"
+          Frame "Frame" (4AAX-1) 53×30
+            Text "선택됨" (4AAY-1) 33×16 "선택됨"
+        Frame "Frame" (4AAS-1) 424×42
+          Text "150,850" (4AAV-1) 152×42 "150,850"
+          Frame "Frame" (4AAT-1) 126×23
+            Text "+1,850 · +1.24%" (4AAU-1) 126×18 "+1,850 · +1.24%"
+      Frame "Peer Comparison" (4AAD-1) 424×177
+        Frame "Frame" (4AAO-1) 424×20
+          Text "같이 비교해볼 종목" (4AAQ-1) 125×20 "같이 비교해볼 종목"
+          Text "반도체" (4AAP-1) 33×16 "반도체"
+        Frame "Frame" (4AAE-1) 424×126
+          Frame "Frame" (4AAL-1) 424×42
+            Text "SK하이닉스" (4AAN-1) 63×16 "SK하이닉스"
+            Text "+2.05%" (4AAM-1) 47×16 "+2.05%"
+          Frame "Frame" (4AAI-1) 424×42
+            Text "DB하이텍" (4AAK-1) 52×16 "DB하이텍"
+            Text "-0.34%" (4AAJ-1) 47×16 "-0.34%"
+          Frame "Frame" (4AAF-1) 424×42
+            Text "한미반도체" (4AAH-1) 59×16 "한미반도체"
+            Text "+4.18%" (4AAG-1) 47×16 "+4.18%"
+      Frame "Quote and Listing" (4A9T-1) 424×162
+        Text "호가와 종목 정보" (4AAC-1) 424×20 "호가와 종목 정보"
+        Frame "호가" (4AA9-1) 424×32
+          Text "호가" (4AAB-1) 24×17 "호가"
+          Text "매도 150,900 · 매수 150,…" (4AAA-1) 201×17 "매도 150,900 · 매수 150,850"
+        Frame "전일 종가" (4AA6-1) 424×32
+          Text "전일 종가" (4AA8-1) 51×17 "전일 종가"
+          Text "149,000" (4AA7-1) 55×17 "149,000"
+        Frame "상장주식수와 상장일" (4AA3-1) 424×32
+          Text "상장주식수 · 상장일" (4AA5-1) 106×17 "상장주식수 · 상장일"
+          Text "59.7억주 · 1975.06.11" (4AA4-1) 159×17 "59.7억주 · 1975.06.11"
+        Frame "상태 칩" (4A9U-1) 424×35
+          Frame "Frame" (4AA1-1) 43×25
+            Text "정상" (4AA2-1) 22×16 "정상"
+          Frame "Frame" (4A9Z-1) 68×25
+            Text "감리 없음" (4AA0-1) 47×16 "감리 없음"
+          Frame "Frame" (4A9X-1) 90×25
+            Text "투자유의 아님" (4A9Y-1) 69×16 "투자유의 아님"
+          Frame "Frame" (4A9V-1) 68×25
+            Text "VI 미발동" (4A9W-1) 47×16 "VI 미발동"
+      Frame "Selected Stock Actions" (4A9O-1) 424×44
+        Frame "Frame" (4A9R-1) 208×44
+          Text "비교에 추가" (4A9S-1) 63×16 "비교에 추가"
+        Frame "Frame" (4A9P-1) 206×44
+          Text "종목 상세 열기" (4A9Q-1) 78×16 "종목 상세 열기"
+  Frame "User Status Footer" (4A9K-1) 1359×64
+    Text "● 실시간 갱신 중 · 마지막 반영 …" (4A9L-1) 206×16 "● 실시간 갱신 중 · 마지막 반영 09:42:18"
+  Frame "시장 고르기 · 드롭다운" (4AGC-1) 236×125
+    Frame "줄 · KOSPI" (4AGD-1) 223×36
+      Text "KOSPI" (4AGE-1) 37×16 "KOSPI"
+      Text "선택됨" (4AGF-1) 33×16 "선택됨"
+    Frame "줄 · KOSDAQ" (4AGG-1) 223×36
+      Text "KOSDAQ" (4AGH-1) 53×16 "KOSDAQ"
+      Text "코스닥 전체" (4AGI-1) 62×16 "코스닥 전체"
+    Frame "줄 · KRX 전체" (4AGJ-1) 223×36
+      Text "KRX 전체" (4AGK-1) 52×16 "KRX 전체"
+      Text "두 시장 합계" (4AGL-1) 69×16 "두 시장 합계"

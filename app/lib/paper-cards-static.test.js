@@ -155,7 +155,7 @@ test('narrowMultisetToCardRoot is the identity when every text sits under the ca
   assert.equal(narrowMultisetToCardRoot(ledger, records, 'NOPE-0'), null);
 });
 
-test('the card root narrowing changes exactly one board of the 96', async () => {
+test('the card root narrowing changes exactly one board of the 101', async () => {
   const { parseTreeRecords, narrowMultisetToCardRoot, checkPaperCardsStatic } = await load();
   const manifest = JSON.parse(fs.readFileSync(path.join(LEDGER_DIR, 'manifest.json'), 'utf8'));
   const pageOf = new Map(manifest.boards.map((board) => [board.id, String(board.page)]));
@@ -194,13 +194,13 @@ test('the card root narrowing changes exactly one board of the 96', async () => 
 
 // ---------- 전수 판정 ----------
 
-test('the static gate runs all 96 card templates and names every red board', async () => {
+test('the static gate runs all 101 card templates and names every red board', async () => {
   const { checkPaperCardsStatic, STATIC_FAILURE_CODES } = await load();
   const report = checkPaperCardsStatic({ runPython: false });
 
-  assert.equal(report.totals.boards, 96);
-  assert.equal(report.boards.length, 96);
-  assert.equal(report.totals.pass + report.totals.fail, 96);
+  assert.equal(report.totals.boards, 101);
+  assert.equal(report.boards.length, 101);
+  assert.equal(report.totals.pass + report.totals.fail, 101);
   assert.equal(report.totals.mount_fail, null, '마운트 층은 이 스크립트가 재지 않는다');
 
   // S1·S6은 이 전제가 서 있어야 나머지 판정이 뜻을 갖는다.
@@ -223,11 +223,11 @@ test('the static gate runs all 96 card templates and names every red board', asy
   );
 });
 
-test('the state link closure over the 96 index stays shut', async () => {
+test('the state link closure over the 101 index stays shut', async () => {
   const { checkPaperCardsStatic } = await load();
   const { static: checks } = checkPaperCardsStatic({ runPython: false });
   assert.deepEqual(checks.S3_state_links.unresolved, []);
-  assert.equal(checks.S3_state_links.targets, 83);
+  assert.equal(checks.S3_state_links.targets, 88);
 });
 
 test('a drifting board reports which slot and which ledger node the text came from', async () => {

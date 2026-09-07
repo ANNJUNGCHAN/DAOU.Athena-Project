@@ -100,6 +100,11 @@ const BOARD_CARD = Object.freeze({
   "3TCO-0": "CC-03",
   "3TOM-0": "CC-03",
   "3UTA-0": "CC-01",
+  "4A9H-1": "CC-06",
+  "4AGN-1": "CC-06",
+  "4ANS-1": "CC-06",
+  "4AUX-1": "CC-06",
+  "4B22-1": "CC-06",
   "fixture-quote": "CC-03",
 });
 
@@ -143,7 +148,7 @@ const STATE_GRAPH = Object.freeze({
   "135M-2": {"parent":null,"links":[{"control":"금현물 · 매수","board_id":"2TNJ-1"},{"control":"신용 · 매수","board_id":"2TJ6-1"},{"control":"정정","board_id":"2TAG-1"},{"control":"취소","board_id":"2TET-1"},{"control":"현금 매도","board_id":"2T63-1"}]},
   "137X-2": {"parent":null,"links":[{"control":"금현물","board_id":"2RJ7-1"},{"control":"기업정보","board_id":"2RBO-1"},{"control":"순위","board_id":"2VDA-0"},{"control":"순위","board_id":"32XM-0"},{"control":"차트","board_id":"32S7-0"},{"control":"투자자 12주체","board_id":"3DI2-0"},{"control":"현재시세","board_id":"2R3M-1"}]},
   "13BC-2": {"parent":null,"links":[{"control":"금현물 · 5단","board_id":"2QX1-1"},{"control":"단계별 낱값·거래소별","board_id":"3JZ3-0"},{"control":"시간외","board_id":"2QRP-1"},{"control":"정규장 · 5단","board_id":"2TRW-1"}]},
-  "13K0-2": {"parent":null,"links":[{"control":"거래량 급증","board_id":"2YJ8-0"},{"control":"관심종목 시세 보드","board_id":"2U5L-1"},{"control":"당일 거래량","board_id":"2X5N-0"},{"control":"등락률","board_id":"2XKO-0"},{"control":"시간외 등락률","board_id":"2YNQ-0"},{"control":"시장·VI","board_id":"2UHM-1"},{"control":"업종","board_id":"2TZN-1"},{"control":"예상체결 등락률","board_id":"2XP6-0"},{"control":"잔량률 급증","board_id":"2YEQ-0"},{"control":"전일 거래량","board_id":"2XG6-0"},{"control":"조건검색","board_id":"2UN6-1"},{"control":"테마 등락·확산 탐색","board_id":"2UBO-1"},{"control":"호가잔량 급증","board_id":"2YA8-0"},{"control":"호가잔량 상위","board_id":"2XTO-0"}]},
+  "13K0-2": {"parent":null,"links":[{"control":"KOSPI","board_id":"4A9H-1"},{"control":"거래량 급증","board_id":"2YJ8-0"},{"control":"관심종목 시세 보드","board_id":"2U5L-1"},{"control":"당일 거래량","board_id":"2X5N-0"},{"control":"더보기","board_id":"4B22-1"},{"control":"등락 전체","board_id":"4AGN-1"},{"control":"등락률","board_id":"2XKO-0"},{"control":"시가총액 전체","board_id":"4ANS-1"},{"control":"시간외 등락률","board_id":"2YNQ-0"},{"control":"시장·VI","board_id":"2UHM-1"},{"control":"업종","board_id":"2TZN-1"},{"control":"예상체결 등락률","board_id":"2XP6-0"},{"control":"유동성 정상","board_id":"4AUX-1"},{"control":"잔량률 급증","board_id":"2YEQ-0"},{"control":"전일 거래량","board_id":"2XG6-0"},{"control":"조건검색","board_id":"2UN6-1"},{"control":"테마 등락·확산 탐색","board_id":"2UBO-1"},{"control":"호가잔량 급증","board_id":"2YA8-0"},{"control":"호가잔량 상위","board_id":"2XTO-0"}]},
   "15P5-2": {"parent":null,"links":[{"control":"ELW 바스켓·만기평가","board_id":"3DZ1-0"}]},
   "1JPU-0": {"parent":null,"links":[{"control":"단계별 낱값","board_id":"3N4O-0"}]},
   "2QFO-2": {"parent":null,"links":[{"control":"거래원","board_id":"2QM7-2"},{"control":"순위","board_id":"2V71-0"},{"control":"신용·대차","board_id":"2RWK-1"},{"control":"종목 동향","board_id":"2S4E-1"},{"control":"투자자별","board_id":"2QFO-2"},{"control":"프로그램","board_id":"2ROJ-1"}]},
@@ -229,6 +234,11 @@ const STATE_GRAPH = Object.freeze({
   "3TCO-0": {"parent":"31II-0","links":[]},
   "3TOM-0": {"parent":"2Z49-0","links":[]},
   "3UTA-0": {"parent":"2SKU-1","links":[]},
+  "4A9H-1": {"parent":"13K0-2","links":[]},
+  "4AGN-1": {"parent":"13K0-2","links":[]},
+  "4ANS-1": {"parent":"13K0-2","links":[]},
+  "4AUX-1": {"parent":"13K0-2","links":[]},
+  "4B22-1": {"parent":"13K0-2","links":[]},
 });
 
 const __exports = { BOARD_CARD, CARD_IDS, STATE_GRAPH, BOARD_PRIMARY, CONTROL_LABELS };

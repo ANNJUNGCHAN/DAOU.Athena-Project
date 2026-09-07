@@ -1,0 +1,2991 @@
+{
+ "board_id": "4AGN-1",
+ "page": "5-1",
+ "page_name": "카드",
+ "name": "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+ "width": 1440,
+ "height": 980,
+ "texts": [
+  {
+   "id": "4ANR-1",
+   "text": "종목 찾기",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4ANQ-1",
+   "text": "장중 · 09:42",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4ANN-1",
+   "text": "등락 고르기 · 당일 거래량 상위",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4ANL-1",
+   "text": "업종",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4ANJ-1",
+   "text": "종목찾기",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4ANH-1",
+   "text": "관심",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4ANF-1",
+   "text": "테마",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AND-1",
+   "text": "시장·VI",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4ANB-1",
+   "text": "조건검색",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Header and Capability Navigation",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AN7-1",
+   "text": "정렬",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AN5-1",
+   "text": "거래대금",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AN3-1",
+   "text": "당일 거래량",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AN1-1",
+   "text": "전일 거래량",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AMZ-1",
+   "text": "등락률",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AMX-1",
+   "text": "예상체결 등락률",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AMV-1",
+   "text": "호가잔량",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AMT-1",
+   "text": "잔량 급증",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AMR-1",
+   "text": "잔량률 급증",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AMP-1",
+   "text": "거래량 급증",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame",
+    "거래량 급증"
+   ]
+  },
+  {
+   "id": "4AMM-1",
+   "text": "● 실시간 갱신",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AML-1",
+   "text": "100개 결과",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AMI-1",
+   "text": "필터",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AMG-1",
+   "text": "KOSPI",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AME-1",
+   "text": "등락 전체",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AMC-1",
+   "text": "시가총액 전체",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AMA-1",
+   "text": "유동성 정상",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AM7-1",
+   "text": "세션",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AM6-1",
+   "text": "정규장",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AM4-1",
+   "text": "시간외 단일가",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Query Controls",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4ALZ-1",
+   "text": "당일 거래량 상위",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "표 헤더블록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4ALY-1",
+   "text": "업데이트 09:42:18",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "표 헤더블록",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4ALW-1",
+   "text": "순위",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "표 헤더블록",
+    "열 이름"
+   ]
+  },
+  {
+   "id": "4ALV-1",
+   "text": "종목",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "표 헤더블록",
+    "열 이름"
+   ]
+  },
+  {
+   "id": "4ALU-1",
+   "text": "현재가",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "표 헤더블록",
+    "열 이름"
+   ]
+  },
+  {
+   "id": "4ALT-1",
+   "text": "등락률",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "표 헤더블록",
+    "열 이름"
+   ]
+  },
+  {
+   "id": "4ALS-1",
+   "text": "거래량",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "표 헤더블록",
+    "열 이름"
+   ]
+  },
+  {
+   "id": "4ALR-1",
+   "text": "거래대금",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "표 헤더블록",
+    "열 이름"
+   ]
+  },
+  {
+   "id": "4ALQ-1",
+   "text": "체결강도",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "표 헤더블록",
+    "열 이름"
+   ]
+  },
+  {
+   "id": "4ALN-1",
+   "text": "01",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "1위 삼성전자"
+   ]
+  },
+  {
+   "id": "4ALM-1",
+   "text": "삼성전자",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "1위 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4ALL-1",
+   "text": "005930",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "1위 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4ALJ-1",
+   "text": "150,850",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "1위 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4ALI-1",
+   "text": "+1,850",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "1위 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4ALG-1",
+   "text": "+1.24%",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "1위 삼성전자"
+   ]
+  },
+  {
+   "id": "4ALF-1",
+   "text": "1,420만주",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "1위 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4ALE-1",
+   "text": "전일 1.2배",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "1위 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4ALC-1",
+   "text": "2.14조",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "1위 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4ALB-1",
+   "text": "회전율 0.24%",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "1위 삼성전자",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AL9-1",
+   "text": "108.4%",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "1위 삼성전자"
+   ]
+  },
+  {
+   "id": "4AL7-1",
+   "text": "02",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "2위 SK하이닉스"
+   ]
+  },
+  {
+   "id": "4AL6-1",
+   "text": "SK하이닉스",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "2위 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AL5-1",
+   "text": "000660",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "2위 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AL3-1",
+   "text": "198,400",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "2위 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AL2-1",
+   "text": "+3,990",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "2위 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AL0-1",
+   "text": "+2.05%",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "2위 SK하이닉스"
+   ]
+  },
+  {
+   "id": "4AKZ-1",
+   "text": "497만주",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "2위 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AKY-1",
+   "text": "전일 1.2배",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "2위 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AKW-1",
+   "text": "9,860억",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "2위 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AKV-1",
+   "text": "회전율 0.68%",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "2위 SK하이닉스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AKT-1",
+   "text": "116.2%",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "2위 SK하이닉스"
+   ]
+  },
+  {
+   "id": "4AKR-1",
+   "text": "03",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "3위 현대차"
+   ]
+  },
+  {
+   "id": "4AKQ-1",
+   "text": "현대차",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "3위 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AKP-1",
+   "text": "005380",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "3위 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AKN-1",
+   "text": "232,500",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "3위 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AKM-1",
+   "text": "-1,220",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "3위 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AKK-1",
+   "text": "-0.52%",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "3위 현대차"
+   ]
+  },
+  {
+   "id": "4AKJ-1",
+   "text": "319만주",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "3위 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AKI-1",
+   "text": "전일 1.1배",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "3위 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AKG-1",
+   "text": "7,420억",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "3위 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AKF-1",
+   "text": "회전율 1.52%",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "3위 현대차",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AKD-1",
+   "text": "93.8%",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "3위 현대차"
+   ]
+  },
+  {
+   "id": "4AKB-1",
+   "text": "04",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "4위 NAVER"
+   ]
+  },
+  {
+   "id": "4AKA-1",
+   "text": "NAVER",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "4위 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AK9-1",
+   "text": "035420",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "4위 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AK7-1",
+   "text": "214,000",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "4위 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AK6-1",
+   "text": "+1,800",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "4위 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AK4-1",
+   "text": "+0.85%",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "4위 NAVER"
+   ]
+  },
+  {
+   "id": "4AK3-1",
+   "text": "318만주",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "4위 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AK2-1",
+   "text": "전일 1.2배",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "4위 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AK0-1",
+   "text": "6,810억",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "4위 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AJZ-1",
+   "text": "회전율 1.94%",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "4위 NAVER",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AJX-1",
+   "text": "104.1%",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "4위 NAVER"
+   ]
+  },
+  {
+   "id": "4AJV-1",
+   "text": "05",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "5위 한화에어로스페이스"
+   ]
+  },
+  {
+   "id": "4AJU-1",
+   "text": "한화에어로스페이스",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "5위 한화에어로스페이스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AJT-1",
+   "text": "012450",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "5위 한화에어로스페이스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AJR-1",
+   "text": "810,000",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "5위 한화에어로스페이스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AJQ-1",
+   "text": "+23,700",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "5위 한화에어로스페이스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AJO-1",
+   "text": "+3.01%",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "5위 한화에어로스페이스"
+   ]
+  },
+  {
+   "id": "4AJN-1",
+   "text": "73.8만주",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "5위 한화에어로스페이스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AJM-1",
+   "text": "전일 1.2배",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "5위 한화에어로스페이스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AJK-1",
+   "text": "5,980억",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "5위 한화에어로스페이스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AJJ-1",
+   "text": "회전율 1.61%",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "5위 한화에어로스페이스",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AJH-1",
+   "text": "127.5%",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "5위 한화에어로스페이스"
+   ]
+  },
+  {
+   "id": "4AJF-1",
+   "text": "상위 5개 표시 · 전체 100개",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "표 푸터"
+   ]
+  },
+  {
+   "id": "4AJE-1",
+   "text": "더보기",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "순위표",
+    "표 푸터",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AJA-1",
+   "text": "세션별 거래",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "세션별 거래",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AJ9-1",
+   "text": "정규장 09:42 기준",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "세션별 거래",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AJ7-1",
+   "text": "세션",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "세션별 거래",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AJ6-1",
+   "text": "거래량",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "세션별 거래",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AJ5-1",
+   "text": "전일비",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "세션별 거래",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AJ4-1",
+   "text": "회전율",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "세션별 거래",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AJ3-1",
+   "text": "거래대금",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "세션별 거래",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AJ1-1",
+   "text": "장전",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "세션별 거래",
+    "장전"
+   ]
+  },
+  {
+   "id": "4AJ0-1",
+   "text": "12만주",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "세션별 거래",
+    "장전"
+   ]
+  },
+  {
+   "id": "4AIZ-1",
+   "text": "0.9배",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "세션별 거래",
+    "장전"
+   ]
+  },
+  {
+   "id": "4AIY-1",
+   "text": "0.002%",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "세션별 거래",
+    "장전"
+   ]
+  },
+  {
+   "id": "4AIX-1",
+   "text": "180억",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "세션별 거래",
+    "장전"
+   ]
+  },
+  {
+   "id": "4AIV-1",
+   "text": "장중",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "세션별 거래",
+    "장중"
+   ]
+  },
+  {
+   "id": "4AIU-1",
+   "text": "1,408만주",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "세션별 거래",
+    "장중"
+   ]
+  },
+  {
+   "id": "4AIT-1",
+   "text": "1.2배",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "세션별 거래",
+    "장중"
+   ]
+  },
+  {
+   "id": "4AIS-1",
+   "text": "0.236%",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "세션별 거래",
+    "장중"
+   ]
+  },
+  {
+   "id": "4AIR-1",
+   "text": "2.12조",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "세션별 거래",
+    "장중"
+   ]
+  },
+  {
+   "id": "4AIP-1",
+   "text": "장후",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "세션별 거래",
+    "장후"
+   ]
+  },
+  {
+   "id": "4AIO-1",
+   "text": "집계 전",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "세션별 거래",
+    "장후"
+   ]
+  },
+  {
+   "id": "4AIN-1",
+   "text": "집계 전",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "세션별 거래",
+    "장후"
+   ]
+  },
+  {
+   "id": "4AIM-1",
+   "text": "집계 전",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "세션별 거래",
+    "장후"
+   ]
+  },
+  {
+   "id": "4AIL-1",
+   "text": "집계 전",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Ranking Result Table",
+    "세션별 거래",
+    "장후"
+   ]
+  },
+  {
+   "id": "4AIH-1",
+   "text": "삼성전자",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Selected Stock Identity",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AIG-1",
+   "text": "005930 · KOSPI",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Selected Stock Identity",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AIE-1",
+   "text": "선택됨",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Selected Stock Identity",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AIB-1",
+   "text": "150,850",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Selected Stock Identity",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AIA-1",
+   "text": "+1,850 · +1.24%",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Selected Stock Identity",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AI6-1",
+   "text": "같이 비교해볼 종목",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Peer Comparison",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AI5-1",
+   "text": "반도체",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Peer Comparison",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AI3-1",
+   "text": "SK하이닉스",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Peer Comparison",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AI2-1",
+   "text": "+2.05%",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Peer Comparison",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AI0-1",
+   "text": "DB하이텍",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Peer Comparison",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AHZ-1",
+   "text": "-0.34%",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Peer Comparison",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AHX-1",
+   "text": "한미반도체",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Peer Comparison",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AHW-1",
+   "text": "+4.18%",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Peer Comparison",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AHS-1",
+   "text": "호가와 종목 정보",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Quote and Listing"
+   ]
+  },
+  {
+   "id": "4AHR-1",
+   "text": "호가",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Quote and Listing",
+    "호가"
+   ]
+  },
+  {
+   "id": "4AHQ-1",
+   "text": "매도 150,900 · 매수 150,850",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Quote and Listing",
+    "호가"
+   ]
+  },
+  {
+   "id": "4AHO-1",
+   "text": "전일 종가",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Quote and Listing",
+    "전일 종가"
+   ]
+  },
+  {
+   "id": "4AHN-1",
+   "text": "149,000",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Quote and Listing",
+    "전일 종가"
+   ]
+  },
+  {
+   "id": "4AHL-1",
+   "text": "상장주식수 · 상장일",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Quote and Listing",
+    "상장주식수와 상장일"
+   ]
+  },
+  {
+   "id": "4AHK-1",
+   "text": "59.7억주 · 1975.06.11",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Quote and Listing",
+    "상장주식수와 상장일"
+   ]
+  },
+  {
+   "id": "4AHI-1",
+   "text": "정상",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Quote and Listing",
+    "상태 칩",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AHG-1",
+   "text": "감리 없음",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Quote and Listing",
+    "상태 칩",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AHE-1",
+   "text": "투자유의 아님",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Quote and Listing",
+    "상태 칩",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AHC-1",
+   "text": "VI 미발동",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Quote and Listing",
+    "상태 칩",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AH8-1",
+   "text": "비교에 추가",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Selected Stock Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AH6-1",
+   "text": "종목 상세 열기",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "Ranking Workspace",
+    "Selected Stock Detail",
+    "Selected Stock Actions",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4AH1-1",
+   "text": "● 실시간 갱신 중 · 마지막 반영 09:42:18",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "User Status Footer"
+   ]
+  },
+  {
+   "id": "4AGZ-1",
+   "text": "등락 전체",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "등락 고르기 · 드롭다운",
+    "줄 · KOSPI"
+   ]
+  },
+  {
+   "id": "4AGY-1",
+   "text": "선택됨",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "등락 고르기 · 드롭다운",
+    "줄 · KOSPI"
+   ]
+  },
+  {
+   "id": "4AGW-1",
+   "text": "상승만",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "등락 고르기 · 드롭다운",
+    "줄 · KOSDAQ"
+   ]
+  },
+  {
+   "id": "4AGV-1",
+   "text": "오른 종목만",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "등락 고르기 · 드롭다운",
+    "줄 · KOSDAQ"
+   ]
+  },
+  {
+   "id": "4AGT-1",
+   "text": "하락만",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "등락 고르기 · 드롭다운",
+    "줄 · KRX 전체"
+   ]
+  },
+  {
+   "id": "4AGS-1",
+   "text": "내린 종목만",
+   "path": [
+    "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+    "Discovery Root · 종목 찾기",
+    "Explorer Card Surface",
+    "등락 고르기 · 드롭다운",
+    "줄 · KRX 전체"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "4AGN-1",
+   "name": "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+   "component": "Frame",
+   "w": 1440,
+   "h": 980,
+   "depth": 0
+  },
+  {
+   "id": "4AGO-1",
+   "name": "Discovery Root · 종목 찾기",
+   "component": "Frame",
+   "w": 1440,
+   "h": 980,
+   "depth": 1
+  },
+  {
+   "id": "4AGP-1",
+   "name": "Explorer Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 900,
+   "depth": 2
+  },
+  {
+   "id": "4AN8-1",
+   "name": "Header and Capability Navigation",
+   "component": "Frame",
+   "w": 1359,
+   "h": 112,
+   "depth": 3
+  },
+  {
+   "id": "4ANM-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 205,
+   "h": 62,
+   "depth": 4
+  },
+  {
+   "id": "4ANO-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 205,
+   "h": 34,
+   "depth": 5
+  },
+  {
+   "id": "4ANP-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 83,
+   "h": 28,
+   "depth": 6
+  },
+  {
+   "id": "4AN9-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 403,
+   "h": 37,
+   "depth": 4
+  },
+  {
+   "id": "4ANK-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 52,
+   "h": 37,
+   "depth": 5
+  },
+  {
+   "id": "4ANI-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 75,
+   "h": 37,
+   "depth": 5
+  },
+  {
+   "id": "4ANG-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 52,
+   "h": 37,
+   "depth": 5
+  },
+  {
+   "id": "4ANE-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 52,
+   "h": 37,
+   "depth": 5
+  },
+  {
+   "id": "4ANC-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 67,
+   "h": 37,
+   "depth": 5
+  },
+  {
+   "id": "4ANA-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 75,
+   "h": 37,
+   "depth": 5
+  },
+  {
+   "id": "4AM0-1",
+   "name": "Ranking Query Controls",
+   "component": "Frame",
+   "w": 1359,
+   "h": 107,
+   "depth": 3
+  },
+  {
+   "id": "4AMJ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1303,
+   "h": 33,
+   "depth": 4
+  },
+  {
+   "id": "4AMN-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 800,
+   "h": 33,
+   "depth": 5
+  },
+  {
+   "id": "4AN6-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "4AN4-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 69,
+   "h": 33,
+   "depth": 6
+  },
+  {
+   "id": "4AN2-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 91,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "4AN0-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 83,
+   "h": 33,
+   "depth": 6
+  },
+  {
+   "id": "4AMY-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 58,
+   "h": 33,
+   "depth": 6
+  },
+  {
+   "id": "4AMW-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 105,
+   "h": 33,
+   "depth": 6
+  },
+  {
+   "id": "4AMU-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 69,
+   "h": 33,
+   "depth": 6
+  },
+  {
+   "id": "4AMS-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 72,
+   "h": 33,
+   "depth": 6
+  },
+  {
+   "id": "4AMQ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 83,
+   "h": 33,
+   "depth": 6
+  },
+  {
+   "id": "4AMO-1",
+   "name": "거래량 급증",
+   "component": "Frame",
+   "w": 83,
+   "h": 33,
+   "depth": 6
+  },
+  {
+   "id": "4AMK-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 159,
+   "h": 16,
+   "depth": 5
+  },
+  {
+   "id": "4AM1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 1303,
+   "h": 33,
+   "depth": 4
+  },
+  {
+   "id": "4AM8-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 363,
+   "h": 33,
+   "depth": 5
+  },
+  {
+   "id": "4AMH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 30,
+   "h": 16,
+   "depth": 6
+  },
+  {
+   "id": "4AMF-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 59,
+   "h": 33,
+   "depth": 6
+  },
+  {
+   "id": "4AMD-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 72,
+   "h": 33,
+   "depth": 6
+  },
+  {
+   "id": "4AMB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 94,
+   "h": 33,
+   "depth": 6
+  },
+  {
+   "id": "4AM9-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 83,
+   "h": 33,
+   "depth": 6
+  },
+  {
+   "id": "4AM2-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 182,
+   "h": 32,
+   "depth": 5
+  },
+  {
+   "id": "4AM5-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 57,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "4AM3-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 93,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "4AH2-1",
+   "name": "Ranking Workspace",
+   "component": "Frame",
+   "w": 1359,
+   "h": 612,
+   "depth": 3
+  },
+  {
+   "id": "4AII-1",
+   "name": "Ranking Result Table",
+   "component": "Frame",
+   "w": 880,
+   "h": 612,
+   "depth": 4
+  },
+  {
+   "id": "4AJB-1",
+   "name": "순위표",
+   "component": "Frame",
+   "w": 824,
+   "h": 380,
+   "depth": 5
+  },
+  {
+   "id": "4ALO-1",
+   "name": "표 헤더블록",
+   "component": "Frame",
+   "w": 824,
+   "h": 64,
+   "depth": 6
+  },
+  {
+   "id": "4ALX-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 824,
+   "h": 22,
+   "depth": 7
+  },
+  {
+   "id": "4ALP-1",
+   "name": "열 이름",
+   "component": "Frame",
+   "w": 824,
+   "h": 34,
+   "depth": 7
+  },
+  {
+   "id": "4AL8-1",
+   "name": "1위 삼성전자",
+   "component": "Frame",
+   "w": 824,
+   "h": 56,
+   "depth": 6
+  },
+  {
+   "id": "4ALK-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 33,
+   "depth": 7
+  },
+  {
+   "id": "4ALH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 114,
+   "h": 35,
+   "depth": 7
+  },
+  {
+   "id": "4ALD-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 35,
+   "depth": 7
+  },
+  {
+   "id": "4ALA-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 122,
+   "h": 35,
+   "depth": 7
+  },
+  {
+   "id": "4AKS-1",
+   "name": "2위 SK하이닉스",
+   "component": "Frame",
+   "w": 824,
+   "h": 56,
+   "depth": 6
+  },
+  {
+   "id": "4AL4-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 33,
+   "depth": 7
+  },
+  {
+   "id": "4AL1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 114,
+   "h": 35,
+   "depth": 7
+  },
+  {
+   "id": "4AKX-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 35,
+   "depth": 7
+  },
+  {
+   "id": "4AKU-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 122,
+   "h": 35,
+   "depth": 7
+  },
+  {
+   "id": "4AKC-1",
+   "name": "3위 현대차",
+   "component": "Frame",
+   "w": 824,
+   "h": 56,
+   "depth": 6
+  },
+  {
+   "id": "4AKO-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 33,
+   "depth": 7
+  },
+  {
+   "id": "4AKL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 114,
+   "h": 35,
+   "depth": 7
+  },
+  {
+   "id": "4AKH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 35,
+   "depth": 7
+  },
+  {
+   "id": "4AKE-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 122,
+   "h": 35,
+   "depth": 7
+  },
+  {
+   "id": "4AJW-1",
+   "name": "4위 NAVER",
+   "component": "Frame",
+   "w": 824,
+   "h": 56,
+   "depth": 6
+  },
+  {
+   "id": "4AK8-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 33,
+   "depth": 7
+  },
+  {
+   "id": "4AK5-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 114,
+   "h": 35,
+   "depth": 7
+  },
+  {
+   "id": "4AK1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 35,
+   "depth": 7
+  },
+  {
+   "id": "4AJY-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 122,
+   "h": 35,
+   "depth": 7
+  },
+  {
+   "id": "4AJG-1",
+   "name": "5위 한화에어로스페이스",
+   "component": "Frame",
+   "w": 824,
+   "h": 56,
+   "depth": 6
+  },
+  {
+   "id": "4AJS-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 190,
+   "h": 33,
+   "depth": 7
+  },
+  {
+   "id": "4AJP-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 114,
+   "h": 35,
+   "depth": 7
+  },
+  {
+   "id": "4AJL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 132,
+   "h": 35,
+   "depth": 7
+  },
+  {
+   "id": "4AJI-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 122,
+   "h": 35,
+   "depth": 7
+  },
+  {
+   "id": "4AJC-1",
+   "name": "표 푸터",
+   "component": "Frame",
+   "w": 824,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "4AJD-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 62,
+   "h": 26,
+   "depth": 7
+  },
+  {
+   "id": "4AIJ-1",
+   "name": "세션별 거래",
+   "component": "Frame",
+   "w": 824,
+   "h": 172,
+   "depth": 5
+  },
+  {
+   "id": "4AJ8-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 824,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "4AJ2-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 796,
+   "h": 36,
+   "depth": 6
+  },
+  {
+   "id": "4AIW-1",
+   "name": "장전",
+   "component": "Frame",
+   "w": 796,
+   "h": 33,
+   "depth": 6
+  },
+  {
+   "id": "4AIQ-1",
+   "name": "장중",
+   "component": "Frame",
+   "w": 796,
+   "h": 33,
+   "depth": 6
+  },
+  {
+   "id": "4AIK-1",
+   "name": "장후",
+   "component": "Frame",
+   "w": 796,
+   "h": 33,
+   "depth": 6
+  },
+  {
+   "id": "4AH3-1",
+   "name": "Selected Stock Detail",
+   "component": "Frame",
+   "w": 480,
+   "h": 612,
+   "depth": 4
+  },
+  {
+   "id": "4AI7-1",
+   "name": "Selected Stock Identity",
+   "component": "Frame",
+   "w": 424,
+   "h": 119,
+   "depth": 5
+  },
+  {
+   "id": "4AIC-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 424,
+   "h": 48,
+   "depth": 6
+  },
+  {
+   "id": "4AIF-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 101,
+   "h": 48,
+   "depth": 7
+  },
+  {
+   "id": "4AID-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 53,
+   "h": 30,
+   "depth": 7
+  },
+  {
+   "id": "4AI8-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 424,
+   "h": 42,
+   "depth": 6
+  },
+  {
+   "id": "4AI9-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 126,
+   "h": 23,
+   "depth": 7
+  },
+  {
+   "id": "4AHT-1",
+   "name": "Peer Comparison",
+   "component": "Frame",
+   "w": 424,
+   "h": 177,
+   "depth": 5
+  },
+  {
+   "id": "4AI4-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 424,
+   "h": 20,
+   "depth": 6
+  },
+  {
+   "id": "4AHU-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 424,
+   "h": 126,
+   "depth": 6
+  },
+  {
+   "id": "4AI1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 424,
+   "h": 42,
+   "depth": 7
+  },
+  {
+   "id": "4AHY-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 424,
+   "h": 42,
+   "depth": 7
+  },
+  {
+   "id": "4AHV-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 424,
+   "h": 42,
+   "depth": 7
+  },
+  {
+   "id": "4AH9-1",
+   "name": "Quote and Listing",
+   "component": "Frame",
+   "w": 424,
+   "h": 162,
+   "depth": 5
+  },
+  {
+   "id": "4AHP-1",
+   "name": "호가",
+   "component": "Frame",
+   "w": 424,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "4AHM-1",
+   "name": "전일 종가",
+   "component": "Frame",
+   "w": 424,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "4AHJ-1",
+   "name": "상장주식수와 상장일",
+   "component": "Frame",
+   "w": 424,
+   "h": 32,
+   "depth": 6
+  },
+  {
+   "id": "4AHA-1",
+   "name": "상태 칩",
+   "component": "Frame",
+   "w": 424,
+   "h": 35,
+   "depth": 6
+  },
+  {
+   "id": "4AHH-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 43,
+   "h": 25,
+   "depth": 7
+  },
+  {
+   "id": "4AHF-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 68,
+   "h": 25,
+   "depth": 7
+  },
+  {
+   "id": "4AHD-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 90,
+   "h": 25,
+   "depth": 7
+  },
+  {
+   "id": "4AHB-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 68,
+   "h": 25,
+   "depth": 7
+  },
+  {
+   "id": "4AH4-1",
+   "name": "Selected Stock Actions",
+   "component": "Frame",
+   "w": 424,
+   "h": 44,
+   "depth": 5
+  },
+  {
+   "id": "4AH7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 208,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "4AH5-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 206,
+   "h": 44,
+   "depth": 6
+  },
+  {
+   "id": "4AH0-1",
+   "name": "User Status Footer",
+   "component": "Frame",
+   "w": 1359,
+   "h": 64,
+   "depth": 3
+  },
+  {
+   "id": "4AGQ-1",
+   "name": "등락 고르기 · 드롭다운",
+   "component": "Frame",
+   "w": 236,
+   "h": 125,
+   "depth": 3
+  },
+  {
+   "id": "4AGX-1",
+   "name": "줄 · KOSPI",
+   "component": "Frame",
+   "w": 223,
+   "h": 36,
+   "depth": 4
+  },
+  {
+   "id": "4AGU-1",
+   "name": "줄 · KOSDAQ",
+   "component": "Frame",
+   "w": 223,
+   "h": 36,
+   "depth": 4
+  },
+  {
+   "id": "4AGR-1",
+   "name": "줄 · KRX 전체",
+   "component": "Frame",
+   "w": 223,
+   "h": 36,
+   "depth": 4
+  }
+ ],
+ "text_multiset": {
+  "종목 찾기": 1,
+  "장중 · 09:42": 1,
+  "등락 고르기 · 당일 거래량 상위": 1,
+  "업종": 1,
+  "종목찾기": 1,
+  "관심": 1,
+  "테마": 1,
+  "시장·VI": 1,
+  "조건검색": 1,
+  "정렬": 1,
+  "거래대금": 3,
+  "당일 거래량": 1,
+  "전일 거래량": 1,
+  "등락률": 2,
+  "예상체결 등락률": 1,
+  "호가잔량": 1,
+  "잔량 급증": 1,
+  "잔량률 급증": 1,
+  "거래량 급증": 1,
+  "● 실시간 갱신": 1,
+  "100개 결과": 1,
+  "필터": 1,
+  "KOSPI": 1,
+  "등락 전체": 2,
+  "시가총액 전체": 1,
+  "유동성 정상": 1,
+  "세션": 2,
+  "정규장": 1,
+  "시간외 단일가": 1,
+  "당일 거래량 상위": 1,
+  "업데이트 09:42:18": 1,
+  "순위": 1,
+  "종목": 1,
+  "현재가": 1,
+  "거래량": 2,
+  "체결강도": 1,
+  "01": 1,
+  "삼성전자": 2,
+  "005930": 1,
+  "150,850": 2,
+  "+1,850": 1,
+  "+1.24%": 1,
+  "1,420만주": 1,
+  "전일 1.2배": 4,
+  "2.14조": 1,
+  "회전율 0.24%": 1,
+  "108.4%": 1,
+  "02": 1,
+  "SK하이닉스": 2,
+  "000660": 1,
+  "198,400": 1,
+  "+3,990": 1,
+  "+2.05%": 2,
+  "497만주": 1,
+  "9,860억": 1,
+  "회전율 0.68%": 1,
+  "116.2%": 1,
+  "03": 1,
+  "현대차": 1,
+  "005380": 1,
+  "232,500": 1,
+  "-1,220": 1,
+  "-0.52%": 1,
+  "319만주": 1,
+  "전일 1.1배": 1,
+  "7,420억": 1,
+  "회전율 1.52%": 1,
+  "93.8%": 1,
+  "04": 1,
+  "NAVER": 1,
+  "035420": 1,
+  "214,000": 1,
+  "+1,800": 1,
+  "+0.85%": 1,
+  "318만주": 1,
+  "6,810억": 1,
+  "회전율 1.94%": 1,
+  "104.1%": 1,
+  "05": 1,
+  "한화에어로스페이스": 1,
+  "012450": 1,
+  "810,000": 1,
+  "+23,700": 1,
+  "+3.01%": 1,
+  "73.8만주": 1,
+  "5,980억": 1,
+  "회전율 1.61%": 1,
+  "127.5%": 1,
+  "상위 5개 표시 · 전체 100개": 1,
+  "더보기": 1,
+  "세션별 거래": 1,
+  "정규장 09:42 기준": 1,
+  "전일비": 1,
+  "회전율": 1,
+  "장전": 1,
+  "12만주": 1,
+  "0.9배": 1,
+  "0.002%": 1,
+  "180억": 1,
+  "장중": 1,
+  "1,408만주": 1,
+  "1.2배": 1,
+  "0.236%": 1,
+  "2.12조": 1,
+  "장후": 1,
+  "집계 전": 4,
+  "005930 · KOSPI": 1,
+  "선택됨": 2,
+  "+1,850 · +1.24%": 1,
+  "같이 비교해볼 종목": 1,
+  "반도체": 1,
+  "DB하이텍": 1,
+  "-0.34%": 1,
+  "한미반도체": 1,
+  "+4.18%": 1,
+  "호가와 종목 정보": 1,
+  "호가": 1,
+  "매도 150,900 · 매수 150,850": 1,
+  "전일 종가": 1,
+  "149,000": 1,
+  "상장주식수 · 상장일": 1,
+  "59.7억주 · 1975.06.11": 1,
+  "정상": 1,
+  "감리 없음": 1,
+  "투자유의 아님": 1,
+  "VI 미발동": 1,
+  "비교에 추가": 1,
+  "종목 상세 열기": 1,
+  "● 실시간 갱신 중 · 마지막 반영 09:42:18": 1,
+  "상승만": 1,
+  "오른 종목만": 1,
+  "하락만": 1,
+  "내린 종목만": 1
+ },
+ "exported_at": "2026-09-07",
+ "tree_summary_sha256": "c83271a6c4cad12e8ff4bb0bb0212bdc4198b4a82e386b34253b7a141f8071fd"
+}

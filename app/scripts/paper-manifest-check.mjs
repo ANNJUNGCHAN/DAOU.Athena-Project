@@ -1,6 +1,6 @@
 /**
  * Paper 원장 매니페스트 불변식 게이트 — `backend/ref/paper-ledger/manifest.json`이
- * 세 전수 게이트(카드 96 · 화면계 · 카드미니 203)의 전제조건을 지키는지 정적으로 잰다.
+ * 세 전수 게이트(카드 101 · 화면계 · 카드미니 203)의 전제조건을 지키는지 정적으로 잰다.
  * Electron 없이 파일만 읽는 오라클이라 밀리초 안에 끝난다.
  *
  * 왜 필요한가: 추출기가 `page`를 스크립트 상수로 박아 넣기 때문에 원장 JSON의
@@ -9,9 +9,9 @@
  * 이 검사가 그 부류를 막는다(fail-closed).
  *
  * 불변식 6개:
- *   I1  sum(pages[].boards) == boards[].length == 444
+ *   I1  sum(pages[].boards) == boards[].length == 449
  *   I2  페이지별 boards[] 실개수 == pages[].boards
- *   I3  role=="card_template" 집합 == card-surface-templates/index.json 96개 (정확 상등)
+ *   I3  role=="card_template" 집합 == card-surface-templates/index.json 101개 (정확 상등)
  *   I4  role=="retired"는 why 필수 — 사유 없는 제외 금지
  *   I5  모든 boards[].id에 대해 <page>/<id>.json 과 .tree.txt 가 실재(역방향 포함)
  *   I6  원장 JSON의 tree_summary_sha256 == sha256(같은 보드의 .tree.txt 바이트)
@@ -30,7 +30,7 @@ const REPO_ROOT = path.resolve(APP_DIR, '..');
 
 export const LEDGER_DIR = path.join(REPO_ROOT, 'backend', 'ref', 'paper-ledger');
 export const CARD_INDEX_PATH = path.join(REPO_ROOT, 'backend', 'ref', 'card-surface-templates', 'index.json');
-export const TOTAL_BOARDS = 444;
+export const TOTAL_BOARDS = 449;
 export const ROLES = Object.freeze([
   'screen',
   'card_template',

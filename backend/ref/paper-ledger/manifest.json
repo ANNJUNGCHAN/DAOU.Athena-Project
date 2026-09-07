@@ -31,7 +31,7 @@
     {
       "id": "5-1",
       "name": "카드",
-      "boards": 104
+      "boards": 109
     },
     {
       "id": "F-1",
@@ -1179,6 +1179,36 @@
       "id": "3UTA-0",
       "page": "5-1",
       "name": "CC-01 / R10-T2-X6 · 부채·미수·연체 상세",
+      "role": "card_template"
+    },
+    {
+      "id": "4A9H-1",
+      "page": "5-1",
+      "name": "CC-06 / R04-S12 · 종목찾기 — 시장 고르기",
+      "role": "card_template"
+    },
+    {
+      "id": "4AGN-1",
+      "page": "5-1",
+      "name": "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+      "role": "card_template"
+    },
+    {
+      "id": "4ANS-1",
+      "page": "5-1",
+      "name": "CC-06 / R04-S14 · 종목찾기 — 시가총액 고르기",
+      "role": "card_template"
+    },
+    {
+      "id": "4AUX-1",
+      "page": "5-1",
+      "name": "CC-06 / R04-S15 · 종목찾기 — 유동성 고르기",
+      "role": "card_template"
+    },
+    {
+      "id": "4B22-1",
+      "page": "5-1",
+      "name": "CC-06 / R04-S16 · 종목찾기 — 전체 100개 펼침",
       "role": "card_template"
     },
     {
