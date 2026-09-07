@@ -7,6 +7,7 @@ const { spawn } = require('node:child_process');
 
 const LOOPBACK_HOST = '127.0.0.1';
 const PRODUCT_PORT = 8010;
+const SAFE_RECEIPT_KEY = /^(?:stage|failed_stage|pid|child_pid|child_exit_code|child_signal|electron_version|source_head|spawn_count|manifest_ready_ms|alive_after_60s|request_count|health_results|outcome|error_name|error_code)$/;
 
 function requireAbsoluteExistingFile(value, label) {
   const resolved = path.resolve(String(value || ''));
@@ -131,14 +132,72 @@ function firstRequestDelay(requestNumber, delayMs) {
   return requestNumber === 1 ? delayMs : 0;
 }
 
+function createReceiptWriter({ privateRoot, nowFn = () => new Date() }) {
+  const root = requireAbsoluteExistingDirectory(privateRoot, 'privateRoot');
+  const receiptPath = path.join(root, 'receipt.jsonl');
+  return {
+    receiptPath,
+    write(stage, metadata = {}) {
+      if (!/^[a-z][a-z0-9_]{1,63}$/.test(stage)) throw new Error('receipt stage is invalid');
+      for (const [key, value] of Object.entries(metadata)) {
+        if (!SAFE_RECEIPT_KEY.test(key) || /secret|token|authorization|credential|message/i.test(key)) {
+          throw new Error(`unsafe receipt field: ${key}`);
+        }
+        if (!(value === null || ['string', 'number', 'boolean'].includes(typeof value) || (Array.isArray(value) && value.every((item) => typeof item === 'boolean')))) {
+          throw new Error(`unsafe receipt value: ${key}`);
+        }
+      }
+      const safe = { stage, observed_at: nowFn().toISOString(), ...metadata };
+      fs.appendFileSync(receiptPath, `${JSON.stringify(safe)}\n`, { encoding: 'utf8', flag: 'a' });
+      return safe;
+    },
+  };
+}
+
+function persistResult(privateRoot, result) {
+  const root = requireAbsoluteExistingDirectory(privateRoot, 'privateRoot');
+  const resultPath = path.join(root, 'result.json');
+  if (fs.existsSync(resultPath)) {
+    const error = new Error('result already exists');
+    error.code = 'EEXIST';
+    throw error;
+  }
+  const pendingPath = path.join(root, `result.pending.${process.pid}.json`);
+  fs.writeFileSync(pendingPath, `${JSON.stringify(result)}\n`, { encoding: 'utf8', flag: 'wx' });
+  fs.renameSync(pendingPath, resultPath);
+  return resultPath;
+}
+
+function createOwnedChildLedger(writeReceipt) {
+  let child = null;
+  let spawnCount = 0;
+  return {
+    capture(ownedChild) {
+      if (!ownedChild || typeof ownedChild.kill !== 'function') throw new Error('owned child handle is invalid');
+      child = ownedChild;
+      spawnCount += 1;
+      return ownedChild;
+    },
+    recordOwned() {
+      if (!child) throw new Error('owned child is unavailable');
+      return writeReceipt('child_spawned', { child_pid: child.pid, spawn_count: spawnCount });
+    },
+    get child() { return child; },
+    get spawnCount() { return spawnCount; },
+  };
+}
+
 module.exports = {
   LOOPBACK_HOST,
   PRODUCT_PORT,
+  createReceiptWriter,
+  createOwnedChildLedger,
   createSpawnAdapter,
   firstRequestDelay,
   fixtureUvicornArgs,
   requireOwnedEphemeralPort,
   reserveEphemeralPort,
+  persistResult,
   sanitizeChildEnv,
   waitUntil,
 };
