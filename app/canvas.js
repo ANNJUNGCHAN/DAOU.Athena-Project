@@ -1932,23 +1932,15 @@ async function mountAitsChartPanel(card, chartBody, descriptor, options = {}) {
   descriptor.context.onReloadRequest = async (request) => {
     const active = aitsChartPanels.snapshot().find((candidate) => candidate.panelId === descriptor.panelId);
     if (!active) throw new Error('AITS chart session이 닫혔다');
-    let reloadTimer;
-    try {
-      return await Promise.race([
-        window.athena.invoke('athena:reload-chart-panel', {
-          panelId: descriptor.panelId,
-          generation: active.generation,
-          period: request.period,
-          interval: request.interval,
-          adjusted: request.adjusted,
-        }),
-        new Promise((_, reject) => {
-          reloadTimer = setTimeout(() => reject(new Error('재조회 8초 한도를 넘겼다')), 8000);
-        }),
-      ]);
-    } finally {
-      clearTimeout(reloadTimer);
-    }
+    // 8초 한도는 chart-card withReloadDeadline이 건다. 여기서 같은 지연을 또
+    // 걸면 안쪽 타이머가 항상 이기고 카드 쪽 분기는 도달하지 못한다.
+    return window.athena.invoke('athena:reload-chart-panel', {
+      panelId: descriptor.panelId,
+      generation: active.generation,
+      period: request.period,
+      interval: request.interval,
+      adjusted: request.adjusted,
+    });
   };
   // 과거 봉 덧붙이기 — main이 base_dt 커서로 그 앞 구간을 받아 candles만 돌려준다.
   // reload와 달리 카드를 갈아치우지 않으므로 generation을 올리지 않는다.

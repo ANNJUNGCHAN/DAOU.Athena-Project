@@ -52,6 +52,28 @@ function renderNowAndOnNextFrame(render, scheduleFrame) {
   return schedule(() => render());
 }
 
+// 차트 주기 재조회는 이 한도만 쓴다. canvas IPC 쪽에 같은 8초를 또 걸면
+// 안쪽 타이머가 항상 먼저 발화해 바깥 분기는 죽은 코드가 된다.
+const RELOAD_DEADLINE_MS = 8000;
+const RELOAD_DEADLINE_ERROR = '재조회 8초 한도를 넘겼다';
+
+function withReloadDeadline(work, options) {
+  const opts = options || {};
+  const ms = Number.isFinite(opts.ms) ? opts.ms : RELOAD_DEADLINE_MS;
+  const message = typeof opts.message === 'string' ? opts.message : RELOAD_DEADLINE_ERROR;
+  const setTimeoutImpl = typeof opts.setTimeout === 'function' ? opts.setTimeout : setTimeout;
+  const clearTimeoutImpl = typeof opts.clearTimeout === 'function' ? opts.clearTimeout : clearTimeout;
+  let timer;
+  return Promise.race([
+    work,
+    new Promise((_, reject) => {
+      timer = setTimeoutImpl(() => reject(new Error(message)), ms);
+    }),
+  ]).finally(() => {
+    clearTimeoutImpl(timer);
+  });
+}
+
 const __loadChartLibrary = createCachedChartLibraryLoader(() => import(__LIGHTWEIGHT_CHARTS_URL));
 // 실제 renderer에서는 canvas.html이 chart-card.js를 읽는 즉시 prewarm한다. Node의
 // 순수 단위 테스트는 ESM/DOM 라이브러리를 불필요하게 로드하지 않는다.
@@ -780,14 +802,8 @@ async function createChartCard(container, opts) {
     }
     reloadPending = true;
     reloadFailure = null;
-    let reloadTimer;
     try {
-      const result = await Promise.race([
-        o.onReloadRequest(request),
-        new Promise((_, reject) => {
-          reloadTimer = setTimeout(() => reject(new Error('재조회 8초 한도를 넘겼다')), 8000);
-        }),
-      ]);
+      const result = await withReloadDeadline(o.onReloadRequest(request));
       if (!result || result.ok !== true) throw new Error((result && result.error) || 'reload가 완료되지 않았다');
       currentAdjusted = request.adjusted !== false;
       toolbar.setAdjusted(currentAdjusted);
@@ -799,7 +815,6 @@ async function createChartCard(container, opts) {
       updateNote();
       return false;
     } finally {
-      clearTimeout(reloadTimer);
       reloadPending = false;
     }
   }
@@ -913,6 +928,9 @@ const __exports = {
   createChartCard,
   createCachedChartLibraryLoader,
   renderNowAndOnNextFrame,
+  withReloadDeadline,
+  RELOAD_DEADLINE_MS,
+  RELOAD_DEADLINE_ERROR,
   resolveInitialPeriod,
   toCandleSeriesData,
   toVolumeSeriesData,
