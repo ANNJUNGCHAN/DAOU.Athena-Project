@@ -1,0 +1,144 @@
+== manifest
+paper manifest verification passed — screen=95 card_template=96 card_spec=8 mini_template=11 mini_card=192 contract=14 record=17 reference=8 retired=3
+exit=0
+== cards-static
+[paper-cards-static] 보드 96장 · 통과 96 · 실패 0
+  S1 매니페스트     ok
+  S2 텍스트 다중집합 ok
+  S3 상태 링크      ok (마크 82 · 대상 83 · 미해소 0)
+  S4 Paper 트리     ok
+  S5 레지스트리     ok
+  S6 색인 대칭      ok (97)
+  리포트 app/captures/paper-gates/PAPER-CARDS.json
+paper cards static verification passed
+exit=0
+== cards-mount
+
+[paper-cards-mount] CC-01 · 보드 14장
+[paper-cards-mount] CC-02 · 보드 6장
+[paper-cards-mount] CC-03 · 보드 31장
+[paper-cards-mount] CC-04 · 보드 9장
+[paper-cards-mount] CC-06 · 보드 21장
+[paper-cards-mount] CC-05 · 보드 15장
+[paper-cards-mount] 보드 96장 · 통과 94 · 실패 2
+  폭 원본 · 2분할 · 4분할 · 최소 · 청크 6 · 30초
+  FAIL 137X-2 (CC-03) — state_board_missing_in_dom
+  FAIL 15R0-2 (CC-06) — surface_geometry
+  리포트 app/captures/paper-gates/PAPER-CARDS.json
+exit=1
+== screens
+
+[layout] 화면(2560x1392)이 설계 치수를 그대로 수용 — 축소 없음
+  ok   11D-0 · 24 · 주문 — 거래 기능 연결 안내
+  ok   16OD-2 · 02 · 부팅 — READY · 0–240ms
+  ok   16OJ-2 · 03 · 부팅 — TYPE A→AT · 240–560ms
+  ok   16OQ-2 · 04 · 부팅 — TYPE ATH→ATHE · 560–880ms
+  ok   16OX-2 · 05 · 부팅 — COMPLETE · 880–1440ms
+  ok   16P3-2 · 06 · 부팅 — DIRECT SHELL EXPAND · 1440–1920ms
+  ok   1DX-0 · 07 · 온보딩 — CLI 연결 (AT-SY-002)
+  ok   1FN-0 · 08 · 온보딩 — 계좌 연결 (AT-SY-003)
+  ok   1I0-0 · 19 · 인증 — OAuth 토큰 ready
+  ok   1KK-0 · 20 · 인증 — 토큰 4상태
+  ok   1M3-0 · 21 · 인증 — 계좌 전환
+  ok   1OP-0 · 22 · 주문 — 검토·영향·확인
+  ok   1Y3-0 · 11 · 대화 — 모델 팝오버 · 루틴 승인
+  ok   25Q-0 · 09 · 셸 — 질문 입력 · Task Canvas
+  ok   2UWT-1 · 32 · 설정 — 성향·이력
+  ok   2V0K-1 · 33 · 온보딩 — CLI 연결 실패 (AT-SY-002)
+  ok   2V27-1 · 34 · 사이드바 검색 — 결과·빈 결과
+  ok   3JL-0 · 12 · 계정 메뉴 — 설정 진입
+  ok   3VHD-1 · 08 · 그래프 — 되물을 것들 카드 · 지난 대화 읽기 전용
+  ok   3VIQ-1 · 35 · 대화 이력 — 모드 5구역 · 세션 목록
+  ok   3VS6-1 · 36 · 프로젝트 추가 — 폴더 점유
+  ok   3VV8-1 · 37 · 프로젝트 ⋯ — 고정·탐색기·제거
+  ok   3VV9-1 · 38 · 펜 — 새 대화창 모드 선택
+  ok   3WBZ-1 · 41 · 세션 복원 — 다시 누르면 그대로
+  ok   3ZPB-0 · 55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기
+  ok   AJ-0 · 13 · 설정 — 셸 오버레이
+  ok   AMZ-0 · 25 · 모드 전환 — 대화 유지·작업공간 교체
+  ok   COS-0 · 26 · 빈 작업공간 — 대화·그래프·백테스트
+  ok   DH2-0 · 30 · 대화 턴 — 복원 실패
+  ok   F9-0 · 14 · 설정 — 계좌 (AT-ST-001)
+  ok   FLM-0 · 16 · 계좌 등록 — 인증 실패 (AT-ST-002)
+  ok   FPE-0 · 17 · 계좌 등록 — 확인 완료 (AT-ST-002)
+  ok   G5B-0 · 28 · Windows 반응형 창 · Snap
+  ok   GCF-0 · 29 · 프로젝트·최근·새 채팅
+  ok   OJ-0 · 18 · 설정 — 모델 · AI 제공업체 계정
+  ok   XI-0 · 15 · 계좌 등록 — 인증 확인 중 (AT-ST-002)
+  ok   2FIA-2 · 05 · 그래프 — 수집·노출·브레인 제어
+  ok   2QA3-2 · 06 · 그래프 — 헤더 필터 (기간·정렬·연결 수)
+  ok   31H-0 · 04 · 그래프 — 노드 선택 · 공통 패널
+  ok   3NE-0 · 01 · 셸 — 그래프 모드 · 요약 뷰
+  ok   4AN-0 · 02 · 셸 — 그래프 요약 · 행 선택
+  ok   4IA-0 · 03 · 그래프 — 기본 군집 지도
+  ok   2IJN-2 · 06 · 에이전트 — 작업 설정
+  ok   432Z-1 · 07 · 에이전트 대화 — 제어 제안 턴 A~E
+  ok   4330-1 · 08 · 에이전트 대화 — 결과 턴
+  ok   43WD-1 · 09 · 에이전트 — 새 알람 · 말로 설명하면 AI가 감시 함수를 만든다
+  ok   446V-1 · 10 · 에이전트 — 알람 노드·흐름 · 검사 결과 · 승인
+  ok   44HD-1 · 11 · 에이전트 — 노드에서 ‘이상해요’ → AI가 고치고 다시 검사
+  ok   44RV-1 · 12 · 에이전트 — 활성 코드 알람 · 상세·발화 이력
+  ok   56X-0 · 01 · 셸 — 알림 파생 방
+  ok   ARM-0 · 02 · 에이전트 — 알람 센터 · 라이브 관제
+  ok   B57-0 · 03 · 에이전트 — 실행 이력·결과
+  ok   BIM-0 · 04 · 에이전트 — 프로액티브
+  ok   BV0-0 · 05 · 에이전트 — 작업
+  ok   15J-0 · 02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)
+  ok   2NW8-2 · 05 · 플러그인 — 설치 승인 (캔버스 카드)
+  ok   2NXS-2 · 06 · 플러그인 — 상태 모음 (6상태)
+  ok   3ZJD-0 · 07 · 플러그인 대화 — 제안 턴 5동작
+  ok   3ZLW-0 · 08 · 플러그인 대화 — 결과 턴
+  ok   3ZNO-0 · 09 · 플러그인 창 복원
+  ok   CU0-0 · 03 · 플러그인 — 허브·설치
+  ok   CVY-0 · 04 · 플러그인 — 관리·마켓플레이스
+  ok   FT6-0 · 01 · 플러그인 — 기능 허용 (AT-ST-006)
+  ok   2LFW-2 · 09 · 키우미 — 미니 카드 10종
+  ok   4TY-0 · 04 · 키우미 — 대화·콘텐츠 전개
+  ok   C8G-0 · 07 · 키우미 메뉴 — 셸 오버레이
+  ok   CLE-0 · 06 · 키우미 메뉴 — 두 진입점과 항목
+  ok   DO-0 · 01 · 키우미 — 상황별 표현·크기 매핑
+  ok   1SW0-0 · 01 · 백테스트 — 설계 (폼)
+  ok   1T5K-0 · 02 · 백테스트 — 설계 (코드)
+  ok   1TGA-1 · 03 · 백테스트 — 결과
+  ok   1TPF-1 · 04 · 백테스트 — 데이터 수집 승인
+  ok   1WSI-1 · 05 · 백테스트 — 이력·비교
+  ok   1WZJ-1 · 06 · 백테스트 — 최적화
+  ok   2FMM-2 · 07 · 백테스트 — 전략 배포 · 실전 적용
+  ok   2FR9-2 · 08 · 백테스트 — 코드 플로우 지도
+  ok   2FY9-2 · 09 · 백테스트 — 오류 진단 · 자동 수정 승인
+  ok   3XL4-1 · 17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)
+  ok   3Y38-1 · 11 · 백테스트 — 시각 전략 설계 · 편집 가능
+  ok   3YFV-1 · 12 · 백테스트 — 시각 전략 검증 · 연결 오류
+  ok   3YQ0-1 · 13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결
+  ok   3Z0X-1 · 14 · 백테스트 — 그래프·코드 동기화 완료 · 실행 전
+  ok   3Z8U-1 · 09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)
+  ok   3ZAA-1 · 10 · 그래프 — "이 노드 설명해줘" (관계·근거·이력·대화 원문)
+  ok   3ZC2-1 · 11 · 그래프 — 편집은 제안까지 · 도구 계약
+  ok   40EV-1 · 19 · 백테스트 — 기법 목록 · 새 기법
+  ok   42FW-1 · 23 · 백테스트 — 승인 → 기법 목록에 추가 → 실매매 적용(키우미가 켜지면 자동 매매)
+  ok   43DP-1 · 20 · 백테스트 — 새 기법 만들기 · 폴더·편집기·터미널·단계 카드
+  ok   43O1-1 · 21 · 백테스트 — 노드·흐름 창 · 노드를 누르면 @칩이 입력창에 들어간다
+  ok   452D-1 · 22 · 백테스트 — 고치기 순환 · 단계 카드를 누르면 diff와 터미널이 열린다
+[paper-screens] 보드 109장 · 통과 102 · 실패 7
+  라우트 없음 5 · 계약 2/14 실패 · 378초
+  FAIL 1XA2-0 (F-1) — contract_no_sentence
+  FAIL 2DZE-0 (F-1) — contract_no_sentence
+  리포트 app/captures/paper-gates/PAPER-SCREENS.json
+[ratchet] 잠긴 102장 유지 — 미구현 7장은 아직 안 막는다
+exit=0
+== mini
+[paper-mini-static] 보드 192장(실카드 96 · 주석 96) · 대장 96행
+  M1 매니페스트   ok
+  M2 짝짓기       ok
+  M3 행 대조      일치 19 · 어긋남 77 (행 432개 중 212개)
+     paper_cross_board 10 · form_deviation 17 · ledger_stale 136 · unbacked 49
+     대장에만 있는 element 182개
+  M4 주석 대조    어긋난 주석 94장
+  M5 문법 커버리지 ok (견본 11장이 10종)
+  기준선 대조 (backend/ref/kiumi/evidence/paper-ledger-divergence-20260904.json)
+     증거 match 10 · divergent 84 · unresolved 2 · rows 227 · missing 190
+     측정 match 19 · divergent 77 · unresolved 0 · rows 212 · missing 182
+     재현 불일치 — 증거는 LLM 실측이라 해시가 아니다(리포트 baseline.deltas 참조)
+  리포트 app/captures/paper-gates/PAPER-MINI.json
+  어긋난 보드 171장 — 정본 결정 규칙 §5.2에 따라 대장은 고치지 않는다
+exit=1

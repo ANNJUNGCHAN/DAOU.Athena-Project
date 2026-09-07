@@ -1,0 +1,68 @@
+{
+ "gaps": [
+  {
+   "board": "15R0-2",
+   "status": "gap",
+   "detail": "기하는 이미 Paper와 1:1이라 보드 쪽에 고칠 것이 없다. 실측: 15RX-2는 Paper JSX 원문 그대로 height fit-content·padding-top 18px·gap 16px·border-top 1px이고 행 4줄이 각각 20px — 18+20+16+20+16+20+16+20=146, +테두리 1 = 147px로 Paper 트리의 764×147과 정확히 같다(앱 rectH 147·clientH 146). 넘치는 2px은 한글 폴백 폰트의 줄상자다: 이 머신에 Daki가 설치돼 있지 않아 --font-body가 Noto Sans KR로 떨어지는데, 실측 metric이 ascent 116% + descent 29% = 145%em이라 Paper가 지정한 line-height 20px(16px의 125%)을 3px 넘고, 마지막 행 15S5-2의 글리프 상자가 아래로 삐져나와 scrollHeight 148 vs clientHeight 146이 된다(4폭 전부, 최소에서는 168/166). 같은 텍스트를 Malgun Gothic으로 재면 133%em이라 20px 안에 들어가지만 자폭이 9% 넓어 f860bb0이 가로 게이트 때문에 Noto를 앞에 둔 자리다. fit-content 상자는 슬랙이 0이라 이 어긋남이 그대로 드러나고, 21장의 fit-content 보드 중 마지막 자식이 한글 본문인 것이 이 보드뿐이라 여기서만 뜬다. 닫는 길은 둘 다 타이포그래피 결정이다: (a) Daki를 앱에 동봉/설치, (b) tokens.css에서 한글 폴백에 metric override(ascent-override 100% · descent-override 25% — Noto의 116:29 비를 유지한 채 125%로 죔)를 얹은 별칭 폰트를 끼움. (b)는 앱 전체 한글 기준선을 ~1px 옮기고 font-synthesis: none인 보드에서 굵기 폴백이 달라질 수 있으며, Paper가 쓰는 line-height 100% 상자(비 1.0)는 어떤 override로도 못 맞춘다 — 게이트 한 줄을 위해 전역 타이포를 바꾸는 판단이라 지시대로 gap으로 남겼다. 컨테이너를 늘리거나 overflow를 죽여 숨기는 길은 Paper 기하를 깨거나 판정을 무르게 하는 것이라 하지 않았다.",
+   "gap_files": [
+    "C:/Projects/DAOU.Athena-parity/app/styles/tokens.css",
+    "C:/Projects/DAOU.Athena-parity/backend/ref/card-surface-templates/15R0-2/board.html",
+    "C:/Projects/DAOU.Athena-parity/backend/ref/card-surface-templates/15R0-2/paper.jsx"
+   ],
+   "gap_size": "M",
+   "still_failing": false,
+   "round4": {
+    "status": "pass",
+    "detail": "verify:paper-cards-mount 4폭(원본·2분할·4분할·최소) 전부 통과. 이 보드는 화면 보드가 아니라 카드 표면 보드(backend/ref/card-surface-templates/15R0-2)라 계약이 app/lib/paper-screen-routes.js 의 ROUTES 가 아니라 카드 게이트(verify:paper-cards-static + verify:paper-cards-mount)다 — 그래서 라우트를 새로 저작하지 않았고 화면계 라우트 수(90)와 래칫(102)도 그대로다. 고친 자리는 보드가 아니라 폰트다: Paper 기하(15RX-2의 height fit-content · padding-top 18px · gap 16px · border-top 1px · 행 4줄 × line-height 20px = 147px)는 이미 Paper 트리 764×147과 1:1이라 한 줄도 건드리지 않았고, tokens.css 에 한글 폴백 metric override 별칭(ascent 100% · descent 25% · line-gap 0%)을 얹어 폴백 폰트가 Paper가 지정한 125% 줄 높이를 지키게 했다. 앱 보정 없음 — 컨테이너를 늘리거나 overflow를 죽이거나 게이트 판정을 무르게 한 곳은 없다. 텍스트 다중집합(S2)·Paper 트리(S4)는 변경 전후 동일하게 통과한다.",
+    "gap_files": [],
+    "gap_size": "",
+    "track": "구현 4차 트랙 C"
+   }
+  },
+  {
+   "board": "1WOB-1",
+   "status": "gap",
+   "detail": "마운트(surface_geometry)는 고쳤고 정적(text_multiset_drift)은 gap이다. [고침] 실측 4분할·최소: 1WST-1(display:flex·flex-direction:column·max-height 520px·overflow clip) 아래 행 20장이 --bs-height 36px를 갖는데, L 단계 [data-bs-hoisted]{flex-shrink:1}이 세로 주축에도 걸려 내용 48px가 36px로 눌렸다(최소 13px·4분할 5px 넘침). 종목명이 두 줄로 접히는 것은 764px 표가 329px 카드로 줄면서 셀 3BML-0이 Paper 132px → 86.5px로 준 결과다. 세로 부모 아래 상자만 원문 flex-shrink를 지키게 해 행이 내용대로 자라도록 고쳤다(4폭 전부 통과). 표 자체를 scroll-table/paired-table로 선언하는 길은 막혔다: 헤더 3BD7-0이 본문 1WST-1의 형제라 scroll-table의 「본문 행은 소유자 직계」 조건을 못 넘고, paired-table은 본문 래퍼 1WST-1에 21번째 자식 「스크롤 트랙」(1WXU-1, 셀 1개)이 있어 추출기의 본문 펴기 조건(자식이 전부 헤더와 같은 열 수)에서 걸린다 — 그 조건을 푸는 것은 표 판정 자체를 바꾸는 일이라 하지 않았다. [gap] 정적 S2 -3은 원장의 「검증 헤더」 프레임(1WOC-1 > 1WOE-1·1WOF-1·1WOH-1) 텍스트다. 그 프레임은 regions.json root(1WOJ-1) 바깥, 즉 카드 표면 밖의 Paper 검증 주석이고 문면도 「A05 목록 펼침 검증」처럼 내부용어라 카드 문구 3원칙상 카드에 실릴 수 없다. 96장 중 카드 루트 밖에 텍스트를 가진 보드는 1WOB-1 하나뿐이고 index.json·meta.json에 제외 규칙이 없어 선례가 없다 — 지시대로 gap. 닫으려면 S2가 원장 쪽을 카드 루트 서브트리로 좁혀야 하는데(S4가 이미 subtreeAt으로 템플릿 루트에 맞춰 좁히는 선례가 같은 파일에 있다) 그것은 게이트 비교 범위를 바꾸는 결정이라 임의로 하지 않았다.",
+   "gap_files": [
+    "C:/Projects/DAOU.Athena-parity/app/scripts/paper-cards-static.mjs",
+    "C:/Projects/DAOU.Athena-parity/backend/ref/card-surface-templates/1WOB-1/regions.json",
+    "C:/Projects/DAOU.Athena-parity/backend/ref/paper-ledger/5-1/1WOB-1.json"
+   ],
+   "gap_size": "S",
+   "round3": {
+    "status": "pass",
+    "detail": "검토자 승인대로 유지. 정적 S2가 원장 다중집합을 카드 루트(regions.json root = 1WOJ-1) 서브트리로 좁혀 slots와 같은 범위에서 정확 상등으로 잰다 — 「검증 헤더」 프레임(1WOC-1) 아래 1WOE-1 「A05 목록 펼침 검증」·1WOF-1·1WOH-1 「펼침 상태」는 카드 루트 밖 아트보드 주석이라 카드 표면이 아니다. 이번 회차에서는 [minor] 지적만 고쳤다: 검사 'the card root narrowing changes exactly one board of the 96'이 좁히기를 켠 상태의 초록만 보던 것을, 96장 보드마다 narrowMultisetToCardRoot의 결과와 원장 원본 다중집합을 직접 deepEqual로 대조해 달라지는 보드 집합이 정확히 ['1WOB-1']임을 재도록 바꿨다. 덤으로 카드 루트가 원장 트리에 없어 좁히기가 null로 꺼지는 보드가 0장임도 같은 검사에서 못 박았다(그 자리에서 조용히 좁히기가 꺼지면 판정 범위가 말없이 넓어진다). copyTemplateWithDrift가 만든 임시 디렉터리도 검사 끝에서 지운다.",
+    "gap_files": [],
+    "gap_size": "",
+    "track": "구현 3차 트랙 A"
+   },
+   "still_failing": false
+  },
+  {
+   "board": "137X-2",
+   "status": "gap",
+   "detail": "정적 드리프트(+6)와 가로 넘침(2분할 303·4분할 387·최소 547px)은 전부 pass로 돌렸다. 남은 것은 state_board_missing_in_dom 9/6 하나이고, 이건 스텁 없이는 못 맞춘다 — 구조적으로 불가능하다. 프로브는 contract.state_boards.length(마크×보드를 편 링크 9개)와 DOM의 [data-state-board] '노드 수'(6개)를 맞댄다. Paper MCP로 확인한 137X-2의 탭 레일 14O9-2에는 칩이 정확히 7개(현재시세·차트·기업정보·ETF·ELW·금현물·순위) 있고 여기에 펼침 컨트롤 3C3M-0을 더해도 문이 될 수 있는 노드는 최대 8개인데, 137X-2를 parent_board로 선언한 상태 보드는 9장(탭 8 + 펼침 1)이다. 특히 '순위' 칩 하나에 2VDA-0(주식 신호·순위)·2VIN-0(ETF 전체시세)·2VO0-0(ELW 순위)·32XM-0(신주인수권 전체) 4장이 매달려 있고, canvas.js wireStateControls는 같은 노드를 두 번 못 엮어(wireStateControlActivation이 __athenaStateWired에서 false를 돌려준다) 첫 보드 하나만 data-state-board로 찍는다. 가장 관대하게 다시 저작해도(ETF 칩→2VIN-0, ELW 칩→2VO0-0) 노드 8 대 링크 9라 여전히 하나가 모자란다 — 노드를 지어내지 않고는 9를 못 만든다. 필요한 것은 제품 판단이다: 칩 하나가 상태 보드 여러 장을 이고 있을 때 그것을 화면에서 어떻게 여는가(칩 안 하위 선택? 순환? 기본 보드 + 안쪽 레일?), 그리고 2VIN-0·2VO0-0의 meta.state.control이 '순위'가 맞는지 아니면 레일에 실제로 있는 'ETF'·'ELW' 칩이 그 문인지. 게이트 판정을 풀거나 보드를 예외로 빼는 길은 택하지 않았다.",
+   "gap_files": [
+    "C:/Projects/DAOU.Athena-parity/backend/ref/card-surface-templates/2VIN-0/meta.json",
+    "C:/Projects/DAOU.Athena-parity/backend/ref/card-surface-templates/2VO0-0/meta.json",
+    "C:/Projects/DAOU.Athena-parity/backend/ref/card-surface-templates/32XM-0/meta.json",
+    "C:/Projects/DAOU.Athena-parity/backend/ref/card-surface-templates/137X-2/slots.json",
+    "C:/Projects/DAOU.Athena-parity/app/canvas.js",
+    "C:/Projects/DAOU.Athena-parity/app/lib/board-mount.js"
+   ],
+   "gap_size": "M",
+   "round3": {
+    "status": "gap",
+    "detail": "지난 회차에서 pass로 낸 것을 gap으로 내린다. 지적이 옳다: 32XM-0은 index.json operation_refs가 [\"base:ka10011\"](kiwoom-common-screen-manifest.json 신주인수권 전체시세)이고 그 op의 보드가 이것 하나뿐이라 base_board_for가 질의 때 세우는 살아 있는 보드다. 이것을 kind:default·parent:null로 내리자 board-templates.index.generated.js의 STATE_GRAPH에서 항목이 사라졌고, 실행 확인 결과 stateLinksFor('32XM-0')이 []가 되어 백엔드 봉투의 state_boards도 []가 되고 canvas.js wireStateControls가 32XM-0 표면의 상품 레일 7칩(현재시세·차트·기업정보·ETF·ELW·금현물·순위)을 하나도 못 감았다 — board-template-registry.js:176 주석이 경고해 둔 「부모 링크가 없으면 갈아탄 뒤 레일이 통째로 죽는다」가 그대로 일어났고, 그 손실을 잡는 게이트는 없다(정적 S3는 마크 target의 색인 존재만, 마운트는 그 보드 자신의 마크 수만 본다). 그래서 meta.state를 kind:tab·parent_board:137X-2·control:순위로 복원했다. 복원 뒤 실행 확인: stateLinksFor('32XM-0') 링크 7개(금현물·기업정보·순위→2VDA-0·순위→32XM-0·차트·투자자 12주체·현재시세), 137X-2 칩 2WFB-0의 data-state-board가 \"2VDA-0 32XM-0\". 대가로 137X-2는 4폭 전부 state_board_missing_in_dom(expected 7 / in_dom 6)으로 빨갛다. 이것을 지시가 준 대안대로 gap으로 남기는 근거: Paper 실측상 32XM-0으로 가는 문이 없다. 원장 444장 트리 전문에서 「신주인수권」은 32XM-0과 그 카드미니 486G-0·499T-0에만 나오고, 2VDA-0의 범위 레일(주식·ETF·ELW)에도 신주인수권 칩이 없으며, 32XM-0 자신은 범위 레일 자체를 안 그리고 상품 레일 「순위」만 ACTIVE다. 즉 Paper가 한 칩(137X-2 「순위」)에 두 보드를 매단 구조이고, 없는 칩을 지어 그리면 정적 S2 텍스트 다중집합이 곧바로 빨개진다. 이 gap은 Paper가 32XM-0으로 가는 문을 그려야 닫힌다. [남은 조각 — Paper 대비 divergence 기록] 2VIN-0·2VO0-0을 depth-2(부모 2VDA-0)로 내린 결과, stateLinksFor가 자기+부모 한 단만 합치므로 두 보드에서 Paper가 그린 상품 레일 4칩(현재시세·차트·기업정보·금현물)과 범위 레일 「주식」(2VDA-0으로 되돌아가기)이 눌리지 않는다. 다만 변경 전에는 137X-2 「순위」 잎 하나에 4개 링크가 매달려 두 보드가 아예 도달 불가였으므로 사용자 관측 기준으로는 순개선이고, 조상 사슬 전체를 걷는 변경은 depth-2 보드 60여 장의 동작을 한꺼번에 바꾸므로 이 작업에서 하지 않았다.",
+    "gap_files": [
+     "backend/ref/card-surface-templates/32XM-0/meta.json",
+     "backend/ref/card-surface-templates/2VDA-0/board.html",
+     "app/lib/board-template-registry.js"
+    ],
+    "gap_size": "M",
+    "track": "구현 3차 트랙 A"
+   },
+   "still_failing": true
+  }
+ ]
+}

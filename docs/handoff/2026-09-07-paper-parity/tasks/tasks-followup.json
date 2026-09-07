@@ -1,0 +1,8 @@
+[
+  {"key":"fu-grok-provider-ui","title":"Grok 공급자 UI 뒷정리: 리드 문구·작성창 툴바 활성 공급자·칩 연결 게이팅","size":"S",
+   "spec":"병합 검증(2026-09-06 조사)에서 프로브가 안 잡은 실제 결함 3건. (1) app/lib/settings-cards.js 모델 카드 리드 설명이 「Claude·Codex CLI 로그인을 그대로 쓴다」로 Grok을 빠뜨린다 — Grok 섹션이 화면에 있으므로 「Claude·Grok·Codex」로(제품 문구 3원칙). (2) app/chat.js renderComposerModel()이 modelStateCache.claude만 읽어 활성 공급자가 Grok이어도 툴바가 Claude 모델·강도를 말한다 — 활성 계정 providerId(athena:cli-list / peekActiveAccount 경유 캐시)에 따라 grok 값을 보여준다. (3) app/chat.js 모델 팝오버의 Grok 섹션에 settings-cards.js의 disabled: !grokConnected 같은 연결 게이팅이 없어 Grok 미설치에서도 칩이 눌린다 — 미연결이면 비활성 + 「연결 후 사용」. 단위 테스트(chat 관련 순수 함수가 있으면) + npm run verify(작성창 팝오버 단언)·verify:settings-cards. Paper 18(OJ-0)·Paper 44 갱신 필요는 문서에 표기.",
+   "files":["app/lib/settings-cards.js","app/chat.js","app/verify.js"],"gates":["unit","verify:settings-cards","verify"]},
+  {"key":"fu-orb-eye-probe-flake","title":"verify 검증22 orbWindow.firedEyesAreRounder 시각 의존 흔들림","size":"S",
+   "spec":"app/verify.js 검증22의 firedEyesAreRounder가 실행 시각·직전 프로브에 따라 통과/실패가 갈린다(2026-09-06 01:30 통과 eyeHeight 9.16 → 01:55·02:05 실패 eyeHeight 10.56, 조용한 상태 눈이 이미 둥글어 발화 뒤 「더 둥글다」 판정이 안 됨). verify.js:3834 주석의 isMarketOpen 바꿔치기·15초 틱 대기가 어느 경로에서 안 먹는지(장외 drowsy → idle 전환 전 측정, 커서 추적 시선, 직전 프로브가 오브 상태를 남김) 실측으로 원인을 밝히고, 결정론적으로 만든다(예: face=idle이 될 때까지 폴링, 눈 종횡비를 상태 dataset로 직접 읽기). 프로브를 완화하지 말 것 — Paper 키우미 02 표정 10종·발화 눈 모양 계약은 유지. 3회 연속 통과로 확인.",
+   "files":["app/verify.js","app/orb.js","app/lib/orb-face.js"],"gates":["verify"]}
+]

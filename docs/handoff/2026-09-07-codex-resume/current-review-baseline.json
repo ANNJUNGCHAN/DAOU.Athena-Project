@@ -1,0 +1,81 @@
+{
+  "head": "bdb40b6151a75719af437dea2d75bc5c18ac4722",
+  "review_scope": "Four historical rejected batches only; not a full current repository review.",
+  "lanes": [
+    {
+      "name": "repository_handoff_audit",
+      "role": "code-reviewer",
+      "verdict": "REQUEST_CHANGES",
+      "evidence": "Current-module restore(A)/flush/clear report contamination reproduced, cancelable timers; no-clear control passed. Local HTML-to-turn path reproduced with 8024-character title."
+    },
+    {
+      "name": "architect_current_review",
+      "role": "architect",
+      "verdict": "REQUEST_CHANGES",
+      "evidence": "Session IPC ownership and asynchronous boundaries traced. Existing contract unit tests 154/154 passed. Local HTML-to-turn path confirmed, persistent system prompt excluded."
+    }
+  ],
+  "findings": [
+    {
+      "id": "RESUME-HIGH-1",
+      "severity": "HIGH",
+      "board": "3WBZ-1",
+      "status_at_baseline": "reproduced",
+      "title": "Previous backtest workspace can be persisted to the next session",
+      "locations": [
+        "app/lib/backtest-canvas.js:5701",
+        "app/lib/session-workspace.js:31",
+        "app/main.js:5102",
+        "app/lib/sidebar.js:1276"
+      ],
+      "next": "TDD fix and separate review of cleared state, delayed callbacks and pre-switch flush ownership."
+    },
+    {
+      "id": "RESUME-MEDIUM-1",
+      "severity": "MEDIUM",
+      "board": "3XL4-1",
+      "status_at_baseline": "data_flow_confirmed_attack_not_tested",
+      "title": "External title loses provenance and enters current-form JSON in the next user turn",
+      "locations": [
+        "backend/athena_api/backtest/source_to_map.py:646",
+        "app/lib/main/live-prompt.js:683"
+      ],
+      "limits": "JSON encoding exists. Not injected into persistent system prompt. No live model or successful prompt-injection exploit demonstrated."
+    },
+    {
+      "id": "RESUME-MEDIUM-2",
+      "severity": "MEDIUM",
+      "board": "3XL4-1",
+      "status_at_baseline": "confirmed",
+      "title": "html source kind is exposed because Korean mapping has web key",
+      "locations": [
+        "backend/athena_api/backtest/source_to_map.py:91"
+      ]
+    },
+    {
+      "id": "RESUME-MEDIUM-3",
+      "severity": "MEDIUM",
+      "board": "446V-1",
+      "status_at_baseline": "missing_elements_confirmed",
+      "title": "Initial check summary does not implement required Paper result panel",
+      "locations": [
+        "app/lib/agent-canvas.js:2272"
+      ]
+    },
+    {
+      "id": "RESUME-MEDIUM-4",
+      "severity": "MEDIUM",
+      "board": "XI-0",
+      "status_at_baseline": "copy_gap_confirmed_historical_flake_not_retested",
+      "title": "Connection verification copy omitted; old route flake has no current reproduction",
+      "locations": [
+        "app/lib/settings-cards.js:570",
+        "app/lib/paper-screen-routes.js:2770"
+      ]
+    }
+  ],
+  "warnings": [
+    "All locations refer to baseline HEAD; subsequent implementation may shift them.",
+    "81 code findings, 52 Paper findings and 209 observations have not been fully revalidated or closed by this bounded review."
+  ]
+}

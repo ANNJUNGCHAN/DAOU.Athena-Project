@@ -1,0 +1,72 @@
+{
+  "baseline_head": "bdb40b6151a75719af437dea2d75bc5c18ac4722",
+  "code_commit": "bc4bdc2",
+  "code_files": [
+    "app/lib/backtest-canvas.js",
+    "app/lib/backtest-canvas.test.js",
+    "app/lib/project-ide.js",
+    "app/lib/project-ide.test.js",
+    "app/lib/sidebar.js",
+    "app/lib/sidebar-history-contract.test.js"
+  ],
+  "tests": {
+    "app_unit": {
+      "command": "node --test lib/*.test.js lib/main/*.test.js lib/graph-mode/*.test.js",
+      "cwd": "C:/Projects/DAOU.Athena/app",
+      "runtime": "C:/Users/ajc22/AppData/Roaming/fnm/node-versions/v22.14.0/installation/node.exe",
+      "pass": 3358,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "duration_ms": 14791.3851,
+      "exit_code": 0,
+      "local_log": "C:/Projects/DAOU.Athena/.omc/artifacts/codex-resume/app-unit.log"
+    },
+    "gates": {
+      "pass": 6,
+      "exit_code": 0,
+      "scripts": [
+        "scripts/gates/check-orb.mjs",
+        "scripts/gates/check-glass-ladder.mjs",
+        "scripts/gates/check-window-model.mjs",
+        "scripts/gates/check-harness-freshness.mjs",
+        "scripts/gates/check-paper-routes.mjs",
+        "app/scripts/paper-manifest-check.mjs"
+      ],
+      "remaining_screen_routes": 4
+    },
+    "added_regressions": 13,
+    "red_before_green": 11,
+    "additional_contract_checks": 2
+  },
+  "independent_reviews": [
+    {
+      "role": "code-reviewer",
+      "agent": "repository_handoff_audit",
+      "verdict": "APPROVE",
+      "scoped_tests_pass": 303
+    },
+    {
+      "role": "architect",
+      "agent": "architect_current_review",
+      "verdict": "CLEAR / APPROVE",
+      "scoped_tests_pass": 328
+    }
+  ],
+  "approval_scope": "Only the directly verified session contamination paths: clear/flush/restore/result/source/run/basic graph-codegen/IDE boundaries. Not every async boundary or repository-wide closure.",
+  "remaining_static_candidates": [
+    "confirmBackfill/pollJob",
+    "technique check/nodes/codegen",
+    "maybeAutoRunTechnique/autoRunTarget",
+    "openVersion",
+    "runVisualCompile",
+    "applyVisualPatch"
+  ],
+  "not_run": [
+    "Full Paper/Electron screen suite",
+    "Full backend pytest",
+    "Live model or broker/order verification"
+  ],
+  "source_changed_after_verification": false
+}

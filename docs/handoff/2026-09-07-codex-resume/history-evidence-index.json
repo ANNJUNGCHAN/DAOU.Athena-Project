@@ -1,0 +1,53 @@
+{
+  "session_id": "0d4f88d0-d946-436b-bc39-d4e63d8412f6",
+  "source_path": "C:/Users/ajc22/.claude/projects/C--Projects-DAOU-Athena/0d4f88d0-d946-436b-bc39-d4e63d8412f6.jsonl",
+  "source_bytes": 32530623,
+  "source_sha256": "709fbafc1e327a0350c12b1e642eb4ef9a6a6460f6f6eb744a43515ac384d3c3",
+  "jsonl_records": 12028,
+  "first_timestamp": "2026-09-04T16:25:41.083Z",
+  "last_timestamp": "2026-09-07T04:48:07.238Z",
+  "coverage": [
+    {
+      "lines": "1–3680",
+      "lane": "repository_handoff_audit",
+      "method": "Structured records, deduplicated messages, connected tool calls/results, queued commands; images located, not every image visually inspected."
+    },
+    {
+      "lines": "3681–11033",
+      "lane": "middle_history_audit",
+      "method": "7353 records; 40 prose, 834 tool calls/results, 128 enqueue/remove, 6 queued completions; 246 related workflow completion results."
+    },
+    {
+      "lines": "11034–12028",
+      "lane": "root",
+      "method": "Final prose, 87 tool calls index, actual AskUserQuestion calls/results and final file Write; Desktop start/end UI matched to source."
+    }
+  ],
+  "anchors": {
+    "initial_request": 8,
+    "agent_paper_edits_and_board19_approval": 11780,
+    "show_original_and_canonical_request": 11780,
+    "concurrency_explanation_request": 11780,
+    "final_handoff_write": 11984,
+    "write_success": 11991,
+    "weekly_limit": 12002
+  },
+  "stop": {
+    "last_success_utc": "2026-09-07T03:42:05.432Z",
+    "last_success_kst": "2026-09-07 12:42:05",
+    "handoff_content_matches_write_lf_normalized": true,
+    "subsequent_successful_code_action_found": false
+  },
+  "initial_repo": {
+    "cwd": "C:/Projects/DAOU.Athena",
+    "branch": "main",
+    "head": "bdb40b6151a75719af437dea2d75bc5c18ac4722",
+    "local_origin_main_same": true,
+    "remote_fetched": false
+  },
+  "limitations": [
+    "All records were indexed and relevant prose/commands/results audited across three contexts; repeated hooks/polling grouped. Not every historical screenshot or binary payload was visually re-read.",
+    "Historical findings have not all been revalidated against current HEAD.",
+    "Paper UI was read without edit authentication; MCP screenshot/edit access was denied."
+  ]
+}
