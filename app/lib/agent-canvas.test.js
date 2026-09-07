@@ -565,6 +565,9 @@ test('최근 실행 로그는 fixture로 표시된다(ledger 라이브 연결은
   const logsWrap = findByClass(container, 'agent-detail-logs')[0];
   assert.equal(logsWrap.getAttribute('data-source'), 'fixture');
   assert.equal(findByClass(logsWrap, 'agent-detail-log').length, 3);
+  const recent = findByClass(container, 'agent-panel-caption').find((n) => n.textContent === '최근 실행');
+  assert.ok(recent);
+  assert.equal(findByClass(recent, 'agent-demo-mark')[0].textContent, '데모');
 });
 
 // ── F-fix1(본편 이월 갭, Paper 39번 실측 AAG-0): "채팅에서 열기 ↗" ──
