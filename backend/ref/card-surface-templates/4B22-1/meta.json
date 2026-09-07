@@ -1,0 +1,14 @@
+{
+  "board_id": "4B22-1",
+  "name": "CC-06 / R04-S16 · 종목찾기 — 전체 100개 펼침",
+  "card_id": "CC-06",
+  "width": 1440,
+  "height": 980,
+  "state": {
+    "kind": "expand",
+    "parent_board": "13K0-2",
+    "control": "더보기",
+    "control_text": "더보기"
+  },
+  "saved_at": "2026-09-08T00:00:00+09:00"
+}

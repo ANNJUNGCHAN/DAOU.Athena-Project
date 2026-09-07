@@ -7,7 +7,7 @@
     "node_id": "14J4-2",
     "jsx_sha256": "a43eb2f376afb682c550642caac5846acfdfe0b32fc4f05cba93f7194ffd444a"
   },
-  "html_sha256": "c73983aa76fbec68ff8101962fa58fda3d1bbbd9eb0b8d2ac17a2553e8925fca",
+  "html_sha256": "25da283326149a8c97e57b3f47c5c67039081367b14a55b9b0c9858b4b8624b8",
   "width_px": 1360.0,
   "height_px": 900.0,
   "artboard_px": [
@@ -100,7 +100,7 @@
     "bs_paired": 19,
     "bs_leaf": 1,
     "bs_kpi_cell": 0,
-    "state_control_marks": 14
+    "state_control_marks": 19
   },
   "density": {
     "table_columns": 7,
@@ -111,6 +111,15 @@
   },
   "state_controls": {
     "marks": [
+      {
+        "control": "KOSPI",
+        "kind": "expand",
+        "boards": [
+          "4A9H-1"
+        ],
+        "node_id": "2WHQ-0",
+        "how": "hand"
+      },
       {
         "control": "거래량 급증",
         "kind": "sort",
@@ -139,6 +148,24 @@
         "how": "exact"
       },
       {
+        "control": "더보기",
+        "kind": "expand",
+        "boards": [
+          "4B22-1"
+        ],
+        "node_id": "33Z1-0",
+        "how": "hand"
+      },
+      {
+        "control": "등락 전체",
+        "kind": "expand",
+        "boards": [
+          "4AGN-1"
+        ],
+        "node_id": "2WHS-0",
+        "how": "hand"
+      },
+      {
         "control": "등락률",
         "kind": "sort",
         "boards": [
@@ -146,6 +173,15 @@
         ],
         "node_id": "2WH9-0",
         "how": "exact"
+      },
+      {
+        "control": "시가총액 전체",
+        "kind": "expand",
+        "boards": [
+          "4ANS-1"
+        ],
+        "node_id": "2WHU-0",
+        "how": "hand"
       },
       {
         "control": "시간외 등락률",
@@ -182,6 +218,15 @@
         ],
         "node_id": "2WHB-0",
         "how": "exact"
+      },
+      {
+        "control": "유동성 정상",
+        "kind": "expand",
+        "boards": [
+          "4AUX-1"
+        ],
+        "node_id": "2WHW-0",
+        "how": "hand"
       },
       {
         "control": "잔량률 급증",
