@@ -172,6 +172,10 @@ test('채팅 검사 왕복: 고침 봉투가 있으면 영수증·되돌리기·
   assert.equal(past.textContent, '지난 고침 1건');
   past.listeners.click();
   assert.equal(byClass(h.history, 'agent-fix-history-fires')[0].textContent, '6번 울림');
+  assert.equal(byClass(h.history, 'agent-fix-recheck-title')[0].textContent, '다시 검사 · 지난 7일');
+  assert.equal(byClass(h.history, 'agent-fix-before')[0].textContent, '2번');
+  assert.equal(byClass(h.history, 'agent-fix-after')[0].textContent, '1번 울림');
+  assert.match(byClass(h.history, 'agent-fix-dot-note')[0].textContent, /회색/);
 });
 
 test('채팅 검사 실패: 남아 온 날짜가 있어도 성공 점 띠·울린 목록·승인을 내지 않는다', () => {

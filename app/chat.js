@@ -3627,6 +3627,62 @@ function renderWatchCheckCard(r, check) {
   card.appendChild(row);
 
   const cycle = watchFixCycleLib.cycleModel(check && check.fix_cycle);
+  if (cycle && (cycle.before || cycle.after || cycle.dots.length)) {
+    const recheck = document.createElement('div');
+    recheck.className = 'agent-fix-recheck';
+    const head = document.createElement('div');
+    head.className = 'agent-fix-recheck-head';
+    const title = document.createElement('span');
+    title.className = 'agent-fix-recheck-title';
+    title.textContent = cycle.recheckTitle;
+    head.appendChild(title);
+    const meta = document.createElement('span');
+    meta.className = 'agent-fix-recheck-meta';
+    meta.textContent = cycle.recheckMeta;
+    head.appendChild(meta);
+    recheck.appendChild(head);
+    if (cycle.before || cycle.after) {
+      const compare = document.createElement('div');
+      compare.className = 'agent-fix-compare';
+      const before = document.createElement('span');
+      before.className = 'agent-fix-before';
+      before.textContent = cycle.before;
+      compare.appendChild(before);
+      const arrow = document.createElement('span');
+      arrow.className = 'agent-fix-arrow';
+      arrow.textContent = cycle.arrow;
+      compare.appendChild(arrow);
+      const after = document.createElement('span');
+      after.className = 'agent-fix-after';
+      after.textContent = cycle.after;
+      compare.appendChild(after);
+      if (cycle.afterDates) {
+        const dates = document.createElement('span');
+        dates.className = 'agent-fix-dates';
+        dates.textContent = cycle.afterDates;
+        compare.appendChild(dates);
+      }
+      recheck.appendChild(compare);
+    }
+    if (cycle.dots.length) {
+      const strip = document.createElement('div');
+      strip.className = 'agent-fix-dots';
+      for (const dot of cycle.dots) {
+        const cell = document.createElement('span');
+        cell.className = 'agent-fix-dot is-' + dot.state;
+        cell.setAttribute('data-day', dot.date);
+        strip.appendChild(cell);
+      }
+      recheck.appendChild(strip);
+    }
+    if (cycle.dotNote) {
+      const note = document.createElement('div');
+      note.className = 'agent-fix-dot-note';
+      note.textContent = cycle.dotNote;
+      recheck.appendChild(note);
+    }
+    card.appendChild(recheck);
+  }
   if (cycle && cycle.receiptRows.length) {
     const receipt = document.createElement('div');
     receipt.className = 'agent-fix-receipt';
