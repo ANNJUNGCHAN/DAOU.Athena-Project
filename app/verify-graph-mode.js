@@ -317,8 +317,8 @@ async function main() {
       summary.ariaLabel === `성향 신호 ${summary.rowCount}건`, { aria: summary.ariaLabel, rows: summary.rowCount });
     check('부제 "상위 N"이 실제 행 수와 같다',
       summary.subtitle === `상위 ${summary.rowCount}`, { subtitle: summary.subtitle, rows: summary.rowCount });
-    check('"전체 N개"가 상위보다 큰 실값이다',
-      /^전체 \d+개$/.test(summary.totalText || '')
+    check('"전체 N개 보기"가 상위보다 큰 실값이다',
+      /^전체 \d+개 보기$/.test(summary.totalText || '')
         && Number(String(summary.totalText).replace(/\D/g, '')) > summary.rowCount,
       summary.totalText);
     check('히어로 라벨이 Paper 문구다', summary.heroLabel === '지금 읽히는 성향', summary.heroLabel);

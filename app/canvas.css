@@ -526,11 +526,13 @@ html, body { background: transparent; }
 }
 .summary-table-title { font-family: var(--font-strong); font-size: var(--text-base); color: var(--color-k-bright); }
 .summary-table-subtitle { font-family: var(--font-body); font-size: var(--text-xs); color: var(--color-k-hint); }
-/* "전체 312개"(보드 01) — 우측 끝. 응답에 total이 있을 때만 그려진다. */
+/* "전체 312개 보기"(보드 01) — 우측 끝. 응답에 total이 있고 상위 표본보다 클 때만 그린다. */
 .summary-table-total {
   margin-left: auto;
   font-family: var(--font-body); font-size: var(--text-xs); color: var(--color-k-hint);
+  background: none; border: 0; padding: 0; cursor: pointer;
 }
+.summary-table-total:hover { color: var(--color-k-bright); }
 
 .summary-table-columns, .summary-row {
   display: flex; align-items: center; gap: 12px; padding-inline: 10px;
