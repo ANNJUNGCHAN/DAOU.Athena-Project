@@ -4,12 +4,12 @@
   "name": "CC-06 / R05 · 반도체 업종·AI 테마",
   "paper_source": {
     "saved_at": "2026-09-02T00:00:00+09:00",
-    "node_id": "15J9-2",
-    "jsx_sha256": "67e87235c709649116b9bd917a2f3a935d9213b6de2375284864110654b611a1"
+    "node_id": "49XY-0",
+    "jsx_sha256": "2a65d8bffd07df17ac82b81c33bf0f36d68b883ae08c7410c2a30f0a15354cca"
   },
-  "html_sha256": "257b6370a450142beb3c70566e51843f0fcb72186e9090cc136db6ffe77c45c3",
-  "width_px": 1440.0,
-  "height_px": 832.0,
+  "html_sha256": "052d4e2515bafa17628b5447ab66fe9069c246dbd3caf22eff11faf31859bd3a",
+  "width_px": 1360.0,
+  "height_px": 755.0,
   "artboard_px": [
     1440,
     832

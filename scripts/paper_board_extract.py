@@ -951,6 +951,38 @@ def color_of(el: Element) -> str | None:
     return None
 
 
+def inherited_declaration(el: Element, prop: str) -> str | None:
+    """자신부터 조상까지 올라가며 선언된 인라인 속성 값을 찾는다(원문 문자열)."""
+    cur: Element | None = el
+    while cur is not None:
+        style = style_of(cur)
+        if style is not None:
+            value = style.get(prop)
+            if value:
+                return value
+        cur = cur.parent
+    return None
+
+
+# 병기 사본이 되돌려야 하는 활자 — 사본은 원래 칸이 아니라 **둘째 칸** 안에 앉는다.
+# Paper 원문은 칸마다 font-size/family를 싣지만 둘째 칸에는 안 싣는 표가 있어
+# (실측 CC-03 순위표: 종목 칸 선언 없음, 보드 루트도 선언 없음) 사본이 브라우저
+# 기본 16px로 서서 접힌 단계에서만 값이 커진다 — 원문 11px보다 5px 크고 종목명
+# 13px보다도 크다(2026-09-07 사용자 제보 "코스닥 글씨가 크지 않아?").
+# 그래서 사본에 원래 칸의 활자를 함께 복제한다. 값 색도 같이 옮긴다: 색은 부호와
+# 함께 방향을 말하는 정보라(헌장 신념 6) 접힌 단계에서 잃으면 뜻이 바뀐다.
+PAIRED_ECHO_PROPERTIES = ("font-size", "font-family", "font-weight", "letter-spacing")
+
+
+def paired_typography(leaf: Element) -> list[tuple[str, str]]:
+    pairs: list[tuple[str, str]] = []
+    for prop in PAIRED_ECHO_PROPERTIES:
+        value = inherited_declaration(leaf, prop)
+        if value:
+            pairs.append((prop, value))
+    return pairs
+
+
 def text_leaves(el: Element) -> list[Element]:
     out: list[Element] = []
 
@@ -1377,7 +1409,9 @@ def apply_column_collapse(
     """표 셀을 `.bs-col`로 감싸고, 접힐 때 쓸 `.bs-paired` 사본을 둘째 열에 붙인다.
 
     래퍼는 `display: contents` 전제라 XL에서 상자 트리에서 사라진다(픽셀 동일).
-    사본은 인라인 스타일 없이 텍스트만 복제하고 원본 텍스트 노드를 `data-node`로 가리킨다.
+    사본은 텍스트와 **원래 칸의 활자·색**(PAIRED_ECHO_PROPERTIES + color)만 복제하고
+    원본 텍스트 노드를 `data-node`(또는 `data-paired-source`)로 가리킨다. 레이아웃
+    속성은 복제하지 않는다 — 사본의 자리는 병기 줄이고 그것은 CSS 계약이다.
     """
     wrapped = paired = 0
     for table in tables:
@@ -1417,12 +1451,18 @@ def apply_column_collapse(
                     if mode == "paired-table":
                         if row_id == table["header_row"]:
                             continue
+                        typography = paired_typography(leaf)
                         pair = _synthetic(
                             "span",
                             "leaf",
                             [
                                 ("class", "bs-paired"),
                                 ("data-paired-col", priority),
+                                *(
+                                    [("style", StyleObject(typography))]
+                                    if typography
+                                    else []
+                                ),
                             ],
                             second,
                         )
@@ -1436,12 +1476,18 @@ def apply_column_collapse(
                             pair,
                         )
                         label.children.append(table["column_labels"][col])
+                        value_color = color_of(leaf)
                         mirror = _synthetic(
                             "span",
                             "leaf",
                             [
                                 ("class", "bs-paired-value"),
                                 ("data-paired-source", node.node_id),
+                                *(
+                                    [("style", StyleObject([("color", value_color)]))]
+                                    if value_color
+                                    else []
+                                ),
                             ],
                             pair,
                         )
@@ -1449,6 +1495,10 @@ def apply_column_collapse(
                         pair.children.extend((label, mirror))
                         copies.append(pair)
                         continue
+                    copy_style = paired_typography(leaf)
+                    copy_color = color_of(leaf)
+                    if copy_color:
+                        copy_style = [*copy_style, ("color", copy_color)]
                     copy = _synthetic(
                         "span",
                         "leaf",
@@ -1456,6 +1506,7 @@ def apply_column_collapse(
                             ("class", "bs-paired"),
                             ("data-paired-col", priority),
                             ("data-node", node.node_id),
+                            *([("style", StyleObject(copy_style))] if copy_style else []),
                         ],
                         second,
                     )

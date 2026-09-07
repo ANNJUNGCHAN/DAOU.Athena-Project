@@ -7,6 +7,8 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
 const backtestCanvas = require('./backtest-canvas');
 const { createBacktestCanvas } = backtestCanvas;
 
@@ -72,6 +74,10 @@ function fakeNode(tag) {
     },
     getAttribute(k) {
       return Object.prototype.hasOwnProperty.call(this.attrs, k) ? this.attrs[k] : null;
+    },
+    removeAttribute(k) {
+      delete this.attrs[k];
+      if (k === 'class') this.className = '';
     },
     addEventListener(type, handler) {
       (this._listeners[type] = this._listeners[type] || []).push(handler);
@@ -188,6 +194,20 @@ async function fillForm(container) {
   to.value = '20260828';
   await to.dispatchEvent({ type: 'input' });
 }
+
+test('기법을 고르기 전에는 빈 채팅 축 data-technique이 없고 고른 뒤에 선다', async () => {
+  const head = fakeNode('div');
+  global.document.getElementById = (id) => (id === 'chatModeHead' ? head : null);
+  const { container, canvas } = makeCanvas();
+  canvas.mount();
+  await flush();
+  assert.equal(head.getAttribute('data-technique'), null);
+  const item = findByClass(container, 'backtest-preset-item')[0];
+  assert.ok(item, '목록에 기법이 있어야 한다');
+  await click(item);
+  await flush();
+  assert.equal(head.getAttribute('data-technique'), 'sma_crossover');
+});
 
 // ── 보드 17 · 출처에서 지도로 ───────────────────────────────────────────────
 //
@@ -598,7 +618,8 @@ test('보드 19: mount 직후는 기법 목록이고 프리셋 0번을 자동으
   assert.equal(findByClass(container, 'backtest-run-button').length, 0);
   const ctx = canvas.getContext();
   assert.equal(ctx.spec, null);
-  assert.equal(ctx.designTab, 'form');
+  assert.equal(ctx.screen, 'technique-list');
+  assert.equal(ctx.designTab, null, '목록 화면을 폼이라고 말하지 않는다');
   assert.equal(textOf(container).includes('data.symbols'), false);
   assert.equal(textOf(container).includes('pydantic'), false);
 });
@@ -1706,12 +1727,13 @@ test('getContext(): 키 목록이 계약으로 고정돼 있다 — spec은 복�
   const { canvas } = await mounted();
   const ctx = canvas.getContext();
   assert.deepEqual(Object.keys(ctx), [
-    'view', 'tab', 'designTab', 'runPath', 'spec', 'draft', 'pending', 'presets',
+    'view', 'tab', 'screen', 'designTab', 'runPath', 'spec', 'draft', 'pending', 'presets',
     'techniqueDraft', 'technique',
     'map', 'code', 'codeDraft', 'lastResult', 'diagnosis', 'optimize', 'runs', 'coverage',
     'lastChange', 'project',
   ]);
   assert.equal(ctx.view, 'design');
+  assert.equal(ctx.screen, null);
   assert.equal(ctx.techniqueDraft, false, '새 기법을 만드는 중이 아니다');
   assert.equal(ctx.spec.presetId, 'sma_crossover');
   assert.equal(ctx.draft, null);
@@ -1920,6 +1942,14 @@ test('모드 탭 5개와 설계 하위 탭 4개가 계약으로 고정돼 있다
     ['지도', '폼', '코드 · 최후의 보루', '노드·흐름']);
 });
 
+test('사용자 문구는 탭 이름 기법에서 파생하고 옛 이름 설계를 쓰지 않는다', () => {
+  const src = fs.readFileSync(path.join(__dirname, 'backtest-canvas.js'), 'utf8');
+  assert.match(src, /\$\{MODE_TABS\[0\]\[1\]\}으로 돌아가기/);
+  assert.match(src, /이 값을 \$\{MODE_TABS\[0\]\[1\]\}에 넣기/);
+  assert.equal(src.includes("'설계로 돌아가기'"), false);
+  assert.equal(src.includes("'이 값을 설계에 넣기'"), false);
+});
+
 test('배포 모드 3종의 기본은 승인이다 — 자동 주문이 기본이 아니다', () => {
   assert.deepEqual(backtestCanvas.DEPLOY_MODES.map((m) => m[0]),
     ['observe', 'approve', 'auto']);
@@ -1949,7 +1979,8 @@ test('오류 화면에는 설계로 돌아가는 버튼이 있다 — 막다른 
   await flush();
   assert.equal(findByClass(container, 'backtest-canvas-error').length, 1);
   const back = findByClass(container, 'backtest-error-back')[0];
-  assert.ok(back, '설계로 돌아가기 버튼이 있어야 한다');
+  assert.ok(back, '기법으로 돌아가기 버튼이 있어야 한다');
+  assert.equal(back.textContent, '기법으로 돌아가기');
   await click(back);
   assert.equal(canvas.getContext().view, 'design');
   assert.equal(findByClass(container, 'backtest-symbol-add').length, 1);
@@ -2369,6 +2400,14 @@ test('기법 목록: 등록부 배선이 없으면 내가 만든 기법 줄이 �
   assert.match(textOf(container), /기법 — 1개/);
 });
 
+test('목록 첫 화면은 헤더에 기법 N개를 다시 쓰지 않는다', async () => {
+  const { container, canvas } = makeCanvas();
+  canvas.mount();
+  await flush();
+  assert.equal(findByClass(container, 'backtest-head-count').length, 0);
+  assert.match(textOf(container), /기법 — 1개/);
+});
+
 test('기법 카드: 이름·분류 칩(한국어)·한 줄 설명이 함께 선다', async () => {
   const { container } = await mounted();
   await toList(container);
@@ -2377,6 +2416,29 @@ test('기법 카드: 이름·분류 칩(한국어)·한 줄 설명이 함께 선
   assert.equal(findByClass(card, 'backtest-preset-category')[0].textContent, '추세');
   // 설명은 프리셋 yaml의 metadata.description을 그대로 쓴다 — 지어내지 않는다.
   assert.match(findByClass(card, 'backtest-technique-desc')[0].textContent, /단기 이평이/);
+});
+
+test('기법 2열 격자는 긴 이름에 트랙이 끌려가지 않는다', () => {
+  const css = fs.readFileSync(path.join(__dirname, '..', 'shell.css'), 'utf8');
+  assert.match(css, /\.backtest-technique-list \{[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/s);
+  assert.match(css, /\.backtest-technique-card \{[^}]*min-width:\s*0/s);
+  const name = css.match(/\.backtest-preset-name,\s*\.backtest-user-strategy-name \{[\s\S]*?\}/)[0];
+  assert.match(name, /min-width:\s*0/);
+  assert.match(name, /overflow:\s*hidden/);
+  assert.match(name, /text-overflow:\s*ellipsis/);
+});
+
+test('[+ 새 기법 만들기] 배너는 브랜드 알파만 쓰고 팔레트 밖 hex를 만들지 않는다', () => {
+  const css = fs.readFileSync(path.join(__dirname, '..', 'shell.css'), 'utf8');
+  const block = css.match(/\.backtest-technique-new \{[\s\S]*?\}/)[0];
+  const hover = css.match(/\.backtest-technique-new:hover \{[^}]+\}/)[0];
+  assert.match(block, /background:\s*rgb\(238 19 123 \/ 5%\)/);
+  assert.match(hover, /background:\s*rgb\(238 19 123 \/ 10%\)/);
+  assert.equal(/#fff5fa|#ffedf6/i.test(block + hover), false);
+  const plus = css.match(/\.backtest-technique-new-plus \{[\s\S]*?\}/)[0];
+  const chip = css.match(/\.backtest-technique-new-chip \{[\s\S]*?\}/)[0];
+  assert.match(plus, /font-size:\s*var\(--text-lg\)/);
+  assert.match(chip, /font-size:\s*var\(--text-xs\)/);
 });
 
 test('[+ 새 기법 만들기]: 빈 뼈대를 코드창에 세우고 첫 문장을 채팅에 보낸다', async () => {
@@ -2522,7 +2584,8 @@ test('목록 화면의 navigate는 하위 탭을 반영하지 않고 이유를 �
   assert.equal(receipt.applied, false);
   assert.deepEqual(receipt.errors, ['기법을 먼저 고르세요']);
   const ctx = made.canvas.getContext();
-  assert.equal(ctx.designTab, 'form', '없는 탭으로 컨텍스트만 옮기지 않는다');
+  assert.equal(ctx.screen, 'technique-list');
+  assert.equal(ctx.designTab, null, '목록 화면을 폼이라고 말하지 않는다');
   assert.equal(findByClass(made.container, 'backtest-technique-list').length, 1);
 });
 
@@ -4333,8 +4396,10 @@ test('모드 워크스페이스에 등록하고 탭이 움직일 때마다 조�
     assert.ok(last.graph && Array.isArray(last.graph.nodes));
 
     registered[0][1].restore({
-      kind: 'backtest', tab: 'design', designTab: 'flow', graph: VISUAL_GRAPH,
+      kind: 'backtest', tab: 'design', designTab: 'flow',
+      form: RESTORE_WORKSPACE.form, graph: VISUAL_GRAPH,
     });
+    assert.equal(made.canvas.getContext().screen, null);
     assert.equal(made.canvas.getContext().designTab, 'flow');
   } finally {
     delete global.window;
@@ -6889,7 +6954,7 @@ test('보드 10: 꺼진 상태의 [다시 시도]는 목록을 다시 묻는다'
   assert.ok(findByClass(made.container, 'backtest-preset-item').length > 0);
 });
 
-test('보드 10: 그 밖의 오류는 「실패」 배지와 설계로 돌아가기다', async () => {
+test('보드 10: 그 밖의 오류는 「실패」 배지와 기법으로 돌아가기다', async () => {
   const made = makeCanvas({
     fetchPresets: async () => { throw new Error('백테스트 실행에 실패했습니다'); },
   });
@@ -6903,7 +6968,7 @@ test('보드 10: 그 밖의 오류는 「실패」 배지와 설계로 돌아가
   assert.match(textOf(made.container), /백테스트 실행에 실패했습니다/);
   assert.deepEqual(
     findByClass(made.container, 'backtest-error-back').map((n) => n.textContent),
-    ['설계로 돌아가기'],
+    ['기법으로 돌아가기'],
   );
 });
 
@@ -6929,7 +6994,7 @@ test('보드 10: 설계를 마친 뒤 꺼진 것을 만나면 설계로 돌아�
   );
   assert.deepEqual(
     findByClass(container, 'backtest-error-back').map((n) => n.textContent),
-    ['다시 시도', '설계로 돌아가기'],
+    ['다시 시도', '기법으로 돌아가기'],
   );
   await click(findByClass(container, 'backtest-error-back')[1]);
   assert.equal(canvas.getContext().view, 'design');

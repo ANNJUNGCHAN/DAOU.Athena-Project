@@ -75,6 +75,14 @@ function domTextMultiset(pairs) {
   return multiset;
 }
 
+// 한 조작 문구가 보드 둘을 가리켜도 DOM 노드는 하나다. 링크 수로 세면
+// 137X-2 「순위」처럼 6칸에 7기대를 심어 가짜 누락이 된다.
+function uniqueStateControls(links) {
+  return new Set((Array.isArray(links) ? links : [])
+    .map((link) => String((link && link.control) || '').trim())
+    .filter(Boolean)).size;
+}
+
 /**
  * 한 보드를 한 폭에서 잰 결과를 실패 목록으로 바꾼다.
  * @param {{preset: string, probe: object, geometryError?: string|null,
@@ -186,4 +194,5 @@ module.exports = {
   formatMountCliReport,
   groupBoardsByCard,
   mountFailures,
+  uniqueStateControls,
 };

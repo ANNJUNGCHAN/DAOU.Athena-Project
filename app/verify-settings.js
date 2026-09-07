@@ -93,10 +93,14 @@ const h = main.settingsHandlers;
 function wait(ms) { return new Promise((r) => setTimeout(r, ms)); }
 
 const report = {};
+const failures = [];
 function log(section, value) {
   report[section] = value;
   console.log(`\n[${section}]`);
   console.log(JSON.stringify(value, null, 2));
+}
+function accountCount(value) {
+  return value && Array.isArray(value.accounts) ? value.accounts.length : -1;
 }
 
 async function run() {
@@ -105,6 +109,7 @@ async function run() {
   await main.createWindows();
   const wins = main.getWins();
   console.log(`[verify-settings] windows created: chat=${!!wins.shellWin} canvas=${!!wins.shellWin}`);
+  if (!wins.shellWin) failures.push('셸 창이 없다');
   await wait(400);
 
   // ---------------- 온보딩 ----------------
@@ -117,12 +122,16 @@ async function run() {
   log('onboarding.advance.step3', advanceStep3);
   await wait(50);
   const heightAfterStep3Done = main.getWins().shellWin.getBounds().height;
-  log('onboarding.chatHeight.selfReturnedToBase', {
+  const heightRoundTrip = {
     heightBeforeStep3Done,
     heightAfterStep3Done,
     baseH: layoutBefore.chatBaseH,
     shrunkBackToBase: Math.abs(heightAfterStep3Done - layoutBefore.chatBaseH) <= 2,
-  });
+  };
+  log('onboarding.chatHeight.selfReturnedToBase', heightRoundTrip);
+  if (!heightRoundTrip.shrunkBackToBase) {
+    failures.push('온보딩 3단계 후 채팅 높이가 기본으로 안 돌아왔다');
+  }
 
   // ---------------- CLI 계정 ----------------
   log('cli.list', h.cliList());
@@ -143,17 +152,24 @@ async function run() {
 
   // ---------------- 계좌 ----------------
   log('account.list.empty', h.accountList());
-  log('account.register.invalid(emptyAlias)', await h.accountRegister(null, { alias: '', appKey: 'x', secretKey: 'y' }));
+  const emptyAlias = await h.accountRegister(null, { alias: '', appKey: 'x', secretKey: 'y' });
+  log('account.register.invalid(emptyAlias)', emptyAlias);
+  if (!emptyAlias || emptyAlias.ok) failures.push('빈 별칭 등록이 성공으로 나왔다');
   log('account.register.auth(realNetworkCall)', await h.accountRegister(null, { alias: '검증-실패계좌', appKey: 'not-a-real-key', secretKey: 'not-a-real-secret' }));
   // Paper FPE-0 — 검증과 저장이 갈렸다. verifyOnly는 같은 발급 왕복을 하되
   // 계좌를 만들지 않는다(목록이 그대로여야 확인 완료 상태가 저장이 아님을 증명한다).
   log('account.register.verifyOnly(stubbedNetwork)', await h.accountRegister(null, {
     alias: '검증-성공계좌', appKey: 'VERIFY_OK_KEY', secretKey: 'VERIFY_OK_SECRET_0123456789', verifyOnly: true,
   }));
-  log('account.list.afterVerifyOnly', h.accountList());
+  const afterVerifyOnly = h.accountList();
+  log('account.list.afterVerifyOnly', afterVerifyOnly);
+  if (accountCount(afterVerifyOnly) !== 0) failures.push('verifyOnly가 계좌를 저장했다');
   const okReg = await h.accountRegister(null, { alias: '검증-성공계좌', appKey: 'VERIFY_OK_KEY', secretKey: 'VERIFY_OK_SECRET_0123456789' });
   log('account.register.ok(stubbedNetwork)', okReg);
-  log('account.list.afterRegister', h.accountList());
+  const afterRegister = h.accountList();
+  log('account.list.afterRegister', afterRegister);
+  if (!(okReg && okReg.ok)) failures.push('스텁 계좌 등록이 실패했다');
+  else if (accountCount(afterRegister) !== 1) failures.push('스텁 계좌 등록 뒤 목록이 1개가 아니다');
 
   if (okReg.ok) {
     log('order-api-set.enable.ok(tokenReady)', h.orderApiSet(null, { id: okReg.id, enabled: true }));
@@ -170,7 +186,9 @@ async function run() {
     log('auth-token-revoke.alreadyNeeded(noUpstreamCall)', await h.authTokenRevoke(null, { id: okReg.id }));
     log('account.setActive.self', h.accountSetActive(null, { id: okReg.id }));
     log('account.remove', h.accountRemove(null, { id: okReg.id }));
-    log('account.list.afterRemove', h.accountList());
+    const afterRemove = h.accountList();
+    log('account.list.afterRemove', afterRemove);
+    if (accountCount(afterRemove) !== 0) failures.push('계좌 삭제 뒤 목록이 비지 않았다');
   }
 
   log('mcp.list.empty', await h.mcpList());
@@ -185,8 +203,11 @@ async function run() {
   });
   const staged = await h.mcpStageSnippet(null, { snippet });
   log('mcp.stageSnippet', staged);
+  if (!(staged && staged.ok && staged.staged && staged.staged.length)) {
+    failures.push(`mcp.stageSnippet 실패: ${JSON.stringify(staged)}`);
+  }
 
-  if (staged.ok && staged.staged.length) {
+  if (staged && staged.ok && staged.staged.length) {
     const one = staged.staged[0];
     const reg = h.mcpRegister(null, { staged: one });
     log('mcp.register', reg);
@@ -218,12 +239,18 @@ async function run() {
       const registryRaw = fs.readFileSync(mcpEnv.registryPath(), 'utf-8');
       const registryJson = JSON.parse(registryRaw);
       const redactedValue = registryJson.servers[one.alias].env.MY_TEST_SECRET;
-      log('mcp-env.afterMigrate.isSentinel', redactedValue === mcpEnv.SENTINEL);
-      log('mcp-env.afterMigrate.noPlaintextOnDisk', !registryRaw.includes(PLAINTEXT_SECRET));
+      const isSentinel = redactedValue === mcpEnv.SENTINEL;
+      const noPlaintext = !registryRaw.includes(PLAINTEXT_SECRET);
+      log('mcp-env.afterMigrate.isSentinel', isSentinel);
+      log('mcp-env.afterMigrate.noPlaintextOnDisk', noPlaintext);
+      if (!isSentinel) failures.push('mcp-env 마이그레이션이 센티널을 쓰지 않았다');
+      if (!noPlaintext) failures.push('mcp-env 레지스트리에 평문 비밀이 남았다');
 
       const overrides = mcpEnv.buildEnvOverrides(one.alias);
       const varName = mcpEnv.envVarName(one.alias, 'MY_TEST_SECRET');
-      log('mcp-env.buildEnvOverrides.decryptRoundTripMatches', overrides[varName] === PLAINTEXT_SECRET);
+      const roundTrip = overrides[varName] === PLAINTEXT_SECRET;
+      log('mcp-env.buildEnvOverrides.decryptRoundTripMatches', roundTrip);
+      if (!roundTrip) failures.push('mcp-env 복호화 왕복이 원문과 다르다');
 
       // 앱 경유 없이 이 서버를 직접 probe — 주입 환경변수가 없으므로 센티널을
       // 못 풀어 spawn이 명확히 실패해야 한다(fail-closed, registry.py의
@@ -269,11 +296,16 @@ async function run() {
   console.log('\n[verify-settings] 리포트 저장: app/captures/VERIFY-SETTINGS-REPORT.json');
   console.log(`[verify-settings] 임시 디렉터리(수동 정리 필요 없음, OS temp): ${TMP_ROOT}`);
 
+  if (failures.length) {
+    console.error(`[verify-settings] 실패 ${failures.length}건`);
+    for (const item of failures) console.error(`  - ${item}`);
+    app.exit(1);
+    return;
+  }
   app.quit();
 }
 
 run().catch((err) => {
   console.error('[verify-settings] FAILED', err);
-  app.quit();
-  process.exitCode = 1;
+  app.exit(1);
 });

@@ -180,10 +180,14 @@ function applyAffixes(spec, formatted) {
     || (spec.suffix !== undefined && typeof spec.suffix !== 'string')) {
     return { text: missingText(), tone: null, missing: true };
   }
-  return {
-    ...formatted,
-    text: `${spec.prefix || ''}${formatted.text}${spec.suffix || ''}`,
-  };
+  // 이미 단위·접두가 붙은 표시 문자열(Paper 원문, 백엔드 text 필드)에
+  // 같은 접두·접미를 한 번 더 붙이지 않는다. 생값 숫자는 이 가드에 안 걸린다.
+  let text = formatted.text;
+  const prefix = spec.prefix || '';
+  const suffix = spec.suffix || '';
+  if (prefix && !text.startsWith(prefix)) text = `${prefix}${text}`;
+  if (suffix && !text.endsWith(suffix)) text = `${text}${suffix}`;
+  return { ...formatted, text };
 }
 
 function missingResult(spec, reason, authored = false) {
@@ -231,7 +235,8 @@ function formatSlot(format, raw) {
     return missingResult(spec, normalized.missing, explicitlyMissing);
   }
   if (typeof normalized.text === 'string' && normalized.text) {
-    return applyAffixes(spec, { text: normalized.text, tone: normalized.tone || null, missing: false });
+    // 호출부가 완성한 표기다. 접두·접미·단위를 다시 입히지 않는다.
+    return { text: normalized.text, tone: normalized.tone || null, missing: false };
   }
 
   const kind = kindOf(spec);
@@ -253,7 +258,9 @@ function formatSlot(format, raw) {
   }
 
   const numeric = toNumber(normalized.value);
-  if (numeric === null) return applyAffixes(spec, { text: String(normalized.value), tone, missing: false });
+  // Paper 원문·이미 단위가 붙은 표기는 숫자가 아니다. 접두·접미를 얹으면
+  // 「900.4조」가 「900.4조원」이 된다.
+  if (numeric === null) return { text: String(normalized.value), tone, missing: false };
   // Kiwoom 가격 필드는 방향 부호를 값에 싣는다. 가격으로 저작된 슬롯만 magnitude를
   // 표시하고, 상승·하락 tone은 위에서 원본 부호로 이미 계산한 값을 유지한다.
   const displayNumeric = spec.absolute === true ? Math.abs(numeric) : numeric;

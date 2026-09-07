@@ -570,7 +570,9 @@ window.athena.on('athena:add-rest-canvas', async (payload) => {
       chart_import_to_dom_ms: Number.isFinite(chartImportReadyAt)
         ? Math.max(0, domAttachedAt - Math.max(receivedAt, chartImportReadyAt)) : null,
       inline_to_dom_ms: Math.max(0, domAttachedAt - receivedAt),
-      dom_to_paint_ack_ms: Math.max(0, paint.visiblePaintAt - domAttachedAt),
+      // 창이 숨어 있던 시간은 렌더 지연이 아니다 — 확인을 못 한 시간이다.
+      // waitForVisiblePaint가 그 시간을 재서 넘기고 여기서 구간에서 뺀다.
+      dom_to_paint_ack_ms: Math.max(0, paint.visiblePaintAt - domAttachedAt - (paint.hiddenMs || 0)),
       rect: paint.rect,
     });
     if (renderSettled) {
@@ -729,7 +731,8 @@ async function addLiveCard(result) {
     if (el) destroyCard(el);
   }
   // ★ canvas_type은 응답값이다 — 요청값이 아니다(S4 RESULT.md §5). success/fallback
-  // 둘 다 이 필드로 어떤 카드를 그릴지 정한다. 알려진 3종(table/stream/reader) 중
+  // 둘 다 이 필드로 어떤 카드를 그릴지 정한다. 알려진 9종(table/stream/reader/
+  // chart/facts/compound/event/action/status) 중
   // 하나가 아니면(대개 free로 폴백) 자유 카드로 떨어뜨린다 — 폴백은 예외가 아니라
   // 흔한 경로다. `!envelope.fell_back`은 방어적 중복이다 — canvas.py의
   // validate_canvas_payload()는 폴백 시 canvas_type 자체를 'free'로 바꿔 보내므로
@@ -1931,23 +1934,15 @@ async function mountAitsChartPanel(card, chartBody, descriptor, options = {}) {
   descriptor.context.onReloadRequest = async (request) => {
     const active = aitsChartPanels.snapshot().find((candidate) => candidate.panelId === descriptor.panelId);
     if (!active) throw new Error('AITS chart session이 닫혔다');
-    let reloadTimer;
-    try {
-      return await Promise.race([
-        window.athena.invoke('athena:reload-chart-panel', {
-          panelId: descriptor.panelId,
-          generation: active.generation,
-          period: request.period,
-          interval: request.interval,
-          adjusted: request.adjusted,
-        }),
-        new Promise((_, reject) => {
-          reloadTimer = setTimeout(() => reject(new Error('재조회 8초 한도를 넘겼다')), 8000);
-        }),
-      ]);
-    } finally {
-      clearTimeout(reloadTimer);
-    }
+    // 8초 한도는 chart-card withReloadDeadline이 건다. 여기서 같은 지연을 또
+    // 걸면 안쪽 타이머가 항상 이기고 카드 쪽 분기는 도달하지 못한다.
+    return window.athena.invoke('athena:reload-chart-panel', {
+      panelId: descriptor.panelId,
+      generation: active.generation,
+      period: request.period,
+      interval: request.interval,
+      adjusted: request.adjusted,
+    });
   };
   // 과거 봉 덧붙이기 — main이 base_dt 커서로 그 앞 구간을 받아 candles만 돌려준다.
   // reload와 달리 카드를 갈아치우지 않으므로 generation을 올리지 않는다.
@@ -3877,7 +3872,9 @@ const agentCanvas = window.AthenaLib.AgentCanvas.createAgentCanvas({
   container: document.getElementById('agentCanvas'),
   fetchRoutines: async () => {
     const res = await window.athena.invoke('athena:routines-list');
-    return (res && res.ok && res.data && Array.isArray(res.data.routines)) ? res.data.routines : [];
+    if (!res || !res.ok) throw new Error((res && res.error) || '루틴 목록을 불러오지 못했습니다');
+    if (!res.data || !Array.isArray(res.data.routines)) throw new Error('루틴 목록 응답이 올바르지 않습니다');
+    return res.data.routines;
   },
   // 3단계 — "오늘 발화" 통계 타일. fired_today는 routines 배열이 아니라 같은
   // 응답의 최상위 필드(2단계, ledger 단일 스캔 집계)라 별개 왕복으로 뗀다
@@ -3954,6 +3951,10 @@ const agentCanvas = window.AthenaLib.AgentCanvas.createAgentCanvas({
     }
     if (opts.kind === 'ask' && node) {
       window.AthenaShell.seedChatInput(`"${name}" 알람의 「${node}」 칸은 뭐야? `);
+      return;
+    }
+    if (opts.repair === true) {
+      document.dispatchEvent(new CustomEvent('athena:watch-repair-request', { detail: opts }));
       return;
     }
     window.AthenaShell.seedChatInput(`"${name}" 알람을 말로 고치고 싶어 — `);

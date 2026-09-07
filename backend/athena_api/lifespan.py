@@ -164,6 +164,31 @@ async def _hourly_ingest_loop(
             )
 
 
+async def _refresh_instrument_identity(
+    index: InstrumentIdentityIndex, client: KiwoomClient
+) -> None:
+    """기동 뒤 백그라운드 1회 — 실패해도 기동을 약화시키지 않는다(빈 스냅숏 = fail-closed)."""
+    try:
+        await index.refresh(client)
+    except asyncio.CancelledError:
+        raise
+    except Exception as exc:
+        # Identity availability may never weaken startup or leak upstream contents. The
+        # empty prior snapshot makes selector planning fail closed until a future complete
+        # refresh succeeds.
+        logger.warning("instrument identity refresh failed type=%s", type(exc).__name__)
+
+
+async def _teardown_instrument_identity(app: FastAPI) -> None:
+    task: asyncio.Task[None] | None = getattr(app.state, "instrument_identity_task", None)
+    app.state.instrument_identity_task = None
+    if task is None or task.done():
+        return
+    task.cancel()
+    with suppress(BaseException):
+        await task
+
+
 def _publish_default(app: FastAPI, runtime: AccountRuntime | None) -> None:
     """Mirror the default account's stack onto the flat app.state attributes.
 
@@ -509,6 +534,7 @@ async def _cleanup_lifespan_resources(
 ) -> None:
     first_error = primary_error
     phases = (
+        ("instrument-identity", lambda: _teardown_instrument_identity(app)),
         ("accounts", lambda: _teardown(app, runtimes, http_client, locks)),
         ("cluster-labeling", lambda: _teardown_cluster_labeling_tasks(app)),
         ("brain", lambda: _teardown_brain(app, brain)),
@@ -572,6 +598,7 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
     async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         instrument_identity = InstrumentIdentityIndex()
         app.state.instrument_identity = instrument_identity
+        app.state.instrument_identity_task = None
         app.state.selector_service = build_selector_service(instrument_identity)
         app.state.settings = runtime_settings
         app.state.local_bearer_token = (
@@ -663,16 +690,18 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
                 default_runtime = runtimes.get(runtime_settings.kiwoom_default_account or "")
                 _publish_default(app, default_runtime)
                 if default_runtime is not None and default_runtime.ready:
-                    try:
-                        await instrument_identity.refresh(default_runtime.data_client)
-                    except Exception as exc:
-                        # Identity availability may never weaken startup or leak upstream
-                        # contents. The empty prior snapshot makes selector planning fail
-                        # closed until a future complete refresh succeeds.
-                        logger.warning(
-                            "instrument identity refresh failed type=%s",
-                            type(exc).__name__,
-                        )
+                    # 식별 인덱스 구성(ka10099 3개 시장 → 별칭 정규식 3,500여 개 컴파일)은
+                    # CPU로 30초 안팎이 걸린다(2026-09-07 실측: 앱 부팅과 겹치면 60초 이상).
+                    # 기동 앞에 두면 앱 launcher의 60초 준비 한도를 넘겨 부팅이 degraded로
+                    # 끝나므로 뒤에서 돌린다 — 끝나기 전에는 빈 스냅숏이라 셀렉터가
+                    # fail-closed로 동작한다(refresh 실패 때와 같은 상태). 참조는 teardown이
+                    # 취소할 수 있게 app.state에 둔다(brain.hourly_task와 같은 관례).
+                    app.state.instrument_identity_task = asyncio.create_task(
+                        _refresh_instrument_identity(
+                            instrument_identity, default_runtime.data_client
+                        ),
+                        name="athena-instrument-identity-refresh",
+                    )
             if runtime_settings.brain_enabled:
                 # 준비된 계좌의 data_client만 넘긴다 — 토큰 발급에 실패한 계좌로
                 # 생산하면 매 주기 인증 오류만 쌓인다. 하나도 없으면 생산자 없이 선다.
