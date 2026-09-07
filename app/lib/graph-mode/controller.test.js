@@ -589,6 +589,15 @@ test('selectNode() — profile-summary에 매칭이 없으면 그래프 노드 �
   assert.equal(controller.state.panel.confidence, undefined);
 });
 
+test('selectNode() — 지도에도 성향 표에도 없는 id는 패널을 열지 않는다', async () => {
+  const { controller, elements } = setup({ payload: payloadTwoClusters, withPanel: true, getProfileSummaryEntries: () => [] });
+  await controller.toggle();
+  controller.selectNode('e:missing');
+  assert.equal(controller.state.selectedEntityId, null);
+  assert.equal(controller.state.panel, null);
+  assert.equal(elements.panel.querySelector('.panel-name'), null);
+});
+
 test('관계 목록 — 선택 엔티티가 걸린 surprising-connections가 있으면 "숨은" 행으로 렌더된다', async () => {
   const connections = [
     { source_entity_id: 'e:a', source_name: '반도체', target_entity_id: 'e:x', target_name: '배당 방어', kinds: ['교차언급'] },

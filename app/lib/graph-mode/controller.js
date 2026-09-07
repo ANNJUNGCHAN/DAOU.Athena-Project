@@ -590,9 +590,6 @@ function createGraphModeController(deps) {
   }
 
   function selectNode(entityId) {
-    // 노드를 새로 고르면 entity 응답 패널은 물러난다 — 같은 자리에 두 주제를
-    // 겹쳐 두면 지금 보고 있는 것이 무엇인지 흐려진다.
-    entityDetail = null;
     const node = findNode(entityId);
     // profile-summary에 같은 entity_id가 있으면(그래프 노드와 성향 신호 표는
     // 서로 다른 엔드포인트라 항상 겹치진 않는다) 그 항목의 근거·신뢰도·보강
@@ -602,6 +599,12 @@ function createGraphModeController(deps) {
     const profileEntry = typeof getProfileSummaryEntries === 'function'
       ? (getProfileSummaryEntries() || []).find((e) => e && e.entity_id === entityId)
       : null;
+    // 지도에도 성향 표에도 없는 id는 조용히 아무 일도 안 한다(OBS-064, Paper 3Z9W-1).
+    // 이름 자리에 원시 entity_id를 그리지 않기 위해 근거가 하나도 없으면 패널을 안 연다.
+    if (!node && !profileEntry) return;
+    // 노드를 새로 고르면 entity 응답 패널은 물러난다 — 같은 자리에 두 주제를
+    // 겹쳐 두면 지금 보고 있는 것이 무엇인지 흐려진다.
+    entityDetail = null;
     const panelData = {
       entityId,
       source: 'node', // §15 선택 출처 태그 — summary-table.js의 'table'과 짝.
@@ -1089,7 +1092,7 @@ function createGraphModeController(deps) {
     const row1 = elp('div', 'panel-header-row1');
     row1.appendChild(elp('span', `panel-dot ${panelDotClass(data)}`));
     const name = elp('span', 'panel-name');
-    name.textContent = data.name || data.entityId;
+    name.textContent = data.name || '';
     row1.appendChild(name);
     if (data.kind) {
       const kindBadge = elp('span', 'panel-kind-badge');
