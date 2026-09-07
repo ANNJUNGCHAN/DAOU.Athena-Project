@@ -1020,15 +1020,23 @@ def _explicit_body_rows(
     저장본에 따라 본문 행이 래퍼 하나에 묶여 있다(2QFO-2 `2QHG-2`). 래퍼는 열 수가
     헤더와 다르고 자식이 전부 헤더와 같은 열 수인 경우에만, 그리고 한 번만 편다 —
     두 개가 나오면 어느 쪽이 본문인지 알 수 없으므로 실패한다.
+
+    「자식이 전부」는 꼬리 행을 세지 않는다. 실보드 래퍼는 데이터 행 뒤에 합계·주석
+    줄을 함께 담는다(실측 2QM7-2 `34GL-0` = 행 8개 + `34N8-0` 「전체 8개 창구」 2칸).
+    전부를 요구하면 그 한 줄 때문에 래퍼가 안 펴지고, 래퍼가 통째로 「열 수가 한참
+    다른 띠」로 걸러져 본문이 0행이 된다 — 표 감지가 조용히 실패하는 자리다.
+    칸이 3개 미만인 줄은 아래 호출부가 이미 종결 콘텐츠로 다룬다(:1093).
     """
     rows: list[Element] = []
     expanded = False
     for row in tail:
         children = element_children(row)
+        data_children = [child for child in children if len(element_children(child)) >= 3]
         if (
             len(children) >= 3
             and len(children) != columns
-            and all(len(element_children(child)) == columns for child in children)
+            and len(data_children) >= 3
+            and all(len(element_children(child)) == columns for child in data_children)
         ):
             if expanded:
                 raise ExtractError(
