@@ -20,7 +20,8 @@ const STATE_META = {
 function stateDot(state) {
   const meta = STATE_META[state] || STATE_META.needed;
   const d = statusDot(state === 'ready', meta.label);
-  if (state === 'needed' || state === 'refreshing') d.classList.add('is-warn');
+  // Paper 1KK-0: 경고색은 재발급 중만. 인증 필요·만료는 흐린 점(is-off).
+  if (state === 'refreshing') d.classList.add('is-warn');
   return d;
 }
 

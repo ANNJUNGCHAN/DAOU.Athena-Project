@@ -2341,8 +2341,9 @@ const ROUTES = Object.freeze([
     window: 'shell',
     // 보드 20은 화면이 아니라 같은 카드의 상태 네 칸을 나란히 세운 목록이다. 한 화면은
     // 한 상태만 그리므로 라우트는 그중 하나만 잰다 — 보드 19가 이미 지고 있는 ready를
-    // 빼고, 나머지 셋의 머리인 needed를 잡는다(refreshing·expired는 이 화면의 전이
-    // 상태라 단위 테스트가 진다, onboarding-flow.test.js 「Paper 28 재발급 중」).
+    // 빼고, 나머지 셋의 머리인 needed를 잡는다. 점 색 4상태는 onboarding-flow
+    // 「Paper 20 토큰 4상태 점은 재발급 중만 경고색이다」가 지고, 재발급 중 버튼
+    // 잠금은 「Paper 28 재발급 중」이 진다.
     reach: [
       { do: 'ipc-fixture', channel: 'athena:account-list', data: PAPER_ACCOUNTS },
       { do: 'ipc-fixture', channel: 'athena:auth-token-status', data: AUTH_TOKEN_NEEDED },
@@ -2360,6 +2361,8 @@ const ROUTES = Object.freeze([
       { what: 'absent', selector: '.auth-timer-expiry:not(:empty)' },
       { what: 'count', selector: '.auth-timer-digits.is-dim', equals: 1 },
       { what: 'count', selector: '.auth-timer-units', equals: 1 },
+      { what: 'count', selector: '.auth-status-left .uk-dot.is-off:not(.is-warn)', equals: 1 },
+      { what: 'count', selector: '.auth-status-left .uk-dot.is-warn', equals: 0 },
     ],
   },
   {
