@@ -11,6 +11,7 @@ const {
   createLatestBoardLoad, nextHydrationSlots,
   slotValueEntries, realtimeSlotIndex, updateRealtimeValue, pairedClosure, realtimePlan, applyRealtimeSlots,
   stateLinksFromMarks, stateControlActivationOwner, wireStateControlActivation,
+  findStateControlNode, STATE_CONTROL_SCOPES,
 } = require('./board-mount');
 const { formatSlot } = require('./board-format');
 const registry = require('./board-template-registry');
@@ -1403,4 +1404,78 @@ test('성공한 empty hydrate는 권위 있는 빈 pending을 보존해 재방�
     nextHydrationSlots(firstPending, { s005: 267750 }, { hydration_slot_ids: ['s019'] }),
     ['s019'],
   );
+});
+
+// ---------- 레일 칩 찾기 (표식 · 같은 문구 · 별칭 문구) ----------
+
+function railLeaf(text, stateControl = null) {
+  const leaf = {
+    tagName: 'DIV',
+    childElementCount: 0,
+    dataset: stateControl ? { stateControl } : {},
+    textContent: text,
+    closest: () => null,
+    querySelectorAll: () => [],
+  };
+  return leaf;
+}
+
+// 스트립 하나에 칩을 늘어놓은 표면. 스코프 밖 잎(표 셀 등)은 outside로 넣는다 —
+// 문구가 같아도 레일이 아니면 칩이 아니다.
+function railSurface(chipTexts, { stamped = [], outside = [] } = {}) {
+  const chips = chipTexts.map((text) => railLeaf(text));
+  const strip = {
+    childElementCount: chips.length,
+    querySelectorAll: () => chips,
+  };
+  return {
+    querySelectorAll(selector) {
+      if (selector === '[data-state-control]') return stamped;
+      if (selector === STATE_CONTROL_SCOPES) return [strip];
+      return [...chips, ...outside];
+    },
+    chips,
+  };
+}
+
+test('표식이 있으면 표식으로 찾는다 — 문구는 안 본다', () => {
+  const marked = railLeaf('관심', '관심종목 시세 보드');
+  const surface = railSurface(['업종'], { stamped: [marked] });
+  assert.equal(findStateControlNode(surface, '관심종목 시세 보드'), marked);
+});
+
+test('표식이 없으면 같은 문구를 내는 레일 잎으로 찾는다', () => {
+  const surface = railSurface(['업종', '테마']);
+  assert.equal(findStateControlNode(surface, '업종'), surface.chips[0]);
+  assert.equal(findStateControlNode(surface, '없는 조작'), null);
+});
+
+test('문구가 표식 이름과 다른 칩은 별칭으로 찾는다 — 자식 보드 레일이 그 모양이다', () => {
+  const surface = railSurface(['관심', '업종']);
+  const labelsFor = (control) => (control === '관심종목 시세 보드' ? ['관심'] : []);
+  assert.equal(
+    findStateControlNode(surface, '관심종목 시세 보드', { labelsFor, links: [] }),
+    surface.chips[0],
+  );
+});
+
+test('별칭이 여러 잎에 걸리거나 다른 링크와 경합하면 매달지 않는다', () => {
+  const twice = railSurface(['▸', '▸']);
+  const markerLabels = () => ['▸'];
+  assert.equal(findStateControlNode(twice, '분봉 시세', { labelsFor: markerLabels, links: [] }), null);
+
+  const shared = railSurface(['금현물']);
+  const labelsFor = () => ['금현물'];
+  const links = [{ control: '금현물 · 매수' }, { control: '금현물 잔고·거래내역' }];
+  assert.equal(findStateControlNode(shared, '금현물 · 매수', { labelsFor, links }), null);
+});
+
+test('레일 밖 잎은 칩이 아니다 — 표 셀에 같은 문구가 있어도 안 매단다', () => {
+  const surface = railSurface([], { outside: [railLeaf('업종')] });
+  assert.equal(findStateControlNode(surface, '업종'), null);
+});
+
+test('색인의 별칭 표는 실제 보드에서 나온 것이다', () => {
+  assert.deepEqual(registry.controlLabels('관심종목 시세 보드'), ['관심']);
+  assert.deepEqual(registry.controlLabels('없는 표식'), []);
 });

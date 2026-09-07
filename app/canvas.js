@@ -14,6 +14,7 @@ const semanticWorkspace = window.AthenaLib.SemanticWorkspace;
 const paperCardRouting = window.AthenaLib.PaperCardRouting;
 const boardMount = window.AthenaLib.BoardMount;
 const boardTemplateRegistry = window.AthenaLib.BoardTemplateRegistry;
+const boardCardActions = window.AthenaLib.BoardCardActions;
 const canvasTabs = window.AthenaLib.CanvasTabs;
 const SEMANTIC_PRIMARY_TYPES = new Set(['table', 'chart', 'facts', 'compound', 'event', 'action', 'status']);
 
@@ -963,6 +964,7 @@ function mountBoardState(host, boardId, envelope, isCurrent = () => true) {
       );
       rememberMountedBoard(state, mounted);
       wireStateControls(host, envelope, mounted);
+      wireCardActions(host, envelope, mounted);
       return hydrateBoardSlots(host, envelope, mounted, isCurrent);
     });
 }
@@ -980,22 +982,6 @@ function switchStateBoard(host, boardId, envelope) {
   ));
 }
 
-// 스트립 칩·탭 = 상태 보드 조작. 추출 원문에서 칩은 그냥 텍스트 노드라, 계약이 준
-// `control` 문구와 정확히 같은 글자를 내는 잎을 그 조작으로 본다(스트립·내비 안에서만).
-function findStateControl(surface, control) {
-  for (const node of surface.querySelectorAll('[data-state-control]')) {
-    if (node.dataset.stateControl === control) return boardMount.stateControlActivationOwner(node);
-  }
-  for (const scope of surface.querySelectorAll('.bs-strip, nav, [role="tablist"]')) {
-    for (const node of scope.querySelectorAll('*')) {
-      if (node.childElementCount === 0 && node.textContent.trim() === control) {
-        return boardMount.stateControlActivationOwner(node);
-      }
-    }
-  }
-  return null;
-}
-
 const RESPONSIVE_STATE_CONTROL_OWNER = '.bs-r-flow, .bs-r-scroll, .bs-r-scroll-table';
 
 function isResponsiveStateControl(node) {
@@ -1011,7 +997,8 @@ function wireStateControls(host, envelope, mounted) {
   for (const link of state.links) {
     const control = String(link.control || '').trim();
     if (!control) continue;
-    const node = findStateControl(surface, control);
+    // 칩 찾기(표식·같은 문구·별칭 문구)는 board-mount가 갖는다 — 단위 테스트가 걸린다.
+    const node = boardMount.findStateControlNode(surface, control, { links: state.links });
     if (!node) continue;
     const didWire = boardMount.wireStateControlActivation(
       node,
@@ -1021,6 +1008,79 @@ function wireStateControls(host, envelope, mounted) {
     if (!didWire) continue;
     // 표시는 CSS가 한다([data-state-board], board-surface.css) — 인라인 원문은 안 건드린다(D1).
     node.dataset.stateBoard = link.board_id;
+    wired += 1;
+  }
+  return wired;
+}
+
+// 카드 액션 — Paper가 목적지를 다른 card_id로 그린 조작(호가 열기 · 종목 상세 열기).
+// 상태 보드 전환과 달리 카드가 새로 선다. 판정(문구 → 보드 · 누른 줄의 종목 ·
+// 봉투 형상)은 lib/board-card-actions.js가 갖고, 여기서는 클릭을 그 판정에 잇는다.
+function cardActionStock(node, surface, envelope, action) {
+  if (action.stock === 'row') return boardCardActions.rowStock(node, surface);
+  const stkCd = cardStkCd(envelope) || boardHydrateTarget(envelope).stk_cd || '';
+  return stkCd ? { stkCd, stockName: cardStockName(surface) } : null;
+}
+
+// 카드가 보고 있는 종목의 이름 — 헤더 첫 잎이다. 없으면 제목에서 뺀다(지어내지 않는다).
+function cardStockName(surface) {
+  const header = surface && surface.querySelector('.bs-header, [data-name="Instrument Header"]');
+  const leaf = header && [...header.querySelectorAll('*')].find((el) => !el.childElementCount
+    && el.textContent.trim() && !/^\d/.test(el.textContent.trim()));
+  return leaf ? leaf.textContent.trim() : '';
+}
+
+// 「알림 설정」 — 에이전트 모드의 「새 알람 · 말로 설명」으로 데려간다. 알람은
+// AI가 쓴 감시 함수라 카드 안에서 끝나는 조작이 아니고, 그 화면은 카드 보드가
+// 아니라 에이전트 모드 화면으로 이미 그려져 있다(Paper A-2 09~12).
+// 두 걸음(캔버스 화면 + 모드 네비 활성 표시)은 sidebar.js의 「관제 창으로 →」와
+// 같은 순서다 — 하나만 부르면 화면과 네비 표시가 어긋난다.
+function openAgentWatch(seed) {
+  if (window.AthenaCanvasMode && typeof window.AthenaCanvasMode.setView === 'function') {
+    window.AthenaCanvasMode.setView('agent');
+  }
+  if (window.AthenaModeNav && typeof window.AthenaModeNav.setActive === 'function') {
+    window.AthenaModeNav.setActive('agent');
+  }
+  if (window.AthenaAgentCanvas && typeof window.AthenaAgentCanvas.refresh === 'function') {
+    window.AthenaAgentCanvas.refresh();
+  }
+  // 문장은 심고 **보내지 않는다** — 사람이 읽고 고친 뒤 Enter를 누른다(보드 43).
+  if (seed) seedGraphChat(seed);
+  return true;
+}
+
+async function runCardAction(node, surface, envelope, action) {
+  const stock = cardActionStock(node, surface, envelope, action);
+  // 종목을 못 읽으면 아무 것도 하지 않는다 — 엉뚱한 종목으로 카드를 열거나 알람을
+  // 시작하는 것보다 아무 일도 안 하는 것이 낫다(사유는 콘솔에만 남긴다).
+  if (!stock) {
+    console.warn('[canvas] 카드 액션 종목을 못 읽었다', action.control);
+    return null;
+  }
+  if (action.kind === 'agent-watch') {
+    return openAgentWatch(boardCardActions.cardActionSeed(action, stock));
+  }
+  const next = boardCardActions.cardActionEnvelope(action, stock);
+  if (!next) return null;
+  // 원문 HTML은 카드 청크에 있다 — 목적지 보드 청크를 먼저 실어야 카드가 선다.
+  await boardTemplateRegistry.loadBoard(action.board_id);
+  return addLiveCard({ status: 'success', envelope: next });
+}
+
+function wireCardActions(host, envelope, mounted) {
+  const surface = mounted && mounted.surface;
+  if (!surface || !boardCardActions) return 0;
+  let wired = 0;
+  for (const { node, action } of boardCardActions.actionNodes(surface)) {
+    const didWire = boardMount.wireStateControlActivation(
+      node,
+      () => { void runCardAction(node, surface, envelope, action); },
+      { keyboard: true },
+    );
+    if (!didWire) continue;
+    // 표시는 CSS가 한다([data-card-action], board-surface.css) — 인라인 원문은 안 건드린다(D1).
+    node.dataset.cardAction = action.control;
     wired += 1;
   }
   return wired;
@@ -1323,6 +1383,16 @@ function removeBoardLoadNode(state) {
   state.loadNode = null;
 }
 
+// 안내 줄(로딩·부분·오류)은 보드 자리 **바로 위**에 앉는다. 처음 그릴 때 host는
+// 카드 본문의 직계 자식이지만, integrated-card-surface가 카드를 패널로 쪼개면서
+// host를 `.integrated-card-panel` 안으로 옮긴다 — 그 뒤에 본문(loadBody)을 기준으로
+// insertBefore를 부르면 「host가 내 자식이 아니다」로 던진다. 그러면 상태 보드 전환이
+// 로딩 표시 한 줄에서 통째로 끊겨 탭 칩이 하나도 안 눌리는 것으로 보인다
+// (2026-09-07 실측: 137X-2 탭 6개 전부 NotFoundError).
+function boardLoadAnchor(state, host) {
+  return (host && host.parentElement) || state.loadBody;
+}
+
 function showBoardLoading(state, host) {
   removeBoardLoadNode(state);
   state.hydrationWarnings = [];
@@ -1331,7 +1401,7 @@ function showBoardLoading(state, host) {
   const loading = emptyState('데이터를 불러오는 중입니다.', '카드가 준비되면 자동으로 표시합니다.');
   loading.classList.add('board-surface-load-state');
   loading.setAttribute('role', 'status');
-  state.loadBody.insertBefore(loading, host);
+  boardLoadAnchor(state, host).insertBefore(loading, host);
   state.loadNode = loading;
   if (state.loadCard && !state.primaryDescriptor) state.loadCard.dataset.renderState = 'loading';
 }
@@ -1347,7 +1417,7 @@ function showBoardReady(state, host, envelope, mounted, retry) {
     const partial = errorNote('일부 추가 정보를 불러오지 못했습니다. 확인된 정보만 표시합니다.');
     partial.classList.add('board-surface-partial');
     partial.appendChild(button('text', '다시 시도', { onClick: retry }));
-    state.loadBody.insertBefore(partial, host);
+    boardLoadAnchor(state, host).insertBefore(partial, host);
     state.loadNode = partial;
   }
   if (mounted) void mountBoardPrimary(host, envelope, mounted);
@@ -1361,7 +1431,7 @@ function showBoardLoadError(state, host, error, retry) {
   failure.classList.add('board-surface-load-state', 'is-error');
   failure.setAttribute('role', 'alert');
   failure.appendChild(button('ghost', '다시 시도', { onClick: retry }));
-  state.loadBody.insertBefore(failure, host);
+  boardLoadAnchor(state, host).insertBefore(failure, host);
   state.loadNode = failure;
   settleBoardChartMount(state, 'error');
   if (state.loadCard) state.loadCard.dataset.renderState = 'error';
