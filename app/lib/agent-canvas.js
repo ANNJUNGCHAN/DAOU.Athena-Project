@@ -2491,6 +2491,9 @@ function createAgentCanvas(deps) {
     fieldsWrap.setAttribute('data-source', item.source);
     const fields = [['확인 주기', `장중 ${WatchNodes.pollMinutes(watch)}분`], ['쿨다운', WatchNodes.cooldownLabel(raw.cooldown_s)]];
     if (raw.expires_at) fields.push(['만료', WatchNodes.dayLabel(raw.expires_at)]);
+    // code-watch 실행기의 assemble_frame 입력 계약(일봉 캐시 + 오늘 시세).
+    // 현재 수신 여부를 뜻하지 않는다 — 검사만 돌릴 때는 완성 봉까지만 센다.
+    fields.push(['데이터', '일봉 + 오늘 현재가']);
     for (const [label, value] of fields) {
       const fieldRow = el('div', 'agent-detail-field');
       const l = el('span', 'agent-detail-field-label');
