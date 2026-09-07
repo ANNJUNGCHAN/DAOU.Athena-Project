@@ -56,6 +56,7 @@ const { resolveCodexDisabledSelection } = require('./lib/main/codex-live-disable
 const { GATEWAY_ALLOWED_TOOLS, DISALLOWED_EXECUTION_TOOLS } = require('./lib/main/claude-tool-policy');
 const providerContractDecision = require('./test-fixtures/provider-contract/decision.json');
 const restDatasetRunner = require('./lib/main/rest-dataset-runner');
+const accountBoundDataset = require('./lib/main/account-bound-dataset');
 const { RestRetryRegistry } = require('./lib/main/rest-retry-registry');
 const { createStockEntityIndexReadiness } = require('./lib/main/stock-entity-index-readiness');
 const { createChartFollowupTracker } = require('./lib/main/chart-followup');
@@ -3050,6 +3051,10 @@ function activeRestAccountId() {
   }
 }
 
+function backendAccountAuthorization() {
+  return LOCAL_BEARER_TOKEN ? `Bearer ${LOCAL_BEARER_TOKEN}` : '';
+}
+
 // 이력 사이드바(리프 1.2.2) 최소 영속화 — 첫 사용자 메시지에서 제목을 뽑아
 // athena-conversations.json에 적는다. historyConversationId()는 현재 선택된
 // 대화 하나에 고정되며, 새 대화/기존 대화 선택 경계에서만 교체된다.
@@ -3609,23 +3614,33 @@ async function runDirectRestDataset(dataset, expand = true, overrides = {}) {
   };
   let result;
   try {
-    result = await restDatasetRunner.runRestDataset({
-      dataset: Object.assign({}, dataset, { firstCanvasDeadlineMs: DIRECT_DATASET_SETTLE_TIMEOUT_MS }),
-      backendBase: BACKEND_HTTP_BASE,
-      fetchImpl: overrides.fetchImpl,
-      signal: overrides.signal || ownController.signal,
-      hardSignal: overrides.hardSignal,
-      onEvent: handleDirectEvent,
-      emitCanvas: overrides.emitCanvas || ((payload) => {
-        if (ownController && activeRestRun !== ownController) {
-          throw new Error('교체된 REST 데이터셋의 늦은 카드는 표시하지 않는다');
-        }
-        return emitRestCanvasForOrigin({ ...payload, retryCardId }, {
-          expand,
-          origin: overrides.origin,
-          timeoutMs: Math.max(1, payload.paintDeadlineAt - performance.now()),
-        });
-      }),
+    result = await accountBoundDataset.runAccountBoundDataset({
+      requestedAccountId: retryAccountId,
+      resolveBackendAlias: (options) => accounts.resolveBackendAlias(options),
+      resolveOptions: {
+        backendBase: BACKEND_HTTP_BASE,
+        fetchImpl: overrides.accountMetadataFetchImpl || fetch,
+        authorization: backendAccountAuthorization(),
+      },
+      runRestDataset: (options) => restDatasetRunner.runRestDataset(options),
+      runnerOptions: {
+        dataset: Object.assign({}, dataset, { firstCanvasDeadlineMs: DIRECT_DATASET_SETTLE_TIMEOUT_MS }),
+        backendBase: BACKEND_HTTP_BASE,
+        fetchImpl: overrides.fetchImpl,
+        signal: overrides.signal || ownController.signal,
+        hardSignal: overrides.hardSignal,
+        onEvent: handleDirectEvent,
+        emitCanvas: overrides.emitCanvas || ((payload) => {
+          if (ownController && activeRestRun !== ownController) {
+            throw new Error('교체된 REST 데이터셋의 늦은 카드는 표시하지 않는다');
+          }
+          return emitRestCanvasForOrigin({ ...payload, retryCardId }, {
+            expand,
+            origin: overrides.origin,
+            timeoutMs: Math.max(1, payload.paintDeadlineAt - performance.now()),
+          });
+        }),
+      },
     });
   } finally {
     if (feedbackWatchdog) clearTimeout(feedbackWatchdog);
@@ -5114,6 +5129,24 @@ function handleAccountSetActive(e, { id } = {}) {
   return accounts.setActive(id);
 }
 
+function handleAccountRuntimeOptions() {
+  return accounts.listBackendAliases({
+    backendBase: BACKEND_HTTP_BASE,
+    fetchImpl: fetch,
+    authorization: backendAccountAuthorization(),
+  });
+}
+
+function handleAccountSetBackendAlias(e, { id, backendAlias } = {}) {
+  return accounts.bindBackendAlias({
+    id,
+    backendAlias,
+    backendBase: BACKEND_HTTP_BASE,
+    fetchImpl: fetch,
+    authorization: backendAccountAuthorization(),
+  });
+}
+
 function handleAccountRemove(e, { id } = {}) {
   return accounts.remove(id);
 }
@@ -5261,6 +5294,8 @@ ipcMain.handle('athena:conversations-new', async (e, { projectId, mode, verifier
 ipcMain.handle('athena:account-list', handleAccountList);
 ipcMain.handle('athena:account-register', handleAccountRegister);
 ipcMain.handle('athena:account-set-active', handleAccountSetActive);
+ipcMain.handle('athena:account-runtime-options', handleAccountRuntimeOptions);
+ipcMain.handle('athena:account-set-backend-alias', handleAccountSetBackendAlias);
 ipcMain.handle('athena:account-remove', handleAccountRemove);
 ipcMain.handle('athena:order-api-set', handleOrderApiSet);
 ipcMain.handle('athena:auth-token-status', handleAuthTokenStatus);

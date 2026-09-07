@@ -7,8 +7,42 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
+const Module = require('node:module');
 
 const settingsCards = require('./settings-cards');
+
+function loadPreloadBridge(invoke) {
+  let bridge;
+  const originalLoad = Module._load;
+  Module._load = function mockElectron(request, parent, isMain) {
+    if (request === 'electron') {
+      return {
+        contextBridge: {
+          exposeInMainWorld(name, value) {
+            assert.equal(name, 'athena');
+            bridge = value;
+          },
+        },
+        ipcRenderer: {
+          invoke,
+          send() {},
+          on() {},
+          removeListener() {},
+        },
+        webFrame: { getZoomFactor: () => 1 },
+      };
+    }
+    return originalLoad.call(this, request, parent, isMain);
+  };
+  try {
+    const preloadPath = require.resolve('../preload');
+    delete require.cache[preloadPath];
+    require(preloadPath);
+  } finally {
+    Module._load = originalLoad;
+  }
+  return bridge;
+}
 
 function fakeStorage(initial) {
   const map = new Map(initial ? [['athena.graphSettings.prefs', initial]] : []);
@@ -311,6 +345,7 @@ async function renderRegisterSheet(t) {
   global.document = { createElement: sheetNode };
   global.window = { athena: { invoke(channel, payload) {
     if (channel === 'athena:account-list') { lists += 1; return Promise.resolve({ accounts: [] }); }
+    if (channel === 'athena:account-runtime-options') return Promise.resolve({ ok: true, aliases: ['server-a'] });
     assert.equal(channel, 'athena:account-register');
     registrations.push(payload);
     return new Promise((resolve) => { resolveRegister = resolve; });
@@ -382,6 +417,94 @@ test('등록 시트의 저장 완료는 실제 입력을 비우고 시트를 닫
   assert.equal(saved.grid.querySelector('.uk-sheet'), null);
   assert.deepEqual(saved.inputs.map((input) => input.value), ['', '', '']);
   assert.equal(saved.listCount(), 2);
+});
+
+test('기존 계좌는 서버 계좌를 자동 선택하지 않고 사용자가 고른 alias를 저장·재표시한다', async (t) => {
+  const priorDocument = global.document;
+  const priorWindow = global.window;
+  let backendAlias = '';
+  const calls = [];
+  global.document = { createElement: sheetNode };
+  global.window = { athena: loadPreloadBridge(async (channel, payload) => {
+    calls.push([channel, payload]);
+    if (channel === 'athena:account-list') {
+      return { accounts: [{ id: 'local-a', alias: '내 계좌', backendAlias, active: true }] };
+    }
+    if (channel === 'athena:account-runtime-options') return { ok: true, aliases: ['server-a', 'server-b'] };
+    if (channel === 'athena:account-set-backend-alias') {
+      backendAlias = payload.backendAlias;
+      return { ok: true, backendAlias };
+    }
+    throw new Error(`unexpected channel: ${channel}`);
+  }) };
+  t.after(() => {
+    if (priorDocument === undefined) delete global.document; else global.document = priorDocument;
+    if (priorWindow === undefined) delete global.window; else global.window = priorWindow;
+  });
+
+  const grid = sheetNode('div');
+  await settingsCards.renderAccounts(grid);
+  const connect = grid.querySelector('.uk-account-backend-button');
+  assert.equal(connect.textContent, '서버 계좌 연결');
+  connect.click();
+  const select = grid.querySelector('.uk-account-backend-select');
+  assert.equal(select.value, '', 'backend 기본값이나 첫 option을 자동 선택하지 않는다');
+  select.value = 'server-b';
+  await grid.querySelector('.uk-account-backend-save').click();
+  assert.deepEqual(calls.find(([channel]) => channel === 'athena:account-set-backend-alias'), [
+    'athena:account-set-backend-alias',
+    { id: 'local-a', backendAlias: 'server-b' },
+  ]);
+  assert.equal(grid.querySelector('.uk-account-backend-button').textContent, '서버: server-b');
+});
+
+test('preload는 계좌 연결 IPC 둘만 main으로 전달하고 미허용 채널은 차단한다', async () => {
+  const calls = [];
+  const bridge = loadPreloadBridge(async (channel, payload) => {
+    calls.push([channel, payload]);
+    return { ok: true };
+  });
+  await bridge.invoke('athena:account-runtime-options');
+  await bridge.invoke('athena:account-set-backend-alias', { id: 'local-a', backendAlias: 'server-a' });
+  assert.deepEqual(calls, [
+    ['athena:account-runtime-options', undefined],
+    ['athena:account-set-backend-alias', { id: 'local-a', backendAlias: 'server-a' }],
+  ]);
+  await assert.rejects(
+    bridge.invoke('athena:account-unknown', {}),
+    /허용되지 않은 invoke 채널/,
+  );
+  assert.equal(calls.length, 2);
+});
+
+test('서버 계좌 metadata를 읽지 못하면 연결 control은 비활성이고 저장 IPC를 호출하지 않는다', async (t) => {
+  const priorDocument = global.document;
+  const priorWindow = global.window;
+  const calls = [];
+  global.document = { createElement: sheetNode };
+  global.window = { athena: { async invoke(channel, payload) {
+    calls.push([channel, payload]);
+    if (channel === 'athena:account-list') {
+      return { accounts: [{ id: 'local-a', alias: '내 계좌', backendAlias: '', active: true }] };
+    }
+    if (channel === 'athena:account-runtime-options') {
+      return { ok: false, aliases: [], error: '서버 계좌 정보를 확인할 수 없다' };
+    }
+    throw new Error(`unexpected channel: ${channel}`);
+  } } };
+  t.after(() => {
+    if (priorDocument === undefined) delete global.document; else global.document = priorDocument;
+    if (priorWindow === undefined) delete global.window; else global.window = priorWindow;
+  });
+
+  const grid = sheetNode('div');
+  await settingsCards.renderAccounts(grid);
+  const connect = grid.querySelector('.uk-account-backend-button');
+  assert.equal(connect.disabled, true);
+  assert.match(connect.title, /확인할 수 없다/);
+  connect.click();
+  assert.equal(grid.querySelector('.uk-sheet'), null);
+  assert.equal(calls.some(([channel]) => channel === 'athena:account-set-backend-alias'), false);
 });
 
 test('인증 실패는 입력을 비우지 않는다 — 다시 검증이 가능하다', () => {
