@@ -226,6 +226,24 @@ test('매수여력·방향·관측가가 없으면 칩은 그리되 수량을 �
   assert.match(noPrice.chips[0].reason, /관측가/);
 });
 
+test('readTicketCapacity: 주문가능금액과 종목 보유만 읽고 없으면 null이다', () => {
+  const known = ot.readTicketCapacity({
+    symbol: '005930',
+    cash: { ord_alow_amt: '0000000008810000' },
+    holdings: {
+      acnt_evlt_remn_indv_tot: [
+        { stk_cd: 'A000660', rmnd_qty: '10' },
+        { stk_cd: 'A005930', trde_able_qty: '40', rmnd_qty: '50' },
+      ],
+    },
+  });
+  assert.equal(known.buyingPower, 8810000);
+  assert.equal(known.holdings, 40);
+  const empty = ot.readTicketCapacity({ symbol: '005930' });
+  assert.equal(empty.buyingPower, null);
+  assert.equal(empty.holdings, null);
+});
+
 test('수량 칩은 10만 주 상한이다', () => {
   const buy = ot.qtyChipModel({ side: 'buy', observed: 1, buyingPower: 200000 });
   assert.equal(buy.chips[3].qty, 100000);
@@ -239,6 +257,7 @@ test('셸 티켓은 수량 칩을 모델에서 그린다', () => {
   assert.match(chat, /ticket-qty-chips/);
   assert.match(chat, /chip\.label/);
   assert.match(chat, /qtyChips\.title/);
+  assert.match(chat, /athena:ticket-capacity/);
   const routes = fs.readFileSync(path.join(__dirname, 'paper-screen-routes.js'), 'utf8');
   assert.match(routes, /selector: 'span\.ticket-seg', equals: 2/);
   assert.match(routes, /selector: '\.ticket-qty-chips button\.ticket-seg', equals: 4/);
