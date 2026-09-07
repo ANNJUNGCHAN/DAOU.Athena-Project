@@ -11,6 +11,7 @@
    "text": "내 관심종목 중 지금 조건에 걸린 종목은?",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Header",
     "Frame"
    ]
@@ -20,6 +21,7 @@
    "text": "단기 관찰 8종목 · 활성 조건 2건",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Header",
     "Frame"
    ]
@@ -29,6 +31,7 @@
    "text": "관심 · 조건 신호",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Header",
     "Frame"
    ]
@@ -38,6 +41,7 @@
    "text": "2개 신호 활성",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Header",
     "Frame"
    ]
@@ -47,6 +51,7 @@
    "text": "관심종목 · 단기 관찰",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Frame"
@@ -57,6 +62,7 @@
    "text": "8종목",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Frame"
@@ -67,6 +73,7 @@
    "text": "종목",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "열 헤더"
@@ -77,6 +84,7 @@
    "text": "현재가",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "열 헤더"
@@ -87,6 +95,7 @@
    "text": "등락",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "열 헤더"
@@ -97,6 +106,7 @@
    "text": "시가",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "열 헤더"
@@ -107,6 +117,7 @@
    "text": "고가 · 저가",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "열 헤더"
@@ -117,6 +128,7 @@
    "text": "오늘 신호",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "열 헤더"
@@ -127,6 +139,7 @@
    "text": "삼성전자",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -139,6 +152,7 @@
    "text": "005930",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -152,6 +166,7 @@
    "text": "거래대금 급증",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -165,6 +180,7 @@
    "text": "150,850",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -177,6 +193,7 @@
    "text": "+1,850",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -189,6 +206,7 @@
    "text": "+1.24%",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -200,6 +218,7 @@
    "text": "149,500",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -211,6 +230,7 @@
    "text": "고 152,400",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -223,6 +243,7 @@
    "text": "저 149,100",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -235,6 +256,7 @@
    "text": "조건 충족",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -246,6 +268,7 @@
    "text": "SK하이닉스",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -258,6 +281,7 @@
    "text": "000660",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -271,6 +295,7 @@
    "text": "20일 신고가",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -284,6 +309,7 @@
    "text": "198,400",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -296,6 +322,7 @@
    "text": "+3,990",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -308,6 +335,7 @@
    "text": "+2.05%",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -319,6 +347,7 @@
    "text": "195,000",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -330,6 +359,7 @@
    "text": "고 199,100",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -342,6 +372,7 @@
    "text": "저 194,800",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -354,6 +385,7 @@
    "text": "조건 충족",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -365,6 +397,7 @@
    "text": "한미반도체",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -377,6 +410,7 @@
    "text": "042700",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -390,6 +424,7 @@
    "text": "거래대금 급증",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -403,6 +438,7 @@
    "text": "197,400",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -415,6 +451,7 @@
    "text": "+7,900",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -427,6 +464,7 @@
    "text": "+4.18%",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -438,6 +476,7 @@
    "text": "190,200",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -449,6 +488,7 @@
    "text": "고 198,000",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -461,6 +501,7 @@
    "text": "저 189,800",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -473,6 +514,7 @@
    "text": "조건 충족",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -484,6 +526,7 @@
    "text": "KODEX 200",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -496,6 +539,7 @@
    "text": "069500",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -509,6 +553,7 @@
    "text": "관찰 중",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -522,6 +567,7 @@
    "text": "48,360",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -534,6 +580,7 @@
    "text": "+410",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -546,6 +593,7 @@
    "text": "+0.86%",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -557,6 +605,7 @@
    "text": "48,000",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -568,6 +617,7 @@
    "text": "고 48,420",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -580,6 +630,7 @@
    "text": "저 47,980",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -592,6 +643,7 @@
    "text": "해당 없음",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -603,6 +655,7 @@
    "text": "현대차",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -615,6 +668,7 @@
    "text": "005380",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -628,6 +682,7 @@
    "text": "관찰 중",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -641,6 +696,7 @@
    "text": "232,500",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -653,6 +709,7 @@
    "text": "-1,220",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -665,6 +722,7 @@
    "text": "-0.52%",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -676,6 +734,7 @@
    "text": "233,500",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -687,6 +746,7 @@
    "text": "고 234,000",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -699,6 +759,7 @@
    "text": "저 232,000",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -711,6 +772,7 @@
    "text": "해당 없음",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -722,6 +784,7 @@
    "text": "NAVER",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -734,6 +797,7 @@
    "text": "035420",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -747,6 +811,7 @@
    "text": "관찰 중",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -760,6 +825,7 @@
    "text": "214,000",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -772,6 +838,7 @@
    "text": "+1,800",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -784,6 +851,7 @@
    "text": "+0.85%",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -795,6 +863,7 @@
    "text": "212,500",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -806,6 +875,7 @@
    "text": "고 214,800",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -818,6 +888,7 @@
    "text": "저 212,300",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -830,6 +901,7 @@
    "text": "해당 없음",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -841,6 +913,7 @@
    "text": "카카오",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -853,6 +926,7 @@
    "text": "035720",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -866,6 +940,7 @@
    "text": "관찰 중",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -879,6 +954,7 @@
    "text": "41,850",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -891,6 +967,7 @@
    "text": "-350",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -903,6 +980,7 @@
    "text": "-0.83%",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -914,6 +992,7 @@
    "text": "42,150",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -925,6 +1004,7 @@
    "text": "고 42,300",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -937,6 +1017,7 @@
    "text": "저 41,750",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -949,6 +1030,7 @@
    "text": "해당 없음",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -960,6 +1042,7 @@
    "text": "기아",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -972,6 +1055,7 @@
    "text": "000270",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -985,6 +1069,7 @@
    "text": "관찰 중",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -998,6 +1083,7 @@
    "text": "99,400",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -1010,6 +1096,7 @@
    "text": "-700",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -1022,6 +1109,7 @@
    "text": "-0.70%",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -1033,6 +1121,7 @@
    "text": "100,000",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -1044,6 +1133,7 @@
    "text": "고 100,300",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -1056,6 +1146,7 @@
    "text": "저 99,300",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -1068,6 +1159,7 @@
    "text": "해당 없음",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "Watchlist Viewport",
@@ -1079,6 +1171,7 @@
    "text": "전체 8종목 표시",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "List Footer · Complete"
@@ -1089,6 +1182,7 @@
    "text": "09-01 장중 09:42",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Watchlist",
     "List Footer · Complete"
@@ -1099,6 +1193,7 @@
    "text": "조건 감시",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Signals"
    ]
@@ -1108,6 +1203,7 @@
    "text": "거래대금 급증",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Signals",
     "Frame",
@@ -1119,6 +1215,7 @@
    "text": "감시 중",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Signals",
     "Frame",
@@ -1131,6 +1228,7 @@
    "text": "누적거래대금 2.14조",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Signals",
     "Frame"
@@ -1141,6 +1239,7 @@
    "text": "삼성전자 · 09:38 감지",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Signals",
     "Frame"
@@ -1151,6 +1250,7 @@
    "text": "오늘 감지",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Signals",
     "Frame",
@@ -1162,6 +1262,7 @@
    "text": "4건",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Signals",
     "Frame",
@@ -1173,6 +1274,7 @@
    "text": "20일 신고가",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Signals",
     "Frame",
@@ -1184,6 +1286,7 @@
    "text": "감시 중",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Signals",
     "Frame",
@@ -1196,6 +1299,7 @@
    "text": "20일 최고가 194,300 · 돌파 +2.11%",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Signals",
     "Frame"
@@ -1206,6 +1310,7 @@
    "text": "SK하이닉스 · 09:28 감지",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Signals",
     "Frame"
@@ -1216,6 +1321,7 @@
    "text": "오늘 감지",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Signals",
     "Frame",
@@ -1227,6 +1333,7 @@
    "text": "2건",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Signals",
     "Frame",
@@ -1238,6 +1345,7 @@
    "text": "골든크로스 5·20",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Signals",
     "Frame",
@@ -1249,6 +1357,7 @@
    "text": "중지",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Signals",
     "Frame",
@@ -1260,6 +1369,7 @@
    "text": "장 마감 후 판정",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Signals",
     "Frame"
@@ -1270,6 +1380,7 @@
    "text": "해당 종목 없음",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Signals",
     "Frame"
@@ -1280,6 +1391,7 @@
    "text": "오늘 감지",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Signals",
     "Frame",
@@ -1291,6 +1403,7 @@
    "text": "0건",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Signals",
     "Frame",
@@ -1302,6 +1415,7 @@
    "text": "조건 수정",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Signals",
     "조건 동작",
@@ -1313,6 +1427,7 @@
    "text": "알림 받기",
    "path": [
     "CC-06 / R06 · 관심종목·조건 신호",
+    "Explorer Card Surface",
     "Workspace",
     "Signals",
     "조건 동작",
@@ -1330,52 +1445,60 @@
    "depth": 0
   },
   {
+   "id": "49Y0-0",
+   "name": "Explorer Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 854,
+   "depth": 1
+  },
+  {
    "id": "15L9-2",
    "name": "Header",
    "component": "Frame",
    "w": 1360,
    "h": 122,
-   "depth": 1
+   "depth": 2
   },
   {
    "id": "15LA-2",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 2
+   "w": 553,
+   "h": 70,
+   "depth": 3
   },
   {
    "id": "15LD-2",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 2
+   "w": 113,
+   "h": 39,
+   "depth": 3
   },
   {
    "id": "15LH-2",
    "name": "Workspace",
    "component": "Frame",
    "w": 1360,
-   "h": 0,
-   "depth": 1
+   "h": 710,
+   "depth": 2
   },
   {
    "id": "15LI-2",
    "name": "Watchlist",
    "component": "Frame",
    "w": 870,
-   "h": 0,
-   "depth": 2
+   "h": 710,
+   "depth": 3
   },
   {
    "id": "15LL-2",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 3
+   "w": 814,
+   "h": 22,
+   "depth": 4
   },
   {
    "id": "35P1-0",
@@ -1383,335 +1506,335 @@
    "component": "Frame",
    "w": 814,
    "h": 44,
-   "depth": 3
+   "depth": 4
   },
   {
    "id": "35SP-0",
    "name": "Watchlist Viewport",
    "component": "Frame",
    "w": 814,
-   "h": 0,
-   "depth": 3
+   "h": 496,
+   "depth": 4
   },
   {
    "id": "35SQ-0",
    "name": "삼성전자",
    "component": "Frame",
-   "w": 0,
+   "w": 814,
    "h": 62,
-   "depth": 4
+   "depth": 5
   },
   {
    "id": "35SR-0",
    "name": "Frame",
    "component": "Frame",
    "w": 260,
-   "h": 0,
-   "depth": 5
+   "h": 41,
+   "depth": 6
   },
   {
    "id": "35ST-0",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 6
+   "w": 260,
+   "h": 21,
+   "depth": 7
   },
   {
    "id": "35SW-0",
    "name": "Frame",
    "component": "Frame",
    "w": 130,
-   "h": 0,
-   "depth": 5
+   "h": 40,
+   "depth": 6
   },
   {
    "id": "35T1-0",
    "name": "Frame",
    "component": "Frame",
    "w": 136,
-   "h": 0,
-   "depth": 5
+   "h": 40,
+   "depth": 6
   },
   {
    "id": "35T5-0",
    "name": "SK하이닉스",
    "component": "Frame",
-   "w": 0,
+   "w": 814,
    "h": 62,
-   "depth": 4
+   "depth": 5
   },
   {
    "id": "35T6-0",
    "name": "Frame",
    "component": "Frame",
    "w": 260,
-   "h": 0,
-   "depth": 5
+   "h": 41,
+   "depth": 6
   },
   {
    "id": "35T8-0",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 6
+   "w": 260,
+   "h": 21,
+   "depth": 7
   },
   {
    "id": "35TB-0",
    "name": "Frame",
    "component": "Frame",
    "w": 130,
-   "h": 0,
-   "depth": 5
+   "h": 40,
+   "depth": 6
   },
   {
    "id": "35TG-0",
    "name": "Frame",
    "component": "Frame",
    "w": 136,
-   "h": 0,
-   "depth": 5
+   "h": 40,
+   "depth": 6
   },
   {
    "id": "35TK-0",
    "name": "NAVER",
    "component": "Frame",
-   "w": 0,
+   "w": 814,
    "h": 62,
-   "depth": 4
+   "depth": 5
   },
   {
    "id": "35TL-0",
    "name": "Frame",
    "component": "Frame",
    "w": 260,
-   "h": 0,
-   "depth": 5
+   "h": 41,
+   "depth": 6
   },
   {
    "id": "35TN-0",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 6
+   "w": 260,
+   "h": 21,
+   "depth": 7
   },
   {
    "id": "35TQ-0",
    "name": "Frame",
    "component": "Frame",
    "w": 130,
-   "h": 0,
-   "depth": 5
+   "h": 40,
+   "depth": 6
   },
   {
    "id": "35TV-0",
    "name": "Frame",
    "component": "Frame",
    "w": 136,
-   "h": 0,
-   "depth": 5
+   "h": 40,
+   "depth": 6
   },
   {
    "id": "3IC9-0",
    "name": "NAVER",
    "component": "Frame",
-   "w": 0,
+   "w": 814,
    "h": 62,
-   "depth": 4
+   "depth": 5
   },
   {
    "id": "3ICJ-0",
    "name": "Frame",
    "component": "Frame",
    "w": 260,
-   "h": 0,
-   "depth": 5
+   "h": 41,
+   "depth": 6
   },
   {
    "id": "3ICK-0",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 6
+   "w": 260,
+   "h": 21,
+   "depth": 7
   },
   {
    "id": "3ICG-0",
    "name": "Frame",
    "component": "Frame",
    "w": 130,
-   "h": 0,
-   "depth": 5
+   "h": 40,
+   "depth": 6
   },
   {
    "id": "3ICB-0",
    "name": "Frame",
    "component": "Frame",
    "w": 136,
-   "h": 0,
-   "depth": 5
+   "h": 40,
+   "depth": 6
   },
   {
    "id": "3ICO-0",
    "name": "NAVER",
    "component": "Frame",
-   "w": 0,
+   "w": 814,
    "h": 62,
-   "depth": 4
+   "depth": 5
   },
   {
    "id": "3ICY-0",
    "name": "Frame",
    "component": "Frame",
    "w": 260,
-   "h": 0,
-   "depth": 5
+   "h": 41,
+   "depth": 6
   },
   {
    "id": "3ICZ-0",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 6
+   "w": 260,
+   "h": 21,
+   "depth": 7
   },
   {
    "id": "3ICV-0",
    "name": "Frame",
    "component": "Frame",
    "w": 130,
-   "h": 0,
-   "depth": 5
+   "h": 40,
+   "depth": 6
   },
   {
    "id": "3ICQ-0",
    "name": "Frame",
    "component": "Frame",
    "w": 136,
-   "h": 0,
-   "depth": 5
+   "h": 40,
+   "depth": 6
   },
   {
    "id": "3ID3-0",
    "name": "NAVER",
    "component": "Frame",
-   "w": 0,
+   "w": 814,
    "h": 62,
-   "depth": 4
+   "depth": 5
   },
   {
    "id": "3IDD-0",
    "name": "Frame",
    "component": "Frame",
    "w": 260,
-   "h": 0,
-   "depth": 5
+   "h": 41,
+   "depth": 6
   },
   {
    "id": "3IDE-0",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 6
+   "w": 260,
+   "h": 21,
+   "depth": 7
   },
   {
    "id": "3IDA-0",
    "name": "Frame",
    "component": "Frame",
    "w": 130,
-   "h": 0,
-   "depth": 5
+   "h": 40,
+   "depth": 6
   },
   {
    "id": "3ID5-0",
    "name": "Frame",
    "component": "Frame",
    "w": 136,
-   "h": 0,
-   "depth": 5
+   "h": 40,
+   "depth": 6
   },
   {
    "id": "3IDI-0",
    "name": "NAVER",
    "component": "Frame",
-   "w": 0,
+   "w": 814,
    "h": 62,
-   "depth": 4
+   "depth": 5
   },
   {
    "id": "3IDS-0",
    "name": "Frame",
    "component": "Frame",
    "w": 260,
-   "h": 0,
-   "depth": 5
+   "h": 41,
+   "depth": 6
   },
   {
    "id": "3IDT-0",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 6
+   "w": 260,
+   "h": 21,
+   "depth": 7
   },
   {
    "id": "3IDP-0",
    "name": "Frame",
    "component": "Frame",
    "w": 130,
-   "h": 0,
-   "depth": 5
+   "h": 40,
+   "depth": 6
   },
   {
    "id": "3IDK-0",
    "name": "Frame",
    "component": "Frame",
    "w": 136,
-   "h": 0,
-   "depth": 5
+   "h": 40,
+   "depth": 6
   },
   {
    "id": "3IDX-0",
    "name": "NAVER",
    "component": "Frame",
-   "w": 0,
+   "w": 814,
    "h": 62,
-   "depth": 4
+   "depth": 5
   },
   {
    "id": "3IE7-0",
    "name": "Frame",
    "component": "Frame",
    "w": 260,
-   "h": 0,
-   "depth": 5
+   "h": 41,
+   "depth": 6
   },
   {
    "id": "3IE8-0",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 6
+   "w": 260,
+   "h": 21,
+   "depth": 7
   },
   {
    "id": "3IE4-0",
    "name": "Frame",
    "component": "Frame",
    "w": 130,
-   "h": 0,
-   "depth": 5
+   "h": 40,
+   "depth": 6
   },
   {
    "id": "3IDZ-0",
    "name": "Frame",
    "component": "Frame",
    "w": 136,
-   "h": 0,
-   "depth": 5
+   "h": 40,
+   "depth": 6
   },
   {
    "id": "1VAO-1",
@@ -1719,7 +1842,7 @@
    "component": "Frame",
    "w": 814,
    "h": 38,
-   "depth": 3
+   "depth": 4
   },
   {
    "id": "15LJ-2",
@@ -1727,31 +1850,31 @@
    "component": "Frame",
    "w": 470,
    "h": 710,
-   "depth": 2
+   "depth": 3
   },
   {
    "id": "15MN-2",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 3
+   "w": 414,
+   "h": 145,
+   "depth": 4
   },
   {
    "id": "15MO-2",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 4
+   "w": 414,
+   "h": 20,
+   "depth": 5
   },
   {
    "id": "3IND-0",
    "name": "감시 중",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 5
+   "w": 57,
+   "h": 16,
+   "depth": 6
   },
   {
    "id": "3INF-0",
@@ -1759,39 +1882,39 @@
    "component": "Rectangle",
    "w": 10,
    "h": 10,
-   "depth": 6
+   "depth": 7
   },
   {
    "id": "3IF9-0",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 4
+   "w": 414,
+   "h": 17,
+   "depth": 5
   },
   {
    "id": "15MT-2",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 3
+   "w": 414,
+   "h": 145,
+   "depth": 4
   },
   {
    "id": "15MU-2",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 4
+   "w": 414,
+   "h": 20,
+   "depth": 5
   },
   {
    "id": "3INH-0",
    "name": "감시 중",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 5
+   "w": 57,
+   "h": 16,
+   "depth": 6
   },
   {
    "id": "3INJ-0",
@@ -1799,63 +1922,63 @@
    "component": "Rectangle",
    "w": 10,
    "h": 10,
-   "depth": 6
+   "depth": 7
   },
   {
    "id": "3IFD-0",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 4
+   "w": 414,
+   "h": 17,
+   "depth": 5
   },
   {
    "id": "3IMH-0",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 3
+   "w": 414,
+   "h": 145,
+   "depth": 4
   },
   {
    "id": "3IMN-0",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 4
+   "w": 414,
+   "h": 20,
+   "depth": 5
   },
   {
    "id": "3IMI-0",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 4
+   "w": 414,
+   "h": 17,
+   "depth": 5
   },
   {
    "id": "3IOR-0",
    "name": "조건 동작",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 3
+   "w": 414,
+   "h": 52,
+   "depth": 4
   },
   {
    "id": "3IOS-0",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
+   "w": 203,
    "h": 46,
-   "depth": 4
+   "depth": 5
   },
   {
    "id": "3IOU-0",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
+   "w": 201,
    "h": 46,
-   "depth": 4
+   "depth": 5
   }
  ],
  "text_multiset": {
@@ -1959,6 +2082,6 @@
   "조건 수정": 1,
   "알림 받기": 1
  },
- "exported_at": "2026-09-05",
- "tree_summary_sha256": "304fa4acc890b59fb5d82955065aa9995bc84990da2bdbd4a4b3d6649554d791"
+ "exported_at": "2026-09-07",
+ "tree_summary_sha256": "1f9d41fe60a6b9dec2ceba8b2b3e0f97cfed0e3b59b6320d5ddb1bac42678afc"
 }
