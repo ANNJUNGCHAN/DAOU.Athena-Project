@@ -33,6 +33,7 @@ test('현재 Paper 50: BrowserWindow 최소 폭은 330px이다', () => {
 
 test('현재 Paper 50: 700–1279px은 이력이 있을 때 하단 대화 트레이를 연다', () => {
   const css = mediaBlock(1279);
+  assert.match(shellCss, /@media \(max-width: 1279px\),\s*\(max-height: 620px\)/);
   assert.match(css, /#shell\s*\{[^}]*grid-template-columns:\s*268px\s+minmax\(0,\s*1fr\)[^}]*grid-template-rows:\s*minmax\(0,\s*1fr\)\s+54px[^}]*\}/);
   assert.match(css, /#shell:has\(#chatRegion\s+\.history:not\(:empty\)\)\s*\{[^}]*grid-template-rows:\s*minmax\(0,\s*1fr\)\s+clamp\(196px,\s*30vh,\s*248px\)[^}]*\}/);
   assert.match(css, /#historyRegion\s*\{[^}]*grid-row:\s*1\s*\/\s*3[^}]*\}/);
@@ -71,6 +72,8 @@ test('현재 Paper 50: 실화면 검증은 실제 viewport 경계·필수 팝오
   assert.match(verifier, /closeModelPopover\(\)/);
   assert.match(verifier, /verifyResponsiveTurn/);
   assert.match(verifier, /shellWin\.setBounds\(responsiveOrigin\)/);
+  assert.match(verifier, /width:\s*1600/);
+  assert.match(verifier, /height:\s*520/);
 });
 
 test('검증22: 숨겨진 오브만 비활성 표시해 paint 후 검사하고 원래 visibility로 복구한다', () => {

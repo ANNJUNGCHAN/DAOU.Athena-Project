@@ -3682,10 +3682,11 @@ body { margin: 0; overflow: hidden; }
 
 /* ---------- Windows 반응형/Snap (현재 Paper 50) ----------
  * 1280px 이상은 위의 기본 3열(268px + 가변 캔버스 + 400px 채팅)이다.
- * 그 아래에서는 같은 채팅 DOM을 캔버스 아래로 옮긴다. 빈 대화는 작성창 54px만
- * 남기고, 이력이 있으면 최근 질문·답변을 읽을 수 있는 하단 트레이를 연다. DOM을
- * 복제하지 않으므로 Snap·복원·모니터 이동 중에도 이력·스크롤·초안이 보존된다. */
-@media (max-width: 1279px) {
+ * 그 아래이거나, 가로 2분할 Snap처럼 넓고 낮으면(max-height 620px) 같은 채팅
+ * DOM을 캔버스 아래로 옮긴다. 빈 대화는 작성창 54px만 남기고, 이력이 있으면
+ * 최근 질문·답변을 읽을 수 있는 하단 트레이를 연다. DOM을 복제하지 않으므로
+ * Snap·복원·모니터 이동 중에도 이력·스크롤·초안이 보존된다. */
+@media (max-width: 1279px), (max-height: 620px) {
   #shell {
     display: grid;
     grid-template-columns: 268px minmax(0, 1fr);
