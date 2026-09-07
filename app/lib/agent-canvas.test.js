@@ -96,6 +96,9 @@ test('통계 카드: "진행 중"만 fixture, 나머지 3장은 live로 표시�
   const inProgress = cards.find((c) => findByClass(c, 'agent-stat-label')[0].textContent === '진행 중');
   assert.equal(inProgress.getAttribute('data-source'), 'fixture');
   assert.equal(findByClass(inProgress, 'agent-demo-mark')[0].textContent, '데모');
+  for (const card of bySource('live')) {
+    assert.equal(findByClass(card, 'agent-demo-mark').length, 0, `${findByClass(card, 'agent-stat-label')[0].textContent} live 카드에 데모가 있으면 안 된다`);
+  }
 });
 
 test('통계 카드: 데이터가 없을 때 "다음 실행"·"오늘 발화"는 지어낸 값 없이 정직한 빈 상태를 보여준다(P3)', () => {
