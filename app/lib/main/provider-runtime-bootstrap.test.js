@@ -77,6 +77,7 @@ test('main MCP snapshot binds full revisions and exact builtin plus approved ups
   assert.ok(snapshot.allowedTools.includes('mcp__athena__athena_routine'));
   assert.ok(snapshot.allowedTools.includes('mcp__athena__athena_brain'));
   assert.ok(snapshot.allowedTools.includes('mcp__athena__athena_nudge_guard'));
+  assert.ok(snapshot.allowedTools.includes('mcp__athena__athena_backtest'));
   assert.ok(snapshot.allowedTools.includes('mcp__athena__dart__get_disclosure'));
   assert.ok(snapshot.allowedTools.includes('mcp__athena__dart__get_company'));
   assert.equal(snapshot.allowedTools.includes('mcp__athena__blocked__must_not_escape'), false);
@@ -185,6 +186,15 @@ test('main marks visible subagent steps before relaying them for first-paint own
   assert.match(source, /onSubagentStep\(step\)\s*\{[\s\S]*?markProviderFirstVisible\(step\);[\s\S]*?sendLiveSubagentStep\(step\);[\s\S]*?\}/);
 });
 
+test('main forwards only trusted normalized provider tool completions to backtest chat actions', () => {
+  const source = fs.readFileSync(path.join(__dirname, '..', '..', 'main.js'), 'utf8');
+  assert.match(
+    source,
+    /onTrustedToolCompleted\(completion\)\s*\{[\s\S]*?persistentTurnContexts\.get\(completion\.clientSubmitId\)[\s\S]*?context\.canvasMode !== 'backtest'[\s\S]*?maybeForwardBacktestChatAction\([\s\S]*?\);[\s\S]*?\}/,
+  );
+  assert.match(source, /const persistentTurnContext = \{[\s\S]*?canvasMode: submit\.canvasMode,[\s\S]*?\};/);
+});
+
 test('pushed canvas side-channel result cannot claim renderer first-visible ownership', () => {
   assert.equal(shouldMarkProviderCanvasVisible({ status: 'pushed' }), false);
   assert.equal(shouldMarkProviderCanvasVisible({ status: 'returned' }), true);
@@ -250,6 +260,11 @@ test('persistent controller routes normalized events and validates the first pai
         conversationId: request.conversationId, turnId: 'turn-1', sequence: 1,
         type: 'text_delta', payload: { text: '안녕' }, monotonicAtMs: 10,
       };
+      await supervisorOptions.onEvent({
+        ...event,
+        conversationId: 'stale-conversation',
+        payload: { text: '오래된 대화' },
+      });
       await supervisorOptions.onEvent(event);
       await supervisorOptions.onEvent({ ...event, sequence: 2, type: 'turn_completed', payload: {
         providerBinding: { provider: 'claude', sessionId: 'session-1' },
@@ -298,6 +313,8 @@ test('persistent controller routes normalized events and validates the first pai
     rendererSubmittedAt: 1,
   });
   assert.equal(result.ok, true);
+  assert.equal(events.some((entry) => entry.text === '오래된 대화'), false);
+  assert.equal(events.filter((entry) => entry.text).length, 1);
   assert.equal(events[0].meta.turnId, 'turn-1');
   assert.equal(runtime.acknowledgePaint({
     clientSubmitId: '11111111-1111-4111-8111-111111111111', turnId: 'turn-1', sequence: 1,

@@ -346,20 +346,21 @@ test('surface_contract가 있으면 보드 마운트로, 없으면 기존 경로
   assert.match(primary, /canvas_type === 'table' && !envelope\.fell_back\) return renderMcpTable/);
   const board = CANVAS.slice(CANVAS.indexOf('function renderBoardSurfaceCard'), CANVAS.indexOf('async function renderTaskCanvasEnvelope'));
   assert.match(board, /if \(!contract \|\| !boardMount\) return null;/);
-  // 보드를 못 세우면 범용 카드로 조용히 떨어뜨리지 않는다.
-  assert.match(board, /body\.replaceChildren\(errorNote\(/);
+  // 보드를 못 세우면 범용 카드로 조용히 떨어뜨리지 않고 재시도 상태를 둔다.
+  assert.match(board, /runBoardSurfaceLoad\(/);
   assert.doesNotMatch(board, /renderFreeCanvas|renderMcpTable/);
   // 마운트 계약은 색인이 갖는다 — 봉투의 surface_contract를 계약으로 넘기면
   // slots가 없어 아무것도 안 그린다.
   const mount = CANVAS.slice(CANVAS.indexOf('function stateLinksOf'), CANVAS.indexOf('function renderBoardSurfaceCard'));
   assert.doesNotMatch(mount, /^\s*contract,\s*$/m, 'surface_contract를 마운트 계약으로 넘기면 slots가 없다');
   assert.doesNotMatch(mount, /contract:\s/);
-  // 원문 HTML은 카드 청크에 있다 — 첫 마운트는 청크 로드를 기다린다.
-  assert.match(mount, /boardMount\.mountBoardAsync\(host, state\.boardId, state\.values/);
-  assert.doesNotMatch(mount, /boardMount\.mountBoard\(/);
+  // 원문 HTML 청크를 기다린 뒤, 아직 최신 요청일 때만 동기로 DOM에 마운트한다.
+  assert.match(mount, /boardTemplateRegistry\.loadBoard\(targetBoardId\)/);
+  assert.match(mount, /if \(!isCurrent\(\) \|\| state\.boardId !== targetBoardId\) return null;/);
+  assert.match(mount, /boardMount\.mountBoard\(/);
 });
 
-test('상태 보드 전환은 계약이 준 링크 안에서만 일어나고 값 표를 이어 쓴다', () => {
+test('상태 보드 전환은 계약 링크 안에서만 일어나고 보드별 값 표를 보존한다', () => {
   const mount = CANVAS.slice(CANVAS.indexOf('function stateLinksOf'), CANVAS.indexOf('function renderBoardSurfaceCard'));
   // state_links·state_boards 어느 이름으로 와도 같은 목록으로 읽는다.
   assert.match(mount, /contract\.state_links \|\| contract\.state_boards/);
@@ -369,8 +370,8 @@ test('상태 보드 전환은 계약이 준 링크 안에서만 일어나고 값
   assert.match(mount, /onExpand: \(boardId\) => switchStateBoard\(host, boardId, envelope\)/);
   assert.match(mount, /boardMount\.wireStateControlActivation\([\s\S]*?switchStateBoard\(host, link\.board_id, envelope\)/);
   assert.match(mount, /keyboard: isResponsiveStateControl\(node\)/);
-  // 값 표는 카드가 사는 동안 이어진다(상태 보드로 갈아타도 같은 값을 다시 쓴다).
-  assert.match(mount, /function mountBoardState\(host, boardId, envelope\) \{[\s\S]*?state\.values/);
+  // 값 표는 board_id별 캐시에 보존되고 전환 때 해당 보드 표만 꺼낸다.
+  assert.match(mount, /function mountBoardState\(host, boardId, envelope,[\s\S]*?state\.values/);
   assert.doesNotMatch(
     CANVAS.slice(CANVAS.indexOf('function switchStateBoard'), CANVAS.indexOf('function findStateControl')),
     /state\.values = /, '상태 보드 전환이 값 표를 비우면 안 된다',
@@ -385,22 +386,25 @@ test('상태 링크는 마운트마다 색인에서 다시 계산한다', () => 
   assert.match(mount, /if \(links\.length\) state\.links = links;/);
 });
 
-test('계약이 갈아탈 탭을 지정하면 기본 보드를 세운 뒤 그리로 간다', () => {
+test('계약이 지정한 초기 상태 보드를 보드별 값으로 같은 로딩 경계 안에서 직접 준비한다', () => {
   const open = CANVAS.slice(CANVAS.indexOf('function openBoardSurface'), CANVAS.indexOf('function realtimeBindingsOf'));
-  // 기본 보드가 먼저다 — 형제 탭 레일이 거기서 나온다.
-  assert.match(open, /mountBoardState\(host, contract\.board_id, envelope\)\.then\(/);
+  assert.match(open, /initialSurfaceContractOf\(envelope\)/);
+  assert.match(open, /seedBoardState\(state, initialContract, envelope\)/);
   assert.match(open, /const initial = String\(contract\.initial_state_board \|\| ''\);/);
-  // 전환은 사람이 탭을 누른 것과 같은 함수로 들어간다(링크에 없으면 아무 일도 없다).
-  assert.match(open, /switchStateBoard\(host, initial, envelope\)/);
-  // 갈아타다 실패해도 이미 선 기본 보드는 지우지 않는다(사람이 탭을 눌렀을 때와 같다).
-  assert.match(open, /switched \? switched\.catch\(\(\) => mounted\) : mounted/);
-  // 기준 보드를 갈아치우지 않는다 — 봉투가 준 board_id로 마운트한다.
-  assert.doesNotMatch(open, /mountBoardState\(host, initial/);
+  // 초기 보드를 직접 열어 기본 보드의 미결 화면과 중복 조회가 잠깐 끼지 않는다.
+  assert.match(open, /mountBoardState\(host, hasInitial \? initial : contract\.board_id, envelope, isCurrent\)/);
+  assert.doesNotMatch(open, /catch\(\(\) => mounted\)/);
+
+  const state = CANVAS.slice(CANVAS.indexOf('function boardStateOf'), CANVAS.indexOf('function boardMountOptions'));
+  assert.match(state, /valuesByBoard: new Map\(\)/);
+  assert.match(state, /state\.values = state\.valuesByBoard\.get\(id\) \|\| \{\}/);
 
   const board = CANVAS.slice(CANVAS.indexOf('function renderBoardSurfaceCard'), CANVAS.indexOf('async function renderTaskCanvasEnvelope'));
   // 마운트 전 높이 0이면 페인트 확인이 카드가 안 선 것으로 읽는다 — 인라인으로만 준다.
   assert.match(board, /host\.style\.minHeight = '120px';/);
-  assert.match(board, /host\.style\.minHeight = '';/);
+  const loadUi = CANVAS.slice(CANVAS.indexOf('function removeBoardLoadNode'), CANVAS.indexOf('function renderBoardSurfaceCard'));
+  assert.match(loadUi, /host\.style\.minHeight = '';/);
+  assert.match(loadUi, /state\.hydrationWarnings = \[\];/);
   const css = fs.readFileSync(path.join(__dirname, '..', 'styles', 'board-surface.css'), 'utf8');
   const hostRule = css.slice(css.indexOf('.board-surface-host {'), css.indexOf('}', css.indexOf('.board-surface-host {')));
   assert.doesNotMatch(hostRule, /min-height/, '전역 CSS에 두면 마운트를 끝낸 보드까지 건드린다');
@@ -421,19 +425,27 @@ test('상태 보드 키보드 의미는 flow/scroll/scroll-table 안의 plain le
     'paired display mirrors never become interactive controls');
 });
 
-test('미결 슬롯이 있으면 하이드레이션을 부르고, 못 받으면 결측어를 그대로 둔다', () => {
+test('미결 슬롯이 있으면 하이드레이션을 기다리고 실패는 재시도 오류로 넘긴다', () => {
   const hydrate = CANVAS.slice(
     CANVAS.indexOf('async function hydrateBoardSlots'),
     CANVAS.indexOf('function renderBoardSurfaceCard'),
   );
   assert.match(hydrate, /window\.athena\.invoke\('athena:canvas-board-hydrate', \{/);
-  assert.match(hydrate, /boardId: state\.boardId/);
+  assert.match(hydrate, /boardId,/);
+  assert.match(hydrate, /slotIds: pending/);
   assert.match(hydrate, /target: boardHydrateTarget\(envelope\)/);
   assert.match(hydrate, /account: boardHydrateAccount\(envelope\)/);
   // 미결 슬롯이 없으면 아예 부르지 않는다.
-  assert.match(hydrate, /if \(!pending\.length \|\| !window\.athena \|\| typeof window\.athena\.invoke !== 'function'\) return mounted;/);
-  // 응답이 없거나 비면 그대로 둔다 — 값을 지어내지 않는다.
+  assert.match(hydrate, /if \(!pending\.length\) return mounted;/);
+  assert.match(hydrate, /throw new Error\('카드 데이터 조회 연결을 사용할 수 없습니다\.'/);
+  // 성공 응답에서 값이 비어 있는 것은 정직한 settled 결과로 둔다.
   assert.match(hydrate, /if \(!filled \|\| !Object\.keys\(filled\)\.length\) return mounted;/);
+  assert.ok(
+    hydrate.indexOf('state.hydrationByBoard.set(')
+      < hydrate.indexOf('if (!filled || !Object.keys(filled).length) return mounted;'),
+    'settled empty 응답도 재조회 대상 목록을 먼저 갱신해야 한다',
+  );
+  assert.match(hydrate, /if \(!reply \|\| !reply\.ok\) \{/);
   // 받은 값은 값 표에 병합하고 그 슬롯만 미결에서 뺀다.
   assert.match(hydrate, /state\.values = \{ \.\.\.state\.values, \.\.\.filled \};/);
   assert.match(hydrate, /state\.unbound = state\.unbound\.filter\(/);
@@ -516,19 +528,16 @@ test('호가 실시간 해제는 두 번 나가지 않는다', () => {
   assert.match(wire, /if \(options\.registerCardDestroyer === false\) return release;/);
 });
 
-test('보드 껍질을 먼저 세우고 앱 렌더러는 뒤에서 얹는다', () => {
-  const mount = CANVAS.slice(CANVAS.indexOf('function mountBoardState'), CANVAS.indexOf('function switchStateBoard'));
-  // await하면 AITS 라이브러리 로드가 3초 계약을 넘긴다 — 던져 놓고 하이드레이션으로 간다.
-  assert.match(mount, /void mountBoardPrimary\(host, envelope, mounted\);/);
-  assert.doesNotMatch(mount, /await mountBoardPrimary|return mountBoardPrimary/);
-  assert.ok(mount.indexOf('wireStateControls') < mount.indexOf('mountBoardPrimary'));
-  assert.ok(mount.indexOf('mountBoardPrimary') < mount.indexOf('hydrateBoardSlots'));
+test('Paper가 준비되어 드러난 뒤 앱 렌더러를 얹는다', () => {
+  const ready = CANVAS.slice(CANVAS.indexOf('function showBoardReady'), CANVAS.indexOf('function showBoardLoadError'));
+  assert.ok(ready.indexOf("host.hidden = false") < ready.indexOf('mountBoardPrimary'));
+  assert.match(ready, /if \(mounted\) void mountBoardPrimary\(host, envelope, mounted\);/);
 });
 
 test('상태 보드를 갈아타기 전에 열린 primary 패널을 먼저 닫는다', () => {
   const swap = CANVAS.slice(CANVAS.indexOf('function switchStateBoard'), CANVAS.indexOf('function findStateControl'));
   // 표면을 갈면 컨테이너가 바뀐다 — 같은 panelId를 다른 컨테이너로 열면 adapter가 던진다.
-  assert.match(swap, /destroyBoardPrimary\(state\);\n\s*return mountBoardState\(host, target, envelope\);/);
+  assert.match(swap, /destroyBoardPrimary\(state\);[\s\S]*?runBoardSurfaceLoad\([\s\S]*?mountBoardState\(host, target, envelope, isCurrent\)/);
 });
 
 test('봉투가 차트를 안 실었거나 봉이 없으면 목업을 걷지 않는다', () => {
@@ -626,9 +635,10 @@ test('보드 껍질이 차트 신원을 찍어 paint ack에 넘긴다', () => {
     CANVAS.indexOf('async function renderTaskCanvasEnvelope'),
   );
   assert.match(board, /if \(chartDescriptor\) beginBoardChartMount\(card, state, chartDescriptor\);/);
-  assert.ok(board.indexOf('beginBoardChartMount') < board.indexOf('openBoardSurface(host, contract, envelope)'));
+  assert.ok(board.indexOf('beginBoardChartMount') < board.indexOf('runBoardSurfaceLoad'));
   // 보드를 못 세우면 차트도 못 선다 — 기다리던 결과를 맺어야 확정 ack가 나간다.
-  assert.match(board, /settleBoardChartMount\(state, 'error'\);/);
+  const loading = CANVAS.slice(CANVAS.indexOf('function showBoardLoadError'), CANVAS.indexOf('function renderBoardSurfaceCard'));
+  assert.match(loading, /settleBoardChartMount\(state, 'error'\);/);
 });
 
 test('같은 panelId가 다른 자리에 살아 있으면 열기 전에 놓아준다', () => {
@@ -647,7 +657,19 @@ test('같은 panelId가 다른 자리에 살아 있으면 열기 전에 놓아�
 test('보드 카드를 닫으면 그 자리에 열린 패널도 닫힌다', () => {
   const board = CANVAS.slice(CANVAS.indexOf('function renderBoardSurfaceCard'), CANVAS.indexOf('async function renderTaskCanvasEnvelope'));
   // 정리자가 없으면 카드를 닫아도 패널과 그 리스가 남는다.
-  assert.match(board, /cardDestroyers\.set\(card, \(\) => destroyBoardPrimary\(boardStateOf\(host\)\)\);/);
+  assert.match(board, /cardDestroyers\.set\(card, \(\) => \{[\s\S]*?state\.load\.dispose\(\);[\s\S]*?destroyBoardPrimary\(state\)/);
   // 보드 카드는 리스를 통합 카드에서 받는다 — 여기서 0B를 따로 걸지 않는다.
   assert.doesNotMatch(board, /wireQuoteRealtime/);
+});
+
+test('Paper 로딩 paint는 pending으로 알리고 hydrate 완료 뒤 최종 상태를 다시 보낸다', () => {
+  const receipt = CANVAS.slice(
+    CANVAS.indexOf("window.athena.on('athena:add-rest-canvas'"),
+    CANVAS.indexOf('const REST_RETRY_STATES'),
+  );
+  assert.match(receipt, /card\.__athenaBoardLoadSettled \|\| null/);
+  assert.match(receipt, /const renderSettled = chartSettled \|\| boardSettled/);
+  assert.match(receipt, /pending: !!renderSettled/);
+  assert.match(receipt, /const settled = await renderSettled/);
+  assert.match(receipt, /card\.dataset\.renderState \|\| \(settled\.status === 'ready' \? 'data' : 'error'\)/);
 });

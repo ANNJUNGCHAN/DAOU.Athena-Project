@@ -30,7 +30,6 @@ from __future__ import annotations
 import argparse
 import json
 import os
-import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -101,6 +100,28 @@ def alt_pairs(holder: dict) -> list[tuple[str, str]]:
     return out
 
 
+def composite_pairs(holder: dict) -> list[tuple[str, str]]:
+    """합성 슬롯의 각 원자 바인딩을 ``(mapping_id, f)``로 편다."""
+    composite = holder.get("composite")
+    if not isinstance(composite, dict):
+        return []
+    out: list[tuple[str, str]] = []
+    for part in composite.get("parts") or []:
+        if isinstance(part, dict) and part.get("mapping_id") and part.get("f"):
+            out.append((part["mapping_id"], part["f"]))
+    return out
+
+
+def binding_pairs(holder: dict) -> list[tuple[str, str]]:
+    """단일·대체·합성 슬롯이 실제로 쓰는 모든 필드."""
+    out: list[tuple[str, str]] = []
+    if holder.get("mapping_id") and holder.get("f"):
+        out.append((holder["mapping_id"], holder["f"]))
+    out.extend(alt_pairs(holder))
+    out.extend(composite_pairs(holder))
+    return out
+
+
 def indexed_field(indexed: dict, row: int) -> str:
     """인덱스 열의 본문 행 `row`(0부터)가 받을 필드 — 추출기 `indexed_field`와 같은 셈."""
     pattern = indexed.get("f_pattern")
@@ -163,7 +184,7 @@ def column_needs_mapping(column: dict, slots_by_id: dict[str, dict]) -> bool:
         slot = slots_by_id.get(slot_id) or {}
         if slot.get("kind") != "value" or slot.get("static"):
             continue
-        if (slot.get("mapping_id") and slot.get("f")) or alt_pairs(slot):
+        if binding_pairs(slot):
             continue
         return True
     return False
@@ -203,14 +224,20 @@ def check_board(
                 report["unknown"].append(f"{where} {pair[0]}|{pair[1]}")
 
     for slot in slots:
-        mapping_id, field = slot.get("mapping_id"), slot.get("f")
+        primary = (
+            [(slot["mapping_id"], slot["f"])]
+            if slot.get("mapping_id") and slot.get("f")
+            else []
+        )
         alts = alt_pairs(slot)
-        if mapping_id and field:
+        composite = composite_pairs(slot)
+        if primary or alts or composite:
             report["mapped"] += 1
-            ledger_check(slot["slot_id"], [(mapping_id, field)])
-        elif not alts and slot.get("kind") == "value" and not slot.get("static"):
+            ledger_check(slot["slot_id"], primary)
+            ledger_check(f"{slot['slot_id']} alt", alts)
+            ledger_check(f"{slot['slot_id']} composite", composite)
+        elif slot.get("kind") == "value" and not slot.get("static"):
             report["unmapped"] += 1
-        ledger_check(f"{slot['slot_id']} alt", alts)
 
         target_id = slot.get("paired_with")
         if target_id:
@@ -254,8 +281,7 @@ def check_board(
     # 같은 표·같은 열을 행마다 되풀이한 자리는 중복 표기가 아니다.
     seen: dict[tuple[str, str], list[dict]] = {}
     for slot in slots:
-        key = (slot.get("mapping_id"), slot.get("f"))
-        if key[0] and key[1]:
+        for key in binding_pairs(slot):
             seen.setdefault(key, []).append(slot)
     for (mapping_id, field), group_slots in sorted(seen.items()):
         if len(group_slots) < 2 or is_column_repeat(group_slots):

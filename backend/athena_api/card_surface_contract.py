@@ -96,10 +96,22 @@ def _slot_value(
         return _UNBOUND
     value = bound[occurrence_id]
     if slot.row_index is None:
+        # ``bind_surface_values``는 배열 JSONPath를 열 전체(list)로 보존한다. 행을
+        # 지정하지 않은 Paper 잎은 단일 관찰값만 표시할 수 있으므로, 그 목록을
+        # 넘기면 프론트의 String(array)가 쉼표로 이어진 원문 전체를 한 칸에 쏟는다.
+        # 행이 하나뿐이어도 그 반복 행이 이 scalar 잎의 의미와 같다는 보장은 없다.
+        # 첫/마지막 행을 현재값으로 추정하지 않고 결측으로 닫는다.
+        if isinstance(value, list):
+            return _UNBOUND
+        if value is None or (isinstance(value, str) and not value.strip()):
+            return _UNBOUND
         return value
     if not isinstance(value, list) or slot.row_index >= len(value):
         return _UNBOUND
-    return value[slot.row_index]
+    row_value = value[slot.row_index]
+    if row_value is None or (isinstance(row_value, str) and not row_value.strip()):
+        return _UNBOUND
+    return row_value
 
 
 def _resolve_slot(
@@ -121,6 +133,34 @@ def _resolve_slot(
         if value is not _UNBOUND:
             return binding.occurrence_id, value
     return None, _UNBOUND
+
+
+def _composite_value(slot: SurfaceSlot, bound: Mapping[str, Any]) -> Any:
+    """명시된 모든 part가 원자 값일 때만 wire composite를 만든다."""
+
+    composite = slot.composite
+    if composite is None:
+        return _UNBOUND
+    parts: list[dict[str, Any]] = []
+    for part in composite.parts:
+        occurrence_id = part.occurrence_id
+        value = _slot_value(slot, occurrence_id, bound)
+        if value is _UNBOUND:
+            return _UNBOUND
+        assert occurrence_id is not None
+        parts.append(
+            {
+                "mapping_id": part.mapping_id,
+                "f": part.f,
+                "occurrence_id": occurrence_id,
+                "observation_id": observation_id_for(
+                    occurrence_id, slot.row_index
+                ),
+                "value": value,
+                "format": dict(part.format),
+            }
+        )
+    return {"composite": {"separator": composite.separator, "parts": parts}}
 
 
 class _Unbound:
@@ -216,21 +256,28 @@ def _board_contract(
             # 보드 HTML이 이미 갖고 있는 고정 문구(라벨)다 — 채울 값이 없다.
             unbound_slots.append(slot.slot_id)
             continue
-        occurrence_id, value = _resolve_slot(slot, bound, priority)
+        if slot.composite is not None:
+            occurrence_id = None
+            value = _composite_value(slot, bound)
+        else:
+            occurrence_id, value = _resolve_slot(slot, bound, priority)
         if value is _UNBOUND:
             unbound_slots.append(slot.slot_id)
             continue
         entry: dict[str, Any] = {
             "slot_id": slot.slot_id,
-            "occurrence_id": occurrence_id,
-            # 실시간 프레임(realtime_bindings의 binding_id ↔ observation_id)이 어느
-            # 슬롯을 가리키는지 프론트가 해시 없이 잇게 한다. 새 식별자가 아니라
-            # 이미 봉투에 실려 있는 관찰 식별자 그대로다.
-            "observation_id": observation_id_for(occurrence_id, slot.row_index),
             "value": value,
             "layer": slot.layer,
             "format": dict(slot.format),
         }
+        if occurrence_id is not None:
+            entry["occurrence_id"] = occurrence_id
+            # 실시간 프레임(realtime_bindings의 binding_id ↔ observation_id)이 어느
+            # 슬롯을 가리키는지 프론트가 해시 없이 잇게 한다. composite는 각 part가
+            # 자기 observation_id를 나른다.
+            entry["observation_id"] = observation_id_for(
+                occurrence_id, slot.row_index
+            )
         if slot.row_index is not None:
             entry["row_index"] = slot.row_index
         slot_values.append(entry)
