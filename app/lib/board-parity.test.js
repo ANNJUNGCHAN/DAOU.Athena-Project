@@ -504,6 +504,29 @@ test('board-surface.css는 5단이고 !important를 쓰지 않는다', () => {
   }
 });
 
+// 카드 크기 = 뷰포트 크기(계획 §1 "따라서 모든 카드 크기가 동일하다"). 보드마다
+// 다른 Paper 루트 높이(생성물 96장 실측: 766~1040px 16종 + fit-content 8장 + 미지정
+// 4장)가 표면 루트로 새면 같은 카드 상자 안에서 유리 패널만 보드마다 달라진다.
+// 사슬 네 줄 중 하나라도 빠지면 확정 높이가 끊겨 표면이 다시 Paper 높이로 주저앉는다
+// (실측: 카드 상자 1138px에 표면 833~1042px).
+test('보드 표면은 Paper 루트 높이가 아니라 카드 자리를 채운다', () => {
+  const css = fs.readFileSync(path.join(__dirname, '..', 'styles', 'board-surface.css'), 'utf8')
+    .replace(/\/\*[\s\S]*?\*\//g, '');
+  // 표면 루트만 되돌리기(`[data-bs-hoisted]`)에서 빼낸다 — 특이도(0,2,0)로 이기므로
+  // 단계 규칙 순서에 기대지 않는다. 안쪽 영역의 최소 높이 바닥은 그대로 남는다.
+  assert.match(css,
+    /\.board-surface\[data-bs-hoisted\]\s*\{[^}]*height:\s*auto;[^}]*min-height:\s*100%;/);
+  assert.match(css, /\.board-surface-host\s*\{[^}]*height:\s*100%;/);
+  assert.match(css,
+    /\.card\[data-board-surface="true"\] \.integrated-card-panels\s*\{[^}]*flex:\s*1 1 auto;[^}]*min-height:\s*0;/);
+  assert.match(css,
+    /\.card\[data-board-surface="true"\] \.integrated-card-panel\s*\{[^}]*height:\s*100%;/);
+  // `height: 100%`로 가두면 원문 루트의 인라인 `overflow: clip`이 자리보다 긴 본문을
+  // 잘라 값이 사라진다(§8 정보 정직성) — 길면 표면이 자라고 자리가 스크롤한다.
+  assert.match(css, /\.board-surface-host\s*\{[^}]*overflow:\s*auto;/);
+  assert.doesNotMatch(css, /\.board-surface\[data-bs-hoisted\]\s*\{[^}]*(?<![-\w])height:\s*100%/);
+});
+
 test('paired-table labels form scoped label-value grids while scroll-table keeps its native grid reachable', () => {
   const css = fs.readFileSync(path.join(__dirname, '..', 'styles', 'board-surface.css'), 'utf8');
   const rules = css.replace(/\/\*[\s\S]*?\*\//g, '');

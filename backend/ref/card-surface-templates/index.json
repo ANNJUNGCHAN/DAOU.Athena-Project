@@ -1217,9 +1217,9 @@
         "text_nodes": 259,
         "slots": 259,
         "anchored_slots": 0,
-        "mapped_slots": 156,
-        "labels": 83,
-        "values": 176,
+        "mapped_slots": 152,
+        "labels": 81,
+        "values": 178,
         "layer_직접": 239,
         "layer_병기": 20,
         "layer_펼침": 0,
@@ -4078,7 +4078,7 @@
         "base:ka10101"
       ],
       "counts": {
-        "elements": 133,
+        "elements": 131,
         "text_nodes": 74,
         "slots": 74,
         "anchored_slots": 0,
@@ -4100,7 +4100,7 @@
         "marks": [],
         "unresolved": []
       },
-      "html_sha256": "4d09e06589adf2611b6de1bf78b9fc5dc242cdb969a6210d90fc85d93b973343"
+      "html_sha256": "c2e6ded9bf32b9d29a6544a3db52ff66c8596ed6ee1ebc74cba0db134096adea"
     },
     {
       "board_id": "3D4I-0",
