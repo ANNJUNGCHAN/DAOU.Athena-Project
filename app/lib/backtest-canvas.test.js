@@ -2360,6 +2360,16 @@ test('기법 카드: 이름·분류 칩(한국어)·한 줄 설명이 함께 선
   assert.match(findByClass(card, 'backtest-technique-desc')[0].textContent, /단기 이평이/);
 });
 
+test('기법 2열 격자는 긴 이름에 트랙이 끌려가지 않는다', () => {
+  const css = fs.readFileSync(path.join(__dirname, '..', 'shell.css'), 'utf8');
+  assert.match(css, /\.backtest-technique-list \{[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/s);
+  assert.match(css, /\.backtest-technique-card \{[^}]*min-width:\s*0/s);
+  const name = css.match(/\.backtest-preset-name,\s*\.backtest-user-strategy-name \{[\s\S]*?\}/)[0];
+  assert.match(name, /min-width:\s*0/);
+  assert.match(name, /overflow:\s*hidden/);
+  assert.match(name, /text-overflow:\s*ellipsis/);
+});
+
 test('[+ 새 기법 만들기] 배너는 브랜드 알파만 쓰고 팔레트 밖 hex를 만들지 않는다', () => {
   const css = fs.readFileSync(path.join(__dirname, '..', 'shell.css'), 'utf8');
   const block = css.match(/\.backtest-technique-new \{[\s\S]*?\}/)[0];
