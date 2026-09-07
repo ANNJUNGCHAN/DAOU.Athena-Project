@@ -167,10 +167,21 @@ test('live-full probe does not share the real athena-shell profile or skip every
   assert.doesNotMatch(src, /appData['"], 'athena-shell'/);
   assert.doesNotMatch(src, /capturePage hangs Electron main on this host/);
   assert.match(src, /capturePage\(\)/);
+  assert.match(src, /requestAnimationFrame\(\(\) => requestAnimationFrame/);
+  assert.match(src, /fs\.rmSync\(dest, \{ force: true \}\)/);
+  assert.doesNotMatch(src, /mode\.view\.replace\('summary', 'mosaic'\)/);
   assert.match(src, /queryVerdict/);
   assert.doesNotMatch(src, /wait-8s-after-token/);
   assert.match(src, /stock-index/);
   assert.match(src, /indexReady\.ok/);
+});
+
+test('live-chart probe does not read a missing legend foot or capture a stale frame', () => {
+  const src = fs.readFileSync(path.join(appDir, 'probe-live-chart.js'), 'utf8');
+  assert.doesNotMatch(src, /chart-legend-foot/);
+  assert.match(src, /requestAnimationFrame\(\(\) => requestAnimationFrame/);
+  assert.match(src, /fs\.rmSync\(dest, \{ force: true \}\)/);
+  assert.match(src, /live-chart-day\.png/);
 });
 
 test('verify:settings-cards는 실 프로필과 락을 공유하지 않고 실패를 삼키지 않는다', () => {

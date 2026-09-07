@@ -18,6 +18,9 @@ app.setPath('userData', PROFILE);
 
 const CAPTURES = path.join(__dirname, 'captures');
 if (!fs.existsSync(CAPTURES)) fs.mkdirSync(CAPTURES, { recursive: true });
+for (const name of ['live-chart-day.png', 'live-chart-주.png', 'live-chart-월.png', 'live-chart-년.png', 'live-chart-분.png', 'live-chart-틱.png']) {
+  fs.rmSync(path.join(CAPTURES, name), { force: true });
+}
 
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -46,7 +49,6 @@ const MEASURE = `(() => {
     trId: card.__athenaChartTrId || null,
     tabs,
     note: note && !note.hidden ? note.textContent.trim() : '',
-    lastPrice: (card.querySelector('.chart-legend-foot') || {}).textContent || null,
   };
 })()`;
 
@@ -79,15 +81,20 @@ async function main() {
   console.log('[live] 초기 상태:', JSON.stringify(base, null, 1));
 
   async function captureOrSkip(name) {
+    await shellWin.webContents.executeJavaScript(
+      'new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve(true))))',
+    );
+    const dest = path.join(CAPTURES, name);
     const img = await Promise.race([
       shellWin.webContents.capturePage(),
       wait(12000).then(() => null),
     ]);
     if (!img) {
+      fs.rmSync(dest, { force: true });
       console.log(`[live] capture skip: ${name}`);
       return;
     }
-    fs.writeFileSync(path.join(CAPTURES, name), img.toPNG());
+    fs.writeFileSync(dest, img.toPNG());
   }
 
   await captureOrSkip('live-chart-day.png');
