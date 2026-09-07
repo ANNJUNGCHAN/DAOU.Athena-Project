@@ -497,12 +497,10 @@ const createWindows = createOnce(async function createWindows() {
   // ---------- 창 기본 기능 (2026-08-17) — frame:false라 OS 타이틀바가 없어 직접 배선 ----------
   // Win+방향키와 Win+Shift+방향키는 가로채지 않고 Windows 기본 Snap·모니터 이동에 맡긴다.
   wireOsSnapEvents(shellWin);
-
-  // 루틴 알림 구독 시작(2026-08-19 능동 에이전트 P2) — fixture면 내부에서 no-op.
-  startRoutineFeed();
-  // 캔버스 사이드 채널 구독(2026-08-19 데이터 지름길) — 게이트웨이가 채운 카드가
-  // 모델 스트림을 안 타고 이 WS로 직접 온다("캔버스 먼저, 채팅은 요약만").
-  startCanvasFeed();
+  // 루틴·캔버스 WS 구독은 여기서 시작하지 않는다 — 부팅 러너(routine-feed·canvas-feed)가
+  // 백엔드 gate 통과 뒤 startRoutineFeed()/startCanvasFeed()를 부른다. 백엔드가 뜨기
+  // 전에 붙기 시작하면 지수 백오프(최대 30초)가 첫 연결 20초 제한을 넘겨 gate가
+  // 실패한다(2026-09-07 실측).
 }, () => mdlog('createWindows reused (already started)'));
 
 // ---------- 루틴 알림 — 백엔드 WS 구독 → 토스트 + 능동 턴 (실행계획 P2) ----------
@@ -5667,9 +5665,25 @@ function attemptShellHandoff() {
   return true;
 }
 
+// 부팅 작업의 종결 상태를 main-debug.log에 남긴다 — 부팅 알림은 실패한 작업 이름만
+// 보여 주므로, 이 줄이 없으면 "왜"가 어디에도 남지 않는다(2026-09-07 실측).
+const loggedBootTaskStates = new Map();
+function logBootTaskTransitions(snapshot) {
+  for (const task of snapshot.tasks) {
+    if (!['succeeded', 'failed', 'disabled'].includes(task.state)) continue;
+    const key = `${task.state}#${task.attempt}`;
+    if (loggedBootTaskStates.get(task.id) === key) continue;
+    loggedBootTaskStates.set(task.id, key);
+    mdlog(`부팅 작업 ${task.id} → ${task.state}${task.detail ? ` — ${task.detail}` : ''}`);
+  }
+}
+
 const startupReadiness = new StartupReadiness({
   tasks: BOOT_TASKS,
-  onChange: broadcastBootReadiness,
+  onChange: (snapshot) => {
+    logBootTaskTransitions(snapshot);
+    broadcastBootReadiness(snapshot);
+  },
   onReady: (snapshot) => {
     mdlog(`부팅 gate 종결 — phase=${snapshot.phase}`);
     void notifyStartupFailuresAfterExpansion(snapshot);
@@ -5680,7 +5694,7 @@ async function ensureBackendStrict(context) {
   const result = await backendLauncher.ensureBackendReady({
     mdlog,
     onProgress: ({ elapsedMs, remainingMs }) => context.update({
-      state: 'waiting',
+      state: 'running',
       detail: `ATHENA 서비스 준비 중 · ${Math.ceil(elapsedMs / 1_000)}초 경과 · 최대 ${Math.ceil(remainingMs / 1_000)}초 남음`,
     }),
   });
@@ -5729,6 +5743,7 @@ async function waitForBrainStartup(context) {
   // a legitimate extraction may take up to 180s. Keep one shared 5-minute
   // watchdog so BOOT does not report a false failure while the real job runs.
   const deadlineAt = Date.now() + BRAIN_GRAPH_REFRESH_TIMEOUT_MS;
+  let startupRetryRequested = false;
   for (;;) {
     if (Date.now() >= deadlineAt) throw new Error('브레인 시작 수집 제한시간(5분) 초과');
     const controller = new AbortController();
@@ -5737,6 +5752,18 @@ async function waitForBrainStartup(context) {
     clearTimeout(timeout);
     if (!result.ok) throw new Error(result.error || '브레인 상태 조회 실패');
     const body = result.body || {};
+    if (body.startup_ingestion_status === 'failed' && !startupRetryRequested) {
+      // 시작 수집 잡의 실패는 그 backend 프로세스가 살아 있는 동안 굳어 있다 — 앱을
+      // 다시 켜도 같은 실패를 본다. 재시도 라우트로 새 잡을 한 번 만들고 그 결과를 기다린다.
+      startupRetryRequested = true;
+      const retry = await fetchBrainJson('/api/v1/brain/startup-ingestion/retry', { method: 'POST' });
+      mdlog(`브레인 시작 수집 재시도 요청 — ok=${retry.ok}${retry.ok ? '' : ` error=${retry.error}`}`);
+      if (retry.ok) {
+        context.update({ state: 'retrying', detail: '실패한 브레인 시작 수집을 다시 실행하는 중' });
+        await waitMs(1_000);
+        continue;
+      }
+    }
     const classification = classifyBrainStartupStatus(body);
     if (classification.state === 'disabled') {
       return { disabled: true, detail: classification.detail };
@@ -5753,6 +5780,14 @@ async function waitForBrainStartup(context) {
     context.update({ state: classification.state, detail: classification.detail });
     await waitMs(1_000);
   }
+}
+
+// brain-ingestion이 '비활성'으로 끝났으면(브레인을 끈 채 기동한 backend에 붙은 경우)
+// 뒤따르는 대화 반영·그래프 구성도 할 일이 없다 — 실패가 아니라 같은 이유의 비활성이다.
+function brainDependentSkipReason() {
+  const brain = startupReadiness.snapshot().tasks.find((task) => task.id === 'brain-ingestion');
+  if (!brain || brain.state !== 'disabled') return null;
+  return `브레인 비활성 backend — ${brain.detail || '건너뜀'}`;
 }
 
 function registerLiveBootRunners(createWindowsPromise) {
@@ -5778,18 +5813,28 @@ function registerLiveBootRunners(createWindowsPromise) {
   startupReadiness.setRunner('stock-index', waitForStockIndex);
   startupReadiness.setRunner('brain-ingestion', waitForBrainStartup);
   startupReadiness.setRunner('chat-history-flush', async () => {
+    const brainSkip = brainDependentSkipReason();
+    if (brainSkip) return { disabled: true, detail: brainSkip };
+    if (!historySink.collectChatEnabled()) {
+      return { disabled: true, detail: '대화 수집(collectChat)이 꺼져 있어 반영할 대화가 없음' };
+    }
     const result = await historySink.flushPendingChatMessages({
       batchSize: 100,
       maxBatches: 100,
       onSaveFailed: emitHistorySaveFailed,
       mdlog,
     });
+    if (result.remaining > 0 && result.attempted === 0) {
+      throw new Error(`브레인이 준비되지 않아 보류 대화 ${result.remaining}건을 반영하지 못함`);
+    }
     if (result.failed > 0 || result.remaining > 0) {
       throw new Error(`보류 대화 ${result.remaining}건을 그래프 저장소에 반영하지 못함`);
     }
     return { detail: `대화 이력 ${result.synced}건 반영 · 보류 0건` };
   });
   startupReadiness.setRunner('graph-projection', async () => {
+    const brainSkip = brainDependentSkipReason();
+    if (brainSkip) return { disabled: true, detail: brainSkip };
     const report = await runConversationGraphRefresh('boot');
     return {
       detail: report.warmStatus === 'ready_empty'
@@ -5836,10 +5881,13 @@ async function startLiveBoot(createWindowsPromise) {
   registerLiveBootRunners(createWindowsPromise);
   await runStartupOrchestration({
     readiness: startupReadiness,
-    concurrentTaskIds: ['stock-index'],
+    // stock-index는 백엔드 프록시를 타므로 backend gate 뒤에 둔다 — 앞에 두면 앱이
+    // 백엔드를 직접 띄우는 부팅에서 12초 예산이 백엔드 기동 시간에 잡아먹혀 매번
+    // 실패한다(2026-09-07 실측: 종목명 인덱스 12초 안에 미적재 → degraded).
+    concurrentTaskIds: [],
     dependencyTaskChains: [['mcp-env', 'provider-warm']],
     dependencyTaskId: 'backend',
-    dependentTaskIds: ['alarm-bootstrap', 'routine-feed', 'canvas-feed'],
+    dependentTaskIds: ['stock-index', 'alarm-bootstrap', 'routine-feed', 'canvas-feed'],
     sequentialDependentTaskIds: ['brain-ingestion', 'chat-history-flush', 'graph-projection'],
     continuousTaskIds: ['background-loops'],
   });
