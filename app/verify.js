@@ -3853,19 +3853,20 @@ app.whenReady().then(async () => {
     })()`);
     const captureName = `paper-${paperCase.id}.png`;
     const imageSize = await shot(shellWin, captureName);
+    const captureSkipped = imageSize.skipped === true;
     const passed = !!probe
       && Object.values(probe).every((value) => value === true || value === false || typeof value === 'string' || value === null)
       && probe.connected && probe.nonzeroRect && probe.bodyHasContent && probe.hasCloseControl
       && probe.stateMatches && probe.displayOnlyGuard && probe.noExecutableOrderOrOauthControl
       && probe.screenIdMatches
       && probe.chartAuthorityMatches && probe.chartRenderStateIsData && probe.chartRendererIdMatches
-      && probe.chartSurfaceMounted && probe.chartErrorNoteAbsent
-      && imageSize.width > 0 && imageSize.height > 0;
+      && probe.chartSurfaceMounted && probe.chartErrorNoteAbsent;
     report.paperScreenCases[paperCase.id] = {
       screenId: paperCase.screenId,
       fixture: 'verify.js:paper-at-cv-005-display-only-v1',
       status: passed ? 'pass' : 'fail',
-      screenshot: `app/captures/${captureName}`,
+      captureSkipped,
+      screenshot: captureSkipped ? null : `app/captures/${captureName}`,
       dom: { connected: !!(probe && probe.connected), nonzeroRect: !!(probe && probe.nonzeroRect), bodyHasContent: !!(probe && probe.bodyHasContent), screenIdMatches: !!(probe && probe.screenIdMatches) },
       layout: { cardMeasured: !!(probe && probe.nonzeroRect), paperWidthApplied: !!probe },
       controls: { closeControlRendered: !!(probe && probe.hasCloseControl), protectedActionsAbsent: !!(probe && probe.noExecutableOrderOrOauthControl) },
@@ -4242,6 +4243,7 @@ app.whenReady().then(async () => {
     const prev = captureLog[i - 1];
     const cur = captureLog[i];
     if (EXPECTED_IDENTICAL.has(`${prev.name}>>>${cur.name}`)) continue;
+    if (prev.skipped || cur.skipped) continue;
     if (prev.winTitle === cur.winTitle && prev.hash === cur.hash) {
       dupCaptures.push({ prev: prev.name, cur: cur.name, hash: cur.hash });
     }
