@@ -505,6 +505,10 @@ html, body {
   -webkit-app-region: no-drag;
 }
 
+/* author display 규칙이 브라우저의 [hidden] 규칙보다 우선하므로, 내용 없는 카드와
+ * 동적 행이 빈 상자로 되살아나지 않게 패널 안의 hidden을 명시적으로 지킨다. */
+.orb-panel [hidden] { display: none !important; }
+
 /* 넘칠 때만 보이는 얇은 스크롤바 — 기본 Windows 스크롤바의 화살표 버튼은
  * 이 크기의 표면에서 카드보다 눈에 띈다(canvas.css .grid와 같은 처리). */
 .orb-card::-webkit-scrollbar { width: 6px; }
@@ -698,14 +702,14 @@ html, body {
   border-radius: 38px;
 }
 
-/* 알림 전용 표면 강제 숨김(대화 모드 진입 시) — orb.js applyMode()가 토글한다.
+/* 알림 표면 강제 숨김(대화 모드 진입 시) — orb.js applyMode()가 토글한다.
  * 개별 요소의 콘텐츠 기반 hidden(renderPanel)과 겹쳐도 되게 !important로 눌러
  * 두 로직이 서로 밟지 않게 한다. */
 .orb-mode-hidden { display: none !important; }
 
 /* ---------- 대화 모드(2026-08-26 board-33/34) ----------
- * 상태 A(셸 숨김)에서만 보인다 — orb.js applyMode()가 athena:shell-visibility로
- * 이 블록과 알림 전용 블록(orb-body/orb-card/orb-foot 등)을 교대로 hidden 처리한다.
+ * 상태 A이거나 알림 모드에서 질문을 제출한 뒤 보인다. applyMode()가 대화 본문과
+ * 알림 표면(orb-body/orb-card/orb-foot 등)을 교대로 hidden 처리한다.
  * 색·유리·모서리 문법은 위 알림 패널과 같은 값을 그대로 물려 쓴다(다른 창처럼
  * 안 읽히면 안 된다) — 새 토큰을 만들지 않는다. */
 .orb-header-title {

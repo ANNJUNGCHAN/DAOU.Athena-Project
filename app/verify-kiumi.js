@@ -202,8 +202,9 @@ async function main() {
       headerTitle: document.getElementById('orbHeaderTitle').textContent,
     };
   })()`);
-  record('보드 05 DISPLAY B: 셸이 보이는 동안 오브는 알림 전용 — 입력줄이 없다',
-    alertOnly.inputStackHidden === true && alertOnly.chatBodyHidden === true, alertOnly);
+  record('보드 05 DISPLAY B: 알림을 먼저 보여주되 키우미 대화 입력은 열려 있다',
+    alertOnly.orbMode === 'alert' && alertOnly.inputStackHidden === false
+    && alertOnly.chatBodyHidden === true && alertOnly.headerTitle === '알림', alertOnly);
 
   await evalIn(shellWin, 
     "document.getElementById('winClose') && document.getElementById('winClose').click()",
@@ -220,7 +221,7 @@ async function main() {
   })()`);
   record('보드 05 DISPLAY A: 셸을 숨기면 같은 패널이 미니 채팅이 된다',
     chatMode.orbMode === 'chat' && chatMode.inputStackHidden === false
-    && chatMode.chatBodyHidden === false && chatMode.headerTitle === '메인 대화', chatMode);
+    && chatMode.chatBodyHidden === false && chatMode.headerTitle === '키우미 대화', chatMode);
 
   // ── 보드 01 · 접힘 원의 두 채널 ────────────────────────────────────────
   await evalIn(orbWin, "document.getElementById('orbToggle').click()");
@@ -279,7 +280,7 @@ async function main() {
 
   // ── 보드 05 · 표시 모드는 창 가시성과 다른 값이다 ──────────────────────
   // 앞의 DISPLAY B 단언은 렌더러 DOM만 재서, 창이 통째로 숨어 있어도 통과한다
-  // (5FX-0 「셸이 보이는 동안 오브는 알림 전용이다」가 화면에 못 닿는 구멍).
+  // (5FX-0 「셸이 보이는 동안 오브는 알림 모드다」가 화면에 못 닿는 구멍).
   // 여기서 셸을 되돌린 뒤 native 창 가시성까지 함께 잰다. 알림 상태를 건드리므로
   // 보드 01 배지 검사(미확인 0건) 뒤에 둔다.
   mainMod.revealShell();
@@ -288,23 +289,23 @@ async function main() {
     orbMode: document.getElementById('orbRoot').dataset.orbMode || null,
     inputStackHidden: document.getElementById('orbInputStack').hidden,
   }))()`);
-  record('보드 05 DISPLAY B: 셸이 다시 보이면 창이 숨고 모드가 알림 전용으로 돌아온다',
+  record('보드 05 DISPLAY B: 셸이 다시 보이면 창은 숨고 알림 모드 입력은 유지된다',
     orbWin.isVisible() === false && backToShell.orbMode === 'alert'
-    && backToShell.inputStackHidden === true, { orbVisible: orbWin.isVisible(), ...backToShell });
+    && backToShell.inputStackHidden === false, { orbVisible: orbWin.isVisible(), ...backToShell });
 
   mainMod.handleRoutineFeedEvent({
     type: 'routine-fired', routine_id: 'vkiumi-alert', symbol: '005930',
     source: 'watch.price', mode: 'realtime-ws', observed: '71,900원',
-    threshold: '70,000원 이상', note: '키우미 알림 전용 검증', fired_at: new Date().toISOString(),
+    threshold: '70,000원 이상', note: '키우미 알림 모드 검증', fired_at: new Date().toISOString(),
   });
   await wait(500);
   const alertPanel = await evalIn(orbWin, `(() => ({
     orbMode: document.getElementById('orbRoot').dataset.orbMode || null,
     inputStackHidden: document.getElementById('orbInputStack').hidden,
   }))()`);
-  record('보드 05 DISPLAY B: 발화가 오면 셸이 보이는 동안에도 알림 전용 패널이 뜬다',
+  record('보드 05 DISPLAY B: 발화가 오면 알림과 키우미 대화 입력이 함께 뜬다',
     orbWin.isVisible() === true && alertPanel.orbMode === 'alert'
-    && alertPanel.inputStackHidden === true, { orbVisible: orbWin.isVisible(), ...alertPanel });
+    && alertPanel.inputStackHidden === false, { orbVisible: orbWin.isVisible(), ...alertPanel });
 
   // 5EX-0 「최소화·가려짐은 표시 모드를 바꾸지 않는다」 — 최소화해도 B에 머문다.
   shellWin.minimize();
@@ -313,8 +314,8 @@ async function main() {
     orbMode: document.getElementById('orbRoot').dataset.orbMode || null,
     inputStackHidden: document.getElementById('orbInputStack').hidden,
   }))()`);
-  record('보드 05: 셸 최소화는 표시 모드를 바꾸지 않는다 — 알림 전용에 머문다',
-    minimized.orbMode === 'alert' && minimized.inputStackHidden === true, minimized);
+  record('보드 05: 셸 최소화는 표시 모드를 바꾸지 않는다 — 알림과 입력이 유지된다',
+    minimized.orbMode === 'alert' && minimized.inputStackHidden === false, minimized);
   shellWin.restore();
   await wait(300);
 

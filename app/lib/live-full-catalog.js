@@ -65,6 +65,7 @@ const VERIFY_SUITE = Object.freeze([
   { script: 'verify:settings-cards', budgetMs: 120000 },
   { script: 'verify:plugins', budgetMs: 90000 },
   { script: 'verify:kiumi', budgetMs: 90000 },
+  { script: 'verify:orb-conversation', budgetMs: 30000 },
   { script: 'verify:kiumi-cards', budgetMs: 90000 },
   { script: 'verify:chat-v3', budgetMs: 90000 },
   { script: 'verify:agent-paper-parity', budgetMs: 90000 },
