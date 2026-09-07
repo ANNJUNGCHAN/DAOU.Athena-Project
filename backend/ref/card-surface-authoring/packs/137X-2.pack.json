@@ -5,6 +5,7 @@
  "operation_refs": [
   "base:0g",
   "base:ka10003",
+  "base:ka10006",
   "base:ka10015",
   "base:ka10060",
   "base:ka10064",
@@ -21,7 +22,8 @@
   "detail:ka10001:identity_and_capital",
   "detail:ka10001:market_scale_and_ownership",
   "detail:ka10001:price_range",
-  "detail:ka10001:valuation"
+  "detail:ka10001:valuation",
+  "detail:ka10007:identity"
  ],
  "suggested_extra_ops": [],
  "fields": [

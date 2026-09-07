@@ -367,11 +367,17 @@ test('같은 오버레이를 쓰는 계좌 전환 화면은 자기 사유로 fai
     (channel, payload) => sent.push([channel, payload]),
     'receipt-2',
     'account_switch_active',
+    'revision-2',
   );
   assert.equal(handled, true);
   assert.deepEqual(sent, [[
     'athena:rest-receipt-painted',
-    { receipt_id: 'receipt-2', verified_visible: false, error: 'account_switch_active' },
+    {
+      receipt_id: 'receipt-2',
+      receipt_revision: 'revision-2',
+      verified_visible: false,
+      error: 'account_switch_active',
+    },
   ]]);
 });
 

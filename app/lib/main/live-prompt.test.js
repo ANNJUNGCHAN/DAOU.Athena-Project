@@ -512,6 +512,36 @@ test('buildLiveTurnPrompt: backtest — backtestContext null이면 폼 없음으
 test('buildBacktestModePrefix: today가 없으면 미상으로 찍는다 (Date 미사용)', () => {
   const p = buildBacktestModePrefix(null, undefined);
   assert.ok(p.startsWith('[모드: 백테스트] 오늘: 미상'));
+  assert.ok(p.includes('상대 기간 기준: 미상 — 날짜를 지어내지 않는다'));
+});
+
+test('buildBacktestModePrefix: 최근 3개월은 today에서 달력 3개월을 뺀 기준값이다', () => {
+  const p = buildBacktestModePrefix(null, '20260907');
+  assert.ok(p.includes('상대 기간 기준: 최근 3개월=20260607~20260907'));
+  assert.ok(!p.includes('20250607'));
+});
+
+test('buildBacktestModePrefix: 최근 3개월은 연도 경계와 월말을 보정한다', () => {
+  assert.ok(buildBacktestModePrefix(null, '20260131')
+    .includes('상대 기간 기준: 최근 3개월=20251031~20260131'));
+  assert.ok(buildBacktestModePrefix(null, '20260531')
+    .includes('상대 기간 기준: 최근 3개월=20260228~20260531'));
+  assert.ok(buildBacktestModePrefix(null, '20240531')
+    .includes('상대 기간 기준: 최근 3개월=20240229~20240531'));
+});
+
+test('buildBacktestModePrefix: 잘못된 today로 날짜를 만들지 않는다', () => {
+  const p = buildBacktestModePrefix(null, '20260230');
+  assert.ok(p.startsWith('[모드: 백테스트] 오늘: 미상'));
+  assert.ok(p.includes('상대 기간 기준: 미상 — 날짜를 지어내지 않는다'));
+  assert.ok(!p.includes('20260230'));
+  assert.doesNotMatch(p, /최근 3개월=\d{8}~\d{8}/);
+});
+
+test('buildBacktestModePrefix: 상대 기간 기준은 사용자가 직접 지정한 날짜를 덮지 않는다', () => {
+  const p = buildBacktestModePrefix(BT_CONTEXT, '20260907');
+  assert.ok(p.includes('사용자가 YYYYMMDD 날짜를 직접 지정했으면 그 값을 우선하고 덮어쓰지 않는다'));
+  assert.ok(p.includes(`현재 폼(JSON): ${JSON.stringify(BT_CONTEXT.spec)}`));
 });
 
 test('buildLivePrompt: 객체 입력 — 시스템 규칙 + 백테스트 접두 + 질문이 한 문자열에 들어간다', () => {
@@ -523,6 +553,40 @@ test('buildLivePrompt: 객체 입력 — 시스템 규칙 + 백테스트 접두 
   assert.ok(p.includes('사용자 노출 언어 규율'));
   assert.ok(p.includes('[모드: 백테스트]'));
   assert.equal(p, `${buildLiveSystemPrompt()}\n\n${buildLiveTurnPrompt(input)}`);
+});
+
+test('buildLivePrompt: Grok은 MCP를 검색한 뒤 qualified 이름과 중첩 스키마로 호출한다', () => {
+  const p = buildLivePrompt({
+    userText: '삼성전자로 최근 3개월 백테스트',
+    canvasMode: 'backtest',
+    providerId: 'grok',
+    backtestContext: BT_CONTEXT,
+    today: '20260907',
+  });
+  assert.ok(p.includes('[Grok MCP 호출 규칙]'));
+  assert.ok(p.includes('search_tool'));
+  assert.ok(p.includes('athena__athena_backtest'));
+  assert.ok(p.includes('"action":"propose_spec"'));
+  assert.ok(p.includes('"propose_spec":{"patch"'));
+  assert.ok(p.includes('period는 day·week·month'));
+});
+
+test('buildLivePrompt: Grok 백테스트 날짜는 오늘 기준 동적 범위만 쓰고 예시 날짜를 고정하지 않는다', () => {
+  const p = buildLivePrompt({
+    userText: '삼성전자로 최근 3개월 백테스트',
+    canvasMode: 'backtest',
+    providerId: 'grok',
+    backtestContext: BT_CONTEXT,
+    today: '20260908',
+  });
+  assert.ok(p.includes('상대 기간 기준: 최근 3개월=20260608~20260908'));
+  assert.ok(!p.includes('20260907'));
+  assert.ok(!p.includes('20260607'));
+});
+
+test('buildLivePrompt: Claude와 기존 문자열 호출에는 Grok MCP 규칙을 붙이지 않는다', () => {
+  assert.equal(buildLivePrompt('x').includes('[Grok MCP 호출 규칙]'), false);
+  assert.equal(buildLivePrompt({ userText: 'x', providerId: 'claude' }).includes('[Grok MCP 호출 규칙]'), false);
 });
 
 // ---- phase-2 계약 [E] — 채팅이 캔버스 전체를 모는 일반화 접두 ----

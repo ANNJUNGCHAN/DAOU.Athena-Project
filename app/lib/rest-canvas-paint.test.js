@@ -6,7 +6,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const {
   correlationKey, isValidCorrelation, waitForVisiblePaint,
-  decidePaintAck, timedOutPaint, PENDING_MOUNT_ACK_TIMEOUT_MS,
+  decidePaintAck, timedOutPaint, upsertRestReceipt, PENDING_MOUNT_ACK_TIMEOUT_MS,
 } = require('./rest-canvas-paint');
 
 test('correlation key requires complete dataset/item/ordinal identity', () => {
@@ -15,6 +15,52 @@ test('correlation key requires complete dataset/item/ordinal identity', () => {
   assert.equal(correlationKey(valid), 'd\u0000i\u00006');
   assert.equal(correlationKey({ dataset_id: 'd', item_id: 'i', ordinal: 7 }), null);
   assert.equal(correlationKey({ dataset_id: 'd', ordinal: 1 }), null);
+});
+
+test('같은 receipt ID의 최종 결과는 로딩 문구를 교체하고 다른 요청은 건드리지 않는다', () => {
+  const makeElement = () => ({
+    className: '',
+    dataset: {},
+    children: [],
+    appendChild(child) { this.children.push(child); },
+    querySelector(selector) {
+      return this.children.find((child) => selector === '.turn-a' && child.className === 'turn-a') || null;
+    },
+  });
+  const history = makeElement();
+  history.querySelectorAll = (selector) => history.children
+    .filter((child) => selector === '.rest-receipt' && child.className.includes('rest-receipt'));
+
+  const first = upsertRestReceipt(history, {
+    receiptId: 'receipt-1', text: '데이터를 불러오는 중입니다...', createElement: makeElement,
+  });
+  const second = upsertRestReceipt(history, {
+    receiptId: 'receipt-2', text: '데이터를 불러오는 중입니다...', createElement: makeElement,
+  });
+  const updated = upsertRestReceipt(history, {
+    receiptId: 'receipt-1', text: '캔버스에 표시했습니다.', createElement: makeElement,
+    replaceOnly: true,
+  });
+  const missing = upsertRestReceipt(history, {
+    receiptId: 'receipt-missing', text: '늦은 결과', createElement: makeElement, replaceOnly: true,
+  });
+
+  assert.equal(updated, first);
+  assert.equal(missing, null);
+  assert.equal(history.children.length, 2);
+  assert.equal(first.querySelector('.turn-a').textContent, '캔버스에 표시했습니다.');
+  assert.equal(second.querySelector('.turn-a').textContent, '데이터를 불러오는 중입니다...');
+
+  for (const finalText of [
+    '조회 중 오류가 발생했습니다. 다시 시도할 수 있습니다.',
+    '조회가 취소되었습니다. 다시 시도할 수 있습니다.',
+  ]) {
+    upsertRestReceipt(history, {
+      receiptId: 'receipt-2', text: finalText, createElement: makeElement, replaceOnly: true,
+    });
+    assert.equal(second.querySelector('.turn-a').textContent, finalText);
+    assert.equal(second.querySelector('.turn-a').textContent.includes('불러오는 중'), false);
+  }
 });
 
 test('paint ack waits for visible nonzero rect and then two additional RAFs', async () => {
@@ -120,6 +166,60 @@ test('한도를 넘긴 pending은 data가 아니라 timeout으로 집계된다',
   assert.notEqual(pendingPaint.renderState, 'timeout');
 });
 
+test('동일 correlation의 늦은 최종 ack는 30초 한도 안에서 pending을 data로 확정한다', () => {
+  const correlation = { dataset_id: 'dataset-1', item_id: 'item-1', ordinal: 1 };
+  const key = correlationKey(correlation);
+  const pendingPaint = decidePaintAck(firstAck, { now: () => 0 }).paint;
+  const waiters = new Map();
+  let settledPaint = null;
+  let timedOut = false;
+  let pendingTimer = null;
+  const setVirtualTimer = (callback, delay) => {
+    pendingTimer = { at: delay, callback };
+    return pendingTimer;
+  };
+  const clearVirtualTimer = (timer) => {
+    if (pendingTimer === timer) pendingTimer = null;
+  };
+  const advanceTo = (nowMs) => {
+    if (!pendingTimer || pendingTimer.at > nowMs) return;
+    const timer = pendingTimer;
+    pendingTimer = null;
+    timer.callback();
+  };
+
+  const timeout = setVirtualTimer(() => {
+    timedOut = true;
+    settledPaint = timedOutPaint(pendingPaint);
+    waiters.delete(key);
+  }, PENDING_MOUNT_ACK_TIMEOUT_MS);
+  waiters.set(key, { pendingPaint, timeout });
+
+  advanceTo(20_000);
+  assert.equal(timedOut, false);
+  const finalCorrelation = { dataset_id: 'dataset-1', item_id: 'item-1', ordinal: 1 };
+  const waiter = waiters.get(correlationKey(finalCorrelation));
+  assert.ok(waiter);
+  const finalDecision = decidePaintAck({
+    verified_visible: true,
+    render_state: 'data',
+    pending: false,
+    renderer_id: 'aits-chart-v1',
+    panel_id: 'panel-1',
+    generation: 3,
+  }, { pendingPaint: waiter.pendingPaint, now: () => 20_000 });
+  clearVirtualTimer(waiter.timeout);
+  waiters.delete(key);
+  settledPaint = finalDecision.paint;
+
+  advanceTo(PENDING_MOUNT_ACK_TIMEOUT_MS);
+  assert.equal(finalDecision.action, 'settle');
+  assert.equal(timedOut, false);
+  assert.equal(waiters.size, 0);
+  assert.equal(settledPaint.renderState, 'data');
+  assert.equal(settledPaint.visiblePaintAt, 0);
+});
+
 test('pending이 아닌 카드는 첫 ack에서 곧바로 정착한다', () => {
   const decision = decidePaintAck({
     verified_visible: true, render_state: 'data', inline_to_dom_ms: 5, dom_to_paint_ack_ms: 6,
@@ -155,7 +255,26 @@ test('pending 대기는 main의 paint waiter 배선에 실제로 걸려 있다',
   assert.match(handler, /decision\.action === 'defer'[\s\S]*notifyFirstPaint\(decision\.paint\)/);
   assert.match(mainSource, /notifyFirstPaint: typeof payload\.onFirstPaint === 'function'/);
   assert.match(mainSource, /event\.type === 'paint-ack' \|\| event\.type === 'paint-pending'\)\) feedbackObserved = true/);
-  // 무한 대기는 3초 계약 뒤에 답변을 영원히 붙잡는다 — 한도는 유한하고 짧다.
+  // 무한 대기는 3초 계약 뒤에 답변을 영원히 붙잡는다 — 한도는 유한하다.
   assert.equal(Number.isInteger(PENDING_MOUNT_ACK_TIMEOUT_MS), true);
-  assert.equal(PENDING_MOUNT_ACK_TIMEOUT_MS, 8000);
+  assert.equal(PENDING_MOUNT_ACK_TIMEOUT_MS, 30_000);
+});
+
+test('main은 로딩 receipt를 같은 ID의 최종 결과로 교체하고 ack revision을 검증한다', () => {
+  const mainSource = fs.readFileSync(path.join(__dirname, '..', 'main.js'), 'utf8');
+  const direct = mainSource.slice(
+    mainSource.indexOf('async function runDirectRestDataset('),
+    mainSource.indexOf('async function handleChartPanelReload('),
+  );
+  assert.match(direct, /'데이터를 불러오는 중입니다\.\.\.'/);
+  assert.doesNotMatch(direct, /조회가 지연되어 아직 화면 데이터를 표시하지 못했습니다/);
+  assert.equal((direct.match(/receiptId: watchdogReceiptId/g) || []).length, 2);
+  assert.match(direct, /replaceOnly: true/);
+  assert.match(direct, /historyConversationId\(\) !== turnConversationId/);
+  assert.match(direct, /historyConversationId\(\) === turnConversationId/);
+  assert.match(direct, /if \(watchdogReceipt\) \{[\s\S]*if \(historyConversationId\(\) === turnConversationId\)/);
+  assert.match(direct, /firstCanvasDeadlineMs: DIRECT_DATASET_SETTLE_TIMEOUT_MS/);
+  assert.match(mainSource, /String\(payload\.receipt_revision \|\| ''\) !== waiter\.revision/);
+  assert.match(mainSource, /restReceiptWaiters\.get\(stableReceiptId\) !== waiter/);
+  assert.match(mainSource, /receiptRevision,[\s\S]*text,/);
 });

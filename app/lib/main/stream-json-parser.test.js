@@ -8,6 +8,7 @@ const {
   splitLines,
   flushCarry,
   parseLine,
+  normalizeToolUseBlock,
   isRenderCanvasToolName,
   isAgentToolName,
   classifySubagentEvent,
@@ -79,6 +80,28 @@ test('isRenderCanvasToolName: 이름과 별칭이 다른 경우 둘 다 매칭',
   assert.equal(isRenderCanvasToolName('mcp__athena__athena__save_canvas'), false);
   assert.equal(isRenderCanvasToolName('mcp__everything__echo'), false);
   assert.equal(isRenderCanvasToolName(undefined), false);
+});
+
+test('normalizeToolUseBlock: Grok use_tool 봉투를 실제 MCP 이름과 입력으로 푼다', () => {
+  const block = {
+    type: 'tool_use', id: 'grok-tool-1', name: 'use_tool',
+    input: {
+      tool_name: 'athena__athena_backtest',
+      tool_input: { action: 'propose_spec', propose_spec: { patch: { symbols: ['005930'] } } },
+    },
+  };
+  assert.deepEqual(normalizeToolUseBlock(block), {
+    ...block,
+    name: 'athena__athena_backtest',
+    input: block.input.tool_input,
+  });
+});
+
+test('normalizeToolUseBlock: 불완전한 use_tool 입력과 일반 도구는 원문을 유지한다', () => {
+  const malformed = { type: 'tool_use', id: 'bad', name: 'use_tool', input: { tool_name: 'athena__x' } };
+  const direct = { type: 'tool_use', id: 'direct', name: 'mcp__athena__athena_search', input: { query: 'x' } };
+  assert.equal(normalizeToolUseBlock(malformed), malformed);
+  assert.equal(normalizeToolUseBlock(direct), direct);
 });
 
 // ---------------------------------------------------------------------------
@@ -292,6 +315,34 @@ test('StreamJsonSession: 라인 경계와 무관하게 임의 크기 청크로 �
     assert.equal(collected[0].envelope.canvas_type, 'table');
     assert.equal(session.diagnostics().skippedLines, 0, `chunkSize=${chunkSize}`);
   }
+});
+
+test('StreamJsonSession: Grok use_tool로 감싼 render_canvas 결과도 캔버스로 분류한다', () => {
+  const session = new StreamJsonSession();
+  const collected = [];
+  const toolUse = {
+    type: 'assistant',
+    message: { content: [{
+      type: 'tool_use', id: 'grok-canvas-1', name: 'use_tool',
+      input: {
+        tool_name: 'athena__athena__render_canvas',
+        tool_input: { plan_token: 'plan-1' },
+      },
+    }] },
+  };
+  const toolResult = {
+    type: 'user',
+    message: { content: [{
+      type: 'tool_result', tool_use_id: 'grok-canvas-1', is_error: false,
+      content: JSON.stringify({ canvas_type: 'facts', data: { fields: [] } }),
+    }] },
+  };
+  session.feed(`${JSON.stringify(toolUse)}\n${JSON.stringify(toolResult)}\n`, {
+    onCanvasResult: (result) => collected.push(result),
+  });
+  assert.equal(collected.length, 1);
+  assert.equal(collected[0].status, 'success');
+  assert.equal(collected[0].envelope.canvas_type, 'facts');
 });
 
 test('StreamJsonSession: 마지막 줄이 개행 없이 끝나도 end()가 회수한다', () => {
