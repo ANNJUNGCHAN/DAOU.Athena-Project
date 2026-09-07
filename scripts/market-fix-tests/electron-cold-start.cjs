@@ -3,41 +3,62 @@
 const crypto = require('node:crypto');
 const fs = require('node:fs');
 const http = require('node:http');
-const os = require('node:os');
 const path = require('node:path');
-const { app } = require('electron');
 const {
+  createReceiptWriter,
+  createOwnedChildLedger,
   createSpawnAdapter,
   firstRequestDelay,
+  persistResult,
   reserveEphemeralPort,
   waitUntil,
 } = require('./cold-start-fixture.cjs');
 
+function parseArgs(argv) {
+  const result = { execute: false, pythonExe: '', privateRoot: '', sourceHead: '' };
+  for (let index = 0; index < argv.length; index += 1) {
+    if (argv[index] === '--execute') result.execute = true;
+    else if (argv[index] === '--python') result.pythonExe = path.resolve(argv[++index] || '');
+    else if (argv[index] === '--private-root') result.privateRoot = path.resolve(argv[++index] || '');
+    else if (argv[index] === '--source-head') result.sourceHead = String(argv[++index] || '').trim().toLowerCase();
+    else throw new Error(`unknown argument: ${argv[index]}`);
+  }
+  if (!result.execute) throw new Error('actual Electron/uvicorn gate requires --execute after independent review');
+  if (!result.pythonExe) throw new Error('--python must name the reviewed Python executable');
+  if (!fs.statSync(result.privateRoot, { throwIfNoEntry: false })?.isDirectory()) {
+    throw new Error('--private-root must name the wrapper-owned existing directory');
+  }
+  if (!/^[0-9a-f]{40}$/.test(result.sourceHead)) throw new Error('--source-head must be an exact commit');
+  return result;
+}
+
+const ARGS = parseArgs(process.argv.slice(2));
 const SCRIPT_DIR = __dirname;
 const REPO_ROOT = path.resolve(SCRIPT_DIR, '..', '..');
 const BACKEND_ROOT = path.join(REPO_ROOT, 'backend');
-const PRIVATE_ROOT = fs.mkdtempSync(path.join(os.tmpdir(), 'athena-boot-integration-'));
+const PRIVATE_ROOT = ARGS.privateRoot;
 const USER_DATA = path.join(PRIVATE_ROOT, 'electron-user-data');
 fs.mkdirSync(USER_DATA, { recursive: true });
+const { app } = require('electron');
 app.setPath('userData', USER_DATA);
 process.chdir(PRIVATE_ROOT);
 if (!process.versions.electron || path.resolve(app.getPath('userData')) !== USER_DATA) {
   throw new Error('fixture must run in Electron with its private userData path active');
 }
 
-const launcher = require('../../app/lib/main/backend-launcher');
-
-function parseArgs(argv) {
-  const result = { execute: false, pythonExe: '' };
-  for (let index = 0; index < argv.length; index += 1) {
-    if (argv[index] === '--execute') result.execute = true;
-    else if (argv[index] === '--python') result.pythonExe = path.resolve(argv[++index] || '');
-    else throw new Error(`unknown argument: ${argv[index]}`);
-  }
-  if (!result.execute) throw new Error('actual Electron/uvicorn gate requires --execute after independent review');
-  if (!result.pythonExe) throw new Error('--python must name the reviewed Python executable');
-  return result;
+const receipts = createReceiptWriter({ privateRoot: PRIVATE_ROOT });
+let currentStage = 'start';
+function mark(stage, metadata = {}) {
+  currentStage = stage;
+  receipts.write(stage, metadata);
 }
+mark('start', {
+  pid: process.pid,
+  electron_version: process.versions.electron,
+  source_head: ARGS.sourceHead,
+});
+const launcher = require('../../app/lib/main/backend-launcher');
+mark('launcher_imported');
 
 function sha256(filePath) {
   return crypto.createHash('sha256').update(fs.readFileSync(filePath)).digest('hex');
@@ -64,18 +85,25 @@ async function waitForExit(child, timeoutMs) {
 }
 
 async function runColdStart(pythonExe) {
+  mark('cold_start_begin');
   const port = await reserveEphemeralPort();
   const manifestUrl = `http://127.0.0.1:${port}/api/v1/llm/manifest`;
   let child = null;
   let spawnCount = 0;
   let stderrBytes = 0;
+  const ownership = createOwnedChildLedger(mark);
   const startedAt = Date.now();
   const spawnFn = createSpawnAdapter({
     expectedLauncherArgs: launcher.buildUvicornArgs(), pythonExe, backendRoot: BACKEND_ROOT,
     fixtureDir: SCRIPT_DIR, privateHome: PRIVATE_ROOT, port,
     onSpawn: (ownedChild) => {
-      child = ownedChild;
-      spawnCount += 1;
+      child = ownership.capture(ownedChild);
+      spawnCount = ownership.spawnCount;
+      ownedChild.once('exit', (code, signal) => {
+        try {
+          mark('child_exit', { child_pid: ownedChild.pid, child_exit_code: code, child_signal: signal });
+        } catch { /* cleanup ownership must survive receipt I/O failure */ }
+      });
       ownedChild.stdout?.resume();
       ownedChild.stderr?.on('data', (chunk) => { stderrBytes += chunk.length; });
     },
@@ -86,12 +114,16 @@ async function runColdStart(pythonExe) {
         checkHealthFn: () => launcher.checkHealth(manifestUrl, 500),
         venvExistsFn: () => fs.statSync(pythonExe, { throwIfNoEntry: false })?.isFile() === true,
         spawnFn,
-        waitUntilHealthyFn: () => waitUntil(() => launcher.checkHealth(manifestUrl, 500), 30_000, 100),
+        waitUntilHealthyFn: () => {
+          ownership.recordOwned();
+          return waitUntil(() => launcher.checkHealth(manifestUrl, 500), 30_000, 100);
+        },
       },
     });
     const manifestReadyAt = Date.now();
     if (!result?.ready || spawnCount !== 1 || !child) throw new Error('cold start did not produce one ready owned child');
     if (manifestReadyAt - startedAt >= 30_000) throw new Error('synthetic manifest readiness exceeded 30 seconds');
+    mark('manifest_ready', { child_pid: child.pid, manifest_ready_ms: manifestReadyAt - startedAt });
     const metadata = await readJson(`http://127.0.0.1:${port}/__fixture__/metadata`);
     if (metadata.synthetic !== true || metadata.identity_count !== 3525 || metadata.account_count !== 0
       || metadata.orders_enabled !== false || metadata.brain_enabled !== false
@@ -106,6 +138,7 @@ async function runColdStart(pythonExe) {
     await new Promise((resolve) => setTimeout(resolve, untilSixtySeconds));
     const aliveAfter60s = child.exitCode === null && await launcher.checkHealth(manifestUrl, 1000);
     if (!aliveAfter60s) throw new Error('owned child was not healthy after 60 seconds');
+    mark('alive_after_60s', { child_pid: child.pid, alive_after_60s: true });
     return {
       outcome: 'PASS_SYNTHETIC_COMPONENT_COLD_START',
       synthetic_identity_count: metadata.identity_count,
@@ -121,10 +154,12 @@ async function runColdStart(pythonExe) {
   } finally {
     launcher.shutdownBackend({ killTreeFn: (ownedChild) => ownedChild.kill() });
     if (child && !(await waitForExit(child, 5000))) throw new Error('owned backend child cleanup timed out');
+    mark('owned_child_cleanup', { child_pid: child?.pid || null });
   }
 }
 
 async function runDelayedExistingServer() {
+  mark('delayed_existing_begin');
   const port = await reserveEphemeralPort();
   let requestCount = 0;
   let spawnCount = 0;
@@ -163,6 +198,7 @@ async function runDelayedExistingServer() {
       throw new Error('delayed existing backend was not detected before spawn');
     }
     if (Date.now() - startedAt < 1500) throw new Error('first manifest request did not cross the 1.5 second timeout');
+    mark('delayed_existing_ready', { request_count: requestCount, health_results: healthResults, spawn_count: spawnCount });
     return {
       outcome: 'PASS_OWNED_DELAYED_EXISTING_SERVER',
       first_manifest_delay_ms: 1700,
@@ -178,14 +214,18 @@ async function runDelayedExistingServer() {
 }
 
 async function main() {
-  const args = parseArgs(process.argv.slice(2));
+  const args = ARGS;
   await app.whenReady();
+  mark('electron_ready');
   const cold = await runColdStart(args.pythonExe);
   const delayed = await runDelayedExistingServer();
   const report = {
     schema_version: 1,
     kind: 'athena_boot_component_integration',
     generated_at: new Date().toISOString(),
+    source_head: args.sourceHead,
+    source_head_scope: 'repository_head_with_runtime_and_fixture_files_clean',
+    outcome: 'PASS',
     mode: 'isolated_electron_synthetic_backend',
     limitations: [
       'launcher production URL is hard-coded to 127.0.0.1:8010; the dependency seam redirects checks and spawn arguments to an owned ephemeral loopback port',
@@ -206,6 +246,10 @@ async function main() {
         launcher: sha256(path.join(REPO_ROOT, 'app', 'lib', 'main', 'backend-launcher.js')),
         identity: sha256(path.join(BACKEND_ROOT, 'athena_api', 'selector', 'instrument_identity.py')),
         fixture: sha256(path.join(SCRIPT_DIR, 'backend_fixture.py')),
+        helper: sha256(path.join(SCRIPT_DIR, 'cold-start-fixture.cjs')),
+        helper_test: sha256(path.join(SCRIPT_DIR, 'cold-start-fixture.test.cjs')),
+        runner: sha256(path.join(SCRIPT_DIR, 'electron-cold-start.cjs')),
+        wrapper: sha256(path.join(SCRIPT_DIR, 'run-electron-cold-start.ps1')),
       },
     },
     scenarios: { cold, delayed_existing: delayed },
@@ -215,13 +259,34 @@ async function main() {
       private_root: PRIVATE_ROOT,
     },
   };
+  mark('result_ready', { outcome: 'PASS' });
+  persistResult(PRIVATE_ROOT, report);
   process.stdout.write(`${JSON.stringify(report)}\n`);
 }
 
 main()
   .then(() => app.quit())
   .catch((error) => {
-    process.stderr.write(`fixture failed: ${String(error?.message || error)}\n`);
+    const failedStage = currentStage;
+    const errorName = String(error?.name || 'Error').slice(0, 80);
+    const errorCode = error?.code == null ? null : String(error.code).slice(0, 80);
+    try {
+      mark('error', { failed_stage: failedStage, error_name: errorName, error_code: errorCode });
+      if (!fs.existsSync(path.join(PRIVATE_ROOT, 'result.json'))) {
+        persistResult(PRIVATE_ROOT, {
+          schema_version: 1,
+          kind: 'athena_boot_component_integration_error',
+          generated_at: new Date().toISOString(),
+          source_head: ARGS.sourceHead,
+          outcome: 'ERROR',
+          failed_stage: failedStage,
+          error_name: errorName,
+          error_code: errorCode,
+          private_profile_preserved: true,
+        });
+      }
+    } catch { /* preserve the original bounded error exit */ }
+    process.stderr.write(`fixture failed at ${failedStage} (${errorName}/${errorCode || 'NO_CODE'})\n`);
     process.exitCode = 1;
     app.quit();
   });
