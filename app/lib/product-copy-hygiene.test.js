@@ -63,6 +63,22 @@ test('빈 상태 문구에 내부 필드명이 없다 — candles·records·--al
   }
 });
 
+test('핸드오프 계좌 표기는 뒤 4자리만 남긴다 — 숫자 8자리 이상이 3844로 끝나면 실패', () => {
+  const files = [
+    path.join(__dirname, '..', '..', 'docs', 'handoff', 'beta-test-live', 'ATHENA-BETA-FEEDBACK.md'),
+    path.join(__dirname, '..', '..', 'docs', 'handoff', '2026-09-01-live-market-verification.md'),
+  ];
+  for (const file of files) {
+    const text = fs.readFileSync(file, 'utf8');
+    assert.match(text, /\*{4}3844/, `${path.basename(file)}에 마스킹 표기가 없다`);
+    assert.doesNotMatch(
+      text,
+      /(?<!\d)\d{4,}3844(?!\d)/,
+      `${path.basename(file)}에 마스킹되지 않은 계좌 숫자가 있다`,
+    );
+  }
+});
+
 test('빈·거부 상태 문구가 다음 행동을 말한다', () => {
   const canvas = readApp('canvas.js');
   assert.match(canvas, /'이 조회를 실행할 권한이 없습니다 — 설정에서 권한을 확인해 주세요\.'/);
