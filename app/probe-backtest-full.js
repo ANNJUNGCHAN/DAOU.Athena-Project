@@ -304,8 +304,12 @@ async function goDesignForm(win) {
   await goTab(win, 0);
   await wait(200);
   // 하위 탭은 지도·폼·코드다 — 폼은 두 번째다(DESIGN_TABS, 2026-09-03).
-  await goSubtab(win, 1);
-  await wait(200);
+  // 고르기 전에는 하위 탭이 없다(A08). 없는 탭을 누르지 않는다.
+  const n = await countOf(win, `${R}.backtest-subtab`);
+  if (n > 1) {
+    await goSubtab(win, 1);
+    await wait(200);
+  }
 }
 
 function addSymbol(win, code) {
@@ -3690,8 +3694,7 @@ async function main() {
     })()`);
     // 섹션만 골라 돌면(ATHENA_PROBE_SECTIONS=O) A가 돌지 않아 모드에 들어간 적이 없다.
     await js(shellWin, "(() => { const n = document.getElementById('modeNavBacktest'); if (n) n.click(); return true; })()");
-    // 프리셋 목록은 **폼 하위탭에만** 있다(지도 탭은 지도를 그린다) — 여기서 지도 탭을
-    // 보고 기다리면 25초를 버리고 아무 일도 안 일어난다(2026-09-03 실측).
+    // 보드 19 첫 화면은 기법 목록이다. 고르기 전에는 하위 탭이 없다.
     await goDesignForm(shellWin);
     await until(
       shellWin,

@@ -193,8 +193,12 @@ function goSubtab(win, index) { return clickNth(win, `${R}.backtest-subtab`, ind
 async function goDesignForm(win) {
   await goTab(win, 0);
   await wait(200);
-  await goSubtab(win, 1);
-  await wait(200);
+  // 고르기 전에는 하위 탭이 없다 — 없는 탭을 누르지 않는다.
+  const n = await countOf(win, `${R}.backtest-subtab`);
+  if (n > 1) {
+    await goSubtab(win, 1);
+    await wait(200);
+  }
 }
 
 function addSymbol(win, code) {
@@ -377,11 +381,10 @@ async function main() {
   report.range = { stk: STK, from: FROM, to: TO, rows: coverage.rows };
   log(`구간 ${STK} ${FROM}~${TO} (캐시 ${coverage.rows}봉)`);
 
-  // ── 01 백테스트 모드 진입 · 프리셋 목록 ────────────────────────────────────
+  // ── 01 백테스트 모드 진입 · 기법 목록 ────────────────────────────────────
   await js(shellWin, "(() => { const n = document.getElementById('modeNavBacktest'); if (n) n.click(); return true; })()");
   await wait(600);
-  // 보드 19: 첫 화면이 폼 탭의 기법 목록이다. goDesignForm은 멱등이다.
-  await goDesignForm(shellWin);
+  // 보드 19: 첫 화면은 기법 목록이다. 고르기 전에는 설계 하위 탭이 없다.
   const presetList = await until(
     shellWin,
     `(() => {
@@ -398,8 +401,17 @@ async function main() {
   if (!presetList) fail('01-mode-empty', '프리셋 목록이 뜨지 않았다');
   await shot(shellWin, '01-mode-empty', `(() => {
     const c = window.AthenaBacktestCanvas.getContext();
-    return { view: c.view, tab: c.tab, designTab: c.designTab, presets: document.querySelectorAll('${R}.backtest-preset-item').length };
-  })()`, '모드 진입 뒤 폼 하위탭의 프리셋 목록');
+    const root = document.getElementById('backtestCanvas');
+    return {
+      view: c.view,
+      tab: c.tab,
+      screen: c.screen,
+      designTab: c.designTab,
+      tabs: Array.from(root.querySelectorAll('.backtest-tab')).map((t) => t.textContent),
+      subtabs: Array.from(root.querySelectorAll('.backtest-subtab')).map((t) => t.textContent),
+      presets: document.querySelectorAll('${R}.backtest-preset-item').length,
+    };
+  })()`, '모드 진입 직후의 보드 19 기법 목록(하위 탭 없음, 모드 탭 3개)');
 
   // ── 02 지도 탭(요약 지도 + 시각 편집기) ────────────────────────────────────
   await ensureRunnableForm(shellWin);
