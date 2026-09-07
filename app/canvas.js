@@ -14,6 +14,7 @@ const semanticWorkspace = window.AthenaLib.SemanticWorkspace;
 const paperCardRouting = window.AthenaLib.PaperCardRouting;
 const boardMount = window.AthenaLib.BoardMount;
 const boardTemplateRegistry = window.AthenaLib.BoardTemplateRegistry;
+const boardCardActions = window.AthenaLib.BoardCardActions;
 const canvasTabs = window.AthenaLib.CanvasTabs;
 const SEMANTIC_PRIMARY_TYPES = new Set(['table', 'chart', 'facts', 'compound', 'event', 'action', 'status']);
 
@@ -960,6 +961,7 @@ function mountBoardState(host, boardId, envelope, isCurrent = () => true) {
       );
       rememberMountedBoard(state, mounted);
       wireStateControls(host, envelope, mounted);
+      wireCardActions(host, envelope, mounted);
       return hydrateBoardSlots(host, envelope, mounted, isCurrent);
     });
 }
@@ -1018,6 +1020,56 @@ function wireStateControls(host, envelope, mounted) {
     if (!didWire) continue;
     // 표시는 CSS가 한다([data-state-board], board-surface.css) — 인라인 원문은 안 건드린다(D1).
     node.dataset.stateBoard = link.board_id;
+    wired += 1;
+  }
+  return wired;
+}
+
+// 카드 액션 — Paper가 목적지를 다른 card_id로 그린 조작(호가 열기 · 종목 상세 열기).
+// 상태 보드 전환과 달리 카드가 새로 선다. 판정(문구 → 보드 · 누른 줄의 종목 ·
+// 봉투 형상)은 lib/board-card-actions.js가 갖고, 여기서는 클릭을 그 판정에 잇는다.
+function cardActionStock(node, surface, envelope, action) {
+  if (action.stock === 'row') return boardCardActions.rowStock(node, surface);
+  const stkCd = cardStkCd(envelope) || boardHydrateTarget(envelope).stk_cd || '';
+  return stkCd ? { stkCd, stockName: cardStockName(surface) } : null;
+}
+
+// 카드가 보고 있는 종목의 이름 — 헤더 첫 잎이다. 없으면 제목에서 뺀다(지어내지 않는다).
+function cardStockName(surface) {
+  const header = surface && surface.querySelector('.bs-header, [data-name="Instrument Header"]');
+  const leaf = header && [...header.querySelectorAll('*')].find((el) => !el.childElementCount
+    && el.textContent.trim() && !/^\d/.test(el.textContent.trim()));
+  return leaf ? leaf.textContent.trim() : '';
+}
+
+async function runCardAction(node, surface, envelope, action) {
+  const stock = cardActionStock(node, surface, envelope, action);
+  // 종목을 못 읽으면 아무 카드도 열지 않는다 — 엉뚱한 종목의 카드를 여는 것보다
+  // 아무 일도 안 하는 것이 낫다(사유는 콘솔에만 남긴다).
+  if (!stock) {
+    console.warn('[canvas] 카드 액션 종목을 못 읽었다', action.control);
+    return null;
+  }
+  const next = boardCardActions.cardActionEnvelope(action, stock);
+  if (!next) return null;
+  // 원문 HTML은 카드 청크에 있다 — 목적지 보드 청크를 먼저 실어야 카드가 선다.
+  await boardTemplateRegistry.loadBoard(action.board_id);
+  return addLiveCard({ status: 'success', envelope: next });
+}
+
+function wireCardActions(host, envelope, mounted) {
+  const surface = mounted && mounted.surface;
+  if (!surface || !boardCardActions) return 0;
+  let wired = 0;
+  for (const { node, action } of boardCardActions.actionNodes(surface)) {
+    const didWire = boardMount.wireStateControlActivation(
+      node,
+      () => { void runCardAction(node, surface, envelope, action); },
+      { keyboard: true },
+    );
+    if (!didWire) continue;
+    // 표시는 CSS가 한다([data-card-action], board-surface.css) — 인라인 원문은 안 건드린다(D1).
+    node.dataset.cardAction = action.control;
     wired += 1;
   }
   return wired;
