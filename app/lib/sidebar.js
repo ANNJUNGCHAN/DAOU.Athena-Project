@@ -530,6 +530,19 @@
     return btn;
   }
 
+  // 보드 29 GK4-0 — 최근 캡션 오른쪽 「전체」. 목록 발치의 「더 보기 (N)」을 그 자리로 옮긴다.
+  function makeRecentAllButton() {
+    const btn = el('button', 'sidebar-recent-all');
+    btn.type = 'button';
+    btn.textContent = '전체';
+    btn.addEventListener('click', (event) => {
+      event.stopPropagation();
+      showOlder = true;
+      renderList();
+    });
+    return btn;
+  }
+
   // 펜 = 새 대화창(38번 보드) — 어느 모드로 열지를 사람이 고른다.
   function makeModePicker(project) {
     const picker = el('div', 'sidebar-mode-picker');
@@ -977,17 +990,14 @@
 
     if (filtered.length) {
       // 최근은 모드를 가리지 않는다 — 머리말이 그것을 말한다(35번 보드).
-      $list.appendChild(makeSectionLabel('최근 · 모드 무관', 'is-recent-caption'));
+      const recentCaption = makeSectionLabel('최근 · 모드 무관', 'is-recent-caption');
+      if (!showOlder && !q && filtered.length > INITIAL_VISIBLE) {
+        recentCaption.appendChild(makeRecentAllButton());
+      }
+      $list.appendChild(recentCaption);
       const visible = showOlder || q ? filtered : filtered.slice(0, INITIAL_VISIBLE);
       for (const conversation of visible) {
         $list.appendChild(makeConversationItem(conversation, 'recent'));
-      }
-      if (!showOlder && !q && filtered.length > INITIAL_VISIBLE) {
-        const more = el('button', 'sidebar-item sidebar-more');
-        more.type = 'button';
-        more.textContent = `더 보기 (${filtered.length})`;
-        more.addEventListener('click', () => { showOlder = true; renderList(); });
-        $list.appendChild(more);
       }
     }
 

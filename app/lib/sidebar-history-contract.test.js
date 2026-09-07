@@ -45,6 +45,15 @@ function renderListBody() {
   return sidebar.slice(start, end > 0 ? end : undefined);
 }
 
+test('최근 캡션 오른쪽에 「전체」가 있고 목록 발치 「더 보기」는 없다', () => {
+  const body = renderListBody();
+  const sessionCss = read('styles', 'sidebar-session.css');
+  assert.match(body, /makeRecentAllButton\(/);
+  assert.match(sidebar, /textContent = '전체'/);
+  assert.doesNotMatch(body, /더 보기/);
+  assert.match(sessionCss, /\.sidebar-recent-all/);
+});
+
 test('모드 클릭은 목록을 거르지 않는다 — renderList에 현재 모드 필터가 없다', () => {
   const body = renderListBody();
   assert.ok(!body.includes('viewToMode(currentMode())'), 'renderList가 현재 모드로 대화를 거른다');
