@@ -2881,8 +2881,24 @@ function createBacktestCanvas(options) {
 
   // ---------- 렌더 ----------
 
+  function syncChatTechniqueAttr() {
+    const doc = typeof document !== 'undefined' ? document : null;
+    if (!doc || typeof doc.getElementById !== 'function') return;
+    const head = doc.getElementById('chatModeHead');
+    if (!head) return;
+    if (spec) {
+      if (typeof head.setAttribute === 'function') {
+        head.setAttribute('data-technique', String(spec.presetId || spec.name || 'selected'));
+      }
+      return;
+    }
+    if (typeof head.removeAttribute === 'function') head.removeAttribute('data-technique');
+    else if (head.dataset) delete head.dataset.technique;
+  }
+
   function render() {
     if (!mounted) return;
+    syncChatTechniqueAttr();
     // 대상이 바뀐 첫 그리기에서 한 번만 캐시 상태를 묻는다 — 같은 열쇠로 두 번 묻지 않는다.
     const wantedCoverage = coverageKey();
     if (wantedCoverage && wantedCoverage !== coverageAsked) {

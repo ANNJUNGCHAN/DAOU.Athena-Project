@@ -1335,11 +1335,11 @@ test('백테스트 빈 채팅은 Paper 40MQ-1이고 대화 모드 새 대화는 
   assert.match(css, /\.history:empty::before\s*\{[^}]*content:\s*'새 대화'/);
   assert.match(
     css,
-    /#chatModeHead\[data-mode="backtest"\]:not\(\[hidden\]\)\s*~\s*\.history:empty::before\s*\{[^}]*content:\s*'아직 고른 기법이 없습니다'/,
+    /#chatModeHead\[data-mode="backtest"\]:not\(\[hidden\]\):not\(\[data-technique\]\)\s*~\s*\.history:empty::before\s*\{[^}]*content:\s*'아직 고른 기법이 없습니다'/,
   );
   assert.match(
     css,
-    /#chatModeHead\[data-mode="backtest"\]:not\(\[hidden\]\)\s*~\s*\.history:empty::after\s*\{[^}]*content:\s*none/,
+    /#chatModeHead\[data-mode="backtest"\]:not\(\[hidden\]\):not\(\[data-technique\]\)\s*~\s*\.history:empty::after\s*\{[^}]*content:\s*none/,
   );
 });
 
@@ -1441,7 +1441,7 @@ test('다섯 모드 대화 크롬은 Paper 계약이다', async () => {
   assert.match(css, /\.history:empty::before\s*\{[^}]*content:\s*'새 대화'/);
   assert.match(
     css,
-    /#chatModeHead\[data-mode="backtest"\]:not\(\[hidden\]\)\s*~\s*\.history:empty::before\s*\{[^}]*content:\s*'아직 고른 기법이 없습니다'/,
+    /#chatModeHead\[data-mode="backtest"\]:not\(\[hidden\]\):not\(\[data-technique\]\)\s*~\s*\.history:empty::before\s*\{[^}]*content:\s*'아직 고른 기법이 없습니다'/,
   );
 });
 
