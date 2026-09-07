@@ -112,18 +112,35 @@ class RoutinesRuntime:
         검사 때 통과한 그 코드가 지금도 그대로 있어야 켠다. 파일을 여는 것은
         프로젝트 폴더 안으로 푼 경로뿐이다(임의 경로 열기 금지).
         """
+        blocker = self.code_watch_source_blocker(spec)
+        if blocker is not None:
+            return blocker
+        if self.watch_runner is None:
+            return "백엔드 실행층 꺼짐 — 백테스트 모듈 필요"
+        return None
+
+    def code_watch_source_blocker(self, spec: RoutineSpec) -> str | None:
+        """코드 감시 초안이 가리키는 프로젝트·파일·해시의 무결성만 확인한다."""
+        from athena_api.projects.store import ProjectMissingError, ProjectPathError
+
         watch = spec.watch
         if watch is None:
             return "감시 코드 파일 없음 — 다시 만들기"
         try:
             target = resolve_watch_file(watch.project_id, watch.path)
             raw = target.read_bytes()
-        except Exception:
+        except KeyError:
+            return "프로젝트 없음 — 다시 선택"
+        except ProjectMissingError:
+            return "프로젝트 폴더 없음 — 다시 연결"
+        except ProjectPathError:
+            return "감시 코드 경로 오류 — 다시 만들기"
+        except FileNotFoundError:
             return "감시 코드 파일 없음 — 다시 만들기"
+        except OSError:
+            return "감시 코드 파일을 읽을 수 없음 — 다시 연결"
         if hashlib.sha256(raw).hexdigest() != watch.version_hash:
             return "검사 뒤 코드가 바뀜 — 다시 검사"
-        if self.watch_runner is None:
-            return "백엔드 실행층 꺼짐 — 백테스트 모듈 필요"
         return None
 
     def restore_trigger_state(self) -> int:
@@ -186,9 +203,16 @@ def resolve_watch_file(project_id: str, path: str) -> Path:
     경로 탈출 방어는 projects.store가 이미 지고 있다(심볼릭 링크까지 본다).
     여기서 다시 구현하지 않고 그 한 곳을 부른다.
     """
-    from athena_api.projects.store import resolve_in_project, resolve_project_path
+    from athena_api.projects.store import (
+        ProjectMissingError,
+        resolve_in_project,
+        resolve_project_path,
+    )
 
-    return resolve_in_project(resolve_project_path(project_id), path)
+    project_root = resolve_project_path(project_id)
+    if not project_root.is_dir():
+        raise ProjectMissingError("등록된 프로젝트 폴더가 디스크에 없다")
+    return resolve_in_project(project_root, path)
 
 
 def _archive_once(settings: Settings) -> None:

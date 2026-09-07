@@ -3217,8 +3217,8 @@ async function main() {
           name: c.spec.name,
         };
       })()`, WAIT_VALIDATE);
-      // 고른 직후의 자리는 지도다 — 파일이 열렸는지는 코드 탭(세 번째)에서 확인한다.
-      await goSubtab(shellWin, 2);
+      // 고른 직후의 자리가 코드다(기법 하나의 화면, 보드 20) — 첫 하위 탭이 코드라 그대로 잰다.
+      await goSubtab(shellWin, 0);
       await wait(400);
       const editorSeen = await until(shellWin, `(() => {
         const ta = document.querySelector('${R}.project-ide-editor .backtest-code-textarea');
@@ -3228,7 +3228,9 @@ async function main() {
           chars: ta.value.length,
           headPath: (document.querySelector('${R}.project-ide-head-path') || {}).textContent,
           venvPanel: document.querySelectorAll('${R}.backtest-venv-panel').length,
-          registerButton: document.querySelectorAll('${R}.backtest-register-strategy').length,
+          // 폴더를 고르는 줄·등록 버튼은 없다 — 한 페이지는 한 알고리즘만 다룬다(2026-09-07).
+          picker: document.querySelectorAll('${R}.project-ide-project').length,
+          homeButton: document.querySelectorAll('${R}.backtest-head-home').length,
         };
       })()`, WAIT_UI);
       await step('M10', '고르면 그 파일이 코드 탭에 열리고 실행경로가 코드가 된다', () => ({
@@ -3237,7 +3239,7 @@ async function main() {
               && JSON.stringify(selected.params) === JSON.stringify(['fast', 'slow'])
               && !!editorSeen && editorSeen.marker === true
               && editorSeen.headPath === USER_STRATEGY_PATH
-              && editorSeen.venvPanel === 1 && editorSeen.registerButton === 1,
+              && editorSeen.venvPanel === 1 && editorSeen.picker === 0 && editorSeen.homeButton === 1,
         data: { selected, editor: editorSeen },
       }));
 
@@ -4547,9 +4549,9 @@ async function main() {
       data: { keys: techKeys },
     }));
 
-    // 뒤에 무엇이 돌든 초안 상태를 남기지 않는다 — [기법 목록]으로 나간 뒤 폼을 되돌린다
-    // (초안에는 폼 탭이 없어 그냥 부르면 하위 탭 1번이 노드·흐름이다).
-    await click(shellWin, `${R}.backtest-technique-back`);
+    // 뒤에 무엇이 돌든 초안 상태를 남기지 않는다 — 헤더의 [그만두기]로 목록(홈)에 나간 뒤
+    // 폼을 되돌린다(초안에는 폼 탭이 없다).
+    await click(shellWin, `${R}.backtest-head-home`);
     await wait(300);
     await ensureRunnableForm(shellWin, FROM, TO);
   });

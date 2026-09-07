@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
 from datetime import UTC, datetime, timedelta
 
 import pytest
@@ -16,6 +17,7 @@ from fastapi.testclient import TestClient
 from athena_api.api.routines import router
 from athena_api.config import Settings
 from athena_api.errors import install_exception_handlers
+from athena_api.projects import store as projects_store
 from athena_api.routines.guard_settings import GuardSettingsStore
 from athena_api.routines.models import (
     MAX_COOLDOWN_S,
@@ -27,9 +29,12 @@ from athena_api.routines.models import (
 from athena_api.routines.runtime import open_routines, teardown_routines
 from athena_api.routines.triggers import TriggerState
 
+WATCH_SOURCE = "x = 1\n"
+WATCH_HASH = hashlib.sha256(WATCH_SOURCE.encode("utf-8")).hexdigest()
+
 
 @pytest.fixture
-def app_client(tmp_path):
+def app_client(tmp_path, monkeypatch):
     app = FastAPI()
     install_exception_handlers(app)
     app.include_router(router)
@@ -50,6 +55,14 @@ def app_client(tmp_path):
     app.state.routines_runtime = runtime
     app.state.nudge_guard_store = GuardSettingsStore(tmp_path / "nudge_guard.json")
     app.state.nudge_guard_store.load()
+    project_root = tmp_path / "project"
+    (project_root / "watch").mkdir(parents=True)
+    (project_root / "watch" / "volume_spike.py").write_bytes(WATCH_SOURCE.encode("utf-8"))
+    monkeypatch.setattr(
+        projects_store,
+        "resolve_project_path",
+        lambda project_id: project_root if project_id == "p1" else _missing_project(project_id),
+    )
     yield TestClient(app), runtime
     loop.run_until_complete(teardown_routines(runtime))
     loop.close()
@@ -289,11 +302,15 @@ CODE_WATCH_DRAFT = {
     "watch": {
         "project_id": "p1",
         "path": "watch/volume_spike.py",
-        "version_hash": "a" * 64,
+        "version_hash": WATCH_HASH,
         "poll_interval_s": 60,
         "lookback_days": 30,
     },
 }
+
+
+def _missing_project(project_id):
+    raise KeyError(project_id)
 
 
 def _code_draft(client) -> str:
@@ -326,7 +343,7 @@ def test_code_watch_poll_interval_is_updatable(app_client):
     assert res.json()["watch"]["poll_interval_s"] == 300
     assert runtime.store.get(rid).watch.poll_interval_s == 300
     # 나머지 watch 값은 그대로다 — 편집이 감시 파일을 바꾸지 않는다.
-    assert runtime.store.get(rid).watch.version_hash == "a" * 64
+    assert runtime.store.get(rid).watch.version_hash == WATCH_HASH
     assert runtime.store.get(rid).watch.path == "watch/volume_spike.py"
 
 

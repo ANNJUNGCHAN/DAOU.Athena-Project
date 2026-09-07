@@ -1,11 +1,9 @@
 {
-  "root": "3BQB-0",
+  "root": "3BQD-0",
   "regions": [
-    { "node_id": "3BQC-0", "name": "Discovery Root · 업종", "role": "other", "depth": 1 },
-    { "node_id": "3BQD-0", "name": "Explorer Card Surface", "role": "other", "depth": 2 },
-    { "node_id": "3BZY-0", "name": "Header and Capability Navigation", "role": "header", "depth": 3 },
-    { "node_id": "3BZG-0", "name": "Ranking Query Controls", "role": "strip", "depth": 3 },
-    { "node_id": "3BQH-0", "name": "Ranking Workspace", "role": "workspace", "depth": 3 },
-    { "node_id": "3BQE-0", "name": "User Status Footer", "role": "footer", "depth": 3 }
+    { "node_id": "3BZY-0", "name": "Header and Capability Navigation", "role": "header", "depth": 1 },
+    { "node_id": "3BZG-0", "name": "Ranking Query Controls", "role": "strip", "depth": 1 },
+    { "node_id": "3BQH-0", "name": "Ranking Workspace", "role": "workspace", "depth": 1 },
+    { "node_id": "3BQE-0", "name": "User Status Footer", "role": "footer", "depth": 1 }
   ]
 }
