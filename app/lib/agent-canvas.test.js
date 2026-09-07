@@ -2248,7 +2248,7 @@ test('A-5 상세: 울린 기록·일시중지·취소·고치기·만료가 있�
     findByClass(row, 'agent-detail-field-label')[0].textContent,
     findByClass(row, 'agent-detail-field-value')[0].textContent,
   ]);
-  assert.deepEqual(Object.fromEntries(pairs), { '확인 주기': '장중 1분', 쿨다운: '1일', 만료: '2026-10-03' });
+  assert.deepEqual(Object.fromEntries(pairs), { '확인 주기': '장중 1분', 쿨다운: '1일', 만료: '2026-10-03', 데이터: '일봉 + 오늘 현재가' });
 
   const inputs = [];
   (function walk(n) { if (['input', 'select', 'textarea'].includes(n.tag)) inputs.push(n); (n.children || []).forEach(walk); })(detail);
@@ -2343,6 +2343,17 @@ test('켜진 알람에는 승인 패널이 없다 — 승인은 초안 한 번�
   const { detail } = await mountCode({ status: 'active' });
   assert.equal(findByClass(detail, 'agent-code-approve').length, 0);
 });
+
+for (const status of ['draft', 'active', 'paused']) {
+  test(`446V 데이터 행: ${status} 코드 감시는 실행기의 일봉·현재가 입력 계약을 표시한다`, async () => {
+    const { detail } = await mountCode({ status }, { detail: { last_check: null, last_run: null } });
+    const rows = findByClass(detail, 'agent-detail-field');
+    const data = rows.find((row) => findByClass(row, 'agent-detail-field-label')[0].textContent === '데이터');
+    assert.ok(data, '검사 전에도 실제 감시 실행기가 받을 데이터 종류를 알아야 한다');
+    assert.equal(findByClass(data, 'agent-detail-field-value')[0].textContent, '일봉 + 오늘 현재가');
+    assert.doesNotMatch(allText(data), /수신됨|연결됨|실시간 정상/);
+  });
+}
 
 test('초안: 검사 요약과 「검사」 버튼이 있고 누르면 검사 1회를 돈다', async () => {
   const checked = [];
