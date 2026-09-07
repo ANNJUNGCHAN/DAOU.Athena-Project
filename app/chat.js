@@ -3378,6 +3378,7 @@ async function refreshRoutineDrafts() {
 // 맡는다. 승인은 초안 카드와 같은 athena:routine-confirm 경로 하나뿐이다 —
 // 사람 클릭 전용(§7-6).
 const watchCheckCardLib = window.AthenaLib.WatchCheckCard;
+const watchFixCycleLib = window.AthenaLib.WatchFixCycle;
 
 // 목록 뷰에 watch 블록이 없을 수 있다 — 없으면 상세를 1회 더 불러 채운다.
 async function watchBlockOf(r) {
@@ -3602,9 +3603,13 @@ function renderWatchCheckCard(r, check) {
       });
     } else {
       btn.addEventListener('click', () => {
-        $input.value = draftFixSeedText(r);
-        autoGrowInput();
-        $input.focus();
+        const repairContext = model.failed
+          ? Object.assign({}, r, {
+            activation_blocker: r.activation_blocker || model.reason,
+            repairReason: model.reason,
+          })
+          : r;
+        void beginWatchRepair(repairContext);
       });
     }
     buttons.push(btn);
@@ -3642,6 +3647,30 @@ function draftDescriptionLine(r) {
 // "고칠 게 있어" 클릭 → 시트 없이 채팅으로(동선 규칙②: 편집도 채팅으로).
 function draftFixSeedText(r) {
   return `"${r.note}" 초안을 고쳐줘 — `;
+}
+
+// 코드 감시 수정은 에이전트 접두가 적용되는 화면에서 이어간다. 누락 파일 복구는
+// 캔버스가 보낸 구조화 컨텍스트를 사람이 검토할 문장으로 바꾸고, 일반 수정은 기존의
+// 열린 문장을 그대로 둔다. 둘 다 입력만 채우며 자동 제출·승인은 하지 않는다.
+async function beginWatchRepair(context) {
+  openAgentCanvas();
+  let prepared = context || {};
+  // 채팅 카드 목록에는 감시 블록·조건이 생략될 수 있다. 차단된 코드 감시는 상세를
+  // 한 번 읽어 현재 설정을 보존하고, 실패해도 카드의 id·차단 사유는 잃지 않는다.
+  if (prepared.repair !== true && prepared.activation_blocker && prepared.id) {
+    let detail = null;
+    try {
+      const res = await window.athena.invoke('athena:routine-detail', { id: prepared.id });
+      if (res && res.ok && res.data) detail = res.data;
+    } catch { /* 아래 merge가 목록 카드의 확인된 값으로 복구 문장을 만든다 */ }
+    prepared = watchFixCycleLib.mergeRepairContext(prepared, detail);
+  }
+  const text = prepared.repair === true
+    ? watchFixCycleLib.repairSeedText(prepared)
+    : draftFixSeedText(prepared);
+  if (window.AthenaShell && typeof window.AthenaShell.seedChatInput === 'function') {
+    window.AthenaShell.seedChatInput(text);
+  }
 }
 
 function renderApprovalCard(r) {
@@ -3742,6 +3771,10 @@ function renderApprovalCard(r) {
 
   const fix = _btn('고칠 게 있어', 'routine-btn');
   fix.addEventListener('click', () => {
+    if (isCodeWatch) {
+      void beginWatchRepair(r);
+      return;
+    }
     $input.value = draftFixSeedText(r);
     autoGrowInput();
     $input.focus();
@@ -4946,6 +4979,14 @@ document.addEventListener('athena:chat-submit', (event) => {
   const text = String((event && event.detail && event.detail.text) || '').trim();
   if (!text) return;
   dispatchUserQuery(text);
+});
+
+// 에이전트 상세의 「다시 만들기」가 보내는 누락 파일 복구 요청. 캔버스는 루틴
+// 컨텍스트만 전달하고, 채팅이 모드 전환과 입력 문장 소유권을 유지한다.
+document.addEventListener('athena:watch-repair-request', (event) => {
+  const detail = event && event.detail;
+  if (!detail || detail.repair !== true) return;
+  void beginWatchRepair(detail);
 });
 
 // 노드를 눌러도 말은 나가지 않는다(보드 22) — 참조만 입력창에 들어가고, 무엇을 물을지는

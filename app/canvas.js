@@ -3909,7 +3909,9 @@ const agentCanvas = window.AthenaLib.AgentCanvas.createAgentCanvas({
   container: document.getElementById('agentCanvas'),
   fetchRoutines: async () => {
     const res = await window.athena.invoke('athena:routines-list');
-    return (res && res.ok && res.data && Array.isArray(res.data.routines)) ? res.data.routines : [];
+    if (!res || !res.ok) throw new Error((res && res.error) || '루틴 목록을 불러오지 못했습니다');
+    if (!res.data || !Array.isArray(res.data.routines)) throw new Error('루틴 목록 응답이 올바르지 않습니다');
+    return res.data.routines;
   },
   // 3단계 — "오늘 발화" 통계 타일. fired_today는 routines 배열이 아니라 같은
   // 응답의 최상위 필드(2단계, ledger 단일 스캔 집계)라 별개 왕복으로 뗀다
@@ -3986,6 +3988,10 @@ const agentCanvas = window.AthenaLib.AgentCanvas.createAgentCanvas({
     }
     if (opts.kind === 'ask' && node) {
       window.AthenaShell.seedChatInput(`"${name}" 알람의 「${node}」 칸은 뭐야? `);
+      return;
+    }
+    if (opts.repair === true) {
+      document.dispatchEvent(new CustomEvent('athena:watch-repair-request', { detail: opts }));
       return;
     }
     window.AthenaShell.seedChatInput(`"${name}" 알람을 말로 고치고 싶어 — `);
