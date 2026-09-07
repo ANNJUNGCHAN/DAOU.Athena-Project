@@ -1190,16 +1190,29 @@ def _mark_scroll_table_semantics(
     accessible_label: str,
 ) -> None:
     rows = [header, *body, *foot]
-    header_top = header
-    while header_top.parent is not owner:
-        if header_top.parent is None:
-            raise ExtractError("scroll-table header is outside the scroll owner")
-        header_top = header_top.parent
-    top_nodes = [header_top, *body, *foot]
-    if any(node.parent is not owner for node in top_nodes):
-        raise ExtractError("scroll-table body rows must be direct children of the scroll owner")
+
+    # 감쌀 것은 행 자체가 아니라 **소유자 직계 조상**이다. 저장본은 머리를 헤더블록에
+    # (2XTO-0 `365O-0`), 본문을 뷰포트 래퍼에(15L8-2 `35SP-0` · 2QM7-2 `34GL-0`) 넣는다.
+    # 머리에만 조상 타고 올라가기를 걸어 두면 그 래퍼를 이고 있는 표는 「본문 행이
+    # 직계 자식이어야 한다」에서 막힌다 — 실측 25장 중 열 접기·스크롤이 하나도 없는
+    # 보드가 대부분 이 모양이다. 역할(role/aria)은 아래에서 `rows`에 그대로 실으므로
+    # 감싸는 층이 한 겹 늘어도 표 의미는 바뀌지 않는다.
+    def top_of(node: Element) -> Element:
+        current = node
+        while current.parent is not owner:
+            if current.parent is None:
+                raise ExtractError("scroll-table row is outside the scroll owner")
+            current = current.parent
+        return current
+
+    top_nodes: list[Element] = []
+    for node in [header, *body, *foot]:
+        top = top_of(node)
+        # 같은 래퍼를 공유하는 행들은 한 번만 싣는다(본문 8행 → 뷰포트 1개).
+        if not any(top is seen for seen in top_nodes):
+            top_nodes.append(top)
     indexes = [owner.children.index(node) for node in top_nodes]
-    if indexes != list(range(indexes[0], indexes[0] + len(rows))):
+    if indexes != list(range(indexes[0], indexes[0] + len(top_nodes))):
         raise ExtractError("scroll-table rows must be contiguous")
 
     columns = len(element_children(header))
