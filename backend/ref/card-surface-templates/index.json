@@ -621,7 +621,7 @@
         "layer_직접": 115,
         "layer_병기": 0,
         "layer_펼침": 0,
-        "tables": 0,
+        "tables": 1,
         "tree_text_truncated": 0,
         "bs_col": 0,
         "bs_paired": 0,
@@ -633,7 +633,7 @@
         "marks": [],
         "unresolved": []
       },
-      "html_sha256": "4f79c85f74e221c0f2d21facd4418cc1e8b1f30921683383fe32a97f53cb8d9d"
+      "html_sha256": "6509c4c4b4947babc81b8349bdb7656b6299664b4f7b4baa9e8a6b4bde1a21a8"
     },
     {
       "board_id": "15N5-2",
