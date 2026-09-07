@@ -100,9 +100,10 @@ const STEP_KINDS = Object.freeze({
   send: Object.freeze(['channel', 'data']),
   // wait      ms
   wait: Object.freeze(['ms']),
-  // wait-for selector,count,timeout — 가시 DOM 개수가 count가 될 때까지 제한 시간 안에서
-  //                                   폴링한다. 시간 초과는 도달 실패다.
-  'wait-for': Object.freeze(['selector', 'count', 'timeout']),
+  // wait-for selector,count,timeout,visibility — DOM 개수가 count가 될 때까지 제한 시간
+  //                                              안에서 폴링한다. visibility는 visible|any,
+  //                                              시간 초과는 도달 실패다.
+  'wait-for': Object.freeze(['selector', 'count', 'timeout', 'visibility']),
   // settle    (인자 없음) — rAF 2회 (verify.js responsiveSettle)
   settle: Object.freeze([]),
   // boot-hold chars — 부팅 창을 `?bootHoldChars=N`으로 다시 읽어 N글자에서 세운다
@@ -1600,6 +1601,71 @@ const BACKTEST_CODE_DRAFT = Object.freeze({
   ].join('\n'),
 });
 
+// 위 코드 초안을 backend mapmodel.build_map(source=...)에 넣은 실제 응답. 코드 흐름
+// 지도는 athena:backtest-map 왕복이 끝나야 생기므로 프리셋만 fixture하면 검증이 로컬
+// 백엔드 유무에 매달린다. 앱이 문구를 소유하지 않는 보드라 응답 전체를 같은 IPC 봉투로
+// 고정하고, 라우트는 실제 캔버스 map 경로가 이 봉투를 그리는지를 잰다.
+const BACKTEST_CODE_MAP = Object.freeze({
+  ok: true,
+  data: {
+    version: null,
+    source_kind: 'code',
+    target: null,
+    app_before: [{
+      key: 'load', title: '봉 데이터를 모읍니다',
+      detail: '캐시에 있는 봉을 날짜순으로 정리해 표 하나로 만듭니다',
+    }],
+    app_after: [
+      {
+        key: 'fill', title: '사고·파는 가격을 정합니다',
+        detail: '신호가 난 다음 봉의 시가로 체결합니다 — 같은 봉 종가로 체결하면 미래를 본 것입니다',
+      },
+      {
+        key: 'cost', title: '비용을 뗍니다',
+        detail: '수수료·거래세·슬리피지를 뺀 다음 손익을 씁니다',
+      },
+      {
+        key: 'metrics', title: '성과를 냅니다',
+        detail: '지표 6장·자산곡선·체결 표를 결과 화면으로 보냅니다',
+      },
+    ],
+    boundary_after_note: 'entry·exit 두 열만 받습니다',
+    boundary_after_lines: { first_line: 18, last_line: 18 },
+    nodes: [
+      {
+        id: 'params', numeral: '①', title: '조절할 값을 정합니다',
+        lines: [{ role: null, text: 'fast · slow · atr_mult — 3개' }],
+        facts: [], status: 'ok', note: null, first_line: 1, last_line: 7, editable: false,
+      },
+      {
+        id: 'indicators', numeral: '②', title: '가격을 지표로 바꿉니다',
+        lines: [
+          { role: null, text: 'fast · slow · atr — 3열' },
+          { role: null, text: 'sma · atr 호출' },
+        ],
+        facts: [], status: 'ok', note: null, first_line: 10, last_line: 12, editable: false,
+      },
+      {
+        id: 'conditions', numeral: '③', title: '사고·파는 순간을 찍습니다',
+        lines: [
+          { role: null, text: 'entry · stop · exit_ — 3열' },
+          { role: null, text: 'cross_above · cross_below 호출' },
+        ],
+        facts: [], status: 'ok', note: null, first_line: 14, last_line: 16, editable: false,
+      },
+      {
+        id: 'guard', numeral: '④', title: '지키는 선을 겁니다', lines: [], facts: [],
+        status: 'unknown', note: '코드 전략의 지키는 선은 앱 설정에서 옵니다',
+        first_line: null, last_line: null, editable: false,
+      },
+    ],
+    free_code: [],
+    unknown: [],
+    error: null,
+    code: { lines: 18, matches_map: true },
+  },
+});
+
 // 보드 07 — 버전 id를 실은 실행 응답. BACKTEST_RUN_OK와 나누는 이유는 보드 03이
 // 재는 것이 결과 화면이라 버전 id가 없어도 그대로 서기 때문이다(그쪽 봉투를 늘리면
 // 보드 03의 판정이 배포 쪽 사정에 끌려간다).
@@ -3005,7 +3071,7 @@ const ROUTES = Object.freeze([
       { do: 'click', selector: '#sidebarNewChat' },
       { do: 'ipc-hang', channel: 'athena__render_canvas' },
       { do: 'command-bar', text: '백엔드 API 개수 확인' },
-      { do: 'wait-for', selector: '.progress-line', count: 1, timeout: 2000 },
+      { do: 'wait-for', selector: '.progress-line', count: 1, timeout: 2000, visibility: 'visible' },
       { do: 'settle' },
     ],
     root: '#shell',
@@ -3541,7 +3607,9 @@ const ROUTES = Object.freeze([
         data: { conversations: [], projects: [], currentProjectId: null, activeId: 'fx-new' },
       },
       { do: 'click', selector: '#sidebarNewChat' },
-      { do: 'wait-for', selector: '#history > *', count: 0, timeout: 2000 },
+      // 2분할에서는 빈 이력 DOM을 보존하되 CSS로 숨긴다. any로 존재·빈 상태를 먼저
+      // 확인하고, 아래 structure가 DOM 존재·자식 없음·비가시를 각각 잰다.
+      { do: 'wait-for', selector: '#history:empty', count: 1, timeout: 2000, visibility: 'any' },
       { do: 'resize', width: 1000, height: 760 },
       { do: 'settle' },
     ],
@@ -3552,16 +3620,17 @@ const ROUTES = Object.freeze([
     // 자기 자신에 대해 쓴 주석이라 앱이 그리는 화면 문구가 아니다.
     phrases: ['새 대화', '그래프', '에이전트', '플러그인', '무엇이든 물어보세요'],
     // Paper가 이 폭에 대해 적은 세 가지: 「한 셸」로 영역은 그대로 셋이고, 채팅은
-    // 아래로 내려가 빈 대화에서는 가시 이력 컨테이너에 자식이 없고 작성창만 남으며,
-    // (빈 대화는 컨테이너 가시성+자식 0 두 단언으로 잰다), 그래도
+    // 아래로 내려가 빈 대화에서는 이력 컨테이너 DOM은 남되 숨고, 자식이 없으며 작성창만
+    // 보인다. 이 셋을 DOM 존재·자식 DOM 0·가시 DOM 0으로 나눠 재고, 그래도
     // 「Snap 후에도 초안과 스크롤은 보존」할 수 있게 입력 DOM은 하나뿐이다.
     // 사이드바 행 수는 안 적는다 — 축소 목업은 넷(새 대화·그래프·에이전트·플러그인)만
     // 그렸는데 앱의 모드는 다섯이라 거기에 앱의 수를 적으면 앱이 정본이 된다.
     structure: [
       { what: 'count', selector: '.shell-region', equals: 3 },
-      { what: 'count', selector: '#history', equals: 1 },
-      { what: 'count', selector: '#history > *', equals: 0 },
-      { what: 'count', selector: '#input', equals: 1 },
+      { what: 'count', selector: '#history', equals: 1, visibility: 'any' },
+      { what: 'count', selector: '#history > *', equals: 0, visibility: 'any' },
+      { what: 'count', selector: '#history', equals: 0, visibility: 'visible' },
+      { what: 'count', selector: '#input', equals: 1, visibility: 'visible' },
     ],
   },
   {
@@ -4252,7 +4321,7 @@ const ROUTES = Object.freeze([
       // 발화 하나가 궤도 링을 다시 세고(refreshSatelliteRing) 미확인으로 쌓인다.
       { do: 'send', channel: 'athena:routine-event', data: ROUTINE_FIRED },
       // fixture 응답을 실제 invoke로 다시 읽고 DOM을 교체할 때까지 제한 시간 안에서 기다린다.
-      { do: 'wait-for', selector: '.orb-ring-dot', count: 3, timeout: 2000 },
+      { do: 'wait-for', selector: '.orb-ring-dot', count: 3, timeout: 2000, visibility: 'visible' },
       // 펼치면 쌓인 첫 건이 패널로 그려진다 — 창 크기는 main이 정하므로 렌더러에는
       // 이 이벤트가 곧 펼침이다(orb.js athena:orb-state).
       { do: 'send', channel: 'athena:orb-state', data: { expanded: true } },
@@ -4416,7 +4485,7 @@ const ROUTES = Object.freeze([
         data: { ok: false, status: 503, error: 'ATHENA_BACKTEST_ENABLED=0' },
       },
       { do: 'mode', view: 'backtest' },
-      { do: 'wait-for', selector: '.backtest-canvas-error', count: 1, timeout: 2000 },
+      { do: 'wait-for', selector: '.backtest-canvas-error', count: 1, timeout: 2000, visibility: 'visible' },
       { do: 'settle' },
     ],
     root: '#backtestCanvas',
@@ -4709,19 +4778,19 @@ const ROUTES = Object.freeze([
     // 설명·실제 값 표기는 그대로 쓰고」라고 못 박은 부분만 잰다.
     reach: [
       { do: 'ipc-fixture', channel: 'athena:backtest-presets', data: BACKTEST_PRESETS },
+      { do: 'ipc-fixture', channel: 'athena:backtest-map', data: BACKTEST_CODE_MAP },
       { do: 'mode', view: 'backtest' },
       { do: 'send', channel: 'athena:backtest-chat-action', data: BACKTEST_TARGET },
-      { do: 'wait', ms: 300 },
       // 이 칸들이 서는 곳은 **코드 경로의 지도**다. 폼 경로에서는 같은 탭이 편집 표면
       // (보드 11~14의 그래프)을 세우고 요약 지도를 빼기 때문이다(renderFlowTab의
       // visualActive 분기, 2026-09-03 사용자 확정) — 보드 08이 그린 것은 파이썬 한
       // 파일을 읽어 만든 지도이므로 코드를 얹어 그 경로로 옮긴다.
       { do: 'send', channel: 'athena:backtest-chat-action', data: BACKTEST_CODE_DRAFT },
-      { do: 'wait', ms: 300 },
+      { do: 'wait-for', selector: '.backtest-code-host', count: 1, timeout: 2000, visibility: 'visible' },
       // 하위 탭 첫째가 지도다(지도 · 폼 · 코드 · 노드·흐름). 지도를 읽는 왕복은 이
       // 클릭이 낸다 — 코드를 얹는 길에는 그 호출이 없다.
       { do: 'click', selector: '#backtestCanvas .backtest-subtab:nth-child(1)' },
-      { do: 'wait', ms: 1500 },
+      { do: 'wait-for', selector: '.backtest-flow-node.is-mine', count: 4, timeout: 2000, visibility: 'visible' },
       { do: 'settle' },
     ],
     root: '#backtestCanvas',
