@@ -1320,6 +1320,16 @@ function removeBoardLoadNode(state) {
   state.loadNode = null;
 }
 
+// 안내 줄(로딩·부분·오류)은 보드 자리 **바로 위**에 앉는다. 처음 그릴 때 host는
+// 카드 본문의 직계 자식이지만, integrated-card-surface가 카드를 패널로 쪼개면서
+// host를 `.integrated-card-panel` 안으로 옮긴다 — 그 뒤에 본문(loadBody)을 기준으로
+// insertBefore를 부르면 「host가 내 자식이 아니다」로 던진다. 그러면 상태 보드 전환이
+// 로딩 표시 한 줄에서 통째로 끊겨 탭 칩이 하나도 안 눌리는 것으로 보인다
+// (2026-09-07 실측: 137X-2 탭 6개 전부 NotFoundError).
+function boardLoadAnchor(state, host) {
+  return (host && host.parentElement) || state.loadBody;
+}
+
 function showBoardLoading(state, host) {
   removeBoardLoadNode(state);
   state.hydrationWarnings = [];
@@ -1328,7 +1338,7 @@ function showBoardLoading(state, host) {
   const loading = emptyState('데이터를 불러오는 중입니다.', '카드가 준비되면 자동으로 표시합니다.');
   loading.classList.add('board-surface-load-state');
   loading.setAttribute('role', 'status');
-  state.loadBody.insertBefore(loading, host);
+  boardLoadAnchor(state, host).insertBefore(loading, host);
   state.loadNode = loading;
   if (state.loadCard && !state.primaryDescriptor) state.loadCard.dataset.renderState = 'loading';
 }
@@ -1344,7 +1354,7 @@ function showBoardReady(state, host, envelope, mounted, retry) {
     const partial = errorNote('일부 추가 정보를 불러오지 못했습니다. 확인된 정보만 표시합니다.');
     partial.classList.add('board-surface-partial');
     partial.appendChild(button('text', '다시 시도', { onClick: retry }));
-    state.loadBody.insertBefore(partial, host);
+    boardLoadAnchor(state, host).insertBefore(partial, host);
     state.loadNode = partial;
   }
   if (mounted) void mountBoardPrimary(host, envelope, mounted);
@@ -1358,7 +1368,7 @@ function showBoardLoadError(state, host, error, retry) {
   failure.classList.add('board-surface-load-state', 'is-error');
   failure.setAttribute('role', 'alert');
   failure.appendChild(button('ghost', '다시 시도', { onClick: retry }));
-  state.loadBody.insertBefore(failure, host);
+  boardLoadAnchor(state, host).insertBefore(failure, host);
   state.loadNode = failure;
   settleBoardChartMount(state, 'error');
   if (state.loadCard) state.loadCard.dataset.renderState = 'error';
