@@ -100,6 +100,9 @@ const STEP_KINDS = Object.freeze({
   send: Object.freeze(['channel', 'data']),
   // wait      ms
   wait: Object.freeze(['ms']),
+  // wait-for selector,count,timeout — 가시 DOM 개수가 count가 될 때까지 제한 시간 안에서
+  //                                   폴링한다. 시간 초과는 도달 실패다.
+  'wait-for': Object.freeze(['selector', 'count', 'timeout']),
   // settle    (인자 없음) — rAF 2회 (verify.js responsiveSettle)
   settle: Object.freeze([]),
   // boot-hold chars — 부팅 창을 `?bootHoldChars=N`으로 다시 읽어 N글자에서 세운다
@@ -2981,8 +2984,38 @@ const ROUTES = Object.freeze([
     // 조건이 하나뿐이라(routine-turn.js conditions 주석) 거기에 1을 적으면 앱이
     // 정본이 된다.
     structure: [
-      { what: 'count', selector: '.turn-agent', equals: 1 },
+      // 복원 실패·브리핑 같은 다른 능동 턴이 이력에 남아 있어도, 이 fixture가 만든
+      // 발화 턴만 센다. Paper의 history child 수를 전역 .turn-agent 수로 읽지 않는다.
+      { what: 'count', selector: '.turn-agent.agent-fired', equals: 1 },
       { what: 'count', selector: '.agent-watch', equals: 1 },
+    ],
+  },
+  {
+    board: '3KM-0', // 10 · 셸 — 답변 중 · Task Canvas
+    window: 'shell',
+    // 새 대화로 이력을 비운 뒤 실제 작성창 제출 경로를 탄다. main 질의 핸들러는
+    // 먼저 영구 대기로 바꿔 provider·네트워크를 시작하지 않으면서, renderer가
+    // 질의 왕복을 기다리는 동안 만드는 질문 턴·진행 줄을 그대로 세운다.
+    reach: [
+      {
+        do: 'ipc-fixture',
+        channel: 'athena:conversations-new',
+        data: { conversations: [], projects: [], currentProjectId: null, activeId: 'fx-new' },
+      },
+      { do: 'click', selector: '#sidebarNewChat' },
+      { do: 'ipc-hang', channel: 'athena__render_canvas' },
+      { do: 'command-bar', text: '백엔드 API 개수 확인' },
+      { do: 'wait-for', selector: '.progress-line', count: 1, timeout: 2000 },
+      { do: 'settle' },
+    ],
+    root: '#shell',
+    // 제출한 질문이 실제 질문 턴에 남는지와, 그 상태에서도 셸 내비가 유지되는지를
+    // 함께 잰다. 진행 중 자체는 아래 진행 줄·미완료 답변 구조가 책임진다.
+    phrases: ['백엔드 API 개수 확인', '그래프', '플러그인'],
+    structure: [
+      { what: 'count', selector: '.turn-q', equals: 1 },
+      { what: 'count', selector: '.progress-line', equals: 1 },
+      { what: 'absent', selector: '.turn-a' },
     ],
   },
   {
@@ -3500,6 +3533,15 @@ const ROUTES = Object.freeze([
     // 보드 06이 이미 지고 있고, 4분할(699px 아래)은 사이드바 글자가 전부 접혀
     // 원장 문구를 하나밖에 못 남긴다. 1000px은 두 경계(1279·699) 사이 한가운데다.
     reach: [
+      // Snap은 기존 대화를 보존하는 기능이지만 이 보드가 고른 상태는 빈 대화다.
+      // 새 대화 IPC를 fixture로 막고 실제 새 대화 버튼으로 renderer 상태만 비운다.
+      {
+        do: 'ipc-fixture',
+        channel: 'athena:conversations-new',
+        data: { conversations: [], projects: [], currentProjectId: null, activeId: 'fx-new' },
+      },
+      { do: 'click', selector: '#sidebarNewChat' },
+      { do: 'wait-for', selector: '#history > *', count: 0, timeout: 2000 },
       { do: 'resize', width: 1000, height: 760 },
       { do: 'settle' },
     ],
@@ -3510,13 +3552,15 @@ const ROUTES = Object.freeze([
     // 자기 자신에 대해 쓴 주석이라 앱이 그리는 화면 문구가 아니다.
     phrases: ['새 대화', '그래프', '에이전트', '플러그인', '무엇이든 물어보세요'],
     // Paper가 이 폭에 대해 적은 세 가지: 「한 셸」로 영역은 그대로 셋이고, 채팅은
-    // 아래로 내려가 빈 대화에서는 작성창만 남으며(2분할 목업의 하단 띠), 그래도
+    // 아래로 내려가 빈 대화에서는 가시 이력 컨테이너에 자식이 없고 작성창만 남으며,
+    // (빈 대화는 컨테이너 가시성+자식 0 두 단언으로 잰다), 그래도
     // 「Snap 후에도 초안과 스크롤은 보존」할 수 있게 입력 DOM은 하나뿐이다.
     // 사이드바 행 수는 안 적는다 — 축소 목업은 넷(새 대화·그래프·에이전트·플러그인)만
     // 그렸는데 앱의 모드는 다섯이라 거기에 앱의 수를 적으면 앱이 정본이 된다.
     structure: [
       { what: 'count', selector: '.shell-region', equals: 3 },
-      { what: 'absent', selector: '#chatRegion .history' },
+      { what: 'count', selector: '#history', equals: 1 },
+      { what: 'count', selector: '#history > *', equals: 0 },
       { what: 'count', selector: '#input', equals: 1 },
     ],
   },
@@ -4207,7 +4251,8 @@ const ROUTES = Object.freeze([
       { do: 'send', channel: 'athena:shell-visibility', data: { hidden: false, displayMode: 'B' } },
       // 발화 하나가 궤도 링을 다시 세고(refreshSatelliteRing) 미확인으로 쌓인다.
       { do: 'send', channel: 'athena:routine-event', data: ROUTINE_FIRED },
-      { do: 'wait', ms: 300 },
+      // fixture 응답을 실제 invoke로 다시 읽고 DOM을 교체할 때까지 제한 시간 안에서 기다린다.
+      { do: 'wait-for', selector: '.orb-ring-dot', count: 3, timeout: 2000 },
       // 펼치면 쌓인 첫 건이 패널로 그려진다 — 창 크기는 main이 정하므로 렌더러에는
       // 이 이벤트가 곧 펼침이다(orb.js athena:orb-state).
       { do: 'send', channel: 'athena:orb-state', data: { expanded: true } },
@@ -4351,13 +4396,37 @@ const ROUTES = Object.freeze([
       { what: 'count', selector: '#orbTicket', equals: 1 },
     ],
   },
-  // ---------- 백테스트 6장 (8-1) ----------
-  // 여섯 보드는 한 캔버스의 여섯 상태다(#backtestCanvas). 기법을 고르기 전 첫 화면은
+  // ---------- 백테스트 7장 (8-1) ----------
+  // 일곱 보드는 한 캔버스의 일곱 상태다(#backtestCanvas). 기법을 고르기 전 첫 화면은
   // 기법 목록이라(backtest-canvas.js listFirst) 어느 보드든 먼저 기법 하나를 세워야 한다 —
   // 그 자극이 위 BACKTEST_TARGET이다. Paper의 머리·탭 이름은 안 적는다: Paper 보드 01의
   // 탭은 「폼 · 코드 · 실행」이고 보드 03은 「설계 · 결과 · 다시 실행」인데, 앱의 모드 탭은
   // 다섯(기법 · 결과 · 이력 · 최적화 · 배포)이고 설계 하위 탭도 넷이라 어느 쪽 수를 적어도
   // 거짓말이 된다(보드 19가 그 기법 목록 화면을 따로 그린다).
+  {
+    board: '2GZM-2', // 10 · 백테스트 — 전략 고르기 · 실패·비활성 상태
+    window: 'shell',
+    // 이 보드는 여러 상태를 나란히 그린 규격판이다. 앱에서 결정론적으로 고립할 수 있는
+    // 비활성 상태 하나를 고른다. 프리셋 조회의 실제 503 봉투를 fixture로 돌려주면
+    // canvas.js의 오류 매핑과 backtest-canvas.js의 비활성 배지·재시도 출구를 모두 탄다.
+    reach: [
+      {
+        do: 'ipc-fixture',
+        channel: 'athena:backtest-presets',
+        data: { ok: false, status: 503, error: 'ATHENA_BACKTEST_ENABLED=0' },
+      },
+      { do: 'mode', view: 'backtest' },
+      { do: 'wait-for', selector: '.backtest-canvas-error', count: 1, timeout: 2000 },
+      { do: 'settle' },
+    ],
+    root: '#backtestCanvas',
+    phrases: ['비활성', '백테스트 기능이 꺼져 있습니다'],
+    structure: [
+      { what: 'count', selector: '.backtest-canvas-error', equals: 1 },
+      { what: 'count', selector: '.backtest-error-badge', equals: 1 },
+      { what: 'count', selector: '.backtest-error-back', equals: 1 },
+    ],
+  },
   {
     board: '1SW0-0', // 01 · 백테스트 — 설계 (폼)
     window: 'shell',
