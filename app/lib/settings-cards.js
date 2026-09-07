@@ -262,6 +262,7 @@ async function refreshScreenCard(card, head, body) {
 
   head.appendChild(row('uk-settings-title', [
     el('span', 'uk-settings-name', '화면'),
+    el('span', 'uk-settings-count', '두 영역과 카드에 함께 적용된다'),
   ]));
   const actions = row('uk-settings-actions', []);
   actions.appendChild(cardCloseButton(card));
