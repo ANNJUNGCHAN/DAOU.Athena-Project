@@ -4,8 +4,10 @@
 
 > 🔵 **2026-09-07 카드 표면 버튼 트랙(브랜치 `claude/card-buttons-functionality-2b13d9`)** —
 > 「카드의 버튼이 하나도 안 눌린다」의 뿌리 원인(로딩 줄 `insertBefore` 예외)과 자식 보드 레일 별칭,
-> 카드 액션 3종, 회귀 게이트 `verify:card-buttons`, 그리고 남은 덩어리(비교 바구니 · 조회 조작 · 주문 확인)는
-> [2026-09-07-card-buttons.md](./2026-09-07-card-buttons.md)에 있다.
+> 카드 액션 3종, 조회 조작 보드 5장(Paper→배선), 회귀 게이트 `verify:card-buttons`는
+> [2026-09-07-card-buttons.md](./2026-09-07-card-buttons.md)에 있다. **남은 넷**(전수 감사 수치 ·
+> 2RJ7-1 겹침 · 비교 바구니 · 주문 확인)은 [card-buttons/GROK_PROMPT.md](./card-buttons/GROK_PROMPT.md)를
+> 붙여넣어 이어받는다 — 추출·이식·원장 도구는 [card-buttons/tools/](./card-buttons/tools/)에 있다.
 
 **`main`이 정본이다.** 다른 컴퓨터에서는 `main`만 받으면 이어받을 수 있다.
 다만 "브랜치가 main 하나뿐"인 것은 **2026-09-01 시점의 상태**이고 지금은 아니다 — §1을 볼 것.
