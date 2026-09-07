@@ -1969,7 +1969,7 @@ function createAgentCanvas(deps) {
     node.appendChild(head);
 
     const fnEl = el('div', 'agent-node-fn');
-    fnEl.textContent = card.titleEn;
+    fnEl.textContent = card.titleEnRef || card.titleEn;
     node.appendChild(fnEl);
 
     if (card.unused) {

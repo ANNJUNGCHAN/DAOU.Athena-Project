@@ -490,7 +490,7 @@ async function main() {
   check('노드 카드가 함수 수만큼(4칸) 그려진다 — 보드 10·11', codeProbe.cardCount === 4);
   check('칸마다 한국어 제목과 영어 함수명이 함께 있다 — R7',
     JSON.stringify(codeProbe.cardTitles) === JSON.stringify(['일봉 불러오기', '5일 거래량 평균', '배수 비교', '알림'])
-    && JSON.stringify(codeProbe.cardFns) === JSON.stringify(['load_bars', 'avg_volume', 'volume_ratio', 'fire']));
+    && JSON.stringify(codeProbe.cardFns) === JSON.stringify(['load_bars · 참고', 'avg_volume · 참고', 'volume_ratio · 참고', 'fire · 참고']));
   check('칸마다 「들어감」 행과 「나옴」 값이 있다 — R7',
     codeProbe.ioLabels.every((l) => JSON.stringify(l) === JSON.stringify(['들어감', '나옴']))
     && codeProbe.inCounts.every((n) => n >= 1)

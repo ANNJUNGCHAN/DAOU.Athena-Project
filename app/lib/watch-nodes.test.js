@@ -33,6 +33,7 @@ test('nodeCards: 한국어 제목이 없으면 영어 함수명으로 대체한�
   const [card] = W.nodeCards([{ fn: 'avg_volume', inputs: [{ name: '봉', value: 60 }], output: 12400000, called: false }]);
   assert.equal(card.titleKo, 'avg_volume');
   assert.equal(card.titleEn, 'avg_volume');
+  assert.equal(card.titleEnRef, 'avg_volume · 참고');
   assert.deepEqual(card.inputs, [{ name: '봉', value: '60' }]);
   assert.equal(card.output, '12,400,000');
   assert.equal(card.unused, true, 'called:false도 「이번엔 안 쓰임」으로 본다');
