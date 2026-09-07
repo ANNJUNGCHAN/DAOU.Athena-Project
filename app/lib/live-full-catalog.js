@@ -46,6 +46,34 @@ function querySucceeded(result) {
   return !!(result && result.ok === true && !result.error);
 }
 
+// probe-live-full.js 가 선언한 고정 대기. 스위트 예산은 이 합보다 커야
+// 질의 타임아웃이 runner kill 로 뭉개지지 않는다.
+const LIVE_FULL_WAITS = Object.freeze({
+  shellMs: 25000,
+  orbMs: 8000,
+  bootMs: 20000,
+  tokenMs: 12000,
+  indexMs: 20000,
+  modeSurfaceMs: 3000,
+  modeGapMs: 400,
+  querySettleMs: 400,
+  cardEvalMs: 2000,
+  cardGapMs: 300,
+  cardRetries: 8,
+});
+
+function liveFullWorstWaitMs() {
+  const waits = LIVE_FULL_WAITS;
+  const boot = waits.shellMs + waits.orbMs + waits.bootMs + waits.tokenMs + waits.indexMs;
+  const modes = MODES.length * (waits.modeSurfaceMs + waits.modeGapMs);
+  const queries = LIVE_QUERIES.reduce((sum, query) => {
+    let ms = query.timeoutMs + waits.querySettleMs;
+    if (query.expectCard) ms += waits.cardRetries * (waits.cardEvalMs + waits.cardGapMs);
+    return sum + ms;
+  }, 0);
+  return boot + modes + queries;
+}
+
 function queryVerdict(query, { result, painted, rest, usedModel }) {
   const ok = querySucceeded(result);
   if (!query.expectCard) return ok;
@@ -104,7 +132,7 @@ const VERIFY_SUITE = Object.freeze([
   { script: 'verify:paper-manifest', budgetMs: 30000 },
   { script: 'verify:paper-cards-static', budgetMs: 30000 },
   { script: 'verify:paper-mini-static', budgetMs: 30000 },
-  { script: 'verify:live-full', budgetMs: 180000 },
+  { script: 'verify:live-full', budgetMs: 360000 },
   { script: 'verify', budgetMs: 180000 },
   { script: 'verify:settings', budgetMs: 90000 },
   { script: 'verify:settings-cards', budgetMs: 120000 },
@@ -152,6 +180,8 @@ module.exports = {
   PAPER_CHROME,
   LOCKED_CLICKS,
   LIVE_QUERIES,
+  LIVE_FULL_WAITS,
+  liveFullWorstWaitMs,
   SAFE_CLICK_IDS,
   EXCLUDED_VERIFY_SCRIPTS,
   VERIFY_SUITE,
