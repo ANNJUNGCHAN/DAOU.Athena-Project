@@ -1309,6 +1309,9 @@ test('backtest로 전환하면 채팅 헤더가 보이고 data-mode·문구가 �
   assert.equal(elements.chatHeadSub.textContent, '답이 캔버스를 바꿉니다');
   await controller.setView('summary');
   assert.equal(elements.chatHead.hidden, true, '대화 모드엔 헤더가 없다(보드 37)');
+  assert.equal(elements.chatHead.dataset.mode, undefined);
+  assert.equal(elements.chatHeadTitle.textContent, '');
+  assert.equal(elements.chatHeadSub.textContent, '');
 });
 
 // W3-6 — 헤더가 플러그인 모드까지 넓어져도 그래프 문구는 한 글자도 바뀌지 않는다(A10).
@@ -1326,6 +1329,9 @@ test('plugin으로 전환하면 채팅 헤더가 플러그인 문구로 바뀌�
   assert.equal(elements.chatHeadSub.textContent, '답이 캔버스를 바꿉니다');
   await controller.setView('agent');
   assert.equal(elements.chatHead.hidden, true, '에이전트 모드엔 헤더가 없다');
+  assert.equal(elements.chatHead.dataset.mode, undefined);
+  assert.equal(elements.chatHeadTitle.textContent, '');
+  assert.equal(elements.chatHeadSub.textContent, '');
 });
 
 test('백테스트 빈 채팅은 Paper 40MQ-1이고 대화 모드 새 대화는 유지한다', () => {

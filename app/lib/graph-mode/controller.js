@@ -482,6 +482,11 @@ function createGraphModeController(deps) {
         elements.chatHead.dataset.mode = chatHeadMode;
         if (elements.chatHeadTitle) elements.chatHeadTitle.textContent = CHAT_HEAD_COPY[chatHeadMode].title;
         if (elements.chatHeadSub) elements.chatHeadSub.textContent = CHAT_HEAD_COPY[chatHeadMode].sub;
+      } else {
+        // 숨기는 것과 별개로 그래프 문구·data-mode를 남기지 않는다(OBS-061).
+        delete elements.chatHead.dataset.mode;
+        if (elements.chatHeadTitle) elements.chatHeadTitle.textContent = '';
+        if (elements.chatHeadSub) elements.chatHeadSub.textContent = '';
       }
     }
   }
