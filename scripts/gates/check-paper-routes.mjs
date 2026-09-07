@@ -53,7 +53,9 @@ export function markupIds(htmlSources) {
 export function knownChannels(sources) {
   const channels = new Set();
   for (const source of sources) {
-    for (const match of source.matchAll(/['"`](athena:[a-z0-9-]+)['"`]/g)) channels.add(match[1]);
+    for (const match of source.matchAll(/['"`](athena(?::[a-z0-9-]+|__[a-z0-9_-]+))['"`]/g)) {
+      channels.add(match[1]);
+    }
   }
   return channels;
 }

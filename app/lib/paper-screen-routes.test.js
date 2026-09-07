@@ -117,6 +117,84 @@ test('the data attributes the reach steps click are the ones the app writes', ()
   assert.match(fs.readFileSync(path.join(__dirname, 'settings-cards.js'), 'utf8'), /b\.setAttribute\('data-key', item\.key\);/);
 });
 
+test('the in-progress shell route hangs the real query IPC before submitting through the composer', () => {
+  const route = ROUTES.find((item) => item.board === '3KM-0');
+  assert.ok(route, '3KM-0 route missing');
+  const hang = route.reach.findIndex((step) => step.do === 'ipc-hang');
+  assert.deepEqual(route.reach.slice(hang, hang + 2), [
+      { do: 'ipc-hang', channel: 'athena__render_canvas' },
+      { do: 'command-bar', text: '백엔드 API 개수 확인' },
+    ]);
+  assert.deepEqual(route.reach[hang + 2], {
+    do: 'wait-for', selector: '.progress-line', count: 1, timeout: 2000,
+  });
+  assert.deepEqual(route.structure, [
+    { what: 'count', selector: '.turn-q', equals: 1 },
+    { what: 'count', selector: '.progress-line', equals: 1 },
+    { what: 'absent', selector: '.turn-a' },
+  ]);
+  assert.ok(route.phrases.includes('백엔드 API 개수 확인'));
+});
+
+test('the disabled backtest route reaches the real 503 mapping without starting a run', () => {
+  const route = ROUTES.find((item) => item.board === '2GZM-2');
+  assert.ok(route, '2GZM-2 route missing');
+  assert.deepEqual(route.reach.slice(0, 2), [
+    {
+      do: 'ipc-fixture',
+      channel: 'athena:backtest-presets',
+      data: { ok: false, status: 503, error: 'ATHENA_BACKTEST_ENABLED=0' },
+    },
+    { do: 'mode', view: 'backtest' },
+  ]);
+  assert.equal(route.reach.some((step) => /run|backfill|deploy/.test(String(step.channel || ''))), false);
+  assert.deepEqual(route.reach[2], {
+    do: 'wait-for', selector: '.backtest-canvas-error', count: 1, timeout: 2000,
+  });
+  assert.deepEqual(route.structure, [
+    { what: 'count', selector: '.backtest-canvas-error', equals: 1 },
+    { what: 'count', selector: '.backtest-error-badge', equals: 1 },
+    { what: 'count', selector: '.backtest-error-back', equals: 1 },
+  ]);
+});
+
+test('the responsive fixture clears restored history through the existing new-conversation path', () => {
+  const route = ROUTES.find((item) => item.board === 'G5B-0');
+  assert.deepEqual(route.reach.slice(0, 2), [
+    {
+      do: 'ipc-fixture',
+      channel: 'athena:conversations-new',
+      data: { conversations: [], projects: [], currentProjectId: null, activeId: 'fx-new' },
+    },
+    { do: 'click', selector: '#sidebarNewChat' },
+  ]);
+  assert.deepEqual(route.reach[2], {
+    do: 'wait-for', selector: '#history > *', count: 0, timeout: 2000,
+  });
+  assert.deepEqual(route.structure.slice(1, 3), [
+    { what: 'count', selector: '#history', equals: 1 },
+    { what: 'count', selector: '#history > *', equals: 0 },
+  ]);
+});
+
+test('the fired-orb fixture waits for the asynchronous routine count refresh', () => {
+  const route = ROUTES.find((item) => item.board === 'DO-0');
+  const fired = route.reach.findIndex((step) => step.do === 'send' && step.channel === 'athena:routine-event');
+  assert.ok(fired >= 0);
+  const fixture = route.reach[0];
+  assert.equal(fixture.do, 'ipc-fixture');
+  assert.equal(fixture.channel, 'athena:routines-list');
+  assert.equal(fixture.data.data.routines.filter((routine) => routine.status === 'active').length, 3);
+  assert.ok(route.reach.indexOf(fixture) < fired, 'routines-list fixture가 routine event보다 먼저여야 한다');
+  assert.deepEqual(route.reach[fired + 1], {
+    do: 'wait-for', selector: '.orb-ring-dot', count: 3, timeout: 2000,
+  });
+  assert.deepEqual(route.structure[0], { what: 'count', selector: '.orb-ring-dot', equals: 3 });
+  const orb = fs.readFileSync(path.join(__dirname, '..', 'orb.js'), 'utf8');
+  assert.match(orb, /refreshSatelliteRing[\s\S]+invoke\('athena:routines-list'\)/);
+  assert.match(orb, /on\('athena:routine-event'[\s\S]+refreshSatelliteRing\(\)/);
+});
+
 // ---------- phrases (§4.4 규칙 4·5) ----------
 
 test('every phrase is a text Paper really draws on that board', () => {
@@ -146,6 +224,8 @@ test('every phrase survived the generator, so none of them is a data value', () 
 //   state-two   원장에는 더 있지만 **한 번에 보이는 상태**가 두 줄뿐이다. 보드 26은
 //               세 모드의 빈 화면을 나란히 그렸는데 앱은 그중 하나만 그린다 —
 //               그 사실 자체를 아래 별도 테스트가 canvas.css·canvas.js·summary-table.js에서 잰다.
+//               보드 10의 비활성 하위 상태도 앱과 Paper가 함께 쓰는 문구가 둘뿐이며,
+//               실제 오류 컨테이너·배지·출구 셋을 구조 단언으로 함께 잰다.
 //   values-only 원장에는 더 있지만 값이 아닌 줄이 둘뿐이다. 보드 05가 그린 문장은 거의
 //               전부 실행 번호·버전·수익률을 품고 있어(「#41 vs #38 — 무엇이 달랐나」)
 //               fixture를 바꾸면 같이 바뀐다 — 그 사실도 아래 별도 테스트가 잰다.
@@ -157,11 +237,12 @@ const PHRASE_FLOOR_EXCEPTIONS = new Map([
   ['16OD-2', { kind: 'ledger-two', why: '원장 texts가 ATHENA·| 둘뿐이다 (02 · 부팅 — READY)' }],
   ['16OX-2', { kind: 'ledger-two', why: '원장 texts가 ATHENA·| 둘뿐이다 (05 · 부팅 — COMPLETE)' }],
   ['COS-0', { kind: 'state-two', why: '대화 빈 화면이 제목·부제 둘뿐이다 (26 · 빈 작업공간)' }],
+  ['2GZM-2', { kind: 'state-two', why: '비활성 하위 상태에서 Paper와 앱이 함께 쓰는 문구가 둘뿐이다 (10 · 백테스트)' }],
   ['1WSI-1', { kind: 'values-only', why: '값이 아닌 줄이 두 diff 칸 이름뿐이다 (05 · 백테스트 — 이력·비교)' }],
   ['3ZAA-1', { kind: 'annotation-only', why: '값이 아닌 줄이 두 절 제목뿐이다 (10 · 그래프 — 이 노드 설명해줘)' }],
 ]);
 
-test('the only routes under three phrases are the ones Paper drew with two texts', () => {
+test('every route under three phrases has a documented two-phrase exception', () => {
   for (const [board, exception] of PHRASE_FLOOR_EXCEPTIONS) {
     if (exception.kind === 'ledger-two') {
       const texts = new Set(ledger(board).texts.map((t) => String(t.text).trim()));

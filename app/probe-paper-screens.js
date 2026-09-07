@@ -52,6 +52,7 @@ const { pathToFileURL } = require('node:url');
 
 const { ROUTES } = require('./lib/paper-screen-routes.js');
 const { MODES } = require('./lib/live-full-catalog.js');
+const { waitForVisibleCount } = require('./lib/paper-screen-wait.js');
 const {
   blessRatchet,
   contractRecord,
@@ -277,6 +278,9 @@ async function runStep(win, step) {
       return;
     case 'wait':
       await wait(step.ms);
+      return;
+    case 'wait-for':
+      await waitForVisibleCount(win, step.selector, step.count, { timeoutMs: step.timeout });
       return;
     case 'settle':
       await settle(win);
