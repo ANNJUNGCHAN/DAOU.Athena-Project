@@ -2341,6 +2341,14 @@ test('설계 폼: 등록부 배선이 없으면 내가 만든 기법 줄이 없�
   assert.match(textOf(container), /기법 — 1개/);
 });
 
+test('목록 첫 화면은 헤더에 기법 N개를 다시 쓰지 않는다', async () => {
+  const { container, canvas } = makeCanvas();
+  canvas.mount();
+  await flush();
+  assert.equal(findByClass(container, 'backtest-head-count').length, 0);
+  assert.match(textOf(container), /기법 — 1개/);
+});
+
 test('기법 카드: 이름·분류 칩(한국어)·한 줄 설명이 함께 선다', async () => {
   const { container } = await mounted();
   const card = findByClass(container, 'backtest-preset-item')[0];

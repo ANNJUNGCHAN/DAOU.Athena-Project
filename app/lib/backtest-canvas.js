@@ -3022,10 +3022,6 @@ function createBacktestCanvas(options) {
       head.appendChild(title);
       return head;
     }
-    if (listFirst()) {
-      const n = presets.length + userStrategies.length;
-      title.appendChild(el('span', 'backtest-head-count', `기법 ${n}개`));
-    }
     if (spec) {
       title.appendChild(el('span', 'backtest-head-strategy', spec.name));
       if (activeVersionId) title.appendChild(el('span', 'backtest-head-version', '코드 버전 활성'));
