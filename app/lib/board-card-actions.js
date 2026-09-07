@@ -14,9 +14,18 @@
 // 목적지 표. control은 Paper 원문 문구 그대로다(추출 HTML의 잎 텍스트와 대조한다).
 // `stock`은 어느 종목으로 열 것인가다 — 'card'는 이 카드가 보고 있는 종목,
 // 'row'는 누른 줄의 종목(순위·탐색 보드의 행 액션).
+//
+// `kind`
+//   open-card   — 그 종목으로 다른 카드를 연다(Paper가 목적지를 다른 card_id로 그렸다).
+//   agent-watch — 에이전트 모드의 「새 알람 · 말로 설명」으로 데려간다. 이 조작의
+//                 화면은 카드 보드가 아니라 에이전트 모드 화면으로 이미 그려져 있고
+//                 (Paper A-2 09~12 · docs/plans/2026-09-03-code-alarm-concept.md §3),
+//                 알람은 AI가 쓴 감시 함수라 대화에서 시작한다. 보드 43 「새 작업은
+//                 채팅에서」 원칙대로 **문장을 심고 보내지는 않는다**.
 const CARD_ACTIONS = Object.freeze([
   Object.freeze({
     control: '호가 열기',
+    kind: 'open-card',
     board_id: '13BC-2',
     card_id: 'CC-04',
     card_kind: 'orderbook',
@@ -25,11 +34,18 @@ const CARD_ACTIONS = Object.freeze([
   }),
   Object.freeze({
     control: '종목 상세 열기',
+    kind: 'open-card',
     board_id: '137X-2',
     card_id: 'CC-03',
     card_kind: 'instrument',
     stock: 'row',
     title: '종목 상세',
+  }),
+  Object.freeze({
+    control: '알림 설정',
+    kind: 'agent-watch',
+    stock: 'card',
+    view: 'agent',
   }),
 ]);
 
@@ -97,7 +113,7 @@ function rowStock(node, surface) {
 // 채워진다 — 상태 보드 전환이 쓰는 그 경로 그대로다.
 function cardActionEnvelope(action, options = {}) {
   const stkCd = String(options.stkCd || '').trim();
-  if (!action || !stkCd) return null;
+  if (!action || action.kind !== 'open-card' || !stkCd) return null;
   const stockName = String(options.stockName || '').trim();
   return {
     card_id: action.card_id,
@@ -128,9 +144,22 @@ function cardActionEnvelope(action, options = {}) {
   };
 }
 
+// 채팅에 심을 씨문장. 짧은 사람 말이어야 하고(2026-09-03 사용자 지적 「문장이 너무
+// 길고 기계적이다」) 조건은 사람이 말한다 — 에이전트가 한 번에 하나씩 되묻는 것이
+// 그 화면의 계약이다(Paper A-2 09 「질문 2/3」). 이름 뒤 줄표는 조사 판정을 피하는
+// 집안 관례다(canvas.js onPanelCta 주석).
+function cardActionSeed(action, stock) {
+  if (!action || action.kind !== 'agent-watch') return '';
+  const name = String((stock && stock.stockName) || '').trim();
+  const code = String((stock && stock.stkCd) || '').trim();
+  const subject = name || (code ? `${code} 종목` : '');
+  if (!subject) return '';
+  return `${subject} — 감시 알람 만들어 줘`;
+}
+
 const __exports = {
   CARD_ACTIONS, STOCK_CODE,
-  cardActionFor, actionNodes, rowStock, cardActionEnvelope, controlOf,
+  cardActionFor, actionNodes, rowStock, cardActionEnvelope, cardActionSeed, controlOf,
 };
 
 if (typeof module !== 'undefined' && module.exports) {

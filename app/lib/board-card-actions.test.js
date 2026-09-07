@@ -3,7 +3,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const {
-  CARD_ACTIONS, cardActionFor, actionNodes, rowStock, cardActionEnvelope,
+  CARD_ACTIONS, cardActionFor, actionNodes, rowStock, cardActionEnvelope, cardActionSeed,
 } = require('./board-card-actions');
 
 // jsdom 없이 검증한다 — board-mount.test.js와 같은 관행(DOM 스텁 주입).
@@ -65,9 +65,31 @@ test('cardActionFor는 Paper 문구가 정확히 같을 때만 목적지를 준�
 test('목적지 표는 카드 종류와 짝이 맞는다 — 어긋나면 통합 카드 판정이 닫힌다', () => {
   const kinds = { 'CC-03': 'instrument', 'CC-04': 'orderbook' };
   for (const action of CARD_ACTIONS) {
-    assert.equal(action.card_kind, kinds[action.card_id], action.control);
     assert.ok(action.stock === 'card' || action.stock === 'row', action.control);
+    if (action.kind !== 'open-card') continue;
+    assert.equal(action.card_kind, kinds[action.card_id], action.control);
   }
+});
+
+test('「알림 설정」은 카드를 열지 않는다 — 에이전트 모드 새 알람으로 간다', () => {
+  const action = cardActionFor('알림 설정');
+  assert.equal(action.kind, 'agent-watch');
+  assert.equal(action.view, 'agent');
+  assert.equal(action.board_id, undefined, '카드 보드가 없는 조작이다');
+  // 봉투를 만들면 목적지 없는 카드가 선다 — 종목이 있어도 만들지 않는다.
+  assert.equal(cardActionEnvelope(action, { stkCd: '005930' }), null);
+});
+
+test('씨문장은 짧은 사람 말이고 조건은 사람이 말한다', () => {
+  const action = cardActionFor('알림 설정');
+  assert.equal(cardActionSeed(action, { stkCd: '005930', stockName: '삼성전자' }),
+    '삼성전자 — 감시 알람 만들어 줘');
+  // 이름을 못 읽었으면 코드로라도 주체를 말한다.
+  assert.equal(cardActionSeed(action, { stkCd: '005930' }), '005930 종목 — 감시 알람 만들어 줘');
+  // 주체가 없으면 심지 않는다(빈 문장을 심으면 입력창만 비운다).
+  assert.equal(cardActionSeed(action, {}), '');
+  // 카드를 여는 조작에는 씨문장이 없다.
+  assert.equal(cardActionSeed(cardActionFor('호가 열기'), { stkCd: '005930' }), '');
 });
 
 test('actionNodes는 문구가 같은 잎만 집는다 — 상위 상자는 안 집는다', () => {

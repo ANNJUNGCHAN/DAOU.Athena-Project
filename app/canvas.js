@@ -1027,13 +1027,36 @@ function cardStockName(surface) {
   return leaf ? leaf.textContent.trim() : '';
 }
 
+// 「알림 설정」 — 에이전트 모드의 「새 알람 · 말로 설명」으로 데려간다. 알람은
+// AI가 쓴 감시 함수라 카드 안에서 끝나는 조작이 아니고, 그 화면은 카드 보드가
+// 아니라 에이전트 모드 화면으로 이미 그려져 있다(Paper A-2 09~12).
+// 두 걸음(캔버스 화면 + 모드 네비 활성 표시)은 sidebar.js의 「관제 창으로 →」와
+// 같은 순서다 — 하나만 부르면 화면과 네비 표시가 어긋난다.
+function openAgentWatch(seed) {
+  if (window.AthenaCanvasMode && typeof window.AthenaCanvasMode.setView === 'function') {
+    window.AthenaCanvasMode.setView('agent');
+  }
+  if (window.AthenaModeNav && typeof window.AthenaModeNav.setActive === 'function') {
+    window.AthenaModeNav.setActive('agent');
+  }
+  if (window.AthenaAgentCanvas && typeof window.AthenaAgentCanvas.refresh === 'function') {
+    window.AthenaAgentCanvas.refresh();
+  }
+  // 문장은 심고 **보내지 않는다** — 사람이 읽고 고친 뒤 Enter를 누른다(보드 43).
+  if (seed) seedGraphChat(seed);
+  return true;
+}
+
 async function runCardAction(node, surface, envelope, action) {
   const stock = cardActionStock(node, surface, envelope, action);
-  // 종목을 못 읽으면 아무 카드도 열지 않는다 — 엉뚱한 종목의 카드를 여는 것보다
-  // 아무 일도 안 하는 것이 낫다(사유는 콘솔에만 남긴다).
+  // 종목을 못 읽으면 아무 것도 하지 않는다 — 엉뚱한 종목으로 카드를 열거나 알람을
+  // 시작하는 것보다 아무 일도 안 하는 것이 낫다(사유는 콘솔에만 남긴다).
   if (!stock) {
     console.warn('[canvas] 카드 액션 종목을 못 읽었다', action.control);
     return null;
+  }
+  if (action.kind === 'agent-watch') {
+    return openAgentWatch(boardCardActions.cardActionSeed(action, stock));
   }
   const next = boardCardActions.cardActionEnvelope(action, stock);
   if (!next) return null;
