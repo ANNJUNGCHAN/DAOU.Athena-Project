@@ -184,6 +184,13 @@ function ticketStateAfterExecute(outcome) {
   return 'failed';
 }
 
+function executeOutcomeTone(outcome) {
+  if (outcome === 'done') return 'ok';
+  if (outcome === 'in_doubt') return 'warn';
+  if (outcome === 'needs_confirm') return 'info';
+  return 'up';
+}
+
 function executeOutcomeCopy(outcome, res) {
   if (outcome === 'done') return '주문 접수됨 — 체결은 계좌에서 확인하세요.';
   if (outcome === 'in_doubt') {
@@ -221,6 +228,7 @@ const __exports = {
   QTY_CHIP_FRACTIONS,
   interpretExecuteStatus,
   ticketStateAfterExecute,
+  executeOutcomeTone,
   executeOutcomeCopy,
   createTicket,
   transition,

@@ -1966,6 +1966,10 @@ html.is-boot-expanding #winControls { opacity: 0; }
 .ticket-lock-copy { display: flex; flex-direction: column; gap: 2px; }
 .ticket-lock-label { font-size: var(--text-sm, 13px); color: var(--color-k-text, #e6e8ee); }
 .ticket-lock-reason { font-size: var(--text-2xs, 11px); color: var(--color-k-dim, #9aa2b1); }
+.ticket-status.is-ok { color: var(--color-ok); }
+.ticket-status.is-warn { color: var(--color-warn); }
+.ticket-status.is-info { color: var(--color-info); }
+.ticket-status.is-up { color: var(--color-up); }
 
 /* ---------- 과거 대화 복원(2026-09-02 · 2026-09-05 개정) ---------- */
 /* 사이드바에서 과거 대화를 누르면 채팅 화면이 그 대화로 조용히 갈아치워진다 — '복원됨'

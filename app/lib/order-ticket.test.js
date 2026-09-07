@@ -121,6 +121,18 @@ test('상태기계: in_doubt·done은 종결 — 재실행 전이 불가', () =>
   ot.transition(t2, 'executing'); // 명시적 재시도만 허용(새 멱등키)
 });
 
+test('결과 톤은 확인 요청·불확실·실패를 같은 주황에 묶지 않는다', () => {
+  assert.equal(ot.executeOutcomeTone('needs_confirm'), 'info');
+  assert.equal(ot.executeOutcomeTone('in_doubt'), 'warn');
+  assert.equal(ot.executeOutcomeTone('failed'), 'up');
+  assert.equal(ot.executeOutcomeTone('done'), 'ok');
+  const chat = fs.readFileSync(path.join(__dirname, '..', 'chat.js'), 'utf8');
+  const canvas = fs.readFileSync(path.join(__dirname, '..', 'canvas.js'), 'utf8');
+  assert.match(chat, /executeOutcomeTone\(/);
+  assert.match(chat, /ticket-status/);
+  assert.match(canvas, /executeOutcomeTone\(/);
+});
+
 test('428 확인 요청은 실패로 접지 않고 게이트로 돌아간다', () => {
   assert.equal(ot.ticketStateAfterExecute('needs_confirm'), 'needs_confirm');
   assert.equal(ot.ticketStateAfterExecute('done'), 'done');

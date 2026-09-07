@@ -273,6 +273,7 @@
    상단 주석 참고). "완료"→ok(초록)/"대기"→warn(호박)로만 판정해 쓴다. */
 .card-kit-pill-status.is-ok { color: var(--color-ok); }
 .card-kit-pill-status.is-warn { color: var(--color-warn); }
+.card-kit-pill-status.is-info { color: var(--color-info); }
 
 /* KIND: 보유주식 */
 
