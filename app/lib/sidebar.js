@@ -62,6 +62,7 @@
           backtest: document.getElementById('modeNavBacktest'),
         },
         badge: document.getElementById('modeNavAgentBadge'),
+        watch: document.getElementById('modeNavAgentWatch'),
         counts: {
           summary: document.getElementById('modeNavSummaryCount'),
           graph: document.getElementById('modeNavGraphCount'),
@@ -186,15 +187,23 @@
     const requestId = ++agentRoutinesRequestId;
     if (!agentSidebarList) { renderList(); return; }
     let rows = [];
+    let nextWatch = null;
     try {
       const res = await window.athena.invoke('athena:routines-list');
       const routines = res && res.ok && res.data && Array.isArray(res.data.routines)
         ? res.data.routines : [];
       rows = agentSidebarList.buildAgentSidebarRows(routines);
+      if (typeof agentSidebarList.activeWatchCount === 'function') {
+        nextWatch = agentSidebarList.activeWatchCount(routines);
+      }
     } catch {
       rows = [];
+      nextWatch = 0;
     }
     if (requestId !== agentRoutinesRequestId) return; // 그 사이 더 최신 요청이 갔다 — 이 응답은 버린다.
+    if (nextWatch != null && modeNav && typeof modeNav.setWatchCount === 'function') {
+      modeNav.setWatchCount(nextWatch);
+    }
     agentRoutinesCache = rows;
     renderList();
   }
@@ -1230,11 +1239,18 @@
   async function hydrateNotifyRooms() {
     if (!agentSidebarList || typeof agentSidebarList.buildHydratedRooms !== 'function') return;
     let routines = [];
+    let listed = false;
     try {
       const res = await window.athena.invoke('athena:routines-list');
       routines = res && res.ok && res.data && Array.isArray(res.data.routines) ? res.data.routines : [];
+      listed = true;
     } catch {
       routines = [];
+    }
+    if (listed && agentRoutinesRequestId === 0 && modeNav
+        && typeof modeNav.setWatchCount === 'function'
+        && typeof agentSidebarList.activeWatchCount === 'function') {
+      modeNav.setWatchCount(agentSidebarList.activeWatchCount(routines));
     }
     const hydrated = agentSidebarList.buildHydratedRooms(routines);
     let changed = false;

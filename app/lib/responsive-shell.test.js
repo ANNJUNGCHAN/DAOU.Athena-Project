@@ -112,6 +112,7 @@ test('현재 Paper 50: 330–699px은 44px 아이콘 레일과 단일 중앙 열
   assert.match(css, /#shell\s*\{[^}]*grid-template-columns:\s*44px\s+minmax\(0,\s*1fr\)[^}]*\}/);
   assert.match(css, /#historyRegion\s*\{[^}]*width:\s*44px[^}]*\}/);
   assert.match(css, /[^{}]*\.sidebar-mode-item-label[^{}]*\{[^}]*display:\s*none\s*!important[^}]*\}/);
+  assert.match(css, /[^{}]*\.sidebar-mode-watch[^{}]*\{[^}]*display:\s*none\s*!important[^}]*\}/);
   assert.match(css, /[^{}]*\.sidebar-list[^{}]*\{[^}]*display:\s*none\s*!important[^}]*\}/);
   assert.match(css, /\.sidebar-mode-item\s*\{[^}]*width:\s*34px[^}]*height:\s*34px[^}]*\}/);
 });

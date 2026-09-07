@@ -3856,6 +3856,7 @@ body { margin: 0; overflow: hidden; }
   .sidebar-head-btn > :not(.sidebar-head-ic),
   .sidebar-mode-caption,
   .sidebar-mode-item-label,
+  .sidebar-mode-watch,
   .sidebar-divider,
   .sidebar-list,
   .sidebar-search-input,

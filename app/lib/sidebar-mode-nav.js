@@ -11,7 +11,7 @@
 // 어긋날 일이 없다.
 
 function createSidebarModeNav(deps) {
-  const { items, badge, counts, onSelect } = deps || {};
+  const { items, badge, watch, counts, onSelect } = deps || {};
   const keys = items ? Object.keys(items) : [];
 
   function setActive(view) {
@@ -54,6 +54,20 @@ function createSidebarModeNav(deps) {
     badge.textContent = String(n);
   }
 
+  // 스트립을 걷어내며 약속한 「감시 N」(OBS-012). 미확인 알람 배지와 자리가 다르다.
+  // 0이면 숨긴다.
+  function setWatchCount(count) {
+    if (!watch) return;
+    const n = Number.isFinite(count) ? Math.max(0, Math.floor(count)) : 0;
+    if (n <= 0) {
+      watch.hidden = true;
+      watch.textContent = '';
+      return;
+    }
+    watch.hidden = false;
+    watch.textContent = `감시 ${n}`;
+  }
+
   // 모드별 대화 수(세션 명세 §3-1의 "이력의 머리는 다섯 모드") — 호출자가
   // session-history-view.js로 센 숫자를 넘긴다. 이 모듈은 숫자만 렌더한다.
   // 0이거나 없으면 그 자리를 숨긴다(없는 이력을 있다고 표시하지 않는다, P3).
@@ -93,7 +107,7 @@ function createSidebarModeNav(deps) {
     }
   }
 
-  return { setActive, setBadgeCount, setCounts, setRunning };
+  return { setActive, setBadgeCount, setWatchCount, setCounts, setRunning };
 }
 
 const __exports = { createSidebarModeNav };

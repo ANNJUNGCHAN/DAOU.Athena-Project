@@ -39,6 +39,13 @@ function isPriorityRoutine(routine) {
   return statusIconFor(routine) !== null;
 }
 
+// 셸 에이전트 배지의 「감시 N」(OBS-012, Paper 스트립 2HG-0). 관제 캔버스 부제와
+// 같은 식 — 활성·비예약만. 0이면 호출자가 숨긴다(없는 감시를 있다고 하지 않는다).
+function activeWatchCount(routines) {
+  const list = Array.isArray(routines) ? routines : [];
+  return list.filter((r) => r && r.status === 'active' && r.mode !== 'scheduled').length;
+}
+
 // routines 배열(athena:routines-list 응답의 data.routines) → 사이드바 행 배열.
 // 제목은 백엔드가 이미 만든 note(사람이 읽는 해석문)를 그대로 쓴다 — 여기서
 // 새로 지어내지 않는다.
@@ -81,7 +88,8 @@ function buildHydratedRooms(routines) {
 }
 
 const __exports = {
-  STATUS_ICON, statusIconFor, isPriorityRoutine, buildAgentSidebarRows, buildHydratedRooms,
+  STATUS_ICON, statusIconFor, isPriorityRoutine, activeWatchCount,
+  buildAgentSidebarRows, buildHydratedRooms,
 };
 
 // UMD 각주(2026-08-18 렌더러 격리) — column-fold.js와 같은 패턴.
