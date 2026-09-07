@@ -22,6 +22,37 @@ function clean(value) {
   return String(value == null ? '' : value).trim();
 }
 
+// 비교 바구니(GROK C, 보드 49Y4-0)는 종목 여러 개를 한 보드에 채운다. 백엔드
+// BoardHydrateRequest.target은 alias→스칼라 가방이라 배열을 JSON으로 보내면
+// op 모델이 arguments_invalid로 전부 비운다. 6자리 코드만 모으고, 지금 계약이
+// 받는 건 첫 종목 하나다 — 나머지 코드는 아직 보내지 않는다.
+function stockCodesFromValue(value) {
+  const raw = Array.isArray(value) ? value : [value];
+  const out = [];
+  const seen = new Set();
+  for (const item of raw) {
+    const code = clean(item);
+    if (!/^\d{6}$/.test(code) || seen.has(code)) continue;
+    seen.add(code);
+    out.push(code);
+  }
+  return out;
+}
+
+function stockCodesFromTarget(target) {
+  if (!target || typeof target !== 'object' || Array.isArray(target)) return [];
+  const codes = [];
+  const seen = new Set();
+  for (const value of [target.stk_cd, target.stk_cds, target.symbols]) {
+    for (const code of stockCodesFromValue(value)) {
+      if (seen.has(code)) continue;
+      seen.add(code);
+      codes.push(code);
+    }
+  }
+  return codes;
+}
+
 // target은 op의 manifest request alias로 적은 인자 가방이다(BoardHydrateRequest.target은
 // dict — 문자열을 보내면 몸체 검증에서 422로 튕긴다). 값이 없는 alias는 아예 싣지 않는다
 // (빈 문자열을 보내 백엔드가 ''를 인자로 오인하게 두지 않는다).
@@ -29,9 +60,14 @@ function buildTargetBag(target) {
   if (!target || typeof target !== 'object' || Array.isArray(target)) return null;
   const bag = {};
   for (const [alias, value] of Object.entries(target)) {
-    if (!clean(alias) || value == null || clean(value) === '') continue;
+    if (!clean(alias) || value == null) continue;
+    if (alias === 'stk_cds' || alias === 'symbols') continue;
+    if (Array.isArray(value) || (typeof value === 'object')) continue;
+    if (clean(value) === '') continue;
     bag[alias] = value;
   }
+  const codes = stockCodesFromTarget(target);
+  if (codes.length) bag.stk_cd = codes[0];
   return Object.keys(bag).length ? bag : null;
 }
 
