@@ -23,6 +23,8 @@
 //       범위 밖이다 — lib/watch-check-card.test.js와 chat 계열 테스트가 잰다.
 process.env.ATHENA_NO_AUTOSTART = '1';
 process.env.ATHENA_CANVAS_SOURCE = 'fixture';
+// Fixture IPC가 설치되기 전의 시작 요청도 사용자의 실행 중 백엔드로 보내지 않는다.
+process.env.ATHENA_BACKEND_URL = 'http://127.0.0.1:0';
 
 const { app, ipcMain } = require('electron');
 const path = require('path');
@@ -145,6 +147,7 @@ async function main() {
         {
           id: 'fx4', symbol: '005930', note: '외국인 순매수 3일 연속', status: 'draft', mode: 'code-watch',
           source_label: '코드 감시', cooldown_s: 86400, created_at: ISO(0, 9, 0),
+          activation_blocker: '감시 코드 파일 없음 — 다시 만들기',
         },
       ],
       disclosure_ready: true,
@@ -194,6 +197,7 @@ async function main() {
         ok: true,
         data: {
           id, watch: WATCH_BLOCK, last_run: null,
+          activation_blocker: '감시 코드 파일 없음 — 다시 만들기',
           last_check: {
             count: 4, lookback_days: 30, last_fire: '2026-08-26',
             fires: [{ dt: '2026-08-26', close: 71000 }],
@@ -257,6 +261,8 @@ async function main() {
       timelineTimes: Array.from(c.querySelectorAll('.agent-live-timeline-time')).map((n) => n.textContent),
       timelineDotColors: Array.from(c.querySelectorAll('.agent-live-timeline-dot')).map((n) => n.style.color),
       statCount: c.querySelectorAll('.agent-stat-card').length,
+      statsText: Array.from(c.querySelectorAll('.agent-stat-card')).map((n) => n.textContent).join(' '),
+      subtitle: c.querySelector('.agent-subtitle').textContent,
     };
   })()`);
 
@@ -266,6 +272,11 @@ async function main() {
     JSON.stringify(tasksProbe.viewTabs) === JSON.stringify(['작업', '알람', '라이브', '제안']),
   );
   check('통계 카드 4장이 그대로다', tasksProbe.statCount === 4);
+  check('진행 중 타일은 실제 활성 감시 수만 표시하고 데모 진행률을 만들지 않는다',
+    tasksProbe.statsText.includes('2건 감시 중')
+    && tasksProbe.subtitle.includes('감시 2 진행 중')
+    && !tasksProbe.statsText.includes('시세 수집')
+    && !tasksProbe.statsText.includes('12초 전'));
   check('이중 제어 규칙 패널이 작업 뷰에 있다 — Paper 보드 05 하단', tasksProbe.rulesPresent === true);
   check(
     '이중 제어 규칙 3줄이 Paper C6V-0~C6X-0 원문 그대로다',
@@ -498,9 +509,9 @@ async function main() {
   check('울린 줄에만 「채팅에서 열기 ↗」가 있다 — 보드 12(억제된 줄은 「—」)',
     codeProbe.fireOpens.length === 2 && codeProbe.fireOpens.every((t) => t === '채팅에서 열기 ↗')
     && codeProbe.fireNoDoors.length === 1);
-  check('설정 요약이 확인 주기·쿨다운·만료 세 줄이고 쿨다운은 한국어 단위다 — 보드 12',
+  check('설정 요약에 확인 주기·쿨다운·만료·데이터가 있고 쿨다운은 한국어 단위다',
     JSON.stringify(codeProbe.fieldPairs)
-      === JSON.stringify([['확인 주기', '장중 1분'], ['쿨다운', '1일'], ['만료', '2026-10-03']]));
+      === JSON.stringify([['확인 주기', '장중 1분'], ['쿨다운', '1일'], ['만료', '2026-10-03'], ['데이터', '일봉 + 오늘 현재가']]));
   check('코드 알람 상세에 조건 편집 폼이 없다 — A-5', codeProbe.inputCount === 0);
 
   // 칸 고르기 → 칩 2개(보드 11) → 채팅으로 넘어가는 문장
@@ -579,16 +590,45 @@ async function main() {
       checkLabel: (detail.querySelector('.agent-code-check-btn') || {}).textContent,
       cardCount: detail.querySelectorAll('.agent-node-card').length,
       firesShown: !!detail.querySelector('.agent-code-fires'),
+      approvalDisabled: detail.querySelector('.agent-code-approve-btn').disabled,
+      blocker: (detail.querySelector('.agent-code-approve-blocker') || {}).textContent,
+      repairLabel: (detail.querySelector('.agent-code-repair-btn') || {}).textContent,
     };
   })()`);
 
   check('코드 알람 초안은 「초안」 배지와 검사 요약을 낸다 — 보드 10',
-    draftProbe.badge === '초안' && draftProbe.summary === '지난 30일 4번 · 마지막 8/26');
-  check('초안 상세에 「어제까지로 세었음 · 오늘은 진행 중」이 있다 — P4·A-10',
-    draftProbe.countedUntil === '어제까지로 세었음 · 오늘은 진행 중');
+    draftProbe.badge === '초안' && draftProbe.summary === '4번 울림');
+  check('초안 상세의 검사 기준일이 실제 검사 응답과 일치한다',
+    draftProbe.countedUntil === '2026-09-02');
   check('초안에 「검사」 버튼이 있고 검사 결과의 칸을 그대로 보여준다',
     draftProbe.checkLabel === '검사' && draftProbe.cardCount === 4);
   check('울린 적 없는 초안에 울린 기록을 지어내지 않는다', draftProbe.firesShown === false);
+  check('검사 이력이 있어도 파일이 사라진 초안의 승인을 막고 복구 버튼을 낸다',
+    draftProbe.approvalDisabled === true
+    && draftProbe.blocker === '지금은 켤 수 없음: 감시 코드 파일 없음 — 다시 만들기'
+    && draftProbe.repairLabel === '다시 만들기');
+  shellWin.showInactive();
+  await shellWin.webContents.executeJavaScript("document.querySelector('.agent-code-approve-btn').scrollIntoView({ block: 'center' })");
+  await wait(350);
+  const blockedDraftImage = await shellWin.webContents.capturePage();
+  fs.mkdirSync(path.join(__dirname, 'captures'), { recursive: true });
+  fs.writeFileSync(path.join(__dirname, 'captures', 'agent-watch-blocked-approval.png'), blockedDraftImage.toPNG());
+  const repairProbe = await shellWin.webContents.executeJavaScript(`(() => {
+    const original = window.AthenaShell.seedChatInput;
+    let text = '';
+    try {
+      window.AthenaShell.seedChatInput = (value) => { text = value; };
+      document.querySelector('.agent-code-repair-btn').click();
+    } finally {
+      window.AthenaShell.seedChatInput = original;
+    }
+    return { text, agentVisible: !document.getElementById('agentCanvas').hidden };
+  })()`);
+  check('복구 클릭은 오류와 대상 파일을 보존한 에이전트 입력을 준비한다',
+    repairProbe.agentVisible && repairProbe.text.includes('fx4')
+    && repairProbe.text.includes('감시 코드 파일 없음')
+    && repairProbe.text.includes('watch/volume_spike.py')
+    && repairProbe.text.includes('기존 조건과 설정은 바꾸지 말고'));
 
   // ---------- 제안 뷰 — 스트립 메타 · 카드 2줄 ----------
   const proactiveProbe = await shellWin.webContents.executeJavaScript(`(() => {
@@ -608,6 +648,21 @@ async function main() {
     proactiveProbe.stripSub === '',
   );
 
+  ipcMain.removeHandler('athena:routines-list');
+  ipcMain.handle('athena:routines-list', async () => ({ ok: false, error: '조회 실패' }));
+  await shellWin.webContents.executeJavaScript("window.AthenaAgentCanvas.setActiveView('tasks'); window.AthenaAgentCanvas.refresh()");
+  const unavailableProbe = await shellWin.webContents.executeJavaScript(`(() => {
+    const c = document.getElementById('agentCanvas');
+    return {
+      statsText: Array.from(c.querySelectorAll('.agent-stat-card')).map((n) => n.textContent).join(' '),
+      rowCount: c.querySelectorAll('.agent-row').length,
+    };
+  })()`);
+  check('실제 IPC 조회 실패도 감시 0건으로 표시하지 않고 마지막 목록을 보존한다',
+    unavailableProbe.statsText.includes('확인할 수 없음')
+    && !unavailableProbe.statsText.includes('활성 감시가 없습니다')
+    && unavailableProbe.rowCount > 0);
+
   console.log('[probe] 렌더러 콘솔 에러 로그 수:', consoleErrors.length);
   check('렌더러 콘솔 에러가 없다', consoleErrors.length === 0);
 
@@ -618,7 +673,7 @@ async function main() {
     JSON.stringify({
       tasksProbe, alarmProbe, drillProbe, settingsProbe,
       codeProbe, nodeChipProbe, editGateProbe, editDoneProbe, draftProbe,
-      proactiveProbe, consoleErrors, failures, ok,
+      proactiveProbe, repairProbe, unavailableProbe, consoleErrors, failures, ok,
     }, null, 1),
   );
   console.log(`[probe] 단언 실패 ${failures.length}건`);

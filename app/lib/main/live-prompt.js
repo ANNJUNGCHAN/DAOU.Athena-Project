@@ -712,16 +712,35 @@ function buildAgentModePrefix(context, today) {
     : '이름 없음';
   const projectLine = projectId
     ? `프로젝트: ${projectName} (${projectId})`
-    : '프로젝트 없음 — 코드 알람은 프로젝트를 먼저 만든 뒤';
+    : '프로젝트 없음 — 코드 작업 화면의 프로젝트 만들기 또는 폴더 열기로 작업 폴더를 먼저 정해야 한다. 임의의 기존 프로젝트를 쓰지 마라.';
   return [
     `[모드: 에이전트] 오늘: ${today ? String(today) : '미상'}`,
     projectLine,
+    projectId ? '' : '프로젝트를 정하기 전에는 propose_watch_code나 draft를 부르지 말고, 위 복구 방법만 짧게 안내한다.',
     '코드 알람 — 사용자가 원하는 감시 규칙이 고정 source(price.current·price.change_rate·trade.strength·volume.prev_day_ratio·vi.triggered·schedule.daily)로 적히지 않으면(예: 거래량이 최근 N일 평균의 배수, 지표 교차, 두 값의 비율) 가장 가까운 고정 source로 바꿔 적지 마라 — 그건 다른 알람이다. 아래 네 걸음을 밟는다.',
     '① athena_routine action=propose_watch_code 로 감시 함수 파일을 쓴다: project_id는 위 프로젝트 id, path는 "watch/<영문 이름>.py", labels는 함수명 → 한국어 제목. source(파이썬 원문)에는 최상위 PARAMS = {...} 리터럴, 최상위 NODE_LABELS = {함수명: "한국어 제목"} 리터럴(signals를 포함한 최상위 함수 전부), 판단 하나에 함수 하나인 최상위 도우미 함수 2~5개(제목은 「일봉 불러오기」·「거래량 평균」·「배수 비교」·「알림」처럼 한국어), 그리고 def signals(df, p)가 있어야 한다. signals는 df.assign(entry=..., exit=False)[["entry","exit"]]를 돌려주고 entry가 울릴지 여부다. df는 open/high/low/close/volume 열을 가진 날짜 오름차순 일봉이고, 쓸 수 있는 것은 pandas·numpy·math·statistics·datetime·athena_bt(지표는 import athena_bt as bt — sma·ema·rsi·atr·bbands 등)뿐이다.',
     '② 돌려받은 code_hash로 이어서 action=draft 를 부른다: symbol(6자리), condition은 {source:"code.watch", op:"==", value:true}, cooldown_s·expires_days·note(한국어 상태 한 줄), watch는 {project_id, path, version_hash: code_hash, params, poll_interval_s:60, lookback_days:30}.',
     '③ 초안 카드에 「검사」 칩이 뜬다는 것과, 사람이 「이 알람 승인」을 눌러야 감시가 돈다는 것을 한 줄로 알린다 — 등록됐다·켜졌다고 말하지 마라.',
     '④ 사용자가 칸이 이상하다고 하면(「이상해요」·「고칠 게 있어」·「…칸이 이상해」) 같은 path로 propose_watch_code를 다시 불러 파일을 새로 쓰고 다시 초안·검사로 간다. 알람이 켜진 상태면 파일을 덮어쓸 수 없으니, 먼저 잠시 멈춰 달라고 말한 뒤 고친다.',
   ].join('\n');
+}
+
+// 에이전트 코드가 착지할 프로젝트는 현재 대화에 연결된 실제 폴더 하나뿐이다.
+// 현재 id가 없거나 폴더가 사라졌으면 null로 닫는다. 목록 첫 행 폴백은 오래된 다른
+// 프로젝트에 감시 코드를 쓰게 만들 수 있어 허용하지 않는다.
+function selectActiveAgentProject(listed, pathExists) {
+  const state = listed && typeof listed === 'object' ? listed : null;
+  const currentId = state && typeof state.currentProjectId === 'string'
+    ? state.currentProjectId : '';
+  const rows = state && Array.isArray(state.projects) ? state.projects : [];
+  if (!currentId) return null;
+  const current = rows.find((row) => row && String(row.id) === currentId) || null;
+  if (!current || typeof current.path !== 'string' || !current.path.trim()) return null;
+  if (typeof pathExists !== 'function') return null;
+  try {
+    if (!pathExists(current.path)) return null;
+  } catch { return null; }
+  return { id: String(current.id), name: String(current.label || current.id) };
 }
 
 // 상주 세션의 턴 페이로드 — 질문만. 레거시와 같은 '사용자 질문:' 프레이밍을
@@ -766,4 +785,5 @@ module.exports = {
   buildLivePrompt,
   buildLiveSystemPrompt,
   buildLiveTurnPrompt,
+  selectActiveAgentProject,
 };
