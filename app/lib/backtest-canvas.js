@@ -2927,14 +2927,14 @@ function createBacktestCanvas(options) {
       if (badge === ERROR_BADGE_DISABLED) {
         panel.appendChild(button('backtest-error-back', '다시 시도', () => { void loadPresets(); }));
         if (spec) {
-          panel.appendChild(button('backtest-error-back', '설계로 돌아가기', () => {
+          panel.appendChild(button('backtest-error-back', `${MODE_TABS[0][1]}으로 돌아가기`, () => {
             setState({ view: 'design', tab: 'design', designTab: 'form', message: null });
           }));
         }
         container.appendChild(panel);
         return;
       }
-      panel.appendChild(button('backtest-error-back', '설계로 돌아가기', () => {
+      panel.appendChild(button('backtest-error-back', `${MODE_TABS[0][1]}으로 돌아가기`, () => {
         if (spec) setState({ view: 'design', tab: 'design', designTab: 'form', message: null });
         else void loadPresets();
       }));
@@ -6478,7 +6478,7 @@ function createBacktestCanvas(options) {
           `이웃 평균 ${formatRatioValue(res.neighbour_mean_sharpe)}`,
         ));
       }
-      best.appendChild(button('backtest-optimize-apply', '이 값을 설계에 넣기', () => {
+      best.appendChild(button('backtest-optimize-apply', `이 값을 ${MODE_TABS[0][1]}에 넣기`, () => {
         void applyBestParams();
       }));
       wrap.appendChild(best);

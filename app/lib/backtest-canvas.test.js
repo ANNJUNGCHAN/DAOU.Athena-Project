@@ -1921,6 +1921,14 @@ test('모드 탭 5개와 설계 하위 탭 4개가 계약으로 고정돼 있다
     ['지도', '폼', '코드 · 최후의 보루', '노드·흐름']);
 });
 
+test('사용자 문구는 탭 이름 기법에서 파생하고 옛 이름 설계를 쓰지 않는다', () => {
+  const src = fs.readFileSync(path.join(__dirname, 'backtest-canvas.js'), 'utf8');
+  assert.match(src, /\$\{MODE_TABS\[0\]\[1\]\}으로 돌아가기/);
+  assert.match(src, /이 값을 \$\{MODE_TABS\[0\]\[1\]\}에 넣기/);
+  assert.equal(src.includes("'설계로 돌아가기'"), false);
+  assert.equal(src.includes("'이 값을 설계에 넣기'"), false);
+});
+
 test('배포 모드 3종의 기본은 승인이다 — 자동 주문이 기본이 아니다', () => {
   assert.deepEqual(backtestCanvas.DEPLOY_MODES.map((m) => m[0]),
     ['observe', 'approve', 'auto']);
@@ -1950,7 +1958,8 @@ test('오류 화면에는 설계로 돌아가는 버튼이 있다 — 막다른 
   await flush();
   assert.equal(findByClass(container, 'backtest-canvas-error').length, 1);
   const back = findByClass(container, 'backtest-error-back')[0];
-  assert.ok(back, '설계로 돌아가기 버튼이 있어야 한다');
+  assert.ok(back, '기법으로 돌아가기 버튼이 있어야 한다');
+  assert.equal(back.textContent, '기법으로 돌아가기');
   await click(back);
   assert.equal(canvas.getContext().view, 'design');
   assert.equal(findByClass(container, 'backtest-symbol-add').length, 1);
@@ -6720,7 +6729,7 @@ test('보드 10: 꺼진 상태의 [다시 시도]는 목록을 다시 묻는다'
   assert.ok(findByClass(made.container, 'backtest-preset-item').length > 0);
 });
 
-test('보드 10: 그 밖의 오류는 「실패」 배지와 설계로 돌아가기다', async () => {
+test('보드 10: 그 밖의 오류는 「실패」 배지와 기법으로 돌아가기다', async () => {
   const made = makeCanvas({
     fetchPresets: async () => { throw new Error('백테스트 실행에 실패했습니다'); },
   });
@@ -6734,7 +6743,7 @@ test('보드 10: 그 밖의 오류는 「실패」 배지와 설계로 돌아가
   assert.match(textOf(made.container), /백테스트 실행에 실패했습니다/);
   assert.deepEqual(
     findByClass(made.container, 'backtest-error-back').map((n) => n.textContent),
-    ['설계로 돌아가기'],
+    ['기법으로 돌아가기'],
   );
 });
 
@@ -6760,7 +6769,7 @@ test('보드 10: 설계를 마친 뒤 꺼진 것을 만나면 설계로 돌아�
   );
   assert.deepEqual(
     findByClass(container, 'backtest-error-back').map((n) => n.textContent),
-    ['다시 시도', '설계로 돌아가기'],
+    ['다시 시도', '기법으로 돌아가기'],
   );
   await click(findByClass(container, 'backtest-error-back')[1]);
   assert.equal(canvas.getContext().view, 'design');
