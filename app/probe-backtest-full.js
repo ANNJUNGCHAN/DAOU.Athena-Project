@@ -704,16 +704,15 @@ async function main() {
         labels: Array.from(root.querySelectorAll('.backtest-subtab')).map((t) => t.textContent),
         on: (root.querySelector('.backtest-subtab.is-on') || {}).textContent || null,
         designTab: c.designTab,
+        screen: c.screen,
         mapVersion: c.map ? c.map.version : null,
       };
     })()`);
     await step('A08', '고르기 전에는 설계 하위 탭이 없다 — 목록이 첫 화면이다', () => ({
-      ok: !!subtabs && subtabs.labels.length === 0 && subtabs.designTab === 'form' && !subtabs.mapVersion,
+      ok: !!subtabs && subtabs.labels.length === 0 && subtabs.designTab === null
+            && subtabs.screen === 'technique-list' && !subtabs.mapVersion,
       data: subtabs,
     }));
-
-    await goSubtab(shellWin, 1);
-    await wait(300);
     // **계약이 바뀐 자리다**(2026-09-03 사용자 확정): 목록은 하나다. 처음 주어진 10개도
     // 그냥 '기법'이고 내가 만든 것과 같은 목록에 선다 — 제목도 하나이고 둘을 함께 센다.
     // 그래서 여기서는 백엔드가 준 10개가 다 그려졌는지와, 제목의 숫자가 화면에 실제로 선
