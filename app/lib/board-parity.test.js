@@ -1009,6 +1009,8 @@ test('KPI 칸은 M 이하에서만 3칸/2칸/1칸 흐름으로 바뀐다', () =>
   assert.match(lBody, /\[data-bs-paired-host="true"\]\s*\{\s*flex-wrap: wrap;\s*min-width: 0;\s*\}/);
   assert.match(lBody,
     /\[data-bs-paired-host="true"\] > \.bs-paired\s*\{\s*flex-basis: 100%;\s*\}/);
+  assert.match(lBody, /\[data-bs-wrap-row="true"\]\s*\{\s*min-width: 0;\s*flex-wrap: wrap;\s*\}/,
+    'L에서 primary 툴바가 레일 옆으로 줄면 가로 줄이 접혀야 한다(2Z49-0 3T2T-0)');
   assert.doesNotMatch(flow.get(1279), /(?:^|[^-])width: (?!var\()|flex-basis|flex-grow/);
   assert.match(flow.get(959), /width: auto/);
   assert.match(flow.get(959), /flex-basis: calc\(33\.3333% - 24px\)/);

@@ -49,14 +49,20 @@ Paper가 목적지를 다른 card_id로 그린 조작은 상태 보드 전환으
 
 ## 4. 회귀 그물 — `npm run verify:card-buttons`
 
-`app/probe-card-buttons.js`가 96장을 실앱 셸에 마운트하고 **진짜 마우스 입력**
-(`sendInputEvent`)으로 후보를 하나씩 누른다. 판정 네 갈래: `responds` ·
-`hit_blocked`(핸들러는 있는데 그 자리 hit test가 남으로 간다) · `inert`(동작 없음) ·
-`offscreen`. 게이트는 **state-control이 전부 반응하는가** 하나만 빨갛게 만든다 —
-`pill`·`affordance`는 아직 동작이 없는 것이 많아 세기만 한다.
+`app/probe-card-buttons.js`가 카드 템플릿 전수(2026-09-08 원장 **101장**)를 실앱 셸에
+마운트하고 **진짜 마우스 입력**(`sendInputEvent`)으로 후보를 하나씩 누른다. 판정 네
+갈래: `responds` · `hit_blocked`(핸들러는 있는데 그 자리 hit test가 남으로 간다) ·
+`inert`(동작 없음) · `offscreen`. 게이트는 **state-control이 전부 반응하는가** 하나만
+빨갛게 만든다 — `pill`·`affordance`는 아직 동작이 없는 것이 많아 세기만 한다.
 
 산출물 `app/captures/paper-gates/CARD-BUTTONS.json`. 샤딩
 `ATHENA_VERIFY_BOARD_IDS=137X-2,2X5N-0`, 리포트 경로 `ATHENA_CARD_BUTTONS_REPORT`.
+
+전수 (2026-09-08, `f3670cf2` 위, 경과 1,648,041ms, 부팅 화면 `summary`):
+`responds=995 · hit_blocked=1 · inert=5771 · gone=0 · offscreen=0`.
+유일한 게이트 실패는 `2Z49-0` 상태 링크 `3T2T-0` 「ELW 거래원별 10창구 전체」
+(`hit`이 레일 `2Z5L-0`). L부터 wrap-row를 켠 뒤 샤드 `2Z49-0`:
+`responds=9 · hit_blocked=0`, `3T2T-0` → 보드 `3TOM-0`. **z-index는 쓰지 않았다.**
 
 프로브가 배운 것 셋(같은 함정을 다시 밟지 않도록):
 - 표 행마다 반복되는 버튼은 라벨당 2개만 누른다 — 전수는 보드 하나에 160개까지 부푼다.
@@ -67,8 +73,8 @@ Paper가 목적지를 다른 card_id로 그린 조작은 상태 보드 전환으
 ## 5. 남은 것
 
 > **이어받는 사람은 [card-buttons/GROK_PROMPT.md](./card-buttons/GROK_PROMPT.md)를 열어 블록을
-> 통째로 복사해 붙여넣는다.** 아래 §5-1~§5-3·§5-5가 남은 근거이고 §5-4는 끝났다. 추출·이식·원장
-> 도구는 [card-buttons/tools/](./card-buttons/tools/)에 있다(새로 만들지 말 것).
+> 통째로 복사해 붙여넣는다.** 아래 §5-1~§5-3이 남고 §5-4·§5-5는 끝났다. 추출·이식·원장 도구는
+> [card-buttons/tools/](./card-buttons/tools/)에 있다(새로 만들지 말 것).
 
 ### 5-1. 비교 바구니 (Paper 보드 신설 완료, 구현 미착수)
 
@@ -168,8 +174,7 @@ S16은 표가 7행으로 늘고 세션별 거래 블록이 빠지며 꼬리가 �
 `호가 열기` 잎 `2RJH-1` hit_node=`2RJH-1`, `responds`, 카드 `13BC-2`를 연다.
 보드 합계 `responds=8 · hit_blocked=0 · inert=39`. **z-index는 쓰지 않았다.**
 
-### 5-5. 전수 감사 수치 갱신
+### 5-5. 전수 감사 수치 갱신 — 해결
 
-`verify:card-buttons` 96장 전수는 이 트랙의 변경 **전에** 돈 것이 마지막이다(그 뒤 실행은
-샤드이거나 좀비 electron 때문에 중간에 죽었다). 30~40분이면 도니, 최종 수치를 §4에
-적는 것이 남았다. 실행 전 `taskkill /F /IM electron.exe`.
+2026-09-08 전수 101장 · 1,648s. 수치와 `2Z49-0` 한 건은 §4. 그 한 건은 wrap-row를
+L부터 켜서 샤드로 닫았다. 전수 초록을 다시 찍으려면 같은 명령으로 한 번 더 돈다.
