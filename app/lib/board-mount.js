@@ -514,6 +514,32 @@ function markElasticKpiValue(el) {
   el.dataset.bsKpiElastic = 'true';
 }
 
+// 글자를 이고 있는 KPI 칸 — 줄바꿈 정책이 켜지면 칸의 min-content가 「가장 긴 값
+// 한 줄」이 된다. L 단계의 `[data-bs-hoisted] { min-width: 0 }`이 그 바닥을 놓아
+// 버리므로, 칸은 0까지 줄고 안쪽 문면이 옆 칸 위로 흘러 겹쳐 읽힌다(실측 2QM7-2
+// 히어로 칸 「모건스탠리 +842억원」 min-content ≈ 324px). 탄력 칸 전용 바닥
+// (`data-bs-kpi-elastic`)은 이 칸을 못 덮는다 — 원문이 `flex-shrink: 0`이라서다.
+// 빈 spacer는 계속 제외한다: 6~8칸 시세 스트립이 L 컨테이너보다 넓어지는 원인이다.
+function markKpiContentFloor(el) {
+  if (!el || !el.dataset) return;
+  if (!String(el.className || '').split(/\s+/).includes('bs-kpi-cell')) return;
+  if (!String(el.textContent || '').trim()) return;
+  el.dataset.bsKpiContent = 'true';
+}
+
+// 글자 단위 분절을 켜는 인라인 선언만 걷어낸다(board-surface.css 「줄바꿈 정책」).
+// 추출 원문 실측 97장 중 39장이 `overflow-wrap: anywhere`를 싣고, 36장은 보드 루트
+// 한 곳에만, 3장(1JPU-0·1JZW-0·2TRW-1)은 13개 내외 노드에 싣는다. 인라인은
+// !important 없이 못 이기므로 규칙으로 덮을 수 없다 — 지우는 것이 유일한 길이다.
+// 다섯 레이아웃 속성과 달리 커스텀 속성으로 옮겨 두지 않는다: 되돌릴 값이 아니다.
+// `anywhere` 외의 값(`break-word` 등)은 Paper가 고른 문면일 수 있으니 건드리지 않는다.
+function stripCharacterWrap(el) {
+  if (!el || !el.style || typeof el.style.getPropertyValue !== 'function') return false;
+  if (el.style.getPropertyValue('overflow-wrap').trim() !== 'anywhere') return false;
+  el.style.removeProperty('overflow-wrap');
+  return true;
+}
+
 function markInsetAbsoluteBox(el) {
   if (!el || !el.dataset || !el.style) return;
   if (el.style.getPropertyValue('position').trim() !== 'absolute') return;
@@ -582,6 +608,7 @@ function hoistLayout(el) {
   if (!el || !el.style || typeof el.style.setProperty !== 'function') return false;
   if (el.dataset && el.dataset.bsHoisted === 'true') return false;
   markElasticKpiValue(el);
+  markKpiContentFloor(el);
   markInsetAbsoluteBox(el);
   markSplitRow(el);
   markColumnStackItem(el);
@@ -643,6 +670,7 @@ function markPairedHost(surface) {
 }
 
 function applyResponsiveHooks(surface) {
+  stripCharacterWrap(surface);
   hoistLayout(surface);
   let hoisted = 1;
   for (const region of RESPONSIVE_REGIONS) {
@@ -653,7 +681,10 @@ function applyResponsiveHooks(surface) {
   // 표면 전체를 훑는다. `data-node`만 보면 손으로 쓴 계약의 구조 노드(픽스처
   // board.html의 `.bs-header` 등)를 놓친다 — 거기에도 고정 폭이 산다.
   // 인라인 선언이 없는 노드는 hoistRigidBox가 그대로 지나간다.
+  // stripCharacterWrap은 hoistRigidBox의 조기 반환(이미 걷어낸 노드)과 무관하게
+  // 돌아야 한다 — 영역 노드가 `anywhere`를 함께 이고 있는 보드가 3장 있다.
   for (const el of surface.querySelectorAll('*')) {
+    stripCharacterWrap(el);
     if (hoistRigidBox(el)) hoisted += 1;
   }
   markPairedHost(surface);
