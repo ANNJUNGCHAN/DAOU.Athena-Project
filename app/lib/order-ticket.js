@@ -46,12 +46,21 @@ function buildSelectorOrderPrefill(payload) {
 
 // 게이트 사전 판정 — 비활성이면 실행 버튼을 잠그고 사유를 보여준다(정직 고지).
 function gateBlocker(accountInfo) {
-  // 두 분기가 한 카드의 같은 한 줄에 번갈아 뜬다 — 문체를 Paper가 확정한 아래 줄에 맞춘다.
   if (!accountInfo) return '계좌 정보를 확인할 수 없습니다 — 백엔드 기동을 확인해 주세요';
   if (!accountInfo.orderApi) {
     return '활성 계좌의 주문 API가 OFF입니다 — 설정 › 계좌에서 게이트를 여세요.';
   }
   return null;
+}
+
+// Paper 9F3-0 잠금 블록 — 라벨과 사유를 한 문장으로 붙이지 않는다.
+function gateLockModel(blocker) {
+  if (!blocker) return { locked: false, label: null, reason: null };
+  return {
+    locked: true,
+    label: '지금은 실행할 수 없음',
+    reason: String(blocker),
+  };
 }
 
 // 매수 kt10000 / 매도 kt10001 — generated/models.py 실측 필드만 쓴다.
@@ -204,6 +213,7 @@ const __exports = {
   buildPrefill,
   buildSelectorOrderPrefill,
   gateBlocker,
+  gateLockModel,
   buildOrderPayload,
   estimateOrderTotal,
   priceRowModel,
