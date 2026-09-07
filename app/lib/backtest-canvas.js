@@ -5877,6 +5877,9 @@ function createBacktestCanvas(options) {
     lastError = null;
     pendingScrollTop = bodyEl = null;
     visualGraph = visualGraphYaml = visualCompiled = visualPreview = null;
+    pendingQuestion = pendingPatch = null;
+    codeOnly = false;
+    codeOnlyGraph = openedVersion = null;
     codegenCache = null;
     if (projectIde) projectIde.suspend();
     projectFiles = [];

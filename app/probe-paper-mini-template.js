@@ -37,6 +37,7 @@ fs.writeFileSync(
   JSON.stringify({ cliDone: true, accountDone: true }),
 );
 app.setPath('userData', PROFILE);
+process.env.ATHENA_NO_AUTOSTART = '1';
 process.env.ATHENA_CANVAS_SOURCE = 'fixture';
 process.env.ATHENA_PERSISTENT_CHAT = '0';
 
@@ -197,14 +198,17 @@ async function main() {
   console.log(`[probe-paper-mini-template] envelopes=${ENVELOPES.length}`);
 
   const mainModule = require('./main.js');
+  require('./lib/main/history-sink').configureChatHistoryStore({
+    dbPath: path.join(PROFILE, 'athena-chat-outbox.sqlite3'),
+  });
   await mainModule.createWindows();
   const { shellWin, orbWin } = mainModule.getWins();
   if (!shellWin || !orbWin) throw new Error('shellWin/orbWin을 찾지 못했다');
   orbWin.webContents.on('console-message', (_event, details) => {
     console.log(`[probe-paper-mini-template] renderer ${details.level}: ${details.message}`);
   });
-  shellWin.show();
-  shellWin.focus();
+  // 격리 검증은 실제 부팅을 시작하지 않으므로 기존 준비 경로로 창을 정리한다.
+  mainModule.revealShell({ focus: true, force: true });
   const shellReady = await waitFor(() => shellWin.webContents.executeJavaScript(
     "!!(document.getElementById('winClose') && document.getElementById('dot'))",
   ));

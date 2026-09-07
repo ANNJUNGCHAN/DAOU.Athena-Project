@@ -5441,6 +5441,82 @@ async function switchWorkspace(made, handler) {
   await made.tick();
 }
 
+for (const pending of ['question', 'patch']) {
+  for (const transition of ['same', 'clear', 'restore']) {
+    test(`완료된 세션 상태 경계: 대기 ${pending} (전환=${transition})`, async () => withWorkspaceGlobal(async ({ registered }) => {
+      const made = await mountVisual();
+      const handler = registered[0][1];
+      made.canvas.onChatAction(pending === 'question'
+        ? { kind: 'visual_question', question: { code: 'E_PREVIOUS', choices: [] } }
+        : { kind: 'visual_patch', patch: VISUAL_PATCH });
+      const key = pending === 'question' ? 'pendingQuestion' : 'pendingPatch';
+      const previous = made.canvas.getContext().map[key];
+      assert.ok(previous, '전환 전에 앞 세션의 대기 상태가 실제로 있어야 한다');
+      if (transition === 'clear') handler.clear();
+      if (transition === 'restore') {
+        await handler.restore({ kind: 'backtest', form: RESTORE_WORKSPACE.form, graph: VISUAL_GRAPH });
+      }
+      await flush();
+      assert.deepEqual(made.canvas.getContext().map[key], transition === 'same' ? previous : null,
+        '앞 세션의 질문·수정안은 다음 모델 컨텍스트에 남으면 안 된다');
+    }));
+  }
+}
+
+for (const origin of ['visual', 'code_only']) {
+  for (const transition of ['same', 'clear', 'restore']) {
+    test(`완료된 세션 상태 경계: 열린 ${origin} 버전 (전환=${transition})`, async () => withWorkspaceGlobal(async ({ registered }) => {
+      const made = await mountWithHistory();
+      const handler = registered[0][1];
+      await click(findByClass(made.container, 'backtest-version-row')[origin === 'visual' ? 1 : 2]);
+      await flush();
+      made.canvas.onChatAction({ kind: 'navigate', tab: 'design', designTab: 'flow' });
+      await flush();
+      assert.equal(findByClass(made.container, 'backtest-snapshot-badge').length, 1);
+      assert.equal(made.canvas.getContext().map.code_only, origin === 'code_only');
+      if (transition === 'clear') handler.clear();
+      if (transition === 'restore') {
+        await handler.restore({
+          kind: 'backtest', form: RESTORE_WORKSPACE.form, graph: VISUAL_GRAPH, designTab: 'flow',
+        });
+      }
+      await flush();
+      assert.equal(made.canvas.getContext().map.code_only, transition === 'same' && origin === 'code_only');
+      assert.equal(findByClass(made.container, 'backtest-head-opened').length, transition === 'same' ? 1 : 0,
+        '앞 세션에서 열었던 버전 표시가 남으면 안 된다');
+      assert.equal(findByClass(made.container, 'backtest-snapshot-badge').length, transition === 'same' ? 1 : 0);
+      if (transition === 'restore') {
+        assert.equal(findByClass(made.container, 'backtest-vis-undo').length, 1,
+          '새 세션의 그래프는 이전 버전 snapshot에 가려지지 않고 편집할 수 있어야 한다');
+        assert.doesNotMatch(textOf(made.container), /ma_hist/);
+      }
+    }));
+  }
+}
+
+test('완료된 세션 상태 경계: 다음 코드 전용 버전은 다음 세션의 호환 그래프를 쓴다', async () => withWorkspaceGlobal(async ({ registered }) => {
+  const made = await mountWithHistory();
+  const handler = registered[0][1];
+  await click(findByClass(made.container, 'backtest-version-row')[2]);
+  await flush();
+  const graph = JSON.parse(JSON.stringify(VISUAL_GRAPH));
+  graph.nodes[1].label = 'ma_next_session';
+  await handler.restore({
+    kind: 'backtest', form: RESTORE_WORKSPACE.form, graph,
+    code: { ...RESTORE_WORKSPACE.code, strategyId: 'next-strategy' },
+  });
+  made.canvas.onChatAction({ kind: 'navigate', tab: 'history' });
+  await flush();
+  await flush();
+  await click(findByClass(made.container, 'backtest-version-row')[2]);
+  await flush();
+  made.canvas.onChatAction({ kind: 'navigate', tab: 'design', designTab: 'flow' });
+  await flush();
+  assert.equal(made.canvas.getContext().map.code_only, true);
+  assert.match(textOf(made.container), /ma_next_session/,
+    '읽기 전용 그래프 캐시도 세션 사이에 재사용하면 안 된다');
+}));
+
 for (const pendingStage of ['start', 'status']) {
   for (const switched of [false, true]) {
     test(`비동기 세션 경계: 수집 ${pendingStage} (전환=${switched})`, async () => withWorkspaceGlobal(async ({ registered, reports }) => {
