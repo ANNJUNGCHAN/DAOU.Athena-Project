@@ -1070,10 +1070,10 @@
         "layer_직접": 189,
         "layer_병기": 0,
         "layer_펼침": 0,
-        "tables": 0,
+        "tables": 1,
         "tree_text_truncated": 0,
-        "bs_col": 0,
-        "bs_paired": 0,
+        "bs_col": 45,
+        "bs_paired": 64,
         "bs_leaf": 0,
         "bs_kpi_cell": 5,
         "state_control_marks": 0
@@ -1082,7 +1082,7 @@
         "marks": [],
         "unresolved": []
       },
-      "html_sha256": "23a7c44492fa3e35289ad1254a3250dea89f7eb27efb98a8af719dec65d4ea99"
+      "html_sha256": "1c579ec61589ce27b5072bb4e98182865ec3409593d8a0fe504f45253b9ca7eb"
     },
     {
       "board_id": "2QRP-1",
@@ -1217,9 +1217,9 @@
         "text_nodes": 259,
         "slots": 259,
         "anchored_slots": 0,
-        "mapped_slots": 156,
-        "labels": 83,
-        "values": 176,
+        "mapped_slots": 152,
+        "labels": 81,
+        "values": 178,
         "layer_직접": 239,
         "layer_병기": 20,
         "layer_펼침": 0,
@@ -2946,7 +2946,7 @@
         "layer_직접": 149,
         "layer_병기": 17,
         "layer_펼침": 0,
-        "tables": 0,
+        "tables": 1,
         "tree_text_truncated": 0,
         "bs_col": 0,
         "bs_paired": 0,
@@ -2958,7 +2958,7 @@
         "marks": [],
         "unresolved": []
       },
-      "html_sha256": "23946513e61fc6c7bcb9db446069ea1600a49a3821f1e25906e6656c84f5f65d"
+      "html_sha256": "ad11fd00144d89bab47ff4dd99d797bd0f37644b01e9db2242e7ea67484c0292"
     },
     {
       "board_id": "2XY6-0",
