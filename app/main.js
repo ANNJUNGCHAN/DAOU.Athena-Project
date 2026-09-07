@@ -20,6 +20,8 @@ const mcpCli = require('./lib/main/mcp-cli');
 const mcpEnv = require('./lib/main/mcp-env');
 // 플러그인 제안 — 판정부와 승인 실행부는 electron 없는 순수 모듈이 진다.
 const pluginProposalForward = require('./lib/main/plugin-proposal-forward');
+const watchCreateForward = require('./lib/main/watch-create-forward');
+const watchCreateCard = require('./lib/watch-create-card');
 const brainEntityForward = require('./lib/main/brain-entity-forward');
 const { createPluginProposalRegistry } = require('./lib/main/plugin-proposal-registry');
 const { CATALOG: PLUGIN_CATALOG } = require('./lib/plugin-catalog');
@@ -2566,6 +2568,23 @@ function maybeForwardRoutineProposal(step, resultBlock) {
   }
 }
 
+function maybeForwardWatchCreate(step, resultBlock) {
+  if (resultBlock.is_error === true) return;
+  const text = extractToolResultText(resultBlock.content);
+  if (!text) return;
+  let payload;
+  try { payload = JSON.parse(text); } catch { return; }
+  const extracted = watchCreateForward.extractWatchCreate(step, payload);
+  if (!extracted) return;
+  if (shellWin && !shellWin.isDestroyed()) {
+    shellWin.webContents.send('athena:watch-create', {
+      receipt: watchCreateCard.buildReceipt(extracted.titles),
+      poll: watchCreateCard.POLL_QUESTION,
+      cooldown: watchCreateCard.COOLDOWN_QUESTION,
+    });
+  }
+}
+
 const GRAPH_VIEW_TOOL_NAME = 'athena_graph_view';
 
 // 그래프 채팅 액션(2026-09-03) — athena_graph_view의 HTTP 무호출 액션 다섯
@@ -2818,6 +2837,7 @@ function createToolStepTracker(
             if (forwardNudgeGuard) {
               maybeForwardNudgeGuardProposal(step, block);
               maybeForwardRoutineProposal(step, block);
+              maybeForwardWatchCreate(step, block);
               if (forwardBacktestAction) maybeForwardBacktestChatAction(step, block);
               maybeForwardGraphChatAction(step, block);
               maybeForwardPluginProposal(step, block);

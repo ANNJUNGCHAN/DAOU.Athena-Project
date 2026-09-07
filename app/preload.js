@@ -340,6 +340,8 @@ const ON_CHANNELS = new Set([
   // 루틴 제어 제안 카드(Step 6) — athena_routine propose 결과, 비영속.
   // 확정은 사람이 카드의 칩을 눌렀을 때 렌더러가 직접 REST를 부른다.
   'athena:routine-proposed',
+  // 새 알람 만들기 영수증·질문 카드 — propose_watch_code 성공 결과, 비영속.
+  'athena:watch-create',
   // 백테스트 채팅 액션 — athena_backtest의 propose_spec·propose_code·navigate·
   // propose_optimize 결과 {kind, ...}, 비영속. 셸에서만 구독한다.
   'athena:backtest-chat-action',

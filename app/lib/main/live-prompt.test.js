@@ -1605,6 +1605,10 @@ test('buildAgentModePrefix: 코드 알람 3단계 계약을 준다(propose_watch
   // 고치기 한 바퀴 — 켜진 알람은 덮어쓸 수 없다.
   assert.ok(p.includes('같은 path로 propose_watch_code를 다시 불러'));
   assert.ok(p.includes('먼저 잠시 멈춰 달라고 말한 뒤 고친다'));
+  assert.ok(p.includes('「함수 N개 만듦」 영수증'));
+  assert.ok(p.includes('「언제 확인할까요?」 질문 카드'));
+  assert.ok(p.includes('poll_interval_s:60을 지어내지 마라'));
+  assert.doesNotMatch(p, /poll_interval_s:60\}/);
 });
 
 test('buildAgentModePrefix: 프로젝트가 있으면 이름과 id를 싣고, 없으면 만들라고 한다', () => {
