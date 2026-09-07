@@ -323,8 +323,32 @@ async function syntheticClick(win, instanceId, index) {
   })()`);
 }
 
+// 카드 화면으로 되돌린다. 캔버스가 다른 모드(에이전트·그래프)에 있으면 카드가 안 보여
+// paint ack가 영영 안 온다 — 실측: 「알림 설정」이 모드를 바꾼 뒤 그 다음 보드부터
+// 41장이 전부 `paint ack wall-clock timeout`으로 죽었다.
+// 되돌릴 자리는 부팅 직후의 화면이다 — 이름을 못 박으면(예: 'summary') 셸의 기본
+// 화면과 어긋나 카드가 안 보이는 화면으로 밀어 넣는다(실측: 전 보드 paint 타임아웃).
+let bootView = '';
+
+async function readCanvasView(win) {
+  return win.webContents.executeJavaScript(`((window.AthenaCanvasMode
+    && window.AthenaCanvasMode.state && window.AthenaCanvasMode.state.view) || '')`);
+}
+
+async function restoreCardView(win) {
+  const view = await readCanvasView(win);
+  if (view === bootView) return view;
+  await win.webContents.executeJavaScript(`(() => {
+    const mode = window.AthenaCanvasMode;
+    if (mode && typeof mode.setView === 'function') mode.setView(${JSON.stringify(bootView)});
+    return true;
+  })()`);
+  return view;
+}
+
 async function mountBoard(win, boardId, ordinal) {
   const surface = loadRealBoardContract(boardId, ordinal, TEMPLATE_ROOT);
+  await restoreCardView(win);
   await sendBoardEnvelope(win, surface);
   await activateBoardTab(win, surface.instanceId);
   await settleBoardLayout(win, surface.instanceId);
@@ -340,14 +364,7 @@ async function auditBoard(win, boardId, ordinal) {
     // 이전 클릭이 보드를 갈아탔으면 기준 보드로 되돌린다.
     // 앞 후보가 캔버스 화면을 갈아탔으면(「알림 설정」은 에이전트 모드로 데려간다)
     // 카드 화면으로 되돌린다 — 안 되돌리면 남은 후보가 안 보이는 카드에서 재진다.
-    await win.webContents.executeJavaScript(`(() => {
-      const mode = window.AthenaCanvasMode;
-      const view = mode && mode.state && mode.state.view;
-      if (mode && typeof mode.setView === 'function' && view && view !== 'summary') {
-        mode.setView('summary');
-      }
-      return view || '';
-    })()`);
+    await restoreCardView(win);
     const current = await win.webContents.executeJavaScript(fingerprintProbe(surface.instanceId));
     // 카드가 늘어났으면(카드 액션이 새 카드를 열었다) 그것도 되돌린다 — 안 그러면
     // 같은 조작을 다시 눌렀을 때 통합 카드가 같은 신원으로 합쳐져 「안 눌린다」로 읽힌다.
@@ -471,6 +488,9 @@ async function main() {
   await app.whenReady();
   registerShellIpc();
   const win = await bootShell();
+  bootView = await readCanvasView(win);
+  process.stdout.write(`[card-buttons] 부팅 화면 ${JSON.stringify(bootView)}
+`);
 
   const boards = [];
   for (const [index, boardId] of boardIds.entries()) {
