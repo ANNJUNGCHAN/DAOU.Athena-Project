@@ -42,6 +42,7 @@ function createFakeClock(startMs = 0) {
 function hardDeadlineDependencies({ clock, childFactory, healthyFn, killed }) {
   return {
     checkHealthFn: async () => healthyFn(),
+    existingBackendCheckAttempts: 1,
     venvExistsFn: () => true,
     spawnFn: childFactory,
     waitUntilHealthyFn: async () => {
@@ -127,6 +128,108 @@ test('decideAction: 헬스체크 실패 + venv 있음 → spawn', () => {
 });
 
 test('hasSpawnedChild: ensureBackend를 부르기 전에는 false — 아직 아무것도 스폰하지 않았다', () => {
+  assert.equal(hasSpawnedChild(), false);
+});
+
+test('ensureBackend: 첫 manifest timeout 뒤 기존 backend가 응답하면 spawn하지 않는다', async () => {
+  _setBackendChildForTest(null);
+  const healthResults = [false, true];
+  let spawnCount = 0;
+  const result = await ensureBackend({
+    _dependencies: {
+      checkHealthFn: async () => healthResults.shift(),
+      venvExistsFn: () => true,
+      spawnFn: () => {
+        spawnCount += 1;
+        return new EventEmitter();
+      },
+      waitUntilHealthyFn: async () => true,
+    },
+  });
+
+  assert.equal(result.reason, 'already-running');
+  assert.equal(result.ready, true);
+  assert.equal(spawnCount, 0);
+  assert.equal(hasSpawnedChild(), false);
+});
+
+test('ensureBackend: 첫 두 manifest timeout 뒤 기존 backend가 응답하면 spawn하지 않는다', async () => {
+  _setBackendChildForTest(null);
+  const healthResults = [false, false, true];
+  let spawnCount = 0;
+  const result = await ensureBackend({
+    _dependencies: {
+      checkHealthFn: async () => healthResults.shift(),
+      venvExistsFn: () => true,
+      spawnFn: () => {
+        spawnCount += 1;
+        return new EventEmitter();
+      },
+      waitUntilHealthyFn: async () => true,
+    },
+  });
+
+  assert.equal(result.reason, 'already-running');
+  assert.equal(result.ready, true);
+  assert.equal(spawnCount, 0);
+  assert.equal(hasSpawnedChild(), false);
+});
+
+test('ensureBackend: 제한된 기존 backend 재확인이 모두 실패하면 정확히 한 번 spawn한다', async () => {
+  _setBackendChildForTest(null);
+  let healthChecks = 0;
+  let spawnCount = 0;
+  const child = new EventEmitter();
+  const result = await ensureBackend({
+    _dependencies: {
+      checkHealthFn: async () => {
+        healthChecks += 1;
+        return false;
+      },
+      venvExistsFn: () => true,
+      spawnFn: () => {
+        spawnCount += 1;
+        return child;
+      },
+      waitUntilHealthyFn: async () => true,
+    },
+  });
+
+  assert.equal(healthChecks, 3);
+  assert.equal(spawnCount, 1);
+  assert.equal(result.spawned, true);
+  assert.equal(result.ready, true);
+  shutdownBackend({ killTreeFn: () => {} });
+});
+
+test('ensureBackend: 기존 backend 재확인 시간도 최초 ensure의 60초 상한에 포함한다', async () => {
+  _setBackendChildForTest(null);
+  const clock = createFakeClock();
+  const child = new EventEmitter();
+  const killed = [];
+  let precheck = true;
+  await ensureBackend({
+    _dependencies: {
+      checkHealthFn: async () => {
+        if (precheck) clock.setNow(clock.now() + 1_000);
+        return false;
+      },
+      venvExistsFn: () => true,
+      spawnFn: () => child,
+      waitUntilHealthyFn: async () => {
+        precheck = false;
+        clock.setNow(15_000);
+        return false;
+      },
+      killTreeFn: (ownedChild) => killed.push(ownedChild),
+      nowFn: clock.now,
+      setTimeoutFn: clock.setTimeoutFn,
+      clearTimeoutFn: clock.clearTimeoutFn,
+    },
+  });
+
+  await clock.advanceTo(60_000);
+  assert.deepEqual(killed, [child]);
   assert.equal(hasSpawnedChild(), false);
 });
 
