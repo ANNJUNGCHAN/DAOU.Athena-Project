@@ -2,9 +2,9 @@
 
 import asyncio
 from collections import OrderedDict
-from typing import Any
+from typing import Annotated, Any
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, Header, HTTPException, Request
 
 from athena_api.accounts import account_runtimes, default_account_alias
 from athena_api.api import router as api_router
@@ -12,6 +12,7 @@ from athena_api.config import Settings, get_settings
 from athena_api.errors import install_exception_handlers
 from athena_api.lifespan import build_lifespan
 from athena_api.logging_config import configure_logging
+from athena_api.security import require_local_bearer
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -54,12 +55,17 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         summary="Per-account Kiwoom readiness",
         openapi_extra={"x-athena-llm-exposed": False},
     )
-    async def ready_accounts() -> dict[str, Any]:
+    async def ready_accounts(
+        request: Request,
+        authorization: Annotated[str, Header(alias="Authorization")] = "",
+    ) -> dict[str, Any]:
         """Report each account separately so a 1-of-N auth failure is visible.
 
-        Always 200: /ready already answers the process-level question, and collapsing N
-        accounts into one boolean is what hides the degraded one.
+        Authorized requests return 200 even when an individual account is degraded:
+        /ready already answers the process-level question, and collapsing N accounts
+        into one boolean is what hides the degraded one.
         """
+        require_local_bearer(request, authorization)
         runtimes = account_runtimes(app)
         return {
             "default": default_account_alias(app),
