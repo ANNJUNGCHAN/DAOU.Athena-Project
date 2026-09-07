@@ -287,6 +287,20 @@ test('실행 증거: ignored 경로의 파일은 작업 사본 해시에 넣지 
   }
 });
 
+test('실행 증거: 진행 줄은 stderr로 가고 최종 JSON만 stdout에 남는다', async (t) => {
+  const fixture = evidenceFixture(t, [{}]);
+  const lines = [];
+  fixture.deps.write = (text) => lines.push(text);
+  const result = await runSuite([{ script: 'verify:fixture', budgetMs: 5000 }], fixture.deps);
+  assert.equal(result.ok, true);
+  assert.ok(lines.some((line) => line.startsWith('[suite] start verify:fixture')));
+  assert.ok(lines.some((line) => line.includes('ok=true')));
+  const src = fs.readFileSync(path.join(__dirname, 'run-verify-suite.js'), 'utf8');
+  assert.match(src, /deps\.write \|\| \(\(text\) => process\.stderr\.write\(text\)\)/);
+  assert.doesNotMatch(src, /deps\.write \|\| \(\(text\) => process\.stdout\.write\(text\)\)/);
+  assert.match(src, /process\.stdout\.write\(JSON\.stringify\(report/);
+});
+
 test('실행 증거: 시작과 종료의 소스가 다르면 동일 기준이라고 표시하지 않는다', async (t) => {
   const fixture = evidenceFixture(t, [{}]);
   let reads = 0;
