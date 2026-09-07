@@ -729,7 +729,8 @@ async function addLiveCard(result) {
     if (el) destroyCard(el);
   }
   // ★ canvas_type은 응답값이다 — 요청값이 아니다(S4 RESULT.md §5). success/fallback
-  // 둘 다 이 필드로 어떤 카드를 그릴지 정한다. 알려진 3종(table/stream/reader) 중
+  // 둘 다 이 필드로 어떤 카드를 그릴지 정한다. 알려진 9종(table/stream/reader/
+  // chart/facts/compound/event/action/status) 중
   // 하나가 아니면(대개 free로 폴백) 자유 카드로 떨어뜨린다 — 폴백은 예외가 아니라
   // 흔한 경로다. `!envelope.fell_back`은 방어적 중복이다 — canvas.py의
   // validate_canvas_payload()는 폴백 시 canvas_type 자체를 'free'로 바꿔 보내므로
