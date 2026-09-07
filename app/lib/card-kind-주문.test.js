@@ -49,12 +49,15 @@ test('buildOrderReceipt: 주문 관련 필드가 하나도 없으면 receipt를 
   assert.equal(buildOrderReceipt({ cur_prc: '88100' }), null);
 });
 
-test('classifyOrderReceiptStatus: 완료·대기만 명시 톤을 주고 나머지는 중립이다', () => {
+test('classifyOrderReceiptStatus: 확인 요청·불확실·실패를 갈라 친다', () => {
   assert.equal(classifyOrderReceiptStatus('체결완료'), 'ok');
   assert.equal(classifyOrderReceiptStatus('접수대기'), 'warn');
   assert.equal(classifyOrderReceiptStatus('미체결'), 'warn');
   assert.equal(classifyOrderReceiptStatus('체결대기'), 'warn');
-  assert.equal(classifyOrderReceiptStatus('체결거부'), 'warn');
+  assert.equal(classifyOrderReceiptStatus('체결거부'), 'up');
+  assert.equal(classifyOrderReceiptStatus('실패'), 'up');
+  assert.equal(classifyOrderReceiptStatus('확인 요청'), 'info');
+  assert.equal(classifyOrderReceiptStatus('확인 필요'), 'warn');
   assert.equal(classifyOrderReceiptStatus('알 수 없음'), 'flat');
 });
 

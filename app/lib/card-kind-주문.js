@@ -62,8 +62,11 @@ function buildOrderReceipt(record) {
 
 function classifyOrderReceiptStatus(raw) {
   const text = String(raw === null || raw === undefined ? '' : raw);
-  if (['미체결', '대기', '접수', '거부', '실패', '취소'].some((label) => text.includes(label))) return 'warn';
-  if (text.includes('완료') || text.includes('체결')) return 'ok';
+  if (text === 'needs_confirm' || text.includes('확인 요청')) return 'info';
+  if (text === 'in_doubt' || text.includes('확인 필요')) return 'warn';
+  if (text === 'failed' || ['실패', '거부', '취소'].some((label) => text.includes(label))) return 'up';
+  if (['미체결', '대기', '접수'].some((label) => text.includes(label))) return 'warn';
+  if (text === 'done' || text.includes('완료') || text.includes('체결')) return 'ok';
   return 'flat';
 }
 

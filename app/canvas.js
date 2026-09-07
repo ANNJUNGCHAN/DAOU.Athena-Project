@@ -2448,7 +2448,13 @@ function renderActionCard(envelope) {
   const data = envelope.data && typeof envelope.data === 'object' ? envelope.data : {};
   const workflowState = data.lifecycle || data.state || 'review';
   stampWorkflowState(card, envelope, 'guarded_order', workflowState);
-  appendWorkflowState(body, data.state_label || workflowState, '주문 단계');
+  const orderState = appendWorkflowState(body, data.state_label || workflowState, '주문 단계');
+  const orderTicket = window.AthenaLib && window.AthenaLib.OrderTicket;
+  if (orderTicket && typeof orderTicket.executeOutcomeTone === 'function' && orderState) {
+    const tone = orderTicket.executeOutcomeTone(workflowState);
+    const value = orderState.querySelector('.workflow-state-value');
+    if (value) value.classList.add(`is-${tone}`);
+  }
   const kindRender = window.AthenaLib.CardKinds.resolve(title);
   const built = kindRender && kindRender(envelope);
   if (built) body.appendChild(built);

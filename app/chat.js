@@ -5479,6 +5479,7 @@ async function renderOrderTicket(prefill) {
       ticket.qty = Number(qtyInput.value);
       payload = orderTicketLib.buildOrderPayload(ticket);
     } catch (err) {
+      status.className = 'ticket-status is-up';
       status.textContent = `입력 오류: ${err.message}`;
       return;
     }
@@ -5501,6 +5502,7 @@ async function renderOrderTicket(prefill) {
         trId: payload.tr_id, body: payload.body, outcome, response: res,
       }));
     }
+    status.className = `ticket-status is-${orderTicketLib.executeOutcomeTone(outcome)}`;
     status.textContent = orderTicketLib.executeOutcomeCopy(outcome, res);
     if (outcome !== 'done' && outcome !== 'in_doubt') syncExec();
   });
