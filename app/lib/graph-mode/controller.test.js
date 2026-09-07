@@ -57,6 +57,7 @@ function setup(options) {
     kiumi: fakeNode('div'),
     canvasRegion: fakeNode('main'),
     chatHead: fakeNode('div'),
+    chatInput: fakeNode('textarea'),
     graphHeaderMeta: fakeNode('span'),
     mapGuide: fakeNode('div'),
     // 지도 범례(보드 03·04 + 07) — #graphBody의 형제라 지도를 다시 그려도 안 지워진다.
@@ -69,6 +70,9 @@ function setup(options) {
   elements.kiumi.dataset = {};
   elements.canvasRegion.dataset = {};
   elements.chatHead.dataset = {};
+  elements.chatInput.dataset = {};
+  elements.chatInput.placeholder = '무엇이든 물어보세요';
+  elements.chatInput.disabled = false;
   if (opts.withPanel) elements.panel = fakeNode('div');
   let calls = 0;
   // 라이브 지도 스텁(2026-09-02). 실제 vis-network는 <canvas>와 브라우저 API를
@@ -1316,11 +1320,13 @@ test('backtest로 전환하면 채팅 헤더가 보이고 data-mode·문구가 �
   assert.equal(elements.chatHead.dataset.mode, 'graph');
   assert.equal(elements.chatHeadTitle.textContent, '그래프에게 묻기');
   assert.equal(elements.chatHeadSub.textContent, '답이 캔버스를 바꿉니다');
+  assert.equal(elements.chatInput.placeholder, '그래프에 대해 물어보세요');
   await controller.setView('summary');
   assert.equal(elements.chatHead.hidden, true, '대화 모드엔 헤더가 없다(보드 37)');
   assert.equal(elements.chatHead.dataset.mode, undefined);
   assert.equal(elements.chatHeadTitle.textContent, '');
   assert.equal(elements.chatHeadSub.textContent, '');
+  assert.equal(elements.chatInput.placeholder, '무엇이든 물어보세요');
 });
 
 // W3-6 — 헤더가 플러그인 모드까지 넓어져도 그래프 문구는 한 글자도 바뀌지 않는다(A10).
