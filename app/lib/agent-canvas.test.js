@@ -98,6 +98,9 @@ test('통계 카드: 진행 중은 활성 감시 집계만 표시하고 허위 �
   assert.equal(inProgress.getAttribute('data-source'), 'live');
   assert.equal(findByClass(inProgress, 'agent-stat-value')[0].textContent, '없음');
   assert.equal(findByClass(inProgress, 'agent-stat-sub')[0].textContent, '활성 감시가 없습니다');
+  for (const card of bySource('live')) {
+    assert.equal(findByClass(card, 'agent-demo-mark').length, 0, `${findByClass(card, 'agent-stat-label')[0].textContent} live 카드에 데모가 있으면 안 된다`);
+  }
 });
 
 test('통계 카드: 라우틴 조회가 끝나기 전에는 진행 중을 불러오는 중으로 표시한다', async () => {
@@ -628,6 +631,9 @@ test('최근 실행 로그는 fixture로 표시된다(ledger 라이브 연결은
   const logsWrap = findByClass(container, 'agent-detail-logs')[0];
   assert.equal(logsWrap.getAttribute('data-source'), 'fixture');
   assert.equal(findByClass(logsWrap, 'agent-detail-log').length, 3);
+  const recent = findByClass(container, 'agent-panel-caption').find((n) => n.textContent === '최근 실행');
+  assert.ok(recent);
+  assert.equal(findByClass(recent, 'agent-demo-mark')[0].textContent, '데모');
 });
 
 // ── F-fix1(본편 이월 갭, Paper 39번 실측 AAG-0): "채팅에서 열기 ↗" ──
@@ -1003,10 +1009,13 @@ test('라이브 컬럼: 진행바 2건 + "다음 24시간" 타임라인 4건이 
   canvas.mount();
   const liveCol = findByClass(container, 'agent-live-col')[0];
   assert.equal(liveCol.getAttribute('data-source'), 'fixture');
+  assert.equal(findByClass(liveCol, 'agent-demo-mark').length, 2);
   assert.equal(findByClass(liveCol, 'agent-demo-mark')[0].textContent, '데모');
   assert.equal(findByClass(liveCol, 'agent-live-progress-row').length, 2);
   assert.equal(findByClass(liveCol, 'agent-live-progress-badge')[0].textContent, '데모');
   assert.equal(findByClass(liveCol, 'agent-live-timeline-row').length, 4);
+  assert.equal(findByClass(liveCol, 'agent-live-ws').length, 0);
+  assert.equal(findByClass(container, 'agent-live-ws')[0].getAttribute('data-source'), 'live');
 });
 
 test('"WS 연결됨" — getWsConnected()가 실데이터다, false면 정직하게 "연결 안 됨"', () => {

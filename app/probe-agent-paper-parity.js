@@ -509,7 +509,7 @@ async function main() {
   check('울린 줄에만 「채팅에서 열기 ↗」가 있다 — 보드 12(억제된 줄은 「—」)',
     codeProbe.fireOpens.length === 2 && codeProbe.fireOpens.every((t) => t === '채팅에서 열기 ↗')
     && codeProbe.fireNoDoors.length === 1);
-  check('설정 요약에 확인 주기·쿨다운·만료·데이터가 있고 쿨다운은 한국어 단위다',
+  check('설정 요약이 확인 주기·쿨다운·만료·데이터 네 줄이고 쿨다운은 한국어 단위다 — 보드 12',
     JSON.stringify(codeProbe.fieldPairs)
       === JSON.stringify([['확인 주기', '장중 1분'], ['쿨다운', '1일'], ['만료', '2026-10-03'], ['데이터', '일봉 + 오늘 현재가']]));
   check('코드 알람 상세에 조건 편집 폼이 없다 — A-5', codeProbe.inputCount === 0);
