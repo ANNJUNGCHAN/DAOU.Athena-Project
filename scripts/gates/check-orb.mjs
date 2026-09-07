@@ -7,15 +7,10 @@
  * 대조군 없이는 믿을 수 없으므로(빈 파일도 통과한다) 존재 검사와 짝지어 둘 다
  * 성립할 때만 초록을 준다.
  *
- * 2026-08-26 board-33/34 규범 개정(문서화된 결정, tree-34-deep.raw "상태는
- * 둘뿐이다") — "입력창 0개(단일 입력 원칙)"가 "셸이 보이는 동안은 오브에 입력이
- * 없다"로 좁아졌다. 오브는 셸이 숨겨졌을 때만(athena:shell-visibility로 게이트)
- * #orbInput 하나를 받고, 그 질의는 셸의 커맨드바와 완전히 같은 runLiveQuery로
- * 이어진다(athena:orb-chat-submit — athena__render_canvas를 직접 부르지 않는다).
- * **살아있는 입력창은 여전히 최대 하나**이므로 원칙 자체(단일 입력)는 안 깨졌다 —
- * 그 하나가 항상 셸이라는 전제만 깨졌다. 그래서 아래 (a)는 화이트리스트로
- * 완화하고(#orbInput 외에는 여전히 금지), 주문 집행·감시 승인/취소가 여전히
- * 오브의 액션이 아니라는 (b)의 핵심(확정 결정 3)은 그대로 조인다.
+ * 2026-09-07 — 키우미는 셸 표시 여부와 무관하게 #orbInput에서 질문을 받는다.
+ * 질의는 셸과 같은 runLiveQuery로 이어지고(athena:orb-chat-submit), 진행 중인
+ * 질의는 두 창의 공유 잠금으로 보호한다. 입력·알림 전환의 실제 동작은
+ * app/probe-orb-conversation.js가 검증하고, 이 게이트는 입력 표면과 IPC 배선을 잰다.
  *
  * 실행: node scripts/gates/check-orb.mjs
  * 성공 표지: orb contract verification passed
@@ -94,8 +89,8 @@ const htmlRaw = read("orb.html");
 if (htmlRaw) {
   const html = stripHtmlComments(htmlRaw);
 
-  // (a) 입력창은 #orbInput 하나까지만 — board-33/34가 "셸 숨김일 때만" 조건으로
-  // 허용한 대화 입력줄이다. 그 밖의 input·모든 textarea·contenteditable은 여전히
+  // (a) 키우미의 입력창은 #orbInput 하나까지만 허용한다.
+  // 그 밖의 input·모든 textarea·contenteditable은 여전히
   // 금지다(둘 이상의 입력창이나 이름 없는 입력창은 게이트로 못 잰다).
   const inputIds = [...html.matchAll(/<input\b[^>]*\bid="([^"]+)"/gi)].map((m) => m[1]);
   const anonymousInputs = (html.match(/<input\b(?![^>]*\bid=)/gi) || []).length;
@@ -247,10 +242,10 @@ if (orbJsRaw) {
   must(orbJs.includes("athena:routine-event"),
     "orb.js: 능동 턴 이벤트를 구독해야 한다 — 오브가 받는 유일한 발생원이다");
 
-  // board-33/34 — 대화 입력은 셸 숨김 신호로 게이트돼야 한다(추측이 아니라 실신호).
+  // 셸 표시 신호로 기본 표면을 동기화하고, 알림에서도 사용자가 대화를 시작한다.
   // 질의는 셸과 같은 runLiveQuery로 이어지는 전용 채널 하나로만 나가야 한다.
   must(orbJs.includes("athena:shell-visibility"),
-    "orb.js: athena:shell-visibility를 구독해야 한다 — 대화 모드는 셸 숨김 실신호로만 켜진다(board-33/34)");
+    "orb.js: athena:shell-visibility를 구독해야 한다 — 셸과 키우미의 기본 표면을 동기화한다");
   must(orbJs.includes("athena:orb-chat-submit"),
     "orb.js: athena:orb-chat-submit을 불러야 한다 — 오브가 자기 질의 파이프라인을 새로 만들면 안 된다");
 }
@@ -362,5 +357,5 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-console.log("오브 76px 원형 · alwaysOnTop · 실행 버튼 0 · 입력창 최대 1(셸 숨김 전용) · 결정론 본문 통과");
+console.log("오브 76px 원형 · alwaysOnTop · 키우미 입력창 1 · 공유 질의 IPC · 결정론 본문 통과");
 console.log("orb contract verification passed");
