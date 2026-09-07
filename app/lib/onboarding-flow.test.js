@@ -220,6 +220,35 @@ test('토큰 확인 화면의 이전은 계좌 3 / 3 callback을 호출하고 �
   assert.equal(backCount, 1);
 });
 
+test('Paper 20 토큰 4상태 점은 재발급 중만 경고색이다', async () => {
+  const previousInvoke = invokeImpl;
+  async function renderDot(state) {
+    invokeImpl = async (channel) => {
+      if (channel === 'athena:auth-token-status') return { state, expiresInSec: 3599 };
+      if (channel === 'athena:account-list') return { accounts: [{ id: 'account-1', alias: '모의-1' }] };
+      return { ok: true };
+    };
+    const root = new FakeElement('div');
+    const cleanup = authScreen.renderAuthTokenStatus(root, {
+      accountId: 'account-1',
+      embedded: false,
+      onClose: () => {},
+    });
+    await flushAsync();
+    const left = findByClass(root, 'auth-status-left');
+    const dot = findByClass(left, 'uk-dot');
+    const className = dot && dot.className;
+    cleanup();
+    return className;
+  }
+
+  assert.equal(await renderDot('needed'), 'uk-dot is-off');
+  assert.equal(await renderDot('ready'), 'uk-dot is-on');
+  assert.equal(await renderDot('refreshing'), 'uk-dot is-off is-warn');
+  assert.equal(await renderDot('expired'), 'uk-dot is-off');
+  invokeImpl = previousInvoke;
+});
+
 test('Paper 28 재발급 중은 모든 진행·해제 동작을 잠그고 이전만 허용한다', async () => {
   invokeImpl = async (channel) => {
     if (channel === 'athena:auth-token-status') return { state: 'refreshing', expiresInSec: 3599 };
