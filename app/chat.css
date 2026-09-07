@@ -429,7 +429,7 @@ html.is-boot-expanding #winControls { opacity: 0; }
   content: '아직 고른 기법이 없습니다';
 }
 #chatModeHead[data-mode="backtest"]:not([hidden]):not([data-technique]) ~ .history:empty::after {
-  content: none;
+  content: '왼쪽 목록에서 기법을 누르면 그 기법에 대해 묻고 고칠 수 있어요.\A새로 만들려면 [+ 새 기법 만들기]를 누르세요.';
 }
 .history::-webkit-scrollbar { width: 8px; }
 .history::-webkit-scrollbar-track { background: transparent; }

@@ -2423,6 +2423,47 @@ test('기법 카드: 이름·분류 칩(한국어)·한 줄 설명이 함께 선
   assert.match(findByClass(card, 'backtest-technique-desc')[0].textContent, /단기 이평이/);
 });
 
+test('기법 목록 머리에 분류·상태 필터가 서고 기본은 전체다', async () => {
+  const { container } = await mounted(userStrategyDeps());
+  await flush();
+  await toList(container);
+  const filters = findByClass(container, 'backtest-technique-filter');
+  assert.equal(filters.length, 2);
+  assert.equal(filters[0].textContent, '분류 전체');
+  assert.equal(filters[1].textContent, '상태 전체');
+});
+
+test('기법 카드마다 [수정]이 있고 내가 만든 줄만 검증됨이다', async () => {
+  const { container } = await mounted(userStrategyDeps());
+  await flush();
+  await toList(container);
+  assert.equal(findByClass(container, 'backtest-technique-edit').length, 2);
+  const preset = findByClass(container, 'backtest-preset-item')[0];
+  const mine = findByClass(container, 'backtest-user-strategy-item')[0];
+  assert.equal(findByClass(preset, 'backtest-technique-status').length, 0);
+  assert.equal(findByClass(mine, 'backtest-technique-status')[0].textContent, '검증됨');
+});
+
+test('상태 필터 검증됨은 목록에 오른 내 기법만 남긴다', async () => {
+  const { container } = await mounted(userStrategyDeps());
+  await flush();
+  await toList(container);
+  await click(findByClass(container, 'backtest-technique-filter')[1]);
+  await flush();
+  assert.equal(findByClass(container, 'backtest-preset-item').length, 0);
+  assert.equal(findByClass(container, 'backtest-user-strategy-item').length, 1);
+  assert.equal(findByClass(container, 'backtest-technique-filter')[1].textContent, '상태 · 검증됨');
+});
+
+test('[수정]은 그 기법을 고른다', async () => {
+  const { container, canvas } = await mounted();
+  await toList(container);
+  await click(findByClass(container, 'backtest-technique-edit')[0]);
+  await flush();
+  assert.equal(canvas.getContext().spec.presetId, 'sma_crossover');
+  assert.equal(findByClass(container, 'backtest-technique-list').length, 0);
+});
+
 test('기법 2열 격자는 긴 이름에 트랙이 끌려가지 않는다', () => {
   const css = fs.readFileSync(path.join(__dirname, '..', 'shell.css'), 'utf8');
   assert.match(css, /\.backtest-technique-list \{[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/s);

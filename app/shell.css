@@ -667,9 +667,40 @@ body { margin: 0; overflow: hidden; }
 }
 .backtest-technique-head {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  min-width: 0;
+}
+.backtest-technique-head-copy {
+  display: flex;
   align-items: baseline;
   gap: 10px;
   min-width: 0;
+}
+.backtest-technique-filters {
+  display: flex;
+  align-items: baseline;
+  gap: 0;
+  margin-left: auto;
+  min-width: 0;
+}
+.backtest-technique-filter {
+  padding: 2px 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.backtest-technique-filter-sep {
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: pre;
 }
 .backtest-technique-note {
   color: var(--color-k-faint);
@@ -783,7 +814,8 @@ body { margin: 0; overflow: hidden; }
 }
 /* 분류 칩(추세·모멘텀·돌파·변동성·반전)과 파일 경로 칩 — 같은 알약, 다른 재료. */
 .backtest-preset-category,
-.backtest-user-strategy-path {
+.backtest-user-strategy-path,
+.backtest-technique-status {
   flex: 0 0 auto;
   padding: 2px 8px;
   border-radius: 999px;
@@ -799,23 +831,32 @@ body { margin: 0; overflow: hidden; }
   overflow: hidden;
   text-overflow: ellipsis;
 }
-/* 내가 만든 기법의 줄 — 카드 아래 오른쪽 끝에 [등록 해제]가 붙는다(카드 밖이라
-   눌러도 기법이 골라지지 않는다). 파일이 사라졌으면 그 한 줄이 카드 안에 선다. */
+/* 기법 줄 — 카드 아래에 [수정]이 붙고, 내가 만든 줄은 [등록 해제]도 붙는다
+   (카드 밖이라 눌러도 기법이 골라지지 않는다). 파일이 사라졌으면 그 한 줄이 카드 안에 선다. */
+.backtest-technique-row,
 .backtest-user-strategy-row {
   display: flex;
   flex-direction: column;
   align-items: stretch;
   gap: 6px;
+  min-width: 0;
 }
 .backtest-user-strategy-item {
   min-width: 0;
 }
+.backtest-technique-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+}
+.backtest-technique-edit,
 .backtest-user-strategy-remove { align-self: flex-end; }
 .backtest-user-strategy-missing {
   color: var(--color-down);
   font-family: var(--font-body);
   font-size: var(--text-2xs);
 }
+.backtest-technique-edit,
 .backtest-user-strategy-remove {
   flex: 0 0 auto;
   padding: 5px 12px;
