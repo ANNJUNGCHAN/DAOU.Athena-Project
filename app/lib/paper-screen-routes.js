@@ -49,8 +49,8 @@ const STEP_KINDS = Object.freeze({
   // hover     selector — 첫 일치 요소에 포인터를 올린다(mouseenter·mouseover).
   //                      클릭으로는 못 만드는 상태가 있어서다: 사이드바 프로젝트 설명
   //                      카드는 행 위에 머무는 동안에만 뜨고(sidebar.js showDescription),
-  //                      그 카드 안의 [프로젝트 수정]이 수정 패널을 여는 유일한 문이다.
-  //                      행을 누르면 프로젝트만 갈아 끼우고 카드는 안 뜬다.
+  //                      그 카드 안의 [프로젝트 수정]과 행 dblclick이 수정 패널을 연다.
+  //                      행을 한 번 누르면 프로젝트만 갈아 끼우고 카드는 안 뜬다.
   hover: Object.freeze(['selector']),
   // mode      view — 사이드바 모드 네비(live-full-catalog.js MODES의 navId)를 누른다
   mode: Object.freeze(['view']),
@@ -3800,8 +3800,8 @@ const ROUTES = Object.freeze([
     ],
     root: '#historyRegion',
     // 세 항목의 라벨과 그 결과 한 줄. 발치의 「이름 바꾸기는 프로젝트 행을 두 번 누르세요」는
-    // 안 적는다 — 앱에서 이름을 고치는 문은 설명 카드의 [프로젝트 수정] 하나뿐이라(보드 29)
-    // 그 문장을 그리면 없는 제스처를 있다고 하는 것이 된다.
+    // 안 적는다 — 문구 한도가 이미 7이고, 그 제스처는 행 dblclick → 보드 29 수정 패널이라
+    // 이 팝오버 DOM에는 그 문장이 없다.
     phrases: [
       '프로젝트',
       '최상단 고정',

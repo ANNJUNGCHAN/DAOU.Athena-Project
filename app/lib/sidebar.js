@@ -739,10 +739,28 @@
     const name = el('span', 'sidebar-project-name');
     name.textContent = project.label;
     main.appendChild(name);
+    let clickTimer = null;
     main.addEventListener('click', () => {
+      // dblclick의 첫 클릭이 목록을 다시 그리면 둘째 클릭이 다른 노드로 샌다.
+      if (clickTimer) clearTimeout(clickTimer);
+      clickTimer = setTimeout(() => {
+        clickTimer = null;
+        currentProjectId = project.id;
+        closeProjectPopovers();
+        renderList();
+      }, 280);
+    });
+    // Paper 3W2R-1: 이름 바꾸기는 프로젝트 행을 두 번 누른다(OBS-043).
+    // 이미 있는 수정 패널·athena:project-update를 연다 — 새 IPC를 만들지 않는다.
+    main.addEventListener('dblclick', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      if (clickTimer) { clearTimeout(clickTimer); clickTimer = null; }
+      resetProjectPopovers();
+      openEditProjectId = project.id;
       currentProjectId = project.id;
-      closeProjectPopovers();
       renderList();
+      restoreCaret('.sidebar-project-edit-input[data-field="label"]');
     });
     row.appendChild(main);
 
