@@ -1,6 +1,6 @@
 (
     <div style={{ backgroundColor: 'var(--color-k-panel)', borderColor: 'var(--color-k-line-soft)', borderRadius: '28px', borderStyle: 'solid', borderWidth: '1px', boxShadow: '#10131A1A 0px 18px 48px', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', flexShrink: '0', fontSynthesis: 'none', gap: '20px', height: 'fit-content', MozOsxFontSmoothing: 'grayscale', overflow: 'clip', overflowWrap: 'anywhere', WebkitFontSmoothing: 'antialiased', width: '1360px' }}>
-      <div style={{ alignItems: 'end', borderBottomColor: 'var(--color-k-line)', borderBottomStyle: 'solid', borderBottomWidth: '1px', boxSizing: 'border-box', display: 'flex', flexShrink: '0', height: '122px', justifyContent: 'space-between', paddingBottom: '22px', paddingInline: '8px', paddingTop: '4px', width: '1360px' }}>
+      <div style={{ alignItems: 'end', borderBottomColor: 'var(--color-k-line)', borderBottomStyle: 'solid', borderBottomWidth: '1px', boxSizing: 'border-box', display: 'flex', flexShrink: '0', height: '122px', justifyContent: 'space-between', paddingBottom: '22px', paddingInline: '28px', paddingTop: '4px', width: '1360px' }}>
         <div style={{ boxSizing: 'border-box', display: 'flex', flexDirection: 'column', gap: '8px' }}>
           <div style={{ boxSizing: 'border-box', color: 'var(--color-k-text)', fontFamily: 'var(--font-display)', fontSize: '34px', letterSpacing: '-0.02em', lineHeight: '40px' }}>
             반도체 업종과 AI 테마 흐름을 보여줘
