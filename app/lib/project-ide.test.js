@@ -243,6 +243,36 @@ test('폴더 열기: 네이티브 대화상자 경로를 open으로 넘긴다 �
 
 // ── 파일 트리 ───────────────────────────────────────────────────────────────
 
+for (const pendingStage of ['tree', 'file']) {
+  test(`suspend: 앞 세션의 ${pendingStage} 응답이 파일을 다시 활성화하지 않는다`, async () => {
+    let finishPrevious;
+    const previous = new Promise((resolve) => { finishPrevious = resolve; });
+    const changes = [];
+    let requests = 0;
+    const made = makeIde({
+      tree: () => pendingStage === 'tree'
+        ? (requests += 1, previous) : Promise.resolve({ entries: TREE }),
+      readFile: () => { requests += 1; return previous; },
+      onProjectChange: (project) => changes.push(project),
+    });
+    made.ide.mount();
+    await flush();
+    const opening = made.ide.openAt('p1', 'strategy.py');
+    await flush();
+    assert.equal(requests, 1);
+    made.ide.suspend();
+    const before = changes.length;
+    finishPrevious(pendingStage === 'tree' ? { entries: TREE } : { text: '# previous-session\n' });
+    assert.equal(await opening, false);
+    assert.equal(made.ide.currentProject(), null);
+    assert.equal(made.ide.activeFile(), null);
+    assert.equal(made.ide.activeText(), '');
+    assert.equal(made.ide.isDirty(), false);
+    assert.equal(changes.length, before);
+    assert.equal(findByClass(made.root, 'project-ide-tab-name').length, 0);
+  });
+}
+
 test('트리가 중첩 폴더와 파일을 그린다 — 폴더를 누르면 접힌다', async () => {
   const made = makeIde();
   await mountWithProject(made);

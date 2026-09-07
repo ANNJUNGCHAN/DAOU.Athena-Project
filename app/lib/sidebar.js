@@ -1270,6 +1270,9 @@
       ? projectId
       : currentProjectId;
     currentProjectId = selectedProjectId;
+    // 이벤트가 앞 세션의 작업공간을 flush한다 — main의 활성 id를 바꾸는 IPC보다
+    // 먼저 보내야 지연된 폼·코드가 새 대화의 저장본에 들어가지 않는다.
+    clearConversationUi();
     let pending = null;
     if (window.athena && typeof window.athena.invoke === 'function') {
       try {
@@ -1281,7 +1284,6 @@
         pending = null;
       }
     }
-    clearConversationUi();
     if (!pending || typeof pending.then !== 'function') {
       activeConversationId = null;
       return;

@@ -988,6 +988,8 @@ function createBacktestCanvas(options) {
   // 「폼·코드·필터가 바뀔 때」인데 예약은 render()마다 걸리므로, 실제로 바뀌었는지는
   // 여기서 가른다.
   let lastReportJson = null;
+  let workspaceGeneration = 0;
+  let workspaceCleared = false;
   let pollTimer = null;
   // 환경 구성 잡의 폴링은 실행·수집 폴링과 별개 타이머다 — 같은 자리를 쓰면 pip이 도는
   // 동안 실행 폴링이 끊기거나 그 반대가 된다(둘은 서로를 모른다).
@@ -1205,6 +1207,7 @@ function createBacktestCanvas(options) {
   // ① 폴더와 파일을 IDE로 실제로 열고(실행이 읽을 원문이 그 파일이다, D2)
   // ② 실행경로를 코드로 돌리고 ③ 등록부가 준 PARAMS 기본값을 슬라이더로 세운다.
   async function selectUserStrategy(id) {
+    const generation = workspaceGeneration;
     const entry = userStrategies.find((s) => s.id === id);
     if (!entry) return;
     const ide = ensureProjectIde();
@@ -1228,6 +1231,7 @@ function createBacktestCanvas(options) {
       formErrors: [], codeErrors: [], designTab: 'flow', mapVersion: 1, codeSpan: null,
     });
     const opened = await ide.openAt(entry.project_id, entry.path);
+    if (generation !== workspaceGeneration) return;
     // 못 열었으면 이유는 IDE가 자기 자리에 적었다 — 폼에도 한 줄 남긴다. 폼만 보고 있는
     // 사람에게는 코드 탭의 문장이 보이지 않는다.
     if (!opened) setState({ formErrors: [`${entry.path}를 열지 못했습니다 — 코드 탭을 보세요`] });
@@ -1460,6 +1464,7 @@ function createBacktestCanvas(options) {
   }
 
   async function startRun(allowPartial) {
+    const generation = workspaceGeneration;
     setState({ view: 'running', progressText: '백테스트를 실행하는 중입니다…' });
     let res;
     let codeRun = false;
@@ -1474,6 +1479,7 @@ function createBacktestCanvas(options) {
       const activeFile = activeProjectFile();
       if (activeFile) {
         body.source = await projectFileText(activeFile);
+        if (generation !== workspaceGeneration) return;
         // 어느 폴더의 코드인가 — 백엔드가 그 폴더의 가상환경으로 돌린다. 안 실으면
         // 사용자가 자기 폴더에 깐 패키지를 코드가 import하지 못한다.
         const project = projectIde ? projectIde.currentProject() : null;
@@ -1491,8 +1497,9 @@ function createBacktestCanvas(options) {
         body.params = overrides;
       }
       res = deps.run ? await deps.run(body) : null;
+      if (generation !== workspaceGeneration) return;
       if (!res) throw new Error('실행 연결이 없습니다');
-    } catch (err) { fail(err); return; }
+    } catch (err) { if (generation === workspaceGeneration) fail(err); return; }
 
     if (res.blocked) {
       setState({
@@ -1591,17 +1598,20 @@ function createBacktestCanvas(options) {
 
   function pollRun() {
     stopPolling();
+    const generation = workspaceGeneration;
+    const runId = state.runId;
     const tick = async () => {
       pollTimer = null;
-      if (!isVisible()) return;
+      if (generation !== workspaceGeneration || !isVisible()) return;
       let data;
-      try { data = deps.result ? await deps.result({ run_id: state.runId }) : null; }
-      catch (err) { fail(err); return; }
-      if (!isVisible()) return;
+      try { data = deps.result ? await deps.result({ run_id: runId }) : null; }
+      catch (err) { if (generation === workspaceGeneration) fail(err); return; }
+      if (generation !== workspaceGeneration || !isVisible()) return;
       if (data && data.status === 'done') {
         let trades = [];
-        try { trades = deps.trades ? await deps.trades({ run_id: state.runId }) : []; }
+        try { trades = deps.trades ? await deps.trades({ run_id: runId }) : []; }
         catch { trades = []; }
+        if (generation !== workspaceGeneration) return;
         lastError = null;
         setState({
           view: 'result', tab: 'result',
@@ -2157,28 +2167,34 @@ function createBacktestCanvas(options) {
 
   async function startSourceMap(url) {
     stopSourcePolling();
+    const generation = workspaceGeneration;
     let res;
     try { res = await deps.sourceMapStart({ url }); }
-    catch (err) { fail(err); return; }
-    if (!isSourcing()) return;
+    catch (err) { if (generation === workspaceGeneration) fail(err); return; }
+    if (generation !== workspaceGeneration || !isSourcing()) return;
     setState({ sourceJobId: res.job_id });
     pollSourceMap();
   }
 
   function pollSourceMap() {
     stopSourcePolling();
+    const generation = workspaceGeneration;
+    const jobId = state.sourceJobId;
     const tick = async () => {
       sourceTimer = null;
       // [멈추기]는 예약된 타이머만 지운다 — 이미 떠 있던 왕복은 못 막는다. 그 왕복이
       // 늦게 돌아와 폴링을 되살리면 사람이 멈춘 연쇄가 혼자 이어진다(pollJob과 같은 규율).
-      if (!state.sourceJobId || !isSourcing() || !isVisible()) return;
+      if (generation !== workspaceGeneration || !jobId || state.sourceJobId !== jobId || !isSourcing() || !isVisible()) return;
       let job;
       try {
         job = deps.sourceMapStatus
-          ? await deps.sourceMapStatus({ job_id: state.sourceJobId })
+          ? await deps.sourceMapStatus({ job_id: jobId })
           : null;
-      } catch (err) { if (state.sourceJobId) fail(err); return; }
-      if (!state.sourceJobId || !isSourcing() || !isVisible()) return;
+      } catch (err) {
+        if (generation === workspaceGeneration && state.sourceJobId === jobId) fail(err);
+        return;
+      }
+      if (generation !== workspaceGeneration || state.sourceJobId !== jobId || !isSourcing() || !isVisible()) return;
       if (!job) { schedulePollSource(tick); return; }
       emitSourceReadCard(job);
       setState({ source: job });
@@ -4587,6 +4603,7 @@ function createBacktestCanvas(options) {
   }
 
   async function openCodeFromMap() {
+    const generation = workspaceGeneration;
     if (runPath === 'code' || activeProjectFile() || !spec || !deps.codegen) {
       setState({ designTab: 'code', codeFromMap: true });
       return;
@@ -4595,7 +4612,11 @@ function createBacktestCanvas(options) {
     if (!codegenCache || codegenCache.yaml !== yaml) {
       let res;
       try { res = await deps.codegen({ yaml }); }
-      catch (err) { setState({ mapError: String((err && err.message) || err) }); return; }
+      catch (err) {
+        if (generation === workspaceGeneration) setState({ mapError: String((err && err.message) || err) });
+        return;
+      }
+      if (generation !== workspaceGeneration) return;
       codegenCache = { yaml, source: String((res && res.source) || '') };
     }
     codeSource = codegenCache.source;
@@ -4928,12 +4949,14 @@ function createBacktestCanvas(options) {
   // 그대로 적는다(visualNotice) — 그 편이 조용히 굳는 것보다 낫다.
   async function ensureVisualGraph() {
     if (!visualWired() || !isSpecPath()) return;
+    const generation = workspaceGeneration;
     const yaml = currentYaml();
     if (visualGraphYaml === yaml) return;
     visualGraphYaml = yaml;
     let res;
     try { res = await deps.visualFromSpec({ yaml }); }
     catch (err) {
+      if (generation !== workspaceGeneration) return;
       // 이 실패는 **이 폼**의 것이다(위 머리말 참고) — 다음 폼 편집이 열쇠를 바꿔
       // 다시 묻는다. 앞 그래프는 버린다: 남겨두면 화면은 새 폼인데 편집기는 앞
       // 전략의 노드를 그린다.
@@ -4944,6 +4967,7 @@ function createBacktestCanvas(options) {
       });
       return;
     }
+    if (generation !== workspaceGeneration) return;
     visualGraph = (res && res.graph) || null;
     visualHashes = (res && res.hashes) || null;
     visualDiagnostics = [];
@@ -5522,6 +5546,10 @@ function createBacktestCanvas(options) {
   function reportWorkspace() {
     const ws = workspaceApi();
     if (!ws || typeof ws.report !== 'function') return;
+    // clear 뒤의 빈 화면은 아직 다음 세션의 작업공간이 아니다. 새 폼·코드가 생기거나
+    // 복원된 뒤에는 같은 보고 경로를 다시 쓴다 — 빈 보고로 다음 저장본을 지우지 않는다.
+    if (workspaceCleared && !spec && !codeSource.trim()) return;
+    workspaceCleared = false;
     try {
       // 복원이 못 읽은 조각은 다시 봉인하지 않는다 — 화면에 없는 것을 null로 적어 보내면
       // main의 얕은 병합이 저장본의 run_id를 지워, [다시 시도]가 되살릴 봉투 자체가
@@ -5594,11 +5622,12 @@ function createBacktestCanvas(options) {
 
   // 결과 데이터셋을 다시 읽는다(42번 보드 R7 — 결과는 참조로 남는다). 못 읽으면 false다:
   // 여기서 조용히 넘어가면 41번 보드 Rule 3의 안내가 설 자리가 없어진다.
-  async function restoreRunResult(runId) {
+  async function restoreRunResult(runId, generation = workspaceGeneration) {
     if (!runId || !deps.result) return false;
     let data;
     try { data = await deps.result({ run_id: runId }); }
     catch { return false; }
+    if (generation !== workspaceGeneration) return false;
     // 아직 도는 중이면 진행률에 그 자리에서 다시 붙는다(41번 보드 Rule 2 "실행 중이던
     // 것도 그대로 돌아온다") — 실행은 창과 무관한 백그라운드 잡이라 run_id 하나면 된다.
     if (data && (data.status === 'running' || data.status === 'queued')) {
@@ -5610,6 +5639,7 @@ function createBacktestCanvas(options) {
     let trades = [];
     try { trades = deps.trades ? await deps.trades({ run_id: runId }) : []; }
     catch { trades = []; }
+    if (generation !== workspaceGeneration) return false;
     setState({ runId, result: data, trades: Array.isArray(trades) ? trades : [] });
     return true;
   }
@@ -5622,8 +5652,9 @@ function createBacktestCanvas(options) {
     // 다음에 열 때 없던 실행이 이 세션에서 있었던 일이 된다 — 결과 탭에 남의 지표가
     // 서고 「복원」 표식까지 붙는다. 앞 세션의 폴링도 같이 끊는다: 그 tick이 돌아오면
     // 방금 비운 자리를 남의 실행으로 다시 채운다.
-    clearRestoreMarks();
-    stopPolling();
+    clearWorkspace();
+    workspaceCleared = false;
+    const generation = workspaceGeneration;
     const saved = workspace || {};
     const form = saved.form || null;
     const code = saved.code || null;
@@ -5668,7 +5699,8 @@ function createBacktestCanvas(options) {
     setState(patch);
 
     if (saved.run && saved.run.runId) {
-      applied.result = await restoreRunResult(saved.run.runId);
+      applied.result = await restoreRunResult(saved.run.runId, generation);
+      if (generation !== workspaceGeneration) return false;
       setState({ restore: SessionRestore.restoreReport(saved, applied) });
     }
     return true;
@@ -5677,9 +5709,11 @@ function createBacktestCanvas(options) {
   // [다시 시도] — 빠진 것만 다시 읽는다. 여전히 못 읽으면 안내가 그대로 선다.
   async function retryRestore() {
     if (!restoreSealed || !restoreApplied) return false;
+    const generation = workspaceGeneration;
     const applied = Object.assign({}, restoreApplied);
     if (!applied.result && restoreSealed.run && restoreSealed.run.runId) {
-      applied.result = await restoreRunResult(restoreSealed.run.runId);
+      applied.result = await restoreRunResult(restoreSealed.run.runId, generation);
+      if (generation !== workspaceGeneration) return false;
     }
     restoreApplied = applied;
     setState({ restore: SessionRestore.restoreReport(restoreSealed, applied) });
@@ -5699,10 +5733,28 @@ function createBacktestCanvas(options) {
   // 안내를 거두는 문이 따로 있어야 한다. 없으면 아무것도 되살린 적 없는 화면에
   // 「복원 6/6」·「일부만 복원했습니다」가 그대로 선다.
   function clearWorkspace() {
+    workspaceGeneration += 1;
+    workspaceCleared = true;
+    if (workspaceReportTimer != null && clearTimeoutImpl) clearTimeoutImpl(workspaceReportTimer);
+    workspaceReportTimer = null;
+    stopPolling();
+    stopSourcePolling();
     clearRestoreMarks();
-    state = Object.assign({}, state, { restore: null });
-    // 숨어 있으면 다시 그리지 않는다 — 여기서 그리면 render()의 보고 예약이 앞 세션의
-    // 폼·코드를 다음 세션 저장본에 적는다. 다시 들어오는 문(sidebar → refresh)이 그린다.
+    // 표식만 거두면 render()가 앞 세션의 폼·코드·실행·스크롤을 다시 봉인한다.
+    // 같은 모드 인스턴스를 재사용하므로 보고 재료와 그 편집 캐시도 함께 거둔다.
+    spec = null;
+    codeSource = '';
+    strategyId = activeVersionId = userStrategyId = null;
+    runPath = 'form';
+    lastError = null;
+    pendingScrollTop = bodyEl = null;
+    visualGraph = visualGraphYaml = visualCompiled = visualPreview = null;
+    codegenCache = null;
+    if (projectIde) projectIde.suspend();
+    projectFiles = [];
+    ideOwnsCode = techniqueDraft = false;
+    resetTechnique();
+    state = { view: 'design', tab: 'design', designTab: 'form', mapVersion: 0, technique: TECHNIQUE_EMPTY };
     if (isVisible()) render();
   }
 
