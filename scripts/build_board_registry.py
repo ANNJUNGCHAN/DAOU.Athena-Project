@@ -41,7 +41,7 @@ GENERATED_BANNER = (
 )
 
 INDEX_FOOTER = """
-const __exports = { BOARD_CARD, CARD_IDS, STATE_GRAPH, BOARD_PRIMARY };
+const __exports = { BOARD_CARD, CARD_IDS, STATE_GRAPH, BOARD_PRIMARY, CONTROL_LABELS };
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = __exports;
@@ -72,6 +72,16 @@ if (typeof module !== 'undefined' && module.exports) {
 # board-mount가 판정한다. 여기서 고정하는 것은 "슬롯이 가리키는 앵커가 실제로
 # board.html에 있는가" 하나다.
 NODE_ATTR = re.compile(r'data-node="([^"]+)"')
+
+# 레일 표식과 그 표식이 화면에 낸 문구. 추출기는 표식을 **그 링크를 소유한 보드**에만
+# 찍는데(`data-state-control`), 자식 보드의 레일은 부모 레일의 복제본이라 표식이 없다.
+# 그래서 자식 보드에서는 프론트가 문구로 칩을 찾아야 하고, 문구가 표식 이름과 다르면
+# (실측 「관심종목 시세 보드」의 칩은 「관심」이다) 그 칩이 영영 안 눌린다.
+# 여기서 (표식 → 문구) 짝만 모아 색인에 싣는다 — 판정은 런타임(board-mount)이 한다.
+STATE_CONTROL_LABEL = re.compile(r'data-state-control="([^"]+)"[^>]*>([^<]*)<')
+
+# 문구로 쓸 수 없는 표식 — ▸ 같은 펼침 표시는 한 보드에 여러 개라 문구로 못 가른다.
+LABEL_HAS_WORD = re.compile(r"[가-힣A-Za-z0-9]")
 
 
 def _js_string(value: str) -> str:
@@ -212,6 +222,18 @@ def state_graph() -> dict[str, dict]:
     return graph
 
 
+def control_labels(boards: list[dict]) -> dict[str, list[str]]:
+    """표식 이름 → 그 표식이 낸 화면 문구들. 이름과 같은 문구는 실을 이유가 없다."""
+    labels: dict[str, set[str]] = {}
+    for board in boards:
+        for control, label in STATE_CONTROL_LABEL.findall(board["html"]):
+            text = label.strip()
+            if not text or text == control or not LABEL_HAS_WORD.search(text):
+                continue
+            labels.setdefault(control, set()).add(text)
+    return {control: sorted(texts) for control, texts in sorted(labels.items())}
+
+
 def chunk_path(card_id: str) -> Path:
     return OUT_DIR / f"board-templates.{card_id}.generated.js"
 
@@ -234,6 +256,10 @@ def render_index(boards: list[dict], graph: dict[str, dict]) -> str:
         renderer = (board.get("primary") or {}).get("renderer")
         if renderer:
             parts.append(f"  {_js_string(board['board_id'])}: {_js_string(renderer)},\n")
+    parts.append("});\n\n")
+    parts.append("const CONTROL_LABELS = Object.freeze({\n")
+    for control, labels in control_labels(boards).items():
+        parts.append(f"  {_js_string(control)}: {json.dumps(labels, ensure_ascii=False)},\n")
     parts.append("});\n\n")
     parts.append("const STATE_GRAPH = Object.freeze({\n")
     for board_id in sorted(graph):

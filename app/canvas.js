@@ -979,22 +979,6 @@ function switchStateBoard(host, boardId, envelope) {
   ));
 }
 
-// 스트립 칩·탭 = 상태 보드 조작. 추출 원문에서 칩은 그냥 텍스트 노드라, 계약이 준
-// `control` 문구와 정확히 같은 글자를 내는 잎을 그 조작으로 본다(스트립·내비 안에서만).
-function findStateControl(surface, control) {
-  for (const node of surface.querySelectorAll('[data-state-control]')) {
-    if (node.dataset.stateControl === control) return boardMount.stateControlActivationOwner(node);
-  }
-  for (const scope of surface.querySelectorAll('.bs-strip, nav, [role="tablist"]')) {
-    for (const node of scope.querySelectorAll('*')) {
-      if (node.childElementCount === 0 && node.textContent.trim() === control) {
-        return boardMount.stateControlActivationOwner(node);
-      }
-    }
-  }
-  return null;
-}
-
 const RESPONSIVE_STATE_CONTROL_OWNER = '.bs-r-flow, .bs-r-scroll, .bs-r-scroll-table';
 
 function isResponsiveStateControl(node) {
@@ -1010,7 +994,8 @@ function wireStateControls(host, envelope, mounted) {
   for (const link of state.links) {
     const control = String(link.control || '').trim();
     if (!control) continue;
-    const node = findStateControl(surface, control);
+    // 칩 찾기(표식·같은 문구·별칭 문구)는 board-mount가 갖는다 — 단위 테스트가 걸린다.
+    const node = boardMount.findStateControlNode(surface, control, { links: state.links });
     if (!node) continue;
     const didWire = boardMount.wireStateControlActivation(
       node,
