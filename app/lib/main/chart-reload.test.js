@@ -10,6 +10,7 @@ function authority() {
   assert.equal(reload.registerPaint({
     renderState: 'data', rendererId: AITS_CHART_RENDERER_ID, panelId: 'panel-1', generation: 4,
   }, {
+    accountId: 'local-a',
     correlation: { dataset_id: 'dataset-1', item_id: 'item-1', ordinal: 1 },
     operationRef: 'base:ka10081',
     operationArgs: { stk_cd: '005930', base_dt: '20260821', upd_stkpc_tp: '1' },
@@ -29,6 +30,7 @@ function authority() {
 test('period reload maps through authoritative AITS contract and preserves exact args/panel identity', () => {
   const reload = authority();
   const dataset = reload.buildDataset({ panelId: 'panel-1', generation: 4, period: 'W', interval: 1, adjusted: true });
+  assert.equal(dataset.accountId, 'local-a');
   assert.equal(dataset.items[0].operationRef, 'base:ka10082');
   assert.deepEqual(dataset.items[0].args, { stk_cd: '005930', base_dt: '20260821', upd_stkpc_tp: '1' });
   assert.deepEqual(dataset.expected, {
@@ -51,6 +53,7 @@ function goldAuthority({ panelId, operationRef, seriesScope, reloadGroup, reload
   assert.equal(reload.registerPaint({
     renderState: 'data', rendererId: AITS_CHART_RENDERER_ID, panelId, generation: 1,
   }, {
+    accountId: 'local-a',
     correlation: { dataset_id: `d-${panelId}`, item_id: 'gold', ordinal: 1 },
     operationRef,
     operationArgs: { stk_cd: 'M04020000', tic_scope: '1', upd_stkpc_tp: '1' },
@@ -94,6 +97,7 @@ test('ambiguous or cross-family signed reload metadata fails closed at registrat
   assert.equal(reload.registerPaint({
     renderState: 'data', rendererId: AITS_CHART_RENDERER_ID, panelId: 'ambiguous', generation: 1,
   }, {
+    accountId: 'local-a',
     correlation: { dataset_id: 'd', item_id: 'i', ordinal: 1 },
     operationRef: 'base:ka50091', operationArgs: { stk_cd: 'M04020000' },
     chartBody: { period: 'tick', target: 'gold', trId: 'ka50091', candles: [] },
@@ -108,6 +112,7 @@ test('ambiguous or cross-family signed reload metadata fails closed at registrat
 test('only a real data chart session registers reload authority and exact result is required', () => {
   const reload = createChartReloadAuthority({ today: () => '20260821' });
   const source = {
+    accountId: 'local-a',
     correlation: { dataset_id: 'd', item_id: 'i', ordinal: 1 },
     operationRef: 'base:ka10081', operationArgs: { stk_cd: '005930' },
     chartBody: { period: 'day', target: 'stock', trId: 'ka10081', candles: [] },
@@ -145,6 +150,21 @@ test('only a real data chart session registers reload authority and exact result
     ok: true,
     canvases: [{ ...acceptedCanvas, operationRef: 'base:ka10082' }],
   }), /operation 계약/);
+});
+
+test('local account lineage가 없는 차트는 reload 권위를 얻지 못한다', () => {
+  const reload = createChartReloadAuthority();
+  assert.equal(reload.registerPaint({
+    renderState: 'data', rendererId: AITS_CHART_RENDERER_ID, panelId: 'panel-1', generation: 1,
+  }, {
+    correlation: { dataset_id: 'd', item_id: 'i', ordinal: 1 },
+    operationRef: 'base:ka10081', operationArgs: { stk_cd: '005930' },
+    chartBody: { period: 'day', target: 'stock', trId: 'ka10081', candles: [] },
+    chartMeta: {
+      series_scope: 'standard', reload_group: 'stock',
+      reload_targets: { day: { operation_ref: 'base:ka10081', request_fields: ['stk_cd'] } },
+    },
+  }), false);
 });
 
 test('an accepted toolbar reload mints a fresh one-use resolve token before render-plan', async () => {
@@ -206,6 +226,7 @@ test('destroyed panels lose reload authority and repeated registrations stay bou
     assert.equal(reload.registerPaint({
       renderState: 'data', rendererId: AITS_CHART_RENDERER_ID, panelId: `bounded-${index}`, generation: 1,
     }, {
+      accountId: 'local-a',
       correlation: { dataset_id: `d-${index}`, item_id: 'i', ordinal: 1 },
       operationRef: 'base:ka10081', operationArgs: { stk_cd: '005930' },
       chartBody: { period: 'day', target: 'stock', trId: 'ka10081', candles: [] },
