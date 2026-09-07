@@ -2620,6 +2620,7 @@ function createAgentCanvas(deps) {
       const logsCaptionRow = el('div', 'agent-panel-caption-row');
       const logsCaption = el('span', 'agent-panel-caption');
       logsCaption.textContent = '최근 실행';
+      logsCaption.appendChild(fixtureMark());
       logsCaptionRow.appendChild(logsCaption);
       // 드릴인(10단계)은 감시(watch)만 연다 — schedule도 3단계부터 실제
       // 라우틴이라 ledger에 대응 행이 생길 수 있지만, 이 화면에 그 배선을
