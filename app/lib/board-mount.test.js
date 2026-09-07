@@ -967,6 +967,54 @@ test('primary가 세로로 쌓아 놓은 양끝 가로 줄만 XS 접기 표시�
   assert.equal(orphan.dataset.bsSplitRow, undefined, 'primary 밖 줄은 대상이 아니다');
 });
 
+test('스트립·헤더가 세로로 쌓은 양끝 줄도 접기 표시를 받는다', () => {
+  const ancestor = (className, inline) => ({
+    classList: { contains: (name) => name === className },
+    style: styleStub(inline || {}),
+  });
+  const under = (chain, inline) => {
+    const row = regionStub('', inline);
+    let child = row;
+    for (const parent of chain) {
+      child.parentElement = parent;
+      child = parent;
+    }
+    return row;
+  };
+  const columnRegion = (name) => ancestor(name, { display: 'flex', 'flex-direction': 'column' });
+  const rowRegion = (name) => ancestor(name, { display: 'flex' });
+  const columnWrap = () => ancestor('', { display: 'flex', 'flex-direction': 'column' });
+  const splitRow = { display: 'flex', 'justify-content': 'space-between' };
+
+  // 실측 2XTO-0: `.bs-strip`(세로) > `2XWZ-0`·`2XWH-0`(space-between 가로 줄).
+  const stripRow = under([columnRegion('bs-strip')], splitRow);
+  const stripNested = under([columnWrap(), columnRegion('bs-strip')], splitRow);
+  const headerRow = under([columnRegion('bs-header')], splitRow);
+  const railRow = under([columnRegion('bs-rail')], splitRow);
+  const footerRow = under([columnRegion('bs-footer')], splitRow);
+  // 영역이 스스로 가로로 나눈 칸은 줄이 아니다 — 접으면 칸이 아랫줄로 떨어진다.
+  const stripCell = under([rowRegion('bs-strip')], splitRow);
+  // KPI는 자기 흐름 규칙(3칸/2칸/1칸)이 있어 경계로 인정하지 않는다.
+  const kpiRow = under([columnRegion('bs-kpi')], splitRow);
+  // 표는 어느 영역 아래에 있어도 열 폭이 계약이다.
+  const stripTableRow = under([ancestor('bs-table'), columnRegion('bs-strip')], splitRow);
+
+  const rows = [stripRow, stripNested, headerRow, railRow, footerRow,
+    stripCell, kpiRow, stripTableRow];
+  for (const row of rows) hoistLayout(row);
+
+  assert.equal(stripRow.dataset.bsSplitRow, 'true');
+  assert.equal(stripNested.dataset.bsSplitRow, 'true', '세로 래퍼 한 겹은 같은 줄이다');
+  assert.equal(headerRow.dataset.bsSplitRow, 'true');
+  assert.equal(railRow.dataset.bsSplitRow, 'true');
+  assert.equal(footerRow.dataset.bsSplitRow, 'true');
+  assert.equal(stripCell.dataset.bsSplitRow, undefined,
+    '가로로 나눈 영역의 칸은 줄이 아니다');
+  assert.equal(kpiRow.dataset.bsSplitRow, undefined,
+    'KPI 줄은 자기 흐름 규칙이 폭을 맡는다');
+  assert.equal(stripTableRow.dataset.bsSplitRow, undefined, '표는 열 폭이 계약이다');
+});
+
 test('세로로 쌓는 부모 아래 상자만 세로 축 flex-shrink 표시를 받는다', () => {
   const parentStub = (inline) => ({
     classList: { contains: () => false },

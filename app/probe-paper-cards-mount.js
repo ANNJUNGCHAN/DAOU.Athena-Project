@@ -48,6 +48,7 @@ const {
   formatMountCliReport,
   groupBoardsByCard,
   mountFailures,
+  uniqueStateControls,
 } = require('./lib/paper-cards-mount-report');
 const { mergeMountLayer } = require('./lib/paper-cards-report');
 
@@ -229,7 +230,7 @@ async function probeChunk(win, chunk) {
           probe,
           geometryError,
           expectedTextMultiset: surface.expectedTextMultiset,
-          expectedStateBoards: surface.contract.state_boards.length,
+          expectedStateBoards: uniqueStateControls(surface.contract.state_boards),
         }));
         record.steps.push({
           preset: preset.name,

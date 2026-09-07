@@ -8,5 +8,13 @@
     { "node_id": "14UQ-2", "name": "Holdings and Allocation", "role": "primary", "depth": 2 },
     { "node_id": "14UR-2", "name": "Settlement and Performance", "role": "rail", "depth": 2 },
     { "node_id": "14XR-2", "name": "Account Status Footer", "role": "footer", "depth": 1 }
+  ],
+  "responsive": [
+    {
+      "node_id": "14UQ-2",
+      "traits": ["scroll-table"],
+      "header_row": "3JFU-0",
+      "accessible_label": "보유 종목 표"
+    }
   ]
 }

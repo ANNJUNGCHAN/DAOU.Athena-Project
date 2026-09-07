@@ -8,5 +8,12 @@
     { "node_id": "14P9-2", "name": "Athena Chart Module Mount", "role": "primary", "depth": 2 },
     { "node_id": "14PA-2", "name": "Instrument Context", "role": "rail", "depth": 2 },
     { "node_id": "14T8-2", "name": "Chart Status Footer", "role": "footer", "depth": 1 }
+  ],
+  "responsive": [
+    {
+      "node_id": "14PX-2",
+      "traits": ["scroll"],
+      "accessible_label": "차트 지표 눈금"
+    }
   ]
 }

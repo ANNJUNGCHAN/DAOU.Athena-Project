@@ -22,8 +22,9 @@ const ControlTurn = isNode
 // 통계 카드 4장 중 "다음 실행"·"오늘 발화"·"성향 제안"은 3단계(F1-FE)부터
 // 라이브다 — 앞 둘은 schedule.daily 백엔드(2단계)의 next_fire_at/fired_today,
 // 성향 제안은 749행 suggestionsCache 계산(7단계와 동일 원천)을 재사용한다.
-// "진행 중"만 fixture로 남는다(값을 뒷받침할 진행률 스트림이 없다, 재검증
-// 확인). source 필드는 기존 canvasSource 컨벤션(chat.js)과 동형이다 —
+// "진행 중"은 활성 감시 루틴 목록에서만 계산한다. 진행률 스트림이 없으므로
+// 개별 시세 수집·경과 시간은 표시하지 않는다. source 필드는 기존 canvasSource
+// 컨벤션(chat.js)과 동형이다 —
 // 지어낸 숫자가 아니라 "라이브로 잰 값인지"를 코드 차원에 남긴다(P3). DOM에도
 // data-source 속성으로 새겨 둔다.
 //
@@ -397,6 +398,7 @@ function createAgentCanvas(deps) {
   let activeTab = 'all';
   let searchQuery = '';
   let routinesCache = [];
+  let routinesLoadState = 'pending';
   let firedTodayCache = null; // GET /api/v1/routines의 fired_today(3단계) — 독립 왕복.
   let requestId = 0; // stale-응답 가드 — sidebar.js 3단계(loadAgentRoutines)와 같은 이유.
   let suggestionsCache = [];
@@ -419,10 +421,17 @@ function createAgentCanvas(deps) {
   // routinesCache/firedTodayCache/suggestionsCache 클로저가 필요해 createAgentCanvas
   // 안에 둔다(statusRowIcon()처럼 순수 함수가 아니다).
 
-  // "진행 중" 타일만 fixture 값이 남는다(Paper 보드 39 실측 문구 그대로) — 위
-  // 머리말 참고, 대응하는 진행률 스트림이 없다.
-  function fixtureInProgressStat() {
-    return { key: 'in-progress', label: '진행 중', value: '● 시세 수집 — 삼성전자', sub: '감시 조건 2/3 · 12초 전', source: 'fixture' };
+  // "진행 중" 타일은 활성 감시 목록의 집계만 표시한다. 개별 진행률 스트림은
+  // 없으므로 종목·조건 단계·경과 시간은 표시하지 않는다.
+  function activeMonitoringStat() {
+    if (routinesLoadState === 'pending') return { key: 'in-progress', label: '진행 중', value: '불러오는 중', sub: '', source: 'live' };
+    if (routinesLoadState === 'error') return { key: 'in-progress', label: '진행 중', value: '확인할 수 없음', sub: '감시 상태를 불러오지 못했습니다', source: 'live' };
+    const active = routinesCache.filter((r) => r.status === 'active' && r.mode !== 'scheduled');
+    return {
+      key: 'in-progress', label: '진행 중',
+      value: active.length ? `${active.length}건 감시 중` : '없음',
+      sub: active.length ? '활성 감시 루틴 기준' : '활성 감시가 없습니다', source: 'live',
+    };
   }
 
   // "다음 실행"(3단계 라이브) — routinesCache의 예약(mode==='scheduled')
@@ -478,7 +487,7 @@ function createAgentCanvas(deps) {
   }
 
   function buildStats() {
-    return [nextRunStat(), fixtureInProgressStat(), firedTodayStat(), suggestionsStat()];
+    return [nextRunStat(), activeMonitoringStat(), firedTodayStat(), suggestionsStat()];
   }
 
   // ---------- 헤더 ----------
@@ -903,6 +912,7 @@ function createAgentCanvas(deps) {
 
   const timelineCaption = el('div', 'agent-panel-caption');
   timelineCaption.textContent = '다음 24시간';
+  timelineCaption.appendChild(fixtureMark());
   liveCol.appendChild(timelineCaption);
   const timelineWrap = el('div', 'agent-live-timeline');
   for (const t of fixtureTimeline()) {
@@ -930,10 +940,8 @@ function createAgentCanvas(deps) {
   wsRow.appendChild(wsDot);
   const wsLabel = el('span', 'agent-live-ws-label');
   wsRow.appendChild(wsLabel);
-  liveCol.appendChild(wsRow);
   const wsCaption = el('div', 'agent-live-ws-caption');
   wsCaption.textContent = '발화는 채팅으로 도착 — 여긴 관제만';
-  liveCol.appendChild(wsCaption);
 
   function renderWsStatus() {
     const connected = typeof getWsConnected === 'function' ? !!getWsConnected() : false;
@@ -943,6 +951,8 @@ function createAgentCanvas(deps) {
   }
 
   alarmLiveBody.appendChild(liveCol);
+  alarmLiveBody.appendChild(wsRow);
+  alarmLiveBody.appendChild(wsCaption);
 
   // ---------- 실행 이력 · 결과 드릴인(10단계, Paper 보드 41) ----------
   const historyBody = el('div', 'agent-history-body');
@@ -2393,6 +2403,34 @@ function createAgentCanvas(deps) {
       approveCaption.textContent = '승인';
       detailCol.appendChild(approveCaption);
       const approve = el('div', 'agent-code-approve');
+      const hasDetailBlocker = Object.prototype.hasOwnProperty.call(detail, 'activation_blocker');
+      const activationBlocker = String(hasDetailBlocker ? (detail.activation_blocker || '') : (raw.activation_blocker || '')).trim();
+      if (activationBlocker) {
+        const blocker = el('div', 'agent-code-approve-blocker');
+        blocker.textContent = `지금은 켤 수 없음: ${activationBlocker}`;
+        approve.appendChild(blocker);
+        const repairBtn = el('button', 'agent-code-edit agent-code-repair-btn');
+        repairBtn.type = 'button';
+        repairBtn.textContent = '다시 만들기';
+        repairBtn.addEventListener('click', () => {
+          if (typeof onEditInChat === 'function') {
+            onEditInChat(item.id, {
+              repair: true,
+              reason: activationBlocker,
+              routineId: item.id,
+              title: item.title,
+              symbol: Object.prototype.hasOwnProperty.call(detail, 'symbol') ? detail.symbol : raw.symbol,
+              watch: watch || undefined,
+              condition: detail.condition || raw.condition || undefined,
+              cooldown_s: Object.prototype.hasOwnProperty.call(detail, 'cooldown_s') ? detail.cooldown_s : raw.cooldown_s,
+              expires_days: Object.prototype.hasOwnProperty.call(detail, 'expires_days') ? detail.expires_days : raw.expires_days,
+              expires_at: Object.prototype.hasOwnProperty.call(detail, 'expires_at') ? detail.expires_at : raw.expires_at,
+              note: Object.prototype.hasOwnProperty.call(detail, 'note') ? detail.note : raw.note,
+            });
+          }
+        });
+        approve.appendChild(repairBtn);
+      }
       const approveLead = el('div', 'agent-code-approve-lead');
       approveLead.textContent = `승인하면 장중 ${WatchNodes.pollMinutes(watch)}분마다 이 함수를 돌리고, 울리면 이 대화에 알림 턴이 붙음`;
       approve.appendChild(approveLead);
@@ -2400,6 +2438,7 @@ function createAgentCanvas(deps) {
       const approveBtn = el('button', 'agent-code-approve-btn');
       approveBtn.type = 'button';
       approveBtn.textContent = '이 알람 승인';
+      approveBtn.disabled = Boolean(activationBlocker);
       approveBtn.addEventListener('click', async () => {
         approveBtn.disabled = true;
         await runControl(confirmRoutine, '이 알람 승인', item, '감시 시작');
@@ -2491,6 +2530,9 @@ function createAgentCanvas(deps) {
     fieldsWrap.setAttribute('data-source', item.source);
     const fields = [['확인 주기', `장중 ${WatchNodes.pollMinutes(watch)}분`], ['쿨다운', WatchNodes.cooldownLabel(raw.cooldown_s)]];
     if (raw.expires_at) fields.push(['만료', WatchNodes.dayLabel(raw.expires_at)]);
+    // code-watch 실행기의 assemble_frame 입력 계약(일봉 캐시 + 오늘 시세).
+    // 현재 수신 여부를 뜻하지 않는다 — 검사만 돌릴 때는 완성 봉까지만 센다.
+    fields.push(['데이터', '일봉 + 오늘 현재가']);
     for (const [label, value] of fields) {
       const fieldRow = el('div', 'agent-detail-field');
       const l = el('span', 'agent-detail-field-label');
@@ -2616,6 +2658,7 @@ function createAgentCanvas(deps) {
       const logsCaptionRow = el('div', 'agent-panel-caption-row');
       const logsCaption = el('span', 'agent-panel-caption');
       logsCaption.textContent = '최근 실행';
+      logsCaption.appendChild(fixtureMark());
       logsCaptionRow.appendChild(logsCaption);
       // 드릴인(10단계)은 감시(watch)만 연다 — schedule도 3단계부터 실제
       // 라우틴이라 ledger에 대응 행이 생길 수 있지만, 이 화면에 그 배선을
@@ -2696,7 +2739,11 @@ function createAgentCanvas(deps) {
   }
 
   function updateSubtitle() {
-    const activeCount = routinesCache.filter((r) => r.status === 'active').length;
+    if (routinesLoadState !== 'success') {
+      subtitle.textContent = routinesLoadState === 'error' ? '감시 상태를 확인할 수 없습니다' : '감시 상태 불러오는 중';
+      return;
+    }
+    const activeCount = routinesCache.filter((r) => r.status === 'active' && r.mode !== 'scheduled').length;
     subtitle.textContent = `루틴 ${routinesCache.length} · 감시 ${activeCount} 진행 중`;
   }
 
@@ -2758,11 +2805,13 @@ function createAgentCanvas(deps) {
   async function refreshRoutines() {
     const rid = ++requestId;
     let rows = [];
+    let loadState = 'success';
     try {
       rows = (typeof fetchRoutines === 'function') ? await fetchRoutines() : [];
       if (!Array.isArray(rows)) rows = [];
     } catch {
       rows = [];
+      loadState = 'error';
     }
     let firedToday = null;
     try {
@@ -2772,7 +2821,8 @@ function createAgentCanvas(deps) {
       firedToday = null;
     }
     if (rid !== requestId) return;
-    routinesCache = rows;
+    if (loadState === 'success') routinesCache = rows;
+    routinesLoadState = loadState;
     firedTodayCache = firedToday;
     updateSubtitle();
     renderStats();

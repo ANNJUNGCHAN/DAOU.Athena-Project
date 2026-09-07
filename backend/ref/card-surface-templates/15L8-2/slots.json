@@ -4,12 +4,12 @@
   "name": "CC-06 / R06 · 관심종목·조건 신호",
   "paper_source": {
     "saved_at": "2026-09-02T11:33:04Z",
-    "node_id": "15L8-2",
-    "jsx_sha256": "2e5f5d11824996b4ba82803150d768bd10f9feecc7a28253bfa0bf3dde6eb356"
+    "node_id": "49Y0-0",
+    "jsx_sha256": "47a2769fd0069fd943887cf54750c96eddaa410a30474e816482e6c0ee2b8ab8"
   },
-  "html_sha256": "4f79c85f74e221c0f2d21facd4418cc1e8b1f30921683383fe32a97f53cb8d9d",
-  "width_px": 1440.0,
-  "height_px": 932.0,
+  "html_sha256": "fe313e7296731c4610d0eaefc4c6fa2488b60da628a6d6650c3bea357c4ed237",
+  "width_px": 1360.0,
+  "height_px": 854.0,
   "artboard_px": [
     1440,
     932
@@ -30,7 +30,35 @@
     "15LI-2": "primary",
     "15LJ-2": "rail"
   },
-  "tables": [],
+  "tables": [
+    {
+      "node_id": "15LI-2",
+      "node_name": "Watchlist",
+      "columns": 6,
+      "header_row": "35P1-0",
+      "body_rows": [
+        "35SQ-0",
+        "35T5-0",
+        "35TK-0",
+        "3IC9-0",
+        "3ICO-0",
+        "3ID3-0",
+        "3IDI-0",
+        "3IDX-0"
+      ],
+      "foot_rows": [],
+      "source": "responsive",
+      "column_labels": [
+        "종목",
+        "현재가",
+        "등락",
+        "시가",
+        "고가 · 저가",
+        "오늘 신호"
+      ],
+      "responsive_mode": "scroll-table"
+    }
+  ],
   "counts": {
     "elements": 182,
     "text_nodes": 115,
@@ -42,7 +70,7 @@
     "layer_직접": 115,
     "layer_병기": 0,
     "layer_펼침": 0,
-    "tables": 0,
+    "tables": 1,
     "tree_text_truncated": 0,
     "bs_col": 0,
     "bs_paired": 0,
@@ -51,8 +79,8 @@
     "state_control_marks": 0
   },
   "density": {
-    "table_columns": 0,
-    "rows_max": 0,
+    "table_columns": 6,
+    "rows_max": 8,
     "kpi_cells": 0,
     "rail_blocks": 5,
     "rail_rows_max": 4
@@ -350,7 +378,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "head",
+        "col": 0
+      },
       "mapping_id": null,
       "f": null,
       "alt_mappings": null,
@@ -371,7 +403,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "head",
+        "col": 1
+      },
       "mapping_id": null,
       "f": null,
       "alt_mappings": null,
@@ -392,7 +428,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "head",
+        "col": 2
+      },
       "mapping_id": null,
       "f": null,
       "alt_mappings": null,
@@ -413,7 +453,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "head",
+        "col": 3
+      },
       "mapping_id": null,
       "f": null,
       "alt_mappings": null,
@@ -434,7 +478,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "head",
+        "col": 4
+      },
       "mapping_id": null,
       "f": null,
       "alt_mappings": null,
@@ -455,7 +503,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "head",
+        "col": 5
+      },
       "mapping_id": null,
       "f": null,
       "alt_mappings": null,
@@ -476,7 +528,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "0",
+        "col": 0
+      },
       "mapping_id": "base:ka10172",
       "f": "302",
       "alt_mappings": null,
@@ -499,7 +555,11 @@
       "layer": "직접",
       "font_size_px": 10.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "0",
+        "col": 0
+      },
       "mapping_id": "base:ka10172",
       "f": "9001",
       "alt_mappings": null,
@@ -527,7 +587,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "0",
+        "col": 0
+      },
       "mapping_id": "base:ka10171",
       "f": "name",
       "alt_mappings": null,
@@ -550,7 +614,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "0",
+        "col": 1
+      },
       "mapping_id": "base:ka10172",
       "f": "10",
       "alt_mappings": null,
@@ -578,7 +646,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "0",
+        "col": 1
+      },
       "mapping_id": "base:ka10172",
       "f": "11",
       "alt_mappings": null,
@@ -604,7 +676,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "0",
+        "col": 2
+      },
       "mapping_id": "base:ka10172",
       "f": "12",
       "alt_mappings": null,
@@ -638,7 +714,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "0",
+        "col": 3
+      },
       "mapping_id": "base:ka10172",
       "f": "16",
       "alt_mappings": null,
@@ -664,7 +744,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "0",
+        "col": 4
+      },
       "mapping_id": "base:ka10172",
       "f": "17",
       "alt_mappings": null,
@@ -690,7 +774,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "0",
+        "col": 4
+      },
       "mapping_id": "base:ka10172",
       "f": "18",
       "alt_mappings": null,
@@ -716,7 +804,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "0",
+        "col": 5
+      },
       "mapping_id": null,
       "f": null,
       "alt_mappings": null,
@@ -739,7 +831,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "1",
+        "col": 0
+      },
       "mapping_id": "base:ka10172",
       "f": "302",
       "alt_mappings": null,
@@ -762,7 +858,11 @@
       "layer": "직접",
       "font_size_px": 10.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "1",
+        "col": 0
+      },
       "mapping_id": "base:ka10172",
       "f": "9001",
       "alt_mappings": null,
@@ -790,7 +890,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "1",
+        "col": 0
+      },
       "mapping_id": "base:ka10171",
       "f": "name",
       "alt_mappings": null,
@@ -818,7 +922,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "1",
+        "col": 1
+      },
       "mapping_id": "base:ka10172",
       "f": "10",
       "alt_mappings": null,
@@ -846,7 +954,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "1",
+        "col": 1
+      },
       "mapping_id": "base:ka10172",
       "f": "11",
       "alt_mappings": null,
@@ -873,7 +985,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "1",
+        "col": 2
+      },
       "mapping_id": "base:ka10172",
       "f": "12",
       "alt_mappings": null,
@@ -908,7 +1024,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "1",
+        "col": 3
+      },
       "mapping_id": "base:ka10172",
       "f": "16",
       "alt_mappings": null,
@@ -935,7 +1055,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "1",
+        "col": 4
+      },
       "mapping_id": "base:ka10172",
       "f": "17",
       "alt_mappings": null,
@@ -962,7 +1086,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "1",
+        "col": 4
+      },
       "mapping_id": "base:ka10172",
       "f": "18",
       "alt_mappings": null,
@@ -989,7 +1117,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "1",
+        "col": 5
+      },
       "mapping_id": null,
       "f": null,
       "alt_mappings": null,
@@ -1012,7 +1144,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "2",
+        "col": 0
+      },
       "mapping_id": "base:ka10172",
       "f": "302",
       "alt_mappings": null,
@@ -1035,7 +1171,11 @@
       "layer": "직접",
       "font_size_px": 10.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "2",
+        "col": 0
+      },
       "mapping_id": "base:ka10172",
       "f": "9001",
       "alt_mappings": null,
@@ -1063,7 +1203,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "2",
+        "col": 0
+      },
       "mapping_id": "base:ka10171",
       "f": "name",
       "alt_mappings": null,
@@ -1086,7 +1230,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "2",
+        "col": 1
+      },
       "mapping_id": "base:ka10172",
       "f": "10",
       "alt_mappings": null,
@@ -1114,7 +1262,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "2",
+        "col": 1
+      },
       "mapping_id": "base:ka10172",
       "f": "11",
       "alt_mappings": null,
@@ -1141,7 +1293,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "2",
+        "col": 2
+      },
       "mapping_id": "base:ka10172",
       "f": "12",
       "alt_mappings": null,
@@ -1176,7 +1332,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "2",
+        "col": 3
+      },
       "mapping_id": "base:ka10172",
       "f": "16",
       "alt_mappings": null,
@@ -1203,7 +1363,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "2",
+        "col": 4
+      },
       "mapping_id": "base:ka10172",
       "f": "17",
       "alt_mappings": null,
@@ -1230,7 +1394,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "2",
+        "col": 4
+      },
       "mapping_id": "base:ka10172",
       "f": "18",
       "alt_mappings": null,
@@ -1257,7 +1425,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "2",
+        "col": 5
+      },
       "mapping_id": null,
       "f": null,
       "alt_mappings": null,
@@ -1280,7 +1452,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "3",
+        "col": 0
+      },
       "mapping_id": "base:ka10172",
       "f": "302",
       "alt_mappings": null,
@@ -1308,7 +1484,11 @@
       "layer": "직접",
       "font_size_px": 10.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "3",
+        "col": 0
+      },
       "mapping_id": "base:ka10172",
       "f": "9001",
       "alt_mappings": null,
@@ -1336,7 +1516,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "3",
+        "col": 0
+      },
       "mapping_id": null,
       "f": null,
       "alt_mappings": null,
@@ -1359,7 +1543,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "3",
+        "col": 1
+      },
       "mapping_id": "base:ka10172",
       "f": "10",
       "alt_mappings": null,
@@ -1387,7 +1575,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "3",
+        "col": 1
+      },
       "mapping_id": "base:ka10172",
       "f": "11",
       "alt_mappings": null,
@@ -1414,7 +1606,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "3",
+        "col": 2
+      },
       "mapping_id": "base:ka10172",
       "f": "12",
       "alt_mappings": null,
@@ -1449,7 +1645,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "3",
+        "col": 3
+      },
       "mapping_id": "base:ka10172",
       "f": "16",
       "alt_mappings": null,
@@ -1476,7 +1676,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "3",
+        "col": 4
+      },
       "mapping_id": "base:ka10172",
       "f": "17",
       "alt_mappings": null,
@@ -1503,7 +1707,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "3",
+        "col": 4
+      },
       "mapping_id": "base:ka10172",
       "f": "18",
       "alt_mappings": null,
@@ -1530,7 +1738,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "3",
+        "col": 5
+      },
       "mapping_id": null,
       "f": null,
       "alt_mappings": null,
@@ -1553,7 +1765,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "4",
+        "col": 0
+      },
       "mapping_id": "base:ka10172",
       "f": "302",
       "alt_mappings": null,
@@ -1576,7 +1792,11 @@
       "layer": "직접",
       "font_size_px": 10.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "4",
+        "col": 0
+      },
       "mapping_id": "base:ka10172",
       "f": "9001",
       "alt_mappings": null,
@@ -1604,7 +1824,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "4",
+        "col": 0
+      },
       "mapping_id": null,
       "f": null,
       "alt_mappings": null,
@@ -1627,7 +1851,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "4",
+        "col": 1
+      },
       "mapping_id": "base:ka10172",
       "f": "10",
       "alt_mappings": null,
@@ -1655,7 +1883,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "4",
+        "col": 1
+      },
       "mapping_id": "base:ka10172",
       "f": "11",
       "alt_mappings": null,
@@ -1682,7 +1914,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "4",
+        "col": 2
+      },
       "mapping_id": "base:ka10172",
       "f": "12",
       "alt_mappings": null,
@@ -1717,7 +1953,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "4",
+        "col": 3
+      },
       "mapping_id": "base:ka10172",
       "f": "16",
       "alt_mappings": null,
@@ -1744,7 +1984,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "4",
+        "col": 4
+      },
       "mapping_id": "base:ka10172",
       "f": "17",
       "alt_mappings": null,
@@ -1771,7 +2015,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "4",
+        "col": 4
+      },
       "mapping_id": "base:ka10172",
       "f": "18",
       "alt_mappings": null,
@@ -1798,7 +2046,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "4",
+        "col": 5
+      },
       "mapping_id": null,
       "f": null,
       "alt_mappings": null,
@@ -1821,7 +2073,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "5",
+        "col": 0
+      },
       "mapping_id": "base:ka10172",
       "f": "302",
       "alt_mappings": null,
@@ -1844,7 +2100,11 @@
       "layer": "직접",
       "font_size_px": 10.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "5",
+        "col": 0
+      },
       "mapping_id": "base:ka10172",
       "f": "9001",
       "alt_mappings": null,
@@ -1872,7 +2132,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "5",
+        "col": 0
+      },
       "mapping_id": null,
       "f": null,
       "alt_mappings": null,
@@ -1895,7 +2159,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "5",
+        "col": 1
+      },
       "mapping_id": "base:ka10172",
       "f": "10",
       "alt_mappings": null,
@@ -1923,7 +2191,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "5",
+        "col": 1
+      },
       "mapping_id": "base:ka10172",
       "f": "11",
       "alt_mappings": null,
@@ -1950,7 +2222,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "5",
+        "col": 2
+      },
       "mapping_id": "base:ka10172",
       "f": "12",
       "alt_mappings": null,
@@ -1985,7 +2261,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "5",
+        "col": 3
+      },
       "mapping_id": "base:ka10172",
       "f": "16",
       "alt_mappings": null,
@@ -2012,7 +2292,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "5",
+        "col": 4
+      },
       "mapping_id": "base:ka10172",
       "f": "17",
       "alt_mappings": null,
@@ -2039,7 +2323,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "5",
+        "col": 4
+      },
       "mapping_id": "base:ka10172",
       "f": "18",
       "alt_mappings": null,
@@ -2066,7 +2354,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "5",
+        "col": 5
+      },
       "mapping_id": null,
       "f": null,
       "alt_mappings": null,
@@ -2089,7 +2381,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "6",
+        "col": 0
+      },
       "mapping_id": "base:ka10172",
       "f": "302",
       "alt_mappings": null,
@@ -2112,7 +2408,11 @@
       "layer": "직접",
       "font_size_px": 10.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "6",
+        "col": 0
+      },
       "mapping_id": "base:ka10172",
       "f": "9001",
       "alt_mappings": null,
@@ -2140,7 +2440,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "6",
+        "col": 0
+      },
       "mapping_id": null,
       "f": null,
       "alt_mappings": null,
@@ -2163,7 +2467,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "6",
+        "col": 1
+      },
       "mapping_id": "base:ka10172",
       "f": "10",
       "alt_mappings": null,
@@ -2191,7 +2499,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "6",
+        "col": 1
+      },
       "mapping_id": "base:ka10172",
       "f": "11",
       "alt_mappings": null,
@@ -2218,7 +2530,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "6",
+        "col": 2
+      },
       "mapping_id": "base:ka10172",
       "f": "12",
       "alt_mappings": null,
@@ -2253,7 +2569,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "6",
+        "col": 3
+      },
       "mapping_id": "base:ka10172",
       "f": "16",
       "alt_mappings": null,
@@ -2280,7 +2600,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "6",
+        "col": 4
+      },
       "mapping_id": "base:ka10172",
       "f": "17",
       "alt_mappings": null,
@@ -2307,7 +2631,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "6",
+        "col": 4
+      },
       "mapping_id": "base:ka10172",
       "f": "18",
       "alt_mappings": null,
@@ -2334,7 +2662,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "6",
+        "col": 5
+      },
       "mapping_id": null,
       "f": null,
       "alt_mappings": null,
@@ -2357,7 +2689,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "7",
+        "col": 0
+      },
       "mapping_id": "base:ka10172",
       "f": "302",
       "alt_mappings": null,
@@ -2380,7 +2716,11 @@
       "layer": "직접",
       "font_size_px": 10.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "7",
+        "col": 0
+      },
       "mapping_id": "base:ka10172",
       "f": "9001",
       "alt_mappings": null,
@@ -2408,7 +2748,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "7",
+        "col": 0
+      },
       "mapping_id": null,
       "f": null,
       "alt_mappings": null,
@@ -2431,7 +2775,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "7",
+        "col": 1
+      },
       "mapping_id": "base:ka10172",
       "f": "10",
       "alt_mappings": null,
@@ -2459,7 +2807,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "7",
+        "col": 1
+      },
       "mapping_id": "base:ka10172",
       "f": "11",
       "alt_mappings": null,
@@ -2486,7 +2838,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "7",
+        "col": 2
+      },
       "mapping_id": "base:ka10172",
       "f": "12",
       "alt_mappings": null,
@@ -2521,7 +2877,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "7",
+        "col": 3
+      },
       "mapping_id": "base:ka10172",
       "f": "16",
       "alt_mappings": null,
@@ -2548,7 +2908,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "7",
+        "col": 4
+      },
       "mapping_id": "base:ka10172",
       "f": "17",
       "alt_mappings": null,
@@ -2575,7 +2939,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "7",
+        "col": 4
+      },
       "mapping_id": "base:ka10172",
       "f": "18",
       "alt_mappings": null,
@@ -2602,7 +2970,11 @@
       "layer": "직접",
       "font_size_px": 16.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "15LI-2",
+        "row": "7",
+        "col": 5
+      },
       "mapping_id": null,
       "f": null,
       "alt_mappings": null,

@@ -70,19 +70,30 @@ async function main() {
   record('01-프리셋 목록이 백엔드에서 온다', presets === 10, { presets });
 
   // 보드 19: 첫 화면은 목록만. 폼 네 덩어리를 보려면 기법을 고른 다음이다.
-  await js(shellWin, `(() => {
+  const picked = await js(shellWin, `(() => {
     const item = document.querySelector('#backtestCanvas .backtest-preset-item');
-    if (item) item.click();
+    if (!item) return false;
+    item.click();
     return true;
   })()`);
-  await wait(400);
-  await js(shellWin, `(() => {
-    const tabs = document.querySelectorAll('#backtestCanvas .backtest-subtab');
-    const formTab = Array.from(tabs).find((t) => t.textContent === '폼') || tabs[1];
-    if (formTab) formTab.click();
+  record('01b-기법 선택', picked === true, { picked });
+  const formOpened = await js(shellWin, `(() => {
+    const tabs = Array.from(document.querySelectorAll('#backtestCanvas .backtest-subtab'));
+    const formTab = tabs.find((t) => t.textContent === '폼');
+    if (!formTab) return false;
+    formTab.click();
     return true;
   })()`);
-  await wait(200);
+  record('01c-폼 탭 클릭', formOpened === true, { formOpened });
+  const formReady = await until(
+    shellWin,
+    `(() => {
+      const api = window.AthenaBacktestCanvas;
+      const ctx = api && typeof api.getContext === 'function' ? api.getContext() : null;
+      return ctx && ctx.designTab === 'form' ? true : null;
+    })()`,
+  );
+  record('01d-폼 탭', formReady === true, { formReady: !!formReady });
 
   // ---------- (2) 설계 폼이 Paper 보드 01의 네 덩어리를 다 그린다 ----------
   const form = await js(shellWin, `(() => {

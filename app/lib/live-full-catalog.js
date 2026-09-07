@@ -42,6 +42,40 @@ const LIVE_QUERIES = Object.freeze([
   { id: 'QA-NEWS', question: '삼성전자 관련 최근 뉴스 알려줘', expectCard: false, expectRest: false, timeoutMs: 20000 },
 ]);
 
+function querySucceeded(result) {
+  return !!(result && result.ok === true && !result.error);
+}
+
+function queryVerdict(query, { result, painted, rest, usedModel }) {
+  const ok = querySucceeded(result);
+  if (!query.expectCard) return ok;
+  return !!(ok && painted && (!query.expectRest || (rest && !usedModel)));
+}
+
+function cssContentText(value) {
+  if (value == null) return '';
+  const text = String(value).trim();
+  if (!text || text === 'none') return '';
+  return text.replace(/^["']|["']$/g, '');
+}
+
+function chromeMatches(view, surface) {
+  const expected = PAPER_CHROME[view];
+  if (!expected) return { ok: false, error: `unknown view ${view}` };
+  let ok;
+  if (expected.headerHidden) {
+    ok = surface.chatHeadHidden === true;
+  } else {
+    ok = surface.chatHeadHidden === false
+      && surface.chatHeadTitle === expected.title
+      && surface.chatHeadSub === expected.sub;
+  }
+  if (ok && expected.emptyHistory != null) {
+    ok = cssContentText(surface.emptyHistory) === expected.emptyHistory;
+  }
+  return { ok, expected, surface };
+}
+
 const SAFE_CLICK_IDS = Object.freeze([
   'modeNavSummary',
   'modeNavGraph',
@@ -98,4 +132,8 @@ module.exports = {
   SAFE_CLICK_IDS,
   VERIFY_SUITE,
   PAPER_SUITE,
+  querySucceeded,
+  queryVerdict,
+  cssContentText,
+  chromeMatches,
 };

@@ -419,3 +419,34 @@ test('brain startup classification distinguishes deliberate disable from unavail
     }).state, 'failed');
   }
 });
+
+test('main boot runners report only valid task states and start WS feeds from the readiness runners', () => {
+  const source = fs.readFileSync(path.join(__dirname, '..', '..', 'main.js'), 'utf8');
+  // 2026-09-07 실측: ensureBackendStrict가 존재하지 않는 'waiting'을 보고해 update()가
+  // throw했고, 백엔드가 12초 안에 안 뜨면 gate가 hard deadline 대신 즉시 실패했다.
+  const validStates = new Set(['pending', 'running', 'retrying', 'succeeded', 'failed', 'disabled']);
+  const states = [...source.matchAll(/context\.update\(\{\s*state:\s*'([a-z]+)'/g)].map((match) => match[1]);
+  assert.ok(states.length >= 2, 'main.js must report progress through context.update');
+  for (const state of states) assert.ok(validStates.has(state), `invalid startup task state in main.js: ${state}`);
+  // 백엔드가 뜨기 전에 붙기 시작하면 지수 백오프(최대 30초)가 첫 연결 20초 제한을
+  // 넘긴다 — 피드는 backend gate 뒤의 러너에서만 시작한다.
+  const createWindows = extractFunctionSource(source, 'async function createWindows()');
+  assert.doesNotMatch(createWindows, /^\s*start(?:Routine|Canvas)Feed\(\);/m);
+  assert.match(source, /waitForFirstFeedConnection\('routine-feed', startRoutineFeed, context\)/);
+  assert.match(source, /waitForFirstFeedConnection\('canvas-feed', startCanvasFeed, context\)/);
+  // brain-ingestion이 비활성으로 끝나면 뒤따르는 두 gate도 실패가 아니라 비활성이다.
+  assert.match(source, /function brainDependentSkipReason\(\)/);
+  assert.equal((source.match(/const brainSkip = brainDependentSkipReason\(\);/g) || []).length, 2);
+});
+
+test('brain startup gate retries transient status failures inside its watchdog', () => {
+  const source = fs.readFileSync(path.join(__dirname, '..', '..', 'main.js'), 'utf8');
+  const waitForBrainStartup = extractFunctionSource(source, 'async function waitForBrainStartup(context)');
+  // 2026-09-07 실측: 기동 직후 백엔드가 식별 인덱스 컴파일·추출 CLI와 CPU를 다투는 동안
+  // 상태 조회가 3초를 넘겼고, 그 한 번으로 gate가 실패했다. 4xx만 즉시 실패, 나머지는
+  // 5분 watchdog 안에서 다시 묻는다.
+  assert.match(waitForBrainStartup, /controller\.abort\(new Error\('brain status timeout'\)\), 10_000\)/);
+  assert.match(waitForBrainStartup, /if \(result\.status >= 400 && result\.status < 500\) \{/);
+  assert.match(waitForBrainStartup, /state: 'retrying', detail: `브레인 상태 조회 재시도/);
+  assert.doesNotMatch(waitForBrainStartup, /if \(!result\.ok\) throw/);
+});

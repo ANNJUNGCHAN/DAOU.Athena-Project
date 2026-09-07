@@ -680,7 +680,7 @@ body { margin: 0; overflow: hidden; }
 }
 .backtest-technique-list {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
 }
 .backtest-technique-list .backtest-design-empty { grid-column: 1 / -1; }
@@ -688,6 +688,7 @@ body { margin: 0; overflow: hidden; }
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  min-width: 0;
   gap: 8px;
   padding: 13px 15px;
   background: var(--color-k-panel2);
@@ -719,11 +720,11 @@ body { margin: 0; overflow: hidden; }
   padding: 16px 18px;
   border: 1px dashed var(--color-brand);
   border-radius: 12px;
-  background: #fff5fa;
+  background: rgb(238 19 123 / 5%);
   cursor: pointer;
   text-align: left;
 }
-.backtest-technique-new:hover { background: #ffedf6; }
+.backtest-technique-new:hover { background: rgb(238 19 123 / 10%); }
 .backtest-technique-new-plus {
   flex-shrink: 0;
   width: 30px;
@@ -735,7 +736,7 @@ body { margin: 0; overflow: hidden; }
   background: var(--color-brand);
   color: var(--color-k-panel);
   font-family: var(--font-strong);
-  font-size: 17px;
+  font-size: var(--text-lg);
   line-height: 20px;
 }
 .backtest-technique-new-copy {
@@ -765,7 +766,7 @@ body { margin: 0; overflow: hidden; }
   background: var(--color-brand);
   color: var(--color-k-panel);
   font-family: var(--font-strong);
-  font-size: 11px;
+  font-size: var(--text-xs);
   line-height: 15px;
   white-space: nowrap;
 }
@@ -775,6 +776,9 @@ body { margin: 0; overflow: hidden; }
   font-family: var(--font-body);
   font-weight: 600;
   font-size: var(--text-sm);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 /* 분류 칩(추세·모멘텀·돌파·변동성·반전)과 파일 경로 칩 — 같은 알약, 다른 재료. */
@@ -795,8 +799,8 @@ body { margin: 0; overflow: hidden; }
   overflow: hidden;
   text-overflow: ellipsis;
 }
-/* 내가 만든 기법의 줄 — 카드 오른쪽에 [등록 해제]가 붙는다(카드 밖이라 눌러도
-   기법이 골라지지 않는다). 파일이 사라졌으면 그 한 줄이 카드 안에 선다. */
+/* 내가 만든 기법의 줄 — 카드 아래 오른쪽 끝에 [등록 해제]가 붙는다(카드 밖이라
+   눌러도 기법이 골라지지 않는다). 파일이 사라졌으면 그 한 줄이 카드 안에 선다. */
 .backtest-user-strategy-row {
   display: flex;
   flex-direction: column;
@@ -1053,6 +1057,39 @@ body { margin: 0; overflow: hidden; }
   overflow: hidden;
   text-overflow: ellipsis;
 }
+/* 기법 하나의 화면 헤더(보드 20) — 폴더 이름이 제목이고 모드 탭·폼/코드 갈래는 없다.
+   오른쪽은 검사 진행 배지 · [실행] · 목록으로 돌아가는 문 하나. */
+.backtest-head.is-workspace .backtest-head-title { flex: 1 1 auto; }
+.backtest-head-folder {
+  color: var(--color-k-text);
+  font-family: var(--font-mono);
+  font-size: var(--text-lg);
+  white-space: nowrap;
+}
+.backtest-head-folder-sub {
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* 목록(홈)으로 — 프리셋 화면에서는 제목 옆에, 기법 화면에서는 오른쪽 끝에 선다. */
+.backtest-head-home {
+  flex-shrink: 0;
+  padding: 5px 12px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-k-soft);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.backtest-head-home:hover { border-color: var(--color-k-text); color: var(--color-k-text); }
+.backtest-head.is-workspace .backtest-run-button { margin-left: 0; }
+
 .backtest-tabs,
 .backtest-subtabs,
 .backtest-segment {
@@ -1380,24 +1417,15 @@ body { margin: 0; overflow: hidden; }
 .backtest-code-bounds-no { color: var(--color-down); }
 .backtest-code-bounds-note { color: var(--color-k-faint); }
 
-/* 프로젝트를 열었을 때의 코드 탭 행동줄(2026-09-02) — 환경과 등록. 옛 편집기의
-   .backtest-code-actions와 같은 자리다. */
-.backtest-ide-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
-}
+/* 환경 패널 — 기법 폴더 트리 아래(보드 20의 「.venv/ 환경」 자리). 이 폴더의 .venv가
+   어떤 상태인가와 만들기. */
 .backtest-venv-panel {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
-  padding: 6px 10px;
-  border: 1px solid var(--color-k-line);
-  border-radius: 999px;
-  background: var(--color-k-panel);
+  gap: 6px;
+  padding: 8px 0 0;
+  border-top: 1px solid var(--color-k-line-soft);
 }
 .backtest-venv-title {
   color: var(--color-k-faint);
@@ -1411,7 +1439,7 @@ body { margin: 0; overflow: hidden; }
   font-size: var(--text-xs);
 }
 .backtest-venv-packages {
-  width: 200px;
+  width: 100%;
   padding: 4px 10px;
   border: 1px solid var(--color-k-line);
   border-radius: 999px;
@@ -1421,17 +1449,6 @@ body { margin: 0; overflow: hidden; }
   font-size: var(--text-xs);
 }
 .backtest-venv-create,
-.backtest-register-strategy {
-  padding: 5px 12px;
-  border: 1px solid var(--color-k-line);
-  border-radius: 999px;
-  background: var(--color-k-panel3);
-  color: var(--color-k-text);
-  font-family: var(--font-body);
-  font-size: var(--text-xs);
-  cursor: pointer;
-}
-.backtest-register-strategy { border-color: var(--color-brand); color: var(--color-brand); }
 .backtest-venv-progress,
 .backtest-venv-error {
   flex: 1 1 100%;
@@ -4014,32 +4031,13 @@ body { margin: 0; overflow: hidden; }
   font-size: 12px;
 }
 
-/* ---------- 코드 탭의 프로젝트 IDE(2026-09-02, 결정 D1~D4) ----------
-   왼쪽 파일 트리 · 위 탭 스트립 · 오른쪽 편집기. 편집기 자체는 .backtest-code-*를
-   그대로 쓴다(같은 편집기 하나다) — 여기서는 그 둘레만 그린다. */
+/* ---------- 기법 폴더 편집기(보드 20 · 폴더 하나 = 기법 하나) ----------
+   왼쪽 기법 폴더 트리(+ 자동 검사·환경) · 오른쪽 편집기. 편집기 자체는 .backtest-code-*를
+   그대로 쓴다(같은 편집기 하나다) — 여기서는 그 둘레만 그린다. 폴더를 고르는 줄은 없다. */
 .project-ide { margin-bottom: 12px; }
 
-.project-ide-picker {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 8px;
-}
-.project-ide-project,
-.project-ide-new-project,
-.project-ide-open-folder,
-.project-ide-project-go,
-.project-ide-new,
-.project-ide-new-go,
-.project-ide-save,
-.project-ide-rename,
-.project-ide-delete,
-.project-ide-rename-go,
 .project-ide-confirm-discard,
-.project-ide-confirm-cancel,
-.project-ide-delete-go,
-.project-ide-delete-cancel {
+.project-ide-confirm-cancel {
   padding: 5px 12px;
   border: 1px solid var(--color-k-line);
   border-radius: 999px;
@@ -4049,28 +4047,6 @@ body { margin: 0; overflow: hidden; }
   font-size: var(--text-xs);
   cursor: pointer;
 }
-.project-ide-project.is-on {
-  border-color: var(--color-brand);
-  color: var(--color-brand);
-}
-.project-ide-save { border-color: var(--color-brand); color: var(--color-brand); }
-.project-ide-delete,
-.project-ide-delete-go { color: var(--color-down); }
-
-.project-ide-project-name,
-.project-ide-new-name,
-.project-ide-rename-name,
-.project-ide-filter {
-  padding: 5px 10px;
-  border: 1px solid var(--color-k-line);
-  border-radius: 8px;
-  background: var(--color-k-panel2);
-  color: var(--color-k-text);
-  font-family: var(--font-body);
-  font-size: var(--text-xs);
-  outline: none;
-}
-
 .project-ide-message {
   margin-bottom: 8px;
   font-family: var(--font-body);
@@ -4078,6 +4054,7 @@ body { margin: 0; overflow: hidden; }
   color: var(--color-k-soft);
 }
 .project-ide-message.is-bad { color: var(--color-down); }
+.project-ide-message.is-empty { display: none; }
 
 .project-ide-body {
   display: flex;
@@ -4097,7 +4074,24 @@ body { margin: 0; overflow: hidden; }
   border: 1px solid var(--color-k-line);
   border-radius: 10px;
 }
-.project-ide-filter { width: 100%; }
+/* 「기법 폴더」 머리와 폴더 이름 한 줄 — 트리는 그 아래 한 단 들어간다. */
+.project-ide-side-title {
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--color-k-line-soft);
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  letter-spacing: 0.1em;
+}
+.project-ide-folder {
+  padding: 3px 4px;
+  color: var(--color-k-text);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .project-ide-tree {
   flex: 1 1 auto;
   max-height: 320px;
@@ -4125,7 +4119,6 @@ body { margin: 0; overflow: hidden; }
 .project-ide-file.is-py { color: var(--color-k-text); }
 .project-ide-file.is-other { color: var(--color-k-ghost); cursor: not-allowed; }
 .project-ide-file.is-on { background: var(--color-k-panel3); color: var(--color-brand); }
-.project-ide-new-row { display: flex; flex-wrap: wrap; gap: 6px; }
 .project-ide-truncated {
   font-family: var(--font-body);
   font-size: 11px;
@@ -4175,23 +4168,33 @@ body { margin: 0; overflow: hidden; }
   gap: 8px;
   flex-wrap: wrap;
 }
-.project-ide-head-project {
-  font-family: var(--font-body);
-  font-size: var(--text-xs);
-  color: var(--color-k-text);
-}
+/* 편집기 머리(보드 20) — 파일 이름 · 저장 상태 · 이 코드가 쓰는 것. */
 .project-ide-head-path {
-  flex: 1 1 auto;
   min-width: 0;
   font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--color-k-soft);
+  font-size: var(--text-sm);
+  color: var(--color-k-text);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.project-ide-rename-row { display: flex; gap: 6px; }
-.project-ide-rename-name { flex: 1 1 auto; min-width: 0; }
+.project-ide-save-state {
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--color-k-panel3);
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
+.project-ide-save-state.is-dirty { color: var(--color-brand); }
+.project-ide-head-note {
+  margin-left: auto;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
 
 /* 되묻기는 인라인 한 줄이다 — 이 앱에는 모달 관례가 없다. */
 .project-ide-confirm {
@@ -4212,6 +4215,71 @@ body { margin: 0; overflow: hidden; }
 }
 
 .project-ide-editor { min-width: 0; }
+
+/* 왼쪽 열 바닥(보드 20) — 자동 검사 목록, 환경, 「이 폴더 밖은 AI가 건드리지 않습니다.」 */
+.backtest-ws-side-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+.backtest-ws-checks {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding-top: 8px;
+  border-top: 1px solid var(--color-k-line-soft);
+}
+.backtest-ws-checks-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 3px;
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  color: var(--color-k-faint);
+}
+.backtest-ws-checks-count {
+  font-family: var(--font-mono);
+  color: var(--color-k-soft);
+  white-space: nowrap;
+}
+.backtest-ws-check {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  color: var(--color-k-text);
+  word-break: keep-all;
+}
+.backtest-ws-check-dot {
+  flex: 0 0 auto;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--color-k-ghost);
+}
+.backtest-ws-check.is-ok .backtest-ws-check-dot { background: var(--color-ok); }
+.backtest-ws-check.is-warn .backtest-ws-check-dot { background: var(--color-warn); }
+.backtest-ws-check.is-fail .backtest-ws-check-dot { background: var(--color-up); }
+.backtest-ws-check-label { flex: 1 1 auto; min-width: 0; }
+.backtest-ws-check-kind {
+  flex: 0 0 auto;
+  color: var(--color-k-faint);
+  white-space: nowrap;
+}
+.backtest-ws-check.is-warn .backtest-ws-check-kind { color: var(--color-warn); }
+.backtest-ws-note {
+  padding-top: 8px;
+  border-top: 1px solid var(--color-k-line-soft);
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  line-height: 15px;
+  word-break: keep-all;
+}
 .project-ide-empty {
   padding: 12px;
   font-family: var(--font-body);
@@ -5999,42 +6067,29 @@ body { margin: 0; overflow: hidden; }
  * 채팅 카드의 선택지도 .backtest-visual-choice를 그대로 쓰고, 여기서는 상세 한 줄과
  * 고른 뒤의 표시만 더한다. */
 
-/* 어디까지 왔는가 — 이름과 검사 몇 개를 넘었는가. */
+/* 헤더의 진행 배지(보드 22 「검사 5/5」「경고 0」) — 몇 번 고쳤고 검사 몇 개를 넘었는가. */
 .backtest-technique-progress {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
-  gap: 8px;
-  margin: 8px 0 4px;
+  align-items: center;
+  gap: 6px;
   font-family: var(--font-body);
   font-size: var(--text-xs);
   word-break: keep-all;
 }
-.backtest-technique-progress-label {
-  color: var(--color-k-dim);
-  white-space: nowrap;
-}
-.backtest-technique-progress-name {
-  font-weight: 600;
-  color: var(--color-k-text);
-}
-.backtest-technique-progress-checks {
+.backtest-technique-progress-checks,
+.backtest-technique-progress-warn {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--color-k-panel3);
   color: var(--color-k-soft);
   font-family: var(--font-mono);
-  white-space: nowrap;
-}
-.backtest-technique-back {
-  margin-left: auto;
-  padding: 4px 10px;
-  border: 1px solid var(--color-k-line);
-  border-radius: 999px;
-  background: transparent;
-  color: var(--color-k-soft);
-  font-family: var(--font-body);
   font-size: var(--text-2xs);
   white-space: nowrap;
-  cursor: pointer;
 }
+.backtest-technique-progress-checks.is-ok { background: #E4F5DE; color: #2E7D1F; }
+.backtest-technique-progress-checks.is-fail { background: #F6E7D6; color: #81501E; }
+.backtest-technique-progress-warn { background: #FFF1E3; color: #9A5B12; }
 
 /* 보드 17 · 출처에서 지도로 — 진행 띠·대상 스트립·뼈대 칸.
    진행 띠는 새 기법의 검사 진행(.backtest-technique-progress)과 같은 문법이다:
@@ -6181,7 +6236,8 @@ body { margin: 0; overflow: hidden; }
   border-color: var(--color-brand);
   color: var(--color-k-text);
 }
-.backtest-technique-band-text { min-width: 0; }
+.backtest-technique-band-text { min-width: 0; color: var(--color-k-text); }
+.backtest-technique-band-note { min-width: 0; }
 .backtest-technique-hand-toggle {
   margin-left: auto;
   flex-shrink: 0;
@@ -6200,17 +6256,47 @@ body { margin: 0; overflow: hidden; }
 .backtest-terminal {
   margin: 8px 0 0;
   padding: 10px;
+  /* 캔버스 루트(#backtestCanvas)가 글을 가운데 맞춘다 — 명령창 출력은 왼쪽이다(보드 20). */
+  text-align: left;
   border: 1px solid var(--color-k-line);
   border-radius: 10px;
   background: var(--color-k-panel2, var(--color-k-panel3));
 }
-.backtest-terminal-title {
+.backtest-terminal-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   margin-bottom: 6px;
-  color: var(--color-k-dim);
+}
+.backtest-terminal-title {
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+}
+.backtest-terminal-sub {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.backtest-terminal-badge {
+  flex-shrink: 0;
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--color-k-panel3);
+  color: var(--color-k-soft);
   font-family: var(--font-body);
   font-size: var(--text-2xs);
   white-space: nowrap;
 }
+.backtest-terminal-badge.is-ok { background: #E4F5DE; color: #2E7D1F; }
+.backtest-terminal-badge.is-warn { background: #FFF1E3; color: #9A5B12; }
+.backtest-terminal-badge.is-fail { background: #F6E7D6; color: #81501E; }
 .backtest-terminal-log {
   max-height: 160px;
   overflow: auto;
@@ -6405,14 +6491,47 @@ body { margin: 0; overflow: hidden; }
 .backtest-technique-progress-edits {
   color: var(--color-k-soft);
   font-family: var(--font-mono);
+  font-size: var(--text-2xs);
   white-space: nowrap;
 }
 
-/* 사람이 누르는 두 버튼 중 하나(보드 23). [기법 목록]이 오른쪽 끝을 잡고 있으므로
- * 승인은 그 왼쪽에 서고, 눈에 띄어야 하니 테두리가 아니라 채운다. */
+/* 승인 바(보드 22) — 명령창 아래, 순환이 끝나는 자리. 사람이 누르는 두 버튼 중 하나라
+ * 눈에 띄어야 하니 테두리가 아니라 채운다. */
+.backtest-technique-approve-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0 0;
+  padding: 10px 14px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 10px;
+  background: var(--color-k-panel);
+}
+.backtest-technique-approve-copy { flex: 1 1 auto; min-width: 0; }
+.backtest-technique-approve-title {
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  word-break: keep-all;
+}
+.backtest-technique-approve-sub {
+  margin-top: 2px;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  word-break: keep-all;
+}
+.backtest-technique-approve-wait {
+  flex-shrink: 0;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  font-size: var(--text-2xs);
+  white-space: nowrap;
+}
 .backtest-technique-approve {
-  margin-left: auto;
-  padding: 4px 12px;
+  flex-shrink: 0;
+  padding: 6px 14px;
   border: 1px solid var(--color-brand);
   border-radius: 999px;
   background: var(--color-brand);
@@ -6423,9 +6542,6 @@ body { margin: 0; overflow: hidden; }
   white-space: nowrap;
   cursor: pointer;
 }
-/* 승인이 서면 [기법 목록]은 더 이상 자기 자리를 밀지 않는다 — 둘 다 auto면 사이가 벌어진다. */
-.backtest-technique-approve ~ .backtest-technique-back { margin-left: 0; }
-
 /* [diff 보기]가 코드 탭 위에 여는 패널. 줄 색은 채팅 카드·파일 초안과 같은 문법이라
  * (backtest-diff-row) 여기서는 틀과 높이만 정한다. */
 .backtest-technique-diff {
@@ -6438,6 +6554,60 @@ body { margin: 0; overflow: hidden; }
 .backtest-technique-diff-body {
   max-height: 260px;
   overflow: auto;
+}
+/* diff 줄(backtest-code-editor.js renderDiff) — 코드 탭의 파일 초안·[diff 보기]·진단 수정안이
+ * 같은 문법을 쓴다. 캔버스 루트가 가운데 맞춤이라 여기서 왼쪽으로 되돌리고, +/− 줄은
+ * 배경으로만 가른다(보드 22). */
+.backtest-diff {
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  line-height: 18px;
+  color: var(--color-k-text);
+}
+.backtest-diff-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 0 8px;
+  white-space: pre;
+}
+.backtest-diff-row.is-add { background: #E4F5DE; }
+.backtest-diff-row.is-del { background: #FBE3E3; color: var(--color-k-soft); }
+.backtest-diff-mark { flex: 0 0 10px; color: var(--color-k-faint); }
+.backtest-diff-row.is-add .backtest-diff-mark { color: #2E7D1F; }
+.backtest-diff-row.is-del .backtest-diff-mark { color: var(--color-up); }
+.backtest-diff-no {
+  flex: 0 0 32px;
+  color: var(--color-k-ghost);
+  text-align: right;
+}
+.backtest-diff-text { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.backtest-diff-gap {
+  padding: 2px 8px;
+  color: var(--color-k-ghost);
+  text-align: left;
+}
+/* diff 패널 머리(경로 · +N −M · [코드로]) — [diff 보기]와 파일 초안이 같이 쓴다. */
+.backtest-technique-diff .backtest-diag-fix-head,
+.backtest-file-draft .backtest-diag-fix-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 6px;
+  text-align: left;
+}
+.backtest-technique-diff .backtest-diag-section-title,
+.backtest-file-draft .backtest-diag-section-title {
+  color: var(--color-k-text);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+.backtest-technique-diff .backtest-diag-fix-stat,
+.backtest-file-draft .backtest-diag-fix-stat {
+  color: var(--color-k-faint);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
 }
 /* [코드로] — 패널을 닫고 편집기로 돌아간다. 머리줄 오른쪽 끝. */
 .backtest-technique-diff-close {

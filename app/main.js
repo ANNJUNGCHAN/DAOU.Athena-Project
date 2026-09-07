@@ -30,7 +30,9 @@ const { runGrokQuery } = require('./lib/main/grok-runner');
 // 파서 자체는 손대지 않는다(sendLiveToolStep 근처 주석 참고).
 const streamJsonParser = require('./lib/main/stream-json-parser');
 const { ensureMcpConfig, createMcpRuntimeSnapshot, canonicalHash } = require('./lib/main/mcp-config');
-const { buildLivePrompt, buildLiveSystemPrompt, buildLiveTurnPrompt } = require('./lib/main/live-prompt');
+const {
+  buildLivePrompt, buildLiveSystemPrompt, buildLiveTurnPrompt, selectActiveAgentProject,
+} = require('./lib/main/live-prompt');
 // 백테스트 설계 턴 접두의 오늘 날짜(YYYYMMDD) — 렌더러와 같은 함수를 쓴다(UMD 각주라 main에서도 안전).
 const { todayYyyymmdd } = require('./lib/backtest-spec');
 // 상주 채팅 세션(2026-08-30 속도 작업) — 매 턴 claude -p 콜드 스폰의 고정비를
@@ -183,7 +185,9 @@ let isQuitting = false;
 // 2026-08-22 축소 이력은 그대로 유효하다: 이 치수는 DIP라 배율 1.5 디스플레이에서
 // 물리 픽셀로 1.5배가 된다. 화면이 설계 치수보다 작으면 비율 축소한다.
 const DESIGN = {
-  shellW: 1520, shellH: 760,
+  // 2026-09-07 사용자 지정 — 1520×760은 너무 작았다. 2560×1392 작업 영역 기준으로
+  // 가로·세로 약 83%를 채우는 치수다. 더 작은 화면에서는 아래 computeLayout이 비율 축소한다.
+  shellW: 2120, shellH: 1165,
   // Paper 53 반응형 하한 — 330px부터 44px 아이콘 레일 + 중앙 1열 +
   // 하단 작성창으로 전환한다. 높이는 기존 카드/작성창 사용성을 지키는 값이다.
   minW: 330, minH: 480,
@@ -493,12 +497,10 @@ const createWindows = createOnce(async function createWindows() {
   // ---------- 창 기본 기능 (2026-08-17) — frame:false라 OS 타이틀바가 없어 직접 배선 ----------
   // Win+방향키와 Win+Shift+방향키는 가로채지 않고 Windows 기본 Snap·모니터 이동에 맡긴다.
   wireOsSnapEvents(shellWin);
-
-  // 루틴 알림 구독 시작(2026-08-19 능동 에이전트 P2) — fixture면 내부에서 no-op.
-  startRoutineFeed();
-  // 캔버스 사이드 채널 구독(2026-08-19 데이터 지름길) — 게이트웨이가 채운 카드가
-  // 모델 스트림을 안 타고 이 WS로 직접 온다("캔버스 먼저, 채팅은 요약만").
-  startCanvasFeed();
+  // 루틴·캔버스 WS 구독은 여기서 시작하지 않는다 — 부팅 러너(routine-feed·canvas-feed)가
+  // 백엔드 gate 통과 뒤 startRoutineFeed()/startCanvasFeed()를 부른다. 백엔드가 뜨기
+  // 전에 붙기 시작하면 지수 백오프(최대 30초)가 첫 연결 20초 제한을 넘겨 gate가
+  // 실패한다(2026-09-07 실측).
 }, () => mdlog('createWindows reused (already started)'));
 
 // ---------- 루틴 알림 — 백엔드 WS 구독 → 토스트 + 능동 턴 (실행계획 P2) ----------
@@ -3024,17 +3026,12 @@ function historyConversationId() {
 
 // 에이전트 모드 코드 알람의 프로젝트(2026-09-03) — 감시 코드가 착지할 폴더 하나다.
 // id는 백엔드 프로젝트 레지스트리의 id다(athena:project-add가 등록 결과 id로 사이드바
-// 레코드를 만든다). 현재 대화의 프로젝트를 먼저 쓰고, 없으면 목록의 첫 프로젝트로
-// 내려앉는다(conversations.js normalizeState가 이미 같은 폴백을 쓴다). 폴더 경로가 없는
-// 기본 레코드는 레지스트리에 없는 것이라 프로젝트가 없는 것으로 본다 — 그때 접두가
-// 「프로젝트 없음」을 실어 모델이 지어내지 않고 사용자에게 묻는다.
+// 레코드를 만든다). 현재 대화의 프로젝트와 실제 폴더가 모두 확인될 때만 쓴다. 다른
+// 프로젝트로 내려앉으면 오래된 폴더에 감시 코드를 쓸 수 있어, 불일치는 프로젝트 없음으로
+// 닫고 접두가 프로젝트 만들기/열기를 안내하게 한다.
 function activeAgentProject() {
   try {
-    const listed = conversations.list();
-    const rows = (listed && Array.isArray(listed.projects) ? listed.projects : [])
-      .filter((row) => row && row.path);
-    const current = rows.find((row) => row.id === (listed && listed.currentProjectId)) || rows[0] || null;
-    return current ? { id: String(current.id), name: String(current.label || current.id) } : null;
+    return selectActiveAgentProject(conversations.list(), (folderPath) => fs.statSync(folderPath).isDirectory());
   } catch { return null; }
 }
 
@@ -3840,12 +3837,12 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
     activeSelectorFastRun.abort(new Error('새 질의가 이전 Selector fast path를 대체했다'));
     activeSelectorFastRun = null;
   }
-  // 모드 전용 채팅(백테스트·그래프)은 모델 앞의 빠른 경로 4종(차트 후속·단순 차트·
+  // 모드 전용 채팅(백테스트·그래프·에이전트)은 모델 앞의 빠른 경로 4종(차트 후속·단순 차트·
   // REST 직결·Selector)을 전부 건너뛴다 — 넷 다 모델을 안 부르고 카드를 밀어, 모드 규율과
   // 턴 프리픽스(live-prompt.js)가 무력화된다. 그래프 모드는 이유가 하나 더 있다: 그 모드의
   // 모든 질문은 그래프 질문이라(사용자 확정) 시세 경로가 가로채면 접두가 실릴 기회조차 없다.
-  const backtestMode = submit.canvasMode === 'backtest' || submit.canvasMode === 'graph';
-  const chartFollowup = backtestMode ? null : chartFollowupTracker.answer(query);
+  const modePromptRequired = ['backtest', 'graph', 'agent'].includes(submit.canvasMode);
+  const chartFollowup = modePromptRequired ? null : chartFollowupTracker.answer(query);
   if (chartFollowup) {
     historySink.saveChatMessage(
       { conversationId: turnConversationId, text: chartFollowup.answerText, role: 'assistant' },
@@ -3864,7 +3861,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   }
   chartFollowupTracker.invalidateForQuery(query);
 
-  const simpleChartRoute = backtestMode ? { handled: false } : await simpleChartFastPath.runSimpleChartFastPath({
+  const simpleChartRoute = modePromptRequired ? { handled: false } : await simpleChartFastPath.runSimpleChartFastPath({
     query,
     index: stockEntityIndex,
     ensureReady: (timeoutMs) => stockEntityIndexReadiness.ensureReady(timeoutMs),
@@ -3894,7 +3891,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   }
   // 정형 질의 모델 우회 확장(2026-08-26 속도 레버) — 순서는 의미 없다(각자
   // 닫힌 문법이라 서로 안 겹친다, rest-dataset-runner.js 테스트로 고정).
-  const directDataset = backtestMode ? null : restDatasetRunner.buildCompoundScreenDataset(query, stockEntityIndex, {
+  const directDataset = modePromptRequired ? null : restDatasetRunner.buildCompoundScreenDataset(query, stockEntityIndex, {
     idFactory: () => `rest-${crypto.randomUUID()}`,
   }) || restDatasetRunner.buildQuoteDataset(query, stockEntityIndex, {
     idFactory: () => `rest-${crypto.randomUUID()}`,
@@ -3929,8 +3926,8 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   const selectorController = new AbortController();
   activeSelectorFastRun = selectorController;
   try {
-    const selectorResult = backtestMode
-      ? { handled: false, reason: '백테스트 모드 — 모델 경로로 넘긴다' }
+    const selectorResult = modePromptRequired
+      ? { handled: false, reason: '모드 전용 채팅 — 모델 경로로 넘긴다' }
       : await selectorFastPath.runSelectorFastPath({
       question: query,
       backendBase: BACKEND_HTTP_BASE,
@@ -4050,10 +4047,10 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
 
   // 빠른 경로 — 캐시된 판정이 있으면 claude -p를 스폰하지 않는다. 카드는
   // 백엔드가 사이드 채널로 밀고(캔버스 먼저), 답변은 결정론 템플릿이다.
-  // 백테스트 설계 모드는 리플레이를 건너뛴다 — 리플레이는 모델을 안 부르고 카드를 밀며
+  // 모드 전용 채팅은 리플레이를 건너뛴다 — 리플레이는 모델을 안 부르고 카드를 밀며
   // 정형 답을 돌려주므로, "카드를 올리지 않는다"는 모드 규율과 설계 대화가 함께 깨진다
   // (캐시 키는 원문 query 그대로 둔다).
-  const cachedJudgment = backtestMode ? null : liveQueryCache.get(query);
+  const cachedJudgment = modePromptRequired ? null : liveQueryCache.get(query);
   if (cachedJudgment) {
     const replay = await fastPath.runCachedReplay({
       judgment: cachedJudgment,
@@ -5668,9 +5665,25 @@ function attemptShellHandoff() {
   return true;
 }
 
+// 부팅 작업의 종결 상태를 main-debug.log에 남긴다 — 부팅 알림은 실패한 작업 이름만
+// 보여 주므로, 이 줄이 없으면 "왜"가 어디에도 남지 않는다(2026-09-07 실측).
+const loggedBootTaskStates = new Map();
+function logBootTaskTransitions(snapshot) {
+  for (const task of snapshot.tasks) {
+    if (!['succeeded', 'failed', 'disabled'].includes(task.state)) continue;
+    const key = `${task.state}#${task.attempt}`;
+    if (loggedBootTaskStates.get(task.id) === key) continue;
+    loggedBootTaskStates.set(task.id, key);
+    mdlog(`부팅 작업 ${task.id} → ${task.state}${task.detail ? ` — ${task.detail}` : ''}`);
+  }
+}
+
 const startupReadiness = new StartupReadiness({
   tasks: BOOT_TASKS,
-  onChange: broadcastBootReadiness,
+  onChange: (snapshot) => {
+    logBootTaskTransitions(snapshot);
+    broadcastBootReadiness(snapshot);
+  },
   onReady: (snapshot) => {
     mdlog(`부팅 gate 종결 — phase=${snapshot.phase}`);
     void notifyStartupFailuresAfterExpansion(snapshot);
@@ -5681,7 +5694,7 @@ async function ensureBackendStrict(context) {
   const result = await backendLauncher.ensureBackendReady({
     mdlog,
     onProgress: ({ elapsedMs, remainingMs }) => context.update({
-      state: 'waiting',
+      state: 'running',
       detail: `ATHENA 서비스 준비 중 · ${Math.ceil(elapsedMs / 1_000)}초 경과 · 최대 ${Math.ceil(remainingMs / 1_000)}초 남음`,
     }),
   });
@@ -5730,14 +5743,38 @@ async function waitForBrainStartup(context) {
   // a legitimate extraction may take up to 180s. Keep one shared 5-minute
   // watchdog so BOOT does not report a false failure while the real job runs.
   const deadlineAt = Date.now() + BRAIN_GRAPH_REFRESH_TIMEOUT_MS;
+  if (!historySink.getBearerToken()) throw new Error('로컬 베어러 토큰이 설정되지 않음');
+  let startupRetryRequested = false;
   for (;;) {
     if (Date.now() >= deadlineAt) throw new Error('브레인 시작 수집 제한시간(5분) 초과');
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(new Error('brain status timeout')), 3_000);
+    const timeout = setTimeout(() => controller.abort(new Error('brain status timeout')), 10_000);
     const result = await fetchBrainJson('/api/v1/brain/status', { signal: controller.signal });
     clearTimeout(timeout);
-    if (!result.ok) throw new Error(result.error || '브레인 상태 조회 실패');
+    if (!result.ok) {
+      // 4xx는 토큰·라우트 문제라 기다려도 안 바뀐다. 그 외(타임아웃·연결 실패·5xx)는
+      // 기동 직후 백엔드가 식별 인덱스 컴파일·추출 CLI와 CPU를 다투느라 늦는 것일 수
+      // 있으므로(2026-09-07 실측: 3초 초과 1회로 gate 실패) watchdog 안에서 다시 묻는다.
+      if (result.status >= 400 && result.status < 500) {
+        throw new Error(result.error || '브레인 상태 조회 실패');
+      }
+      context.update({ state: 'retrying', detail: `브레인 상태 조회 재시도 — ${result.error || '응답 없음'}` });
+      await waitMs(1_000);
+      continue;
+    }
     const body = result.body || {};
+    if (body.startup_ingestion_status === 'failed' && !startupRetryRequested) {
+      // 시작 수집 잡의 실패는 그 backend 프로세스가 살아 있는 동안 굳어 있다 — 앱을
+      // 다시 켜도 같은 실패를 본다. 재시도 라우트로 새 잡을 한 번 만들고 그 결과를 기다린다.
+      startupRetryRequested = true;
+      const retry = await fetchBrainJson('/api/v1/brain/startup-ingestion/retry', { method: 'POST' });
+      mdlog(`브레인 시작 수집 재시도 요청 — ok=${retry.ok}${retry.ok ? '' : ` error=${retry.error}`}`);
+      if (retry.ok) {
+        context.update({ state: 'retrying', detail: '실패한 브레인 시작 수집을 다시 실행하는 중' });
+        await waitMs(1_000);
+        continue;
+      }
+    }
     const classification = classifyBrainStartupStatus(body);
     if (classification.state === 'disabled') {
       return { disabled: true, detail: classification.detail };
@@ -5754,6 +5791,14 @@ async function waitForBrainStartup(context) {
     context.update({ state: classification.state, detail: classification.detail });
     await waitMs(1_000);
   }
+}
+
+// brain-ingestion이 '비활성'으로 끝났으면(브레인을 끈 채 기동한 backend에 붙은 경우)
+// 뒤따르는 대화 반영·그래프 구성도 할 일이 없다 — 실패가 아니라 같은 이유의 비활성이다.
+function brainDependentSkipReason() {
+  const brain = startupReadiness.snapshot().tasks.find((task) => task.id === 'brain-ingestion');
+  if (!brain || brain.state !== 'disabled') return null;
+  return `브레인 비활성 backend — ${brain.detail || '건너뜀'}`;
 }
 
 function registerLiveBootRunners(createWindowsPromise) {
@@ -5779,18 +5824,28 @@ function registerLiveBootRunners(createWindowsPromise) {
   startupReadiness.setRunner('stock-index', waitForStockIndex);
   startupReadiness.setRunner('brain-ingestion', waitForBrainStartup);
   startupReadiness.setRunner('chat-history-flush', async () => {
+    const brainSkip = brainDependentSkipReason();
+    if (brainSkip) return { disabled: true, detail: brainSkip };
+    if (!historySink.collectChatEnabled()) {
+      return { disabled: true, detail: '대화 수집(collectChat)이 꺼져 있어 반영할 대화가 없음' };
+    }
     const result = await historySink.flushPendingChatMessages({
       batchSize: 100,
       maxBatches: 100,
       onSaveFailed: emitHistorySaveFailed,
       mdlog,
     });
+    if (result.remaining > 0 && result.attempted === 0) {
+      throw new Error(`브레인이 준비되지 않아 보류 대화 ${result.remaining}건을 반영하지 못함`);
+    }
     if (result.failed > 0 || result.remaining > 0) {
       throw new Error(`보류 대화 ${result.remaining}건을 그래프 저장소에 반영하지 못함`);
     }
     return { detail: `대화 이력 ${result.synced}건 반영 · 보류 0건` };
   });
   startupReadiness.setRunner('graph-projection', async () => {
+    const brainSkip = brainDependentSkipReason();
+    if (brainSkip) return { disabled: true, detail: brainSkip };
     const report = await runConversationGraphRefresh('boot');
     return {
       detail: report.warmStatus === 'ready_empty'
@@ -5837,10 +5892,13 @@ async function startLiveBoot(createWindowsPromise) {
   registerLiveBootRunners(createWindowsPromise);
   await runStartupOrchestration({
     readiness: startupReadiness,
-    concurrentTaskIds: ['stock-index'],
+    // stock-index는 백엔드 프록시를 타므로 backend gate 뒤에 둔다 — 앞에 두면 앱이
+    // 백엔드를 직접 띄우는 부팅에서 12초 예산이 백엔드 기동 시간에 잡아먹혀 매번
+    // 실패한다(2026-09-07 실측: 종목명 인덱스 12초 안에 미적재 → degraded).
+    concurrentTaskIds: [],
     dependencyTaskChains: [['mcp-env', 'provider-warm']],
     dependencyTaskId: 'backend',
-    dependentTaskIds: ['alarm-bootstrap', 'routine-feed', 'canvas-feed'],
+    dependentTaskIds: ['stock-index', 'alarm-bootstrap', 'routine-feed', 'canvas-feed'],
     sequentialDependentTaskIds: ['brain-ingestion', 'chat-history-flush', 'graph-projection'],
     continuousTaskIds: ['background-loops'],
   });

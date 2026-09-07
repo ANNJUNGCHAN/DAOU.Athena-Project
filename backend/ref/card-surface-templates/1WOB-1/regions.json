@@ -7,5 +7,13 @@
     { "node_id": "1WRQ-1", "name": "통합 순위 요약", "role": "rail", "depth": 3 },
     { "node_id": "1WSN-1", "name": "목록 · 펼침 검증", "role": "primary", "depth": 3 },
     { "node_id": "1WXX-1", "name": "목록 footer · 펼침", "role": "footer", "depth": 2 }
+  ],
+  "responsive": [
+    {
+      "node_id": "1WSN-1",
+      "traits": ["scroll-table"],
+      "header_row": "3BD7-0",
+      "accessible_label": "종목 목록 표"
+    }
   ]
 }
