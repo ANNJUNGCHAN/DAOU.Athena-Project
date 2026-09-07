@@ -38,7 +38,7 @@ function grokFailureMessage({ killedBy, timeoutMs, code, finalResult, stderrText
   return `grok 종료 코드 ${code}`;
 }
 
-function buildArgs({ prompt, resumeSessionId, model, effort }) {
+function buildArgs({ prompt, resumeSessionId, model, effort, trustProjectFolder = false }) {
   const args = [
     '-p', prompt,
     '--output-format', 'streaming-messages-json',
@@ -47,6 +47,10 @@ function buildArgs({ prompt, resumeSessionId, model, effort }) {
     '--verbatim',
     '--disallowed-tools', DISALLOWED_EXECUTION_TOOLS,
   ];
+  // Grok은 신뢰하지 않은 cwd의 project-scoped MCP를 발견만 하고 시작하지 않는다.
+  // 이 플래그는 main.js가 앱이 생성한 전용 mcp-config cwd에만 명시한다. 외부
+  // 호출자가 임의 cwd를 넘겼다고 자동 신뢰하지 않도록 기본값은 false다.
+  if (trustProjectFolder) args.push('--trust');
   if (model) args.push('--model', model);
   if (effort) args.push('--effort', effort);
   if (resumeSessionId) args.push('--resume', String(resumeSessionId));
@@ -59,6 +63,7 @@ function runGrokQuery({
   resumeSessionId = null,
   model = null,
   effort = null,
+  trustProjectFolder = false,
   grokBin = getGrokBin(),
   timeoutMs = DEFAULT_TIMEOUT_MS,
   onSpawn,
@@ -78,7 +83,7 @@ function runGrokQuery({
       return;
     }
 
-    const args = buildArgs({ prompt, resumeSessionId, model, effort });
+    const args = buildArgs({ prompt, resumeSessionId, model, effort, trustProjectFolder });
     const session = new StreamJsonSession();
     let child;
     try {

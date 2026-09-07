@@ -7,8 +7,12 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
 
 const editor = require('./backtest-code-editor');
+
+const SHELL_CSS = fs.readFileSync(path.join(__dirname, '..', 'shell.css'), 'utf8');
 
 function kinds(source) {
   return editor.tokenize(source).filter((t) => t.kind).map((t) => [t.kind, t.text]);
@@ -216,6 +220,13 @@ function mount(options) {
 }
 
 const one = (host, cls) => findByClass(host, cls)[0];
+
+test('캔버스의 가운데 정렬은 코드 본문에 상속되지 않는다', () => {
+  assert.match(SHELL_CSS, /\.backtest-code-root\s*{[^}]*text-align:\s*left\s*;/s);
+  assert.match(SHELL_CSS, /\.backtest-code-pre,\s*\.backtest-code-textarea\s*{[^}]*text-align:\s*left\s*;/s);
+  assert.match(SHELL_CSS, /\.backtest-code-gutter\s*{[^}]*text-align:\s*right\s*;/s);
+  assert.match(SHELL_CSS, /\.backtest-code-marker\s*{[^}]*text-align:\s*right\s*;/s);
+});
 const litLines = (host) => findByClass(host, 'backtest-code-line')
   .filter((n) => n.className.split(/\s+/).includes('is-lit'))
   .map((n) => n.textContent);

@@ -9,9 +9,8 @@
 //   요청 {board_id, target: {manifest alias: 값}, account}
 //   응답 {board_id, card_id, operations, surface_contract: {slot_values: [...], ...}}
 //
-// 붙은 백엔드에 이 경로가 없을 수 있다. 그때는 실패가 아니라
-// `status: 'unavailable'`로 조용히 접는다 — 화면은 결측어(미제공)를 그대로 둔다.
-// 없는 값을 지어내지 않는 것이 이 경로의 유일한 안전 조건이다(헌장 신념 5).
+// 붙은 백엔드에 이 경로가 없을 수 있다. 그때는 `status: 'unavailable'`을 돌려
+// 렌더러가 로딩 오류와 재시도를 표시하게 한다. 없는 값을 완성 화면처럼 보이지 않는다.
 
 const HYDRATE_PATH = '/api/v1/internal/canvas/board-hydrate';
 
@@ -37,7 +36,7 @@ function buildTargetBag(target) {
 }
 
 // 요청 몸체는 계약이 정한 세 필드뿐이다. 값이 없는 필드는 아예 싣지 않는다.
-function buildHydrateBody({ boardId, target, account } = {}) {
+function buildHydrateBody({ boardId, target, account, slotIds } = {}) {
   const board = clean(boardId);
   if (!board) throw new TypeError('board_id가 없다');
   const body = { board_id: board };
@@ -45,6 +44,9 @@ function buildHydrateBody({ boardId, target, account } = {}) {
   if (bag) body.target = bag;
   const accountValue = clean(account);
   if (accountValue) body.account = accountValue;
+  if (Array.isArray(slotIds)) {
+    body.slot_ids = [...new Set(slotIds.map(clean).filter(Boolean))];
+  }
   return body;
 }
 
@@ -69,10 +71,27 @@ function normalizeSlotValues(raw) {
   return values;
 }
 
-async function hydrateBoard({ backendBase, fetchImpl, token, boardId, target, account } = {}) {
+function normalizeOperations(raw) {
+  if (!Array.isArray(raw)) return [];
+  return raw.flatMap((entry) => {
+    if (!entry || typeof entry !== 'object') return [];
+    const operationRef = clean(entry.operation_ref || entry.operationRef);
+    const status = clean(entry.status);
+    if (!operationRef || !status) return [];
+    const normalized = { operation_ref: operationRef, status };
+    const reason = clean(entry.reason);
+    if (reason) normalized.reason = reason;
+    if (Number.isInteger(entry.bound_count) && entry.bound_count >= 0) {
+      normalized.bound_count = entry.bound_count;
+    }
+    return [normalized];
+  });
+}
+
+async function hydrateBoard({ backendBase, fetchImpl, token, boardId, target, account, slotIds } = {}) {
   let body;
   try {
-    body = buildHydrateBody({ boardId, target, account });
+    body = buildHydrateBody({ boardId, target, account, slotIds });
   } catch (error) {
     return { ok: false, status: 'invalid', error: String((error && error.message) || error) };
   }
@@ -93,7 +112,7 @@ async function hydrateBoard({ backendBase, fetchImpl, token, boardId, target, ac
       body: JSON.stringify(body),
     });
   } catch (error) {
-    // 백엔드가 아직 안 떴거나 경로가 없다 — 화면은 결측어를 그대로 둔다.
+    // 백엔드가 아직 안 떴거나 경로가 없다 — renderer가 재시도 가능한 오류로 표시한다.
     return { ok: false, status: 'unavailable', error: String((error && error.message) || error) };
   }
   const httpStatus = Number(response && response.status) || 0;
@@ -120,12 +139,14 @@ async function hydrateBoard({ backendBase, fetchImpl, token, boardId, target, ac
   const slotValues = normalizeSlotValues(
     (contract && contract.slot_values) || payload.slot_values || payload.slotValues,
   );
+  const operations = normalizeOperations(payload.operations);
   return {
     ok: true,
     status: 'hydrated',
     board_id: body.board_id,
     slot_values: slotValues,
     filled: Object.keys(slotValues).length,
+    operations,
     // 하이드레이션으로 채워진 슬롯도 실시간 갱신을 받으려면 observation_id가 붙은
     // 원본 계약이 필요하다(렌더러가 realtimeSlotIndex를 다시 만든다).
     surface_contract: contract,
@@ -137,5 +158,6 @@ module.exports = {
   UNAVAILABLE_STATUS,
   buildHydrateBody,
   normalizeSlotValues,
+  normalizeOperations,
   hydrateBoard,
 };
