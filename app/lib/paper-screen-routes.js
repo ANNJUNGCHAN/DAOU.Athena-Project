@@ -1050,7 +1050,23 @@ const CODE_RUNS = Object.freeze({
   },
 });
 
-const CODE_DETAIL_FIRST_CHECK = paperCodeDetail('check', WATCH_NODES_FIRST);
+const CODE_DETAIL_FIRST_CHECK = Object.freeze({
+  ok: true,
+  data: {
+    ...paperCodeDetail('check', WATCH_NODES_FIRST).data,
+    last_check: {
+      ...paperCodeDetail('check', WATCH_NODES_FIRST).data.last_check,
+      cooldown_s: 86400,
+      last_fire: '2026-09-01',
+      counted_through: '2026-09-04',
+      counted_until: '어제까지로 세었음 · 오늘은 진행 중',
+      fires: [
+        { dt: '2026-08-12', close: 70000 }, { dt: '2026-08-19', close: 70500 },
+        { dt: '2026-08-26', close: 71000 }, { dt: '2026-09-01', close: 71500 },
+      ],
+    },
+  },
+});
 const CODE_DETAIL_ACTIVE = paperCodeDetail('run', WATCH_NODES_LIVE);
 
 // 두 번째 고침을 마치고 다시 검사까지 끝난 초안(보드 11) — 백엔드가 직전 판과
@@ -2431,8 +2447,8 @@ const ROUTES = Object.freeze([
       { do: 'settle' },
     ],
     root: '#agentCanvas',
-    // 칸 제목·값·함수명은 전부 봉투가 주는 값이다. 남는 것은 칸 문법의 두 라벨,
-    // 승인 패널의 문과 게이트 고지, 고치는 문, 설정 두 줄이다.
+    // 칸 제목·값·함수명·검사 숫자는 봉투가 준다. 첫 검사 상태/결과 패널도
+    // 고정 문법과 실제 fixture의 날짜·발화 목록으로 검사한다.
     phrases: [
       '들어감', '나옴', '이 알람 승인',
       '승인 전까지 실행 없음 · 채팅 칩으로도, 이 버튼으로도 — 같은 게이트',
@@ -2446,6 +2462,14 @@ const ROUTES = Object.freeze([
       { what: 'absent', selector: '.agent-node-chip' },
       { what: 'absent', selector: '.agent-node-badge' },
       { what: 'count', selector: '.agent-code-approve-row button', equals: 2 },
+      { what: 'count', selector: '.agent-check-band.is-passed', equals: 1 },
+      { what: 'order', selector: '.agent-check-band-status', equals: ['검사 통과 · 장중 1분마다'] },
+      { what: 'order', selector: '.agent-detail-col > .agent-panel-caption', equals: ['상세', '노드 · 흐름', '승인', '설정'] },
+      { what: 'count', selector: '.agent-check-result', equals: 1 },
+      { what: 'count', selector: '.agent-check-result .agent-fix-dot', equals: 30 },
+      { what: 'count', selector: '.agent-check-result .agent-fix-dot.is-fired', equals: 4 },
+      { what: 'count', selector: '.agent-check-result .agent-check-fire', equals: 4 },
+      { what: 'absent', selector: '.agent-fix-recheck' },
     ],
   },
   {
@@ -2768,9 +2792,7 @@ const ROUTES = Object.freeze([
     ],
     root: '#settings',
     // 마스크 점·「붙여넣음 · 36자」·「모의-주력」은 값이거나 <input>의 placeholder라
-    // 문구가 못 된다. Paper가 상태 행 아래에 한 줄 더 그린 「APP KEY와 SECRET KEY로
-    // 계좌 연결 권한을 확인하고 있습니다」도 안 적는다 — 앱은 그 자리에 정적 안내를
-    // 두지 않고 상태 행 한 문장이 혼자 말한다(settings-cards.js의 같은 자리 주석).
+    // 문구가 못 된다. 상태 행(113-0)과 그 아래 연결 권한 설명(114-0)은 각각 잰다.
     // 확정 버튼 라벨 「확인 중…」(11B-0)은 문구로 못 잰다 — 판정은 root 아래 가시
     // 텍스트 전체에 대한 includes라 바로 위 안내 줄에 통째로 들어 있다. 그 자리는
     // 아래 structure가 라벨까지 재고, 문구는 아직 안 쓴 108-0이 맡는다.
@@ -2780,6 +2802,7 @@ const ROUTES = Object.freeze([
       '저장·표시 원칙',
       '이 컴퓨터에서만 쓰는 이름이다',
       '토큰 발급 확인 중… 입력과 저장이 잠시 잠깁니다',
+      'APP KEY와 SECRET KEY로 계좌 연결 권한을 확인하고 있습니다',
     ],
     // 확인 중을 다른 두 상태와 가르는 것은 문구가 아니라 **잠김**이다: 입력 셋과
     // 확정 버튼이 모두 잠기고, 실패 상자는 아직 없다. 실패 상자는 셈이 아니라
@@ -2789,6 +2812,10 @@ const ROUTES = Object.freeze([
     // (빈 입력에 진짜 핸들러가 답한 것이다 — 키움 왕복은 그 전에 끊긴다). 리포트에
     // 그 문면이 보이면 앱 회귀가 아니라 하네스의 가로채기가 안 걸린 것이다.
     structure: [
+      { what: 'order', selector: '.uk-sheet .uk-status-text, .uk-sheet .uk-account-verifying-note', equals: [
+        '토큰 발급 확인 중… 입력과 저장이 잠시 잠깁니다',
+        'APP KEY와 SECRET KEY로 계좌 연결 권한을 확인하고 있습니다',
+      ] },
       { what: 'count', selector: '.uk-sheet .uk-input', equals: 3 },
       { what: 'count', selector: '.uk-sheet .uk-input:disabled', equals: 3 },
       { what: 'order', selector: '.uk-sheet .uk-btn-primary:disabled', equals: ['확인 중…'] },

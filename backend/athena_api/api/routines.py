@@ -505,6 +505,9 @@ async def check_watch_code(request: Request, body: dict[str, Any]) -> dict[str, 
         # 고침 전후 비교가 읽는 두 칸 — 울린 날 목록과 센 구간이다.
         "fires": list(payload["fires"]),
         "lookback_days": result.lookback_days,
+        # 지금 설정이 아니라 이 검사에서 실제로 적용한 값이다(simulate_fires의 하한).
+        "cooldown_s": max(0, cooldown_s),
+        "diagnosis": payload["diagnosis"],
     }
     if routine_id and result.ok:
         # 검사에 통과한 그 코드로 확정을 열어 준다 — can_activate가 해시를 대조한다.
@@ -520,6 +523,7 @@ async def check_watch_code(request: Request, body: dict[str, Any]) -> dict[str, 
                 payload["warnings"].append(
                     "켜져 있는 알람 — 검사 결과를 알람에 심지 않았음 · 고치려면 먼저 일시중지"
                 )
+    runtime.watch_last[f"check:{key}"]["warnings"] = list(payload["warnings"])
     return payload
 
 

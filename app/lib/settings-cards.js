@@ -578,6 +578,7 @@ function accountSheetPhase(phase, extra) {
   return {
     phase,
     hint: ACCOUNT_SHEET_HINTS[phase === 'saving' ? 'verified' : phase],
+    verificationNote: phase === 'verifying' ? 'APP KEY와 SECRET KEY로 계좌 연결 권한을 확인하고 있습니다' : null,
     submitLabel: phase === 'verifying' ? '확인 중…'
       : verifiedLike ? '계좌 저장'
         : phase === 'failed' ? '다시 검증' : '검증 후 저장',
@@ -686,8 +687,7 @@ function openAccountRegisterSheet(card, onDone) {
   cols.appendChild(right);
   body.appendChild(cols);
 
-  // 상태 행(Paper XI-0 113-0)이 지금 상태의 한 문장을 혼자 말한다 — 정적 안내
-  // 한 줄을 늘 띄우던 자리를 대신한다.
+  // 상태 행(Paper XI-0 113-0) 아래에 확인 중 설명(114-0)을 별도 줄로 그린다.
   const statusRow = el('div', 'uk-status-row');
   const statusDotEl = el('span', 'uk-status-dot');
   const statusText = el('span', 'uk-status-text', '');
@@ -731,6 +731,7 @@ function openAccountRegisterSheet(card, onDone) {
     appKeyField.input.classList.toggle('is-error', next.errorFields.includes('appKey'));
     secretKeyField.input.classList.toggle('is-error', next.errorFields.includes('secretKey'));
     clear(errBox);
+    if (next.verificationNote) errBox.appendChild(el('div', 'uk-field-hint-static uk-account-verifying-note', next.verificationNote));
     if (next.successBox) errBox.appendChild(successNote(next.successBox));
     const failure = overrideError || next.errorMessage;
     if (failure) errBox.appendChild(errorNote(failure));
