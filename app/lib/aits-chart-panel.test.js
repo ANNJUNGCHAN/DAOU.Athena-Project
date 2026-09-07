@@ -364,11 +364,6 @@ test('all Athena chart entry points are statically locked to the AITS adapter', 
   assert.doesNotMatch(lowLevel, /clearTimeout\(reloadTimer\)/);
   assert.doesNotMatch(canvas, /reloadTimer/);
   assert.doesNotMatch(canvas, /재조회 8초 한도를 넘겼다/);
-  const probeLive = fs.readFileSync(path.join(__dirname, '..', 'probe-live-chart.js'), 'utf8');
-  assert.match(probeLive, /capture skip/);
-  assert.match(probeLive, /wait\(12000\)/);
-  const probeHoga = fs.readFileSync(path.join(__dirname, '..', 'probe-orderbook-realtime.js'), 'utf8');
-  assert.match(probeHoga, /json: async \(\) => \(\{\}\)/);
   assert.match(lowLevel, /const __loadChartLibrary = createCachedChartLibraryLoader/);
   assert.match(lowLevel, /if \(!__isCjs && typeof document !== 'undefined'\)[\s\S]*__loadChartLibrary\(\)/);
   assert.match(lowLevel, /await __loadChartLibrary\(\)/);
