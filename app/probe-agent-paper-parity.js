@@ -29,6 +29,8 @@ process.env.ATHENA_BACKEND_URL = 'http://127.0.0.1:0';
 const { app, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const { captureRoot } = require('./lib/probe-captures');
+const CAPTURES = captureRoot(__dirname);
 
 const PROFILE = path.join(__dirname, '.probe-agent-paper-parity-profile');
 fs.rmSync(PROFILE, { recursive: true, force: true });
@@ -611,8 +613,7 @@ async function main() {
   await shellWin.webContents.executeJavaScript("document.querySelector('.agent-code-approve-btn').scrollIntoView({ block: 'center' })");
   await wait(350);
   const blockedDraftImage = await shellWin.webContents.capturePage();
-  fs.mkdirSync(path.join(__dirname, 'captures'), { recursive: true });
-  fs.writeFileSync(path.join(__dirname, 'captures', 'agent-watch-blocked-approval.png'), blockedDraftImage.toPNG());
+  fs.writeFileSync(path.join(CAPTURES, 'agent-watch-blocked-approval.png'), blockedDraftImage.toPNG());
   const repairProbe = await shellWin.webContents.executeJavaScript(`(() => {
     const original = window.AthenaShell.seedChatInput;
     let text = '';
@@ -667,9 +668,8 @@ async function main() {
   check('렌더러 콘솔 에러가 없다', consoleErrors.length === 0);
 
   const ok = failures.length === 0;
-  fs.mkdirSync(path.join(__dirname, 'captures'), { recursive: true });
   fs.writeFileSync(
-    path.join(__dirname, 'captures', 'probe-agent-paper-parity.json'),
+    path.join(CAPTURES, 'probe-agent-paper-parity.json'),
     JSON.stringify({
       tasksProbe, alarmProbe, drillProbe, settingsProbe,
       codeProbe, nodeChipProbe, editGateProbe, editDoneProbe, draftProbe,

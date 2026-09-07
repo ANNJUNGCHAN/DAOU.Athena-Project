@@ -12,6 +12,7 @@ process.env.ATHENA_CANVAS_SOURCE = 'fixture';
 const { app, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const { captureRoot } = require('./lib/probe-captures');
 
 // 캡처 전용이라 GPU가 필요 없다 — 이 머신에서는 GPU 경로가 warmup 창 ready-to-show를 5초 안에 못
 // 넘겨 프로브가 시작도 못 한다(probe-chat-input-width.js와 같은 조치).
@@ -27,7 +28,7 @@ fs.writeFileSync(
 app.setPath('userData', PROFILE);
 
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
-const OUT = path.join(__dirname, 'captures');
+const OUT = captureRoot(__dirname);
 
 async function captureChat(shellWin, name) {
   const rect = await shellWin.webContents.executeJavaScript(`(() => {

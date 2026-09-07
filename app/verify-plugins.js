@@ -14,6 +14,7 @@
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
+const { captureRoot } = require('./lib/probe-captures');
 
 const REGISTRY_DIR = fs.mkdtempSync(path.join(os.tmpdir(), 'athena-verify-plugins-'));
 process.env.ATHENA_MCP_REGISTRY_PATH = path.join(REGISTRY_DIR, 'mcp_servers.json');
@@ -23,7 +24,7 @@ process.env.ATHENA_MCP_REGISTRY_PATH = path.join(REGISTRY_DIR, 'mcp_servers.json
 const mcpCli = require('./lib/main/mcp-cli');
 const { CATALOG } = require('./lib/plugin-catalog');
 
-const REPORT_PATH = path.join(__dirname, 'captures', 'VERIFY-PLUGINS-REPORT.json');
+const REPORT_PATH = path.join(captureRoot(__dirname), 'VERIFY-PLUGINS-REPORT.json');
 const results = [];
 let failures = 0;
 

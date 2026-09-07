@@ -54,13 +54,14 @@ import { checkPaperManifest, loadManifest, LEDGER_DIR, CARD_INDEX_PATH } from '.
 const require_ = createRequire(import.meta.url);
 const { mergeStaticLayer } = require_('../lib/paper-cards-report.js');
 const { parseTreeRecords } = require_('../lib/paper-tree.js');
+const { captureRoot } = require_('../lib/probe-captures.js');
 
 const APP_DIR = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const REPO_ROOT = path.resolve(APP_DIR, '..');
 
 export const TEMPLATES_DIR = path.join(REPO_ROOT, 'backend', 'ref', 'card-surface-templates');
 export const GENERATED_INDEX_PATH = path.join(APP_DIR, 'lib', 'board-templates.index.generated.js');
-export const REPORT_PATH = path.join(APP_DIR, 'captures', 'paper-gates', 'PAPER-CARDS.json');
+export const REPORT_PATH = path.join(captureRoot(APP_DIR), 'paper-gates', 'PAPER-CARDS.json');
 export const FIXTURE_BOARD_ID = 'fixture-quote';
 
 /**

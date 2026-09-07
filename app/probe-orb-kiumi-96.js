@@ -6,10 +6,11 @@ const path = require('path');
 const fs = require('fs');
 const os = require('os');
 const { execFileSync } = require('child_process');
+const { captureRoot } = require('./lib/probe-captures');
 
 const APP_ROOT = __dirname;
 const REPO_ROOT = path.resolve(APP_ROOT, '..');
-const OUT_DIR = path.join(APP_ROOT, 'captures', 'kiumi-96');
+const OUT_DIR = path.join(captureRoot(APP_ROOT), 'kiumi-96');
 const LEDGER_PATH = path.join(REPO_ROOT, 'backend', 'ref', 'kiumi', 'kiumi-ledger.jsonl');
 fs.mkdirSync(OUT_DIR, { recursive: true });
 

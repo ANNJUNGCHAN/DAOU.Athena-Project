@@ -5,18 +5,25 @@ const os = require('os');
 const path = require('path');
 const { spawnSync } = require('child_process');
 const { resolveHarnessProfile } = require('./lib/main/harness-profile');
+const { captureRoot } = require('./lib/probe-captures');
 const appDir = __dirname;
+const captures = captureRoot(appDir);
 // 이 스크립트는 자식 Electron 두 번에 ATHENA_USERDATA_DIR을 넘기는 오케스트레이터다.
 // 호출자가 이미 그 변수를 줬으면(실제로 등록한 계좌·CLI 계정으로 검증하고 싶을 때)
 // 새 임시 프로필을 만들지 않고 그대로 물려주며, finally의 정리도 no-op이 된다.
 const harnessProfile = resolveHarnessProfile({ prefix: 'athena-life003-two-run-' });
 const profile = harnessProfile.dir;
 const electron = path.join(appDir, 'node_modules', 'electron', 'dist', 'electron.exe');
-const reportPath = path.join(appDir, 'captures', 'LIFE-003-REVIEW.json');
+const reportPath = path.join(captures, 'LIFE-003-REVIEW.json');
 function run() {
   const result = spawnSync(electron, ['run-life003-review.js'], {
     cwd: appDir, encoding: 'utf8', timeout: 30000,
-    env: { ...process.env, ATHENA_USERDATA_DIR: profile, ATHENA_REVIEW_EXIT_AFTER_REPORT: '1' },
+    env: {
+      ...process.env,
+      ATHENA_USERDATA_DIR: profile,
+      ATHENA_REVIEW_EXIT_AFTER_REPORT: '1',
+      ATHENA_CAPTURE_DIR: captures,
+    },
   });
   if (result.status !== 0) throw new Error(`Electron LIFE-003 run failed\n${result.stdout}\n${result.stderr}`);
   return JSON.parse(fs.readFileSync(reportPath, 'utf8'));
@@ -35,7 +42,7 @@ try {
   assert.equal(second.firstCloseNotice.afterSecond.shown, 0);
   assert.deepEqual(second.orbOpenShellIpc, first.orbOpenShellIpc);
   assert.equal(second.trayExit.beforeQuitObserved, true);
-  fs.writeFileSync(path.join(appDir, 'captures', 'LIFE-003-VERIFY.json'), `${JSON.stringify({
+  fs.writeFileSync(path.join(captures, 'LIFE-003-VERIFY.json'), `${JSON.stringify({
     pass: true, profile: path.basename(profile), firstRun: first, secondRun: second,
   }, null, 2)}\n`, 'utf8');
   console.log(JSON.stringify({ pass: true, firstShown: 1, secondShown: 0,

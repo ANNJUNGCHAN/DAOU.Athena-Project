@@ -4,13 +4,13 @@ const { app, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const { resolveHarnessProfile } = require('./lib/main/harness-profile');
+const { captureRoot } = require('./lib/probe-captures');
 
 const profile = resolveHarnessProfile({ prefix: 'athena-verify-settings-cards-' });
 app.setPath('userData', profile.dir);
 profile.seedOnboarding();
 
-const CAPTURES = path.join(__dirname, 'captures');
-if (!fs.existsSync(CAPTURES)) fs.mkdirSync(CAPTURES, { recursive: true });
+const CAPTURES = captureRoot(__dirname);
 
 function wait(ms) { return new Promise((r) => setTimeout(r, ms)); }
 async function shot(win, name) {

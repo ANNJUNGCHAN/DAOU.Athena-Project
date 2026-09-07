@@ -38,11 +38,33 @@ test('ATHENA_CAPTURE_DIR가 없으면 appDir/captures 를 만들고 쓴다', () 
 
 test('전수 스위트의 공유 리포트 하네스는 captureRoot를 쓴다', () => {
   const read = (name) => fs.readFileSync(path.join(__dirname, '..', name), 'utf8');
-  for (const file of ['verify.js', 'probe-live-full.js', 'verify-hoga-live.js', 'verify-kiumi.js']) {
+  const files = [
+    'verify.js',
+    'probe-live-full.js',
+    'verify-hoga-live.js',
+    'verify-kiumi.js',
+    'verify-settings.js',
+    'verify-settings-cards.js',
+    'verify-plugins.js',
+    'probe-chat-v3-visual.js',
+    'probe-agent-paper-parity.js',
+    'probe-orb-order-ticket.js',
+    'probe-orb-conversation.js',
+    'probe-orb-kiumi-96.js',
+    'verify-integrated-cards.js',
+    'verify-life003.js',
+    'run-life003-review.js',
+    'scripts/paper-cards-static.mjs',
+    'scripts/paper-mini-static.mjs',
+  ];
+  for (const file of files) {
     const src = read(file);
-    assert.match(src, /require\('\.\/lib\/probe-captures'\)/, file);
-    assert.match(src, /captureRoot\(__dirname\)/, file);
-    assert.doesNotMatch(src, /const CAPTURES = path\.join\(__dirname, 'captures'\)/, file);
-    assert.doesNotMatch(src, /const OUT_DIR = path\.join\(__dirname, 'captures'\)/, file);
+    assert.match(src, /probe-captures/, file);
+    assert.match(src, /captureRoot\(/, file);
+    assert.doesNotMatch(
+      src,
+      /path\.join\((?:__dirname|APP|APP_ROOT|appDir|APP_DIR), ['"]captures['"]\)/,
+      file,
+    );
   }
 });
