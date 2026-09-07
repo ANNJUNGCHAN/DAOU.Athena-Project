@@ -208,6 +208,25 @@ test('isZeroLike는 0과 결측을 함께 세고(H1 모수) 값 있는 항목은
 test('미리 만들어진 표기(text)는 그대로 쓰고 포맷터를 다시 태우지 않는다', () => {
   const result = formatSlot({ kind: 'number' }, { value: 1, text: '익일 동일', tone: 'flat' });
   assert.deepEqual([result.text, result.tone], ['익일 동일', 'flat']);
+  assert.equal(
+    formatSlot({ kind: 'number', suffix: '원' }, { value: 150850, text: '150,850원' }).text,
+    '150,850원',
+  );
+});
+
+test('Paper 원문을 슬롯 값으로 넣어도 접두·접미를 한 번 더 붙이지 않는다', () => {
+  // 마운트 게이트는 실데이터가 없어 paper_text를 값으로 싣는다. 그 원문은 이미
+  // 「150,850원」처럼 단위를 포함하고, 같은 슬롯의 format.suffix도 「원」이다.
+  assert.equal(formatSlot(boardSlot('2R3M-1', 's005').format, '150,850원').text, '150,850원');
+  assert.equal(formatSlot(boardSlot('2R3M-1', 's022').format, '21.2배').text, '21.2배');
+  assert.equal(formatSlot(boardSlot('137X-2', 's019').format, '거래대금 2.14조원').text, '거래대금 2.14조원');
+  assert.equal(
+    formatSlot(boardSlot('2R3M-1', 's030').format, '현재가 · 09:42:18 체결').text,
+    '현재가 · 09:42:18 체결',
+  );
+  // 원값 숫자는 접미를 한 번만 붙인다 — 위 가드가 생값 경로를 닫으면 안 된다.
+  assert.equal(formatSlot(boardSlot('2R3M-1', 's005').format, '-267750').text, '267,750원');
+  assert.equal(formatSlot(boardSlot('137X-2', 's019').format, 2140000).text, '거래대금 2조 1,400억원');
 });
 
 // ---------- 추출기 포맷 어휘(format.unit) 소비 ----------
