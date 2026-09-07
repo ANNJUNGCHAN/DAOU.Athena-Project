@@ -17,12 +17,9 @@
   <div id="orbRoot" class="orb-root" data-anchor="bottom-right" data-state="collapsed" data-alert="none">
 
     <!-- 펼침 패널 — 상태는 둘뿐이다(board-33/34, tree-34-deep.raw):
-         상태 A(셸 숨김) = 대화 모드, 상태 B(셸 표시) = 알림 전용.
-         알림 전용에서는 옛 계약 그대로다 — 대화체 문장 1 · 대표 카드 1 · 더보기,
-         실행 버튼 없음(확정 결정 3). 대화 모드에서만 입력줄이 생긴다 — **셸이
-         보이는 동안은 여전히 입력창 0개**라 "단일 입력 지점" 원칙 자체는 안
-         깨진다(둘이 동시에 살지 않는다), 그 지점이 셸 하나에서 "지금 보이는
-         창 하나"로 넓어졌을 뿐이다. -->
+         상태 A(셸 숨김) = 대화 모드, 상태 B(셸 표시) = 알림 모드.
+         알림 모드에서도 입력줄은 열어 둔다. 사용자가 질문을 보내면 같은 패널이
+         대화 이력으로 전환되고, 접으면 보존한 알림 큐를 다시 보여준다. -->
     <section id="orbPanel" class="orb-panel" hidden aria-live="polite">
       <header class="orb-panel-head">
         <!-- 시점 정직성 3종 — 발화 배지 · 방식 표기는 lib/routine-turn.js의
@@ -40,7 +37,7 @@
 
       <!-- 대표 카드 1 — 이벤트 원장 행의 1:1 렌더링이다. 지어낸 값이 없다.
            캔버스의 카드 12종과 별개 표면이라 여기 미리보기는 카드 종류를 늘리지 않는다. -->
-      <div id="orbCard" class="orb-card"></div>
+      <div id="orbCard" class="orb-card" hidden></div>
 
       <footer id="orbFoot" class="orb-foot">
         <!-- 소스 라벨 — "묻지 않은 턴입니다"까지 포함한 정직성 계약 문구. -->
@@ -99,8 +96,8 @@
         </div>
       </div>
 
-      <!-- 오브의 새 부품 — 입력은 상태 A(셸 숨김)에서만 존재한다(board-34 게이트,
-           orb.js applyMode가 athena:shell-visibility로 켜고 끈다). -->
+      <!-- 오브의 대화 입력 — 알림 모드에서도 질문을 시작할 수 있고, 제출하면
+           orb.js가 현재 패널을 기존 이력이 보이는 대화 모드로 전환한다. -->
       <div id="orbInputStack" class="orb-input-stack" hidden>
         <div class="orb-input-row">
           <input id="orbInput" class="orb-input" type="text" placeholder="무엇이든 물어보세요" autocomplete="off" />
