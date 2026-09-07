@@ -7,6 +7,7 @@ const path = require('node:path');
 const vm = require('node:vm');
 const checkLib = require('./watch-check-card');
 const progressLib = require('./watch-progress-card');
+const fixCycleLib = require('./watch-fix-cycle');
 
 // 실제 IPC 응답 전달·카드 조립을 실행한다. Electron 대신 DOM/IPC 경계만 주입한다.
 const source = fs.readFileSync(path.join(__dirname, '..', 'chat.js'), 'utf8');
@@ -34,7 +35,7 @@ function byClass(root, cls) {
 function renderHarness(check, lastCheck = null, detailFails = false) {
   const history = element('history'), calls = [];
   const scope = {
-    document: { createElement: element }, watchCheckCardLib: checkLib,
+    document: { createElement: element }, watchCheckCardLib: checkLib, watchFixCycleLib: fixCycleLib,
     window: { AthenaLib: { WatchProgressCard: progressLib }, athena: {
       invoke: async (channel, body) => {
         calls.push({ channel, body });
@@ -125,14 +126,53 @@ test('채팅 검사 왕복: 상세가 ok:false면 날짜를 메우지 않고 울
   assert.ok(byClass(h.history, 'agent-source').some((node) => /검사 구간 날짜를 붙이지 못함/.test(node.textContent)));
 });
 
-for (const kind of ['dated', 'failed']) {
-  test(`채팅 검사 왕복: ${kind} 응답은 상세를 더 읽지 않는다`, async () => {
-    const check = checked(kind === 'failed' ? { ok: false, counted_through: undefined } : {});
-    const h = renderHarness(check);
-    assert.equal(await h.scope.runWatchCheck(draft), check);
-    assert.deepEqual(h.calls.map((call) => call.channel), ['athena:routine-watch-check']);
-  });
-}
+test('채팅 검사 왕복: 실패한 응답은 상세를 더 읽지 않는다', async () => {
+  const check = checked({ ok: false, counted_through: undefined });
+  const h = renderHarness(check);
+  assert.equal(await h.scope.runWatchCheck(draft), check);
+  assert.deepEqual(h.calls.map((call) => call.channel), ['athena:routine-watch-check']);
+});
+
+test('채팅 검사 왕복: 날짜가 있는 성공 응답도 영수증용 상세를 읽는다', async () => {
+  const check = checked();
+  const h = renderHarness(check);
+  assert.equal(await h.scope.runWatchCheck(draft), check);
+  assert.deepEqual(h.calls.map((call) => call.channel), ['athena:routine-watch-check', 'athena:routine-detail']);
+});
+
+test('채팅 검사 왕복: 고침 봉투가 있으면 영수증·되돌리기·지난 고침이 선다', async () => {
+  const check = checked();
+  const cycle = {
+    ok: true, fix_count: 2, past_count: 1, lookback_days: 7, counted_through: '2026-09-02',
+    fires_before: 2, fires_after: 1, fires_before_dates: ['2026-08-28'],
+    fires_after_dates: ['2026-09-01'],
+    changes: [{ label: '평균 일수', before: '3일', after: '5일' }],
+    changed_nodes: 2, can_rollback: true,
+  };
+  const h = renderHarness(check);
+  h.scope.window.athena.invoke = async (channel, body) => {
+    h.calls.push({ channel, body });
+    if (channel === 'athena:routine-watch-check') return { ok: true, data: check };
+    if (channel === 'athena:routine-detail') {
+      return { ok: true, data: { last_check: check, fix_cycle: cycle, fix_history: [{ fixed_at: '2026-09-01T02:10:00.000Z', fire_count: 6 }] } };
+    }
+    if (channel === 'athena:routine-watch-rollback') return { ok: true };
+    return { ok: true };
+  };
+  const result = await h.scope.runWatchCheck(draft);
+  h.scope.renderWatchCheckCard(draft, result);
+  assert.equal(byClass(h.history, 'agent-fix-receipt-title')[0].textContent, '한 바퀴 영수증 · 2번째 고침');
+  assert.ok(byClass(h.history, 'agent-fix-receipt-text').some((node) => /평균 일수 3일 → 5일/.test(node.textContent)));
+  const rollback = byClass(h.history, 'agent-fix-rollback')[0];
+  assert.equal(rollback.textContent, '되돌리기');
+  await rollback.listeners.click();
+  assert.equal(h.calls.at(-1).channel, 'athena:routine-watch-rollback');
+  assert.equal(rollback.textContent, '되돌림');
+  const past = byClass(h.history, 'agent-fix-past')[0];
+  assert.equal(past.textContent, '지난 고침 1건');
+  past.listeners.click();
+  assert.equal(byClass(h.history, 'agent-fix-history-fires')[0].textContent, '6번 울림');
+});
 
 test('채팅 검사 실패: 남아 온 날짜가 있어도 성공 점 띠·울린 목록·승인을 내지 않는다', () => {
   const h = renderHarness(null);

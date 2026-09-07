@@ -3419,15 +3419,23 @@ async function runWatchCheck(r) {
     const check = res.data;
     // 검사 응답에 빠진 날짜는 같은 검사의 상세 스냅샷에서만 보충한다.
     // checked_at은 UTC지만 counted_through는 실제로 센 KST 날짜다.
-    if (check.ok === true && !check.counted_through && check.checked_at && r.id) {
+    if (check.ok === true && r.id) {
       try {
         const detail = await window.athena.invoke('athena:routine-detail', { id: r.id });
-        const saved = detail && detail.ok && detail.data && detail.data.last_check;
-        if (saved && saved.ok === true && saved.checked_at === check.checked_at
-            && typeof saved.counted_through === 'string' && saved.counted_through) {
-          return Object.assign({}, check, { counted_through: saved.counted_through });
+        const data = detail && detail.ok && detail.data;
+        if (data) {
+          const extra = {};
+          const saved = data.last_check;
+          if (!check.counted_through && check.checked_at && saved
+              && saved.ok === true && saved.checked_at === check.checked_at
+              && typeof saved.counted_through === 'string' && saved.counted_through) {
+            extra.counted_through = saved.counted_through;
+          }
+          if (data.fix_cycle && typeof data.fix_cycle === 'object') extra.fix_cycle = data.fix_cycle;
+          if (Array.isArray(data.fix_history)) extra.fix_history = data.fix_history;
+          if (Object.keys(extra).length) return Object.assign({}, check, extra);
         }
-      } catch { /* 원래 검사 결과는 보존하고 날짜를 추정하지 않는다 */ }
+      } catch { /* 원래 검사 결과는 보존하고 날짜·영수증을 추정하지 않는다 */ }
     }
     return check;
   }
@@ -3617,6 +3625,77 @@ function renderWatchCheckCard(r, check) {
   }
   row.appendChild(status);
   card.appendChild(row);
+
+  const cycle = watchFixCycleLib.cycleModel(check && check.fix_cycle);
+  if (cycle && cycle.receiptRows.length) {
+    const receipt = document.createElement('div');
+    receipt.className = 'agent-fix-receipt';
+    const receiptTitle = document.createElement('div');
+    receiptTitle.className = 'agent-fix-receipt-title';
+    receiptTitle.textContent = cycle.receiptTitle;
+    receipt.appendChild(receiptTitle);
+    for (const entry of cycle.receiptRows) {
+      const receiptRow = document.createElement('div');
+      receiptRow.className = 'agent-fix-receipt-row';
+      const mark = document.createElement('span');
+      mark.className = 'agent-fix-receipt-mark';
+      mark.textContent = entry.mark;
+      const text = document.createElement('span');
+      text.className = 'agent-fix-receipt-text';
+      text.textContent = entry.text;
+      receiptRow.appendChild(mark);
+      receiptRow.appendChild(text);
+      receipt.appendChild(receiptRow);
+    }
+    const actions = document.createElement('div');
+    actions.className = 'agent-fix-actions';
+    if (cycle.canRollback) {
+      const rollback = document.createElement('button');
+      rollback.type = 'button';
+      rollback.className = 'agent-fix-rollback';
+      rollback.textContent = cycle.rollbackLabel;
+      rollback.addEventListener('click', async () => {
+        rollback.disabled = true;
+        const res = await window.athena.invoke('athena:routine-watch-rollback', { id: r.id });
+        rollback.textContent = (res && res.ok) ? '되돌림' : `되돌리기 실패: ${(res && res.error) || '알 수 없는 오류'}`;
+      });
+      actions.appendChild(rollback);
+    }
+    if (cycle.pastLabel) {
+      const past = document.createElement('button');
+      past.type = 'button';
+      past.className = 'agent-fix-past';
+      past.textContent = cycle.pastLabel;
+      let historyOpen = false;
+      past.addEventListener('click', () => {
+        if (historyOpen) return;
+        historyOpen = true;
+        const list = document.createElement('div');
+        list.className = 'agent-fix-history';
+        for (const entry of watchFixCycleLib.historyRows(check.fix_history)) {
+          const hist = document.createElement('div');
+          hist.className = 'agent-fix-history-row';
+          const when = document.createElement('span');
+          when.className = 'agent-fix-history-when';
+          when.textContent = entry.when;
+          const fires = document.createElement('span');
+          fires.className = 'agent-fix-history-fires';
+          fires.textContent = entry.fires;
+          hist.appendChild(when);
+          hist.appendChild(fires);
+          list.appendChild(hist);
+        }
+        receipt.appendChild(list);
+      });
+      actions.appendChild(past);
+    }
+    if (actions.children.length) receipt.appendChild(actions);
+    const note = document.createElement('div');
+    note.className = 'agent-fix-note';
+    note.textContent = cycle.note;
+    receipt.appendChild(note);
+    card.appendChild(receipt);
+  }
 
   _mountTurn(line, card);
 }
