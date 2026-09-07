@@ -885,7 +885,8 @@ test('buildBacktestModePrefix: 전략으로 만들 주소는 source_map으로 �
 test('buildBacktestModePrefix: 등록은 register_strategy로 가고 실행·활성화·배포가 아니다', () => {
   const p = buildBacktestModePrefix(BT_PROJECT_CONTEXT, '20260902');
   assert.ok(p.includes('register_strategy(project_id·path·name)'));
-  assert.ok(p.includes('"내 전략"에 프리셋과 같은 자리로 뜬다'));
+  assert.ok(p.includes('기법 탭의 목록에 프리셋과 같은 자리로 뜬다'));
+  assert.equal(p.includes('설계 폼'), false);
   assert.ok(p.includes('등록은 실행도 활성화도 배포도 아니다'));
 });
 
