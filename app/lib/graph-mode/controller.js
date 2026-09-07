@@ -459,9 +459,8 @@ function createGraphModeController(deps) {
     if (elements.graphSettings) {
       elements.graphSettings.hidden = !graphView || state.surface !== store.SURFACE_SETTINGS;
     }
-    // 키우미 얼굴(2026-08-27, Paper 보드 45) — 지금 모드를 얼굴로 보여준다
-    // (대화=눈 · 그래프=온톨로지 별자리). CSS가 data-mode로 얼굴을 고른다 —
-    // agent·backtest 얼굴은 아직 CSS에 없어 기본 얼굴로 폴백한다(보드 39~43·45 후속).
+    // 키우미 얼굴은 하나다(2026-09-01). data-mode는 지금 모드 이름일 뿐이고
+    // CSS가 그 값으로 도형을 갈아끼우지 않는다 — 얼굴 5종 폴백은 폐기됐다.
     const modeLabel = graphView ? 'graph' : (activeSurface === 'summary' ? 'chat' : activeSurface);
     if (elements.kiumi) elements.kiumi.dataset.mode = modeLabel;
     // 캔버스 빈 상태의 모드별 변형(보드 46) — CSS가 이 축으로 하나만 보여준다.
