@@ -289,6 +289,49 @@ html, body { background: transparent; }
   background: var(--color-k-panel2);
 }
 
+/* ── 지도 범례(보드 03·04 「범례」 프레임 + 보드 07 채움 세 칸) ─────
+ * 표식은 지도가 **실제로 그리는 것과 같은 규칙**이다 — 선 셋은 live-map.js의
+ * CONFIDENCE(실선·점선·주황 점선)와 숨은 연관(핑크), 원 셋은 nodeFill()의
+ * 채움·주황 테두리·빈 채움이다. 한쪽만 고치면 범례가 화면과 다른 말을 한다.
+ * 두 줄인 이유: 보드 07이 채움 세 칸을 별도 묶음으로 그렸고, 아홉을 한 줄에
+ * 세우면 셸이 좀아질 때 글자가 끊긴다. */
+#graphLegend { flex-shrink: 0; padding: 0 18px 14px; }
+.graph-legend { display: flex; flex-direction: column; gap: 6px; }
+.graph-legend-row { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 16px; }
+.graph-legend-item { display: flex; align-items: center; gap: 6px; }
+.graph-legend-label {
+  font-family: var(--font-body); font-size: var(--text-xs); color: var(--color-k-hint);
+  white-space: nowrap;
+}
+.graph-legend-caption {
+  font-family: var(--font-body); font-size: var(--text-xs); color: var(--color-k-faint);
+  white-space: nowrap;
+}
+.graph-legend-clusters { display: flex; align-items: center; gap: 2px; }
+.graph-legend-cluster-chip { width: 9px; height: 9px; border-radius: 2px; }
+/* 원 크기 = 연결 수 — 작은 원과 큰 원 둘(Paper 3VC3-1의 6px·13px 그대로). */
+.graph-legend-sizes { display: inline-flex; align-items: center; gap: 3px; }
+.graph-legend-sizes::before, .graph-legend-sizes::after {
+  content: ''; border-radius: 50%; background: var(--color-k-hint);
+}
+.graph-legend-sizes::before { width: 6px; height: 6px; }
+.graph-legend-sizes::after { width: 13px; height: 13px; }
+.graph-legend-line { width: 18px; height: 0; border-top-width: 1.4px; border-top-style: solid; }
+.graph-legend-line.is-fact { border-top-color: rgba(16, 19, 26, 0.38); }
+.graph-legend-line.is-inferred { border-top-color: rgba(16, 19, 26, 0.24); border-top-style: dashed; }
+.graph-legend-line.is-ambiguous { border-top-color: var(--color-warn); border-top-style: dashed; }
+.graph-legend-line.is-hidden {
+  border-top-color: var(--color-brand); border-top-style: dashed; border-top-width: 2px;
+}
+/* 채움 세 칸 — 표식 색은 군집색이 아니라 중립이다. 여기서 팔레트 한 칸을 쓰면
+ * 「이 색이 그 확정성」으로 읽혀 바로 위 「색 = 군집」과 부딛힌다. */
+.graph-legend-fill {
+  width: 12px; height: 12px; border-radius: 50%; box-sizing: border-box;
+  border: 2px solid var(--color-k-hint); background: var(--color-k-hint);
+}
+.graph-legend-fill.is-uncertain { border-color: var(--color-warn); }
+.graph-legend-fill.is-unknown { background: var(--color-k-panel); }
+
 /* ── 수집·노출 서브뷰(보드 05) ──────────────────────────────────────────────
  * 요약 표·군집 지도와 같은 3열 셸 안 중앙 카드다. 세 서브뷰가 같은 헤더 골격을
  * 쓰도록 #graphSettingsHeader는 #graphSummaryHeader와 같은 규칙을 따른다. */

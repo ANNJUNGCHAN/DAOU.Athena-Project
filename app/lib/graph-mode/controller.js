@@ -377,6 +377,7 @@ function createGraphModeController(deps) {
     // 그 함수는 여기 안에 있다. 밖에서 만들어 넘기면 그 배선을 호출자가 흉내 내야 하고
     // 두 뷰의 선택 동작이 갈라진다.
     createLiveMap,            // ({container, onSelect}) => liveMap (선택)
+    legend,                   // map-legend.js 모듈 (선택) — 범례·확정성 인코딩
   } = deps;
 
   let state = store.createInitialState();
@@ -519,6 +520,7 @@ function createGraphModeController(deps) {
     note.className = 'graph-mode-unavailable';
     note.textContent = message || BRAIN_UNAVAILABLE_COPY;
     elements.graphBody.appendChild(note);
+    renderMapLegend(false);
     lastDrawnRevision = null; // available해지면 실제 그림으로 다시 그리게 한다.
   }
 
@@ -871,6 +873,38 @@ function createGraphModeController(deps) {
     if (elements.mapGuide) {
       elements.mapGuide.hidden = state.stage !== store.STAGE_CLUSTERS;
     }
+  }
+
+  // 지도가 지금 쓰는 확정성 티어. 성향 신호 전체(표의 상위 5가 아니라)를 읽는다 —
+  // 표가 받아 둔 만큼만 주면 나머지 노드가 전부 '모름'으로 떨어진다.
+  function certaintyById() {
+    if (!legend) return null;
+    const entries = typeof getProfileSummaryEntries === 'function'
+      ? (getProfileSummaryEntries() || []) : [];
+    return legend.certaintyByEntity(entries);
+  }
+
+  // 지도 범례(보드 03·04의 여섯 줄 + 보드 07의 채움 세 칸). hidden은 이 함수
+  // 하나가 소유한다 — 지도가 안 그려진 자리(필터가 다 걷어냈거나 렌더러가 없거나)
+  // 에 범례만 남으면 없는 그림을 설명하게 된다.
+  function renderMapLegend(drawn) {
+    if (!elements.mapLegend) return;
+    if (!drawn || !legend) {
+      elements.mapLegend.hidden = true;
+      while (elements.mapLegend.firstChild) {
+        elements.mapLegend.removeChild(elements.mapLegend.firstChild);
+      }
+      return;
+    }
+    const clusters = (lastPlaced && Array.isArray(lastPlaced.clusters)) ? lastPlaced.clusters : [];
+    legend.renderMapLegend(elements.mapLegend, {
+      clusters: clusters.map((c) => c.cluster),
+      // 확정 이름이 아닌 군집이 하나라도 있으면 캡션을 **한 번만** 붙인다
+      // (보드 07 2QE0-2). 지금 백엔드에는 확정 이름 필드가 없어 늘 붙는다 —
+      // 그것이 실제 상태다.
+      estimatedNames: clusters.some((c) => c.cluster !== -1 && !c.name),
+    });
+    elements.mapLegend.hidden = false;
   }
 
   function elp(name, className) {
@@ -1360,6 +1394,7 @@ function createGraphModeController(deps) {
       // 정직성 상태). 렌더러보다 **먼저** 본다: 그릴 게 없는 것과 못 그리는 것은
       // 다르고, 지도에 빈 캔버스만 남기면 전자가 후자처럼 보인다.
       renderFilteredEmpty();
+      renderMapLegend(false);
     } else if (liveActive()) {
       while (elements.graphBody && elements.graphBody.firstChild) {
         elements.graphBody.removeChild(elements.graphBody.firstChild);
@@ -1367,7 +1402,11 @@ function createGraphModeController(deps) {
       // 핑크 점선은 군집을 넘는 연결 전부가 아니라 요약의 “숨은 연관” 카드와
       // **같은 상위 3쌍**에만 붙는다(보드 2QCN-2 › 2QF8-2) — 그 셋을 고르는
       // topSurprising은 패널·관계 목록이 이미 쓰는 것과 같은 함수다.
-      liveMap.render(payload, { hiddenPairs: highlightedHiddenPairs() });
+      liveMap.render(payload, {
+        hiddenPairs: highlightedHiddenPairs(),
+        certaintyById: certaintyById(),
+      });
+      renderMapLegend(true);
     } else {
       // vis-network를 못 불러왔다. 빈 화면 대신 정직하게 알린다 — 없는 것(그릴
       // 그래프가 없다)과 못 읽은 것(렌더러가 없다)은 다르다(§0 정책).

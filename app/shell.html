@@ -264,6 +264,11 @@
           </div>
         </div>
         <div id="graphBody"></div>
+        <!-- 지도 범례(보드 03·04 「범례」 프레임 + 보드 07 채움 세 칸) —
+             #graphBody의 형제다: 본문은 지도를 다시 그릴 때마다 통째로 비워지므로
+             안에 두면 범례가 함께 지워진다. 내용·hidden은 controller.js
+             renderMapLegend() 하나가 소유한다. -->
+        <div id="graphLegend" hidden></div>
       </div>
       <!-- 그래프 모드 세 번째 서브뷰(보드 05 수집·노출) — #graphSummaryTable·
            #graphCanvas와 형제이고 셋 중 하나만 보인다(state.surface).
@@ -566,6 +571,7 @@
      방식(lib/chart-card.js의 ../node_modules/... 해석)을 그대로 따른다. -->
 <script src="node_modules/vis-network/standalone/umd/vis-network.min.js"></script>
 <script src="lib/graph-mode/live-map.js"></script>
+<script src="lib/graph-mode/map-legend.js"></script>
 <script src="lib/graph-mode/controller.js"></script>
 <script src="lib/settings-cards.js"></script>
 <script src="lib/plugin-catalog.js"></script>
