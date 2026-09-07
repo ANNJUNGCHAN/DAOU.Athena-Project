@@ -52,6 +52,30 @@ function queryVerdict(query, { result, painted, rest, usedModel }) {
   return !!(ok && painted && (!query.expectRest || (rest && !usedModel)));
 }
 
+function cssContentText(value) {
+  if (value == null) return '';
+  const text = String(value).trim();
+  if (!text || text === 'none') return '';
+  return text.replace(/^["']|["']$/g, '');
+}
+
+function chromeMatches(view, surface) {
+  const expected = PAPER_CHROME[view];
+  if (!expected) return { ok: false, error: `unknown view ${view}` };
+  let ok;
+  if (expected.headerHidden) {
+    ok = surface.chatHeadHidden === true;
+  } else {
+    ok = surface.chatHeadHidden === false
+      && surface.chatHeadTitle === expected.title
+      && surface.chatHeadSub === expected.sub;
+  }
+  if (ok && expected.emptyHistory != null) {
+    ok = cssContentText(surface.emptyHistory) === expected.emptyHistory;
+  }
+  return { ok, expected, surface };
+}
+
 const SAFE_CLICK_IDS = Object.freeze([
   'modeNavSummary',
   'modeNavGraph',
@@ -110,4 +134,6 @@ module.exports = {
   PAPER_SUITE,
   querySucceeded,
   queryVerdict,
+  cssContentText,
+  chromeMatches,
 };

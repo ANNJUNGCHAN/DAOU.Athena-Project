@@ -8,11 +8,11 @@ const path = require('path');
 const {
   MODES,
   SETTINGS_NAV,
-  PAPER_CHROME,
   LOCKED_CLICKS,
   LIVE_QUERIES,
   SAFE_CLICK_IDS,
   queryVerdict,
+  chromeMatches,
 } = require('./lib/live-full-catalog');
 
 const PROFILE = process.env.ATHENA_USERDATA_DIR || path.join(__dirname, '.probe-live-full-profile');
@@ -117,21 +117,6 @@ const BUTTON_PROBE = `(() => {
     };
   });
 })()`;
-
-function chromeMatches(view, surface) {
-  const expected = PAPER_CHROME[view];
-  if (!expected) return { ok: false, error: `unknown view ${view}` };
-  if (expected.headerHidden) {
-    return { ok: surface.chatHeadHidden === true, expected, surface };
-  }
-  return {
-    ok: surface.chatHeadHidden === false
-      && surface.chatHeadTitle === expected.title
-      && surface.chatHeadSub === expected.sub,
-    expected,
-    surface,
-  };
-}
 
 function exclusiveCanvas(view, surface) {
   const visible = MODES.filter((mode) => surface[mode.view === 'summary' ? 'mosaic' : mode.view.replace('summary', 'mosaic')]);

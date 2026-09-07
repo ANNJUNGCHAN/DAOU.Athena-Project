@@ -73,6 +73,10 @@ function fakeNode(tag) {
     getAttribute(k) {
       return Object.prototype.hasOwnProperty.call(this.attrs, k) ? this.attrs[k] : null;
     },
+    removeAttribute(k) {
+      delete this.attrs[k];
+      if (k === 'class') this.className = '';
+    },
     addEventListener(type, handler) {
       (this._listeners[type] = this._listeners[type] || []).push(handler);
     },
@@ -188,6 +192,20 @@ async function fillForm(container) {
   to.value = '20260828';
   await to.dispatchEvent({ type: 'input' });
 }
+
+test('기법을 고르기 전에는 빈 채팅 축 data-technique이 없고 고른 뒤에 선다', async () => {
+  const head = fakeNode('div');
+  global.document.getElementById = (id) => (id === 'chatModeHead' ? head : null);
+  const { container, canvas } = makeCanvas();
+  canvas.mount();
+  await flush();
+  assert.equal(head.getAttribute('data-technique'), null);
+  const item = findByClass(container, 'backtest-preset-item')[0];
+  assert.ok(item, '목록에 기법이 있어야 한다');
+  await click(item);
+  await flush();
+  assert.equal(head.getAttribute('data-technique'), 'sma_crossover');
+});
 
 // ── 보드 17 · 출처에서 지도로 ───────────────────────────────────────────────
 //
