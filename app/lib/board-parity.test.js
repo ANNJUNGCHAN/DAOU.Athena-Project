@@ -527,6 +527,33 @@ test('보드 표면은 Paper 루트 높이가 아니라 카드 자리를 채운�
   assert.doesNotMatch(css, /\.board-surface\[data-bs-hoisted\]\s*\{[^}]*(?<![-\w])height:\s*100%/);
 });
 
+// 병기 사본은 접힌 칸의 값을 대신 보여 준다 — 그러면 **그 칸의 활자**로 보여야
+// 한다. 사본은 원래 칸이 아니라 둘째 칸 안에 앉으므로, 활자를 함께 복제하지 않으면
+// 둘째 칸이 선언한 크기(없으면 브라우저 기본 16px)로 선다: 실측 CC-03 순위표에서
+// 접힌 「시장 · 코스닥」이 원문 11px 대신 16px으로 서서 종목명 13px보다 컸다
+// (2026-09-07 제보). 추출기가 font-size·font-family·color를 사본에 싣는 것이 계약이고,
+// 이 테스트는 생성물 전수에서 그 계약이 유지되는지 본다.
+test('병기 사본은 접힌 칸의 활자를 그대로 쓴다', () => {
+  const templateRoot = path.join(__dirname, '..', '..', 'backend', 'ref', 'card-surface-templates');
+  let copies = 0;
+  const bare = [];
+  for (const entry of fs.readdirSync(templateRoot, { withFileTypes: true })) {
+    if (!entry.isDirectory()) continue;
+    const htmlPath = path.join(templateRoot, entry.name, 'board.html');
+    if (!fs.existsSync(htmlPath)) continue;
+    const html = fs.readFileSync(htmlPath, 'utf8');
+    for (const [tag] of html.matchAll(/<span class="bs-paired"[^>]*>/g)) {
+      copies += 1;
+      // 병기 사본에는 라벨·값 두 조각을 품는 모양(paired-table)도 있다 — 그 모양은
+      // 활자를 사본 루트에 싣고 색만 값 조각이 갖는다. 어느 모양이든 크기는 사본
+      // 루트에 실려 있어야 한다.
+      if (!/font-size:/.test(tag)) bare.push(`${entry.name} ${tag.slice(0, 120)}`);
+    }
+  }
+  assert.ok(copies > 0, '병기 사본이 하나도 없다 — 추출물이 비었나');
+  assert.deepEqual(bare, [], '활자를 잃은 병기 사본이 있다');
+});
+
 test('paired-table labels form scoped label-value grids while scroll-table keeps its native grid reachable', () => {
   const css = fs.readFileSync(path.join(__dirname, '..', 'styles', 'board-surface.css'), 'utf8');
   const rules = css.replace(/\/\*[\s\S]*?\*\//g, '');
