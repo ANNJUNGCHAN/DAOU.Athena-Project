@@ -7,6 +7,7 @@ const path = require('node:path');
 const {
   correlationKey, isValidCorrelation, waitForVisiblePaint,
   decidePaintAck, timedOutPaint, upsertRestReceipt, PENDING_MOUNT_ACK_TIMEOUT_MS,
+  HIDDEN_POLL_MS,
 } = require('./rest-canvas-paint');
 
 test('correlation key requires complete dataset/item/ordinal identity', () => {
@@ -85,11 +86,46 @@ test('paint ack waits for visible nonzero rect and then two additional RAFs', as
 
 test('paint ack does not accept a hidden document', async () => {
   const element = { getBoundingClientRect: () => ({ width: 10, height: 10, x: 0, y: 0 }) };
-  await assert.rejects(() => waitForVisiblePaint(element, {
+  const error = await waitForVisiblePaint(element, {
     requestAnimationFrame: (callback) => callback(),
     visibilityState: () => 'hidden',
     maxFrames: 2,
-  }), /실제 표시되지 않았다/);
+    maxHiddenMs: 300,
+    setTimer: (callback) => { callback(); return 0; },
+    clearTimer: () => {},
+  }).then(() => null, (thrown) => thrown);
+  // 숨은 문서는 여전히 "그려졌다"로 받지 않는다. 다만 사유가 렌더 실패가 아니라
+  // 「확인할 수 없었다」로 구분돼야 한다 — 사람이 실패 로그만 보고 갈라낼 수 있게.
+  assert.match(error.message, /창이 숨어 있어 표시를 확인하지 못했다/);
+  assert.equal(error.reason, 'hidden');
+});
+
+// 창이 가려진 사이에 카드가 도착하는 경우 — 실측으로 발견한 자리다(다른 창이 셸을
+// 덮은 사이 wall-clock timeout → verified_visible false → 재시도 영수증).
+// 숨은 시간은 rAF 예산에서 빠지고, 창이 돌아오면 확인이 이어져야 한다.
+test('paint ack pauses its budget while hidden and resumes when visible again', async () => {
+  let hiddenTicks = 0;
+  let frames = 0;
+  const element = { getBoundingClientRect: () => ({ width: 320, height: 180, x: 0, y: 0 }) };
+  const result = await waitForVisiblePaint(element, {
+    // 숨은 창의 rAF는 멈춘다 — 보이게 된 뒤에만 프레임이 온다.
+    requestAnimationFrame: (callback) => { frames += 1; callback(frames); },
+    visibilityState: () => (hiddenTicks >= 5 ? 'visible' : 'hidden'),
+    now: () => frames * 10,
+    // rAF 예산은 숨은 시간(5틱 = 500ms)보다 짧다. 예산이 흐르면 실패한다.
+    timeoutMs: 50,
+    // 숨김 폴링만 즉시 깨운다. 프레임 예산 타이머(remainingMs)는 그대로 둔다 —
+    // 그것까지 즉시 발화시키면 rAF보다 먼저 터져 예산 초과로 읽힌다.
+    setTimer: (callback, delayMs) => {
+      if (delayMs === HIDDEN_POLL_MS) { hiddenTicks += 1; callback(); }
+      return 0;
+    },
+    clearTimer: () => {},
+  });
+  assert.equal(result.verifiedVisible, true);
+  assert.equal(result.hiddenMs, 500);
+  // 계측은 숨은 시간을 뺀 값이다 — 숨은 시간은 렌더 지연이 아니다.
+  assert.ok(result.waitMs < 500, `waitMs가 숨은 시간을 포함한다: ${result.waitMs}`);
 });
 
 test('paint ack rejects on wall-clock timeout when RAF never fires', async () => {
