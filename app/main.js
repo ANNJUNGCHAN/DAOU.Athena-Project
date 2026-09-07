@@ -57,7 +57,10 @@ const { GATEWAY_ALLOWED_TOOLS, DISALLOWED_EXECUTION_TOOLS } = require('./lib/mai
 const providerContractDecision = require('./test-fixtures/provider-contract/decision.json');
 const restDatasetRunner = require('./lib/main/rest-dataset-runner');
 const { RestRetryRegistry } = require('./lib/main/rest-retry-registry');
-const { createStockEntityIndexReadiness } = require('./lib/main/stock-entity-index-readiness');
+const {
+  createStockEntityIndexReadiness,
+  reconcileStockIndexStartupTask,
+} = require('./lib/main/stock-entity-index-readiness');
 const { createChartFollowupTracker } = require('./lib/main/chart-followup');
 const simpleChartFastPath = require('./lib/main/simple-chart-fast-path');
 const selectorFastPath = require('./lib/main/selector-fast-path');
@@ -3569,6 +3572,11 @@ const stockEntityIndexReadiness = createStockEntityIndexReadiness({
     lastStockIndexErrorLogAt = now;
     mdlog(`Kiwoom 종목명 인덱스 갱신 보류(재시도 예정): ${String((error && error.message) || error)}`);
   },
+  onReady: ({ size }) => {
+    if (reconcileStockIndexStartupTask(startupReadiness, size)) {
+      mdlog(`Kiwoom 종목명 인덱스 회복 — 부팅 준비 상태 갱신 · 종목 ${size}개`);
+    }
+  },
 });
 const chartFollowupTracker = createChartFollowupTracker();
 const DIRECT_FEEDBACK_WATCHDOG_MS = 2200;
@@ -5641,11 +5649,13 @@ async function notifyStartupFailuresAfterExpansion(snapshot) {
 }
 
 function broadcastBootReadiness(snapshot) {
-  if (bootWin && !bootWin.isDestroyed()) {
-    bootWin.webContents.send('athena:boot-readiness', snapshot);
-  }
-  if (shellWin && !shellWin.isDestroyed()) {
-    shellWin.webContents.send('athena:boot-readiness', snapshot);
+  for (const [target, label] of [[bootWin, 'boot'], [shellWin, 'shell']]) {
+    if (!target || target.isDestroyed() || target.webContents.isDestroyed()) continue;
+    try {
+      target.webContents.send('athena:boot-readiness', snapshot);
+    } catch (error) {
+      mdlog(`부팅 준비 상태 ${label} 창 전달 실패: ${String((error && error.message) || error)}`);
+    }
   }
 }
 
