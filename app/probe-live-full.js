@@ -8,11 +8,11 @@ const path = require('path');
 const {
   MODES,
   SETTINGS_NAV,
-  LOCKED_CLICKS,
   LIVE_QUERIES,
-  SAFE_CLICK_IDS,
   queryVerdict,
   chromeMatches,
+  isAllowlistedClick,
+  isLockedClick,
 } = require('./lib/live-full-catalog');
 
 const PROFILE = process.env.ATHENA_USERDATA_DIR || path.join(__dirname, '.probe-live-full-profile');
@@ -131,10 +131,7 @@ function exclusiveCanvas(view, surface) {
   return { ok: map[view] === true && surface.chat === true, visible, chat: surface.chat };
 }
 
-function isLockedClick(button) {
-  const hay = `${button.id} ${button.text}`;
-  return LOCKED_CLICKS.find((lock) => lock.match.test(hay));
-}
+
 
 async function main() {
   if (!fs.existsSync(CAPTURES)) fs.mkdirSync(CAPTURES, { recursive: true });
@@ -293,18 +290,18 @@ async function main() {
   report.buttons = buttons;
   const visibleButtons = buttons.filter((button) => button.visible);
   for (const button of visibleButtons) {
+    if (!isAllowlistedClick(button)) {
+      report.clicks.push({ id: button.id, text: button.text, skipped: true, reason: 'not in SAFE_CLICK_IDS' });
+      continue;
+    }
     const locked = isLockedClick(button);
     if (locked) {
       report.clicks.push({ id: button.id, text: button.text, skipped: true, reason: locked.reason });
       continue;
     }
-    if (button.id && SAFE_CLICK_IDS.includes(button.id)) {
-      await evalJs(shellWin, `(() => { const n = document.getElementById(${JSON.stringify(button.id)}); if (n && !n.disabled) n.click(); })()`, 2000, null);
-      await wait(150);
-      report.clicks.push({ id: button.id, text: button.text, skipped: false });
-    } else {
-      report.clicks.push({ id: button.id, text: button.text, skipped: true, reason: 'not in SAFE_CLICK_IDS' });
-    }
+    await evalJs(shellWin, `(() => { const n = document.getElementById(${JSON.stringify(button.id)}); if (n && !n.disabled) n.click(); })()`, 2000, null);
+    await wait(150);
+    report.clicks.push({ id: button.id, text: button.text, skipped: false });
   }
 
   await evalJs(shellWin, `document.getElementById('modeNavSummary').click()`, 2000, null);
