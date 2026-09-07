@@ -17,6 +17,7 @@ const path = require('node:path');
 const shellHtml = fs.readFileSync(path.join(__dirname, '..', 'shell.html'), 'utf8');
 const chatCss = fs.readFileSync(path.join(__dirname, '..', 'chat.css'), 'utf8');
 const orbCss = fs.readFileSync(path.join(__dirname, '..', 'orb.css'), 'utf8');
+const controllerJs = fs.readFileSync(path.join(__dirname, 'graph-mode', 'controller.js'), 'utf8');
 
 const RETIRED_MODE_FACES = ['chat', 'graph', 'agent', 'plugin', 'backtest'];
 
@@ -51,6 +52,14 @@ test('얼굴은 모드와 무관하게 항상 보인다', () => {
     !chatCss.includes('.dot[data-mode='),
     'data-mode로 얼굴을 갈아끼우는 규칙은 남아 있지 않다',
   );
+});
+
+test('모드 전환 코드는 얼굴 5종 폴백을 다시 약속하지 않는다', () => {
+  assert.match(controllerJs, /키우미 얼굴은 하나다/);
+  assert.doesNotMatch(controllerJs, /기본 얼굴로 폴백/);
+  assert.doesNotMatch(controllerJs, /온톨로지 별자리/);
+  assert.doesNotMatch(controllerJs, /대화=눈/);
+  assert.match(controllerJs, /if \(elements\.kiumi\) elements\.kiumi\.dataset\.mode = modeLabel/);
 });
 
 test('키우미는 산다 — 눈 깜빡임이 배선돼 있다', () => {
