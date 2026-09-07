@@ -20,6 +20,7 @@ const CHIP_ODD = '이상해요';
 const CHIP_ASK = '물어볼게요';
 const CODE_COLLAPSED = '코드 · 참고 · 펼치기';
 const CODE_EXPANDED = '코드 · 참고 · 접기';
+const FN_REF = ' · 참고';
 const COUNTED_UNTIL = '어제까지로 세었음 · 오늘은 진행 중';
 const KIND_LABEL = '코드 감시';
 
@@ -83,10 +84,12 @@ function nodeCards(nodes) {
     const node = n || {};
     const fn = String(node.fn || '').trim();
     const inputs = Array.isArray(node.inputs) ? node.inputs : [];
+    const titleEn = String(node.title_en || '').trim() || fn;
     return {
       fn,
       titleKo: String(node.title_ko || '').trim() || String(node.title_en || '').trim() || fn,
-      titleEn: String(node.title_en || '').trim() || fn,
+      titleEn,
+      titleEnRef: titleEn ? `${titleEn}${FN_REF}` : '',
       inputs: inputs.map((row) => ({
         name: String((row && row.name) || '').trim(),
         value: formatValue(row && row.value),

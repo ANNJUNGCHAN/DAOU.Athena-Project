@@ -2247,7 +2247,7 @@ test('A-2 상세: 노드 카드 수가 함수 수와 같고(4칸) 각 칸에 제
   }
   const first = cards[0];
   assert.equal(findByClass(first, 'agent-node-title')[0].textContent, '일봉 불러오기');
-  assert.equal(findByClass(first, 'agent-node-fn')[0].textContent, 'load_bars');
+  assert.equal(findByClass(first, 'agent-node-fn')[0].textContent, 'load_bars · 참고');
   assert.deepEqual(
     findByClass(first, 'agent-node-io-label').map((n) => n.textContent), ['들어감', '나옴'],
   );
