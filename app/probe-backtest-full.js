@@ -1822,7 +1822,7 @@ async function main() {
       data: { second: secondDiag, applied: applyRunOutcome, status: fixedCtx.lastResult && fixedCtx.lastResult.status },
     }));
 
-    // --- 에러 화면과 [설계로 돌아가기] ---
+    // --- 에러 화면과 [기법으로 돌아가기] ---
     // 전제는 이 검사가 **스스로** 세운다. 앞 검사가 남긴 화면을 물려받으면(F09가 결과 화면에
     // 서 있으면) 여기의 setDates는 없는 입력칸을 만지고 실행 클릭은 없는 버튼으로 흘러,
     // 90초 뒤 에러 패널 대신 null을 본다(2026-09-02 실측).
@@ -1865,14 +1865,14 @@ async function main() {
     // (기능이 꺼진 「비활성」은 백엔드가 503을 줄 때고, 그 갈래는 단위가 고정한다).
     await step('F10', '캐시가 0봉인 구간의 부분 실행은 정직한 에러 화면이 된다', () => ({
       ok: !!errView && errView.title === '백테스트' && String(errView.sub).length > 12
-            && errView.badge === '실패' && errView.backLabel === '설계로 돌아가기'
+            && errView.badge === '실패' && errView.backLabel === '기법으로 돌아가기'
             && errView.back === 1 && errView.tabs === 0,
       data: errView,
     }));
 
-    // F10이 세운 에러 화면에서만 잴 수 있다 — 다른 화면에서 누른 [설계로 돌아가기]는
+    // F10이 세운 에러 화면에서만 잴 수 있다 — 다른 화면에서 누른 [기법으로 돌아가기]는
     // 이 검사가 재려는 것이 아니다. 앞 검사의 화면을 물려받아 판정하지 않는다.
-    await step('F11', '[설계로 돌아가기]가 막다른 길을 없앤다', async () => {
+    await step('F11', '[기법으로 돌아가기]가 막다른 길을 없앤다', async () => {
       if (!errView) {
         return { skip: 'F10이 에러 화면을 세우지 못했다 — 없앨 막다른 길이 없다' };
       }
@@ -2207,7 +2207,7 @@ async function main() {
       list.forEach((s) => { out[String(s.getAttribute('aria-label')).replace(' 값', '')] = Number(s.value); });
       return out;
     })()`);
-    await step('I08', '[이 값을 설계에 넣기]가 최고 조합을 슬라이더에 옮긴다', () => ({
+    await step('I08', '[이 값을 기법에 넣기]가 최고 조합을 슬라이더에 옮긴다', () => ({
       ok: !!bestParams && appliedCtx.view === 'design' && appliedCtx.designTab === 'form'
             && Object.keys(bestParams).every((k) => sliderValues[k] === Number(bestParams[k])),
       data: { best: bestParams, sliders: sliderValues, view: appliedCtx.view },

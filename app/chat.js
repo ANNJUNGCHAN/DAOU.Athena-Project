@@ -3378,6 +3378,7 @@ async function refreshRoutineDrafts() {
 // 맡는다. 승인은 초안 카드와 같은 athena:routine-confirm 경로 하나뿐이다 —
 // 사람 클릭 전용(§7-6).
 const watchCheckCardLib = window.AthenaLib.WatchCheckCard;
+const watchFixCycleLib = window.AthenaLib.WatchFixCycle;
 
 // 목록 뷰에 watch 블록이 없을 수 있다 — 없으면 상세를 1회 더 불러 채운다.
 async function watchBlockOf(r) {
@@ -3396,7 +3397,8 @@ function watchPollMinutes(r) {
   return Number.isFinite(sec) && sec >= 60 ? Math.round(sec / 60) : 1;
 }
 
-// 검사 1회 — 응답 본문을 그대로 돌려준다(문구는 checkCardModel이 만든다).
+// 검사 1회 — 응답 본문을 돌려준다(문구는 checkCardModel이 만든다).
+// 성공인데 날짜가 없고 같은 검사의 last_check가 있으면 counted_through만 얕은 복사로 얹는다.
 // 통로 자체가 실패하면 카드가 실패로 그려지도록 ok:false 모양으로 감싼다.
 async function runWatchCheck(r) {
   const watch = await watchBlockOf(r);
@@ -3413,7 +3415,22 @@ async function runWatchCheck(r) {
   let res;
   try { res = await window.athena.invoke('athena:routine-watch-check', { body }); }
   catch { return { ok: false, reason: '검사 통로가 막혀 있음' }; }
-  if (res && res.ok && res.data) return res.data;
+  if (res && res.ok && res.data) {
+    const check = res.data;
+    // 검사 응답에 빠진 날짜는 같은 검사의 상세 스냅샷에서만 보충한다.
+    // checked_at은 UTC지만 counted_through는 실제로 센 KST 날짜다.
+    if (check.ok === true && !check.counted_through && check.checked_at && r.id) {
+      try {
+        const detail = await window.athena.invoke('athena:routine-detail', { id: r.id });
+        const saved = detail && detail.ok && detail.data && detail.data.last_check;
+        if (saved && saved.ok === true && saved.checked_at === check.checked_at
+            && typeof saved.counted_through === 'string' && saved.counted_through) {
+          return Object.assign({}, check, { counted_through: saved.counted_through });
+        }
+      } catch { /* 원래 검사 결과는 보존하고 날짜를 추정하지 않는다 */ }
+    }
+    return check;
+  }
   return { ok: false, reason: (res && res.error) || '검사 통로가 막혀 있음' };
 }
 
@@ -3516,6 +3533,37 @@ function renderWatchCheckCard(r, check) {
     card.appendChild(why);
   }
 
+  if (model.fireDots.length) {
+    const strip = document.createElement('div');
+    strip.className = 'agent-fix-dots';
+    for (const dot of model.fireDots) {
+      const cell = document.createElement('span');
+      cell.className = `agent-fix-dot is-${dot.state}`;
+      cell.setAttribute('data-day', dot.date);
+      cell.setAttribute('title', `${dot.date} · ${dot.state === 'fired' ? '울림' : '울림 없음'}`);
+      strip.appendChild(cell);
+    }
+    card.appendChild(strip);
+  }
+  if (model.fireRows.length) {
+    const fires = document.createElement('div');
+    fires.className = 'agent-check-fires';
+    for (const text of model.fireRows) {
+      const fire = document.createElement('span');
+      fire.className = 'agent-check-fire';
+      fire.textContent = text;
+      fires.appendChild(fire);
+    }
+    card.appendChild(fires);
+  }
+
+  if (model.dateWindowNote) {
+    const note = document.createElement('div');
+    note.className = 'agent-source';
+    note.textContent = model.dateWindowNote;
+    card.appendChild(note);
+  }
+
   // A-10 — 오늘 봉은 아직 안 끝났다는 고지. 검사 카드에서 빠질 수 없다.
   const counted = document.createElement('div');
   counted.className = 'agent-source';
@@ -3555,9 +3603,13 @@ function renderWatchCheckCard(r, check) {
       });
     } else {
       btn.addEventListener('click', () => {
-        $input.value = draftFixSeedText(r);
-        autoGrowInput();
-        $input.focus();
+        const repairContext = model.failed
+          ? Object.assign({}, r, {
+            activation_blocker: r.activation_blocker || model.reason,
+            repairReason: model.reason,
+          })
+          : r;
+        void beginWatchRepair(repairContext);
       });
     }
     buttons.push(btn);
@@ -3595,6 +3647,30 @@ function draftDescriptionLine(r) {
 // "고칠 게 있어" 클릭 → 시트 없이 채팅으로(동선 규칙②: 편집도 채팅으로).
 function draftFixSeedText(r) {
   return `"${r.note}" 초안을 고쳐줘 — `;
+}
+
+// 코드 감시 수정은 에이전트 접두가 적용되는 화면에서 이어간다. 누락 파일 복구는
+// 캔버스가 보낸 구조화 컨텍스트를 사람이 검토할 문장으로 바꾸고, 일반 수정은 기존의
+// 열린 문장을 그대로 둔다. 둘 다 입력만 채우며 자동 제출·승인은 하지 않는다.
+async function beginWatchRepair(context) {
+  openAgentCanvas();
+  let prepared = context || {};
+  // 채팅 카드 목록에는 감시 블록·조건이 생략될 수 있다. 차단된 코드 감시는 상세를
+  // 한 번 읽어 현재 설정을 보존하고, 실패해도 카드의 id·차단 사유는 잃지 않는다.
+  if (prepared.repair !== true && prepared.activation_blocker && prepared.id) {
+    let detail = null;
+    try {
+      const res = await window.athena.invoke('athena:routine-detail', { id: prepared.id });
+      if (res && res.ok && res.data) detail = res.data;
+    } catch { /* 아래 merge가 목록 카드의 확인된 값으로 복구 문장을 만든다 */ }
+    prepared = watchFixCycleLib.mergeRepairContext(prepared, detail);
+  }
+  const text = prepared.repair === true
+    ? watchFixCycleLib.repairSeedText(prepared)
+    : draftFixSeedText(prepared);
+  if (window.AthenaShell && typeof window.AthenaShell.seedChatInput === 'function') {
+    window.AthenaShell.seedChatInput(text);
+  }
 }
 
 function renderApprovalCard(r) {
@@ -3695,6 +3771,10 @@ function renderApprovalCard(r) {
 
   const fix = _btn('고칠 게 있어', 'routine-btn');
   fix.addEventListener('click', () => {
+    if (isCodeWatch) {
+      void beginWatchRepair(r);
+      return;
+    }
     $input.value = draftFixSeedText(r);
     autoGrowInput();
     $input.focus();
@@ -4898,7 +4978,20 @@ document.addEventListener('athena:backtest-receipt', (event) => {
 document.addEventListener('athena:chat-submit', (event) => {
   const text = String((event && event.detail && event.detail.text) || '').trim();
   if (!text) return;
+  // Enter·추천 칩과 같은 게이트 — 없으면 [새 기법 만들기]가 진행 중 턴을 대체한다.
+  if (state !== 'idle' || remoteQueryBusy) {
+    appendSystemLine('답변 중');
+    return;
+  }
   dispatchUserQuery(text);
+});
+
+// 에이전트 상세의 「다시 만들기」가 보내는 누락 파일 복구 요청. 캔버스는 루틴
+// 컨텍스트만 전달하고, 채팅이 모드 전환과 입력 문장 소유권을 유지한다.
+document.addEventListener('athena:watch-repair-request', (event) => {
+  const detail = event && event.detail;
+  if (!detail || detail.repair !== true) return;
+  void beginWatchRepair(detail);
 });
 
 // 노드를 눌러도 말은 나가지 않는다(보드 22) — 참조만 입력창에 들어가고, 무엇을 물을지는

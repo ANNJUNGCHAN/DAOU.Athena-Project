@@ -19,6 +19,7 @@ const { createIndicatorRenderer } = __dep('./chart-indicator-render', 'ChartIndi
 const { volumeProfile } = __dep('./chart-volume-profile', 'ChartVolumeProfile');
 const { createAuthoringStore, periodToken } = __dep('./chart-authoring-store', 'ChartAuthoringStore');
 const { createDrawingLayer } = __dep('./chart-drawings', 'ChartDrawings');
+const { formatKoreanUnit } = __dep('./board-format', 'BoardFormat');
 
 const __LIGHTWEIGHT_CHARTS_URL = (() => {
   if (typeof document === 'undefined' || !document.currentScript) return 'lightweight-charts';
@@ -51,6 +52,28 @@ function renderNowAndOnNextFrame(render, scheduleFrame) {
   return schedule(() => render());
 }
 
+// 차트 주기 재조회는 이 한도만 쓴다. canvas IPC 쪽에 같은 8초를 또 걸면
+// 안쪽 타이머가 항상 먼저 발화해 바깥 분기는 죽은 코드가 된다.
+const RELOAD_DEADLINE_MS = 8000;
+const RELOAD_DEADLINE_ERROR = '재조회 8초 한도를 넘겼다';
+
+function withReloadDeadline(work, options) {
+  const opts = options || {};
+  const ms = Number.isFinite(opts.ms) ? opts.ms : RELOAD_DEADLINE_MS;
+  const message = typeof opts.message === 'string' ? opts.message : RELOAD_DEADLINE_ERROR;
+  const setTimeoutImpl = typeof opts.setTimeout === 'function' ? opts.setTimeout : setTimeout;
+  const clearTimeoutImpl = typeof opts.clearTimeout === 'function' ? opts.clearTimeout : clearTimeout;
+  let timer;
+  return Promise.race([
+    work,
+    new Promise((_, reject) => {
+      timer = setTimeoutImpl(() => reject(new Error(message)), ms);
+    }),
+  ]).finally(() => {
+    clearTimeoutImpl(timer);
+  });
+}
+
 const __loadChartLibrary = createCachedChartLibraryLoader(() => import(__LIGHTWEIGHT_CHARTS_URL));
 // 실제 renderer에서는 canvas.html이 chart-card.js를 읽는 즉시 prewarm한다. Node의
 // 순수 단위 테스트는 ESM/DOM 라이브러리를 불필요하게 로드하지 않는다.
@@ -68,6 +91,11 @@ const CROSSHAIR_COLOR = 'rgba(120,128,140,0.6)';
 const AXIS_TEXT_COLOR = '#6B7480';
 // 가격축은 원 단위 정수로 — CC-101 이월 폴리시(팀 리드 지시, CC-102 인수 조건).
 const PRICE_FORMAT = { type: 'price', precision: 0, minMove: 1 };
+
+function formatVolumeKo(value) {
+  return formatKoreanUnit(value) || '';
+}
+const VOLUME_FORMAT = { type: 'custom', formatter: formatVolumeKo };
 
 // 주기별 초기 봉 폭(px/봉) — MTS 표준 캔들 밀도. AITS
 // (src/renderer/shared/vm/chart-lwc/common.ts DEFAULT_BAR_SPACING)에서 가져온 값이다.
@@ -354,7 +382,7 @@ async function createChartCard(container, opts) {
 
   volumeSeries = chart.addSeries(
     HistogramSeries,
-    { priceFormat: { type: 'volume' }, priceScaleId: '' },
+    { priceFormat: VOLUME_FORMAT, priceScaleId: '' },
     1 // 거래량은 가격 pane과 분리된 하위 pane(paneIndex 1)
   );
   chart.panes()[1] && chart.panes()[1].setHeight(80);
@@ -757,7 +785,9 @@ async function createChartCard(container, opts) {
       : ['서버 보정(upd_stkpc_tp) 미연결 — 목업 동일 데이터'];
     if (intradayUnavailable) parts.push(`${intradayUnavailable} — 일봉을 그대로 보여준다`);
     if (authoringStore.enabled) parts.push('차트 설정이 이 기기에 저장되었습니다');
-    if (reloadFailure) parts.push(`재조회 실패 — ${reloadFailure}`);
+    if (reloadFailure) {
+      parts.push(reloadFailure === '재조회 8초 한도를 넘겼다' ? '재조회 시간 초과' : `재조회 실패 — ${reloadFailure}`);
+    }
     adjustedNote.textContent = parts.join(' · ');
   }
 
@@ -772,14 +802,8 @@ async function createChartCard(container, opts) {
     }
     reloadPending = true;
     reloadFailure = null;
-    let reloadTimer;
     try {
-      const result = await Promise.race([
-        o.onReloadRequest(request),
-        new Promise((_, reject) => {
-          reloadTimer = setTimeout(() => reject(new Error('재조회 8초 한도를 넘겼다')), 8000);
-        }),
-      ]);
+      const result = await withReloadDeadline(o.onReloadRequest(request));
       if (!result || result.ok !== true) throw new Error((result && result.error) || 'reload가 완료되지 않았다');
       currentAdjusted = request.adjusted !== false;
       toolbar.setAdjusted(currentAdjusted);
@@ -791,7 +815,6 @@ async function createChartCard(container, opts) {
       updateNote();
       return false;
     } finally {
-      clearTimeout(reloadTimer);
       reloadPending = false;
     }
   }
@@ -905,10 +928,14 @@ const __exports = {
   createChartCard,
   createCachedChartLibraryLoader,
   renderNowAndOnNextFrame,
+  withReloadDeadline,
+  RELOAD_DEADLINE_MS,
+  RELOAD_DEADLINE_ERROR,
   resolveInitialPeriod,
   toCandleSeriesData,
   toVolumeSeriesData,
   withAlpha,
+  formatVolumeKo,
   UP_COLOR,
   DOWN_COLOR,
 };

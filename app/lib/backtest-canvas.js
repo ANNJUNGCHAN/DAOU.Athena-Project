@@ -2866,7 +2866,9 @@ function createBacktestCanvas(options) {
     return {
       view: state.view,
       tab: state.tab,
-      designTab: state.designTab,
+      // 목록 화면에는 지도/폼 하위 탭이 없다 — form이라고 실으면 모델이 없는 칸을 말한다.
+      screen: listFirst() && state.tab === 'design' ? 'technique-list' : null,
+      designTab: listFirst() && state.tab === 'design' ? null : state.designTab,
       runPath,
       spec: spec ? JSON.parse(JSON.stringify(spec)) : null,
       // 설정은 검증과 무관하게 바로 들어가므로 대기 초안은 없다 — 계약 키는 남긴다.
@@ -3062,8 +3064,24 @@ function createBacktestCanvas(options) {
 
   // ---------- 렌더 ----------
 
+  function syncChatTechniqueAttr() {
+    const doc = typeof document !== 'undefined' ? document : null;
+    if (!doc || typeof doc.getElementById !== 'function') return;
+    const head = doc.getElementById('chatModeHead');
+    if (!head) return;
+    if (spec) {
+      if (typeof head.setAttribute === 'function') {
+        head.setAttribute('data-technique', String(spec.presetId || spec.name || 'selected'));
+      }
+      return;
+    }
+    if (typeof head.removeAttribute === 'function') head.removeAttribute('data-technique');
+    else if (head.dataset) delete head.dataset.technique;
+  }
+
   function render() {
     if (!mounted) return;
+    syncChatTechniqueAttr();
     // 대상이 바뀐 첫 그리기에서 한 번만 캐시 상태를 묻는다 — 같은 열쇠로 두 번 묻지 않는다.
     const wantedCoverage = coverageKey();
     if (wantedCoverage && wantedCoverage !== coverageAsked) {
@@ -3092,14 +3110,14 @@ function createBacktestCanvas(options) {
       if (badge === ERROR_BADGE_DISABLED) {
         panel.appendChild(button('backtest-error-back', '다시 시도', () => { void loadPresets(); }));
         if (spec) {
-          panel.appendChild(button('backtest-error-back', '설계로 돌아가기', () => {
+          panel.appendChild(button('backtest-error-back', `${MODE_TABS[0][1]}으로 돌아가기`, () => {
             setState({ view: 'design', tab: 'design', designTab: 'form', message: null });
           }));
         }
         container.appendChild(panel);
         return;
       }
-      panel.appendChild(button('backtest-error-back', '설계로 돌아가기', () => {
+      panel.appendChild(button('backtest-error-back', `${MODE_TABS[0][1]}으로 돌아가기`, () => {
         if (spec) setState({ view: 'design', tab: 'design', designTab: 'form', message: null });
         else void loadPresets();
       }));
@@ -3213,10 +3231,6 @@ function createBacktestCanvas(options) {
       title.appendChild(el('span', 'backtest-head-version', `지도 v${state.mapVersion || 0}`));
       head.appendChild(title);
       return head;
-    }
-    if (listFirst()) {
-      const n = presets.length + userStrategies.length;
-      title.appendChild(el('span', 'backtest-head-count', `기법 ${n}개`));
     }
     if (spec) {
       title.appendChild(el('span', 'backtest-head-strategy', spec.name));
@@ -6748,7 +6762,7 @@ function createBacktestCanvas(options) {
           `이웃 평균 ${formatRatioValue(res.neighbour_mean_sharpe)}`,
         ));
       }
-      best.appendChild(button('backtest-optimize-apply', '이 값을 설계에 넣기', () => {
+      best.appendChild(button('backtest-optimize-apply', `이 값을 ${MODE_TABS[0][1]}에 넣기`, () => {
         void applyBestParams();
       }));
       wrap.appendChild(best);

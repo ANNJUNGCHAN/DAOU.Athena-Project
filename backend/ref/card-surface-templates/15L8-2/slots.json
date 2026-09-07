@@ -4,12 +4,12 @@
   "name": "CC-06 / R06 · 관심종목·조건 신호",
   "paper_source": {
     "saved_at": "2026-09-02T11:33:04Z",
-    "node_id": "15L8-2",
-    "jsx_sha256": "2e5f5d11824996b4ba82803150d768bd10f9feecc7a28253bfa0bf3dde6eb356"
+    "node_id": "49Y0-0",
+    "jsx_sha256": "47a2769fd0069fd943887cf54750c96eddaa410a30474e816482e6c0ee2b8ab8"
   },
-  "html_sha256": "4f79c85f74e221c0f2d21facd4418cc1e8b1f30921683383fe32a97f53cb8d9d",
-  "width_px": 1440.0,
-  "height_px": 932.0,
+  "html_sha256": "9d27f73e39e781d9b8cb91a39ebf8d84ba985283693a5bfc29eabba10a44e86b",
+  "width_px": 1360.0,
+  "height_px": 854.0,
   "artboard_px": [
     1440,
     932

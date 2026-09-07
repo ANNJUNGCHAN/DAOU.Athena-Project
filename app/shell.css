@@ -680,7 +680,7 @@ body { margin: 0; overflow: hidden; }
 }
 .backtest-technique-list {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
 }
 .backtest-technique-list .backtest-design-empty { grid-column: 1 / -1; }
@@ -688,6 +688,7 @@ body { margin: 0; overflow: hidden; }
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  min-width: 0;
   gap: 8px;
   padding: 13px 15px;
   background: var(--color-k-panel2);
@@ -719,11 +720,11 @@ body { margin: 0; overflow: hidden; }
   padding: 16px 18px;
   border: 1px dashed var(--color-brand);
   border-radius: 12px;
-  background: #fff5fa;
+  background: rgb(238 19 123 / 5%);
   cursor: pointer;
   text-align: left;
 }
-.backtest-technique-new:hover { background: #ffedf6; }
+.backtest-technique-new:hover { background: rgb(238 19 123 / 10%); }
 .backtest-technique-new-plus {
   flex-shrink: 0;
   width: 30px;
@@ -735,7 +736,7 @@ body { margin: 0; overflow: hidden; }
   background: var(--color-brand);
   color: var(--color-k-panel);
   font-family: var(--font-strong);
-  font-size: 17px;
+  font-size: var(--text-lg);
   line-height: 20px;
 }
 .backtest-technique-new-copy {
@@ -765,7 +766,7 @@ body { margin: 0; overflow: hidden; }
   background: var(--color-brand);
   color: var(--color-k-panel);
   font-family: var(--font-strong);
-  font-size: 11px;
+  font-size: var(--text-xs);
   line-height: 15px;
   white-space: nowrap;
 }
@@ -775,6 +776,9 @@ body { margin: 0; overflow: hidden; }
   font-family: var(--font-body);
   font-weight: 600;
   font-size: var(--text-sm);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 /* 분류 칩(추세·모멘텀·돌파·변동성·반전)과 파일 경로 칩 — 같은 알약, 다른 재료. */
@@ -795,8 +799,8 @@ body { margin: 0; overflow: hidden; }
   overflow: hidden;
   text-overflow: ellipsis;
 }
-/* 내가 만든 기법의 줄 — 카드 오른쪽에 [등록 해제]가 붙는다(카드 밖이라 눌러도
-   기법이 골라지지 않는다). 파일이 사라졌으면 그 한 줄이 카드 안에 선다. */
+/* 내가 만든 기법의 줄 — 카드 아래 오른쪽 끝에 [등록 해제]가 붙는다(카드 밖이라
+   눌러도 기법이 골라지지 않는다). 파일이 사라졌으면 그 한 줄이 카드 안에 선다. */
 .backtest-user-strategy-row {
   display: flex;
   flex-direction: column;

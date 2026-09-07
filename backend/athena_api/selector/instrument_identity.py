@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import re
 import unicodedata
 from collections import defaultdict
@@ -164,7 +165,12 @@ class InstrumentIdentityIndex:
         market_records: dict[str, tuple[Mapping[str, Any], ...]] = {}
         for market in IDENTITY_MARKETS:
             market_records[market] = tuple(await fetch_market(market))
-        return self.replace(market_records)
+        # 별칭 정규식 3,500여 개 컴파일은 CPU 수십 초다(2026-09-07 실측 30초). 이벤트 루프
+        # 위에서 하면 그동안 헬스체크·모든 요청이 멎으므로 워커 스레드에서 만들고, 완성된
+        # 스냅숏만 포인터 하나로 교체한다(all-or-nothing 의미는 그대로).
+        next_snapshot = await asyncio.to_thread(build_identity_snapshot, market_records)
+        self._snapshot = next_snapshot
+        return len(next_snapshot.records_by_code)
 
     async def refresh(self, client: Any) -> int:
         spec = TR_REGISTRY["ka10099"]
