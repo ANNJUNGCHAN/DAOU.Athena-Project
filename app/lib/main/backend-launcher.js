@@ -1,6 +1,7 @@
 'use strict';
 
 const fs = require('fs');
+const os = require('os');
 const path = require('path');
 const { spawn } = require('child_process');
 const { BACKEND_DIR, PYTHON_EXE } = require('./mcp-config');
@@ -13,6 +14,10 @@ const HEALTH_TIMEOUT_MS = 1500;
 const STARTUP_POLL_TIMEOUT_MS = 12_000;
 const STARTUP_HARD_TIMEOUT_MS = 60_000;
 const STARTUP_POLL_INTERVAL_MS = 500;
+// self-spawn 백엔드의 stdout/stderr — 예전엔 'ignore'로 버려서 code=3(lifespan 실패)의
+// 이유가 어디에도 남지 않았다(2026-09-07 실측: 자격증명 프로세스 잠금 충돌이 원인).
+const BACKEND_LOG_PATH = path.join(os.homedir(), '.athena', 'logs', 'backend-uvicorn.log');
+const OUTPUT_TAIL_LINES = 40;
 const UVICORN_ARGS = [
   '-m', 'uvicorn', 'athena_api.main:app',
   '--host', HEALTH_HOST,
@@ -90,6 +95,53 @@ async function waitUntilHealthy(timeoutMs, intervalMs) {
   }
   return false;
 }
+
+function captureChildOutput(child, logPath) {
+  const tail = [];
+  const streams = [child.stdout, child.stderr].filter((stream) => stream && typeof stream.on === 'function');
+  if (!streams.length) return () => tail; // 파이프가 없는 child(테스트 더미)는 파일도 만들지 않는다.
+  let sink = null;
+  try {
+    fs.mkdirSync(path.dirname(logPath), { recursive: true });
+    sink = fs.createWriteStream(logPath, { flags: 'a' });
+    sink.on('error', () => { sink = null; });
+    sink.write(`===== ${new Date().toISOString()} uvicorn spawn pid=${child.pid} =====\n`);
+  } catch {
+    sink = null;
+  }
+  const onChunk = (chunk) => {
+    const text = String(chunk);
+    if (sink) sink.write(text);
+    for (const line of text.split(/\r?\n/)) {
+      if (!line.trim()) continue;
+      tail.push(line);
+      if (tail.length > OUTPUT_TAIL_LINES) tail.shift();
+    }
+  };
+  for (const stream of streams) stream.on('data', onChunk);
+  child.once('exit', () => { if (sink) sink.end(); });
+  return () => [...tail];
+}
+
+// 마지막 예외 줄 — traceback 본문(들여쓰기 줄)과 uvicorn 배너("ERROR:    Application
+// startup failed.")는 건너뛰고 `XxxError: ...` 꼴의 최상위 줄만 고른다. 예외가 없이
+// 죽었으면(hard deadline에 우리가 죽인 경우 등) 빈 문자열이다 — 마지막 접근 로그를
+// 실패 이유처럼 보이게 하지 않는다.
+function summarizeStartupFailure(lines) {
+  const exceptions = lines.filter((line) => /^[A-Za-z_][\w.]*(?:Error|Exception)\b/.test(line));
+  return String(exceptions[exceptions.length - 1] || '').slice(0, 300);
+}
+
+// process_lock.py의 충돌 문구 — 다른 backend가 같은 자격증명·브레인 파일을 이미 쥐고
+// 기동 중이라는 뜻이다. 이때 우리가 다시 스폰해도 같은 이유로 죽으므로, 그쪽이
+// 준비될 때까지 헬스만 기다린다.
+function isLockContention(lines) {
+  return /already (?:running|owns|holds)/i.test(lines.join('\n'));
+}
+
+// 직전 self-spawn이 기동 단계에서 죽은 기록 — ensureBackendReady 루프가 같은 실패를
+// 12초마다 반복 스폰하지 않게 한다. 헬스체크가 성공하거나 hard deadline이 지나면 잊는다.
+let lastStartupFailure = null;
 
 // 우리가 스폰한 child 핸들 — 정확히 하나만 유지한다. before-quit이 이 값의
 // 존재 여부로 "우리가 스폰했는가"를 판정한다(사용자 기동 인스턴스는 이 변수에
@@ -187,9 +239,25 @@ async function ensureBackend({ mdlog, _dependencies = {} } = {}) {
   const t0 = nowFn();
   const healthy = await checkHealthFn();
 
+  if (healthy) lastStartupFailure = null;
   if (!healthy && backendChild) {
     log('ensureBackend: 기존 self-spawn 백엔드가 아직 기동 중 — 중복 스폰하지 않는다');
     return { ok: true, spawned: false, ready: false, reason: 'startup-pending' };
+  }
+  if (!healthy && lastStartupFailure && nowFn() - lastStartupFailure.at < hardTimeoutMs) {
+    if (lastStartupFailure.contention) {
+      log('ensureBackend: 다른 백엔드가 잠금을 쥐고 기동 중 — 재스폰하지 않고 준비를 기다린다');
+      return {
+        ok: true, spawned: false, ready: false, reason: 'startup-contended', error: lastStartupFailure.summary,
+      };
+    }
+    return {
+      ok: false,
+      spawned: false,
+      ready: false,
+      reason: 'startup-failed',
+      error: `백엔드 기동 실패(code=${lastStartupFailure.code}) — ${lastStartupFailure.summary}`,
+    };
   }
 
   const action = decideAction({ healthy, venvExists: venvExistsFn() });
@@ -211,7 +279,7 @@ async function ensureBackend({ mdlog, _dependencies = {} } = {}) {
     child = spawnFn(PYTHON_EXE, buildUvicornArgs(), {
       cwd: BACKEND_DIR,
       env: buildBackendEnv(),
-      stdio: 'ignore',
+      stdio: ['ignore', 'pipe', 'pipe'],
       windowsHide: true,
       // claude-runner.js와 같은 이유(실측, 2026-08-17) — shell:true는 Windows에서
       // 인자 재조립 중 문제가 생길 수 있다. python.exe는 실행파일이라 셸이 필요 없다.
@@ -223,8 +291,17 @@ async function ensureBackend({ mdlog, _dependencies = {} } = {}) {
     return { ok: false, spawned: false, error: message };
   }
   backendChild = child;
+  lastStartupFailure = null;
+  const outputTail = captureChildOutput(child, _dependencies.backendLogPath || BACKEND_LOG_PATH);
   child.on('exit', (code, signal) => {
-    log(`ensureBackend: 백엔드 프로세스 종료 감지 — code=${code} signal=${signal}`);
+    const lines = outputTail();
+    const summary = summarizeStartupFailure(lines);
+    log(`ensureBackend: 백엔드 프로세스 종료 감지 — code=${code} signal=${signal}${summary ? ` — ${summary}` : ''}`);
+    // 스폰 뒤 hard deadline 안에 0이 아닌 코드로 죽었다 = 기동 단계 실패. (hard deadline
+    // 초과로 우리가 죽인 경우는 retireHungChild가 backendChild를 먼저 비운다.)
+    if (code !== 0 && code !== null && backendChild === child && nowFn() - spawnAt < hardTimeoutMs) {
+      lastStartupFailure = { at: nowFn(), code, summary, contention: isLockContention(lines) };
+    }
     cancelBackendReadinessWatch(child);
     if (backendChild === child) backendChild = null;
   });
@@ -290,7 +367,9 @@ async function ensureBackendReady({ mdlog, onProgress, _dependencies = {} } = {}
     ok: false,
     ready: false,
     reason: 'readiness-hard-timeout',
-    error: 'backend readiness hard timeout',
+    error: lastResult && lastResult.error
+      ? `backend readiness hard timeout — ${lastResult.error}`
+      : 'backend readiness hard timeout',
     lastResult,
   };
 }
@@ -378,5 +457,8 @@ module.exports = {
   hasSpawnedChild: () => backendChild !== null,
   // 테스트 전용 — restartAfterReset의 self-spawn 분기를 실제 프로세스 없이
   // 재현하기 위한 훅(history-sink.js의 _resetBrainReadyCacheForTest와 같은 패턴).
-  _setBackendChildForTest: (child) => { backendChild = child; },
+  _setBackendChildForTest: (child) => { backendChild = child; lastStartupFailure = null; },
+  BACKEND_LOG_PATH,
+  summarizeStartupFailure,
+  isLockContention,
 };

@@ -5,7 +5,7 @@ const assert = require('node:assert/strict');
 const {
   buildAgentModePrefix,
   buildBacktestModePrefix, buildGraphModePrefix, buildLivePrompt, buildLiveSystemPrompt,
-  buildLiveTurnPrompt,
+  buildLiveTurnPrompt, selectActiveAgentProject,
 } = require('./live-prompt');
 
 // 구 출처 전략을 실제 캔버스 복원 경계로 읽는다. 외부 왕복과 실제 타이머는 없다.
@@ -1610,10 +1610,43 @@ test('buildAgentModePrefix: 코드 알람 3단계 계약을 준다(propose_watch
 test('buildAgentModePrefix: 프로젝트가 있으면 이름과 id를 싣고, 없으면 만들라고 한다', () => {
   assert.ok(buildAgentModePrefix(AGENT_PROJECT, '20260903').includes('프로젝트: 내 전략 (p-77)'));
   const none = buildAgentModePrefix(null, '20260903');
-  assert.ok(none.includes('프로젝트 없음 — 코드 알람은 프로젝트를 먼저 만든 뒤'));
+  assert.ok(none.includes('프로젝트 없음 — 코드 작업 화면의 프로젝트 만들기 또는 폴더 열기'));
+  assert.ok(none.includes('임의의 기존 프로젝트를 쓰지 마라'));
+  assert.ok(none.includes('프로젝트를 정하기 전에는 propose_watch_code나 draft를 부르지 말고'));
   assert.ok(!none.includes('프로젝트: '));
   // 옛 컨텍스트(키 없음)도 던지지 않는다.
   assert.ok(buildAgentModePrefix({}, '').includes('프로젝트 없음'));
+});
+
+test('selectActiveAgentProject: 현재 대화 프로젝트의 실제 폴더만 고른다', () => {
+  const listed = {
+    currentProjectId: 'current',
+    projects: [
+      { id: 'legacy', label: '옛 프로젝트', path: 'C:/missing/legacy' },
+      { id: 'current', label: '현재 프로젝트', path: 'C:/projects/current' },
+    ],
+  };
+  const seen = [];
+  const selected = selectActiveAgentProject(listed, (folder) => {
+    seen.push(folder);
+    return folder === 'C:/projects/current';
+  });
+  assert.deepEqual(selected, { id: 'current', name: '현재 프로젝트' });
+  assert.deepEqual(seen, ['C:/projects/current']);
+});
+
+test('selectActiveAgentProject: 현재 프로젝트가 없거나 폴더가 사라졌으면 첫 행으로 대체하지 않는다', () => {
+  const listed = {
+    currentProjectId: 'default',
+    projects: [{ id: 'legacy', label: '옛 프로젝트', path: 'C:/projects/legacy' }],
+  };
+  assert.equal(selectActiveAgentProject(listed, () => true), null);
+  assert.equal(selectActiveAgentProject({
+    currentProjectId: 'legacy', projects: listed.projects,
+  }, () => false), null);
+  assert.equal(selectActiveAgentProject({
+    currentProjectId: 'legacy', projects: listed.projects,
+  }, () => { throw new Error('not a directory'); }), null);
 });
 
 test('buildLiveTurnPrompt: canvasMode=agent면 에이전트 접두가 질문 앞에 붙는다', () => {
