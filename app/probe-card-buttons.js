@@ -34,7 +34,10 @@ const APP = __dirname;
 const ROOT = path.resolve(APP, '..');
 const TEMPLATE_ROOT = path.join(ROOT, 'backend', 'ref', 'card-surface-templates');
 const CARD_INDEX = path.join(TEMPLATE_ROOT, 'index.json');
-const REPORT_PATH = path.join(APP, 'captures', 'paper-gates', 'CARD-BUTTONS.json');
+// 샤딩할 때 리포트가 서로를 덮지 않게 경로를 갈아낄 수 있다.
+const REPORT_PATH = process.env.ATHENA_CARD_BUTTONS_REPORT
+  ? path.resolve(APP, process.env.ATHENA_CARD_BUTTONS_REPORT)
+  : path.join(APP, 'captures', 'paper-gates', 'CARD-BUTTONS.json');
 
 // 프로필은 실행마다 새 이름으로 만든다 — 고정 이름을 rmSync하면 앞선 실행이 남긴
 // 자식 프로세스 잠금에 EPERM으로 죽는다. `-profile` 접미는 app/.gitignore 규약이다.
@@ -122,6 +125,7 @@ const CARD_SELECTOR = (instanceId) => `#grid .card[data-integrated-instance-key=
 //   pill          — 버튼처럼 생긴 잎(둥근 모서리 + 배경/테두리 + 좌우 패딩).
 // 「Quote and Valuation Strip」처럼 값을 읽어 주는 묶음은 뺀다 — 조작이 아니라
 // 읽을 것이고, 그 잎까지 세면 보드 하나가 40개 넘는 후보로 부풀어 판정이 묻힌다.
+const LABEL_CAP = 2;
 const CANDIDATE_GROUP = String.raw`Action|Button|버튼|Tab|탭|Chip|칩|Toolbar|툴바|Control|Nav|Mode|모드|Filter|필터|Sort|정렬|Range|주기|Period|Preset`;
 
 function collectCandidates(instanceId) {
@@ -131,12 +135,20 @@ function collectCandidates(instanceId) {
     if (!surface) return { error: 'board surface not mounted' };
     const GROUP = /${CANDIDATE_GROUP}/i;
     const seen = new Set();
+    const perLabel = new Map();
     const out = [];
     const push = (el, why, text) => {
       if (!el || seen.has(el)) return;
       seen.add(el);
       const rect = el.getBoundingClientRect();
       if (rect.width < 2 || rect.height < 2) return;
+      // 표 행마다 같은 버튼이 반복되는 보드가 있다(순위·발굴 보드는 「종목 상세 열기」
+      // 10줄). 판정은 라벨 단위로 같으므로 라벨당 ${LABEL_CAP}개만 눌러 본다 — 전수로
+      // 누르면 보드 하나에 160개가 걸려 96장 실행이 몇 시간이 된다.
+      const label = why + '\\u0000' + String(text || el.textContent || '').trim();
+      const taken = perLabel.get(label) || 0;
+      if (taken >= ${LABEL_CAP}) return;
+      perLabel.set(label, taken + 1);
       el.dataset.probeCandidate = String(out.length);
       out.push({
         why,
@@ -279,14 +291,29 @@ async function auditBoard(win, boardId, ordinal) {
       await win.webContents.executeJavaScript('window.AthenaShell.clearCanvases()');
       ({ surface } = await mountBoard(win, boardId, ordinal));
     }
-    // 자리는 다시 잰다 — 재마운트·레이아웃으로 바뀔 수 있다.
+    // 자리는 다시 잰다 — 재마운트·레이아웃으로 바뀔 수 있다. 화면 밖에 있는 후보는
+    // 먼저 끌어올린다: 창 밖 좌표로 마우스를 보내면 hit test가 아무것도 못 집어
+    // 실제 결함이 아닌데 「안 눌린다」로 읽힌다(실측 31II-0 y=1179px).
+    await win.webContents.executeJavaScript(`(() => {
+      const root = document.querySelector('${CARD_SELECTOR(surface.instanceId)}');
+      const el = root && root.querySelector('[data-probe-candidate="${index}"]');
+      if (el) el.scrollIntoView({ block: 'center', inline: 'center' });
+      return true;
+    })()`);
+    await idle(win, 120);
     const spot = await win.webContents.executeJavaScript(`(() => {
       const root = document.querySelector('${CARD_SELECTOR(surface.instanceId)}');
       const el = root && root.querySelector('[data-probe-candidate="${index}"]');
       if (!el) return null;
       const r = el.getBoundingClientRect();
+      const view = { w: window.innerWidth, h: window.innerHeight };
+      if (r.bottom < 0 || r.top > view.h || r.right < 0 || r.left > view.w) return { offscreen: true };
       return { x: r.x, y: r.y, w: r.width, h: r.height };
     })()`);
+    if (spot && spot.offscreen) {
+      results.push({ ...candidate, verdict: 'offscreen' });
+      continue;
+    }
     if (!spot || spot.w < 2 || spot.h < 2) {
       results.push({ ...candidate, verdict: 'gone' });
       continue;
@@ -319,7 +346,7 @@ async function auditBoard(win, boardId, ordinal) {
 }
 
 function summarize(boards) {
-  const totals = { responds: 0, hit_blocked: 0, inert: 0, gone: 0 };
+  const totals = { responds: 0, hit_blocked: 0, inert: 0, gone: 0, offscreen: 0 };
   const byLabel = new Map();
   for (const board of boards) {
     for (const control of board.controls || []) {
@@ -346,6 +373,9 @@ function gateFindings(boards) {
     }
     for (const control of board.controls || []) {
       if (control.why !== 'state-control' || control.verdict === 'responds') continue;
+      // 자기 보드를 가리키는 칩은 「지금 열린 탭」이다 — 눌러도 안 바뀌는 것이 맞다
+      // (실측 2QFO-2 「투자자별」 → 2QFO-2).
+      if (control.state_board === board.board_id) continue;
       findings.push({
         board_id: board.board_id,
         reason: `state_control_${control.verdict}`,
