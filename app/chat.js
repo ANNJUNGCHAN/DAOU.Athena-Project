@@ -3014,7 +3014,7 @@ document.addEventListener('keydown', (e) => {
 // 필수 계약이다(시점 정직성). 렌더는 전부 textContent — innerHTML 0건 유지.
 const routineTurnLib = window.AthenaLib.RoutineTurn;
 // 루틴 칩은 스트립과 함께 제거됐다(보드 45 v5, 2026-08-27) — 활성 감시 수 표시는
-// 사이드바 에이전트 배지의 몫(에이전트모드 구현과 함께 배선).
+// 사이드바 #modeNavAgentWatch의 몫이다.
 
 // 능동 턴·승인 카드·주문 티켓이 공유하는 DOM 조립 헬퍼 — 렌더는 textContent만.
 function _btn(label, className) {
@@ -5336,7 +5336,9 @@ async function renderOrderTicket(prefill) {
   const qtyUnit = document.createElement('span');
   qtyUnit.className = 'ticket-unit';
   qtyUnit.textContent = '주';
-  qtyRow.append(qtyLabel, qtyInput, qtyUnit);
+  const qtyChips = document.createElement('div');
+  qtyChips.className = 'ticket-qty-chips';
+  qtyRow.append(qtyLabel, qtyInput, qtyUnit, qtyChips);
   card.appendChild(qtyRow);
 
   // 총액 추정 — 발화 시점 관측값 × 수량. 관측값이 없으면 행을 그리지 않는다.
@@ -5397,6 +5399,34 @@ async function renderOrderTicket(prefill) {
   card.append(execRow, status, execNote);
   $orderBody.appendChild(card);
 
+  const paintQtyChips = () => {
+    const model = orderTicketLib.qtyChipModel({
+      side: ticket.side,
+      observed: prefill && prefill.observed,
+      buyingPower: ticket.buyingPower,
+      holdings: ticket.holdings,
+    });
+    qtyChips.replaceChildren();
+    for (const chip of model.chips) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'ticket-seg';
+      btn.textContent = chip.label;
+      btn.disabled = !chip.enabled;
+      if (chip.reason) btn.title = chip.reason;
+      btn.addEventListener('click', () => {
+        if (!chip.enabled || chip.qty == null) return;
+        qtyInput.value = String(chip.qty);
+        ticket.qty = chip.qty;
+        syncExec();
+        syncTotal();
+      });
+      qtyChips.appendChild(btn);
+    }
+    const blocked = model.chips.find((chip) => chip.reason);
+    qtyChips.title = blocked ? blocked.reason : '';
+  };
+
   const syncExec = () => {
     // Paper 22 — 실행 버튼은 고른 방향을 그대로 말한다(「구매하기」).
     execBtn.textContent = ticket.side === 'sell' ? '판매하기' : '구매하기';
@@ -5405,18 +5435,21 @@ async function renderOrderTicket(prefill) {
   };
   if (ticket.side === 'buy') buyBtn.classList.add('routine-btn-approve');
   if (ticket.side === 'sell') sellBtn.classList.add('routine-btn-approve');
+  paintQtyChips();
   syncExec();
 
   buyBtn.addEventListener('click', () => {
     ticket.side = 'buy';
     buyBtn.classList.add('routine-btn-approve');
     sellBtn.classList.remove('routine-btn-approve');
+    paintQtyChips();
     syncExec();
   });
   sellBtn.addEventListener('click', () => {
     ticket.side = 'sell';
     sellBtn.classList.add('routine-btn-approve');
     buyBtn.classList.remove('routine-btn-approve');
+    paintQtyChips();
     syncExec();
   });
   qtyInput.addEventListener('input', () => { syncExec(); syncTotal(); });

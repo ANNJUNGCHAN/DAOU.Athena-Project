@@ -102,6 +102,46 @@ function priceRowModel() {
   };
 }
 
+// Paper 1OP-0 수량 칩 — 10% · 25% · 50% · 최대. 매수여력·보유·관측가가 없으면
+// 칩은 그리되 수량을 짓지 않는다(실주문 없음 · 없는 잔고를 있다고 하지 않는다).
+const QTY_CHIP_FRACTIONS = Object.freeze([
+  { label: '10%', fraction: 0.10 },
+  { label: '25%', fraction: 0.25 },
+  { label: '50%', fraction: 0.50 },
+  { label: '최대', fraction: 1 },
+]);
+
+function qtyChipModel(input) {
+  const src = input || {};
+  const side = src.side === 'buy' || src.side === 'sell' ? src.side : null;
+  const observed = Number(src.observed);
+  const buyingPower = Number(src.buyingPower);
+  const holdings = Number(src.holdings);
+  let reason = null;
+  if (!side) reason = '방향을 먼저 고르세요';
+  else if (side === 'buy' && !(Number.isFinite(buyingPower) && buyingPower > 0)) {
+    reason = '매수 가능 금액을 아직 모릅니다';
+  } else if (side === 'sell' && !(Number.isFinite(holdings) && holdings > 0)) {
+    reason = '보유 수량을 아직 모릅니다';
+  } else if (side === 'buy' && !(Number.isFinite(observed) && observed > 0)) {
+    reason = '관측가가 없어 수량을 계산할 수 없습니다';
+  }
+  return {
+    unit: '주',
+    chips: QTY_CHIP_FRACTIONS.map((chip) => {
+      if (reason) return { label: chip.label, qty: null, enabled: false, reason };
+      const raw = side === 'buy'
+        ? Math.floor((buyingPower * chip.fraction) / observed)
+        : Math.floor(holdings * chip.fraction);
+      if (!Number.isFinite(raw) || raw < 1) {
+        return { label: chip.label, qty: null, enabled: false, reason: '1주 미만입니다' };
+      }
+      const qty = Math.min(raw, 100000);
+      return { label: chip.label, qty, enabled: true, reason: null };
+    }),
+  };
+}
+
 // HTTP 상태 → 티켓 상태. 409(멱등 충돌/IN_DOUBT)는 재전송 금지 상태다.
 function interpretExecuteStatus(status) {
   if (status >= 200 && status < 300) return 'done';
@@ -167,6 +207,8 @@ const __exports = {
   buildOrderPayload,
   estimateOrderTotal,
   priceRowModel,
+  qtyChipModel,
+  QTY_CHIP_FRACTIONS,
   interpretExecuteStatus,
   ticketStateAfterExecute,
   executeOutcomeCopy,

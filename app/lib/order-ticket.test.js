@@ -2,6 +2,8 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
 const ot = require('./order-ticket');
 
 const FIRED = {
@@ -163,6 +165,59 @@ test('가격 행은 시장가 고정을 세그먼트와 읽기값으로 드러�
     readout: '시장가 체결',
     limitEnabled: false,
   });
+});
+
+test('수량 칩은 Paper 1OP-0 넷이다 — 10% · 25% · 50% · 최대', () => {
+  const model = ot.qtyChipModel({ side: 'buy', observed: 88100, buyingPower: 8810000 });
+  assert.deepEqual(model.chips.map((chip) => chip.label), ['10%', '25%', '50%', '최대']);
+  assert.equal(model.unit, '주');
+  assert.deepEqual(model.chips.map((chip) => chip.qty), [10, 25, 50, 100]);
+  assert.equal(model.chips.every((chip) => chip.enabled), true);
+});
+
+test('매수 칩은 관측가로 나누고 내림한다 — 1주 미만은 비활성', () => {
+  const model = ot.qtyChipModel({ side: 'buy', observed: 88100, buyingPower: 50000 });
+  assert.equal(model.chips[0].enabled, false);
+  assert.equal(model.chips[0].qty, null);
+  assert.match(model.chips[0].reason, /1주 미만/);
+});
+
+test('매도 칩은 보유 수량의 비율이다 — 잔고를 지어내지 않는다', () => {
+  const known = ot.qtyChipModel({ side: 'sell', holdings: 40 });
+  assert.deepEqual(known.chips.map((chip) => chip.qty), [4, 10, 20, 40]);
+  const unknown = ot.qtyChipModel({ side: 'sell' });
+  assert.equal(unknown.chips.every((chip) => chip.enabled === false), true);
+  assert.match(unknown.chips[0].reason, /보유 수량/);
+  assert.equal(unknown.chips.every((chip) => chip.qty === null), true);
+});
+
+test('매수여력·방향·관측가가 없으면 칩은 그리되 수량을 짓지 않는다', () => {
+  const noSide = ot.qtyChipModel({});
+  assert.equal(noSide.chips.length, 4);
+  assert.match(noSide.chips[0].reason, /방향/);
+  const noCash = ot.qtyChipModel({ side: 'buy', observed: 88100 });
+  assert.match(noCash.chips[3].reason, /매수 가능 금액/);
+  const noPrice = ot.qtyChipModel({ side: 'buy', buyingPower: 8810000 });
+  assert.match(noPrice.chips[0].reason, /관측가/);
+});
+
+test('수량 칩은 10만 주 상한이다', () => {
+  const buy = ot.qtyChipModel({ side: 'buy', observed: 1, buyingPower: 200000 });
+  assert.equal(buy.chips[3].qty, 100000);
+  const sell = ot.qtyChipModel({ side: 'sell', holdings: 200000 });
+  assert.equal(sell.chips[3].qty, 100000);
+});
+
+test('셸 티켓은 수량 칩을 모델에서 그린다', () => {
+  const chat = fs.readFileSync(path.join(__dirname, '..', 'chat.js'), 'utf8');
+  assert.match(chat, /qtyChipModel\(/);
+  assert.match(chat, /ticket-qty-chips/);
+  assert.match(chat, /chip\.label/);
+  assert.match(chat, /qtyChips\.title/);
+  const routes = fs.readFileSync(path.join(__dirname, 'paper-screen-routes.js'), 'utf8');
+  assert.match(routes, /selector: 'span\.ticket-seg', equals: 2/);
+  assert.match(routes, /selector: '\.ticket-qty-chips button\.ticket-seg', equals: 4/);
+  assert.doesNotMatch(routes, /selector: '\.ticket-seg', equals: 2/);
 });
 
 test('실주문 본문은 여전히 trde_tp 3(시장가) 고정이다', () => {
