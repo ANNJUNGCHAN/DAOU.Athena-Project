@@ -12,8 +12,11 @@ const {
   LOCKED_CLICKS,
   LIVE_QUERIES,
   SAFE_CLICK_IDS,
+  EXCLUDED_VERIFY_SCRIPTS,
   VERIFY_SUITE,
   PAPER_SUITE,
+  isAllowlistedClick,
+  isLockedClick,
   queryVerdict,
   cssContentText,
   chromeMatches,
@@ -92,6 +95,23 @@ test('live-full catalog locked clicks cover real orders and kiumi five faces', (
   }
 });
 
+test('클릭 게이트는 허용목록이고 잠금 정규식은 그 목록에 위험 id가 섞이지 않는지만 본다', () => {
+  for (const id of SAFE_CLICK_IDS) {
+    assert.equal(isAllowlistedClick({ id, text: id }), true);
+    assert.equal(isLockedClick({ id, text: id }), null, id);
+  }
+  assert.equal(isAllowlistedClick({ id: 'orderSubmit', text: '시장가 매수' }), false);
+  assert.equal(isLockedClick({ id: 'orderSubmit', text: '시장가 매수' }).id, 'order-submit');
+  const src = fs.readFileSync(path.join(appDir, 'probe-live-full.js'), 'utf8');
+  const clickLoop = src.slice(src.indexOf('const visibleButtons'), src.indexOf('await evalJs(shellWin, `document.getElementById(\'modeNavSummary\')'));
+  assert.match(clickLoop, /if \(!isAllowlistedClick\(button\)\)/);
+  assert.match(clickLoop, /const locked = isLockedClick\(button\)/);
+  assert.ok(
+    clickLoop.indexOf('isAllowlistedClick') < clickLoop.indexOf('isLockedClick'),
+    '허용목록이 잠금 정규식보다 먼저 게이트다',
+  );
+});
+
 test('expectCard:false 질의도 실패·타임아웃을 통과로 쓰지 않는다', () => {
   const fin = LIVE_QUERIES.find((item) => item.id === 'QA-FIN');
   const quote = LIVE_QUERIES.find((item) => item.id === 'QA-QUOTE');
@@ -123,6 +143,21 @@ test('live-full probe does not share the real athena-shell profile or skip every
   assert.doesNotMatch(src, /wait-8s-after-token/);
   assert.match(src, /stock-index/);
   assert.match(src, /indexReady\.ok/);
+});
+
+test('verify:settings-cards는 실 프로필과 락을 공유하지 않고 실패를 삼키지 않는다', () => {
+  const src = fs.readFileSync(path.join(appDir, 'verify-settings-cards.js'), 'utf8');
+  const live = fs.readFileSync(path.join(appDir, 'probe-live-full.js'), 'utf8');
+  assert.match(src, /resolveHarnessProfile\(\{ prefix: 'athena-verify-settings-cards-' \}\)/);
+  assert.match(src, /app\.setPath\('userData', profile\.dir\)/);
+  assert.ok(src.indexOf("app.setPath('userData'") < src.indexOf("require('./main.js')"));
+  assert.match(src, /\.catch\(\(err\) => \{[\s\S]*app\.exit\(1\)/);
+  assert.doesNotMatch(src, /appData['"], 'athena-shell'/);
+  assert.match(live, /\.probe-live-full-profile/);
+  assert.notEqual(
+    src.match(/athena-verify-settings-cards-/)[0],
+    live.match(/\.probe-live-full-profile/)[0],
+  );
 });
 
 test('verify suite lists live-full and the official verify script with budgets', () => {
@@ -158,6 +193,23 @@ test('paper 스위트도 예산과 실재하는 npm 스크립트를 단언한다
     assert.ok(pkg.scripts[item.script], `missing npm script ${item.script}`);
   }
   assert.equal(pkg.scripts['verify:paper'], 'node scripts/run-verify-suite.js --suite paper');
+});
+
+test('package.json verify 스크립트는 기본 스위트·Paper 스위트·명시 제외 중 하나에 속한다', () => {
+  const pkg = JSON.parse(fs.readFileSync(path.join(appDir, 'package.json'), 'utf8'));
+  const listed = [
+    ...VERIFY_SUITE.map((item) => item.script),
+    ...PAPER_SUITE.map((item) => item.script),
+    ...EXCLUDED_VERIFY_SCRIPTS,
+  ];
+  const verifyScripts = Object.keys(pkg.scripts)
+    .filter((key) => key === 'verify' || key.startsWith('verify:'))
+    .sort();
+  assert.deepEqual([...new Set(listed)].sort(), verifyScripts);
+  for (const name of EXCLUDED_VERIFY_SCRIPTS) {
+    assert.equal(VERIFY_SUITE.some((item) => item.script === name), false, name);
+    assert.ok(pkg.scripts[name], name);
+  }
 });
 
 test('paper 스위트의 electron 항목은 기본 스위트에 못 들어간다', () => {

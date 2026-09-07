@@ -87,6 +87,17 @@ const SAFE_CLICK_IDS = Object.freeze([
   'sidebarCompactToggle',
 ]);
 
+// 실제 클릭 게이트는 SAFE_CLICK_IDS다. LOCKED_CLICKS는 허용목록에 위험 id가
+// 섞였을 때의 2차 차단이며, 목록 밖 버튼을 건너뛰는 이유가 되지는 않는다.
+function isAllowlistedClick(button) {
+  return !!(button && button.id && SAFE_CLICK_IDS.includes(button.id));
+}
+
+function isLockedClick(button) {
+  const hay = `${(button && button.id) || ''} ${(button && button.text) || ''}`;
+  return LOCKED_CLICKS.find((lock) => lock.match.test(hay)) || null;
+}
+
 // 기본 스위트. Paper 전수 게이트 중 **값싼 정적 3종만** 여기 들어간다(설계서 §6.2).
 // 매니페스트가 맨 앞인 것은 전제가 깨지면 나머지 판정이 무의미해서다.
 const VERIFY_SUITE = Object.freeze([
@@ -112,6 +123,18 @@ const VERIFY_SUITE = Object.freeze([
   { script: 'verify:life003', budgetMs: 60000 },
 ]);
 
+// package.json 의 verify / verify:* 는 VERIFY_SUITE ∪ PAPER_SUITE ∪ 이 목록이다.
+// 새 스크립트를 추가하면 셋 중 하나에 반드시 적는다.
+const EXCLUDED_VERIFY_SCRIPTS = Object.freeze([
+  'verify:suite',
+  'verify:paper',
+  'verify:paper-cards-all',
+  'verify:paper-mini',
+  'verify:provider-sessions:node-injected',
+  'verify:provider-sessions:electron-runtime',
+  'verify:provider-sessions:os-leak',
+]);
+
 // Paper 전수 스위트. electron 항목이 분 단위라 기본 스위트(약 22분)에 넣으면 40분이 된다 —
 // `npm run verify:paper` 로 마일스톤·야간에만 돈다(설계서 §6.2·§6.5).
 const PAPER_SUITE = Object.freeze([
@@ -130,8 +153,11 @@ module.exports = {
   LOCKED_CLICKS,
   LIVE_QUERIES,
   SAFE_CLICK_IDS,
+  EXCLUDED_VERIFY_SCRIPTS,
   VERIFY_SUITE,
   PAPER_SUITE,
+  isAllowlistedClick,
+  isLockedClick,
   querySucceeded,
   queryVerdict,
   cssContentText,
