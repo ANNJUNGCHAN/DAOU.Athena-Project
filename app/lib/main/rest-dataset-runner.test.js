@@ -10,6 +10,7 @@ const {
   STOCK_ENTITY_RESOLVER_ADAPTER_VERSION,
   REVIEWED_MARKET_ENTITY_KIND,
   StockEntityIndex,
+  restItemForScreenKind,
   buildQuoteDataset,
   buildChartDataset,
   buildCompoundScreenDataset,
@@ -1009,6 +1010,38 @@ test('복합 문장은 단일 화면 문법과 단순 차트 fast path 어디에
     assert.equal(buildCompoundScreenDataset(simple, index), null, simple);
     assert.ok(buildChartDataset(simple, index, { idFactory: () => 'single-chart' }), simple);
   }
+});
+
+test('단독 시세·호가·차트 항목은 restItemForScreenKind와 같다', () => {
+  const index = new StockEntityIndex();
+  index.replace([{ code: '005930', name: '삼성전자', aliases: ['Samsung Electronics'], market: '0' }]);
+  const entity = index.resolveQuery('삼성전자 시세');
+  const today = () => '20260907';
+  assert.deepEqual(
+    buildQuoteDataset('삼성전자 시세', index, { idFactory: () => 'q' }).items,
+    [restItemForScreenKind('quote', entity, 1, today)],
+  );
+  assert.deepEqual(
+    buildOrderBookDataset('삼성전자 호가', index, { idFactory: () => 'o' }).items,
+    [restItemForScreenKind('orderbook', entity, 1, today)],
+  );
+  assert.deepEqual(
+    buildChartDataset('삼성전자 일봉 차트', index, { idFactory: () => 'c', today }).items,
+    [restItemForScreenKind('chart', entity, 1, today)],
+  );
+  const compound = buildCompoundScreenDataset('삼성전자 시세랑 호가', index, {
+    idFactory: () => 'x',
+    today,
+  });
+  assert.deepEqual(compound.items, [
+    restItemForScreenKind('quote', entity, 1, today),
+    restItemForScreenKind('orderbook', entity, 2, today),
+  ]);
+  const src = fs.readFileSync(path.join(__dirname, 'rest-dataset-runner.js'), 'utf8');
+  assert.match(src, /const KOREAN_SCREEN_CORE = `\(\?:\$\{KOREAN_QUOTE_CORE\}\|\$\{KOREAN_ORDERBOOK_CORE\}\|\$\{KOREAN_CHART_CORE\}\)`/);
+  assert.match(src, /items: \[restItemForScreenKind\('quote'/);
+  assert.match(src, /items: \[restItemForScreenKind\('chart'/);
+  assert.match(src, /items: \[restItemForScreenKind\('orderbook'/);
 });
 
 test('compound binder accepts 시세랑 호가 and rejects comparison or single-screen queries', () => {

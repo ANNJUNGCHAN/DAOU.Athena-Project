@@ -34,7 +34,7 @@ const KOREAN_CHART_COURTESY = '(?:\\s*(?:를|은|는))?(?:\\s*(?:좀|한번))?(?
 // 동사가 붙는 CHART_COURTESY와 다르다). 각 CORE는 그 카드 하나만 가리키는
 // 명사라 다른 화면과 안 겹친다(예: "시세"는 QUOTE_CORE에 이미 있어 안 넣음).
 const KOREAN_ORDERBOOK_CORE = '(?:호가)';
-const KOREAN_SCREEN_CORE = '(?:시세|현재가|오늘\\s*주가|주가|호가|(?:일봉\\s*)?차트)';
+const KOREAN_SCREEN_CORE = `(?:${KOREAN_QUOTE_CORE}|${KOREAN_ORDERBOOK_CORE}|${KOREAN_CHART_CORE})`;
 const KOREAN_SCREEN_JOIN = '(?:랑|이랑|와|과|하고|,)';
 const KOREAN_INVESTOR_FLOW_CORE = '(?:수급|(?:외국인|기관)\\s*매매(?:\\s*동향)?)';
 const KOREAN_TRADING_SOURCE_CORE = '(?:거래원)';
@@ -1050,13 +1050,7 @@ function buildQuoteDataset(query, index, { idFactory = () => `rest-${Date.now().
   return {
     datasetId: String(idFactory()).slice(0, 64),
     question: text,
-    items: [{
-      itemId: 'primary-quote',
-      ordinal: 1,
-      operationRef: 'detail:ka10001:current_trading',
-      args: { stk_cd: entity.code },
-      caption: null,
-    }],
+    items: [restItemForScreenKind('quote', entity, 1, kstToday)],
   };
 }
 
@@ -1073,13 +1067,7 @@ function buildChartDataset(query, index, {
   return {
     datasetId: String(idFactory()).slice(0, 64),
     question: text,
-    items: [{
-      itemId: 'primary-chart',
-      ordinal: 1,
-      operationRef: 'base:ka10081',
-      args: { stk_cd: entity.code, base_dt: today(), upd_stkpc_tp: '1' },
-      caption: null,
-    }],
+    items: [restItemForScreenKind('chart', entity, 1, today)],
   };
 }
 
@@ -1118,13 +1106,7 @@ function buildOrderBookDataset(query, index, { idFactory = () => `rest-${Date.no
   return {
     datasetId: String(idFactory()).slice(0, 64),
     question: text,
-    items: [{
-      itemId: 'primary-orderbook',
-      ordinal: 1,
-      operationRef: 'detail:ka10004:aggregate_totals',
-      args: { stk_cd: entity.code },
-      caption: null,
-    }],
+    items: [restItemForScreenKind('orderbook', entity, 1, kstToday)],
   };
 }
 
@@ -1250,6 +1232,7 @@ module.exports = {
   normalizeRecommendations,
   isEligibleOperationRef,
   buildDeterministicAnswer,
+  restItemForScreenKind,
   buildQuoteDataset,
   buildChartDataset,
   buildCompoundScreenDataset,
