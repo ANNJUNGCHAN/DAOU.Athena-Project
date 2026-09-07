@@ -276,7 +276,11 @@ function buildBacktestModePrefix(context, today) {
   const label = (v) => (typeof v === 'string' && v ? v : '모름');
   const json = (v, empty) => (obj(v) ? JSON.stringify(v) : empty);
 
-  const spec = json(ctx && ctx.spec, '없음 — 아직 프리셋을 고르지 않았다');
+  const formSpec = obj(ctx && ctx.spec);
+  // 구 출처 전략은 외부 제목을 이름으로 저장했다. 화면·저장본은 보존하고, 모델에
+  // 보내는 폼과 기법 이름만 새 출처 잡과 같은 앱 이름으로 대신한다.
+  const sourceName = formSpec && formSpec.presetId === 'from_source' ? '출처에서 만든 전략' : null;
+  const spec = json(sourceName ? { ...formSpec, name: sourceName } : formSpec, '없음 — 아직 프리셋을 고르지 않았다');
   // 실행 전에 채워야 할 것 — 설정은 검증과 무관하게 이미 폼에 들어가 있다(2026-09-02).
   const pending = ctx && Array.isArray(ctx.pending) && ctx.pending.length
     ? JSON.stringify(ctx.pending)
@@ -420,7 +424,8 @@ function buildBacktestModePrefix(context, today) {
   const techniqueChecks = technique && Array.isArray(technique.checks) ? technique.checks : [];
   const techniqueNodes = technique && Array.isArray(technique.nodes) ? technique.nodes : [];
   const flows = obj(technique && technique.flows);
-  const techniqueName = (technique && typeof technique.name === 'string' && technique.name)
+  const techniqueName = sourceName
+    || (technique && typeof technique.name === 'string' && technique.name)
     || (obj(ctx && ctx.spec) && typeof ctx.spec.name === 'string' && ctx.spec.name)
     || '아직 없음';
   const isWarnCheck = (c) => Boolean(obj(c)) && (c.severity === 'warn' || WARN_CHECK_IDS.has(c.id));

@@ -88,7 +88,7 @@ _SOURCE_KIND_KO = {
     "youtube": "유튜브",
     "naver_blog": "네이버 블로그",
     "pdf": "PDF",
-    "web": "웹페이지",
+    "html": "웹페이지",
 }
 
 class SourceMapError(RuntimeError):
@@ -643,7 +643,9 @@ async def run_job(job: SourceMapJob, *, brief: dict[str, Any] | None = None) -> 
 
     # ③ 지도 그리기 — 칸마다 배선을 확인하고 하나씩 올린다.
     job.begin("map")
-    spec = spec_from_rules(job.rules, name=job.title or "출처에서 만든 전략")
+    # 외부 제목은 출처 카드(job.title)에만 둔다. 전략명은 다음 모델 턴의 현재 폼에도
+    # 실리므로 출처 문장을 이름으로 옮기면 자료가 지시 경계 안으로 들어간다.
+    spec = spec_from_rules(job.rules, name="출처에서 만든 전략")
     job.spec = spec
     full = mapmodel.build_map(spec=spec, version=0)
     job.map = full
