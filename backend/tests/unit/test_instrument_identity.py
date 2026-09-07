@@ -455,3 +455,102 @@ def test_lifespan_publishes_one_app_local_identity_index_and_selector() -> None:
     with TestClient(app):
         assert app.state.selector_service._instrument_identity is app.state.instrument_identity
         assert app.state.instrument_identity.size == 0
+
+
+# --- 기동 순서: 식별 인덱스 갱신은 기동을 막지 않는다 (2026-09-07) --------------------------
+# 별칭 정규식 3,500여 개 컴파일이 30초 안팎(앱 부팅과 겹치면 60초 이상)이라 lifespan이 이를
+# 기다리면 앱 launcher의 60초 준비 한도를 넘긴다. 갱신은 백그라운드 태스크로 돌고,
+# 끝나기 전에는 빈 스냅숏(fail-closed), teardown이 태스크를 취소한다.
+
+_IDENTITY_STARTUP_ACCOUNTS = (
+    '[{"alias":"identity-test","app_key":"key-identity","secret_key":"secret-identity"}]'
+)
+
+
+def _identity_startup_settings() -> Settings:
+    return Settings(
+        _env_file=None,
+        kiwoom_accounts=_IDENTITY_STARTUP_ACCOUNTS,
+        kiwoom_default_account="identity-test",
+    )
+
+
+async def _offline_websocket(_url: str):
+    raise ConnectionError("offline test")
+
+
+def _mock_kiwoom_token(mock) -> None:
+    from datetime import datetime, timedelta
+
+    import httpx
+
+    expires = datetime.now() + timedelta(hours=1)
+    mock.post("/oauth2/token").mock(
+        return_value=httpx.Response(
+            200,
+            json={
+                "return_code": 0,
+                "token": "identity-token",
+                "expires_dt": expires.strftime("%Y%m%d%H%M%S"),
+            },
+        )
+    )
+
+
+async def test_lifespan_startup_does_not_wait_for_identity_refresh_and_cancels_it_on_exit(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    import respx
+    from fastapi import FastAPI
+
+    from athena_api.lifespan import build_lifespan
+
+    refresh_started = asyncio.Event()
+    release_refresh = asyncio.Event()
+
+    async def slow_refresh(self: InstrumentIdentityIndex, _client: object) -> int:
+        refresh_started.set()
+        await release_refresh.wait()
+        return 0
+
+    monkeypatch.setattr(InstrumentIdentityIndex, "refresh", slow_refresh)
+    app = FastAPI()
+    with respx.mock(base_url="https://mockapi.kiwoom.com") as mock:
+        _mock_kiwoom_token(mock)
+        lifespan = build_lifespan(_identity_startup_settings(), ws_connect=_offline_websocket)
+        async with lifespan(app):
+            task = app.state.instrument_identity_task
+            assert isinstance(task, asyncio.Task)
+            await asyncio.wait_for(refresh_started.wait(), timeout=5)
+            assert not task.done(), "기동은 식별 인덱스 갱신이 끝나기 전에 완료돼야 한다"
+            assert app.state.instrument_identity.size == 0, "끝나기 전에는 빈 스냅숏(fail-closed)"
+        assert task.done() and task.cancelled(), "teardown이 진행 중인 갱신을 취소한다"
+        assert app.state.instrument_identity_task is None
+
+
+async def test_lifespan_identity_refresh_failure_is_logged_not_raised(
+    monkeypatch: pytest.MonkeyPatch,
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    import respx
+    from fastapi import FastAPI
+
+    from athena_api.lifespan import build_lifespan
+
+    async def failing_refresh(self: InstrumentIdentityIndex, _client: object) -> int:
+        raise RuntimeError("upstream unavailable")
+
+    monkeypatch.setattr(InstrumentIdentityIndex, "refresh", failing_refresh)
+    app = FastAPI()
+    with respx.mock(base_url="https://mockapi.kiwoom.com") as mock:
+        _mock_kiwoom_token(mock)
+        with caplog.at_level("WARNING", logger="athena_api.lifespan"):
+            lifespan = build_lifespan(_identity_startup_settings(), ws_connect=_offline_websocket)
+            async with lifespan(app):
+                task = app.state.instrument_identity_task
+                await asyncio.wait_for(asyncio.shield(task), timeout=5)
+                assert task.done() and not task.cancelled() and task.exception() is None
+                assert app.state.instrument_identity.size == 0
+    assert any(
+        "instrument identity refresh failed" in record.getMessage() for record in caplog.records
+    )
