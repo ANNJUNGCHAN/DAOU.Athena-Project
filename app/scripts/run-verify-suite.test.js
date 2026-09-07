@@ -337,6 +337,22 @@ test('실행 증거: ignored 경로의 파일은 작업 사본 해시에 넣지 
   }
 });
 
+test('실행 증거: 단계마다 ATHENA_CAPTURE_DIR을 자식 env에 넘긴다', async (t) => {
+  const fixture = evidenceFixture(t, [{}]);
+  const spawnOpts = [];
+  const inner = fixture.deps.spawn;
+  fixture.deps.spawn = (...args) => {
+    spawnOpts.push(args[2]);
+    return inner(...args);
+  };
+  const result = await runSuite([{ script: 'verify:fixture', budgetMs: 5000 }], fixture.deps);
+  assert.equal(result.ok, true);
+  assert.ok(result.results[0].captureDir);
+  assert.equal(spawnOpts[0].env.ATHENA_CAPTURE_DIR, result.results[0].captureDir);
+  assert.equal(fs.existsSync(result.results[0].captureDir), true);
+  assert.ok(result.results[0].captureDir.includes('verify-fixture-captures'));
+});
+
 test('실행 증거: 진행 줄은 stderr로 가고 최종 JSON만 stdout에 남는다', async (t) => {
   const fixture = evidenceFixture(t, [{}]);
   const lines = [];

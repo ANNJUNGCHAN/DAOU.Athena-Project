@@ -1,0 +1,48 @@
+'use strict';
+
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
+const { captureRoot } = require('./probe-captures');
+
+test('ATHENA_CAPTURE_DIR가 있으면 공유 captures가 아니라 그 디렉터리다', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'athena-capture-dir-'));
+  const previous = process.env.ATHENA_CAPTURE_DIR;
+  process.env.ATHENA_CAPTURE_DIR = dir;
+  try {
+    assert.equal(captureRoot(path.join(os.tmpdir(), 'unused-app')), path.resolve(dir));
+    assert.equal(fs.existsSync(dir), true);
+  } finally {
+    if (previous === undefined) delete process.env.ATHENA_CAPTURE_DIR;
+    else process.env.ATHENA_CAPTURE_DIR = previous;
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('ATHENA_CAPTURE_DIR가 없으면 appDir/captures 를 만들고 쓴다', () => {
+  const appDir = fs.mkdtempSync(path.join(os.tmpdir(), 'athena-capture-app-'));
+  const previous = process.env.ATHENA_CAPTURE_DIR;
+  delete process.env.ATHENA_CAPTURE_DIR;
+  try {
+    const root = captureRoot(appDir);
+    assert.equal(root, path.join(appDir, 'captures'));
+    assert.equal(fs.existsSync(root), true);
+  } finally {
+    if (previous === undefined) delete process.env.ATHENA_CAPTURE_DIR;
+    else process.env.ATHENA_CAPTURE_DIR = previous;
+    fs.rmSync(appDir, { recursive: true, force: true });
+  }
+});
+
+test('전수 스위트의 공유 리포트 하네스는 captureRoot를 쓴다', () => {
+  const read = (name) => fs.readFileSync(path.join(__dirname, '..', name), 'utf8');
+  for (const file of ['verify.js', 'probe-live-full.js', 'verify-hoga-live.js', 'verify-kiumi.js']) {
+    const src = read(file);
+    assert.match(src, /require\('\.\/lib\/probe-captures'\)/, file);
+    assert.match(src, /captureRoot\(__dirname\)/, file);
+    assert.doesNotMatch(src, /const CAPTURES = path\.join\(__dirname, 'captures'\)/, file);
+    assert.doesNotMatch(src, /const OUT_DIR = path\.join\(__dirname, 'captures'\)/, file);
+  }
+});

@@ -103,6 +103,7 @@ function runOne(item, deps = {}) {
         durationMs: Math.max(0, finished - started),
         stdoutTail: stdout, stderrTail: stderr,
         stdoutLog: logPaths.stdout || null, stderrLog: logPaths.stderr || null,
+        captureDir: deps.captureDir || null,
         captures: capturesWrittenSince(capturesBefore, listCaptureEntries(capturesRoot)),
       });
     };
@@ -117,9 +118,12 @@ function runOne(item, deps = {}) {
     };
     let child;
     try {
-      child = spawnFn('npm', ['run', item.script], {
-        cwd: appDir, shell: true, stdio: ['ignore', 'pipe', 'pipe'],
-      });
+      const spawnOpts = { cwd: appDir, shell: true, stdio: ['ignore', 'pipe', 'pipe'] };
+      if (deps.captureDir) {
+        fs.mkdirSync(deps.captureDir, { recursive: true });
+        spawnOpts.env = { ...process.env, ATHENA_CAPTURE_DIR: deps.captureDir };
+      }
+      child = spawnFn('npm', ['run', item.script], spawnOpts);
     } catch (error) { finish(null, error); return; }
     // shell: true라 Windows에서는 cmd.exe → npm.cmd → electron 3단 트리가 뜬다.
     // child.kill()은 직계 cmd.exe만 죽여 electron 좀비가 프로필 락을 쥔 채 남으므로
@@ -209,8 +213,9 @@ async function runSuite(selected, deps = {}) {
     persist();
     write(`[suite] start ${item.script} budget=${item.budgetMs}\n`);
     const prefix = `${String(index + 1).padStart(3, '0')}-${item.script.replace(/[^a-zA-Z0-9_-]/g, '-')}`;
+    const captureDir = path.join(directory, `${prefix}-captures`);
     const result = await runOne(item, {
-      ...deps, logPaths: {
+      ...deps, captureDir, logPaths: {
         stdout: path.join(directory, `${prefix}.stdout.log`),
         stderr: path.join(directory, `${prefix}.stderr.log`),
       },
