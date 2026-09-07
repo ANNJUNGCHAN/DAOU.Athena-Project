@@ -359,6 +359,7 @@ test('all Athena chart entry points are statically locked to the AITS adapter', 
   assert.match(lowLevel, /onPeriodChange: \(period, interval\) => requestAuthoritativeReload/);
   assert.match(lowLevel, /onAdjustedToggle: \(adjustedOn\) => requestAuthoritativeReload/);
   assert.match(lowLevel, /재조회 8초 한도를 넘겼다/);
+  assert.match(lowLevel, /재조회 시간 초과/);
   assert.match(lowLevel, /clearTimeout\(reloadTimer\)/);
   assert.match(canvas, /재조회 8초 한도를 넘겼다/);
   assert.match(canvas, /clearTimeout\(reloadTimer\)/);

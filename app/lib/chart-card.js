@@ -757,7 +757,9 @@ async function createChartCard(container, opts) {
       : ['서버 보정(upd_stkpc_tp) 미연결 — 목업 동일 데이터'];
     if (intradayUnavailable) parts.push(`${intradayUnavailable} — 일봉을 그대로 보여준다`);
     if (authoringStore.enabled) parts.push('차트 설정이 이 기기에 저장되었습니다');
-    if (reloadFailure) parts.push(`재조회 실패 — ${reloadFailure}`);
+    if (reloadFailure) {
+      parts.push(reloadFailure === '재조회 8초 한도를 넘겼다' ? '재조회 시간 초과' : `재조회 실패 — ${reloadFailure}`);
+    }
     adjustedNote.textContent = parts.join(' · ');
   }
 
