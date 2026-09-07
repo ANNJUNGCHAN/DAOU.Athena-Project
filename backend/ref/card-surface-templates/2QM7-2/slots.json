@@ -7,7 +7,7 @@
     "node_id": "2QM8-2",
     "jsx_sha256": "a47757ee6d8dcb42fa207b8ba678657e549dbe40887dbc00bdab27548fc6c66a"
   },
-  "html_sha256": "1319c2943652ce6992b0aecb5828b6b054d3c2db24252bae0ca1f6562303659e",
+  "html_sha256": "86250cce875b07a9f5b5395ab3fc58ddcc29c6f61c4b1cbcb5282ba927ca7b54",
   "width_px": 1360.0,
   "height_px": 934.0,
   "artboard_px": [
@@ -48,7 +48,36 @@
     "34WI-0": "rail",
     "2QNI-2": "footer"
   },
-  "tables": [],
+  "tables": [
+    {
+      "node_id": "34FS-0",
+      "node_name": "Broker Table",
+      "columns": 7,
+      "header_row": "34FX-0",
+      "body_rows": [
+        "34GM-0",
+        "34H5-0",
+        "34HO-0",
+        "34I7-0",
+        "34L4-0",
+        "34LN-0",
+        "34M6-0",
+        "34MP-0"
+      ],
+      "foot_rows": [],
+      "source": "responsive",
+      "column_labels": [
+        "순위",
+        "창구",
+        "매도",
+        "매수",
+        "순매수",
+        "증감",
+        "비중"
+      ],
+      "responsive_mode": "paired-table"
+    }
+  ],
   "counts": {
     "elements": 341,
     "text_nodes": 189,
@@ -60,17 +89,17 @@
     "layer_직접": 189,
     "layer_병기": 0,
     "layer_펼침": 0,
-    "tables": 0,
+    "tables": 1,
     "tree_text_truncated": 0,
-    "bs_col": 0,
-    "bs_paired": 0,
+    "bs_col": 45,
+    "bs_paired": 64,
     "bs_leaf": 0,
     "bs_kpi_cell": 5,
     "state_control_marks": 0
   },
   "density": {
-    "table_columns": 0,
-    "rows_max": 0,
+    "table_columns": 7,
+    "rows_max": 8,
     "kpi_cells": 5,
     "rail_blocks": 4,
     "rail_rows_max": 5
@@ -263,7 +292,153 @@
     "국내 순매수",
     "종가"
   ],
-  "column_bindings": [],
+  "column_bindings": [
+    {
+      "table_id": "34FS-0",
+      "columns": [
+        {
+          "col": 1,
+          "data_col": 0,
+          "header": "순위",
+          "slot_ids": [
+            "s035",
+            "s047",
+            "s059",
+            "s071",
+            "s082",
+            "s093",
+            "s104",
+            "s115"
+          ]
+        },
+        {
+          "col": 2,
+          "data_col": 1,
+          "header": "창구",
+          "slot_ids": [
+            "s036",
+            "s037",
+            "s038",
+            "s048",
+            "s049",
+            "s050",
+            "s060",
+            "s061",
+            "s062",
+            "s072",
+            "s073",
+            "s083",
+            "s084",
+            "s094",
+            "s095",
+            "s105",
+            "s106",
+            "s116",
+            "s117"
+          ]
+        },
+        {
+          "col": 3,
+          "data_col": 2,
+          "header": "매도",
+          "slot_ids": [
+            "s039",
+            "s040",
+            "s051",
+            "s052",
+            "s063",
+            "s064",
+            "s074",
+            "s075",
+            "s085",
+            "s086",
+            "s096",
+            "s097",
+            "s107",
+            "s108",
+            "s118",
+            "s119"
+          ]
+        },
+        {
+          "col": 4,
+          "data_col": 3,
+          "header": "매수",
+          "slot_ids": [
+            "s041",
+            "s042",
+            "s053",
+            "s054",
+            "s065",
+            "s066",
+            "s076",
+            "s077",
+            "s087",
+            "s088",
+            "s098",
+            "s099",
+            "s109",
+            "s110",
+            "s120",
+            "s121"
+          ]
+        },
+        {
+          "col": 5,
+          "data_col": 4,
+          "header": "순매수",
+          "slot_ids": [
+            "s043",
+            "s044",
+            "s055",
+            "s056",
+            "s067",
+            "s068",
+            "s078",
+            "s079",
+            "s089",
+            "s090",
+            "s100",
+            "s101",
+            "s111",
+            "s112",
+            "s122",
+            "s123"
+          ]
+        },
+        {
+          "col": 6,
+          "data_col": 5,
+          "header": "증감",
+          "slot_ids": [
+            "s045",
+            "s057",
+            "s069",
+            "s080",
+            "s091",
+            "s102",
+            "s113",
+            "s124"
+          ]
+        },
+        {
+          "col": 7,
+          "data_col": 6,
+          "header": "비중",
+          "slot_ids": [
+            "s046",
+            "s058",
+            "s070",
+            "s081",
+            "s092",
+            "s103",
+            "s114",
+            "s125"
+          ]
+        }
+      ]
+    }
+  ],
   "section_titles_ko": {
     "2QM9-2": "종목 헤더",
     "2QMH-2": "수급 탭 전환",
@@ -979,7 +1154,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "head",
+        "col": 0
+      },
       "mapping_id": null,
       "f": null,
       "alt_mappings": null,
@@ -1000,7 +1179,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "head",
+        "col": 1
+      },
       "mapping_id": null,
       "f": null,
       "alt_mappings": null,
@@ -1021,7 +1204,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "head",
+        "col": 2
+      },
       "mapping_id": null,
       "f": null,
       "alt_mappings": null,
@@ -1042,7 +1229,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "head",
+        "col": 3
+      },
       "mapping_id": null,
       "f": null,
       "alt_mappings": null,
@@ -1063,7 +1254,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "head",
+        "col": 4
+      },
       "mapping_id": null,
       "f": null,
       "alt_mappings": null,
@@ -1084,7 +1279,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "head",
+        "col": 5
+      },
       "mapping_id": null,
       "f": null,
       "alt_mappings": null,
@@ -1105,7 +1304,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "head",
+        "col": 6
+      },
       "mapping_id": null,
       "f": null,
       "alt_mappings": null,
@@ -1126,7 +1329,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "0",
+        "col": 0
+      },
       "mapping_id": "base:ka10038",
       "f": "rank",
       "alt_mappings": null,
@@ -1152,7 +1359,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "0",
+        "col": 1
+      },
       "mapping_id": "base:0F",
       "f": "151",
       "alt_mappings": [
@@ -1204,7 +1415,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "0",
+        "col": 1
+      },
       "mapping_id": "base:0F",
       "f": "156",
       "alt_mappings": [
@@ -1256,7 +1471,11 @@
       "layer": "직접",
       "font_size_px": 10.5,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "0",
+        "col": 1
+      },
       "mapping_id": "base:ka10102",
       "f": "gb",
       "alt_mappings": null,
@@ -1282,7 +1501,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "0",
+        "col": 2
+      },
       "mapping_id": "detail:ka10002:sell_brokers",
       "f": "sel_trde_qty_4",
       "alt_mappings": null,
@@ -1308,7 +1531,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "0",
+        "col": 2
+      },
       "mapping_id": "base:0F",
       "f": "164",
       "alt_mappings": [
@@ -1340,7 +1567,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "0",
+        "col": 3
+      },
       "mapping_id": "detail:ka10002:buy_brokers",
       "f": "buy_trde_qty_1",
       "alt_mappings": null,
@@ -1366,7 +1597,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "0",
+        "col": 3
+      },
       "mapping_id": "base:0F",
       "f": "171",
       "alt_mappings": [
@@ -1398,7 +1633,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "0",
+        "col": 4
+      },
       "mapping_id": "base:ka10052",
       "f": "acc_netprps",
       "alt_mappings": null,
@@ -1424,7 +1663,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "0",
+        "col": 4
+      },
       "mapping_id": "base:ka10038",
       "f": "acc_netprps_qty",
       "alt_mappings": null,
@@ -1450,7 +1693,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "0",
+        "col": 5
+      },
       "mapping_id": "base:0F",
       "f": "176",
       "alt_mappings": [
@@ -1510,7 +1757,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "0",
+        "col": 6
+      },
       "mapping_id": "base:ka10043",
       "f": "trde_wght",
       "alt_mappings": null,
@@ -1536,7 +1787,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "1",
+        "col": 0
+      },
       "mapping_id": "base:ka10042",
       "f": "rank",
       "alt_mappings": null,
@@ -1562,7 +1817,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "1",
+        "col": 1
+      },
       "mapping_id": "detail:ka10002:buy_brokers",
       "f": "buy_trde_ori_nm_3",
       "alt_mappings": [
@@ -1599,7 +1858,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "1",
+        "col": 1
+      },
       "mapping_id": "detail:ka10002:buy_brokers",
       "f": "buy_trde_ori_3",
       "alt_mappings": [
@@ -1636,7 +1899,11 @@
       "layer": "직접",
       "font_size_px": 10.5,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "1",
+        "col": 1
+      },
       "mapping_id": "base:ka10102",
       "f": "gb",
       "alt_mappings": null,
@@ -1664,7 +1931,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "1",
+        "col": 2
+      },
       "mapping_id": "detail:ka10002:sell_brokers",
       "f": "sel_trde_qty_1",
       "alt_mappings": null,
@@ -1692,7 +1963,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "1",
+        "col": 2
+      },
       "mapping_id": "base:ka10038",
       "f": "sell_qty",
       "alt_mappings": null,
@@ -1718,7 +1993,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "1",
+        "col": 3
+      },
       "mapping_id": "detail:ka10002:buy_brokers",
       "f": "buy_trde_qty_3",
       "alt_mappings": null,
@@ -1744,7 +2023,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "1",
+        "col": 3
+      },
       "mapping_id": "base:0F",
       "f": "173",
       "alt_mappings": [
@@ -1776,7 +2059,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "1",
+        "col": 4
+      },
       "mapping_id": "base:ka10052",
       "f": "acc_netprps",
       "alt_mappings": null,
@@ -1804,7 +2091,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "1",
+        "col": 4
+      },
       "mapping_id": "base:ka10043",
       "f": "netprps_qty",
       "alt_mappings": null,
@@ -1830,7 +2121,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "1",
+        "col": 5
+      },
       "mapping_id": "base:0F",
       "f": "178",
       "alt_mappings": [
@@ -1875,7 +2170,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "1",
+        "col": 6
+      },
       "mapping_id": "base:ka10043",
       "f": "trde_wght",
       "alt_mappings": null,
@@ -1903,7 +2202,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "2",
+        "col": 0
+      },
       "mapping_id": "base:ka10038",
       "f": "rank",
       "alt_mappings": null,
@@ -1931,7 +2234,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "2",
+        "col": 1
+      },
       "mapping_id": "base:ka10042",
       "f": "mmcm_nm",
       "alt_mappings": null,
@@ -1957,7 +2264,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "2",
+        "col": 1
+      },
       "mapping_id": "base:ka10102",
       "f": "code",
       "alt_mappings": null,
@@ -1983,7 +2294,11 @@
       "layer": "직접",
       "font_size_px": 10.5,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "2",
+        "col": 1
+      },
       "mapping_id": "base:ka10102",
       "f": "gb",
       "alt_mappings": null,
@@ -2011,7 +2326,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "2",
+        "col": 2
+      },
       "mapping_id": "detail:ka10002:sell_brokers",
       "f": "sel_trde_qty_1",
       "alt_mappings": null,
@@ -2039,7 +2358,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "2",
+        "col": 2
+      },
       "mapping_id": "base:ka10078",
       "f": "sell_qty",
       "alt_mappings": null,
@@ -2065,7 +2388,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "2",
+        "col": 3
+      },
       "mapping_id": "detail:ka10002:buy_brokers",
       "f": "buy_trde_qty_1",
       "alt_mappings": null,
@@ -2093,7 +2420,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "2",
+        "col": 3
+      },
       "mapping_id": "base:ka10038",
       "f": "buy_qty",
       "alt_mappings": null,
@@ -2119,7 +2450,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "2",
+        "col": 4
+      },
       "mapping_id": "base:ka10052",
       "f": "acc_netprps",
       "alt_mappings": null,
@@ -2147,7 +2482,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "2",
+        "col": 4
+      },
       "mapping_id": "base:ka10038",
       "f": "acc_netprps_qty",
       "alt_mappings": null,
@@ -2175,7 +2514,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "2",
+        "col": 5
+      },
       "mapping_id": "base:0F",
       "f": "166",
       "alt_mappings": null,
@@ -2203,7 +2546,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "2",
+        "col": 6
+      },
       "mapping_id": "base:ka10043",
       "f": "trde_wght",
       "alt_mappings": null,
@@ -2231,7 +2578,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "3",
+        "col": 0
+      },
       "mapping_id": "base:ka10038",
       "f": "rank",
       "alt_mappings": null,
@@ -2259,7 +2610,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "3",
+        "col": 1
+      },
       "mapping_id": "base:ka10102",
       "f": "name",
       "alt_mappings": null,
@@ -2285,7 +2640,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "3",
+        "col": 1
+      },
       "mapping_id": "base:ka10042",
       "f": "mmcm_cd",
       "alt_mappings": null,
@@ -2311,7 +2670,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "3",
+        "col": 2
+      },
       "mapping_id": "detail:ka10002:sell_brokers",
       "f": "sel_trde_qty_1",
       "alt_mappings": null,
@@ -2339,7 +2702,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "3",
+        "col": 2
+      },
       "mapping_id": "base:ka10038",
       "f": "sell_qty",
       "alt_mappings": null,
@@ -2367,7 +2734,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "3",
+        "col": 3
+      },
       "mapping_id": "detail:ka10002:buy_brokers",
       "f": "buy_trde_qty_1",
       "alt_mappings": null,
@@ -2395,7 +2766,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "3",
+        "col": 3
+      },
       "mapping_id": "base:ka10078",
       "f": "buy_qty",
       "alt_mappings": null,
@@ -2421,7 +2796,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "3",
+        "col": 4
+      },
       "mapping_id": "base:ka10052",
       "f": "acc_netprps",
       "alt_mappings": null,
@@ -2449,7 +2828,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "3",
+        "col": 4
+      },
       "mapping_id": "base:ka10038",
       "f": "acc_netprps_qty",
       "alt_mappings": null,
@@ -2477,7 +2860,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "3",
+        "col": 5
+      },
       "mapping_id": "base:0F",
       "f": "166",
       "alt_mappings": null,
@@ -2505,7 +2892,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "3",
+        "col": 6
+      },
       "mapping_id": "base:ka10043",
       "f": "trde_wght",
       "alt_mappings": null,
@@ -2533,7 +2924,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "4",
+        "col": 0
+      },
       "mapping_id": "base:ka10038",
       "f": "rank",
       "alt_mappings": null,
@@ -2561,7 +2956,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "4",
+        "col": 1
+      },
       "mapping_id": "base:0F",
       "f": "145",
       "alt_mappings": [
@@ -2598,7 +2997,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "4",
+        "col": 1
+      },
       "mapping_id": "base:0F",
       "f": "150",
       "alt_mappings": [
@@ -2635,7 +3038,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "4",
+        "col": 2
+      },
       "mapping_id": "detail:ka10002:sell_brokers",
       "f": "sel_trde_qty_5",
       "alt_mappings": null,
@@ -2661,7 +3068,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "4",
+        "col": 2
+      },
       "mapping_id": "base:0F",
       "f": "165",
       "alt_mappings": [
@@ -2693,7 +3104,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "4",
+        "col": 3
+      },
       "mapping_id": "detail:ka10002:buy_brokers",
       "f": "buy_trde_qty_1",
       "alt_mappings": null,
@@ -2721,7 +3136,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "4",
+        "col": 3
+      },
       "mapping_id": "base:ka10038",
       "f": "buy_qty",
       "alt_mappings": null,
@@ -2749,7 +3168,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "4",
+        "col": 4
+      },
       "mapping_id": "base:ka10052",
       "f": "acc_netprps",
       "alt_mappings": null,
@@ -2777,7 +3200,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "4",
+        "col": 4
+      },
       "mapping_id": "base:ka10038",
       "f": "acc_netprps_qty",
       "alt_mappings": null,
@@ -2805,7 +3232,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "4",
+        "col": 5
+      },
       "mapping_id": "base:0F",
       "f": "170",
       "alt_mappings": [
@@ -2850,7 +3281,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "4",
+        "col": 6
+      },
       "mapping_id": "base:ka10043",
       "f": "trde_wght",
       "alt_mappings": null,
@@ -2878,7 +3313,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "5",
+        "col": 0
+      },
       "mapping_id": "base:ka10038",
       "f": "rank",
       "alt_mappings": null,
@@ -2906,7 +3345,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "5",
+        "col": 1
+      },
       "mapping_id": "detail:ka10040:sell_brokers",
       "f": "sel_trde_ori_3",
       "alt_mappings": [
@@ -2958,7 +3401,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "5",
+        "col": 1
+      },
       "mapping_id": "detail:ka10040:sell_brokers",
       "f": "sel_trde_ori_cd_3",
       "alt_mappings": [
@@ -3010,7 +3457,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "5",
+        "col": 2
+      },
       "mapping_id": "detail:ka10002:sell_brokers",
       "f": "sel_trde_qty_3",
       "alt_mappings": null,
@@ -3036,7 +3487,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "5",
+        "col": 2
+      },
       "mapping_id": "base:0F",
       "f": "163",
       "alt_mappings": [
@@ -3068,7 +3523,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "5",
+        "col": 3
+      },
       "mapping_id": "detail:ka10002:buy_brokers",
       "f": "buy_trde_qty_5",
       "alt_mappings": null,
@@ -3094,7 +3553,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "5",
+        "col": 3
+      },
       "mapping_id": "base:0F",
       "f": "175",
       "alt_mappings": [
@@ -3126,7 +3589,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "5",
+        "col": 4
+      },
       "mapping_id": "base:ka10052",
       "f": "acc_netprps",
       "alt_mappings": null,
@@ -3154,7 +3621,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "5",
+        "col": 4
+      },
       "mapping_id": "base:ka10038",
       "f": "acc_netprps_qty",
       "alt_mappings": null,
@@ -3182,7 +3653,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "5",
+        "col": 5
+      },
       "mapping_id": "base:0F",
       "f": "168",
       "alt_mappings": [
@@ -3242,7 +3717,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "5",
+        "col": 6
+      },
       "mapping_id": "base:ka10043",
       "f": "trde_wght",
       "alt_mappings": null,
@@ -3270,7 +3749,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "6",
+        "col": 0
+      },
       "mapping_id": "base:ka10038",
       "f": "rank",
       "alt_mappings": null,
@@ -3298,7 +3781,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "6",
+        "col": 1
+      },
       "mapping_id": "detail:ka10002:sell_brokers",
       "f": "sel_trde_ori_nm_2",
       "alt_mappings": [
@@ -3350,7 +3837,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "6",
+        "col": 1
+      },
       "mapping_id": "detail:ka10002:sell_brokers",
       "f": "sel_trde_ori_2",
       "alt_mappings": [
@@ -3402,7 +3893,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "6",
+        "col": 2
+      },
       "mapping_id": "detail:ka10002:sell_brokers",
       "f": "sel_trde_qty_2",
       "alt_mappings": null,
@@ -3428,7 +3923,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "6",
+        "col": 2
+      },
       "mapping_id": "base:0F",
       "f": "162",
       "alt_mappings": [
@@ -3460,7 +3959,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "6",
+        "col": 3
+      },
       "mapping_id": "detail:ka10002:buy_brokers",
       "f": "buy_trde_qty_4",
       "alt_mappings": null,
@@ -3486,7 +3989,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "6",
+        "col": 3
+      },
       "mapping_id": "base:0F",
       "f": "174",
       "alt_mappings": [
@@ -3518,7 +4025,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "6",
+        "col": 4
+      },
       "mapping_id": "base:ka10052",
       "f": "acc_netprps",
       "alt_mappings": null,
@@ -3546,7 +4057,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "6",
+        "col": 4
+      },
       "mapping_id": "base:ka10038",
       "f": "acc_netprps_qty",
       "alt_mappings": null,
@@ -3574,7 +4089,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "6",
+        "col": 5
+      },
       "mapping_id": "base:0F",
       "f": "167",
       "alt_mappings": [
@@ -3634,7 +4153,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "6",
+        "col": 6
+      },
       "mapping_id": "base:ka10043",
       "f": "trde_wght",
       "alt_mappings": null,
@@ -3662,7 +4185,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "7",
+        "col": 0
+      },
       "mapping_id": "base:ka10038",
       "f": "rank",
       "alt_mappings": null,
@@ -3690,7 +4217,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "7",
+        "col": 1
+      },
       "mapping_id": "detail:ka10040:sell_brokers",
       "f": "sel_trde_ori_1",
       "alt_mappings": [
@@ -3742,7 +4273,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "7",
+        "col": 1
+      },
       "mapping_id": "detail:ka10040:sell_brokers",
       "f": "sel_trde_ori_cd_1",
       "alt_mappings": [
@@ -3794,7 +4329,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "7",
+        "col": 2
+      },
       "mapping_id": "detail:ka10002:sell_brokers",
       "f": "sel_trde_qty_1",
       "alt_mappings": null,
@@ -3820,7 +4359,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "7",
+        "col": 2
+      },
       "mapping_id": "base:0F",
       "f": "161",
       "alt_mappings": [
@@ -3852,7 +4395,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "7",
+        "col": 3
+      },
       "mapping_id": "detail:ka10002:buy_brokers",
       "f": "buy_trde_qty_2",
       "alt_mappings": null,
@@ -3878,7 +4425,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "7",
+        "col": 3
+      },
       "mapping_id": "base:0F",
       "f": "172",
       "alt_mappings": [
@@ -3910,7 +4461,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "7",
+        "col": 4
+      },
       "mapping_id": "base:ka10052",
       "f": "acc_netprps",
       "alt_mappings": null,
@@ -3938,7 +4493,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "7",
+        "col": 4
+      },
       "mapping_id": "base:ka10038",
       "f": "acc_netprps_qty",
       "alt_mappings": null,
@@ -3966,7 +4525,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "7",
+        "col": 5
+      },
       "mapping_id": "base:0F",
       "f": "166",
       "alt_mappings": [
@@ -4026,7 +4589,11 @@
       "layer": "직접",
       "font_size_px": 12.0,
       "anchor": null,
-      "table": null,
+      "table": {
+        "table": "34FS-0",
+        "row": "7",
+        "col": 6
+      },
       "mapping_id": "base:ka10043",
       "f": "trde_wght",
       "alt_mappings": null,

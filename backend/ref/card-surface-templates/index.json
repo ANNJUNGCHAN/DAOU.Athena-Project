@@ -621,7 +621,7 @@
         "layer_직접": 115,
         "layer_병기": 0,
         "layer_펼침": 0,
-        "tables": 0,
+        "tables": 1,
         "tree_text_truncated": 0,
         "bs_col": 0,
         "bs_paired": 0,
@@ -633,7 +633,7 @@
         "marks": [],
         "unresolved": []
       },
-      "html_sha256": "9d27f73e39e781d9b8cb91a39ebf8d84ba985283693a5bfc29eabba10a44e86b"
+      "html_sha256": "c58039fa4ed2b413877dac231b76d3febf8046169d6795503659beb919d1d02f"
     },
     {
       "board_id": "15N5-2",
@@ -1070,10 +1070,10 @@
         "layer_직접": 189,
         "layer_병기": 0,
         "layer_펼침": 0,
-        "tables": 0,
+        "tables": 1,
         "tree_text_truncated": 0,
-        "bs_col": 0,
-        "bs_paired": 0,
+        "bs_col": 45,
+        "bs_paired": 64,
         "bs_leaf": 0,
         "bs_kpi_cell": 5,
         "state_control_marks": 0
@@ -1082,7 +1082,7 @@
         "marks": [],
         "unresolved": []
       },
-      "html_sha256": "1319c2943652ce6992b0aecb5828b6b054d3c2db24252bae0ca1f6562303659e"
+      "html_sha256": "86250cce875b07a9f5b5395ab3fc58ddcc29c6f61c4b1cbcb5282ba927ca7b54"
     },
     {
       "board_id": "2QRP-1",
@@ -2946,7 +2946,7 @@
         "layer_직접": 149,
         "layer_병기": 17,
         "layer_펼침": 0,
-        "tables": 0,
+        "tables": 1,
         "tree_text_truncated": 0,
         "bs_col": 0,
         "bs_paired": 0,
@@ -2958,7 +2958,7 @@
         "marks": [],
         "unresolved": []
       },
-      "html_sha256": "23946513e61fc6c7bcb9db446069ea1600a49a3821f1e25906e6656c84f5f65d"
+      "html_sha256": "5074983f799314aabffaaab1233339b2c4a497c0c5463083b99b6047c35611df"
     },
     {
       "board_id": "2XY6-0",

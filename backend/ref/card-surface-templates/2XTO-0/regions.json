@@ -7,5 +7,17 @@
     { "node_id": "365M-0", "name": "Ranking Result Table", "role": "primary", "depth": 2 },
     { "node_id": "2XTV-0", "name": "Selected Stock Detail", "role": "rail", "depth": 2 },
     { "node_id": "2XTR-0", "name": "User Status Footer", "role": "footer", "depth": 1 }
+  ],
+  "responsive": [
+    { "node_id": "2XX3-0", "traits": ["scroll"], "accessible_label": "순위 정렬 기준" },
+    { "node_id": "2XWO-0", "traits": ["scroll"], "accessible_label": "종목 필터" },
+    { "node_id": "2XWI-0", "traits": ["scroll"], "accessible_label": "세션 선택" },
+    { "node_id": "3EF1-0", "traits": ["scroll"], "accessible_label": "조회 대상 종목 목록" },
+    {
+      "node_id": "365N-0",
+      "traits": ["scroll-table"],
+      "header_row": "365S-0",
+      "accessible_label": "호가잔량 상위 순위표"
+    }
   ]
 }
