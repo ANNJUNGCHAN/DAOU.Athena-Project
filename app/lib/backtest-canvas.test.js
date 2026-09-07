@@ -5571,3 +5571,79 @@ test('세션 복원: 새 기법을 고르면 복원 표식이 사라진다 — �
   assert.equal(findByClass(made.container, 'backtest-restore-count').length, 0);
   assert.equal(findByClass(made.container, 'backtest-restore-notice').length, 0);
 }));
+
+// ── 보드 10 · 안 될 때의 두 상태 ────────────────────────────────────────────
+//
+// Paper는 「안 될 때」를 배지로 갈랐다: 실행이 터진 실패와, 기능 자체가 꺼진 비활성.
+// 세 번째 카드(진행 유지)는 화면이 아니라 이 캔버스가 이미 하는 일이라(41번 보드
+// 세션 복원 · resumePollingIfNeeded) 배지가 설 자리가 없다.
+
+test('보드 10: 기능이 꺼진 상태는 「비활성」 배지와 다시 시도로 선다', async () => {
+  const { container } = (() => {
+    const made = makeCanvas({
+      fetchPresets: async () => { throw new Error(backtestCanvas.BACKTEST_DISABLED_TEXT); },
+    });
+    made.canvas.mount();
+    return made;
+  })();
+  await flush();
+
+  assert.equal(findByClass(container, 'backtest-canvas-error').length, 1);
+  assert.deepEqual(
+    findByClass(container, 'backtest-error-badge').map((n) => n.textContent),
+    ['비활성'],
+  );
+  assert.match(textOf(container), /설정에서 백테스트를 켜야 합니다/);
+  // 내부 이름은 화면에 오르지 않는다.
+  assert.ok(!textOf(container).includes('ATHENA_BACKTEST_ENABLED'));
+  // 막다른 길 금지 — 켠 뒤 다시 물을 손잡이 하나가 남는다.
+  assert.deepEqual(
+    findByClass(container, 'backtest-error-back').map((n) => n.textContent),
+    ['다시 시도'],
+  );
+});
+
+test('보드 10: 꺼진 상태의 [다시 시도]는 목록을 다시 묻는다', async () => {
+  let calls = 0;
+  const made = makeCanvas({
+    fetchPresets: async () => {
+      calls += 1;
+      if (calls === 1) throw new Error(backtestCanvas.BACKTEST_DISABLED_TEXT);
+      return PRESETS;
+    },
+  });
+  made.canvas.mount();
+  await flush();
+  await click(findByClass(made.container, 'backtest-error-back')[0]);
+  await flush();
+
+  assert.equal(calls, 2);
+  assert.equal(findByClass(made.container, 'backtest-canvas-error').length, 0);
+  assert.ok(findByClass(made.container, 'backtest-preset-item').length > 0);
+});
+
+test('보드 10: 그 밖의 오류는 「실패」 배지와 설계로 돌아가기다', async () => {
+  const made = makeCanvas({
+    fetchPresets: async () => { throw new Error('백테스트 실행에 실패했습니다'); },
+  });
+  made.canvas.mount();
+  await flush();
+
+  assert.deepEqual(
+    findByClass(made.container, 'backtest-error-badge').map((n) => n.textContent),
+    ['실패'],
+  );
+  assert.match(textOf(made.container), /백테스트 실행에 실패했습니다/);
+  assert.deepEqual(
+    findByClass(made.container, 'backtest-error-back').map((n) => n.textContent),
+    ['설계로 돌아가기'],
+  );
+});
+
+test('보드 10: 배지 판정은 문구 하나로 갈린다', () => {
+  const { errorStateBadge, BACKTEST_DISABLED_TEXT } = backtestCanvas;
+  assert.equal(errorStateBadge(BACKTEST_DISABLED_TEXT), '비활성');
+  assert.equal(errorStateBadge(`${BACKTEST_DISABLED_TEXT} (503)`), '비활성');
+  assert.equal(errorStateBadge('데이터 수집에 실패했습니다'), '실패');
+  assert.equal(errorStateBadge(''), '실패');
+});

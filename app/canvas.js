@@ -3357,7 +3357,10 @@ function backtestError(res, fallback) {
   // 던지는데, 그 문구로는 사용자가 무엇을 해야 할지 알 수 없다 — 백엔드를 안 띄운
   // 것이 원인의 거의 전부다(2026-09-01 probe-backtest-mode 실측으로 잡았다).
   if (res && res.status === 0) return `백엔드에 연결하지 못했습니다 — 백엔드가 떠 있는지 확인하세요 (${raw})`;
-  if (res && res.status === 503) return `백테스트 기능이 꺼져 있습니다 — 백엔드에서 ATHENA_BACKTEST_ENABLED를 켜야 합니다 (${raw})`;
+  // 503은 기능이 꺼진 것이다(보드 10 「비활성」). 내부 환경변수 이름도 백엔드가 준
+  // 영어 원문도 사용자에게는 할 일이 아니다 — Paper가 적은 그 한 줄만 남긴다.
+  // 이 문장이 곧 상태 표식이다(backtest-canvas.js errorStateBadge가 앞을 읽는다).
+  if (res && res.status === 503) return window.AthenaLib.BacktestCanvas.BACKTEST_DISABLED_TEXT;
   if (res && res.status === 404) return `백엔드에 백테스트 경로가 없습니다 — 백엔드가 이 브랜치 버전인지 확인하세요 (${raw})`;
   return raw;
 }

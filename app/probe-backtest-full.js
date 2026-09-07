@@ -1855,12 +1855,17 @@ async function main() {
       return {
         title: (panel.querySelector('.backtest-canvas-empty-title') || {}).textContent,
         sub: (panel.querySelector('.backtest-canvas-empty-sub') || {}).textContent,
+        badge: (panel.querySelector('.backtest-error-badge') || {}).textContent,
+        backLabel: (panel.querySelector('.backtest-error-back') || {}).textContent,
         back: panel.querySelectorAll('.backtest-error-back').length,
         tabs: root.querySelectorAll('.backtest-tab').length,
       };
     })()`, WAIT_RUN);
+    // 보드 10: 안 될 때의 상태에는 이름이 붙는다. 실행이 터진 것이므로 「실패」다
+    // (기능이 꺼진 「비활성」은 백엔드가 503을 줄 때고, 그 갈래는 단위가 고정한다).
     await step('F10', '캐시가 0봉인 구간의 부분 실행은 정직한 에러 화면이 된다', () => ({
       ok: !!errView && errView.title === '백테스트' && String(errView.sub).length > 12
+            && errView.badge === '실패' && errView.backLabel === '설계로 돌아가기'
             && errView.back === 1 && errView.tabs === 0,
       data: errView,
     }));
