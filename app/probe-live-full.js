@@ -55,19 +55,27 @@ async function waitUntil(check, timeoutMs, intervalMs = 100) {
 }
 
 async function captureOrSkip(win, name) {
+  const dest = path.join(CAPTURES, name);
   if (!win || typeof win.isDestroyed === 'function' && win.isDestroyed()) {
+    fs.rmSync(dest, { force: true });
     return { name, skipped: true, reason: 'window gone' };
   }
   try {
+    await win.webContents.executeJavaScript(
+      'new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve(true))))',
+    );
     const img = await Promise.race([
       win.webContents.capturePage(),
       wait(12000).then(() => null),
     ]);
-    if (!img) return { name, skipped: true, reason: 'capturePage timeout' };
-    const dest = path.join(CAPTURES, name);
+    if (!img) {
+      fs.rmSync(dest, { force: true });
+      return { name, skipped: true, reason: 'capturePage timeout' };
+    }
     fs.writeFileSync(dest, img.toPNG());
     return { name, skipped: false, path: dest };
   } catch (error) {
+    fs.rmSync(dest, { force: true });
     return { name, skipped: true, reason: String(error && error.message || error) };
   }
 }
@@ -120,7 +128,6 @@ const BUTTON_PROBE = `(() => {
 })()`;
 
 function exclusiveCanvas(view, surface) {
-  const visible = MODES.filter((mode) => surface[mode.view === 'summary' ? 'mosaic' : mode.view.replace('summary', 'mosaic')]);
   const graphSurface = surface.graph || surface.graphSummary || surface.graphSettings;
   const map = {
     summary: surface.mosaic && !graphSurface && !surface.agent && !surface.plugin && !surface.backtest,
@@ -129,7 +136,7 @@ function exclusiveCanvas(view, surface) {
     plugin: !surface.mosaic && !graphSurface && !surface.agent && surface.plugin && !surface.backtest,
     backtest: !surface.mosaic && !graphSurface && !surface.agent && !surface.plugin && surface.backtest,
   };
-  return { ok: map[view] === true && surface.chat === true, visible, chat: surface.chat };
+  return { ok: map[view] === true && surface.chat === true, chat: surface.chat };
 }
 
 

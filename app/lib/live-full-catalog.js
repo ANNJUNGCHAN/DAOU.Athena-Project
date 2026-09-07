@@ -169,6 +169,7 @@ const PAPER_SUITE = Object.freeze([
   { script: 'verify:paper-manifest', budgetMs: 30000 },
   { script: 'verify:paper-cards-static', budgetMs: 30000 },
   { script: 'verify:paper-cards-mount', budgetMs: 900000 },
+  { script: 'verify:card-buttons', budgetMs: 900000 },
   { script: 'verify:paper-screens', budgetMs: 420000 },
   { script: 'verify:paper-mini-static', budgetMs: 30000 },
   { script: 'verify:paper-mini-template', budgetMs: 120000 },
