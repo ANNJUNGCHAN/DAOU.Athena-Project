@@ -186,6 +186,18 @@ test('main marks visible subagent steps before relaying them for first-paint own
   assert.match(source, /onSubagentStep\(step\)\s*\{[\s\S]*?markProviderFirstVisible\(step\);[\s\S]*?sendLiveSubagentStep\(step\);[\s\S]*?\}/);
 });
 
+test('main relays provider warnings as a finished live tool step with the mapped Korean message', () => {
+  const source = fs.readFileSync(path.join(__dirname, '..', '..', 'main.js'), 'utf8');
+  assert.match(
+    source,
+    /onWarning\(warning\)\s*\{[\s\S]*?persistentTurnContexts\.has\(warning\.clientSubmitId\)[\s\S]*?sendLiveToolStep\(\{[\s\S]*?id: `warning:\$\{warning\.code \|\| 'PROVIDER_WARNING'\}`[\s\S]*?label: warning\.safeMessage \|\| '모델 안내'[\s\S]*?done: true[\s\S]*?\}\);[\s\S]*?\}/,
+  );
+  assert.doesNotMatch(
+    source,
+    /onWarning\(warning\)\s*\{[\s\S]*?error:\s*true/,
+  );
+});
+
 test('main forwards only trusted normalized provider tool completions to backtest chat actions', () => {
   const source = fs.readFileSync(path.join(__dirname, '..', '..', 'main.js'), 'utf8');
   assert.match(

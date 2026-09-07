@@ -22,6 +22,14 @@ test('userFacingProviderError maps weekly-limit English to Korean', () => {
   assert.equal(userFacingProviderError('Claude 응답의 durable checkpoint가 없습니다.'), 'Claude 응답의 durable checkpoint가 없습니다.');
 });
 
+test('turn failure and rate-limit warning pass through userFacingProviderError', () => {
+  const fs = require('node:fs');
+  const path = require('node:path');
+  const source = fs.readFileSync(path.join(__dirname, 'claude-agent-session.js'), 'utf8');
+  assert.match(source, /_finishFailure\(active, 'PROVIDER_PROTOCOL_ERROR', true, userFacingProviderError\(detail/);
+  assert.match(source, /code: 'CLAUDE_RATE_LIMIT'[\s\S]*?safeMessage: userFacingProviderError\(/);
+});
+
 class AsyncChannel {
   constructor() {
     this.values = [];
