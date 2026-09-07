@@ -3,7 +3,7 @@
   "gate": "verify:paper-screens",
   "blessed_at": "2026-09-07T00:43:33.485Z",
   "blessed_by": "verify:paper-screens --bless",
-  "target_boards": 109,
+  "target_boards": 105,
   "passing": [
     "11D-0",
     "15J-0",
