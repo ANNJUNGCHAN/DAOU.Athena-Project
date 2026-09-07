@@ -102,13 +102,37 @@
   outline-offset: 2px;
 }
 
-/* 숫자 줄바꿈은 여기서 손대지 않는다 — 실측 결과. Paper 원문은 보드 루트에
- * `overflow-wrap: anywhere`를 실어 한 글자에서도 줄을 바꾼다. 보드가 Paper 폭보다
- * 좁아지면 "150,850"이 "150,85 / 0"으로 끊긴다(실측 2R3M-1 컨테이너 1171px).
- * 값 자리에 `overflow-wrap: normal`을 걸면 그 끊김은 사라지지만(상속은 선언 규칙에
- * 진다) 좁은 단계에서 가로 넘침이 되살아난다 — 실측 컨테이너 537px에서 4~90px,
- * 377px에서 25~250px. 폭 계약(가로 넘침 0)과 숫자 가독은 여기서 맞바꿀 수 없다:
- * Paper 쪽에서 좁은 단계의 글자 크기를 정하는 편이 맞다(파리티 레인 판단). */
+/* ---------- 줄바꿈 정책 — 글자 단위 분절은 어느 단계에서도 없다 ----------
+ *
+ * 앞선 판단은 `overflow-wrap: anywhere`(Paper 원문)를 분절의 원인으로 보고 손대지
+ * 않기로 했지만, 그건 원인의 절반이었다. 한글은 CSS 기본값(`word-break: normal`)에서
+ * **음절 사이가 이미 줄바꿈 기회**다 — 실측 2QM7-2(삼성전자 수급)에는 `anywhere`가
+ * 0건인데도 "모건스탠리"가 "모건스탠 / 리"로 쪼개진다. 그래서 정책 선언은
+ * `word-break: keep-all`이고, 추출 원문 97장에 그 선언은 0건이다.
+ *
+ * `anywhere`는 여기에 숫자·라틴까지 얹는 두 번째 원인이다("149,50 / 0", 실측
+ * 2R3M-1 컨테이너 1171px). 인라인 선언은 이 규칙보다 세므로 board-mount의
+ * stripCharacterWrap이 마운트 시점에 걷어낸다 — 다섯 레이아웃 속성과 달리
+ * 되돌리지 않는다: 한 글자씩 눕는 것은 Paper가 그린 문면이 아니라 폭이 부족할 때의
+ * 브라우저 기본 동작이다.
+ *
+ * 이제 남는 부족분은 줄바꿈이 아니라 가로 넘침으로 나온다(실측 컨테이너 537px에서
+ * 4~90px · 377px에서 25~250px). 그건 이 파일 아래의 수단으로 받는다: 열 접기 →
+ * 가로 스크롤. 값·문구를 쪼개서 폭을 맞추는 길은 닫는다(사용자 확정 2026-09-07). */
+.board-surface {
+  word-break: keep-all;
+  overflow-wrap: normal;
+}
+
+/* 값 자리(숫자·통화·%·코드·시각)는 어절 경계조차 없으므로 nowrap이 유일한 규약이다.
+ * 소유자(`.bs-r-flow`/`.bs-r-scroll`) 아래로 한정하던 L 단계 규칙을 base로 넓힌다 —
+ * 반응형 기계가 아예 안 붙은 보드 25장(97장 실측)은 그 한정 때문에 값 nowrap을
+ * 하나도 못 받았고, 2QM7-2·15L8-2가 거기 있다. XL에서는 Paper 폭이 이미 한 줄을
+ * 담으므로 계산값이 안 바뀐다. */
+:is(.bs-r-atomic, [data-bs-value-atomic="true"], [data-paired-source]) {
+  white-space: nowrap;
+  overflow-wrap: normal;
+}
 
 /* 추출기가 넣은 접기 래퍼 — XL에서는 박스 트리에서 사라진다(픽셀 동일). */
 .bs-col { display: contents; }
@@ -217,6 +241,14 @@
    * 값이 두 줄로 접히고, 그만큼 칸이 Paper 78px을 넘겨 자란다. `fit-content`는
    * max-content를 쓰되 남은 폭에서 잘리므로 좁은 단계에서 칸이 줄을 밀어내지 않는다. */
   .bs-kpi-cell[data-bs-kpi-elastic="true"] { min-width: fit-content; }
+
+  /* 줄바꿈 정책(base)이 켜지면 값·문구가 안 쪼개지므로 칸의 min-content가 「가장 긴
+   * 한 줄」이다. 위 `[data-bs-hoisted] { min-width: 0 }`이 그 바닥을 놓아 버려서
+   * 칸이 0까지 줄고 안쪽 문면이 옆 칸 위로 흘러 겹친다 — 원문이 `flex-shrink: 0`인
+   * 히어로 칸은 탄력 칸 바닥의 대상이 아니다(실측 2QM7-2 「모건스탠리 +842억원」).
+   * `fit-content`는 남은 폭에서 잘리므로 좁은 단계에서 줄을 밀어내지 않고, 글자를
+   * 이고 있는 칸만 받으므로 빈 spacer는 그대로 0이다(시세 스트립 6~8칸 계약). */
+  .bs-kpi-cell[data-bs-kpi-content="true"] { min-width: fit-content; }
 
   /* 의미 단위가 먼저 다음 줄로 이동하고, 단위 안의 글자는 쪼개지지 않는다.
    * 값 표시는 responsive owner 밖에서도 쓰이므로 반드시 owner 아래로 한정한다. */
