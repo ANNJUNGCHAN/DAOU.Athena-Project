@@ -76,6 +76,19 @@ test('gateBlocker: 주문 API 비활성이면 정직한 사유를 준다', () =>
   assert.equal(ot.gateBlocker({ orderApi: true }), null);
 });
 
+test('잠금 블록은 라벨과 사유를 두 줄로 가른다', () => {
+  const locked = ot.gateLockModel(ot.gateBlocker({ orderApi: false }));
+  assert.equal(locked.locked, true);
+  assert.equal(locked.label, '지금은 실행할 수 없음');
+  assert.match(locked.reason, /주문 API가 OFF/);
+  assert.doesNotMatch(locked.reason, /지금은 실행할 수 없음/);
+  assert.equal(ot.gateLockModel(null).locked, false);
+  const chat = fs.readFileSync(path.join(__dirname, '..', 'chat.js'), 'utf8');
+  assert.match(chat, /gateLockModel\(/);
+  assert.match(chat, /ticket-lock/);
+  assert.match(chat, /turn-fail-dot/);
+});
+
 test('buildOrderPayload: kt10000/kt10001 실측 필드·시장가 고정', () => {
   const buy = ot.buildOrderPayload({ symbol: '005930', qty: 20, side: 'buy' });
   assert.equal(buy.tr_id, 'kt10000');

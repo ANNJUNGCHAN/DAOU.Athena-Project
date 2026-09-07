@@ -5377,9 +5377,26 @@ async function renderOrderTicket(prefill) {
   } catch {
     gateBlocked = orderTicketLib.gateBlocker(null);
   }
-  gateLine.textContent = gateBlocked
-    ? `지금은 실행할 수 없음: ${gateBlocked}`
-    : '주문 API 활성 (모의계좌)';
+  const lock = orderTicketLib.gateLockModel(gateBlocked);
+  if (lock.locked) {
+    gateLine.replaceChildren();
+    gateLine.className = 'ticket-lock';
+    const dot = document.createElement('span');
+    dot.className = 'turn-fail-dot';
+    const copy = document.createElement('div');
+    copy.className = 'ticket-lock-copy';
+    const label = document.createElement('div');
+    label.className = 'ticket-lock-label';
+    label.textContent = lock.label;
+    const reason = document.createElement('div');
+    reason.className = 'ticket-lock-reason';
+    reason.textContent = lock.reason;
+    copy.append(label, reason);
+    gateLine.append(dot, copy);
+  } else {
+    gateLine.className = 'agent-source';
+    gateLine.textContent = '주문 API 활성 (모의계좌)';
+  }
 
   // Paper 22 9GG-0 — 카드 발치의 상시 각주. 게이트가 열렸든 막혔든 늘 서 있고,
   // 앱이 실제로 그렇게 동작한다(집행 때마다 newIdempotencyKey()를 새로 만든다).

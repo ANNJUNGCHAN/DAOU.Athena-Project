@@ -3052,6 +3052,7 @@ const ROUTES = Object.freeze([
       { what: 'count', selector: '.ticket-card', equals: 1 },
       { what: 'count', selector: 'span.ticket-seg', equals: 2 },
       { what: 'count', selector: '.ticket-qty-chips button.ticket-seg', equals: 4 },
+      { what: 'count', selector: '.ticket-lock', equals: 1 },
     ],
   },
 
