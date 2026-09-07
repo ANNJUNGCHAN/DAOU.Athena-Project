@@ -2549,6 +2549,25 @@ test('목록 화면에서도 모드 탭 이동(이력)은 그대로 반영된다
   assert.equal(made.canvas.getContext().tab, 'history');
 });
 
+test('기법이 없어도 optimize·deploy에 서면 모드 탭 5종이 선다', async () => {
+  const made = await listMounted();
+  assert.deepEqual(
+    findByClass(made.container, 'backtest-tab').map((t) => t.textContent),
+    backtestCanvas.MODE_TABS_LIST.map(([, label]) => label),
+  );
+  for (const tab of ['optimize', 'deploy']) {
+    const receipt = made.canvas.onChatAction({ kind: 'navigate', tab });
+    await flush();
+    assert.equal(receipt.applied, true, tab);
+    assert.equal(made.canvas.getContext().tab, tab);
+    assert.deepEqual(
+      findByClass(made.container, 'backtest-tab').map((t) => t.textContent),
+      backtestCanvas.MODE_TABS.map(([, label]) => label),
+      tab,
+    );
+  }
+});
+
 // 위 두 케이스를 **실제 앱의 배선**(폴더 생성 + 파일 쓰기)에서 다시 본다. 폴더 만들기는
 // 비동기라 그 사이에 얹힌 코드가 씨앗 쓰기에 덮일 수 있고, 막힐 설정이 폴더를 남길 수
 // 있다 — 단일 버퍼 배선에서는 둘 다 보이지 않는 자리다.
