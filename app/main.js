@@ -3200,6 +3200,18 @@ function createProviderRuntimeControllerInstance(stateDir) {
         markProviderFirstVisible(step);
         sendLiveSubagentStep(step);
       },
+      onWarning(warning) {
+        if (!persistentTurnContexts.has(warning.clientSubmitId)) return;
+        sendLiveToolStep({
+          id: `warning:${warning.code || 'PROVIDER_WARNING'}`,
+          label: warning.safeMessage || '모델 안내',
+          done: true,
+          clientSubmitId: warning.clientSubmitId,
+          turnId: warning.turnId,
+          sequence: warning.sequence,
+          origin: warning.origin,
+        });
+      },
     },
   });
 }
