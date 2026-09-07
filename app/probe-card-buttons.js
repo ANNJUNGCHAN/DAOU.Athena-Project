@@ -214,6 +214,10 @@ function fingerprintProbe(instanceId) {
       // 「안 눌린다」로 읽힌다.
       cards: [...document.querySelectorAll('#grid .card')]
         .map((card) => card.dataset.boardId || card.className).join('|'),
+      // 카드 밖으로 데려가는 조작(모드 전환)도 반응이다.
+      view: (window.AthenaCanvasMode && window.AthenaCanvasMode.state
+        && window.AthenaCanvasMode.state.view) || '',
+      seeded: (document.getElementById('input') || {}).value || '',
     };
   })()`;
 }
@@ -223,6 +227,8 @@ function changed(before, after) {
   if (before.board !== after.board) return true;
   if (before.loading !== after.loading) return true;
   if (before.cards !== after.cards) return true;
+  if (before.view !== after.view) return true;
+  if (before.seeded !== after.seeded) return true;
   return before.text !== after.text;
 }
 
@@ -332,6 +338,16 @@ async function auditBoard(win, boardId, ordinal) {
   const results = [];
   for (const [index, candidate] of listing.candidates.entries()) {
     // 이전 클릭이 보드를 갈아탔으면 기준 보드로 되돌린다.
+    // 앞 후보가 캔버스 화면을 갈아탔으면(「알림 설정」은 에이전트 모드로 데려간다)
+    // 카드 화면으로 되돌린다 — 안 되돌리면 남은 후보가 안 보이는 카드에서 재진다.
+    await win.webContents.executeJavaScript(`(() => {
+      const mode = window.AthenaCanvasMode;
+      const view = mode && mode.state && mode.state.view;
+      if (mode && typeof mode.setView === 'function' && view && view !== 'summary') {
+        mode.setView('summary');
+      }
+      return view || '';
+    })()`);
     const current = await win.webContents.executeJavaScript(fingerprintProbe(surface.instanceId));
     // 카드가 늘어났으면(카드 액션이 새 카드를 열었다) 그것도 되돌린다 — 안 그러면
     // 같은 조작을 다시 눌렀을 때 통합 카드가 같은 신원으로 합쳐져 「안 눌린다」로 읽힌다.
@@ -394,6 +410,8 @@ async function auditBoard(win, boardId, ordinal) {
       // 옳은 카드가 열렸는지 알 수 없다.
       cards_after: afterReal.cards !== before.cards ? afterReal.cards : undefined,
       board_after: afterReal.board !== before.board ? afterReal.board : undefined,
+      view_after: afterReal.view !== before.view ? afterReal.view : undefined,
+      seeded_after: afterReal.seeded !== before.seeded ? afterReal.seeded : undefined,
       synthetic_error: synthetic && synthetic.error ? synthetic.error : undefined,
     });
   }
