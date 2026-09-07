@@ -535,6 +535,43 @@ async function main() {
     `);
     pageOk('확대 조작', zoom);
     check('확대해도 프레임 크기가 안 변한다', zoom.stable === true, zoom);
+
+    // 범례(보드 03·04 「범례」 + 보드 07 채움 세 칸). 범례가 화면과 다른 말을 하면
+    // 안 되므로 라벨을 지도 렌더러의 실제 상수와 맞댄다 — 한쪽만 고치면 여기서 깨진다.
+    const legend = await evaluate(wc, `
+      const host = document.getElementById('graphLegend');
+      if (!host) return { ok: false, reason: '#graphLegend가 없다' };
+      const text = (sel) => Array.from(host.querySelectorAll(sel)).map((n) => n.textContent);
+      const edge = window.AthenaLib.GraphLiveMap.CONFIDENCE;
+      return {
+        ok: true,
+        hidden: host.hidden,
+        labels: text('.graph-legend-label'),
+        fillItems: host.querySelectorAll('.graph-legend-fill-item').length,
+        clusterChips: host.querySelectorAll('.graph-legend-cluster-chip').length,
+        captions: text('.graph-legend-caption'),
+        edgeLabels: [edge.EXTRACTED.label, edge.INFERRED.label, edge.AMBIGUOUS.label],
+        fillLabels: window.AthenaLib.GraphMapLegend.FILL_ITEMS.map((i) => i.label),
+      };
+    `);
+    pageOk('지도 범례', legend);
+    check('지도를 그리면 범례가 함께 선다', legend.hidden === false, legend.hidden);
+    check('범례가 보드 03·04의 여섯 줄과 보드 07의 채움 세 칸을 이 차례로 그린다',
+      JSON.stringify(legend.labels) === JSON.stringify([
+        '색 = 군집', '원 크기 = 연결 수', '사실', '추론', '불확실', '숨은 연관 — 군집을 넘는 연결',
+        '사실 · 체결·잔고', '불확실', '그 밖 · 모름',
+      ]), legend.labels);
+    check('선 셋의 이름이 지도가 실제로 쓰는 확정성 라벨과 같다',
+      JSON.stringify(legend.edgeLabels) === JSON.stringify(['사실', '추론', '불확실']), legend.edgeLabels);
+    check('채움 세 칸은 보드 07의 이름 그대로다',
+      JSON.stringify(legend.fillLabels) === JSON.stringify(['사실 · 체결·잔고', '불확실', '그 밖 · 모름']),
+      legend.fillLabels);
+    check('채움 표식이 세 칸이다', legend.fillItems === 3, legend.fillItems);
+    check('군집 색 표식은 지도가 쓴 군집 수만큼이다', legend.clusterChips > 0, legend.clusterChips);
+    // 확정 이름 파이프라인이 백엔드에 없으므로 캡션은 한 번 붙는다(보드 07 2QE0-2).
+    check('군집 이름 캡션은 군집마다가 아니라 지도에 한 번만 붙는다',
+      legend.captions.length === 1 && legend.captions[0] === '군집 이름은 대표 항목에서 추정',
+      legend.captions);
     await capture(wc, '04-map');
 
     // 노드 선택 — 캔버스는 클릭 좌표가 물리로 흔들리므로 렌더러 무관 진입점으로 잰다.

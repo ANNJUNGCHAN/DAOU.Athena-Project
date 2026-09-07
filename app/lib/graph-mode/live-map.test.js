@@ -4,7 +4,7 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
-const { buildEdges } = require('./live-map');
+const { buildEdges, nodeFill, signatureOf, CONFIDENCE } = require('./live-map');
 
 const THEME = { text: '#14171d', dim: '#5b6270', halo: '#ffffff', line: 'rgba(16,19,26,0.14)' };
 const HIDDEN_COLOR = '#ee137b';
@@ -64,4 +64,33 @@ test('쌍의 방향은 가리지 않는다 — 요약이 반대로 준 쌍도 �
   const built = buildEdges(crossingPayload(), THEME, [['t0', 's0']]);
   const pink = built.filter((e) => e.color.color === HIDDEN_COLOR);
   assert.deepEqual(pink.map((e) => [e.from, e.to]), [['s0', 't0']]);
+});
+
+// ── 노드 채움 = 확정성(보드 07 2QCN-2) ──────────────────────────────────────
+// 색은 계속 군집이다(보드 03·04) — 확정성은 채움의 유무와 테두리로 말한다.
+
+test('nodeFill — 사실은 군집색으로 채운다', () => {
+  const fill = nodeFill('#68BDF6', 'fact', THEME);
+  assert.equal(fill.background, '#68BDF6');
+  assert.equal(fill.border, '#68BDF6');
+});
+
+test('nodeFill — 불확실은 군집색을 지키고 주황 테두리로 말한다', () => {
+  const fill = nodeFill('#68BDF6', 'uncertain', THEME);
+  assert.equal(fill.background, '#68BDF6');
+  assert.equal(fill.border, CONFIDENCE.AMBIGUOUS.color);
+  assert.equal(fill.borderWidth, 3);
+});
+
+test('nodeFill — 모름은 채우지 않는다, 군집색은 테두리에 남는다', () => {
+  const fill = nodeFill('#68BDF6', 'unknown', THEME);
+  assert.equal(fill.background, THEME.halo);
+  assert.equal(fill.border, '#68BDF6');
+});
+
+test('signatureOf — 티어가 바뀌면 지도를 다시 그린다', () => {
+  const payload = crossingPayload();
+  const before = signatureOf(payload, [], new Map([['s0', 'unknown']]));
+  const after = signatureOf(payload, [], new Map([['s0', 'uncertain']]));
+  assert.notEqual(before, after);
 });

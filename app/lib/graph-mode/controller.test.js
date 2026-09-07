@@ -9,6 +9,8 @@ const path = require('node:path');
 const store = require('./graph-mode-store');
 const grouping = require('./cluster-grouping');
 const themeClusters = require('./theme-clusters');
+const mapLegend = require('./map-legend');
+const liveMapModule = require('./live-map');
 const prefs = require('./graph-mode-prefs');
 const {
   createGraphModeController, computeGraphHeaderMeta, formatEventDate, buildTimelineRows,
@@ -57,6 +59,8 @@ function setup(options) {
     chatHead: fakeNode('div'),
     graphHeaderMeta: fakeNode('span'),
     mapGuide: fakeNode('div'),
+    // 지도 범례(보드 03·04 + 07) — #graphBody의 형제라 지도를 다시 그려도 안 지워진다.
+    mapLegend: fakeNode('div'),
     graphSettings: fakeNode('div'),
     // 요약 서브뷰 본문 — 브레인 미기동 안내가 지도 말고 여기에도 선다(2QCN-2).
     summaryMain: fakeNode('div'),
@@ -100,6 +104,7 @@ function setup(options) {
     onRelationDelete: opts.onRelationDelete,
     filters: opts.filters,
     getFilters: opts.getFilters,
+    legend: opts.legend === undefined ? mapLegend : opts.legend,
   });
   // 대부분의 테스트는 브레인이 켜져 있다고 가정한다 — 꺼진 채 시작하고 싶은
   // 테스트만 opts.available: false를 넘긴다.
@@ -111,7 +116,7 @@ function setup(options) {
 // 재사용하므로(원칙1) render.test.js/theme-clusters.test.js와 같은 방식으로 window를 세운다.
 test.beforeEach(() => {
   installFakeDocument();
-  global.window = { AthenaLib: { ThemeClusters: themeClusters } };
+  global.window = { AthenaLib: { ThemeClusters: themeClusters, GraphLiveMap: liveMapModule } };
 });
 
 test.afterEach(() => {
@@ -628,6 +633,47 @@ test('숨은 연관을 아직 못 받았으면 지도에 강조할 쌍이 없다
   const { controller, liveRenderOptions } = setup({ payload: payloadTwoClusters });
   await controller.toggle();
   assert.deepEqual(liveRenderOptions[liveRenderOptions.length - 1].hiddenPairs, []);
+});
+
+// ── 지도 범례와 노드 채움(보드 07 2QCN-2) ───────────────────────────────────
+
+test('지도를 그리면 범례가 함께 선다', async () => {
+  const { controller, elements } = setup({ payload: payloadTwoClusters });
+  await controller.toggle();
+  assert.equal(elements.mapLegend.hidden, false);
+  const labels = elements.mapLegend.querySelectorAll('.graph-legend-label').map((n) => n.textContent);
+  assert.ok(labels.includes('색 = 군집'));
+  assert.ok(labels.includes('사실 · 체결·잔고'));
+  assert.equal(elements.mapLegend.querySelectorAll('.graph-legend-fill-item').length, 3);
+});
+
+test('확정 이름이 없는 군집이 있으면 범례 캡션이 한 번만 붙는다', async () => {
+  const { controller, elements } = setup({ payload: payloadTwoClusters });
+  await controller.toggle();
+  const captions = elements.mapLegend.querySelectorAll('.graph-legend-caption');
+  assert.equal(captions.length, 1, '군집마다가 아니라 지도에 한 번이다');
+  assert.equal(captions[0].textContent, '군집 이름은 대표 항목에서 추정');
+});
+
+test('지도가 안 그려지면 범례도 안 선다 — 없는 그림을 설명하지 않는다', async () => {
+  const { controller, elements } = setup({ payload: payloadTwoClusters, noLiveMap: true });
+  await controller.toggle();
+  assert.equal(elements.mapLegend.hidden, true);
+});
+
+test('지도에 넘기는 확정성은 성향 신호 전체에서 온다', async () => {
+  const entries = [
+    { entity_id: 'e:a', confidence: 'EXTRACTED', tier: 'deterministic' },
+    { entity_id: 'e:c', confidence: 'AMBIGUOUS', tier: 'conversational' },
+  ];
+  const { controller, liveRenderOptions } = setup({
+    payload: payloadTwoClusters, getProfileSummaryEntries: () => entries,
+  });
+  await controller.toggle();
+  const last = liveRenderOptions[liveRenderOptions.length - 1];
+  assert.equal(last.certaintyById.get('e:a'), 'fact');
+  assert.equal(last.certaintyById.get('e:c'), 'uncertain');
+  assert.equal(last.certaintyById.get('e:b'), undefined, '신호가 없는 노드는 지도가 모름으로 읽는다');
 });
 
 // ── 필터가 화면을 비웠을 때(보드 07 정직성 상태) ─────────────────────────────

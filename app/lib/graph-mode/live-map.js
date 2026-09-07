@@ -24,11 +24,10 @@ const PALETTE = ['#FFC454', '#68BDF6', '#6DCE9E', '#FF756E', '#DE9BF9', '#FB95AF
 // .graph-edge.is-inference, .graph-edge.is-hidden-link). 두 뷰를 오갈 때 같은 선이
 // 같은 뜻이어야 해서 색을 새로 만들지 않는다.
 //
-// 주의(알려진 차이): 정적 뷰는 **노드 채움**에도 확정성을 싣는다
-// (.graph-node-circle.is-fact/.is-warn/.is-soft). 라이브 뷰는 노드 색을 군집에
-// 쓰므로 그 축이 겹친다 — 여기서는 확정성을 엣지에만 싣고, 군집은 색으로 읽게 한다
-// (1단계 군집 버블이 색으로 군집을 말하던 것과 같은 읽기다). 노드 확정성까지
-// 살리려면 profile-summary 티어를 여기로 끌어와 테두리에 실어야 한다 — 후속 판단.
+// 노드 **채움**도 확정성을 싣는다(보드 07 2QCN-2 — 「원 크기가 이미 연결 수를
+// 말하므로, 채움은 다른 축(확정성)을 말한다」). 색은 계속 군집이다: 확정성은
+// 채움의 유무와 테두리로 말한다(nodeFill 참고). 세 칸의 판정은 성향 신호 표와
+// 같은 함수를 쓴다(map-legend.js certaintyOfEntry).
 const CONFIDENCE = {
   EXTRACTED: { label: '사실', color: 'rgba(16, 19, 26, 0.38)', dashes: false },
   INFERRED: { label: '추론', color: 'rgba(16, 19, 26, 0.24)', dashes: [4, 4] },
@@ -108,6 +107,21 @@ function clusterColor(cluster) {
   return PALETTE[((n % PALETTE.length) + PALETTE.length) % PALETTE.length];
 }
 
+// 확정성 세 칸의 실제 칠. 범례 표식(canvas.css .graph-legend-fill)이 **같은 규칙**을
+// 그리므로 여기를 고치면 거기도 고쳐야 한다 — 범례가 화면과 다른 말을 하면 안 된다.
+//   fact      군집색 채움          — 해석의 여지가 없는 기록에서 나온 신호
+//   uncertain 군집색 채움 + 주황 테두리 — 애매하다고 기록된 것(되물을 후보)
+//   unknown   빈 채움 + 군집색 테두리  — 추론이거나 성향 신호에 안 잡힌 구조 노드
+function nodeFill(color, certainty, theme) {
+  if (certainty === 'uncertain') {
+    return { background: color, border: CONFIDENCE.AMBIGUOUS.color, borderWidth: 3 };
+  }
+  if (certainty === 'unknown') {
+    return { background: theme.halo, border: color, borderWidth: 2 };
+  }
+  return { background: color, border: color, borderWidth: 2 };
+}
+
 function pairKey(a, b) {
   return `${String(a)}${SEP}${String(b)}`;
 }
@@ -115,14 +129,19 @@ function pairKey(a, b) {
 // 같은 그래프를 다시 받았는데 처음부터 다시 그리면 물리가 재시작돼 사용자가
 // 손으로 만들어 둔 배치가 날아간다. draw(true)는 필터·전환마다 불리므로
 // 내용이 실제로 달라졌을 때만 다시 만든다.
-function signatureOf(payload, hiddenPairs) {
+function signatureOf(payload, hiddenPairs, certaintyById) {
   const nodes = Array.isArray(payload && payload.nodes) ? payload.nodes : [];
   const edges = Array.isArray(payload && payload.edges) ? payload.edges : [];
   // 숨은 연관은 지도보다 늦게 도착한다(별도 왕복이다) — 강조할 쌍이 바뀌었으면
   // 같은 그래프라도 다시 그려야 핑크가 그 셋에 붙는다.
   const hidden = (Array.isArray(hiddenPairs) ? hiddenPairs : [])
     .map((pair) => (Array.isArray(pair) ? pairKey(pair[0], pair[1]) : '')).join(',');
-  return `${payload && payload.revision}|${nodes.length}|${edges.length}|${nodes.map((n) => n.entity_id).join(',')}|${hidden}`;
+  // 확정성 채움도 지도보다 늦게 도착한다(성향 신호는 별도 왕복이다) — 티어가
+  // 바뀌었으면 같은 그래프라도 다시 그려야 채움이 그 티어를 말한다.
+  const certainty = nodes
+    .map((n) => `${n.entity_id}:${(certaintyById && certaintyById.get(String(n.entity_id))) || ''}`)
+    .join(',');
+  return `${payload && payload.revision}|${nodes.length}|${edges.length}|${nodes.map((n) => n.entity_id).join(',')}|${hidden}|${certainty}`;
 }
 
 // 숨은 연관 강조는 **상위 3쌍에만** 붙는다(보드 2QCN-2 › 2QF8-2).
@@ -215,11 +234,14 @@ function createLiveMap(deps) {
     return Boolean(container && vis && vis.Network && vis.DataSet);
   }
 
-  function buildNodes(payload, theme) {
+  function buildNodes(payload, theme, certaintyById) {
     const maxDegree = Math.max(1, ...payload.nodes.map((n) => Number(n.degree) || 0));
     return payload.nodes.map((node) => {
       const color = clusterColor(node.cluster);
       const diameter = nodeDiameterPx(node.degree, maxDegree);
+      // 티어를 못 받은 노드는 '모름'이다 — 못 읽은 것을 사실로 칠하지 않는다.
+      const certainty = (certaintyById && certaintyById.get(String(node.entity_id))) || 'unknown';
+      const fill = nodeFill(color, certainty, theme);
       return {
         id: node.entity_id,
         // 캡션이 원 **안**에 든다(Neo4j와 같은 형태). shape:'dot'은 이름을 원 밖에
@@ -232,12 +254,12 @@ function createLiveMap(deps) {
         shape: 'circle',
         widthConstraint: { minimum: diameter, maximum: diameter },
         color: {
-          background: color,
-          border: color,
-          highlight: { background: color, border: theme.text },
-          hover: { background: color, border: theme.text },
+          background: fill.background,
+          border: fill.border,
+          highlight: { background: fill.background, border: theme.text },
+          hover: { background: fill.background, border: theme.text },
         },
-        borderWidth: 2,
+        borderWidth: fill.borderWidth,
         borderWidthSelected: 4,
         // 원 안이라 후광이 필요 없다 — 파스텔 군집색 위의 잉크로 충분히 읽힌다.
         font: { color: theme.text, size: 11, multi: false },
@@ -254,7 +276,8 @@ function createLiveMap(deps) {
       return false;
     }
     const hiddenPairs = (options && Array.isArray(options.hiddenPairs)) ? options.hiddenPairs : [];
-    const next = signatureOf(payload, hiddenPairs);
+    const certaintyById = (options && options.certaintyById instanceof Map) ? options.certaintyById : null;
+    const next = signatureOf(payload, hiddenPairs, certaintyById);
     if (network && next === signature) return true; // 같은 그래프 — 배치를 지키고 아무것도 안 한다.
     signature = next;
 
@@ -264,7 +287,7 @@ function createLiveMap(deps) {
     container.appendChild(host);
 
     const theme = themeColors(container);
-    nodesDs = new vis.DataSet(buildNodes(payload, theme));
+    nodesDs = new vis.DataSet(buildNodes(payload, theme, certaintyById));
     edgesDs = new vis.DataSet(buildEdges(payload, theme, hiddenPairs));
     network = new vis.Network(host, { nodes: nodesDs, edges: edgesDs }, {
       // 크기는 노드마다 widthConstraint로 못박는다(buildNodes) — scaling은 shape:'dot'의
@@ -396,7 +419,8 @@ function createLiveMap(deps) {
 }
 
 const __exports = {
-  createLiveMap, signatureOf, buildEdges, clusterColor, nodeDiameterPx, truncateForCircle, CONFIDENCE, PHYSICS,
+  createLiveMap, signatureOf, buildEdges, clusterColor, nodeFill, nodeDiameterPx, truncateForCircle,
+  CONFIDENCE, PHYSICS, PALETTE,
 };
 
 // UMD 각주(2026-08-18 렌더러 격리) — column-fold.js와 같은 패턴.

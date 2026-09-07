@@ -2876,6 +2876,8 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
   createLiveMap: window.AthenaLib.GraphLiveMap
     ? window.AthenaLib.GraphLiveMap.createLiveMap
     : undefined,
+  // 범례와 노드 채움의 확정성 인코딩(보드 07) — 같은 모듈이 둘을 정한다.
+  legend: window.AthenaLib.GraphMapLegend,
   elements: {
     summary: document.getElementById('mosaic'),
     // 가시성 전용 — graphMode.applyVisibility() 하나만 이 hidden을 건드린다.
@@ -2914,6 +2916,9 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
     // controller.js 하나(renderGraphHeader) — #graphCanvas 전체가 숨으면
     // 자식이라 함께 자동으로 숨으므로 이 로직은 1↔2단계 전환에만 관여한다.
     mapGuide: document.getElementById('graphMapGuide'),
+    // 지도 범례(보드 03·04 + 07) — #graphBody의 형제라 지도를 다시 그려도 안 지워진다.
+    // 내용·hidden은 controller.js renderMapLegend()가 소유한다.
+    mapLegend: document.getElementById('graphLegend'),
     // 세 번째 서브뷰(보드 05 수집·노출) — 요약 표·군집 지도와 같은 축이라
     // 가시성도 같은 함수가 소유한다.
     graphSettings: document.getElementById('graphSettingsCanvas'),
