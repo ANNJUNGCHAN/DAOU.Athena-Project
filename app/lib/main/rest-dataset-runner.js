@@ -604,9 +604,15 @@ async function runRestDataset({
   let firstPainted = false;
   let firstCanvasMs = null;
   let firstFeedbackMs = null;
-  const deadlineTimer = setTimeout(() => {
+  let firstCanvasWindowStart = startedAt;
+  let deadlineTimer = setTimeout(abortIfNoFirstPaint, dataset.firstCanvasDeadlineMs);
+  function abortIfNoFirstPaint() {
     if (!firstPainted) controller.abort(new RestDatasetError('first_canvas_deadline', '첫 카드 3초 마감 시간을 넘겼다'));
-  }, dataset.firstCanvasDeadlineMs);
+  }
+  function armFirstCanvasDeadline() {
+    clearTimeout(deadlineTimer);
+    deadlineTimer = setTimeout(abortIfNoFirstPaint, dataset.firstCanvasDeadlineMs);
+  }
   // 차트 껍질처럼 먼저 보이는 카드는 마운트 결과가 확정되기 전에 이미 첫 피드백을
   // 지킨다. 그 시점에 마감을 풀지 않으면 늦게 뜨는 차트마다 화면에는 카드가 있는데
   // 답변만 first_canvas_deadline으로 뒤집힌다.
@@ -649,7 +655,7 @@ async function runRestDataset({
     onEvent({ type: 'inline-start', datasetId: dataset.datasetId, itemId: item.itemId, ordinal: item.ordinal });
     const renderDeadlineMs = firstPainted
       ? BACKEND_MAX_DEADLINE_MS
-      : remainingRenderDeadlineMs(startedAt, dataset.firstCanvasDeadlineMs, clock());
+      : remainingRenderDeadlineMs(firstCanvasWindowStart, dataset.firstCanvasDeadlineMs, clock());
     const body = await readJson(await fetchImpl(`${backendBase}/api/v1/canvas/render-plan`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -686,7 +692,7 @@ async function runRestDataset({
       onEvent({ type: 'inline-ready', datasetId: dataset.datasetId, itemId: item.itemId, ordinal: item.ordinal });
       const paintDeadlineAt = firstPainted
         ? inlineAt + SECONDARY_PAINT_TIMEOUT_MS
-        : startedAt + dataset.firstCanvasDeadlineMs;
+        : firstCanvasWindowStart + dataset.firstCanvasDeadlineMs;
       const paint = await emitCanvas({
         datasetId: dataset.datasetId,
         itemId: item.itemId,
@@ -774,6 +780,10 @@ async function runRestDataset({
   try {
     await executeItem(dataset.items[0]);
     if (!controller.signal.aborted && dataset.items.length > 1) {
+      if (!firstPainted) {
+        firstCanvasWindowStart = clock();
+        armFirstCanvasDeadline();
+      }
       await runPool(dataset.items.slice(1), MAX_CONCURRENCY, executeItem);
     }
   } finally {
