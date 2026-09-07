@@ -1597,6 +1597,26 @@ const BACKTEST_CODE_DRAFT = Object.freeze({
   ].join('\n'),
 });
 
+const BACKTEST_FLOW_MAP = Object.freeze({
+  ok: true,
+  data: {
+    version: 1,
+    source_kind: 'code',
+    app_before: [{ key: 'load', title: '봉 데이터를 모읍니다', detail: '' }],
+    app_after: [
+      { key: 'fill', title: '사고·파는 가격을 정합니다', detail: '' },
+      { key: 'cost', title: '비용을 뗍니다', detail: '' },
+      { key: 'metrics', title: '성과를 냅니다', detail: '' },
+    ],
+    nodes: [
+      { id: 'params', numeral: '①', title: '조절할 값을 정합니다', lines: [], facts: [], status: 'ok' },
+      { id: 'indicators', numeral: '②', title: '가격을 지표로 바꿉니다', lines: [], facts: [], status: 'ok' },
+      { id: 'conditions', numeral: '③', title: '사고·파는 순간을 찍습니다', lines: [], facts: [], status: 'ok' },
+      { id: 'output', numeral: '④', title: '두 열만 돌려줍니다', lines: [], facts: [], status: 'ok' },
+    ],
+  },
+});
+
 // 보드 07 — 버전 id를 실은 실행 응답. BACKTEST_RUN_OK와 나누는 이유는 보드 03이
 // 재는 것이 결과 화면이라 버전 id가 없어도 그대로 서기 때문이다(그쪽 봉투를 늘리면
 // 보드 03의 판정이 배포 쪽 사정에 끌려간다).
@@ -2531,13 +2551,13 @@ const ROUTES = Object.freeze([
       '울린 기록 · 최근', '채팅에서 열기 ↗', '전체 이력 보기 →',
     ],
     // Paper 보드 12의 상태 제어 행은 [일시중지][취소][고치기 — 말로] 셋이고,
-    // 켜진 알람에는 초안의 「검사」가 없다. 설정 요약은 확인 주기·쿨다운·만료
-    // 세 줄이다 — 값(「1일」·「2026-10-03」)은 봉투가 주므로 개수로만 잰다.
+    // 켜진 알람에는 초안의 「검사」가 없다. 설정 요약은 확인 주기·쿨다운·만료와
+    // 데이터 출처 네 줄이다 — 값(「1일」·「2026-10-03」)은 봉투가 주므로 개수로만 잰다.
     structure: [
       { what: 'count', selector: '.agent-code-controls button', equals: 3 },
       { what: 'absent', selector: '.agent-code-check-btn' },
       { what: 'count', selector: '.agent-view-tab', equals: 4 },
-      { what: 'count', selector: '.agent-detail-field', equals: 3 },
+      { what: 'count', selector: '.agent-detail-field', equals: 4 },
     ],
   },
 
@@ -4244,7 +4264,7 @@ const ROUTES = Object.freeze([
     ],
     root: '#orbPanel',
     phrases: [
-      '메인 대화',
+      '키우미 대화',
       '셸을 내려두셨네요. 여기서 바로 물어보셔도 됩니다.',
       '긴 표와 차트는 줄여서 보여드리고, 전체는 대화창에서 이어집니다.',
       '대화창으로 가기',
@@ -4640,6 +4660,7 @@ const ROUTES = Object.freeze([
     // 설명·실제 값 표기는 그대로 쓰고」라고 못 박은 부분만 잰다.
     reach: [
       { do: 'ipc-fixture', channel: 'athena:backtest-presets', data: BACKTEST_PRESETS },
+      { do: 'ipc-fixture', channel: 'athena:backtest-map', data: BACKTEST_FLOW_MAP },
       { do: 'mode', view: 'backtest' },
       { do: 'send', channel: 'athena:backtest-chat-action', data: BACKTEST_TARGET },
       { do: 'wait', ms: 300 },

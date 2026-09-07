@@ -903,6 +903,7 @@ function createAgentCanvas(deps) {
 
   const timelineCaption = el('div', 'agent-panel-caption');
   timelineCaption.textContent = '다음 24시간';
+  timelineCaption.appendChild(fixtureMark());
   liveCol.appendChild(timelineCaption);
   const timelineWrap = el('div', 'agent-live-timeline');
   for (const t of fixtureTimeline()) {
@@ -930,10 +931,8 @@ function createAgentCanvas(deps) {
   wsRow.appendChild(wsDot);
   const wsLabel = el('span', 'agent-live-ws-label');
   wsRow.appendChild(wsLabel);
-  liveCol.appendChild(wsRow);
   const wsCaption = el('div', 'agent-live-ws-caption');
   wsCaption.textContent = '발화는 채팅으로 도착 — 여긴 관제만';
-  liveCol.appendChild(wsCaption);
 
   function renderWsStatus() {
     const connected = typeof getWsConnected === 'function' ? !!getWsConnected() : false;
@@ -943,6 +942,8 @@ function createAgentCanvas(deps) {
   }
 
   alarmLiveBody.appendChild(liveCol);
+  alarmLiveBody.appendChild(wsRow);
+  alarmLiveBody.appendChild(wsCaption);
 
   // ---------- 실행 이력 · 결과 드릴인(10단계, Paper 보드 41) ----------
   const historyBody = el('div', 'agent-history-body');
@@ -2491,6 +2492,9 @@ function createAgentCanvas(deps) {
     fieldsWrap.setAttribute('data-source', item.source);
     const fields = [['확인 주기', `장중 ${WatchNodes.pollMinutes(watch)}분`], ['쿨다운', WatchNodes.cooldownLabel(raw.cooldown_s)]];
     if (raw.expires_at) fields.push(['만료', WatchNodes.dayLabel(raw.expires_at)]);
+    // code-watch 실행기의 assemble_frame 입력 계약(일봉 캐시 + 오늘 시세).
+    // 현재 수신 여부를 뜻하지 않는다 — 검사만 돌릴 때는 완성 봉까지만 센다.
+    fields.push(['데이터', '일봉 + 오늘 현재가']);
     for (const [label, value] of fields) {
       const fieldRow = el('div', 'agent-detail-field');
       const l = el('span', 'agent-detail-field-label');
@@ -2616,6 +2620,7 @@ function createAgentCanvas(deps) {
       const logsCaptionRow = el('div', 'agent-panel-caption-row');
       const logsCaption = el('span', 'agent-panel-caption');
       logsCaption.textContent = '최근 실행';
+      logsCaption.appendChild(fixtureMark());
       logsCaptionRow.appendChild(logsCaption);
       // 드릴인(10단계)은 감시(watch)만 연다 — schedule도 3단계부터 실제
       // 라우틴이라 ledger에 대응 행이 생길 수 있지만, 이 화면에 그 배선을

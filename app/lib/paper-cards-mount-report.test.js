@@ -11,6 +11,7 @@ const {
   formatMountCliReport,
   groupBoardsByCard,
   mountFailures,
+  uniqueStateControls,
 } = require('./paper-cards-mount-report');
 
 // 창 없이 재는 부분만 본다 — 청크 묶기, 다중집합 3분류, 폭 하나의 실패 판정,
@@ -102,6 +103,21 @@ test('슬롯이 화면에 못 닿거나 상태 보드가 DOM에 안 찍히면 �
   assert.deepEqual(missing.map((item) => item.code), ['state_board_missing_in_dom']);
   assert.equal(missing[0].expected, 3);
   assert.equal(missing[0].in_dom, 2);
+});
+
+test('상태 링크 기대치는 조작 문구 수이지 대상 보드 수가 아니다', () => {
+  const { stateLinksFromMarks } = require('./board-mount');
+  const slots = JSON.parse(require('node:fs').readFileSync(
+    require('node:path').join(__dirname, '..', '..', 'backend', 'ref', 'card-surface-templates', '137X-2', 'slots.json'),
+    'utf8',
+  ));
+  const links = stateLinksFromMarks(slots.state_controls);
+  assert.equal(links.length, 7);
+  assert.equal(uniqueStateControls(links), 6);
+  assert.equal(
+    mountFailures(step({ expectedStateBoards: uniqueStateControls(links), probe: probe({ state_boards_in_dom: 6 }) })).length,
+    0,
+  );
 });
 
 test('DOM 텍스트가 slots.json과 다르면 어느 글자가 왜 다른지까지 남는다', () => {

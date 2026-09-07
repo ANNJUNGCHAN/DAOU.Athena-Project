@@ -96,6 +96,9 @@ test('통계 카드: "진행 중"만 fixture, 나머지 3장은 live로 표시�
   const inProgress = cards.find((c) => findByClass(c, 'agent-stat-label')[0].textContent === '진행 중');
   assert.equal(inProgress.getAttribute('data-source'), 'fixture');
   assert.equal(findByClass(inProgress, 'agent-demo-mark')[0].textContent, '데모');
+  for (const card of bySource('live')) {
+    assert.equal(findByClass(card, 'agent-demo-mark').length, 0, `${findByClass(card, 'agent-stat-label')[0].textContent} live 카드에 데모가 있으면 안 된다`);
+  }
 });
 
 test('통계 카드: 데이터가 없을 때 "다음 실행"·"오늘 발화"는 지어낸 값 없이 정직한 빈 상태를 보여준다(P3)', () => {
@@ -565,6 +568,9 @@ test('최근 실행 로그는 fixture로 표시된다(ledger 라이브 연결은
   const logsWrap = findByClass(container, 'agent-detail-logs')[0];
   assert.equal(logsWrap.getAttribute('data-source'), 'fixture');
   assert.equal(findByClass(logsWrap, 'agent-detail-log').length, 3);
+  const recent = findByClass(container, 'agent-panel-caption').find((n) => n.textContent === '최근 실행');
+  assert.ok(recent);
+  assert.equal(findByClass(recent, 'agent-demo-mark')[0].textContent, '데모');
 });
 
 // ── F-fix1(본편 이월 갭, Paper 39번 실측 AAG-0): "채팅에서 열기 ↗" ──
@@ -940,10 +946,13 @@ test('라이브 컬럼: 진행바 2건 + "다음 24시간" 타임라인 4건이 
   canvas.mount();
   const liveCol = findByClass(container, 'agent-live-col')[0];
   assert.equal(liveCol.getAttribute('data-source'), 'fixture');
+  assert.equal(findByClass(liveCol, 'agent-demo-mark').length, 2);
   assert.equal(findByClass(liveCol, 'agent-demo-mark')[0].textContent, '데모');
   assert.equal(findByClass(liveCol, 'agent-live-progress-row').length, 2);
   assert.equal(findByClass(liveCol, 'agent-live-progress-badge')[0].textContent, '데모');
   assert.equal(findByClass(liveCol, 'agent-live-timeline-row').length, 4);
+  assert.equal(findByClass(liveCol, 'agent-live-ws').length, 0);
+  assert.equal(findByClass(container, 'agent-live-ws')[0].getAttribute('data-source'), 'live');
 });
 
 test('"WS 연결됨" — getWsConnected()가 실데이터다, false면 정직하게 "연결 안 됨"', () => {
@@ -2248,7 +2257,7 @@ test('A-5 상세: 울린 기록·일시중지·취소·고치기·만료가 있�
     findByClass(row, 'agent-detail-field-label')[0].textContent,
     findByClass(row, 'agent-detail-field-value')[0].textContent,
   ]);
-  assert.deepEqual(Object.fromEntries(pairs), { '확인 주기': '장중 1분', 쿨다운: '1일', 만료: '2026-10-03' });
+  assert.deepEqual(Object.fromEntries(pairs), { '확인 주기': '장중 1분', 쿨다운: '1일', 만료: '2026-10-03', 데이터: '일봉 + 오늘 현재가' });
 
   const inputs = [];
   (function walk(n) { if (['input', 'select', 'textarea'].includes(n.tag)) inputs.push(n); (n.children || []).forEach(walk); })(detail);
@@ -2343,6 +2352,17 @@ test('켜진 알람에는 승인 패널이 없다 — 승인은 초안 한 번�
   const { detail } = await mountCode({ status: 'active' });
   assert.equal(findByClass(detail, 'agent-code-approve').length, 0);
 });
+
+for (const status of ['draft', 'active', 'paused']) {
+  test(`446V 데이터 행: ${status} 코드 감시는 실행기의 일봉·현재가 입력 계약을 표시한다`, async () => {
+    const { detail } = await mountCode({ status }, { detail: { last_check: null, last_run: null } });
+    const rows = findByClass(detail, 'agent-detail-field');
+    const data = rows.find((row) => findByClass(row, 'agent-detail-field-label')[0].textContent === '데이터');
+    assert.ok(data, '검사 전에도 실제 감시 실행기가 받을 데이터 종류를 알아야 한다');
+    assert.equal(findByClass(data, 'agent-detail-field-value')[0].textContent, '일봉 + 오늘 현재가');
+    assert.doesNotMatch(allText(data), /수신됨|연결됨|실시간 정상/);
+  });
+}
 
 test('초안: 검사 요약과 「검사」 버튼이 있고 누르면 검사 1회를 돈다', async () => {
   const checked = [];

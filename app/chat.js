@@ -3396,7 +3396,8 @@ function watchPollMinutes(r) {
   return Number.isFinite(sec) && sec >= 60 ? Math.round(sec / 60) : 1;
 }
 
-// 검사 1회 — 응답 본문을 그대로 돌려준다(문구는 checkCardModel이 만든다).
+// 검사 1회 — 응답 본문을 돌려준다(문구는 checkCardModel이 만든다).
+// 성공인데 날짜가 없고 같은 검사의 last_check가 있으면 counted_through만 얕은 복사로 얹는다.
 // 통로 자체가 실패하면 카드가 실패로 그려지도록 ok:false 모양으로 감싼다.
 async function runWatchCheck(r) {
   const watch = await watchBlockOf(r);
@@ -3413,7 +3414,22 @@ async function runWatchCheck(r) {
   let res;
   try { res = await window.athena.invoke('athena:routine-watch-check', { body }); }
   catch { return { ok: false, reason: '검사 통로가 막혀 있음' }; }
-  if (res && res.ok && res.data) return res.data;
+  if (res && res.ok && res.data) {
+    const check = res.data;
+    // 검사 응답에 빠진 날짜는 같은 검사의 상세 스냅샷에서만 보충한다.
+    // checked_at은 UTC지만 counted_through는 실제로 센 KST 날짜다.
+    if (check.ok === true && !check.counted_through && check.checked_at && r.id) {
+      try {
+        const detail = await window.athena.invoke('athena:routine-detail', { id: r.id });
+        const saved = detail && detail.ok && detail.data && detail.data.last_check;
+        if (saved && saved.ok === true && saved.checked_at === check.checked_at
+            && typeof saved.counted_through === 'string' && saved.counted_through) {
+          return Object.assign({}, check, { counted_through: saved.counted_through });
+        }
+      } catch { /* 원래 검사 결과는 보존하고 날짜를 추정하지 않는다 */ }
+    }
+    return check;
+  }
   return { ok: false, reason: (res && res.error) || '검사 통로가 막혀 있음' };
 }
 
@@ -3514,6 +3530,37 @@ function renderWatchCheckCard(r, check) {
     why.className = 'agent-source';
     why.textContent = model.reason;
     card.appendChild(why);
+  }
+
+  if (model.fireDots.length) {
+    const strip = document.createElement('div');
+    strip.className = 'agent-fix-dots';
+    for (const dot of model.fireDots) {
+      const cell = document.createElement('span');
+      cell.className = `agent-fix-dot is-${dot.state}`;
+      cell.setAttribute('data-day', dot.date);
+      cell.setAttribute('title', `${dot.date} · ${dot.state === 'fired' ? '울림' : '울림 없음'}`);
+      strip.appendChild(cell);
+    }
+    card.appendChild(strip);
+  }
+  if (model.fireRows.length) {
+    const fires = document.createElement('div');
+    fires.className = 'agent-check-fires';
+    for (const text of model.fireRows) {
+      const fire = document.createElement('span');
+      fire.className = 'agent-check-fire';
+      fire.textContent = text;
+      fires.appendChild(fire);
+    }
+    card.appendChild(fires);
+  }
+
+  if (model.dateWindowNote) {
+    const note = document.createElement('div');
+    note.className = 'agent-source';
+    note.textContent = model.dateWindowNote;
+    card.appendChild(note);
   }
 
   // A-10 — 오늘 봉은 아직 안 끝났다는 고지. 검사 카드에서 빠질 수 없다.
@@ -4898,6 +4945,11 @@ document.addEventListener('athena:backtest-receipt', (event) => {
 document.addEventListener('athena:chat-submit', (event) => {
   const text = String((event && event.detail && event.detail.text) || '').trim();
   if (!text) return;
+  // Enter·추천 칩과 같은 게이트 — 없으면 [새 기법 만들기]가 진행 중 턴을 대체한다.
+  if (state !== 'idle' || remoteQueryBusy) {
+    appendSystemLine('답변 중');
+    return;
+  }
   dispatchUserQuery(text);
 });
 
