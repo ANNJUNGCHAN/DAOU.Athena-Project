@@ -60,6 +60,13 @@ function safeText(value, max = 500) {
   return String(value == null ? '' : value).replace(/[\u0000-\u001f\u007f]/g, ' ').slice(0, max);
 }
 
+function userFacingProviderError(text) {
+  const raw = safeText(text);
+  if (/weekly limit/i.test(raw) || /hit your/i.test(raw)) return '이번 주 모델 한도에 닿았습니다';
+  if (/rate[_ ]limit/i.test(raw)) return '모델 요청 한도에 닿았습니다';
+  return raw;
+}
+
 function plainObject(value) {
   return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
 }
@@ -635,7 +642,10 @@ class ClaudeAgentSession {
       return;
     }
     if (message.type === 'rate_limit_event') {
-      this._emit(active, 'warning', { code: 'CLAUDE_RATE_LIMIT', safeMessage: safeText(message.rate_limit_info && message.rate_limit_info.status || 'rate-limit') });
+      this._emit(active, 'warning', {
+        code: 'CLAUDE_RATE_LIMIT',
+        safeMessage: userFacingProviderError(message.rate_limit_info && message.rate_limit_info.status || 'rate-limit'),
+      });
       return;
     }
     if (message.type === 'result') await this._handleResult(active, message);
@@ -749,7 +759,7 @@ class ClaudeAgentSession {
     }
     if (message.subtype !== 'success' || message.is_error === true) {
       const detail = Array.isArray(message.errors) ? message.errors.join('; ') : message.result;
-      this._finishFailure(active, 'PROVIDER_PROTOCOL_ERROR', true, safeText(detail || 'Claude turn failed'));
+      this._finishFailure(active, 'PROVIDER_PROTOCOL_ERROR', true, userFacingProviderError(detail || 'Claude turn failed'));
       return;
     }
     const sessionId = String(message.session_id || active.sessionId || '');
@@ -1061,6 +1071,7 @@ module.exports = {
   createClaudeAgentSession,
   canonicalMessageHash,
   canonicalToolName,
+  userFacingProviderError,
   collectExactMcpTools,
   validateInitialClaudeCursor,
   DEFAULT_INITIALIZE_TIMEOUT_MS,

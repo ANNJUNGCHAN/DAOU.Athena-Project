@@ -224,6 +224,10 @@ def _watch_last(runtime: RoutinesRuntime, spec: Any, kind: str) -> dict[str, Any
 async def create_draft(request: Request, body: dict[str, Any]) -> dict[str, Any]:
     runtime = _runtime(request)
     spec = validate_draft(body)  # RoutineValidationError → 422 (errors.py)
+    if spec.mode == "code-watch":
+        blocker = runtime.code_watch_source_blocker(spec)
+        if blocker is not None:
+            raise HTTPException(status_code=409, detail=blocker)
     runtime.store.upsert(spec)
     return _view(spec, runtime)
 
@@ -364,6 +368,7 @@ async def save_watch_code_route(request: Request, body: dict[str, Any]) -> dict[
     그때는 해시가 어긋나 다시 검사를 받아야 재개된다. 이 문구는 화면이 그대로
     보여주지 않는다.
     """
+    from athena_api.projects.store import ProjectMissingError
     from athena_api.watch.store_code import CodeLocked, save_watch_code
 
     runtime = _runtime(request)
@@ -387,6 +392,8 @@ async def save_watch_code_route(request: Request, body: dict[str, Any]) -> dict[
         return result
     except KeyError:
         raise HTTPException(status_code=404, detail="프로젝트 없음") from None
+    except ProjectMissingError:
+        raise HTTPException(status_code=404, detail="프로젝트 폴더 없음 — 다시 연결") from None
     except CodeLocked:
         raise HTTPException(
             status_code=409,
@@ -407,7 +414,7 @@ async def check_watch_code(request: Request, body: dict[str, Any]) -> dict[str, 
     백테스트의 전략·실행·배포 표에는 아무 행도 만들지 않는다(R5). 늘어날 수 있는 것은
     공유 일봉 캐시(`bt_candle` 행 추가·`bt_coverage` 구간 확장)뿐이다.
     """
-    from athena_api.projects.store import ProjectPathError
+    from athena_api.projects.store import ProjectMissingError, ProjectPathError
     from athena_api.watch.check import run_check
     from athena_api.watch.data import assemble_frame, frame_from_candles
 
@@ -440,6 +447,8 @@ async def check_watch_code(request: Request, body: dict[str, Any]) -> dict[str, 
         target = resolve_watch_file(project_id, path)
     except KeyError:
         raise HTTPException(status_code=404, detail="프로젝트 없음") from None
+    except ProjectMissingError:
+        raise HTTPException(status_code=404, detail="프로젝트 폴더 없음 — 다시 연결") from None
     except ProjectPathError as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from None
     if not target.is_file():
@@ -734,7 +743,7 @@ async def rollback_watch_fix(request: Request, routine_id: str) -> dict[str, Any
     켜져 있는 알람은 못 되돌린다(R10과 같은 규칙) — 돌고 있는 코드가 사람 확정
     없이 바뀌면 안 된다.
     """
-    from athena_api.projects.store import ProjectPathError
+    from athena_api.projects.store import ProjectMissingError, ProjectPathError
 
     runtime = _runtime(request)
     spec = runtime.store.get(routine_id)
@@ -754,6 +763,8 @@ async def rollback_watch_fix(request: Request, routine_id: str) -> dict[str, Any
         target = resolve_watch_file(spec.watch.project_id, spec.watch.path)
     except KeyError:
         raise HTTPException(status_code=404, detail="프로젝트 없음") from None
+    except ProjectMissingError:
+        raise HTTPException(status_code=404, detail="프로젝트 폴더 없음 — 다시 연결") from None
     except ProjectPathError as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from None
     # 접어 둘 때 read_text가 이미 개행을 LF로 읽었다 — 여기서 다시 고르지 않는다.

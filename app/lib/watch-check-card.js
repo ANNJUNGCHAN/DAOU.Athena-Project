@@ -2,6 +2,10 @@
 (function () {
 'use strict';
 
+const isNode = typeof module !== 'undefined' && module.exports;
+const WatchNodes = isNode ? require('./watch-nodes') : window.AthenaLib.WatchNodes;
+const FixCycle = isNode ? require('./watch-fix-cycle') : window.AthenaLib.WatchFixCycle;
+
 // 검사 결과 카드(Paper 보드 10/446V-1)의 순수 계산 — DOM은 만들지 않는다
 // (chat.js가 renderWatchCheckCard에서 조립). 백엔드 /routines/watch/check 응답을
 // 사람이 읽는 문구로 바꾸는 로직만 여기 둔다 — routine-turn.js의 describeMode,
@@ -57,6 +61,17 @@ function checkCardModel(check, draft) {
   const count = Number(res.count);
   const countText = Number.isFinite(count) && count >= 0 ? count : 0;
   const last = lastFireDate(res);
+  const fires = ok && Array.isArray(res.fires)
+    ? res.fires.filter((fire) => fire && typeof fire.dt === 'string' && fire.dt.trim()) : [];
+  // 캔버스와 같은 날짜 계산. 검사 마지막 날이 없으면 현재 날짜로 메우지 않는다.
+  const fireDots = ok ? FixCycle.dotStrip({
+    lookback_days: res.lookback_days, counted_through: res.counted_through,
+    fires_after_dates: fires.map((fire) => fire.dt),
+  }) : [];
+  const fireRows = fires.map((fire) => `${shortDate(fire.dt)}${
+    typeof fire.close === 'number' && Number.isFinite(fire.close)
+      ? ` · 종가 ${WatchNodes.formatValue(fire.close)}` : ''
+  }`);
 
   const nodes = Array.isArray(res.nodes) ? res.nodes : [];
   const summary = nodeSummary(nodes);
@@ -89,6 +104,11 @@ function checkCardModel(check, draft) {
     chips,
     failed: !ok,
     reason,
+    fireDots,
+    fireRows,
+    // 구간 끝 날짜가 없으면 달력을 추정하지 않는다.
+    dateWindowNote: ok && fires.length && !fireDots.length
+      ? '검사 구간 날짜를 붙이지 못함 — 울린 날만 표시' : '',
   };
 }
 

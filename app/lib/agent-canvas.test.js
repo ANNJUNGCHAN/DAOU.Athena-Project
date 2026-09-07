@@ -85,17 +85,83 @@ test('mount(): 헤더(타이틀·부제·탭 3종·검색·CTA)와 통계 카드
   assert.equal(findByClass(container, 'agent-stat-card').length, 4);
 });
 
-test('통계 카드: "진행 중"만 fixture, 나머지 3장은 live로 표시된다(3단계 라이브 승격)', () => {
+test('통계 카드: 진행 중은 활성 감시 집계만 표시하고 허위 데모 진행률을 만들지 않는다', async () => {
   const container = fakeNode('div');
   const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
   canvas.mount();
+  await canvas.refresh();
   const cards = findByClass(container, 'agent-stat-card');
   const bySource = (src) => cards.filter((c) => c.getAttribute('data-source') === src);
-  assert.equal(bySource('fixture').length, 1, '"진행 중" 하나만 fixture로 남는다');
-  assert.equal(bySource('live').length, 3, '다음 실행·오늘 발화·성향 제안은 live다');
+  assert.equal(bySource('fixture').length, 0);
+  assert.equal(bySource('live').length, 4);
   const inProgress = cards.find((c) => findByClass(c, 'agent-stat-label')[0].textContent === '진행 중');
-  assert.equal(inProgress.getAttribute('data-source'), 'fixture');
-  assert.equal(findByClass(inProgress, 'agent-demo-mark')[0].textContent, '데모');
+  assert.equal(inProgress.getAttribute('data-source'), 'live');
+  assert.equal(findByClass(inProgress, 'agent-stat-value')[0].textContent, '없음');
+  assert.equal(findByClass(inProgress, 'agent-stat-sub')[0].textContent, '활성 감시가 없습니다');
+  for (const card of bySource('live')) {
+    assert.equal(findByClass(card, 'agent-demo-mark').length, 0, `${findByClass(card, 'agent-stat-label')[0].textContent} live 카드에 데모가 있으면 안 된다`);
+  }
+});
+
+test('통계 카드: 라우틴 조회가 끝나기 전에는 진행 중을 불러오는 중으로 표시한다', async () => {
+  let resolveRoutines;
+  const pendingRoutines = new Promise((resolve) => { resolveRoutines = resolve; });
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({ container, fetchRoutines: () => pendingRoutines });
+  canvas.mount();
+
+  const refresh = canvas.refresh();
+  const inProgress = findByClass(container, 'agent-stat-card').find(
+    (card) => findByClass(card, 'agent-stat-label')[0].textContent === '진행 중',
+  );
+  assert.equal(findByClass(inProgress, 'agent-stat-value')[0].textContent, '불러오는 중');
+
+  resolveRoutines([]);
+  await refresh;
+});
+
+test('통계 카드: 진행 중 건수는 활성 감시만 세고 예약·일시중지·초안은 제외한다', async () => {
+  const container = fakeNode('div');
+  const routines = [
+    routine({ id: 'periodic-active', status: 'active', mode: 'periodic' }),
+    routine({ id: 'code-active', status: 'active', mode: 'code-watch' }),
+    routine({ id: 'scheduled-active', status: 'active', mode: 'scheduled' }),
+    routine({ id: 'periodic-paused', status: 'paused', mode: 'periodic' }),
+    routine({ id: 'periodic-draft', status: 'draft', mode: 'periodic' }),
+  ];
+  const canvas = createAgentCanvas({ container, fetchRoutines: async () => routines });
+  canvas.mount();
+  await canvas.refresh();
+
+  const inProgress = findByClass(container, 'agent-stat-card').find(
+    (card) => findByClass(card, 'agent-stat-label')[0].textContent === '진행 중',
+  );
+  assert.equal(findByClass(inProgress, 'agent-stat-value')[0].textContent, '2건 감시 중');
+});
+
+test('통계 카드: 성공 뒤 라우틴 조회가 실패하면 기존 목록을 보존하고 진행 상태를 알 수 없음으로 표시한다', async () => {
+  let shouldFail = false;
+  const container = fakeNode('div');
+  const canvas = createAgentCanvas({
+    container,
+    fetchRoutines: async () => {
+      if (shouldFail) throw new Error('network down');
+      return [routine({ id: 'kept', note: '보존할 감시' })];
+    },
+  });
+  canvas.mount();
+  await canvas.refresh();
+  shouldFail = true;
+  await canvas.refresh();
+
+  assert.deepEqual(
+    findByClass(container, 'agent-row').map((row) => findByClass(row, 'agent-row-title')[0].textContent),
+    ['보존할 감시'],
+  );
+  const inProgress = findByClass(container, 'agent-stat-card').find(
+    (card) => findByClass(card, 'agent-stat-label')[0].textContent === '진행 중',
+  );
+  assert.equal(findByClass(inProgress, 'agent-stat-value')[0].textContent, '확인할 수 없음');
 });
 
 test('통계 카드: 데이터가 없을 때 "다음 실행"·"오늘 발화"는 지어낸 값 없이 정직한 빈 상태를 보여준다(P3)', () => {
@@ -565,6 +631,9 @@ test('최근 실행 로그는 fixture로 표시된다(ledger 라이브 연결은
   const logsWrap = findByClass(container, 'agent-detail-logs')[0];
   assert.equal(logsWrap.getAttribute('data-source'), 'fixture');
   assert.equal(findByClass(logsWrap, 'agent-detail-log').length, 3);
+  const recent = findByClass(container, 'agent-panel-caption').find((n) => n.textContent === '최근 실행');
+  assert.ok(recent);
+  assert.equal(findByClass(recent, 'agent-demo-mark')[0].textContent, '데모');
 });
 
 // ── F-fix1(본편 이월 갭, Paper 39번 실측 AAG-0): "채팅에서 열기 ↗" ──
@@ -940,10 +1009,13 @@ test('라이브 컬럼: 진행바 2건 + "다음 24시간" 타임라인 4건이 
   canvas.mount();
   const liveCol = findByClass(container, 'agent-live-col')[0];
   assert.equal(liveCol.getAttribute('data-source'), 'fixture');
+  assert.equal(findByClass(liveCol, 'agent-demo-mark').length, 2);
   assert.equal(findByClass(liveCol, 'agent-demo-mark')[0].textContent, '데모');
   assert.equal(findByClass(liveCol, 'agent-live-progress-row').length, 2);
   assert.equal(findByClass(liveCol, 'agent-live-progress-badge')[0].textContent, '데모');
   assert.equal(findByClass(liveCol, 'agent-live-timeline-row').length, 4);
+  assert.equal(findByClass(liveCol, 'agent-live-ws').length, 0);
+  assert.equal(findByClass(container, 'agent-live-ws')[0].getAttribute('data-source'), 'live');
 });
 
 test('"WS 연결됨" — getWsConnected()가 실데이터다, false면 정직하게 "연결 안 됨"', () => {
@@ -2248,7 +2320,7 @@ test('A-5 상세: 울린 기록·일시중지·취소·고치기·만료가 있�
     findByClass(row, 'agent-detail-field-label')[0].textContent,
     findByClass(row, 'agent-detail-field-value')[0].textContent,
   ]);
-  assert.deepEqual(Object.fromEntries(pairs), { '확인 주기': '장중 1분', 쿨다운: '1일', 만료: '2026-10-03' });
+  assert.deepEqual(Object.fromEntries(pairs), { '확인 주기': '장중 1분', 쿨다운: '1일', 만료: '2026-10-03', 데이터: '일봉 + 오늘 현재가' });
 
   const inputs = [];
   (function walk(n) { if (['input', 'select', 'textarea'].includes(n.tag)) inputs.push(n); (n.children || []).forEach(walk); })(detail);
@@ -2328,6 +2400,65 @@ test('초안: 승인 패널의 「이 알람 승인」은 채팅 칩과 같은 c
   assert.deepEqual(confirmed, ['cw1']);
 });
 
+test('초안: 상세 조회에만 활성화 차단 사유가 있어도 승인을 비활성화한다', async () => {
+  const { detail } = await mountCode({ status: 'draft' }, {
+    detail: { activation_blocker: '감시 코드 파일 없음 — 먼저 만들기' },
+    confirmRoutine: async () => { throw new Error('승인 게이트가 호출되면 안 됨'); },
+  });
+  const approve = findByClass(detail, 'agent-code-approve-btn')[0];
+  assert.equal(approve.disabled, true);
+  assert.ok(allText(detail).includes('지금은 켤 수 없음: 감시 코드 파일 없음 — 먼저 만들기'));
+});
+
+test('초안: 상세 조회의 activation_blocker null은 목록의 오래된 차단 사유를 해제한다', async () => {
+  const confirmed = [];
+  const { detail } = await mountCode({
+    status: 'draft', activation_blocker: '목록에 남은 오래된 차단 사유',
+  }, {
+    detail: { activation_blocker: null },
+    confirmRoutine: async (id) => { confirmed.push(id); },
+  });
+
+  assert.equal(findByClass(detail, 'agent-code-approve-blocker').length, 0);
+  const approve = findByClass(detail, 'agent-code-approve-btn')[0];
+  assert.equal(approve.disabled, false);
+  await approve.dispatchEvent({ type: 'click' });
+  assert.deepEqual(confirmed, ['cw1']);
+});
+
+test('초안: 다시 만들기 payload는 상세 감시 값을 우선하고 source_spec으로 조건을 대신하지 않는다', async () => {
+  let payload;
+  const detailWatch = {
+    project_id: 'detail-project', path: 'watch/detail.py', version_hash: 'detail-hash',
+    params: { days: 3 }, poll_interval_s: 180, lookback_days: 40,
+  };
+  const detailCondition = { field: 'volume_ratio', op: '>=', value: 1.5 };
+  const { detail } = await mountCode({
+    status: 'draft', activation_blocker: '목록 차단', symbol: 'RAW',
+    watch: { path: 'watch/raw.py', poll_interval_s: 60 },
+    condition: { field: 'raw', op: '>', value: 99 },
+    source_spec: { transport: 'raw-source-spec-must-not-be-used' },
+    cooldown_s: 86400, expires_at: '2026-10-01T00:00:00Z', note: '목록 설명',
+  }, {
+    detail: {
+      activation_blocker: '상세 차단', symbol: 'DETAIL', watch: detailWatch,
+      condition: detailCondition, cooldown_s: 300,
+      expires_at: '2026-11-02T00:00:00Z', note: '상세 설명',
+    },
+    onEditInChat: (_id, opts) => { payload = opts; },
+  });
+
+  await findByClass(detail, 'agent-code-repair-btn')[0].dispatchEvent({ type: 'click' });
+  assert.equal(payload.reason, '상세 차단');
+  assert.equal(payload.symbol, 'DETAIL');
+  assert.equal(payload.watch, detailWatch);
+  assert.equal(payload.condition, detailCondition);
+  assert.equal(payload.cooldown_s, 300);
+  assert.equal(payload.expires_at, '2026-11-02T00:00:00Z');
+  assert.equal(payload.note, '상세 설명');
+  assert.equal(Object.prototype.hasOwnProperty.call(payload, 'source_spec'), false);
+});
+
 test('초안: 승인 패널의 「취소」는 cancelRoutine을 부른다 — 상태 제어 행의 취소와 같은 채널', async () => {
   const cancelled = [];
   const { detail } = await mountCode({ status: 'draft' }, {
@@ -2343,6 +2474,17 @@ test('켜진 알람에는 승인 패널이 없다 — 승인은 초안 한 번�
   const { detail } = await mountCode({ status: 'active' });
   assert.equal(findByClass(detail, 'agent-code-approve').length, 0);
 });
+
+for (const status of ['draft', 'active', 'paused']) {
+  test(`446V 데이터 행: ${status} 코드 감시는 실행기의 일봉·현재가 입력 계약을 표시한다`, async () => {
+    const { detail } = await mountCode({ status }, { detail: { last_check: null, last_run: null } });
+    const rows = findByClass(detail, 'agent-detail-field');
+    const data = rows.find((row) => findByClass(row, 'agent-detail-field-label')[0].textContent === '데이터');
+    assert.ok(data, '검사 전에도 실제 감시 실행기가 받을 데이터 종류를 알아야 한다');
+    assert.equal(findByClass(data, 'agent-detail-field-value')[0].textContent, '일봉 + 오늘 현재가');
+    assert.doesNotMatch(allText(data), /수신됨|연결됨|실시간 정상/);
+  });
+}
 
 test('초안: 검사 요약과 「검사」 버튼이 있고 누르면 검사 1회를 돈다', async () => {
   const checked = [];

@@ -7,6 +7,8 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
 const backtestCanvas = require('./backtest-canvas');
 const { createBacktestCanvas } = backtestCanvas;
 
@@ -72,6 +74,10 @@ function fakeNode(tag) {
     },
     getAttribute(k) {
       return Object.prototype.hasOwnProperty.call(this.attrs, k) ? this.attrs[k] : null;
+    },
+    removeAttribute(k) {
+      delete this.attrs[k];
+      if (k === 'class') this.className = '';
     },
     addEventListener(type, handler) {
       (this._listeners[type] = this._listeners[type] || []).push(handler);
@@ -188,6 +194,20 @@ async function fillForm(container) {
   to.value = '20260828';
   await to.dispatchEvent({ type: 'input' });
 }
+
+test('기법을 고르기 전에는 빈 채팅 축 data-technique이 없고 고른 뒤에 선다', async () => {
+  const head = fakeNode('div');
+  global.document.getElementById = (id) => (id === 'chatModeHead' ? head : null);
+  const { container, canvas } = makeCanvas();
+  canvas.mount();
+  await flush();
+  assert.equal(head.getAttribute('data-technique'), null);
+  const item = findByClass(container, 'backtest-preset-item')[0];
+  assert.ok(item, '목록에 기법이 있어야 한다');
+  await click(item);
+  await flush();
+  assert.equal(head.getAttribute('data-technique'), 'sma_crossover');
+});
 
 // ── 보드 17 · 출처에서 지도로 ───────────────────────────────────────────────
 //
@@ -598,7 +618,8 @@ test('보드 19: mount 직후는 기법 목록이고 프리셋 0번을 자동으
   assert.equal(findByClass(container, 'backtest-run-button').length, 0);
   const ctx = canvas.getContext();
   assert.equal(ctx.spec, null);
-  assert.equal(ctx.designTab, 'form');
+  assert.equal(ctx.screen, 'technique-list');
+  assert.equal(ctx.designTab, null, '목록 화면을 폼이라고 말하지 않는다');
   assert.equal(textOf(container).includes('data.symbols'), false);
   assert.equal(textOf(container).includes('pydantic'), false);
 });
@@ -608,7 +629,9 @@ test('empty → design: 프리셋 목록·대상·지표·조건·리스크 카�
   canvas.mount();
   await flush();
   await toForm(container);
-  assert.equal(findByClass(container, 'backtest-preset-item').length, 1);
+  // 목록은 홈에만 선다 — 기법 하나의 화면에는 목록으로 돌아가는 문만 있다.
+  assert.equal(findByClass(container, 'backtest-preset-item').length, 0);
+  assert.equal(findByClass(container, 'backtest-head-home').length, 1);
   assert.ok(findByClass(container, 'backtest-symbol-add').length, '종목 입력이 있어야 한다');
   assert.equal(findByClass(container, 'backtest-indicator-row').length, 2);
   assert.equal(findByClass(container, 'backtest-condition-card').length, 2);
@@ -748,7 +771,7 @@ test('승인 카드 [취소] → 설계로 돌아간다', async () => {
   const { container } = await toApproval();
   await click(findByClass(container, 'backtest-approval-cancel')[0]);
   assert.equal(findByClass(container, 'backtest-approval').length, 0);
-  assert.ok(findByClass(container, 'backtest-preset-item').length);
+  assert.ok(findByClass(container, 'backtest-subtab').length, '설계 화면으로 돌아온다');
 });
 
 test('[수집하고 실행] → backfill 바디가 폼 값 그대로다', async () => {
@@ -810,7 +833,7 @@ test('중단 뒤에 늦게 돌아온 수집 응답이 백테스트를 시작하�
   // run은 승인 카드를 띄운 첫 호출 하나뿐이어야 한다 — 늦게 온 done이 실행을 열지 않는다.
   assert.equal(calls.length, 1);
   assert.equal(findByClass(container, 'backtest-canvas-error').length, 0);
-  assert.ok(findByClass(container, 'backtest-preset-item').length);
+  assert.ok(findByClass(container, 'backtest-subtab').length, '설계 화면으로 돌아온다');
 });
 
 // ── 보드 03 · 결과 ──────────────────────────────────────────────────────────
@@ -899,6 +922,9 @@ test('결과에서 설계로 돌아가는 탭이 있다 — 갇히지 않는다'
   const tabs = findByClass(container, 'backtest-tab');
   assert.equal(tabs.length, 5);
   await click(tabs[0]);
+  assert.ok(findByClass(container, 'backtest-subtab').length, '설계 화면으로 돌아온다');
+  // 목록(홈)으로 가는 문도 있다.
+  await toList(container);
   assert.ok(findByClass(container, 'backtest-preset-item').length);
 });
 
@@ -991,6 +1017,23 @@ async function mounted(overrides) {
   await flush();
   await toForm(made.container);
   return made;
+}
+
+// 기법 하나의 화면에서 목록(홈)으로 — 헤더의 [기법 목록]/[그만두기]. 목록이 이미 서 있으면
+// 그대로다. 목록은 홈에만 선다(2026-09-07 사용자 확정: 한 페이지 = 한 알고리즘).
+async function toList(container) {
+  const home = findByClass(container, 'backtest-head-home')[0];
+  if (home) { await click(home); await flush(); }
+}
+
+async function clickNewTechnique(made) {
+  await toList(made.container);
+  await click(findByClass(made.container, 'backtest-technique-new')[0]);
+  await flush();
+}
+
+function subtabNamed(container, label) {
+  return findByClass(container, 'backtest-subtab').find((t) => t.textContent === label);
 }
 
 const RECEIPT_KEYS = [
@@ -1254,11 +1297,8 @@ test('preset이 든 설정: 전략이 바뀌고 종목·기간은 남으며 나�
   assert.equal(spec.toDt, '20260828');
   assert.deepEqual(Object.keys(spec.params), ['period']);
   assert.equal(spec.params.period.default, 7);
-  await toForm(container);
-  const selected = findByClass(container, 'backtest-preset-item')
-    .filter((n) => n.getAttribute('aria-pressed') === 'true');
-  assert.equal(selected.length, 1);
-  assert.equal(findByClass(selected[0], 'backtest-preset-name')[0].textContent, 'RSI 과매도');
+  // 헤더가 바뀐 전략을 말한다 — 목록은 홈에만 서고 홈은 전략을 내려놓는 자리다.
+  assert.equal(findByClass(container, 'backtest-head-strategy')[0].textContent, 'RSI 과매도');
 
   // 되돌리면 앞 전략으로 통째로 돌아간다.
   assert.equal(canvas.undoChatAction(receipt.id).ok, true);
@@ -1687,12 +1727,13 @@ test('getContext(): 키 목록이 계약으로 고정돼 있다 — spec은 복�
   const { canvas } = await mounted();
   const ctx = canvas.getContext();
   assert.deepEqual(Object.keys(ctx), [
-    'view', 'tab', 'designTab', 'runPath', 'spec', 'draft', 'pending', 'presets',
+    'view', 'tab', 'screen', 'designTab', 'runPath', 'spec', 'draft', 'pending', 'presets',
     'techniqueDraft', 'technique',
     'map', 'code', 'codeDraft', 'lastResult', 'diagnosis', 'optimize', 'runs', 'coverage',
     'lastChange', 'project',
   ]);
   assert.equal(ctx.view, 'design');
+  assert.equal(ctx.screen, null);
   assert.equal(ctx.techniqueDraft, false, '새 기법을 만드는 중이 아니다');
   assert.equal(ctx.spec.presetId, 'sma_crossover');
   assert.equal(ctx.draft, null);
@@ -1901,6 +1942,14 @@ test('모드 탭 5개와 설계 하위 탭 4개가 계약으로 고정돼 있다
     ['지도', '폼', '코드 · 최후의 보루', '노드·흐름']);
 });
 
+test('사용자 문구는 탭 이름 기법에서 파생하고 옛 이름 설계를 쓰지 않는다', () => {
+  const src = fs.readFileSync(path.join(__dirname, 'backtest-canvas.js'), 'utf8');
+  assert.match(src, /\$\{MODE_TABS\[0\]\[1\]\}으로 돌아가기/);
+  assert.match(src, /이 값을 \$\{MODE_TABS\[0\]\[1\]\}에 넣기/);
+  assert.equal(src.includes("'설계로 돌아가기'"), false);
+  assert.equal(src.includes("'이 값을 설계에 넣기'"), false);
+});
+
 test('배포 모드 3종의 기본은 승인이다 — 자동 주문이 기본이 아니다', () => {
   assert.deepEqual(backtestCanvas.DEPLOY_MODES.map((m) => m[0]),
     ['observe', 'approve', 'auto']);
@@ -1930,7 +1979,8 @@ test('오류 화면에는 설계로 돌아가는 버튼이 있다 — 막다른 
   await flush();
   assert.equal(findByClass(container, 'backtest-canvas-error').length, 1);
   const back = findByClass(container, 'backtest-error-back')[0];
-  assert.ok(back, '설계로 돌아가기 버튼이 있어야 한다');
+  assert.ok(back, '기법으로 돌아가기 버튼이 있어야 한다');
+  assert.equal(back.textContent, '기법으로 돌아가기');
   await click(back);
   assert.equal(canvas.getContext().view, 'design');
   assert.equal(findByClass(container, 'backtest-symbol-add').length, 1);
@@ -1951,6 +2001,11 @@ const IDE_TREE = [
 
 const PROJECT_SOURCE = 'PARAMS = {}\ndef signals(df, p):\n    return [["entry", "exit"]]\n';
 
+// 이 폴더의 strategy.py를 가리키는 등록부 줄 — 기법 화면은 목록에서 이 줄을 눌러 들어간다.
+const PROJECT_STRATEGY = {
+  id: 'u0', name: 'strategy', project_id: 'p1', path: 'strategy.py', exists: true, params: {},
+};
+
 // 가짜 디스크 — 쓴 것이 읽힌다. 진짜 디스크가 그러하고, "쓰고 나서 실행"이 편집기
 // 버퍼의 옛 내용으로 도는지(캔버스가 파일을 다시 읽는지)를 이 fake만이 잡아낸다.
 function projectDeps(overrides) {
@@ -1966,17 +2021,18 @@ function projectDeps(overrides) {
       disk[p] = text;
       return { path: p, size: text.length, mtime: 1 };
     },
+    userStrategies: async () => [PROJECT_STRATEGY],
   }, overrides || {});
 }
 
-// 폼을 채우고 → 코드 탭으로 옮겨 → 프로젝트를 고르고 → strategy.py를 연다.
+// 폼(대상·기간)을 채우고 → 목록으로 → 이 폴더의 기법을 고른다. 기법 화면이 열리며 그 파일이
+// 편집기에 들어온다 — 코드 탭에서 폴더를 고르는 길은 없다(기법 하나의 화면, 보드 20).
 async function openProjectFile(made) {
   await fillForm(made.container);
-  await click(findByClass(made.container, 'backtest-subtab')[2]);
+  await toList(made.container);
+  await toList(made.container);
+  await click(findByClass(made.container, 'backtest-user-strategy-item')[0]);
   await flush();
-  await click(findByClass(made.container, 'project-ide-project')[0]);
-  await flush();
-  await click(findByClass(made.container, 'project-ide-file')[0]);
   await flush();
 }
 
@@ -1988,19 +2044,40 @@ test('코드 탭: 프로젝트 배선이 없으면 지금까지의 단일 편집
   assert.equal(findByClass(container, 'backtest-code-save').length, 1);
 });
 
-test('코드 탭: 프로젝트를 고르기 전에는 IDE와 옛 편집기가 함께 선다', async () => {
+test('코드 탭: 프리셋은 단일 편집기, 폴더가 있는 기법은 그 폴더의 편집기 — 폴더를 고르는 줄은 없다', async () => {
   const made = await mounted(projectDeps());
   await click(findByClass(made.container, 'backtest-subtab')[2]);
   await flush();
-  assert.equal(findByClass(made.container, 'project-ide').length, 1);
-  assert.equal(findByClass(made.container, 'backtest-code-textarea').length, 1, '되돌아갈 자리가 남아야 한다');
-  // 프로젝트를 고르면 IDE가 코드 탭을 가져간다.
-  await click(findByClass(made.container, 'project-ide-project')[0]);
-  await flush();
+  // 프리셋(yaml)에는 폴더가 없다 — 지금까지의 단일 편집기와 경계 카드다.
+  assert.equal(findByClass(made.container, 'project-ide').length, 0);
+  assert.equal(findByClass(made.container, 'backtest-code-textarea').length, 1);
+  assert.equal(findByClass(made.container, 'backtest-code-save').length, 1);
+  assert.equal(findByClass(made.container, 'backtest-code-bounds').length, 1);
+  // 목록에서 폴더가 있는 기법을 고르면 그 폴더 하나의 편집기가 코드 탭이다.
+  await openProjectFile(made);
   assert.equal(findByClass(made.container, 'project-ide-body').length, 1);
   assert.equal(findByClass(made.container, 'backtest-code-save').length, 0);
-  // 이 코드가 닿을 수 있는 것(경계 카드)은 어느 쪽에서도 사라지지 않는다.
-  assert.equal(findByClass(made.container, 'backtest-code-bounds').length, 1);
+  assert.equal(findByClass(made.container, 'backtest-code-bounds').length, 0, '기법 화면에는 경계 카드가 없다(보드 20)');
+  // 다른 폴더를 고르는 줄·새 프로젝트·폴더 열기는 없다 — 한 페이지는 한 알고리즘만 다룬다.
+  assert.equal(findByClass(made.container, 'project-ide-project').length, 0);
+  assert.doesNotMatch(textOf(made.container), /새 프로젝트|폴더 열기/);
+  // 헤더는 폴더 이름과 목록으로 돌아가는 문이다 — 모드 탭·폼/코드 갈래는 없다.
+  assert.equal(findByClass(made.container, 'backtest-head-folder')[0].textContent, '내 전략/');
+  assert.match(findByClass(made.container, 'backtest-head-folder-sub')[0].textContent, /폴더 하나가 기법 하나 · 대화 하나 · 1개 파일/);
+  assert.equal(findByClass(made.container, 'backtest-head-home')[0].textContent, '기법 목록');
+  assert.equal(findByClass(made.container, 'backtest-tab').length, 0);
+  assert.equal(findByClass(made.container, 'backtest-runpath').length, 0);
+  assert.deepEqual(
+    findByClass(made.container, 'backtest-subtab').map((t) => t.textContent),
+    ['코드', '노드·흐름', '폼', '배포'],
+  );
+  // 왼쪽 열 — 기법 폴더 트리와 다짐 한 줄(보드 20).
+  assert.equal(findByClass(made.container, 'project-ide-side-title')[0].textContent, '기법 폴더');
+  assert.match(textOf(made.container), /이 폴더 밖은 AI가 건드리지 않습니다/);
+  // [기법 목록]으로 돌아가면 목록이고, 앞 기법의 파일은 실행 대상이 아니다.
+  await toList(made.container);
+  assert.equal(findByClass(made.container, 'backtest-technique-list').length, 1);
+  assert.equal(made.canvas.getContext().project, null);
 });
 
 test('실행: 지금 연 파일의 본문이 source로 실린다(D2 — 진실은 디스크에 있다)', async () => {
@@ -2031,8 +2108,8 @@ test('실행: 저장 안 한 편집이 있으면 막고 "저장하고 실행하�
   assert.equal(sent, null, '실행이 나가면 안 된다');
   assert.match(textOf(made.container), /저장하고 실행하세요/);
 
-  // 저장하면 그 본문 그대로 돈다.
-  await click(findByClass(made.container, 'project-ide-save')[0]);
+  // 저장하면(Ctrl+S — 자동 저장은 타이머를 기다린다) 그 본문 그대로 돈다.
+  await findByClass(made.container, 'project-ide')[0].dispatchEvent({ type: 'keydown', key: 's', ctrlKey: true });
   await flush();
   await click(findByClass(made.container, 'backtest-run-button')[0]);
   await flush();
@@ -2071,11 +2148,9 @@ function fileDeps(writes, overrides) {
 }
 
 // 프로젝트만 고르고 파일은 열지 않는다 — 채팅이 새 파일을 내는 흔한 자리다.
+// 폴더만 고르는 길은 없어졌다 — 폴더는 기법을 고를 때 그 파일과 함께 열린다.
 async function selectProjectOnly(made) {
-  await click(findByClass(made.container, 'backtest-subtab')[2]);
-  await flush();
-  await click(findByClass(made.container, 'project-ide-project')[0]);
-  await flush();
+  await openProjectFile(made);
 }
 
 test('file_draft: 코드 탭에 diff가 서고 파일은 아직 쓰이지 않는다', async () => {
@@ -2163,7 +2238,7 @@ test('file_draft: 프로젝트가 없거나 .py가 아니면 서지 않고 이�
   });
   assert.equal(blocked.applied, false);
   assert.equal(blocked.canApply, false);
-  assert.deepEqual(blocked.errors, ['코드 탭에서 프로젝트 폴더를 먼저 여세요']);
+  assert.deepEqual(blocked.errors, ['기법 목록에서 폴더가 있는 기법을 먼저 고르세요']);
 
   const made = await mounted(fileDeps(writes));
   await selectProjectOnly(made);
@@ -2301,9 +2376,10 @@ function userStrategyDeps(overrides) {
   }), overrides || {});
 }
 
-test('설계 폼: 내가 만든 기법도 같은 목록에 선다 — 묶음은 하나뿐이다', async () => {
+test('기법 목록: 내가 만든 기법도 같은 목록에 선다 — 묶음은 하나뿐이다', async () => {
   const { container } = await mounted(userStrategyDeps());
   await flush();
+  await toList(container);
   assert.equal(findByClass(container, 'backtest-technique-list').length, 1, '목록은 하나다');
   assert.equal(findByClass(container, 'backtest-preset-item').length, 1);
   const items = findByClass(container, 'backtest-user-strategy-item');
@@ -2316,20 +2392,53 @@ test('설계 폼: 내가 만든 기법도 같은 목록에 선다 — 묶음은 
   assert.equal(findByClass(container, 'backtest-user-strategy-remove').length, 1);
 });
 
-test('설계 폼: 등록부 배선이 없으면 내가 만든 기법 줄이 없을 뿐 목록은 그대로다', async () => {
+test('기법 목록: 등록부 배선이 없으면 내가 만든 기법 줄이 없을 뿐 목록은 그대로다', async () => {
   const { container } = await mounted();
+  await toList(container);
   assert.equal(findByClass(container, 'backtest-user-strategy-item').length, 0);
   assert.equal(findByClass(container, 'backtest-preset-item').length, 1);
   assert.match(textOf(container), /기법 — 1개/);
 });
 
+test('목록 첫 화면은 헤더에 기법 N개를 다시 쓰지 않는다', async () => {
+  const { container, canvas } = makeCanvas();
+  canvas.mount();
+  await flush();
+  assert.equal(findByClass(container, 'backtest-head-count').length, 0);
+  assert.match(textOf(container), /기법 — 1개/);
+});
+
 test('기법 카드: 이름·분류 칩(한국어)·한 줄 설명이 함께 선다', async () => {
   const { container } = await mounted();
+  await toList(container);
   const card = findByClass(container, 'backtest-preset-item')[0];
   assert.equal(findByClass(card, 'backtest-preset-name')[0].textContent, 'SMA 골든크로스');
   assert.equal(findByClass(card, 'backtest-preset-category')[0].textContent, '추세');
   // 설명은 프리셋 yaml의 metadata.description을 그대로 쓴다 — 지어내지 않는다.
   assert.match(findByClass(card, 'backtest-technique-desc')[0].textContent, /단기 이평이/);
+});
+
+test('기법 2열 격자는 긴 이름에 트랙이 끌려가지 않는다', () => {
+  const css = fs.readFileSync(path.join(__dirname, '..', 'shell.css'), 'utf8');
+  assert.match(css, /\.backtest-technique-list \{[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/s);
+  assert.match(css, /\.backtest-technique-card \{[^}]*min-width:\s*0/s);
+  const name = css.match(/\.backtest-preset-name,\s*\.backtest-user-strategy-name \{[\s\S]*?\}/)[0];
+  assert.match(name, /min-width:\s*0/);
+  assert.match(name, /overflow:\s*hidden/);
+  assert.match(name, /text-overflow:\s*ellipsis/);
+});
+
+test('[+ 새 기법 만들기] 배너는 브랜드 알파만 쓰고 팔레트 밖 hex를 만들지 않는다', () => {
+  const css = fs.readFileSync(path.join(__dirname, '..', 'shell.css'), 'utf8');
+  const block = css.match(/\.backtest-technique-new \{[\s\S]*?\}/)[0];
+  const hover = css.match(/\.backtest-technique-new:hover \{[^}]+\}/)[0];
+  assert.match(block, /background:\s*rgb\(238 19 123 \/ 5%\)/);
+  assert.match(hover, /background:\s*rgb\(238 19 123 \/ 10%\)/);
+  assert.equal(/#fff5fa|#ffedf6/i.test(block + hover), false);
+  const plus = css.match(/\.backtest-technique-new-plus \{[\s\S]*?\}/)[0];
+  const chip = css.match(/\.backtest-technique-new-chip \{[\s\S]*?\}/)[0];
+  assert.match(plus, /font-size:\s*var\(--text-lg\)/);
+  assert.match(chip, /font-size:\s*var\(--text-xs\)/);
 });
 
 test('[+ 새 기법 만들기]: 빈 뼈대를 코드창에 세우고 첫 문장을 채팅에 보낸다', async () => {
@@ -2343,8 +2452,7 @@ test('[+ 새 기법 만들기]: 빈 뼈대를 코드창에 세우고 첫 문장�
   global.document.dispatchEvent = (event) => { sent.push(event); return true; };
   try {
     const made = await mounted();
-    await click(findByClass(made.container, 'backtest-technique-new')[0]);
-    await flush();
+    await clickNewTechnique(made);
     const ctx = made.canvas.getContext();
     assert.equal(ctx.designTab, 'code', '코드창이 먼저 선다');
     assert.equal(ctx.runPath, 'code');
@@ -2368,12 +2476,14 @@ test('[+ 새 기법 만들기]: 빈 뼈대를 코드창에 세우고 첫 문장�
 
 test('[+ 새 기법 만들기] 뒤에 기법을 고르면 만들던 중이라는 신호가 꺼진다', async () => {
   const made = await mounted();
-  await click(findByClass(made.container, 'backtest-technique-new')[0]);
-  await flush();
+  await clickNewTechnique(made);
   assert.equal(made.canvas.getContext().techniqueDraft, true);
-  // 초안에는 폼 탭이 없다 — 목록으로 돌아가는 문은 진행 표시의 [기법 목록] 하나다.
-  await click(findByClass(made.container, 'backtest-technique-back')[0]);
+  // 초안에는 폼 탭이 없다 — 목록으로 돌아가는 문은 헤더의 [그만두기] 하나다.
+  assert.equal(findByClass(made.container, 'backtest-head-home')[0].textContent, '그만두기');
+  await click(findByClass(made.container, 'backtest-head-home')[0]);
   await flush();
+  assert.equal(made.canvas.getContext().techniqueDraft, false);
+  assert.equal(findByClass(made.container, 'backtest-technique-list').length, 1, '홈으로 돌아온다');
   await click(findByClass(made.container, 'backtest-preset-item')[0]);
   await flush();
   const ctx = made.canvas.getContext();
@@ -2474,7 +2584,8 @@ test('목록 화면의 navigate는 하위 탭을 반영하지 않고 이유를 �
   assert.equal(receipt.applied, false);
   assert.deepEqual(receipt.errors, ['기법을 먼저 고르세요']);
   const ctx = made.canvas.getContext();
-  assert.equal(ctx.designTab, 'form', '없는 탭으로 컨텍스트만 옮기지 않는다');
+  assert.equal(ctx.screen, 'technique-list');
+  assert.equal(ctx.designTab, null, '목록 화면을 폼이라고 말하지 않는다');
   assert.equal(findByClass(made.container, 'backtest-technique-list').length, 1);
 });
 
@@ -2529,6 +2640,7 @@ test('내 전략을 고르면 그 파일이 IDE에 열리고 실행경로가 코
   const made = await mounted(userStrategyDeps());
   await flush();
   await fillForm(made.container);
+  await toList(made.container);
   await click(findByClass(made.container, 'backtest-user-strategy-item')[0]);
   await flush();
   await flush();
@@ -2544,6 +2656,7 @@ test('내 전략을 고르면 그 파일이 IDE에 열리고 실행경로가 코
 test('내 전략을 고르면 등록부의 PARAMS가 슬라이더로 서고, 지표·조건 카드는 사라진다', async () => {
   const made = await mounted(userStrategyDeps());
   await flush();
+  await toList(made.container);
   await click(findByClass(made.container, 'backtest-user-strategy-item')[0]);
   await flush();
   await flush();
@@ -2566,6 +2679,7 @@ test('내 전략 실행: 파일 본문·project_id·슬라이더 값이 함께 �
   }));
   await flush();
   await fillForm(made.container);
+  await toList(made.container);
   await click(findByClass(made.container, 'backtest-user-strategy-item')[0]);
   await flush();
   await flush();
@@ -2581,6 +2695,219 @@ test('내 전략 실행: 파일 본문·project_id·슬라이더 값이 함께 �
   assert.equal(sent.params.fast, 35);
 });
 
+// ── 처음 있던 기법(프리셋)도 같은 기법 화면이다(2026-09-07 사용자 확정) ─────────
+// 폴더 배선(codegen · 프로젝트 채널)이 있으면 프리셋을 고르는 것은 내 기법을 고르는 것과 같다:
+// yaml에서 파이썬을 만들어 그 기법의 폴더에 두고 strategy.py를 편집기에 연다. 배선이 없는
+// 하네스(위 mounted())에서는 지금까지의 지도·폼 표면이 선다 — 그 계약은 위 테스트들이 잔다.
+
+const PRESET_SOURCE = [
+  'import athena_bt as bt',
+  '',
+  'PARAMS = {"fast": {"default": 20, "min": 5, "max": 60}, "slow": {"default": 60, "min": 20, "max": 240}}',
+  '',
+  '',
+  'def signals(df, p):',
+  '    return df',
+  '',
+].join('\n');
+
+// 가짜 디스크 + 프로젝트 배선 + codegen. createProject는 관리형 폴더처럼 씨앗을 갖고 태어난다.
+function presetWorkspaceDeps(calls, overrides) {
+  const disk = {};
+  const projects = [];
+  return Object.assign(projectDeps({
+    createProject: async (name) => {
+      calls.created.push(name);
+      const project = {
+        id: `pp-${projects.length + 1}`, name: String(name), path: `C:/x/${name}`,
+        kind: 'managed', created_at: '2026-09-07T00:00:00Z', exists: true, py_files: 1,
+      };
+      projects.push(project);
+      disk['strategy.py'] = '# 씨앗\n';
+      return { project, seed: 'strategy.py' };
+    },
+    listProjects: async () => ({ projects: projects.slice(), notice: null }),
+    projectTree: async () => ({
+      entries: Object.keys(disk).map((path) => ({
+        name: path.split('/').pop(), path, is_dir: false, py: /\.py$/i.test(path), size: 1,
+      })),
+      truncated: false,
+    }),
+    readProjectFile: async (_id, path) => {
+      if (!(path in disk)) throw new Error('파일이 존재하지 않는다');
+      return { path, text: disk[path] };
+    },
+    writeProjectFile: async (id, path, text) => {
+      calls.writes.push({ id, path, text });
+      disk[path] = text;
+      return { path, size: text.length, mtime: 1 };
+    },
+    codegen: async (body) => { calls.codegen.push(body); return { source: PRESET_SOURCE }; },
+    userStrategies: async () => [],
+  }), overrides || {});
+}
+
+function presetCalls() {
+  return { created: [], writes: [], codegen: [], map: [], nodes: [] };
+}
+
+// 목록(홈)에서 시작한다 — mounted()는 폼을 보려고 프리셋을 한 번 눌러 두는데, 배선이 있으면
+// 그 클릭이 이미 폴더를 열어 셈이 하나 어긋난다.
+async function mountedList(overrides) {
+  const made = makeCanvas(overrides);
+  made.canvas.mount();
+  await flush();
+  return made;
+}
+
+// 목록에서 프리셋을 누른 뒤 폴더·파일까지 다 열리기를 기다린다.
+async function openPreset(made) {
+  await toList(made.container);
+  await click(findByClass(made.container, 'backtest-preset-item')[0]);
+  for (let i = 0; i < 6; i += 1) await flush();
+}
+
+test('프리셋을 고르면 그 기법의 폴더가 열린다 — 코드는 yaml에서 만들고 폴더는 한 번만 만든다', async () => {
+  const calls = presetCalls();
+  const made = await mountedList(presetWorkspaceDeps(calls, {
+    map: async (body) => { calls.map.push(body); return MAP_PAYLOAD; },
+  }));
+  await openPreset(made);
+  // 코드는 그 기법의 yaml에서 나오고, 폴더 이름은 기법 이름이다(경로 한 조각으로 다듬어).
+  assert.equal(calls.codegen.length, 1);
+  assert.match(calls.codegen[0].yaml, /sma_crossover/);
+  assert.deepEqual(calls.created, ['SMA-골든크로스']);
+  assert.deepEqual(calls.writes.map((w) => w.path), ['strategy.py', 'tests/test_strategy.py']);
+  assert.equal(calls.writes[0].text, PRESET_SOURCE);
+  // 기법 하나의 화면이다 — 폴더 헤더, [기법 목록], 모드 탭 없음, 지도 없음.
+  const ctx = made.canvas.getContext();
+  assert.equal(ctx.runPath, 'code');
+  assert.equal(ctx.project.name, 'SMA-골든크로스');
+  assert.equal(ctx.project.activeFile, 'strategy.py');
+  assert.equal(ctx.designTab, 'code');
+  assert.equal(ctx.code.source, PRESET_SOURCE);
+  assert.equal(findByClass(made.container, 'backtest-head-folder')[0].textContent, 'SMA-골든크로스/');
+  assert.equal(findByClass(made.container, 'backtest-head-home')[0].textContent, '기법 목록');
+  assert.equal(findByClass(made.container, 'backtest-tab').length, 0);
+  assert.deepEqual(
+    findByClass(made.container, 'backtest-subtab').map((t) => t.textContent),
+    ['코드', '노드·흐름', '폼', '배포'],
+  );
+  assert.equal(calls.map.length, 0, '지도를 만들지 않는다');
+  assert.equal(findByClass(made.container, 'backtest-code-textarea')[0].value, PRESET_SOURCE);
+  assert.equal(findByClass(made.container, 'project-ide-side').length, 1);
+  // 다시 고르면 같은 폴더다 — 폴더를 또 만들지도, 파일을 다시 쓰지도 않는다.
+  await openPreset(made);
+  assert.deepEqual(calls.created, ['SMA-골든크로스']);
+  assert.equal(calls.writes.length, 2);
+  assert.equal(calls.codegen.length, 2, '코드는 매번 만들지만 폴더가 있으면 그 파일이 이긴다');
+  assert.equal(made.canvas.getContext().project.activeFile, 'strategy.py');
+});
+
+test('프리셋 폼: 지표·조건 카드 대신 파라미터 카드다 — 슬라이더는 실행에 params로 얹힌다', async () => {
+  const calls = presetCalls();
+  let sent = null;
+  const made = await mountedList(presetWorkspaceDeps(calls, {
+    run: async (body) => { sent = body; return { run_id: 'r1' }; },
+    result: async () => ({ status: 'running' }),
+  }));
+  await openPreset(made);
+  await fillForm(made.container);
+  await toForm(made.container);
+  assert.equal(findByClass(made.container, 'backtest-indicator-row').length, 0);
+  assert.equal(findByClass(made.container, 'backtest-condition-card').length, 0);
+  assert.match(textOf(made.container), /범위는 기법이 정한 값입니다/);
+  const sliders = findByClass(made.container, 'backtest-param-slider');
+  assert.equal(sliders.length, 2);
+  assert.equal(sliders[0].getAttribute('max'), '60', 'yaml의 범위 그대로다');
+  sliders[0].value = '35';
+  await sliders[0].dispatchEvent({ type: 'input' });
+  await click(findByClass(made.container, 'backtest-run-button')[0]);
+  await flush();
+  assert.equal(sent.source, PRESET_SOURCE, '도는 것은 폴더의 파일이다');
+  assert.equal(sent.project_id, 'pp-1');
+  assert.equal(sent.params.fast, 35);
+  assert.equal(sent.params.slow, 60);
+});
+
+test('프리셋 노드·흐름: 열린 파일이 원문이다 — 지도 뒤의 코드를 다시 만들지 않는다', async () => {
+  const calls = presetCalls();
+  const seen = {};
+  const made = await mountedList(presetWorkspaceDeps(calls, {
+    techniqueNodesLib: fakeNodesLib(seen),
+    techniqueNodes: async (body) => { calls.nodes.push(body); return NODES_RESPONSE; },
+  }));
+  await openPreset(made);
+  await click(subtabNamed(made.container, '노드·흐름'));
+  await flush();
+  await flush();
+  assert.deepEqual(calls.nodes, [{ source: PRESET_SOURCE }]);
+  assert.equal(calls.codegen.length, 1, '폴더를 열 때 한 번뿐이다');
+  assert.equal(made.canvas.getContext().designTab, 'nodes');
+});
+
+test('프리셋: 폴더를 못 만들면 화면 버퍼로 열고 그 사실을 적는다 — 실행은 그 코드를 싣는다', async () => {
+  const calls = presetCalls();
+  let sent = null;
+  const made = await mountedList(presetWorkspaceDeps(calls, {
+    createProject: async () => { throw new Error('프로젝트 API 없음'); },
+    run: async (body) => { sent = body; return { run_id: 'r1' }; },
+    result: async () => ({ status: 'running' }),
+  }));
+  await openPreset(made);
+  await fillForm(made.container);
+  // 폼을 채운 뒤 코드 탭으로 — 버퍼로 물러난 사실과 코드는 코드 탭에 적힌다.
+  await click(subtabNamed(made.container, '코드'));
+  const ctx = made.canvas.getContext();
+  assert.equal(ctx.project, null);
+  assert.equal(ctx.code.source, PRESET_SOURCE);
+  assert.match(textOf(made.container), /폴더를 만들지 못해 화면 버퍼로 엽니다 — 프로젝트 API 없음/);
+  assert.match(findByClass(made.container, 'backtest-head-folder-sub')[0].textContent, /폴더 없이 화면 버퍼로/);
+  assert.equal(findByClass(made.container, 'backtest-code-textarea')[0].value, PRESET_SOURCE);
+  assert.equal(findByClass(made.container, 'backtest-code-save').length, 0, '기법 화면에는 버튼이 없다');
+  await click(findByClass(made.container, 'backtest-run-button')[0]);
+  await flush();
+  assert.equal(sent.source, PRESET_SOURCE);
+  assert.equal(sent.project_id, undefined);
+  assert.equal(sent.params.fast, 20, '버퍼 코드에도 슬라이더 값이 얹힌다');
+});
+
+test('프리셋: [기법 목록]으로 나가면 폴더·파일을 내려놓고, 다시 고르면 그 폴더가 되살아난다', async () => {
+  const calls = presetCalls();
+  const made = await mountedList(presetWorkspaceDeps(calls));
+  await openPreset(made);
+  await toList(made.container);
+  assert.equal(findByClass(made.container, 'backtest-technique-list').length, 1);
+  assert.equal(made.canvas.getContext().project, null);
+  assert.equal(made.canvas.getContext().runPath, 'form');
+  await openPreset(made);
+  assert.equal(made.canvas.getContext().project.activeFile, 'strategy.py');
+  assert.deepEqual(calls.created, ['SMA-골든크로스']);
+});
+
+test('대화가 기법을 고르면(spec_draft preset) 그 기법의 화면으로 간다 — 바뀐 파라미터가 코드에 실린다', async () => {
+  const calls = presetCalls();
+  const made = await mountedList(presetWorkspaceDeps(calls, {
+    fetchPresets: async () => TWO_PRESETS,
+    map: async (body) => { calls.map.push(body); return MAP_PAYLOAD; },
+  }));
+  await toList(made.container);
+  const receipt = made.canvas.onChatAction({
+    kind: 'spec_draft', patch: { preset: 'rsi_reversal', params: { period: 7 } },
+  });
+  assert.equal(receipt.applied, true);
+  for (let i = 0; i < 6; i += 1) await flush();
+  assert.deepEqual(calls.created, ['RSI-과매도']);
+  assert.equal(calls.codegen.length, 1);
+  assert.match(calls.codegen[0].yaml, /rsi_reversal/);
+  assert.match(calls.codegen[0].yaml, /default: 7/, '대화가 바꾼 값이 코드에 실린다');
+  assert.equal(calls.map.length, 0);
+  const ctx = made.canvas.getContext();
+  assert.equal(ctx.designTab, 'code');
+  assert.equal(ctx.project.name, 'RSI-과매도');
+  assert.equal(findByClass(made.container, 'backtest-head-folder')[0].textContent, 'RSI-과매도/');
+});
+
 test('[등록 해제]는 등록만 지우고 목록을 다시 읽는다 — 파일은 건드리지 않는다', async () => {
   const removed = [];
   let list = [USER_STRATEGY];
@@ -2589,6 +2916,7 @@ test('[등록 해제]는 등록만 지우고 목록을 다시 읽는다 — 파�
     unregisterUserStrategy: async (id) => { removed.push(id); list = []; return { ok: true }; },
   }));
   await flush();
+  await toList(made.container);
   await click(findByClass(made.container, 'backtest-user-strategy-remove')[0]);
   await flush();
   assert.deepEqual(removed, ['u1']);
@@ -2600,63 +2928,12 @@ test('등록부가 exists:false를 주면 그 사실을 그대로 적는다 — 
     userStrategies: async () => [Object.assign({}, USER_STRATEGY, { exists: false })],
   }));
   await flush();
+  await toList(container);
   assert.equal(findByClass(container, 'backtest-user-strategy-missing').length, 1);
   assert.match(textOf(container), /파일이 없습니다/);
 });
 
-// ── 코드 탭의 행동줄: 등록 버튼 ─────────────────────────────────────────────
-
-test('[내 전략으로 등록]: 지금 연 파일을 파일 이름(확장자 뺀)으로 등록하고 목록을 갱신한다', async () => {
-  const posted = [];
-  let list = [];
-  const made = await mounted(userStrategyDeps({
-    userStrategies: async () => list,
-    registerUserStrategy: async (body) => {
-      posted.push(body);
-      list = [USER_STRATEGY];
-      return { id: 'u1' };
-    },
-  }));
-  await openProjectFile(made);
-  await click(findByClass(made.container, 'backtest-register-strategy')[0]);
-  await flush();
-  assert.deepEqual(posted, [{ project_id: 'p1', path: 'strategy.py', name: 'strategy' }]);
-  await click(findByClass(made.container, 'backtest-subtab')[1]);
-  await flush();
-  assert.equal(findByClass(made.container, 'backtest-user-strategy-item').length, 1);
-});
-
-test('[내 전략으로 등록]: 저장 안 한 편집이 있으면 등록하지 않는다 — 등록부와 화면이 갈라진다', async () => {
-  const posted = [];
-  const made = await mounted(userStrategyDeps({
-    registerUserStrategy: async (body) => { posted.push(body); return { id: 'u1' }; },
-  }));
-  await openProjectFile(made);
-  const area = findByClass(made.container, 'backtest-code-textarea')[0];
-  area.value = '# 아직 저장 안 함\n';
-  await area.dispatchEvent({ type: 'input' });
-  await click(findByClass(made.container, 'backtest-register-strategy')[0]);
-  await flush();
-  assert.deepEqual(posted, []);
-  assert.match(textOf(made.container), /저장하고 등록하세요/);
-});
-
-test('등록 버튼: 연 파일이 없는 채로 누르면 조용히 넘어가지 않고 무엇을 하라고 말한다', async () => {
-  const posted = [];
-  const made = await mounted(userStrategyDeps({
-    registerUserStrategy: async (body) => { posted.push(body); return { id: 'u1' }; },
-  }));
-  await click(findByClass(made.container, 'backtest-subtab')[2]);
-  await flush();
-  await click(findByClass(made.container, 'project-ide-project')[0]);
-  await flush();
-  await click(findByClass(made.container, 'backtest-register-strategy')[0]);
-  await flush();
-  assert.deepEqual(posted, []);
-  assert.match(textOf(made.container), /등록할 파일을 먼저 여세요/);
-});
-
-// ── 코드 탭의 행동줄: 환경 패널 ─────────────────────────────────────────────
+// ── 기법 화면 왼쪽 열의 환경 패널 ───────────────────────────────────────────
 
 test('환경 패널: 없음/준비됨 상태를 백엔드가 준 그대로 적는다', async () => {
   const made = await mounted(userStrategyDeps({
@@ -2841,16 +3118,17 @@ test('채팅 navigate(design, flow)도 같은 진행 표시를 거친다', async
   assert.equal(findByClass(made.container, 'backtest-flow-loading').length, 0);
 });
 
-test('지도 탭: 프로젝트 파일을 열었으면 그 파일이 지도의 원문이다', async () => {
-  let seen = null;
+test('내 기법 화면에는 지도 탭이 없다 — 첫 표면은 그 파일의 코드고 지도를 만들지 않는다', async () => {
+  let asked = 0;
   const made = await mounted(userStrategyDeps({
-    map: async (body) => { seen = body; return MAP_PAYLOAD; },
+    map: async () => { asked += 1; return MAP_PAYLOAD; },
   }));
+  const before = asked;
   await openProjectFile(made);
-  await click(findByClass(made.container, 'backtest-subtab')[0]);
-  await flush();
-  assert.equal(seen.source, PROJECT_SOURCE);
-  assert.equal(seen.yaml, undefined);
+  assert.equal(asked, before, '기법을 고를 때 지도를 만들지 않는다');
+  assert.equal(made.canvas.getContext().designTab, 'code');
+  assert.equal(subtabNamed(made.container, '지도'), undefined);
+  assert.equal(findByClass(made.container, 'backtest-subtab')[0].className.includes('is-on'), true);
 });
 
 test('지도 탭: 대상 한 줄과 ①~④ 칸, 코드 서랍이 함께 선다', async () => {
@@ -3029,7 +3307,7 @@ test('프리셋을 고르면 지도 뒤의 코드도 비운다 — 서랍이 남
   const made = await mounted({ map: async () => MAP_PAYLOAD });
   await withCode(made);
   assert.equal(made.canvas.getContext().runPath, 'code');
-  await toForm(made.container);
+  await toList(made.container);
   await click(findByClass(made.container, 'backtest-preset-item')[0]);
   await flush();
   const ctx = made.canvas.getContext();
@@ -3116,18 +3394,18 @@ test('파일 실행이 준 전략·버전 id로 배포 탭이 열린다 — [이
     deployments: async () => [],
   }));
   await openProjectFile(made);
-  // 실행 전에는 배포 탭이 "먼저 저장하라"고 막는다.
-  await click(findByClass(made.container, 'backtest-tab')[4]);
+  // 실행 전에는 배포 탭이 "먼저 저장하라"고 막는다. 배포는 기법 화면의 하위 탭이다(보드 23).
+  await click(subtabNamed(made.container, '배포'));
   await flush();
   assert.match(textOf(made.container), /먼저 코드를 한 번 실행하거나 코드 탭에서 저장해야/);
 
   // 대상·기간은 openProjectFile이 이미 채웠다 — 실행 버튼은 헤더라 어느 탭에서든 눌린다.
-  await click(findByClass(made.container, 'backtest-tab')[0]);
+  await click(subtabNamed(made.container, '코드'));
   await click(findByClass(made.container, 'backtest-run-button')[0]);
   await flush();
   assert.equal(made.canvas.getContext().code.activeVersionId, 'v9');
 
-  await click(findByClass(made.container, 'backtest-tab')[4]);
+  await click(subtabNamed(made.container, '배포'));
   await flush();
   assert.equal(findByClass(made.container, 'backtest-deploy-create').length, 1);
 });
@@ -3142,10 +3420,9 @@ async function toDeployForm(extra) {
     deployments: async () => [],
   }, extra || {})));
   await openProjectFile(made);
-  await click(findByClass(made.container, 'backtest-tab')[0]);
   await click(findByClass(made.container, 'backtest-run-button')[0]);
   await flush();
-  await click(findByClass(made.container, 'backtest-tab')[4]);
+  await click(subtabNamed(made.container, '배포'));
   await flush();
   return made;
 }
@@ -4119,8 +4396,10 @@ test('모드 워크스페이스에 등록하고 탭이 움직일 때마다 조�
     assert.ok(last.graph && Array.isArray(last.graph.nodes));
 
     registered[0][1].restore({
-      kind: 'backtest', tab: 'design', designTab: 'flow', graph: VISUAL_GRAPH,
+      kind: 'backtest', tab: 'design', designTab: 'flow',
+      form: RESTORE_WORKSPACE.form, graph: VISUAL_GRAPH,
     });
+    assert.equal(made.canvas.getContext().screen, null);
     assert.equal(made.canvas.getContext().designTab, 'flow');
   } finally {
     delete global.window;
@@ -4521,8 +4800,7 @@ async function draftCanvas(overrides) {
     },
     techniqueNodes: async (body) => { calls.nodes.push(body); return NODES_RESPONSE; },
   }, overrides || {}));
-  await click(findByClass(made.container, 'backtest-technique-new')[0]);
-  await flush();
+  await clickNewTechnique(made);
   return Object.assign(made, { calls });
 }
 
@@ -5010,8 +5288,7 @@ async function folderDraft(seen, overrides) {
     },
     techniqueNodes: async (body) => { calls.nodes.push(body); return NODES_RESPONSE; },
   }, overrides || {}));
-  await click(findByClass(made.container, 'backtest-technique-new')[0]);
-  await flush();
+  await clickNewTechnique(made);
   await flush();
   return Object.assign(made, { calls });
 }
@@ -5063,8 +5340,7 @@ test('폴더를 못 만들면 메모리 버퍼로 물러나고 그 사실을 카
   const made = await mounted(Object.assign(techniqueProjectDeps(calls), {
     createProject: async () => { throw new Error('백엔드 없음'); },
   }));
-  await click(findByClass(made.container, 'backtest-technique-new')[0]);
-  await flush();
+  await clickNewTechnique(made);
   await flush();
   const steps = stepsOf(cards);
   assert.equal(steps[0].icon, 'file');
@@ -5079,8 +5355,7 @@ test('폴더를 못 만들면 메모리 버퍼로 물러나고 그 사실을 카
 
 test('프로젝트 배선 자체가 없으면 폴더 없이 시작한다고 적는다', captureCards(async (cards) => {
   const made = await mounted();
-  await click(findByClass(made.container, 'backtest-technique-new')[0]);
-  await flush();
+  await clickNewTechnique(made);
   const steps = stepsOf(cards);
   assert.equal(steps.length, 1);
   assert.equal(steps[0].title_ko, '폴더 없이 시작합니다');
@@ -5251,8 +5526,11 @@ test('[이 기법 승인]: 검사와 자동 실행을 넘긴 뒤에만 서고, �
   ]);
   assert.equal(made.canvas.getContext().techniqueDraft, false, '초안이 아니게 된다');
   assert.equal(stepsOf(cards).pop().title_ko, '기법 목록에 추가됨 · 새 기법');
+  // 승인된 기법은 같은 화면에 머문다 — 이제 초안이 아니라 목록의 내 기법이다.
+  assert.equal(findByClass(made.container, 'backtest-head-home')[0].textContent, '기법 목록');
+  assert.equal(findByClass(made.container, 'backtest-technique-approve-bar').length, 0, '승인 바는 초안의 것이다');
   // 목록을 다시 읽어 그 기법이 선다.
-  await click(findByClass(made.container, 'backtest-subtab')[1]);
+  await toList(made.container);
   assert.match(textOf(made.container), /기법 — 2개/);
 }));
 
@@ -6510,9 +6788,10 @@ for (const dirty of [false, true]) {
     made.canvas.mount();
     await flush();
     await fillForm(made.container);
+    await toList(made.container);
     await click(findByClass(made.container, 'backtest-user-strategy-item')[0]);
     await flush();
-    await click(findByClass(made.container, 'backtest-subtab')[2]);
+    await flush();
     const draft = `${GOLDEN_SOURCE}# 저장 안 한 편집\n`;
     if (dirty) {
       const editor = findByClass(made.container, 'backtest-code-textarea')[0];
@@ -6534,10 +6813,10 @@ for (const dirty of [false, true]) {
     assert.equal(sent.length, 1);
     assert.equal(sent[0].source, nextSource);
     assert.equal(sent[0].project_id, undefined);
-    // 보존한 탭은 사람이 다시 선택할 수 있고, 저장 안 한 편집도 그대로 남는다.
-    await click(findByClass(made.container, 'backtest-tab')[0]);
-    await click(findByClass(made.container, 'backtest-subtab')[2]);
-    await click(findByClass(made.container, 'project-ide-tab-name')[0]);
+    // 보존한 탭은 목록에서 그 기법을 다시 고르면 되살아나고, 저장 안 한 편집도 그대로 남는다.
+    await toList(made.container);
+    await click(findByClass(made.container, 'backtest-user-strategy-item')[0]);
+    await flush();
     await flush();
     assert.equal(made.canvas.getContext().project.activeFile, 'strategies/golden.py');
     assert.equal(findByClass(made.container, 'backtest-code-textarea')[0].value, dirty ? draft : GOLDEN_SOURCE);
@@ -6617,6 +6896,8 @@ test('세션 복원: 새 기법을 고르면 복원 표식이 사라진다 — �
   await registered[0][1].restore(RESTORE_WORKSPACE);
   await flush();
   assert.equal(findByClass(made.container, 'backtest-restore-count').length, 1);
+  await toList(made.container);
+  assert.equal(findByClass(made.container, 'backtest-restore-count').length, 0, '홈으로 가면 그 세션의 표식은 거둔다');
   await click(findByClass(made.container, 'backtest-preset-item')[0]);
   await flush();
   assert.equal(findByClass(made.container, 'backtest-restore-count').length, 0);
@@ -6673,7 +6954,7 @@ test('보드 10: 꺼진 상태의 [다시 시도]는 목록을 다시 묻는다'
   assert.ok(findByClass(made.container, 'backtest-preset-item').length > 0);
 });
 
-test('보드 10: 그 밖의 오류는 「실패」 배지와 설계로 돌아가기다', async () => {
+test('보드 10: 그 밖의 오류는 「실패」 배지와 기법으로 돌아가기다', async () => {
   const made = makeCanvas({
     fetchPresets: async () => { throw new Error('백테스트 실행에 실패했습니다'); },
   });
@@ -6687,7 +6968,7 @@ test('보드 10: 그 밖의 오류는 「실패」 배지와 설계로 돌아가
   assert.match(textOf(made.container), /백테스트 실행에 실패했습니다/);
   assert.deepEqual(
     findByClass(made.container, 'backtest-error-back').map((n) => n.textContent),
-    ['설계로 돌아가기'],
+    ['기법으로 돌아가기'],
   );
 });
 
@@ -6713,8 +6994,9 @@ test('보드 10: 설계를 마친 뒤 꺼진 것을 만나면 설계로 돌아�
   );
   assert.deepEqual(
     findByClass(container, 'backtest-error-back').map((n) => n.textContent),
-    ['다시 시도', '설계로 돌아가기'],
+    ['다시 시도', '기법으로 돌아가기'],
   );
   await click(findByClass(container, 'backtest-error-back')[1]);
   assert.equal(canvas.getContext().view, 'design');
 });
+

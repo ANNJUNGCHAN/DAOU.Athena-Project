@@ -148,10 +148,75 @@ function historyRows(history) {
   });
 }
 
+function compactJson(value) {
+  if (value == null) return '';
+  try { return JSON.stringify(value); } catch { return ''; }
+}
+
+function numberSetting(name, value) {
+  if (value == null || value === '') return '';
+  const number = Number(value);
+  return Number.isFinite(number) ? `${name}=${number}` : '';
+}
+
+function ownValue(detail, summary, key) {
+  return Object.prototype.hasOwnProperty.call(detail, key) ? detail[key] : summary[key];
+}
+
+function mergeRepairContext(summary, detail) {
+  const raw = summary && typeof summary === 'object' ? summary : {};
+  const current = detail && typeof detail === 'object' ? detail : {};
+  return {
+    repair: true,
+    reason: raw.repairReason || ownValue(current, raw, 'activation_blocker'),
+    routineId: raw.routineId || raw.id,
+    title: raw.title || raw.note,
+    symbol: ownValue(current, raw, 'symbol'),
+    watch: ownValue(current, raw, 'watch'),
+    condition: ownValue(current, raw, 'condition'),
+    cooldown_s: ownValue(current, raw, 'cooldown_s'),
+    expires_days: ownValue(current, raw, 'expires_days'),
+    expires_at: ownValue(current, raw, 'expires_at'),
+    note: ownValue(current, raw, 'note'),
+  };
+}
+
+/**
+ * 승인 차단된 코드 감시를 채팅에서 복구할 때 사람이 검토할 시작 문장.
+ * 기존 초안의 식별자와 설정만 옮기며 새 조건이나 프로젝트를 추측하지 않는다.
+ */
+function repairSeedText(detail) {
+  const d = detail && typeof detail === 'object' ? detail : {};
+  const watch = d.watch && typeof d.watch === 'object' ? d.watch : {};
+  const title = String(d.title || d.note || '코드 감시 초안').trim();
+  const routineId = String(d.routineId || d.id || '').trim() || '확인 필요';
+  const reason = String(d.reason || d.activation_blocker || '').trim() || '감시 코드 파일을 찾지 못함';
+  const settings = [
+    watch.project_id ? `project_id=${watch.project_id}` : '',
+    watch.path ? `path=${watch.path}` : '',
+    d.symbol ? `symbol=${d.symbol}` : '',
+    d.condition ? `condition=${compactJson(d.condition)}` : '',
+    watch.params ? `params=${compactJson(watch.params)}` : '',
+    numberSetting('poll_interval_s', watch.poll_interval_s),
+    numberSetting('lookback_days', watch.lookback_days),
+    numberSetting('cooldown_s', d.cooldown_s),
+    d.expires_at ? `expires_at=${d.expires_at}` : '',
+    numberSetting('expires_days', d.expires_days),
+  ].filter(Boolean).join(', ');
+  const missingProjectId = !watch.project_id;
+  const missingProjectFolder = /프로젝트[^.]{0,20}(없음|미등록|찾지 못)/.test(reason);
+  const repairAction = missingProjectId
+    ? '현재 감시 프로젝트를 찾을 수 없음. 임의 프로젝트를 쓰지 말고 프로젝트 만들기 또는 폴더 열기로 작업 폴더부터 정한 뒤, 기존 상대 경로에 누락된 코드를 재생성해줘.'
+    : missingProjectFolder
+      ? '프로젝트를 다시 연결하거나 폴더 열기로 작업 폴더부터 정한 뒤, 임의 프로젝트로 바꾸지 말고 기존 상대 경로에 누락된 코드를 재생성해줘.'
+      : '누락된 코드를 같은 경로에 재생성해줘.';
+  return `"${title}" 감시 코드를 복구해줘. 루틴 id: ${routineId}. 실패 이유: ${reason}. 기존 감시 설정: ${settings || '확인 필요'}. 기존 조건과 설정은 바꾸지 말고 ${repairAction} 그다음 검사해줘. 검사 전에는 승인하지 마.`;
+}
+
 const __exports = {
   CHIP_CYCLE, CYCLE_TEXT, RECHECK_TITLE, RECEIPT_TITLE, ROLLBACK, RECEIPT_NOTE,
   DOT_SILENCED, DOT_FIRED, DOT_QUIET,
-  shortDate, secondsLabel, dotStrip, cycleModel, historyRows,
+  shortDate, secondsLabel, dotStrip, cycleModel, historyRows, mergeRepairContext, repairSeedText,
 };
 
 if (typeof module !== 'undefined' && module.exports) {
