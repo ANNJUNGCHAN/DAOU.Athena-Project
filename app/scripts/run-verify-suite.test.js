@@ -61,6 +61,9 @@ function harness({ budgetMs = 20, deferTerminate = false } = {}) {
       if (!deferTerminate) return Promise.resolve(outcome);
       return new Promise((resolve) => { release = () => resolve(outcome); });
     },
+  }).then((result) => {
+    if (result.captureDir) fs.rmSync(result.captureDir, { recursive: true, force: true });
+    return result;
   });
   return { child, terminated, spawnArgs, promise, whenTerminated, release: () => release() };
 }
@@ -335,6 +338,27 @@ test('실행 증거: ignored 경로의 파일은 작업 사본 해시에 넣지 
   } finally {
     fs.unlinkSync(ignored);
   }
+});
+
+test('runOne은 captureDir가 없어도 공유 app/captures/를 ATHENA_CAPTURE_DIR로 쓰지 않는다', async () => {
+  const spawnOpts = [];
+  const child = fakeChild();
+  const promise = runOne({ script: 'verify:kiumi', budgetMs: 5000 }, {
+    capturesRoot: null,
+    spawn: (_command, _args, options) => {
+      spawnOpts.push(options);
+      return child;
+    },
+    terminateTree: () => Promise.resolve({ ok: true, outcome: 'forced' }),
+  });
+  child.emit('close', 0);
+  const result = await promise;
+  const isolated = spawnOpts[0].env && spawnOpts[0].env.ATHENA_CAPTURE_DIR;
+  const shared = path.resolve(path.join(__dirname, '..', 'captures'));
+  assert.ok(isolated, '자식 env에 ATHENA_CAPTURE_DIR이 있어야 한다');
+  assert.notEqual(path.resolve(isolated), shared);
+  assert.equal(path.resolve(result.captureDir), path.resolve(isolated));
+  fs.rmSync(isolated, { recursive: true, force: true });
 });
 
 test('실행 증거: 단계마다 ATHENA_CAPTURE_DIR을 자식 env에 넘긴다', async (t) => {
