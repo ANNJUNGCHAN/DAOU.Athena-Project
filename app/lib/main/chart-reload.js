@@ -24,7 +24,7 @@ function createChartReloadAuthority(options) {
     const source = authority && typeof authority === 'object' ? authority : {};
     const meta = source.chartMeta && typeof source.chartMeta === 'object' ? source.chartMeta : {};
     const chart = source.chartBody && typeof source.chartBody === 'object' ? source.chartBody : {};
-    if (!source.correlation || !source.operationRef || !source.operationArgs
+    if (!source.correlation || !source.operationRef || !source.operationArgs || !source.accountId
       || !chart.period || !chart.target || !chart.trId
       || !meta.series_scope || !meta.reload_group || !meta.reload_targets) return false;
     const reloadTargets = {};
@@ -51,6 +51,7 @@ function createChartReloadAuthority(options) {
       correlation: Object.assign({}, source.correlation),
       operationRef: String(source.operationRef),
       operationArgs: Object.assign({}, source.operationArgs),
+      accountId: String(source.accountId),
     });
     return true;
   }
@@ -75,6 +76,7 @@ function createChartReloadAuthority(options) {
     if (allowedFields.has('base_dt') && !args.base_dt) args.base_dt = today();
     const correlation = authority.correlation;
     return {
+      accountId: authority.accountId,
       datasetId: String(correlation.dataset_id),
       question: `AITS chart reload ${target.operationRef}`,
       items: [{
