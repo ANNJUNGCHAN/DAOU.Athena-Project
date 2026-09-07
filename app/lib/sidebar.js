@@ -549,6 +549,9 @@
     picker.setAttribute('role', 'menu');
     picker.setAttribute('aria-label', `${project.label} 새 대화창`);
     const choices = projectMenu ? projectMenu.modeChoices() : [];
+    const counts = projectMenu
+      ? projectMenu.countConversationsByMode(conversationsCache, project.id)
+      : {};
     for (const choice of choices) {
       const btn = el('button', 'sidebar-mode-picker-item');
       btn.type = 'button';
@@ -556,6 +559,11 @@
       btn.dataset.view = choice.view;
       btn.appendChild(el('span', 'sidebar-mode-picker-label', choice.label));
       btn.appendChild(el('span', 'sidebar-mode-picker-hint', choice.hint));
+      const count = el('span', 'sidebar-mode-picker-count');
+      count.textContent = projectMenu
+        ? projectMenu.modeCountLabel(counts[choice.mode])
+        : '';
+      btn.appendChild(count);
       btn.addEventListener('click', (event) => {
         event.stopPropagation();
         closeProjectPopovers();

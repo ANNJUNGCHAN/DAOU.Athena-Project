@@ -3874,8 +3874,8 @@ const ROUTES = Object.freeze([
     //
     // Paper의 시트 머리(「어느 모드로 열까요?」)·발치(「같은 모드로 여러 개를 열 수
     // 있습니다」)·[취소][백테스트 창 열기]는 적지 않는다: 앱의 펜은 모달 시트가 아니라
-    // 행에 붙는 목록이고, 고른 줄이 곧 새 대화창이라 확인 버튼이 없다. 「현재 2개」류의
-    // 창 수와 Gap Note의 「지금 코드에 없는 것」도 화면 문구가 아니다.
+    // 행에 붙는 목록이고, 고른 줄이 곧 새 대화창이라 확인 버튼이 없다. 창 수는 숫자라
+    // 문구가 못 되고, structure가 다섯 알약을 잰다.
     phrases: [
       '결과 카드가 쌓이는 기본 창',
       '성향·엔티티·근거를 보는 지도',
@@ -3890,6 +3890,12 @@ const ROUTES = Object.freeze([
         what: 'order',
         selector: '.sidebar-mode-picker-label',
         equals: ['대화', '그래프', '에이전트', '플러그인', '백테스트'],
+      },
+      { what: 'count', selector: '.sidebar-mode-picker-count', equals: 5 },
+      {
+        what: 'order',
+        selector: '.sidebar-mode-picker-count',
+        equals: ['현재 1개', '현재 1개', '없음', '없음', '현재 2개'],
       },
     ],
   },

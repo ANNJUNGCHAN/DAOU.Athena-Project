@@ -3,7 +3,7 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { menuItemsFor, modeChoices, removeConfirmState } = require('./sidebar-project-menu');
+const { menuItemsFor, modeChoices, countConversationsByMode, modeCountLabel, removeConfirmState } = require('./sidebar-project-menu');
 
 function project(overrides) {
   return {
@@ -49,6 +49,23 @@ test('모드 선택은 다섯이고 순서와 view 매핑이 고정이다', () =
   assert.deepEqual(choices.map((c) => c.view), ['summary', 'graph', 'agent', 'plugin', 'backtest']);
   assert.deepEqual(choices.map((c) => c.label), ['대화', '그래프', '에이전트', '플러그인', '백테스트']);
   assert.ok(choices.every((c) => typeof c.hint === 'string' && c.hint.length > 0));
+});
+
+test('프로젝트 안 모드별 대화 수는 현재 N개 / 없음이다', () => {
+  const conversations = [
+    { projectId: 'p1', mode: 'chat' },
+    { projectId: 'p1', mode: 'chat' },
+    { projectId: 'p1', mode: 'graph' },
+    { projectId: 'p2', mode: 'agent' },
+    { projectId: 'p1', mode: 'summary' },
+  ];
+  const counts = countConversationsByMode(conversations, 'p1');
+  assert.deepEqual(counts, { chat: 3, graph: 1, agent: 0, plugin: 0, backtest: 0 });
+  assert.equal(modeCountLabel(counts.chat), '현재 3개');
+  assert.equal(modeCountLabel(counts.graph), '현재 1개');
+  assert.equal(modeCountLabel(counts.agent), '없음');
+  assert.equal(modeCountLabel(0), '없음');
+  assert.equal(modeCountLabel(-1), '없음');
 });
 
 test('modeChoices는 매번 새 객체를 준다 — 호출자가 원본을 못 바꾼다', () => {

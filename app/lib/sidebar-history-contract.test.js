@@ -61,6 +61,17 @@ function renderListBody() {
   return sidebar.slice(start, end > 0 ? end : undefined);
 }
 
+test('펜 모드 선택 줄마다 현재 대화 수가 있다', () => {
+  const start = sidebar.indexOf('function makeModePicker');
+  const end = sidebar.indexOf('\n  function ', start + 1);
+  const body = sidebar.slice(start, end);
+  assert.match(body, /countConversationsByMode\(conversationsCache, project\.id\)/);
+  assert.match(body, /sidebar-mode-picker-count/);
+  assert.match(body, /modeCountLabel\(counts\[choice\.mode\]\)/);
+  const sessionCss = read('styles', 'sidebar-session.css');
+  assert.match(sessionCss, /\.sidebar-mode-picker-count/);
+});
+
 test('최근 캡션 오른쪽에 「전체」가 있고 목록 발치 「더 보기」는 없다', () => {
   const body = renderListBody();
   const sessionCss = read('styles', 'sidebar-session.css');
