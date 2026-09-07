@@ -4,12 +4,12 @@
   "name": "CC-06 / R09 · 시장 체온·VI",
   "paper_source": {
     "saved_at": "2026-09-02T00:00:00+09:00",
-    "node_id": "15R0-2",
-    "jsx_sha256": "4856d3330ba095a7f80aec5c9104e433a08bd1bee1e001fa6b6913c0dc21b7ea"
+    "node_id": "49Y2-0",
+    "jsx_sha256": "7edc1c160dd593eb50aed3ed9d619a762558afa129469daed13c602cbb5697bf"
   },
-  "html_sha256": "694e1e44b8c5b3cdad2264340cf6e92e00523763cd3525cb093113b0aaaec9c8",
-  "width_px": 1440.0,
-  "height_px": 960.0,
+  "html_sha256": "782593673cfbeea7b48cedddf6103664f610dee62dfcb17aa7eb248e9f6955fb",
+  "width_px": 1360.0,
+  "height_px": 834.0,
   "artboard_px": [
     1440,
     960
