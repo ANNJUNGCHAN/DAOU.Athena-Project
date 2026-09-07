@@ -150,6 +150,23 @@ test('배지: badge 엘리먼트가 주입되지 않아도 터지지 않는다',
   assert.doesNotThrow(() => nav.setBadgeCount(5));
 });
 
+test('감시 수: 2건이면 「감시 2」, 0이면 숨긴다', () => {
+  const watch = fakeBadge();
+  const items = { summary: fakeButton(), graph: fakeButton(), agent: fakeButton() };
+  const nav = createSidebarModeNav({ items, watch });
+  nav.setWatchCount(2);
+  assert.equal(watch.hidden, false);
+  assert.equal(watch.textContent, '감시 2');
+  nav.setWatchCount(0);
+  assert.equal(watch.hidden, true);
+  assert.equal(watch.textContent, '');
+});
+
+test('감시 수: watch 엘리먼트가 없어도 터지지 않는다', () => {
+  const { nav } = setup();
+  assert.doesNotThrow(() => nav.setWatchCount(3));
+});
+
 // ── 모드별 대화 수(세션 명세 §3-1 "이력의 머리는 다섯 모드") ─────────────────
 // 이 파일은 숫자를 세지 않는다 — 호출자(sidebar.js)가 session-history-view.js로
 // 센 결과를 넘기고, 여기서는 렌더 규칙(0이면 숨김·숫자만)만 검증한다.

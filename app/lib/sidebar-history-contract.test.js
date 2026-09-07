@@ -17,6 +17,26 @@ const sidebar = read('lib', 'sidebar.js');
 const chat = read('chat.js');
 const chatCss = read('chat.css');
 const shellCss = read('shell.css');
+const shellHtml = read('shell.html');
+
+test('에이전트 모드 행에 활성 감시 수가 있다 — 스트립 필 「감시 N」의 자리', () => {
+  assert.match(shellHtml, /id="modeNavAgentWatch"/);
+  assert.match(sidebar, /getElementById\('modeNavAgentWatch'\)/);
+  assert.match(sidebar, /activeWatchCount\(routines\)/);
+  assert.match(sidebar, /setWatchCount\(/);
+  assert.doesNotMatch(shellHtml, /감시 수=사이드바 에이전트 배지\(예정\)/);
+  assert.match(chat, /사이드바 #modeNavAgentWatch/);
+  const fnStart = sidebar.indexOf('async function loadAgentRoutines()');
+  const fnEnd = sidebar.indexOf('\n  const INITIAL_VISIBLE', fnStart);
+  const fn = sidebar.slice(fnStart, fnEnd);
+  const guard = fn.indexOf('if (requestId !== agentRoutinesRequestId) return');
+  const apply = fn.lastIndexOf('setWatchCount(');
+  assert.ok(guard >= 0 && apply > guard, '낡은 routines 응답이 감시 수를 덮으면 안 된다');
+  const agentBtn = shellHtml.slice(shellHtml.indexOf('id="modeNavAgent"'), shellHtml.indexOf('id="modeNavPlugin"'));
+  assert.ok(agentBtn.indexOf('modeNavAgentCount') < agentBtn.indexOf('modeNavAgentWatch'));
+  assert.ok(agentBtn.indexOf('modeNavAgentWatch') < agentBtn.indexOf('modeNavAgentBadge'));
+  assert.match(sidebar, /listed && agentRoutinesRequestId === 0/);
+});
 
 function renderListBody() {
   const start = sidebar.indexOf('function renderList()');

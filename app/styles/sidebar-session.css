@@ -3,6 +3,14 @@
  * 확인·고정 표시는 여기서 입힌다. 색은 tokens.css의 값만 쓴다. */
 
 /* ---- 모드 옆 대화 수 — 이름에 딸린 숫자(배지 아님) ---- */
+.sidebar-mode-watch {
+  margin-left: 6px;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  color: var(--color-k-faint);
+  white-space: nowrap;
+}
+.sidebar-mode-item.is-active .sidebar-mode-watch { color: inherit; opacity: 0.7; }
 .sidebar-mode-count {
   margin-left: 4px;
   color: var(--color-k-faint);

@@ -4,7 +4,8 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const {
-  statusIconFor, isPriorityRoutine, buildAgentSidebarRows, buildHydratedRooms, STATUS_ICON,
+  statusIconFor, isPriorityRoutine, activeWatchCount,
+  buildAgentSidebarRows, buildHydratedRooms, STATUS_ICON,
 } = require('./agent-sidebar-list');
 
 function routine(overrides) {
@@ -65,6 +66,19 @@ test('status.draft → 초안 아이콘(모드와 무관), 우선 노출 대상�
 test('routine이 없으면 null', () => {
   assert.equal(statusIconFor(null), null);
   assert.equal(statusIconFor(undefined), null);
+});
+
+test('activeWatchCount: 활성 비예약만 센다 — 예약·일시중지·초안은 감시가 아니다', () => {
+  const routines = [
+    routine({ id: 'a', status: 'active', mode: 'periodic' }),
+    routine({ id: 'b', status: 'active', mode: 'realtime-ws' }),
+    routine({ id: 'c', status: 'active', mode: 'scheduled' }),
+    routine({ id: 'd', status: 'paused', mode: 'periodic' }),
+    routine({ id: 'e', status: 'draft' }),
+  ];
+  assert.equal(activeWatchCount(routines), 2);
+  assert.equal(activeWatchCount([]), 0);
+  assert.equal(activeWatchCount(null), 0);
 });
 
 test('buildAgentSidebarRows: active/paused/draft만 남기고 나머지는 걸러낸다', () => {
