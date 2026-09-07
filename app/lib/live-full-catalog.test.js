@@ -36,6 +36,21 @@ test('live-full catalog locks five modes to shell.html nav and canvas ids', () =
   }
 });
 
+test('live-full catalog mode labels match sidebar copy', () => {
+  const shell = fs.readFileSync(path.join(appDir, 'shell.html'), 'utf8');
+  assert.deepEqual(
+    MODES.map((mode) => mode.label),
+    ['대화', '그래프', '에이전트', '플러그인', '백테스트'],
+  );
+  for (const mode of MODES) {
+    const match = shell.match(
+      new RegExp(`id="${mode.navId}"[\\s\\S]*?<span class="sidebar-mode-item-label">([^<]+)</span>`),
+    );
+    assert.ok(match, `${mode.navId} sidebar-mode-item-label`);
+    assert.equal(mode.label, match[1]);
+  }
+});
+
 test('live-full catalog paper chrome matches controller CHAT_HEAD_COPY and chat.css empty copy', () => {
   const controller = fs.readFileSync(path.join(__dirname, 'graph-mode', 'controller.js'), 'utf8');
   const chatCss = fs.readFileSync(path.join(appDir, 'chat.css'), 'utf8');
