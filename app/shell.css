@@ -799,8 +799,8 @@ body { margin: 0; overflow: hidden; }
   overflow: hidden;
   text-overflow: ellipsis;
 }
-/* 내가 만든 기법의 줄 — 카드 오른쪽에 [등록 해제]가 붙는다(카드 밖이라 눌러도
-   기법이 골라지지 않는다). 파일이 사라졌으면 그 한 줄이 카드 안에 선다. */
+/* 내가 만든 기법의 줄 — 카드 아래 오른쪽 끝에 [등록 해제]가 붙는다(카드 밖이라
+   눌러도 기법이 골라지지 않는다). 파일이 사라졌으면 그 한 줄이 카드 안에 선다. */
 .backtest-user-strategy-row {
   display: flex;
   flex-direction: column;
