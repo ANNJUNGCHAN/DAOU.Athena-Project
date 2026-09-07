@@ -10,11 +10,20 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const {
-  toCandleSeriesData, toVolumeSeriesData, withAlpha, UP_COLOR, DOWN_COLOR,
+  toCandleSeriesData, toVolumeSeriesData, withAlpha, formatVolumeKo, UP_COLOR, DOWN_COLOR,
   resolveInitialPeriod, createCachedChartLibraryLoader, renderNowAndOnNextFrame,
 } = require('./chart-card');
 
 const FIXTURE = require(path.join(__dirname, '..', 'data', 'chart-mock-ohlcv.json'));
+
+test('formatVolumeKo uses 만·억 instead of K/M/B', () => {
+  assert.equal(formatVolumeKo(14030000), '1,403만');
+  assert.equal(formatVolumeKo(214000000), '2억 1,400만');
+  assert.equal(formatVolumeKo(9800), '9,800');
+  const src = fs.readFileSync(path.join(__dirname, 'chart-card.js'), 'utf8');
+  assert.match(src, /priceFormat: VOLUME_FORMAT/);
+  assert.doesNotMatch(src, /type: 'volume'/);
+});
 
 test('cold-start chart import is started once and every renderer awaits the same ready result', async () => {
   let imports = 0;
