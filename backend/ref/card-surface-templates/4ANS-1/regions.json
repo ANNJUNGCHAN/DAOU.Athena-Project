@@ -1,0 +1,41 @@
+{
+  "root": "4ANU-1",
+  "regions": [
+    {
+      "node_id": "4AUD-1",
+      "name": "Header and Capability Navigation",
+      "role": "header",
+      "depth": 1
+    },
+    {
+      "node_id": "4AT5-1",
+      "name": "Ranking Query Controls",
+      "role": "strip",
+      "depth": 1
+    },
+    {
+      "node_id": "4AO7-1",
+      "name": "Ranking Workspace",
+      "role": "workspace",
+      "depth": 1
+    },
+    {
+      "node_id": "4APN-1",
+      "name": "Ranking Result Table",
+      "role": "primary",
+      "depth": 2
+    },
+    {
+      "node_id": "4AO8-1",
+      "name": "Selected Stock Detail",
+      "role": "rail",
+      "depth": 2
+    },
+    {
+      "node_id": "4AO5-1",
+      "name": "User Status Footer",
+      "role": "footer",
+      "depth": 1
+    }
+  ]
+}

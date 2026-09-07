@@ -24,7 +24,7 @@ test('paper ledger manifest satisfies all six invariants', async () => {
   assert.deepEqual(failures, []);
   const total = Object.values(counts).reduce((sum, n) => sum + n, 0);
   assert.equal(total, TOTAL_BOARDS);
-  assert.equal(counts.card_template, 96);
+  assert.equal(counts.card_template, 101);
 });
 
 test('every role in the manifest comes from the closed vocabulary', async () => {
