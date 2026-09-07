@@ -109,6 +109,16 @@ test('복원은 조용하다 — 채팅에 복원 배너가 없다', () => {
   assert.match(chatCss, /\.past-empty\s*\{/, '메시지 0건의 빈 상태는 남아야 한다');
 });
 
+test('프로젝트 행을 두 번 누르면 이름 수정 패널이 열린다', () => {
+  const start = sidebar.indexOf('function makeProjectRow');
+  const end = sidebar.indexOf('\n  function ', start + 1);
+  const body = sidebar.slice(start, end);
+  assert.match(body, /addEventListener\('dblclick'/);
+  assert.match(body, /if \(clickTimer\) \{ clearTimeout\(clickTimer\)/);
+  assert.match(body, /openEditProjectId = project\.id/);
+  assert.match(body, /restoreCaret\('\.sidebar-project-edit-input\[data-field="label"\]'\)/);
+});
+
 test('프로젝트 설명 카드는 버튼 밖에 살고, 프로젝트 수정은 진짜 버튼이다', () => {
   const start = sidebar.indexOf('function makeProjectRow(');
   const body = sidebar.slice(start, sidebar.indexOf('\n  function ', start + 1));
