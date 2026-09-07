@@ -19,6 +19,7 @@ const { createIndicatorRenderer } = __dep('./chart-indicator-render', 'ChartIndi
 const { volumeProfile } = __dep('./chart-volume-profile', 'ChartVolumeProfile');
 const { createAuthoringStore, periodToken } = __dep('./chart-authoring-store', 'ChartAuthoringStore');
 const { createDrawingLayer } = __dep('./chart-drawings', 'ChartDrawings');
+const { formatKoreanUnit } = __dep('./board-format', 'BoardFormat');
 
 const __LIGHTWEIGHT_CHARTS_URL = (() => {
   if (typeof document === 'undefined' || !document.currentScript) return 'lightweight-charts';
@@ -68,6 +69,11 @@ const CROSSHAIR_COLOR = 'rgba(120,128,140,0.6)';
 const AXIS_TEXT_COLOR = '#6B7480';
 // 가격축은 원 단위 정수로 — CC-101 이월 폴리시(팀 리드 지시, CC-102 인수 조건).
 const PRICE_FORMAT = { type: 'price', precision: 0, minMove: 1 };
+
+function formatVolumeKo(value) {
+  return formatKoreanUnit(value) || '';
+}
+const VOLUME_FORMAT = { type: 'custom', formatter: formatVolumeKo };
 
 // 주기별 초기 봉 폭(px/봉) — MTS 표준 캔들 밀도. AITS
 // (src/renderer/shared/vm/chart-lwc/common.ts DEFAULT_BAR_SPACING)에서 가져온 값이다.
@@ -354,7 +360,7 @@ async function createChartCard(container, opts) {
 
   volumeSeries = chart.addSeries(
     HistogramSeries,
-    { priceFormat: { type: 'volume' }, priceScaleId: '' },
+    { priceFormat: VOLUME_FORMAT, priceScaleId: '' },
     1 // 거래량은 가격 pane과 분리된 하위 pane(paneIndex 1)
   );
   chart.panes()[1] && chart.panes()[1].setHeight(80);
@@ -911,6 +917,7 @@ const __exports = {
   toCandleSeriesData,
   toVolumeSeriesData,
   withAlpha,
+  formatVolumeKo,
   UP_COLOR,
   DOWN_COLOR,
 };
