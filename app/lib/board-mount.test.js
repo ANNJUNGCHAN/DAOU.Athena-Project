@@ -11,7 +11,7 @@ const {
   createLatestBoardLoad, nextHydrationSlots,
   slotValueEntries, realtimeSlotIndex, updateRealtimeValue, pairedClosure, realtimePlan, applyRealtimeSlots,
   stateLinksFromMarks, stateControlActivationOwner, wireStateControlActivation,
-  findStateControlNode, STATE_CONTROL_SCOPES,
+  findStateControlNode, STATE_CONTROL_SCOPES, STATE_CONTROL_WIDE_SCOPES,
 } = require('./board-mount');
 const { formatSlot } = require('./board-format');
 const registry = require('./board-template-registry');
@@ -1468,24 +1468,34 @@ function railLeaf(text, stateControl = null) {
   return leaf;
 }
 
-// 스트립 하나에 칩을 늘어놓은 표면. 스코프 밖 잎(표 셀 등)은 outside로 넣는다 —
-// 문구가 같아도 레일이 아니면 칩이 아니다.
-function railSurface(chipTexts, { stamped = [], outside = [] } = {}) {
+// 스트립 하나에 칩을 늘어놓은 표면. header/footer/outside는 레일 밖 잎이다.
+function railSurface(chipTexts, { stamped = [], outside = [], header = [], footer = [] } = {}) {
   const chips = chipTexts.map((text) => railLeaf(text));
   const strip = {
     childElementCount: chips.length,
     querySelectorAll: () => chips,
   };
+  const headerScope = {
+    childElementCount: header.length,
+    querySelectorAll: () => header,
+  };
+  const footerScope = {
+    childElementCount: footer.length,
+    querySelectorAll: () => footer,
+  };
   return {
     querySelectorAll(selector) {
       if (selector === '[data-state-control]') return stamped;
       if (selector === STATE_CONTROL_SCOPES) return [strip];
-      // 머리·꼬리 단은 이 스텁에서 비워 두고(스코프 프레임이 없다), 표면 전체 단이
-      // 레일 밖 잎을 답한다 — 넓힐 때만 잡히는 것이 계약이다.
-      if (selector === '*') return [...chips, ...outside];
+      if (selector === STATE_CONTROL_WIDE_SCOPES) {
+        return [header.length ? headerScope : null, footer.length ? footerScope : null].filter(Boolean);
+      }
+      if (selector === '*') return [...chips, ...header, ...footer, ...outside];
       return [];
     },
     chips,
+    headerLeaves: header,
+    footerLeaves: footer,
     outsideLeaves: outside,
   };
 }
@@ -1535,6 +1545,22 @@ test('레일 밖 문구가 둘이면 어느 쪽인지 알 수 없다 — 안 매
 test('스트립 칩이 있으면 레일 밖 같은 문구보다 먼저다', () => {
   const both = railSurface(['등락률'], { outside: [railLeaf('등락률')] });
   assert.equal(findStateControlNode(both, '등락률'), both.chips[0]);
+});
+
+test('머리 칩이 하나면 본문에 같은 문구가 있어도 머리를 맨다', () => {
+  const surface = railSurface([], {
+    header: [railLeaf('업종')],
+    outside: [railLeaf('업종')],
+  });
+  assert.equal(findStateControlNode(surface, '업종'), surface.headerLeaves[0]);
+});
+
+test('꼬리 칩이 하나면 본문에 같은 문구가 있어도 꼬리를 맨다', () => {
+  const surface = railSurface([], {
+    footer: [railLeaf('더보기')],
+    outside: [railLeaf('더보기')],
+  });
+  assert.equal(findStateControlNode(surface, '더보기'), surface.footerLeaves[0]);
 });
 
 test('색인의 별칭 표는 실제 보드에서 나온 것이다', () => {

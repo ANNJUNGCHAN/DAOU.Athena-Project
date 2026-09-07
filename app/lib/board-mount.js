@@ -1134,7 +1134,7 @@ const __exports = {
   slotValueEntries, observationIdsOfSlotEntry, realtimeSlotIndex, updateRealtimeValue,
   pairedClosure, realtimePlan, applyRealtimeSlots,
   stateLinksFromMarks, stateControlActivationOwner, wireStateControlActivation,
-  findStateControlNode, STATE_CONTROL_SCOPES,
+  findStateControlNode, STATE_CONTROL_SCOPES, STATE_CONTROL_WIDE_SCOPES,
 };
 
 if (typeof module !== 'undefined' && module.exports) {
