@@ -7,5 +7,18 @@
     { "node_id": "36EO-0", "name": "Ranking Result Table", "role": "primary", "depth": 2 },
     { "node_id": "2YAF-0", "name": "Selected Stock Detail", "role": "rail", "depth": 2 },
     { "node_id": "2YAB-0", "name": "User Status Footer", "role": "footer", "depth": 1 }
+  ],
+  "responsive": [
+    {
+      "node_id": "36EP-0",
+      "traits": ["scroll-table"],
+      "header_row": "36EU-0",
+      "accessible_label": "종목 순위표"
+    },
+    {
+      "node_id": "3EGY-0",
+      "traits": ["scroll"],
+      "accessible_label": "조회 대상 종목 목록"
+    }
   ]
 }

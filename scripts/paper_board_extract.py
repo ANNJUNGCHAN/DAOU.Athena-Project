@@ -1052,15 +1052,23 @@ def _explicit_body_rows(
     저장본에 따라 본문 행이 래퍼 하나에 묶여 있다(2QFO-2 `2QHG-2`). 래퍼는 열 수가
     헤더와 다르고 자식이 전부 헤더와 같은 열 수인 경우에만, 그리고 한 번만 편다 —
     두 개가 나오면 어느 쪽이 본문인지 알 수 없으므로 실패한다.
+
+    「자식이 전부」는 꼬리 행을 세지 않는다. 실보드 래퍼는 데이터 행 뒤에 합계·주석
+    줄을 함께 담는다(실측 2QM7-2 `34GL-0` = 행 8개 + `34N8-0` 「전체 8개 창구」 2칸).
+    전부를 요구하면 그 한 줄 때문에 래퍼가 안 펴지고, 래퍼가 통째로 「열 수가 한참
+    다른 띠」로 걸러져 본문이 0행이 된다 — 표 감지가 조용히 실패하는 자리다.
+    칸이 3개 미만인 줄은 아래 호출부가 이미 종결 콘텐츠로 다룬다(:1093).
     """
     rows: list[Element] = []
     expanded = False
     for row in tail:
         children = element_children(row)
+        data_children = [child for child in children if len(element_children(child)) >= 3]
         if (
             len(children) >= 3
             and len(children) != columns
-            and all(len(element_children(child)) == columns for child in children)
+            and len(data_children) >= 3
+            and all(len(element_children(child)) == columns for child in data_children)
         ):
             if expanded:
                 raise ExtractError(
@@ -1214,16 +1222,29 @@ def _mark_scroll_table_semantics(
     accessible_label: str,
 ) -> None:
     rows = [header, *body, *foot]
-    header_top = header
-    while header_top.parent is not owner:
-        if header_top.parent is None:
-            raise ExtractError("scroll-table header is outside the scroll owner")
-        header_top = header_top.parent
-    top_nodes = [header_top, *body, *foot]
-    if any(node.parent is not owner for node in top_nodes):
-        raise ExtractError("scroll-table body rows must be direct children of the scroll owner")
+
+    # 감쌀 것은 행 자체가 아니라 **소유자 직계 조상**이다. 저장본은 머리를 헤더블록에
+    # (2XTO-0 `365O-0`), 본문을 뷰포트 래퍼에(15L8-2 `35SP-0` · 2QM7-2 `34GL-0`) 넣는다.
+    # 머리에만 조상 타고 올라가기를 걸어 두면 그 래퍼를 이고 있는 표는 「본문 행이
+    # 직계 자식이어야 한다」에서 막힌다 — 실측 25장 중 열 접기·스크롤이 하나도 없는
+    # 보드가 대부분 이 모양이다. 역할(role/aria)은 아래에서 `rows`에 그대로 실으므로
+    # 감싸는 층이 한 겹 늘어도 표 의미는 바뀌지 않는다.
+    def top_of(node: Element) -> Element:
+        current = node
+        while current.parent is not owner:
+            if current.parent is None:
+                raise ExtractError("scroll-table row is outside the scroll owner")
+            current = current.parent
+        return current
+
+    top_nodes: list[Element] = []
+    for node in [header, *body, *foot]:
+        top = top_of(node)
+        # 같은 래퍼를 공유하는 행들은 한 번만 싣는다(본문 8행 → 뷰포트 1개).
+        if not any(top is seen for seen in top_nodes):
+            top_nodes.append(top)
     indexes = [owner.children.index(node) for node in top_nodes]
-    if indexes != list(range(indexes[0], indexes[0] + len(rows))):
+    if indexes != list(range(indexes[0], indexes[0] + len(top_nodes))):
         raise ExtractError("scroll-table rows must be contiguous")
 
     columns = len(element_children(header))
