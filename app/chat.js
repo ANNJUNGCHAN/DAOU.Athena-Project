@@ -956,7 +956,8 @@ function setLocked(locked, text, time) {
   // 잠금 중에는 placeholder를 숨긴다 — 입력이 min-width:0으로 눌리며
   // "무엇이든 물어보세요"가 "무엇이"로 잘려 힌트 옆에 남았다(2026-08-31
   // 사용자 지적). 답하는 중에 질문을 권하는 문구가 떠 있을 이유도 없다.
-  $input.placeholder = locked ? '' : '무엇이든 물어보세요';
+  const idle = $input.dataset.idlePlaceholder || '무엇이든 물어보세요';
+  $input.placeholder = locked ? '' : idle;
   $lockHint.hidden = !locked;
   $stopBtn.hidden = !locked;
   $composerSpinner.hidden = !locked;

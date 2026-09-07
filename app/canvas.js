@@ -3114,6 +3114,7 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
     chatHead: document.getElementById('chatModeHead'),
     chatHeadTitle: document.querySelector('#chatModeHead .chat-mode-head-title'),
     chatHeadSub: document.querySelector('#chatModeHead .chat-mode-head-sub'),
+    chatInput: document.getElementById('input'),
     // 그래프 뷰 본문 — 렌더·클릭위임·크기측정 전용(가시성은 위 graph가 계속
     // 소유). #graphCanvas 안 #graphHeader의 영구 형제라 다시 그려도 헤더는 안 지워진다.
     graphBody: document.getElementById('graphBody'),
