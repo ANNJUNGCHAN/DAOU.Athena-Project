@@ -4,16 +4,25 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const {
   OPERATION_POLICIES,
-  CardLeaseManager,
+  CardLeaseManager: CardLeaseManagerWithAccount,
   createBoundedShutdownCoordinator,
   createRegistrarTransport,
   createSemanticBindingSourceProvider,
   createValidatedFetch,
   normalizeFrameRows,
   publicPolicies,
-  resolveLeaseBindings,
+  resolveLeaseBindings: resolveLeaseBindingsWithAccount,
   semanticUpdatesFor,
 } = require('./integrated-card-realtime');
+
+function resolveLeaseBindings(config) {
+  return resolveLeaseBindingsWithAccount({ backendAccountAlias: 'server-a', ...config });
+}
+
+class CardLeaseManager extends CardLeaseManagerWithAccount {
+  mount(config) { return super.mount({ backendAccountAlias: 'server-a', ...config }); }
+  update(config) { return super.update({ backendAccountAlias: 'server-a', ...config }); }
+}
 
 function fakeTransport(overrides = {}) {
   const calls = [];
@@ -407,6 +416,136 @@ test('releaseAll reports pending cleanup instead of false unmounted success', as
   assert.equal(result.pending, 1);
 });
 
+test('releaseAll does not wait for in-flight REG and late success is removed with its captured alias', async () => {
+  let finishAcquire;
+  let acquireStarted;
+  const started = new Promise((resolve) => { acquireStarted = resolve; });
+  const calls = [];
+  const transport = fakeTransport({
+    acquire: async (binding) => {
+      calls.push(['REG', binding.operationId, binding.backendAccountAlias]);
+      acquireStarted();
+      return new Promise((resolve) => { finishAcquire = resolve; });
+    },
+    release: async (binding) => {
+      calls.push(['REMOVE', binding.operationId, binding.backendAccountAlias]);
+      return true;
+    },
+  });
+  const manager = new CardLeaseManagerWithAccount({ transport });
+  const mounting = manager.mount({
+    leaseId: 'account-a', cardId: 'CC-01', mode: 'overview',
+    accountId: 'renderer-account', backendAccountAlias: 'server-a',
+  });
+  await started;
+
+  let drained = false;
+  const draining = manager.releaseAll().then((result) => {
+    drained = true;
+    return result;
+  });
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(drained, true, 'drain must settle without waiting for REG');
+  assert.deepEqual(await draining, { ok: true, results: [], pending: 0 });
+  let cleanupComplete = false;
+  const cleanup = manager.whenDrained().then((ok) => { cleanupComplete = ok; return ok; });
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(cleanupComplete, false);
+
+  finishAcquire(true);
+  const mounted = await mounting;
+  assert.equal(mounted.ok, false);
+  assert.match(mounted.error, /draining/);
+  assert.equal(await cleanup, true);
+  assert.deepEqual(calls, [
+    ['REG', '00', 'server-a'],
+    ['REMOVE', '00', 'server-a'],
+  ]);
+  assert.equal(manager.status('account-a'), null);
+});
+
+test('releaseAll removes a reconnect REG that succeeds after drain under its captured alias', async () => {
+  let finishReconnect;
+  let markReconnectStarted;
+  let reconnectBindings;
+  const started = new Promise((resolve) => { markReconnectStarted = resolve; });
+  const calls = [];
+  const transport = fakeTransport({
+    acquire: async () => true,
+    reconnect: async (bindings) => {
+      reconnectBindings = bindings;
+      calls.push(['RECONNECT', bindings[0].backendAccountAlias]);
+      markReconnectStarted();
+      return new Promise((resolve) => { finishReconnect = resolve; });
+    },
+    release: async (binding) => {
+      calls.push(['REMOVE', binding.operationId, binding.backendAccountAlias]);
+      return true;
+    },
+  });
+  const manager = new CardLeaseManagerWithAccount({ transport });
+  await manager.mount({
+    leaseId: 'quote-a', cardId: 'CC-03', mode: 'quote', symbol: '005930',
+    backendAccountAlias: 'server-a',
+  });
+  await manager.handleFeedStatus({ state: 'disconnected' });
+  const reconnecting = manager.handleFeedStatus({ state: 'open' }, 2);
+  await started;
+
+  const drained = await manager.releaseAll();
+  assert.equal(drained.ok, true);
+  finishReconnect(reconnectBindings.map((binding) => ({ binding, ok: true })));
+  assert.deepEqual(await reconnecting, { ok: false, status: 'draining' });
+  assert.deepEqual(calls, [
+    ['RECONNECT', 'server-a'],
+    ['REMOVE', '0A', 'server-a'],
+    ['REMOVE', '0B', 'server-a'],
+    ['REMOVE', '0A', 'server-a'],
+    ['REMOVE', '0B', 'server-a'],
+  ]);
+});
+
+test('production transport force-removes every reconnect REG that succeeds after drain', async () => {
+  const calls = [];
+  const finishReconnects = [];
+  let markReconnectsStarted;
+  const reconnectsStarted = new Promise((resolve) => { markReconnectsStarted = resolve; });
+  let registerCount = 0;
+  const response = () => ({
+    ok: true, status: 200, json: async () => ({ return_code: '0' }),
+  });
+  const transport = createRegistrarTransport({
+    backendBase: 'http://backend',
+    fetchImpl: async (_url, init) => {
+      const body = JSON.parse(init.body);
+      calls.push({ body, init });
+      if (body.trnm !== 'REG') return response();
+      registerCount += 1;
+      if (registerCount <= 2) return response();
+      const pending = new Promise((resolve) => { finishReconnects.push(() => resolve(response())); });
+      if (finishReconnects.length === 2) markReconnectsStarted();
+      return pending;
+    },
+  });
+  const manager = new CardLeaseManagerWithAccount({ transport });
+  await manager.mount({
+    leaseId: 'quote-a', cardId: 'CC-03', mode: 'quote', symbol: '005930',
+    backendAccountAlias: 'server-a',
+  });
+  await manager.handleFeedStatus({ state: 'disconnected' });
+  const reconnecting = manager.handleFeedStatus({ state: 'open' }, 2);
+  await reconnectsStarted;
+  assert.equal((await manager.releaseAll()).ok, true);
+  finishReconnects.forEach((finish) => finish());
+  assert.deepEqual(await reconnecting, { ok: false, status: 'draining' });
+
+  const removals = calls.filter((call) => call.body.trnm === 'REMOVE');
+  assert.equal(removals.length, 4, 'drain REMOVE and post-reconnect force REMOVE must both be sent');
+  assert.deepEqual(removals.map((call) => call.body.data[0].type), ['0A', '0B', '0A', '0B']);
+  assert.deepEqual(removals.map((call) => call.init.headers['X-Athena-Account']), Array(4).fill('server-a'));
+  assert.deepEqual(removals.map((call) => call.init.redirect), Array(4).fill('error'));
+});
+
 test('stale connection generation and old-target ticks are blocked', async () => {
   const transport = fakeTransport();
   const bindingId = 'rtb_dddddddddddddddddddd';
@@ -462,10 +601,58 @@ test('condition list/general commands are allowlisted; release-command is not ca
       return { ok: true, status: 200, json: async () => ({ return_code: '0' }) };
     },
   });
-  assert.equal((await transport.command('ka10171')).ok, true);
-  assert.equal((await transport.command('ka10172', { conditionId: '3' })).ok, true);
-  assert.equal((await transport.command('ka10174', { conditionId: '3' })).ok, false);
+  assert.equal((await transport.command('ka10171', {}, 'server-a')).ok, true);
+  assert.equal((await transport.command('ka10172', { conditionId: '3' }, 'server-a')).ok, true);
+  assert.equal((await transport.command('ka10174', { conditionId: '3' }, 'server-a')).ok, false);
   assert.deepEqual(calls.map((c) => c.body.trnm), ['CNSRLST', 'CNSRREQ']);
+});
+
+test('renderer account target stays separate from verified backend header alias', async () => {
+  const calls = [];
+  const transport = createRegistrarTransport({
+    backendBase: 'http://backend',
+    fetchImpl: async (url, init) => {
+      calls.push({ url, init, body: JSON.parse(init.body) });
+      return { ok: true, status: 200, json: async () => ({ return_code: '0' }) };
+    },
+  });
+  const manager = new CardLeaseManagerWithAccount({ transport });
+  const mounted = await manager.mount({
+    leaseId: 'account-card', cardId: 'CC-01', mode: 'overview',
+    accountId: '123-45-6789', backendAccountAlias: 'server-a',
+  });
+  assert.equal(mounted.ok, true);
+  assert.deepEqual(mounted.bindings.map((binding) => binding.target), ['123-45-6789', '123-45-6789']);
+  assert.deepEqual(calls.map((call) => call.init.headers['X-Athena-Account']), ['server-a', 'server-a']);
+  assert.deepEqual(calls.map((call) => call.init.redirect), ['error', 'error']);
+  assert.equal(calls.some((call) => call.init.headers['X-Athena-Account'] === '123-45-6789'), false);
+});
+
+test('missing backend alias blocks lease and command before any transport fetch', async () => {
+  let fetches = 0;
+  const transport = createRegistrarTransport({
+    backendBase: 'http://backend',
+    fetchImpl: async () => { fetches += 1; },
+  });
+  const manager = new CardLeaseManagerWithAccount({ transport });
+  const mounted = await manager.mount({ leaseId: 'missing', cardId: 'CC-04', mode: 'regular', symbol: '005930' });
+  assert.equal(mounted.ok, false);
+  assert.match(mounted.error, /invalid backend account alias/);
+  assert.equal((await transport.command('ka10171', {}, '')).ok, false);
+  assert.equal(fetches, 0);
+});
+
+test('redirect rejection stays a failed realtime command', async () => {
+  const transport = createRegistrarTransport({
+    backendBase: 'http://backend',
+    fetchImpl: async (_url, init) => {
+      assert.equal(init.redirect, 'error');
+      throw new TypeError('redirect disallowed');
+    },
+  });
+  const result = await transport.command('ka10171', {}, 'server-a');
+  assert.equal(result.ok, false);
+  assert.match(result.error, /redirect disallowed/);
 });
 
 test('HTTP 200 with nonzero or missing Kiwoom return_code is rejected', async () => {

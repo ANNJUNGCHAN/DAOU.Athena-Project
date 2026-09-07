@@ -5,8 +5,12 @@ const assert = require('node:assert/strict');
 
 const {
   parseRealTick, parseRealFrame, buildRegisterBody, buildRemoveBody, kstToEpochSec, kstTradingDate,
-  createRealtimeRegistrar,
+  createRealtimeRegistrar: createRealtimeRegistrarWithAccount,
 } = require('./chart-realtime');
+
+function createRealtimeRegistrar(options) {
+  return createRealtimeRegistrarWithAccount({ backendAccountAlias: 'server-a', ...options });
+}
 
 // 2026-08-25 09:00:00 KST = 2026-08-25 00:00:00 UTC.
 const NINE_AM = Date.UTC(2026, 7, 25, 0, 0, 0) / 1000;
@@ -71,6 +75,32 @@ test('parseRealFrame: REAL 프레임만 읽고 0B 아닌 행은 버린다', () =
 test('parseRealFrame: REAL이 아니면 빈 배열이다', () => {
   assert.deepEqual(parseRealFrame({ trnm: 'PING' }, '20260825'), []);
   assert.deepEqual(parseRealFrame(null, '20260825'), []);
+});
+
+test('REAL registrar A/B는 REG와 REMOVE에 같은 서버 alias와 redirect 차단을 보낸다', async () => {
+  for (const backendAccountAlias of ['server-a', 'server-b']) {
+    const calls = [];
+    const registrar = createRealtimeRegistrarWithAccount({
+      backendBase: 'http://backend', backendAccountAlias,
+      fetchImpl: async (_url, options) => { calls.push(options); return { ok: true }; },
+    });
+    assert.equal(await registrar.acquire('005930'), true);
+    assert.equal(await registrar.release('005930'), true);
+    assert.deepEqual(calls.map((call) => call.headers['X-Athena-Account']), [backendAccountAlias, backendAccountAlias]);
+    assert.deepEqual(calls.map((call) => call.redirect), ['error', 'error']);
+  }
+});
+
+test('REAL registrar alias 누락/형식 오류는 REG/REMOVE fetch 전에 차단한다', async () => {
+  let fetches = 0;
+  for (const backendAccountAlias of ['', 'LOCAL-UUID', 'server a']) {
+    const registrar = createRealtimeRegistrarWithAccount({
+      backendBase: 'http://backend', backendAccountAlias,
+      fetchImpl: async () => { fetches += 1; },
+    });
+    assert.equal(await registrar.acquire('005930'), false);
+  }
+  assert.equal(fetches, 0);
 });
 
 test('buildRegisterBody: data[].type이 tr_id와 정확히 일치한다', () => {
@@ -242,4 +272,103 @@ test('release: REMOVE 실패를 호출자에게 전파하고 pending 참조를 �
   assert.equal(reg.refCount('005930'), 1);
   assert.equal(await reg.release('005930'), true);
   assert.equal(reg.refCount('005930'), 0);
+});
+
+test('releaseAll: 진행 중 REG를 기다리지 않고 완료 시 같은 alias로 REMOVE하여 전환 누수를 막는다', async () => {
+  const calls = [];
+  let finishRegister;
+  const reg = createRealtimeRegistrarWithAccount({
+    backendBase: 'http://backend',
+    backendAccountAlias: 'server-a',
+    fetchImpl: async (_url, init) => {
+      const body = JSON.parse(init.body);
+      calls.push({ body, alias: init.headers['X-Athena-Account'] });
+      if (body.trnm === 'REG') await new Promise((resolve) => { finishRegister = resolve; });
+      return { ok: true, status: 200 };
+    },
+  });
+  const acquiring = reg.acquire('005930');
+  const releasing = reg.releaseAll();
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.deepEqual(calls.map((call) => call.body.trnm), ['REG']);
+  assert.equal(await releasing, false);
+  assert.equal(await reg.acquire('000660'), false);
+  let drained = false;
+  const drainCompletion = reg.whenDrained().then((ok) => { drained = ok; return ok; });
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(drained, false);
+  finishRegister();
+  assert.equal(await acquiring, false);
+  assert.equal(await drainCompletion, true);
+  assert.deepEqual(calls.map((call) => call.body.trnm), ['REG', 'REMOVE']);
+  assert.deepEqual(calls.map((call) => call.alias), ['server-a', 'server-a']);
+  assert.equal(reg.size(), 0);
+});
+
+test('whenDrained: 늦은 REG의 REMOVE 실패는 같은 alias 재사용을 허용하지 않는다', async () => {
+  let finishRegister;
+  const reg = createRealtimeRegistrarWithAccount({
+    backendBase: 'http://backend',
+    backendAccountAlias: 'server-a',
+    fetchImpl: async (_url, init) => {
+      const body = JSON.parse(init.body);
+      if (body.trnm === 'REG') await new Promise((resolve) => { finishRegister = resolve; });
+      return { ok: body.trnm === 'REG', status: body.trnm === 'REG' ? 200 : 503 };
+    },
+  });
+  const acquiring = reg.acquire('005930');
+  await reg.releaseAll();
+  finishRegister();
+  assert.equal(await acquiring, false);
+  assert.equal(await reg.whenDrained(), false);
+});
+
+test('releaseAll: 이미 진행 중인 일반 REMOVE가 끝날 때까지 drain 완료를 보류한다', async () => {
+  let finishRemove;
+  const reg = createRealtimeRegistrar({
+    backendBase: 'http://backend',
+    fetchImpl: async (_url, init) => {
+      const body = JSON.parse(init.body);
+      if (body.trnm === 'REMOVE') {
+        return new Promise((resolve) => {
+          finishRemove = () => resolve({ ok: true, status: 200 });
+        });
+      }
+      return { ok: true, status: 200 };
+    },
+  });
+  assert.equal(await reg.acquire('005930'), true);
+  const releasing = reg.release('005930');
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(await reg.releaseAll(), false);
+  let drained = false;
+  const drain = reg.whenDrained().then((ok) => { drained = ok; return ok; });
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(drained, false);
+  finishRemove();
+  assert.equal(await releasing, true);
+  assert.equal(await drain, true);
+});
+
+test('whenDrained: 진행 중인 일반 REMOVE 실패는 같은 alias 재사용을 닫는다', async () => {
+  let finishRemove;
+  const reg = createRealtimeRegistrar({
+    backendBase: 'http://backend',
+    fetchImpl: async (_url, init) => {
+      const body = JSON.parse(init.body);
+      if (body.trnm === 'REMOVE') {
+        return new Promise((resolve) => {
+          finishRemove = () => resolve({ ok: false, status: 503 });
+        });
+      }
+      return { ok: true, status: 200 };
+    },
+  });
+  assert.equal(await reg.acquire('005930'), true);
+  const releasing = reg.release('005930');
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(await reg.releaseAll(), false);
+  finishRemove();
+  assert.equal(await releasing, false);
+  assert.equal(await reg.whenDrained(), false);
 });

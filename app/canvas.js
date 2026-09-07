@@ -2032,17 +2032,35 @@ function resolveEnvelopeSymbol(envelope) {
   ).trim();
 }
 
+function releaseRendererRealtimeLease(channel, leaseToken) {
+  void window.athena.invoke(channel, { leaseToken }).then((ok) => {
+    if (!ok) return window.athena.invoke(channel, { leaseToken });
+    return ok;
+  }).catch(() => {});
+}
+
 function wireQuoteRealtime(card, wrap, envelope, applyTick) {
   const symbol = resolveEnvelopeSymbol(envelope);
   if (!symbol || typeof applyTick !== 'function') return;
   quoteRealtimePanels.openPanel(card, symbol, (tick) => applyTick(wrap, envelope, tick));
+  let leaseToken = null;
+  let released = false;
+  void window.athena.invoke('athena:realtime-acquire', { symbol }).then((result) => {
+    if (!result || !result.ok || !result.leaseToken) return;
+    if (released) {
+      releaseRendererRealtimeLease('athena:realtime-release', result.leaseToken);
+      return;
+    }
+    leaseToken = result.leaseToken;
+  }).catch(() => {});
   const priorDestroy = cardDestroyers.get(card);
   cardDestroyers.set(card, () => {
+    released = true;
     quoteRealtimePanels.closePanel(card);
-    // 카드 1장을 참조 1개로 센다(main.js ensureChartRealtime 주석 참고) — 이
-    // 카드가 위에서 연 세션과 같은 symbol로만 해제한다. main이 acquire 때 보는
-    // 것과 같은 envelope 필드에서 뽑은 값이라 카운트가 서로 어긋나지 않는다.
-    window.athena.send('athena:realtime-release', { symbol });
+    if (leaseToken) {
+      releaseRendererRealtimeLease('athena:realtime-release', leaseToken);
+      leaseToken = null;
+    }
     if (priorDestroy) priorDestroy();
   });
 }
@@ -2055,7 +2073,15 @@ function wireOrderbookRealtime(card, wrap, envelope, applyTick, options = {}) {
   const symbol = resolveEnvelopeSymbol(envelope);
   if (!symbol || typeof applyTick !== 'function') return null;
   orderbookRealtimePanels.openPanel(card, symbol, (tick) => applyTick(wrap, envelope, tick));
-  window.athena.send('athena:orderbook-realtime-acquire', { symbol });
+  let leaseToken = null;
+  void window.athena.invoke('athena:orderbook-realtime-acquire', { symbol }).then((result) => {
+    if (!result || !result.ok || !result.leaseToken) return;
+    if (released) {
+      releaseRendererRealtimeLease('athena:orderbook-realtime-release', result.leaseToken);
+      return;
+    }
+    leaseToken = result.leaseToken;
+  }).catch(() => {});
   // 해제는 한 번만 나간다 — acquire보다 release가 많으면 main의 REG 셈이 무너져
   // 같은 종목을 보는 남의 카드 피드까지 끊긴다.
   let released = false;
@@ -2063,7 +2089,10 @@ function wireOrderbookRealtime(card, wrap, envelope, applyTick, options = {}) {
     if (released) return false;
     released = true;
     orderbookRealtimePanels.closePanel(card);
-    window.athena.send('athena:orderbook-realtime-release', { symbol });
+    if (leaseToken) {
+      releaseRendererRealtimeLease('athena:orderbook-realtime-release', leaseToken);
+      leaseToken = null;
+    }
     return true;
   };
   // 보드 카드는 정리자를 renderBoardSurfaceCard가 이미 걸었다(보드 상태가 자리를
