@@ -7,5 +7,11 @@
     { "node_id": "2T8B-1", "name": "Order Entry", "role": "primary", "depth": 2 },
     { "node_id": "2T7F-1", "name": "Order Preview", "role": "other", "depth": 2 },
     { "node_id": "2T6C-1", "name": "Fees and Execution", "role": "rail", "depth": 2 }
+  ],
+  "responsive": [
+    {
+      "node_id": "2T99-1",
+      "traits": ["flow"]
+    }
   ]
 }

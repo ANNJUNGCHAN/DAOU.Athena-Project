@@ -365,7 +365,10 @@
    * 줄로 서는 바닥을 준다(실측 2SKU-1 「예수금 KPI 4칸」: 칸 91px 안에 내용 144px,
    * 사슬로 표면 9px). `fit-content`는 남은 폭에서 잘리므로 넉넉한 단계에서 줄을
    * 밀어내지 않고, 글자를 이고 있는 칸만 받으므로 빈 spacer는 그대로 0이다. */
-  [data-bs-wrap-row="true"] > [data-bs-elastic-cell="true"] { min-width: fit-content; }
+  /* 표시는 board-mount가 소유자의 **직계 자식**에만 남기므로 부모 한정이 필요 없다.
+   * 접기 소유자(`.bs-r-flow`)에도 같은 바닥이 필요하다 — flow는 `flex-wrap`만 주고,
+   * 칸이 탄력이면 그 wrap이 발동하지 않는다(실측 2T63-1 「Order Progress」 5장). */
+  [data-bs-elastic-cell="true"] { min-width: fit-content; }
   .bs-kpi { flex-wrap: wrap; }
   .bs-kpi-cell { width: auto; flex-basis: calc(33.3333% - 24px); flex-grow: 1; }
   .bs-strip { overflow-x: auto; }
