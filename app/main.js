@@ -2502,11 +2502,64 @@ const TOOL_STEP_LABELS = {
 // (Paper 보드 10의 툴 칩이 「노드 조회」로 따로 서 있다) — 같은 도구라도 액션으로
 // 가른다. 입력은 tool_use 블록에 이미 실려 있다.
 function toolStepLabel(name, input) {
+  // Paper 25Q-0 ⑧ 실행 라인: 도구 이름 뒤에 사람이 읽는 대상만 붙인다.
+  // 실제 입력 키는 search.query / resolve.question+arguments / brain.entity 다.
+  // call은 plan_token만 받으므로 대상을 만들지 않는다. TR·툴 id·계좌·토큰은 숨긴다(OBS-014).
+  function targetOf(raw) {
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return '';
+    const inner = raw.tool_input && typeof raw.tool_input === 'object' && !Array.isArray(raw.tool_input)
+      ? raw.tool_input : raw;
+    const nested = (inner.arguments && typeof inner.arguments === 'object' && !Array.isArray(inner.arguments))
+      ? inner.arguments
+      : (inner.args && typeof inner.args === 'object' && !Array.isArray(inner.args) ? inner.args : null);
+    const args = nested ? Object.assign({}, inner, nested) : inner;
+    const pick = (...keys) => {
+      for (const key of keys) {
+        const value = args[key];
+        if (typeof value === 'string' && value.trim()) return value.trim();
+      }
+      return '';
+    };
+    const leak = (value) => /(?:^|[^a-z0-9])(ka|kt|kw)\d/i.test(value)
+      || /athena_|mcp__/i.test(value)
+      || /plan_token/i.test(value)
+      || /^[0-9a-f-]{16,}$/i.test(value);
+    const parts = [];
+    const display = pick('stk_nm', 'stock_name', 'entity_name');
+    const named = pick('name');
+    const entity = pick('entity');
+    if (display && !leak(display)) parts.push(display);
+    else if (named && !leak(named) && /[가-힣]/.test(named)) parts.push(named);
+    else if (entity && !leak(entity) && /[가-힣]/.test(entity)) parts.push(entity);
+    const query = pick('query');
+    if (query && query !== display && !leak(query)) {
+      parts.push(query.length > 24 ? `${query.slice(0, 24)}…` : query);
+    }
+    const yearRaw = args.year != null ? args.year
+      : (args.yr != null ? args.yr : (args.fs_year != null ? args.fs_year : args.base_year));
+    const year = (typeof yearRaw === 'number' && Number.isInteger(yearRaw) && yearRaw >= 1990 && yearRaw <= 2100)
+      ? String(yearRaw)
+      : (typeof yearRaw === 'string' && /^\d{4}$/.test(yearRaw.trim()) ? yearRaw.trim() : '');
+    if (year) parts.push(year);
+    const fs = pick('fs_div', 'stmt_tp');
+    if (fs === '연결' || fs === 'CFS') parts.push('연결');
+    else if (fs === '별도' || fs === 'OFS') parts.push('별도');
+    if (!parts.length) {
+      const question = pick('question');
+      if (question && !leak(question)) {
+        parts.push(question.length > 24 ? `${question.slice(0, 24)}…` : question);
+      }
+    }
+    return parts.join(' ').slice(0, 40);
+  }
   if (streamJsonParser.isRenderCanvasToolName(name)) return '카드 그리는 중';
   // MCP 툴 이름은 mcp__<server>__<tool> 형태로 온다 — 마지막 조각만 라벨을 찾는 열쇠다.
   const base = String(name || '').split('__').pop();
-  if (base === 'athena_brain' && input && input.action === 'entity') return '노드 조회';
-  return TOOL_STEP_LABELS[base] || '처리 중';
+  const kind = (base === 'athena_brain' && input && input.action === 'entity')
+    ? '노드 조회'
+    : (TOOL_STEP_LABELS[base] || '처리 중');
+  const target = targetOf(input);
+  return target ? `${kind} · ${target}` : kind;
 }
 
 const NUDGE_GUARD_TOOL_NAME = 'athena_nudge_guard';

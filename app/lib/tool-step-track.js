@@ -35,7 +35,7 @@ function applyToolStep(steps, step) {
   const note = typeof step.note === 'string' ? step.note : '';
   const timeText = done && typeof step.elapsedMs === 'number'
     ? `${(step.elapsedMs / 1000).toFixed(1)}s`
-    : (done ? '—' : '');
+    : (done ? '—' : '대기 중');
   steps.set(step.id, { label, done, elapsedMs: step.elapsedMs, error, retrying, note });
   return { id: step.id, label, done, timeText, error, retrying, note };
 }
