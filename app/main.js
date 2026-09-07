@@ -889,6 +889,7 @@ const orderbookRealtime = require('./lib/main/orderbook-realtime');
 const integratedCardRealtime = require('./lib/main/integrated-card-realtime');
 // 보드 슬롯 하이드레이션 — 봉투가 못 채운 슬롯을 마운트 뒤에 한 번 더 채운다.
 const boardHydrate = require('./lib/main/board-hydrate');
+const chartPage = require('./lib/main/chart-page');
 const chartSeries = require('./lib/main/chart-series');
 // 백테스트 REST 프록시(P4, backtest-mode-plan.md §8.1) — routineHttp와 같은 원칙이지만
 // main.js 밖 순수 함수라 단위 테스트(backtest-bridge.test.js)를 직접 붙일 수 있다.
@@ -2367,6 +2368,7 @@ async function emitRestCanvasAndWaitForPaint(payload, { expand = true, timeoutMs
         correlation,
         operationRef: payload.operationRef,
         operationArgs: payload.operationArgs,
+        accountId: payload.accountId,
         chartBody: chart,
         chartMeta: payload && payload.envelope && payload.envelope.data && payload.envelope.data.chart_meta,
       },
@@ -3055,6 +3057,20 @@ function backendAccountAuthorization() {
   return LOCAL_BEARER_TOKEN ? `Bearer ${LOCAL_BEARER_TOKEN}` : '';
 }
 
+function createActiveBackendAccountInvoker(run, requestedAccountId) {
+  return accountBoundDataset.createAccountBoundInvoker({
+    requestedAccountId,
+    getActiveAccountId: activeRestAccountId,
+    resolveBackendAlias: (options) => accounts.resolveBackendAlias(options),
+    resolveOptions: {
+      backendBase: BACKEND_HTTP_BASE,
+      fetchImpl: fetch,
+      authorization: backendAccountAuthorization(),
+    },
+    run,
+  });
+}
+
 // 이력 사이드바(리프 1.2.2) 최소 영속화 — 첫 사용자 메시지에서 제목을 뽑아
 // athena-conversations.json에 적는다. historyConversationId()는 현재 선택된
 // 대화 하나에 고정되며, 새 대화/기존 대화 선택 경계에서만 교체된다.
@@ -3558,13 +3574,21 @@ const providerConversationRotationQueue = createConversationRotationQueue({
 });
 const stockEntityIndex = new restDatasetRunner.StockEntityIndex();
 let lastStockIndexErrorLogAt = 0;
+async function refreshActiveStockEntityIndex(index, { signal } = {}) {
+  const bound = await createActiveBackendAccountInvoker((options) => (
+    restDatasetRunner.refreshStockEntityIndex(index, {
+      backendBase: BACKEND_HTTP_BASE,
+      signal,
+      ...options,
+    })
+  ));
+  if (!bound.ok) throw new Error(bound.error || '조회에 사용할 서버 계좌를 확인할 수 없다');
+  return bound.run();
+}
 const stockEntityIndexReadiness = createStockEntityIndexReadiness({
   index: stockEntityIndex,
   refresh: async (index, { signal }) => {
-    const count = await restDatasetRunner.refreshStockEntityIndex(index, {
-      backendBase: BACKEND_HTTP_BASE,
-      signal,
-    });
+    const count = await refreshActiveStockEntityIndex(index, { signal });
     mdlog(`Kiwoom 종목명 인덱스 갱신 — 종목 ${count}개`);
     return count;
   },
@@ -3634,7 +3658,7 @@ async function runDirectRestDataset(dataset, expand = true, overrides = {}) {
           if (ownController && activeRestRun !== ownController) {
             throw new Error('교체된 REST 데이터셋의 늦은 카드는 표시하지 않는다');
           }
-          return emitRestCanvasForOrigin({ ...payload, retryCardId }, {
+          return emitRestCanvasForOrigin({ ...payload, retryCardId, accountId: retryAccountId }, {
             expand,
             origin: overrides.origin,
             timeoutMs: Math.max(1, payload.paintDeadlineAt - performance.now()),
@@ -3727,7 +3751,11 @@ async function handleChartPanelReload(event, payload) {
     throw new Error('AITS chart reload는 셸 창에서만 허용된다');
   }
   const request = chartReloadAuthority.buildDataset(payload);
-  const result = await runDirectRestDataset(request, false, { skipHistory: true, allowRetry: true });
+  const result = await runDirectRestDataset(request, false, {
+    skipHistory: true,
+    allowRetry: true,
+    accountId: request.accountId,
+  });
   return chartReloadAuthority.acceptResult(request, result);
 }
 
@@ -3749,28 +3777,14 @@ async function handleChartHistoryPage(event, payload) {
   // 공유해 진행 중인 조회를 abort시키고 캔버스 배달·패널 권위 수명에 엮인다 —
   // 과거 조회는 화면을 그리는 일이 아니라 봉만 가져오는 일이라 그 전부가 부작용이다
   // (실측 2026-08-25: 자동 발화 시 두 요청이 서로를 취소해 영영 pending으로 남았다).
-  let res;
-  try {
-    res = await fetch(`${BACKEND_HTTP_BASE}/api/v1/canvas/chart-page`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ operation_ref: item.operationRef, args: item.args }),
-    });
-  } catch (err) {
-    return { ok: false, error: `과거 조회 실패 — ${String((err && err.message) || err)}`, candles: [] };
-  }
-  if (!res.ok) {
-    const detail = await res.json().catch(() => null);
-    return {
-      ok: false,
-      error: `과거 조회 거부(HTTP ${res.status})${detail && detail.detail ? ` — ${detail.detail}` : ''}`,
-      candles: [],
-    };
-  }
-  const body = await res.json().catch(() => null);
-  const candles = body && Array.isArray(body.candles) ? body.candles : [];
-  if (!candles.length) return { ok: false, error: '과거 봉이 없다', candles: [] };
-  return { ok: true, candles, trId: body.tr_id || null };
+  const bound = await createActiveBackendAccountInvoker((options) => chartPage.fetchChartPage({
+    backendBase: BACKEND_HTTP_BASE,
+    operationRef: item.operationRef,
+    args: item.args,
+    ...options,
+  }), request.accountId);
+  if (!bound.ok) return { ok: false, error: bound.error, candles: [] };
+  return bound.run();
 }
 
 ipcMain.handle('athena:chart-history-page', handleChartHistoryPage);
@@ -3782,13 +3796,16 @@ async function handleChartSeries(event, payload) {
     throw new Error('수급 시계열 조회는 셸 창에서만 허용된다');
   }
   const input = payload && typeof payload === 'object' ? payload : {};
-  return chartSeries.fetchChartSeries({
+  const bound = await createActiveBackendAccountInvoker((options) => chartSeries.fetchChartSeries({
     backendBase: BACKEND_HTTP_BASE,
     operationRef: input.operationRef,
     args: input.args,
     fields: input.fields,
     baseDt: input.baseDt,
-  });
+    ...options,
+  }));
+  if (!bound.ok) return { ok: false, error: bound.error, series: [] };
+  return bound.run();
 }
 
 ipcMain.handle('athena:chart-series', handleChartSeries);
@@ -3981,7 +3998,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
         if (activeSelectorFastRun !== selectorController) {
           throw new Error('교체된 Selector fast path의 늦은 카드는 표시하지 않는다');
         }
-        return emitRestCanvasForOrigin(payload, {
+        return emitRestCanvasForOrigin({ ...payload, accountId: selectorAccount.accountId }, {
           expand,
           origin,
           timeoutMs: Math.max(1, payload.paintDeadlineAt - performance.now()),
@@ -4052,7 +4069,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
             if (activeSelectorFastRun !== selectorController) {
               throw new Error('교체된 Selector cold path의 늦은 카드는 표시하지 않는다');
             }
-            return emitRestCanvasForOrigin(payload, {
+            return emitRestCanvasForOrigin({ ...payload, accountId: selectorAccount.accountId }, {
               expand,
               origin,
               timeoutMs: Math.max(1, payload.paintDeadlineAt - performance.now()),

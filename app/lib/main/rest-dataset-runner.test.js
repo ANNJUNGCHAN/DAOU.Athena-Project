@@ -18,7 +18,7 @@ const {
   buildTradingSourceDataset,
   buildStockInfoDataset,
   buildProgramTradeDataset,
-  refreshStockEntityIndex,
+  refreshStockEntityIndex: refreshStockEntityIndexWithAccount,
   normalizeDataset,
   normalizeRecommendations,
   runRestDataset: runRestDatasetWithAccount,
@@ -33,6 +33,10 @@ const RESOLVER_VECTOR = JSON.parse(fs.readFileSync(RESOLVER_VECTOR_PATH, 'utf8')
 
 function runRestDataset(options) {
   return runRestDatasetWithAccount({ backendAccountAlias: 'server-a', ...options });
+}
+
+function refreshStockEntityIndex(index, options) {
+  return refreshStockEntityIndexWithAccount(index, { backendAccountAlias: 'server-a', ...options });
 }
 
 function resolverRecords() {
@@ -1360,6 +1364,39 @@ test('ETF, unknown code, intent uncertainty, and unknown market never bind the s
   assert.equal(refreshed.resolveQuery('시장0 현재가')?.kind, 'stock');
   assert.equal(refreshed.resolveQuery('시장10 현재가')?.kind, 'stock');
   assert.equal(refreshed.resolveQuery('시장8 현재가')?.kind, 'etf');
+});
+
+test('stock-master A/B refresh는 모든 시장 요청에 같은 검증 alias와 redirect 차단을 보낸다', async () => {
+  for (const backendAccountAlias of ['server-a', 'server-b']) {
+    const index = new StockEntityIndex();
+    const calls = [];
+    await refreshStockEntityIndexWithAccount(index, {
+      backendBase: 'http://backend', backendAccountAlias,
+      wait: async () => {},
+      fetchImpl: async (_url, options) => {
+        calls.push(options);
+        const market = JSON.parse(options.body).mrkt_tp;
+        return response({ list: [{ code: `${Number(market) + 1}`.padStart(6, '0'), name: `시장${market}`, marketCode: market }] });
+      },
+    });
+    assert.equal(calls.length, 3);
+    assert.deepEqual(calls.map((options) => options.headers['X-Athena-Account']), [
+      backendAccountAlias, backendAccountAlias, backendAccountAlias,
+    ]);
+    assert.deepEqual(calls.map((options) => options.redirect), ['error', 'error', 'error']);
+  }
+});
+
+test('stock-master alias 누락/형식 오류는 첫 시장 fetch 전에 차단한다', async () => {
+  let fetches = 0;
+  for (const backendAccountAlias of ['', 'LOCAL-UUID', 'server a']) {
+    await assert.rejects(refreshStockEntityIndexWithAccount(new StockEntityIndex(), {
+      backendBase: 'http://backend', backendAccountAlias,
+      wait: async () => {},
+      fetchImpl: async () => { fetches += 1; },
+    }), (error) => error && error.code === 'missing_backend_account_alias');
+  }
+  assert.equal(fetches, 0);
 });
 
 test('stock-master refresh publishes one atomic returned-market snapshot and deduplicates aggregate overlap', async () => {
