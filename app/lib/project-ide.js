@@ -89,6 +89,8 @@ function createProjectIde(options) {
   let truncated = false;
   let tabs = [];               // [{path, text, saved, dirty}]
   let activePath = null;
+  let workspaceGeneration = 0;
+  let suspended = false;
   let filter = '';
   let message = null;          // {text, bad}
   let closing = null;          // 더러운 탭을 닫으려는 중인 경로
@@ -119,7 +121,23 @@ function createProjectIde(options) {
   }
 
   function activeTab() {
-    return activePath ? findTab(activePath) : null;
+    return !suspended && activePath ? findTab(activePath) : null;
+  }
+
+  // 세션 전환은 파일 편집을 버리는 동작이 아니다. 탭은 남기되, 명시적으로 다시
+  // 고르기 전까지 앞 세션 파일을 현재 코드·실행 대상으로 내주지 않는다.
+  function suspend() {
+    workspaceGeneration += 1;
+    suspended = true;
+    activePath = null;
+    closing = null;
+    paint();
+  }
+
+  function resumeWorkspace() {
+    if (!suspended) return;
+    suspended = false;
+    if (deps.onProjectChange) deps.onProjectChange(project);
   }
 
   // ---------- 데이터 ----------
@@ -145,6 +163,13 @@ function createProjectIde(options) {
   }
 
   async function selectProject(next) {
+    const generation = workspaceGeneration;
+    if (suspended && project && next && project.id === next.id) {
+      resumeWorkspace();
+      paint();
+      return;
+    }
+    suspended = false;
     project = next || null;
     tabs = [];
     activePath = null;
@@ -153,6 +178,7 @@ function createProjectIde(options) {
     renaming = false;
     filter = '';
     await loadTree();
+    if (generation !== workspaceGeneration) return;
     paint();
     // 프로젝트를 고르고 나면 코드 탭의 구성이 바뀐다(옛 단일 편집기 ↔ IDE) — 그 판단은
     // 캔버스가 하므로 여기서 한 번 알린다.
@@ -188,21 +214,24 @@ function createProjectIde(options) {
   }
 
   async function openFile(pathText) {
+    const generation = workspaceGeneration;
     if (!isPython(pathText)) {
       say('이 기능은 파이썬(.py) 파일만 엽니다 — 다른 파일은 보기만 합니다', true);
       paint();
       return;
     }
     const already = findTab(pathText);
-    if (already) { activePath = pathText; say(null); paint(); return; }
+    if (already) { activePath = pathText; resumeWorkspace(); say(null); paint(); return; }
     if (!deps.readFile || !project) return;
     try {
       const res = await deps.readFile(project.id, pathText);
+      if (generation !== workspaceGeneration) return;
       const text = String((res && res.text) || '');
       tabs = tabs.concat([{ path: pathText, text, saved: text, dirty: false }]);
       activePath = pathText;
+      resumeWorkspace();
       say(null);
-    } catch (err) { fail(err); }
+    } catch (err) { if (generation !== workspaceGeneration) return; fail(err); }
     paint();
   }
 
@@ -278,10 +307,12 @@ function createProjectIde(options) {
   // 따로 만들면 언젠가 한쪽만 고쳐진다. 열렸는지를 불리언으로 돌려주는 이유: 부른 쪽이
   // "열었다"고 말하기 전에 정말 열렸는지 알아야 한다(등록부의 파일은 지워졌을 수 있다).
   async function openAt(projectId, pathText) {
+    const generation = workspaceGeneration;
     // 목록이 비었을 때만 다시 읽으면, 이 세션에서 만든 프로젝트(등록 뒤 열기)는 영영
     // 없는 폴더가 된다 — 처음 그린 목록이 그대로 남기 때문이다(프로브 M10~M13 실측).
     // 찾는 id가 없을 때도 한 번 다시 읽는다.
     if (!projects.length || !projects.some((p) => p.id === projectId)) await loadProjects();
+    if (generation !== workspaceGeneration) return false;
     const next = projects.find((p) => p.id === projectId);
     if (!next) {
       say('그 폴더가 프로젝트 목록에 없습니다', true);
@@ -289,6 +320,7 @@ function createProjectIde(options) {
       return false;
     }
     if (!project || project.id !== projectId) await selectProject(next);
+    if (generation !== workspaceGeneration) return false;
     await openFile(pathText);
     return activePath === pathText;
   }
@@ -467,6 +499,7 @@ function createProjectIde(options) {
       const item = el('div', `project-ide-tab${isOn ? ' is-on' : ''}`);
       const name = button('project-ide-tab-name', basename(tab.path), () => {
         activePath = tab.path;
+        resumeWorkspace();
         closing = null;
         paint();
       });
@@ -616,9 +649,10 @@ function createProjectIde(options) {
     element: root,
     mount() { void loadProjects(); },
     refresh() { paint(); },
-    currentProject() { return project; },
+    currentProject() { return suspended ? null : project; },
     openAt,
     closeAll,
+    suspend,
     adoptExternalWrite,
     activeFile() {
       const tab = activeTab();

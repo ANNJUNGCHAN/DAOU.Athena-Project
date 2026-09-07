@@ -5304,6 +5304,23 @@ function withWorkspaceGlobal(run) {
   return Promise.resolve(run({ registered, reports })).finally(() => { delete global.window; });
 }
 
+function makeWorkspaceCanvas(overrides) {
+  const timers = new Map();
+  let timerId = 0;
+  const made = makeCanvas(Object.assign({}, overrides, {
+    setTimeoutImpl: (fn) => { timers.set(++timerId, fn); return timerId; },
+    clearTimeoutImpl: (id) => { timers.delete(id); },
+  }));
+  made.tick = async () => {
+    for (const [id, fn] of [...timers]) {
+      if (!timers.delete(id)) continue;
+      fn();
+    }
+    await flush();
+  };
+  return made;
+}
+
 test('세션 복원: 폼의 대상·코드·로그가 돌아오고 표식이 카운트를 말한다', async () => withWorkspaceGlobal(async ({ registered }) => {
   const made = makeCanvas({ result: async () => ({ status: 'done', metrics: {}, stdout: '' }) });
   made.canvas.mount();
@@ -5534,6 +5551,231 @@ test('세션 복원: 다른 세션으로 갈아타면 복원 표식·안내를 �
   assert.equal(findByClass(made.container, 'backtest-restore-code').length, 0);
   assert.equal(findByClass(made.container, 'backtest-restore-notice').length, 0);
 }));
+
+for (const hidden of [false, true]) {
+  test(`세션 복원: clear 뒤 앞 세션을 다시 봉인하지 않고 새 편집은 저장한다 (hidden=${hidden})`, async () => withWorkspaceGlobal(async ({ registered, reports }) => {
+    const made = makeWorkspaceCanvas({
+      result: async () => ({ status: 'done', metrics: {}, stdout: '앞 세션 로그' }),
+      trades: async () => [],
+    });
+    made.canvas.mount();
+    await flush();
+    const handler = registered[0][1];
+    await handler.restore(RESTORE_WORKSPACE);
+    await made.tick();
+    made.container.hidden = hidden;
+    // chat.js가 새 기록 id를 요청하기 직전에 호출하는 실제 순서다.
+    handler.flush();
+    const before = reports.length;
+    handler.clear();
+    await made.tick();
+    made.container.hidden = false;
+    made.canvas.refresh();
+    await flush();
+    await made.tick();
+    assert.equal(reports.length, before, '새 세션에 앞 세션의 작업공간을 보냈다');
+
+    // 보고를 꺼서 통과시키면 안 된다 — 새 세션에서 고른 폼은 바로 저장되어야 한다.
+    await click(findByClass(made.container, 'backtest-preset-item')[0]);
+    await flush();
+    await made.tick();
+    const next = reports[reports.length - 1];
+    assert.ok(reports.length > before);
+    assert.match(next.form.yaml, /SMA 골든크로스/);
+    assert.ok(!next.form.yaml.includes('005930'), '앞 세션의 대상까지 새 폼에 옮겼다');
+    assert.equal(next.code, null);
+    assert.equal(next.run, null);
+    assert.equal(next.log, null);
+    assert.notEqual(next.scroll && next.scroll.top, 120);
+  }));
+}
+
+test('세션 복원: clear 전 시작한 결과 조회가 다음 복원에 늦게 섞이지 않는다', async () => withWorkspaceGlobal(async ({ registered, reports }) => {
+  let finishResult;
+  const result = new Promise((resolve) => { finishResult = resolve; });
+  const made = makeWorkspaceCanvas({ result: () => result, trades: async () => [] });
+  made.canvas.mount();
+  await flush();
+  const handler = registered[0][1];
+  const restoring = handler.restore(RESTORE_WORKSPACE);
+  handler.flush();
+  handler.clear();
+  await handler.restore({
+    kind: 'backtest', tab: 'design', designTab: 'form',
+    form: { yaml: RESTORE_YAML.replace('005930', '000660') },
+  });
+  await made.tick();
+  const before = reports.length;
+  finishResult({ status: 'done', metrics: { total_return: 0.418 }, stdout: '앞 세션 결과' });
+  await restoring;
+  await made.tick();
+  assert.equal(reports.length, before, '이전 결과 조회가 새 세션에 보고를 만들었다');
+  const next = reports[reports.length - 1];
+  assert.match(next.form.yaml, /000660/);
+  assert.equal(next.code, null);
+  assert.equal(next.run, null);
+  assert.equal(next.log, null);
+  assert.equal(findByClass(made.container, 'backtest-restore-notice').length, 0);
+}));
+
+for (const pendingStage of ['start', 'status']) {
+  test(`세션 복원: 앞 세션의 출처 ${pendingStage} 응답은 새 세션 지도를 바꾸지 않는다`, async () => withWorkspaceGlobal(async ({ registered, reports }) => {
+    let finishPrevious;
+    const previous = new Promise((resolve) => { finishPrevious = resolve; });
+    let finishNext;
+    const next = new Promise((resolve) => { finishNext = resolve; });
+    const statusCalls = [];
+    const made = makeWorkspaceCanvas({
+      sourceMapStart: async ({ url }) => url.endsWith('/previous')
+        ? (pendingStage === 'start' ? previous : { job_id: 'previous-source' })
+        : { job_id: 'next-source' },
+      sourceMapStatus: ({ job_id: jobId }) => {
+        statusCalls.push(jobId);
+        return jobId === 'previous-source' ? previous : next;
+      },
+    });
+    made.canvas.mount();
+    await flush();
+    const handler = registered[0][1];
+    made.canvas.onChatAction({ kind: 'source_url', url: 'https://example.com/previous' });
+    await flush();
+    handler.flush();
+    handler.clear();
+    made.canvas.onChatAction({ kind: 'source_url', url: 'https://example.com/next' });
+    await flush();
+    finishPrevious(pendingStage === 'start'
+      ? { job_id: 'previous-source' }
+      : sourceJobAt3of5({ status: 'done', spec_yaml: RESTORE_YAML }));
+    await flush();
+    await made.tick();
+    assert.equal(made.canvas.getContext().view, 'sourcing');
+    assert.deepEqual(statusCalls, pendingStage === 'start'
+      ? ['next-source'] : ['previous-source', 'next-source']);
+    // 새 세션의 응답은 정상 채택·저장한다 — 모든 출처 결과를 버리는 가드는 오답이다.
+    finishNext(sourceJobAt3of5({ status: 'done', spec_yaml: SMA_YAML }));
+    await flush();
+    await made.tick();
+    assert.equal(made.canvas.getContext().view, 'design');
+    assert.match(reports[reports.length - 1].form.yaml, /SMA 골든크로스/);
+    assert.ok(!reports[reports.length - 1].form.yaml.includes('변동성 돌파'));
+  }));
+}
+
+test('세션 복원: 앞 세션의 실행 시작 응답을 새 세션 실행으로 저장하지 않는다', async () => withWorkspaceGlobal(async ({ registered, reports }) => {
+  let finishRun;
+  const running = new Promise((resolve) => { finishRun = resolve; });
+  const made = makeWorkspaceCanvas({
+    run: () => running,
+    result: async () => ({ status: 'done', metrics: {}, stdout: '' }),
+    trades: async () => [],
+  });
+  made.canvas.mount();
+  await flush();
+  const handler = registered[0][1];
+  await handler.restore(RESTORE_WORKSPACE);
+  assert.deepEqual(made.canvas.runFromChat(), []);
+  handler.flush();
+  handler.clear();
+  await handler.restore({
+    kind: 'backtest', tab: 'design', designTab: 'form',
+    form: { yaml: RESTORE_YAML.replace('005930', '000660') },
+  });
+  await made.tick();
+  const before = reports.length;
+  finishRun({ run_id: 'previous-late-run', strategy_id: 'previous-strategy', version_id: 'previous-version' });
+  await flush();
+  await made.tick();
+  assert.equal(reports.length, before);
+  assert.equal(reports[reports.length - 1].run, null);
+  assert.equal(reports[reports.length - 1].code, null);
+  assert.equal(made.canvas.getContext().view, 'design');
+}));
+
+for (const dirty of [false, true]) {
+  test(`세션 복원: 이전 IDE 파일이 복원 코드의 실행을 가로채지 않는다 (dirty=${dirty})`, async () => withWorkspaceGlobal(async ({ registered }) => {
+    const sent = [];
+    const made = makeWorkspaceCanvas(userStrategyDeps({
+      run: async (body) => { sent.push(body); return { run_id: 'next-run' }; },
+      result: async () => ({ status: 'running' }),
+    }));
+    made.canvas.mount();
+    await flush();
+    await fillForm(made.container);
+    await click(findByClass(made.container, 'backtest-user-strategy-item')[0]);
+    await flush();
+    await click(findByClass(made.container, 'backtest-subtab')[2]);
+    const draft = `${GOLDEN_SOURCE}# 저장 안 한 편집\n`;
+    if (dirty) {
+      const editor = findByClass(made.container, 'backtest-code-textarea')[0];
+      editor.value = draft;
+      await editor.dispatchEvent({ type: 'input' });
+    }
+    const handler = registered[0][1];
+    handler.flush();
+    handler.clear();
+    const nextSource = 'PARAMS = {}\ndef signals(df, p):\n    return df\n# SESSION_B_CODE\n';
+    await handler.restore({
+      kind: 'backtest', designTab: 'code', form: RESTORE_WORKSPACE.form,
+      code: { source: nextSource, file: 'b.py', runPath: 'code' },
+    });
+    assert.equal(made.canvas.getContext().project, null);
+    assert.equal(findByClass(made.container, 'backtest-code-textarea')[0].value, nextSource);
+    assert.deepEqual(made.canvas.runFromChat(), []);
+    await flush();
+    assert.equal(sent.length, 1);
+    assert.equal(sent[0].source, nextSource);
+    assert.equal(sent[0].project_id, undefined);
+    // 보존한 탭은 사람이 다시 선택할 수 있고, 저장 안 한 편집도 그대로 남는다.
+    await click(findByClass(made.container, 'backtest-tab')[0]);
+    await click(findByClass(made.container, 'backtest-subtab')[2]);
+    await click(findByClass(made.container, 'project-ide-tab-name')[0]);
+    await flush();
+    assert.equal(made.canvas.getContext().project.activeFile, 'strategies/golden.py');
+    assert.equal(findByClass(made.container, 'backtest-code-textarea')[0].value, dirty ? draft : GOLDEN_SOURCE);
+    assert.equal(made.canvas.getContext().project.dirty, dirty);
+  }));
+}
+
+for (const pendingKind of ['graph', 'code']) {
+  test(`세션 복원: 앞 세션의 ${pendingKind} 생성 응답은 새 세션 설계를 덮지 않는다`, async () => withWorkspaceGlobal(async ({ registered, reports }) => {
+    let finishPrevious;
+    const previous = new Promise((resolve) => { finishPrevious = resolve; });
+    let requests = 0;
+    const made = makeWorkspaceCanvas({
+      visualFromSpec: () => {
+        if (pendingKind === 'graph') { requests += 1; return previous; }
+        return Promise.resolve({ graph: VISUAL_GRAPH });
+      },
+      visualValidate: async () => ({ valid: true, diagnostics: [] }),
+      codegen: () => { requests += 1; return previous; },
+    });
+    made.canvas.mount();
+    await flush();
+    const handler = registered[0][1];
+    await click(findByClass(made.container, 'backtest-preset-item')[0]);
+    await flush();
+    if (pendingKind === 'code') await click(findByClass(made.container, 'backtest-visual-open-code')[0]);
+    await flush();
+    assert.equal(requests, 1, '이전 세션 요청이 실제로 대기해야 한다');
+    handler.flush();
+    handler.clear();
+    await handler.restore({
+      kind: 'backtest', designTab: 'form',
+      form: { yaml: RESTORE_YAML.replace('005930', '000660') },
+    });
+    await made.tick();
+    const before = reports.length;
+    finishPrevious(pendingKind === 'graph'
+      ? { graph: { ...VISUAL_GRAPH, id: 'previous-session-graph' } }
+      : { source: '# previous-session-code\n' });
+    await flush();
+    await made.tick();
+    assert.equal(reports.length, before);
+    assert.equal(reports[reports.length - 1].code, null);
+    assert.notEqual(reports[reports.length - 1].graph?.id, 'previous-session-graph');
+    assert.equal(made.canvas.getContext().designTab, 'form');
+  }));
+}
 
 test('세션 복원: 바뀐 것이 없으면 같은 봉투를 다시 보고하지 않는다', async () => withWorkspaceGlobal(async ({ registered, reports }) => {
   const made = makeCanvas({

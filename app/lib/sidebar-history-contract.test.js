@@ -8,6 +8,8 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
+const vm = require('node:vm');
+const { createSessionWorkspace } = require('./session-workspace');
 
 const appDir = path.resolve(__dirname, '..');
 const read = (...parts) => fs.readFileSync(path.join(appDir, ...parts), 'utf8');
@@ -109,4 +111,42 @@ test('검색 빈 결과판은 Paper 34의 세 조각을 그린다 — 안내문�
   // 발치의 키보드 안내·총 건수는 결과판에만 있다(Paper 빈 판에는 없다).
   assert.match(body, /if \(result\.total\) \{\s+const foot = /, '발치가 빈 판에도 붙는다');
   assert.match(shellCss, /\.sidebar-search-empty-cta\s*\{/, 'CTA 스타일이 없다');
+});
+
+test('새 대화 요청 전에 앞 세션의 지연 작업공간을 흘린다', async () => {
+  let activeId = 'previous';
+  const saved = [];
+  const workspace = createSessionWorkspace({
+    send: (payload) => { saved.push({ id: activeId, patch: payload.patch }); },
+  });
+  workspace.register('backtest', {
+    restore() {},
+    flush() { workspace.report({ run: { runId: 'previous-run' } }); },
+    clear() {},
+  });
+  // Electron 대신 IPC 경계만 대체한다. 함수 본문은 sidebar.js의 실제 새 대화 경로다.
+  const context = vm.createContext({
+    Event,
+    window: {
+      dispatchEvent: (event) => {
+        if (event.type === 'athena:new-conversation') { workspace.flush(); workspace.clear(); }
+      },
+      athena: { invoke: async (channel) => {
+        assert.equal(channel, 'athena:conversations-new');
+        activeId = 'next';
+        return { activeId };
+      } },
+    },
+    projectsCache: [{ id: 'project' }], currentProjectId: 'project',
+    conversationsCache: [], activeConversationId: 'previous', selectedNotifyId: null,
+    $history: { firstChild: null }, $roomBanner: {}, $input: null,
+    currentMode: () => 'backtest', renderList() {}, updateModeCounts() {},
+  });
+  const start = sidebar.indexOf('  function clearConversationUi()');
+  const end = sidebar.indexOf("  $newChat.addEventListener('click'", start);
+  assert.ok(start >= 0 && end > start);
+  vm.runInContext(sidebar.slice(start, end), context);
+  await vm.runInContext("startNewConversation('project')", context);
+  assert.deepEqual(saved, [{ id: 'previous', patch: { run: { runId: 'previous-run' } } }]);
+  assert.equal(activeId, 'next');
 });
