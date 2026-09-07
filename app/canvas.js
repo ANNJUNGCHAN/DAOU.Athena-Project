@@ -3827,17 +3827,6 @@ const backtestCanvas = window.AthenaLib.BacktestCanvas.createBacktestCanvas({
     if (!res || !res.ok) throw new Error(projectError(res, '프로젝트를 만들지 못했습니다'));
     return res.data;
   },
-  // 폴더는 사람이 네이티브 창에서 고른다 — 렌더러가 경로를 지어내는 길은 없다.
-  openProjectDialog: async () => {
-    const res = await window.athena.invoke('athena:project-open-dialog');
-    if (!res || !res.ok) throw new Error(projectError(res, '폴더 선택 창을 열지 못했습니다'));
-    return res.data;
-  },
-  openProject: async (folderPath) => {
-    const res = await window.athena.invoke('athena:project-open', { path: folderPath });
-    if (!res || !res.ok) throw new Error(projectError(res, '폴더를 열지 못했습니다'));
-    return res.data;
-  },
   projectTree: async (projectId) => {
     const res = await window.athena.invoke('athena:project-tree', { project_id: projectId });
     if (!res || !res.ok) throw new Error(projectError(res, '파일 목록을 불러오지 못했습니다'));
@@ -3855,27 +3844,6 @@ const backtestCanvas = window.AthenaLib.BacktestCanvas.createBacktestCanvas({
       'athena:project-file-write', { project_id: projectId, path: filePath, text },
     );
     if (!res || !res.ok) throw new Error(projectError(res, '파일을 저장하지 못했습니다'));
-    return res.data;
-  },
-  createProjectFile: async (projectId, filePath, kind) => {
-    const res = await window.athena.invoke(
-      'athena:project-file-create', { project_id: projectId, path: filePath, kind },
-    );
-    if (!res || !res.ok) throw new Error(projectError(res, '파일을 만들지 못했습니다'));
-    return res.data;
-  },
-  renameProjectFile: async (projectId, filePath, to) => {
-    const res = await window.athena.invoke(
-      'athena:project-file-rename', { project_id: projectId, path: filePath, to },
-    );
-    if (!res || !res.ok) throw new Error(projectError(res, '이름을 바꾸지 못했습니다'));
-    return res.data;
-  },
-  deleteProjectFile: async (projectId, filePath) => {
-    const res = await window.athena.invoke(
-      'athena:project-file-delete', { project_id: projectId, path: filePath },
-    );
-    if (!res || !res.ok) throw new Error(projectError(res, '지우지 못했습니다'));
     return res.data;
   },
 });
