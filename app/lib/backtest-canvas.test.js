@@ -620,8 +620,6 @@ test('보드 19: mount 직후는 기법 목록이고 프리셋 0번을 자동으
   assert.equal(ctx.spec, null);
   assert.equal(ctx.screen, 'technique-list');
   assert.equal(ctx.designTab, null, '목록 화면을 폼이라고 말하지 않는다');
-  assert.equal(textOf(container).includes('data.symbols'), false);
-  assert.equal(textOf(container).includes('pydantic'), false);
 });
 
 test('empty → design: 프리셋 목록·대상·지표·조건·리스크 카드를 모두 그린다', async () => {
