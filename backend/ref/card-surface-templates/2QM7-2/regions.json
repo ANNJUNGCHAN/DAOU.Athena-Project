@@ -8,5 +8,17 @@
     { "node_id": "34FS-0", "name": "Broker Table", "role": "primary", "depth": 2 },
     { "node_id": "34WI-0", "name": "Side Panel", "role": "rail", "depth": 2 },
     { "node_id": "2QNI-2", "name": "Flow Status Footer", "role": "footer", "depth": 1 }
+  ],
+  "responsive": [
+    {
+      "node_id": "34FS-0",
+      "traits": ["paired-table"],
+      "header_row": "34FX-0"
+    },
+    {
+      "node_id": "34UH-0",
+      "traits": ["scroll"],
+      "accessible_label": "일별 순매수 추이"
+    }
   ]
 }

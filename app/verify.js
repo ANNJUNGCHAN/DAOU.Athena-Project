@@ -2773,7 +2773,7 @@ app.whenReady().then(async () => {
     // 셸 창이 설정 모드로 바뀐다
     renderedInChatWindow: chatProbe.settingsVisible === true && chatProbe.url === 'shell.html',
     chatModeSteppedAside: chatProbe.appHidden === true,
-    // 사이드바 nav — 존재 + 항목 4개(화면·계좌·모델·그래프. 플러그인 항목은
+    // 사이드바 nav — 존재 + 항목 4개(화면·계좌·모델·성향・이력. 플러그인 항목은
     // 2026-09-03 플러그인 모드 관리 뷰로 옮겨가 여기서 사라졌다) + 기본 선택은 '화면'
     navExists: navProbe.navExists === true,
     navHasFourItems: navProbe.navItemCount === 4,

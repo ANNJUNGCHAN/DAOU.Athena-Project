@@ -830,9 +830,9 @@
         "severity": "P2",
         "originalSeverity": "P1",
         "category": "개인정보/비밀값",
-        "title": "실계좌번호 81313844가 마스킹 없이 커밋돼 git 이력에 남았다",
-        "detail": "베타 피드백 문서가 실행 환경 줄(6행)과 P1 이슈 B-12(142행) 두 곳에 실제 등록 계좌번호 81313844를 전체 노출한 채로 커밋됐다. 같은 문서 142행이 스스로 '카드 last4 마스킹 계약과 불일치. 캡처·공유 즉시 유출'이라고 이 값을 결함으로 지목하면서, 정작 문서 본문에는 원문 그대로 적어 넣었다 — 결함을 보고하는 행위가 그 결함을 영구화했다. origin(github.com/ANNJUNGCHAN/DAOU.Athena)은 현재 private이라 즉시 공개 유출은 아니지만, 이미 push된 커밋이라 저장소 공개 전환·포크·협력자 추가·클론 배포 시 되돌릴 수 없다. app/captures/**는 .gitignore로 막혀 있어(app/.gitignore:8) 실행 산출물 경로는 안전한 반면, docs/ 경로에는 그런 방어가 없다. 같은 값이 범위 밖 docs/handoff/2026-09-01-live-market-verification.md:54에도 이미 있어 이번 커밋이 두 번째 노출이다.",
-        "evidence": "docs/handoff/beta-test-live/ATHENA-BETA-FEEDBACK.md:6 '런타임: backend `127.0.0.1:8010` ... 계좌 `81313844`, 토큰 잔여 ~23시간.' / :142 '사이드바 `81313844` 전체. 카드 last4 마스킹 계약과 불일치. 캡처·공유 즉시 유출.' / `git remote -v` → https://github.com/ANNJUNGCHAN/DAOU.Athena.git, `gh repo view` → {\"isPrivate\":true}",
+        "title": "실계좌번호 ****3844가 마스킹 없이 커밋돼 git 이력에 남았다",
+        "detail": "베타 피드백 문서가 실행 환경 줄(6행)과 P1 이슈 B-12(142행) 두 곳에 실제 등록 계좌번호 ****3844를 전체 노출한 채로 커밋됐다. 같은 문서 142행이 스스로 '카드 last4 마스킹 계약과 불일치. 캡처·공유 즉시 유출'이라고 이 값을 결함으로 지목하면서, 정작 문서 본문에는 원문 그대로 적어 넣었다 — 결함을 보고하는 행위가 그 결함을 영구화했다. origin(github.com/ANNJUNGCHAN/DAOU.Athena)은 현재 private이라 즉시 공개 유출은 아니지만, 이미 push된 커밋이라 저장소 공개 전환·포크·협력자 추가·클론 배포 시 되돌릴 수 없다. app/captures/**는 .gitignore로 막혀 있어(app/.gitignore:8) 실행 산출물 경로는 안전한 반면, docs/ 경로에는 그런 방어가 없다. 같은 값이 범위 밖 docs/handoff/2026-09-01-live-market-verification.md:54에도 이미 있어 이번 커밋이 두 번째 노출이다.",
+        "evidence": "docs/handoff/beta-test-live/ATHENA-BETA-FEEDBACK.md:6 '런타임: backend `127.0.0.1:8010` ... 계좌 `****3844`, 토큰 잔여 ~23시간.' / :142 '사이드바 `****3844` 전체. 카드 last4 마스킹 계약과 불일치. 캡처·공유 즉시 유출.' / `git remote -v` → https://github.com/ANNJUNGCHAN/DAOU.Athena.git, `gh repo view` → {\"isPrivate\":true}",
         "fix": "두 줄을 `8131****`(또는 '계좌 A')로 바꾸고, 범위 밖 docs/handoff/2026-09-01-live-market-verification.md:54도 같이 정리한다. 계좌번호·토큰 문자열을 잡는 pre-commit 시크릿 스캔 규칙을 docs/에도 적용한다. 이미 push된 이력이 문제라면 저장소 공개 전 히스토리 재작성 여부를 별도로 판단해야 한다.",
         "commit": "81e1332",
         "reportedBy": [

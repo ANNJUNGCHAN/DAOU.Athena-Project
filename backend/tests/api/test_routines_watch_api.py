@@ -505,6 +505,44 @@ def test_check_attaches_the_hash_to_a_draft_and_opens_confirm(check_client):
     assert confirmed.json()["watch"]["path"] == "watch/volume_spike.py"
 
 
+def test_save_then_draft_then_check_then_confirm(check_client):
+    """에이전트 제안 순서의 양성 경로: 착지 → 초안 → 검사 → 사람 승인."""
+    client, _, _ = check_client
+    saved = client.post(CODE, json=_body(source=CHECK_SOURCE))
+    assert saved.status_code == 200, saved.text
+
+    draft = client.post(
+        "/api/v1/routines/draft",
+        json={
+            "symbol": "005930",
+            "condition": {"source": "code.watch", "op": "==", "value": True},
+            "cooldown_s": 86400,
+            "expires_days": 30,
+            "watch": {
+                "project_id": "p1",
+                "path": "watch/volume_spike.py",
+                "version_hash": saved.json()["code_hash"],
+                "params": {"days": 3, "ratio": 1.5},
+                "poll_interval_s": 60,
+                "lookback_days": 30,
+            },
+        },
+    )
+    assert draft.status_code == 200, draft.text
+    routine_id = draft.json()["id"]
+
+    checked = client.post(
+        CHECK,
+        json=_check_body(routine_id=routine_id, params={"days": 3, "ratio": 1.5}),
+    )
+    assert checked.status_code == 200, checked.text
+    assert checked.json()["ok"] is True
+
+    confirmed = client.post(f"/api/v1/routines/{routine_id}/confirm")
+    assert confirmed.status_code == 200, confirmed.text
+    assert confirmed.json()["status"] == "active"
+
+
 def test_check_reseeds_the_hash_of_a_paused_alarm(check_client):
     """일시중지 알람은 고쳐 쓰고 다시 검사하면 그 자리에서 재개 문이 열린다."""
     client, runtime, root = check_client

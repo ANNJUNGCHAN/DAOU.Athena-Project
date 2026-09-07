@@ -4,7 +4,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const { computeShellPlacement, clampCenterToWorkArea } = require('./window-placement');
 
-// 부팅 설계 치수(main.js DESIGN) 그대로 — 중앙 캔버스 1120 + 우측 채팅 400 = 1520.
+// 옛 부팅 설계 치수 — 순수 함수 배치 산수를 재는 고정 입력이다(현 main.js DESIGN과는 무관).
 const DIMS = { width: 1520, height: 760 };
 
 test('computeShellPlacement: left — 왼쪽 절반의 중앙에 셸 창을 놓는다', () => {

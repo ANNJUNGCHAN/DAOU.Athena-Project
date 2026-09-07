@@ -1597,6 +1597,26 @@ const BACKTEST_CODE_DRAFT = Object.freeze({
   ].join('\n'),
 });
 
+const BACKTEST_FLOW_MAP = Object.freeze({
+  ok: true,
+  data: {
+    version: 1,
+    source_kind: 'code',
+    app_before: [{ key: 'load', title: '봉 데이터를 모읍니다', detail: '' }],
+    app_after: [
+      { key: 'fill', title: '사고·파는 가격을 정합니다', detail: '' },
+      { key: 'cost', title: '비용을 뗍니다', detail: '' },
+      { key: 'metrics', title: '성과를 냅니다', detail: '' },
+    ],
+    nodes: [
+      { id: 'params', numeral: '①', title: '조절할 값을 정합니다', lines: [], facts: [], status: 'ok' },
+      { id: 'indicators', numeral: '②', title: '가격을 지표로 바꿉니다', lines: [], facts: [], status: 'ok' },
+      { id: 'conditions', numeral: '③', title: '사고·파는 순간을 찍습니다', lines: [], facts: [], status: 'ok' },
+      { id: 'output', numeral: '④', title: '두 열만 돌려줍니다', lines: [], facts: [], status: 'ok' },
+    ],
+  },
+});
+
 // 보드 07 — 버전 id를 실은 실행 응답. BACKTEST_RUN_OK와 나누는 이유는 보드 03이
 // 재는 것이 결과 화면이라 버전 id가 없어도 그대로 서기 때문이다(그쪽 봉투를 늘리면
 // 보드 03의 판정이 배포 쪽 사정에 끌려간다).
@@ -1901,10 +1921,77 @@ const BACKTEST_USER_STRATEGIES = Object.freeze({
 // 앱의 [+ 새 기법 만들기]는 첫 문장을 채팅으로 던지므로 검사에서 누르면 모델 왕복이
 // 붙는다. 같은 뼈대를 세우는 이 문이 클릭 없이 결정론을 준다.
 //
-// 폴더는 만들지 않는다: athena:project-create를 실패로 못 박아 화면이 「폴더 없이
-// 시작합니다」로 물러나게 한다. 이 게이트가 도는 컴퓨터의 백엔드에 검사용 폴더를
-// 쌓지 않으려는 것이고, 그 물러남 자체가 앱이 이미 가진 갈래다.
-const TECHNIQUE_PROJECT_OFF = Object.freeze({ ok: false, error: 'probe' });
+// 폴더는 fixture다: 프로젝트 채널 여섯(만들기·목록·트리·읽기·쓰기·환경)을 전부 가짜로
+// 못 박아 화면이 보드 20의 왼쪽 열(기법 폴더 트리 · 자동 검사 · 환경)을 세우게 한다.
+// 이 게이트가 도는 컴퓨터의 백엔드에는 아무 폴더도 쌓이지 않는다 — 백엔드에 닿는
+// 채널이 하나도 없다. 「폴더 없이 시작합니다」로 물러나는 갈래는 단위 테스트가 잰다.
+const TECHNIQUE_PROJECT = Object.freeze({
+  id: 'fx-tp-1',
+  name: '새-기법-260907-1840',
+  path: 'C:/fx/.athena/projects/새-기법-260907-1840',
+  kind: 'managed',
+  created_at: '2026-09-07T09:40:00Z',
+  exists: true,
+  py_files: 2,
+});
+const TECHNIQUE_PROJECT_CREATE = Object.freeze({
+  ok: true, data: { project: TECHNIQUE_PROJECT, seed: 'strategy.py' },
+});
+const TECHNIQUE_PROJECT_LIST = Object.freeze({
+  ok: true, data: { projects: [TECHNIQUE_PROJECT], notice: null },
+});
+const TECHNIQUE_PROJECT_TREE = Object.freeze({
+  ok: true,
+  data: {
+    project_id: 'fx-tp-1',
+    root: TECHNIQUE_PROJECT.path,
+    entries: [
+      { name: 'strategy.py', path: 'strategy.py', is_dir: false, py: true, size: 640 },
+      {
+        name: 'tests', path: 'tests', is_dir: true, py: false, size: 0,
+        children: [
+          { name: 'test_strategy.py', path: 'tests/test_strategy.py', is_dir: false, py: true, size: 520 },
+        ],
+      },
+    ],
+    truncated: false,
+  },
+});
+// 처음 여는 순간의 파일 본문 — 뼈대다. 그 뒤 대화가 낸 코드는 쓰기 fixture를 지나 버퍼에
+// 그대로 얹힌다(adoptExternalWrite)라 여기 무엇이 있든 화면의 코드는 대화가 낸 것이다.
+const TECHNIQUE_PROJECT_FILE = Object.freeze({
+  ok: true,
+  data: {
+    path: 'strategy.py',
+    text: [
+      'import athena_bt as bt',
+      '',
+      'PARAMS = {}',
+      '',
+      '',
+      'def signals(df, p):',
+      '    df["entry"] = False',
+      '    df["exit"] = False',
+      '    return df[["entry", "exit"]]',
+      '',
+    ].join('\n'),
+  },
+});
+const TECHNIQUE_PROJECT_WRITE = Object.freeze({
+  ok: true, data: { path: 'strategy.py', size: 640, mtime: 1 },
+});
+const TECHNIQUE_PROJECT_ENV = Object.freeze({
+  ok: true,
+  data: { project_id: 'fx-tp-1', exists: false, python: null, packages: [], base_ok: false },
+});
+const TECHNIQUE_PROJECT_FIXTURES = Object.freeze([
+  { do: 'ipc-fixture', channel: 'athena:project-create', data: TECHNIQUE_PROJECT_CREATE },
+  { do: 'ipc-fixture', channel: 'athena:project-list', data: TECHNIQUE_PROJECT_LIST },
+  { do: 'ipc-fixture', channel: 'athena:project-tree', data: TECHNIQUE_PROJECT_TREE },
+  { do: 'ipc-fixture', channel: 'athena:project-file-read', data: TECHNIQUE_PROJECT_FILE },
+  { do: 'ipc-fixture', channel: 'athena:project-file-write', data: TECHNIQUE_PROJECT_WRITE },
+  { do: 'ipc-fixture', channel: 'athena:project-env-get', data: TECHNIQUE_PROJECT_ENV },
+]);
 
 // 대상만 채우는 설정 초안 — preset을 싣지 않아야 새 기법의 뼈대가 선다(preset이 오면
 // 그 기법을 고르는 길이다). 종목·기간은 값이라 phrases에 안 넣는다.
@@ -2531,13 +2618,13 @@ const ROUTES = Object.freeze([
       '울린 기록 · 최근', '채팅에서 열기 ↗', '전체 이력 보기 →',
     ],
     // Paper 보드 12의 상태 제어 행은 [일시중지][취소][고치기 — 말로] 셋이고,
-    // 켜진 알람에는 초안의 「검사」가 없다. 설정 요약은 확인 주기·쿨다운·만료
-    // 세 줄이다 — 값(「1일」·「2026-10-03」)은 봉투가 주므로 개수로만 잰다.
+    // 켜진 알람에는 초안의 「검사」가 없다. 설정 요약은 확인 주기·쿨다운·만료와
+    // 데이터 출처 네 줄이다 — 값(「1일」·「2026-10-03」)은 봉투가 주므로 개수로만 잰다.
     structure: [
       { what: 'count', selector: '.agent-code-controls button', equals: 3 },
       { what: 'absent', selector: '.agent-code-check-btn' },
       { what: 'count', selector: '.agent-view-tab', equals: 4 },
-      { what: 'count', selector: '.agent-detail-field', equals: 3 },
+      { what: 'count', selector: '.agent-detail-field', equals: 4 },
     ],
   },
 
@@ -4244,7 +4331,7 @@ const ROUTES = Object.freeze([
     ],
     root: '#orbPanel',
     phrases: [
-      '메인 대화',
+      '키우미 대화',
       '셸을 내려두셨네요. 여기서 바로 물어보셔도 됩니다.',
       '긴 표와 차트는 줄여서 보여드리고, 전체는 대화창에서 이어집니다.',
       '대화창으로 가기',
@@ -4640,6 +4727,7 @@ const ROUTES = Object.freeze([
     // 설명·실제 값 표기는 그대로 쓰고」라고 못 박은 부분만 잰다.
     reach: [
       { do: 'ipc-fixture', channel: 'athena:backtest-presets', data: BACKTEST_PRESETS },
+      { do: 'ipc-fixture', channel: 'athena:backtest-map', data: BACKTEST_FLOW_MAP },
       { do: 'mode', view: 'backtest' },
       { do: 'send', channel: 'athena:backtest-chat-action', data: BACKTEST_TARGET },
       { do: 'wait', ms: 300 },
@@ -4930,15 +5018,16 @@ const ROUTES = Object.freeze([
   },
   // ---------- 백테스트 새 기법 3장 (8-1 · 보드 20·21·22) ----------
   // 셋은 한 초안의 세 순간이다: 코드가 아직 검사를 못 넘은 때(20) · 넘어서 노드가 열린
-  // 때(21) · 두 번째 고침의 diff를 연 때(22). Paper가 그린 왼쪽 파일 트리(기법 폴더 ·
-  // tests/ · .venv/)와 AI가 쓰는 중 배너는 앱에 없다 — 어그난 자리에는 아무 것도 적지
-  // 않는다. 검사 항목 이름(문법·계약·룩어헤드…)도 백엔드 label_ko라 문구가 못 된다.
+  // 때(21) · 두 번째 고침의 diff를 연 때(22). 폴더 하나 = 기법 하나 = 대화 하나(2026-09-07):
+  // 헤더는 폴더 이름과 [그만두기], 왼쪽 열은 그 폴더의 트리·자동 검사·환경이다. 검사
+  // 항목 이름(문법·계약·룩어헤드…)은 백엔드 label_ko라 문구가 못 된다. 「AI가 쓰는 중」
+  // 배너는 앱에 없다 — 어그난 자리에는 아무 것도 적지 않는다.
   {
     board: '43DP-1', // 20 · 백테스트 — 새 기법 만들기 · 폴더·편집기·터미널·단계 카드
     window: 'shell',
     reach: [
       { do: 'ipc-fixture', channel: 'athena:backtest-presets', data: BACKTEST_TECHNIQUE_PRESETS },
-      { do: 'ipc-fixture', channel: 'athena:project-create', data: TECHNIQUE_PROJECT_OFF },
+      ...TECHNIQUE_PROJECT_FIXTURES,
       { do: 'ipc-fixture', channel: 'athena:backtest-technique-check', data: TECHNIQUE_CHECKS_BLOCKED },
       { do: 'mode', view: 'backtest' },
       { do: 'wait', ms: 400 },
@@ -4952,12 +5041,23 @@ const ROUTES = Object.freeze([
       { do: 'settle' },
     ],
     root: '#backtestCanvas',
-    phrases: ['코드', '노드·흐름', '직접 편집', '터미널'],
-    // 초안에는 하위 탭이 둘뿐이다 — Paper 보드 20이 그린 그 둘, 그 차례.
+    // 「기법 폴더」·「그만두기」·「이 폴더 밖은 AI가 건드리지 않습니다.」는 보드 20의 왼쪽 열과
+    // 헤더가 적은 그대로다. 폴더 이름·파일 이름은 값이라 phrases에 안 넣는다.
+    phrases: [
+      '코드', '노드·흐름', '직접 편집', '터미널', '그만두기', '기법 폴더',
+      '이 폴더 밖은 AI가 건드리지 않습니다.',
+    ],
+    // 초안에는 하위 탭이 둘뿐이다 — Paper 보드 20이 그린 그 둘, 그 차례. 헤더에 모드 탭·
+    // 폼/코드 갈래·다른 폴더를 고르는 줄은 없다(한 페이지 = 한 알고리즘).
     structure: [
       { what: 'order', selector: '.backtest-subtab', equals: ['코드', '노드·흐름'] },
       { what: 'count', selector: '.backtest-terminal', equals: 1 },
       { what: 'count', selector: '.backtest-technique-band', equals: 1 },
+      { what: 'count', selector: '.project-ide-side', equals: 1 },
+      { what: 'count', selector: '.backtest-head-home', equals: 1 },
+      { what: 'count', selector: '.backtest-tab', equals: 0 },
+      { what: 'count', selector: '.backtest-runpath', equals: 0 },
+      { what: 'count', selector: '.project-ide-project', equals: 0 },
     ],
   },
   {
@@ -4967,7 +5067,7 @@ const ROUTES = Object.freeze([
     // (loadTechniqueNodes의 auto 갈래). 그래서 이 라우트에는 탭을 누르는 손이 없다.
     reach: [
       { do: 'ipc-fixture', channel: 'athena:backtest-presets', data: BACKTEST_TECHNIQUE_PRESETS },
-      { do: 'ipc-fixture', channel: 'athena:project-create', data: TECHNIQUE_PROJECT_OFF },
+      ...TECHNIQUE_PROJECT_FIXTURES,
       { do: 'ipc-fixture', channel: 'athena:backtest-technique-check', data: TECHNIQUE_CHECKS_PASSED },
       { do: 'ipc-fixture', channel: 'athena:backtest-technique-nodes', data: TECHNIQUE_NODES },
       { do: 'ipc-fixture', channel: 'athena:backtest-run', data: BACKTEST_RUN_OK },
@@ -4999,7 +5099,7 @@ const ROUTES = Object.freeze([
     // 여는 클릭이 #history를 지난다.
     reach: [
       { do: 'ipc-fixture', channel: 'athena:backtest-presets', data: BACKTEST_TECHNIQUE_PRESETS },
-      { do: 'ipc-fixture', channel: 'athena:project-create', data: TECHNIQUE_PROJECT_OFF },
+      ...TECHNIQUE_PROJECT_FIXTURES,
       { do: 'ipc-fixture', channel: 'athena:backtest-technique-check', data: TECHNIQUE_CHECKS_PASSED },
       { do: 'ipc-fixture', channel: 'athena:backtest-technique-nodes', data: TECHNIQUE_NODES },
       { do: 'ipc-fixture', channel: 'athena:backtest-run', data: BACKTEST_RUN_OK },

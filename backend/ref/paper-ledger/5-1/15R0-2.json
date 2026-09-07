@@ -11,6 +11,7 @@
    "text": "지금 시장이 뜨거운지, VI는 어디서 터지는지 보여줘",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Header",
     "Frame"
    ]
@@ -20,6 +21,7 @@
    "text": "KOSPI · KOSDAQ · 오늘 VI 3건",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Header",
     "Frame"
    ]
@@ -29,6 +31,7 @@
    "text": "시장 · VI",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Header",
     "Frame"
    ]
@@ -38,6 +41,7 @@
    "text": "오전 9:42 · 실시간",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Header",
     "Frame"
    ]
@@ -47,6 +51,7 @@
    "text": "KOSPI",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "Market breadth",
     "Frame",
@@ -58,6 +63,7 @@
    "text": "2,684.21",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "Market breadth",
     "Frame",
@@ -69,6 +75,7 @@
    "text": "+29.73 · +1.12%",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "Market breadth",
     "Frame",
@@ -80,6 +87,7 @@
    "text": "KOSDAQ",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "Market breadth",
     "Frame",
@@ -91,6 +99,7 @@
    "text": "842.15",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "Market breadth",
     "Frame",
@@ -102,6 +111,7 @@
    "text": "+7.01 · +0.84%",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "Market breadth",
     "Frame",
@@ -113,6 +123,7 @@
    "text": "상승 1,486",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "Market breadth",
     "Frame"
@@ -123,6 +134,7 @@
    "text": "보합 183",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "Market breadth",
     "Frame"
@@ -133,6 +145,7 @@
    "text": "하락 621",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "Market breadth",
     "Frame"
@@ -143,6 +156,7 @@
    "text": "상한 · 하한 종목",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "Market breadth",
     "Frame",
@@ -154,6 +168,7 @@
    "text": "상한 4 · 하한 2",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "Market breadth",
     "Frame",
@@ -165,6 +180,7 @@
    "text": "거래 형성 종목",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "Market breadth",
     "Frame",
@@ -176,6 +192,7 @@
    "text": "2,182개 / 2,290개 (95.3%)",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "Market breadth",
     "Frame",
@@ -187,6 +204,7 @@
    "text": "52주 신고가 종목",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "Market breadth",
     "Frame",
@@ -198,6 +216,7 @@
    "text": "114",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "Market breadth",
     "Frame",
@@ -209,6 +228,7 @@
    "text": "외국인 현물 순매수",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "Market breadth",
     "Frame",
@@ -220,6 +240,7 @@
    "text": "+4,208억",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "Market breadth",
     "Frame",
@@ -231,6 +252,7 @@
    "text": "업종 등락 상위",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "Market breadth",
     "업종 등락 상위"
@@ -241,6 +263,7 @@
    "text": "반도체",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "Market breadth",
     "업종 등락 상위",
@@ -253,6 +276,7 @@
    "text": "G2510 · 제조",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "Market breadth",
     "업종 등락 상위",
@@ -265,6 +289,7 @@
    "text": "3,184.52",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "Market breadth",
     "업종 등락 상위",
@@ -277,6 +302,7 @@
    "text": "+87.96 · +2.84%",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "Market breadth",
     "업종 등락 상위",
@@ -289,6 +315,7 @@
    "text": "의약품",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "Market breadth",
     "업종 등락 상위",
@@ -301,6 +328,7 @@
    "text": "G3520 · 제조",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "Market breadth",
     "업종 등락 상위",
@@ -313,6 +341,7 @@
    "text": "14,208.55",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "Market breadth",
     "업종 등락 상위",
@@ -325,6 +354,7 @@
    "text": "+190.63 · +1.36%",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "Market breadth",
     "업종 등락 상위",
@@ -337,6 +367,7 @@
    "text": "은행",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "Market breadth",
     "업종 등락 상위",
@@ -349,6 +380,7 @@
    "text": "G4010 · 금융",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "Market breadth",
     "업종 등락 상위",
@@ -361,6 +393,7 @@
    "text": "912.44",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "Market breadth",
     "업종 등락 상위",
@@ -373,6 +406,7 @@
    "text": "+8.32 · +0.92%",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "Market breadth",
     "업종 등락 상위",
@@ -385,6 +419,7 @@
    "text": "등락률 상위 3개 표시 · 전체 21개",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "Market breadth",
     "업종 등락 상위"
@@ -395,6 +430,7 @@
    "text": "VI 영향 종목",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Header",
@@ -406,6 +442,7 @@
    "text": "오늘 3건",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Header",
@@ -417,6 +454,7 @@
    "text": "발동 중 2",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Header",
@@ -428,6 +466,7 @@
    "text": "종목",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI 표 헤더"
@@ -438,6 +477,7 @@
    "text": "유형",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI 표 헤더"
@@ -448,6 +488,7 @@
    "text": "발동가",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI 표 헤더"
@@ -458,6 +499,7 @@
    "text": "상태 · 시각",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI 표 헤더"
@@ -468,6 +510,7 @@
    "text": "대성첨단",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Instruments Table",
@@ -480,6 +523,7 @@
    "text": "396300",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Instruments Table",
@@ -492,6 +536,7 @@
    "text": "정적 VI",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Instruments Table",
@@ -504,6 +549,7 @@
    "text": "정적 ±10%",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Instruments Table",
@@ -516,6 +562,7 @@
    "text": "20,500",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Instruments Table",
@@ -528,6 +575,7 @@
    "text": "기준가 대비 +10.22%",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Instruments Table",
@@ -540,6 +588,7 @@
    "text": "발동 중",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Instruments Table",
@@ -552,6 +601,7 @@
    "text": "09:40:44",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Instruments Table",
@@ -564,6 +614,7 @@
    "text": "이수페타시스",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Instruments Table",
@@ -576,6 +627,7 @@
    "text": "007660",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Instruments Table",
@@ -588,6 +640,7 @@
    "text": "동적 VI",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Instruments Table",
@@ -600,6 +653,7 @@
    "text": "동적 ±3%",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Instruments Table",
@@ -612,6 +666,7 @@
    "text": "64,500",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Instruments Table",
@@ -624,6 +679,7 @@
    "text": "기준가 대비 +3.04%",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Instruments Table",
@@ -636,6 +692,7 @@
    "text": "발동 중",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Instruments Table",
@@ -648,6 +705,7 @@
    "text": "09:41:08",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Instruments Table",
@@ -660,6 +718,7 @@
    "text": "테마파워",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Instruments Table",
@@ -672,6 +731,7 @@
    "text": "217500",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Instruments Table",
@@ -684,6 +744,7 @@
    "text": "정적 VI",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Instruments Table",
@@ -696,6 +757,7 @@
    "text": "정적 ±10%",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Instruments Table",
@@ -708,6 +770,7 @@
    "text": "8,120",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Instruments Table",
@@ -720,6 +783,7 @@
    "text": "기준가 대비 -10.1%",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Instruments Table",
@@ -732,6 +796,7 @@
    "text": "해제",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Instruments Table",
@@ -744,6 +809,7 @@
    "text": "09:06:12",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Instruments Table",
@@ -756,6 +822,7 @@
    "text": "대성첨단 발동 상세",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Context Detail",
@@ -767,6 +834,7 @@
    "text": "해제 예정 09:42:44",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Context Detail",
@@ -778,6 +846,7 @@
    "text": "기준가",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Context Detail",
@@ -790,6 +859,7 @@
    "text": "18,600원",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Context Detail",
@@ -802,6 +872,7 @@
    "text": "발동가",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Context Detail",
@@ -814,6 +885,7 @@
    "text": "20,500원",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Context Detail",
@@ -826,6 +898,7 @@
    "text": "+10.22%",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Context Detail",
@@ -838,6 +911,7 @@
    "text": "거래 상태",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Context Detail",
@@ -850,6 +924,7 @@
    "text": "단일가 접수",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Context Detail",
@@ -862,6 +937,7 @@
    "text": "추가 정보",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Context Detail",
@@ -874,6 +950,7 @@
    "text": "미제공",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Context Detail",
@@ -886,6 +963,7 @@
    "text": "이벤트 흐름",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Event Timeline"
@@ -896,6 +974,7 @@
    "text": "09:40:44",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Event Timeline",
@@ -908,6 +987,7 @@
    "text": "정적 VI 발동",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Event Timeline",
@@ -920,6 +1000,7 @@
    "text": "09:41:12",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Event Timeline",
@@ -932,6 +1013,7 @@
    "text": "단일가 접수",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Event Timeline",
@@ -944,6 +1026,7 @@
    "text": "09:42:44",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Event Timeline",
@@ -956,6 +1039,7 @@
    "text": "해제 예정",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "VI Event Timeline",
@@ -968,6 +1052,7 @@
    "text": "발동 중 2종목 · 오늘 3건 전체 표시",
    "path": [
     "CC-06 / R09 · 시장 체온·VI",
+    "Explorer Card Surface",
     "Workspace",
     "VI Affected Instruments",
     "List Footer · Complete"
@@ -984,28 +1069,36 @@
    "depth": 0
   },
   {
+   "id": "49Y2-0",
+   "name": "Explorer Card Surface",
+   "component": "Frame",
+   "w": 1360,
+   "h": 834,
+   "depth": 1
+  },
+  {
    "id": "15R1-2",
    "name": "Header",
    "component": "Frame",
    "w": 1360,
    "h": 122,
-   "depth": 1
+   "depth": 2
   },
   {
    "id": "15R2-2",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 2
+   "w": 692,
+   "h": 70,
+   "depth": 3
   },
   {
    "id": "15R5-2",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 2
+   "w": 100,
+   "h": 39,
+   "depth": 3
   },
   {
    "id": "15R9-2",
@@ -1013,7 +1106,7 @@
    "component": "Frame",
    "w": 1360,
    "h": 690,
-   "depth": 1
+   "depth": 2
   },
   {
    "id": "15RA-2",
@@ -1021,191 +1114,191 @@
    "component": "Frame",
    "w": 820,
    "h": 690,
-   "depth": 2
+   "depth": 3
   },
   {
    "id": "15RD-2",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 3
+   "w": 764,
+   "h": 130,
+   "depth": 4
   },
   {
    "id": "15RE-2",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 4
+   "w": 375,
+   "h": 130,
+   "depth": 5
   },
   {
    "id": "15RI-2",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 4
+   "w": 376,
+   "h": 130,
+   "depth": 5
   },
   {
    "id": "15RP-2",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
+   "w": 764,
    "h": 18,
-   "depth": 3
+   "depth": 4
   },
   {
    "id": "15RQ-2",
    "name": "Rectangle",
    "component": "Rectangle",
-   "w": 0,
-   "h": 0,
-   "depth": 4
+   "w": 497,
+   "h": 18,
+   "depth": 5
   },
   {
    "id": "15RR-2",
    "name": "Rectangle",
    "component": "Rectangle",
-   "w": 0,
-   "h": 0,
-   "depth": 4
+   "w": 61,
+   "h": 18,
+   "depth": 5
   },
   {
    "id": "15RS-2",
    "name": "Rectangle",
    "component": "Rectangle",
-   "w": 0,
-   "h": 0,
-   "depth": 4
+   "w": 206,
+   "h": 18,
+   "depth": 5
   },
   {
    "id": "15RT-2",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 3
+   "w": 764,
+   "h": 16,
+   "depth": 4
   },
   {
    "id": "15RX-2",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 3
+   "w": 764,
+   "h": 147,
+   "depth": 4
   },
   {
    "id": "36EE-0",
    "name": "상한 · 하한 종목",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 4
+   "w": 764,
+   "h": 20,
+   "depth": 5
   },
   {
    "id": "36EH-0",
    "name": "거래 형성 종목",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 4
+   "w": 764,
+   "h": 20,
+   "depth": 5
   },
   {
    "id": "36EK-0",
    "name": "52주 신고가 종목",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 4
+   "w": 764,
+   "h": 20,
+   "depth": 5
   },
   {
    "id": "15S4-2",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 4
+   "w": 764,
+   "h": 20,
+   "depth": 5
   },
   {
    "id": "3SF9-0",
    "name": "업종 등락 상위",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 3
+   "w": 764,
+   "h": 251,
+   "depth": 4
   },
   {
    "id": "3SFC-0",
    "name": "업종 행 · 반도체",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 4
+   "w": 764,
+   "h": 38,
+   "depth": 5
   },
   {
    "id": "3SFD-0",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 5
+   "w": 82,
+   "h": 38,
+   "depth": 6
   },
   {
    "id": "3SFG-0",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 5
+   "w": 108,
+   "h": 38,
+   "depth": 6
   },
   {
    "id": "3SFK-0",
    "name": "업종 행 · 의약품",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 4
+   "w": 764,
+   "h": 38,
+   "depth": 5
   },
   {
    "id": "3SFO-0",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 5
+   "w": 82,
+   "h": 38,
+   "depth": 6
   },
   {
    "id": "3SFL-0",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 5
+   "w": 116,
+   "h": 38,
+   "depth": 6
   },
   {
    "id": "3SFR-0",
    "name": "업종 행 · 은행",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 4
+   "w": 764,
+   "h": 38,
+   "depth": 5
   },
   {
    "id": "3SFV-0",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 5
+   "w": 82,
+   "h": 38,
+   "depth": 6
   },
   {
    "id": "3SFS-0",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 5
+   "w": 101,
+   "h": 38,
+   "depth": 6
   },
   {
    "id": "170E-2",
@@ -1213,247 +1306,247 @@
    "component": "Frame",
    "w": 520,
    "h": 690,
-   "depth": 2
+   "depth": 3
   },
   {
    "id": "170G-2",
    "name": "VI Header",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 3
+   "w": 472,
+   "h": 42,
+   "depth": 4
   },
   {
    "id": "170H-2",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 4
+   "w": 91,
+   "h": 42,
+   "depth": 5
   },
   {
    "id": "170K-2",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
+   "w": 71,
    "h": 32,
-   "depth": 4
+   "depth": 5
   },
   {
    "id": "36HF-0",
    "name": "VI 표 헤더",
    "component": "Frame",
-   "w": 0,
+   "w": 472,
    "h": 36,
-   "depth": 3
+   "depth": 4
   },
   {
    "id": "36IR-0",
    "name": "VI Instruments Table",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 3
+   "w": 472,
+   "h": 217,
+   "depth": 4
   },
   {
    "id": "36IS-0",
    "name": "한미반도체",
    "component": "Frame",
-   "w": 0,
+   "w": 472,
    "h": 72,
-   "depth": 4
+   "depth": 5
   },
   {
    "id": "36IT-0",
    "name": "Frame",
    "component": "Frame",
    "w": 160,
-   "h": 0,
-   "depth": 5
+   "h": 37,
+   "depth": 6
   },
   {
    "id": "36IW-0",
    "name": "Frame",
    "component": "Frame",
    "w": 90,
-   "h": 0,
-   "depth": 5
+   "h": 34,
+   "depth": 6
   },
   {
    "id": "36IZ-0",
    "name": "Frame",
    "component": "Frame",
    "w": 128,
-   "h": 0,
-   "depth": 5
+   "h": 34,
+   "depth": 6
   },
   {
    "id": "36J2-0",
    "name": "Frame",
    "component": "Frame",
    "w": 94,
-   "h": 0,
-   "depth": 5
+   "h": 34,
+   "depth": 6
   },
   {
    "id": "36J5-0",
    "name": "이수페타시스",
    "component": "Frame",
-   "w": 0,
+   "w": 472,
    "h": 72,
-   "depth": 4
+   "depth": 5
   },
   {
    "id": "36J6-0",
    "name": "Frame",
    "component": "Frame",
    "w": 160,
-   "h": 0,
-   "depth": 5
+   "h": 37,
+   "depth": 6
   },
   {
    "id": "36J9-0",
    "name": "Frame",
    "component": "Frame",
    "w": 90,
-   "h": 0,
-   "depth": 5
+   "h": 34,
+   "depth": 6
   },
   {
    "id": "36JC-0",
    "name": "Frame",
    "component": "Frame",
    "w": 128,
-   "h": 0,
-   "depth": 5
+   "h": 34,
+   "depth": 6
   },
   {
    "id": "36JF-0",
    "name": "Frame",
    "component": "Frame",
    "w": 94,
-   "h": 0,
-   "depth": 5
+   "h": 34,
+   "depth": 6
   },
   {
    "id": "36JI-0",
    "name": "테마파워",
    "component": "Frame",
-   "w": 0,
+   "w": 472,
    "h": 72,
-   "depth": 4
+   "depth": 5
   },
   {
    "id": "36JJ-0",
    "name": "Frame",
    "component": "Frame",
    "w": 160,
-   "h": 0,
-   "depth": 5
+   "h": 37,
+   "depth": 6
   },
   {
    "id": "36JM-0",
    "name": "Frame",
    "component": "Frame",
    "w": 90,
-   "h": 0,
-   "depth": 5
+   "h": 34,
+   "depth": 6
   },
   {
    "id": "36JP-0",
    "name": "Frame",
    "component": "Frame",
    "w": 128,
-   "h": 0,
-   "depth": 5
+   "h": 34,
+   "depth": 6
   },
   {
    "id": "36JS-0",
    "name": "Frame",
    "component": "Frame",
    "w": 94,
-   "h": 0,
-   "depth": 5
+   "h": 34,
+   "depth": 6
   },
   {
    "id": "171H-2",
    "name": "VI Context Detail",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 3
+   "w": 472,
+   "h": 124,
+   "depth": 4
   },
   {
    "id": "171I-2",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 4
+   "w": 440,
+   "h": 18,
+   "depth": 5
   },
   {
    "id": "36MY-0",
    "name": "발동 상세 4칸",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 4
+   "w": 440,
+   "h": 60,
+   "depth": 5
   },
   {
    "id": "36MZ-0",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 5
+   "w": 104,
+   "h": 60,
+   "depth": 6
   },
   {
    "id": "36Q6-0",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 5
+   "w": 104,
+   "h": 60,
+   "depth": 6
   },
   {
    "id": "36N7-0",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 5
+   "w": 104,
+   "h": 60,
+   "depth": 6
   },
   {
    "id": "36NA-0",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 5
+   "w": 104,
+   "h": 60,
+   "depth": 6
   },
   {
    "id": "171X-2",
    "name": "VI Event Timeline",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 3
+   "w": 472,
+   "h": 91,
+   "depth": 4
   },
   {
    "id": "171Z-2",
    "name": "Frame",
    "component": "Frame",
-   "w": 0,
-   "h": 0,
-   "depth": 4
+   "w": 472,
+   "h": 49,
+   "depth": 5
   },
   {
    "id": "1720-2",
    "name": "Frame",
    "component": "Frame",
    "w": 145,
-   "h": 0,
-   "depth": 5
+   "h": 49,
+   "depth": 6
   },
   {
    "id": "1721-2",
@@ -1461,7 +1554,7 @@
    "component": "Rectangle",
    "w": 9,
    "h": 9,
-   "depth": 6
+   "depth": 7
   },
   {
    "id": "1724-2",
@@ -1469,15 +1562,15 @@
    "component": "Rectangle",
    "w": 12,
    "h": 1,
-   "depth": 5
+   "depth": 6
   },
   {
    "id": "1725-2",
    "name": "Frame",
    "component": "Frame",
    "w": 145,
-   "h": 0,
-   "depth": 5
+   "h": 49,
+   "depth": 6
   },
   {
    "id": "1726-2",
@@ -1485,7 +1578,7 @@
    "component": "Rectangle",
    "w": 9,
    "h": 9,
-   "depth": 6
+   "depth": 7
   },
   {
    "id": "1729-2",
@@ -1493,15 +1586,15 @@
    "component": "Rectangle",
    "w": 12,
    "h": 1,
-   "depth": 5
+   "depth": 6
   },
   {
    "id": "172A-2",
    "name": "Frame",
    "component": "Frame",
    "w": 145,
-   "h": 0,
-   "depth": 5
+   "h": 49,
+   "depth": 6
   },
   {
    "id": "172B-2",
@@ -1509,7 +1602,7 @@
    "component": "Rectangle",
    "w": 9,
    "h": 9,
-   "depth": 6
+   "depth": 7
   },
   {
    "id": "1VDL-1",
@@ -1517,10 +1610,13 @@
    "component": "Frame",
    "w": 472,
    "h": 38,
-   "depth": 3
+   "depth": 4
   }
  ],
  "text_multiset": {
+  "114": 1,
+  "217500": 1,
+  "396300": 1,
   "지금 시장이 뜨거운지, VI는 어디서 터지는지 보여줘": 1,
   "KOSPI · KOSDAQ · 오늘 VI 3건": 1,
   "시장 · VI": 1,
@@ -1539,7 +1635,6 @@
   "거래 형성 종목": 1,
   "2,182개 / 2,290개 (95.3%)": 1,
   "52주 신고가 종목": 1,
-  "114": 1,
   "외국인 현물 순매수": 1,
   "+4,208억": 1,
   "업종 등락 상위": 1,
@@ -1564,7 +1659,6 @@
   "발동가": 2,
   "상태 · 시각": 1,
   "대성첨단": 1,
-  "396300": 1,
   "정적 VI": 2,
   "정적 ±10%": 2,
   "20,500": 1,
@@ -1579,7 +1673,6 @@
   "기준가 대비 +3.04%": 1,
   "09:41:08": 1,
   "테마파워": 1,
-  "217500": 1,
   "8,120": 1,
   "기준가 대비 -10.1%": 1,
   "해제": 1,
@@ -1601,6 +1694,6 @@
   "해제 예정": 1,
   "발동 중 2종목 · 오늘 3건 전체 표시": 1
  },
- "exported_at": "2026-09-05",
- "tree_summary_sha256": "dbba6580655e73d763e960038838cd9a2c1cfa2de2ee96822d2ab3119c84553d"
+ "exported_at": "2026-09-07",
+ "tree_summary_sha256": "97e31b14a078eb26dbaded01c35f9725f4cc43fe6beb2169e559e67686efe2e7"
 }
