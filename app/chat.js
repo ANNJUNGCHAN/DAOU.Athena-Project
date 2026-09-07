@@ -4945,6 +4945,11 @@ document.addEventListener('athena:backtest-receipt', (event) => {
 document.addEventListener('athena:chat-submit', (event) => {
   const text = String((event && event.detail && event.detail.text) || '').trim();
   if (!text) return;
+  // Enter·추천 칩과 같은 게이트 — 없으면 [새 기법 만들기]가 진행 중 턴을 대체한다.
+  if (state !== 'idle' || remoteQueryBusy) {
+    appendSystemLine('답변 중');
+    return;
+  }
   dispatchUserQuery(text);
 });
 
