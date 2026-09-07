@@ -438,3 +438,15 @@ test('main boot runners report only valid task states and start WS feeds from th
   assert.match(source, /function brainDependentSkipReason\(\)/);
   assert.equal((source.match(/const brainSkip = brainDependentSkipReason\(\);/g) || []).length, 2);
 });
+
+test('brain startup gate retries transient status failures inside its watchdog', () => {
+  const source = fs.readFileSync(path.join(__dirname, '..', '..', 'main.js'), 'utf8');
+  const waitForBrainStartup = extractFunctionSource(source, 'async function waitForBrainStartup(context)');
+  // 2026-09-07 실측: 기동 직후 백엔드가 식별 인덱스 컴파일·추출 CLI와 CPU를 다투는 동안
+  // 상태 조회가 3초를 넘겼고, 그 한 번으로 gate가 실패했다. 4xx만 즉시 실패, 나머지는
+  // 5분 watchdog 안에서 다시 묻는다.
+  assert.match(waitForBrainStartup, /controller\.abort\(new Error\('brain status timeout'\)\), 10_000\)/);
+  assert.match(waitForBrainStartup, /if \(result\.status >= 400 && result\.status < 500\) \{/);
+  assert.match(waitForBrainStartup, /state: 'retrying', detail: `브레인 상태 조회 재시도/);
+  assert.doesNotMatch(waitForBrainStartup, /if \(!result\.ok\) throw/);
+});

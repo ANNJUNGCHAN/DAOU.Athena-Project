@@ -5743,14 +5743,25 @@ async function waitForBrainStartup(context) {
   // a legitimate extraction may take up to 180s. Keep one shared 5-minute
   // watchdog so BOOT does not report a false failure while the real job runs.
   const deadlineAt = Date.now() + BRAIN_GRAPH_REFRESH_TIMEOUT_MS;
+  if (!historySink.getBearerToken()) throw new Error('로컬 베어러 토큰이 설정되지 않음');
   let startupRetryRequested = false;
   for (;;) {
     if (Date.now() >= deadlineAt) throw new Error('브레인 시작 수집 제한시간(5분) 초과');
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(new Error('brain status timeout')), 3_000);
+    const timeout = setTimeout(() => controller.abort(new Error('brain status timeout')), 10_000);
     const result = await fetchBrainJson('/api/v1/brain/status', { signal: controller.signal });
     clearTimeout(timeout);
-    if (!result.ok) throw new Error(result.error || '브레인 상태 조회 실패');
+    if (!result.ok) {
+      // 4xx는 토큰·라우트 문제라 기다려도 안 바뀐다. 그 외(타임아웃·연결 실패·5xx)는
+      // 기동 직후 백엔드가 식별 인덱스 컴파일·추출 CLI와 CPU를 다투느라 늦는 것일 수
+      // 있으므로(2026-09-07 실측: 3초 초과 1회로 gate 실패) watchdog 안에서 다시 묻는다.
+      if (result.status >= 400 && result.status < 500) {
+        throw new Error(result.error || '브레인 상태 조회 실패');
+      }
+      context.update({ state: 'retrying', detail: `브레인 상태 조회 재시도 — ${result.error || '응답 없음'}` });
+      await waitMs(1_000);
+      continue;
+    }
     const body = result.body || {};
     if (body.startup_ingestion_status === 'failed' && !startupRetryRequested) {
       // 시작 수집 잡의 실패는 그 backend 프로세스가 살아 있는 동안 굳어 있다 — 앱을
