@@ -14,6 +14,7 @@ const {
   SAFE_CLICK_IDS,
   VERIFY_SUITE,
   PAPER_SUITE,
+  queryVerdict,
 } = require('./live-full-catalog');
 
 const appDir = path.join(__dirname, '..');
@@ -59,6 +60,16 @@ test('live-full catalog locked clicks cover real orders and kiumi five faces', (
   }
 });
 
+test('expectCard:false 질의도 실패·타임아웃을 통과로 쓰지 않는다', () => {
+  const fin = LIVE_QUERIES.find((item) => item.id === 'QA-FIN');
+  const quote = LIVE_QUERIES.find((item) => item.id === 'QA-QUOTE');
+  assert.equal(queryVerdict(fin, { result: { ok: false, error: 'query timeout' }, painted: false, rest: false, usedModel: false }), false);
+  assert.equal(queryVerdict(fin, { result: { ok: true }, painted: false, rest: false, usedModel: false }), true);
+  assert.equal(queryVerdict(quote, { result: { ok: true }, painted: false, rest: true, usedModel: false }), false);
+  assert.equal(queryVerdict(quote, { result: { ok: true }, painted: true, rest: true, usedModel: false }), true);
+  assert.equal(queryVerdict(quote, { result: { ok: true }, painted: true, rest: false, usedModel: true }), false);
+});
+
 test('order lock does not treat 과매도 or 과매수 technique copy as a live order', () => {
   const orderLock = LOCKED_CLICKS.find((item) => item.id === 'order-submit');
   assert.ok(orderLock);
@@ -68,6 +79,15 @@ test('order lock does not treat 과매도 or 과매수 technique copy as a live 
   assert.equal(orderLock.match.test('시장가 매수'), true);
   assert.equal(orderLock.match.test('시장가 매도'), true);
   assert.equal(orderLock.match.test('주문 확인'), true);
+});
+
+test('live-full probe does not share the real athena-shell profile or skip every capture', () => {
+  const src = fs.readFileSync(path.join(appDir, 'probe-live-full.js'), 'utf8');
+  assert.match(src, /\.probe-live-full-profile/);
+  assert.doesNotMatch(src, /appData['"], 'athena-shell'/);
+  assert.doesNotMatch(src, /capturePage hangs Electron main on this host/);
+  assert.match(src, /capturePage\(\)/);
+  assert.match(src, /queryVerdict/);
 });
 
 test('verify suite lists live-full and the official verify script with budgets', () => {
