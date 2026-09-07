@@ -1,4 +1,4 @@
-# Grok 프롬프트 — 카드 표면 버튼 트랙 남은 넷 이어받기 (2026-09-08)
+# Grok 프롬프트 — 카드 표면 버튼 트랙 남은 셋 이어받기 (2026-09-08)
 
 아래 블록을 통째로 복사해 Grok 워커에 붙여넣는다. **worktree 안에서** 실행한다
 (`claude/card-buttons-functionality-2b13d9`, PR
@@ -12,7 +12,8 @@
 ```
 # 목표
 
-카드 표면 버튼 트랙에서 **남은 넷**을 끝낸다. 이미 끝난 것은 다시 하지 않는다.
+카드 표면 버튼 트랙에서 **남은 셋**(A 전수 수치 · C 비교 바구니 · D 주문 확인)을 끝낸다.
+B(2RJ7-1 「호가 열기」 겹침)는 끝났다. 이미 끝난 것은 다시 하지 않는다.
 
 # 0. 시작 전에 읽을 것 (추측으로 시작하지 않는다)
 
@@ -57,20 +58,12 @@ cd app && node_modules/electron/dist/electron.exe probe-card-buttons.js
 
 결과를 `docs/handoff/2026-09-07-card-buttons.md` §4에 수치로 적는다(반응·inert·보드 수).
 
-## B. 2RJ7-1 「호가 열기」 겹침 (작다, 배선이 아니라 레이아웃이다)
+## B. 2RJ7-1 「호가 열기」 겹침 — 완료
 
-증상: 핸들러는 붙었는데(`__athenaStateWired`) 그 자리 hit test가 이웃 블록
-`3A46-0`(「예상 체결 시간」)으로 간다 — 실측 rect x≈1222 y≈568 w≈51 h≈16.
-즉 사용자가 그 버튼을 누를 수 없다. 노드: 버튼 잎 `2RJH-1`, 감싼 알약 `2RJG-1`.
-
-1. `ATHENA_VERIFY_BOARD_IDS=2RJ7-1`로 프로브를 돌려 `hit.hit_node`를 재확인한다.
-2. 원인을 먼저 밝힌다 — 겹침이 (a) Paper 원문의 자리 문제인가, (b) 반응형 훅이
-   `left`를 걷어낸 absolute 상자 문제인가(`board-mount.markInsetAbsoluteBox`),
-   (c) 고정 높이 상자를 내용이 뚫은 것인가. `app/styles/board-surface.css`의
-   되돌리기 규칙과 `regions.json`을 함께 본다.
-3. (a)면 Paper를 고치고 재추출(§C의 절차와 같다). (b)·(c)면 CSS·훅을 고치고
-   `verify:paper-cards-mount`로 4폭 전부 통과를 확인한다. **z-index로 덮어 가리지 않는다** —
-   겹침은 남고 클릭만 통하는 상태가 되면 §8 정보 정직성에 어긋난다.
+`markInsetAbsoluteBox`가 하단 absolute 상자의 부모 `padding-bottom`을
+`bottom+height`만큼 비운다(z-index 없음). 프로브 샤드 `2RJ7-1`:
+`호가 열기` hit_node=`2RJH-1`, `responds`, `13BC-2` 오픈, `hit_blocked=0`.
+근거는 [../2026-09-07-card-buttons.md](../2026-09-07-card-buttons.md) §5-4.
 
 ## C. 비교 바구니 (Paper 보드는 이미 있다 — 배선이 남았다)
 

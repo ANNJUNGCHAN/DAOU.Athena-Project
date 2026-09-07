@@ -693,9 +693,63 @@ function stripCharacterWrap(el) {
   return true;
 }
 
+function pxNumber(value) {
+  const match = /^(-?\d+(?:\.\d+)?)px$/.exec(String(value || '').trim());
+  return match ? Number(match[1]) : null;
+}
+
+function paddingBottomPx(style) {
+  const bottom = pxNumber(style.getPropertyValue('padding-bottom'));
+  if (bottom != null) return bottom;
+  const block = style.getPropertyValue('padding-block').trim();
+  if (!block) return 0;
+  const parts = block.split(/\s+/);
+  return pxNumber(parts.length > 1 ? parts[1] : parts[0]) || 0;
+}
+
+// 하단 absolute 상자(실측 2RJ7-1 Chart Context Actions: bottom 18 · height 44)는
+// 흐름에서 빠지므로 부모 padding-bottom(원문 22px)이 상자보다 작으면 흐름 안
+// 이웃(「예상 체결 시간」 3A46-0)이 그 자리를 차지한다. hit test가 버튼이 아니라
+// 이웃으로 간다. 부모를 상자 높이+bottom만큼 비워 겹침 자체를 없앤다 — z-index로
+// 덮으면 겹침은 남고 클릭만 통해 헌장 §8에 어긋난다.
+//
+// 2RJ7-1 레일은 `align-items: start`라 두 열이 내용 높이(원문 420·401)로 선다.
+// 고정 높이 558에서 padding-bottom을 62로 올리면 내용 상자 474 — 두 열은 그 안에
+// 들어가므로 패딩 영역으로 흘러 바를 다시 덮지 않는다. 열을 514로 늘려 가정하면
+// 안 된다.
+function reserveParentBottom(el, reservePx) {
+  const parent = el.parentElement;
+  if (!parent || !parent.style || !parent.dataset) return;
+  const pos = parent.style.getPropertyValue('position').trim();
+  if (pos !== 'relative' && pos !== 'absolute') return;
+  const current = paddingBottomPx(parent.style);
+  const prev = pxNumber(parent.style.getPropertyValue('--bs-reserve-bottom'));
+  const reserve = Math.max(reservePx, prev || 0);
+  if (reserve <= current) return;
+  const block = parent.style.getPropertyValue('padding-block').trim();
+  if (block) {
+    const top = block.split(/\s+/)[0];
+    parent.style.removeProperty('padding-block');
+    if (!parent.style.getPropertyValue('padding-top')) {
+      parent.style.setProperty('padding-top', top);
+    }
+  }
+  parent.style.setProperty('--bs-reserve-bottom', `${reserve}px`);
+  parent.style.setProperty('padding-bottom', `${reserve}px`);
+  parent.dataset.bsReserveBottom = 'true';
+}
+
 function markInsetAbsoluteBox(el) {
   if (!el || !el.dataset || !el.style) return;
   if (el.style.getPropertyValue('position').trim() !== 'absolute') return;
+  const bottom = pxNumber(el.style.getPropertyValue('bottom'));
+  const heightInline = pxNumber(el.style.getPropertyValue('height'));
+  const height = heightInline != null
+    ? heightInline
+    : pxNumber(el.style.getPropertyValue('--bs-height'));
+  if (bottom != null && height != null) {
+    reserveParentBottom(el, bottom + height);
+  }
   const left = el.style.getPropertyValue('left').trim();
   if (!left || !el.style.getPropertyValue('width').trim()) return;
   if (el.style.getPropertyValue('right').trim()) return;

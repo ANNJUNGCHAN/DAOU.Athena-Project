@@ -67,8 +67,8 @@ Paper가 목적지를 다른 card_id로 그린 조작은 상태 보드 전환으
 ## 5. 남은 것
 
 > **이어받는 사람은 [card-buttons/GROK_PROMPT.md](./card-buttons/GROK_PROMPT.md)를 열어 블록을
-> 통째로 복사해 붙여넣는다.** 아래 §5-1~§5-4가 그 프롬프트의 근거이고, 추출·이식·원장 도구는
-> [card-buttons/tools/](./card-buttons/tools/)에 있다(새로 만들지 말 것).
+> 통째로 복사해 붙여넣는다.** 아래 §5-1~§5-3·§5-5가 남은 근거이고 §5-4는 끝났다. 추출·이식·원장
+> 도구는 [card-buttons/tools/](./card-buttons/tools/)에 있다(새로 만들지 말 것).
 
 ### 5-1. 비교 바구니 (Paper 보드 신설 완료, 구현 미착수)
 
@@ -155,13 +155,18 @@ S16은 표가 7행으로 늘고 세션별 거래 블록이 빠지며 꼬리가 �
 승인 없이 배선하지 않았다 — 배선 전에 사용자 확정이 필요하다. 물을 것 둘: ① 확인 버튼이
 곧 집행인가 확인 화면까지인가 ② 모의/실계좌 구분을 어디서 막는가.
 
-### 5-4. 2RJ7-1 「호가 열기」 겹침 (배선이 아니라 레이아웃)
+### 5-4. 2RJ7-1 「호가 열기」 겹침 — 해결 (레이아웃, z-index 없음)
 
-핸들러는 붙었는데(`__athenaStateWired`) 그 자리 hit test가 이웃 블록 `3A46-0`
-(「예상 체결 시간」)으로 간다 — 실측 rect x≈1222 · y≈568 · w≈51 · h≈16, 버튼 잎 `2RJH-1`,
-감싼 알약 `2RJG-1`. 사용자는 그 버튼을 누를 수 없다. 원인이 Paper 원문의 자리인지,
-`markInsetAbsoluteBox`가 걷어낸 absolute 상자인지, 고정 높이를 내용이 뚫은 것인지를
-먼저 가려야 한다. **z-index로 덮어 클릭만 통하게 하지 않는다**(겹침은 그대로 남는다).
+원인은 Paper 원문 자리였다. `2RJF-1` Chart Context Actions는
+`position:absolute; bottom:18px; height:44px`이고, 부모 레일 `2RJE-1`의
+`padding-block`은 22px뿐이라 흐름 안 `3A46-0`(「예상 체결 시간」)이 그 40px
+띠를 차지했다. `markInsetAbsoluteBox`가 부모 `padding-bottom`을
+`bottom+height`(62px)로 비운다. 레일은 `align-items:start`라 두 열은 내용
+높이(420·401)로 서서 474px 내용 상자 안에 남는다.
+
+프로브 `ATHENA_VERIFY_BOARD_IDS=2RJ7-1` (2026-09-08, HEAD 작업본):
+`호가 열기` 잎 `2RJH-1` hit_node=`2RJH-1`, `responds`, 카드 `13BC-2`를 연다.
+보드 합계 `responds=8 · hit_blocked=0 · inert=39`. **z-index는 쓰지 않았다.**
 
 ### 5-5. 전수 감사 수치 갱신
 
