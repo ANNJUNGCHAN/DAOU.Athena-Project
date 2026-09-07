@@ -219,8 +219,28 @@ async function main() {
     report.tokenRefresh = { ok: false, state: 'no-account' };
   }
 
-  await wait(8000);
-  report.indexReady = { ok: true, source: 'wait-8s-after-token' };
+  const indexReady = await waitUntil(async () => {
+    const snap = await evalJs(
+      shellWin,
+      `window.athena.invoke('athena:boot-readiness:get')`,
+      8000,
+      null,
+    );
+    const task = snap && Array.isArray(snap.tasks)
+      ? snap.tasks.find((item) => item.id === 'stock-index')
+      : null;
+    if (!task) return null;
+    if (task.state === 'succeeded' || task.state === 'disabled') {
+      return { ok: true, state: task.state, detail: task.detail || '' };
+    }
+    if (task.state === 'failed') {
+      return { ok: false, state: task.state, detail: task.detail || '' };
+    }
+    return null;
+  }, 20000);
+  report.indexReady = indexReady && typeof indexReady.ok === 'boolean'
+    ? indexReady
+    : { ok: false, source: 'stock-index-timeout' };
   report.captures.push(await captureOrSkip(shellWin, 'live-full-boot.png'));
   fs.writeFileSync(REPORT, JSON.stringify(report, null, 2));
 
@@ -353,6 +373,7 @@ async function main() {
     && report.windows.orb
     && modeOk
     && report.settings.ok
+    && report.indexReady && report.indexReady.ok
     && report.queries.every((row) => row.ok)
     && report.forbiddenOrderCalls === 0
     && visibleButtons.length > 0;
