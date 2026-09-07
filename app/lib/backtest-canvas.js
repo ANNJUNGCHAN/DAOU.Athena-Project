@@ -2685,7 +2685,9 @@ function createBacktestCanvas(options) {
     return {
       view: state.view,
       tab: state.tab,
-      designTab: state.designTab,
+      // 목록 화면에는 지도/폼 하위 탭이 없다 — form이라고 실으면 모델이 없는 칸을 말한다.
+      screen: listFirst() && state.tab === 'design' ? 'technique-list' : null,
+      designTab: listFirst() && state.tab === 'design' ? null : state.designTab,
       runPath,
       spec: spec ? JSON.parse(JSON.stringify(spec)) : null,
       // 설정은 검증과 무관하게 바로 들어가므로 대기 초안은 없다 — 계약 키는 남긴다.

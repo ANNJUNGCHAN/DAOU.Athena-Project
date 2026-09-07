@@ -619,7 +619,9 @@ function buildBacktestModePrefix(context, today) {
     '- 실행·검증·수집·저장·활성화·배포·탐색 시작은 사람이 카드 버튼을 누른다.',
     '- 이미 채워진 값은 되묻지 않는다. 모르면 짧게 하나만 묻는다. 실행당 종목 1개, 날짜 YYYYMMDD. 답은 두세 문장 — 무엇을 바꿨는지 한 줄과 다음 질문 한 줄.',
     ...techniqueRules,
-    `현재 화면: tab=${label(ctx && ctx.tab)} · designTab=${label(ctx && ctx.designTab)} · 실행경로=${label(ctx && ctx.runPath)}`,
+    ctx && ctx.screen === 'technique-list'
+      ? '현재 화면: 기법 목록'
+      : `현재 화면: tab=${label(ctx && ctx.tab)} · designTab=${label(ctx && ctx.designTab)} · 실행경로=${label(ctx && ctx.runPath)}`,
     techniqueBlock,
     mapBlock,
     `현재 폼(JSON): ${spec}`,

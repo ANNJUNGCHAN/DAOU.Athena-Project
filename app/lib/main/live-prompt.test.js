@@ -651,6 +651,13 @@ test('buildBacktestModePrefix: phase-1 컨텍스트는 새 구역이 없음/모�
   assert.ok(!p.includes('```'));
 });
 
+test('buildBacktestModePrefix: 목록 화면은 designTab=form이라고 거짓말하지 않는다', () => {
+  const p = buildBacktestModePrefix({
+    tab: 'design', screen: 'technique-list', designTab: null, spec: null, runPath: null,
+  }, '20260902');
+  assert.ok(p.includes('현재 화면: 기법 목록'));
+  assert.equal(p.includes('designTab=form'), false);
+});
 test('buildBacktestModePrefix: 컨텍스트 없이도 모든 구역이 없음/모름으로 나온다', () => {
   const p = buildBacktestModePrefix(null, '20260902');
   assert.ok(p.includes('현재 화면: tab=모름 · designTab=모름 · 실행경로=모름'));
