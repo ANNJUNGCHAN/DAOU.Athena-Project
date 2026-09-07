@@ -1,27 +1,60 @@
 # -*- coding: utf-8 -*-
-"""Athena Paper 정합 판정 v4 — 2026-09-07 구현 4차 결과 보고서 생성기(최종)."""
-import json, html, io, sys, subprocess
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
-SP = r'C:/Projects/DAOU.Athena/docs/handoff/2026-09-07-paper-parity'
-ROOT = 'C:/Projects/DAOU.Athena'
+"""Historical Paper-parity HTML generator (round 4 snapshot).
 
-head = subprocess.run(['git', '-C', ROOT, 'rev-parse', '--short', 'origin/main'], capture_output=True, text=True).stdout.strip()
-n_commits = subprocess.run(['git', '-C', ROOT, 'rev-list', '--count', '--no-merges', 'c33ef0a..origin/main'], capture_output=True, text=True).stdout.strip()
-types = subprocess.run(['git', '-C', ROOT, 'log', '--no-merges', '--format=%s', 'c33ef0a..origin/main'], capture_output=True, text=True, encoding='utf-8').stdout.splitlines()
+This is not the current completion ledger. Current audit state lives in
+docs/handoff/2026-09-07-grok-build/ALL-FINDINGS.json (342 items).
+Do not regenerate this HTML as a “final / 7 boards left / all applied” verdict.
+"""
+import json, html, io, sys, subprocess
+from pathlib import Path
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+ROOT = Path(r'C:/Projects/DAOU.Athena')
+REPORT_DIR = ROOT / 'docs' / 'handoff' / '2026-09-07-paper-parity' / 'report'
+EVIDENCE = ROOT / 'docs' / 'handoff' / '2026-09-07-grok-build' / 'evidence'
+CURRENT_LEDGER = ROOT / 'docs' / 'handoff' / '2026-09-07-grok-build' / 'ALL-FINDINGS.json'
+
+def _load_json(path):
+    return json.loads(Path(path).read_text(encoding='utf-8'))
+
+def _canonical_gate(path, evidence_name):
+    payload = _load_json(path)
+    if payload.get('selection', {}).get('canonical') is False:
+        fallback = EVIDENCE / evidence_name
+        if fallback.exists():
+            sys.stderr.write(f'partial capture {path.name} — using {fallback}\n')
+            return _load_json(fallback)
+        raise SystemExit(f'{path} is a partial --only report; refuse to publish as totals')
+    return payload
+
+head = subprocess.run(['git', '-C', str(ROOT), 'rev-parse', '--short', 'HEAD'], capture_output=True, text=True).stdout.strip()
+n_commits = subprocess.run(['git', '-C', str(ROOT), 'rev-list', '--count', '--no-merges', 'c33ef0a..HEAD'], capture_output=True, text=True).stdout.strip()
+types = subprocess.run(['git', '-C', str(ROOT), 'log', '--no-merges', '--format=%s', 'c33ef0a..HEAD'], capture_output=True, text=True, encoding='utf-8').stdout.splitlines()
 from collections import Counter
 tc = Counter()
 for s in types:
     t = s.split('(')[0].split(':')[0].strip()
     tc[t] += 1
 
-screens = json.load(open(f'{SP}/gaps-screens-annotated-v4.json', encoding='utf-8'))
-cards = json.load(open(f'{SP}/gaps-cards-v4.json', encoding='utf-8'))['gaps']
-manifest = json.load(open(f'{ROOT}/backend/ref/paper-ledger/manifest.json', encoding='utf-8'))
+screens_path = REPORT_DIR / 'gaps-screens-annotated.json'
+cards_path = REPORT_DIR / 'gaps-cards.json'
+if not screens_path.exists() or not cards_path.exists():
+    raise SystemExit(f'missing gap files under {REPORT_DIR} (not gaps-*-v4.json)')
+
+screens = _load_json(screens_path)
+cards_payload = _load_json(cards_path)
+cards = cards_payload['gaps'] if isinstance(cards_payload, dict) else cards_payload
+manifest = _load_json(ROOT / 'backend' / 'ref' / 'paper-ledger' / 'manifest.json')
 names = {b['id']: (b['page'], b.get('name', ''), b['role']) for b in manifest['boards']}
-ratchet = json.load(open(f'{ROOT}/app/lib/paper-screens-ratchet.json', encoding='utf-8'))
-scr = json.load(open(f'{ROOT}/app/captures/paper-gates/PAPER-SCREENS.json', encoding='utf-8'))['totals']
-cardsrep = json.load(open(f'{ROOT}/app/captures/paper-gates/PAPER-CARDS.json', encoding='utf-8'))['totals']
-mini = json.load(open(f'{ROOT}/app/captures/paper-gates/PAPER-MINI.json', encoding='utf-8'))['totals']
+ratchet = _load_json(ROOT / 'app' / 'lib' / 'paper-screens-ratchet.json')
+scr_payload = _canonical_gate(ROOT / 'app' / 'captures' / 'paper-gates' / 'PAPER-SCREENS.json', 'integrated-PAPER-SCREENS.json')
+cards_gate = _canonical_gate(ROOT / 'app' / 'captures' / 'paper-gates' / 'PAPER-CARDS.json', 'integrated-PAPER-CARDS.json')
+mini_payload = _load_json(ROOT / 'app' / 'captures' / 'paper-gates' / 'PAPER-MINI.json')
+if mini_payload.get('selection', {}).get('canonical') is False and (EVIDENCE / 'integrated-PAPER-MINI.json').exists():
+    mini_payload = _load_json(EVIDENCE / 'integrated-PAPER-MINI.json')
+scr = scr_payload['totals']
+cardsrep = cards_gate['totals']
+mini = mini_payload['totals']
+ledger_note = f'current ledger {CURRENT_LEDGER.as_posix()} exists={CURRENT_LEDGER.exists()}'
 
 # 결정 갈래 배정 — 남은 7장 (화면 4 + 계약 2 + 카드 1)
 GROUPS = {
@@ -159,12 +192,12 @@ ul.plain {{ padding-left:18px; }} ul.plain li {{ margin:5px 0; }}
 @media (prefers-reduced-motion: reduce) {{ * {{ scroll-behavior:auto; }} }}
 </style>
 <main>
-<div class="eyebrow">DAOU.Athena · main {esc(head)} · 2026-09-07 · 4판(구현 4차 결과 · 최종)</div>
-<h1>Athena Paper 정합 판정</h1>
-<div class="meta"><span>Paper 파일 「Athena」 10페이지 444보드</span><span>전수 게이트 3종(카드·화면·카드미니)이 기준</span><span>어제 판정(c33ef0a) 이후 main 에 {esc(n_commits)}개 커밋</span></div>
+<div class="eyebrow">DAOU.Athena · HEAD {esc(head)} · historical round-4 HTML · not the 2026-09-07 grok-build ledger</div>
+<h1>Athena Paper 정합 판정 (역사본)</h1>
+<div class="meta"><span>이 HTML은 4차 구현 당시 스냅샷이다</span><span>현재 검수 원장은 ALL-FINDINGS 342항목</span><span>{esc(ledger_note)}</span><span>c33ef0a 이후 HEAD 커밋 {esc(n_commits)}</span></div>
 
 <section class="verdict">
-  <p class="lead">최종 판정: 앱은 Paper 「Athena」를 카드는 1:1로(96장 중 95장), 화면은 실측 라우트로(95장 중 91장 · 계약 14장 중 12장) 구현했다. 남은 7장은 코드로 닫을 수 없는 것만 남았다 — Paper 자신을 고쳐야 하는 것 4장(캡션 2 · 보드끼리 반대말 1 · 문 없는 칩 1), 잠긴 제품 결정과 Paper 가 반대말을 하는 것 2장, 창 모델·세션 구조를 바꿔야 하는 것 1장.</p>
+  <p class="lead">이 생성기의 옛 문장(「남은 7장만 코드로 닫을 수 없다」「전부 적용」)은 현재 완료 판정이 아니다. 화면 라우트 누락 4장·계약 캡션 2장·4TY 제품/Paper 명칭 갈라짐·XI-0 흔들림·live-full 하네스·원장 210 open은 별도 근거로 남아 있다. 아래 숫자 칸은 생성 시점의 게이트 JSON이며, 부분(--only) 캡처는 전수 합계로 쓰지 않는다.</p>
   <ul>
 <li><b>카드.</b> 96장 × 정적 6검사 + 런타임 4폭에서 95장 통과(3판 94, 2판 93, 1판 64). 15R0-2 는 이 머신에 Daki 가 없어 생긴 폴백 폰트 줄상자 2px 이었고, 폰트 metric override 로 보드 기하를 건드리지 않고 닫았다. 137X-2 는 Paper 가 「순위」 칩 하나에 보드 두 장(2VDA-0·32XM-0)을 매달아 문이 7개인데 상태 보드가 8장인 구조 그대로다 — 없는 칩을 지어 그리면 정적 텍스트 검사가 곧바로 빨개진다.</li>
 <li><b>화면.</b> 109장(화면 95 + 계약 14) 중 103장이 래칫에 잠겼다. 4차가 그래프 07 정직성 상태(범례·노드 채움 = 확정성·이름 추정 캡션)를 실기능으로 세웠고 — 지난 회차의 「보드 03·04 와 충돌」 판정은 원장 재대조로 뒤집혔다 — 백테스트 10 의 오류 상태 절반을 세웠다. 3차의 새 화면·기능 8건(프로젝트 추가 대화상자 · 세션 작업공간 복원 · 출처→지도 5단계 · 미니 카드 도달 · 제어 제안 턴 A~E · 작업 설정 편집 폼 · 고침 이력·되돌리기 · entity 응답 패널)과 Paper 가 스스로 「화면이 아니다」라고 적은 8장의 role 이전은 그대로다.</li>
@@ -186,8 +219,8 @@ ul.plain {{ padding-left:18px; }} ul.plain li {{ margin:5px 0; }}
 <p>여섯 트랙이 각자 워크트리에서 「구현 → 독립 검토(최대 3회) → origin/main 병합·푸시」를 작업마다 반복했다. pre-push 훅(저장소 게이트 6종 + 단위 3,345개)이 모든 푸시에서 통과했다.</p>
 <div class="tablewrap"><table><thead><tr><th>트랙</th><th>결과</th><th>내용</th></tr></thead><tbody>{tracks_html}</tbody></table></div>
 
-<h2>남은 빨감 — 코드로 닫을 수 없는 7장</h2>
-<p>각 보드의 설명은 그 보드를 맡은 구현자가 Paper 원장과 앱 코드를 실측해 남긴 기록 그대로다. 「스텁이나 예외 목록으로 초록을 만들지 않는다」는 규칙 아래 남은 것들이라, 열면 무엇이 없고 왜 임의로 정하지 않았는지가 적혀 있다.</p>
+<h2>4차 당시 미해결로 묶인 보드 (역사 갈래)</h2>
+<p>아래 7장 묶음은 4차 HTML이 쓰던 갈래다. 그 뒤 137X-2 마운트 단위 중복은 코드로 줄였고, 4TY-0은 제품 「키우미 대화」를 유지한 채 Paper 「메인 대화」 문구 불일치로 남긴다. 현재 open 목록은 ALL-FINDINGS를 본다.</p>
 {groups_html}
 
 <h2>구현 3차·4차에서 닫힌 {len(closed3)}장</h2>
@@ -198,7 +231,7 @@ ul.plain {{ padding-left:18px; }} ul.plain li {{ margin:5px 0; }}
 <p>라우트는 통과하지만 Paper 보드가 앱보다 더 그린 조각(구역 이름·각주·도구 이름 표기 등)이 있다. 게이트 수치에는 안 잡히므로 따로 적어 둔다.</p>
 <section class="group">{partial_html}</section>
 
-<h2>다음 — 사용자가 정할 7가지</h2>
+<h2>4차 당시 사용자 결정으로 남긴 항목 (역사)</h2>
 <ol class="next">
 <li><b>1XA2-0 · 2DZE-0</b> — Paper 보드에 계약 캡션 한 줄(마침표 문장)을 적는다. 코드·문서는 이미 있다.</li>
 <li><b>2GZM-2</b> — 보드 10 의 프리셋 고르기 화면과 보드 19 의 「프리셋이라는 구분은 없습니다」 중 어느 쪽이 정본인지 Paper 에서 정한다. 오류 상태 절반은 이미 앱에 있다.</li>
@@ -210,6 +243,8 @@ ul.plain {{ padding-left:18px; }} ul.plain li {{ margin:5px 0; }}
 </ol>
 </main>
 '''
-out = f'{SP}/athena-paper-parity-verdict.html'
-open(out, 'w', encoding='utf-8', newline='\n').write(page)
-print('written', out, len(page), 'bytes; head', head, 'commits', n_commits)
+# Keep the round-4 HTML as history. A regen is a dated copy, not a new final verdict.
+out = REPORT_DIR / 'athena-paper-parity-verdict.regen.html'
+out.write_text(page, encoding='utf-8', newline='\n')
+print('written', out.as_posix(), len(page), 'bytes; head', head, 'commits', n_commits)
+print('original historical HTML preserved:', (REPORT_DIR / 'athena-paper-parity-verdict.html').as_posix())

@@ -14,6 +14,9 @@ const {
   SAFE_CLICK_IDS,
   VERIFY_SUITE,
   PAPER_SUITE,
+  queryVerdict,
+  cssContentText,
+  chromeMatches,
 } = require('./live-full-catalog');
 
 const appDir = path.join(__dirname, '..');
@@ -40,13 +43,43 @@ test('live-full catalog paper chrome matches controller CHAT_HEAD_COPY and chat.
   assert.equal(PAPER_CHROME.graph.title, '그래프에게 묻기');
   assert.equal(PAPER_CHROME.plugin.title, '아테나 · 플러그인 대화');
   assert.equal(PAPER_CHROME.backtest.emptyHistory, '아직 고른 기법이 없습니다');
-  assert.match(chatCss, /아직 고른 기법이 없습니다/);
+  assert.match(
+    chatCss,
+    /#chatModeHead\[data-mode="backtest"\]:not\(\[hidden\]\):not\(\[data-technique\]\)\s*~\s*\.history:empty::before\s*\{[^}]*content:\s*'아직 고른 기법이 없습니다'/,
+  );
+});
+
+test('chromeMatches는 emptyHistory 계약을 헤더와 함께 잰다', () => {
+  assert.equal(cssContentText('"아직 고른 기법이 없습니다"'), '아직 고른 기법이 없습니다');
+  assert.equal(cssContentText('none'), '');
+  const backtestOk = chromeMatches('backtest', {
+    chatHeadHidden: false,
+    chatHeadTitle: '기법에게 묻기',
+    chatHeadSub: '고른 기법을 다룹니다',
+    emptyHistory: '"아직 고른 기법이 없습니다"',
+  });
+  assert.equal(backtestOk.ok, true);
+  const staleCopy = chromeMatches('backtest', {
+    chatHeadHidden: false,
+    chatHeadTitle: '기법에게 묻기',
+    chatHeadSub: '고른 기법을 다룹니다',
+    emptyHistory: '"새 대화"',
+  });
+  assert.equal(staleCopy.ok, false);
+  const summaryOk = chromeMatches('summary', {
+    chatHeadHidden: true,
+    emptyHistory: '"새 대화"',
+  });
+  assert.equal(summaryOk.ok, true);
 });
 
 test('live-full catalog settings nav fourth item is 성향・이력', () => {
   const settings = fs.readFileSync(path.join(__dirname, 'settings-cards.js'), 'utf8');
+  const phase4 = fs.readFileSync(path.join(appDir, 'phase4-traversal.js'), 'utf8');
   assert.deepEqual(SETTINGS_NAV.map((item) => item.label), ['화면', '계좌', '모델', '성향・이력']);
   assert.match(settings, /label: '성향・이력'/);
+  assert.match(phase4, /SETTINGS_NAV/);
+  assert.doesNotMatch(phase4, /\['그래프',\s*'03e-settings-graph\.png'\]/);
 });
 
 test('live-full catalog locked clicks cover real orders and kiumi five faces', () => {
@@ -59,6 +92,16 @@ test('live-full catalog locked clicks cover real orders and kiumi five faces', (
   }
 });
 
+test('expectCard:false 질의도 실패·타임아웃을 통과로 쓰지 않는다', () => {
+  const fin = LIVE_QUERIES.find((item) => item.id === 'QA-FIN');
+  const quote = LIVE_QUERIES.find((item) => item.id === 'QA-QUOTE');
+  assert.equal(queryVerdict(fin, { result: { ok: false, error: 'query timeout' }, painted: false, rest: false, usedModel: false }), false);
+  assert.equal(queryVerdict(fin, { result: { ok: true }, painted: false, rest: false, usedModel: false }), true);
+  assert.equal(queryVerdict(quote, { result: { ok: true }, painted: false, rest: true, usedModel: false }), false);
+  assert.equal(queryVerdict(quote, { result: { ok: true }, painted: true, rest: true, usedModel: false }), true);
+  assert.equal(queryVerdict(quote, { result: { ok: true }, painted: true, rest: false, usedModel: true }), false);
+});
+
 test('order lock does not treat 과매도 or 과매수 technique copy as a live order', () => {
   const orderLock = LOCKED_CLICKS.find((item) => item.id === 'order-submit');
   assert.ok(orderLock);
@@ -68,6 +111,18 @@ test('order lock does not treat 과매도 or 과매수 technique copy as a live 
   assert.equal(orderLock.match.test('시장가 매수'), true);
   assert.equal(orderLock.match.test('시장가 매도'), true);
   assert.equal(orderLock.match.test('주문 확인'), true);
+});
+
+test('live-full probe does not share the real athena-shell profile or skip every capture', () => {
+  const src = fs.readFileSync(path.join(appDir, 'probe-live-full.js'), 'utf8');
+  assert.match(src, /\.probe-live-full-profile/);
+  assert.doesNotMatch(src, /appData['"], 'athena-shell'/);
+  assert.doesNotMatch(src, /capturePage hangs Electron main on this host/);
+  assert.match(src, /capturePage\(\)/);
+  assert.match(src, /queryVerdict/);
+  assert.doesNotMatch(src, /wait-8s-after-token/);
+  assert.match(src, /stock-index/);
+  assert.match(src, /indexReady\.ok/);
 });
 
 test('verify suite lists live-full and the official verify script with budgets', () => {
