@@ -618,7 +618,8 @@ test('보드 19: mount 직후는 기법 목록이고 프리셋 0번을 자동으
   assert.equal(findByClass(container, 'backtest-run-button').length, 0);
   const ctx = canvas.getContext();
   assert.equal(ctx.spec, null);
-  assert.equal(ctx.designTab, 'form');
+  assert.equal(ctx.screen, 'technique-list');
+  assert.equal(ctx.designTab, null, '목록 화면을 폼이라고 말하지 않는다');
   assert.equal(textOf(container).includes('data.symbols'), false);
   assert.equal(textOf(container).includes('pydantic'), false);
 });
@@ -1707,12 +1708,13 @@ test('getContext(): 키 목록이 계약으로 고정돼 있다 — spec은 복�
   const { canvas } = await mounted();
   const ctx = canvas.getContext();
   assert.deepEqual(Object.keys(ctx), [
-    'view', 'tab', 'designTab', 'runPath', 'spec', 'draft', 'pending', 'presets',
+    'view', 'tab', 'screen', 'designTab', 'runPath', 'spec', 'draft', 'pending', 'presets',
     'techniqueDraft', 'technique',
     'map', 'code', 'codeDraft', 'lastResult', 'diagnosis', 'optimize', 'runs', 'coverage',
     'lastChange', 'project',
   ]);
   assert.equal(ctx.view, 'design');
+  assert.equal(ctx.screen, null);
   assert.equal(ctx.techniqueDraft, false, '새 기법을 만드는 중이 아니다');
   assert.equal(ctx.spec.presetId, 'sma_crossover');
   assert.equal(ctx.draft, null);
@@ -2534,7 +2536,8 @@ test('목록 화면의 navigate는 하위 탭을 반영하지 않고 이유를 �
   assert.equal(receipt.applied, false);
   assert.deepEqual(receipt.errors, ['기법을 먼저 고르세요']);
   const ctx = made.canvas.getContext();
-  assert.equal(ctx.designTab, 'form', '없는 탭으로 컨텍스트만 옮기지 않는다');
+  assert.equal(ctx.screen, 'technique-list');
+  assert.equal(ctx.designTab, null, '목록 화면을 폼이라고 말하지 않는다');
   assert.equal(findByClass(made.container, 'backtest-technique-list').length, 1);
 });
 
@@ -4179,8 +4182,10 @@ test('모드 워크스페이스에 등록하고 탭이 움직일 때마다 조�
     assert.ok(last.graph && Array.isArray(last.graph.nodes));
 
     registered[0][1].restore({
-      kind: 'backtest', tab: 'design', designTab: 'flow', graph: VISUAL_GRAPH,
+      kind: 'backtest', tab: 'design', designTab: 'flow',
+      form: RESTORE_WORKSPACE.form, graph: VISUAL_GRAPH,
     });
+    assert.equal(made.canvas.getContext().screen, null);
     assert.equal(made.canvas.getContext().designTab, 'flow');
   } finally {
     delete global.window;
