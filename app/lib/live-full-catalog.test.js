@@ -15,6 +15,8 @@ const {
   VERIFY_SUITE,
   PAPER_SUITE,
   queryVerdict,
+  cssContentText,
+  chromeMatches,
 } = require('./live-full-catalog');
 
 const appDir = path.join(__dirname, '..');
@@ -41,13 +43,43 @@ test('live-full catalog paper chrome matches controller CHAT_HEAD_COPY and chat.
   assert.equal(PAPER_CHROME.graph.title, '그래프에게 묻기');
   assert.equal(PAPER_CHROME.plugin.title, '아테나 · 플러그인 대화');
   assert.equal(PAPER_CHROME.backtest.emptyHistory, '아직 고른 기법이 없습니다');
-  assert.match(chatCss, /아직 고른 기법이 없습니다/);
+  assert.match(
+    chatCss,
+    /#chatModeHead\[data-mode="backtest"\]:not\(\[hidden\]\):not\(\[data-technique\]\)\s*~\s*\.history:empty::before\s*\{[^}]*content:\s*'아직 고른 기법이 없습니다'/,
+  );
+});
+
+test('chromeMatches는 emptyHistory 계약을 헤더와 함께 잰다', () => {
+  assert.equal(cssContentText('"아직 고른 기법이 없습니다"'), '아직 고른 기법이 없습니다');
+  assert.equal(cssContentText('none'), '');
+  const backtestOk = chromeMatches('backtest', {
+    chatHeadHidden: false,
+    chatHeadTitle: '기법에게 묻기',
+    chatHeadSub: '고른 기법을 다룹니다',
+    emptyHistory: '"아직 고른 기법이 없습니다"',
+  });
+  assert.equal(backtestOk.ok, true);
+  const staleCopy = chromeMatches('backtest', {
+    chatHeadHidden: false,
+    chatHeadTitle: '기법에게 묻기',
+    chatHeadSub: '고른 기법을 다룹니다',
+    emptyHistory: '"새 대화"',
+  });
+  assert.equal(staleCopy.ok, false);
+  const summaryOk = chromeMatches('summary', {
+    chatHeadHidden: true,
+    emptyHistory: '"새 대화"',
+  });
+  assert.equal(summaryOk.ok, true);
 });
 
 test('live-full catalog settings nav fourth item is 성향・이력', () => {
   const settings = fs.readFileSync(path.join(__dirname, 'settings-cards.js'), 'utf8');
+  const phase4 = fs.readFileSync(path.join(appDir, 'phase4-traversal.js'), 'utf8');
   assert.deepEqual(SETTINGS_NAV.map((item) => item.label), ['화면', '계좌', '모델', '성향・이력']);
   assert.match(settings, /label: '성향・이력'/);
+  assert.match(phase4, /SETTINGS_NAV/);
+  assert.doesNotMatch(phase4, /\['그래프',\s*'03e-settings-graph\.png'\]/);
 });
 
 test('live-full catalog locked clicks cover real orders and kiumi five faces', () => {
@@ -88,6 +120,9 @@ test('live-full probe does not share the real athena-shell profile or skip every
   assert.doesNotMatch(src, /capturePage hangs Electron main on this host/);
   assert.match(src, /capturePage\(\)/);
   assert.match(src, /queryVerdict/);
+  assert.doesNotMatch(src, /wait-8s-after-token/);
+  assert.match(src, /stock-index/);
+  assert.match(src, /indexReady\.ok/);
 });
 
 test('verify suite lists live-full and the official verify script with budgets', () => {

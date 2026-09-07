@@ -651,6 +651,13 @@ test('buildBacktestModePrefix: phase-1 컨텍스트는 새 구역이 없음/모�
   assert.ok(!p.includes('```'));
 });
 
+test('buildBacktestModePrefix: 목록 화면은 designTab=form이라고 거짓말하지 않는다', () => {
+  const p = buildBacktestModePrefix({
+    tab: 'design', screen: 'technique-list', designTab: null, spec: null, runPath: null,
+  }, '20260902');
+  assert.ok(p.includes('현재 화면: 기법 목록'));
+  assert.equal(p.includes('designTab=form'), false);
+});
 test('buildBacktestModePrefix: 컨텍스트 없이도 모든 구역이 없음/모름으로 나온다', () => {
   const p = buildBacktestModePrefix(null, '20260902');
   assert.ok(p.includes('현재 화면: tab=모름 · designTab=모름 · 실행경로=모름'));
@@ -885,7 +892,8 @@ test('buildBacktestModePrefix: 전략으로 만들 주소는 source_map으로 �
 test('buildBacktestModePrefix: 등록은 register_strategy로 가고 실행·활성화·배포가 아니다', () => {
   const p = buildBacktestModePrefix(BT_PROJECT_CONTEXT, '20260902');
   assert.ok(p.includes('register_strategy(project_id·path·name)'));
-  assert.ok(p.includes('"내 전략"에 프리셋과 같은 자리로 뜬다'));
+  assert.ok(p.includes('기법 탭의 목록에 프리셋과 같은 자리로 뜬다'));
+  assert.equal(p.includes('설계 폼'), false);
   assert.ok(p.includes('등록은 실행도 활성화도 배포도 아니다'));
 });
 
