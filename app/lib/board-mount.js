@@ -448,6 +448,64 @@ function stateLinksFromMarks(stateControls) {
   return links;
 }
 
+// 레일 칩을 찾는 세 갈래. 추출 원문에서 칩은 그냥 텍스트 잎이라 표식이 없으면
+// 문구로 찾을 수밖에 없다.
+//
+//   1) 표식      — `data-state-control`. 그 링크를 소유한 보드에만 찍힌다.
+//   2) 같은 문구  — 스트립·내비 안에서 계약의 control과 정확히 같은 글자를 내는 잎.
+//   3) 별칭 문구  — 같은 표식이 **다른 보드에서** 낸 문구(색인 CONTROL_LABELS).
+//                  자식 보드의 레일은 부모 레일의 복제본인데 표식이 없어서,
+//                  문구가 표식 이름과 다른 칩(「관심종목 시세 보드」 → 「관심」)은
+//                  2)로는 절대 안 잡힌다 — 실측 44장 98링크가 그 상태였다.
+//
+// 3)은 두 겹으로 막는다: 그 문구를 내는 잎이 이 보드에 **하나**여야 하고, 다른 링크가
+// 같은 문구를 노리지 않아야 한다. 엉뚱한 칩에 다른 보드를 매다는 것이 안 눌리는
+// 것보다 나쁘다.
+const STATE_CONTROL_SCOPES = '.bs-strip, nav, [role="tablist"]';
+
+function stateControlScopeLeaves(surface) {
+  const leaves = [];
+  for (const scope of surface.querySelectorAll(STATE_CONTROL_SCOPES)) {
+    for (const node of scope.querySelectorAll('*')) {
+      if (node.childElementCount === 0) leaves.push(node);
+    }
+  }
+  return leaves;
+}
+
+function labelsOf(control, options) {
+  const source = options && typeof options.labelsFor === 'function'
+    ? options.labelsFor
+    : (registry && registry.controlLabels);
+  return typeof source === 'function' ? source(control) || [] : [];
+}
+
+function findStateControlNode(surface, control, options = {}) {
+  if (!surface || typeof surface.querySelectorAll !== 'function') return null;
+  const wanted = String(control || '').trim();
+  if (!wanted) return null;
+  for (const node of surface.querySelectorAll('[data-state-control]')) {
+    if (node.dataset.stateControl === wanted) return stateControlActivationOwner(node);
+  }
+  const leaves = stateControlScopeLeaves(surface);
+  const textOf = (node) => String(node.textContent || '').trim();
+  const exact = leaves.find((node) => textOf(node) === wanted);
+  if (exact) return stateControlActivationOwner(exact);
+  const links = Array.isArray(options.links) ? options.links : [];
+  for (const label of labelsOf(wanted, options)) {
+    const matches = leaves.filter((node) => textOf(node) === label);
+    if (matches.length !== 1) continue;
+    // 같은 문구를 노리는 다른 링크가 있으면 어느 쪽인지 알 수 없다 — 건너뛴다.
+    const rivals = links.filter((link) => {
+      const rival = String((link && link.control) || '').trim();
+      return rival && rival !== wanted && labelsOf(rival, options).includes(label);
+    });
+    if (rivals.length) continue;
+    return stateControlActivationOwner(matches[0]);
+  }
+  return null;
+}
+
 function stateControlActivationOwner(node) {
   if (!node || typeof node.closest !== 'function') return node || null;
   return node.closest('button, [role="button"], [role="tab"]') || node;
@@ -902,6 +960,7 @@ const __exports = {
   slotValueEntries, observationIdsOfSlotEntry, realtimeSlotIndex, updateRealtimeValue,
   pairedClosure, realtimePlan, applyRealtimeSlots,
   stateLinksFromMarks, stateControlActivationOwner, wireStateControlActivation,
+  findStateControlNode, STATE_CONTROL_SCOPES,
 };
 
 if (typeof module !== 'undefined' && module.exports) {

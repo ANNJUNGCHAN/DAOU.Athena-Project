@@ -20,6 +20,7 @@ const BOARD_CARD = (index && index.BOARD_CARD) || {};
 const CARD_IDS = (index && index.CARD_IDS) || [];
 const STATE_GRAPH = (index && index.STATE_GRAPH) || {};
 const BOARD_PRIMARY = (index && index.BOARD_PRIMARY) || {};
+const CONTROL_LABELS = (index && index.CONTROL_LABELS) || {};
 
 // 이 스크립트가 어디서 왔는지 — 청크도 같은 폴더에 있다. 문서 URL 기준 상대경로를
 // 쓰면 fixture HTML(app/*.html)처럼 다른 위치에서 부를 때 깨진다.
@@ -192,6 +193,15 @@ function stateLinksFor(boardId) {
   return links;
 }
 
+// 이 표식이 화면에 내는 문구들. 추출기는 표식(`data-state-control`)을 그 링크를
+// 소유한 보드에만 찍는데, 자식 보드의 레일은 그 복제본이라 표식이 없다 — 자식에서는
+// 문구로 칩을 찾아야 하고, 문구가 표식 이름과 다르면(「관심종목 시세 보드」 → 「관심」)
+// 이 표가 없으면 그 칩이 영영 안 눌린다. 판정(유일성·경합)은 board-mount가 한다.
+function controlLabels(control) {
+  const labels = CONTROL_LABELS[String(control || '')];
+  return Array.isArray(labels) ? labels.slice() : [];
+}
+
 // 보드 1장당 <template> 1개. cloneNode는 호출부(board-mount)가 한다.
 function templateFor(boardId, doc = typeof document !== 'undefined' ? document : null) {
   if (!doc) return null;
@@ -212,7 +222,8 @@ function clearTemplateCache() {
 const __exports = {
   BOARD_CARD, boardIds, cardIds, hasBoard, cardIdFor, isLoaded,
   chunkFileName, chunkUrl, loadChunk, loadBoard,
-  boardHtml, boardSha256, contractFor, primaryRendererFor, stateLinksFor, templateFor, clearTemplateCache,
+  boardHtml, boardSha256, contractFor, primaryRendererFor, stateLinksFor, controlLabels,
+  templateFor, clearTemplateCache,
 };
 
 if (typeof module !== 'undefined' && module.exports) {

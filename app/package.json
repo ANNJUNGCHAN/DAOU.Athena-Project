@@ -38,6 +38,7 @@
     "verify:paper-cards-static": "node scripts/paper-cards-static.mjs",
     "verify:paper-cards-mount": "electron probe-paper-cards-mount.js",
     "verify:paper-cards-all": "npm run verify:paper-cards-static && npm run verify:paper-cards-mount",
+    "verify:card-buttons": "electron probe-card-buttons.js",
     "verify:paper-screens": "electron probe-paper-screens.js",
     "verify:paper-mini-static": "node scripts/paper-mini-static.mjs",
     "verify:paper-mini-template": "electron probe-paper-mini-template.js",
