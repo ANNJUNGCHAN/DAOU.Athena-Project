@@ -5441,8 +5441,7 @@ async function renderOrderTicket(prefill) {
       idempotencyKey: orderTicketLib.newIdempotencyKey(),
     });
     const outcome = orderTicketLib.interpretExecuteStatus((res && res.status) || 0);
-    orderTicketLib.transition(ticket, outcome === 'done' ? 'done'
-      : outcome === 'in_doubt' ? 'in_doubt' : 'failed');
+    orderTicketLib.transition(ticket, orderTicketLib.ticketStateAfterExecute(outcome));
     // 종결 상태를 표시 전용 action 카드로도 남긴다(Paper AT-CV-005 보호
     // 워크플로) — 실행 버튼이 없는 영수증일 뿐, 이 티켓 패널이 유일한 실행
     // 표면이라는 확정 결정 3 경계는 그대로다. addLiveCard는 canvas.js가 선언한
@@ -5452,13 +5451,7 @@ async function renderOrderTicket(prefill) {
         trId: payload.tr_id, body: payload.body, outcome, response: res,
       }));
     }
-    if (outcome === 'done') {
-      status.textContent = '주문 접수됨 — 체결은 계좌에서 확인하세요.';
-    } else if (outcome === 'in_doubt') {
-      status.textContent = '확인 중(IN_DOUBT) — 중복 방지를 위해 재전송하지 않습니다. 계좌에서 접수 여부를 확인하세요.';
-    } else {
-      status.textContent = `실행 실패: ${(res && res.error) || 'HTTP ' + ((res && res.status) || '?')} — 재시도하려면 다시 실행을 누르세요(새 멱등키).`;
-      syncExec();
-    }
+    status.textContent = orderTicketLib.executeOutcomeCopy(outcome, res);
+    if (outcome !== 'done' && outcome !== 'in_doubt') syncExec();
   });
 }

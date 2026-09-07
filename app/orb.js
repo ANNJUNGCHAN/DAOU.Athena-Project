@@ -1521,24 +1521,21 @@
     if (gen !== ticketGeneration) return; // 응답 도착 전 티켓이 닫히거나 갈렸다 — 낡은 응답을 버린다
     ticketExecuting = false;
     const outcome = orderTicketLib.interpretExecuteStatus((res && res.status) || 0);
-    orderTicketLib.transition(ticket, outcome === 'done' ? 'done'
-      : outcome === 'in_doubt' ? 'in_doubt' : 'failed');
+    orderTicketLib.transition(ticket, orderTicketLib.ticketStateAfterExecute(outcome));
+    $ticketStatus.textContent = orderTicketLib.executeOutcomeCopy(outcome, res);
+    $ticketStatus.hidden = false;
     if (outcome === 'done') {
       // 간결한 완료 표시 후 닫기 — DONE_HOLD(완료 웃음 유지 시간)와 같은
       // 길이만큼 보여준 뒤 닫는다(별도 영수증 카드를 새로 만들지 않는다).
-      $ticketStatus.textContent = '주문 접수됨 — 체결은 계좌에서 확인하세요.';
-      $ticketStatus.hidden = false;
       updateTicketExecDisabled();
       setTimeout(() => { if (gen === ticketGeneration) closeOrbTicket(); }, DONE_HOLD);
     } else if (outcome === 'in_doubt') {
-      $ticketStatus.textContent = '확인 중(IN_DOUBT) — 재전송하지 않습니다. 계좌에서 접수 여부를 확인하세요.';
       $ticketStatus.classList.add('is-doubt');
-      $ticketStatus.hidden = false;
+      updateTicketExecDisabled();
+    } else if (outcome === 'needs_confirm') {
       updateTicketExecDisabled();
     } else {
-      $ticketStatus.textContent = `실행 실패: ${(res && res.error) || 'HTTP ' + ((res && res.status) || '?')}`;
       $ticketStatus.classList.add('is-failed');
-      $ticketStatus.hidden = false;
       updateTicketExecDisabled();
     }
   });

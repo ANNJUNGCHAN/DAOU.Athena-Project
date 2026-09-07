@@ -110,8 +110,9 @@ function interpretExecuteStatus(status) {
   return 'failed';
 }
 
-// 상태기계: review → executing → done | in_doubt | failed.
+// 상태기계: review → executing → done | in_doubt | needs_confirm | failed.
 // in_doubt/done은 종결 — 같은 티켓으로 재실행 불가(1회용, 중복 주문 방지).
+// 428 확인 요청은 실패가 아니다 — 게이트로 돌아가 다시 누른다(OBS-030, Paper FY7-0).
 function createTicket(prefill) {
   const side = prefill && (prefill.side === 'buy' || prefill.side === 'sell')
     ? prefill.side : null;
@@ -122,11 +123,28 @@ function createTicket(prefill) {
 
 const _TRANSITIONS = {
   review: ['executing'],
-  executing: ['done', 'in_doubt', 'failed'],
+  executing: ['done', 'in_doubt', 'needs_confirm', 'failed'],
   failed: ['executing'], // 명시적 재시도는 사람이 새로 누른 경우만(새 멱등키)
+  needs_confirm: ['executing'],
   done: [],
   in_doubt: [],
 };
+
+function ticketStateAfterExecute(outcome) {
+  if (outcome === 'done' || outcome === 'in_doubt' || outcome === 'needs_confirm') return outcome;
+  return 'failed';
+}
+
+function executeOutcomeCopy(outcome, res) {
+  if (outcome === 'done') return '주문 접수됨 — 체결은 계좌에서 확인하세요.';
+  if (outcome === 'in_doubt') {
+    return '확인 중(IN_DOUBT) — 중복 방지를 위해 재전송하지 않습니다. 계좌에서 접수 여부를 확인하세요.';
+  }
+  if (outcome === 'needs_confirm') {
+    return '확인 요청 — 조건을 확인한 뒤 주문 게이트로 돌아갑니다.';
+  }
+  return `실행 실패: ${(res && res.error) || 'HTTP ' + ((res && res.status) || '?')} — 재시도하려면 다시 실행을 누르세요(새 멱등키).`;
+}
 
 function transition(ticket, next) {
   const allowed = _TRANSITIONS[ticket.state] || [];
@@ -150,6 +168,8 @@ const __exports = {
   estimateOrderTotal,
   priceRowModel,
   interpretExecuteStatus,
+  ticketStateAfterExecute,
+  executeOutcomeCopy,
   createTicket,
   transition,
   newIdempotencyKey,
