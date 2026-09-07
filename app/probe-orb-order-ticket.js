@@ -26,9 +26,9 @@ const path = require('path');
 const fs = require('fs');
 const os = require('os');
 const { execFileSync } = require('child_process');
+const { captureRoot } = require('./lib/probe-captures');
 
-const OUT_DIR = path.join(__dirname, 'captures');
-fs.mkdirSync(OUT_DIR, { recursive: true });
+const OUT_DIR = captureRoot(__dirname);
 
 const PROFILE = path.join(__dirname, '.probe-orb-order-ticket-profile');
 fs.rmSync(PROFILE, { recursive: true, force: true });

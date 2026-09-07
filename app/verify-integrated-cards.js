@@ -36,11 +36,12 @@ const {
   pruneUnexpectedBoardCaptures,
   resolveBoardSelection,
 } = require('./lib/integrated-card-capture-hygiene');
+const { captureRoot } = require('./lib/probe-captures');
 
 const APP = __dirname;
 const ROOT = path.resolve(APP, '..');
 const BACKEND = path.join(ROOT, 'backend');
-const CAPTURE_DIR = path.join(APP, 'captures', 'integrated-cards');
+const CAPTURE_DIR = path.join(captureRoot(APP), 'integrated-cards');
 const BOARD_SELECTION_OVERRIDE = process.env.ATHENA_VERIFY_BOARD_IDS;
 const CANONICAL_CAPTURE_RUN = BOARD_SELECTION_OVERRIDE === undefined;
 const CAPTURE_OUTPUT_DIR = ensureCaptureOutputDirectory(CAPTURE_DIR, CANONICAL_CAPTURE_RUN);

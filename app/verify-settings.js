@@ -26,6 +26,7 @@ const os = require('os');
 const path = require('path');
 const fs = require('fs');
 const { EventEmitter } = require('events');
+const { captureRoot } = require('./lib/probe-captures');
 
 // **이 스크립트는 공유 프로필로 돌릴 수 없다.** 아래에서 계좌를 등록하고
 // (`검증-실패계좌`·`검증-성공계좌`) 다시 삭제한다 — ATHENA_USERDATA_DIR로
@@ -292,8 +293,9 @@ async function run() {
     log('mcp.list.afterRemove', await h.mcpList());
   }
 
-  fs.writeFileSync(path.join(__dirname, 'captures', 'VERIFY-SETTINGS-REPORT.json'), JSON.stringify(report, null, 2), 'utf-8');
-  console.log('\n[verify-settings] 리포트 저장: app/captures/VERIFY-SETTINGS-REPORT.json');
+  const reportPath = path.join(captureRoot(__dirname), 'VERIFY-SETTINGS-REPORT.json');
+  fs.writeFileSync(reportPath, JSON.stringify(report, null, 2), 'utf-8');
+  console.log('\n[verify-settings] 리포트 저장:', reportPath);
   console.log(`[verify-settings] 임시 디렉터리(수동 정리 필요 없음, OS temp): ${TMP_ROOT}`);
 
   if (failures.length) {

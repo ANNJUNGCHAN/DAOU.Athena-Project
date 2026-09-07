@@ -4,11 +4,12 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
+const { captureRoot } = require('./lib/probe-captures');
 
 app.setPath('userData', fs.mkdtempSync(path.join(os.tmpdir(), 'athena-orb-conversation-')));
 // Capture settled layout deterministically in a hidden window.
 app.commandLine.appendSwitch('force-prefers-reduced-motion');
-const out = path.join(__dirname, 'captures', 'orb-conversation');
+const out = path.join(captureRoot(__dirname), 'orb-conversation');
 const submitted = [];
 let win;
 let holdReply;

@@ -12,7 +12,8 @@ process.env.ATHENA_NO_AUTOSTART = '1';
 process.env.ATHENA_ALLOW_FIXTURE_NOTIFICATIONS = '1';
 const main = require('./main');
 const bg = require('./lib/main/background-close');
-const captureDir = path.join(__dirname, 'captures');
+const { captureRoot } = require('./lib/probe-captures');
+const captureDir = captureRoot(__dirname);
 const reportPath = path.join(captureDir, 'LIFE-003-REVIEW.json');
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 async function waitUntil(check, timeoutMs = 8000) {

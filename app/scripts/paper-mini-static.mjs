@@ -43,6 +43,7 @@ import { checkPaperManifest, loadManifest, LEDGER_DIR } from './paper-manifest-c
 const require_ = createRequire(import.meta.url);
 const { parseTreeRecords } = require_('../lib/paper-tree.js');
 const { mergeStaticLayer } = require_('../lib/paper-mini-report.js');
+const { captureRoot } = require_('../lib/probe-captures.js');
 const {
   paperMiniRows, buildTextIndex, compareMiniCard, compareMiniNote,
   templateGrammarOf, grammarCoverage,
@@ -56,7 +57,7 @@ export const KIUMI_LEDGER_PATH = path.join(REPO_ROOT, 'backend', 'ref', 'kiumi',
 export const EVIDENCE_PATH = path.join(
   REPO_ROOT, 'backend', 'ref', 'kiumi', 'evidence', 'paper-ledger-divergence-20260904.json',
 );
-export const REPORT_PATH = path.join(APP_DIR, 'captures', 'paper-gates', 'PAPER-MINI.json');
+export const REPORT_PATH = path.join(captureRoot(APP_DIR), 'paper-gates', 'PAPER-MINI.json');
 
 const readJson = (file) => JSON.parse(readFileSync(file, 'utf8'));
 
