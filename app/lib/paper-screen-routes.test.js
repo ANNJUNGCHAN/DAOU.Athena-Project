@@ -92,6 +92,14 @@ test('every mode step names a mode the shell can actually switch to', () => {
   }
 });
 
+test('every wait-for step declares whether hidden matches count', () => {
+  for (const route of ROUTES) {
+    for (const step of route.reach.filter((item) => item.do === 'wait-for')) {
+      assert.ok(['visible', 'any'].includes(step.visibility), `${route.board}: ${step.visibility}`);
+    }
+  }
+});
+
 // ---------- 셀렉터가 실재한다 (§4.4 규칙 1의 축소판) ----------
 
 test('every DOM id literal in a route exists in shell.html or orb.html', () => {
@@ -126,7 +134,7 @@ test('the in-progress shell route hangs the real query IPC before submitting thr
       { do: 'command-bar', text: '백엔드 API 개수 확인' },
     ]);
   assert.deepEqual(route.reach[hang + 2], {
-    do: 'wait-for', selector: '.progress-line', count: 1, timeout: 2000,
+    do: 'wait-for', selector: '.progress-line', count: 1, timeout: 2000, visibility: 'visible',
   });
   assert.deepEqual(route.structure, [
     { what: 'count', selector: '.turn-q', equals: 1 },
@@ -149,7 +157,7 @@ test('the disabled backtest route reaches the real 503 mapping without starting 
   ]);
   assert.equal(route.reach.some((step) => /run|backfill|deploy/.test(String(step.channel || ''))), false);
   assert.deepEqual(route.reach[2], {
-    do: 'wait-for', selector: '.backtest-canvas-error', count: 1, timeout: 2000,
+    do: 'wait-for', selector: '.backtest-canvas-error', count: 1, timeout: 2000, visibility: 'visible',
   });
   assert.deepEqual(route.structure, [
     { what: 'count', selector: '.backtest-canvas-error', equals: 1 },
@@ -169,11 +177,13 @@ test('the responsive fixture clears restored history through the existing new-co
     { do: 'click', selector: '#sidebarNewChat' },
   ]);
   assert.deepEqual(route.reach[2], {
-    do: 'wait-for', selector: '#history > *', count: 0, timeout: 2000,
+    do: 'wait-for', selector: '#history:empty', count: 1, timeout: 2000, visibility: 'any',
   });
-  assert.deepEqual(route.structure.slice(1, 3), [
-    { what: 'count', selector: '#history', equals: 1 },
-    { what: 'count', selector: '#history > *', equals: 0 },
+  assert.deepEqual(route.structure.slice(1), [
+    { what: 'count', selector: '#history', equals: 1, visibility: 'any' },
+    { what: 'count', selector: '#history > *', equals: 0, visibility: 'any' },
+    { what: 'count', selector: '#history', equals: 0, visibility: 'visible' },
+    { what: 'count', selector: '#input', equals: 1, visibility: 'visible' },
   ]);
 });
 
@@ -187,12 +197,37 @@ test('the fired-orb fixture waits for the asynchronous routine count refresh', (
   assert.equal(fixture.data.data.routines.filter((routine) => routine.status === 'active').length, 3);
   assert.ok(route.reach.indexOf(fixture) < fired, 'routines-list fixture가 routine event보다 먼저여야 한다');
   assert.deepEqual(route.reach[fired + 1], {
-    do: 'wait-for', selector: '.orb-ring-dot', count: 3, timeout: 2000,
+    do: 'wait-for', selector: '.orb-ring-dot', count: 3, timeout: 2000, visibility: 'visible',
   });
   assert.deepEqual(route.structure[0], { what: 'count', selector: '.orb-ring-dot', equals: 3 });
   const orb = fs.readFileSync(path.join(__dirname, '..', 'orb.js'), 'utf8');
   assert.match(orb, /refreshSatelliteRing[\s\S]+invoke\('athena:routines-list'\)/);
   assert.match(orb, /on\('athena:routine-event'[\s\S]+refreshSatelliteRing\(\)/);
+});
+
+test('the code-flow route fixtures the real map IPC and waits for its rendered nodes', () => {
+  const route = ROUTES.find((item) => item.board === '2FR9-2');
+  const fixture = route.reach.find((step) => step.do === 'ipc-fixture' && step.channel === 'athena:backtest-map');
+  assert.ok(fixture, '2FR9-2 must not depend on a live backtest-map backend');
+  assert.equal(fixture.data.ok, true);
+  assert.equal(fixture.data.data.source_kind, 'code');
+  assert.equal(fixture.data.data.app_before.length, 1);
+  assert.equal(fixture.data.data.app_after.length, 3);
+  assert.equal(fixture.data.data.nodes.length, 4);
+  const payloadText = JSON.stringify(fixture.data.data);
+  for (const phrase of route.phrases.slice(1)) assert.ok(payloadText.includes(phrase), phrase);
+  assert.ok(route.reach.some((step) => step.do === 'wait-for'
+    && step.selector === '.backtest-flow-node.is-mine' && step.count === 4));
+  const canvas = fs.readFileSync(path.join(__dirname, '..', 'canvas.js'), 'utf8');
+  assert.match(canvas, /invoke\('athena:backtest-map', body\)/);
+  const backendFlow = fs.readFileSync(path.join(REPO_ROOT, 'backend', 'athena_api', 'backtest', 'flow.py'), 'utf8');
+  for (const phrase of route.phrases.slice(1)) assert.ok(backendFlow.includes(phrase), phrase);
+});
+
+test('the screen probe creates a unique private profile without deleting an earlier run', () => {
+  const probe = fs.readFileSync(path.join(__dirname, '..', 'probe-paper-screens.js'), 'utf8');
+  assert.match(probe, /fs\.mkdtempSync\(path\.join\(os\.tmpdir\(\), 'athena-paper-screens-profile-'\)\)/);
+  assert.doesNotMatch(probe, /rmSync\(PROFILE/);
 });
 
 // ---------- phrases (§4.4 규칙 4·5) ----------
@@ -321,6 +356,9 @@ test('every structure check uses one of the three allowed shapes', () => {
       if (check.what === 'count') assert.equal(typeof check.equals, 'number');
       if (check.what === 'order') assert.ok(Array.isArray(check.equals));
       if (check.what === 'absent') assert.equal('equals' in check, false);
+      if ('visibility' in check) {
+        assert.ok(['visible', 'any'].includes(check.visibility), `${route.board}: ${check.visibility}`);
+      }
     }
   }
 });
