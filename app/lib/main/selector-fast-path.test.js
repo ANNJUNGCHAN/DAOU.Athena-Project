@@ -4,8 +4,12 @@ const assert = require('node:assert/strict');
 const {
   SelectorFastPathError,
   buildMarketOrderDraft,
-  runSelectorFastPath,
+  runSelectorFastPath: runSelectorFastPathWithAccount,
 } = require('./selector-fast-path');
+
+function runSelectorFastPath(options) {
+  return runSelectorFastPathWithAccount({ backendAccountAlias: 'server-a', ...options });
+}
 
 function inlineBody(request, overrides = {}) {
   const correlation = {
@@ -54,6 +58,8 @@ test('query success performs one HTTP request, paints, persists, and reports zer
 
   assert.equal(requests.length, 1);
   assert.equal(requests[0].url, 'http://127.0.0.1:8010/api/v1/selector/dispatch');
+  assert.equal(requests[0].options.headers['X-Athena-Account'], 'server-a');
+  assert.equal(requests[0].options.redirect, 'error');
   assert.deepEqual(requests[0].request, {
     question: '삼성전자 현재가와 거래량 보여줘',
     intent: 'auto',
@@ -72,6 +78,57 @@ test('query success performs one HTTP request, paints, persists, and reports zer
   assert.equal(result.handled, true);
   assert.equal(result.source, 'selector-fast');
   assert.equal(result.modelCalls, 0);
+});
+
+test('서버 alias가 없으면 query·guarded draft·websocket selector fetch를 호출하지 않는다', async () => {
+  let fetches = 0;
+  for (const intent of ['auto', 'order', 'websocket']) {
+    const result = await runSelectorFastPathWithAccount({
+      question: '삼성전자 요청',
+      backendBase: 'http://backend',
+      intent,
+      fetchImpl: async () => { fetches += 1; },
+    });
+    assert.deepEqual(result, { handled: false, reason: 'missing_backend_account_alias' });
+  }
+  assert.equal(fetches, 0);
+});
+
+test('계좌 A/B selector dispatch는 명시 alias와 redirect 차단을 유지한다', async () => {
+  for (const backendAccountAlias of ['server-a', 'server-b']) {
+    const requests = [];
+    const result = await runSelectorFastPathWithAccount({
+      question: '삼성전자 현재가 보여줘',
+      backendBase: 'http://backend',
+      backendAccountAlias,
+      idFactory: (() => { const values = ['dataset', 'item']; return () => values.shift(); })(),
+      fetchImpl: async (_url, options) => {
+        const request = JSON.parse(options.body);
+        requests.push(options);
+        return { ok: true, status: 200, json: async () => inlineBody(request) };
+      },
+    });
+    assert.equal(result.handled, true);
+    assert.equal(requests[0].headers['X-Athena-Account'], backendAccountAlias);
+    assert.equal(requests[0].redirect, 'error');
+  }
+});
+
+test('selector redirect가 거부되면 카드와 이력을 만들지 않는다', async () => {
+  let painted = 0;
+  let persisted = 0;
+  await assert.rejects(runSelectorFastPath({
+    question: '삼성전자 현재가 보여줘',
+    backendBase: 'http://backend',
+    fetchImpl: async (_url, options) => {
+      assert.equal(options.redirect, 'error');
+      throw new TypeError('redirect disallowed');
+    },
+    emitCanvas: async () => { painted += 1; },
+    persistTurn: async () => { persisted += 1; },
+  }), /redirect disallowed/);
+  assert.equal(painted, 0);
+  assert.equal(persisted, 0);
 });
 
 test('expected miss falls through without paint or history side effects', async () => {
@@ -144,7 +201,7 @@ test('cold retry sends an exact preferred operation and rejects a different resu
       idFactory: (() => { const values = ['dataset', 'item']; return () => values.shift(); })(),
       fetchImpl: async (_url, options) => {
         const request = JSON.parse(options.body);
-        requests.push(request);
+        requests.push({ request, options });
         return {
           ok: true,
           status: 200,
@@ -158,7 +215,9 @@ test('cold retry sends an exact preferred operation and rejects a different resu
       && error.code === 'preferred_operation_mismatch',
   );
   assert.equal(requests.length, 1);
-  assert.equal(requests[0].preferred_ref, 'detail:ka10004:buy_bid_prices');
+  assert.equal(requests[0].request.preferred_ref, 'detail:ka10004:buy_bid_prices');
+  assert.equal(requests[0].options.headers['X-Athena-Account'], 'server-a');
+  assert.equal(requests[0].options.redirect, 'error');
 });
 
 test('inline error state is painted once and never retried through the model path', async () => {
@@ -268,6 +327,8 @@ test('closed market-order grammar dispatches guarded draft without execution', a
       const request = JSON.parse(options.body);
       assert.equal(request.intent, 'order');
       assert.deepEqual(request.arguments, draft.arguments);
+      assert.equal(options.headers['X-Athena-Account'], 'server-a');
+      assert.equal(options.redirect, 'error');
       return {
         ok: true,
         status: 200,
@@ -314,6 +375,8 @@ test('explicit websocket acknowledgement paints the mapped family event card onc
     idFactory: (() => { const values = ['ws-dataset', 'ws-item']; return () => values.shift(); })(),
     fetchImpl: async (_url, options) => {
       const request = JSON.parse(options.body);
+      assert.equal(options.headers['X-Athena-Account'], 'server-a');
+      assert.equal(options.redirect, 'error');
       const correlation = {
         dataset_id: request.dataset_id,
         item_id: request.item_id,

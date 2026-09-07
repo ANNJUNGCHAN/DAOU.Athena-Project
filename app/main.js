@@ -3944,9 +3944,32 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   const selectorController = new AbortController();
   activeSelectorFastRun = selectorController;
   try {
+    const selectorAccount = backtestMode
+      ? null
+      : await accountBoundDataset.createAccountBoundInvoker({
+        getActiveAccountId: activeRestAccountId,
+        resolveBackendAlias: (options) => accounts.resolveBackendAlias(options),
+        resolveOptions: {
+          backendBase: BACKEND_HTTP_BASE,
+          fetchImpl: fetch,
+          authorization: backendAccountAuthorization(),
+        },
+        run: (options) => selectorFastPath.runSelectorFastPath(options),
+      });
+    if (orderDraft && selectorAccount && !selectorAccount.ok) {
+      return persistLocalLiveResult(query, {
+        ok: false,
+        source: 'selector-fast',
+        error: selectorAccount.error || '조회에 사용할 서버 계좌를 확인할 수 없다',
+        answerText: '주문 내용을 만들기 전에 설정의 계좌 화면에서 조회에 사용할 서버 계좌를 연결해 주세요.',
+        canvasTypes: [],
+        modelCalls: 0,
+        durationMs: Math.max(0, performance.now() - queryStartedAt),
+      }, turnConversationId);
+    }
     const selectorResult = backtestMode
       ? { handled: false, reason: '백테스트 모드 — 모델 경로로 넘긴다' }
-      : await selectorFastPath.runSelectorFastPath({
+      : selectorAccount.ok ? await selectorAccount.run({
       question: query,
       backendBase: BACKEND_HTTP_BASE,
       intent: orderDraft ? orderDraft.intent : 'auto',
@@ -3978,10 +4001,22 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
           { onSaveFailed: emitHistorySaveFailed, mdlog },
         );
       },
-    });
+    }) : { handled: false, reason: 'backend_account_unavailable' };
     if (selectorResult.handled) {
       mdlog(`Selector 단일 dispatch 적중 — ${selectorResult.durationMs}ms (모델 무호출)`);
       return selectorResult;
+    }
+    if (orderDraft) {
+      mdlog(`주문 초안 Selector 처리 실패 — 모델 폴백 차단: ${selectorResult.reason || 'unknown'}`);
+      return persistLocalLiveResult(query, {
+        ok: false,
+        source: 'selector-fast',
+        error: selectorResult.reason || 'selector_dispatch_failed',
+        answerText: '주문 내용을 안전하게 확인하지 못해 초안을 만들지 않았습니다.',
+        canvasTypes: [],
+        modelCalls: 0,
+        durationMs: Math.max(0, performance.now() - queryStartedAt),
+      }, turnConversationId);
     }
     if (simpleChartRoute.inferenceFallback) {
       mdlog('종목 인덱스 준비 전 Selector 직접 처리 불가 — Claude 폴백 차단');
@@ -4003,7 +4038,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
         }),
         // 두 분류기는 읽기 전용이다. 첫 유효안이 정해진 뒤에만 단 하나의
         // proposal을 순차 dispatch하여 조회 외 operation의 중복 효과를 막는다.
-        dispatchProposal: (proposal) => selectorFastPath.runSelectorFastPath({
+        dispatchProposal: (proposal) => selectorAccount.run({
           question: query,
           backendBase: BACKEND_HTTP_BASE,
           intent: proposal.intent,
@@ -4053,6 +4088,18 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
       mdlog(`종목 인덱스 준비 전 Selector 오류 — Claude 폴백 차단: ${String((error && error.message) || error)}`);
       return persistLocalLiveResult(query, {
         ...simpleChartRoute.inferenceFallback,
+        durationMs: Math.max(0, performance.now() - queryStartedAt),
+      }, turnConversationId);
+    }
+    if (orderDraft) {
+      mdlog(`주문 초안 Selector 오류 — 모델 폴백 차단: ${String((error && error.message) || error)}`);
+      return persistLocalLiveResult(query, {
+        ok: false,
+        source: 'selector-fast',
+        error: String((error && error.message) || error),
+        answerText: '주문 내용을 안전하게 확인하지 못해 초안을 만들지 않았습니다.',
+        canvasTypes: [],
+        modelCalls: 0,
         durationMs: Math.max(0, performance.now() - queryStartedAt),
       }, turnConversationId);
     }

@@ -161,6 +161,7 @@ function verifyAcknowledgedWebsocket(body, expected) {
 async function runSelectorFastPath({
   question,
   backendBase,
+  backendAccountAlias,
   intent = 'auto',
   arguments: operationArguments = {},
   candidateRefs = [],
@@ -180,6 +181,9 @@ async function runSelectorFastPath({
   if (typeof fetchImpl !== 'function') throw new TypeError('fetchImpl이 필요하다');
   const rawQuestion = String(question || '');
   if (!rawQuestion.trim()) throw new TypeError('question이 필요하다');
+  if (!/^[a-z0-9][a-z0-9_-]{0,31}$/.test(String(backendAccountAlias || ''))) {
+    return { handled: false, reason: 'missing_backend_account_alias' };
+  }
   const datasetId = `selector-${idFactory()}`;
   const itemId = `selector-${idFactory()}`;
   const correlation = { dataset_id: datasetId, item_id: itemId, ordinal: 1 };
@@ -188,7 +192,11 @@ async function runSelectorFastPath({
 
   const response = await fetchImpl(`${String(backendBase || '').replace(/\/$/, '')}/api/v1/selector/dispatch`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    redirect: 'error',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Athena-Account': backendAccountAlias,
+    },
     signal,
     body: JSON.stringify({
       question: rawQuestion,
