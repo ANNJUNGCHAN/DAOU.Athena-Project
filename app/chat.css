@@ -1953,6 +1953,9 @@ html.is-boot-expanding #winControls { opacity: 0; }
 .ticket-value { font-family: var(--font-mono); font-size: var(--text-sm, 13px); color: var(--color-k-text, #e6e8ee); }
 .ticket-qty { width: 120px; font-family: var(--font-mono); font-size: var(--text-sm, 13px); color: var(--color-k-text, #e6e8ee); background: rgba(16, 19, 26, 0.5); border: 1px solid rgba(230, 232, 238, 0.25); border-radius: 8px; padding: 6px 10px; }
 .ticket-unit { font-size: var(--text-2xs, 11px); color: var(--color-k-dim, #9aa2b1); }
+.ticket-qty-chips { display: flex; align-items: center; gap: 4px; margin-left: auto; }
+.ticket-qty-chips .ticket-seg { cursor: pointer; background: transparent; font-family: inherit; }
+.ticket-qty-chips .ticket-seg:disabled { cursor: default; opacity: 0.45; }
 .ticket-seg { font-size: var(--text-2xs, 11px); color: var(--color-k-dim, #9aa2b1); border: 1px solid rgba(230, 232, 238, 0.18); border-radius: 6px; padding: 3px 10px; }
 .ticket-seg-on { color: var(--color-k-text, #e6e8ee); background: rgba(230, 232, 238, 0.12); border-color: rgba(230, 232, 238, 0.32); }
 .ticket-readout { margin-left: auto; font-family: var(--font-mono); font-size: var(--text-2xs, 11px); color: var(--color-k-ghost, rgba(230, 232, 238, 0.45)); }
