@@ -5647,3 +5647,23 @@ test('보드 10: 배지 판정은 문구 하나로 갈린다', () => {
   assert.equal(errorStateBadge('데이터 수집에 실패했습니다'), '실패');
   assert.equal(errorStateBadge(''), '실패');
 });
+
+test('보드 10: 설계를 마친 뒤 꺼진 것을 만나면 설계로 돌아갈 길도 남는다', async () => {
+  const { container, canvas } = await mounted({
+    run: async () => { throw new Error(backtestCanvas.BACKTEST_DISABLED_TEXT); },
+  });
+  await fillForm(container);
+  await click(findByClass(container, 'backtest-run-button')[0]);
+  await flush();
+
+  assert.deepEqual(
+    findByClass(container, 'backtest-error-badge').map((n) => n.textContent),
+    ['비활성'],
+  );
+  assert.deepEqual(
+    findByClass(container, 'backtest-error-back').map((n) => n.textContent),
+    ['다시 시도', '설계로 돌아가기'],
+  );
+  await click(findByClass(container, 'backtest-error-back')[1]);
+  assert.equal(canvas.getContext().view, 'design');
+});
