@@ -30,7 +30,9 @@ const { runGrokQuery } = require('./lib/main/grok-runner');
 // 파서 자체는 손대지 않는다(sendLiveToolStep 근처 주석 참고).
 const streamJsonParser = require('./lib/main/stream-json-parser');
 const { ensureMcpConfig, createMcpRuntimeSnapshot, canonicalHash } = require('./lib/main/mcp-config');
-const { buildLivePrompt, buildLiveSystemPrompt, buildLiveTurnPrompt } = require('./lib/main/live-prompt');
+const {
+  buildLivePrompt, buildLiveSystemPrompt, buildLiveTurnPrompt, selectActiveAgentProject,
+} = require('./lib/main/live-prompt');
 // 백테스트 설계 턴 접두의 오늘 날짜(YYYYMMDD) — 렌더러와 같은 함수를 쓴다(UMD 각주라 main에서도 안전).
 const { todayYyyymmdd } = require('./lib/backtest-spec');
 // 상주 채팅 세션(2026-08-30 속도 작업) — 매 턴 claude -p 콜드 스폰의 고정비를
@@ -3026,17 +3028,12 @@ function historyConversationId() {
 
 // 에이전트 모드 코드 알람의 프로젝트(2026-09-03) — 감시 코드가 착지할 폴더 하나다.
 // id는 백엔드 프로젝트 레지스트리의 id다(athena:project-add가 등록 결과 id로 사이드바
-// 레코드를 만든다). 현재 대화의 프로젝트를 먼저 쓰고, 없으면 목록의 첫 프로젝트로
-// 내려앉는다(conversations.js normalizeState가 이미 같은 폴백을 쓴다). 폴더 경로가 없는
-// 기본 레코드는 레지스트리에 없는 것이라 프로젝트가 없는 것으로 본다 — 그때 접두가
-// 「프로젝트 없음」을 실어 모델이 지어내지 않고 사용자에게 묻는다.
+// 레코드를 만든다). 현재 대화의 프로젝트와 실제 폴더가 모두 확인될 때만 쓴다. 다른
+// 프로젝트로 내려앉으면 오래된 폴더에 감시 코드를 쓸 수 있어, 불일치는 프로젝트 없음으로
+// 닫고 접두가 프로젝트 만들기/열기를 안내하게 한다.
 function activeAgentProject() {
   try {
-    const listed = conversations.list();
-    const rows = (listed && Array.isArray(listed.projects) ? listed.projects : [])
-      .filter((row) => row && row.path);
-    const current = rows.find((row) => row.id === (listed && listed.currentProjectId)) || rows[0] || null;
-    return current ? { id: String(current.id), name: String(current.label || current.id) } : null;
+    return selectActiveAgentProject(conversations.list(), (folderPath) => fs.statSync(folderPath).isDirectory());
   } catch { return null; }
 }
 
@@ -3842,12 +3839,12 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
     activeSelectorFastRun.abort(new Error('새 질의가 이전 Selector fast path를 대체했다'));
     activeSelectorFastRun = null;
   }
-  // 모드 전용 채팅(백테스트·그래프)은 모델 앞의 빠른 경로 4종(차트 후속·단순 차트·
+  // 모드 전용 채팅(백테스트·그래프·에이전트)은 모델 앞의 빠른 경로 4종(차트 후속·단순 차트·
   // REST 직결·Selector)을 전부 건너뛴다 — 넷 다 모델을 안 부르고 카드를 밀어, 모드 규율과
   // 턴 프리픽스(live-prompt.js)가 무력화된다. 그래프 모드는 이유가 하나 더 있다: 그 모드의
   // 모든 질문은 그래프 질문이라(사용자 확정) 시세 경로가 가로채면 접두가 실릴 기회조차 없다.
-  const backtestMode = submit.canvasMode === 'backtest' || submit.canvasMode === 'graph';
-  const chartFollowup = backtestMode ? null : chartFollowupTracker.answer(query);
+  const modePromptRequired = ['backtest', 'graph', 'agent'].includes(submit.canvasMode);
+  const chartFollowup = modePromptRequired ? null : chartFollowupTracker.answer(query);
   if (chartFollowup) {
     historySink.saveChatMessage(
       { conversationId: turnConversationId, text: chartFollowup.answerText, role: 'assistant' },
@@ -3866,7 +3863,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   }
   chartFollowupTracker.invalidateForQuery(query);
 
-  const simpleChartRoute = backtestMode ? { handled: false } : await simpleChartFastPath.runSimpleChartFastPath({
+  const simpleChartRoute = modePromptRequired ? { handled: false } : await simpleChartFastPath.runSimpleChartFastPath({
     query,
     index: stockEntityIndex,
     ensureReady: (timeoutMs) => stockEntityIndexReadiness.ensureReady(timeoutMs),
@@ -3896,7 +3893,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   }
   // 정형 질의 모델 우회 확장(2026-08-26 속도 레버) — 순서는 의미 없다(각자
   // 닫힌 문법이라 서로 안 겹친다, rest-dataset-runner.js 테스트로 고정).
-  const directDataset = backtestMode ? null : restDatasetRunner.buildCompoundScreenDataset(query, stockEntityIndex, {
+  const directDataset = modePromptRequired ? null : restDatasetRunner.buildCompoundScreenDataset(query, stockEntityIndex, {
     idFactory: () => `rest-${crypto.randomUUID()}`,
   }) || restDatasetRunner.buildQuoteDataset(query, stockEntityIndex, {
     idFactory: () => `rest-${crypto.randomUUID()}`,
@@ -3931,8 +3928,8 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   const selectorController = new AbortController();
   activeSelectorFastRun = selectorController;
   try {
-    const selectorResult = backtestMode
-      ? { handled: false, reason: '백테스트 모드 — 모델 경로로 넘긴다' }
+    const selectorResult = modePromptRequired
+      ? { handled: false, reason: '모드 전용 채팅 — 모델 경로로 넘긴다' }
       : await selectorFastPath.runSelectorFastPath({
       question: query,
       backendBase: BACKEND_HTTP_BASE,
@@ -4052,10 +4049,10 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
 
   // 빠른 경로 — 캐시된 판정이 있으면 claude -p를 스폰하지 않는다. 카드는
   // 백엔드가 사이드 채널로 밀고(캔버스 먼저), 답변은 결정론 템플릿이다.
-  // 백테스트 설계 모드는 리플레이를 건너뛴다 — 리플레이는 모델을 안 부르고 카드를 밀며
+  // 모드 전용 채팅은 리플레이를 건너뛴다 — 리플레이는 모델을 안 부르고 카드를 밀며
   // 정형 답을 돌려주므로, "카드를 올리지 않는다"는 모드 규율과 설계 대화가 함께 깨진다
   // (캐시 키는 원문 query 그대로 둔다).
-  const cachedJudgment = backtestMode ? null : liveQueryCache.get(query);
+  const cachedJudgment = modePromptRequired ? null : liveQueryCache.get(query);
   if (cachedJudgment) {
     const replay = await fastPath.runCachedReplay({
       judgment: cachedJudgment,
