@@ -3,6 +3,7 @@
 const { spawn, execFileSync } = require('node:child_process');
 const { createHash } = require('node:crypto');
 const fs = require('node:fs');
+const os = require('node:os');
 const path = require('node:path');
 const { VERIFY_SUITE, PAPER_SUITE } = require('../lib/live-full-catalog');
 const { terminateTree } = require('../lib/main/proc-utils');
@@ -78,9 +79,14 @@ function runOne(item, deps = {}) {
   const terminateFn = deps.terminateTree || terminateTree;
   const started = Date.now();
   const logPaths = deps.logPaths || {};
+  // 공유 app/captures/는 앞 실행 PNG가 이번 실패를 덮는다(CODE-039). captureDir를
+  // 안 주면 임시 폴더를 만들고, 자식은 그곳만 쓴다.
+  const captureDir = Object.prototype.hasOwnProperty.call(deps, 'captureDir')
+    ? deps.captureDir
+    : fs.mkdtempSync(path.join(os.tmpdir(), 'athena-runone-captures-'));
   const capturesRoot = Object.prototype.hasOwnProperty.call(deps, 'capturesRoot')
     ? deps.capturesRoot
-    : path.join(appDir, 'captures');
+    : (captureDir || path.join(appDir, 'captures'));
   const capturesBefore = listCaptureEntries(capturesRoot);
   for (const file of Object.values(logPaths)) fs.writeFileSync(file, '');
   return new Promise((resolve) => {
@@ -103,7 +109,7 @@ function runOne(item, deps = {}) {
         durationMs: Math.max(0, finished - started),
         stdoutTail: stdout, stderrTail: stderr,
         stdoutLog: logPaths.stdout || null, stderrLog: logPaths.stderr || null,
-        captureDir: deps.captureDir || null,
+        captureDir: captureDir || null,
         captures: capturesWrittenSince(capturesBefore, listCaptureEntries(capturesRoot)),
       });
     };
@@ -119,9 +125,9 @@ function runOne(item, deps = {}) {
     let child;
     try {
       const spawnOpts = { cwd: appDir, shell: true, stdio: ['ignore', 'pipe', 'pipe'] };
-      if (deps.captureDir) {
-        fs.mkdirSync(deps.captureDir, { recursive: true });
-        spawnOpts.env = { ...process.env, ATHENA_CAPTURE_DIR: deps.captureDir };
+      if (captureDir) {
+        fs.mkdirSync(captureDir, { recursive: true });
+        spawnOpts.env = { ...process.env, ATHENA_CAPTURE_DIR: captureDir };
       }
       child = spawnFn('npm', ['run', item.script], spawnOpts);
     } catch (error) { finish(null, error); return; }
