@@ -963,9 +963,18 @@ test('KPI 칸은 M 이하에서만 3칸/2칸/1칸 흐름으로 바뀐다', () =>
   const xsBody = new Map(stepBodies).get(479);
   assert.match(xsBody, /\[data-bs-split-row="true"\]\s*\{\s*flex-wrap: wrap;\s*\}/);
   assert.match(xsBody, /\[data-bs-split-row="true"\] > \*\s*\{\s*min-width: 0;\s*flex-wrap: wrap;\s*\}/);
+  // 스트립이 세로로 쌓은 줄만 예외로 M부터 접는다(`.bs-header`와 같은 축). XS까지
+  // 미루면 S 구간에서 칩 묶음이 자기 스크롤 경계에서 잘리고 그 바로 옆에 형제 문구가
+  // 간격 없이 붙어 겹쳐 읽힌다 — 실측 캡처 board-2XTO-0-640x540에서 칩이 「예상차」로
+  // 잘린 자리 위에 「● 실시간 갱신」이 얹혔다. primary 쪽 판단은 그대로 XS다.
+  const mBody = new Map(stepBodies).get(959);
+  assert.match(mBody, /\.bs-strip > \[data-bs-split-row="true"\]\s*\{[^}]*flex-wrap: wrap;/);
   for (const [width, body] of stepBodies) {
     if (width === 479) continue;
-    assert.doesNotMatch(body, /bs-split-row/, `${width}px 단계에서 줄을 미리 접으면 안 된다`);
+    const scoped = body.replace(/\.bs-strip [^{]*\[data-bs-split-row[^{]*\{[^}]*\}/g, '')
+      .replace(/\.bs-strip > \[data-bs-split-row[^{]*\{[^}]*\}/g, '');
+    assert.doesNotMatch(scoped, /bs-split-row/,
+      `${width}px 단계에서 스트립 밖의 줄을 미리 접으면 안 된다`);
   }
 });
 
