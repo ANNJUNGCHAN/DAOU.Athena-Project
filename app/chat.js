@@ -123,6 +123,15 @@ function refreshResultDockVisibility() {
   $resultDock.hidden = !resultDockHasResults || resultDockDismissed;
 }
 const $input = document.getElementById('input');
+const backtestEmptyPrompts = window.AthenaLib && window.AthenaLib.BacktestEmptyPrompts;
+if (backtestEmptyPrompts) {
+  backtestEmptyPrompts.mountBacktestEmptyPrompts(
+    document.getElementById('backtestEmptyPrompts'),
+    (text) => {
+      document.dispatchEvent(new CustomEvent('athena:chat-insert', { detail: { text } }));
+    },
+  );
+}
 
 // 입력창 높이를 내용에 맞춘다(2026-09-02 사용자 지적 "글 길게 쓰면 여러 줄이 되어야").
 // height를 먼저 비워야 scrollHeight가 "지금 높이"가 아니라 "필요한 높이"를 답한다 —

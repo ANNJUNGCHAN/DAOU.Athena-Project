@@ -335,6 +335,9 @@
           </div>
         </div>
         <div class="history" id="history" role="log" aria-label="현재 대화" tabindex="0"></div>
+        <!-- Paper 40MW–40N3 — 백테스트 빈 채팅의 예시 질문. #history 안에 넣으면
+             :empty 안내가 죽는다. 보임은 chat.css가 모드·기법·빈 이력을 같이 본다. -->
+        <div id="backtestEmptyPrompts" class="backtest-empty-prompts"></div>
 
         <!-- 커맨드 카드(보드 45 v5, 2026-08-27) — 스트립 필 줄은 전면 제거됐다.
              입력부는 첨부 칩(있을 때만) + 입력행(키우미·입력줄·잠금 힌트)뿐이다.
@@ -490,6 +493,7 @@
 <script src="lib/rest-canvas-paint.js"></script>
 <script src="lib/canvas-layout.js"></script>
 <script src="lib/empty-canvas.js"></script>
+<script src="lib/backtest-empty-prompts.js"></script>
 <script src="lib/column-fold.js"></script>
 <script src="lib/facts-card.js"></script>
 <!-- 카드 v3(.omc/state/card-v3-plan.md §2.3/§3 Wave 0-FE) — 프리미티브·레지스트리는
