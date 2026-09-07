@@ -422,10 +422,19 @@
         "bs_paired": 19,
         "bs_leaf": 1,
         "bs_kpi_cell": 0,
-        "state_control_marks": 14
+        "state_control_marks": 19
       },
       "state_controls": {
         "marks": [
+          {
+            "control": "KOSPI",
+            "kind": "expand",
+            "boards": [
+              "4A9H-1"
+            ],
+            "node_id": "2WHQ-0",
+            "how": "hand"
+          },
           {
             "control": "거래량 급증",
             "kind": "sort",
@@ -454,6 +463,24 @@
             "how": "exact"
           },
           {
+            "control": "더보기",
+            "kind": "expand",
+            "boards": [
+              "4B22-1"
+            ],
+            "node_id": "33Z1-0",
+            "how": "hand"
+          },
+          {
+            "control": "등락 전체",
+            "kind": "expand",
+            "boards": [
+              "4AGN-1"
+            ],
+            "node_id": "2WHS-0",
+            "how": "hand"
+          },
+          {
             "control": "등락률",
             "kind": "sort",
             "boards": [
@@ -461,6 +488,15 @@
             ],
             "node_id": "2WH9-0",
             "how": "exact"
+          },
+          {
+            "control": "시가총액 전체",
+            "kind": "expand",
+            "boards": [
+              "4ANS-1"
+            ],
+            "node_id": "2WHU-0",
+            "how": "hand"
           },
           {
             "control": "시간외 등락률",
@@ -497,6 +533,15 @@
             ],
             "node_id": "2WHB-0",
             "how": "exact"
+          },
+          {
+            "control": "유동성 정상",
+            "kind": "expand",
+            "boards": [
+              "4AUX-1"
+            ],
+            "node_id": "2WHW-0",
+            "how": "hand"
           },
           {
             "control": "잔량률 급증",
@@ -555,7 +600,7 @@
         ],
         "unresolved": []
       },
-      "html_sha256": "377758fff74f4eb0b40dc032f769b720e668bdfb92c587d845f2b2108c01a125"
+      "html_sha256": "db491891aff94f96eaf4a731e9c520f9c89d738807a4eeb9cdea6c57a6f94d76"
     },
     {
       "board_id": "15J9-2",
@@ -4931,10 +4976,195 @@
         "unresolved": []
       },
       "html_sha256": "87d07cdfa7dcbb578a8bf87ccabbc2d4b22a2250b9ed449010950d1cc96078db"
+    },
+    {
+      "board_id": "4A9H-1",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-S12 · 종목찾기 — 시장 고르기",
+      "state": {
+        "kind": "expand",
+        "parent_board": "13K0-2",
+        "control": "KOSPI",
+        "control_text": "KOSPI",
+        "control_node": null
+      },
+      "operation_refs": [],
+      "counts": {
+        "elements": 255,
+        "text_nodes": 150,
+        "slots": 150,
+        "anchored_slots": 0,
+        "mapped_slots": 66,
+        "labels": 77,
+        "values": 73,
+        "layer_직접": 0,
+        "layer_병기": 0,
+        "layer_펼침": 150,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 12,
+        "bs_paired": 12,
+        "bs_leaf": 4,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "3e4913c668dc464d36b495eb3fe134e1f7928d6c0327b2b6be4d5bd5bc3b0ac3"
+    },
+    {
+      "board_id": "4AGN-1",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+      "state": {
+        "kind": "expand",
+        "parent_board": "13K0-2",
+        "control": "등락 전체",
+        "control_text": "등락 전체",
+        "control_node": null
+      },
+      "operation_refs": [],
+      "counts": {
+        "elements": 255,
+        "text_nodes": 150,
+        "slots": 150,
+        "anchored_slots": 0,
+        "mapped_slots": 66,
+        "labels": 77,
+        "values": 73,
+        "layer_직접": 0,
+        "layer_병기": 0,
+        "layer_펼침": 150,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 12,
+        "bs_paired": 12,
+        "bs_leaf": 4,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "8c6089a42de184bc816b32ea6463687c5b8a22a208d2a5021f175abc287c9445"
+    },
+    {
+      "board_id": "4ANS-1",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-S14 · 종목찾기 — 시가총액 고르기",
+      "state": {
+        "kind": "expand",
+        "parent_board": "13K0-2",
+        "control": "시가총액 전체",
+        "control_text": "시가총액 전체",
+        "control_node": null
+      },
+      "operation_refs": [],
+      "counts": {
+        "elements": 255,
+        "text_nodes": 150,
+        "slots": 150,
+        "anchored_slots": 0,
+        "mapped_slots": 66,
+        "labels": 77,
+        "values": 73,
+        "layer_직접": 0,
+        "layer_병기": 0,
+        "layer_펼침": 150,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 12,
+        "bs_paired": 12,
+        "bs_leaf": 4,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "9487233b9908f4c05209117668d692f1ef96bc9f8617f71cd706acf2e94252d6"
+    },
+    {
+      "board_id": "4AUX-1",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-S15 · 종목찾기 — 유동성 고르기",
+      "state": {
+        "kind": "expand",
+        "parent_board": "13K0-2",
+        "control": "유동성 정상",
+        "control_text": "유동성 정상",
+        "control_node": null
+      },
+      "operation_refs": [],
+      "counts": {
+        "elements": 255,
+        "text_nodes": 150,
+        "slots": 150,
+        "anchored_slots": 0,
+        "mapped_slots": 66,
+        "labels": 77,
+        "values": 73,
+        "layer_직접": 0,
+        "layer_병기": 0,
+        "layer_펼침": 150,
+        "tables": 1,
+        "tree_text_truncated": 0,
+        "bs_col": 12,
+        "bs_paired": 12,
+        "bs_leaf": 4,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "20aad6fb7a639eb098eac17aefd197b0f867552332163b164c7c74cf548d06fd"
+    },
+    {
+      "board_id": "4B22-1",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-S16 · 종목찾기 — 전체 100개 펼침",
+      "state": {
+        "kind": "expand",
+        "parent_board": "13K0-2",
+        "control": "더보기",
+        "control_text": "더보기",
+        "control_node": null
+      },
+      "operation_refs": [],
+      "counts": {
+        "elements": 249,
+        "text_nodes": 144,
+        "slots": 144,
+        "anchored_slots": 0,
+        "mapped_slots": 73,
+        "labels": 60,
+        "values": 84,
+        "layer_직접": 0,
+        "layer_병기": 0,
+        "layer_펼침": 144,
+        "tables": 0,
+        "tree_text_truncated": 0,
+        "bs_col": 0,
+        "bs_paired": 0,
+        "bs_leaf": 0,
+        "bs_kpi_cell": 0,
+        "state_control_marks": 0
+      },
+      "state_controls": {
+        "marks": [],
+        "unresolved": []
+      },
+      "html_sha256": "2b6936a44563b3ca20db6869bd9e9cd54824abcc02a9d888e0e3da3c30339e4f"
     }
   ],
   "state_controls": {
-    "resolved": 83,
+    "resolved": 88,
     "unresolved_count": 0,
     "unresolved": []
   }

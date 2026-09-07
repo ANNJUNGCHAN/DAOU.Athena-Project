@@ -431,6 +431,15 @@
  * 인라인 원문(색·폰트)은 건드리지 않는다. */
 [data-state-board] { cursor: pointer; }
 
+/* 카드 액션(호가 열기·종목 상세 열기) — 상태 보드 칩과 같은 규약이다: canvas.js가
+ * Paper 문구와 맞는 잎에 data-card-action을 찍고, 여기서는 누를 수 있음만 보인다. */
+[data-card-action] { cursor: pointer; }
+
+[data-card-action][role="button"]:focus-visible {
+  outline: 2px solid var(--color-k-text);
+  outline-offset: 2px;
+}
+
 /* 카드 안에서 보드가 앉는 자리. 보드 본문이 길면 카드 안에서 세로 스크롤한다
  * (계획 §1 "카드 크기 = 뷰포트 크기").
  *
