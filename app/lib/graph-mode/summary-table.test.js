@@ -276,7 +276,9 @@ function setupController(options) {
       if (opts.fail) throw new Error('backend down');
       if (opts.notOk) return { ok: false, error: 'boom' };
       opts.onFetch && opts.onFetch(params);
-      const res = { ok: true, entries: opts.entries || [entry()] };
+      const all = opts.entries || [entry()];
+      const take = Number.isFinite(params && params.limit) ? all.slice(0, params.limit) : all;
+      const res = { ok: true, entries: take };
       if (opts.total !== undefined) res.total = opts.total;
       return res;
     },
@@ -333,20 +335,58 @@ test('보강 순이면 백엔드가 준 순서를 그대로 둔다(같은 값을
   assert.deepEqual(container.querySelectorAll('.summary-row-name').map((n) => n.textContent), ['A', 'B']);
 });
 
-test('응답에 total이 있으면 "전체 N개"가 붙고, 없으면 안 붙는다(§0 정책)', async () => {
+test('응답에 total이 있으면 "전체 N개 보기" 단추가 붙고, 없으면 안 붙는다(§0 정책)', async () => {
   const withTotal = setupController({ entries: [entry()], total: 312 });
   await withTotal.controller.load();
-  assert.equal(withTotal.container.querySelector('.summary-table-total').textContent, '전체 312개');
+  const totalEl = withTotal.container.querySelector('.summary-table-total');
+  assert.equal(totalEl.nodeName, 'button');
+  assert.equal(totalEl.textContent, '전체 312개 보기');
 
   const without = setupController({ entries: [entry()] });
   await without.controller.load();
   assert.equal(without.container.querySelector('.summary-table-total'), null);
 });
 
-test('total이 보이는 행 수와 같으면 "전체 N개"를 안 붙인다(같은 수를 두 번 말하지 않는다)', async () => {
-  const { controller, container } = setupController({ entries: [entry()], total: 1 });
+test('total이 상위 한도와 같거나 더 작으면 "전체 N개 보기"를 안 붙인다', async () => {
+  const smaller = setupController({ entries: [entry()], total: 1, limit: 5 });
+  await smaller.controller.load();
+  assert.equal(smaller.container.querySelector('.summary-table-total'), null);
+  const equal = setupController({
+    entries: [entry(), entry({ entity_id: 'e:b' }), entry({ entity_id: 'e:c' }),
+      entry({ entity_id: 'e:d' }), entry({ entity_id: 'e:e' })],
+    total: 5, limit: 5,
+  });
+  await equal.controller.load();
+  assert.equal(equal.container.querySelector('.summary-table-total'), null);
+});
+
+test('전체 N개 보기 단추는 limit을 풀고 다시 누르면 상위 N으로 접는다', async () => {
+  const seen = [];
+  const all = Array.from({ length: 8 }, (_, i) => entry({ entity_id: `e:${i}`, entity_name: `n${i}` }));
+  const { controller, container, selected } = setupController({
+    limit: 5,
+    entries: all,
+    total: 8,
+    onFetch: (params) => seen.push(params.limit),
+  });
   await controller.load();
-  assert.equal(container.querySelector('.summary-table-total'), null);
+  assert.deepEqual(seen, [5]);
+  assert.equal(describeRendered(container).rows, 5);
+  const open = container.querySelector('.summary-table-total');
+  assert.equal(open.textContent, '전체 8개 보기');
+  open.dispatchEvent({ type: 'click' });
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.deepEqual(seen, [5, 8]);
+  assert.equal(describeRendered(container).rows, 8, '펼치면 total과 같은 행 수가 온다');
+  const fold = container.querySelector('.summary-table-total');
+  assert.equal(fold.textContent, '상위 5개', '표본이 가득 차도 접기 단추가 남는다');
+  assert.equal(selected.length, 0, '전체 보기 클릭은 행 선택이 아니다');
+  fold.dispatchEvent({ type: 'click' });
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.deepEqual(seen, [5, 8, 5]);
+  assert.equal(describeRendered(container).rows, 5);
+  assert.equal(container.querySelector('.summary-table-total').textContent, '전체 8개 보기');
+  assert.equal(selected.length, 0);
 });
 
 test('행을 클릭하면 selectEntity가 실재 필드로만 채운 panelData로 불린다', async () => {

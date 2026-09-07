@@ -400,11 +400,16 @@ function renderSummaryTable(container, entries, options) {
   title.textContent = '성향 신호';
   head.appendChild(title);
   const subtitle = el('span', 'summary-table-subtitle');
-  subtitle.textContent = `상위 ${list.length}`;
+  const previewLimit = options && Number.isFinite(options.previewLimit) ? options.previewLimit : 5;
+  const expanded = !!(options && options.expanded);
+  subtitle.textContent = expanded ? `전체 ${list.length}개` : `상위 ${list.length}`;
   head.appendChild(subtitle);
-  if (total !== null && total > list.length) {
-    const totalEl = el('span', 'summary-table-total');
-    totalEl.textContent = `전체 ${total}개`;
+  // Paper 3S3-0 「전체 N개 보기」 — 상위 표본 밖을 여는 진입이다. 펼친 뒤에는
+  // 같은 자리 단추로 상위 N에 접는다(OBS-059). total이 표본보다 클 때만 그린다.
+  if (total !== null && total > previewLimit) {
+    const totalEl = el('button', 'summary-table-total');
+    totalEl.setAttribute('type', 'button');
+    totalEl.textContent = expanded ? `상위 ${previewLimit}개` : `전체 ${total}개 보기`;
     head.appendChild(totalEl);
   }
   wrap.appendChild(head);
@@ -449,6 +454,9 @@ function createSummaryTableController(deps) {
     getEmptyCounts,          // 선택 — () => {stats, hintCount}(0건 히어로의 실측 수치)
   } = deps;
 
+  const previewLimit = Number.isFinite(limit) ? limit : 5;
+  let expanded = false;
+  let lastTotal = null;
   let entries = [];
 
   // 표와 같은 fetch 결과로 히어로·배너도 채운다(둘 다 "얹는" 부가 정보라 이
@@ -527,13 +535,27 @@ function createSummaryTableController(deps) {
     }
   }
 
+  function wireTotalToggle() {
+    if (!container || typeof container.querySelector !== 'function') return;
+    const btn = container.querySelector('.summary-table-total');
+    if (!btn || typeof btn.addEventListener !== 'function') return;
+    btn.addEventListener('click', (event) => {
+      if (event && typeof event.stopPropagation === 'function') event.stopPropagation();
+      expanded = !expanded;
+      load();
+    });
+  }
+
   async function load() {
     // 헤더 필터(보드 01)의 기간·정렬. 안 주면 백엔드 기본 창을 그대로 쓴다 —
     // 다른 선택 주입과 같은 계약이다.
     const filterState = typeof getFilters === 'function' ? getFilters() : null;
     let res;
+    const fetchLimit = expanded && Number.isFinite(lastTotal) && lastTotal > previewLimit
+      ? lastTotal
+      : previewLimit;
     try {
-      res = await fetchProfileSummary({ limit, windowDays: filterState ? filterState.windowDays : undefined });
+      res = await fetchProfileSummary({ limit: fetchLimit, windowDays: filterState ? filterState.windowDays : undefined });
     } catch (err) {
       if (onError) onError(err);
       renderLoadFailed(container);
@@ -547,12 +569,16 @@ function createSummaryTableController(deps) {
       return null;
     }
     const received = Array.isArray(res.entries) ? res.entries : [];
+    if (Number.isFinite(res.total)) lastTotal = res.total;
     entries = filters && filterState ? filters.sortEntries(received, filterState.summarySort) : received;
     renderSummaryTable(container, entries, {
-      total: res.total,
+      total: lastTotal,
+      previewLimit,
+      expanded,
       emptyCounts: typeof getEmptyCounts === 'function' ? getEmptyCounts() : null,
     });
     wireRowClicks();
+    wireTotalToggle();
     await renderExtras(entries, res.confidence_counts, {
       total: res.total,
       clusterCount: typeof getClusterCount === 'function' ? getClusterCount() : undefined,
