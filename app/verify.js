@@ -1874,6 +1874,17 @@ app.whenReady().then(async () => {
     const twoPane = await responsiveProbe();
     await shot(shellWin, '03d-responsive-900-chat-tray.png');
 
+    shellWin.setBounds({
+      x: responsiveOrigin.x,
+      y: responsiveOrigin.y,
+      width: 1600,
+      height: 520,
+    });
+    mainMod.noteAppBounds(shellWin);
+    await responsiveSettle();
+    const shortWide = await responsiveProbe();
+    await shot(shellWin, '03d-responsive-1600x520-chat-tray.png');
+
     await setResponsiveWidth(responsiveOrigin, 500);
     const compact = await responsiveProbe();
     await shellWin.webContents.executeJavaScript(`document.getElementById('sidebarCompactToggle').click()`);
@@ -1884,6 +1895,7 @@ app.whenReady().then(async () => {
 
     report.responsiveShell = {
       twoPane,
+      shortWide,
       compact,
       compactOverlay,
       attachments: attachmentMatrix,
@@ -1907,6 +1919,16 @@ app.whenReady().then(async () => {
       && twoPane.conversationRole === 'log'
       && twoPane.conversationLabel === '현재 대화'
       && twoPane.conversationTabIndex === 0);
+    assertOk('responsiveShell: 1600x520 Snap keeps the composer under the canvas',
+      shortWide.shellDisplay === 'grid'
+      && near(shortWide.history.width, 268, 2)
+      && shortWide.chat.y >= shortWide.canvas.bottom - 1
+      && shortWide.canvas.height > 0
+      && shortWide.conversationDisplay === 'flex'
+      && shortWide.responsiveTurnVisible === true
+      && near(shortWide.inputStack.y, shortWide.conversation.bottom, 2)
+      && shortWide.inputStack.bottom <= shortWide.chat.bottom + 1
+      && shortWide.input.width > 0);
     assertOk('responsiveShell: 500px uses 44px rail and keeps the same mounted input',
       compact.shellDisplay === 'grid'
       && near(compact.history.width, 44, 2)
