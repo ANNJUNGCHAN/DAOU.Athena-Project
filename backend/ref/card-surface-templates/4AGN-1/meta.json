@@ -1,0 +1,14 @@
+{
+  "board_id": "4AGN-1",
+  "name": "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+  "card_id": "CC-06",
+  "width": 1440,
+  "height": 980,
+  "state": {
+    "kind": "expand",
+    "parent_board": "13K0-2",
+    "control": "등락 전체",
+    "control_text": "등락 전체"
+  },
+  "saved_at": "2026-09-08T00:00:00+09:00"
+}

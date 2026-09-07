@@ -81,7 +81,7 @@ worldY 7343). S2(당일 거래량)를 복제해 작업 영역만 갈았다: 왼�
    3~4종목을 한 보드에 채워야 하므로 백엔드 계약이 늘어난다. 담은 목록을 들고 있을 자리
    (클라이언트 바구니 상태)도 아직 없다.
 
-### 5-2. 조회 조작 (Paper 보드 5장 신설 완료, 구현 미착수)
+### 5-2. 조회 조작 (Paper 보드 5장 신설 + 추출·배선 완료)
 
 정렬 8종·「시간외 단일가」는 이미 상태 보드가 있어 눌린다(2X5N-0 실측). 안 눌린 것은
 **Paper에 그 상태의 보드가 없던** 필터·페이지 조작이고, 2026-09-08에 다섯 장을 신설했다
@@ -103,14 +103,46 @@ S16은 표가 7행으로 늘고 세션별 거래 블록이 빠지며 꼬리가 �
 
 `정렬`·`필터`·`세션`은 줄 이름(읽는 것)이고 조작이 아니다 — 보드를 만들지 않았다.
 
-**구현 절차(기계적):** 보드마다
-`backend/ref/card-surface-templates/<board_id>/`에 `paper.jsx`(get_jsx inline-styles) ·
-`paper.tree.txt`(get_tree_summary depth 10) · `regions.json` · `meta.json`을 놓고
-`python scripts/paper_board_extract.py <board> --check` → `build_board_registry.py`.
-`meta.json`의 `state`는 **`{kind: "tab", parent_board: "13K0-2", control: "<문구>"}`** 로 둔다 —
-13K0-2가 레일 주인이므로 그 링크가 `stateLinksFor`의 부모 병합을 타고 S2~S10 전부에
-그대로 내려간다(그 칩들이 자식 보드에도 그려져 있다). 그러면 런타임 코드는 손대지 않고
-`verify:card-buttons`의 state-control 판정만으로 다섯 문구가 초록이 된다.
+**추출·배선(2026-09-08 완료).** 실측으로 배운 것 다섯:
+
+1. **원문은 표면 노드에서 뽑는다.** 템플릿 `paper.jsx`/`paper.tree.txt`는 아트보드가 아니라
+   카드 표면(`Explorer Card Surface`)에서 나온 것이고 `regions.json`의 `root`가 그 노드다.
+   원장 `<board>.tree.txt`는 **아트보드**에서 뽑는다(정적 게이트 S4가 원장에서 표면
+   서브트리를 잘라 템플릿과 대조한다).
+2. **원문을 세션 컨텍스트로 옮겨 적지 마라.** Paper MCP를 로컬 HTTP(`127.0.0.1:29979/mcp`)로
+   직접 불러 파일로 떨궜다(메모 `paper-mcp-direct-http`). 57KB JSX를 손으로 옮기면 한 글자
+   틀려도 S4가 트리 드리프트로 잡는다.
+3. **`kind: "expand"`는 `state.control_text`를 함께 적어야 한다.** 추출기는 펼침 컨트롤을
+   ▸ 잎에서만 찾다가(`mark_state_controls`) 「후보 없음」으로 떨어진다. 문구를 손으로 못 박으면
+   그 칩 잎을 문으로 삼는다(`how: hand`).
+4. **저작 바인딩은 노드 id로 이어진다.** 복제 보드는 id가 새로 생기므로 도너(2X5N-0)의
+   `mapping_id`·`f`·`kor`·`format`·`kind`·`static`·`display_dup`을 (node_path, 문구)로 맞춰
+   옮겨 적었다. 늘린 표 행(06·07)은 같은 칸 자리의 저작을 그대로 받고 `display_dup`을 켠다 —
+   안 켜면 검사기가 「같은 f가 여러 칸」으로 센다. 병기 짝(`paired_with`)은 **같은 행 안**을
+   가리켜야 한다(문구로 옮기면 다른 행을 가리킨다).
+5. **드롭다운 줄의 오른쪽 문구는 `kind: "label"`이다.** 자동 판정이 value로 보면 바인딩 없는
+   값 슬롯이 되어 런타임에 「미제공」이 뜬다. 숫자를 지어내는 대신 설명 문구로 바꿨다
+   (「코스닥 전체」·「오른 종목만」·「관리·경고 종목 제외」).
+
+**함께 넓힌 것 — 칩 찾기의 자리.** 능력 내비(업종·관심·테마·시장·VI·조건검색)는 카드 머리에,
+「더보기」는 표 꼬리에 있다. 스트립만 뒤지던 `findStateControlNode`가 그 문들을 자식 보드에서
+전부 놓쳤다(실측 4A9H-1: 링크 19개 중 6개). 이제 좁은 자리 → 머리·꼬리 → 표면 전체로 세 단을
+훑고, 넓은 단에서는 **그 문구가 보드에 하나뿐일 때만** 매단다(「등락률」처럼 정렬 칩과 표 열
+이름이 같은 자리는 앞 단에서 이미 잡힌다). 별칭도 같은 순서로 넓힌다.
+
+**증거.** `verify:paper-cards-static` 101/101 · `verify:paper-cards-mount` 5/5(4폭) ·
+`paper-manifest-check` card_template=101 · `validate_board_slots` 경고 0 · app 단위 3,524건 ·
+`verify:card-buttons`로 13K0-2에서 다섯 문구가 각자 보드로 갈아탐(`KOSPI→4A9H-1` …), 새 보드
+4A9H-1에서 레일 17문구 반응, 「관심」은 직접 클릭으로 `4A9H-1 → 2U5L-1` 확인.
+
+**모집단 수가 96 → 101로 늘었다.** `TOTAL_BOARDS`(paper-manifest-check.mjs)와 그 수를 박아 둔
+단위 테스트 셋(`paper-cards-static.test.js`·`paper-manifest-check.test.js`)을 같이 고쳤다.
+상태 링크 대상도 83 → 88이다.
+
+**프로브 주의.** 이 계열 전수 실행은 부하에 민감하다 — 좀비 electron이 남아 있으면 보드마다
+`paint ack wall-clock timeout`이 난다. 실행 전 `taskkill /F /IM electron.exe`로 정리할 것.
+같은 이유로 `verify:card-buttons`가 「관심」·「테마」를 inert로 잴 때가 있으나(측정 흔들림),
+실앱에서는 `data-state-board`가 찍히고 클릭이 보드를 갈아탄다.
 
 ### 5-3. 주문 조작
 

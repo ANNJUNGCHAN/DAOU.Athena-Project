@@ -461,14 +461,33 @@ function stateLinksFromMarks(stateControls) {
 // 3)은 두 겹으로 막는다: 그 문구를 내는 잎이 이 보드에 **하나**여야 하고, 다른 링크가
 // 같은 문구를 노리지 않아야 한다. 엉뚱한 칩에 다른 보드를 매다는 것이 안 눌리는
 // 것보다 나쁘다.
+// 칩은 스트립에만 있지 않다. 능력 내비(업종·관심·테마·시장·VI·조건검색)는 카드 머리에
+// 있고, 「더보기」는 표 꼬리에 있다 — 스트립만 뒤지면 그 문들이 자식 보드에서 전부
+// 죽는다(실측 4A9H-1: 링크 19개 중 6개가 안 걸렸다). 그래서 좁은 자리부터 넓은 자리로
+// 세 단으로 훑는다. 넓은 단(표면 전체)은 **그 문구가 보드에 하나뿐일 때만** 쓴다 —
+// 「등락률」처럼 정렬 칩과 표 열 이름이 같은 글자를 쓰는 자리가 있다(그 경우는 앞 단에서
+// 스트립 칩이 이미 잡는다).
 const STATE_CONTROL_SCOPES = '.bs-strip, nav, [role="tablist"]';
+const STATE_CONTROL_WIDE_SCOPES = '.bs-header, .bs-footer';
 
-function stateControlScopeLeaves(surface) {
+function leavesIn(surface, selector) {
   const leaves = [];
-  for (const scope of surface.querySelectorAll(STATE_CONTROL_SCOPES)) {
+  for (const scope of surface.querySelectorAll(selector)) {
     for (const node of scope.querySelectorAll('*')) {
       if (node.childElementCount === 0) leaves.push(node);
     }
+  }
+  return leaves;
+}
+
+function stateControlScopeLeaves(surface) {
+  return leavesIn(surface, STATE_CONTROL_SCOPES);
+}
+
+function surfaceLeaves(surface) {
+  const leaves = [];
+  for (const node of surface.querySelectorAll('*')) {
+    if (node.childElementCount === 0) leaves.push(node);
   }
   return leaves;
 }
@@ -487,21 +506,31 @@ function findStateControlNode(surface, control, options = {}) {
   for (const node of surface.querySelectorAll('[data-state-control]')) {
     if (node.dataset.stateControl === wanted) return stateControlActivationOwner(node);
   }
-  const leaves = stateControlScopeLeaves(surface);
   const textOf = (node) => String(node.textContent || '').trim();
+  const leaves = stateControlScopeLeaves(surface);
   const exact = leaves.find((node) => textOf(node) === wanted);
   if (exact) return stateControlActivationOwner(exact);
+  // 머리·꼬리 → 표면 전체. 좁은 자리에서 못 찾았을 때만 넓히고, 넓은 자리에서는
+  // 문구가 유일할 때만 매단다.
+  for (const wide of [leavesIn(surface, STATE_CONTROL_WIDE_SCOPES), surfaceLeaves(surface)]) {
+    const matches = wide.filter((node) => textOf(node) === wanted);
+    if (matches.length === 1) return stateControlActivationOwner(matches[0]);
+  }
   const links = Array.isArray(options.links) ? options.links : [];
   for (const label of labelsOf(wanted, options)) {
-    const matches = leaves.filter((node) => textOf(node) === label);
-    if (matches.length !== 1) continue;
     // 같은 문구를 노리는 다른 링크가 있으면 어느 쪽인지 알 수 없다 — 건너뛴다.
     const rivals = links.filter((link) => {
       const rival = String((link && link.control) || '').trim();
       return rival && rival !== wanted && labelsOf(rival, options).includes(label);
     });
     if (rivals.length) continue;
-    return stateControlActivationOwner(matches[0]);
+    // 별칭도 같은 순서로 넓힌다 — 능력 내비(「관심」·「테마」)는 머리에 있어 스트립만
+    // 보면 못 찾는다. 단마다 그 문구가 하나뿐일 때만 매단다.
+    for (const tier of [leaves, leavesIn(surface, STATE_CONTROL_WIDE_SCOPES), surfaceLeaves(surface)]) {
+      const matches = tier.filter((node) => textOf(node) === label);
+      if (matches.length === 1) return stateControlActivationOwner(matches[0]);
+      if (matches.length > 1) break;
+    }
   }
   return null;
 }
