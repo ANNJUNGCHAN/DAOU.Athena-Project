@@ -150,8 +150,14 @@ async function runSuite(selected, deps = {}) {
     sharedArtifacts: { verified: false, reason: 'Shared reports/captures are not bound to this run ID.' },
   };
   const persist = () => {
-    fs.writeFileSync(`${report.reportPath}.tmp`, JSON.stringify(report, null, 2) + '\n');
-    fs.renameSync(`${report.reportPath}.tmp`, report.reportPath);
+    const tmp = `${report.reportPath}.tmp`;
+    try {
+      fs.writeFileSync(tmp, JSON.stringify(report, null, 2) + '\n');
+      fs.renameSync(tmp, report.reportPath);
+    } catch (error) {
+      try { fs.unlinkSync(tmp); } catch { /* tmp 잔류를 성공 영수증으로 읽지 않는다 */ }
+      throw error;
+    }
   };
   persist();
   for (const [index, item] of selected.entries()) {

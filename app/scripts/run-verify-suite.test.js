@@ -234,6 +234,10 @@ for (const outcome of ['failure', 'timeout', 'throw', 'error']) {
     if (outcome === 'throw' || outcome === 'error') assert.match(failed.error, /fixture/);
     assert.equal(fs.existsSync(failed.stdoutLog), true);
     assert.equal(fs.existsSync(failed.stderrLog), true);
+    if (outcome === 'failure' || outcome === 'timeout') {
+      assert.match(fs.readFileSync(failed.stdoutLog, 'utf8'), /실패 전 출력/);
+      assert.match(fs.readFileSync(failed.stderrLog, 'utf8'), /진단/);
+    }
     assert.deepEqual(JSON.parse(fs.readFileSync(result.reportPath, 'utf8')), result);
   });
 }
@@ -267,6 +271,20 @@ test('실행 증거: 현재 Git commit과 dirty 여부 및 작업 사본 내용 
   assert.equal(typeof source.dirty, 'boolean');
   assert.match(source.worktreeSha256, /^[0-9a-f]{64}$/);
   assert.equal(source.error, undefined);
+});
+
+test('실행 증거: ignored 경로의 파일은 작업 사본 해시에 넣지 않는다', () => {
+  const before = readSourceIdentity();
+  const ignored = path.join(__dirname, '..', 'captures', `hash-probe-${process.pid}.txt`);
+  fs.mkdirSync(path.dirname(ignored), { recursive: true });
+  fs.writeFileSync(ignored, `not-source-${Date.now()}`);
+  try {
+    const after = readSourceIdentity();
+    assert.equal(after.worktreeSha256, before.worktreeSha256);
+    assert.equal(after.commit, before.commit);
+  } finally {
+    fs.unlinkSync(ignored);
+  }
 });
 
 test('실행 증거: 시작과 종료의 소스가 다르면 동일 기준이라고 표시하지 않는다', async (t) => {
