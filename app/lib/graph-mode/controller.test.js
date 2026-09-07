@@ -1360,7 +1360,7 @@ test('백테스트 빈 채팅은 Paper 40MQ-1이고 대화 모드 새 대화는 
   );
   assert.match(
     css,
-    /#chatModeHead\[data-mode="backtest"\]:not\(\[hidden\]\):not\(\[data-technique\]\)\s*~\s*\.history:empty::after\s*\{[^}]*content:\s*none/,
+    /#chatModeHead\[data-mode="backtest"\]:not\(\[hidden\]\):not\(\[data-technique\]\)\s*~\s*\.history:empty::after\s*\{[^}]*content:\s*'왼쪽 목록에서 기법을 누르면/,
   );
 });
 

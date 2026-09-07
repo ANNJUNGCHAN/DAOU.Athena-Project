@@ -1123,6 +1123,9 @@ function createBacktestCanvas(options) {
   let ideOwnsCode = false;
   // 새 기법을 대화로 만드는 중인가(US-011) — live-prompt가 다음 단계에서 읽을 신호다.
   let techniqueDraft = false;
+  // 보드 19 목록 필터. 빈 문자열은 Paper의 「전체」다 — 값이 없으면 지어내지 않는다.
+  let techniqueCategoryFilter = '';
+  let techniqueStatusFilter = '';
   // 처음 있던 기법(프리셋)을 폴더로 연 상태 — {presetId, projectId}. projectId가 null이면
   // 폴더를 못 만들어 화면 버퍼로 연 것이다. 셋(초안·내 기법·프리셋) 중 하나가 서 있으면
   // 기법 하나의 화면(workspaceActive)이다.
@@ -3384,6 +3387,78 @@ function createBacktestCanvas(options) {
     return TECHNIQUE_CATEGORY_KO[key] || key;
   }
 
+  // 목록에 올릴 수 있는 상태만. 배포·키우미는 strategy_version_id 짝이 목록 줄에
+  // 없으므로 여기서 지어내지 않는다. 내가 만든 기법은 목록에 오른 것 자체가 승인이다.
+  function techniqueStatusOf(kind, entry) {
+    if (kind === 'user' && entry && entry.exists !== false) return 'verified';
+    return '';
+  }
+
+  function techniqueStatusLabel(status) {
+    return status === 'verified' ? '검증됨' : '';
+  }
+
+  function renderTechniqueStatus(status) {
+    const label = techniqueStatusLabel(status);
+    return label ? el('div', `backtest-technique-status is-${status}`, label) : null;
+  }
+
+  function renderTechniqueEdit(onEdit) {
+    return button('backtest-technique-edit', '수정', (event) => {
+      if (event && event.stopPropagation) event.stopPropagation();
+      onEdit();
+    });
+  }
+
+  function techniqueCategoryOptions() {
+    const seen = [];
+    presets.forEach((preset) => {
+      const label = techniqueCategoryKo(preset.category);
+      if (label && seen.indexOf(label) === -1) seen.push(label);
+    });
+    return seen;
+  }
+
+  function cycleTechniqueFilter(axis) {
+    if (axis === 'category') {
+      const options = [''].concat(techniqueCategoryOptions());
+      const i = options.indexOf(techniqueCategoryFilter);
+      techniqueCategoryFilter = options[(i < 0 ? 0 : i + 1) % options.length];
+    } else {
+      const options = ['', 'verified'];
+      const i = options.indexOf(techniqueStatusFilter);
+      techniqueStatusFilter = options[(i < 0 ? 0 : i + 1) % options.length];
+    }
+    render();
+  }
+
+  function techniquePassesFilters(kind, entry) {
+    if (techniqueCategoryFilter) {
+      if (kind !== 'preset') return false;
+      if (techniqueCategoryKo(entry.category) !== techniqueCategoryFilter) return false;
+    }
+    if (techniqueStatusFilter === 'verified') {
+      return techniqueStatusOf(kind, entry) === 'verified';
+    }
+    return true;
+  }
+
+  function renderTechniqueFilters() {
+    const row = el('div', 'backtest-technique-filters');
+    const catLabel = techniqueCategoryFilter
+      ? `분류 · ${techniqueCategoryFilter}`
+      : '분류 전체';
+    const stLabel = techniqueStatusFilter === 'verified' ? '상태 · 검증됨' : '상태 전체';
+    const cat = button('backtest-technique-filter', catLabel, () => cycleTechniqueFilter('category'));
+    cat.setAttribute('aria-label', '분류 필터');
+    const st = button('backtest-technique-filter', stLabel, () => cycleTechniqueFilter('status'));
+    st.setAttribute('aria-label', '상태 필터');
+    row.appendChild(cat);
+    row.appendChild(el('span', 'backtest-technique-filter-sep', ' · '));
+    row.appendChild(st);
+    return row;
+  }
+
   // 기법 목록 — 처음 주어진 것과 내가 만든 것을 한 목록에 세운다(사용자 확정). 맨 위는
   // 언제나 [+ 새 기법 만들기]다: 목록을 훑고 "없다"고 판단한 사람이 다음에 누를 것이
   // 그것이기 때문이다. 클래스 이름(preset·user-strategy)은 그대로다 — 두 줄이 하는 일이
@@ -3393,32 +3468,43 @@ function createBacktestCanvas(options) {
     const total = presets.length + userStrategies.length;
     wrap.appendChild(renderNewTechniqueCard());
     const head = el('div', 'backtest-technique-head');
-    head.appendChild(el('div', 'backtest-card-title', `기법 — ${total}개`));
-    head.appendChild(el(
+    const titles = el('div', 'backtest-technique-head-copy');
+    titles.appendChild(el('div', 'backtest-card-title', `기법 — ${total}개`));
+    titles.appendChild(el(
       'div', 'backtest-technique-note',
       `처음 있던 ${presets.length}개와 내가 만든 ${userStrategies.length}개를 구분하지 않습니다`,
     ));
+    head.appendChild(titles);
+    head.appendChild(renderTechniqueFilters());
     wrap.appendChild(head);
     const list = el('div', 'backtest-technique-list');
     presets.forEach((preset) => {
+      if (!techniquePassesFilters('preset', preset)) return;
       const isSelected = spec && !userStrategyId && preset.id === spec.presetId;
+      const row = el('div', 'backtest-technique-row');
       const item = button(
         `backtest-preset-item backtest-technique-card${isSelected ? ' is-selected' : ''}`, null,
         () => selectPreset(preset.id),
       );
       item.setAttribute('aria-pressed', String(isSelected));
-      const row = el('div', 'backtest-technique-card-head');
-      row.appendChild(el('div', 'backtest-preset-name', preset.name));
+      const cardHead = el('div', 'backtest-technique-card-head');
+      cardHead.appendChild(el('div', 'backtest-preset-name', preset.name));
       const category = techniqueCategoryKo(preset.category);
-      if (category) row.appendChild(el('div', 'backtest-preset-category', category));
-      item.appendChild(row);
+      if (category) cardHead.appendChild(el('div', 'backtest-preset-category', category));
+      const status = renderTechniqueStatus(techniqueStatusOf('preset', preset));
+      if (status) cardHead.appendChild(status);
+      item.appendChild(cardHead);
       const desc = techniqueDescription(preset);
       if (desc) item.appendChild(el('div', 'backtest-technique-desc', desc));
-      list.appendChild(item);
+      row.appendChild(item);
+      row.appendChild(renderTechniqueEdit(() => selectPreset(preset.id)));
+      list.appendChild(row);
     });
     // 내가 만든 기법. 다른 점은 둘뿐이다: 파일이 사라졌으면 그렇다고 적고, 줄마다
-    // [등록 해제]가 붙는다(등록만 지우고 파일은 건드리지 않는다).
+    // [등록 해제]가 붙는다(등록만 지우고 파일은 건드리지 않는다). [수정]은 고르는
+    // 것과 같다 — 카드 밖이라 눌러도 고르기가 카드 클릭과 겹치지 않는다.
     userStrategies.forEach((entry) => {
+      if (!techniquePassesFilters('user', entry)) return;
       const row = el('div', 'backtest-user-strategy-row');
       const isSelected = userStrategyId === entry.id;
       const item = button(
@@ -3427,17 +3513,22 @@ function createBacktestCanvas(options) {
         () => { void selectUserStrategy(entry.id); },
       );
       item.setAttribute('aria-pressed', String(isSelected));
-      const head = el('div', 'backtest-technique-card-head');
-      head.appendChild(el('div', 'backtest-user-strategy-name', entry.name));
-      head.appendChild(el('div', 'backtest-user-strategy-path', entry.path));
-      item.appendChild(head);
+      const cardHead = el('div', 'backtest-technique-card-head');
+      cardHead.appendChild(el('div', 'backtest-user-strategy-name', entry.name));
+      cardHead.appendChild(el('div', 'backtest-user-strategy-path', entry.path));
+      const status = renderTechniqueStatus(techniqueStatusOf('user', entry));
+      if (status) cardHead.appendChild(status);
+      item.appendChild(cardHead);
       if (entry.exists === false) {
         item.appendChild(el('div', 'backtest-user-strategy-missing', '파일이 없습니다'));
       }
       row.appendChild(item);
-      row.appendChild(button('backtest-user-strategy-remove', '등록 해제', () => {
+      const actions = el('div', 'backtest-technique-actions');
+      actions.appendChild(renderTechniqueEdit(() => { void selectUserStrategy(entry.id); }));
+      actions.appendChild(button('backtest-user-strategy-remove', '등록 해제', () => {
         void unregisterUserStrategy(entry.id);
       }));
+      row.appendChild(actions);
       list.appendChild(row);
     });
     if (!total) {
