@@ -31,6 +31,33 @@ test('every route targets a distinct board the manifest calls a screen', () => {
   }
 });
 
+test('every screen board has a reach route — missing is fail, not skip', () => {
+  const routed = new Set(ROUTES.map((route) => route.board));
+  const missing = [...screenBoards.keys()].filter((id) => !routed.has(id)).sort();
+  assert.deepEqual(missing, [], `라우트 없는 화면: ${missing.join(', ')}`);
+});
+
+test('the four boards that were unrouted are classified off-screen with why', () => {
+  const boards = Object.fromEntries(manifest.boards.map((board) => [board.id, board]));
+  const expected = [
+    ['3KM-0', 'reference'],
+    ['3W9B-1', 'reference'],
+    ['2I7Z-2', 'retired'],
+    ['2GZM-2', 'reference'],
+  ];
+  for (const [id, role] of expected) {
+    assert.equal(boards[id].role, role, id);
+    assert.ok(String(boards[id].why || '').trim(), `${id}: 화면이 아니면 why가 있어야 한다`);
+  }
+});
+
+test('the screens ratchet universe matches the live manifest', () => {
+  const ratchet = require('./paper-screens-ratchet.json');
+  const screens = manifest.boards.filter((board) => board.role === 'screen').length;
+  const contracts = manifest.boards.filter((board) => board.role === 'contract').length;
+  assert.equal(ratchet.target_boards, screens + contracts);
+});
+
 test('every route renders in a window the app actually has', () => {
   // boot은 부팅 단계 보드가 사는 창이다(main.js createWindows의 bootWin) — 부팅이
   // 끝나면 셸로 넘어가며 사라지므로, 그 창을 쓰는 라우트는 boot-hold로 세워 둔다.
