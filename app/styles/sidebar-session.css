@@ -93,12 +93,14 @@
 }
 
 /* ---- 프로젝트 = 폴더 하나(36번 보드) — "폴더 추가"는 캡션 오른쪽의 작은 글자 버튼 ---- */
-.sidebar-section-label.is-project-caption {
+.sidebar-section-label.is-project-caption,
+.sidebar-section-label.is-recent-caption {
   display: flex;
   align-items: center;
   box-sizing: border-box;
 }
-.sidebar-project-add {
+.sidebar-project-add,
+.sidebar-recent-all {
   margin-left: auto;
   height: 18px;
   padding: 0 6px;
@@ -112,7 +114,9 @@
   cursor: pointer;
 }
 .sidebar-project-add:hover,
-.sidebar-project-add:focus-visible { color: #10131a; background: rgb(16 19 26 / 6%); }
+.sidebar-project-add:focus-visible,
+.sidebar-recent-all:hover,
+.sidebar-recent-all:focus-visible { color: #10131a; background: rgb(16 19 26 / 6%); }
 
 /* 고정된 프로젝트는 이름이 굵고 앞에 작은 핀. */
 .sidebar-project.is-pinned .sidebar-project-main { font-family: var(--font-strong); }
