@@ -159,7 +159,14 @@
 .sidebar-mode-picker-item:hover,
 .sidebar-mode-picker-item:focus-visible { background: rgb(16 19 26 / 6%); }
 .sidebar-mode-picker-label { font-family: var(--font-strong); flex-shrink: 0; }
-.sidebar-mode-picker-hint { color: var(--color-k-faint); font-size: var(--text-2xs); overflow: hidden; text-overflow: ellipsis; }
+.sidebar-mode-picker-hint { color: var(--color-k-faint); font-size: var(--text-2xs); overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.sidebar-mode-picker-count {
+  margin-left: auto;
+  flex-shrink: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  color: var(--color-k-faint);
+}
 
 /* ---- 폴더 삭제 확인(38번 보드) — 이름을 그대로 쳐야 지워진다 ---- */
 .sidebar-project-remove {

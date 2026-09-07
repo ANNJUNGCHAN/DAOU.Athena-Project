@@ -58,6 +58,24 @@ function modeChoices() {
   return MODE_CHOICES.map((choice) => ({ ...choice }));
 }
 
+function countConversationsByMode(conversations, projectId) {
+  const counts = {};
+  for (const choice of MODE_CHOICES) counts[choice.mode] = 0;
+  for (const row of conversations || []) {
+    if (!row || typeof row !== 'object') continue;
+    if (projectId && row.projectId !== projectId) continue;
+    const mode = row.mode === 'summary' ? 'chat' : row.mode;
+    if (Object.prototype.hasOwnProperty.call(counts, mode)) counts[mode] += 1;
+  }
+  return counts;
+}
+
+function modeCountLabel(count) {
+  const n = Number(count);
+  if (!Number.isFinite(n) || n <= 0) return '없음';
+  return `현재 ${Math.floor(n)}개`;
+}
+
 // 이름이 정확히 같을 때만 연다. 앞뒤 공백만 털고(입력창에서 흔한 실수) 그 외의
 // 관대함은 없다 — main.js athena:project-remove의 판정과 같은 규칙이라야
 // 화면에서 열린 버튼이 백엔드에서 name_mismatch로 튕기지 않는다.
@@ -68,7 +86,9 @@ function removeConfirmState(project, typed) {
   return { canRemove: false, hint: `"${label}"를 그대로 입력해야 지울 수 있습니다` };
 }
 
-const __exports = { MODE_CHOICES, menuItemsFor, modeChoices, removeConfirmState };
+const __exports = {
+  MODE_CHOICES, menuItemsFor, modeChoices, countConversationsByMode, modeCountLabel, removeConfirmState,
+};
 
 // UMD 각주(2026-08-18 렌더러 격리) — sidebar-mode-nav.js와 같은 패턴.
 if (typeof module !== 'undefined' && module.exports) {
