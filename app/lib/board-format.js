@@ -231,7 +231,7 @@ function formatSlot(format, raw) {
     return missingResult(spec, normalized.missing, explicitlyMissing);
   }
   if (typeof normalized.text === 'string' && normalized.text) {
-    return applyAffixes(spec, { text: normalized.text, tone: normalized.tone || null, missing: false });
+    return { text: normalized.text, tone: normalized.tone || null, missing: false };
   }
 
   const kind = kindOf(spec);
