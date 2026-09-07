@@ -258,7 +258,9 @@ function formatSlot(format, raw) {
   }
 
   const numeric = toNumber(normalized.value);
-  if (numeric === null) return applyAffixes(spec, { text: String(normalized.value), tone, missing: false });
+  // Paper 원문·이미 단위가 붙은 표기는 숫자가 아니다. 접두·접미를 얹으면
+  // 「900.4조」가 「900.4조원」이 된다.
+  if (numeric === null) return { text: String(normalized.value), tone, missing: false };
   // Kiwoom 가격 필드는 방향 부호를 값에 싣는다. 가격으로 저작된 슬롯만 magnitude를
   // 표시하고, 상승·하락 tone은 위에서 원본 부호로 이미 계산한 값을 유지한다.
   const displayNumeric = spec.absolute === true ? Math.abs(numeric) : numeric;

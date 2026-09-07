@@ -227,6 +227,9 @@ test('Paper 원문을 슬롯 값으로 넣어도 접두·접미를 한 번 더 �
   // 원값 숫자는 접미를 한 번만 붙인다 — 위 가드가 생값 경로를 닫으면 안 된다.
   assert.equal(formatSlot(boardSlot('2R3M-1', 's005').format, '-267750').text, '267,750원');
   assert.equal(formatSlot(boardSlot('137X-2', 's019').format, 2140000).text, '거래대금 2조 1,400억원');
+  // 「900.4조」는 이미 만 단위 표기다. suffix 「원」을 붙이면 시가총액이 「900.4조원」이 된다.
+  assert.equal(formatSlot(boardSlot('137X-2', 's054').format, '900.4조').text, '900.4조');
+  assert.equal(formatSlot(boardSlot('137X-2', 's067').format, '2.14조').text, '2.14조');
 });
 
 // ---------- 추출기 포맷 어휘(format.unit) 소비 ----------
