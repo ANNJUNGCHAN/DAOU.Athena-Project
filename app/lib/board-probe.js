@@ -691,14 +691,34 @@ const boardStepProbe = (instanceId) => `(async () => {
     overflow_x: Math.max(0, surface.scrollWidth - Math.round(surface.getBoundingClientRect().width)),
     host_client_width: surface.parentElement ? surface.parentElement.clientWidth : null,
     // 넘침이 남으면 어느 상자가 냈는지 함께 남긴다 — 숫자만으로는 못 고친다.
+    //
+    // 「밖으로 나갔다」는 **화면에 보이는** 사각형으로 재야 한다. 예전에는 raw rect를
+    // 써서 스크롤 컨테이너 오른쪽으로 넘어간(=잘려서 안 보이는) 상자가 전부 잡혔고,
+    // 목록 20칸이 그 위양성으로 가득 차 진짜 원인이 묻혔다 — 실측 2XTO-0 최소에서
+    // 20개 전부가 스크롤 표 안쪽이라 54px의 주인을 짚지 못했다. .bs-strip 하나만
+    // 예외로 빼던 특례도 여기서 없어진다: 스크롤 소유자는 잘림 계산이 알아서 지운다.
+    //
+    // 조상이 이미 지목됐으면 자식은 그 결과이므로 세지 않는다 — 가장 얕은(원인)
+    // 상자만 남겨야 목록이 읽힌다.
     overflow_nodes: (() => {
       const nodes = [];
       const surfaceRect = surface.getBoundingClientRect();
+      const bound = surfaceRect.left + surface.clientLeft + surface.clientWidth;
+      const visibleRight = (el) => {
+        let right = el.getBoundingClientRect().right;
+        for (let node = el.parentElement; node && node !== surface.parentElement; node = node.parentElement) {
+          if (getComputedStyle(node).overflowX === 'visible') continue;
+          const box = node.getBoundingClientRect();
+          right = Math.min(right, box.left + node.clientLeft + node.clientWidth);
+        }
+        return right;
+      };
+      const blamed = [];
       for (const el of surface.querySelectorAll('*')) {
         const over = el.scrollWidth - el.clientWidth;
-        const rect = el.getBoundingClientRect();
-        const insideScrollStrip = Boolean(el.closest('.bs-strip'));
-        const outsideRight = insideScrollStrip ? 0 : Math.max(0, Math.round(rect.right - surfaceRect.right));
+        const outsideRight = Math.max(0, Math.round(visibleRight(el) - bound));
+        if (outsideRight > 1 && blamed.some((ancestor) => ancestor.contains(el))) continue;
+        if (outsideRight > 1) blamed.push(el);
         if (over > 1 || outsideRight > 1) {
           const style = getComputedStyle(el);
           nodes.push({
@@ -713,8 +733,10 @@ const boardStepProbe = (instanceId) => `(async () => {
           });
         }
       }
-      return nodes.sort((a, b) => Math.max(b.over, b.outside_right)
-        - Math.max(a.over, a.outside_right)).slice(0, 20);
+      // 표면 밖으로 나간 상자가 먼저다 — 그게 실패의 원인이고, 자기 안에서만 넘치는
+      // 상자(over)는 스크롤 소유자로서 정상 동작 중일 수 있다.
+      return nodes.sort((a, b) => (b.outside_right - a.outside_right) || (b.over - a.over))
+        .slice(0, 20);
     })(),
     card_rect: (() => {
       const box = root.getBoundingClientRect();
