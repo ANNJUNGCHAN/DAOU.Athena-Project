@@ -19,6 +19,22 @@ const chatCss = read('chat.css');
 const shellCss = read('shell.css');
 const shellHtml = read('shell.html');
 
+test('계정 메뉴 사용량 값은 토큰 접두 없이 남고 머리·항목에 아이콘이 있다', () => {
+  const start = sidebar.indexOf('function menuItemIcon');
+  const end = sidebar.indexOf('function openSettingsBridge');
+  const menu = sidebar.slice(start, end);
+  assert.match(menu, /sidebar-menu-avatar/);
+  assert.match(menu, /sidebar-menu-item-ic/);
+  assert.match(menu, /viewBox', '0 0 14 14'/);
+  const clickStart = sidebar.indexOf("$accountRow.addEventListener('click'");
+  const clickEnd = sidebar.indexOf('document.addEventListener(\'mousedown\'', clickStart);
+  const click = sidebar.slice(clickStart, clickEnd);
+  assert.match(click, /formatTokenRemaining\(status\.expiresInSec\)/);
+  assert.equal(click.includes('`토큰 ${formatTokenRemaining'), false);
+  assert.match(shellCss, /\.sidebar-menu-avatar \{[^}]*width:\s*26px/s);
+  assert.match(shellCss, /\.sidebar-menu-item-ic \{[^}]*width:\s*14px/s);
+});
+
 test('에이전트 모드 행에 활성 감시 수가 있다 — 스트립 필 「감시 N」의 자리', () => {
   assert.match(shellHtml, /id="modeNavAgentWatch"/);
   assert.match(sidebar, /getElementById\('modeNavAgentWatch'\)/);

@@ -1505,20 +1505,43 @@
 
   function closeAccountMenu() { $accountMenu.hidden = true; }
 
+  function menuItemIcon(d) {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'sidebar-menu-item-ic');
+    svg.setAttribute('viewBox', '0 0 14 14');
+    svg.setAttribute('aria-hidden', 'true');
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', d);
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke', 'currentColor');
+    path.setAttribute('stroke-width', '1.2');
+    path.setAttribute('stroke-linecap', 'round');
+    path.setAttribute('stroke-linejoin', 'round');
+    svg.appendChild(path);
+    return svg;
+  }
+
   function buildAccountMenu(account, remainingText, accountCount) {
     while ($accountMenu.firstChild) $accountMenu.removeChild($accountMenu.firstChild);
 
     const head = el('div', 'sidebar-menu-head');
+    const avatar = el('div', 'sidebar-menu-avatar');
+    avatar.setAttribute('aria-hidden', 'true');
+    avatar.textContent = String(account.alias || '?').trim().slice(0, 1);
+    const copy = el('div', 'sidebar-menu-head-copy');
     const alias = el('div', 'sidebar-menu-alias');
     alias.textContent = account.alias;
     const sub = el('div', 'sidebar-menu-sub');
     sub.textContent = `키움 모의투자 · 주문 API ${account.orderApi ? '켜짐' : '꺼짐'}`;
-    head.appendChild(alias);
-    head.appendChild(sub);
+    copy.appendChild(alias);
+    copy.appendChild(sub);
+    head.appendChild(avatar);
+    head.appendChild(copy);
     $accountMenu.appendChild(head);
 
     const usage = el('button', 'sidebar-menu-item');
     usage.type = 'button';
+    usage.appendChild(menuItemIcon('M7 1.8a5.2 5.2 0 1 1 0 10.4A5.2 5.2 0 0 1 7 1.8ZM7 4.2v3.1l2.1 1.3'));
     const usageLabel = el('span', 'sidebar-menu-item-label');
     usageLabel.textContent = '토큰 사용량';
     const usageValue = el('span', 'sidebar-menu-item-value');
@@ -1530,6 +1553,7 @@
 
     const switcher = el('button', 'sidebar-menu-item');
     switcher.type = 'button';
+    switcher.appendChild(menuItemIcon('M7 7.1a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM3 12c.5-2 1.9-3.1 4-3.1s3.5 1.1 4 3.1'));
     const switchLabel = el('span', 'sidebar-menu-item-label');
     switchLabel.textContent = '계좌 전환';
     const switchValue = el('span', 'sidebar-menu-item-value');
@@ -1541,6 +1565,7 @@
 
     const settings = el('button', 'sidebar-menu-item');
     settings.type = 'button';
+    settings.appendChild(menuItemIcon('M7 4.6a2.4 2.4 0 1 1 0 4.8 2.4 2.4 0 0 1 0-4.8ZM7 1.6v1.4M7 11v1.4M1.6 7h1.4M11 7h1.4'));
     const settingsLabel = el('span', 'sidebar-menu-item-label');
     settingsLabel.textContent = '설정';
     const settingsValue = el('span', 'sidebar-menu-item-value');
@@ -1572,7 +1597,7 @@
     window.athena.invoke('athena:auth-token-status', { id: activeAccountCache.id })
       .then((status) => {
         const remaining = status && status.state === 'ready'
-          ? `토큰 ${formatTokenRemaining(status.expiresInSec)}`
+          ? formatTokenRemaining(status.expiresInSec)
           : '토큰 재발급 필요';
         buildAccountMenu(activeAccountCache, remaining, accountCountCache);
         $accountMenu.hidden = false;
