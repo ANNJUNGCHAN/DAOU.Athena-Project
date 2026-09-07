@@ -106,8 +106,7 @@ function checkCardModel(check, draft) {
     reason,
     fireDots,
     fireRows,
-    // 울린 날은 응답에 있는데 구간 끝 날짜가 없으면 달력을 만들지 않는다.
-    // 그 한계를 빈 자리로 두지 않고 한 줄로 말한다. 날짜를 추정하지는 않는다.
+    // 구간 끝 날짜가 없으면 달력을 추정하지 않는다.
     dateWindowNote: ok && fires.length && !fireDots.length
       ? '검사 구간 날짜를 붙이지 못함 — 울린 날만 표시' : '',
   };

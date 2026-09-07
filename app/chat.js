@@ -3532,7 +3532,6 @@ function renderWatchCheckCard(r, check) {
     card.appendChild(why);
   }
 
-  // 보드 10 — 실제 검사 날짜로 만든 점 띠와 울린 날. 실패 결과에는 둘 다 없다.
   if (model.fireDots.length) {
     const strip = document.createElement('div');
     strip.className = 'agent-fix-dots';
@@ -3557,14 +3556,14 @@ function renderWatchCheckCard(r, check) {
     card.appendChild(fires);
   }
 
-    if (model.dateWindowNote) {
+  if (model.dateWindowNote) {
     const note = document.createElement('div');
     note.className = 'agent-source';
     note.textContent = model.dateWindowNote;
     card.appendChild(note);
   }
 
-// A-10 — 오늘 봉은 아직 안 끝났다는 고지. 검사 카드에서 빠질 수 없다.
+  // A-10 — 오늘 봉은 아직 안 끝났다는 고지. 검사 카드에서 빠질 수 없다.
   const counted = document.createElement('div');
   counted.className = 'agent-source';
   counted.textContent = model.countedUntil;
