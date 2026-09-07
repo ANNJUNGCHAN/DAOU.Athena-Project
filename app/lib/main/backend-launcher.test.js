@@ -3,11 +3,16 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const { EventEmitter } = require('events');
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
+const { PassThrough } = require('stream');
 const {
   HEALTH_URL, HEALTH_HOST, HEALTH_PORT,
   buildUvicornArgs, buildBackendEnv, decideAction, hasSpawnedChild,
   ensureBackend, ensureBackendReady, shutdownBackend,
   awaitChildExit, restartAfterReset, _setBackendChildForTest,
+  summarizeStartupFailure, isLockContention,
 } = require('./backend-launcher');
 
 function createFakeClock(startMs = 0) {
@@ -483,4 +488,191 @@ test('readLocalBearerToken: .env 없음/키 없음이면 null — 루프백 게�
   fsm.writeFileSync(pathm.join(empty, '.env'), 'OTHER=1' + '\n');
   assert.equal(readLocalBearerToken(empty), null);
   fsm.rmSync(empty, { recursive: true, force: true });
+});
+
+// ---------- 기동 단계 실패의 이유 보존 + 잠금 충돌 시 재스폰 억제 (2026-09-07) ----------
+
+function spawnedChildWithStderr() {
+  const child = new EventEmitter();
+  child.pid = 4242;
+  child.stdout = new PassThrough();
+  child.stderr = new PassThrough();
+  return child;
+}
+
+async function waitForFileToContain(filePath, pattern) {
+  for (let attempt = 0; attempt < 50; attempt += 1) {
+    if (fs.existsSync(filePath) && pattern.test(fs.readFileSync(filePath, 'utf8'))) return true;
+    await new Promise((resolve) => setTimeout(resolve, 10));
+  }
+  return false;
+}
+
+const LOCK_CONTENTION_STDERR = [
+  'INFO:     Waiting for application startup.',
+  'ERROR:    Traceback (most recent call last):',
+  '  File "process_lock.py", line 41, in acquire',
+  'PermissionError: [Errno 13] Permission denied',
+  '',
+  'The above exception was the direct cause of the following exception:',
+  '',
+  'Traceback (most recent call last):',
+  '  File "lifespan.py", line 640, in lifespan',
+  "RuntimeError: another credential-owning Athena backend is already running for account 'daeju'",
+  '',
+  'ERROR:    Application startup failed. Exiting.',
+  '',
+].join('\n');
+
+test('summarizeStartupFailure: uvicorn 배너와 traceback 본문을 건너뛰고 실제 예외 줄을 고른다', () => {
+  const lines = LOCK_CONTENTION_STDERR.split('\n').filter((line) => line.trim());
+  assert.equal(
+    summarizeStartupFailure(lines),
+    "RuntimeError: another credential-owning Athena backend is already running for account 'daeju'",
+  );
+  assert.equal(isLockContention(lines), true);
+  assert.equal(isLockContention(['ValueError: bad config']), false);
+  assert.equal(summarizeStartupFailure([]), '');
+});
+
+test('ensureBackend: 잠금 충돌로 죽은 self-spawn 뒤에는 재스폰하지 않고 다른 백엔드의 준비를 기다린다', async () => {
+  _setBackendChildForTest(null);
+  const logPath = path.join(os.tmpdir(), `athena-launcher-test-${process.pid}-${Date.now()}-a.log`);
+  const child = spawnedChildWithStderr();
+  let now = 0;
+  let healthy = false;
+  let spawnCount = 0;
+  const logs = [];
+  const dependencies = {
+    checkHealthFn: async () => healthy,
+    venvExistsFn: () => true,
+    spawnFn: (_exe, _args, opts) => {
+      spawnCount += 1;
+      assert.deepEqual(opts.stdio, ['ignore', 'pipe', 'pipe'], 'stderr를 버리지 않고 받아야 한다');
+      return child;
+    },
+    waitUntilHealthyFn: async () => false,
+    nowFn: () => now,
+    backendLogPath: logPath,
+  };
+  try {
+    const first = await ensureBackend({ mdlog: (message) => logs.push(message), _dependencies: dependencies });
+    assert.equal(first.reason, 'readiness-pending');
+    child.stderr.write(LOCK_CONTENTION_STDERR);
+    await new Promise((resolve) => setImmediate(resolve));
+    now = 15_000;
+    child.emit('exit', 3, null);
+    assert.equal(hasSpawnedChild(), false);
+    assert.match(
+      logs[logs.length - 1],
+      /code=3 signal=null — RuntimeError: another credential-owning Athena backend is already running/,
+      'main-debug.log 한 줄에 종료 코드와 마지막 예외가 함께 남아야 한다',
+    );
+
+    const contended = await ensureBackend({ mdlog: (message) => logs.push(message), _dependencies: dependencies });
+    assert.equal(contended.ok, true);
+    assert.equal(contended.ready, false);
+    assert.equal(contended.reason, 'startup-contended');
+    assert.match(contended.error, /already running/);
+    assert.equal(spawnCount, 1, '다른 백엔드가 잠금을 쥔 동안 다시 스폰하면 같은 이유로 또 죽는다');
+
+    healthy = true;
+    const ready = await ensureBackend({ _dependencies: dependencies });
+    assert.equal(ready.reason, 'already-running');
+    assert.equal(ready.ready, true);
+    assert.equal(await waitForFileToContain(logPath, /already running for account/), true, 'stderr는 파일에도 남는다');
+  } finally {
+    fs.rmSync(logPath, { force: true });
+    _setBackendChildForTest(null);
+  }
+});
+
+test('ensureBackend: 기동 단계에서 죽은 self-spawn은 stderr의 마지막 예외를 실패 이유로 돌려주고, hard deadline 뒤에는 다시 스폰한다', async () => {
+  _setBackendChildForTest(null);
+  const logPath = path.join(os.tmpdir(), `athena-launcher-test-${process.pid}-${Date.now()}-b.log`);
+  const child = spawnedChildWithStderr();
+  let now = 0;
+  let spawnCount = 0;
+  const dependencies = {
+    checkHealthFn: async () => false,
+    venvExistsFn: () => true,
+    spawnFn: () => {
+      spawnCount += 1;
+      return spawnCount === 1 ? child : new EventEmitter();
+    },
+    waitUntilHealthyFn: async () => false,
+    nowFn: () => now,
+    backendLogPath: logPath,
+  };
+  try {
+    await ensureBackend({ _dependencies: dependencies });
+    child.stderr.write([
+      'ERROR:    Traceback (most recent call last):',
+      '  File "config.py", line 10, in <module>',
+      'pydantic_core._pydantic_core.ValidationError: 1 validation error for Settings',
+      'ERROR:    Application startup failed. Exiting.',
+      '',
+    ].join('\n'));
+    await new Promise((resolve) => setImmediate(resolve));
+    now = 9_000;
+    child.emit('exit', 3, null);
+
+    const failed = await ensureBackend({ _dependencies: dependencies });
+    assert.equal(failed.ok, false);
+    assert.equal(failed.reason, 'startup-failed');
+    assert.match(failed.error, /code=3/);
+    assert.match(failed.error, /ValidationError: 1 validation error for Settings/);
+    assert.equal(spawnCount, 1, '같은 실패를 12초마다 반복 스폰하지 않는다');
+
+    now = 70_000;
+    const respawned = await ensureBackend({ _dependencies: dependencies });
+    assert.equal(respawned.reason, 'readiness-pending');
+    assert.equal(spawnCount, 2, 'hard deadline이 지나면 실패 기록을 잊고 다시 스폰할 수 있다');
+  } finally {
+    fs.rmSync(logPath, { force: true });
+    _setBackendChildForTest(null);
+  }
+});
+
+test('ensureBackend: 정상 종료(code=0)와 stderr 없는 child는 실패 기록을 남기지 않는다', async () => {
+  _setBackendChildForTest(null);
+  const child = new EventEmitter();
+  let spawnCount = 0;
+  const dependencies = {
+    checkHealthFn: async () => false,
+    venvExistsFn: () => true,
+    spawnFn: () => {
+      spawnCount += 1;
+      return spawnCount === 1 ? child : new EventEmitter();
+    },
+    waitUntilHealthyFn: async () => false,
+    backendLogPath: path.join(os.tmpdir(), `athena-launcher-test-${process.pid}-${Date.now()}-c.log`),
+  };
+  try {
+    await ensureBackend({ _dependencies: dependencies });
+    child.emit('exit', 0, null);
+    const next = await ensureBackend({ _dependencies: dependencies });
+    assert.equal(next.reason, 'readiness-pending');
+    assert.equal(spawnCount, 2);
+  } finally {
+    fs.rmSync(dependencies.backendLogPath, { force: true });
+    _setBackendChildForTest(null);
+  }
+});
+
+test('ensureBackendReady: hard deadline 실패 메시지에 마지막 ensure 결과의 error를 싣는다', async () => {
+  let now = 0;
+  const result = await ensureBackendReady({
+    _dependencies: {
+      nowFn: () => now,
+      sleepFn: async (ms) => { now += ms; },
+      hardTimeoutMs: 1_000,
+      pollIntervalMs: 500,
+      ensureBackendFn: async () => ({
+        ok: true, ready: false, reason: 'startup-contended', error: 'another backend is already running',
+      }),
+    },
+  });
+  assert.equal(result.reason, 'readiness-hard-timeout');
+  assert.match(result.error, /backend readiness hard timeout — another backend is already running/);
 });

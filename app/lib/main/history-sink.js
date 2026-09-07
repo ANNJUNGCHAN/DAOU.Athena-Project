@@ -421,6 +421,7 @@ module.exports = {
   pushExposeToModel,
   isBrainReadyCached,
   canAttemptSave,
+  collectChatEnabled,
   configureChatHistoryStore,
   closeChatHistoryStore,
   saveChatMessage,
