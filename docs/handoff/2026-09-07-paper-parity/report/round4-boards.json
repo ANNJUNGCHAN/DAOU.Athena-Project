@@ -1,0 +1,42 @@
+{
+ "15R0-2": {
+  "status": "pass",
+  "detail": "verify:paper-cards-mount 4폭(원본·2분할·4분할·최소) 전부 통과. 이 보드는 화면 보드가 아니라 카드 표면 보드(backend/ref/card-surface-templates/15R0-2)라 계약이 app/lib/paper-screen-routes.js 의 ROUTES 가 아니라 카드 게이트(verify:paper-cards-static + verify:paper-cards-mount)다 — 그래서 라우트를 새로 저작하지 않았고 화면계 라우트 수(90)와 래칫(102)도 그대로다. 고친 자리는 보드가 아니라 폰트다: Paper 기하(15RX-2의 height fit-content · padding-top 18px · gap 16px · border-top 1px · 행 4줄 × line-height 20px = 147px)는 이미 Paper 트리 764×147과 1:1이라 한 줄도 건드리지 않았고, tokens.css 에 한글 폴백 metric override 별칭(ascent 100% · descent 25% · line-gap 0%)을 얹어 폴백 폰트가 Paper가 지정한 125% 줄 높이를 지키게 했다. 앱 보정 없음 — 컨테이너를 늘리거나 overflow를 죽이거나 게이트 판정을 무르게 한 곳은 없다. 텍스트 다중집합(S2)·Paper 트리(S4)는 변경 전후 동일하게 통과한다.",
+  "gap_files": [],
+  "gap_size": "",
+  "run": "wf_ac5124e7-843"
+ },
+ "2QCN-2": {
+  "status": "pass",
+  "detail": "라우트: mode graph → #graphViewTab → athena:brain-graph-updated → settle. 봉투는 GRAPH_CLUSTER_MAP + 새 GRAPH_CERTAINTY_SIGNALS(사실·불확실·추론이 섞인 세 줄 — 기존 GRAPH_PROFILE_SIGNALS에는 AMBIGUOUS 줄이 없어 채움 세 칸이 지도에 다 서지 않는다). 문구 4: '사실 · 체결·잔고' · '불확실' · '그 밖 · 모름' · '군집 이름은 대표 항목에서 추정'. 구조 2: .graph-legend-fill-item 3(보드 07의 채움 세 칸) · .graph-legend-caption 1(「한 번만 붙는다」). 앱 보정 있음 — 범례가 통째로 없던 자리에 보드 03·04의 여섯 줄 + 보드 07의 채움 세 칸을 세웠고, 라이브 지도의 노드 채움에 확정성 티어를 실었다(가짜 값 없음: 티어 없는 노드는 '모름'). 보드 03(4IA-0)에도 이제 앱이 그리는 '숨은 연관 — 군집을 넘는 연결'을 문구로 더했다(범례 개수는 안 적었다 — Paper는 여섯인데 앱은 보드 07이 더한 채움 세 칸까지 아홉이라 실제로 어긋나는 자리다). 라우트에 적지 않고 남긴 조각 셋: ① 3열 표(상황 · 화면이 하는 말 · 왜 그렇게 말하는가) — 원장 트리에 이 보드는 셸 창 프레임이 아예 없고 세 묶음이 전부 보드 옆 설명 판이라 제품 화면이 아니다(보드 06 2QA3-2가 같은 판정을 이미 적어 뒀다). ② 1단계 「확정 이름」 — 백엔드 ClusterMapResponse(brain.py:950-965)에 확정 이름 필드가 없다(cluster_representative_labels·cluster_ai_labels 둘뿐). 사다리는 이미 그 단계를 건너뛰게 서 있고, 그래서 범례 캡션이 늘 붙는다 — 그것이 실제 상태다. ③ 4단계 「이름 없는 군집」 — 군집 안 어느 멤버에도 이름이 없을 때만 서는데 이름 있는 노드로 그린 지도에서는 3단계(대표 항목)에서 사다리가 멈춘다. 코드는 있으나 이 라우트로는 도달할 수 없어 문구에 안 넣었다.",
+  "gap_files": [],
+  "gap_size": "",
+  "run": "wf_ac5124e7-843"
+ },
+ "4IA-0": {
+  "status": "pass",
+  "detail": "래칫 유지 — 범례가 생겨 Paper에 더 가까워졌다. 문구를 6 → 7로 늘려 '숨은 연관 — 군집을 넘는 연결'(이 보드에만 있는 범례 마지막 줄, 31H-0은 '숨은 연관'까지다)을 더했고, 「범례는 앱이 아예 안 그린다」던 머리 주석을 고쳤다. 구조는 손대지 않았다.",
+  "gap_files": [],
+  "gap_size": "",
+  "run": "wf_ac5124e7-843"
+ },
+ "31H-0": {
+  "status": "pass",
+  "detail": "래칫 유지 — 범례 추가로 깨지지 않았다. 문구가 이미 7(상한)이라 손대지 않았다.",
+  "gap_files": [],
+  "gap_size": "",
+  "run": "wf_ac5124e7-843"
+ },
+ "2GZM-2": {
+  "status": "gap",
+  "detail": "이번 회차(수정): 오류 화면의 상태 판정을 정직하게 좁혔다. 「비활성」 배지는 백엔드 503 원문에 백테스트 스위치 이름이 실릴 때만 서고(canvas.js backtestError), 데이터 세션 미연결·프로젝트 저장소 부재 같은 다른 503 은 「백테스트를 지금 쓸 수 없습니다 (원문)」로 원인을 남긴 채 「실패」 배지와 [설계로 돌아가기]로 간다. 비활성 갈래도 설계가 이미 서 있으면 [설계로 돌아가기]를 함께 세워 막다른 길을 없앴다(2HQI-2). 앞 회차에서 세운 것은 그대로다: Paper 배지 문면 「실패」(2HIC-2)·「비활성」(2HIL-2), 503 문면 「백테스트 기능이 꺼져 있습니다 — 설정에서 백테스트를 켜야 합니다」(2HIJ-2+2HIH-2 앞 절), 내부 환경변수 이름의 사용자 노출 제거. 「진행 유지」(2HIR-2)는 화면 상태가 아니라 resumePollingIfNeeded(backtest-canvas.js:1810)·41번 보드 세션 복원이 이미 하는 일이라 배지를 세우지 않았다.\n\n못 세운 것(a) — Paper 대 Paper 충돌이라 앱을 고치지 않았고 라우트도 적지 않았다: 2GZM-2 의 「프리셋」 열(2H0D-2) 머리 2H3F-2 「무엇으로 시작할까요 — 프리셋 10종」과 같은 순간을 그린 보드 19(40EV-1)가 40EY-1 「프리셋이라는 구분은 없습니다. 목록은 하나뿐이고…」로 그것을 이름 대어 부정하고, 목록 머리를 40HT-1 「기법 11개」·40HU-1 로 채운다. 매니페스트도 3X7M-1·3XE7-1 을 role=\"retired\"(「보드 19~22 현행」)로 적는다. 2GZM-2 의 머리를 앱에 세우면 40EV-1 라우트가 깨진다. 라우트를 못 적는 이유도 그대로다: 잴 수 있는 남은 순간은 배타적인 오류 상태 하나뿐이고, 원장 실재 문구 중 그 화면에 실제로 뜨는 것은 「비활성」·「백테스트 기능이 꺼져 있습니다」 둘뿐이라 phrases 하한 3개를 못 채운다(2HIH-2 는 원장에서 한 문장이라 앱이 쓰는 앞 절만으로는 포함 판정을 통과하지 못한다). 프리셋 열의 **내용**(10종 이름)은 이미 백엔드 presets.py 에 있고 40EV-1 라우트가 11장으로 잰다.",
+  "gap_files": [
+   "C:/Projects/DAOU.Athena-parity/backend/ref/paper-ledger/8-1/2GZM-2.json",
+   "C:/Projects/DAOU.Athena-parity/backend/ref/paper-ledger/8-1/40EV-1.json",
+   "C:/Projects/DAOU.Athena-parity/app/lib/backtest-canvas.js",
+   "C:/Projects/DAOU.Athena-parity/app/lib/paper-screen-routes.js"
+  ],
+  "gap_size": "S",
+  "run": "wf_ac5124e7-843"
+ }
+}

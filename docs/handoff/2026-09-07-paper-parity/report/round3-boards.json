@@ -1,0 +1,180 @@
+{
+ "9GI-0": {
+  "status": "pass",
+  "detail": "role screen→reference. 원장 트리 재확인: 루트 1680×352 아래 「Shell 창」 프레임 0건이고 제목 띠 1600×54 와 문서 칸 788×194 두 개가 전부 — 도달할 창이 없다. why 에 Paper 근거와 함께 폴백 구현 자리(app/styles/access.css)·측정 자리(app/lib/semantic-workspace-accessibility.test.js)를 적었다. contract 로 두지 않은 이유: 마침표 문장 3개가 뽑히긴 하지만 그 계약은 access.css 단위 테스트가 이미 재고 있어 문서 대조로 옮기면 같은 것을 약한 방법으로 두 번 재게 된다.",
+  "gap_files": [],
+  "gap_size": "",
+  "run": "wf_77115a53-25c",
+  "label": "",
+  "head": "fc836aaefbc01e684c286a44ecb24fead2515b8b"
+ },
+ "2USX-1": {
+  "status": "pass",
+  "detail": "role screen→retired. 원장 트리 마지막 세 줄이 결정적이다 — 보드 루트의 형제 프레임 Frame \"폐기 각주\" (43BL-1) 262×30 안에 Text \"폐기\" 와 Text \"플러그인 모드 02로 이동(2026-09-03)\" 이 있다. 원장 444장 중 「폐기 각주」를 가진 보드가 이 한 장뿐임을 grep 으로 확인했다. why 에 각주 원문과 기능이 이동한 자리(app/lib/plugin-canvas.js)를 적었다 — I4(retired 는 why 필수) 만족.",
+  "gap_files": [],
+  "gap_size": "",
+  "run": "wf_77115a53-25c",
+  "label": "",
+  "head": "fc836aaefbc01e684c286a44ecb24fead2515b8b"
+ },
+ "3VVU-1": {
+  "status": "pass",
+  "detail": "role screen→reference. Shell 창 프레임 0건이고 「40 Content」 → Stage → Flow Zone → Flow Row 아래 Step 1(전환 직전)·Step 2·Step 3 의 Mini Screen 을 나란히 놓은 흐름 도해다 — 한 순간에 도달 가능한 화면이 아니다. 그린 장면(사이드바 새 대화·모드 이름·조용한 복원)은 보드 25·35·41 이 이미 지고 있어 여기에 라우트를 적으면 남의 화면으로 초록을 만드는 것이 된다.",
+  "gap_files": [],
+  "gap_size": "",
+  "run": "wf_77115a53-25c",
+  "label": "",
+  "head": "fc836aaefbc01e684c286a44ecb24fead2515b8b"
+ },
+ "2TJ-0": {
+  "status": "pass",
+  "detail": "role screen→reference. 루트 첫 자식이 「설명」 프레임이고 그 아래 표정 1~3행에 얼굴 썸네일 10칸과 라벨(기본·웃음·윙크…)만 있는 사양 판이다(Shell 창 0건). 앱은 표정을 도형으로만 그리고 열 칸을 나열하는 화면이 없다. why 에 표정 계약을 이미 재는 자리(verify:kiumi, scripts/gates/check-orb.mjs)를 적었다.",
+  "gap_files": [],
+  "gap_size": "",
+  "run": "wf_77115a53-25c",
+  "label": "",
+  "head": "fc836aaefbc01e684c286a44ecb24fead2515b8b"
+ },
+ "5H3-0": {
+  "status": "pass",
+  "detail": "role screen→reference. 「설명」 + 「시선 9방향」 3x3 orb 격자 + 시간 루프 사양 판이다(1900×0, Shell 창 0건). 계약 문장이 25개 뽑히지만 전부 오브 동작 규범이고 그 계약은 check-orb.mjs(페이드 금지)와 access.css 의 reduced-motion 이 이미 실행 가능한 오라클로 잠그고 있어 contract 로 옮기면 중복 측정이 된다. why 에 그 자리를 적었다.",
+  "gap_files": [],
+  "gap_size": "",
+  "run": "wf_77115a53-25c",
+  "label": "",
+  "head": "fc836aaefbc01e684c286a44ecb24fead2515b8b"
+ },
+ "5EU-0": {
+  "status": "pass",
+  "detail": "role screen→reference. 표시 모드 A(셸 숨김 · DISPLAY A)와 B(셸 표시 · DISPLAY B)를 좌우로 나란히 놓은 사양 판이다(1400×0, Shell 창 0건). 두 모드는 서로 배타적이라 한 화면에 함께 설 수 없고, 그 배타성이 이전 회차에 phrases 3개 하한을 못 채운 원인이다. why 에 verify:kiumi 가 A/B 표시 모드 불변을 잰다는 사실을 적었다.",
+  "gap_files": [],
+  "gap_size": "",
+  "run": "wf_77115a53-25c",
+  "label": "",
+  "head": "fc836aaefbc01e684c286a44ecb24fead2515b8b"
+ },
+ "3XV1-1": {
+  "status": "pass",
+  "detail": "role screen→contract, 게이트 통과. 계약 문장 8개(A 자유 코드 칸 · B 동사=카드=버전 · C 어제 걸로 돌려줘 · D 칸 오른쪽 사실과 원문 보기 · E 코드 탭 이름과 배너 · F 로딩 4요소 · G 폼·코드 경로 · H 배포 카드 지도)를 docs/architecture/paper-contracts.md 에 원문 그대로 옮기고 실측 구현 상태를 적었다. 정직하게 남긴 어긋남: 「자유 코드 칸」이라는 이름이 앱에 없다(app/lib/backtest-explain.js:150 은 블록을 남기지만 그 라벨을 안 쓴다), 대화로 v 를 고르는 동사가 없다(이력 탭에서 눌러야 한다 — app/lib/backtest-canvas.js:4409 openVersion), 코드 탭 배너가 state.codeFromMap 일 때만 선다(:3934), 로딩 4요소 중 ③ 남은 시간이 없고 ② 는 단계가 아니라 페이지 비율 막대다(:5300), runPath 'form'/'code' 두 갈래가 아직 살아 있다(:867·:1131), 배포 오늘 로그에 칸 번호가 안 붙는다(:5833).",
+  "gap_files": [],
+  "gap_size": "",
+  "run": "wf_77115a53-25c",
+  "label": "",
+  "head": "fc836aaefbc01e684c286a44ecb24fead2515b8b"
+ },
+ "9GJ-0": {
+  "status": "pass",
+  "detail": "role screen→contract, 게이트 통과. 계약 문장 10개를 원문 그대로 옮기고 구현 자리를 적었다 — gateBlocker(app/lib/order-ticket.js:48)·interpretExecuteStatus(:106)·_TRANSITIONS(:123)·syncExec(app/chat.js:4873)·종결 세 문구(app/chat.js:4929/4931/4933). 정직하게 남긴 어긋남: 428 을 interpretExecuteStatus 는 needs_confirm 으로 가르지만 화면은 done/in_doubt 이 아닌 것을 전부 failed 로 접어(app/chat.js:4917) 「확인 요청 · 실행 전」 상태도 「주문 게이트로 돌아간다」 경로도 없다; 백엔드 연결 차단 문구와 주문 API OFF 문구가 Paper 문장과 다르다(order-ticket.js:50·:52 — 사건과 보내는 자리는 같고 문장이 다르다). 이 어긋남은 문서에 자리와 함께 적었고 앱 문구는 이번에 고치지 않았다(주문 표면 문구 변경은 실주문 경로의 잠긴 계약과 맞물려 이 작업 범위 밖).",
+  "gap_files": [],
+  "gap_size": "",
+  "run": "wf_77115a53-25c",
+  "label": "",
+  "head": "fc836aaefbc01e684c286a44ecb24fead2515b8b"
+ },
+ "1WOB-1": {
+  "status": "pass",
+  "detail": "검토자 승인대로 유지. 정적 S2가 원장 다중집합을 카드 루트(regions.json root = 1WOJ-1) 서브트리로 좁혀 slots와 같은 범위에서 정확 상등으로 잰다 — 「검증 헤더」 프레임(1WOC-1) 아래 1WOE-1 「A05 목록 펼침 검증」·1WOF-1·1WOH-1 「펼침 상태」는 카드 루트 밖 아트보드 주석이라 카드 표면이 아니다. 이번 회차에서는 [minor] 지적만 고쳤다: 검사 'the card root narrowing changes exactly one board of the 96'이 좁히기를 켠 상태의 초록만 보던 것을, 96장 보드마다 narrowMultisetToCardRoot의 결과와 원장 원본 다중집합을 직접 deepEqual로 대조해 달라지는 보드 집합이 정확히 ['1WOB-1']임을 재도록 바꿨다. 덤으로 카드 루트가 원장 트리에 없어 좁히기가 null로 꺼지는 보드가 0장임도 같은 검사에서 못 박았다(그 자리에서 조용히 좁히기가 꺼지면 판정 범위가 말없이 넓어진다). copyTemplateWithDrift가 만든 임시 디렉터리도 검사 끝에서 지운다.",
+  "gap_files": [],
+  "gap_size": "",
+  "run": "wf_77115a53-25c",
+  "label": "",
+  "head": "9d9af9a6df9a5c841231214190c29ea55b524122"
+ },
+ "137X-2": {
+  "status": "gap",
+  "detail": "지난 회차에서 pass로 낸 것을 gap으로 내린다. 지적이 옳다: 32XM-0은 index.json operation_refs가 [\"base:ka10011\"](kiwoom-common-screen-manifest.json 신주인수권 전체시세)이고 그 op의 보드가 이것 하나뿐이라 base_board_for가 질의 때 세우는 살아 있는 보드다. 이것을 kind:default·parent:null로 내리자 board-templates.index.generated.js의 STATE_GRAPH에서 항목이 사라졌고, 실행 확인 결과 stateLinksFor('32XM-0')이 []가 되어 백엔드 봉투의 state_boards도 []가 되고 canvas.js wireStateControls가 32XM-0 표면의 상품 레일 7칩(현재시세·차트·기업정보·ETF·ELW·금현물·순위)을 하나도 못 감았다 — board-template-registry.js:176 주석이 경고해 둔 「부모 링크가 없으면 갈아탄 뒤 레일이 통째로 죽는다」가 그대로 일어났고, 그 손실을 잡는 게이트는 없다(정적 S3는 마크 target의 색인 존재만, 마운트는 그 보드 자신의 마크 수만 본다). 그래서 meta.state를 kind:tab·parent_board:137X-2·control:순위로 복원했다. 복원 뒤 실행 확인: stateLinksFor('32XM-0') 링크 7개(금현물·기업정보·순위→2VDA-0·순위→32XM-0·차트·투자자 12주체·현재시세), 137X-2 칩 2WFB-0의 data-state-board가 \"2VDA-0 32XM-0\". 대가로 137X-2는 4폭 전부 state_board_missing_in_dom(expected 7 / in_dom 6)으로 빨갛다. 이것을 지시가 준 대안대로 gap으로 남기는 근거: Paper 실측상 32XM-0으로 가는 문이 없다. 원장 444장 트리 전문에서 「신주인수권」은 32XM-0과 그 카드미니 486G-0·499T-0에만 나오고, 2VDA-0의 범위 레일(주식·ETF·ELW)에도 신주인수권 칩이 없으며, 32XM-0 자신은 범위 레일 자체를 안 그리고 상품 레일 「순위」만 ACTIVE다. 즉 Paper가 한 칩(137X-2 「순위」)에 두 보드를 매단 구조이고, 없는 칩을 지어 그리면 정적 S2 텍스트 다중집합이 곧바로 빨개진다. 이 gap은 Paper가 32XM-0으로 가는 문을 그려야 닫힌다. [남은 조각 — Paper 대비 divergence 기록] 2VIN-0·2VO0-0을 depth-2(부모 2VDA-0)로 내린 결과, stateLinksFor가 자기+부모 한 단만 합치므로 두 보드에서 Paper가 그린 상품 레일 4칩(현재시세·차트·기업정보·금현물)과 범위 레일 「주식」(2VDA-0으로 되돌아가기)이 눌리지 않는다. 다만 변경 전에는 137X-2 「순위」 잎 하나에 4개 링크가 매달려 두 보드가 아예 도달 불가였으므로 사용자 관측 기준으로는 순개선이고, 조상 사슬 전체를 걷는 변경은 depth-2 보드 60여 장의 동작을 한꺼번에 바꾸므로 이 작업에서 하지 않았다.",
+  "gap_files": [
+   "backend/ref/card-surface-templates/32XM-0/meta.json",
+   "backend/ref/card-surface-templates/2VDA-0/board.html",
+   "app/lib/board-template-registry.js"
+  ],
+  "gap_size": "M",
+  "run": "wf_77115a53-25c",
+  "label": "",
+  "head": "9d9af9a6df9a5c841231214190c29ea55b524122"
+ },
+ "3VS6-1": {
+  "status": "pass",
+  "detail": "라우트: conversations-list를 SIDEBAR_HISTORY로 못 박고 session-run-state로 목록을 다시 읽힌 뒤, athena:project-pick-folder를 PICKED_FOLDER(빈 폴더·아무 프로젝트도 안 쓰는 경로)로 고정하고 [＋ 폴더 추가] 한 번으로 대화상자를 연다 — 탐색기는 OS 대화상자라 프로브가 누를 수 없어 이 fixture가 유일한 결정론이다. root는 #projectCreate. phrases 7(프로젝트 추가 / 프로젝트는 폴더 하나를 점유합니다 / 작업 폴더 / 탐색기가 열립니다… / 폴더 이름에서 가져왔습니다 · 바꿀 수 있습니다 / 이 폴더에서 아테나가 하는 일 / 이 폴더로 만들기)는 전부 붙박이 사본만 골랐고 경로·이름은 값이라 뺐다. structure는 단계 셋(폴더·이름·권한) · 권한 문장 셋 · 기본 상태에 안내 없음(absent). 앱 보정: 화면이 통째로 없던 자리라 셸 마크업·CSS·IPC 두 갈래·백엔드 name 필드를 모두 새로 세웠다. 라우트에 못 적은 조각 둘 — Paper가 모달 옆에 함께 그린 「이미 점유된 폴더」·「빈 폴더가 아닐 때」는 구현했지만 한 번에 하나만 보이는 배타 상태라(project-create-dialog.js noticeFor: 점유가 빈 폴더보다 세다) 한 라우트로는 못 잰다. 대신 probe-session-restore.js가 실제 폴더 셋(빈 폴더 / 파일 있는 폴더 / proj-athena가 이미 쓰는 폴더)으로 세 상태를 전부 실측한다 — 점유 시 만들기 잠금·[그 프로젝트 열기]·조사 보정(‘아테나 리서치’가)까지 단언한다. 이번 구현으로도 못 세운 Paper 조각 하나: Stage 목업의 타이틀바 「ATHENA · 아테나」(창 제목에 현재 프로젝트 이름을 붙이는 것)는 이 대화상자 밖 창 크롬이고 앱의 #dragStrip은 「Athena」로 고정이다 — 이 보드만의 결정이 아니라 셸 전체 계약이라 여기서 바꾸지 않았고 라우트에도 적지 않았다. Interaction Rail(규칙 1~3 · 「지금 코드에 없는 것」)은 설계 주석이라 화면 대상이 아니다.",
+  "gap_files": [],
+  "gap_size": "",
+  "run": "wf_77115a53-25c",
+  "label": "",
+  "head": "d68faf8d1e547335dd734a6e6c29cd19acaf639a"
+ },
+ "3WBZ-1": {
+  "status": "pass",
+  "detail": "라우트는 이번에도 손대지 않았다 — conversations-list·conversations-set-active·session-load·session-replay-cards·backtest-presets·backtest-result 여섯을 fixture로 못 박고 이력 행 [data-conversation-id=\"fx-s2\"]를 실제로 눌러 도달한다(root #backtestCanvas). phrases 7개(백테스트·전략 폼·restored·일부만 복원했습니다·「결과 데이터셋 1장을 찾지 못했습니다. 폼·코드·로그는 그대로입니다.」·다시 시도·이대로 열기)와 structure 셋(.backtest-restore-mark=2 · .backtest-restore-notice=1 · .backtest-canvas-empty absent) 그대로 통과한다. 이번 회차의 앱 보정 넷: (1) 복원이 앞 세션의 실행·로그·결과를 물고 오지 않게 restoreWorkspace() 머리에서 비우고 폴링을 끊었다, (2) 세션 전환·새 대화에서 복원 표식·안내를 거두는 clear() 문을 워크스페이스 계약에 더했다, (3) 안 바뀐 봉투를 다시 보고하지 않아 실행 중 초당 디스크 쓰기를 없앴다, (4) 표식을 설계 화면에만 세워 결과·이력·배포 탭의 거짓 「복원 6/6」을 없앴다. 표식 2개는 fixture 의 tab='design'·designTab='form' 자리에서 그대로 서므로 structure 는 영향 없음(전수 --only 로 확인). 못 세운 조각 하나는 지난 회차와 같은 Paper WS Header(3WGN-1 세션 제목 · 3WGR-1 「백테스트」 · 3WGS-1 「3일 전 · 완료」)이고, 검토자도 그 유보에 동의했다. Chat Card 요약·시세 스트림 재접속 둘은 이 보드의 계약이 아니라 지난 회차대로 정당한 제외로 둔다.",
+  "gap_files": [
+   "app/lib/backtest-canvas.js",
+   "app/lib/sidebar.js"
+  ],
+  "gap_size": "S",
+  "run": "wf_77115a53-25c",
+  "label": "",
+  "head": "533c83d0276fa279f2224568691e898cfc9759cb"
+ },
+ "3XL4-1": {
+  "status": "pass",
+  "detail": "라우트 요지(그대로): presets + source-map-start/status 봉투를 얹고 mode backtest → athena:backtest-chat-action {kind:'source_url'} 한 번 → 600ms 대기. 봉투 SOURCE_MAP_AT_3 은 SourceMapJob.to_dict() 의 3/5 프레임 실물이다. phrases 일곱은 손대지 않았다(봉투가 주는 글자는 한 글자도 안 넣는다). structure 넷도 그대로 — 다만 `absent .backtest-map-open-code` 의 근거를 「code_lines 가 null 인 동안」에서 「만드는 중 화면에는 그 코드를 여는 자리가 없다」로 고쳤다(이번에 서랍을 그렇게 고정했다).\n\n앱 보정(이번 회차): ① 숨어 있는 동안 멈춘 폴링을 resumePollingIfNeeded 가 다시 잇는다 — 대화 모드에서 주소를 붙이는 주 경로가 빈 껍데기로 굳던 것. ② 잡이 done 프레임에 spec_yaml 을 싣고 화면이 그 스펙을 폼으로 옮겨 설계 화면(흐름 지도)으로 넘어간다 — 「다 그려지면 대화로 고칠 수 있습니다」의 다음 칸. ③ 만드는 중 서랍의 죽은 [코드 열기] 제거. ④ 새 주소는 앞 잡을 멈추고 뜬다. ⑤ MCP source_map 스키마에 note.\n\nPaper 가 그렸으나 이번에도 안 세운 조각(라우트에 아무 것도 적지 않았다):\n(1) 채팅 우측 진행 카드(3XUU 「지도를 그리는 중 · 3/5」·3XUW 「약 20초」·3XUX 안내). 진행은 캔버스에만 둔다 — 같은 진행을 두 표면에 두면 정본이 갈린다.\n(2) 거래량 규칙(「거래량이 20일 평균의 1.5배」). 지표 등록부에 거래량 이동평균이 없어 mapped=false 로 남는다.\n(3) 「유튜브 자막 14,200자 · 12분」의 12분 — sources.brief_from_url 이 길이를 안 준다.\n(4) 서랍의 「· breakout_vol.py 예정」 — 없는 파일 이름을 짓지 않는다.\n(5) 「칸 3/6」의 6 — mapmodel._spec_nodes 가 네 칸이라 앱은 「칸 3/4」다.\n(6) 만드는 중 헤더의 탭 넷(3XR6/3XR8/3XRA)과 [실행](3XRC). 지금 화면에는 고를 기법도 돌릴 것도 없고, 탭을 누르면 도는 잡을 화면에서 잃는다 — 앱 쪽 판단으로 남겨 두고 미구현으로 기록한다.\n(7) 잡의 ⑤ 자체 검사 결과(checks)는 전환 뒤 어디에도 안 붙는다 — Paper 보드 17 은 만드는 중 화면이라 그 표시를 그리지 않았다.",
+  "gap_files": [
+   "C:/Projects/DAOU.Athena-parity/app/chat.js",
+   "C:/Projects/DAOU.Athena-parity/app/lib/backtest-canvas.js",
+   "C:/Projects/DAOU.Athena-parity/backend/athena_api/backtest/indicators/core.py",
+   "C:/Projects/DAOU.Athena-parity/backend/athena_api/backtest/sources.py"
+  ],
+  "gap_size": "S",
+  "run": "wf_77115a53-25c",
+  "label": "",
+  "head": "8f5441e9f9bd00ac7b874abd1911e65095f3b01b"
+ },
+ "2LFW-2": {
+  "status": "pass",
+  "detail": "라우트: window=orb, reach 는 셸 숨김(athena:shell-visibility {hidden:true,displayMode:'A'}) → 펼침(athena:orb-state {expanded:true}) → MINI_CARD_ENVELOPES 열 개를 athena:orb-canvas-result 로 순서대로 send → settle. root=#orbChatBody. phrases 6: '지표 · 드로잉 · 매물대는 캔버스에서'(차트 능력 고지), '주문 티켓'·'1회 확인'(orb.html 마크업 리터럴), '표시 전용 · 실행과 최종 확인은 대화창에서만'(주문 확인 경계 고지), '설정됨'·'토큰과 자격 증명 값은 표시하지 않음'(인증 상태 고정 행·고지) — 전부 앱 리터럴이라 픽스처가 못 바꾼다. structure 2: .orb-fold-card=9(표·차트·사실·복합·주문 확인·이벤트·인증 상태·본문·스트림), #orbTicket=1(실행 버튼을 가진 유일한 카드라 별도 DOM). 앱 보정 있음: orb.js 에 검사 전용 봉투 통로(askCanvasProbeMode + 질의 밖 구독), main.js 에 athena:orb-canvas-probe 조회 핸들러(env ATHENA_ORB_CANVAS_PROBE, 제품 기본 false), preload INVOKE_CHANNELS 한 줄, probe-paper-screens.js 가 그 env 를 켠다. 제품 표면·동작은 그대로다(같은 카드 함수·같은 자리, 질의 중에는 chatBusy 로 비켜섬). 라우트에 안 적은 것: ① 접힘 고지 문구('열 2개 · 행 2개를 접었습니다 — 전체는 캔버스에서', '항목 4개를 접었습니다…', '최근 2건 · 표시 전용…', '첫 문단만 · 전문 12,400자는 캔버스에서')는 개수가 봉투 픽스처에 달려 있어 문구 규칙(픽스처가 못 바꾸는 것만)에 걸린다 — 카드는 실제로 접혀 고지를 그리고 있고(표 5행·사실 9행·복합 6항목·스트림 3건을 일부러 상한 위로 넣었다), 다만 게이트가 그 줄을 문구로 잡지 않는다. ② Paper 보드의 주석 판(‘canvas_type: table’ 따위 종별 머리, ‘이미 있음/신규’ 해설, 3행 ‘열 종이 함께 지키는 것’ 공통 규칙 표, ‘카드 폭 · 패널 상한 360px · 640px’)은 설계 주석이라 앱 화면에 대응하는 가시 텍스트가 없다 — 적지 않았다.",
+  "gap_files": [],
+  "gap_size": "",
+  "run": "wf_77115a53-25c",
+  "label": "",
+  "head": "ac8452f5b62a338d74826ac27cf65da12d99320b"
+ },
+ "432Z-1": {
+  "status": "pass",
+  "detail": "라우트는 그대로다(고칠 이유가 없었다) — send 로 athena:routine-proposed 봉투 다섯(update·ack_all·adopt·view·fire)을 쏘고, B 「모두 읽음」 칩이 서게 athena:routine-event 하나를 먼저 쏴 알람 센터에 방을 만든다. root #history, phrases 7개(제어 이름·사람 칩·D 상태어만 — 리드와 「근거: …」는 봉투가 주는 값이라 안 넣었다), structure 셋(.control-proposal 5 · .control-proposal .routine-approval-actions 4 · .control-proposal-status 1)이 「다섯 중 D만 게이트가 없다」(437R-1)를 잠근다. 이번 회차 앱 보정: 채택 칩이 shell.js seedChatInput 버스를 타게 했고(캐럿 끝 보정 회복), 편집 결과 카드 사실행에서 쿨다운을 빼 436C-1 과 맞췄으며, 거절 뒤 상태 알약을 436N-1 「보류」 하나로 통일했고, chat.css 새 블록을 보드 08 주석-규칙 짝을 깨지 않는 자리로 옮겼다. 라우트에 안 적은 것은 이전과 같다 — 보드 머리(4332~4335-1)·열 머리·열 각주·게이트 지도(437L~437R-1)는 사양 보드의 주석층이라 앱 화면이 아니다. 4330-1 의 「뷰 이동」 결과 열도 이번에도 안 세웠다: D 열이 이미 「완료 · 이동함 · 칩 없음」으로 그 사건의 완결형이라 같은 봉투로 둘을 그리면 방에 같은 일이 두 번 적힌다.",
+  "gap_files": [],
+  "gap_size": "",
+  "run": "wf_77dc4b43-a5e",
+  "label": "",
+  "head": "7ef650222fc9ef2e86b745e127dd90354cae8713"
+ },
+ "2IJN-2": {
+  "status": "pass",
+  "detail": "라우트 무변경: routines-list·routine-runs·routine-detail fixture → agent 모드 → .agent-row → .agent-history-open → .agent-history-tab[data-key=\"settings\"] → .agent-history-settings-edit. phrases 7(설정 — 요약 · 설정 편집 · 상세 패널 — 설정 편집 · 조건 비교 · 연속 틱 · 만료(일) · 저장), structure 3(.agent-settings-field=8 · .agent-settings-readonly=4 · .agent-settings-save=1) 그대로. 이번 회차 앱 보정 셋: ① [이력]↔[설정] 왕복이 편집 중인 값을 조용히 지우던 결함을 고쳤다 — 탭을 떠나기 전에 입력을 한 번 읽어 둔다(폼 바로 위 세그먼트라 늘 밟는 동선이었다). ② 전일 동시간 거래량 비율의 「%」 표기를 뺐다 — 카탈로그가 단위를 말하지 않아 지어낸 값이었다. ③ 폼이 지운 안내문의 고아 CSS 규칙을 지웠다. 앞 회차의 못 세운 조각 셋은 그대로다(예약 드릴인 미도달 · 종목 한글명 없음 · 예약 안내문 「종목 없음」은 앱에서 거짓이라 안 적음).",
+  "gap_files": [],
+  "gap_size": "",
+  "run": "wf_77dc4b43-a5e",
+  "label": "",
+  "head": "2761b30"
+ },
+ "44HD-1": {
+  "status": "pass",
+  "detail": "라우트: routines-list를 코드 알람 초안(CODE_WATCH_DRAFT)으로, routine-detail을 고침 2회를 마친 상세(CODE_DETAIL_AFTER_FIX)로 못 박고, 에이전트 모드 → 알람 행 → 셋째 노드 카드(배수 비교) 클릭까지 결정론으로 도달한다. root #agentCanvas. phrases 7(순환 / 물어봄 → 고침 → 검사 → 다시 그림 · 한 바퀴 끝 / 방금 바뀜 / 이상해요 / 물어볼게요 / 되돌리기 / 코드는 AI가, 판단은 사람이 · 승인 전까지 실행 없음), structure 5(노드 칸 4 · 「방금 바뀜」 2 · 고른 칸의 칩 2 · 영수증 3줄 · 점 30칸) 전부 그대로다.\n이번 회차 보정: 봉투가 검사 통과 여부(ok)와 못 센 까닭(skip_reason)을 싣고, 통과했을 때만 「4번 → 2번 울림」·울린 날·점 띠·「다시 검사 통과 · 노드 2개 다시 그림」을 그린다. 점 띠 창은 검사가 실제로 센 마지막 날(KST)로 잡고, [되돌리기]는 초안·일시중지에서만 서며, 되돌린 뒤 해시는 되쓴 원문에서 다시 센다. 라우트 봉투에는 ok·skip_reason·counted_through 세 칸만 더했다.\n못 세운 Paper 조각 넷은 지난 회차 그대로다(라우트에 한 글자도 안 적었다): (1) 「자동 검사 3/3 · 노드 2개 다시 그림」 — 앱의 3/3은 켠 뒤 오늘 값으로 도는 1회라(watch-progress-card.js LINE_TODAY) 검사 시점에 쓸 수 없다. 대신 쓰는 「다시 검사 통과」는 이제 통과했을 때만 선다. (2) 「8/12 · 2.3배」의 배수 — 검사의 fires 원소는 {dt, close}뿐이라 배수는 일반적으로 없다. (3) 영수증 첫 줄 「평균 일수」 대 앱의 「일수」 — 라벨을 노드 들어감 이름에서 파생한다(한 단어 차이, 값 문자열이라 phrases 밖). (4) 캔버스 최상단 상태 띠 두 줄과 ③ 채팅 영역의 영수증 카드 — 지시가 캔버스로 한정했고 root와도 다른 자리다.",
+  "gap_files": [
+   "app/chat.js",
+   "app/lib/watch-check-card.js",
+   "app/lib/watch-progress-card.js"
+  ],
+  "gap_size": "S",
+  "run": "wf_77dc4b43-a5e",
+  "label": "",
+  "head": "6f9324b2a705d5950d118c956a5860343e1ae953"
+ },
+ "3ZAA-1": {
+  "status": "pass",
+  "detail": "라우트: mode graph → send athena:graph-chat-action {kind:'entity', detail: GRAPH_ENTITY_DETAIL}(앱에 누를 자리가 없어 main이 보내는 봉투를 그대로 쏜다 — 보드 11과 같은 문법) → settle. root=#graphPanel(shell.html:300에서 hidden으로 시작하고 renderSelection()이 선택도 entityDetail도 없으면 hidden을 유지하므로 봉투를 빼면 root_not_visible로 떨어진다). phrases 2 — 「관계 — 방향 · 확정성 · 티어 · 보강」·「변경 이력 — 최신 먼저」(3개 하한의 네 번째 예외 annotation-only, 근거 테스트 the entity board writes its annotations in a way the app never draws가 함께 진다). structure 4 — 관계 행 2 · 원문 발췌 2 · 이력 3 · 노드 선택 탭 부재. 앱 보정(값 층이라 phrases에 안 들어간다): 관계 행의 원문 in/out 칸 생략(옆 화살표가 같은 방향을 한국어로 말한다), 발췌 출처 chat_message · conv-1#3 → 「대화 · 08-04 · 전문 28자」, 이력 edge_added·AMBIGUOUS → EXTRACTED → 공통 패널과 같은 한국어 조립. Paper가 그린 것 중 라우트에 못 적은 것 넷과 사유: ① 보드 제목 두 줄과 「action=entity」·「entity = 이름 또는 entity_id」 — 보드 주석이자 도구 인자 이름이라 앱에 없다. ② 발치의 「정직성 규칙」 네 줄 — 같은 주석층이고(트리에서 3ZBV-1은 패널 3ZAF-1의 형제가 아니라 보드 프레임의 직계) 내용이 화면이 아니라 모델의 답이 지켜야 할 계약 서술이며 confidence·full_chars·resolved=false·503을 품고 있어 제품 문구 3원칙에 걸린다(2026-09-07 판정으로 앱에서 제거). ③ 툴 칩 「노드 조회」와 부제 — 구현은 되어 있으나(main.js toolStepLabel · brain-entity-forward.entityStepNote · chat.js .progress-tool-step-note) 진행 줄이 살아 있는 턴 안에서만 존재해 라우트 어휘로 결정론을 못 만든다. ④ 모델 답변 세 문단 — 결정론이 아니다.",
+  "gap_files": [],
+  "gap_size": "",
+  "run": "wf_77dc4b43-a5e",
+  "label": "",
+  "head": "3960fca98f091853bb33d0b6ed6142b17f436aab"
+ }
+}
