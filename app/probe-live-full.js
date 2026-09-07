@@ -9,6 +9,7 @@ const {
   MODES,
   SETTINGS_NAV,
   LIVE_QUERIES,
+  LIVE_FULL_WAITS,
   queryVerdict,
   chromeMatches,
   isAllowlistedClick,
@@ -166,7 +167,7 @@ async function main() {
   const wins = await waitUntil(() => {
     const current = mainMod.getWins();
     return current.shellWin && !current.shellWin.isDestroyed() ? current : null;
-  }, 25000);
+  }, LIVE_FULL_WAITS.shellMs);
   if (!wins) {
     report.errors.push('shell window missing');
     fs.writeFileSync(REPORT, JSON.stringify(report, null, 2));
@@ -178,7 +179,7 @@ async function main() {
   await waitUntil(() => {
     const current = mainMod.getWins();
     return current.orbWin && !current.orbWin.isDestroyed();
-  }, 8000);
+  }, LIVE_FULL_WAITS.orbMs);
   const orbWin = mainMod.getWins().orbWin;
   report.windows = {
     shell: !shellWin.isDestroyed(),
@@ -189,7 +190,7 @@ async function main() {
   const boot = await waitUntil(async () => {
     const surface = await shellWin.webContents.executeJavaScript(SURFACE_PROBE);
     return surface && !surface.boot && (surface.app || surface.onboard) ? surface : null;
-  }, 20000);
+  }, LIVE_FULL_WAITS.bootMs);
   report.boot = boot;
   if (!boot || boot.onboard) {
     report.errors.push(boot && boot.onboard ? 'onboarding still visible' : 'app never became visible');
@@ -209,7 +210,7 @@ async function main() {
       shellWin.webContents.executeJavaScript(
         `window.athena.invoke('athena:auth-token-refresh', ${JSON.stringify({ id: activeId })})`,
       ),
-      wait(12000).then(() => ({ ok: false, state: 'timeout' })),
+      wait(LIVE_FULL_WAITS.tokenMs).then(() => ({ ok: false, state: 'timeout' })),
     ]).catch((error) => ({ ok: false, error: String(error && error.message || error) }));
     report.tokenRefresh = { ok: Boolean(refreshed && refreshed.ok), state: refreshed && refreshed.state };
   } else {
@@ -234,7 +235,7 @@ async function main() {
       return { ok: false, state: task.state, detail: task.detail || '' };
     }
     return null;
-  }, 20000);
+  }, LIVE_FULL_WAITS.indexMs);
   report.indexReady = indexReady && typeof indexReady.ok === 'boolean'
     ? indexReady
     : { ok: false, source: 'stock-index-timeout' };
@@ -243,8 +244,8 @@ async function main() {
 
   for (const mode of MODES) {
     await evalJs(shellWin, `document.getElementById(${JSON.stringify(mode.navId)}).click()`, 3000, null);
-    await wait(300);
-    const surface = await evalJs(shellWin, SURFACE_PROBE, 3000, null);
+    await wait(LIVE_FULL_WAITS.modeGapMs);
+    const surface = await evalJs(shellWin, SURFACE_PROBE, LIVE_FULL_WAITS.modeSurfaceMs, null);
     if (!surface) {
       report.modes.push({ view: mode.view, ok: false, error: 'surface probe timeout' });
       continue;
@@ -323,10 +324,10 @@ async function main() {
     } catch (error) {
       result = { ok: false, error: String(error && error.message || error) };
     }
-    await wait(400);
+    await wait(LIVE_FULL_WAITS.querySettleMs);
     let after = { count: before, titles: [], kinds: [] };
     if (query.expectCard) {
-      for (let attempt = 0; attempt < 8; attempt += 1) {
+      for (let attempt = 0; attempt < LIVE_FULL_WAITS.cardRetries; attempt += 1) {
         after = await evalJs(shellWin, `(() => {
       const cards = Array.from(document.querySelectorAll('.card'));
       return {
@@ -334,9 +335,9 @@ async function main() {
         titles: cards.slice(-4).map((card) => card.querySelector('.card-title, .bs-title, h2, h3')?.textContent || card.dataset.kind || card.className),
         kinds: cards.slice(-4).map((card) => card.dataset.kind || card.dataset.cardKind || card.className),
       };
-    })()`, 2000, after);
+    })()`, LIVE_FULL_WAITS.cardEvalMs, after);
         if (after.count > before) break;
-        await wait(300);
+        await wait(LIVE_FULL_WAITS.cardGapMs);
       }
     }
     const cardDelta = after.count - before;

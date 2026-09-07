@@ -11,6 +11,8 @@ const {
   PAPER_CHROME,
   LOCKED_CLICKS,
   LIVE_QUERIES,
+  LIVE_FULL_WAITS,
+  liveFullWorstWaitMs,
   SAFE_CLICK_IDS,
   EXCLUDED_VERIFY_SCRIPTS,
   VERIFY_SUITE,
@@ -114,12 +116,38 @@ test('클릭 게이트는 허용목록이고 잠금 정규식은 그 목록에 �
 
 test('expectCard:false 질의도 실패·타임아웃을 통과로 쓰지 않는다', () => {
   const fin = LIVE_QUERIES.find((item) => item.id === 'QA-FIN');
+  const news = LIVE_QUERIES.find((item) => item.id === 'QA-NEWS');
   const quote = LIVE_QUERIES.find((item) => item.id === 'QA-QUOTE');
   assert.equal(queryVerdict(fin, { result: { ok: false, error: 'query timeout' }, painted: false, rest: false, usedModel: false }), false);
+  assert.equal(queryVerdict(news, { result: { ok: false, error: 'query timeout' }, painted: false, rest: false, usedModel: false }), false);
   assert.equal(queryVerdict(fin, { result: { ok: true }, painted: false, rest: false, usedModel: false }), true);
   assert.equal(queryVerdict(quote, { result: { ok: true }, painted: false, rest: true, usedModel: false }), false);
   assert.equal(queryVerdict(quote, { result: { ok: true }, painted: true, rest: true, usedModel: false }), true);
   assert.equal(queryVerdict(quote, { result: { ok: true }, painted: true, rest: false, usedModel: true }), false);
+});
+
+test('verify:live-full 예산은 프로브가 쓰는 선언 대기 합보다 크다', () => {
+  const item = VERIFY_SUITE.find((row) => row.script === 'verify:live-full');
+  const worst = liveFullWorstWaitMs();
+  assert.ok(Number.isInteger(item.budgetMs));
+  assert.ok(worst > 180000, `옛 180s 예산은 선언 대기 ${worst}ms 를 못 덮는다`);
+  assert.ok(item.budgetMs > worst, `${item.budgetMs} vs worst ${worst}`);
+  const src = fs.readFileSync(path.join(appDir, 'probe-live-full.js'), 'utf8');
+  assert.match(src, /LIVE_FULL_WAITS\.shellMs/);
+  assert.match(src, /LIVE_FULL_WAITS\.orbMs/);
+  assert.match(src, /LIVE_FULL_WAITS\.bootMs/);
+  assert.match(src, /LIVE_FULL_WAITS\.tokenMs/);
+  assert.match(src, /LIVE_FULL_WAITS\.indexMs/);
+  assert.match(src, /LIVE_FULL_WAITS\.modeSurfaceMs/);
+  assert.match(src, /LIVE_FULL_WAITS\.modeGapMs/);
+  assert.match(src, /LIVE_FULL_WAITS\.querySettleMs/);
+  assert.match(src, /LIVE_FULL_WAITS\.cardRetries/);
+  assert.match(src, /LIVE_FULL_WAITS\.cardEvalMs/);
+  assert.match(src, /LIVE_FULL_WAITS\.cardGapMs/);
+  assert.match(src, /const painted = cardDelta > 0/);
+  assert.doesNotMatch(src, /painted = cardDelta > 0 \|\|/);
+  assert.match(src, /queryVerdict\(query, \{ result, painted, rest, usedModel \}\)/);
+  assert.equal(LIVE_FULL_WAITS.shellMs, 25000);
 });
 
 test('order lock does not treat 과매도 or 과매수 technique copy as a live order', () => {
