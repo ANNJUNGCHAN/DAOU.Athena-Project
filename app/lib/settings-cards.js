@@ -412,6 +412,7 @@ async function refreshAccountsCard(card, head, body) {
   // 수백 ms 동안 완전히 빈 채로 남는다(실측) — 사용자에겐 카드가 깨진 것처럼
   // 보인다. 이전 내용을 그대로 둔 채 기다렸다가 한 번에 교체한다.
   let data;
+  let runtimeOptions = { ok: false, aliases: [], error: '서버 계좌 정보를 확인할 수 없다' };
   try {
     data = await window.athena.invoke('athena:account-list');
   } catch (err) {
@@ -421,6 +422,10 @@ async function refreshAccountsCard(card, head, body) {
     body.appendChild(errorNote(String((err && err.message) || err)));
     return;
   }
+  try {
+    const options = await window.athena.invoke('athena:account-runtime-options');
+    if (options && typeof options === 'object') runtimeOptions = options;
+  } catch { /* 로컬 OAuth 목록은 유지하고 서버 계좌 연결만 fail-closed한다 */ }
   clear(head);
   clear(body);
 
@@ -438,7 +443,13 @@ async function refreshAccountsCard(card, head, body) {
   if (!accounts.length) {
     body.appendChild(emptyState('등록된 계좌가 없다', '+ 계좌 등록으로 첫 모의투자 계좌를 연결한다'));
   } else {
-    body.appendChild(buildAccountsTable(accounts, refresh, (account) => openOrderApiSheet(card, account, refresh)));
+    body.appendChild(buildAccountsTable(
+      accounts,
+      refresh,
+      (account) => openOrderApiSheet(card, account, refresh),
+      (account) => openBackendAccountSheet(card, account, runtimeOptions, refresh),
+      runtimeOptions,
+    ));
   }
 
   const note = el('div', 'uk-settings-note');
@@ -458,7 +469,7 @@ function acctStatusPill(a) {
 // canDelete === false는 "등록된 계좌가 이 하나뿐"이다(AT-ST-001 Desc 1.1
 // "마지막 하나는 삭제 불가"). 백엔드(accounts.remove())는 이 규칙을 강제하지
 // 않으므로 — 강제할 수 있는 유일한 자리인 UI에서 막는다.
-function buildAccountRow(a, refresh, openOrderApi, canDelete) {
+function buildAccountRow(a, refresh, openOrderApi, openBackendAccount, runtimeOptions, canDelete) {
   const aliasCell = row('uk-col-alias', [
     el('span', 'uk-cell-strong', a.alias),
     badge(!!a.active, a.active ? '활성' : '비활성'),
@@ -486,6 +497,16 @@ function buildAccountRow(a, refresh, openOrderApi, canDelete) {
 
   const actionsCell = el('div', 'uk-col-actions');
   actionsCell.addEventListener('click', (e) => e.stopPropagation());
+  const backendButton = button('text', a.backendAlias
+    ? `서버: ${a.backendAlias}`
+    : '서버 계좌 연결');
+  backendButton.classList.add('uk-account-backend-button');
+  backendButton.disabled = !runtimeOptions.ok;
+  backendButton.title = runtimeOptions.ok
+    ? '조회에 사용할 서버 계좌 선택'
+    : (runtimeOptions.error || '서버 계좌 정보를 확인할 수 없다');
+  backendButton.addEventListener('click', () => openBackendAccount(a));
+  actionsCell.appendChild(backendButton);
 
   const normalCells = [aliasCell, appkeyCell, orderApiCell, statusCell, lastCheckCell, actionsCell];
   const r = row('uk-row', normalCells);
@@ -534,7 +555,7 @@ function buildAccountRow(a, refresh, openOrderApi, canDelete) {
   return r;
 }
 
-function buildAccountsTable(accounts, refresh, openOrderApi) {
+function buildAccountsTable(accounts, refresh, openOrderApi, openBackendAccount, runtimeOptions) {
   const wrap = el('div');
   wrap.appendChild(row('uk-col-head', [
     el('span', 'uk-col-alias', '별칭'),
@@ -547,9 +568,77 @@ function buildAccountsTable(accounts, refresh, openOrderApi) {
 
   const canDelete = accounts.length > 1;
   for (const a of accounts) {
-    wrap.appendChild(buildAccountRow(a, refresh, openOrderApi, canDelete));
+    wrap.appendChild(buildAccountRow(a, refresh, openOrderApi, openBackendAccount, runtimeOptions, canDelete));
   }
   return wrap;
+}
+
+function openBackendAccountSheet(card, account, runtimeOptions, onDone) {
+  const { root, body } = sheet('조회에 사용할 서버 계좌', {
+    subtitle: `${account.alias}의 시세 조회에 사용할 서버 계좌를 연결합니다`,
+    onClose: () => detachSheet(card, root),
+  });
+  const group = el('div', 'uk-field-group');
+  group.appendChild(el('label', 'uk-field-label', '서버 계좌'));
+  const select = document.createElement('select');
+  select.className = 'uk-input uk-account-backend-select';
+  const placeholder = document.createElement('option');
+  placeholder.value = '';
+  placeholder.textContent = '서버 계좌를 선택하세요';
+  select.appendChild(placeholder);
+  const aliases = runtimeOptions.ok && Array.isArray(runtimeOptions.aliases) ? runtimeOptions.aliases : [];
+  for (const alias of aliases) {
+    const option = document.createElement('option');
+    option.value = alias;
+    option.textContent = alias;
+    select.appendChild(option);
+  }
+  select.value = aliases.includes(account.backendAlias) ? account.backendAlias : '';
+  select.disabled = !runtimeOptions.ok;
+  group.appendChild(select);
+  group.appendChild(el('div', 'uk-field-hint-static',
+    '저장된 계좌와 조회 서버의 계좌를 직접 연결합니다. 표시 별칭으로 자동 선택하지 않습니다.'));
+  body.appendChild(group);
+
+  const status = el('div');
+  if (!runtimeOptions.ok) status.appendChild(errorNote(runtimeOptions.error || '서버 계좌 정보를 확인할 수 없다'));
+  else if (!aliases.length) status.appendChild(errorNote('backend에 설정된 서버 계좌가 없다'));
+  body.appendChild(status);
+
+  const buttons = row('uk-btn-row-end', []);
+  const cancel = button('ghost', '취소', { onClick: () => detachSheet(card, root) });
+  const save = button('primary', '연결 저장');
+  save.classList.add('uk-account-backend-save');
+  save.disabled = !runtimeOptions.ok || aliases.length === 0;
+  save.addEventListener('click', async () => {
+    clear(status);
+    const backendAlias = String(select.value || '').trim();
+    if (!backendAlias) {
+      status.appendChild(errorNote('조회에 사용할 서버 계좌를 선택해 주세요.'));
+      return;
+    }
+    save.disabled = true;
+    let result;
+    try {
+      result = await window.athena.invoke('athena:account-set-backend-alias', {
+        id: account.id,
+        backendAlias,
+      });
+    } catch {
+      result = { ok: false, error: '서버 계좌 연결 기능을 사용할 수 없다' };
+    }
+    if (!result || !result.ok) {
+      status.appendChild(errorNote((result && result.error) || '서버 계좌를 연결하지 못했다'));
+      save.disabled = false;
+      return;
+    }
+    detachSheet(card, root);
+    await onDone();
+  });
+  buttons.appendChild(cancel);
+  buttons.appendChild(save);
+  body.appendChild(buttons);
+  attachSheet(card, root);
 }
 
 function accountErrorMessage(code) {
