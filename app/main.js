@@ -5884,10 +5884,13 @@ async function startLiveBoot(createWindowsPromise) {
   registerLiveBootRunners(createWindowsPromise);
   await runStartupOrchestration({
     readiness: startupReadiness,
-    concurrentTaskIds: ['stock-index'],
+    // stock-index는 백엔드 프록시를 타므로 backend gate 뒤에 둔다 — 앞에 두면 앱이
+    // 백엔드를 직접 띄우는 부팅에서 12초 예산이 백엔드 기동 시간에 잡아먹혀 매번
+    // 실패한다(2026-09-07 실측: 종목명 인덱스 12초 안에 미적재 → degraded).
+    concurrentTaskIds: [],
     dependencyTaskChains: [['mcp-env', 'provider-warm']],
     dependencyTaskId: 'backend',
-    dependentTaskIds: ['alarm-bootstrap', 'routine-feed', 'canvas-feed'],
+    dependentTaskIds: ['stock-index', 'alarm-bootstrap', 'routine-feed', 'canvas-feed'],
     sequentialDependentTaskIds: ['brain-ingestion', 'chat-history-flush', 'graph-projection'],
     continuousTaskIds: ['background-loops'],
   });
