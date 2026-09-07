@@ -144,6 +144,15 @@ test('Paper 33 — 연결에 실패한 CLI 행은 [연결] 자리에 재시도�
   await flushAsync();
   assert.equal(containsText(root, '연결 실패 · 재시도'), true);
   assert.equal(findByText(root, 'button', '연결'), null, '실패한 행은 [연결]을 그대로 두지 않는다');
+  assert.equal(
+    findByClass(root, 'onb-hint').textContent,
+    'Grok CLI 실행 파일을 찾지 못했습니다. 설치 후 재시도하거나, 연결된 다른 CLI로 계속할 수 있습니다.',
+  );
+  assert.equal(findByClass(root, 'onb-error-slot').children.length, 0, '안내문과 같은 실패를 아래에 한 번 더 쓰지 않는다');
+  assert.equal(
+    onboarding.cliConnectFailHint('Grok', 'Grok CLI가 이 컴퓨터에 설치되어 있지 않다 (찾아본 곳: grok.exe)'),
+    'Grok CLI 실행 파일을 찾지 못했습니다. 설치 후 재시도하거나, 연결된 다른 CLI로 계속할 수 있습니다.',
+  );
 
   loginLaunches = true;
   findByClass(root, 'onb-cli-row').click();

@@ -17,6 +17,15 @@ const CLI_LOGIN_TIMEOUT_MS = 90000;
 // ('athena:cli-list' 실패 시에만 쓰는 자리표시자이기 때문).
 const CLI_FALLBACK_NAME = { claude: 'Claude', codex: 'Codex', grok: 'Grok' };
 const CLI_FALLBACK_ORDER = ['claude', 'grok', 'codex'];
+const CLI_CONNECT_HINT = '연결을 누르면 해당 CLI의 로그인 명령이 새 터미널 창에서 실행됩니다. 로그인은 그 창에서 완료하세요. 계정은 여러 개 연결할 수 있고, 활성 계정 하나가 명령을 받습니다.';
+
+function cliConnectFailHint(name, message) {
+  const raw = String(message || '').trim();
+  if (/설치되어 있지 않다/.test(raw)) {
+    return `${name} CLI 실행 파일을 찾지 못했습니다. 설치 후 재시도하거나, 연결된 다른 CLI로 계속할 수 있습니다.`;
+  }
+  return raw || `${name} 로그인을 시작하지 못했습니다.`;
+}
 
 function buildShell(root, { kicker, title, sub }) {
   clear(root);
@@ -121,7 +130,7 @@ function renderCliStep(root, { onContinue }) {
   // (lib/main/cli-accounts.js의 login()). 화면이 브라우저를 약속하고 콘솔을
   // 띄우면 그건 사용자에게 거짓말이므로, 스펙 문장을 그대로 두지 않고 실제
   // 동작에 맞춘다 — 원문은 이 주석에 남긴다.
-  const hint = el('div', 'onb-hint', '연결을 누르면 해당 CLI의 로그인 명령이 새 터미널 창에서 실행됩니다. 로그인은 그 창에서 완료하세요. 계정은 여러 개 연결할 수 있고, 활성 계정 하나가 명령을 받습니다.');
+  const hint = el('div', 'onb-hint', CLI_CONNECT_HINT);
   const errSlot = el('div', 'onb-error-slot');
   body.appendChild(list);
   body.appendChild(hint);
@@ -140,6 +149,7 @@ function renderCliStep(root, { onContinue }) {
   // 마지막 연결 시도가 실패한 CLI(Paper 보드 33). 실패한 행은 [연결] 자리에
   // 「연결 실패 · 재시도」를 두고, 행 자체가 재시도가 된다.
   const failedConnect = new Set();
+  const failHints = new Map();
   let destroyed = false;
   let lastProviders = [];
 
@@ -150,6 +160,8 @@ function renderCliStep(root, { onContinue }) {
     const anyAccount = lastProviders.some(hasAccounts);
     continueBtn.disabled = !anyAccount;
     continueBtn.title = anyAccount ? '' : 'CLI를 하나 이상 연결해야 계속할 수 있습니다 — 건너뛰기는 없습니다.';
+    const failedId = [...failedConnect][0];
+    hint.textContent = (failedId && failHints.get(failedId)) || CLI_CONNECT_HINT;
     for (const p of lastProviders) list.appendChild(renderProvider(p));
   }
 
@@ -228,11 +240,12 @@ function renderCliStep(root, { onContinue }) {
   async function doConnect(p) {
     clear(errSlot);
     failedConnect.delete(p.id);
+    failHints.delete(p.id);
     try {
       const res = await window.athena.invoke('athena:cli-login', { providerId: p.id });
       if (!res || !res.ok) {
-        errSlot.appendChild(errorNote(`${p.name} 로그인을 시작하지 못했습니다.${res && res.message ? ' ' + res.message : ''}`));
         failedConnect.add(p.id);
+        failHints.set(p.id, cliConnectFailHint(p.name, res && res.message));
         renderAll();
         return;
       }
@@ -247,8 +260,8 @@ function renderCliStep(root, { onContinue }) {
         renderAll();
       }
     } catch (err) {
-      errSlot.appendChild(errorNote(`${p.name} 로그인 요청 중 오류가 발생했습니다.`));
       failedConnect.add(p.id);
+      failHints.set(p.id, cliConnectFailHint(p.name, err && err.message));
       renderAll();
     }
   }
@@ -280,6 +293,7 @@ function renderCliStep(root, { onContinue }) {
     for (const t of pending.values()) clearTimeout(t);
     pending.clear();
     failedConnect.clear();
+    failHints.clear();
     lastProviders = (data && data.providers) || [];
     renderAll();
   }
@@ -472,6 +486,7 @@ function renderAccountStep(root, {
 // UMD 각주(2026-08-18 렌더러 격리) — sanitize.js와 같은 패턴.
 const __exports = {
   renderCliStep,
+  cliConnectFailHint,
   renderAccountStep,
   setAppBlockedForOnboarding,
   createOnboardingRevisionGuard,
