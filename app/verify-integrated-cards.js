@@ -827,9 +827,13 @@ async function captureBoardSteps(win, surface) {
       const probe = await win.webContents.executeJavaScript(boardStepProbe(surface.instanceId));
       if (probe.error) throw new Error(`board ${surface.boardId} ${preset.name}: ${probe.error}`);
       if (probe.container_width < preset.minContainer || probe.container_width > preset.maxContainer) {
+        // 숨은 창은 리사이즈에 반응하지 않는다(레이아웃이 멈춘다) — 그러면 컨테이너가
+        // 직전 프리셋 폭 그대로 읽혀 "반응형이 안 돈다"처럼 보인다. 실패에 창 상태를
+        // 같이 실어 그 두 원인을 갈라 준다.
+        const visibility = await win.webContents.executeJavaScript('document.visibilityState');
         throw new Error(
           `board ${surface.boardId} ${preset.name}: container ${probe.container_width}px outside ${
-            preset.minContainer}..${preset.maxContainer}px`,
+            preset.minContainer}..${preset.maxContainer}px (visibilityState=${visibility})`,
         );
       }
       assertSurfaceGeometry(surface.boardId, preset, probe);

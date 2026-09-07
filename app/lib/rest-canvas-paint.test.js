@@ -128,6 +128,47 @@ test('paint ack pauses its budget while hidden and resumes when visible again', 
   assert.ok(result.waitMs < 500, `waitMs가 숨은 시간을 포함한다: ${result.waitMs}`);
 });
 
+// 프레임을 기다리는 **중에** 창이 숨는 경로. 첫 판(마감 시각만 미루기)이 못 막은
+// 자리이고, 통합 카드 게이트가 base:ka50092에서 실제로 이 실패를 냈다:
+// 예산 타이머는 이미 무장돼 있는데 rAF가 멈춰, 타이머가 먼저 터져 예산 초과로 읽혔다.
+test('paint ack does not blame its budget when the window hides mid-frame', async () => {
+  const element = { getBoundingClientRect: () => ({ width: 300, height: 150, x: 0, y: 0 }) };
+  let visible = true;
+  let armedTimers = 0;
+  let frames = 0;
+  const result = await waitForVisiblePaint(element, {
+    // 숨은 뒤에는 rAF가 오지 않는다. 다시 보이면 온다.
+    requestAnimationFrame: (callback) => {
+      if (!visible) return;
+      frames += 1;
+      callback(frames);
+    },
+    visibilityState: () => (visible ? 'visible' : 'hidden'),
+    now: () => frames * 10,
+    timeoutMs: 40,
+    setTimer: (callback, delayMs) => {
+      if (delayMs === HIDDEN_POLL_MS) {
+        // 숨김 폴링 — 두 번째 되보기에서 창이 돌아온다.
+        visible = true;
+        callback();
+        return 0;
+      }
+      armedTimers += 1;
+      // 첫 프레임 대기 도중에 창이 숨고, 그 상태로 예산 타이머가 터진다.
+      if (armedTimers === 1) {
+        visible = false;
+        callback();
+      }
+      return 0;
+    },
+    clearTimer: () => {},
+  });
+  assert.equal(result.verifiedVisible, true);
+  // 예산 초과로 읽지 않았고, 숨은 시간은 계측에서 빠졌다.
+  assert.ok(result.hiddenMs >= 0);
+  assert.equal(result.rect.width, 300);
+});
+
 test('paint ack rejects on wall-clock timeout when RAF never fires', async () => {
   const element = { getBoundingClientRect: () => ({ width: 10, height: 10, x: 0, y: 0 }) };
   await assert.rejects(() => waitForVisiblePaint(element, {

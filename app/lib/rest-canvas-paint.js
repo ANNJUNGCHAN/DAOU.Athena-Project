@@ -22,6 +22,9 @@ function correlationKey(value) {
 // 숨은 동안 예산을 쓰지 않기 위해 얼마나 자주 되보는지. 타이머는 숨은 창에서도
 // 돌지만 rAF는 아예 멈춘다 — 그래서 대기 수단이 타이머여야 한다.
 const HIDDEN_POLL_MS = 100;
+// 프레임 대기가 "숨어서 못 받았다"로 끝났다는 내부 표식. rAF 콜백 인자와 겹치지
+// 않는 고유 값이어야 한다(rAF는 타임스탬프 숫자를 넘긴다).
+const HIDDEN_RETRY = Symbol('paint-ack-hidden-retry');
 
 async function waitForVisiblePaint(element, {
   requestAnimationFrame: raf = globalThis.requestAnimationFrame,
@@ -40,7 +43,11 @@ async function waitForVisiblePaint(element, {
   }
   if (typeof raf !== 'function') throw new Error('requestAnimationFrame이 필요하다');
   const startedAt = now();
-  let wallClockDeadline = Date.now() + timeoutMs;
+  // 예산은 남은 양으로 들고 다닌다(마감 시각이 아니다) — 숨은 구간을 빼려면
+  // "얼마나 남았나"를 프레임 대기마다 다시 계산해야 하고, 마감 시각 모델은 그
+  // 되돌림을 표현할 수 없다(실측: 마감만 미루는 첫 판은 프레임 대기 **중에**
+  // 숨는 경로를 못 막아 같은 타임아웃이 다시 났다).
+  let budgetRemainingMs = timeoutMs;
   let hiddenMs = 0;
   // 창이 숨어 있는 동안은 "안 그려졌다"가 아니라 "볼 수 없어서 확인할 수 없다"다.
   // Chromium은 숨은/가려진 창의 rAF를 멈추므로, 이 시간을 예산에 넣으면 창이 뒤로
@@ -49,32 +56,48 @@ async function waitForVisiblePaint(element, {
   // 그래서 숨은 시간은 예산에서 빼고(deadline을 그만큼 미룬다) 창이 돌아오면
   // 그 자리에서 확인을 이어 간다. 확인 자체를 느슨하게 하지는 않는다 — 보이는
   // 상태에서 두 프레임을 다시 재는 규칙은 그대로다.
+  const hiddenError = () => {
+    const error = new Error(`paint ack: 창이 숨어 있어 표시를 확인하지 못했다(hidden ${hiddenMs}ms)`);
+    error.reason = 'hidden';
+    return error;
+  };
   const waitWhileHidden = async () => {
     while (visibilityState() !== 'visible') {
-      if (hiddenMs >= maxHiddenMs) {
-        const error = new Error(`paint ack: 창이 숨어 있어 표시를 확인하지 못했다(hidden ${hiddenMs}ms)`);
-        error.reason = 'hidden';
-        throw error;
-      }
+      if (hiddenMs >= maxHiddenMs) throw hiddenError();
       await new Promise((resolve) => setTimer(resolve, HIDDEN_POLL_MS));
       hiddenMs += HIDDEN_POLL_MS;
-      wallClockDeadline += HIDDEN_POLL_MS;
     }
   };
+  // 프레임 하나를 기다린다. 숨은 구간은 예산에서 빼고 다시 기다린다 — 두 자리
+  // 모두에서다: 기다리기 **전에** 숨어 있었거나, 기다리는 **중에** 숨었거나.
+  // 뒤쪽이 실제 실패 경로였다(예산 타이머는 이미 무장돼 있고 rAF는 멈춘다).
   const nextFrame = async () => {
-    await waitWhileHidden();
-    return new Promise((resolve, reject) => {
-      const remainingMs = wallClockDeadline - Date.now();
-      if (remainingMs <= 0) {
-        reject(new Error('paint ack wall-clock timeout'));
-        return;
-      }
-      const timer = setTimer(() => reject(new Error('paint ack wall-clock timeout')), remainingMs);
-      raf((value) => {
-        clearTimer(timer);
-        resolve(value);
+    for (;;) {
+      await waitWhileHidden();
+      if (budgetRemainingMs <= 0) throw new Error('paint ack wall-clock timeout');
+      const armedAt = Date.now();
+      const framed = await new Promise((resolve, reject) => {
+        const timer = setTimer(() => {
+          // 예산이 다 흘렀다. 지금 숨어 있다면 rAF가 멈춘 탓이므로 예산 초과로
+          // 읽지 않는다 — 그 시간을 숨은 시간으로 기록하고 되기다린다.
+          if (visibilityState() !== 'visible') {
+            resolve(HIDDEN_RETRY);
+            return;
+          }
+          reject(new Error('paint ack wall-clock timeout'));
+        }, budgetRemainingMs);
+        raf((value) => {
+          clearTimer(timer);
+          resolve(value);
+        });
       });
-    });
+      if (framed !== HIDDEN_RETRY) {
+        budgetRemainingMs -= Math.max(0, Date.now() - armedAt);
+        return framed;
+      }
+      hiddenMs += Math.max(0, Date.now() - armedAt);
+      if (hiddenMs >= maxHiddenMs) throw hiddenError();
+    }
   };
   for (let frame = 0; frame < maxFrames; frame += 1) {
     await nextFrame();
