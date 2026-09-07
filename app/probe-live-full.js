@@ -1,7 +1,6 @@
-// 실 설정된 Athena 셸을 띄워 모드·설정·버튼·질의를 전수한다.
-// 격리 빈 프로필을 쓰지 않는다 — 사용자가 이미 환경 설정한 %APPDATA%/athena-shell
-// (또는 ATHENA_USERDATA_DIR)을 그대로 쓴다. 종목 인덱스를 위해
-// ATHENA_NO_AUTOSTART를 켜지 않는다. 실주문과 키우미 다섯 얼굴은 클릭하지 않는다.
+// 모드·설정·버튼·질의를 전수한다. 실주문과 키우미 다섯 얼굴은 클릭하지 않는다.
+// 기본은 격리 프로필 — 실앱 %APPDATA%/athena-shell 과 락·상태를 공유하지 않는다.
+// 실프로필이 필요하면 ATHENA_USERDATA_DIR 을 명시한다.
 
 const { app, BrowserWindow } = require('electron');
 const fs = require('fs');
@@ -13,12 +12,15 @@ const {
   LOCKED_CLICKS,
   LIVE_QUERIES,
   SAFE_CLICK_IDS,
+  queryVerdict,
 } = require('./lib/live-full-catalog');
 
-app.setPath(
-  'userData',
-  process.env.ATHENA_USERDATA_DIR || path.join(app.getPath('appData'), 'athena-shell'),
-);
+const PROFILE = process.env.ATHENA_USERDATA_DIR || path.join(__dirname, '.probe-live-full-profile');
+if (!process.env.ATHENA_USERDATA_DIR) {
+  fs.rmSync(PROFILE, { recursive: true, force: true });
+  fs.mkdirSync(PROFILE, { recursive: true });
+}
+app.setPath('userData', PROFILE);
 
 const fetchCalls = [];
 const CAPTURES = path.join(__dirname, 'captures');
@@ -51,8 +53,22 @@ async function waitUntil(check, timeoutMs, intervalMs = 100) {
   return last;
 }
 
-async function captureOrSkip(_win, name) {
-  return { name, skipped: true, reason: 'capturePage hangs Electron main on this host' };
+async function captureOrSkip(win, name) {
+  if (!win || typeof win.isDestroyed === 'function' && win.isDestroyed()) {
+    return { name, skipped: true, reason: 'window gone' };
+  }
+  try {
+    const img = await Promise.race([
+      win.webContents.capturePage(),
+      wait(12000).then(() => null),
+    ]);
+    if (!img) return { name, skipped: true, reason: 'capturePage timeout' };
+    const dest = path.join(CAPTURES, name);
+    fs.writeFileSync(dest, img.toPNG());
+    return { name, skipped: false, path: dest };
+  } catch (error) {
+    return { name, skipped: true, reason: String(error && error.message || error) };
+  }
 }
 
 const SURFACE_PROBE = `(() => {
@@ -144,7 +160,10 @@ async function main() {
   };
   const mainMod = require('./main.js');
   if (typeof mainMod.getWins !== 'function') {
-    throw new Error(`main.js exports missing getWins: ${Object.keys(mainMod || {}).join(',')}`);
+    throw new Error(
+      `main.js exports missing getWins: ${Object.keys(mainMod || {}).join(',')}`
+      + ' — 같은 프로필로 실앱이 이미 떠 있으면 싱글 인스턴스 락에 걸린다',
+    );
   }
   const report = {
     ok: false,
@@ -304,8 +323,9 @@ async function main() {
     }
     await wait(400);
     let after = { count: before, titles: [], kinds: [] };
-    for (let attempt = 0; attempt < 8; attempt += 1) {
-      after = await evalJs(shellWin, `(() => {
+    if (query.expectCard) {
+      for (let attempt = 0; attempt < 8; attempt += 1) {
+        after = await evalJs(shellWin, `(() => {
       const cards = Array.from(document.querySelectorAll('.card'));
       return {
         count: cards.length,
@@ -313,17 +333,16 @@ async function main() {
         kinds: cards.slice(-4).map((card) => card.dataset.kind || card.dataset.cardKind || card.className),
       };
     })()`, 2000, after);
-      if (after.count > before) break;
-      await wait(300);
+        if (after.count > before) break;
+        await wait(300);
+      }
     }
     const cardDelta = after.count - before;
     const source = String((result && result.source) || '');
     const rest = /rest|kiwoom/i.test(source);
     const usedModel = /claude|model|selector/i.test(source);
-    const painted = cardDelta > 0 || (result && result.ok === true);
-    const ok = query.expectCard
-      ? Boolean(painted && result && result.ok && (!query.expectRest || (rest && !usedModel)))
-      : true;
+    const painted = cardDelta > 0;
+    const ok = queryVerdict(query, { result, painted, rest, usedModel });
     report.queries.push({
       id: query.id,
       question: query.question,
@@ -344,13 +363,12 @@ async function main() {
   report.forbiddenOrderCalls = orderCalls().length;
   report.windows.extra = BrowserWindow.getAllWindows().length;
   const modeOk = report.modes.every((row) => row.ok);
-  const requiredQueries = report.queries.filter((row) => LIVE_QUERIES.find((item) => item.id === row.id && item.expectCard));
   report.ok = !report.boot.onboard
     && report.windows.shell
     && report.windows.orb
     && modeOk
     && report.settings.ok
-    && requiredQueries.every((row) => row.ok)
+    && report.queries.every((row) => row.ok)
     && report.forbiddenOrderCalls === 0
     && visibleButtons.length > 0;
   report.finishedAt = new Date().toISOString();

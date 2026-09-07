@@ -42,6 +42,16 @@ const LIVE_QUERIES = Object.freeze([
   { id: 'QA-NEWS', question: '삼성전자 관련 최근 뉴스 알려줘', expectCard: false, expectRest: false, timeoutMs: 20000 },
 ]);
 
+function querySucceeded(result) {
+  return !!(result && result.ok === true && !result.error);
+}
+
+function queryVerdict(query, { result, painted, rest, usedModel }) {
+  const ok = querySucceeded(result);
+  if (!query.expectCard) return ok;
+  return !!(ok && painted && (!query.expectRest || (rest && !usedModel)));
+}
+
 const SAFE_CLICK_IDS = Object.freeze([
   'modeNavSummary',
   'modeNavGraph',
@@ -98,4 +108,6 @@ module.exports = {
   SAFE_CLICK_IDS,
   VERIFY_SUITE,
   PAPER_SUITE,
+  querySucceeded,
+  queryVerdict,
 };
