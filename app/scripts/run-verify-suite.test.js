@@ -8,7 +8,10 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 
-const { parseOnly, parseSuite, runOne, runSuite, readSourceIdentity } = require('./run-verify-suite');
+const {
+  parseOnly, parseSuite, runOne, runSuite, readSourceIdentity,
+  listCaptureEntries, capturesWrittenSince,
+} = require('./run-verify-suite');
 
 // Node의 readable 스트림처럼 setEncoding이 걸리면 청크 경계를 이어 붙여 디코드한다.
 class FakeStream extends EventEmitter {
@@ -46,6 +49,7 @@ function harness({ budgetMs = 20, deferTerminate = false } = {}) {
   const whenTerminated = new Promise((resolve) => { signalTerminate = resolve; });
   let release = () => {};
   const promise = runOne({ script: 'verify:kiumi', budgetMs }, {
+    capturesRoot: null,
     spawn: (command, args, options) => {
       spawnArgs.push({ command, args, options });
       return child;
@@ -167,7 +171,7 @@ function evidenceFixture(t, outcomes) {
   });
   const source = { commit: 'a'.repeat(40), dirty: true, worktreeSha256: 'b'.repeat(64) };
   const deps = {
-    outputRoot, getSource: () => source, write: () => {},
+    outputRoot, capturesRoot: null, getSource: () => source, write: () => {},
     spawn: () => {
       const outcome = outcomes[children.length];
       if (outcome.throw) throw new Error('fixture spawn failed');
@@ -258,11 +262,57 @@ test('실행 증거: 연속 실행은 서로 덮어쓰지 않고 공유된 옛 �
   assert.equal(second.ok, false, '옛 성공 리포트가 현재 실패를 뒤집으면 안 된다');
   for (const report of [first, second]) {
     assert.equal(report.verificationScope, 'subprocess-exit-status');
-    assert.equal(report.sharedArtifacts.verified, false);
-    assert.match(report.sharedArtifacts.reason, /run|실행/);
+    assert.equal(report.sharedArtifacts.verified, true);
+    assert.equal(report.sharedArtifacts.policy, 'mtime-during-step');
+    assert.match(report.sharedArtifacts.reason, /mtime|실행/);
+    assert.deepEqual(report.results[0].captures, []);
   }
   assert.equal(fs.readFileSync(staleReport, 'utf8'), '{"ok":true,"from":"old-run"}');
   assert.equal(fs.readFileSync(staleCapture, 'utf8'), 'old-image');
+});
+
+test('실행 증거: 단계 중에 생긴 captures만 묶고 손대지 않은 옛 파일과 verify-suite는 뺀다', async (t) => {
+  const capturesRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'athena-suite-captures-'));
+  t.after(() => fs.rmSync(capturesRoot, { recursive: true, force: true }));
+  fs.writeFileSync(path.join(capturesRoot, 'LIVE-FULL-REPORT.json'), '{"ok":true,"from":"yesterday"}');
+  fs.mkdirSync(path.join(capturesRoot, 'verify-suite', 'old-run'), { recursive: true });
+  fs.writeFileSync(path.join(capturesRoot, 'verify-suite', 'old-run', 'result.json'), '{"ok":true}');
+  const fixture = evidenceFixture(t, [{}]);
+  fixture.deps.capturesRoot = capturesRoot;
+  const originalSpawn = fixture.deps.spawn;
+  fixture.deps.spawn = () => {
+    const child = originalSpawn();
+    fs.mkdirSync(path.join(capturesRoot, 'paper-gates'), { recursive: true });
+    fs.writeFileSync(path.join(capturesRoot, 'paper-gates', 'CARD-BUTTONS.json'), '{"ok":true}');
+    fs.writeFileSync(path.join(capturesRoot, 'hoga-live.png'), 'this-run');
+    return child;
+  };
+  const result = await runSuite([{ script: 'verify:fixture', budgetMs: 5000 }], fixture.deps);
+  assert.equal(result.ok, true);
+  assert.equal(result.sharedArtifacts.policy, 'mtime-during-step');
+  const names = result.results[0].captures.map((entry) => entry.path).sort();
+  assert.deepEqual(names, ['hoga-live.png', 'paper-gates/CARD-BUTTONS.json']);
+  assert.equal(
+    fs.readFileSync(path.join(capturesRoot, 'LIVE-FULL-REPORT.json'), 'utf8'),
+    '{"ok":true,"from":"yesterday"}',
+  );
+});
+
+test('capturesWrittenSince는 새 파일과 mtime이 앞선 파일만 남긴다', () => {
+  const before = [
+    { path: 'old.png', mtimeMs: 10, size: 4 },
+    { path: 'rewritten.json', mtimeMs: 10, size: 2 },
+  ];
+  const after = [
+    { path: 'old.png', mtimeMs: 10, size: 4 },
+    { path: 'rewritten.json', mtimeMs: 20, size: 2 },
+    { path: 'new.png', mtimeMs: 20, size: 1 },
+  ];
+  assert.deepEqual(
+    capturesWrittenSince(before, after).map((entry) => entry.path),
+    ['rewritten.json', 'new.png'],
+  );
+  assert.deepEqual(listCaptureEntries(null), []);
 });
 
 test('실행 증거: 현재 Git commit과 dirty 여부 및 작업 사본 내용 해시를 읽는다', () => {

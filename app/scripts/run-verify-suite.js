@@ -38,11 +38,50 @@ function printList(suite) {
   }
 }
 
+// 공유 captures/는 여러 하네스가 같은 이름을 덮어쓴다. 단계 시작 스냅샷과
+// 끝난 뒤 스냅샷을 비교해, 그 사이에 생기거나 mtime이 앞선 파일만 이번 단계
+// 증거로 묶는다. verify-suite/ 는 러너 자신의 실행 폴더라 여기서 걷지 않는다.
+function listCaptureEntries(root) {
+  if (!root) return [];
+  let names;
+  try { names = fs.readdirSync(root, { withFileTypes: true }); }
+  catch { return []; }
+  const out = [];
+  for (const entry of names) {
+    if (entry.name === 'verify-suite') continue;
+    const full = path.join(root, entry.name);
+    if (entry.isDirectory()) {
+      for (const child of listCaptureEntries(full)) {
+        out.push({ ...child, path: `${entry.name}/${child.path}` });
+      }
+      continue;
+    }
+    try {
+      const st = fs.statSync(full);
+      out.push({ path: entry.name, mtimeMs: st.mtimeMs, size: st.size });
+    } catch { /* 스냅샷 중 사라진 파일은 이번 실행 증거가 아니다 */ }
+  }
+  return out.sort((a, b) => (a.path < b.path ? -1 : a.path > b.path ? 1 : 0));
+}
+
+function capturesWrittenSince(before, after) {
+  const prev = new Map(before.map((entry) => [entry.path, entry]));
+  return after.filter((entry) => {
+    const old = prev.get(entry.path);
+    if (!old) return true;
+    return entry.mtimeMs > old.mtimeMs || entry.size !== old.size;
+  });
+}
+
 function runOne(item, deps = {}) {
   const spawnFn = deps.spawn || spawn;
   const terminateFn = deps.terminateTree || terminateTree;
   const started = Date.now();
   const logPaths = deps.logPaths || {};
+  const capturesRoot = Object.prototype.hasOwnProperty.call(deps, 'capturesRoot')
+    ? deps.capturesRoot
+    : path.join(appDir, 'captures');
+  const capturesBefore = listCaptureEntries(capturesRoot);
   for (const file of Object.values(logPaths)) fs.writeFileSync(file, '');
   return new Promise((resolve) => {
     let stdout = '';
@@ -64,6 +103,7 @@ function runOne(item, deps = {}) {
         durationMs: Math.max(0, finished - started),
         stdoutTail: stdout, stderrTail: stderr,
         stdoutLog: logPaths.stdout || null, stderrLog: logPaths.stderr || null,
+        captures: capturesWrittenSince(capturesBefore, listCaptureEntries(capturesRoot)),
       });
     };
     const append = (stream, chunk) => {
@@ -145,9 +185,13 @@ async function runSuite(selected, deps = {}) {
     startedAt: new Date(started).toISOString(), finishedAt: null, durationMs: null,
     status: 'running', source: getSource(),
     verificationScope: 'subprocess-exit-status',
-    // 하위 프로브가 공유 captures에 쓰는 파일은 이 run ID를 확인할 계약이 없다.
-    // 존재/mtime만으로 이번 실행의 리포트·캡처라고 승격하지 않는다.
-    sharedArtifacts: { verified: false, reason: 'Shared reports/captures are not bound to this run ID.' },
+    // 공유 captures/는 단계 실행 중에 mtime이 앞선 파일만 그 단계 결과에 묶는다.
+    // 그보다 오래된 파일은 이번 실행 증거가 아니다(CODE-039).
+    sharedArtifacts: {
+      verified: true,
+      policy: 'mtime-during-step',
+      reason: 'captures/ 파일은 그 단계 실행 중에 생기거나 mtime이 앞선 것만 이번 실행 증거다. 오래된 파일은 묶지 않는다.',
+    },
   };
   const persist = () => {
     const tmp = `${report.reportPath}.tmp`;
@@ -227,4 +271,7 @@ if (require.main === module) {
   });
 }
 
-module.exports = { parseOnly, parseSuite, runOne, runSuite, readSourceIdentity };
+module.exports = {
+  parseOnly, parseSuite, runOne, runSuite, readSourceIdentity,
+  listCaptureEntries, capturesWrittenSince,
+};
