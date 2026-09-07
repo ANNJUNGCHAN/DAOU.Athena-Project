@@ -180,10 +180,14 @@ function applyAffixes(spec, formatted) {
     || (spec.suffix !== undefined && typeof spec.suffix !== 'string')) {
     return { text: missingText(), tone: null, missing: true };
   }
-  return {
-    ...formatted,
-    text: `${spec.prefix || ''}${formatted.text}${spec.suffix || ''}`,
-  };
+  // 이미 단위·접두가 붙은 표시 문자열(Paper 원문, 백엔드 text 필드)에
+  // 같은 접두·접미를 한 번 더 붙이지 않는다. 생값 숫자는 이 가드에 안 걸린다.
+  let text = formatted.text;
+  const prefix = spec.prefix || '';
+  const suffix = spec.suffix || '';
+  if (prefix && !text.startsWith(prefix)) text = `${prefix}${text}`;
+  if (suffix && !text.endsWith(suffix)) text = `${text}${suffix}`;
+  return { ...formatted, text };
 }
 
 function missingResult(spec, reason, authored = false) {
@@ -231,7 +235,8 @@ function formatSlot(format, raw) {
     return missingResult(spec, normalized.missing, explicitlyMissing);
   }
   if (typeof normalized.text === 'string' && normalized.text) {
-    return applyAffixes(spec, { text: normalized.text, tone: normalized.tone || null, missing: false });
+    // 호출부가 완성한 표기다. 접두·접미·단위를 다시 입히지 않는다.
+    return { text: normalized.text, tone: normalized.tone || null, missing: false };
   }
 
   const kind = kindOf(spec);
