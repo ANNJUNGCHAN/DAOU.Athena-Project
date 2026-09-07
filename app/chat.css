@@ -65,9 +65,9 @@ html, body { background: transparent; }
 }
 .boot-base,
 .boot-name {
-  font-family: var(--font-display);
+  font-family: 'Daki', 'Noto Sans KR Athena', 'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', -apple-system, 'Segoe UI', sans-serif;
   font-size: 112px;
-  font-weight: 400;
+  font-weight: 300;
   line-height: 112px;
   letter-spacing: -0.04em;
   white-space: nowrap;
