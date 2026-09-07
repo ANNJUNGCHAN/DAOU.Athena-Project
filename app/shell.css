@@ -719,11 +719,11 @@ body { margin: 0; overflow: hidden; }
   padding: 16px 18px;
   border: 1px dashed var(--color-brand);
   border-radius: 12px;
-  background: #fff5fa;
+  background: rgb(238 19 123 / 5%);
   cursor: pointer;
   text-align: left;
 }
-.backtest-technique-new:hover { background: #ffedf6; }
+.backtest-technique-new:hover { background: rgb(238 19 123 / 10%); }
 .backtest-technique-new-plus {
   flex-shrink: 0;
   width: 30px;

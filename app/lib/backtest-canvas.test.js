@@ -7,6 +7,8 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
 const backtestCanvas = require('./backtest-canvas');
 const { createBacktestCanvas } = backtestCanvas;
 
@@ -2356,6 +2358,15 @@ test('기법 카드: 이름·분류 칩(한국어)·한 줄 설명이 함께 선
   assert.equal(findByClass(card, 'backtest-preset-category')[0].textContent, '추세');
   // 설명은 프리셋 yaml의 metadata.description을 그대로 쓴다 — 지어내지 않는다.
   assert.match(findByClass(card, 'backtest-technique-desc')[0].textContent, /단기 이평이/);
+});
+
+test('[+ 새 기법 만들기] 배너는 브랜드 알파만 쓰고 팔레트 밖 hex를 만들지 않는다', () => {
+  const css = fs.readFileSync(path.join(__dirname, '..', 'shell.css'), 'utf8');
+  const block = css.match(/\.backtest-technique-new \{[\s\S]*?\}/)[0];
+  const hover = css.match(/\.backtest-technique-new:hover \{[^}]+\}/)[0];
+  assert.match(block, /background:\s*rgb\(238 19 123 \/ 5%\)/);
+  assert.match(hover, /background:\s*rgb\(238 19 123 \/ 10%\)/);
+  assert.equal(/#fff5fa|#ffedf6/i.test(block + hover), false);
 });
 
 test('[+ 새 기법 만들기]: 빈 뼈대를 코드창에 세우고 첫 문장을 채팅에 보낸다', async () => {
