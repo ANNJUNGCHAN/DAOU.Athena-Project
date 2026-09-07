@@ -63,6 +63,40 @@ test('요청 몸체의 target은 manifest alias 가방이고 빈 값은 싣지 �
   assert.throws(() => buildHydrateBody({ target: { stk_cd: '005930' } }), /board_id/);
 });
 
+test('종목 코드 배열은 첫 6자리만 stk_cd로 올리고 JSON 배열로 보내지 않는다', () => {
+  assert.deepEqual(
+    buildHydrateBody({
+      boardId: '49Y4-0',
+      target: { stk_cd: ['005930', '000660'], stex_tp: '0' },
+    }),
+    { board_id: '49Y4-0', target: { stex_tp: '0', stk_cd: '005930' } },
+  );
+  assert.deepEqual(
+    buildHydrateBody({ boardId: '49Y4-0', target: { stk_cds: ['005930', '000660'] } }),
+    { board_id: '49Y4-0', target: { stk_cd: '005930' } },
+  );
+  const body = buildHydrateBody({
+    boardId: '49Y4-0',
+    target: { stk_cd: ['005930', '000660'], symbols: ['035420'] },
+  });
+  assert.equal(body.target.stk_cd, '005930');
+  assert.equal(Array.isArray(body.target.stk_cd), false);
+  assert.equal('stk_cds' in body.target, false);
+  assert.equal('symbols' in body.target, false);
+  assert.equal('targets' in body, false);
+});
+
+test('빈·잘못된 종목 배열은 stk_cd를 만들지 않는다', () => {
+  assert.deepEqual(
+    buildHydrateBody({ boardId: '49Y4-0', target: { stk_cd: [], stex_tp: '0' } }),
+    { board_id: '49Y4-0', target: { stex_tp: '0' } },
+  );
+  assert.deepEqual(
+    buildHydrateBody({ boardId: '49Y4-0', target: { stk_cds: ['AAPL'] } }),
+    { board_id: '49Y4-0' },
+  );
+});
+
 test('slot_values는 목록으로 와도 표로 와도 같은 표가 된다', () => {
   assert.deepEqual(
     normalizeSlotValues([{ slot_id: 'a', value: 1 }, { slot_id: 'b', value: 0 }]),
@@ -83,6 +117,27 @@ test('operation 상태는 로딩 완료와 부분 실패를 판단할 최소 필
     { operation_ref: 'base:ka10001', status: 'bound', bound_count: 6 },
     { operation_ref: 'base:ka10003', status: 'unbound', reason: 'upstream_error' },
   ]);
+});
+
+test('하이드레이션 POST의 stk_cd는 배열이 아니라 첫 종목 문자열이다', async () => {
+  const { calls, fetchImpl } = makeFetch(hydrateResponse([]));
+  await hydrateBoard({
+    backendBase: 'http://127.0.0.1:8010',
+    fetchImpl,
+    token: 'board-hydrate-token',
+    boardId: '49Y4-0',
+    target: { stk_cd: ['005930', '000660'] },
+  });
+  assert.deepEqual(calls[0].body.target, { stk_cd: '005930' });
+  assert.equal(typeof calls[0].body.target.stk_cd, 'string');
+  await hydrateBoard({
+    backendBase: 'http://127.0.0.1:8010',
+    fetchImpl,
+    token: 'board-hydrate-token',
+    boardId: '49Y4-0',
+    target: { stk_cds: ['035420', '000660'] },
+  });
+  assert.deepEqual(calls[1].body.target, { stk_cd: '035420' });
 });
 
 test('하이드레이션은 로컬 베어러를 싣고 surface_contract.slot_values를 읽는다', async () => {
