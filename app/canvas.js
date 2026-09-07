@@ -3350,17 +3350,25 @@ void pluginRefresh();
 // 툴에 없다).
 // 실패 문구 — 봉투의 status를 버리고 error 원문만 보여주면 404가 "Not Found"로
 // 끝나 사용자가 무엇을 해야 할지 알 수 없다(2026-08-31 프로브 실측). 손쓸 수 있는
-// 두 상태만 문장으로 바꾸고 원문은 괄호로 남긴다 — 감추지 않는다.
+// 상태만 문장으로 바꾸고 원문은 괄호로 남긴다 — 감추지 않는다. 예외는 하나,
+// 백테스트가 꺼져 있을 때다: 그 한 줄이 곧 화면의 상태 표식이라 원문을 붙이지
+// 않는다(backtest-canvas.js errorStateBadge가 문장 앞을 읽는다).
 function backtestError(res, fallback) {
   const raw = (res && res.error) || fallback;
   // status 0 = 연결 자체가 안 됐다. Node fetch는 이때 "fetch failed" 열두 글자만
   // 던지는데, 그 문구로는 사용자가 무엇을 해야 할지 알 수 없다 — 백엔드를 안 띄운
   // 것이 원인의 거의 전부다(2026-09-01 probe-backtest-mode 실측으로 잡았다).
   if (res && res.status === 0) return `백엔드에 연결하지 못했습니다 — 백엔드가 떠 있는지 확인하세요 (${raw})`;
-  // 503은 기능이 꺼진 것이다(보드 10 「비활성」). 내부 환경변수 이름도 백엔드가 준
-  // 영어 원문도 사용자에게는 할 일이 아니다 — Paper가 적은 그 한 줄만 남긴다.
-  // 이 문장이 곧 상태 표식이다(backtest-canvas.js errorStateBadge가 앞을 읽는다).
-  if (res && res.status === 503) return window.AthenaLib.BacktestCanvas.BACKTEST_DISABLED_TEXT;
+  // 503에는 원인이 둘 있다. 백테스트가 꺼진 것(보드 10 「비활성」)일 때만 Paper가
+  // 적은 한 줄로 바꾼다 — 내부 환경변수 이름도 백엔드 영어 원문도 사용자에게는
+  // 할 일이 아니다. 데이터 세션이 아직 안 붙은 503(백필 경로)까지 꺼졌다고 말하면
+  // 켜져 있는 기능을 껐다고 하는 거짓말이 되므로, 그쪽은 원문을 남긴다.
+  if (res && res.status === 503) {
+    if (String(raw).includes('ATHENA_BACKTEST_ENABLED')) {
+      return window.AthenaLib.BacktestCanvas.BACKTEST_DISABLED_TEXT;
+    }
+    return `백테스트를 지금 쓸 수 없습니다 (${raw})`;
+  }
   if (res && res.status === 404) return `백엔드에 백테스트 경로가 없습니다 — 백엔드가 이 브랜치 버전인지 확인하세요 (${raw})`;
   return raw;
 }

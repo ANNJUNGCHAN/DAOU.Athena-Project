@@ -2827,10 +2827,16 @@ function createBacktestCanvas(options) {
       // 막다른 길 금지(보드 10) — 오류 화면에서 설계로 돌아갈 길이 없어 사용자가 갇혔다
       // (2026-09-02 실측 "뒤로가기가 없어"). 전략이 있으면 설계 폼으로, 없으면 프리셋부터.
       //
-      // 비활성은 다르다: 조회 자체가 막혀 프리셋도 못 읽었으니 돌아갈 설계가 없다.
-      // 켠 다음 다시 묻는 것이 유일한 출구다.
+      // 비활성은 다르다: 조회가 막혀 목록도 못 읽은 자리라면 돌아갈 설계가 없고,
+      // 켠 뒤 다시 묻는 것이 유일한 출구다. 설계를 마친 뒤 실행에서 꺼진 것을 만났을
+      // 때는 돌아갈 자리가 있으므로 그때만 함께 세운다.
       if (badge === ERROR_BADGE_DISABLED) {
         panel.appendChild(button('backtest-error-back', '다시 시도', () => { void loadPresets(); }));
+        if (spec) {
+          panel.appendChild(button('backtest-error-back', '설계로 돌아가기', () => {
+            setState({ view: 'design', tab: 'design', designTab: 'form', message: null });
+          }));
+        }
         container.appendChild(panel);
         return;
       }
