@@ -42,7 +42,7 @@
         "layer_직접": 166,
         "layer_병기": 0,
         "layer_펼침": 0,
-        "tables": 0,
+        "tables": 1,
         "tree_text_truncated": 0,
         "bs_col": 0,
         "bs_paired": 0,
@@ -100,7 +100,7 @@
         ],
         "unresolved": []
       },
-      "html_sha256": "39c5525f3d66646aed081e42feaca56f5ed5564a8cdb42290639e5fef124c974"
+      "html_sha256": "c0d1edbad865ceee5da3d81e13b0df4e1b25963e3cebf3ee95496e046f2896a8"
     },
     {
       "board_id": "135M-2",
@@ -300,7 +300,7 @@
         ],
         "unresolved": []
       },
-      "html_sha256": "8039a65e86a52c2ee2cbe11ed931f284ccfb510b3473094e750c711a8033e9c8"
+      "html_sha256": "70a7402b60536402cf2e4486a021332118a3264c05d0ece19c5f791cb0f4388b"
     },
     {
       "board_id": "13BC-2",
@@ -621,7 +621,7 @@
         "layer_직접": 115,
         "layer_병기": 0,
         "layer_펼침": 0,
-        "tables": 0,
+        "tables": 1,
         "tree_text_truncated": 0,
         "bs_col": 0,
         "bs_paired": 0,
@@ -633,7 +633,7 @@
         "marks": [],
         "unresolved": []
       },
-      "html_sha256": "9d27f73e39e781d9b8cb91a39ebf8d84ba985283693a5bfc29eabba10a44e86b"
+      "html_sha256": "fe313e7296731c4610d0eaefc4c6fa2488b60da628a6d6650c3bea357c4ed237"
     },
     {
       "board_id": "15N5-2",
@@ -916,7 +916,7 @@
         "layer_직접": 244,
         "layer_병기": 20,
         "layer_펼침": 0,
-        "tables": 0,
+        "tables": 1,
         "tree_text_truncated": 0,
         "bs_col": 0,
         "bs_paired": 0,
@@ -928,7 +928,7 @@
         "marks": [],
         "unresolved": []
       },
-      "html_sha256": "6d1379545e609004489ef597d6f76658ee74c928a7cdbcf6375df23a8d4375c9"
+      "html_sha256": "5395381f9500ed6b3391c4b16cd11905499b7b321b540713868810b2a9798864"
     },
     {
       "board_id": "2QFO-2",
@@ -1070,10 +1070,10 @@
         "layer_직접": 189,
         "layer_병기": 0,
         "layer_펼침": 0,
-        "tables": 0,
+        "tables": 1,
         "tree_text_truncated": 0,
-        "bs_col": 0,
-        "bs_paired": 0,
+        "bs_col": 45,
+        "bs_paired": 64,
         "bs_leaf": 0,
         "bs_kpi_cell": 5,
         "state_control_marks": 0
@@ -1082,7 +1082,7 @@
         "marks": [],
         "unresolved": []
       },
-      "html_sha256": "1319c2943652ce6992b0aecb5828b6b054d3c2db24252bae0ca1f6562303659e"
+      "html_sha256": "7eb0742026a84372999ac3cb8407543f8dd143b0d9baae591db87fdd47bca35f"
     },
     {
       "board_id": "2QRP-1",
@@ -1292,7 +1292,7 @@
         "marks": [],
         "unresolved": []
       },
-      "html_sha256": "01ffd291016c833c85310a35849a11dd31151bc506a96f2f5aa33b44ad277120"
+      "html_sha256": "811d44572a5064c0ed5a0d0b896fe59381846042e8c7ed6e239d8412bf6a5c9d"
     },
     {
       "board_id": "2RJ7-1",
@@ -1826,7 +1826,7 @@
         "marks": [],
         "unresolved": []
       },
-      "html_sha256": "81fd608cb5b270a7c0e25ebe7eeeebcdd8f5e0b0a92d7ad548c8fc3e517e7930"
+      "html_sha256": "f8f2f2a79d46a6c02cb10071b0306f1cacdd2ee4596583acd0862c8da42a65a9"
     },
     {
       "board_id": "2TAG-1",
@@ -1867,7 +1867,7 @@
         "marks": [],
         "unresolved": []
       },
-      "html_sha256": "9113230bec7d1919bd4dc330c116ef0acf2723aedce4ff530019fead5e918a61"
+      "html_sha256": "409735c07897eee65028aeacf76278c18423504fbb9ff5e94101df05237e6a6f"
     },
     {
       "board_id": "2TET-1",
@@ -1908,7 +1908,7 @@
         "marks": [],
         "unresolved": []
       },
-      "html_sha256": "3acc2e8a2a917eab67da3dba9e07d376543ebb645f21089196bca5006bc0d017"
+      "html_sha256": "43c748e8abe76451b34fc0e1429b45ceb690c6cfc57a69ad721ac56135eb73f5"
     },
     {
       "board_id": "2TJ6-1",
@@ -1948,7 +1948,7 @@
         "marks": [],
         "unresolved": []
       },
-      "html_sha256": "6b0be3f4800c476da3f519870f2537eb86f7d6038ca696296e83c91f681c4354"
+      "html_sha256": "dc0ef12a6fd372040a7c56e9da4113a2139091c2d1cafc62811f26e0d5098d0a"
     },
     {
       "board_id": "2TNJ-1",
@@ -1990,7 +1990,7 @@
         "marks": [],
         "unresolved": []
       },
-      "html_sha256": "5074933e93f6db1b00a39153a0c638e28d8279bd987dce4f8c039203ee72bfd0"
+      "html_sha256": "b77d5722ce74852ce38f5c7c72602285dc89e5dc7b3a61ab07f4677b94b7e320"
     },
     {
       "board_id": "2TRW-1",
@@ -2829,7 +2829,7 @@
         "layer_직접": 143,
         "layer_병기": 17,
         "layer_펼침": 0,
-        "tables": 0,
+        "tables": 1,
         "tree_text_truncated": 0,
         "bs_col": 0,
         "bs_paired": 0,
@@ -2841,7 +2841,7 @@
         "marks": [],
         "unresolved": []
       },
-      "html_sha256": "6117b4d538d849498032b7c0693519b76e8777b8088d56b3b214cf7e0bddb9a2"
+      "html_sha256": "4da22db724fa4e9376664f0f5f96672971c495e0f55f2840dafc242e40466f17"
     },
     {
       "board_id": "2XKO-0",
@@ -2868,7 +2868,7 @@
         "layer_직접": 153,
         "layer_병기": 12,
         "layer_펼침": 0,
-        "tables": 0,
+        "tables": 1,
         "tree_text_truncated": 0,
         "bs_col": 0,
         "bs_paired": 0,
@@ -2880,7 +2880,7 @@
         "marks": [],
         "unresolved": []
       },
-      "html_sha256": "297d1d77071d5fe9de524fde2c7bedc32f930afbb5ee181ef2e3301640691b9e"
+      "html_sha256": "f465953b0cf39854a0be2651d9ef4ee5fd50ee01cbed7931e46087f626fb392a"
     },
     {
       "board_id": "2XP6-0",
@@ -2907,7 +2907,7 @@
         "layer_직접": 143,
         "layer_병기": 17,
         "layer_펼침": 0,
-        "tables": 0,
+        "tables": 1,
         "tree_text_truncated": 0,
         "bs_col": 0,
         "bs_paired": 0,
@@ -2919,7 +2919,7 @@
         "marks": [],
         "unresolved": []
       },
-      "html_sha256": "bf946cc0635ff7d39c5b03bd7531db209f09d1101785d17ac9a13c7066a92362"
+      "html_sha256": "57ab5f4fc03dcaa606e0fbfc1eb1fdc05080972ab7050625b145ee0319ddba6c"
     },
     {
       "board_id": "2XTO-0",
@@ -2946,7 +2946,7 @@
         "layer_직접": 149,
         "layer_병기": 17,
         "layer_펼침": 0,
-        "tables": 0,
+        "tables": 1,
         "tree_text_truncated": 0,
         "bs_col": 0,
         "bs_paired": 0,
@@ -2958,7 +2958,7 @@
         "marks": [],
         "unresolved": []
       },
-      "html_sha256": "23946513e61fc6c7bcb9db446069ea1600a49a3821f1e25906e6656c84f5f65d"
+      "html_sha256": "5074983f799314aabffaaab1233339b2c4a497c0c5463083b99b6047c35611df"
     },
     {
       "board_id": "2XY6-0",
@@ -3071,7 +3071,7 @@
         "layer_직접": 144,
         "layer_병기": 17,
         "layer_펼침": 0,
-        "tables": 0,
+        "tables": 1,
         "tree_text_truncated": 0,
         "bs_col": 0,
         "bs_paired": 0,
@@ -3083,7 +3083,7 @@
         "marks": [],
         "unresolved": []
       },
-      "html_sha256": "ba21f50dfbfc67a995620b85cbba52254b9171231b7fb7ff59c20653c7763c9c"
+      "html_sha256": "3262fa5b62c65d88cffe9f7c9adfe5c708c06d74378e228d30941142d50e9b65"
     },
     {
       "board_id": "2YEQ-0",
@@ -3110,7 +3110,7 @@
         "layer_직접": 144,
         "layer_병기": 17,
         "layer_펼침": 0,
-        "tables": 0,
+        "tables": 1,
         "tree_text_truncated": 0,
         "bs_col": 0,
         "bs_paired": 0,
@@ -3122,7 +3122,7 @@
         "marks": [],
         "unresolved": []
       },
-      "html_sha256": "3e25f7a0bc2e4d1bee2b42c9663a0e3f586d4653cd18085d01ddf9e6114d1d0c"
+      "html_sha256": "a903dca16dc2dac4a4ff5979e6e31d3c702f221b0aa0d243741ba84e9eb7b44f"
     },
     {
       "board_id": "2YJ8-0",
@@ -3149,7 +3149,7 @@
         "layer_직접": 143,
         "layer_병기": 17,
         "layer_펼침": 0,
-        "tables": 0,
+        "tables": 1,
         "tree_text_truncated": 0,
         "bs_col": 0,
         "bs_paired": 0,
@@ -3161,7 +3161,7 @@
         "marks": [],
         "unresolved": []
       },
-      "html_sha256": "80dc5c714c8e62b799a0d116a38d20134bc5d225da05e9e38a74fe824ba486a8"
+      "html_sha256": "d36e7ebcd7ce805ee508604e3707aa2936bb9dfef6151fd8a3c1bb72bbc96b1d"
     },
     {
       "board_id": "2YNQ-0",
@@ -3188,7 +3188,7 @@
         "layer_직접": 142,
         "layer_병기": 17,
         "layer_펼침": 0,
-        "tables": 0,
+        "tables": 1,
         "tree_text_truncated": 0,
         "bs_col": 0,
         "bs_paired": 0,
@@ -3200,7 +3200,7 @@
         "marks": [],
         "unresolved": []
       },
-      "html_sha256": "98ac9e1227c3dc7193b8403440ffa114e7c24c3d1c9d490cccbb3251002427d0"
+      "html_sha256": "b5bbb918823fc274f8091960b9ed57f913f1efdd79197c5b93c76a1bdcc23acf"
     },
     {
       "board_id": "2YS8-0",
@@ -4179,7 +4179,7 @@
         "marks": [],
         "unresolved": []
       },
-      "html_sha256": "e874992e84e97adb0f528c7a8a42780524039f5bb10583b82cc90e0660a8a9fa"
+      "html_sha256": "c3e05665cdf852f84b688ce25aa5c585cfcc37c8729088cec0aba21691e1a056"
     },
     {
       "board_id": "3DZ1-0",

@@ -150,13 +150,37 @@
   outline-offset: 2px;
 }
 
-/* 숫자 줄바꿈은 여기서 손대지 않는다 — 실측 결과. Paper 원문은 보드 루트에
- * `overflow-wrap: anywhere`를 실어 한 글자에서도 줄을 바꾼다. 보드가 Paper 폭보다
- * 좁아지면 "150,850"이 "150,85 / 0"으로 끊긴다(실측 2R3M-1 컨테이너 1171px).
- * 값 자리에 `overflow-wrap: normal`을 걸면 그 끊김은 사라지지만(상속은 선언 규칙에
- * 진다) 좁은 단계에서 가로 넘침이 되살아난다 — 실측 컨테이너 537px에서 4~90px,
- * 377px에서 25~250px. 폭 계약(가로 넘침 0)과 숫자 가독은 여기서 맞바꿀 수 없다:
- * Paper 쪽에서 좁은 단계의 글자 크기를 정하는 편이 맞다(파리티 레인 판단). */
+/* ---------- 줄바꿈 정책 — 글자 단위 분절은 어느 단계에서도 없다 ----------
+ *
+ * 앞선 판단은 `overflow-wrap: anywhere`(Paper 원문)를 분절의 원인으로 보고 손대지
+ * 않기로 했지만, 그건 원인의 절반이었다. 한글은 CSS 기본값(`word-break: normal`)에서
+ * **음절 사이가 이미 줄바꿈 기회**다 — 실측 2QM7-2(삼성전자 수급)에는 `anywhere`가
+ * 0건인데도 "모건스탠리"가 "모건스탠 / 리"로 쪼개진다. 그래서 정책 선언은
+ * `word-break: keep-all`이고, 추출 원문 97장에 그 선언은 0건이다.
+ *
+ * `anywhere`는 여기에 숫자·라틴까지 얹는 두 번째 원인이다("149,50 / 0", 실측
+ * 2R3M-1 컨테이너 1171px). 인라인 선언은 이 규칙보다 세므로 board-mount의
+ * stripCharacterWrap이 마운트 시점에 걷어낸다 — 다섯 레이아웃 속성과 달리
+ * 되돌리지 않는다: 한 글자씩 눕는 것은 Paper가 그린 문면이 아니라 폭이 부족할 때의
+ * 브라우저 기본 동작이다.
+ *
+ * 이제 남는 부족분은 줄바꿈이 아니라 가로 넘침으로 나온다(실측 컨테이너 537px에서
+ * 4~90px · 377px에서 25~250px). 그건 이 파일 아래의 수단으로 받는다: 열 접기 →
+ * 가로 스크롤. 값·문구를 쪼개서 폭을 맞추는 길은 닫는다(사용자 확정 2026-09-07). */
+.board-surface {
+  word-break: keep-all;
+  overflow-wrap: normal;
+}
+
+/* 값 자리(숫자·통화·%·코드·시각)는 어절 경계조차 없으므로 nowrap이 유일한 규약이다.
+ * 소유자(`.bs-r-flow`/`.bs-r-scroll`) 아래로 한정하던 L 단계 규칙을 base로 넓힌다 —
+ * 반응형 기계가 아예 안 붙은 보드 25장(97장 실측)은 그 한정 때문에 값 nowrap을
+ * 하나도 못 받았고, 2QM7-2·15L8-2가 거기 있다. XL에서는 Paper 폭이 이미 한 줄을
+ * 담으므로 계산값이 안 바뀐다. */
+:is(.bs-r-atomic, [data-bs-value-atomic="true"], [data-paired-source]) {
+  white-space: nowrap;
+  overflow-wrap: normal;
+}
 
 /* 추출기가 넣은 접기 래퍼 — XL에서는 박스 트리에서 사라진다(픽셀 동일). */
 .bs-col { display: contents; }
@@ -266,6 +290,14 @@
    * max-content를 쓰되 남은 폭에서 잘리므로 좁은 단계에서 칸이 줄을 밀어내지 않는다. */
   .bs-kpi-cell[data-bs-kpi-elastic="true"] { min-width: fit-content; }
 
+  /* 줄바꿈 정책(base)이 켜지면 값·문구가 안 쪼개지므로 칸의 min-content가 「가장 긴
+   * 한 줄」이다. 위 `[data-bs-hoisted] { min-width: 0 }`이 그 바닥을 놓아 버려서
+   * 칸이 0까지 줄고 안쪽 문면이 옆 칸 위로 흘러 겹친다 — 원문이 `flex-shrink: 0`인
+   * 히어로 칸은 탄력 칸 바닥의 대상이 아니다(실측 2QM7-2 「모건스탠리 +842억원」).
+   * `fit-content`는 남은 폭에서 잘리므로 좁은 단계에서 줄을 밀어내지 않고, 글자를
+   * 이고 있는 칸만 받으므로 빈 spacer는 그대로 0이다(시세 스트립 6~8칸 계약). */
+  .bs-kpi-cell[data-bs-kpi-content="true"] { min-width: fit-content; }
+
   /* 의미 단위가 먼저 다음 줄로 이동하고, 단위 안의 글자는 쪼개지지 않는다.
    * 값 표시는 responsive owner 밖에서도 쓰이므로 반드시 owner 아래로 한정한다. */
   .bs-r-flow { flex-wrap: wrap; }
@@ -320,6 +352,23 @@
   /* 헤더도 한 줄을 고집하지 않는다 — 제목 묶음과 스트립이 양끝으로 벌어져 있어
    * 좁아지면 둘의 min-content 합이 그대로 가로 넘침이 된다(실측 135M-2 49px). */
   .bs-header { flex-wrap: wrap; }
+  /* 머리·스트립이 접혀도 그 안의 가로 묶음이 한 줄을 고집하면 그만큼이 그대로 가로
+   * 넘침이다 — flex item 기본 `min-width: auto`가 자식들의 min-content를 지킨다
+   * (실측 2XTO-0 `2XXN-0` 기능 네비 421px ↔ 컨테이너 378px에서 표면 37px, 최소
+   * 프리셋 3회 재현). 묶음 안에서도 접게 하면 칩은 아랫줄로 내려가고 글자는 하나도
+   * 안 사라진다 — XS의 `[data-bs-split-row] > *`와 같은 처방이다.
+   * 표시는 board-mount의 markWrapRow가 **가로 묶음에만** 남긴다: 세로 묶음에
+   * flex-wrap을 주면 넘친 것이 오른쪽 새 열로 가서 오히려 가로 넘침이 된다. */
+  [data-bs-wrap-row="true"] { min-width: 0; flex-wrap: wrap; }
+  /* 칸이 전부 탄력(`flex-basis: 0%`)인 줄은 폭이 부족해도 줄바꿈이 발동하지 않는다 —
+   * 각 칸이 0을 기준으로 남는 폭을 나눠 가지기 때문이다. 그 칸에는 자기 문면이 한
+   * 줄로 서는 바닥을 준다(실측 2SKU-1 「예수금 KPI 4칸」: 칸 91px 안에 내용 144px,
+   * 사슬로 표면 9px). `fit-content`는 남은 폭에서 잘리므로 넉넉한 단계에서 줄을
+   * 밀어내지 않고, 글자를 이고 있는 칸만 받으므로 빈 spacer는 그대로 0이다. */
+  /* 표시는 board-mount가 소유자의 **직계 자식**에만 남기므로 부모 한정이 필요 없다.
+   * 접기 소유자(`.bs-r-flow`)에도 같은 바닥이 필요하다 — flow는 `flex-wrap`만 주고,
+   * 칸이 탄력이면 그 wrap이 발동하지 않는다(실측 2T63-1 「Order Progress」 5장). */
+  [data-bs-elastic-cell="true"] { min-width: fit-content; }
   .bs-kpi { flex-wrap: wrap; }
   .bs-kpi-cell { width: auto; flex-basis: calc(33.3333% - 24px); flex-grow: 1; }
   .bs-strip { overflow-x: auto; }
@@ -329,6 +378,23 @@
    * 것이 없어지고 글자만 한 자씩 세로로 눕는다 — 한국어 원문이 `overflow-wrap:
    * anywhere`라 자동 최소 크기가 한 글자다(실측 컨테이너 377px에서 칩 7개 전부). */
   .bs-strip > * { flex-shrink: 0; }
+  /* 스트립이 세로로 쌓은 양끝 줄은 헤더와 같은 축으로 M부터 접는다(위 `.bs-header`).
+   * XS까지 미루면 S 구간에서 칩 묶음이 자기 스크롤 경계에서 잘리고 그 **바로 옆에**
+   * 형제 문구가 간격 없이 붙어 겹쳐 읽힌다 — 실측 캡처 board-2XTO-0-640x540:
+   * 칩이 「예상차」로 잘린 자리 위에 「● 실시간 갱신」이 얹힌다.
+   * 바로 위 `flex-shrink: 0`은 스트립을 가로로 스크롤시키려고 칩을 안 줄이는 규약인데,
+   * 접을 줄에는 그 예외가 필요하다: 줄이 스트립 폭까지 줄어야 접기가 발동한다.
+   * 칩 묶음은 자기 자신이 `.bs-r-scroll` 소유자라 스크롤을 스스로 맡는다.
+   * primary가 이고 있는 줄은 그대로 XS에서 접는다 — 137X-2 Chart Toolbar가 S에서는
+   * 다 들어간다는 실측이 있어 그 판단을 뒤집지 않는다. */
+  .bs-strip > [data-bs-split-row="true"] {
+    flex-shrink: 1;
+    min-width: 0;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  .bs-strip [data-bs-split-row="true"] { flex-wrap: wrap; }
+  .bs-strip [data-bs-split-row="true"] > * { min-width: 0; }
   .bs-col[data-col-priority="6"] { display: none; }
   .bs-paired[data-paired-col~="6"] { display: block; }
   .bs-r-paired-table .bs-paired[data-paired-col~="6"] { display: grid; }

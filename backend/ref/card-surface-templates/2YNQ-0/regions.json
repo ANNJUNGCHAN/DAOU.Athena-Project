@@ -7,5 +7,18 @@
     {"node_id": "2YNT-0", "name": "User Status Footer", "role": "footer", "depth": 1},
     {"node_id": "3720-0", "name": "Ranking Result Table", "role": "primary", "depth": 2},
     {"node_id": "2YNX-0", "name": "Selected Stock Detail", "role": "rail", "depth": 2}
+  ],
+  "responsive": [
+    {
+      "node_id": "3721-0",
+      "traits": ["scroll-table"],
+      "header_row": "3726-0",
+      "accessible_label": "종목 순위표"
+    },
+    {
+      "node_id": "3EQC-0",
+      "traits": ["scroll"],
+      "accessible_label": "조회 대상 종목 목록"
+    }
   ]
 }

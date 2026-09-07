@@ -580,6 +580,32 @@ function markElasticKpiValue(el) {
   el.dataset.bsKpiElastic = 'true';
 }
 
+// 글자를 이고 있는 KPI 칸 — 줄바꿈 정책이 켜지면 칸의 min-content가 「가장 긴 값
+// 한 줄」이 된다. L 단계의 `[data-bs-hoisted] { min-width: 0 }`이 그 바닥을 놓아
+// 버리므로, 칸은 0까지 줄고 안쪽 문면이 옆 칸 위로 흘러 겹쳐 읽힌다(실측 2QM7-2
+// 히어로 칸 「모건스탠리 +842억원」 min-content ≈ 324px). 탄력 칸 전용 바닥
+// (`data-bs-kpi-elastic`)은 이 칸을 못 덮는다 — 원문이 `flex-shrink: 0`이라서다.
+// 빈 spacer는 계속 제외한다: 6~8칸 시세 스트립이 L 컨테이너보다 넓어지는 원인이다.
+function markKpiContentFloor(el) {
+  if (!el || !el.dataset) return;
+  if (!String(el.className || '').split(/\s+/).includes('bs-kpi-cell')) return;
+  if (!String(el.textContent || '').trim()) return;
+  el.dataset.bsKpiContent = 'true';
+}
+
+// 글자 단위 분절을 켜는 인라인 선언만 걷어낸다(board-surface.css 「줄바꿈 정책」).
+// 추출 원문 실측 97장 중 39장이 `overflow-wrap: anywhere`를 싣고, 36장은 보드 루트
+// 한 곳에만, 3장(1JPU-0·1JZW-0·2TRW-1)은 13개 내외 노드에 싣는다. 인라인은
+// !important 없이 못 이기므로 규칙으로 덮을 수 없다 — 지우는 것이 유일한 길이다.
+// 다섯 레이아웃 속성과 달리 커스텀 속성으로 옮겨 두지 않는다: 되돌릴 값이 아니다.
+// `anywhere` 외의 값(`break-word` 등)은 Paper가 고른 문면일 수 있으니 건드리지 않는다.
+function stripCharacterWrap(el) {
+  if (!el || !el.style || typeof el.style.getPropertyValue !== 'function') return false;
+  if (el.style.getPropertyValue('overflow-wrap').trim() !== 'anywhere') return false;
+  el.style.removeProperty('overflow-wrap');
+  return true;
+}
+
 function markInsetAbsoluteBox(el) {
   if (!el || !el.dataset || !el.style) return;
   if (el.style.getPropertyValue('position').trim() !== 'absolute') return;
@@ -597,18 +623,34 @@ function markInsetAbsoluteBox(el) {
   el.dataset.bsInsetX = 'true';
 }
 
-// primary가 **세로로 쌓아 놓은** 줄인가. Paper는 필터·칩 줄을 primary 바로 아래에
+// 영역이 **세로로 쌓아 놓은** 줄인가. Paper는 필터·칩 줄을 영역 바로 아래에
 // 두기도 하고(137X-2 Chart Toolbar) 세로 래퍼 한 겹을 끼우기도 한다(실측 30O1-0
 // Quote Detail Mount > Frame > Mode Row). 둘은 같은 줄이므로 같은 규약을 받는다.
 // 가로로 나뉜 칸 안(표 행의 셀 등)은 아니다: 위로 올라가다 세로 래퍼가 아닌 것을
 // 만나면 멈추고, 표(열 폭이 계약이다)는 이름으로도 막는다.
-function inPrimaryColumnStack(el) {
+//
+// 경계는 primary만이 아니다. 스트립이 세로로 쌓은 칩 줄도 같은 모양이고(실측
+// 2XTO-0 `2XWZ-0`·`2XWH-0` — `.bs-strip`(column) 아래 `space-between` 가로 줄),
+// primary만 인정하면 그 줄은 접기 표시를 못 받는다. 그 결과 좁은 폭에서 칩 묶음이
+// 스크롤 경계에서 잘리고 그 **바로 옆에** 형제 문구(`● 실시간 갱신`)가 간격 없이
+// 붙어 겹쳐 읽힌다(실측 4분할 캡처 board-2XTO-0-640x540: 칩이 「예상차」로 잘린 자리).
+// primary는 예전 그대로 무조건 경계다(기존 보드 판정을 안 바꾼다). 새로 인정하는
+// 영역은 **세로로 쌓은 것만** 경계로 본다 — 가로로 나눈 영역의 칸은 줄이 아니다.
+const REGION_STACK_BOUNDARY = Object.freeze([
+  'bs-rail', 'bs-strip', 'bs-header', 'bs-footer',
+]);
+
+function inRegionColumnStack(el) {
   for (let node = el.parentElement; node; node = node.parentElement) {
     if (!node.classList) return false;
-    // primary가 스스로 표인 보드도 있다(실측 2SYW-1 Order Ledger `bs-primary bs-table`).
-    // 그 경계에서 멈추는 것이 먼저다 — primary 직속 요약 줄은 표 행이 아니다.
+    // 영역이 스스로 표인 보드도 있다(실측 2SYW-1 Order Ledger `bs-primary bs-table`).
+    // 그 경계에서 멈추는 것이 먼저다 — 영역 직속 요약 줄은 표 행이 아니다.
     if (node.classList.contains('bs-primary')) return true;
     if (node.classList.contains('bs-table')) return false;
+    if (REGION_STACK_BOUNDARY.some((name) => node.classList.contains(name))) {
+      return Boolean(node.style)
+        && node.style.getPropertyValue('flex-direction').trim() === 'column';
+    }
     if (!node.style) return false;
     if (node.style.getPropertyValue('flex-direction').trim() !== 'column') return false;
   }
@@ -625,8 +667,94 @@ function markSplitRow(el) {
   if (el.style.getPropertyValue('display').trim() !== 'flex') return;
   if (el.style.getPropertyValue('justify-content').trim() !== 'space-between') return;
   if (el.style.getPropertyValue('flex-direction').trim() === 'column') return;
-  if (!inPrimaryColumnStack(el)) return;
+  if (!inRegionColumnStack(el)) return;
   el.dataset.bsSplitRow = 'true';
+}
+
+// 머리·스트립이 이고 있는 **가로 묶음**. `.bs-header`가 M부터 접혀도(board-surface.css)
+// 그 안의 묶음이 한 줄을 고집하면 그만큼이 그대로 가로 넘침이 된다 — flex item 기본
+// `min-width: auto`가 자식들의 min-content를 지키기 때문이다(실측 2XTO-0 `2XXN-0`
+// 기능 네비 421px ↔ 컨테이너 378px에서 표면 37px, 최소 프리셋 3회 재현).
+//
+// 세로 묶음은 반드시 뺀다: 세로 줄에 `flex-wrap`을 주면 넘친 것이 오른쪽 새 열로
+// 가서 오히려 가로 넘침이 된다(같은 판단이 markSplitRow에도 있다). CSS로는
+// flex-direction을 고를 수 없으므로 여기서 가로인 것만 표시한다.
+//
+// 범위는 영역의 **직계 자식**이다. 머리·스트립은 자기 자신이 M부터 접히므로 방향을
+// 안 보고, 나머지 영역은 **세로로 쌓을 때만** 경계로 본다 — 가로로 나눈 영역의
+// 직계 자식은 줄이 아니라 칸이고, 칸을 접으면 칸이 아랫줄로 떨어진다
+// (inRegionColumnStack과 같은 판단이다).
+//
+// 실측 2SKU-1: `.bs-primary`(세로) > `39QL-0` 「예수금 KPI 4칸」(가로 4칸). 이 줄은
+// `.bs-kpi` 표시를 못 받아 3칸/2칸 흐름도, 칸 바닥도 없다. 그래서 칸이 91px로 눌리고
+// 안쪽 문면이 53px 넘쳐 사슬로 표면 9px까지 올라왔다(4분할 2회 재현).
+//
+// 표는 어느 쪽에서도 제외한다 — 열 폭이 계약이다.
+const WRAP_ROW_ALWAYS = Object.freeze(['bs-header', 'bs-strip']);
+const WRAP_ROW_WHEN_COLUMN = Object.freeze(['bs-primary', 'bs-rail', 'bs-footer']);
+
+function markWrapRow(el) {
+  if (!el || !el.dataset || !el.style || !el.classList) return;
+  if (el.style.getPropertyValue('display').trim() !== 'flex') return;
+  if (el.style.getPropertyValue('flex-direction').trim() === 'column') return;
+  if (el.classList.contains('bs-table')) return;
+  const parent = el.parentElement;
+  if (!parent || !parent.classList) return;
+  if (parent.classList.contains('bs-table')) return;
+  const always = WRAP_ROW_ALWAYS.some((name) => parent.classList.contains(name));
+  const whenColumn = WRAP_ROW_WHEN_COLUMN.some((name) => parent.classList.contains(name));
+  if (!always && !whenColumn) return;
+  if (!always && (!parent.style
+    || parent.style.getPropertyValue('flex-direction').trim() !== 'column')) return;
+  el.dataset.bsWrapRow = 'true';
+  markElasticCells(el);
+}
+
+// 접기만으로는 안 되는 줄이 있다. 칸이 탄력(`flex-basis: 0%` + `flex-grow: 1`)이면
+// 폭이 부족해도 각 칸이 0을 기준으로 남는 폭을 나눠 가지므로 **줄바꿈이 아예 발동하지
+// 않는다**. 칸은 그대로 눌리고 안쪽 문면이 옆으로 흐른다.
+//   · 실측 2SKU-1 「예수금 KPI 4칸」: 칸 91px 안에 내용 144px → 표면 9px
+//   · 실측 2T63-1 「Order Progress」: 단계 묶음 361px가 90px로 눌려 번호와 라벨이 겹침
+//     (`주문 작성`↔`2`, 5장 동일) — flow 트레잇을 줘도 접히지 않던 이유다
+// 그 칸에는 자기 문면이 한 줄로 서는 바닥을 준다(`.bs-kpi-cell[data-bs-kpi-elastic]`과
+// 같은 처방을, 영역 표시를 못 받은 줄까지 넓힌 것이다).
+// 빈 spacer는 제외한다 — 바닥을 주면 줄이 되려 넓어진다.
+// 인라인 값과 걷어낸 값을 함께 본다 — 이 판정은 hoist 전후 어디서든 불릴 수 있고,
+// hoist가 인라인 `flex-basis`를 `--bs-flex-basis`로 옮긴 뒤에는 인라인이 비어 있다.
+// 그걸 놓치면 표시가 조용히 안 붙는다(실측 2T63-1 계열 5장: flow를 줘도 안 접혔다).
+function flexValueOf(el, property, token) {
+  const inline = el.style.getPropertyValue(property).trim();
+  return inline || el.style.getPropertyValue(token).trim();
+}
+
+function markElasticCells(owner) {
+  for (const cell of elementChildren(owner) || []) {
+    if (!cell || !cell.dataset || !cell.style) continue;
+    if (flexValueOf(cell, 'flex-basis', '--bs-flex-basis') !== '0%') continue;
+    if (flexValueOf(cell, 'flex-grow', '--bs-flex-grow') !== '1') continue;
+    if (!String(cell.textContent || '').trim()) continue;
+    cell.dataset.bsElasticCell = 'true';
+  }
+}
+
+// 스크롤 소유자의 인라인 `overflow`는 정책을 이긴다 — 지워야 한다.
+// 실측 133H-2 `14UQ-2`(보유 종목 표)는 Paper 원문에 `overflow: visible`을 싣고 있어
+// `.bs-r-scroll-table { overflow-x: auto }`가 무력화됐다. 그 결과 표가 스크롤하지 않고
+// 안쪽 semantics(844px)가 그대로 표면을 뚫었다(560px에서 313px · 380px에서 493px).
+// stripCharacterWrap과 같은 규약이다: 정책이 이겨야 하는 인라인 선언은 되돌리지 않고
+// 지운다. `hidden`·`auto`처럼 이미 자르는 값은 Paper가 고른 문면이므로 건드리지 않는다.
+function stripScrollOwnerOverflow(el) {
+  if (!el || !el.style || !el.classList) return false;
+  if (!el.classList.contains('bs-r-scroll') && !el.classList.contains('bs-r-scroll-table')) {
+    return false;
+  }
+  let stripped = false;
+  for (const property of ['overflow', 'overflow-x']) {
+    if (el.style.getPropertyValue(property).trim() !== 'visible') continue;
+    el.style.removeProperty(property);
+    stripped = true;
+  }
+  return stripped;
 }
 
 // 세로로 쌓는 부모 아래 놓인 상자. flex-shrink는 **주축** 속성이라 부모가 column이면
@@ -648,8 +776,10 @@ function hoistLayout(el) {
   if (!el || !el.style || typeof el.style.setProperty !== 'function') return false;
   if (el.dataset && el.dataset.bsHoisted === 'true') return false;
   markElasticKpiValue(el);
+  markKpiContentFloor(el);
   markInsetAbsoluteBox(el);
   markSplitRow(el);
+  markWrapRow(el);
   markColumnStackItem(el);
   for (const [property, token] of HOISTED_PROPERTIES) {
     const value = el.style.getPropertyValue(property);
@@ -676,6 +806,7 @@ function hoistRigidBox(el) {
   if (el.dataset && el.dataset.bsHoisted === 'true') return false;
   markInsetAbsoluteBox(el);
   markSplitRow(el);
+  markWrapRow(el);
   markColumnStackItem(el);
   let moved = false;
   for (const [property, token] of HOISTED_PROPERTIES) {
@@ -709,6 +840,7 @@ function markPairedHost(surface) {
 }
 
 function applyResponsiveHooks(surface) {
+  stripCharacterWrap(surface);
   hoistLayout(surface);
   // 껍데기는 기하 hoist **뒤에** 본다 — 프레임 판정이 `--bs-width`를 읽는다.
   normalizeCardShell(surface);
@@ -721,8 +853,21 @@ function applyResponsiveHooks(surface) {
   // 표면 전체를 훑는다. `data-node`만 보면 손으로 쓴 계약의 구조 노드(픽스처
   // board.html의 `.bs-header` 등)를 놓친다 — 거기에도 고정 폭이 산다.
   // 인라인 선언이 없는 노드는 hoistRigidBox가 그대로 지나간다.
+  // stripCharacterWrap은 hoistRigidBox의 조기 반환(이미 걷어낸 노드)과 무관하게
+  // 돌아야 한다 — 영역 노드가 `anywhere`를 함께 이고 있는 보드가 3장 있다.
   for (const el of surface.querySelectorAll('*')) {
+    stripCharacterWrap(el);
     if (hoistRigidBox(el)) hoisted += 1;
+  }
+  // 추출기가 붙인 트레잇 소유자를 마무리한다. hoist 순회와 분리해야 한다:
+  // 소유자는 인라인 기하가 없어 hoistRigidBox가 그대로 지나가는 노드일 수 있다.
+  for (const owner of surface.querySelectorAll('.bs-r-scroll, .bs-r-scroll-table')) {
+    stripScrollOwnerOverflow(owner);
+  }
+  // 접기 소유자의 탄력 자식에도 바닥을 준다 — flow는 `flex-wrap`만 주고, 칸이
+  // 탄력이면 그 wrap이 발동하지 않는다(markElasticCells 주석의 2T63-1 실측).
+  for (const owner of surface.querySelectorAll('.bs-r-flow')) {
+    markElasticCells(owner);
   }
   markPairedHost(surface);
   return hoisted;
