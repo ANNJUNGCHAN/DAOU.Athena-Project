@@ -8,5 +8,17 @@
     { "node_id": "3E98-0", "name": "펼침 머리", "role": "other", "depth": 2 },
     { "node_id": "3E9G-0", "name": "본문 2단", "role": "primary", "depth": 2 },
     { "node_id": "3DI5-0", "name": "Chart Status Footer", "role": "footer", "depth": 1 }
+  ],
+  "responsive": [
+    {
+      "node_id": "3E9H-0",
+      "traits": ["scroll"],
+      "accessible_label": "일자별 투자자 표"
+    },
+    {
+      "node_id": "3E9I-0",
+      "traits": ["scroll"],
+      "accessible_label": "장중 시간대 투자자 표"
+    }
   ]
 }

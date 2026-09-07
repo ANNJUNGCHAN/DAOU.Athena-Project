@@ -707,20 +707,54 @@ function markWrapRow(el) {
   if (!always && (!parent.style
     || parent.style.getPropertyValue('flex-direction').trim() !== 'column')) return;
   el.dataset.bsWrapRow = 'true';
+  markElasticCells(el);
+}
 
-  // 접기만으로는 안 되는 줄이 있다. 칸이 전부 탄력(`flex-basis: 0%` + `flex-grow: 1`)
-  // 이면 폭이 부족해도 각 칸이 0을 기준으로 나눠 가지므로 줄바꿈이 아예 발동하지
-  // 않는다 — 실측 2SKU-1 「예수금 KPI 4칸」 네 칸 전부가 그 모양이고, 칸이 91px로
-  // 눌려 안쪽 문면이 53px 넘쳤다. 그 칸에는 자기 문면이 한 줄로 서는 바닥을 준다
-  // (`.bs-kpi-cell[data-bs-kpi-elastic]`과 같은 처방이고, 영역 표시를 못 받은 줄까지
-  // 넓히는 것이다). 빈 spacer는 제외한다 — 바닥을 주면 줄이 되려 넓어진다.
-  for (const cell of elementChildren(el) || []) {
+// 접기만으로는 안 되는 줄이 있다. 칸이 탄력(`flex-basis: 0%` + `flex-grow: 1`)이면
+// 폭이 부족해도 각 칸이 0을 기준으로 남는 폭을 나눠 가지므로 **줄바꿈이 아예 발동하지
+// 않는다**. 칸은 그대로 눌리고 안쪽 문면이 옆으로 흐른다.
+//   · 실측 2SKU-1 「예수금 KPI 4칸」: 칸 91px 안에 내용 144px → 표면 9px
+//   · 실측 2T63-1 「Order Progress」: 단계 묶음 361px가 90px로 눌려 번호와 라벨이 겹침
+//     (`주문 작성`↔`2`, 5장 동일) — flow 트레잇을 줘도 접히지 않던 이유다
+// 그 칸에는 자기 문면이 한 줄로 서는 바닥을 준다(`.bs-kpi-cell[data-bs-kpi-elastic]`과
+// 같은 처방을, 영역 표시를 못 받은 줄까지 넓힌 것이다).
+// 빈 spacer는 제외한다 — 바닥을 주면 줄이 되려 넓어진다.
+// 인라인 값과 걷어낸 값을 함께 본다 — 이 판정은 hoist 전후 어디서든 불릴 수 있고,
+// hoist가 인라인 `flex-basis`를 `--bs-flex-basis`로 옮긴 뒤에는 인라인이 비어 있다.
+// 그걸 놓치면 표시가 조용히 안 붙는다(실측 2T63-1 계열 5장: flow를 줘도 안 접혔다).
+function flexValueOf(el, property, token) {
+  const inline = el.style.getPropertyValue(property).trim();
+  return inline || el.style.getPropertyValue(token).trim();
+}
+
+function markElasticCells(owner) {
+  for (const cell of elementChildren(owner) || []) {
     if (!cell || !cell.dataset || !cell.style) continue;
-    if (cell.style.getPropertyValue('flex-basis').trim() !== '0%') continue;
-    if (cell.style.getPropertyValue('flex-grow').trim() !== '1') continue;
+    if (flexValueOf(cell, 'flex-basis', '--bs-flex-basis') !== '0%') continue;
+    if (flexValueOf(cell, 'flex-grow', '--bs-flex-grow') !== '1') continue;
     if (!String(cell.textContent || '').trim()) continue;
     cell.dataset.bsElasticCell = 'true';
   }
+}
+
+// 스크롤 소유자의 인라인 `overflow`는 정책을 이긴다 — 지워야 한다.
+// 실측 133H-2 `14UQ-2`(보유 종목 표)는 Paper 원문에 `overflow: visible`을 싣고 있어
+// `.bs-r-scroll-table { overflow-x: auto }`가 무력화됐다. 그 결과 표가 스크롤하지 않고
+// 안쪽 semantics(844px)가 그대로 표면을 뚫었다(560px에서 313px · 380px에서 493px).
+// stripCharacterWrap과 같은 규약이다: 정책이 이겨야 하는 인라인 선언은 되돌리지 않고
+// 지운다. `hidden`·`auto`처럼 이미 자르는 값은 Paper가 고른 문면이므로 건드리지 않는다.
+function stripScrollOwnerOverflow(el) {
+  if (!el || !el.style || !el.classList) return false;
+  if (!el.classList.contains('bs-r-scroll') && !el.classList.contains('bs-r-scroll-table')) {
+    return false;
+  }
+  let stripped = false;
+  for (const property of ['overflow', 'overflow-x']) {
+    if (el.style.getPropertyValue(property).trim() !== 'visible') continue;
+    el.style.removeProperty(property);
+    stripped = true;
+  }
+  return stripped;
 }
 
 // 세로로 쌓는 부모 아래 놓인 상자. flex-shrink는 **주축** 속성이라 부모가 column이면
@@ -824,6 +858,16 @@ function applyResponsiveHooks(surface) {
   for (const el of surface.querySelectorAll('*')) {
     stripCharacterWrap(el);
     if (hoistRigidBox(el)) hoisted += 1;
+  }
+  // 추출기가 붙인 트레잇 소유자를 마무리한다. hoist 순회와 분리해야 한다:
+  // 소유자는 인라인 기하가 없어 hoistRigidBox가 그대로 지나가는 노드일 수 있다.
+  for (const owner of surface.querySelectorAll('.bs-r-scroll, .bs-r-scroll-table')) {
+    stripScrollOwnerOverflow(owner);
+  }
+  // 접기 소유자의 탄력 자식에도 바닥을 준다 — flow는 `flex-wrap`만 주고, 칸이
+  // 탄력이면 그 wrap이 발동하지 않는다(markElasticCells 주석의 2T63-1 실측).
+  for (const owner of surface.querySelectorAll('.bs-r-flow')) {
+    markElasticCells(owner);
   }
   markPairedHost(surface);
   return hoisted;
