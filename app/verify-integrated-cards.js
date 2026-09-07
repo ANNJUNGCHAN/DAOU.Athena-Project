@@ -53,6 +53,15 @@ const FIXTURE_PYTHON = process.env.ATHENA_FIXTURE_PYTHON
 
 app.setPath('userData', path.join(CAPTURE_OUTPUT_DIR, '.electron-user-data'));
 app.disableHardwareAcceleration();
+// 계측 창이 다른 창에 덮여도 판정이 흔들리지 않게 한다 — Chromium은 네이티브 창
+// 가림을 감지하면 그 창을 hidden으로 표시하고 rAF를 멈춘다. 그러면 카드는 정상인데
+// paint ack이 확인할 프레임을 못 받아 검사만 빨개진다(2026-09-07 실측: 다른 창이
+// 셸을 덮은 사이 detail:kt00013:cash_resources에서 wall-clock timeout, 같은 검사를
+// 단독으로 다시 돌리면 통과). 제품 쪽은 숨은 시간을 예산에서 빼는 방향으로 고쳤고
+// (lib/rest-canvas-paint.js), 검사는 애초에 가림 판정을 받지 않게 한다 —
+// 창 쌓임 순서는 카드 렌더 계약이 아니다. backgroundThrottling은 건드리지 않는다
+// (2026-09-04 실측에서 역효과였다).
+app.commandLine.appendSwitch('disable-features', 'CalculateNativeWinOcclusion');
 
 function loadBundle() {
   const script = path.join(BACKEND, 'tests', 'support', 'canvas_fixture_factory.py');
@@ -1738,6 +1747,17 @@ async function main() {
       || bootState.localReadiness !== 'ready') {
       throw new Error(`actual shell boot contract failed: ${JSON.stringify(bootState)}`);
     }
+    // 계측 전에 창이 실제로 보이는 상태인지 한 번 못박는다. 여기서 hidden이면
+    // 그 뒤 299회 paint ack이 전부 「wall-clock timeout」으로 나와 원인이 카드처럼
+    // 읽힌다 — 원인을 이름 그대로 부르는 실패가 그것보다 낫다.
+    const shellVisibility = await win.webContents.executeJavaScript('document.visibilityState');
+    if (shellVisibility !== 'visible') {
+      throw new Error(
+        `계측 창이 보이지 않는다(visibilityState=${shellVisibility}) — 다른 창이 덮었거나 최소화됐다.`
+        + ' 가림 판정은 CalculateNativeWinOcclusion 비활성으로 막아 두었으니, 이 실패는 창이 실제로 최소화된 경우다.',
+      );
+    }
+    report.actual_shell_visibility = shellVisibility;
     await win.webContents.executeJavaScript(
       'window.AthenaCanvasMode.setView("summary")',
     );

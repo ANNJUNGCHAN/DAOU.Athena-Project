@@ -19,6 +19,10 @@ function correlationKey(value) {
   return `${value.dataset_id}\u0000${value.item_id}\u0000${value.ordinal}`;
 }
 
+// 숨은 동안 예산을 쓰지 않기 위해 얼마나 자주 되보는지. 타이머는 숨은 창에서도
+// 돌지만 rAF는 아예 멈춘다 — 그래서 대기 수단이 타이머여야 한다.
+const HIDDEN_POLL_MS = 100;
+
 async function waitForVisiblePaint(element, {
   requestAnimationFrame: raf = globalThis.requestAnimationFrame,
   visibilityState = () => (globalThis.document ? globalThis.document.visibilityState : 'visible'),
@@ -27,25 +31,51 @@ async function waitForVisiblePaint(element, {
   timeoutMs = 2500,
   setTimer = globalThis.setTimeout,
   clearTimer = globalThis.clearTimeout,
+  // 창이 계속 숨어 있으면 언젠가는 접어야 한다. 이 한도는 "표시를 확인할 기회"의
+  // 상한이지 렌더 예산이 아니다 — 그래서 rAF 예산(timeoutMs)보다 훨씬 길다.
+  maxHiddenMs = 60_000,
 } = {}) {
   if (!element || typeof element.getBoundingClientRect !== 'function') {
     throw new Error('paint ack 대상 카드가 없다');
   }
   if (typeof raf !== 'function') throw new Error('requestAnimationFrame이 필요하다');
   const startedAt = now();
-  const wallClockDeadline = Date.now() + timeoutMs;
-  const nextFrame = () => new Promise((resolve, reject) => {
-    const remainingMs = wallClockDeadline - Date.now();
-    if (remainingMs <= 0) {
-      reject(new Error('paint ack wall-clock timeout'));
-      return;
+  let wallClockDeadline = Date.now() + timeoutMs;
+  let hiddenMs = 0;
+  // 창이 숨어 있는 동안은 "안 그려졌다"가 아니라 "볼 수 없어서 확인할 수 없다"다.
+  // Chromium은 숨은/가려진 창의 rAF를 멈추므로, 이 시간을 예산에 넣으면 창이 뒤로
+  // 밀린 순간에 도착한 카드가 통째로 실패 카드가 된다(실측: 다른 창이 덮은 사이
+  // paint ack wall-clock timeout → verified_visible false → 재시도 영수증).
+  // 그래서 숨은 시간은 예산에서 빼고(deadline을 그만큼 미룬다) 창이 돌아오면
+  // 그 자리에서 확인을 이어 간다. 확인 자체를 느슨하게 하지는 않는다 — 보이는
+  // 상태에서 두 프레임을 다시 재는 규칙은 그대로다.
+  const waitWhileHidden = async () => {
+    while (visibilityState() !== 'visible') {
+      if (hiddenMs >= maxHiddenMs) {
+        const error = new Error(`paint ack: 창이 숨어 있어 표시를 확인하지 못했다(hidden ${hiddenMs}ms)`);
+        error.reason = 'hidden';
+        throw error;
+      }
+      await new Promise((resolve) => setTimer(resolve, HIDDEN_POLL_MS));
+      hiddenMs += HIDDEN_POLL_MS;
+      wallClockDeadline += HIDDEN_POLL_MS;
     }
-    const timer = setTimer(() => reject(new Error('paint ack wall-clock timeout')), remainingMs);
-    raf((value) => {
-      clearTimer(timer);
-      resolve(value);
+  };
+  const nextFrame = async () => {
+    await waitWhileHidden();
+    return new Promise((resolve, reject) => {
+      const remainingMs = wallClockDeadline - Date.now();
+      if (remainingMs <= 0) {
+        reject(new Error('paint ack wall-clock timeout'));
+        return;
+      }
+      const timer = setTimer(() => reject(new Error('paint ack wall-clock timeout')), remainingMs);
+      raf((value) => {
+        clearTimer(timer);
+        resolve(value);
+      });
     });
-  });
+  };
   for (let frame = 0; frame < maxFrames; frame += 1) {
     await nextFrame();
     const rect = element.getBoundingClientRect();
@@ -57,7 +87,10 @@ async function waitForVisiblePaint(element, {
       return {
         verifiedVisible: true,
         visiblePaintAt: now(),
-        waitMs: Math.max(0, now() - startedAt),
+        // 계측은 사용자가 **볼 수 있었던** 시간만 센다 — 숨은 시간은 렌더 지연이
+        // 아니다. 호출부가 dom→ack 구간에서 이 값을 뺀다.
+        hiddenMs,
+        waitMs: Math.max(0, now() - startedAt - hiddenMs),
         rect: {
           width: paintedRect.width,
           height: paintedRect.height,
@@ -157,6 +190,7 @@ const api = {
   timedOutPaint,
   upsertRestReceipt,
   PENDING_MOUNT_ACK_TIMEOUT_MS,
+  HIDDEN_POLL_MS,
 };
 if (typeof module !== 'undefined' && module.exports) module.exports = api;
 else {
