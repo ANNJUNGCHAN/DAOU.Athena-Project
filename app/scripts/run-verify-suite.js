@@ -132,7 +132,7 @@ function readSourceIdentity() {
 }
 
 async function runSuite(selected, deps = {}) {
-  const write = deps.write || ((text) => process.stdout.write(text));
+  const write = deps.write || ((text) => process.stderr.write(text));
   const getSource = deps.getSource || readSourceIdentity;
   const started = Date.now();
   const outputRoot = deps.outputRoot || path.join(appDir, 'captures', 'verify-suite');
