@@ -63,15 +63,17 @@ function buildAuthTokenStatusCard(payload, nowMs) {
   return { status: 'success', envelope: _baseEnvelope('status', null, data) };
 }
 
-// 주문 티켓 종결 상태(order-ticket.js: done|in_doubt|failed, needs_confirm은
-// chat.js execBtn 핸들러가 이미 failed로 접는다 — 여기서도 같은 3분기를 반복해
-// 사람이 보는 상태줄과 카드가 어긋나지 않게 한다) → action 카드. 표시 전용
-// 영수증이다 — 이 함수도, 카드도 실행 버튼을 만들지 않는다(확정 결정 3 경계).
+// 주문 티켓 종결 상태(order-ticket.js: done|in_doubt|needs_confirm|failed) →
+// action 카드. 428 확인 요청은 실패가 아니다(OBS-030). 표시 전용 영수증이다 —
+// 이 함수도, 카드도 실행 버튼을 만들지 않는다(확정 결정 3 경계).
 // receipt는 outcome==='done'일 때만 채운다: athena:order-execute 핸들러
 // (main.js)는 2xx에서만 파싱한 JSON 본문(data)을 돌려주고 실패 응답에는 error
 // 문자열만 있다 — 없는 영수증을 지어내지 않는다.
 function buildOrderActionCard({ trId, body, outcome, response }) {
-  const lifecycle = outcome === 'done' ? 'done' : outcome === 'in_doubt' ? 'in_doubt' : 'failed';
+  const lifecycle = outcome === 'done' ? 'done'
+    : outcome === 'in_doubt' ? 'in_doubt'
+    : outcome === 'needs_confirm' ? 'needs_confirm'
+    : 'failed';
   const receipt = (lifecycle === 'done' && response && response.data && typeof response.data === 'object')
     ? response.data
     : {};
@@ -82,7 +84,10 @@ function buildOrderActionCard({ trId, body, outcome, response }) {
     status: 'success',
     envelope: _baseEnvelope('action', caption, {
       lifecycle,
-      state_label: lifecycle === 'done' ? '체결 완료' : lifecycle === 'in_doubt' ? '확인 필요' : '실패',
+      state_label: lifecycle === 'done' ? '체결 완료'
+        : lifecycle === 'in_doubt' ? '확인 필요'
+        : lifecycle === 'needs_confirm' ? '확인 요청'
+        : '실패',
       receipt,
       order: {
         stk_cd: symbol,

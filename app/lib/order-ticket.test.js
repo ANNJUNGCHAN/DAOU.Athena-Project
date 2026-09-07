@@ -106,6 +106,22 @@ test('상태기계: in_doubt·done은 종결 — 재실행 전이 불가', () =>
   ot.transition(t2, 'executing'); // 명시적 재시도만 허용(새 멱등키)
 });
 
+test('428 확인 요청은 실패로 접지 않고 게이트로 돌아간다', () => {
+  assert.equal(ot.ticketStateAfterExecute('needs_confirm'), 'needs_confirm');
+  assert.equal(ot.ticketStateAfterExecute('done'), 'done');
+  assert.equal(ot.ticketStateAfterExecute('in_doubt'), 'in_doubt');
+  assert.equal(ot.ticketStateAfterExecute('failed'), 'failed');
+  assert.equal(ot.ticketStateAfterExecute('other'), 'failed');
+  const t = ot.createTicket(null);
+  ot.transition(t, 'executing');
+  ot.transition(t, 'needs_confirm');
+  assert.equal(t.state, 'needs_confirm');
+  ot.transition(t, 'executing');
+  assert.match(ot.executeOutcomeCopy('needs_confirm'), /확인 요청/);
+  assert.equal(ot.executeOutcomeCopy('needs_confirm').includes('실행 실패'), false);
+  assert.match(ot.executeOutcomeCopy('failed', { status: 503, error: 'down' }), /실행 실패: down/);
+});
+
 test('createTicket: 안전한 방향·수량 프리필만 review 상태에 반영한다', () => {
   const safe = ot.createTicket({ side: 'buy', qty: 10 });
   assert.equal(safe.state, 'review');

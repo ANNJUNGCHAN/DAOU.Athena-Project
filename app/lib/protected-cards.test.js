@@ -94,11 +94,13 @@ test('buildOrderActionCard: in_doubt/failed — 없는 영수증을 지어내지
   assert.deepEqual(failed.envelope.data.receipt, {});
 });
 
-test('buildOrderActionCard: needs_confirm은 failed로 접는다 — chat.js 상태줄과 같은 3분기', () => {
+test('buildOrderActionCard: needs_confirm은 실패로 접지 않는다', () => {
   const built = pc.buildOrderActionCard({
     ...BUY_KT10000, outcome: 'needs_confirm', response: { ok: false, status: 428, error: 'confirm' },
   });
-  assert.equal(built.envelope.data.lifecycle, 'failed');
+  assert.equal(built.envelope.data.lifecycle, 'needs_confirm');
+  assert.equal(built.envelope.data.state_label, '확인 요청');
+  assert.deepEqual(built.envelope.data.receipt, {});
 });
 
 test('buildOrderActionCard: 매도(kt10001) 캡션', () => {
