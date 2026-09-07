@@ -52,6 +52,54 @@
   margin: 0 auto;
 }
 
+/* 카드 높이는 카드가 정한다 — 보드가 아니다(계획 §1 "카드 크기 = 뷰포트 크기,
+ * 따라서 모든 카드 크기가 동일하다").
+ *
+ * Paper 보드의 루트 높이는 보드마다 다르다(생성물 96장 실측: 766·824·846·880·
+ * 896·900·930·934·936·960·1000·1018·1029·1034·1039·1040px 16종 + fit-content 8장
+ * + 미지정 4장). 그 값이 `--bs-height`로 걷혀 되돌리기 규칙(아래 `[data-bs-hoisted]`)
+ * 을 타고 **표면 루트**에까지 들어오면, 같은 크기의 카드 상자 안에서 눈에 보이는
+ * 유리 패널만 보드마다 달라진다 — 실측(컨테이너 1360px · 카드 상자 1138px):
+ * 계좌 952 · 주문 880 · 종목 1040 · 호가 880 · 수급 934 · 탐색 900 · 순위 1040px.
+ * 사용자가 "순위 카드가 미묘하게 다르다"고 본 자리가 이것이다.
+ *
+ * 그래서 루트에서만 그 값을 무르고(안쪽 영역·표 행·KPI 칸은 그대로 — 되돌리기
+ * 계약과 좁은 단계의 최소 높이 바닥은 안쪽 값으로 돈다) 카드 자리를 채우게 한다.
+ * `height: auto` + `min-height: 100%`이지 `height: 100%`가 아니다: 원문 루트 다수가
+ * 인라인 `overflow: clip`을 실어, 자리보다 긴 본문을 고정 높이에 가두면 넘친
+ * 부분이 잘려 사라진다(§8 정보 정직성). 길면 표면이 자라고 자리가 스크롤한다.
+ *
+ * 특이도(0,2,0)로 아래 base·@container의 `[data-bs-hoisted]`(0,1,0)를 이긴다 —
+ * 순서에 기대지 않으므로 단계 규칙을 어느 자리에 더해도 이 계약은 안 흔들린다. */
+.board-surface[data-bs-hoisted] {
+  height: auto;
+  min-height: 100%;
+}
+
+/* 카드 껍데기도 카드가 정한다 — 보드마다 다른 원문 껍데기(생성물 96장 루트 실측:
+ * 라운드 28px 62장 · 16px 27장 · 24px 3장 · 미지정 4장, 배경 panel 92장 ·
+ * 페이지 배경 4장)를 board-mount의 normalizeCardShell이 `--bs-shell-*`로 걷어내고
+ * 여기서 한 벌만 입힌다. 라운드 정본은 28px(2026-09-07 사용자 확정 — 다수값).
+ * 그림자는 원문 값 그대로다(#10131A1A 0 18px 48px). 새 색은 만들지 않는다:
+ * 배경·선은 tokens.css의 유리 사다리 토큰이고 그림자만 값으로 쓴다(canvas.css
+ * `.card`의 접지 그림자와 같은 문법). */
+.board-surface[data-bs-card-shell="true"] {
+  background-color: var(--color-k-panel);
+  border: 1px solid var(--color-k-line-soft);
+  border-radius: var(--radius-card);
+  box-shadow: 0 18px 48px rgb(16 19 26 / 10%);
+}
+
+/* Paper 아트보드 프레임이 루트로 잡힌 보드(실측 4장) — 폭·프레임 패딩을 카드
+ * 계약으로 되세운다. 1360px은 나머지 92장 루트의 실측 폭이고, 이 4장의 자식도
+ * 이미 그 폭으로 서 있다(프레임 패딩 40px을 더해 아트보드 1440px이 된 것이다).
+ * 폭만 세우면 그 패딩만큼 자식이 넘치므로 둘은 한 짝으로 간다. */
+.board-surface[data-bs-card-frame="true"] {
+  width: 1360px;
+  max-width: min(100%, 1360px);
+  padding: 0;
+}
+
 /* ---------- XL base — 인라인에서 걷어낸 값을 그대로 되돌린다 ---------- */
 
 /* 영역 밖 고정 상자(표 열·KPI 칸·헤더 블록)도 걷어낸다 — board-mount의
@@ -318,10 +366,15 @@
 [data-state-board] { cursor: pointer; }
 
 /* 카드 안에서 보드가 앉는 자리. 보드 본문이 길면 카드 안에서 세로 스크롤한다
- * (계획 §1 "카드 크기 = 뷰포트 크기"). */
+ * (계획 §1 "카드 크기 = 뷰포트 크기").
+ *
+ * 높이 100%는 그 계약의 세로 절반이다 — 자리가 내용 높이를 그대로 쓰면(auto)
+ * 아래 `min-height: 100%`가 기댈 확정 높이가 없어 표면이 Paper 보드 높이에
+ * 그대로 주저앉는다(실측: 카드 상자 1138px 안에서 자리·표면이 833~1040px). */
 .board-surface-host {
   width: 100%;
   min-width: 0;
+  height: 100%;
   overflow: auto;
 }
 
@@ -345,3 +398,16 @@
 }
 
 .card[data-board-surface="true"] .integrated-card-content { gap: 0; }
+
+/* 카드 자리에서 보드까지 확정 높이를 잇는다 — `min-height: 100%`(표면)와
+ * `height: 100%`(자리)는 부모 높이가 확정일 때만 의미가 있고, 통합 카드 뼈대는
+ * 그 사이에 두 겹(panels · panel)을 더 끼운다:
+ *
+ *   .card(100%) → .card-body.integrated-card-content(flex: 1) → .integrated-card-panels
+ *   → .integrated-card-panel → .board-surface-host → .board-surface
+ *
+ * 두 겹이 auto로 서면 사슬이 거기서 끊겨 표면이 다시 Paper 보드 높이로 주저앉는다
+ * (실측: 이 두 줄 없이는 833~1042px로 흩어졌다). 보드 표면 카드에만 한정한다 —
+ * 모자이크 통합 카드는 패널 여러 장을 세로로 쌓는 뼈대가 그대로 맞다. */
+.card[data-board-surface="true"] .integrated-card-panels { flex: 1 1 auto; min-height: 0; }
+.card[data-board-surface="true"] .integrated-card-panel { height: 100%; min-height: 0; }
