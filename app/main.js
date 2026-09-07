@@ -69,6 +69,7 @@ const selectorColdHedge = require('./lib/main/selector-cold-hedge');
 const { createClaudeSelectorWorkerPool } = require('./lib/main/claude-selector-worker-pool');
 const chartReload = require('./lib/main/chart-reload');
 const chartReloadAuthority = chartReload.createChartReloadAuthority();
+const ticketCapacity = require('./lib/main/ticket-capacity');
 
 function isQueryOnlyRetryDataset(dataset) {
   try {
@@ -1254,6 +1255,20 @@ ipcMain.handle('athena:order-execute', async (_e, { trId, body, idempotencyKey }
       : { ok: false, status: res.status, error: data.detail || `HTTP ${res.status}` };
   } catch (e) {
     return { ok: false, status: 0, error: String((e && e.message) || e) };
+  }
+});
+
+ipcMain.handle('athena:ticket-capacity', async (_e, { symbol } = {}) => {
+  try {
+    return await ticketCapacity.fetchTicketCapacity({
+      backendBase: BACKEND_HTTP_BASE,
+      fetchImpl: fetch,
+      token: LOCAL_BEARER_TOKEN,
+      symbol,
+      fixture: process.env.ATHENA_CANVAS_SOURCE === 'fixture',
+    });
+  } catch (e) {
+    return { ok: false, buyingPower: null, holdings: null, error: String((e && e.message) || e) };
   }
 });
 

@@ -76,6 +76,8 @@ const INVOKE_CHANNELS = new Set([
   'athena:nudge-guard-get',
   'athena:nudge-guard-set',
   'athena:order-execute',
+  // 수량 칩 매수여력·보유 조회 — 주문 TR이 아니다.
+  'athena:ticket-capacity',
   // 6종 통합 카드 실시간 lease. 주문 mutation과 분리된 REG/REMOVE 제어 경로다.
   'athena:integrated-card-realtime-policy',
   'athena:integrated-card-realtime-mount',

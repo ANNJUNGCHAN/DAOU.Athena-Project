@@ -120,6 +120,40 @@ const QTY_CHIP_FRACTIONS = Object.freeze([
   { label: '최대', fraction: 1 },
 ]);
 
+function parsePaddedNumber(raw) {
+  if (raw == null || raw === '') return null;
+  const n = Number(String(raw).replace(/,/g, '').trim());
+  if (!Number.isFinite(n) || n <= 0) return null;
+  return n;
+}
+
+function stockCode6(raw) {
+  const digits = String(raw == null ? '' : raw).replace(/\D/g, '');
+  return digits.length >= 6 ? digits.slice(-6) : '';
+}
+
+// kt00001 주문가능금액 · kt00018 보유 행만 읽는다. 없는 필드는 null — 0을 지어내지 않는다.
+function readTicketCapacity(input) {
+  const src = input || {};
+  const cash = src.cash && typeof src.cash === 'object' && !Array.isArray(src.cash) ? src.cash : {};
+  const buyingPower = parsePaddedNumber(cash.ord_alow_amt);
+  const holdingsBody = src.holdings && typeof src.holdings === 'object' ? src.holdings : {};
+  const rows = Array.isArray(src.holdingsRows) ? src.holdingsRows
+    : Array.isArray(holdingsBody.acnt_evlt_remn_indv_tot) ? holdingsBody.acnt_evlt_remn_indv_tot
+    : [];
+  const symbol = stockCode6(src.symbol);
+  let holdings = null;
+  if (symbol) {
+    for (const row of rows) {
+      if (!row || typeof row !== 'object') continue;
+      if (stockCode6(row.stk_cd) !== symbol) continue;
+      holdings = parsePaddedNumber(row.trde_able_qty) || parsePaddedNumber(row.rmnd_qty);
+      break;
+    }
+  }
+  return { buyingPower, holdings };
+}
+
 function qtyChipModel(input) {
   const src = input || {};
   const side = src.side === 'buy' || src.side === 'sell' ? src.side : null;
@@ -226,6 +260,7 @@ const __exports = {
   priceRowModel,
   qtyChipModel,
   QTY_CHIP_FRACTIONS,
+  readTicketCapacity,
   interpretExecuteStatus,
   ticketStateAfterExecute,
   executeOutcomeTone,

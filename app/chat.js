@@ -5452,6 +5452,17 @@ async function renderOrderTicket(prefill) {
   };
   if (ticket.side === 'buy') buyBtn.classList.add('routine-btn-approve');
   if (ticket.side === 'sell') sellBtn.classList.add('routine-btn-approve');
+  try {
+    const cap = await window.athena.invoke('athena:ticket-capacity', {
+      symbol: prefill && prefill.symbol,
+    });
+    if (cap && (cap.buyingPower != null || cap.holdings != null)) {
+      ticket.buyingPower = cap.buyingPower;
+      ticket.holdings = cap.holdings;
+    }
+  } catch {
+    // 조회 실패는 칩을 비활성으로 둔다. 잔고를 짓지 않는다.
+  }
   paintQtyChips();
   syncExec();
 
