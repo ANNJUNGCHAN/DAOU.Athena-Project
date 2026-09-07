@@ -120,6 +120,9 @@ test('live-full probe does not share the real athena-shell profile or skip every
   assert.doesNotMatch(src, /capturePage hangs Electron main on this host/);
   assert.match(src, /capturePage\(\)/);
   assert.match(src, /queryVerdict/);
+  assert.doesNotMatch(src, /wait-8s-after-token/);
+  assert.match(src, /stock-index/);
+  assert.match(src, /indexReady\.ok/);
 });
 
 test('verify suite lists live-full and the official verify script with budgets', () => {
