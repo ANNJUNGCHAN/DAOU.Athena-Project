@@ -1,0 +1,53 @@
+{
+  "reason": "Repository .gitattributes sets * -text; new evidence copies use LF. Original .omc artifact bytes were not edited.",
+  "changes": [
+    {
+      "file": "app-unit-final-summary.log",
+      "before_sha256": "a126a210207ef9b19a7726f804b33cc513c8a0e5f7f0138c1177811d666c8130",
+      "after_sha256": "2f884bd23b34482b9e3dd1493de3ad59dde7d85ae519886509701510d2171e82",
+      "change": "CRLF to LF only"
+    },
+    {
+      "file": "backend-focused.log",
+      "before_sha256": "406d48fc404cd0d04118b6ea400fe3dea9f22029321f4009aa670b918afb55fe",
+      "after_sha256": "8bf95c87d2c15d961db7d7d6aef519e4921ddec909d61e8fee9926e1ea623d8b",
+      "change": "CRLF to LF only"
+    },
+    {
+      "file": "source/app-tests.log",
+      "before_sha256": "3838bcb99dfb36608bc87c8bec1b521343bd4dcdbf5c6f54a59ac1fe8d812f8f",
+      "after_sha256": "6eaee36d2cc47d3101e5e0b47fb487f74bcdb3b662272f33768a82009e78ba39",
+      "change": "CRLF to LF only"
+    },
+    {
+      "file": "source/backend-tests.log",
+      "before_sha256": "7f16dea01cc4a25b3cc3e6cf1f492431bc64b89549ad4ba40b1feac8f663a78e",
+      "after_sha256": "c9c0e44c10546f961c6212394a3dfd48a03ddc047899f9cda478620ee9836b08",
+      "change": "CRLF to LF only"
+    },
+    {
+      "file": "source/producer-corpus.json",
+      "before_sha256": "0042d47da2b40f33692c7594b2781f63fc379e468d684c92efc5f25127ec526e",
+      "after_sha256": "aac16283dfb13ca1b059eb6a11f1229941aad3826d25c242a7d09541c3c70809",
+      "change": "CRLF to LF only"
+    },
+    {
+      "file": "source/reviewer-corpus.json",
+      "before_sha256": "0f01c98ea0d88bb25ccd7950e5a2f030e2436cd9a4509c7a24c04d0398ed2ad9",
+      "after_sha256": "09f507823667914fc62cec472bc109a91f802a4fa3187297721a0f706a97258c",
+      "change": "CRLF to LF only"
+    },
+    {
+      "file": "watch-backend-tests.log",
+      "before_sha256": "20e625dd4f4b245f15d22f6b8da340feded510c06fd266d475bfe13ef7de9b94",
+      "after_sha256": "cbbfb083db92c5bfa5848336368e23ae8e69301c9fa1a4ee83b65f1eae30face",
+      "change": "CRLF to LF only"
+    },
+    {
+      "file": "watch-frontend-tests.log",
+      "before_sha256": "f044634b83945b7f6c054c190c0a92b84af7bfe898e79111b6bc5a57ea0d33f9",
+      "after_sha256": "632fce47531ca5c36c80bb73827aca07ddad10a6b7ad204014d99a58211911d3",
+      "change": "CRLF to LF only"
+    }
+  ]
+}

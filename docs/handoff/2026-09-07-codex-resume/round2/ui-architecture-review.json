@@ -1,0 +1,181 @@
+{
+  "role": "Independent architecture/devil's-advocate reviewer",
+  "reviewer": "/root/source_boundary_audit",
+  "status": "CLEAR",
+  "baseline": "765d5dcecdaf71455de63794934ac06642fe3212",
+  "review_boundary": "Eight UI/check-result files below. Reviewer did not author these files. Own source/backtest/live-prompt six files are explicitly excluded from this architecture approval.",
+  "files": [
+    {
+      "path": "app/lib/agent-canvas.js",
+      "sha256": "BC0BD8489D01FAB27666AA59C209F7A6B9F4C38BFC39DC8CDC1BB85909FB2A2E"
+    },
+    {
+      "path": "app/lib/agent-canvas.test.js",
+      "sha256": "1F5C5FF4C85AF61C38FEDDCF1893DA684E3C4E77FFA283F9C9B9CD1A74FB3B1C"
+    },
+    {
+      "path": "app/lib/settings-cards.js",
+      "sha256": "01ADAC3ACD88C103A3EADFAC23C739424CB13160D61E06D5C2F674A32873EBDA"
+    },
+    {
+      "path": "app/lib/settings-cards.test.js",
+      "sha256": "7787FDF88A504B014610A1A08D4C02EE78379E277228A518A2FD3E225C76AF85"
+    },
+    {
+      "path": "app/lib/paper-screen-routes.js",
+      "sha256": "A175BF748CA8D42037958DD2A85F6B8356166533CF795F517BABF807C2DBC996"
+    },
+    {
+      "path": "app/shell.css",
+      "sha256": "61533F2EB0B9E04119B281489FF03F1D76F7075EDD4A285D966F441C9283978D"
+    },
+    {
+      "path": "backend/athena_api/api/routines.py",
+      "sha256": "630CFDEB2D5236CB4B0E07D6365C622DCD60106AC968846FFD0687B331DA1651"
+    },
+    {
+      "path": "backend/tests/api/test_routines_watch_api.py",
+      "sha256": "28629DE745F119C5EF73C607EA5A55385330E2DAEF36EB41EC8AFA1A32F85732"
+    }
+  ],
+  "issues": {
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "low": 0
+  },
+  "findings": [],
+  "architecture_evidence": [
+    {
+      "boundary": "Account verification status and explanation",
+      "locations": [
+        "app/lib/settings-cards.js:581",
+        "app/lib/settings-cards.js:734",
+        "app/lib/settings-cards.js:767",
+        "app/lib/settings-cards.js:783"
+      ],
+      "conclusion": "The added note is a pure projection of the existing verifying phase. It has a separate DOM line after the status row, clears at every phase update, and does not alter registration IPC or storage. Existing input lock, verifyOnly, failure retention, cancel wipe and save wipe/refresh paths remain in place.",
+      "contract": "backend/ref/paper-ledger/1-0/XI-0.tree.txt:119-120 distinguishes Paper 113-0 status from 114-0 explanation."
+    },
+    {
+      "boundary": "First check producer snapshot -> panel",
+      "locations": [
+        "backend/athena_api/api/routines.py:493",
+        "backend/athena_api/api/routines.py:509",
+        "backend/athena_api/api/routines.py:526",
+        "app/lib/agent-canvas.js:2018",
+        "app/lib/agent-canvas.js:2038"
+      ],
+      "conclusion": "Panel uses the stored result count/fires/dt/close/lookback/count cutoff and applied cooldown, not current routine cooldown. Backend normalization matches simulate_fires max(0,int(cooldown_s)); body validation already requires int and rejects bool. Warnings are copied after the active-routine warning is added. Diagnosis survives into detail. No separate new persistence/approval engine is introduced."
+    },
+    {
+      "boundary": "Failure vs successful zero and first check vs fix cycle",
+      "locations": [
+        "app/lib/agent-canvas.js:2051",
+        "app/lib/agent-canvas.js:2251",
+        "app/lib/agent-canvas.js:2322",
+        "app/lib/agent-canvas.js:2339",
+        "app/lib/agent-canvas.js:2363"
+      ],
+      "conclusion": "Count, fires, dots and cooldown are gated on check.ok===true. A failed default count=0 is not rendered as zero fires. Actual successful zero can render quiet dots. Draft historical nodes use 노드 · 흐름. A real fix_cycle selects the existing recheck/receipt path instead of duplicating the new first-check panel."
+    },
+    {
+      "boundary": "Calendar and activation",
+      "locations": [
+        "app/lib/agent-canvas.js:2070",
+        "app/lib/agent-canvas.js:2405",
+        "app/lib/watch-fix-cycle.js:64",
+        "backend/athena_api/watch/check.py:57",
+        "backend/athena_api/api/routines.py:660"
+      ],
+      "conclusion": "Calendar reuses existing UTC day-key logic anchored to backend KST counted_through, independent of checked_at's UTC date. Backend candle frames are sorted. Confirmation still calls the same confirmRoutine path, and server can_activate still checks file hash/execution availability; active check results do not replace active code hash."
+    },
+    {
+      "boundary": "Fixture and route contracts",
+      "locations": [
+        "app/lib/paper-screen-routes.js:1053",
+        "app/lib/paper-screen-routes.js:2451",
+        "app/lib/paper-screen-routes.js:2465",
+        "app/lib/paper-screen-routes.js:2798",
+        "app/lib/paper-screen-routes.js:2815",
+        "app/shell.css:6641"
+      ],
+      "conclusion": "446V has seven phrases; XI has six. Added statuses, caption order, dot/fire counts and separate status/note order are structure assertions. Existing 3-to-7 phrase ratchet remains unchanged. CSS is confined to the new result/band components and shares the existing result layout."
+    }
+  ],
+  "strongest_counterargument": {
+    "question": "Does the new panel silently treat mutable current settings or failed count=0 as a successful historical check, or imply activation without the existing gate?",
+    "resolution": "No scoped architecture blocker found. Read the actual producer/check/runtime code, independently ran the full affected test groups, then exercised active-routine check/detail with requested cooldown -1, 0 and 172800. Result snapshots were 0, 0 and 172800; counts were 2, 2 and 1; active hash remained unchanged and the late-added active warning was preserved. The UI has explicit passed gating and uses snapshot cooldown only.",
+    "controls": [
+      {
+        "requested_cooldown": -1,
+        "applied_snapshot": 0,
+        "count": 2,
+        "active_hash_preserved": true,
+        "warnings_preserved": true
+      },
+      {
+        "requested_cooldown": 0,
+        "applied_snapshot": 0,
+        "count": 2,
+        "active_hash_preserved": true,
+        "warnings_preserved": true
+      },
+      {
+        "requested_cooldown": 172800,
+        "applied_snapshot": 172800,
+        "count": 1,
+        "active_hash_preserved": true,
+        "warnings_preserved": true
+      }
+    ]
+  },
+  "independent_validation": [
+    {
+      "cwd": "app",
+      "command": "node --test --test-reporter=spec lib/agent-canvas.test.js lib/settings-cards.test.js lib/watch-nodes.test.js lib/watch-check-card.test.js lib/watch-fix-cycle.test.js lib/paper-screen-routes.test.js",
+      "result": "225 passed, 0 failed/cancelled/skipped/todo"
+    },
+    {
+      "cwd": "backend",
+      "command": ".venv/Scripts/python.exe -m pytest -q -p no:randomly tests/api/test_routines_watch_api.py tests/api/test_routines_fix_cycle.py tests/unit/test_watch_check.py",
+      "result": "56 passed, one existing Starlette/httpx deprecation warning; 15.22s"
+    },
+    {
+      "cwd": "backend",
+      "method": "Read-only in-memory import of existing check_client fixture with tempfile + MonkeyPatch; three real TestClient check/detail calls for -1/0/172800 cooldown on active routine",
+      "result": "3/3 controls passed: normalized cooldown, count/fires coherence, warnings and active hash preserved"
+    },
+    {
+      "cwd": ".",
+      "command": "node scripts/gates/check-paper-routes.mjs",
+      "result": "91 routes passed; existing four unrouted screens unchanged"
+    },
+    {
+      "cwd": ".",
+      "command": "git diff --check -- <eight scoped files>",
+      "result": "passed"
+    }
+  ],
+  "additional_visual_evidence_reviewed": {
+    "independently_relaunched_electron": false,
+    "reports_read": [
+      ".omc/artifacts/account-verifying-20260907/PAPER-SCREENS-focused.json",
+      ".omc/artifacts/watch-check-20260907/PAPER-SCREENS-focused.json"
+    ],
+    "observed_report_results": "Existing isolated Electron outputs report 3/3 in each group. These were corroborating evidence, not substituted for independent code/tests.",
+    "images_visually_inspected": [
+      ".omc/artifacts/account-verifying-20260907/XI-0.png",
+      ".omc/artifacts/watch-check-20260907/446V-1-result.png"
+    ],
+    "observations": "XI shows distinct status and explanation lines with locked controls. 446V result is visible after scrolling in the existing detail column and contains the count, applied cooldown, daily dots, dated closes and cutoff notice."
+  },
+  "limits": [
+    "This CLEAR applies only to the eight scoped UI/check files; it is not approval of reviewer's authored six files or the aggregate branch.",
+    "No full-board pixel parity or broad Paper-ledger closure is claimed. OBS-077 chat-card dots/list and OBS-078 data-source settings row remain separate work.",
+    "Root's historical XI 22-run set contains one unresolved flake; this review does not erase it or infer universal timing reliability from focused passes.",
+    "No source edits, live account/model/broker requests, real orders, commit or push were performed in this review. API verification used existing isolated temporary fixtures.",
+    "One initial route-gate invocation used app/ as cwd and failed with MODULE_NOT_FOUND; it was rerun from repo root and passed. One escaped rg expression failed and was rerun with fixed strings. Neither was treated as product failure or success evidence."
+  ],
+  "recommendation": "Architectural Status CLEAR; no scoped architecture blocker. Root combines this independent UI8 lane with separate code-reviewer and source/backtest architecture results."
+}

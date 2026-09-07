@@ -1,0 +1,184 @@
+{
+  "baseline_head": "765d5dcecdaf71455de63794934ac06642fe3212",
+  "code_commits": {
+    "backtest_source": "f2de70da2d797826e21787b592a8f6749fa8e6b4",
+    "ui_watch": "f601f5b5be7c734899ab8a955ba94d8c11278ac8"
+  },
+  "frozen_files": [
+    {
+      "path": "app/lib/backtest-canvas.js",
+      "sha256": "985c688262062bf9b116f18db0f1904e7ccf23d453468af58a24e08711b64c9a"
+    },
+    {
+      "path": "app/lib/backtest-canvas.test.js",
+      "sha256": "0cd96922c8886835579f3ff746dce2ee7702e8ae227fa32a4b9ecdaefa03fb9d"
+    },
+    {
+      "path": "app/lib/main/live-prompt.js",
+      "sha256": "20e00a0c6f6645537aa02e6a7084c3a3cccc68753a0874523ff5a6d43e9f1fab"
+    },
+    {
+      "path": "app/lib/main/live-prompt.test.js",
+      "sha256": "adfecc76025cb77abbf15675a818b5a0fd8e14c0ab1485431d4a0bd6cd7c2cfc"
+    },
+    {
+      "path": "backend/athena_api/backtest/source_to_map.py",
+      "sha256": "13c8072eaa1bc51325bd1b4bdbad8944e7a9f64b3e1581e72423c9e5bb13e73d"
+    },
+    {
+      "path": "backend/tests/unit/test_backtest_source_to_map.py",
+      "sha256": "1e90b60eb8c1dcf76e72343c689f544aec98bccd7b96671374c05edf19dafb2d"
+    },
+    {
+      "path": "app/lib/agent-canvas.js",
+      "sha256": "bc0bd8489d01fab27666aa59c209f7a6b9f4c38bfc39dc8cdc1bb85909fb2a2e"
+    },
+    {
+      "path": "app/lib/agent-canvas.test.js",
+      "sha256": "1f5c5ff4c85af61c38feddcf1893da684e3c4e77ffa283f9c9b9cd1a74fb3b1c"
+    },
+    {
+      "path": "app/lib/settings-cards.js",
+      "sha256": "01adac3acd88c103a3eadfac23c739424cb13160d61e06d5c2f674a32873ebda"
+    },
+    {
+      "path": "app/lib/settings-cards.test.js",
+      "sha256": "7787fdf88a504b014610a1a08d4c02ee78379e277228a518a2fd3e225c76af85"
+    },
+    {
+      "path": "app/lib/paper-screen-routes.js",
+      "sha256": "a175bf748ca8d42037958dd2a85f6b8356166533cf795f517babf807c2dbc996"
+    },
+    {
+      "path": "app/shell.css",
+      "sha256": "61533f2eb0b9e04119b281489ff03f1d76f7075edd4a285d966f441c9283978d"
+    },
+    {
+      "path": "backend/athena_api/api/routines.py",
+      "sha256": "630cfdeb2d5236cb4b0e07d6365c622dcd60106ac968846ffd0687b331da1651"
+    },
+    {
+      "path": "backend/tests/api/test_routines_watch_api.py",
+      "sha256": "28629de745f119c5ef73c607ea5a55385330e2daef36eb41ec8afa1a32f85732"
+    }
+  ],
+  "tests": {
+    "app_unit": {
+      "command": "node --test lib/*.test.js lib/main/*.test.js lib/graph-mode/*.test.js",
+      "cwd": "app",
+      "pass": 3457,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "duration_ms": 20497.1932,
+      "exit_code": 0,
+      "summary": "app-unit-final-summary.log",
+      "local_full_log": ".omc/artifacts/codex-resume/round2-app-unit-final.log",
+      "full_log_sha256": "0c91942ec23ded450685f626f5cb514f2380b1278a72a6dc01ad3644fcf27103"
+    },
+    "backend_focused": {
+      "command": ".venv/Scripts/python.exe -m pytest -q -p no:randomly tests/unit/test_backtest_sources.py tests/unit/test_backtest_source_to_map.py tests/api/test_backtest_source_map_api.py tests/api/test_routines_watch_api.py",
+      "cwd": "backend",
+      "pass": 112,
+      "fail": 0,
+      "warnings": 1,
+      "warning": "Existing Starlette/httpx deprecation",
+      "duration_seconds": 12.73,
+      "log": "backend-focused.log"
+    },
+    "ruff": {
+      "changed_python_files": 4,
+      "result": "pass"
+    },
+    "deterministic_gates": {
+      "pass": 6,
+      "result": "deterministic-gates.json",
+      "unrouted_screens": 4
+    },
+    "electron": {
+      "account": {
+        "pass": 3,
+        "boards": [
+          "XI-0",
+          "FLM-0",
+          "FPE-0"
+        ],
+        "report": "account-PAPER-SCREENS-focused.json"
+      },
+      "watch": {
+        "pass": 3,
+        "boards": [
+          "446V-1",
+          "44HD-1",
+          "44RV-1"
+        ],
+        "report": "watch-PAPER-SCREENS-focused.json"
+      },
+      "mode": "actual Electron renderer with isolated fixture IPC/profile; not live account results"
+    },
+    "portable_source_reproduction": {
+      "producer_cases": 20,
+      "independent_corpus": 400,
+      "full_turn_roundtrips": 2,
+      "failed": 0
+    }
+  },
+  "independent_reviews": {
+    "backtest_source": {
+      "code_review": {
+        "agent": "round2_code_review",
+        "verdict": "APPROVE",
+        "final_scoped_tests": 517
+      },
+      "architecture": {
+        "agent": "watch_check_panel",
+        "verdict": "CLEAR",
+        "non_author_scope": true,
+        "final_async_tests": 70,
+        "separate_answer_cases": 4
+      }
+    },
+    "ui_watch": {
+      "code_review": {
+        "agent": "round2_code_review",
+        "verdict": "APPROVE",
+        "scoped_tests": 216
+      },
+      "architecture": {
+        "agent": "source_boundary_audit",
+        "verdict": "CLEAR",
+        "non_author_scope": true,
+        "scoped_app_tests": 225,
+        "scoped_backend_tests": 56,
+        "separate_api_cases": 3,
+        "evidence": "ui-architecture-review.json"
+      }
+    }
+  },
+  "review_assignment_note": "Separate architect creation and prior architect resume were rejected by the agent thread limit. Review scopes were split by authorship: the UI writer reviewed only the six backtest/source files, and the source writer reviewed only the eight UI files. Neither author approves their own changes; an independent code reviewer covers each scope separately.",
+  "not_claimed": [
+    "Full backend pytest",
+    "Full Paper screen suite or pixel parity",
+    "Historical XI-0 flake closure",
+    "OBS-077 chat-card dots/list and OBS-078 data-source row closure",
+    "All 81 code / 52 Paper / 209 observations or 15 pass-but-gap boards closed",
+    "Arbitrary handwritten YAML support",
+    "Recovery of source provenance already lost and resealed without original YAML",
+    "All existing visual state cleared across sessions",
+    "Live model, broker, or order testing"
+  ],
+  "integration": {
+    "code_push": "verified",
+    "code_head": "f601f5b5be7c734899ab8a955ba94d8c11278ac8",
+    "remote": "origin refs/heads/main",
+    "remote_verified": true,
+    "verification": "git ls-remote output equals local HEAD and origin/main",
+    "pre_push": {
+      "status": "passed_without_bypass",
+      "gates": 6,
+      "app_unit": "passed"
+    },
+    "documentation": "This evidence is committed after the two verified code commits. Its own commit id is resolved through Git rather than embedded in itself."
+  }
+}

@@ -1,0 +1,22 @@
+[
+  {
+    "kind": "plain",
+    "title": "TITLE_MARKER word word word word word word word word word word word word word word word word word word word word word word word word word",
+    "scalar": "  name: TITLE_MARKER word word word word word word word word word word word word word\n    word word word word word word word word word word word word"
+  },
+  {
+    "kind": "single",
+    "title": "TITLE_MARKER: user's word word word word word word word word word word word word word word word word word word word word word word word word word",
+    "scalar": "  name: 'TITLE_MARKER: user''s word word word word word word word word word word word\n    word word word word word word word word word word word word word word'"
+  },
+  {
+    "kind": "double",
+    "title": "TITLE_MARKER\tword word word word word word word word word word word word word word word word word word word word word word word word word",
+    "scalar": "  name: \"TITLE_MARKER\\tword word word word word word word word word word word word\\\n    \\ word word word word word word word word word word word word word\""
+  },
+  {
+    "kind": "paragraph",
+    "title": "TITLE_MARKER\nnext line word word word word word word word word word word word word word word word word word word word word word word word word word",
+    "scalar": "  name: 'TITLE_MARKER\n\n    next line word word word word word word word word word word word word word word\n    word word word word word word word word word word word'"
+  }
+]

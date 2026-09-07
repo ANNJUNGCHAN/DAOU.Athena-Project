@@ -1,0 +1,97 @@
+{
+  "baseline_head": "765d5dcecdaf71455de63794934ac06642fe3212",
+  "scope": "Current continuation of the interrupted Claude code review; bounded findings below, not a full historical-ledger closure.",
+  "current_findings": [
+    {
+      "id": "RESUME-HIGH-1",
+      "status": "fixed_within_stated_scope_code_approve_architecture_clear",
+      "continuation": "Six previously static async groups plus stopJob/retryVisualPatch/refreshVisualBase/askVisualQuestion/forkCodeOnly caller boundaries. Final answerVisualQuestion success/rejection continuation is also guarded.",
+      "tests_added": 70,
+      "commit": "f2de70da2d797826e21787b592a8f6749fa8e6b4"
+    },
+    {
+      "id": "RESUME-MEDIUM-1",
+      "status": "fixed_within_stated_scope_code_approve_architecture_clear",
+      "continuation": "Safe source strategy name at generation and prompt-only from_source name; recover source marker from original PyYAML multiline scalar YAML.",
+      "irrecoverable_data_limit": "A form already reserialized with custom/another strategy id after the old parser lost provenance cannot be identified by name alone. No speculative migration is performed.",
+      "commit": "f2de70da2d797826e21787b592a8f6749fa8e6b4"
+    },
+    {
+      "id": "RESUME-MEDIUM-2",
+      "status": "fixed_within_stated_scope_code_approve_architecture_clear",
+      "continuation": "Use actual html source-kind key for Korean display.",
+      "commit": "f2de70da2d797826e21787b592a8f6749fa8e6b4"
+    },
+    {
+      "id": "RESUME-MEDIUM-3",
+      "status": "fixed_within_stated_scope_code_approve_architecture_clear",
+      "continuation": "446V-1 first-check status and result panels use actual check snapshot data.",
+      "commit": "f601f5b5be7c734899ab8a955ba94d8c11278ac8"
+    },
+    {
+      "id": "RESUME-MEDIUM-4",
+      "status": "fixed_within_stated_scope_code_approve_architecture_clear",
+      "continuation": "XI-0 status/explanation order and verification locks; historical canonical flake remains unresolved.",
+      "commit": "f601f5b5be7c734899ab8a955ba94d8c11278ac8"
+    }
+  ],
+  "historical_mapping": [
+    {
+      "id": "OBS-021",
+      "board": "XI-0",
+      "relationship": "Existing input/button locks and verifying label were verified by current focused UI and rendering tests; they were already implemented before this continuation. This batch additionally fixes the second explanation line.",
+      "evidence": [
+        "account-XI-0.json",
+        "account-execution.json"
+      ]
+    },
+    {
+      "id": "OBS-022",
+      "board": "FLM-0",
+      "relationship": "Current focused UI verifies failed/verified state messages and labels. XI-0 missing state-specific explanation is fixed in this batch; earlier state transitions are not attributed to this new change.",
+      "evidence": [
+        "account-FLM-0.json",
+        "account-FPE-0.json",
+        "account-XI-0.json"
+      ]
+    },
+    {
+      "id": "OBS-077",
+      "board": "446V-1",
+      "relationship": "Canvas first-check dot strip and fire list verified by current 446V focused probe. Chat card still has only summary/diagnosis/chips: the historical observation is only partially covered."
+    },
+    {
+      "id": "OBS-078",
+      "board": "446V-1",
+      "relationship": "Existing canvas confirm/cancel/edit actions were inspected; the settings data-source row is still absent. Do not close the full observation by first-check panel changes."
+    },
+    {
+      "id": "OBS-048",
+      "board": "3WBZ-1",
+      "relationship": "Same session-restoration board but partial-restore warning is separate from async contamination. Not closed by this batch."
+    },
+    {
+      "id": "OBS-169",
+      "board": "3XL4-1",
+      "relationship": "Same source board but five-stage/loading/summary UI is separate from title provenance. Not closed by this batch."
+    }
+  ],
+  "ledger_limits": {
+    "code_81_closed_by_this_mapping": 0,
+    "pass_but_gap_15_closed_by_this_batch": 0,
+    "note": "No global count decrement is inferred from shared board ids. Historical source records remain unchanged; current evidence is an overlay."
+  },
+  "remaining_static_candidates": [
+    {
+      "function": "clearWorkspace",
+      "state": [
+        "pendingQuestion",
+        "pendingPatch",
+        "codeOnly",
+        "openedVersion"
+      ],
+      "status": "not_dynamically_revalidated",
+      "note": "Already-existing visual state at switch is a separate lifecycle from late responses. No new confirmed bug is claimed."
+    }
+  ]
+}

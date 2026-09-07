@@ -1,0 +1,410 @@
+TAP version 13
+# Subtest: every route targets a distinct board the manifest calls a screen
+ok 1 - every route targets a distinct board the manifest calls a screen
+  ---
+  duration_ms: 1.5447
+  ...
+# Subtest: every route renders in a window the app actually has
+ok 2 - every route renders in a window the app actually has
+  ---
+  duration_ms: 0.2533
+  ...
+# Subtest: a route that lives in the boot window holds the sequence at one stage
+ok 3 - a route that lives in the boot window holds the sequence at one stage
+  ---
+  duration_ms: 1.6708
+  ...
+# Subtest: every reach step uses a declared verb and carries exactly its declared arguments
+ok 4 - every reach step uses a declared verb and carries exactly its declared arguments
+  ---
+  duration_ms: 1.5147
+  ...
+# Subtest: the only eval escape hatches are the onboarding ones, and each says why
+ok 5 - the only eval escape hatches are the onboarding ones, and each says why
+  ---
+  duration_ms: 0.4164
+  ...
+# Subtest: every mode step names a mode the shell can actually switch to
+ok 6 - every mode step names a mode the shell can actually switch to
+  ---
+  duration_ms: 0.2772
+  ...
+# Subtest: every DOM id literal in a route exists in shell.html or orb.html
+ok 7 - every DOM id literal in a route exists in shell.html or orb.html
+  ---
+  duration_ms: 1.7722
+  ...
+# Subtest: the data attributes the reach steps click are the ones the app writes
+ok 8 - the data attributes the reach steps click are the ones the app writes
+  ---
+  duration_ms: 2.6113
+  ...
+# Subtest: every phrase is a text Paper really draws on that board
+ok 9 - every phrase is a text Paper really draws on that board
+  ---
+  duration_ms: 41.5665
+  ...
+# Subtest: every phrase survived the generator, so none of them is a data value
+ok 10 - every phrase survived the generator, so none of them is a data value
+  ---
+  duration_ms: 1.4171
+  ...
+# Subtest: the only routes under three phrases are the ones Paper drew with two texts
+ok 11 - the only routes under three phrases are the ones Paper drew with two texts
+  ---
+  duration_ms: 0.91
+  ...
+# Subtest: the empty canvas draws one mode variant at a time
+ok 12 - the empty canvas draws one mode variant at a time
+  ---
+  duration_ms: 2.4545
+  ...
+# Subtest: the history board names runs in a way the app never writes
+ok 13 - the history board names runs in a way the app never writes
+  ---
+  duration_ms: 1.7877
+  ...
+# Subtest: the entity board writes its annotations in a way the app never draws
+ok 14 - the entity board writes its annotations in a way the app never draws
+  ---
+  duration_ms: 0.8706
+  ...
+# Subtest: each route carries 3 to 7 phrases
+ok 15 - each route carries 3 to 7 phrases
+  ---
+  duration_ms: 0.202
+  ...
+# Subtest: every structure check uses one of the three allowed shapes
+ok 16 - every structure check uses one of the three allowed shapes
+  ---
+  duration_ms: 0.2804
+  ...
+# Subtest: a route whose phrases and counts are all there has no failures
+ok 17 - a route whose phrases and counts are all there has no failures
+  ---
+  duration_ms: 2.828
+  ...
+# Subtest: phrases split across elements still match — the join is whitespace-normalized
+ok 18 - phrases split across elements still match — the join is whitespace-normalized
+  ---
+  duration_ms: 0.136
+  ...
+# Subtest: a missing phrase names exactly the phrases that are gone
+ok 19 - a missing phrase names exactly the phrases that are gone
+  ---
+  duration_ms: 0.2165
+  ...
+# Subtest: a reach step that threw is reported as reach_failed and nothing else
+ok 20 - a reach step that threw is reported as reach_failed and nothing else
+  ---
+  duration_ms: 0.1852
+  ...
+# Subtest: an invisible root is its own code — counting phrases under it would be a lie
+ok 21 - an invisible root is its own code — counting phrases under it would be a lie
+  ---
+  duration_ms: 0.1149
+  ...
+# Subtest: a count that does not match names both numbers
+ok 22 - a count that does not match names both numbers
+  ---
+  duration_ms: 0.1096
+  ...
+# Subtest: an absent check expects zero and fails when the app draws it anyway
+ok 23 - an absent check expects zero and fails when the app draws it anyway
+  ---
+  duration_ms: 0.2476
+  ...
+# Subtest: an order check compares the sequence, not the count
+ok 24 - an order check compares the sequence, not the count
+  ---
+  duration_ms: 0.1447
+  ...
+# Subtest: a screen board with no route is a failure, not a skip
+ok 25 - a screen board with no route is a failure, not a skip
+  ---
+  duration_ms: 0.3275
+  ...
+# Subtest: every code this module emits is in the closed set §6.4 reads
+ok 26 - every code this module emits is in the closed set §6.4 reads
+  ---
+  duration_ms: 0.6173
+  ...
+# Subtest: contract sentences keep the prose and drop the table cells
+ok 27 - contract sentences keep the prose and drop the table cells
+  ---
+  duration_ms: 0.4159
+  ...
+# Subtest: a contract sentence the docs never copied is contract_undocumented
+ok 28 - a contract sentence the docs never copied is contract_undocumented
+  ---
+  duration_ms: 0.2745
+  ...
+# Subtest: a contract board the docs already carry passes
+ok 29 - a contract board the docs already carry passes
+  ---
+  duration_ms: 0.1482
+  ...
+# Subtest: a contract board with no sentence fails instead of passing on nothing
+ok 30 - a contract board with no sentence fails instead of passing on nothing
+  ---
+  duration_ms: 0.12
+  ...
+# Subtest: a board outside the lock may fail — that is the unimplemented backlog, not a regression
+ok 31 - a board outside the lock may fail — that is the unimplemented backlog, not a regression
+  ---
+  duration_ms: 0.2999
+  ...
+# Subtest: a locked board that breaks is exit 1
+ok 32 - a locked board that breaks is exit 1
+  ---
+  duration_ms: 0.1345
+  ...
+# Subtest: a newly passing board is a warning, not a failure
+ok 33 - a newly passing board is a warning, not a failure
+  ---
+  duration_ms: 0.0954
+  ...
+# Subtest: a full run that never saw a locked board is exit 1 — the lock silently vanished
+ok 34 - a full run that never saw a locked board is exit 1 — the lock silently vanished
+  ---
+  duration_ms: 0.0744
+  ...
+# Subtest: a partial run does not call the boards it skipped missing
+ok 35 - a partial run does not call the boards it skipped missing
+  ---
+  duration_ms: 0.0783
+  ...
+# Subtest: bless grows the lock and keeps the shrink log untouched
+ok 36 - bless grows the lock and keeps the shrink log untouched
+  ---
+  duration_ms: 0.1887
+  ...
+# Subtest: bless refuses to shrink the lock on its own
+ok 37 - bless refuses to shrink the lock on its own
+  ---
+  duration_ms: 1.3855
+  ...
+# Subtest: shrinking without a reason is refused even with --allow-shrink
+ok 38 - shrinking without a reason is refused even with --allow-shrink
+  ---
+  duration_ms: 0.1274
+  ...
+# Subtest: a reasoned shrink is allowed and leaves the reason behind
+ok 39 - a reasoned shrink is allowed and leaves the reason behind
+  ---
+  duration_ms: 0.1898
+  ...
+# Subtest: the CLI lists the boards that need work but not the 96 unwritten routes
+ok 40 - the CLI lists the boards that need work but not the 96 unwritten routes
+  ---
+  duration_ms: 0.4091
+  ...
+# Subtest: a run the ratchet let through does not get a green stamp while boards are red
+ok 41 - a run the ratchet let through does not get a green stamp while boards are red
+  ---
+  duration_ms: 0.1541
+  ...
+# Subtest: the success marker appears only when nothing is red
+ok 42 - the success marker appears only when nothing is red
+  ---
+  duration_ms: 0.1348
+  ...
+# Subtest: a regression prints why it blocks and drops the success marker
+ok 43 - a regression prints why it blocks and drops the success marker
+  ---
+  duration_ms: 0.177
+  ...
+# Subtest: accountSubline: 출처 · 추가 시각 · 비활성이면 전환 안내 순으로 잇는다
+ok 44 - accountSubline: 출처 · 추가 시각 · 비활성이면 전환 안내 순으로 잇는다
+  ---
+  duration_ms: 2.2486
+  ...
+# Subtest: accountSubline: addedAt이 없거나 깨졌으면 날짜 조각을 뺀다
+ok 45 - accountSubline: addedAt이 없거나 깨졌으면 날짜 조각을 뺀다
+  ---
+  duration_ms: 0.2533
+  ...
+# Subtest: 저장소가 비어 있으면 기본값(전부 켜짐)
+ok 46 - 저장소가 비어 있으면 기본값(전부 켜짐)
+  ---
+  duration_ms: 0.7455
+  ...
+# Subtest: 저장소가 아예 없어도 터지지 않는다
+ok 47 - 저장소가 아예 없어도 터지지 않는다
+  ---
+  duration_ms: 0.111
+  ...
+# Subtest: 저장한 값이 돌아온다 — 건드리지 않은 키는 유지된다
+ok 48 - 저장한 값이 돌아온다 — 건드리지 않은 키는 유지된다
+  ---
+  duration_ms: 0.3057
+  ...
+# Subtest: 깨진 JSON은 기본값으로 물러선다 — 지우지 않는다
+ok 49 - 깨진 JSON은 기본값으로 물러선다 — 지우지 않는다
+  ---
+  duration_ms: 0.8228
+  ...
+# Subtest: 불리언이 아닌 값은 기본값으로 대체된다
+ok 50 - 불리언이 아닌 값은 기본값으로 대체된다
+  ---
+  duration_ms: 0.1088
+  ...
+# Subtest: 저장이 실패해도 이번 세션 값은 돌려준다
+ok 51 - 저장이 실패해도 이번 세션 값은 돌려준다
+  ---
+  duration_ms: 0.1266
+  ...
+# Subtest: exposeToModel이 그래프 탭 배지의 켜짐/꺼짐을 정한다
+ok 52 - exposeToModel이 그래프 탭 배지의 켜짐/꺼짐을 정한다
+  ---
+  duration_ms: 0.2894
+  ...
+# Subtest: 보유잔고 조회 주기 기본값은 60분
+ok 53 - 보유잔고 조회 주기 기본값은 60분
+  ---
+  duration_ms: 0.3409
+  ...
+# Subtest: 조회 주기를 30분·120분으로 바꿔 저장하고 되읽는다
+ok 54 - 조회 주기를 30분·120분으로 바꿔 저장하고 되읽는다
+  ---
+  duration_ms: 0.3256
+  ...
+# Subtest: 허용되지 않은 조회 주기 값은 기본값(60분)으로 물러선다
+ok 55 - 허용되지 않은 조회 주기 값은 기본값(60분)으로 물러선다
+  ---
+  duration_ms: 0.0917
+  ...
+# Subtest: collectChat 변경은 main 성공 응답 뒤에만 로컬 상태를 저장한다
+ok 56 - collectChat 변경은 main 성공 응답 뒤에만 로컬 상태를 저장한다
+  ---
+  duration_ms: 0.2731
+  ...
+# Subtest: collectChat이 아닌 패치(collectFills 등)는 main에 미러링하지 않는다
+ok 57 - collectChat이 아닌 패치(collectFills 등)는 main에 미러링하지 않는다
+  ---
+  duration_ms: 0.1052
+  ...
+# Subtest: collectChat 재활성화 실패는 로컬 상태를 OFF로 복원하고 사람이 읽을 오류를 낸다
+ok 58 - collectChat 재활성화 실패는 로컬 상태를 OFF로 복원하고 사람이 읽을 오류를 낸다
+  ---
+  duration_ms: 0.723
+  ...
+# Subtest: collectChat 비활성화 purge 실패는 메인의 정제 오류를 그대로 던지고 로컬을 OFF로 남긴다
+ok 59 - collectChat 비활성화 purge 실패는 메인의 정제 오류를 그대로 던지고 로컬을 OFF로 남긴다
+  ---
+  duration_ms: 0.7741
+  ...
+# Subtest: exposeToModel 패치는 전용 채널로 main에 미러링된다
+ok 60 - exposeToModel 패치는 전용 채널로 main에 미러링된다
+  ---
+  duration_ms: 0.3081
+  ...
+# Subtest: 성향·이력 카드는 백엔드가 준 값만 행으로 만든다 — 없는 값은 행이 없다
+ok 61 - 성향·이력 카드는 백엔드가 준 값만 행으로 만든다 — 없는 값은 행이 없다
+  ---
+  duration_ms: 0.3229
+  ...
+# Subtest: 학습된 관심 대상이 오면 Paper 라벨 그대로 한 행이 된다 — 중복은 접는다
+ok 62 - 학습된 관심 대상이 오면 Paper 라벨 그대로 한 행이 된다 — 중복은 접는다
+  ---
+  duration_ms: 0.1136
+  ...
+# Subtest: 노출 설정이 오면 Paper 32 「성향 반영」 행이 사실대로 선다
+ok 63 - 노출 설정이 오면 Paper 32 「성향 반영」 행이 사실대로 선다
+  ---
+  duration_ms: 0.1139
+  ...
+# Subtest: 보관 건수가 오면 「보관 중」 행이 선다 — 용량·보존 기간은 출처가 없어 안 그린다
+ok 64 - 보관 건수가 오면 「보관 중」 행이 선다 — 용량·보존 기간은 출처가 없어 안 그린다
+  ---
+  duration_ms: 0.0665
+  ...
+# Subtest: 건수를 못 읽으면 「보관 중」 행 자체가 없다 — 0건이라고 말하지 않는다
+ok 65 - 건수를 못 읽으면 「보관 중」 행 자체가 없다 — 0건이라고 말하지 않는다
+  ---
+  duration_ms: 0.0735
+  ...
+# Subtest: 열리지 않는 것 제목은 토큰 색을 쓴다 — 다크 잔재 하드코딩이 없다
+ok 66 - 열리지 않는 것 제목은 토큰 색을 쓴다 — 다크 잔재 하드코딩이 없다
+  ---
+  duration_ms: 0.5038
+  ...
+# Subtest: settings-cards.css 어디에도 \#F2F4F8 하드코딩이 없다
+ok 67 - settings-cards.css 어디에도 \#F2F4F8 하드코딩이 없다
+  ---
+  duration_ms: 0.4447
+  ...
+# Subtest: 확인 중에는 입력 셋이 잠기고 버튼 라벨이 확인 중…이다
+ok 68 - 확인 중에는 입력 셋이 잠기고 버튼 라벨이 확인 중…이다
+  ---
+  duration_ms: 0.1887
+  ...
+# Subtest: 등록 시트는 검증 IPC 대기 중 Paper의 상태 줄과 설명 줄을 별도로 표시한다
+ok 69 - 등록 시트는 검증 IPC 대기 중 Paper의 상태 줄과 설명 줄을 별도로 표시한다
+  ---
+  duration_ms: 3.7127
+  ...
+# Subtest: 확인 중 시트를 취소하면 실제 입력을 비우고 시트를 닫는다
+ok 70 - 확인 중 시트를 취소하면 실제 입력을 비우고 시트를 닫는다
+  ---
+  duration_ms: 0.6955
+  ...
+# Subtest: 등록 시트의 저장 완료는 실제 입력을 비우고 시트를 닫는다
+ok 71 - 등록 시트의 저장 완료는 실제 입력을 비우고 시트를 닫는다
+  ---
+  duration_ms: 0.7906
+  ...
+# Subtest: 인증 실패는 입력을 비우지 않는다 — 다시 검증이 가능하다
+ok 72 - 인증 실패는 입력을 비우지 않는다 — 다시 검증이 가능하다
+  ---
+  duration_ms: 0.0954
+  ...
+# Subtest: 실패 코드가 auth면 SECRET KEY에 오류 테두리가 붙는다
+ok 73 - 실패 코드가 auth면 SECRET KEY에 오류 테두리가 붙는다
+  ---
+  duration_ms: 0.0827
+  ...
+# Subtest: 검증 성공은 시트를 닫지 않고 확인 완료 상태로 간다
+ok 74 - 검증 성공은 시트를 닫지 않고 확인 완료 상태로 간다
+  ---
+  duration_ms: 0.0621
+  ...
+# Subtest: 계좌 저장을 눌러야 시트가 닫히고 그때 입력을 비운다
+ok 75 - 계좌 저장을 눌러야 시트가 닫히고 그때 입력을 비운다
+  ---
+  duration_ms: 0.0602
+  ...
+# Subtest: 취소는 어느 상태에서든 시트를 닫고 값을 비운다
+ok 76 - 취소는 어느 상태에서든 시트를 닫고 값을 비운다
+  ---
+  duration_ms: 0.0782
+  ...
+# Subtest: 저장 실패는 시트를 닫지 않고 다시 검증으로 되돌린다 — 값은 남는다
+ok 77 - 저장 실패는 시트를 닫지 않고 다시 검증으로 되돌린다 — 값은 남는다
+  ---
+  duration_ms: 0.0529
+  ...
+# Subtest: 여는 상태 문구에 내부용어가 없다
+ok 78 - 여는 상태 문구에 내부용어가 없다
+  ---
+  duration_ms: 0.0492
+  ...
+# Subtest: 검증은 verifyOnly로, 저장은 그 없이 같은 채널을 부른다
+ok 79 - 검증은 verifyOnly로, 저장은 그 없이 같은 채널을 부른다
+  ---
+  duration_ms: 0.6214
+  ...
+# Subtest: 입력을 비우는 곳은 applyState 하나뿐이다 — 닫히는 길은 전부 거기를 지난다
+ok 80 - 입력을 비우는 곳은 applyState 하나뿐이다 — 닫히는 길은 전부 거기를 지난다
+  ---
+  duration_ms: 0.5855
+  ...
+1..80
+# tests 80
+# suites 0
+# pass 80
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 163.7686

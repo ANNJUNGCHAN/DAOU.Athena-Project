@@ -1,0 +1,94 @@
+{
+  "scope": "RESUME-MEDIUM-3 / Paper A-2 446V-1 first-check status band and result panel",
+  "status": "implementation frozen; writer verification passed; root owns independent approval and integration",
+  "committed_or_pushed": false,
+  "owned_files": [
+    "C:/Projects/DAOU.Athena/app/lib/agent-canvas.js",
+    "C:/Projects/DAOU.Athena/app/lib/agent-canvas.test.js",
+    "C:/Projects/DAOU.Athena/app/shell.css",
+    "C:/Projects/DAOU.Athena/backend/athena_api/api/routines.py",
+    "C:/Projects/DAOU.Athena/backend/tests/api/test_routines_watch_api.py",
+    "C:/Projects/DAOU.Athena/app/lib/paper-screen-routes.js (CODE_DETAIL_FIRST_CHECK fixture and 446V-1 route only; XI-0 changes belong to root)"
+  ],
+  "paper_evidence": {
+    "source": "C:/Projects/DAOU.Athena/backend/ref/paper-ledger/A-2/446V-1.tree.txt",
+    "nodes": [
+      "45BA-1 status band",
+      "45F4-1 result panel",
+      "45FC-1 daily dots",
+      "45G7-1 fire dates"
+    ],
+    "implementation": "Actual count, lookback_days, fires dt/close and counted_through populate the panel. The status uses actual node count and checked_at as the check timestamp. No fabricated 3/3 checks, revision number or volume ratio. Draft nodes use the Paper title 노드 · 흐름 rather than labeling a historical check 오늘 확인."
+  },
+  "red_evidence": [
+    {
+      "command": "node --test --test-name-pattern=446V lib/agent-canvas.test.js",
+      "observed_before_implementation": "4 failures for missing first-check band/panel, failure being rendered as 0 fires, and no-check state; 1 passing existing fix_cycle positive control. The DOM fixture gained childNodes to match the browser before counting the meaningful failures."
+    },
+    {
+      "command": ".venv/Scripts/python.exe -m pytest tests/api/test_routines_watch_api.py -q -k 'preserves_applied_cooldown or preserves_diagnosis'",
+      "observed_before_implementation": "2 failures: last_check lacked cooldown_s and diagnosis."
+    },
+    {
+      "command": "node --test --test-name-pattern='446V 첫 검사: 상태 띠' lib/agent-canvas.test.js",
+      "observed_before_caption_fix": "1 failure: historical draft check still rendered 오늘 확인 instead of 노드 · 흐름."
+    },
+    {
+      "command": "node --test --test-reporter=spec lib/paper-screen-routes.test.js",
+      "observed_after_independent_review": "15 passed, 1 failed: 446V-1 had 9 phrases, exceeding the unchanged 3-to-7 contract. The new status and caption assertions moved to two structure.order checks; no assertion coverage or gate limit was removed."
+    }
+  ],
+  "green_evidence": [
+    {
+      "command": "node --test --test-reporter=spec lib/agent-canvas.test.js lib/watch-nodes.test.js lib/watch-check-card.test.js lib/watch-fix-cycle.test.js lib/paper-screen-routes.test.js",
+      "result": "188 passed; 0 failed, skipped or todo",
+      "log": "watch-frontend-tests.log"
+    },
+    {
+      "command": ".venv/Scripts/python.exe -m pytest tests/api/test_routines_watch_api.py tests/api/test_routines_fix_cycle.py tests/unit/test_watch_check.py -q",
+      "result": "56 passed; existing Starlette httpx deprecation warning",
+      "log": "watch-backend-tests.log"
+    },
+    {
+      "command": "node scripts/gates/check-paper-routes.mjs",
+      "result": "passed; 91 routed screens, existing 4 unrouted screens unchanged"
+    },
+    {
+      "command": "git diff --check",
+      "result": "passed; no output"
+    },
+    {
+      "command": "app/node_modules/electron/dist/electron.exe .omc/artifacts/watch-check-20260907/capture-watch-check.cjs --only 446V-1,44HD-1,44RV-1",
+      "launch": "Native PowerShell Start-Process -WindowStyle Hidden with separate stdout/stderr files, -PassThru and WaitForExit; process exit 0",
+      "result": "3/3 passed with final 446V-1 route's 12 structure checks",
+      "generated_at": "2026-09-07T06:15:07.404Z",
+      "elapsed_ms": 17771,
+      "report": "watch-PAPER-SCREENS-focused.json"
+    }
+  ],
+  "isolation": {
+    "backend_model_broker_order_calls": "none; backend tests use temporary project/routine files, fixture candle cache and existing local watch runner",
+    "electron": "ATHENA_NO_AUTOSTART=1; ATHENA_CANVAS_SOURCE=fixture; existing probe uses a disposable .probe-paper-screens-profile and fixture IPC responses restored between routes",
+    "capture_wrapper": "Only saves the existing final measurement and screenshots before fixture restoration. A second 446V-1 screenshot scrolls the result panel into view after measurement. No assertion, timeout, ratchet or product UI change in the wrapper.",
+    "initial_launch_note": "An initial direct PowerShell GUI invocation detached and left only the first capture with no completed report. Only that probe's identified process tree was stopped, then the final commands used Start-Process with durable file redirection. No pass was inferred from the incomplete launch."
+  },
+  "artifacts": [
+    "watch-446V-1.json",
+    "watch-446V-1.png",
+    "watch-446V-1-result.png",
+    "watch-44HD-1.json",
+    "watch-44HD-1.png",
+    "watch-44RV-1.json",
+    "watch-44RV-1.png"
+  ],
+  "remaining_boundaries": [
+    "OBS-077 is only partially addressed: app/chat.js renderWatchCheckCard and app/lib/watch-check-card.js still render summary/node summary/diagnosis/chips without daily dots or the fire-date list. Chat was inspected but not edited.",
+    "OBS-078 is not wholly closed: canvas approval and existing confirm/cancel/edit paths are implemented; settings still contain polling, cooldown and expiry but omit Paper's data-source row. No new approval engine was introduced.",
+    "The existing narrow scrollable agent detail column remains. The new first-check result panel is below the initial viewport; 446V-1-result.png shows it after scrolling. No claim of full-board pixel parity.",
+    "No broad 81/52/209 ledger closure, Paper source edit, full suite pass, commit, push, or independent approval is claimed by this writer."
+  ],
+  "evidence_copy": {
+    "source_directory": "C:/Projects/DAOU.Athena/.omc/artifacts/watch-check-20260907/",
+    "note": "Original artifacts retained. Media and measurements preserved; copied text logs use LF. Evidence references rebased; original launch command retained."
+  }
+}

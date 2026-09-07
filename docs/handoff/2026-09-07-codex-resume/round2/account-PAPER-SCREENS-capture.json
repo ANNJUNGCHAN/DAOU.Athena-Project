@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "gate": "verify:paper-screens",
+  "generated_at": "2026-09-07T05:43:11.012Z",
+  "selection": {
+    "canonical": false,
+    "boards": 3
+  },
+  "elapsed_ms": 14928,
+  "totals": {
+    "boards": 3,
+    "pass": 3,
+    "fail": 0,
+    "route_missing": 0,
+    "contract": 0,
+    "contract_fail": 0
+  },
+  "ratchet": {
+    "file": "app/lib/paper-screens-ratchet.json",
+    "passing_count": 103,
+    "regressions": [],
+    "newly_passing": [],
+    "missing": []
+  },
+  "boards": [
+    {
+      "board_id": "FLM-0",
+      "page": "1-0",
+      "name": "16 · 계좌 등록 — 인증 실패 (AT-ST-002)",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 5,
+        "structure": 4,
+        "visible_text_length": 527
+      }
+    },
+    {
+      "board_id": "FPE-0",
+      "page": "1-0",
+      "name": "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 5,
+        "structure": 3,
+        "visible_text_length": 513
+      }
+    },
+    {
+      "board_id": "XI-0",
+      "page": "1-0",
+      "name": "15 · 계좌 등록 — 인증 확인 중 (AT-ST-002)",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 6,
+        "structure": 6,
+        "visible_text_length": 514
+      }
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "scope": "Paper XI-0 account verification status and explanation",
+  "baseline": "main 765d5dc",
+  "changed_files": [
+    "app/lib/settings-cards.js",
+    "app/lib/settings-cards.test.js",
+    "app/lib/paper-screen-routes.js"
+  ],
+  "paper_source": "backend/ref/paper-ledger/1-0/XI-0.json, text nodes 113-0 and 114-0",
+  "red": {
+    "command": "node --test lib/settings-cards.test.js",
+    "tests": 36,
+    "pass": 34,
+    "fail": 2,
+    "observed_failures": [
+      "Existing verifying state test extended with missing verificationNote: expected Paper 114-0, actual undefined",
+      "New actual card/sheet rendering test: Paper 114-0 explanation absent from rendered sheet while verification IPC pending"
+    ],
+    "note": "The combined cancel/save safety test passed before the implementation change; it was subsequently split into two tests. It is not claimed as a failing regression. Red output is preserved in the executor tool transcript."
+  },
+  "green": {
+    "command": "node --test lib/settings-cards.test.js lib/paper-screen-routes.test.js lib/paper-screens-report.test.js",
+    "tests": 80,
+    "pass": 80,
+    "fail": 0,
+    "cancelled": 0,
+    "skip": 0,
+    "todo": 0,
+    "log": "account-related-tests.log"
+  },
+  "electron": [
+    {
+      "runner": "app/probe-paper-screens.js --only XI-0,FLM-0,FPE-0",
+      "report": "account-PAPER-SCREENS-focused.json",
+      "canonical": false,
+      "boards": 3,
+      "pass": 3,
+      "fail": 0,
+      "elapsed_ms": 14164
+    },
+    {
+      "runner": "capture-account-sheets.cjs --only XI-0,FLM-0,FPE-0",
+      "note": "Diagnostic wrapper compiles the same probe with only final measurement/screenshot persistence inserted before its return. No production probe file or verdict logic is edited.",
+      "report": "account-PAPER-SCREENS-capture.json",
+      "canonical": false,
+      "boards": 3,
+      "pass": 3,
+      "fail": 0,
+      "screenshots": [
+        "account-XI-0.png",
+        "account-FLM-0.png",
+        "account-FPE-0.png"
+      ],
+      "measurements": [
+        "account-XI-0.json",
+        "account-FLM-0.json",
+        "account-FPE-0.json"
+      ]
+    }
+  ],
+  "isolation": {
+    "profile": "C:/Projects/DAOU.Athena/app/.probe-paper-screens-profile",
+    "profile_checked_as_workspace_directory_not_link": true,
+    "ATHENA_NO_AUTOSTART": "1",
+    "ATHENA_CANVAS_SOURCE": "fixture",
+    "account_list_and_register": "Existing route fixtures; XI-0 hangs the register response",
+    "no_concurrent_electron_at_start": true,
+    "electron_remaining_after_normal_exit": 0,
+    "bless_or_allow_shrink": false,
+    "real_backend_model_order_execution": false
+  },
+  "historical_flake": {
+    "status": "unresolved_not_reproduced_by_two_current_focused_runs",
+    "historical_source": "C:/Users/ajc22/.claude/projects/C--Projects-DAOU-Athena/0d4f88d0-d946-436b-bc39-d4e63d8412f6/workflows/wf_d44cefc8-e1b.json, result.results review scr-account-order-15-17-22-24",
+    "historical_observation": "Reviewer recorded a XI-0 phrase_missing/structure_mismatch failure in 1 of 22 full canonical runs at 0733add, without concurrent Electron, and explicitly stated the failing PAPER-SCREENS.json had been overwritten.",
+    "current_scope_limit": "This task ran focused routes, not the full sequence that historically reproduced the flake. No deterministic current root cause was identified; no runner timing or fixture changes were made."
+  },
+  "final_checks": {
+    "git_diff_check_assigned_files": "pass",
+    "added_lines_placeholder_skip_only_scan": "pass",
+    "commit_push": "not performed; root owns independent reviews and integration"
+  },
+  "evidence_copy": {
+    "source_directory": ".omc/artifacts/account-verifying-20260907",
+    "note": "Report/media/log bytes preserved. Relative evidence links in this JSON updated for the handoff directory. Diagnostic wrapper copy is account-capture-account-sheets.cjs; execution used the original location and app cwd."
+  }
+}

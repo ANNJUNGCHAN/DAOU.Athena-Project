@@ -1,0 +1,175 @@
+{
+  "task": "Source-title model boundary, recoverable legacy YAML, and late visual-question response",
+  "frozen_at_utc": "2026-09-07 06:27:10 UTC",
+  "baseline": {
+    "branch": "main",
+    "commit": "765d5dcecdaf71455de63794934ac06642fe3212"
+  },
+  "status": "Executor changes and tests frozen; independent approval and commit/push belong to root.",
+  "frozen_files": [
+    {
+      "path": "backend/athena_api/backtest/source_to_map.py",
+      "scope": "source kind display map and run_job metadata.name",
+      "sha256": "13C8072EAA1BC51325BD1B4BDBAD8944E7A9F64B3E1581E72423C9E5BB13E73D"
+    },
+    {
+      "path": "backend/tests/unit/test_backtest_source_to_map.py",
+      "scope": "actual HTML title boundary and html label regression",
+      "sha256": "1E90B60EB8C1DCF76E72343C689F544AEC98BCCD7B96671374C05EDF19DAFB2D"
+    },
+    {
+      "path": "app/lib/main/live-prompt.js",
+      "scope": "source-only current form and technique name prompt projection",
+      "sha256": "20E00A0C6F6645537AA02E6A7084C3A3CCCC68753A0874523FF5A6D43E9F1FAB"
+    },
+    {
+      "path": "app/lib/main/live-prompt.test.js",
+      "scope": "real restore/getContext prompt boundary and ordinary name preservation",
+      "sha256": "ADFECC76025CB77ABBF15675A818B5A0FD8E14C0AB1485431D4A0BD6CD7C2CFC"
+    },
+    {
+      "path": "app/lib/backtest-canvas.js",
+      "scope": "parseYamlScalar/parseYamlBlock and answerVisualQuestion only; other async edits belong to prior writer",
+      "sha256": "985C688262062BF9B116F18DB0F1904E7CCF23D453468AF58A24E08711B64C9A"
+    },
+    {
+      "path": "app/lib/backtest-canvas.test.js",
+      "scope": "11 actual safe_dump scalar fixtures, ordinary form serializer controls, 4 visual-question async tests; prior 66 async tests untouched",
+      "sha256": "0CD96922C8886835579F3FF746DCE2EE7702E8AE227FA32A4B9ECDAEFA03FB9D"
+    }
+  ],
+  "findings": [
+    "External HTML title was preserved without a title length cap, copied into spec.metadata.name by run_job, then serialized in a user-turn prefix as current-form JSON. No model exploitation was executed.",
+    "Source mapper contract says source text does not enter the model. Paper source_read card/header requirements do not require the original external title to become the strategy name.",
+    "Actual html source kind did not match the translation map's old web key.",
+    "Existing strategy.id is preserved as form presetId when the YAML parser reaches strategy. Long safe_dump scalars stopped the old parser early and discarded following strategy/risk.",
+    "PyYAML single quotes use doubled apostrophes and folded physical/Unicode line breaks; double quotes use escapes and escaped physical line continuation. Existing Spec.toYaml uses a different quote() that only escapes double quote.",
+    "answerVisualQuestion awaited visualPatch without a workspaceGeneration guard, allowing prior-session patch/conflict receipts and state mutations after a restore."
+  ],
+  "behavior": [
+    "New source jobs use app-generated strategy name 출처에서 만든 전략; original title/url/kind and source_read receipt remain available to the UI; mapping rules and target confirmation behavior are unchanged.",
+    "Existing source forms with actual presetId=from_source replace only the model-bound form/technique name with the same safe name. UI, input context, saved YAML, generated code and regular custom/preset names remain unchanged.",
+    "Recoverable backend YAML now consumes emitted scalar continuation and preserves following strategy.id, rules and risk. Single-quoted raw lines are read through the closing quote before folding.",
+    "The existing form writer header version: \"1.0\" selects its quote inverse for double-quoted scalar values; backend safe_dump uses version: '1.0' and YAML escape decoding. This is an encoding dialect distinction, not a source trust/provenance guess.",
+    "Late visual-question success/failure returns null after workspace change; new question, patch, context, report and cards remain unchanged. Same-session success/conflict still works."
+  ],
+  "red_evidence": [
+    {
+      "stage": "new source boundary/html label",
+      "result": "4 failed, 1 passed, 23 deselected",
+      "details": "normal/long HTML title and old complete-job expected name plus html kind label failed; empty-title positive control passed."
+    },
+    {
+      "stage": "legacy prompt projection",
+      "result": "2 failed, 1 passed",
+      "details": "source current form and techniqueDraft duplicate leaked; ordinary user-name control passed."
+    },
+    {
+      "stage": "folded YAML",
+      "result": "4 parser failures plus 1 real restore/full-turn failure",
+      "details": "plain/single/double/paragraph backend scalar fixtures dropped later strategy.id; ordinary YAML control passed."
+    },
+    {
+      "stage": "Unicode emitted indentation",
+      "result": "3 failed then green",
+      "details": "NEL/LS/PS title preservation initially retained producer indentation."
+    },
+    {
+      "stage": "Unicode combinations and user spaces",
+      "result": "3 failed, 1 passed",
+      "details": "newline+PS lost source id; ordinary serializer Unicode-space parser and real restore controls lost intended spaces; producer escaped-space control passed."
+    },
+    {
+      "stage": "trailing Unicode newline",
+      "result": "1 failed",
+      "details": "row.text.trim removed the actual trailing LS before continuation; raw first scalar line fixes it."
+    },
+    {
+      "stage": "literal backslash compatibility",
+      "result": "4 failed",
+      "details": "C:\\new strategy became newline, value \\u0041 became A, path \\UFFFFFFFF raised RangeError; real custom restore also failed. Existing form quote dialect is now preserved."
+    },
+    {
+      "stage": "visual-question late response",
+      "result": "2 failed, 2 passed",
+      "details": "switched success and rejection emitted stale cards; same-session success/rejection controls passed. Test setup first used map context version instead of receipt version; corrected before recording this production RED."
+    }
+  ],
+  "final_verification": [
+    {
+      "cwd": "app",
+      "command": "node --test --test-reporter=spec lib/backtest-canvas.test.js lib/backtest-spec.test.js lib/main/live-prompt.test.js",
+      "result": "503 passed; 0 fail/cancel/skip/todo; 21300.6037ms",
+      "log": "app-tests.log"
+    },
+    {
+      "cwd": "app",
+      "command": "node --test --test-reporter=spec --test-name-pattern=\"비동기 세션 경계\" lib/backtest-canvas.test.js",
+      "result": "70 passed (prior 66 unchanged + new 4); 0 fail/cancel/skip/todo"
+    },
+    {
+      "cwd": "backend",
+      "command": ".venv/Scripts/python.exe -m pytest -q -p no:randomly tests/unit/test_backtest_sources.py tests/unit/test_backtest_source_to_map.py tests/api/test_backtest_source_map_api.py",
+      "result": "77 passed, 1 existing Starlette/httpx deprecation warning, 6.00s",
+      "log": "backend-tests.log"
+    },
+    {
+      "cwd": "backend",
+      "command": ".venv/Scripts/python.exe -m ruff check athena_api/backtest/source_to_map.py tests/unit/test_backtest_source_to_map.py",
+      "result": "All checks passed"
+    },
+    {
+      "cwd": "backend",
+      "env": {
+        "PYTHONUTF8": "1",
+        "PYTHONPATH": "."
+      },
+      "command": ".venv/Scripts/python.exe ../.omc/artifacts/2026-09-07-source-yaml-boundary/verify-boundary.py",
+      "result": "20 real source producer cases + 400 independently supplied deterministic PyYAML title cases; all preserve original title, from_source id, risk",
+      "logs": [
+        "producer-corpus.json",
+        "reviewer-corpus.json"
+      ]
+    },
+    {
+      "cwd": ".",
+      "command": "node .omc/artifacts/2026-09-07-source-yaml-boundary/verify-legacy-roundtrip.js",
+      "result": "2/2 actual backend YAML/code and own serializer round trips through real canvas restore/getContext; title absent from turn and full prompt; original context/YAML/code unchanged",
+      "log": "legacy-roundtrip.json"
+    },
+    {
+      "cwd": ".",
+      "command": "git diff --check -- app/lib/backtest-canvas.js app/lib/backtest-canvas.test.js app/lib/main/live-prompt.js app/lib/main/live-prompt.test.js backend/athena_api/backtest/source_to_map.py backend/tests/unit/test_backtest_source_to_map.py",
+      "result": "passed"
+    },
+    {
+      "command": "Inspect added lines for TODO, test.skip/test.only, it.skip/it.only",
+      "result": "none"
+    }
+  ],
+  "reproduction_files": [
+    "legacy-source.json: actual pre-fix spec_from_rules(name=external_title) -> spec_to_yaml -> spec_to_python output; code has no external title header.",
+    "verify-legacy-roundtrip.js: actual old backend output -> own serializer -> real restore/getContext -> full turn; legacy-roundtrip.json stores inputs/contexts/outputs.",
+    "verify-boundary.py: repeatable actual backend producer20 and independent seed29 corpus400 generation/parse check.",
+    "pyyaml-scalars.json: initial four emitted scalar forms; final eleven producer scalar cases are embedded in backtest-canvas.test.js FOLDED_SOURCE_TITLES."
+  ],
+  "limitations": [
+    "If the original YAML still contains strategy.id=from_source, this change can recover the marker and block title delivery. If an earlier lossy parse was resaved with custom or a prior strategy id and no original YAML remains, provenance is gone. This change does not guess from name content or rewrite those documents.",
+    "This remains the existing small parser for the repository's two producer formats, not a new complete YAML parser or arbitrary handwritten YAML importer. No new dependency, durable provenance schema, title keyword denylist, broad form renaming or code-body sanitization was added.",
+    "Model exploitation and live endpoint behavior were not tested; evidence establishes local serialization and stale-response boundaries."
+  ],
+  "safety": {
+    "live_model_calls": 0,
+    "model_waits": 0,
+    "live_network_calls": 0,
+    "broker_calls": 0,
+    "orders": 0,
+    "commits": 0,
+    "pushes": 0,
+    "note": "Only local unit/API TestClient fixtures, offline Node/Python execution and repository/artifact reads/writes."
+  },
+  "evidence_copy": {
+    "source_directory": ".omc/artifacts/2026-09-07-source-yaml-boundary",
+    "note": "Original artifacts retained. Copied text output uses LF; data content and verdict logic unchanged. Portable scripts adjust repository-root paths; Python writes LF explicitly. Commands are in ../README.md."
+  }
+}

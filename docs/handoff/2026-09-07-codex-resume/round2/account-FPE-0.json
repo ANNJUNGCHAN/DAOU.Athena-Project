@@ -1,0 +1,20 @@
+{
+  "reach_error": null,
+  "root_found": true,
+  "root_visible": true,
+  "visible_text": "설정\n↑↓ 이동 · Enter 선택 · Tab 패널 이동 · Esc 닫기\n화면\n계좌\n2개\n모델\n성향・이력\n켜짐\n계좌\n2개 등록\n+ 계좌 등록\n×\n별칭\n앱키\n주문 API\n연결 상태\n마지막 검증\n모의-주력\n활성\n저장됨 · 36자\nON\n정상\n—\n×\n모의-테스트\n비활성\n저장됨 · 36자\nOFF\n검증 필요\n—\n×\n앱키·시크릿은 목록에 표시되지 않는다. 저장 위치는 OS 자격증명 저장소다.\n비활성 계좌를 누르면 활성으로 전환된다. 활성 계좌는 항상 하나다.\n계좌 등록\n모의투자 계좌의 APP KEY / SECRET KEY를 등록한다\n닫기\n별칭\n이 컴퓨터에서만 쓰는 이름이다\nAPP KEY\nSECRET KEY\n저장·표시 원칙\nOS 자격증명 저장소(Windows DPAPI)에 암호화 저장한다\n저장 후에는 화면에 다시 표시하지 않는다\n앱 로그에도 남기지 않는다\n폐기는 삭제 한 번으로 끝난다\n확인이 완료되었습니다. 저장하면 OS 자격증명 저장소에 암호화됩니다\n확인 완료 — 모의투자 계좌 연결 권한을 확인했습니다\n취소\n계좌 저장",
+  "structure": [
+    {
+      "index": 0,
+      "actual": 1
+    },
+    {
+      "index": 1,
+      "actual": 0
+    },
+    {
+      "index": 2,
+      "actual": 0
+    }
+  ]
+}
