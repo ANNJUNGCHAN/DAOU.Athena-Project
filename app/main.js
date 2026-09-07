@@ -2854,6 +2854,9 @@ function createSubagentTracker() {
 // 있으므로(세션 재개 실패 1회 재시도) 카운터로 겹침을 흡수한다 — 두 번째
 // 재귀에서 false로 떨어졌다가 바깥 호출이 끝나기도 전에 다시 열리면 안 된다.
 let liveQueryBusyDepth = 0;
+// 두 창의 입력이 동시에 보일 수 있다. 셸의 기존 재질의 선점은 유지하면서
+// busy 방송이 도착하기 전에도 오브 왕복을 다른 창에서 선점하지 못하게 센다.
+let liveOrbQueryBusyDepth = 0;
 
 function broadcastLiveQueryBusy(busy) {
   if (shellWin && !shellWin.isDestroyed()) shellWin.webContents.send('athena:live-query-state', { busy });
@@ -3810,12 +3813,14 @@ async function runLiveQuery(query, expand, origin = 'shell', turnConversationId 
   const sessionTurnError = beginSessionTurn(turnConversationId, query, historyReceipt && historyReceipt.messageId);
   if (sessionTurnError) return { ok: false, source: 'local', error: sessionTurnError };
   liveQueryBusyDepth += 1;
+  if (origin === 'orb') liveOrbQueryBusyDepth += 1;
   if (liveQueryBusyDepth === 1) broadcastLiveQueryBusy(true);
   liveSubmitContexts.set(turnConversationId, submit);
   try {
     return await runLiveQueryInner(query, expand, origin, turnConversationId);
   } finally {
     liveSubmitContexts.delete(turnConversationId);
+    if (origin === 'orb') liveOrbQueryBusyDepth -= 1;
     liveQueryBusyDepth -= 1;
     if (liveQueryBusyDepth === 0) broadcastLiveQueryBusy(false);
   }
@@ -4468,6 +4473,9 @@ ipcMain.handle('athena__render_canvas', async (e, payload = {}) => {
   if (!query || !String(query).trim()) {
     return { ok: false, source: 'live', error: '질의가 비어 있다' };
   }
+  if (liveOrbQueryBusyDepth > 0) {
+    return { ok: false, source: 'live', error: '키우미에서 답변 중 — 잠시 후 다시 시도하세요' };
+  }
   return runLiveQuery(query, expand, 'shell', historyConversationId(), {
     clientSubmitId: payload.clientSubmitId,
     rendererSubmittedAt: payload.rendererSubmittedAt,
@@ -4488,9 +4496,8 @@ ipcMain.handle('athena__render_canvas', async (e, payload = {}) => {
 // 같은 관례). 값을 돌려주기만 하고 아무 상태도 바꾸지 않는다.
 ipcMain.handle('athena:orb-canvas-probe', () => process.env.ATHENA_ORB_CANVAS_PROBE === '1');
 
-// 오브 대화 모드(2026-08-26 board-33) — 셸이 숨겨졌을 때만 오브 렌더러가 이
-// 채널을 부른다(orb.js 쪽 게이트는 athena:shell-visibility). **셸 창을 앞으로
-// 가져오지 않는다**(expand:false 고정) — "오브 미니 채팅은 언제나 메인 방
+// 오브 대화 모드 — 셸 표시 여부와 무관하게 같은 채널로 질문을 받는다.
+// **셸 창을 앞으로 가져오지 않는다**(expand:false 고정) — "오브 미니 채팅은 언제나 메인 방
 // 하나에만 말한다"(board-34), 카드는 셸을 열지 않고도 캔버스 사이드 채널로
 // 이미 그려진다(startCanvasFeed). 파이프라인은 새로 만들지 않는다 — 셸의
 // 커맨드바가 부르는 runLiveQuery와 완전히 같은 함수를 그대로 호출한다.

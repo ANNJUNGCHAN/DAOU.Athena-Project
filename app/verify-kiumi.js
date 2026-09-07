@@ -21,6 +21,7 @@ fs.writeFileSync(
   JSON.stringify({ cliDone: true, accountDone: true }),
 );
 app.setPath('userData', PROFILE);
+process.env.ATHENA_NO_AUTOSTART = '1';
 process.env.ATHENA_CANVAS_SOURCE = 'fixture';
 
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -64,8 +65,13 @@ async function main() {
   await mainMod.createWindows();
   const { shellWin, orbWin } = mainMod.getWins();
   if (!shellWin || !orbWin) throw new Error('shellWin/orbWin 못 찾음');
-  shellWin.show();
-  shellWin.focus();
+  // 부팅 시퀀스를 생략하는 검증은 기존 우회 경로로 부팅 창까지 정리한다.
+  // show()만 호출하면 남은 부팅 창이 뒤의 정상 revealShell() 복귀를 막는다.
+  mainMod.revealShell({ focus: true, force: true });
+  const bootWin = mainMod.getWins().bootWin;
+  record('검증 준비: 부팅 창을 정리한 셸이 보인다',
+    (!bootWin || bootWin.isDestroyed()) && shellWin.isVisible(),
+    { bootPresent: !!bootWin && !bootWin.isDestroyed(), shellVisible: shellWin.isVisible() });
   const shellReady = await waitForShellReady(shellWin);
   if (!shellReady) throw new Error('셸 렌더러가 30초 안에 준비되지 않았다');
   await wait(400); // 확장 전이가 끝나 레이아웃이 굳을 여유
