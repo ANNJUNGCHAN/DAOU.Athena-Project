@@ -1480,9 +1480,13 @@ function railSurface(chipTexts, { stamped = [], outside = [] } = {}) {
     querySelectorAll(selector) {
       if (selector === '[data-state-control]') return stamped;
       if (selector === STATE_CONTROL_SCOPES) return [strip];
-      return [...chips, ...outside];
+      // 머리·꼬리 단은 이 스텁에서 비워 두고(스코프 프레임이 없다), 표면 전체 단이
+      // 레일 밖 잎을 답한다 — 넓힐 때만 잡히는 것이 계약이다.
+      if (selector === '*') return [...chips, ...outside];
+      return [];
     },
     chips,
+    outsideLeaves: outside,
   };
 }
 
@@ -1518,9 +1522,19 @@ test('별칭이 여러 잎에 걸리거나 다른 링크와 경합하면 매달�
   assert.equal(findStateControlNode(shared, '금현물 · 매수', { labelsFor, links }), null);
 });
 
-test('레일 밖 잎은 칩이 아니다 — 표 셀에 같은 문구가 있어도 안 매단다', () => {
-  const surface = railSurface([], { outside: [railLeaf('업종')] });
-  assert.equal(findStateControlNode(surface, '업종'), null);
+test('레일 밖 잎도 그 문구가 하나뿐이면 문이 된다 — 머리의 능력 내비·표 꼬리의 더보기', () => {
+  const only = railSurface([], { outside: [railLeaf('업종')] });
+  assert.equal(findStateControlNode(only, '업종'), only.outsideLeaves[0]);
+});
+
+test('레일 밖 문구가 둘이면 어느 쪽인지 알 수 없다 — 안 매단다', () => {
+  const twice = railSurface([], { outside: [railLeaf('등락률'), railLeaf('등락률')] });
+  assert.equal(findStateControlNode(twice, '등락률'), null);
+});
+
+test('스트립 칩이 있으면 레일 밖 같은 문구보다 먼저다', () => {
+  const both = railSurface(['등락률'], { outside: [railLeaf('등락률')] });
+  assert.equal(findStateControlNode(both, '등락률'), both.chips[0]);
 });
 
 test('색인의 별칭 표는 실제 보드에서 나온 것이다', () => {
