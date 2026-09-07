@@ -1052,14 +1052,15 @@ function openAgentWatch(seed) {
 
 async function runCardAction(node, surface, envelope, action) {
   const stock = cardActionStock(node, surface, envelope, action);
+  if (action.kind === 'agent-watch') {
+    // 관심종목·조건 보드(15L8-2)처럼 카드 종목이 없는 문도 에이전트로 간다.
+    return openAgentWatch(boardCardActions.cardActionSeed(action, stock || {}));
+  }
   // 종목을 못 읽으면 아무 것도 하지 않는다 — 엉뚱한 종목으로 카드를 열거나 알람을
   // 시작하는 것보다 아무 일도 안 하는 것이 낫다(사유는 콘솔에만 남긴다).
   if (!stock) {
     console.warn('[canvas] 카드 액션 종목을 못 읽었다', action.control);
     return null;
-  }
-  if (action.kind === 'agent-watch') {
-    return openAgentWatch(boardCardActions.cardActionSeed(action, stock));
   }
   const next = boardCardActions.cardActionEnvelope(action, stock);
   if (!next) return null;

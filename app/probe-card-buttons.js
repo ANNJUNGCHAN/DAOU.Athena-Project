@@ -126,7 +126,7 @@ const CARD_SELECTOR = (instanceId) => `#grid .card[data-integrated-instance-key=
 // 「Quote and Valuation Strip」처럼 값을 읽어 주는 묶음은 뺀다 — 조작이 아니라
 // 읽을 것이고, 그 잎까지 세면 보드 하나가 40개 넘는 후보로 부풀어 판정이 묻힌다.
 const LABEL_CAP = 2;
-const CANDIDATE_GROUP = String.raw`Action|Button|버튼|Tab|탭|Chip|칩|Toolbar|툴바|Control|Nav|Mode|모드|Filter|필터|Sort|정렬|Range|주기|Period|Preset`;
+const CANDIDATE_GROUP = String.raw`Action|Button|버튼|동작|Tab|탭|Chip|칩|Toolbar|툴바|Control|Nav|Mode|모드|Filter|필터|Sort|정렬|Range|주기|Period|Preset`;
 
 function collectCandidates(instanceId) {
   return `(() => {
@@ -182,13 +182,18 @@ function collectCandidates(instanceId) {
       if (el.closest('.bs-paired')) continue;
       const text = String(el.textContent || '').trim();
       if (!text || text.length > 18) continue;
-      const cs = getComputedStyle(el);
-      const radius = parseFloat(cs.borderTopLeftRadius) || 0;
-      const bg = cs.backgroundColor;
-      const hasBg = Boolean(bg) && bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent';
-      const bordered = (parseFloat(cs.borderTopWidth) || 0) > 0;
-      const padded = (parseFloat(cs.paddingLeft) || 0) >= 6;
-      if (radius >= 6 && (hasBg || bordered) && padded) push(el, 'pill', text);
+      const looksPill = (node) => {
+        if (!node || node === surface) return false;
+        const cs = getComputedStyle(node);
+        const radius = parseFloat(cs.borderTopLeftRadius) || 0;
+        const bg = cs.backgroundColor;
+        const hasBg = Boolean(bg) && bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent';
+        const bordered = (parseFloat(cs.borderTopWidth) || 0) > 0;
+        const padded = (parseFloat(cs.paddingLeft) || 0) >= 6
+          || (parseFloat(cs.height) || 0) >= 32;
+        return radius >= 6 && (hasBg || bordered) && padded;
+      };
+      if (looksPill(el) || looksPill(el.parentElement)) push(el, 'pill', text);
       else if (el.childElementCount === 0
         && (inGroup(el) || el.closest('.bs-strip, nav, [role="tablist"]'))) {
         push(el, 'affordance', text);

@@ -80,6 +80,19 @@ test('「알림 설정」은 카드를 열지 않는다 — 에이전트 모드 
   assert.equal(cardActionEnvelope(action, { stkCd: '005930' }), null);
 });
 
+test('15L8-2 Paper 문구 「알림 받기」·「조건 수정」도 에이전트 알람 문이다', () => {
+  const alert = cardActionFor('알림 받기');
+  const edit = cardActionFor('조건 수정');
+  assert.equal(alert.kind, 'agent-watch');
+  assert.equal(edit.kind, 'agent-watch');
+  assert.equal(cardActionEnvelope(alert, { stkCd: '005930' }), null);
+  assert.equal(cardActionSeed(alert, { stkCd: '005930', stockName: '삼성전자' }),
+    '삼성전자 — 감시 알람 만들어 줘');
+  assert.equal(cardActionSeed(edit, {}), '감시 조건 고쳐 줘');
+  assert.equal(cardActionSeed(alert, {}), '감시 알람 만들어 줘');
+  assert.equal(cardActionSeed(cardActionFor('알림 설정'), {}), '');
+});
+
 test('씨문장은 짧은 사람 말이고 조건은 사람이 말한다', () => {
   const action = cardActionFor('알림 설정');
   assert.equal(cardActionSeed(action, { stkCd: '005930', stockName: '삼성전자' }),

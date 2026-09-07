@@ -47,6 +47,22 @@ const CARD_ACTIONS = Object.freeze([
     stock: 'card',
     view: 'agent',
   }),
+  // 15L8-2 Paper 원문. 「알림 설정」과 같은 에이전트 알람 문이되 문구가 다르다.
+  Object.freeze({
+    control: '알림 받기',
+    kind: 'agent-watch',
+    stock: 'card',
+    view: 'agent',
+    seedWithoutStock: true,
+  }),
+  Object.freeze({
+    control: '조건 수정',
+    kind: 'agent-watch',
+    stock: 'card',
+    view: 'agent',
+    seed: '감시 조건 고쳐 줘',
+    seedWithoutStock: true,
+  }),
 ]);
 
 const STOCK_CODE = /^\d{6}$/;
@@ -153,8 +169,9 @@ function cardActionSeed(action, stock) {
   const name = String((stock && stock.stockName) || '').trim();
   const code = String((stock && stock.stkCd) || '').trim();
   const subject = name || (code ? `${code} 종목` : '');
-  if (!subject) return '';
-  return `${subject} — 감시 알람 만들어 줘`;
+  const tail = String(action.seed || '감시 알람 만들어 줘').trim();
+  if (!subject) return action.seedWithoutStock ? tail : '';
+  return `${subject} — ${tail}`;
 }
 
 const __exports = {
