@@ -3445,6 +3445,83 @@ async function runWatchCheck(r) {
 // 자동 검사 진행 패널(Paper 보드 09 · 458M-1) — 검사 카드와 「도는 중」 카드가 같은
 // 문법을 쓴다. 마크는 세 종류뿐이고 발치 안전 고지는 순수 모델의 상수다.
 const watchProgressLib = window.AthenaLib.WatchProgressCard;
+const watchCreateCardLib = window.AthenaLib.WatchCreateCard;
+
+function renderWatchCreateReceipt(receipt) {
+  if (!receipt || !receipt.text) return;
+  const line = document.createElement('div');
+  line.className = 'turn';
+  const card = document.createElement('div');
+  card.className = 'turn-agent watch-create-receipt';
+  const badge = document.createElement('span');
+  badge.className = 'watch-create-badge';
+  badge.textContent = receipt.badge;
+  card.appendChild(badge);
+  const text = document.createElement('div');
+  text.className = 'watch-create-text';
+  text.textContent = receipt.text;
+  card.appendChild(text);
+  _mountTurn(line, card);
+}
+
+function renderWatchCreateQuestion(model) {
+  if (!model || !model.question) return;
+  const line = document.createElement('div');
+  line.className = 'turn';
+  const card = document.createElement('div');
+  card.className = 'turn-agent watch-create-question';
+  const head = document.createElement('div');
+  head.className = 'agent-head';
+  (Array.isArray(model.tags) ? model.tags : []).forEach((tag) => {
+    const pill = document.createElement('span');
+    pill.className = 'routine-draft-pill';
+    pill.textContent = tag;
+    head.appendChild(pill);
+  });
+  card.appendChild(head);
+  const title = document.createElement('div');
+  title.className = 'routine-draft-title';
+  title.textContent = model.question;
+  card.appendChild(title);
+  const choices = Array.isArray(model.choices) ? model.choices : [];
+  if (choices.length) {
+    const status = document.createElement('span');
+    status.className = 'agent-mode';
+    const list = document.createElement('div');
+    list.className = 'backtest-visual-choices';
+    list.setAttribute('role', 'group');
+    list.setAttribute('aria-label', model.question);
+    const picks = [];
+    choices.forEach((choice) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'backtest-visual-choice';
+      btn.textContent = choice;
+      btn.addEventListener('click', () => {
+        picks.forEach((item) => { item.disabled = true; });
+        btn.classList.add('is-on');
+        status.textContent = '고른 답을 보냈습니다';
+        document.dispatchEvent(new CustomEvent('athena:chat-submit', { detail: { text: choice } }));
+        if (model.kind === 'poll') renderWatchCreateQuestion(watchCreateCardLib.COOLDOWN_QUESTION);
+      });
+      picks.push(btn);
+      list.appendChild(btn);
+    });
+    card.appendChild(list);
+    const actions = document.createElement('div');
+    actions.className = 'routine-approval-actions';
+    actions.appendChild(status);
+    card.appendChild(actions);
+  }
+  if (model.footnote) {
+    const note = document.createElement('div');
+    note.className = 'agent-source';
+    note.textContent = model.footnote;
+    card.appendChild(note);
+  }
+  _mountTurn(line, card);
+}
+
 
 const WATCH_PROGRESS_MARK_CLASS = {
   '✓': 'done', '◐': 'running', '○': 'pending',
@@ -4263,6 +4340,12 @@ window.athena.on('athena:routine-proposed', (envelope) => {
   const turn = proposalTurnLib.buildProposalTurn(envelope, { unread: unreadAlertCount() });
   if (!turn) return;
   renderControlProposalTurn(turn);
+});
+
+window.athena.on('athena:watch-create', (envelope) => {
+  if (!envelope) return;
+  if (envelope.receipt) renderWatchCreateReceipt(envelope.receipt);
+  if (envelope.poll) renderWatchCreateQuestion(envelope.poll);
 });
 
 // ---------- 플러그인 제안 턴 · 결과 턴 (US-004) ----------

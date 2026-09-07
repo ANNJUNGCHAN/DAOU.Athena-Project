@@ -48,6 +48,7 @@ function createHarness({ forwardBacktestAction = false } = {}) {
     const maybeForwardBrainEntity = () => '';
     const maybeForwardNudgeGuardProposal = () => {};
     const maybeForwardRoutineProposal = () => {};
+    const maybeForwardWatchCreate = () => {};
     const maybeForwardGraphChatAction = () => {};
     const maybeForwardPluginProposal = () => {};
     (${tracker});

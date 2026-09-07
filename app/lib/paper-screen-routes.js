@@ -1109,6 +1109,15 @@ const CODE_DETAIL_AFTER_FIX = Object.freeze({
 // (chat.js runWatchCheck가 res.data를 그대로 넘긴다). 원 핸들러를 부르면 백엔드가
 // 지난 30일을 실제로 돌려 판정이 이 컴퓨터의 회선과 시계에 좌우된다.
 // 종목·배수·걸린 시간은 전부 값이라 phrases에 한 글자도 넣지 않는다.
+const WatchCreateCard = require('./watch-create-card');
+const WATCH_CREATE = Object.freeze({
+  receipt: Object.freeze(WatchCreateCard.buildReceipt([
+    '일봉 불러오기', '3일 거래량 평균', '배수 비교', '알림',
+  ])),
+  poll: WatchCreateCard.POLL_QUESTION,
+  cooldown: WatchCreateCard.COOLDOWN_QUESTION,
+});
+
 const WATCH_CHECK_DONE = Object.freeze({
   ok: true,
   data: {
@@ -2713,6 +2722,7 @@ const ROUTES = Object.freeze([
       { do: 'ipc-fixture', channel: 'athena:routines-list', data: CODE_WATCH_DRAFT },
       { do: 'ipc-fixture', channel: 'athena:routine-detail', data: CODE_DETAIL_FIRST_CHECK },
       { do: 'ipc-fixture', channel: 'athena:routine-watch-check', data: WATCH_CHECK_DONE },
+      { do: 'send', channel: 'athena:watch-create', data: WATCH_CREATE },
       // 초안 카드를 세우는 것은 목록 재조회 하나뿐이고(refreshRoutineDrafts), 그것을
       // 다시 부르는 문은 턴 종료다 — 부팅의 한 번은 fixture를 걸기 전에 이미 지나갔다.
       // 그래서 질의를 한 번 돌린다(검사 프로필은 캔버스가 fixture 출처라 왕복이 없다).
@@ -2723,16 +2733,21 @@ const ROUTES = Object.freeze([
       { do: 'settle' },
     ],
     root: '#history',
-    // Paper 보드 09의 절반은 아직 앱에 없다 — 「AI가 감시 함수를 만드는 중」 상태 띠와
-    // [그만두기], 값이 안 채워진 노드 자리(「만드는 중 …」·「질문 답 기다림」),
-    // 「언제 확인할까요?」류 질문 카드가 그것이다(앱 전체 grep 0건). 있는 것만 잠근다:
-    // 자동 검사 진행 패널의 머리 둘과 발치 고지, 그리고 검사 카드의 갈래말이다.
-    // 다섯 줄의 본문은 전부 숫자를 품어 문구 후보에서 빠진다(E 규칙) — 개수로만 잰다.
-    phrases: ['새 알람', '자동 검사', '코드가 바뀔 때마다', '격리 실행 · 계좌·주문 접근 없음 · 30초 제한'],
-    // 보드 09의 자동 검사 패널은 다섯 줄에 발치 고지 하나다.
+    // 「AI가 감시 함수를 만드는 중」 상태 띠와 [그만두기]는 아직 없다. 영수증·질문
+    // 카드는 athena:watch-create 한 통으로 선다(propose_watch_code 성공과 같은 길).
+    // 자동 검사 진행 패널의 다섯 줄 본문은 숫자를 품어 문구 후보에서 빠진다(E 규칙).
+    phrases: [
+      '새 알람', '자동 검사', '격리 실행 · 계좌·주문 접근 없음 · 30초 제한',
+      '언제 확인할까요? — 하나만 고르면 됩니다', '장중 1분마다', '장 마감 후 한 번',
+      '얼마나 자주 울려도 될까요? — 쿨다운을 정합니다',
+    ],
+    // 보드 09의 자동 검사 패널은 다섯 줄에 발치 고지 하나다. 영수증·질문 카드는
+    // 검사 칩과 별개로 선다.
     structure: [
       { what: 'count', selector: '.watch-progress-line', equals: 5 },
       { what: 'count', selector: '.watch-progress-notice', equals: 1 },
+      { what: 'count', selector: '.watch-create-receipt', equals: 1 },
+      { what: 'count', selector: '.watch-create-question', equals: 1 },
     ],
   },
 
