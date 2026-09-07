@@ -322,21 +322,38 @@ function slotValueEntries(surfaceContract) {
   return Array.isArray(raw) ? raw : [];
 }
 
+function observationIdsOfSlotEntry(entry) {
+  const ids = [];
+  const direct = text(entry && (entry.observation_id || entry.observationId));
+  if (OBSERVATION_ID.test(direct)) ids.push(direct);
+  const composite = boardFormat.compositeSpecOf(entry && entry.value);
+  for (const part of (composite && Array.isArray(composite.parts)) ? composite.parts : []) {
+    const observationId = text(part && (part.observation_id || part.observationId));
+    if (OBSERVATION_ID.test(observationId) && !ids.includes(observationId)) ids.push(observationId);
+  }
+  return ids;
+}
+
 function realtimeSlotIndex(surfaceContract, realtimeBindings) {
   const slotsByObservation = new Map();
   for (const entry of slotValueEntries(surfaceContract)) {
     const slotId = text(entry && entry.slot_id);
-    const observationId = text(entry && (entry.observation_id || entry.observationId));
-    if (!slotId || !OBSERVATION_ID.test(observationId)) continue;
-    if (!slotsByObservation.has(observationId)) slotsByObservation.set(observationId, []);
-    const bucket = slotsByObservation.get(observationId);
-    if (!bucket.includes(slotId)) bucket.push(slotId);
+    if (!slotId) continue;
+    for (const observationId of observationIdsOfSlotEntry(entry)) {
+      if (!slotsByObservation.has(observationId)) slotsByObservation.set(observationId, []);
+      const bucket = slotsByObservation.get(observationId);
+      if (!bucket.includes(slotId)) bucket.push(slotId);
+    }
   }
   const index = new Map();
+  // 기존 호출부의 binding_id → [slot_id] Map 계약은 유지한다. composite 갱신만
+  // 어느 part를 바꿀지 알아야 하므로 같은 색인에 binding의 관찰 식별자를 덧붙인다.
+  index.observationByBinding = new Map();
   for (const raw of Array.isArray(realtimeBindings) ? realtimeBindings : []) {
     const bindingId = text(raw && (raw.binding_id || raw.bindingId));
     const observationId = text(raw && (raw.observation_id || raw.observationId));
     if (!REALTIME_BINDING_ID.test(bindingId) || !OBSERVATION_ID.test(observationId)) continue;
+    index.observationByBinding.set(bindingId, observationId);
     const slotIds = slotsByObservation.get(observationId);
     if (!slotIds) continue;
     if (!index.has(bindingId)) index.set(bindingId, []);
@@ -344,6 +361,26 @@ function realtimeSlotIndex(surfaceContract, realtimeBindings) {
     for (const slotId of slotIds) if (!bucket.includes(slotId)) bucket.push(slotId);
   }
   return index;
+}
+
+function updateRealtimeValue(current, observationId, nextValue) {
+  const composite = boardFormat.compositeSpecOf(current);
+  if (!composite) return { value: nextValue, updated: true };
+  // composite 전체를 scalar tick으로 덮지 않는다. 정확히 같은 observation_id인
+  // part만 바꾸고 나머지 값·포맷·구분자는 그대로 보존한다.
+  if (!OBSERVATION_ID.test(text(observationId)) || !Array.isArray(composite.parts)) {
+    return { value: current, updated: false };
+  }
+  let updated = false;
+  const parts = composite.parts.map((part) => {
+    const partObservation = text(part && (part.observation_id || part.observationId));
+    if (partObservation !== observationId) return part;
+    updated = true;
+    return { ...part, value: nextValue };
+  });
+  return updated
+    ? { value: { ...current, composite: { ...composite, parts } }, updated: true }
+    : { value: current, updated: false };
 }
 
 // 프레임 하나가 건드리는 슬롯 집합. 병기(D4) 짝은 같은 프레임에서 함께 칠한다 —
@@ -742,14 +779,60 @@ function mountBoardAsync(root, boardId, values, options = {}) {
   return registry.loadBoard(boardId).then(() => mountBoard(root, boardId, values, options));
 }
 
+// 같은 보드 자리에서 겹쳐 달리는 비동기 로드 중 마지막 요청만 DOM 소유권을 갖는다.
+// 카드 닫기·상태 보드 전환 뒤에 먼저 시작한 hydrate가 늦게 끝나도 이전 보드를
+// 되살리지 않도록 호출자에게 current 판정 함수를 건넨다.
+function createLatestBoardLoad() {
+  let revision = 0;
+  let disposed = false;
+
+  function invalidate() {
+    revision += 1;
+  }
+
+  function dispose() {
+    disposed = true;
+    invalidate();
+  }
+
+  async function run(task, handlers = {}) {
+    const ticket = ++revision;
+    const isCurrent = () => !disposed && revision === ticket;
+    if (typeof handlers.onLoading === 'function') handlers.onLoading();
+    try {
+      const value = await task(isCurrent);
+      if (!isCurrent()) return { status: 'stale' };
+      if (typeof handlers.onReady === 'function') handlers.onReady(value);
+      return { status: 'ready', value };
+    } catch (error) {
+      if (!isCurrent()) return { status: 'stale' };
+      const retry = () => run(task, handlers);
+      if (typeof handlers.onError === 'function') handlers.onError(error, retry);
+      return { status: 'error', error };
+    }
+  }
+
+  return { run, invalidate, dispose };
+}
+
+function nextHydrationSlots(pending, filled, surfaceContract) {
+  const authoritative = surfaceContract && surfaceContract.hydration_slot_ids;
+  if (Array.isArray(authoritative)) return authoritative.slice();
+  const values = filled && typeof filled === 'object' && !Array.isArray(filled) ? filled : {};
+  return (Array.isArray(pending) ? pending : [])
+    .filter((slotId) => !Object.prototype.hasOwnProperty.call(values, slotId));
+}
+
 const __exports = {
   ROLLUP_MARK, RESPONSIVE_REGIONS, HOISTED_PROPERTIES,
   isValueSlot, anchorOf, staticTextOf, collapsePlan, mountPlan, pairedGroups,
   nodeIndex, elementChildCount, setHidden, applyPlan,
   hoistLayout, hoistRigidBox, applyResponsiveHooks, surfaceRoot,
   primaryMountPoint, collapsePrimaryMockup, restorePrimaryMockup, mountBoard, mountBoardAsync,
+  createLatestBoardLoad, nextHydrationSlots,
   RAW_IDENTITY_NAME, scrubRawIdentityNames,
-  slotValueEntries, realtimeSlotIndex, pairedClosure, realtimePlan, applyRealtimeSlots,
+  slotValueEntries, observationIdsOfSlotEntry, realtimeSlotIndex, updateRealtimeValue,
+  pairedClosure, realtimePlan, applyRealtimeSlots,
   stateLinksFromMarks, stateControlActivationOwner, wireStateControlActivation,
 };
 

@@ -6,6 +6,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const {
   MAX_CONCURRENCY,
+  MAX_FIRST_CANVAS_DEADLINE_MS,
   STOCK_ENTITY_RESOLVER_ADAPTER_VERSION,
   REVIEWED_MARKET_ENTITY_KIND,
   StockEntityIndex,
@@ -537,6 +538,38 @@ test('first-canvas deadline exposes an explicit retryable timeout and retry adva
   assert.equal(retried.canvases[0].generation, 2);
   assert.equal(retryFetch.calls[1].body.dataset_id, 'd-retry-1');
   assert.equal(retried.retryAction, null);
+});
+
+test('직접 조회가 선택한 bounded deadline 안에서는 3초가 지난 첫 카드도 성공한다', async () => {
+  const input = dataset();
+  input.firstCanvasDeadlineMs = 5_000;
+  let now = 0;
+  const fetchImpl = async (url, options) => {
+    if (url.endsWith('/resolve')) {
+      now = 3_500;
+      return response({ plan_token: 'p-cold-start' });
+    }
+    now = 4_000;
+    const body = JSON.parse(options.body);
+    return response(canonicalInline(body, input.items[0].operationRef));
+  };
+  const result = await runRestDataset({
+    dataset: input,
+    backendBase: 'http://backend',
+    fetchImpl,
+    clock: () => now,
+    emitCanvas: async (payload) => ({
+      verifiedVisible: true,
+      visiblePaintAt: payload.requestStartedAt + 4_100,
+      renderState: 'data',
+    }),
+  });
+
+  assert.equal(MAX_FIRST_CANVAS_DEADLINE_MS, 30_000);
+  assert.equal(result.ok, true);
+  assert.equal(result.firstCanvasMs, 4_100);
+  assert.equal(result.dataCanvasCount, 1);
+  assert.equal(result.answerText, '캔버스에 표시했습니다.');
 });
 
 test('fetch failure before the first card is an explicit retryable local error', async () => {

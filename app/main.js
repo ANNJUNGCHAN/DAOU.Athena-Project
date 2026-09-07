@@ -2144,7 +2144,7 @@ ipcMain.on('athena:rest-receipt-painted', (event, payload = {}) => {
   if (!shellWin || shellWin.isDestroyed() || event.sender !== shellWin.webContents) return;
   const receiptId = String(payload.receipt_id || '');
   const waiter = restReceiptWaiters.get(receiptId);
-  if (!waiter) return;
+  if (!waiter || String(payload.receipt_revision || '') !== waiter.revision) return;
   restReceiptWaiters.delete(receiptId);
   waiter.cleanup();
   if (!payload.verified_visible) {
@@ -2267,8 +2267,8 @@ ipcMain.handle('athena:integrated-card-realtime-command', async (event, payload 
 });
 
 // 보드 슬롯 하이드레이션(읽기 전용). 봉투의 surface_contract.unbound_slots가 남았을
-// 때만 렌더러가 부른다. 엔드포인트가 아직 없으면 status:'unavailable'이 오고
-// 화면은 결측어를 그대로 둔다 — 없는 값을 지어내지 않는다.
+// 때만 렌더러가 부른다. 엔드포인트가 없거나 조회가 실패하면 상태를 그대로 돌려
+// 렌더러가 로딩 오류와 재시도를 표시한다.
 ipcMain.handle('athena:canvas-board-hydrate', async (event, payload = {}) => {
   if (!shellWin || shellWin.isDestroyed() || event.sender !== shellWin.webContents) {
     return { ok: false, status: 'error', error: 'invalid renderer' };
@@ -2283,21 +2283,39 @@ ipcMain.handle('athena:canvas-board-hydrate', async (event, payload = {}) => {
     boardId: payload.boardId || payload.board_id,
     target: payload.target,
     account: payload.account,
+    slotIds: payload.slotIds || payload.slot_ids,
   });
 });
 
-function emitRestReceiptAndWaitForPaint(text, { timeoutMs = 3000 } = {}) {
+function emitRestReceiptAndWaitForPaint(text, {
+  timeoutMs = 3000,
+  receiptId = crypto.randomUUID(),
+  replaceOnly = false,
+} = {}) {
   if (!shellWin || shellWin.isDestroyed()) return Promise.reject(new Error('셸 창이 준비되지 않았다'));
   revealShell({ focus: true });
-  const receiptId = crypto.randomUUID();
+  const stableReceiptId = String(receiptId || '');
+  if (!stableReceiptId) return Promise.reject(new Error('REST 영수증 ID가 필요하다'));
+  if (restReceiptWaiters.has(stableReceiptId)) {
+    return Promise.reject(new Error('같은 REST 영수증 paint ack가 이미 대기 중이다'));
+  }
+  const receiptRevision = crypto.randomUUID();
   return new Promise((resolve, reject) => {
-    const timer = setTimeout(() => {
-      restReceiptWaiters.delete(receiptId);
+    let timer = null;
+    const cleanup = () => clearTimeout(timer);
+    const waiter = { resolve, reject, cleanup, revision: receiptRevision };
+    timer = setTimeout(() => {
+      if (restReceiptWaiters.get(stableReceiptId) !== waiter) return;
+      restReceiptWaiters.delete(stableReceiptId);
       reject(new Error('REST 영수증 paint ack 3초 제한을 넘겼다'));
     }, timeoutMs);
-    const cleanup = () => clearTimeout(timer);
-    restReceiptWaiters.set(receiptId, { resolve, reject, cleanup });
-    shellWin.webContents.send('athena:add-rest-receipt', { receiptId, text });
+    restReceiptWaiters.set(stableReceiptId, waiter);
+    shellWin.webContents.send('athena:add-rest-receipt', {
+      receiptId: stableReceiptId,
+      receiptRevision,
+      text,
+      replaceOnly,
+    });
   });
 }
 
@@ -2735,10 +2753,13 @@ function extractToolResultText(content) {
 //       완료 쪽(tool_result)은 steps에 애초에 없어 자동으로 조용히 무시된다.
 // sendFn(선택)으로 송신 채널을 바꿀 수 있다 — 브리핑 턴(R1)이 라벨 변환·중복
 // 방어는 그대로 쓰되 athena:briefing-tool-step으로만 내보내기 위한 주입 지점.
-// forwardNudgeGuard(선택) — 말걸기 가드 확인 카드·백테스트 채팅 액션 카드는 채팅
-// 전용 사람 액션이라 사용자 턴에서만 전달한다. 브리핑 턴(자동 실행)이 이 카드를
-// 띄우면 사용자 승인 흐름이 자동 턴에서 새어나오는 셈이라 끈다.
-function createToolStepTracker(sendFn = sendLiveToolStep, { forwardNudgeGuard = true } = {}) {
+// forwardNudgeGuard(선택) — 말걸기 가드 확인 카드 등 사람 액션은 사용자 턴에서만
+// 전달한다. forwardBacktestAction은 한 단계 더 좁혀 실제 백테스트 캔버스 턴에서만
+// 폼 변경을 허용한다. 다른 모드의 숨은 백테스트 호출이 화면을 바꾸면 안 된다.
+function createToolStepTracker(
+  sendFn = sendLiveToolStep,
+  { forwardNudgeGuard = true, forwardBacktestAction = false } = {},
+) {
   const steps = new Map(); // tool_use_id -> { label, startedAt, name, input, elapsedMs? }
   return function trackToolStep(event) {
     if (!event || typeof event !== 'object') return;
@@ -2748,11 +2769,12 @@ function createToolStepTracker(sendFn = sendLiveToolStep, { forwardNudgeGuard = 
       if (!Array.isArray(content)) return;
       for (const block of content) {
         if (block && block.type === 'tool_use' && block.id && !steps.has(block.id)) {
-          if (streamJsonParser.isAgentToolName(block.name)) continue;
-          const label = toolStepLabel(block.name, block.input);
+          const toolUse = streamJsonParser.normalizeToolUseBlock(block);
+          if (streamJsonParser.isAgentToolName(toolUse.name)) continue;
+          const label = toolStepLabel(toolUse.name, toolUse.input);
           // name·input도 함께 들고 있는다 — F-stage9가 athena_nudge_guard의
           // propose 호출을 가려내는 데 쓴다(위 maybeForwardNudgeGuardProposal).
-          steps.set(block.id, { label, startedAt: Date.now(), name: block.name, input: block.input });
+          steps.set(block.id, { label, startedAt: Date.now(), name: toolUse.name, input: toolUse.input });
           sendFn({ id: block.id, label, done: false, elapsedMs: null });
         }
       }
@@ -2794,7 +2816,7 @@ function createToolStepTracker(sendFn = sendLiveToolStep, { forwardNudgeGuard = 
             if (forwardNudgeGuard) {
               maybeForwardNudgeGuardProposal(step, block);
               maybeForwardRoutineProposal(step, block);
-              maybeForwardBacktestChatAction(step, block);
+              if (forwardBacktestAction) maybeForwardBacktestChatAction(step, block);
               maybeForwardGraphChatAction(step, block);
               maybeForwardPluginProposal(step, block);
             }
@@ -3164,6 +3186,14 @@ function createProviderRuntimeControllerInstance(stateDir) {
         if (!persistentTurnContexts.has(step.clientSubmitId)) return;
         markProviderFirstVisible(step);
         sendLiveToolStep(step);
+      },
+      onTrustedToolCompleted(completion) {
+        const context = persistentTurnContexts.get(completion.clientSubmitId);
+        if (!context || context.canvasMode !== 'backtest') return;
+        maybeForwardBacktestChatAction(
+          { name: completion.canonicalToolName, input: completion.input },
+          { is_error: false, content: completion.content },
+        );
       },
       onSubagentStep(step) {
         if (!persistentTurnContexts.has(step.clientSubmitId)) return;
@@ -3539,6 +3569,7 @@ const stockEntityIndexReadiness = createStockEntityIndexReadiness({
 });
 const chartFollowupTracker = createChartFollowupTracker();
 const DIRECT_FEEDBACK_WATCHDOG_MS = 2200;
+const DIRECT_DATASET_SETTLE_TIMEOUT_MS = 30_000;
 
 async function runDirectRestDataset(dataset, expand = true, overrides = {}) {
   const startedAt = performance.now();
@@ -3555,11 +3586,15 @@ async function runDirectRestDataset(dataset, expand = true, overrides = {}) {
   let feedbackObserved = false;
   let watchdogReceipt = null;
   const shouldPaintReceipt = !overrides.emitCanvas;
+  const watchdogReceiptId = shouldPaintReceipt ? crypto.randomUUID() : null;
   const feedbackWatchdog = shouldPaintReceipt ? setTimeout(() => {
-    if (feedbackObserved) return;
+    if (feedbackObserved || historyConversationId() !== turnConversationId) return;
     watchdogReceipt = emitRestReceiptAndWaitForPaint(
-      '조회가 지연되어 아직 화면 데이터를 표시하지 못했습니다.',
-      { timeoutMs: Math.max(1, 3000 - DIRECT_FEEDBACK_WATCHDOG_MS) },
+      '데이터를 불러오는 중입니다...',
+      {
+        timeoutMs: Math.max(1, 3000 - DIRECT_FEEDBACK_WATCHDOG_MS),
+        receiptId: watchdogReceiptId,
+      },
     ).then((paint) => ({ paint, error: null }), (error) => ({ paint: null, error }));
   }, DIRECT_FEEDBACK_WATCHDOG_MS) : null;
   const handleDirectEvent = (event) => {
@@ -3572,7 +3607,7 @@ async function runDirectRestDataset(dataset, expand = true, overrides = {}) {
   let result;
   try {
     result = await restDatasetRunner.runRestDataset({
-      dataset,
+      dataset: Object.assign({}, dataset, { firstCanvasDeadlineMs: DIRECT_DATASET_SETTLE_TIMEOUT_MS }),
       backendBase: BACKEND_HTTP_BASE,
       fetchImpl: overrides.fetchImpl,
       signal: overrides.signal || ownController.signal,
@@ -3595,9 +3630,25 @@ async function runDirectRestDataset(dataset, expand = true, overrides = {}) {
   }
   const watchdogOutcome = watchdogReceipt ? await watchdogReceipt : null;
   if (watchdogOutcome && watchdogOutcome.paint) {
-    result.answerPaintedByMain = true;
     result.feedbackOk = true;
     result.firstFeedbackMs = Math.max(0, watchdogOutcome.paint.visiblePaintAt - startedAt);
+  }
+  if (watchdogReceipt) {
+    if (historyConversationId() === turnConversationId) {
+      try {
+        await emitRestReceiptAndWaitForPaint(result.answerText, {
+          timeoutMs: 3000,
+          receiptId: watchdogReceiptId,
+          replaceOnly: true,
+        });
+        result.answerPaintedByMain = true;
+      } catch (error) {
+        result.answerPaintedByMain = false;
+        result.feedbackError = String((error && error.message) || error);
+      }
+    } else {
+      result.answerPaintedByMain = false;
+    }
   } else if (!result.renderedCount && shouldPaintReceipt) {
     try {
       const paint = await emitRestReceiptAndWaitForPaint(result.answerText, {
@@ -4056,7 +4107,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
     sendLiveToolStep(step);
     const bridge = getSessionBridge();
     if (bridge) bridge.recordToolStep({ sessionId: turnConversationId, messageId: sessionAssistantId, step });
-  });
+  }, { forwardBacktestAction: submit.canvasMode === 'backtest' });
   const trackSubagent = createSubagentTracker();
   const liveProviderId = resolveLiveQueryProviderId();
   noteLiveQueryProvider(liveProviderId);
@@ -4076,6 +4127,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
     graphContext: submit.graphContext,
     agentContext: { project: activeAgentProject() },
     today: todayYyyymmdd(),
+    providerId: liveProviderId,
   };
   const turnPrompt = buildLiveTurnPrompt(liveTurnInput);
   if (providerRuntimeEnabled && currentProviderSelection.disabled) {
@@ -4100,6 +4152,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
       expand: expand === true,
       expandTriggered: false,
       origin,
+      canvasMode: submit.canvasMode,
     };
     persistentTurnContexts.set(clientSubmitId, persistentTurnContext);
     let persistentResult;
@@ -4199,6 +4252,9 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
       resumeSessionId,
       model,
       effort,
+      // dir는 위 getLiveMcpConfig()가 앱 userData 아래에 생성한 전용 폴더다.
+      // renderer submit이나 사용자가 고른 프로젝트 경로를 이 cwd로 받지 않는다.
+      trustProjectFolder: true,
       ...turnCallbacks,
     });
   } else if (persistentChatEnabled()) {

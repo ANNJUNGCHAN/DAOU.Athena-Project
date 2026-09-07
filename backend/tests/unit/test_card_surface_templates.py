@@ -896,6 +896,112 @@ def test_alt_mappings_let_one_leaf_reach_several_operations(universe) -> None:
     )
 
 
+def test_explicit_composite_resolves_parts_without_using_extra_fields(
+    tmp_path, universe
+) -> None:
+    root = _copy(tmp_path)
+    payload = _read_slots(root, "2SKU-1-T1")
+    slot = next(item for item in payload["slots"] if item["slot_id"] == "t1_kpi_summary")
+    slot.update(
+        {
+            "mapping_id": None,
+            "f": None,
+            "alt_mappings": None,
+            "extra_fields": [{"mapping_id": "base:ka10085", "f": "cur_prc"}],
+            "composite": {
+                "separator": " · ",
+                "parts": [
+                    {
+                        "mapping_id": "base:kt00003",
+                        "f": "prsm_dpst_aset_amt",
+                        "format": {"prefix": "예수금 ", "unit": "원"},
+                    },
+                    {
+                        "mapping_id": "detail:ka10087:sell_bid_prices",
+                        "f": "ovt_sigpric_sel_bid_1",
+                        "format": {"suffix": "원"},
+                    },
+                ],
+            },
+        }
+    )
+    _write_slots(root, "2SKU-1-T1", payload)
+
+    parsed = load_registry(root, universe=universe).boards["2SKU-1-T1"].slot(
+        "t1_kpi_summary"
+    )
+
+    assert parsed.mapping_id is None
+    assert parsed.alt_mappings == ()
+    assert parsed.composite.separator == " · "
+    assert [part.f for part in parsed.composite.parts] == [
+        "prsm_dpst_aset_amt",
+        "ovt_sigpric_sel_bid_1",
+    ]
+    assert parsed.composite.parts[0].format == {"prefix": "예수금 ", "unit": "원"}
+    assert "base:ka10085|$.acnt_prft_rt[].cur_prc|1" not in parsed.occurrence_ids
+
+
+@pytest.mark.parametrize(
+    "composite, error",
+    [
+        ({"separator": " · ", "parts": []}, "at least two entries"),
+        (
+            {
+                "separator": " · ",
+                "parts": [
+                    {"mapping_id": "base:kt00003", "f": "prsm_dpst_aset_amt"},
+                    {
+                        "mapping_id": "detail:ka10087:sell_bid_prices",
+                        "f": "ovt_sigpric_sel_bid_1",
+                        "format": "money",
+                    },
+                ],
+            },
+            "format must be an object",
+        ),
+    ],
+)
+def test_invalid_composite_authoring_is_rejected(
+    tmp_path, universe, composite, error
+) -> None:
+    root = _copy(tmp_path)
+    payload = _read_slots(root, "2SKU-1-T1")
+    slot = next(item for item in payload["slots"] if item["slot_id"] == "t1_kpi_summary")
+    slot.update(
+        {
+            "mapping_id": None,
+            "f": None,
+            "alt_mappings": None,
+            "composite": composite,
+        }
+    )
+    _write_slots(root, "2SKU-1-T1", payload)
+
+    with pytest.raises(CardSurfaceTemplateError, match=error):
+        load_registry(root, universe=universe)
+
+
+def test_composite_cannot_also_declare_a_scalar_binding(tmp_path, universe) -> None:
+    root = _copy(tmp_path)
+    payload = _read_slots(root, "2SKU-1-T1")
+    slot = next(item for item in payload["slots"] if item["slot_id"] == "t1_kpi_summary")
+    slot["composite"] = {
+        "separator": " · ",
+        "parts": [
+            {"mapping_id": "base:kt00003", "f": "prsm_dpst_aset_amt"},
+            {
+                "mapping_id": "detail:ka10087:sell_bid_prices",
+                "f": "ovt_sigpric_sel_bid_1",
+            },
+        ],
+    }
+    _write_slots(root, "2SKU-1-T1", payload)
+
+    with pytest.raises(CardSurfaceTemplateError, match="cannot be combined"):
+        load_registry(root, universe=universe)
+
+
 def test_strict_coverage_counts_an_occurrence_only_an_alt_reaches(
     tmp_path, universe
 ) -> None:

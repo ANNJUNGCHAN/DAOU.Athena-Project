@@ -316,11 +316,13 @@ test('늦게 끝나는 차트 마운트는 pending ack와 살아 있는 카드�
     canvas.indexOf('const REST_RETRY_STATES'),
   );
   assert.match(restAck, /const chartSettled = card && card\.dataset\.renderState === 'loading'/);
-  assert.match(restAck, /pending: !!chartSettled,/);
-  assert.match(restAck, /const mountedState = await chartSettled;[\s\S]*render_state: mountedState,[\s\S]*pending: false,/);
+  assert.match(restAck, /const boardSettled = card && card\.dataset\.renderState === 'loading'/);
+  assert.match(restAck, /const renderSettled = chartSettled \|\| boardSettled;/);
+  assert.match(restAck, /pending: !!renderSettled,/);
+  assert.match(restAck, /const settled = await renderSettled;[\s\S]*const mountedState = chartSettled[\s\S]*render_state: mountedState,[\s\S]*pending: false,/);
   assert.equal((restAck.match(/athena:rest-canvas-painted/g) || []).length, 3);
   // 후속 ack가 던져도 이미 성공한 첫 ack를 오류 ack로 뒤집지 않는다.
-  assert.match(restAck, /if \(chartSettled\) \{[\s\S]*try \{[\s\S]*await chartSettled/);
+  assert.match(restAck, /if \(renderSettled\) \{[\s\S]*try \{[\s\S]*await renderSettled/);
 });
 
 test('all Athena chart entry points are statically locked to the AITS adapter', () => {

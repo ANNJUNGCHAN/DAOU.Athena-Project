@@ -195,6 +195,8 @@ _GENERIC_TASK_CANVAS_CONTRACT_ALIASES = frozenset(
         "updatePolicy",
         "surface_contract",
         "surfaceContract",
+        "initial_surface_contract",
+        "initialSurfaceContract",
         "field_contract",
         "fieldContract",
         "coverage_receipt",
@@ -958,6 +960,100 @@ class BoardHydrateRequest(BaseModel):
     # 자기 요청 모델이 선언한 alias만 골라 쓴다.
     target: dict[str, Any] = Field(default_factory=dict)
     account: str | None = Field(default=None, min_length=1, max_length=64)
+    # 렌더러가 현재 보드에서 실제로 부족한 슬롯만 보낸다. 생략은 구버전
+    # 클라이언트 호환을 위해 모든 값 바인딩 슬롯을 뜻한다.
+    slot_ids: list[str] | None = Field(default=None, max_length=512)
+
+
+def _hydrate_operation_refs(board: Any, slot_ids: list[str] | None) -> tuple[str, ...]:
+    """현재 필요한 슬롯이 실제로 참조하는 op만 보드 선언 순서로 돌려준다."""
+
+    by_slot = {slot.slot_id: slot for slot in board.slots}
+    if slot_ids is None:
+        slots = board.binding_slots
+    else:
+        unknown = sorted(set(slot_ids) - by_slot.keys())
+        if unknown:
+            raise HTTPException(
+                status_code=422,
+                detail=f"board {board.board_id!r} has no slots: {', '.join(unknown)}",
+            )
+        requested = set(slot_ids)
+        slots = tuple(
+            slot
+            for slot in board.slots
+            if slot.slot_id in requested and slot.binds_a_field
+        )
+    needed = {
+        binding.mapping_id
+        for slot in slots
+        for binding in slot.bindings
+    }
+    return tuple(ref for ref in board.operation_refs if ref in needed)
+
+
+def _same_query_arguments(
+    document: Any, tr_id: str, target: Mapping[str, Any], argument_key: str
+) -> bool:
+    if document is None or document.kind != "query" or document.tr_id != tr_id:
+        return False
+    arguments, _ = _hydrate_arguments(document, target)
+    if arguments is None:
+        return False
+    return json.dumps(
+        arguments.model_dump(mode="json", by_alias=True, exclude_none=True),
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    ) == argument_key
+
+
+def _initial_surface_contract(
+    card_contract: Mapping[str, Any],
+    *,
+    source: BaseModel,
+    tr_id: str,
+    target: Mapping[str, Any],
+    selector: SelectorService,
+) -> dict[str, Any] | None:
+    surface = card_contract.get("surface_contract")
+    if not isinstance(surface, Mapping):
+        return None
+    board_id = surface.get("initial_state_board")
+    if not isinstance(board_id, str) or not board_id:
+        return None
+    registry = get_card_surface_registry()
+    board = registry.boards.get(board_id)
+    if board is None:
+        return None
+    argument_key = json.dumps(
+        dict(target), ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    )
+    queried_refs = {
+        operation_ref
+        for operation_ref in board.operation_refs
+        if _same_query_arguments(
+            selector.catalog.find_exact(operation_ref), tr_id, target, argument_key
+        )
+    }
+    source_data = source.model_dump(by_alias=True)
+    bound: dict[str, Any] = {}
+    for operation_ref in board.operation_refs:
+        if operation_ref in queried_refs:
+            bound.update(bind_surface_values(operation_ref, source_data))
+    contract = build_board_surface_contract(
+        board_id, bound, registry, active_operation_refs=queried_refs
+    )
+    if contract is None:
+        return None
+    filled = {entry["slot_id"] for entry in contract["slot_values"]}
+    contract["hydration_slot_ids"] = [
+        slot.slot_id
+        for slot in board.binding_slots
+        if slot.slot_id not in filled
+        and any(binding.mapping_id not in queried_refs for binding in slot.bindings)
+    ]
+    return contract
 
 
 def _hydrate_arguments(
@@ -1005,6 +1101,7 @@ async def _hydrate_operation(
     payload: BoardHydrateRequest,
     request: Request,
     client: KiwoomClient,
+    fetched: dict[tuple[str, str], tuple[BaseModel | None, str | None]],
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     """read op 하나를 호출해 (상태, 바인딩)으로 돌려준다. 실패는 예외로 새지 않는다."""
 
@@ -1028,25 +1125,40 @@ async def _hydrate_operation(
     if arguments is None:
         assert reason is not None
         return unbound(reason)
-    try:
-        result = await call_typed_tr(
-            document.tr_id,
-            arguments,
-            request,
-            Response(),
-            client,
-            response_model=document.response_model if document.group_id else None,
-        )
-    except (KiwoomError, httpx.HTTPError, TimeoutError, ValueError) as exc:
-        logger.warning(
-            "board-hydrate upstream failed op=%s error=%s",
-            operation_ref,
-            type(exc).__name__,
-        )
-        return unbound("upstream_error")
-    if isinstance(result, JSONResponse):
-        # 업무 오류 응답(return_code != 0)은 값이 아니다.
-        return unbound("upstream_business_result")
+    argument_key = json.dumps(
+        arguments.model_dump(mode="json", by_alias=True, exclude_none=True),
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+    fetch_key = (document.tr_id, argument_key)
+    if fetch_key not in fetched:
+        try:
+            result = await call_typed_tr(
+                document.tr_id,
+                arguments,
+                request,
+                Response(),
+                client,
+            )
+        except (KiwoomError, httpx.HTTPError, TimeoutError, ValueError) as exc:
+            logger.warning(
+                "board-hydrate upstream failed tr=%s error=%s",
+                document.tr_id,
+                type(exc).__name__,
+            )
+            fetched[fetch_key] = (None, "upstream_error")
+        else:
+            if isinstance(result, JSONResponse):
+                # 업무 오류 응답(return_code != 0)은 같은 실제 호출을 공유하는 모든
+                # detail group에서도 값이 아니다.
+                fetched[fetch_key] = (None, "upstream_business_result")
+            else:
+                fetched[fetch_key] = (result, None)
+    result, fetch_error = fetched[fetch_key]
+    if result is None:
+        assert fetch_error is not None
+        return unbound(fetch_error)
     bound = bind_surface_values(operation_ref, result.model_dump(by_alias=True))
     return (
         {
@@ -1091,25 +1203,52 @@ async def internal_canvas_board_hydrate(
 
     operations: list[dict[str, Any]] = []
     bound: dict[str, Any] = {}
-    for operation_ref in board.operation_refs:
+    # 한 실제 TR은 detail group이 여러 개여도 요청 인자와 upstream 응답이 같다.
+    # 보드 한 장 안에서는 한 번만 호출하고, 원본 응답을 각 operation_ref의 가시
+    # occurrence로 따로 투영한다. 같은 실패도 다시 호출하지 않는다.
+    fetched: dict[tuple[str, str], tuple[BaseModel | None, str | None]] = {}
+    for operation_ref in _hydrate_operation_refs(board, payload.slot_ids):
         status, values = await _hydrate_operation(
             operation_ref,
             selector.catalog.find_exact(operation_ref),
             payload,
             request,
             data_client,
+            fetched,
         )
         operations.append(status)
         bound.update(values)
+
+    surface_contract = build_board_surface_contract(board.board_id, bound, registry)
+    assert surface_contract is not None
+    filled = {entry["slot_id"] for entry in surface_contract["slot_values"]}
+    retryable_refs = {
+        status["operation_ref"]
+        for status in operations
+        if status.get("reason") in {"upstream_error", "upstream_business_result"}
+    }
+    requested_slots = (
+        board.binding_slots
+        if payload.slot_ids is None
+        else tuple(
+            slot
+            for slot in board.binding_slots
+            if slot.slot_id in set(payload.slot_ids)
+        )
+    )
+    surface_contract["hydration_slot_ids"] = [
+        slot.slot_id
+        for slot in requested_slots
+        if slot.slot_id not in filled
+        and any(binding.mapping_id in retryable_refs for binding in slot.bindings)
+    ]
 
     return JSONResponse(
         content={
             "board_id": board.board_id,
             "card_id": board.card_id,
             "operations": operations,
-            "surface_contract": build_board_surface_contract(
-                board.board_id, bound, registry
-            ),
+            "surface_contract": surface_contract,
         }
     )
 
@@ -1769,6 +1908,7 @@ async def canvas_render_plan(
         authoritative_screen_contract if payload.delivery == "inline" else None
     )
     reservation = _reserve_workspace(request.app, card_contract)
+    full_responses: list[BaseModel] = []
 
     # 주문 확인 헤더를 아예 받지 않는다 — 조회 plan만 실행 가능(주문 plan은
     # selector.call의 3중 게이트가 헤더 부재로 거부한다).
@@ -1783,6 +1923,7 @@ async def canvas_render_plan(
                 account=account,
                 order_client=order_client,
                 ws_client=ws_client,
+                full_response_sink=full_responses.append,
             )
         else:
             budget_ms = min(payload.deadline_ms, _INLINE_SERVER_BUDGET_MS)
@@ -1795,6 +1936,7 @@ async def canvas_render_plan(
                     account=account,
                     order_client=None,
                     ws_client=None,
+                    full_response_sink=full_responses.append,
                 )
     except TimeoutError:
         if inline_contract is None or inline_operation_ref is None:
@@ -1886,6 +2028,16 @@ async def canvas_render_plan(
             next_actions=["resolve_again"],
         )
     _bind_semantic_values(card_contract, operation_ref, call_payload.get("data"))
+    if full_responses:
+        initial_contract = _initial_surface_contract(
+            card_contract,
+            source=full_responses[0],
+            tr_id=document.tr_id,
+            target=verified_plan.arguments,
+            selector=selector,
+        )
+        if initial_contract is not None:
+            card_contract["initial_surface_contract"] = initial_contract
     screen_contract = authoritative_screen_contract
 
     if screen_contract is None:

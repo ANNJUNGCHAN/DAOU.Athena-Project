@@ -8,9 +8,11 @@ const {
   collapsePlan, mountPlan, pairedGroups, nodeIndex, applyPlan, setHidden, isValueSlot,
   hoistLayout, applyResponsiveHooks, RESPONSIVE_REGIONS, HOISTED_PROPERTIES, primaryMountPoint,
   collapsePrimaryMockup, restorePrimaryMockup,
-  slotValueEntries, realtimeSlotIndex, pairedClosure, realtimePlan, applyRealtimeSlots,
+  createLatestBoardLoad, nextHydrationSlots,
+  slotValueEntries, realtimeSlotIndex, updateRealtimeValue, pairedClosure, realtimePlan, applyRealtimeSlots,
   stateLinksFromMarks, stateControlActivationOwner, wireStateControlActivation,
 } = require('./board-mount');
+const { formatSlot } = require('./board-format');
 const registry = require('./board-template-registry');
 const {
   assertReadability, collectPairedSemanticFindings,
@@ -1090,6 +1092,47 @@ test('realtimeSlotIndex는 한 관찰에 걸린 슬롯을 전부 모은다(같�
   assert.deepEqual(index.get(RTB_PRICE), ['header.price', 'kpi.1.value']);
 });
 
+test('realtimeSlotIndex는 composite 각 part 관찰을 같은 슬롯에 잇는다', () => {
+  const contract = { slot_values: [{
+    slot_id: 'header.summary',
+    value: { composite: { separator: ' · ', parts: [
+      { mapping_id: 'base:0B', f: 'cur_prc', observation_id: OBS_PRICE, value: 150850, format: { kind: 'number' } },
+      { mapping_id: 'base:0B', f: 'flu_rt', observation_id: OBS_RATE, value: 1.24, format: { kind: 'percent' } },
+    ] } },
+  }] };
+  const index = realtimeSlotIndex(contract, fixtureRealtimeBindings());
+  assert.deepEqual(index.get(RTB_PRICE), ['header.summary']);
+  assert.deepEqual(index.get(RTB_RATE), ['header.summary']);
+  assert.equal(index.observationByBinding.get(RTB_PRICE), OBS_PRICE);
+  assert.equal(index.observationByBinding.get(RTB_RATE), OBS_RATE);
+});
+
+test('updateRealtimeValue는 composite에서 해당 관찰 part만 바꾸고 나머지를 보존한다', () => {
+  const current = { composite: { separator: ' · ', parts: [
+    { mapping_id: 'base:0B', f: 'cur_prc', observation_id: OBS_PRICE, value: 150850, format: { kind: 'number' } },
+    { mapping_id: 'base:0B', f: 'flu_rt', observation_id: OBS_RATE, value: 1.24, format: { kind: 'percent' } },
+  ] } };
+  const changed = updateRealtimeValue(current, OBS_PRICE, 152700);
+  assert.equal(changed.updated, true);
+  assert.equal(changed.value.composite.parts[0].value, 152700);
+  assert.equal(changed.value.composite.parts[1].value, 1.24);
+  assert.equal(current.composite.parts[0].value, 150850);
+  assert.deepEqual(updateRealtimeValue(current, OBS_ORPHAN, 9), { value: current, updated: false });
+  assert.deepEqual(updateRealtimeValue(150850, OBS_PRICE, 152700), { value: 152700, updated: true });
+});
+
+test('composite 실시간 갱신은 전체를 다시 포맷하고 잘못된 part 값은 원문 대신 미제공으로 닫는다', () => {
+  const current = { composite: { separator: ' · ', parts: [
+    { mapping_id: 'base:0B', f: 'cur_prc', observation_id: OBS_PRICE, value: 150850, format: { kind: 'number' } },
+    { mapping_id: 'base:0B', f: 'flu_rt', observation_id: OBS_RATE, value: 1.24, format: { kind: 'percent' } },
+  ] } };
+  const changed = updateRealtimeValue(current, OBS_RATE, -1.21).value;
+  assert.equal(formatSlot({}, changed).text, '150,850 · -1.21%');
+
+  const invalid = updateRealtimeValue(changed, OBS_RATE, [-1.21, -1.22]).value;
+  assert.deepEqual(formatSlot({}, invalid), { text: '미제공', tone: null, missing: true });
+});
+
 test('realtimeSlotIndex는 모양이 어긋난 식별자를 버린다(추측으로 잇지 않는다)', () => {
   const contract = {
     slot_values: [
@@ -1298,4 +1341,66 @@ test('primaryMountPoint는 자리가 없으면 지어내지 않는다', () => {
   const surface = el({}, [el({ node: '14PA-2' })]);
   assert.equal(primaryMountPoint(surface, { primary: { renderer: 'athena-chart', mount_slot: '14P9-2' } }), null);
   assert.equal(primaryMountPoint(null, { primary: { renderer: 'athena-chart' } }), null);
+});
+
+test('늦게 끝난 보드 로드는 새 상태 보드나 닫힌 카드를 되살리지 않는다', async () => {
+  const lifecycle = createLatestBoardLoad();
+  const events = [];
+  let finishOld;
+  const old = lifecycle.run(
+    () => new Promise((resolve) => { finishOld = resolve; }),
+    { onReady: () => events.push('old-ready') },
+  );
+  const current = lifecycle.run(
+    async () => 'current-board',
+    { onReady: (value) => events.push(value) },
+  );
+  assert.deepEqual(await current, { status: 'ready', value: 'current-board' });
+  finishOld('old-board');
+  assert.deepEqual(await old, { status: 'stale' });
+  assert.deepEqual(events, ['current-board']);
+
+  let finishClosed;
+  const closed = lifecycle.run(
+    () => new Promise((resolve) => { finishClosed = resolve; }),
+    { onReady: () => events.push('closed-ready') },
+  );
+  lifecycle.dispose();
+  finishClosed('closed-board');
+  assert.deepEqual(await closed, { status: 'stale' });
+  assert.deepEqual(events, ['current-board']);
+});
+
+test('보드 로드 실패는 현재 요청에서만 오류와 같은 요청 재시도를 제공한다', async () => {
+  const lifecycle = createLatestBoardLoad();
+  let attempts = 0;
+  let retry;
+  const warnings = ['old failure'];
+  const handlers = {
+    onLoading: () => { warnings.length = 0; },
+    onError: (_error, next) => { warnings.push('current failure'); retry = next; },
+  };
+  const first = await lifecycle.run(async () => {
+    attempts += 1;
+    if (attempts === 1) throw new Error('network');
+    return 'next board';
+  }, handlers);
+  assert.equal(first.status, 'error');
+  assert.deepEqual(warnings, ['current failure']);
+  assert.equal(typeof retry, 'function');
+  const second = await retry();
+  assert.deepEqual(second, { status: 'ready', value: 'next board' });
+  assert.equal(attempts, 2);
+  assert.deepEqual(warnings, []);
+});
+
+test('성공한 empty hydrate는 권위 있는 빈 pending을 보존해 재방문 때 다시 조회하지 않는다', () => {
+  const firstPending = ['s005', 's019'];
+  const settled = nextHydrationSlots(firstPending, {}, { hydration_slot_ids: [] });
+  assert.deepEqual(settled, []);
+  assert.deepEqual(nextHydrationSlots(settled, {}, null), []);
+  assert.deepEqual(
+    nextHydrationSlots(firstPending, { s005: 267750 }, { hydration_slot_ids: ['s019'] }),
+    ['s019'],
+  );
 });

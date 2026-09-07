@@ -45,6 +45,11 @@ test('buildArgs: --mcp-config 를 붙이지 않는다 — 프로젝트 .grok/con
   assert.equal(args.indexOf('--mcp-config'), -1);
 });
 
+test('buildArgs: 앱 관리 MCP 폴더를 명시한 호출만 --trust 를 붙인다', () => {
+  assert.equal(buildArgs({ prompt: 'x' }).includes('--trust'), false);
+  assert.equal(buildArgs({ prompt: 'x', trustProjectFolder: true }).includes('--trust'), true);
+});
+
 test('grokFailureMessage: CLI errors 배열을 종료 코드보다 우선한다', () => {
   const { grokFailureMessage } = require('./grok-runner');
   const message = grokFailureMessage({

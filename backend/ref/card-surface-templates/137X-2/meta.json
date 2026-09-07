@@ -9,5 +9,28 @@
     "parent_board": null,
     "control": null
   },
-  "saved_at": "2026-09-02T10:59:57Z"
+  "saved_at": "2026-09-02T10:59:57Z",
+  "operation_refs": [
+    "base:0g",
+    "base:ka10003",
+    "base:ka10006",
+    "base:ka10015",
+    "base:ka10060",
+    "base:ka10064",
+    "base:ka10079",
+    "base:ka10080",
+    "base:ka10081",
+    "base:ka10082",
+    "base:ka10083",
+    "base:ka10084",
+    "base:ka10086",
+    "base:ka10094",
+    "detail:ka10001:current_trading",
+    "detail:ka10001:daily_price_band",
+    "detail:ka10001:identity_and_capital",
+    "detail:ka10001:market_scale_and_ownership",
+    "detail:ka10001:price_range",
+    "detail:ka10001:valuation",
+    "detail:ka10007:identity"
+  ]
 }

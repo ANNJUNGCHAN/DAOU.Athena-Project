@@ -101,7 +101,15 @@ def _check_slot_anchors(board_id: str, html: str, slots_path: Path) -> None:
 # 마운트 계약 투사 — board-mount가 실제로 읽는 필드만 싣는다. slots.json 전체(원장
 # 근거·감사 필드 포함)를 그대로 실으면 청크가 두 배가 되고, 프론트는 쓰지도 않는다.
 # 값은 봉투(surface_contract.slot_values)가 나르고, 여기 실리는 것은 정적 계약뿐이다.
-_MOUNT_FIELDS = ("slot_id", "kind", "paper_text", "paired_with", "collapse_group", "expanded_board")
+_MOUNT_FIELDS = (
+    "slot_id",
+    "kind",
+    "paper_text",
+    "paired_with",
+    "collapse_group",
+    "expanded_board",
+    "composite",
+)
 
 
 def _mount_contract(slots_path: Path) -> list[dict]:

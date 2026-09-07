@@ -40,6 +40,7 @@ function createProviderEventRouter({
   onThinkingDelta = null,
   onCanvasResult = null,
   onToolStep = null,
+  onTrustedToolCompleted = null,
   onSubagentStep = null,
   onPermissionDenied = null,
   onUsage = null,
@@ -52,8 +53,10 @@ function createProviderEventRouter({
 } = {}) {
   const startedAtByToolUseId = new Map();
   const toolNameByToolUseId = new Map();
+  const toolInputByToolUseId = new Map();
   const completedToolUseIds = new Set();
   let terminalSeen = false;
+  let boundIdentity = null;
 
   function metadata(event) {
     return Object.freeze({
@@ -68,6 +71,9 @@ function createProviderEventRouter({
 
   function route(event) {
     if (!validateProviderEvent(event)) return { accepted: false, reason: 'invalid-event' };
+    const identity = `${event.runtimeGeneration}\u0000${event.conversationId}\u0000${event.turnId}`;
+    if (boundIdentity === null) boundIdentity = identity;
+    else if (boundIdentity !== identity) return { accepted: false, reason: 'identity-mismatch' };
     if (terminalSeen) return { accepted: false, reason: 'after-terminal' };
     const payload = event.payload;
     const meta = metadata(event);
@@ -94,6 +100,8 @@ function createProviderEventRouter({
         const canonicalName = String(payload.canonicalToolName || payload.providerToolName || '');
         startedAtByToolUseId.set(id, clock());
         toolNameByToolUseId.set(id, canonicalName);
+        toolInputByToolUseId.set(id, payload.input && typeof payload.input === 'object' && !Array.isArray(payload.input)
+          ? payload.input : {});
         if (typeof onToolStep === 'function') {
           onToolStep({
             id,
@@ -136,6 +144,21 @@ function createProviderEventRouter({
             ...meta,
           });
         }
+        if (payload.isError !== true
+          && startedAtByToolUseId.has(id)
+          && canonicalName === toolNameByToolUseId.get(id)
+          && typeof onTrustedToolCompleted === 'function') {
+          onTrustedToolCompleted({
+            id,
+            canonicalToolName: canonicalName,
+            input: toolInputByToolUseId.get(id),
+            content: payload.content,
+            ...meta,
+          });
+        }
+        startedAtByToolUseId.delete(id);
+        toolNameByToolUseId.delete(id);
+        toolInputByToolUseId.delete(id);
         break;
       }
       case 'canvas_result':
@@ -185,6 +208,9 @@ function createProviderEventRouter({
 
     if (TERMINAL_EVENT_TYPES.has(event.type)) {
       terminalSeen = true;
+      startedAtByToolUseId.clear();
+      toolNameByToolUseId.clear();
+      toolInputByToolUseId.clear();
       if (typeof onTerminal === 'function') onTerminal(event.type, payload, meta);
     }
     return { accepted: true };

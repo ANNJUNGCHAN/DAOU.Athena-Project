@@ -5,10 +5,11 @@ from __future__ import annotations
 import logging
 import time
 from collections import OrderedDict
+from collections.abc import Callable
 from typing import Any
 
 from fastapi import Request, Response
-from pydantic import ValidationError
+from pydantic import BaseModel, ValidationError
 
 from athena_api.errors import KiwoomNotReadyError
 from athena_api.generated.registry import SPLIT_BASE_TR_IDS
@@ -838,6 +839,7 @@ class SelectorService:
         authorization: str | None = None,
         confirmation: str | None = None,
         idempotency_key: str | None = None,
+        full_response_sink: Callable[[BaseModel], None] | None = None,
     ) -> CallResponse:
         plan = self.signer.verify(call.plan_token, self.catalog, expected_account=account)
         self._consume_nonce(plan)
@@ -885,6 +887,7 @@ class SelectorService:
                 response,
                 client,
                 response_model=document.response_model if document.group_id else None,
+                full_response_sink=full_response_sink,
             )
         upstream_ms = int((time.monotonic() - upstream_start) * 1000)
         logger.info("athena_call upstream tr=%s upstream_ms=%d", document.tr_id, upstream_ms)
