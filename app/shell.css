@@ -3670,6 +3670,8 @@ body { margin: 0; overflow: hidden; }
 .backtest-terminal {
   margin: 8px 0 0;
   padding: 10px;
+  /* 캔버스 루트(#backtestCanvas)가 글을 가운데 맞춘다 — 명령창 출력은 왼쪽이다(보드 20). */
+  text-align: left;
   border: 1px solid var(--color-k-line);
   border-radius: 10px;
   background: var(--color-k-panel2, var(--color-k-panel3));
@@ -3966,6 +3968,60 @@ body { margin: 0; overflow: hidden; }
 .backtest-technique-diff-body {
   max-height: 260px;
   overflow: auto;
+}
+/* diff 줄(backtest-code-editor.js renderDiff) — 코드 탭의 파일 초안·[diff 보기]·진단 수정안이
+ * 같은 문법을 쓴다. 캔버스 루트가 가운데 맞춤이라 여기서 왼쪽으로 되돌리고, +/− 줄은
+ * 배경으로만 가른다(보드 22). */
+.backtest-diff {
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  line-height: 18px;
+  color: var(--color-k-text);
+}
+.backtest-diff-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 0 8px;
+  white-space: pre;
+}
+.backtest-diff-row.is-add { background: #E4F5DE; }
+.backtest-diff-row.is-del { background: #FBE3E3; color: var(--color-k-soft); }
+.backtest-diff-mark { flex: 0 0 10px; color: var(--color-k-faint); }
+.backtest-diff-row.is-add .backtest-diff-mark { color: #2E7D1F; }
+.backtest-diff-row.is-del .backtest-diff-mark { color: var(--color-up); }
+.backtest-diff-no {
+  flex: 0 0 32px;
+  color: var(--color-k-ghost);
+  text-align: right;
+}
+.backtest-diff-text { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.backtest-diff-gap {
+  padding: 2px 8px;
+  color: var(--color-k-ghost);
+  text-align: left;
+}
+/* diff 패널 머리(경로 · +N −M · [코드로]) — [diff 보기]와 파일 초안이 같이 쓴다. */
+.backtest-technique-diff .backtest-diag-fix-head,
+.backtest-file-draft .backtest-diag-fix-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 6px;
+  text-align: left;
+}
+.backtest-technique-diff .backtest-diag-section-title,
+.backtest-file-draft .backtest-diag-section-title {
+  color: var(--color-k-text);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+.backtest-technique-diff .backtest-diag-fix-stat,
+.backtest-file-draft .backtest-diag-fix-stat {
+  color: var(--color-k-faint);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
 }
 /* [코드로] — 패널을 닫고 편집기로 돌아간다. 머리줄 오른쪽 끝. */
 .backtest-technique-diff-close {
