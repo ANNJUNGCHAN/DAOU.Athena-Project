@@ -105,7 +105,7 @@ function createProviderEventRouter({
         if (typeof onToolStep === 'function') {
           onToolStep({
             id,
-            label: toolStepLabel(canonicalName),
+            label: toolStepLabel(canonicalName, toolInputByToolUseId.get(id)),
             done: false,
             elapsedMs: null,
             error: false,
@@ -119,7 +119,7 @@ function createProviderEventRouter({
         if (!id || completedToolUseIds.has(id) || typeof onToolStep !== 'function') break;
         onToolStep({
           id,
-          label: toolStepLabel(toolNameByToolUseId.get(id) || ''),
+          label: toolStepLabel(toolNameByToolUseId.get(id) || '', toolInputByToolUseId.get(id)),
           done: false,
           elapsedMs: null,
           error: false,
@@ -137,7 +137,7 @@ function createProviderEventRouter({
         if (typeof onToolStep === 'function') {
           onToolStep({
             id,
-            label: toolStepLabel(canonicalName),
+            label: toolStepLabel(canonicalName, toolInputByToolUseId.get(id)),
             done: true,
             elapsedMs: Number.isFinite(startedAt) ? Math.max(0, clock() - startedAt) : null,
             error: payload.isError === true,

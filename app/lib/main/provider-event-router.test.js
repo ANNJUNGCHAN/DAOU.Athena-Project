@@ -279,6 +279,31 @@ test('subagent descriptions and warnings are bounded and control-character free'
   assert.equal(warnings[0].safeMessage.length <= 160, true);
 });
 
+test('tool_started는 입력을 toolStepLabel에만 넘기고 스텝 객체에는 싣지 않는다', () => {
+  const seen = [];
+  const steps = [];
+  const router = createProviderEventRouter({
+    onToolStep: (step) => steps.push(step),
+    toolStepLabel: (name, input) => {
+      seen.push({ name, input });
+      const stock = input && input.arguments && input.arguments.stk_nm;
+      return stock ? `조회 · ${stock}` : '조회';
+    },
+  });
+  router.route(event(1, 'tool_started', {
+    toolUseId: 'tool-1',
+    canonicalToolName: 'athena_resolve',
+    input: { question: 'q', arguments: { stk_nm: '삼성전자' }, account: 'secret' },
+  }));
+  assert.deepEqual(seen, [{
+    name: 'athena_resolve',
+    input: { question: 'q', arguments: { stk_nm: '삼성전자' }, account: 'secret' },
+  }]);
+  assert.equal(steps[0].label, '조회 · 삼성전자');
+  assert.equal(JSON.stringify(steps).includes('account'), false);
+  assert.equal(JSON.stringify(steps).includes('secret'), false);
+});
+
 test('invalid or unstamped events fail before any callback', () => {
   let calls = 0;
   const router = createProviderEventRouter({ onInternalEvent: () => { calls += 1; } });

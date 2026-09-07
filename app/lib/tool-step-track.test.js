@@ -4,10 +4,10 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const { applyToolStep } = require('./tool-step-track');
 
-test('시작 단계 — done:false, timeText 빈 문자열', () => {
+test('시작 단계 — done:false, timeText는 대기 중', () => {
   const steps = new Map();
   const r = applyToolStep(steps, { id: 't1', label: '조회', done: false, elapsedMs: null });
-  assert.deepEqual(r, { id: 't1', label: '조회', done: false, timeText: '', error: false, retrying: false, note: '' });
+  assert.deepEqual(r, { id: 't1', label: '조회', done: false, timeText: '대기 중', error: false, retrying: false, note: '' });
   assert.deepEqual(steps.get('t1'), { label: '조회', done: false, elapsedMs: null, error: false, retrying: false, note: '' });
 });
 
@@ -99,4 +99,5 @@ test('부제(Paper 보드 10) — 보낸 것만 그대로 실리고, 안 보내�
   assert.equal(r.label, '노드 조회');
   assert.equal(r.note, '한미반도체 · 관계 7 · 이력 3');
   assert.equal(applyToolStep(steps, { id: 't2', label: '조회', done: false }).note, '');
+  assert.equal(applyToolStep(steps, { id: 't2', label: '조회', done: false }).timeText, '대기 중');
 });
