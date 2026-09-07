@@ -570,7 +570,9 @@ window.athena.on('athena:add-rest-canvas', async (payload) => {
       chart_import_to_dom_ms: Number.isFinite(chartImportReadyAt)
         ? Math.max(0, domAttachedAt - Math.max(receivedAt, chartImportReadyAt)) : null,
       inline_to_dom_ms: Math.max(0, domAttachedAt - receivedAt),
-      dom_to_paint_ack_ms: Math.max(0, paint.visiblePaintAt - domAttachedAt),
+      // 창이 숨어 있던 시간은 렌더 지연이 아니다 — 확인을 못 한 시간이다.
+      // waitForVisiblePaint가 그 시간을 재서 넘기고 여기서 구간에서 뺀다.
+      dom_to_paint_ack_ms: Math.max(0, paint.visiblePaintAt - domAttachedAt - (paint.hiddenMs || 0)),
       rect: paint.rect,
     });
     if (renderSettled) {
