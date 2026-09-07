@@ -24,6 +24,16 @@ function ruleBody(selector) {
   return '';
 }
 
+test('부팅 워드마크는 Paper DakiL(Light)을 탄다 — Daki Title이 아니다', () => {
+  const match = css.match(/\.boot-base,\s*\.boot-name\s*\{([^}]*)\}/);
+  assert.ok(match, '.boot-base, .boot-name 조판 규칙이 있어야 한다');
+  const block = match[1];
+  assert.match(block, /font-family:\s*'Daki'/);
+  assert.match(block, /font-weight:\s*300/);
+  assert.doesNotMatch(block, /var\(--font-display\)/);
+  assert.doesNotMatch(block, /Daki Title/);
+});
+
 test('부팅 자리표시자는 Paper 16OD-2 회색이다 — 투명이 아니다', () => {
   const base = ruleBody('.boot-base');
   assert.ok(base, '.boot-base 규칙이 있어야 한다');
