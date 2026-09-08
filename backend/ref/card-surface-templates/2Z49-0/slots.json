@@ -4031,7 +4031,10 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "unbound_reason": "현재가 — ka30002 응답에 정확한 현재가 필드가 없으므로 stale Paper 예시값을 유지하지 않고 런타임에서 미제공으로 표시한다"
+      "unbound_reason": "현재가 — ka30002 응답에 정확한 현재가 필드가 없으므로 stale Paper 예시값을 유지하지 않고 런타임에서 미제공으로 표시한다",
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "현재가 열 — ELW 거래원 순매수(ka30002) 응답에 현재가가 없다"
     },
     {
       "slot_id": "s125",
@@ -4314,7 +4317,10 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "unbound_reason": "현재가 — ka30002 응답에 정확한 현재가 필드가 없으므로 stale Paper 예시값을 유지하지 않고 런타임에서 미제공으로 표시한다"
+      "unbound_reason": "현재가 — ka30002 응답에 정확한 현재가 필드가 없으므로 stale Paper 예시값을 유지하지 않고 런타임에서 미제공으로 표시한다",
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "현재가 열 — ELW 거래원 순매수(ka30002) 응답에 현재가가 없다"
     },
     {
       "slot_id": "s134",
@@ -4597,7 +4603,10 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "unbound_reason": "현재가 — ka30002 응답에 정확한 현재가 필드가 없으므로 stale Paper 예시값을 유지하지 않고 런타임에서 미제공으로 표시한다"
+      "unbound_reason": "현재가 — ka30002 응답에 정확한 현재가 필드가 없으므로 stale Paper 예시값을 유지하지 않고 런타임에서 미제공으로 표시한다",
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "현재가 열 — ELW 거래원 순매수(ka30002) 응답에 현재가가 없다"
     },
     {
       "slot_id": "s143",
@@ -4880,7 +4889,10 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "unbound_reason": "현재가 — ka30002 응답에 정확한 현재가 필드가 없으므로 stale Paper 예시값을 유지하지 않고 런타임에서 미제공으로 표시한다"
+      "unbound_reason": "현재가 — ka30002 응답에 정확한 현재가 필드가 없으므로 stale Paper 예시값을 유지하지 않고 런타임에서 미제공으로 표시한다",
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "현재가 열 — ELW 거래원 순매수(ka30002) 응답에 현재가가 없다"
     },
     {
       "slot_id": "s152",
@@ -5163,7 +5175,10 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "unbound_reason": "현재가 — ka30002 응답에 정확한 현재가 필드가 없으므로 stale Paper 예시값을 유지하지 않고 런타임에서 미제공으로 표시한다"
+      "unbound_reason": "현재가 — ka30002 응답에 정확한 현재가 필드가 없으므로 stale Paper 예시값을 유지하지 않고 런타임에서 미제공으로 표시한다",
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "현재가 열 — ELW 거래원 순매수(ka30002) 응답에 현재가가 없다"
     },
     {
       "slot_id": "s161",

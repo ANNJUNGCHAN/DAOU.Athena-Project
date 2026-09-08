@@ -34,7 +34,14 @@ const APP = __dirname;
 const ROOT = path.resolve(APP, '..');
 const TEMPLATE_ROOT = path.join(ROOT, 'backend', 'ref', 'card-surface-templates');
 const CARD_INDEX = path.join(TEMPLATE_ROOT, 'index.json');
-const REPORT_PATH = path.join(APP, 'captures', 'card-api-sweep', 'CARD-API-SWEEP.json');
+// 샤드를 나눠 돌릴 때 프로필·리포트가 겹치면 서로의 프로필을 지우고 리포트를
+// 덮어쓴다(실측: 두 샤드 동시 실행에서 한쪽 결과가 통째로 사라졌다). 샤드 이름을
+// 주면 둘 다 갈라 쓴다 — `ATHENA_SWEEP_SHARD=b`.
+const SHARD = (process.env.ATHENA_SWEEP_SHARD || '').trim();
+const SHARD_SUFFIX = SHARD ? `-${SHARD}` : '';
+const REPORT_PATH = path.join(
+  APP, 'captures', 'card-api-sweep', `CARD-API-SWEEP${SHARD_SUFFIX}.json`,
+);
 const BACKEND_BASE = process.env.ATHENA_BACKEND_BASE || 'http://127.0.0.1:8010';
 const TARGET = JSON.parse(process.env.ATHENA_SWEEP_TARGET || '{"stk_cd":"005930"}');
 // 눈으로 볼 보드 — `ATHENA_SWEEP_CAPTURE=4AUX-1,133H-2` 또는 `*`.
@@ -46,7 +53,7 @@ const CARD_KIND = Object.freeze({
   'CC-04': 'orderbook', 'CC-05': 'flow', 'CC-06': 'explorer',
 });
 
-const PROFILE = path.join(APP, '.probe-card-api-sweep-profile');
+const PROFILE = path.join(APP, `.probe-card-api-sweep-profile${SHARD_SUFFIX}`);
 fs.rmSync(PROFILE, { recursive: true, force: true });
 fs.mkdirSync(PROFILE, { recursive: true });
 fs.writeFileSync(
@@ -248,6 +255,9 @@ async function probeBoard(win, boardId, ordinal, token) {
         missing_total: missing.total,
         missing_counts: missing.counts,
         missing_nodes: missing.nodes,
+        // Paper가 디자인으로 그린 결측어 라벨 — 결함이 아니라 1:1 증거다.
+        authored_missing_total: missing.authored_total,
+        authored_missing_nodes: missing.authored_nodes,
         clipped_total: clip.clipped_total,
         clipped_nodes: clip.clipped_nodes,
         reachable_clip_total: clip.reachable_total,
