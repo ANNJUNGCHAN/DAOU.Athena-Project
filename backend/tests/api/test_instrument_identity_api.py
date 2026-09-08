@@ -1,5 +1,7 @@
 """HTTP regressions for private instrument identity binding during resolve."""
 
+from pathlib import Path
+
 from fastapi.testclient import TestClient
 
 from athena_api.config import Settings
@@ -145,3 +147,55 @@ def test_http_natural_order_matching_mismatch_missing_and_exact_contract() -> No
     assert service.signer.verify(
         exact.json()["plan_token"], service.catalog
     ).arguments["stk_cd"] == "035720"
+
+
+def test_instrument_resolve_and_status_read_persisted_sqlite_master(tmp_path: Path) -> None:
+    db_path = tmp_path / "instruments.sqlite3"
+    index = InstrumentIdentityIndex(db_path=db_path)
+    index.replace(
+        {
+            "0": [{"code": "005930", "name": "삼성전자", "marketCode": "0"}],
+            "10": [{"code": "035720", "name": "카카오", "marketCode": "10"}],
+            "8": [{"code": "069500", "name": "KODEX 200", "marketCode": "8"}],
+        }
+    )
+    app = create_app(Settings(_env_file=None, instrument_db_path=db_path))
+
+    with TestClient(app) as client:
+        resolved = client.post(
+            "/api/v1/instruments/resolve", json={"question": "삼성전자 현재가"}
+        )
+        missing = client.post(
+            "/api/v1/instruments/resolve", json={"question": "없는 종목 현재가"}
+        )
+        status = client.get("/api/v1/instruments/status")
+
+    assert resolved.status_code == 200
+    assert resolved.json() == {
+        "ready": True,
+        "instrument": {
+            "code": "005930",
+            "name": "삼성전자",
+            "marketCode": "0",
+            "kind": "stock",
+        },
+    }
+    assert missing.json() == {"ready": True, "instrument": None}
+    assert status.status_code == 200
+    assert status.json()["ready"] is True
+    assert status.json()["size"] == 3
+    assert status.json()["refreshedAt"] is not None
+
+
+def test_instrument_resolve_reports_not_ready_for_empty_master(tmp_path: Path) -> None:
+    app = create_app(
+        Settings(_env_file=None, instrument_db_path=tmp_path / "instruments.sqlite3")
+    )
+
+    with TestClient(app) as client:
+        response = client.post(
+            "/api/v1/instruments/resolve", json={"question": "삼성전자 현재가"}
+        )
+
+    assert response.status_code == 200
+    assert response.json() == {"ready": False, "instrument": None}

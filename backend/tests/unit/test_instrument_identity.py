@@ -5,6 +5,7 @@ from __future__ import annotations
 import asyncio
 import json
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 from fastapi.testclient import TestClient
@@ -157,6 +158,128 @@ async def test_refresh_never_publishes_a_partial_market_snapshot() -> None:
     assert index.resolve("신규0 현재가").code == "111111"
 
 
+def test_sqlite_master_persists_across_index_instances(tmp_path: Path) -> None:
+    db_path = tmp_path / "instruments.sqlite3"
+    writer = InstrumentIdentityIndex(db_path=db_path)
+    writer.replace(_market_records())
+
+    restarted = InstrumentIdentityIndex(db_path=db_path)
+
+    resolved = restarted.resolve("삼성전자 현재가")
+    assert resolved is not None
+    assert (resolved.code, resolved.name, resolved.market) == ("005930", "삼성전자", "0")
+    assert restarted.status()[0:2] == (True, 3)
+    assert restarted.refreshed_at is not None
+
+
+async def test_sqlite_refresh_keeps_previous_commit_visible_until_full_replace(
+    tmp_path: Path,
+) -> None:
+    db_path = tmp_path / "instruments.sqlite3"
+    writer = InstrumentIdentityIndex(db_path=db_path)
+    writer.replace(_market_records())
+    reader = InstrumentIdentityIndex(db_path=db_path)
+    reached_last_market = asyncio.Event()
+    release_last_market = asyncio.Event()
+
+    async def fetch(market: str):
+        if market == "8":
+            reached_last_market.set()
+            await release_last_market.wait()
+        return [{"code": {"0": "111111", "10": "222222", "8": "333333"}[market],
+                 "name": f"신규{market}", "marketCode": market}]
+
+    task = asyncio.create_task(writer.refresh_from(fetch))
+    await reached_last_market.wait()
+    assert reader.resolve("삼성전자 현재가").code == "005930"
+    assert reader.resolve("신규0 현재가") is None
+    release_last_market.set()
+    assert await task == 3
+    assert reader.resolve("삼성전자 현재가") is None
+    assert reader.resolve("신규0 현재가").code == "111111"
+
+
+def test_duplicate_normalized_name_is_ambiguous_in_sqlite(tmp_path: Path) -> None:
+    index = InstrumentIdentityIndex(db_path=tmp_path / "instruments.sqlite3")
+    index.replace(
+        {
+            "0": [{"code": "111111", "name": "동명이", "marketCode": "0"}],
+            "10": [{"code": "222222", "name": "동명이", "marketCode": "10"}],
+            "8": [{"code": "333333", "name": "다른 ETF", "marketCode": "8"}],
+        }
+    )
+
+    assert index.resolve("동명이 현재가") is None
+
+
+async def test_refresh_loop_runs_immediately_and_then_on_interval() -> None:
+    from athena_api.lifespan import _instrument_identity_refresh_loop
+
+    refreshed_twice = asyncio.Event()
+
+    class RecordingIndex:
+        calls = 0
+
+        async def refresh(self, _client: object) -> int:
+            self.calls += 1
+            if self.calls >= 2:
+                refreshed_twice.set()
+            return 1
+
+    index = RecordingIndex()
+    app = SimpleNamespace(
+        state=SimpleNamespace(
+            instrument_identity_wakeup=asyncio.Event(),
+            kiwoom_client=SimpleNamespace(is_ready=True),
+        )
+    )
+    task = asyncio.create_task(_instrument_identity_refresh_loop(app, index, 0.01))
+    try:
+        await asyncio.wait_for(refreshed_twice.wait(), timeout=1)
+        assert index.calls >= 2
+    finally:
+        task.cancel()
+        with pytest.raises(asyncio.CancelledError):
+            await task
+
+
+async def test_refresh_loop_uses_runtime_account_selected_after_start() -> None:
+    from athena_api.lifespan import _instrument_identity_refresh_loop
+
+    refreshed = asyncio.Event()
+    first_client = SimpleNamespace(is_ready=True, alias="first")
+    second_client = SimpleNamespace(is_ready=True, alias="second")
+
+    class RecordingIndex:
+        clients: list[object] = []
+
+        async def refresh(self, client: object) -> int:
+            self.clients.append(client)
+            refreshed.set()
+            return 1
+
+    index = RecordingIndex()
+    wakeup = asyncio.Event()
+    app = SimpleNamespace(
+        state=SimpleNamespace(
+            instrument_identity_wakeup=wakeup,
+            kiwoom_client=first_client,
+        )
+    )
+    task = asyncio.create_task(_instrument_identity_refresh_loop(app, index, 3600))
+    try:
+        await asyncio.wait_for(refreshed.wait(), timeout=1)
+        refreshed.clear()
+        app.state.kiwoom_client = second_client
+        wakeup.set()
+        await asyncio.wait_for(refreshed.wait(), timeout=1)
+        assert index.clients == [first_client, second_client]
+    finally:
+        task.cancel()
+        with pytest.raises(asyncio.CancelledError):
+            await task
+
+
 async def test_generated_ka10099_refresh_uses_only_reviewed_markets() -> None:
     class Client:
         def __init__(self) -> None:
@@ -193,6 +316,74 @@ async def test_generated_ka10099_refresh_uses_only_reviewed_markets() -> None:
         {"mrkt_tp": "10"},
         {"mrkt_tp": "8"},
     ]
+
+
+async def test_ka10099_continuation_is_fully_collected_before_commit(tmp_path: Path) -> None:
+    from athena_api.kiwoom import ResponseEnvelope
+
+    class Client:
+        calls: list[tuple[str, str | None]] = []
+
+        async def post_with_headers(self, _tr_id, _path, body, options=None):
+            market = body["mrkt_tp"]
+            next_key = getattr(options, "next_key", None)
+            self.calls.append((market, next_key))
+            page = "2" if next_key else "1"
+            return ResponseEnvelope(
+                body={
+                    "return_code": 0,
+                    "list": [{
+                        "code": f"{int(market):02d}{page}001".zfill(6),
+                        "name": f"시장{market}페이지{page}",
+                        "marketCode": market,
+                    }],
+                },
+                cont_yn="N" if next_key else "Y",
+                next_key=None if next_key else f"next-{market}",
+            )
+
+    index = InstrumentIdentityIndex(db_path=tmp_path / "instruments.sqlite3")
+    assert await index.refresh(Client()) == 6
+    assert Client.calls == [
+        ("0", None), ("0", "next-0"),
+        ("10", None), ("10", "next-10"),
+        ("8", None), ("8", "next-8"),
+    ]
+
+
+async def test_non_success_ka10099_never_replaces_last_good_master(tmp_path: Path) -> None:
+    from athena_api.kiwoom import ResponseEnvelope
+
+    class Client:
+        async def post_with_headers(self, _tr_id, _path, _body, options=None):
+            return ResponseEnvelope(
+                body={"return_code": 17, "return_msg": "failed", "list": []},
+                cont_yn="N",
+                next_key=None,
+            )
+
+    index = InstrumentIdentityIndex(db_path=tmp_path / "instruments.sqlite3")
+    index.replace(_market_records())
+
+    with pytest.raises(ValueError, match="non-success"):
+        await index.refresh(Client())
+
+    assert index.resolve("삼성전자 현재가").code == "005930"
+
+
+async def test_empty_market_response_never_replaces_last_good_master(tmp_path: Path) -> None:
+    index = InstrumentIdentityIndex(db_path=tmp_path / "instruments.sqlite3")
+    index.replace(_market_records())
+
+    async def fetch(market: str):
+        if market == "10":
+            return []
+        return [{"code": "111111", "name": f"시장{market}", "marketCode": market}]
+
+    with pytest.raises(ValueError, match="returned no records"):
+        await index.refresh_from(fetch)
+
+    assert index.resolve("삼성전자 현재가").code == "005930"
 
 
 def test_live_shaped_mixed_market_response_filters_and_deduplicates_by_returned_market() -> None:
@@ -472,8 +663,10 @@ def test_all_instrument_bound_query_families_have_exactly_one_stk_cd_alias() -> 
     } == {document.operation_ref: ["stk_cd"] for document in instrument_families}
 
 
-def test_lifespan_publishes_one_app_local_identity_index_and_selector() -> None:
-    app = create_app(Settings(_env_file=None))
+def test_lifespan_publishes_one_app_local_identity_index_and_selector(tmp_path: Path) -> None:
+    app = create_app(
+        Settings(_env_file=None, instrument_db_path=tmp_path / "instruments.sqlite3")
+    )
 
     with TestClient(app):
         assert app.state.selector_service._instrument_identity is app.state.instrument_identity
@@ -490,11 +683,12 @@ _IDENTITY_STARTUP_ACCOUNTS = (
 )
 
 
-def _identity_startup_settings() -> Settings:
+def _identity_startup_settings(tmp_path: Path) -> Settings:
     return Settings(
         _env_file=None,
         kiwoom_accounts=_IDENTITY_STARTUP_ACCOUNTS,
         kiwoom_default_account="identity-test",
+        instrument_db_path=tmp_path / "instruments.sqlite3",
     )
 
 
@@ -522,6 +716,7 @@ def _mock_kiwoom_token(mock) -> None:
 
 async def test_lifespan_startup_does_not_wait_for_identity_refresh_and_cancels_it_on_exit(
     monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
 ) -> None:
     import respx
     from fastapi import FastAPI
@@ -540,7 +735,9 @@ async def test_lifespan_startup_does_not_wait_for_identity_refresh_and_cancels_i
     app = FastAPI()
     with respx.mock(base_url="https://mockapi.kiwoom.com") as mock:
         _mock_kiwoom_token(mock)
-        lifespan = build_lifespan(_identity_startup_settings(), ws_connect=_offline_websocket)
+        lifespan = build_lifespan(
+            _identity_startup_settings(tmp_path), ws_connect=_offline_websocket
+        )
         async with lifespan(app):
             task = app.state.instrument_identity_task
             assert isinstance(task, asyncio.Task)
@@ -554,13 +751,17 @@ async def test_lifespan_startup_does_not_wait_for_identity_refresh_and_cancels_i
 async def test_lifespan_identity_refresh_failure_is_logged_not_raised(
     monkeypatch: pytest.MonkeyPatch,
     caplog: pytest.LogCaptureFixture,
+    tmp_path: Path,
 ) -> None:
     import respx
     from fastapi import FastAPI
 
     from athena_api.lifespan import build_lifespan
 
+    attempted = asyncio.Event()
+
     async def failing_refresh(self: InstrumentIdentityIndex, _client: object) -> int:
+        attempted.set()
         raise RuntimeError("upstream unavailable")
 
     monkeypatch.setattr(InstrumentIdentityIndex, "refresh", failing_refresh)
@@ -568,11 +769,14 @@ async def test_lifespan_identity_refresh_failure_is_logged_not_raised(
     with respx.mock(base_url="https://mockapi.kiwoom.com") as mock:
         _mock_kiwoom_token(mock)
         with caplog.at_level("WARNING", logger="athena_api.lifespan"):
-            lifespan = build_lifespan(_identity_startup_settings(), ws_connect=_offline_websocket)
+            lifespan = build_lifespan(
+                _identity_startup_settings(tmp_path), ws_connect=_offline_websocket
+            )
             async with lifespan(app):
                 task = app.state.instrument_identity_task
-                await asyncio.wait_for(asyncio.shield(task), timeout=5)
-                assert task.done() and not task.cancelled() and task.exception() is None
+                await asyncio.wait_for(attempted.wait(), timeout=5)
+                await asyncio.sleep(0)
+                assert not task.done()
                 assert app.state.instrument_identity.size == 0
     assert any(
         "instrument identity refresh failed" in record.getMessage() for record in caplog.records

@@ -397,3 +397,103 @@ test('답변 턴은 실행이다 — 시작하면 running, 끝나면 done, 오�
   assert.equal(store.getJob('a2').status, 'failed');
   assert.deepEqual(events, ['running', 'done', 'running', 'failed']);
 });
+
+test('runAssistantTurn은 빠른 반환도 done으로 닫고 답변을 저장한다', async (t) => {
+  const { store, bridge } = setup(t);
+  bridge.ensureSession({ id: 'sess_1', mode: 'chat', projectId: 'proj', title: '빠른 경로' });
+
+  const result = await bridge.runAssistantTurn({
+    sessionId: 'sess_1',
+    messageId: 'fast_1',
+    run: async () => ({ ok: true, source: 'chart-followup', answerText: '바로 답함' }),
+  });
+
+  assert.equal(result.source, 'chart-followup');
+  assert.equal(messageOf(store, 'sess_1', 'fast_1').text, '바로 답함');
+  assert.equal(messageOf(store, 'sess_1', 'fast_1').done, true);
+  assert.equal(store.getJob('fast_1').status, 'done');
+});
+
+test('runAssistantTurn은 오류 반환을 failed로 닫는다', async (t) => {
+  const { store, bridge } = setup(t);
+  bridge.ensureSession({ id: 'sess_1', mode: 'chat', projectId: 'proj', title: '거절 경로' });
+
+  await bridge.runAssistantTurn({
+    sessionId: 'sess_1',
+    messageId: 'failed_1',
+    run: async () => ({ ok: false, error: '연결 실패', answerText: '연결을 확인해 주세요.' }),
+  });
+
+  const row = messageOf(store, 'sess_1', 'failed_1');
+  assert.equal(row.text, '연결을 확인해 주세요.');
+  assert.equal(row.error, '연결 실패');
+  assert.equal(row.done, true);
+  assert.equal(store.getJob('failed_1').status, 'failed');
+});
+
+test('runAssistantTurn은 예외가 나도 failed로 닫고 부분 응답을 보존한다', async (t) => {
+  const { store, bridge } = setup(t);
+  bridge.ensureSession({ id: 'sess_1', mode: 'chat', projectId: 'proj', title: '예외 경로' });
+
+  await assert.rejects(bridge.runAssistantTurn({
+    sessionId: 'sess_1',
+    messageId: 'throw_1',
+    run: async () => {
+      bridge.journalDelta({ sessionId: 'sess_1', messageId: 'throw_1', text: '여기까지' });
+      throw new Error('fast path boom');
+    },
+  }), /fast path boom/);
+
+  assert.equal(messageOf(store, 'sess_1', 'throw_1').text, '여기까지');
+  assert.equal(messageOf(store, 'sess_1', 'throw_1').done, true);
+  assert.match(messageOf(store, 'sess_1', 'throw_1').error, /fast path boom/);
+  assert.equal(store.getJob('throw_1').status, 'failed');
+});
+
+test('runAssistantTurn은 같은 대화의 겹친 턴을 messageId별로 따로 닫는다', async (t) => {
+  const { store, bridge } = setup(t);
+  bridge.ensureSession({ id: 'sess_1', mode: 'chat', projectId: 'proj', title: '겹친 턴' });
+  let finishFirst;
+  let finishSecond;
+  const firstGate = new Promise((resolve) => { finishFirst = resolve; });
+  const secondGate = new Promise((resolve) => { finishSecond = resolve; });
+  const first = bridge.runAssistantTurn({
+    sessionId: 'sess_1', messageId: 'overlap_1',
+    run: async () => { await firstGate; return { ok: true, answerText: '첫째' }; },
+  });
+  const second = bridge.runAssistantTurn({
+    sessionId: 'sess_1', messageId: 'overlap_2',
+    run: async () => { await secondGate; return { ok: true, answerText: '둘째' }; },
+  });
+
+  finishFirst();
+  await first;
+  assert.equal(store.getJob('overlap_1').status, 'done');
+  assert.equal(store.getJob('overlap_2').status, 'running');
+  finishSecond();
+  await second;
+  assert.equal(store.getJob('overlap_2').status, 'done');
+});
+
+test('runAssistantTurn은 본문이 끝낸 provider 결과를 다시 덮어쓰지 않는다', async (t) => {
+  const { store, bridge } = setup(t);
+  bridge.ensureSession({ id: 'sess_1', mode: 'chat', projectId: 'proj', title: '모델 경로' });
+
+  await bridge.runAssistantTurn({
+    sessionId: 'sess_1',
+    messageId: 'provider_1',
+    run: async () => {
+      bridge.finishAssistant({
+        sessionId: 'sess_1', messageId: 'provider_1', text: '최종 답', thinking: '보존할 생각',
+        usage: { inputTokens: 7, outputTokens: 11 },
+      });
+      return { ok: true, answerText: 'wrapper용 답' };
+    },
+  });
+
+  const row = messageOf(store, 'sess_1', 'provider_1');
+  assert.equal(row.text, '최종 답');
+  assert.equal(row.thinking, '보존할 생각');
+  assert.deepEqual(row.usage, { inputTokens: 7, outputTokens: 11 });
+  assert.equal(store.getJob('provider_1').status, 'done');
+});

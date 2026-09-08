@@ -562,7 +562,7 @@ test('main MCP list is read-only and conversation rotation uses the shared provi
   assert.match(handler, /providerConversationRotationQueue\.begin\(\{ projectId, mode, verifierCorrelationId \}\)/);
 
   const queueStart = source.indexOf('const providerConversationRotationQueue');
-  const queueEnd = source.indexOf('const stockEntityIndex', queueStart);
+  const queueEnd = source.indexOf('const chartFollowupTracker', queueStart);
   const queue = source.slice(queueStart, queueEnd);
   const blockAt = queue.indexOf("blockNewTurns('conversation_rotation')");
   const identityAt = queue.indexOf('historyActiveConversationId = conversationId');

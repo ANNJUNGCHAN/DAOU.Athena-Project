@@ -97,6 +97,10 @@ class Settings(BaseSettings):
     local_bearer_token: SecretStr | None = None
     request_timeout_seconds: float = 10.0
     max_rate_limit_retries: int = 1
+    instrument_db_path: Path = Field(
+        default_factory=lambda: Path.home() / ".athena" / "instruments.sqlite3"
+    )
+    instrument_refresh_interval_seconds: float = Field(default=3600.0, gt=0)
     # 투자의 뇌는 키움 자격증명과 무관하다 — 기본 off라서 옵트인하지 않은 배포와 기존
     # 테스트는 실제 DB 파일을 건드리지 않는다. lifespan.py의 build_lifespan 참고.
     brain_enabled: bool = False

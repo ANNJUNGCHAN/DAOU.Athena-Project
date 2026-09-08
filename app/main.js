@@ -28,6 +28,7 @@ const { CATALOG: PLUGIN_CATALOG } = require('./lib/plugin-catalog');
 // 결정 D1의 실배선 — claude -p 스폰 + stream-json 파싱 + .mcp.json 생성.
 const { runClaudeQuery } = require('./lib/main/claude-runner');
 const { runGrokQuery } = require('./lib/main/grok-runner');
+const { createGrokAcpSession } = require('./lib/main/grok-acp-session');
 // 툴 호출 진행 단계(board-33) 라벨링에 render_canvas 판정 하나만 빌려 쓴다 —
 // 파서 자체는 손대지 않는다(sendLiveToolStep 근처 주석 참고).
 const streamJsonParser = require('./lib/main/stream-json-parser');
@@ -63,10 +64,8 @@ const providerContractDecision = require('./test-fixtures/provider-contract/deci
 const restDatasetRunner = require('./lib/main/rest-dataset-runner');
 const accountBoundDataset = require('./lib/main/account-bound-dataset');
 const { RestRetryRegistry } = require('./lib/main/rest-retry-registry');
-const {
-  createStockEntityIndexReadiness,
-  reconcileStockIndexStartupTask,
-} = require('./lib/main/stock-entity-index-readiness');
+const stockMasterClient = require('./lib/main/stock-master-client');
+const { reconcileStockIndexStartupTask } = require('./lib/main/stock-entity-index-readiness');
 const { createChartFollowupTracker } = require('./lib/main/chart-followup');
 const simpleChartFastPath = require('./lib/main/simple-chart-fast-path');
 const selectorFastPath = require('./lib/main/selector-fast-path');
@@ -931,7 +930,7 @@ const integratedRealtimeShutdown = integratedCardRealtime.createBoundedShutdownC
     }
     stopOrbCursorPoll(); // 인터벌 누수 금지 — 창이 죽기 전에 정리한다
     chartReloadAuthority.clear();
-    stockEntityIndexReadiness.stop();
+    stockMasterAbortController.abort(new Error('Athena 앱 종료'));
     // 트레이로 숨겨진 동안에는 selector worker를 유지하고 실제 종료에서만 닫는다.
     selectorClaudePool.stop(new Error('Athena 앱 종료'));
     liveRuntimes.stopAllChatSessions(new Error('Athena 앱 종료'));
@@ -2626,7 +2625,48 @@ function createLiveChatSessionForConversation() {
 }
 
 function getLiveChatSession(conversationId = historyConversationId()) {
-  return liveRuntimes.chatSession(conversationId, createLiveChatSessionForConversation);
+  return liveRuntimes.chatSession(conversationId, createLiveChatSessionForConversation, 'claude');
+}
+
+function getLiveGrokSession(conversationId) {
+  return liveRuntimes.chatSession(conversationId, () => {
+    const { dir, grokProfilePath, configPath } = getLiveMcpConfig();
+    return createGrokAcpSession({
+      cwd: dir,
+      profilePath: grokProfilePath,
+      trustProjectFolder: true,
+      rules: buildLiveSystemPrompt('grok'),
+      mcpServersFn: () => {
+        const gateway = JSON.parse(fs.readFileSync(configPath, 'utf8')).mcpServers.athena;
+        return [{
+          name: 'athena', command: gateway.command, args: gateway.args,
+          env: Object.entries({ ...gateway.env, ATHENA_MCP_TOOL_NAME_STYLE: 'grok' })
+            .map(([name, value]) => ({ name, value })),
+        }];
+      },
+      // Athena 플러그인은 자체 게이트웨이에서 권한을 확인한다. 다른 코딩 앱의
+      // 전역 MCP를 함께 시작하면 질문마다 무관한 서버 준비를 기다리게 된다.
+      envOverridesFn: () => ({
+        ...mcpEnv.buildEnvOverrides(),
+        GROK_CLAUDE_MCPS_ENABLED: '0',
+        GROK_CURSOR_MCPS_ENABLED: '0',
+      }),
+    });
+  }, 'grok');
+}
+
+function liveGrokSecurityKey() {
+  const config = getLiveMcpConfig();
+  const registry = mcpEnv.registryPath();
+  return canonicalHash({
+    generation: providerSecurityGeneration,
+    config: fileRevision(config.configPath),
+    grokConfig: fileRevision(config.grokConfigPath),
+    profile: fileRevision(config.grokProfilePath),
+    registry: fileRevision(registry),
+    consent: fileRevision(path.join(path.dirname(registry), 'consent.json')),
+    secrets: fileRevision(path.join(app.getPath('userData'), 'athena-secrets.json')),
+  });
 }
 
 function stopLiveClaudeChatSession(reason) {
@@ -2654,9 +2694,11 @@ function resolveActiveModelSelection(prefsState = modelPrefs.get()) {
 }
 
 function noteLiveQueryProvider(providerId) {
-  if (liveQueryProviderId && liveQueryProviderId !== providerId) liveRuntimes.clearIdleCursors();
+  if (liveQueryProviderId && liveQueryProviderId !== providerId) {
+    liveRuntimes.clearIdleCursors();
+    stopLiveClaudeChatSession('provider_changed');
+  }
   liveQueryProviderId = providerId;
-  if (providerId === 'grok') stopLiveClaudeChatSession('grok_active');
 }
 
 // 캔버스 결과 하나(stream-json-parser.classifyCanvasBlock의 출력)를 캔버스
@@ -4017,38 +4059,8 @@ const providerConversationRotationQueue = createConversationRotationQueue({
     })
     : Promise.resolve(),
 });
-const stockEntityIndex = new restDatasetRunner.StockEntityIndex();
-let lastStockIndexErrorLogAt = 0;
-async function refreshActiveStockEntityIndex(index, { signal } = {}) {
-  const bound = await createActiveBackendAccountInvoker((options) => (
-    restDatasetRunner.refreshStockEntityIndex(index, {
-      backendBase: BACKEND_HTTP_BASE,
-      signal,
-      ...options,
-    })
-  ));
-  if (!bound.ok) throw new Error(bound.error || '조회에 사용할 서버 계좌를 확인할 수 없다');
-  return bound.run();
-}
-const stockEntityIndexReadiness = createStockEntityIndexReadiness({
-  index: stockEntityIndex,
-  refresh: async (index, { signal }) => {
-    const count = await refreshActiveStockEntityIndex(index, { signal });
-    mdlog(`Kiwoom 종목명 인덱스 갱신 — 종목 ${count}개`);
-    return count;
-  },
-  onError: (error) => {
-    const now = Date.now();
-    if (now - lastStockIndexErrorLogAt < 30_000) return;
-    lastStockIndexErrorLogAt = now;
-    mdlog(`Kiwoom 종목명 인덱스 갱신 보류(재시도 예정): ${String((error && error.message) || error)}`);
-  },
-  onReady: ({ size }) => {
-    if (reconcileStockIndexStartupTask(startupReadiness, size)) {
-      mdlog(`Kiwoom 종목명 인덱스 회복 — 부팅 준비 상태 갱신 · 종목 ${size}개`);
-    }
-  },
-});
+const stockMasterAbortController = new AbortController();
+let stockMasterRecoveryPromise = null;
 const chartFollowupTracker = createChartFollowupTracker();
 const DIRECT_FEEDBACK_WATCHDOG_MS = 2200;
 const DIRECT_DATASET_SETTLE_TIMEOUT_MS = 30_000;
@@ -4314,8 +4326,18 @@ async function runLiveQuery(query, expand, origin = 'shell', turnConversationId 
 // 오브 기원 엔벌로프만 orbWin에도 추가 relay하는 데 쓴다(board-33③④ 선행).
 async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   // 답변은 시작 전에 자리표시자(done:false)로 먼저 적는다 — 첫 토큰 전에 죽어도 질문은 남는다.
+  // 빠른 경로의 조기 반환과 예외까지 같은 wrapper가 닫아 persisted running을 남기지 않는다.
   const sessionAssistantId = crypto.randomUUID();
-  { const bridge = getSessionBridge(); if (bridge) bridge.beginAssistant({ sessionId: turnConversationId, messageId: sessionAssistantId }); }
+  const bridge = getSessionBridge();
+  if (!bridge) return runLiveQueryInnerBody(query, expand, origin, turnConversationId, sessionAssistantId);
+  return bridge.runAssistantTurn({
+    sessionId: turnConversationId,
+    messageId: sessionAssistantId,
+    run: () => runLiveQueryInnerBody(query, expand, origin, turnConversationId, sessionAssistantId),
+  });
+}
+
+async function runLiveQueryInnerBody(query, expand, origin, turnConversationId, sessionAssistantId) {
   const queryStartedAt = performance.now();
   const submit = liveSubmitContexts.get(turnConversationId) || {};
   const runtime = liveRuntimes.get(turnConversationId);
@@ -4324,6 +4346,10 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   if (runtime.activeSelectorFastRun) {
     runtime.activeSelectorFastRun.abort(new Error('새 질의가 이전 Selector fast path를 대체했다'));
     runtime.activeSelectorFastRun = null;
+  }
+  if (runtime.activeStockMasterLookup) {
+    runtime.activeStockMasterLookup.abort(new Error('새 질의가 이전 SQLite 종목 검색을 대체했다'));
+    runtime.activeStockMasterLookup = null;
   }
   // 모드 전용 채팅(백테스트·그래프·에이전트)은 모델 앞의 빠른 경로 4종(차트 후속·단순 차트·
   // REST 직결·Selector)을 전부 건너뛴다 — 넷 다 모델을 안 부르고 카드를 밀어, 모드 규율과
@@ -4349,10 +4375,31 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   }
   chartFollowupTracker.invalidateForQuery(query);
 
+  let stockResolution = { ready: false, instrument: null };
+  if (!modePromptRequired) {
+    try {
+      stockResolution = await stockMasterClient.resolveCurrentStockMasterQuery(query, {
+        runtime,
+        backendBase: BACKEND_HTTP_BASE,
+        fetchImpl: fetch,
+        shutdownSignal: stockMasterAbortController.signal,
+      });
+    } catch (error) {
+      if (error && error.name === 'AbortError') throw error;
+      mdlog(`SQLite 종목 검색 보류: ${String((error && error.message) || error)}`);
+    }
+  }
+  // 기존 닫힌 문법 빌더에는 SQLite가 이 질문에서 확정한 한 종목만 전달한다.
+  // 전체 종목 목록은 Electron 프로세스에 적재하거나 보관하지 않는다.
+  const queryStockEntityIndex = stockMasterClient.createQueryScopedIndex(
+    restDatasetRunner.StockEntityIndex,
+    stockResolution,
+  );
+
   const simpleChartRoute = modePromptRequired ? { handled: false } : await simpleChartFastPath.runSimpleChartFastPath({
     query,
-    index: stockEntityIndex,
-    ensureReady: (timeoutMs) => stockEntityIndexReadiness.ensureReady(timeoutMs),
+    index: queryStockEntityIndex,
+    ensureReady: async () => stockResolution.ready,
     buildDataset: (question, index) => restDatasetRunner.buildChartDataset(question, index, {
       idFactory: () => `rest-${crypto.randomUUID()}`,
     }),
@@ -4379,19 +4426,19 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   }
   // 정형 질의 모델 우회 확장(2026-08-26 속도 레버) — 순서는 의미 없다(각자
   // 닫힌 문법이라 서로 안 겹친다, rest-dataset-runner.js 테스트로 고정).
-  const directDataset = modePromptRequired ? null : restDatasetRunner.buildCompoundScreenDataset(query, stockEntityIndex, {
+  const directDataset = modePromptRequired ? null : restDatasetRunner.buildCompoundScreenDataset(query, queryStockEntityIndex, {
     idFactory: () => `rest-${crypto.randomUUID()}`,
-  }) || restDatasetRunner.buildQuoteDataset(query, stockEntityIndex, {
+  }) || restDatasetRunner.buildQuoteDataset(query, queryStockEntityIndex, {
     idFactory: () => `rest-${crypto.randomUUID()}`,
-  }) || restDatasetRunner.buildChartDataset(query, stockEntityIndex, {
+  }) || restDatasetRunner.buildChartDataset(query, queryStockEntityIndex, {
     idFactory: () => `rest-${crypto.randomUUID()}`,
-  }) || restDatasetRunner.buildOrderBookDataset(query, stockEntityIndex, {
+  }) || restDatasetRunner.buildOrderBookDataset(query, queryStockEntityIndex, {
     idFactory: () => `rest-${crypto.randomUUID()}`,
-  }) || restDatasetRunner.buildInvestorFlowDataset(query, stockEntityIndex, {
+  }) || restDatasetRunner.buildInvestorFlowDataset(query, queryStockEntityIndex, {
     idFactory: () => `rest-${crypto.randomUUID()}`,
-  }) || restDatasetRunner.buildTradingSourceDataset(query, stockEntityIndex, {
+  }) || restDatasetRunner.buildTradingSourceDataset(query, queryStockEntityIndex, {
     idFactory: () => `rest-${crypto.randomUUID()}`,
-  }) || restDatasetRunner.buildStockInfoDataset(query, stockEntityIndex, {
+  }) || restDatasetRunner.buildStockInfoDataset(query, queryStockEntityIndex, {
     idFactory: () => `rest-${crypto.randomUUID()}`,
   }) || restDatasetRunner.buildProgramTradeDataset(query, {
     idFactory: () => `rest-${crypto.randomUUID()}`,
@@ -4410,7 +4457,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   // render까지 끝낸다. 애매함/인자 부족/비조회 응답만 기존 Claude 경로로 넘긴다.
   // 단순 시장가 주문은 별도 닫힌 문법에서만 intent=order로 보내고, 실행하지 않은
   // guarded 초안을 채팅 주문확인 UI에 전달한다.
-  const orderDraft = selectorFastPath.buildMarketOrderDraft(query, stockEntityIndex);
+  const orderDraft = selectorFastPath.buildMarketOrderDraft(query, queryStockEntityIndex);
   const selectorController = new AbortController();
   runtime.activeSelectorFastRun = selectorController;
   try {
@@ -4727,11 +4774,18 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
     };
   }
   // 두 경로(상주 세션/콜드 스폰)가 같은 콜백을 공유한다 — 스트림 계약이 동일하다.
+  let firstVisibleTextAt = null;
+  const providerStartedAt = performance.now();
   const turnCallbacks = {
     onSpawn: (h) => { myHandle = h; runtime.activeLiveQuery = h; },
     // 성공 resolve 1건과 render 1건의 토큰이 정확히 같은 경우만 캐시한다.
     onEvent: (ev) => { replayTurnCapture.observe(ev); trackToolStep(ev); trackSubagent(ev); },
     onTextDelta: (text, metadata) => {
+      if (text && firstVisibleTextAt === null) {
+        firstVisibleTextAt = performance.now();
+        mdlog(`대화 첫 텍스트 전송 — conversation=${turnConversationId} provider=${liveProviderId} `
+          + `elapsedMs=${Math.round(firstVisibleTextAt - queryStartedAt)}`);
+      }
       sendLiveTextDelta(text, { ...metadata, conversationId: turnConversationId }, origin);
       const bridge = getSessionBridge();
       if (bridge) bridge.journalDelta({ sessionId: turnConversationId, messageId: sessionAssistantId, text });
@@ -4774,7 +4828,17 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   // 아래 세션 체인·캐시·저장 로직은 분기를 모른다. ATHENA_PERSISTENT_CHAT=0
   // 이면 기존 왕복(runClaudeQuery)으로 폴백한다(킬 스위치).
   let result;
-  if (liveProviderId === 'grok') {
+  if (liveProviderId === 'grok' && process.env.ATHENA_GROK_PERSISTENT_CHAT !== '0') {
+    result = await getLiveGrokSession(turnConversationId).run({
+      prompt: turnPrompt,
+      resumeSessionId,
+      model,
+      effort,
+      identityKey: (currentProviderSelection.activeAccount || cliAccounts.peekActiveAccount() || {}).accountId,
+      securityKey: liveGrokSecurityKey(),
+      ...turnCallbacks,
+    });
+  } else if (liveProviderId === 'grok') {
     result = await runGrokQuery({
       prompt: buildLivePrompt(liveTurnInput),
       cwd: dir,
@@ -4817,6 +4881,10 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
       if (activeLegacyQueryCompletion === legacyQueryCompletion) activeLegacyQueryCompletion = null;
     }
   }
+  mdlog(`대화 모델 완료 — conversation=${turnConversationId} provider=${liveProviderId} `
+    + `preProviderMs=${Math.round(providerStartedAt - queryStartedAt)} `
+    + `providerMs=${Math.round(performance.now() - providerStartedAt)} `
+    + `ok=${!!result.ok} reused=${result.spawnedFresh === false}`);
   if (typeof result.firstEventMs === 'number') {
     mdlog(`상주 채팅 턴 — 제출→첫 스트림 이벤트 ${Math.round(result.firstEventMs)}ms `
       + `(프로세스 ${result.spawnedFresh ? '신규 기동' : '재사용'})`);
@@ -4837,7 +4905,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
     // 재개 실패 — 세션 파일이 사라졌거나 CLI가 재개를 거부했을 수 있다. 다음
     // 질의가 계속 같은 이유로 죽지 않게 세션을 버린다(fail-open은 새 대화 시작).
     runtime.liveSessionId = null;
-    if (/session/i.test(String(result.error || ''))) {
+    if (result.submitted !== true && /session/i.test(String(result.error || ''))) {
       // 세션 문제로 죽은 게 분명하면 이번 질의만은 새 세션으로 1회 재시도한다 —
       // liveSessionId가 이미 null이라 재귀는 한 단계에서 끝난다.
       // origin을 반드시 실어 보낸다 — 누락하면 오브 기원 질의가 이 재시도를
@@ -4916,6 +4984,10 @@ function abortRuntimeWork(runtime, reason) {
   if (runtime.activeSelectorFastRun) {
     runtime.activeSelectorFastRun.abort(reason || new Error('대화 작업을 취소했다'));
     runtime.activeSelectorFastRun = null;
+  }
+  if (runtime.activeStockMasterLookup) {
+    runtime.activeStockMasterLookup.abort(reason || new Error('대화 작업을 취소했다'));
+    runtime.activeStockMasterLookup = null;
   }
   if (runtime.activeRestRun) {
     runtime.activeRestRun.abort(reason || new Error('대화 작업을 취소했다'));
@@ -5592,11 +5664,14 @@ async function handleModelSet(e, payload = {}) {
     // 커서로 폴백하는데, 그 값이 중단된 턴의 포크를 가리킬 수 있다(아키텍트
     // 리뷰 결함 1). 대화 커서의 진실은 이 파일의 liveSessionId 하나다.
     if (persistentChatEnabled()) {
-      liveRuntimes.forEachChatSession((session, runtime) => session.warm({
+      liveRuntimes.forEachChatSession((session, runtime) => {
+        if (runtime.chatSessionProviderId === 'grok') return;
+        session.warm({
         model: state.claude.model,
         effort: state.claude.effort,
         resumeSessionId: liveResumeCursor(runtime.conversationId),
-      }));
+        });
+      });
     }
   }
   broadcastModelChanged(state);
@@ -6430,17 +6505,51 @@ async function withDeadline(promise, timeoutMs, message) {
 }
 
 async function waitForStockIndex(context) {
-  stockEntityIndexReadiness.start();
-  await waitForInitialReadiness({
-    ensureReady: (timeoutMs) => stockEntityIndexReadiness.ensureReady(timeoutMs),
-    maxAttempts: 6,
-    attemptTimeoutMs: 2_000,
-    onRetry: (attempt) => context.update({
-      state: 'retrying', detail: `종목명 인덱스 적재 재시도 중 (${attempt}/6)`,
-    }),
-    errorMessage: '종목명 인덱스를 12초 안에 처음 적재하지 못함',
-  });
-  return { detail: `종목 ${stockEntityIndex.size}개 적재 완료` };
+  let readyStatus = null;
+  try {
+    await waitForInitialReadiness({
+      ensureReady: async (timeoutMs) => {
+        readyStatus = await stockMasterClient.waitForStockMasterReady({
+          backendBase: BACKEND_HTTP_BASE,
+          fetchImpl: fetch,
+          timeoutMs,
+          signal: stockMasterAbortController.signal,
+        });
+        return !!readyStatus;
+      },
+      maxAttempts: 6,
+      attemptTimeoutMs: 2_000,
+      onRetry: (attempt) => context.update({
+        state: 'retrying', detail: `SQLite 종목 마스터 준비 확인 중 (${attempt}/6)`,
+      }),
+      errorMessage: 'SQLite 종목 마스터를 12초 안에 준비하지 못함',
+    });
+  } catch (error) {
+    startStockMasterReadinessRecovery();
+    throw error;
+  }
+  return { detail: `SQLite 종목 마스터 ${readyStatus.size}개 준비 완료` };
+}
+
+function startStockMasterReadinessRecovery() {
+  if (stockMasterRecoveryPromise || stockMasterAbortController.signal.aborted) return;
+  stockMasterRecoveryPromise = stockMasterClient.recoverStockMasterReady({
+    backendBase: BACKEND_HTTP_BASE,
+    fetchImpl: fetch,
+    signal: stockMasterAbortController.signal,
+    onReady: ({ size }) => {
+      const task = startupReadiness.snapshot().tasks.find((candidate) => candidate.id === 'stock-index');
+      if (task && task.state === 'succeeded') return true;
+      if (!reconcileStockIndexStartupTask(startupReadiness, size)) return false;
+      mdlog(`SQLite 종목 마스터 늦은 준비 완료 — 부팅 상태 회복 · 종목 ${size}개`);
+      return true;
+    },
+  }).catch((error) => {
+    if (!stockMasterAbortController.signal.aborted) {
+      mdlog(`SQLite 종목 마스터 회복 확인 실패: ${String((error && error.message) || error)}`);
+    }
+    return null;
+  }).finally(() => { stockMasterRecoveryPromise = null; });
 }
 
 async function waitForBrainStartup(context) {
@@ -6609,9 +6718,8 @@ async function startLiveBoot(createWindowsPromise) {
   registerLiveBootRunners(createWindowsPromise);
   await runStartupOrchestration({
     readiness: startupReadiness,
-    // stock-index는 백엔드 프록시를 타므로 backend gate 뒤에 둔다 — 앞에 두면 앱이
-    // 백엔드를 직접 띄우는 부팅에서 12초 예산이 백엔드 기동 시간에 잡아먹혀 매번
-    // 실패한다(2026-09-07 실측: 종목명 인덱스 12초 안에 미적재 → degraded).
+    // stock-index는 백엔드 SQLite 상태를 확인하므로 backend gate 뒤에 둔다.
+    // 전체 종목 갱신과 1시간 배치는 백엔드 lifespan이 단독 소유한다.
     concurrentTaskIds: ['account-token'],
     dependencyTaskChains: [['mcp-env', 'provider-warm']],
     dependencyTaskId: 'backend',
