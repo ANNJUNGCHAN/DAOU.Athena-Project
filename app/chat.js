@@ -2647,7 +2647,8 @@ $input.addEventListener('keydown', (e) => {
   if (e.key !== 'Enter' || state !== 'idle' || remoteQueryBusy) return;
   e.preventDefault();
   // 첨부 칩이 있으면 전송 직전에 경로를 동봉한다(코덱스 UI 이식, 2026-08-27).
-  const text = consumeAttachments($input.value);
+  // 참조 칩(보드 21)도 같은 자리에서 접힌다 — 둘 다 눈에 보이는 질문은 건드리지 않는다.
+  const text = consumeReferences(consumeAttachments($input.value));
   $input.value = '';
   autoGrowInput();
   dispatchUserQuery(text);
@@ -2982,6 +2983,121 @@ function consumeAttachments(text) {
   renderAttachChips();
   const head = String(text || '').trim() || '첨부한 파일을 읽고 내용을 설명해줘';
   return `${head}\n\n[첨부 — 아래 경로를 Read(파일)/Glob(폴더)으로 직접 읽어라]\n${paths.join('\n')}`;
+}
+
+// 참조 칩(보드 21, 2026-09-08 개정) — 노드·흐름을 눌러도 말은 나가지 않는다. 무엇을 두고
+// 이야기할지만 칩으로 붙고, 하고 싶은 말은 사람이 자기 말로 쓴다. 그래서 여기가 하는 일은
+// 셋뿐이다: 칩을 쌓고, ×로 내리고, 전송 직전에 기계가 읽는 꼬리로 접는다.
+//
+// 첨부 칩(위)과 같은 규율을 따르되 자리는 그 위다 — 참조는 "무엇에 대한 질문인가"라서
+// 질문보다 먼저 읽혀야 한다. 그릇은 shell.html이 아니라 여기서 만든다(첨부 칩과 달리 이
+// 칩은 백테스트 노드 창에서만 생긴다 — 마크업에 늘 빈 <div>를 눕혀 둘 이유가 없다).
+const $refChips = document.createElement('div');
+$refChips.className = 'chat-ref-chips';
+$refChips.hidden = true;
+$attachChips.parentNode.insertBefore($refChips, $attachChips);
+let chatRefs = []; // { kind, label, name, lines, path }
+
+function renderRefChips() {
+  $refChips.textContent = '';
+  $refChips.hidden = chatRefs.length === 0;
+  chatRefs.forEach((ref, i) => {
+    const wrap = document.createElement('span');
+    wrap.className = 'chat-ref';
+    const chip = document.createElement('span');
+    chip.className = 'chat-ref-chip';
+    const name = document.createElement('span');
+    name.className = 'chat-ref-chip-name';
+    name.textContent = `@${ref.name}`;
+    const rm = document.createElement('button');
+    rm.type = 'button';
+    rm.className = 'chat-ref-chip-rm';
+    rm.setAttribute('aria-label', `참조 제거 @${ref.name}`);
+    rm.textContent = '×';
+    rm.addEventListener('click', () => {
+      chatRefs.splice(i, 1);
+      renderRefChips();
+      $input.focus();
+    });
+    chip.appendChild(name);
+    chip.appendChild(rm);
+    wrap.appendChild(chip);
+    // 줄 범위는 알약 밖 모노다 — 파일의 어디를 가리키는지는 함수 이름과 다른 종류의
+    // 사실이라서, 같은 알약 안에 넣으면 이름의 일부처럼 읽힌다.
+    if (ref.lines) {
+      const meta = document.createElement('span');
+      meta.className = 'chat-ref-chip-meta';
+      meta.textContent = `L${ref.lines[0]}-${ref.lines[1]}`;
+      if (ref.path) meta.title = ref.path;
+      wrap.appendChild(meta);
+    }
+    $refChips.appendChild(wrap);
+  });
+  // 줄 범위가 실린 칩이 있을 때만 그 약속을 한다 — @전체·@진입 흐름에는 읽을 줄 범위가
+  // 없고, 없는 약속을 적으면 사람은 그것을 코드의 사실로 읽는다.
+  if (chatRefs.some((r) => r.lines)) {
+    const hint = document.createElement('span');
+    hint.className = 'chat-ref-hint';
+    hint.textContent = '보내면 AI가 그 함수의 줄 범위를 읽고 답합니다';
+    $refChips.appendChild(hint);
+  }
+}
+
+// 같은 이름을 두 번 붙이지 않는다 — 사람이 카드를 두 번 누르는 것은 "하나 더"가 아니라
+// "이것 맞나"를 확인하는 동작이다(쌓이면 꼬리에 같은 참조가 두 번 실린다).
+function addChatReference(ref) {
+  const name = String((ref && ref.name) || '').trim();
+  if (!name || !$input) return;
+  if (!chatRefs.some((r) => r.name === name)) {
+    chatRefs.push({
+      kind: String(ref.kind || 'node'),
+      label: String(ref.label || `@${name}`),
+      name: name,
+      lines: Array.isArray(ref.lines) && ref.lines.length === 2 ? [ref.lines[0], ref.lines[1]] : null,
+      path: ref.path ? String(ref.path) : '',
+    });
+    renderRefChips();
+  }
+  // 붙인 다음 할 일은 사람이 자기 말을 쓰는 것이다 — 초점을 입력창에 둔다.
+  $input.focus();
+}
+
+// 전송 직전 병합(augmentMentions·consumeAttachments와 같은 자리) — 사용자 버블에는 타이핑
+// 원문이 남고, 모델에게만 기계가 읽는 참조 꼬리가 함께 간다.
+function refSuffix(ref) {
+  const parts = [`@${ref.name}`];
+  if (ref.path) parts.push(ref.path);
+  if (ref.lines) parts.push(`L${ref.lines[0]}-${ref.lines[1]}`);
+  return `[참조 ${parts.join(' ')}]`;
+}
+
+function consumeReferences(text) {
+  if (!chatRefs.length) return text;
+  const tail = chatRefs.map(refSuffix).join(' ');
+  chatRefs = [];
+  renderRefChips();
+  const head = String(text || '').trim();
+  return head ? `${head}\n\n${tail}` : tail;
+}
+
+document.addEventListener('athena:chat-reference', (event) => {
+  addChatReference(event && event.detail);
+});
+
+// 기법이 갈리면 칩을 내린다 — @should_exit가 다른 기법의 함수를 가리키면 모델은 없는 줄을
+// 읽으려 든다. 갈림은 캔버스가 #chatModeHead의 data-technique로 이미 말하고 있다
+// (lib/backtest-canvas.js syncChatTechniqueAttr).
+const $chatModeHeadForRefs = document.getElementById('chatModeHead');
+if ($chatModeHeadForRefs && typeof MutationObserver === 'function') {
+  let seenTechnique = $chatModeHeadForRefs.getAttribute('data-technique');
+  new MutationObserver(() => {
+    const now = $chatModeHeadForRefs.getAttribute('data-technique');
+    if (now === seenTechnique) return;
+    seenTechnique = now;
+    if (!chatRefs.length) return;
+    chatRefs = [];
+    renderRefChips();
+  }).observe($chatModeHeadForRefs, { attributes: true, attributeFilter: ['data-technique'] });
 }
 
 function kiumiSection(title) {
