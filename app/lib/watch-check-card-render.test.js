@@ -11,7 +11,7 @@ const fixCycleLib = require('./watch-fix-cycle');
 
 // 실제 IPC 응답 전달·카드 조립을 실행한다. Electron 대신 DOM/IPC 경계만 주입한다.
 const source = fs.readFileSync(path.join(__dirname, '..', 'chat.js'), 'utf8');
-const start = source.indexOf('async function watchBlockOf(');
+const start = source.indexOf('const firstSeenAtById = new Map();');
 const end = source.indexOf('\nrefreshRoutineDrafts();', start);
 assert.ok(start >= 0 && end > start);
 
@@ -38,11 +38,17 @@ function byClass(root, cls) {
   return out;
 }
 function renderHarness(check, lastCheck = null, detailFails = false) {
-  const history = element('history'), calls = [];
+  const histories = { A: element('history'), B: element('history') };
+  const history = histories.B, calls = [];
   const scope = {
+    displayedConversationId: 'B',
     document: { createElement: element }, watchCheckCardLib: checkLib, watchFixCycleLib: fixCycleLib,
     routineTurnLib: { describeMode: (mode) => mode },
-    window: { AthenaLib: { WatchProgressCard: progressLib }, athena: {
+    window: { AthenaLib: {
+      WatchCheckCard: checkLib,
+      WatchFixCycle: fixCycleLib,
+      WatchProgressCard: progressLib,
+    }, athena: {
       invoke: async (channel, body) => {
         calls.push({ channel, body });
         if (channel === 'athena:routine-watch-check') return { ok: true, data: check };
@@ -54,11 +60,14 @@ function renderHarness(check, lastCheck = null, detailFails = false) {
       },
     } },
     _btn: (label, className) => Object.assign(element('button'), { textContent: label, className }),
-    _mountTurn: (line, card) => { line.appendChild(card); history.appendChild(line); },
+    _mountTurn: (line, card, conversationId = scope.displayedConversationId) => {
+      line.appendChild(card);
+      histories[conversationId].appendChild(line);
+    },
   };
   vm.createContext(scope);
   vm.runInContext(source.slice(start, end), scope);
-  return { history, calls, scope };
+  return { history, histories, calls, scope };
 }
 const draft = { id: 'draft-1', mode: 'code-watch', symbol: '005930', note: '거래량 확인', cooldown_s: 86400,
   watch: { project_id: 'p1', path: 'watch/a.py', lookback_days: 30 } };
@@ -104,6 +113,46 @@ test('새 코드 알람 초안은 자동 검사하고 통과 뒤에도 승인은
   assert.equal(approvals[0].disabled, true, '검사 전 초안에서는 승인할 수 없다');
   assert.equal(approvals[1].disabled, false, '통과 카드에서 사람이 승인할 수 있다');
   assert.equal(h.calls.some((call) => call.channel === 'athena:routine-confirm'), false);
+});
+
+test('A/B 초안이 동시에 와도 승인·검사 진행·결과는 각각 만든 대화에만 남는다', async () => {
+  const h = renderHarness(checked());
+  const resolveChecks = new Map();
+  h.scope.window.athena.invoke = (channel, body) => {
+    h.calls.push({ channel, body });
+    if (channel === 'athena:routine-watch-check') {
+      return new Promise((resolve) => { resolveChecks.set(body.body.routine_id, resolve); });
+    }
+    if (channel === 'athena:routine-detail') return Promise.resolve({ ok: true, data: { last_check: checked() } });
+    return Promise.resolve({ ok: true });
+  };
+
+  h.scope.revealRoutineDraft({ ...draft, id: 'draft-a', status: 'draft' }, {
+    autoCheck: true, conversationId: 'A',
+  });
+  h.scope.displayedConversationId = 'B';
+  h.scope.revealRoutineDraft({ ...draft, id: 'draft-b', status: 'draft' }, {
+    autoCheck: true, conversationId: 'B',
+  });
+  await new Promise((resolve) => setImmediate(resolve));
+
+  assert.equal(h.histories.A.children.length, 2, 'A 승인 카드와 검사 진행 카드가 A에 선다');
+  assert.equal(h.histories.B.children.length, 2, 'B 승인 카드와 검사 진행 카드가 B에 선다');
+  assert.equal(h.calls.filter((call) => call.channel === 'athena:routine-watch-check').length, 2);
+
+  resolveChecks.get('draft-a')({ ok: true, data: checked() });
+  await new Promise((resolve) => setImmediate(resolve));
+  await new Promise((resolve) => setImmediate(resolve));
+
+  assert.equal(h.histories.A.children.length, 2, '진행 카드가 걷히고 결과 카드가 같은 A에 선다');
+  assert.equal(h.histories.B.children.length, 2, 'A 검사 완료 중에도 B 카드는 B에 남는다');
+  assert.equal(byClass(h.histories.A, 'routine-btn-approve').length, 2);
+
+  resolveChecks.get('draft-b')({ ok: true, data: checked() });
+  await new Promise((resolve) => setImmediate(resolve));
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(h.histories.B.children.length, 2);
+  assert.equal(byClass(h.histories.B, 'routine-btn-approve').length, 2);
 });
 
 test('앱을 다시 열어 발견한 기존 초안은 자동 재검사하지 않는다', async () => {
