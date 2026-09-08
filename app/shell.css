@@ -2722,26 +2722,6 @@ body { margin: 0; overflow: hidden; }
   flex-direction: column;
   gap: 12px;
 }
-/* ---------- 동선 규칙(Paper 에이전트 보드 05 하단) ---------- */
-.agent-route-rules {
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 8px 8px 12px;
-  background: var(--color-k-panel);
-  border: 1px solid var(--color-k-line);
-  border-radius: 12px;
-}
-.agent-route-rule {
-  padding: 0 12px;
-  color: var(--color-k-dim); /* 작은 본문 최소 대비 기준(#5B6270, 검수 대장 공통 규칙) */
-  font-family: var(--font-body);
-  font-weight: 300;
-  font-size: var(--text-xs);
-  line-height: 17px;
-}
-
 /* ---------- 예약·감시 리스트 + 상세 패널(5단계, Paper 보드 39 실측) ---------- */
 .agent-panels {
   display: flex;
@@ -7085,48 +7065,6 @@ body { margin: 0; overflow: hidden; }
   font-family: var(--font-body);
   font-weight: 300;
   font-size: var(--text-sm);
-  cursor: pointer;
-}
-.agent-code-edit {
-  flex-shrink: 0;
-  border: 1px solid var(--color-k-line);
-  border-radius: var(--radius-full);
-  padding: 5px 14px;
-  background: transparent;
-  color: var(--color-k-text);
-  font-family: var(--font-strong);
-  font-size: var(--text-sm);
-  white-space: nowrap;
-  cursor: pointer;
-}
-.agent-code-edit-confirm {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding: 8px 10px;
-  border: 1px solid var(--color-k-line);
-  border-radius: var(--radius-md);
-  background: var(--color-k-panel3);
-}
-.agent-code-edit-confirm-text {
-  flex: 1 1 100%;
-  color: var(--color-k-text);
-  font-size: var(--text-sm);
-  word-break: keep-all;
-}
-.agent-code-edit-chip {
-  flex-shrink: 0;
-  height: 28px;
-  border: 1px solid var(--color-k-line);
-  border-radius: var(--radius-full);
-  padding: 0 12px;
-  background: var(--color-k-panel);
-  color: var(--color-k-text);
-  font-family: var(--font-body);
-  font-weight: 300;
-  font-size: var(--text-xs);
-  white-space: nowrap;
   cursor: pointer;
 }
 

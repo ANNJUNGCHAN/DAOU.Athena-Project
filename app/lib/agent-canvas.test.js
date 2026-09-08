@@ -1502,64 +1502,6 @@ test('말걸기 가드: fetchNudgeGuard가 실패해도 지어낸 값으로 채�
   assert.equal(findByClass(guard, 'agent-list-empty')[0].textContent, '가드 설정을 불러오는 중입니다');
 });
 
-// ---------- 이중 제어 규칙(Paper 에이전트 보드 05 하단 C6U-0~C6X-0) ----------
-
-test('이중 제어 규칙: 작업 뷰 하단 캡션은 「이중 제어 규칙」이다', () => {
-  const container = fakeNode('div');
-  const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
-  canvas.mount();
-
-  const panel = findByClass(container, 'agent-route-rules')[0];
-  assert.ok(panel, '규칙 패널이 있어야 한다');
-  assert.equal(findByClass(panel, 'agent-panel-caption')[0].textContent, '이중 제어 규칙');
-});
-
-test('이중 제어 규칙: 3줄이 Paper C6V-0~C6X-0 원문 그대로다', () => {
-  const container = fakeNode('div');
-  const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
-  canvas.mount();
-
-  const panel = findByClass(container, 'agent-route-rules')[0];
-  assert.deepEqual(findByClass(panel, 'agent-route-rule').map((n) => n.textContent), [
-    '① 새 작업 — 채팅 문장으로도, 시트로도.',
-    '② 편집 — "이거 고쳐줘"로도, 폼으로도.',
-    '③ 확정 — 채팅 칩으로도, 버튼으로도. 어느 입구든 같은 게이트.',
-  ]);
-});
-
-test('이중 제어 규칙: 문구가 GUI 입구를 부정하지 않는다', () => {
-  const container = fakeNode('div');
-  const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
-  canvas.mount();
-
-  const lines = findByClass(container, 'agent-route-rule').map((n) => n.textContent).join(' ');
-  assert.ok(!/시트를 열지 않는다/.test(lines), 'Paper는 시트 입구를 요구한다');
-  assert.ok(!/보기 전용/.test(lines), 'Paper는 폼 입구를 요구한다');
-});
-
-test('이중 제어 규칙: 화면 자신의 계약이라 data-source 표기를 달지 않는다', () => {
-  const container = fakeNode('div');
-  const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
-  canvas.mount();
-
-  assert.equal(findByClass(container, 'agent-route-rules')[0].getAttribute('data-source'), null);
-});
-
-test('이중 제어 규칙: 알람·라이브·제안 뷰로 가면 작업 뷰와 함께 숨는다', () => {
-  const container = fakeNode('div');
-  const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
-  canvas.mount();
-
-  const body = findByClass(container, 'agent-body')[0];
-  assert.equal(body.hidden, false);
-  for (const view of ['alerts', 'live', 'proactive']) {
-    canvas.setActiveView(view);
-    assert.equal(body.hidden, true, `${view} 뷰에서는 이중 제어 규칙이 든 작업 본문이 숨어야 한다`);
-    canvas.setActiveView('tasks');
-    assert.equal(body.hidden, false);
-  }
-});
-
 // ---------- 드릴인 실행 목록 — 날짜 그룹 · 접기(Paper 보드 03) ----------
 
 // ts를 오늘 기준 상대 일수로 만든다 — 그룹 머리("오늘 — M/D 요일")가 벽시계에
@@ -2309,10 +2251,10 @@ test('A-4 상세: 코드는 접혀 있고 라벨이 「코드 · 참고 · 펼�
   assert.equal(findByClass(after, 'agent-code-source-path')[0].textContent, 'watch/volume_spike.py');
 });
 
-test('A-5 상세: 울린 기록·일시중지·취소·고치기·만료가 있고 조건 편집 폼은 없다', async () => {
+test('A-5 상세: 울린 기록·일시중지·취소·만료가 있고 조건 편집 폼은 없다', async () => {
   const { detail } = await mountCode({});
   const text = allText(detail);
-  for (const phrase of ['울린 기록', '일시중지', '취소', '고치기 — 말로', '만료']) {
+  for (const phrase of ['울린 기록', '일시중지', '취소', '만료']) {
     assert.ok(text.includes(phrase), `${phrase}가 상세에 있어야 한다`);
   }
   assert.equal(findByClass(detail, 'agent-history-open')[0].textContent, '전체 이력 보기 →');
@@ -2337,50 +2279,6 @@ test('A-5 상세: 안 불린 함수 칸은 「이번엔 안 쓰임」으로 남�
   const marks = findByClass(detail, 'agent-node-card')
     .map((c) => findByClass(c, 'agent-node-unused').map((n) => n.textContent));
   assert.deepEqual(marks, [[], ['이번엔 안 쓰임'], [], []]);
-});
-
-test('A-12 활성: 「고치기 — 말로」는 먼저 멈춤을 묻는다(거절 사유 문구 없음)', async () => {
-  const calls = [];
-  const { container, detail } = await mountCode({}, {
-    pauseRoutine: async (id) => { calls.push(['pause', id]); },
-    onEditInChat: (id, opts) => { calls.push(['edit', id, opts.kind]); },
-  });
-  findByClass(detail, 'agent-code-edit')[0].dispatchEvent({ type: 'click' });
-  let after = findByClass(container, 'agent-detail-col')[0];
-  const chips = findByClass(after, 'agent-code-edit-chip');
-  assert.deepEqual(chips.map((n) => n.textContent), ['일시중지하고 고치기', '그대로 두기']);
-  assert.equal(calls.length, 0, '묻기 전에는 아무것도 안 부른다');
-  assert.equal(allText(after).includes('409'), false, '거절 사유를 화면에 옮기지 않는다');
-
-  await chips[0].dispatchEvent({ type: 'click' });
-  assert.deepEqual(calls, [['pause', 'cw1'], ['edit', 'cw1', 'edit']]);
-  after = findByClass(container, 'agent-detail-col')[0];
-  assert.equal(findByClass(after, 'agent-code-edit-chip').length, 0, '확인 줄은 사라진다');
-});
-
-test('A-12 활성: 「그대로 두기」를 고르면 아무것도 안 부르고 확인 줄만 닫는다', async () => {
-  const calls = [];
-  const { container, detail } = await mountCode({}, {
-    pauseRoutine: async (id) => { calls.push(['pause', id]); },
-    onEditInChat: (id) => { calls.push(['edit', id]); },
-  });
-  findByClass(detail, 'agent-code-edit')[0].dispatchEvent({ type: 'click' });
-  const after = findByClass(container, 'agent-detail-col')[0];
-  findByClass(after, 'agent-code-edit-chip')[1].dispatchEvent({ type: 'click' });
-  assert.deepEqual(calls, []);
-  assert.equal(findByClass(findByClass(container, 'agent-detail-col')[0], 'agent-code-edit-chip').length, 0);
-});
-
-test('A-12 일시중지: 확인 없이 바로 고치기로 넘어간다', async () => {
-  const calls = [];
-  const { container, detail } = await mountCode({ status: 'paused' }, {
-    pauseRoutine: async (id) => { calls.push(['pause', id]); },
-    onEditInChat: (id, opts) => { calls.push(['edit', id, opts.kind]); },
-  });
-  assert.equal(findByClass(detail, 'agent-pause-btn')[0].textContent, '재개');
-  findByClass(detail, 'agent-code-edit')[0].dispatchEvent({ type: 'click' });
-  assert.deepEqual(calls, [['edit', 'cw1', 'edit']]);
-  assert.equal(findByClass(findByClass(container, 'agent-detail-col')[0], 'agent-code-edit-chip').length, 0);
 });
 
 test('초안: 승인 패널의 「이 알람 승인」은 채팅 칩과 같은 confirmRoutine 게이트를 부른다', async () => {
