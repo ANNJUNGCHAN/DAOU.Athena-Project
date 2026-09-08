@@ -1827,7 +1827,7 @@ html.is-boot-expanding #winControls { opacity: 0; }
  * 시각용)을 이 카드 안에서만 되돌린다. */
 .routine-approval .agent-badge { color: var(--color-k-dim); border-color: var(--color-k-ghost); }
 .routine-mode-line { margin: 4px 0; }
-.routine-approval-actions { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+.routine-approval-actions { display: flex; align-items: center; gap: 10px; margin-top: 8px; flex-wrap: wrap; }
 /* 채팅 카드 칩(보드 43 실측, 2026-08-28 SSOT 정합) — 풀 라운드 아웃라인 필
  * (py-1 px-4 · 잉크 14% 외곽선 · text-xs DakiL leading-14 · k-dim), 프라이머리는
  * 브랜드 채움. 옛 보드 09 스펙(반경 8·잉크 90% 채움·text-sm)은 초안 카드
@@ -1842,6 +1842,9 @@ html.is-boot-expanding #winControls { opacity: 0; }
   border-radius: 999px;
   padding: 4px 12px;
   cursor: pointer;
+  /* 한글 칩은 글자 단위로 세로로 꺾인다 — 칩은 한 줄, 길면 행이 접힌다(위 flex-wrap). */
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 .routine-btn-approve { background: var(--color-brand); color: var(--color-k-panel); border-color: transparent; }
 .routine-btn:disabled { opacity: 0.4; cursor: default; }
