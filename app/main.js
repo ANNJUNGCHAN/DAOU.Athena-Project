@@ -765,6 +765,11 @@ function runBriefingTurnWired(event) {
       sendQueryState: sendBriefingQueryState,
     },
     claudeRunner: briefingClaudeRunner || { runClaudeQuery },
+    // 활성 계정이 Grok이면 러너가 grok CLI를 고른다 — verify 스텁이 꽂혀 있으면 그 스텁이
+    // 양쪽 다 받는다(실 CLI를 스폰하지 않는 결정론 유지).
+    grokRunner: briefingClaudeRunner ? { runGrokQuery: briefingClaudeRunner.runClaudeQuery } : { runGrokQuery },
+    // 브리핑 모델은 앱 모델 설정 하나 — 사용자 턴·셸 툴바·오브와 같은 함수다.
+    resolveModelSelection: resolveActiveModelSelection,
     cwd: dir,
     configFile,
     onEvent: trackBriefingToolStep,
@@ -868,8 +873,6 @@ ipcMain.handle('athena:routine-missed-confirm', async (_e, { id } = {}) => {
       observed: firedAt,
       note: view ? view.note : '',
       fired_at: firedAt,
-      briefing_model: view ? view.briefing_model : null,
-      briefing_effort: view ? view.briefing_effort : null,
     }).catch((err) => {
       mdlog(`캐치업 브리핑 실패: ${String((err && err.message) || err)}`);
     });

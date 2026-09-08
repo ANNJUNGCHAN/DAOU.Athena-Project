@@ -61,12 +61,13 @@ _CONTROL_ACTIONS: tuple[str, ...] = (
 
 # control=update 제안이 만질 수 있는 필드 — 조건(condition)은 제외다.
 # 조건 편집은 06 설정 폼에서 사람이 소스별 분기를 보며 직접 한다.
+# briefing_model/briefing_effort도 없다 — 예약 브리핑은 앱 모델 설정(키우미·셸과 같은
+# 활성 모델)으로 돈다(app/lib/main/briefing-runner.js selectModel, 2026-09-08 확정).
+# 루틴 스키마의 두 필드는 저장만 될 뿐 실행기가 읽지 않으므로 여기서 제안하지 않는다.
 _UPDATABLE_FIELDS: tuple[str, ...] = (
     "note",
     "cooldown_s",
     "expires_days",
-    "briefing_model",
-    "briefing_effort",
 )
 
 _TIMEOUT_SECONDS = 15.0
@@ -111,10 +112,8 @@ _INPUT_SCHEMA: dict[str, Any] = {
                 "'1,2,3,4,5@07:30'). symbol은 이 source에서도 6자리 종목코드가 "
                 "필수다 — 종목과 무관한 예약(예: '평일 아침 브리핑')이라도 "
                 "관련 종목/ETF나 대표 보유 종목을 사용자에게 물어 정하라"
-                "(임의로 지어내지 마라). briefing_model/briefing_effort는 "
-                "예약 브리핑 자동 실행에 쓸 모델·노력 설정(선택) — 생략하면 "
-                "앱 기본값을 따른다. effort는 low/medium/high/xhigh/max만 "
-                "허용된다."
+                "(임의로 지어내지 마라). 예약 브리핑이 쓸 모델·노력은 루틴에 "
+                "정하지 않는다 — 앱의 모델 설정을 그대로 따른다."
             ),
             "properties": {
                 "symbol": {"type": "string", "description": "6자리 종목코드"},
@@ -137,14 +136,6 @@ _INPUT_SCHEMA: dict[str, Any] = {
                         "애매하면 생략(기본 false) — 오분류가 과대 반응(FACE.GLAD)을 "
                         "부르니 보수적으로 판단하라."
                     ),
-                },
-                "briefing_model": {
-                    "type": "string",
-                    "description": "예약 브리핑 실행 모델(선택, 예: claude-sonnet-5)",
-                },
-                "briefing_effort": {
-                    "type": "string",
-                    "description": "예약 브리핑 노력 수준(선택): low/medium/high/xhigh/max",
                 },
                 "watch": {
                     "type": "object",
@@ -209,8 +200,8 @@ _INPUT_SCHEMA: dict[str, Any] = {
                 "action=propose일 때의 제어 제안. 아무것도 실행하지 않는다 — "
                 "현재 값과 제안값을 나란히 반환할 뿐이고, 사용자가 카드의 칩을 "
                 "눌러야 비로소 반영된다. control=update의 proposed는 note·"
-                "cooldown_s·expires_days·briefing_model·briefing_effort만 담을 "
-                "수 있다 — 조건(condition)은 06 설정 폼에서 사람이 직접 고친다."
+                "cooldown_s·expires_days만 담을 수 있다 — 조건(condition)은 06 "
+                "설정 폼에서 사람이 직접 고친다."
             ),
             "required": ["control"],
             "properties": {

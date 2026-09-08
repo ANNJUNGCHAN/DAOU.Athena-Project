@@ -214,11 +214,10 @@ const SETTINGS_MODE_LABEL = {
   'realtime-ws': '자동', periodic: '자동', scheduled: '예약', 'code-watch': WatchNodes.KIND_LABEL,
 };
 
-// 브리핑 모델·노력 선택지 — chat.js PILL_MODEL_CHIPS·settings-cards.js와 같은
-// 어휘다. 빈 값은 저장 본문에서 null로 나가 "앱 기본"을 뜻한다(백엔드 R1).
-const BRIEFING_MODELS = ['fable', 'opus', 'sonnet', 'haiku'];
-const BRIEFING_EFFORTS = ['low', 'medium', 'high', 'xhigh', 'max'];
-const BRIEFING_DEFAULT_LABEL = '앱 기본';
+// 브리핑 모델·강도는 루틴별 설정이 아니다 — 앱 모델 설정(설정 › 모델, 키우미 메뉴
+// '모델 설정') 하나를 브리핑 러너가 스폰 시점에 읽는다(briefing-runner.js selectModel).
+// 그래서 이 폼에는 브리핑 모델 칸이 없고, 백엔드의 briefing_model/briefing_effort
+// 필드는 읽지도 쓰지도 않는다(2026-09-08 사용자 확정: 어디서 쓰든 모델은 같다).
 
 function opsHint(ops) {
   const glyphs = ops.map((op) => OP_GLYPH[op] || op);
@@ -233,11 +232,6 @@ function expiryHint(iso) {
   if (Number.isNaN(d.getTime())) return `만료 ${iso} · 미변경 시 보존`;
   const pad = (n) => String(n).padStart(2, '0');
   return `만료 ${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} · 미변경 시 보존`;
-}
-
-function briefingOptions(values) {
-  return [{ value: '', label: BRIEFING_DEFAULT_LABEL }]
-    .concat(values.map((v) => ({ value: v, label: v })));
 }
 
 // 요약 한 줄(Paper "설정 — 요약") — 목록 행이 이미 쥔 값만 쓴다(왕복 없음).
@@ -301,20 +295,6 @@ function settingsFormModel(detail, routine) {
     key: 'expires_days', label: '만료(일)', kind: 'number', value: '', hint: expiryHint(detail.expires_at),
   });
   fields.push({ key: 'note', label: '설명', kind: 'string', value: detail.note || '' });
-  fields.push({
-    key: 'briefing_model',
-    label: '브리핑 모델',
-    kind: 'select',
-    options: briefingOptions(BRIEFING_MODELS),
-    value: detail.briefing_model || '',
-  });
-  fields.push({
-    key: 'briefing_effort',
-    label: '노력',
-    kind: 'select',
-    options: briefingOptions(BRIEFING_EFFORTS),
-    value: detail.briefing_effort || '',
-  });
 
   const trailing = [];
   if (row.created_at) trailing.push({ label: '생성', value: formatDateTime(row.created_at) });
@@ -357,10 +337,6 @@ function settingsUpdateBody(model, values) {
       // 자동 생성문이었을 때만 새 조건으로 다시 쓴다(사람이 쓴 설명은 그대로).
       if (!touched && conditionChanged) continue;
       body.note = text;
-      continue;
-    }
-    if (field.key === 'briefing_model' || field.key === 'briefing_effort') {
-      body[field.key] = text === '' ? null : text;
       continue;
     }
     body[field.key] = text;
@@ -1456,7 +1432,7 @@ function createAgentCanvas(deps) {
       return;
     }
     const raw = historyItem.raw || {};
-    for (const key of ['note', 'cooldown_s', 'expires_at', 'briefing_model', 'briefing_effort']) {
+    for (const key of ['note', 'cooldown_s', 'expires_at']) {
       if (key in saved) raw[key] = saved[key];
     }
     historyItem.title = raw.note || historyItem.title;
@@ -1838,18 +1814,15 @@ function createAgentCanvas(deps) {
   // watch·schedule 둘 다 백엔드가 실제로 주는 필드만 쓴다(P3 — 지어내지
   // 않는다) — 3단계부터 schedule도 raw가 live 라우틴이라 같은 필드 조합을
   // 쓴다. schedule만 "다음 실행"(next_fire_at, 2단계 순수 계산값)이 추가로 붙는다.
-  // 6단계부터 schedule에 "브리핑 모델"(3단계 briefing_model/briefing_effort,
-  // null이면 앱 기본값 의미 그대로 표기)과 "실행 위치"(가장 최근 브리핑 보고의
-  // destination — 실행 이력이 없으면 행 자체를 렌더하지 않는다)가 실데이터로 붙는다.
+  // 6단계부터 schedule에 "실행 위치"(가장 최근 브리핑 보고의 destination — 실행
+  // 이력이 없으면 행 자체를 렌더하지 않는다)가 실데이터로 붙는다. "브리핑 모델" 행은
+  // 없다 — 브리핑은 앱 모델 설정을 쓰므로 루틴별 값이 존재하지 않는다(파일 머리 주석).
   let detailDestinationCache = { id: null, value: null }; // 선택 항목별 1회 조회 캐시
   function detailFieldsFor(item) {
     const r = item.raw;
     const fields = [['소스', r.source_label || '—'], ['쿨다운', `${r.cooldown_s}초`]];
     if (item.kind === 'schedule' && r.next_fire_at) fields.push(['다음 실행', formatDateTime(r.next_fire_at)]);
     if (item.kind === 'schedule') {
-      fields.push(['브리핑 모델', r.briefing_model
-        ? `${r.briefing_model}${r.briefing_effort ? ` · ${r.briefing_effort}` : ''}`
-        : '앱 기본']);
       if (detailDestinationCache.id === item.id && detailDestinationCache.value) {
         fields.push(['실행 위치', detailDestinationCache.value === 'canvas' ? '캔버스' : '채팅']);
       }
