@@ -425,9 +425,12 @@ async function main() {
   check('편집으로 들어가는 문은 [설정 편집] 하나다', settingsProbe.editLabel === '설정 편집');
   check('[설정 편집]이 「상세 패널 — 설정 편집」 폼을 연다',
     settingsProbe.formCaption === '상세 패널 — 설정 편집');
-  check('실시간 소스 폼은 Paper의 8필드 그대로다',
+  // Paper 06 폼의 '브리핑 모델'·'노력' 두 칸은 앱에 없다 — 브리핑은 앱 모델 설정을
+  // 쓴다(2026-09-08 사용자 확정, briefing-runner.js selectModel). Paper 보드가 그 두
+  // 칸을 지우면 여기 주석도 걷는다.
+  check('실시간 소스 폼은 Paper의 6필드 그대로다(브리핑 모델·노력 제외)',
     JSON.stringify(settingsProbe.fieldLabels) === JSON.stringify(
-      ['조건 비교', '조건 값', '연속 틱', '쿨다운(초)', '만료(일)', '설명', '브리핑 모델', '노력']));
+      ['조건 비교', '조건 값', '연속 틱', '쿨다운(초)', '만료(일)', '설명']));
   check('종목·모드·소스는 읽기 전용이고 소스에 「변경 불가」가 붙는다',
     JSON.stringify(settingsProbe.readonlyLabels) === JSON.stringify(['종목', '모드', '소스', '생성'])
     && settingsProbe.tag === '변경 불가');

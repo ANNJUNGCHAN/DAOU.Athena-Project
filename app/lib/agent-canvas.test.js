@@ -416,13 +416,14 @@ test('예약(schedule) 상세는 백엔드 실제 필드(소스·쿨다운·다�
   assert.ok(fieldLabels.includes('쿨다운'));
   assert.ok(fieldLabels.includes('다음 실행'));
   // [6단계 의도적 반전] 이전 단언은 "'실행 위치'는 지어낸 fixture 필드라 없다"
-  // 였다 — 이제 실데이터 행이 됐으므로 '브리핑 모델'은 항상 붙고(값 없으면
-  // '앱 기본'), '실행 위치'는 **브리핑 실행 이력이 없을 때만** 안 붙는다.
-  assert.ok(fieldLabels.includes('브리핑 모델'));
+  // 였다 — 이제 실데이터 행이 됐으므로 '실행 위치'는 **브리핑 실행 이력이 없을
+  // 때만** 안 붙는다. '브리핑 모델' 행은 없다 — 브리핑은 앱 모델 설정을 쓰므로
+  // 루틴별 값이 없고, 저장된 briefing_model이 있어도 실제로 쓰지 않는 값이다.
+  assert.equal(fieldLabels.includes('브리핑 모델'), false, '루틴별 브리핑 모델은 존재하지 않는다');
   assert.equal(fieldLabels.includes('실행 위치'), false, '실행 이력 없는 라우틴은 이 행을 렌더하지 않는다');
 });
 
-test('예약(schedule) 상세 — "브리핑 모델" 설정값과 "실행 위치"(최근 브리핑 보고 destination)가 실데이터로 렌더된다(6단계)', async () => {
+test('예약(schedule) 상세 — "실행 위치"(최근 브리핑 보고 destination)가 실데이터로 렌더되고 저장된 briefing_model은 표시하지 않는다(6단계)', async () => {
   const container = fakeNode('div');
   const routines = [routine({
     id: 's2', status: 'active', mode: 'scheduled', note: '평일 아침 브리핑',
@@ -444,7 +445,7 @@ test('예약(schedule) 상세 — "브리핑 모델" 설정값과 "실행 위치
     findByClass(f, 'agent-detail-field-label')[0].textContent,
     findByClass(f, 'agent-detail-field-value')[0].textContent,
   ]));
-  assert.equal(fields.get('브리핑 모델'), 'claude-sonnet-5 · low');
+  assert.equal(fields.has('브리핑 모델'), false, '저장된 briefing_model은 실제로 쓰지 않는 값이라 보여주지 않는다');
   assert.equal(fields.get('실행 위치'), '캔버스'); // 최신(8/27) 보고의 destination 우선
 });
 
@@ -1874,7 +1875,10 @@ test('드릴인 설정: 요약만 있는 동안에는 값을 바꾸는 입력이
   assert.equal(inputs.length, 0, '편집 폼을 열기 전에는 입력이 없다');
 });
 
-test('드릴인 설정: [설정 편집]이 상세를 1회 불러 실시간 소스 폼(8필드)을 세운다', async () => {
+// 브리핑 모델·노력 칸은 없다 — 브리핑은 앱 모델 설정을 쓴다(agent-canvas.js 머리 주석,
+// briefing-runner.js selectModel). 루틴별 모델을 폼이 내놓으면 실제로 안 쓰는 값을
+// 약속하는 거짓말이다(2026-09-08 사용자 확정).
+test('드릴인 설정: [설정 편집]이 상세를 1회 불러 실시간 소스 폼(6필드)을 세운다', async () => {
   const container = fakeNode('div');
   let detailCalls = 0;
   const canvas = createAgentCanvas({
@@ -1887,7 +1891,7 @@ test('드릴인 설정: [설정 편집]이 상세를 1회 불러 실시간 소�
   const captions = findByClass(panel, 'agent-panel-caption').map((n) => n.textContent);
   assert.deepEqual(captions, ['설정 — 요약', '상세 패널 — 설정 편집']);
   assert.deepEqual(fieldLabels(panel), [
-    '조건 비교', '조건 값', '연속 틱', '쿨다운(초)', '만료(일)', '설명', '브리핑 모델', '노력',
+    '조건 비교', '조건 값', '연속 틱', '쿨다운(초)', '만료(일)', '설명',
   ]);
   const readonly = findByClass(panel, 'agent-settings-readonly').map((row) => [
     findByClass(row, 'agent-settings-label')[0].textContent,
@@ -1905,7 +1909,7 @@ test('드릴인 설정: [설정 편집]이 상세를 1회 불러 실시간 소�
   assert.equal(findByClass(panel, 'agent-settings-save')[0].textContent, '저장');
 });
 
-test('드릴인 설정: 예약 소스 폼에는 연속 틱이 없다(7필드) — 분기는 소스 명세가 낸다', async () => {
+test('드릴인 설정: 예약 소스 폼에는 연속 틱이 없다(5필드) — 분기는 소스 명세가 낸다', async () => {
   const container = fakeNode('div');
   const canvas = createAgentCanvas({
     container, fetchRoutines: async () => [drillInRoutine()], fetchRuns: async () => [],
@@ -1914,7 +1918,7 @@ test('드릴인 설정: 예약 소스 폼에는 연속 틱이 없다(7필드) �
   const panel = await openSettingsForm(container, canvas);
 
   assert.deepEqual(fieldLabels(panel), [
-    '조건 비교', '조건 값', '쿨다운(초)', '만료(일)', '설명', '브리핑 모델', '노력',
+    '조건 비교', '조건 값', '쿨다운(초)', '만료(일)', '설명',
   ]);
   const hints = findByClass(panel, 'agent-settings-hint').map((n) => n.textContent);
   assert.equal(hints[0], 'at 하나뿐');
@@ -1934,7 +1938,7 @@ test('드릴인 설정: 코드 감시 폼에는 조건 행 자체가 없다(백�
   });
   const panel = await openSettingsForm(container, canvas);
 
-  assert.deepEqual(fieldLabels(panel), ['쿨다운(초)', '만료(일)', '설명', '브리핑 모델', '노력']);
+  assert.deepEqual(fieldLabels(panel), ['쿨다운(초)', '만료(일)', '설명']);
 });
 
 test('드릴인 설정: [저장]은 폼 값을 update로 보내고 만료를 비워 두면 안 싣는다', async () => {
@@ -1957,7 +1961,8 @@ test('드릴인 설정: [저장]은 폼 값을 update로 보내고 만료를 비
   assert.equal('expires_days' in sent.body, false, '만료 칸이 비면 키 자체가 안 나간다');
   assert.equal(sent.body.cooldown_s, 600);
   assert.deepEqual(sent.body.condition, { op: '>=', value: 88000, consecutive_ticks: 1 });
-  assert.equal(sent.body.briefing_model, 'opus');
+  assert.equal('briefing_model' in sent.body, false, '브리핑 모델은 앱 설정이라 루틴 update에 안 싣는다');
+  assert.equal('briefing_effort' in sent.body, false);
   // 저장이 끝나면 폼이 닫히고 요약이 저장한 값으로 다시 그려진다.
   assert.equal(findByClass(panel, 'agent-settings-form').length, 0);
   assert.match(findByClass(panel, 'agent-settings-summary-meta')[0].textContent, /쿨다운 600초/);
@@ -2037,15 +2042,16 @@ test('드릴인 설정: 상세를 못 받으면 빈 폼 대신 그 사실을 적
 
 // ---------- 설정 폼 순수 모델 ----------
 
-test('settingsUpdateBody: 브리핑 모델을 "앱 기본"으로 되돌리면 null로 나간다', () => {
+test('settingsUpdateBody: 상세에 briefing_model이 저장돼 있어도 폼·본문에 안 나온다', () => {
   const model = settingsFormModel(watchDetail(), drillInRoutine());
+  assert.equal(model.fields.some((f) => f.key === 'briefing_model' || f.key === 'briefing_effort'), false);
   const values = {
     op: '>=', value: '88000', consecutive_ticks: '1', cooldown_s: '300',
-    expires_days: '3', note: '삼성전자 88,000 감시', briefing_model: '', briefing_effort: '',
+    expires_days: '3', note: '삼성전자 88,000 감시',
   };
   const body = settingsUpdateBody(model, values);
-  assert.equal(body.briefing_model, null);
-  assert.equal(body.briefing_effort, null);
+  assert.equal('briefing_model' in body, false);
+  assert.equal('briefing_effort' in body, false);
   assert.equal(body.expires_days, 3);
   assert.equal(body.note, '삼성전자 88,000 감시');
 });
@@ -2054,7 +2060,7 @@ test('settingsUpdateBody: 설명을 안 건드리고 조건만 고치면 note를
   const model = settingsFormModel(watchDetail(), drillInRoutine());
   const base = {
     op: '>=', value: '88000', consecutive_ticks: '1', cooldown_s: '300',
-    expires_days: '', note: '삼성전자 88,000 감시', briefing_model: 'opus', briefing_effort: 'high',
+    expires_days: '', note: '삼성전자 88,000 감시',
   };
   // 조건 값만 바꾼다 — 백엔드가 자동 생성 설명을 새 조건으로 다시 쓰게 둔다.
   const changed = settingsUpdateBody(model, { ...base, value: '90000' });
