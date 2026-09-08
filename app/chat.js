@@ -214,11 +214,25 @@ function setTurnProgress(rec, el) {
   if (isDisplayedConversation(rec.conversationId)) liveProgressEl = el;
 }
 // 오브 기원 질의(main 방송) 잠금 — 내 턴이 아니고, 보고 있는 대화가 진행 중일 때만.
+let remoteLockShown = false;
+function setRemoteLock(locked, text) {
+  // 이미 풀려 있으면 다시 풀지 않는다 — 다른 잠금 주인(온보딩·주문 확인)을 건드리지 않는다.
+  if (!locked && !remoteLockShown) return;
+  remoteLockShown = locked;
+  setLocked(locked, text);
+}
 function applyRemoteLock() {
   if (state !== 'idle') { remoteQueryBusy = false; return; }
+  if (displayedConversationId === null) {
+    // 새 대화의 id를 아직 못 받았다(athena:conversation-active 대기) — 이 틈에 보낸 질문은 어느
+    // 대화에도 못 붙는다. 잠깐 잠근다.
+    remoteQueryBusy = true;
+    setRemoteLock(true, '새 대화를 여는 중…');
+    return;
+  }
   const busy = !!displayedConversationId && remoteBusyIds.has(displayedConversationId);
   remoteQueryBusy = busy;
-  setLocked(busy, busy ? '오브에서 대화 중 — 잠시 후 다시 시도하세요' : undefined);
+  setRemoteLock(busy, busy ? '오브에서 대화 중 — 잠시 후 다시 시도하세요' : undefined);
 }
 // 지금 보이는 대화의 거울(state/liveProgressEl/abortToken)과 입력 잠금을 그 대화의 기록으로 맞춘다.
 function syncDisplayedTurn() {
@@ -1460,8 +1474,8 @@ async function runQueryLive(text) {
   // propose로 불렀다면 main.js가 tool_result에서 뽑아 보낸다(아래
   // renderGuardConfirmCard 참고, 폴링으로는 발견 불가능한 비영속 데이터라
   // 이 턴 전용 구독이 유일한 신호다).
-  const onNudgeGuardProposed = (payload) => {
-    if (!mine()) return;
+  const onNudgeGuardProposed = (payload, meta) => {
+    if (!mine() || !forMe(meta) || (meta && meta.deferred)) return;
     renderGuardConfirmCard(payload, text);
   };
   const unsubscribeNudgeGuardProposed = window.athena.on('athena:nudge-guard-proposed', onNudgeGuardProposed);
@@ -1469,8 +1483,8 @@ async function runQueryLive(text) {
   // 모델이 낸 플러그인 제안은 이 턴의 산물이다 — 채팅에는 제안 턴 한 장만
   // 남는다. 캔버스 카드는 canvas.js의 모듈 스코프 구독이 그리고(턴이 끝나도
   // 카드는 남아야 한다), GUI 버튼 경로는 채팅 턴을 만들지 않는다.
-  const onPluginProposed = (envelope) => {
-    if (!mine()) return;
+  const onPluginProposed = (envelope, meta) => {
+    if (!mine() || !forMe(meta) || (meta && meta.deferred)) return;
     // 모드 밖이면 캔버스가 봉투를 폐기한다 — 그때 채팅에 남는 것은 폐기를
     // 알리는 한 줄뿐이고, 제안 턴은 만들지 않는다(없는 카드를 가리키게 된다).
     if (pluginModeLib.currentMode() !== 'plugin') return;
@@ -2641,6 +2655,19 @@ window.athena.on('athena:conversation-active', ({ conversationId } = {}) => {
   syncDisplayedTurn();
 });
 
+// 배경 대화의 턴이 낸 채팅 전용 카드(말걸기 가드·플러그인 제안)는 main이 미뤄 두고, 그 대화로 돌아온
+// 뒤(athena:session-replay-cards) meta.deferred=true로 흘린다. 그때는 그 턴의 구독이 이미 끝났으므로
+// 여기 모듈 스코프에서 그린다 — 보고 있는 대화의 것일 때만.
+window.athena.on('athena:nudge-guard-proposed', (payload, meta) => {
+  if (!meta || !meta.deferred || meta.conversationId !== displayedConversationId) return;
+  renderGuardConfirmCard(payload, '');
+});
+window.athena.on('athena:plugin-proposed', (envelope, meta) => {
+  if (!meta || !meta.deferred || meta.conversationId !== displayedConversationId) return;
+  if (pluginModeLib.currentMode() !== 'plugin') return;
+  renderPluginProposalTurn(envelope);
+});
+
 // 오브 "듣는 중" 실신호(2026-08-26 board-32) — 입력 지점은 이 창 하나뿐이라
 // (확정 결정 3), 여기 포커스가 곧 "사람이 말을 거는 중"이라는 사실이다. 지어낸
 // 감정이 아니라 이미 있는 DOM 신호에 이름만 붙이는 것뿐이다(orb.js 위 주석과 짝).
@@ -3067,9 +3094,9 @@ window.addEventListener('athena:new-conversation', () => {
   state = 'idle';
   liveProgressEl = null;
   abortToken = 0;
-  remoteQueryBusy = false;
+  applyRemoteLock(); // 새 대화 id가 오기 전까지 잠깐 잠근다 — athena:conversation-active가 푼다
   setDot(null);
-  setLocked(false);
+
 });
 
 // 실행 중 턴 중단 — Esc(아래 keydown)와 입력 상자의 ■ 버튼(Paper 44)이 같은 경로를 탄다.
@@ -3293,7 +3320,9 @@ window.athena.on('athena:routine-event', (event) => {
 // Fast Selector의 guarded order 결과는 기존 주문 확인 티켓에만 착지한다.
 // 이 이벤트 경로에서는 athena:order-execute를 호출하지 않는다 — 실행은 아래
 // 티켓 안의 사용자 클릭 핸들러 하나로 계속 제한된다.
-window.athena.on('athena:selector-order-draft', (payload) => {
+window.athena.on('athena:selector-order-draft', (payload, meta) => {
+  // 다중 대화 — 다른 대화의 초안은 main이 미뤄 두고 그 대화로 돌아올 때 흘린다. 혹시 늦게 온 것은 버린다.
+  if (meta && meta.conversationId && meta.conversationId !== displayedConversationId) return;
   const prefill = orderTicketLib.buildSelectorOrderPrefill(payload);
   if (prefill) openOrderTicket(prefill);
 });

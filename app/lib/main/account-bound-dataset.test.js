@@ -19,6 +19,8 @@ function loadSelectorStage(dispatch) {
     AbortController,
     performance,
     runtime: { activeSelectorFastRun: null },
+    historyConversationId: () => 'turn-a',
+    shellForConversation: () => ({ send() {} }),
     modePromptRequired: false,
     simpleChartRoute: { handled: false },
     stockEntityIndex: {},
