@@ -1,0 +1,83 @@
+........................................................................ [  1%]
+........................................................................ [  3%]
+........................................................................ [  5%]
+........................................................................ [  7%]
+........................................................................ [  9%]
+........................................................................ [ 11%]
+........................................................................ [ 13%]
+........................................................................ [ 15%]
+........................................................................ [ 17%]
+........................................................................ [ 18%]
+........................................................................ [ 20%]
+........................................................................ [ 22%]
+........................................................................ [ 24%]
+........................................................................ [ 26%]
+........................................................................ [ 28%]
+........................................................................ [ 30%]
+........................................................................ [ 32%]
+........................................................................ [ 34%]
+........................................................................ [ 36%]
+........................................................................ [ 37%]
+........................................................................ [ 39%]
+........................................................................ [ 41%]
+........................................................................ [ 43%]
+........................................................................ [ 45%]
+........................................................................ [ 47%]
+........................................................................ [ 49%]
+........................................................................ [ 51%]
+........................................................................ [ 53%]
+........................................................................ [ 54%]
+........................................................................ [ 56%]
+........................................................................ [ 58%]
+........................................................................ [ 60%]
+........................................................................ [ 62%]
+........................................................................ [ 64%]
+........................................................................ [ 66%]
+........................................................................ [ 68%]
+........................................................................ [ 70%]
+........................................................................ [ 72%]
+........................................................................ [ 73%]
+.......s................................................................ [ 75%]
+........................................................................ [ 77%]
+........................................................................ [ 79%]
+........................................................................ [ 81%]
+........................................................................ [ 83%]
+.......................................................................s [ 85%]
+.ssss................................................................... [ 87%]
+........................................................................ [ 89%]
+........................................................................ [ 90%]
+........................................................................ [ 92%]
+........................................................................ [ 94%]
+........................................................................ [ 96%]
+........................................................................ [ 98%]
+......................................................                   [100%]
+============================== warnings summary ===============================
+.venv\Lib\site-packages\fastapi\testclient.py:1
+  C:\Projects\DAOU.Athena\backend\.venv\Lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================ slowest 15 durations =============================
+137.65s call     tests/unit/test_selector_autonomous_eval.py::test_ablation_runtime_restores_baseline_deterministically
+113.99s call     tests/unit/test_selector_autonomous_eval.py::test_each_ablation_reports_top1_pairs_scope_errors_and_comparison
+113.13s call     tests/unit/test_selector_autonomous_eval.py::test_semantic_gate_cannot_pass_with_a_hidden_critical_failure
+87.61s call     tests/unit/test_selector_autonomous_eval.py::test_autonomous_expansion_full_evaluation_gate_covers_every_case
+86.47s call     tests/unit/test_selector_autonomous_eval.py::test_correct_retrieval_top1_cannot_hide_policy_abstention
+54.87s call     tests/unit/test_selector_autonomous_eval.py::test_all_critical_semantic_groups_are_green
+46.37s call     tests/unit/test_selector_autonomous_eval.py::test_evaluator_reruns_ranking_once_per_case
+37.49s call     tests/unit/test_selector_eval.py::test_golden_retrieval_is_exact
+29.13s call     tests/unit/test_selector_eval.py::test_ranking_is_deterministic_for_all_golden_questions
+9.42s call     tests/api/test_projects_api.py::test_env_setup_really_installs_the_base_packages
+8.89s call     tests/unit/test_selector_autonomous_eval.py::test_sealed_cli_writes_manifest_before_evaluation_failure
+8.47s call     tests/unit/test_selector_autonomous_eval.py::test_report_and_metrics_record_current_corpus_hash
+7.83s call     tests/unit/test_selector_autonomous_eval.py::test_report_records_app_pipeline_resolver_mode_and_hash
+5.68s call     tests/api/test_inventory_api.py::test_oauth_openapi_never_exposes_credentials_or_tokens
+5.01s call     tests/api/test_brain_api.py::test_relation_retraction_is_not_exposed_to_the_model
+=========================== short test summary info ===========================
+SKIPPED [1] tests\unit\test_projects_store.py:233: �� ȯ�濡�� �ɺ��� ��ũ�� ���� �� ���� Ż�� ��ʸ� �ǳʶڴ�: [WinError 1314] Ŭ���̾�Ʈ�� �ʿ��� ������ ������ ���� �ʽ��ϴ�: 'C:\\Users\\ajc22\\AppData\\Local\\Temp\\pytest-of-ajc22\\pytest-2937\\test_resolve_in_project_reject12\\outside' -> 'C:\\Users\\ajc22\\AppData\\Local\\Temp\\pytest-of-ajc22\\pytest-2937\\test_resolve_in_project_reject12\\proj\\escape'
+SKIPPED [1] tests\\unit\\test_selector_autonomous_eval.py:1325: v5 \ubd09\uc778 \ucf54\ud37c\uc2a4 \ubbf8\uc791\uc131 \u2014 \ucc28\ub2e8 \uc0ac\uc720\ub2e4(\uc644\ub8cc \uc99d\uac70\uac00 \uc544\ub2c8\ub2e4). \uc774 \uac8c\uc774\ud2b8\ub294 100\uac74\uc758 \uc0c8 \uc9c8\ubb38(\uc9c1\uc811 quote 10\uac74 \uc774\uc0c1\xb7advisory 0\xb7\uc911\ubcf5/\uadfc\uc0ac\ubcf5\uc0ac \uc5c6\uc74c)\uc744 \uc694\uad6c\ud558\ub294\ub370, \uae30\uc874 \ucf54\ud37c\uc2a4 \ud30c\uc0dd\uc73c\ub85c\ub294 \uad6c\uc870\uc801\uc73c\ub85c \ub9cc\uc871\ud560 \uc218 \uc5c6\ub2e4(\uc911\ubcf5\xb7\uadfc\uc0ac\ubcf5\uc0ac \uac80\uc0ac\uc5d0 \uac78\ub9b0\ub2e4). SEALED_V5_ACCEPTANCE \uc0ac\uc591\uc740 \uadf8\ub300\ub85c \ub450\uace0, \ucf54\ud37c\uc2a4\ub97c \uc800\uc220\ud558\ub294 \ucee4\ubc0b\uc5d0\uc11c \ud568\uaed8 \ud574\uc81c\ud55c\ub2e4.
+SKIPPED [1] tests\\unit\\test_selector_autonomous_eval.py:1376: v5 \ubd09\uc778 \ucf54\ud37c\uc2a4 \ubbf8\uc791\uc131 \u2014 \ucc28\ub2e8 \uc0ac\uc720\ub2e4(\uc644\ub8cc \uc99d\uac70\uac00 \uc544\ub2c8\ub2e4). \uc774 \uac8c\uc774\ud2b8\ub294 100\uac74\uc758 \uc0c8 \uc9c8\ubb38(\uc9c1\uc811 quote 10\uac74 \uc774\uc0c1\xb7advisory 0\xb7\uc911\ubcf5/\uadfc\uc0ac\ubcf5\uc0ac \uc5c6\uc74c)\uc744 \uc694\uad6c\ud558\ub294\ub370, \uae30\uc874 \ucf54\ud37c\uc2a4 \ud30c\uc0dd\uc73c\ub85c\ub294 \uad6c\uc870\uc801\uc73c\ub85c \ub9cc\uc871\ud560 \uc218 \uc5c6\ub2e4(\uc911\ubcf5\xb7\uadfc\uc0ac\ubcf5\uc0ac \uac80\uc0ac\uc5d0 \uac78\ub9b0\ub2e4). SEALED_V5_ACCEPTANCE \uc0ac\uc591\uc740 \uadf8\ub300\ub85c \ub450\uace0, \ucf54\ud37c\uc2a4\ub97c \uc800\uc220\ud558\ub294 \ucee4\ubc0b\uc5d0\uc11c \ud568\uaed8 \ud574\uc81c\ud55c\ub2e4.
+SKIPPED [1] tests\\unit\\test_selector_autonomous_eval.py:1403: v5 \ubd09\uc778 \ucf54\ud37c\uc2a4 \ubbf8\uc791\uc131 \u2014 \ucc28\ub2e8 \uc0ac\uc720\ub2e4(\uc644\ub8cc \uc99d\uac70\uac00 \uc544\ub2c8\ub2e4). \uc774 \uac8c\uc774\ud2b8\ub294 100\uac74\uc758 \uc0c8 \uc9c8\ubb38(\uc9c1\uc811 quote 10\uac74 \uc774\uc0c1\xb7advisory 0\xb7\uc911\ubcf5/\uadfc\uc0ac\ubcf5\uc0ac \uc5c6\uc74c)\uc744 \uc694\uad6c\ud558\ub294\ub370, \uae30\uc874 \ucf54\ud37c\uc2a4 \ud30c\uc0dd\uc73c\ub85c\ub294 \uad6c\uc870\uc801\uc73c\ub85c \ub9cc\uc871\ud560 \uc218 \uc5c6\ub2e4(\uc911\ubcf5\xb7\uadfc\uc0ac\ubcf5\uc0ac \uac80\uc0ac\uc5d0 \uac78\ub9b0\ub2e4). SEALED_V5_ACCEPTANCE \uc0ac\uc591\uc740 \uadf8\ub300\ub85c \ub450\uace0, \ucf54\ud37c\uc2a4\ub97c \uc800\uc220\ud558\ub294 \ucee4\ubc0b\uc5d0\uc11c \ud568\uaed8 \ud574\uc81c\ud55c\ub2e4.
+SKIPPED [1] tests\\unit\\test_selector_autonomous_eval.py:1430: v5 \ubd09\uc778 \ucf54\ud37c\uc2a4 \ubbf8\uc791\uc131 \u2014 \ucc28\ub2e8 \uc0ac\uc720\ub2e4(\uc644\ub8cc \uc99d\uac70\uac00 \uc544\ub2c8\ub2e4). \uc774 \uac8c\uc774\ud2b8\ub294 100\uac74\uc758 \uc0c8 \uc9c8\ubb38(\uc9c1\uc811 quote 10\uac74 \uc774\uc0c1\xb7advisory 0\xb7\uc911\ubcf5/\uadfc\uc0ac\ubcf5\uc0ac \uc5c6\uc74c)\uc744 \uc694\uad6c\ud558\ub294\ub370, \uae30\uc874 \ucf54\ud37c\uc2a4 \ud30c\uc0dd\uc73c\ub85c\ub294 \uad6c\uc870\uc801\uc73c\ub85c \ub9cc\uc871\ud560 \uc218 \uc5c6\ub2e4(\uc911\ubcf5\xb7\uadfc\uc0ac\ubcf5\uc0ac \uac80\uc0ac\uc5d0 \uac78\ub9b0\ub2e4). SEALED_V5_ACCEPTANCE \uc0ac\uc591\uc740 \uadf8\ub300\ub85c \ub450\uace0, \ucf54\ud37c\uc2a4\ub97c \uc800\uc220\ud558\ub294 \ucee4\ubc0b\uc5d0\uc11c \ud568\uaed8 \ud574\uc81c\ud55c\ub2e4.
+SKIPPED [1] tests\\unit\\test_selector_autonomous_eval.py:1457: v5 \ubd09\uc778 \ucf54\ud37c\uc2a4 \ubbf8\uc791\uc131 \u2014 \ucc28\ub2e8 \uc0ac\uc720\ub2e4(\uc644\ub8cc \uc99d\uac70\uac00 \uc544\ub2c8\ub2e4). \uc774 \uac8c\uc774\ud2b8\ub294 100\uac74\uc758 \uc0c8 \uc9c8\ubb38(\uc9c1\uc811 quote 10\uac74 \uc774\uc0c1\xb7advisory 0\xb7\uc911\ubcf5/\uadfc\uc0ac\ubcf5\uc0ac \uc5c6\uc74c)\uc744 \uc694\uad6c\ud558\ub294\ub370, \uae30\uc874 \ucf54\ud37c\uc2a4 \ud30c\uc0dd\uc73c\ub85c\ub294 \uad6c\uc870\uc801\uc73c\ub85c \ub9cc\uc871\ud560 \uc218 \uc5c6\ub2e4(\uc911\ubcf5\xb7\uadfc\uc0ac\ubcf5\uc0ac \uac80\uc0ac\uc5d0 \uac78\ub9b0\ub2e4). SEALED_V5_ACCEPTANCE \uc0ac\uc591\uc740 \uadf8\ub300\ub85c \ub450\uace0, \ucf54\ud37c\uc2a4\ub97c \uc800\uc220\ud558\ub294 \ucee4\ubc0b\uc5d0\uc11c \ud568\uaed8 \ud574\uc81c\ud55c\ub2e4.
+3792 passed, 6 skipped, 1 warning in 1361.01s (0:22:41)

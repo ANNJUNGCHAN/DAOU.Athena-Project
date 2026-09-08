@@ -1,0 +1,27 @@
+✔ isEntityCall — 아테나 게이트웨이의 athena_brain action=entity만 받는다 (1.0491ms)
+✔ extractEntityDetail — 찾은 노드의 응답만 넘긴다 (1.0402ms)
+✔ extractEntityDetail — 못 찾았거나 후보만 온 응답은 안 넘긴다(되묻는 것은 모델의 일) (0.1701ms)
+✔ extractEntityDetail — JSON이 아니거나 다른 액션이면 조용히 버린다 (0.1343ms)
+✔ entityStepNote — 부제는 대상과 연결 수·이력 수다 (0.3275ms)
+✔ entityStepNote — 관계 수는 잘린 목록 길이가 아니라 연결 수다(패널 머리와 한 말) (0.1128ms)
+✔ entityStepNote — 없는 개수는 지어내지 않고 그 절을 뺀다 (0.1816ms)
+✔ 시작 단계 — done:false, timeText 빈 문자열 (1.7432ms)
+✔ 완료 단계 — 초 단위 소요시간 문자열 (0.2459ms)
+✔ 완료인데 elapsedMs가 숫자가 아니면 — 대시 하나 (0.1684ms)
+✔ 라벨 없는 이벤트 — 기본 라벨 "처리 중" (0.1892ms)
+✔ id 없는 이벤트 — null(그리지 않는다) (0.2118ms)
+✔ 같은 id 재호출 — 진행 중에서 완료로 갱신된다 (0.7578ms)
+✔ 실패 완료 — label에 "실패"가 붙고 error:true (0.2375ms)
+✔ error 필드 없는 이벤트 — error:false 기본값(옵셔널 필드) (0.1569ms)
+✔ 같은 id 재호출 — 진행 중에서 실패로 갱신된다 (0.2891ms)
+✔ retrying — 서버 연결 대기는 실패로 쓰지 않는다 (0.3421ms)
+✔ retrying — 진짜 실패는 여전히 실패다(대기가 실패를 덮지 않는다) (0.1332ms)
+✔ 부제(Paper 보드 10) — 보낸 것만 그대로 실리고, 안 보내면 빈 문자열이다 (0.0882ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 97.718

@@ -1,0 +1,47 @@
+[suite] start verify:paper-manifest budget=30000
+[suite] verify:paper-manifest ok=true timedOut=false code=0
+{
+  "ok": true,
+  "results": [
+    {
+      "script": "verify:paper-manifest",
+      "ok": true,
+      "code": 0,
+      "timedOut": false,
+      "budgetMs": 30000,
+      "error": null,
+      "startedAt": "2026-09-07T07:58:28.358Z",
+      "finishedAt": "2026-09-07T07:58:29.157Z",
+      "durationMs": 799,
+      "stdoutTail": "\n> athena-shell@0.1.0 verify:paper-manifest\n> node scripts/paper-manifest-check.mjs\n\npaper manifest verification passed — screen=95 card_template=96 card_spec=8 mini_template=11 mini_card=192 contract=14 record=17 reference=8 retired=3\n",
+      "stderrTail": "",
+      "stdoutLog": "C:\\Projects\\DAOU.Athena\\app\\captures\\verify-suite\\2026-09-07T07-58-27-753Z-4VhhQf\\001-verify-paper-manifest.stdout.log",
+      "stderrLog": "C:\\Projects\\DAOU.Athena\\app\\captures\\verify-suite\\2026-09-07T07-58-27-753Z-4VhhQf\\001-verify-paper-manifest.stderr.log"
+    }
+  ],
+  "schemaVersion": 1,
+  "runId": "2026-09-07T07-58-27-753Z-4VhhQf",
+  "suite": "paper",
+  "reportPath": "C:\\Projects\\DAOU.Athena\\app\\captures\\verify-suite\\2026-09-07T07-58-27-753Z-4VhhQf\\result.json",
+  "startedAt": "2026-09-07T07:58:27.753Z",
+  "finishedAt": "2026-09-07T07:58:29.585Z",
+  "durationMs": 1832,
+  "status": "complete",
+  "source": {
+    "commit": "ac4938008690a86e19c22e2c2d612db11aa52b03",
+    "dirty": true,
+    "worktreeSha256": "3791bebb79b01c1aef3fcd89cbe626e2854402e80e54bf12496e459687b9e875"
+  },
+  "verificationScope": "subprocess-exit-status",
+  "sharedArtifacts": {
+    "verified": false,
+    "reason": "Shared reports/captures are not bound to this run ID."
+  },
+  "currentStep": null,
+  "sourceAtEnd": {
+    "commit": "ac4938008690a86e19c22e2c2d612db11aa52b03",
+    "dirty": true,
+    "worktreeSha256": "3791bebb79b01c1aef3fcd89cbe626e2854402e80e54bf12496e459687b9e875"
+  },
+  "sourceSnapshotsMatch": true
+}

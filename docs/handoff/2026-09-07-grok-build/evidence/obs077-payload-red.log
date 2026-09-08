@@ -1,0 +1,66 @@
+TAP version 13
+# Subtest: 채팅 검사 왕복: 응답의 날짜가 실제 30개 점과 울린 날 목록에 도착한다
+not ok 1 - 채팅 검사 왕복: 응답의 날짜가 실제 30개 점과 울린 날 목록에 도착한다
+  ---
+  duration_ms: 3.8117
+  location: 'C:\\Projects\\DAOU.Athena\\app\\lib\\watch-check-card-render.test.js:64:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    0 !== 30
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 30
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Projects\DAOU.Athena\app\lib\watch-check-card-render.test.js:73:10)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: 채팅 검사 왕복: 상세가 다른 검사면 날짜를 섞지 않는다
+ok 2 - 채팅 검사 왕복: 상세가 다른 검사면 날짜를 섞지 않는다
+  ---
+  duration_ms: 1.7518
+  ...
+# Subtest: 채팅 검사 왕복: 상세 조회 실패는 실제 검사 결과를 버리거나 날짜로 메우지 않는다
+ok 3 - 채팅 검사 왕복: 상세 조회 실패는 실제 검사 결과를 버리거나 날짜로 메우지 않는다
+  ---
+  duration_ms: 0.7692
+  ...
+# Subtest: 채팅 검사 왕복: dated 응답은 상세를 더 읽지 않는다
+ok 4 - 채팅 검사 왕복: dated 응답은 상세를 더 읽지 않는다
+  ---
+  duration_ms: 0.8753
+  ...
+# Subtest: 채팅 검사 왕복: failed 응답은 상세를 더 읽지 않는다
+ok 5 - 채팅 검사 왕복: failed 응답은 상세를 더 읽지 않는다
+  ---
+  duration_ms: 0.639
+  ...
+# Subtest: 채팅 검사 실패: 남아 온 날짜가 있어도 성공 점 띠·울린 목록·승인을 내지 않는다
+ok 6 - 채팅 검사 실패: 남아 온 날짜가 있어도 성공 점 띠·울린 목록·승인을 내지 않는다
+  ---
+  duration_ms: 0.6196
+  ...
+# Subtest: 채팅 검사 0회: 실제 구간만 조용한 7칸으로 표시하고 목록을 만들지 않는다
+ok 7 - 채팅 검사 0회: 실제 구간만 조용한 7칸으로 표시하고 목록을 만들지 않는다
+  ---
+  duration_ms: 1.5141
+  ...
+# Subtest: 브라우저 배선: shell의 실제 script 순서로 불러온 모델도 날짜·종가를 전달한다
+ok 8 - 브라우저 배선: shell의 실제 script 순서로 불러온 모델도 날짜·종가를 전달한다
+  ---
+  duration_ms: 2.95
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 7
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 89.5597

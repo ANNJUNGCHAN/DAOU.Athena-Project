@@ -1,0 +1,52 @@
+{
+  "date": "2026-09-07",
+  "baseline": "da5cd98f",
+  "role": "executor; non-author final approval remains with independent reviewers",
+  "status": "source and tests frozen",
+  "scope": [
+    "app/lib/backtest-canvas.js",
+    "app/lib/backtest-canvas.test.js"
+  ],
+  "root_cause": "clearWorkspace increments the generation to reject unfinished work and clears form/code/graph, but omitted already-set pendingQuestion, pendingPatch, codeOnly, codeOnlyGraph, and openedVersion. Therefore successful previous-session state survives both explicit clear and restoreWorkspace, which calls clear internally. The old pending objects reach getContext, the old version badge remains, and snapshotGraph can cover a new editable graph with the old read-only graph.",
+  "change": "Three assignments in clearWorkspace reset exactly those five state values. Existing session serialization, asynchronous guards, same-session read-only/version behavior and all other files remain outside this change.",
+  "red": {
+    "command": "cd app; node --test --test-reporter=spec --test-name-pattern='완료된 세션 상태 경계' lib/backtest-canvas.test.js",
+    "tests": 13,
+    "pass": 4,
+    "fail": 9,
+    "positive_controls": "Same-session question, patch, visual history version, and code-only history version remain unchanged.",
+    "failures": "Clear and restore each retain old question/patch (4), visual version badge (2), and code-only state (2); after entering code-only in the next session, the prior ma_fast graph is shown instead of next-session ma_next_session (1).",
+    "log": ".omc/artifacts/full-review/backtest-completed-state-red.log"
+  },
+  "green": {
+    "focused": {
+      "tests": 13,
+      "pass": 13,
+      "fail": 0,
+      "duration_ms": 1768.962,
+      "log": ".omc/artifacts/full-review/backtest-completed-state-green.log"
+    },
+    "related": {
+      "command": "cd app; node --test --test-reporter=spec lib/backtest-canvas.test.js lib/main/live-prompt.test.js lib/session-workspace.test.js",
+      "tests": 481,
+      "pass": 481,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "duration_ms": 22674.3921,
+      "log": ".omc/artifacts/full-review/backtest-completed-state-related.log"
+    },
+    "checks": [
+      "git diff --check -- app/lib/backtest-canvas.js app/lib/backtest-canvas.test.js",
+      "node --check app/lib/backtest-canvas.js",
+      "node --check app/lib/backtest-canvas.test.js"
+    ],
+    "placeholder_scan": "No test.skip/test.only/TODO/FIXME matches in either owned file."
+  },
+  "sha256": {
+    "app/lib/backtest-canvas.js": "3c753e78fd740c76e6c860923375e1a512560a40d45d349021bc8947dbe480a0",
+    "app/lib/backtest-canvas.test.js": "5e8f741768410b00fe6ad3ea85f6255cb86b3193dcddcec0327ff9bbe6b6b185"
+  },
+  "boundaries": "Tests execute the actual canvas instance, actual onChatAction handlers, actual history-row click/openVersion flow, getContext, and real workspace handlers with a fake DOM and fixture services. No live backend/model/broker/order call, no commit, no push. Backend tracked files are untouched while the full pytest run continues. This establishes a state leak fix, not causation of the separately observed 2FR9-2 full Paper probe failure."
+}

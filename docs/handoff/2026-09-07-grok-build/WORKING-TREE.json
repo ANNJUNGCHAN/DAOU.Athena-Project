@@ -1,0 +1,57 @@
+{
+  "captured_at": "2026-09-07T08:26:06.318888+00:00",
+  "head": "ac4938008690a86e19c22e2c2d612db11aa52b03",
+  "branch": "main",
+  "remote_head_at_capture": "ac4938008690a86e19c22e2c2d612db11aa52b03",
+  "product_status": "9 WIP files frozen; author-tested, independent approval pending",
+  "git_status": "## main...origin/main\n M app/chat.js\n M app/lib/agent-canvas.js\n M app/lib/agent-canvas.test.js\n M app/lib/watch-check-card.js\n M app/lib/watch-check-card.test.js\n M app/scripts/run-verify-suite.js\n M app/scripts/run-verify-suite.test.js\n M app/shell.html\n?? app/lib/watch-check-card-render.test.js\n?? docs/handoff/2026-09-07-grok-build.zip\n?? docs/handoff/2026-09-07-grok-build/\n",
+  "files": [
+    {
+      "path": "app/chat.js",
+      "sha256": "8e8bd8cda6546a5d19e200fef7a24b60371b8f768ed843ce708368cd1a343c47",
+      "new": false
+    },
+    {
+      "path": "app/lib/agent-canvas.js",
+      "sha256": "362fea084f55af99799ce85558c42211609bedff8decd407f6599fd25c1e7efe",
+      "new": false
+    },
+    {
+      "path": "app/lib/agent-canvas.test.js",
+      "sha256": "12246f671f892bbcbe5c536ad5c3b388644abf82dfeaa1991b5d7a2068b328c7",
+      "new": false
+    },
+    {
+      "path": "app/lib/watch-check-card.js",
+      "sha256": "b66bde43f00f41fe2898dfdfa1d49cb4043f1c5354c843eaa962aea330b0ba2d",
+      "new": false
+    },
+    {
+      "path": "app/lib/watch-check-card.test.js",
+      "sha256": "22245ecd80ebe9e0308e8b7714ff5494a3c3029f0822d90c16d31711116d1697",
+      "new": false
+    },
+    {
+      "path": "app/lib/watch-check-card-render.test.js",
+      "sha256": "5949dfa0f346c83584c2ccda6659968c79e0ba4027a74a502a295c59ba0dc175",
+      "new": true
+    },
+    {
+      "path": "app/shell.html",
+      "sha256": "753fc25efa13a5c9d733ed9b2e41bb6d707f48970117f076dc2ac36531609aca",
+      "new": false
+    },
+    {
+      "path": "app/scripts/run-verify-suite.js",
+      "sha256": "ed34eeb6c125274be2502847fc284196c458cdee08b6d3bea23ffc15b0f890c0",
+      "new": false
+    },
+    {
+      "path": "app/scripts/run-verify-suite.test.js",
+      "sha256": "74a689e868a740aaa3cc0bca456ae4bf16c9a08309a05eb4dd6406b0401822ff",
+      "new": false
+    }
+  ],
+  "patch": "wip/tracked.patch",
+  "new_file_transport": "wip/files/app/lib/watch-check-card-render.test.js"
+}

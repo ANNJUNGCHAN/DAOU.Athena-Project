@@ -1,0 +1,21 @@
+✔ 완료된 세션 상태 경계: 대기 question (전환=same) (65.8754ms)
+✔ 완료된 세션 상태 경계: 대기 question (전환=clear) (62.6051ms)
+✔ 완료된 세션 상태 경계: 대기 question (전환=restore) (80.0871ms)
+✔ 완료된 세션 상태 경계: 대기 patch (전환=same) (61.8534ms)
+✔ 완료된 세션 상태 경계: 대기 patch (전환=clear) (78.9741ms)
+✔ 완료된 세션 상태 경계: 대기 patch (전환=restore) (64.7386ms)
+✔ 완료된 세션 상태 경계: 열린 visual 버전 (전환=same) (185.5945ms)
+✔ 완료된 세션 상태 경계: 열린 visual 버전 (전환=clear) (185.3381ms)
+✔ 완료된 세션 상태 경계: 열린 visual 버전 (전환=restore) (188.1458ms)
+✔ 완료된 세션 상태 경계: 열린 code_only 버전 (전환=same) (153.8485ms)
+✔ 완료된 세션 상태 경계: 열린 code_only 버전 (전환=clear) (188.1333ms)
+✔ 완료된 세션 상태 경계: 열린 code_only 버전 (전환=restore) (201.6128ms)
+✔ 완료된 세션 상태 경계: 다음 코드 전용 버전은 다음 세션의 호환 그래프를 쓴다 (220.7215ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1847.6178
