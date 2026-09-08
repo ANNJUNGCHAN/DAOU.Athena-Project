@@ -144,7 +144,10 @@ function writeGrokProjectMcpConfig(dir) {
     '[mcp_servers.athena]',
     `command = ${JSON.stringify(PYTHON_EXE)}`,
     `args = ${JSON.stringify(['-m', 'athena_mcp', 'serve'])}`,
-    `env = ${tomlInlineTable({ PYTHONPATH: BACKEND_DIR })}`,
+    `env = ${tomlInlineTable({
+      PYTHONPATH: BACKEND_DIR,
+      ATHENA_MCP_TOOL_NAME_STYLE: 'grok',
+    })}`,
     'enabled = true',
     '',
   ].join('\n');

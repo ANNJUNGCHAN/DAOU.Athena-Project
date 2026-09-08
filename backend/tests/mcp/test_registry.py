@@ -143,6 +143,51 @@ def test_self_reported_version_not_trusted_field_name_signals_it(store):
     assert info.reported_version == "1.28.1"  # 그대로 저장 — 검증하지 않음
 
 
+def test_identical_self_reported_metadata_reconnect_preserves_revision_and_timestamp(store):
+    store.add("dart", command="uvx", args=["dart-mcp"])
+    store.record_self_reported_info(
+        "dart",
+        reported_name="dart-mcp",
+        reported_version="1.0.0",
+        protocol_version="2025-11-25",
+    )
+    revision = store.revision
+    observed_at = store.get("dart").self_reported_server_info.observed_at
+
+    store.record_self_reported_info(
+        "dart",
+        reported_name="dart-mcp",
+        reported_version="1.0.0",
+        protocol_version="2025-11-25",
+    )
+
+    assert store.revision == revision
+    assert store.get("dart").self_reported_server_info.observed_at == observed_at
+
+
+def test_changed_self_reported_identity_and_real_config_mutation_still_advance_revision(store):
+    store.add("dart", command="uvx", args=["dart-mcp"])
+    store.record_self_reported_info(
+        "dart",
+        reported_name="dart-mcp",
+        reported_version="1.0.0",
+        protocol_version="2025-11-25",
+    )
+    before_changed_identity = store.revision
+
+    store.record_self_reported_info(
+        "dart",
+        reported_name="dart-mcp",
+        reported_version="1.1.0",
+        protocol_version="2025-11-25",
+    )
+    assert store.revision == before_changed_identity + 1
+
+    before_config_change = store.revision
+    store.add("time", command="uvx", args=["mcp-server-time"])
+    assert store.revision == before_config_change + 1
+
+
 # ---------------------------------------------------------------------------
 # 클로드 데스크탑 스니펫 파서
 # ---------------------------------------------------------------------------
