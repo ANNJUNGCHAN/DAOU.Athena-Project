@@ -2594,6 +2594,17 @@ function resolveLiveQueryProviderId() {
   return (peeked && peeked.providerId) || 'claude';
 }
 
+// 지금 질의가 돌 공급자와 그 공급자의 모델·사고 강도 — 실행(runLiveQuery)·셸 툴바
+// (chat.js renderComposerModel)·오브 컨트롤 스트립(orb.js refreshChatControlStrip)이
+// 전부 이 한 값을 읽는다. 어디서 쓰든 모델 종류가 같아야 한다 — 판정을 렌더러마다
+// 따로 두면 오브는 FABLE, 셸은 Grok-4.5를 말하는 사고가 난다(2026-09-08 실측).
+// Grok 계정이 활성이면 grok 값, 그 밖(Claude·Codex·미연결)은 claude 값이다.
+function resolveActiveModelSelection(prefsState = modelPrefs.get()) {
+  const provider = resolveLiveQueryProviderId() === 'grok' ? 'grok' : 'claude';
+  const { model, effort } = prefsState[provider];
+  return { provider, model, effort };
+}
+
 function noteLiveQueryProvider(providerId) {
   if (liveQueryProviderId && liveQueryProviderId !== providerId) liveSessionId = null;
   liveQueryProviderId = providerId;
@@ -4445,8 +4456,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   const resumeSessionId = liveSessionId;
   // 설정 화면 모델 패널(lib/main/model-prefs.js) 값 — null이면 buildArgs가
   // --model/--effort를 안 붙여 CLI 기본값을 쓴다.
-  const prefsState = modelPrefs.get();
-  const { model, effort } = liveProviderId === 'grok' ? prefsState.grok : prefsState.claude;
+  const { model, effort } = resolveActiveModelSelection();
   // 턴 텍스트는 한 번만 만든다 — chat.js가 제출에 실은 canvasMode·backtestContext를
   // 그대로 넘기면 백테스트 설계 모드에서만 접두가 붙고(live-prompt.js
   // buildBacktestModePrefix), 그 외 모드는 문자열 호출과 바이트 동일하다. 캐시 키
@@ -5269,13 +5279,14 @@ ipcMain.handle('athena:settings:expose-to-model:set', async (_e, { enabled } = {
 // 전역 기본값이다. 검증은 각 모듈이 한다, 여기선 라우팅 + 성공 시 병합·방송만
 // 담당한다(prefs와 같은 문법 — 셸 창이 같은 렌더러의 #settings 패널이라도
 // 명시적으로 보낸다).
-// IPC 계약: athena:model-get/-set → { claude, grok, codex } 각 {model,effort}.
+// IPC 계약: athena:model-get/-set → { claude, grok, codex } 각 {model,effort} +
+// active {provider, model, effort} — 지금 질의가 실제로 쓸 값(resolveActiveModelSelection).
 // ---------------------------------------------------------------------------
 
 function handleModelGet() {
   const { claude, grok } = modelPrefs.get();
   const { model, effort } = codexConfig.readModelSettings();
-  return { claude, grok, codex: { model, effort } };
+  return { claude, grok, codex: { model, effort }, active: resolveActiveModelSelection({ claude, grok }) };
 }
 
 async function handleModelSet(e, payload = {}) {
@@ -5309,11 +5320,15 @@ async function handleModelSet(e, payload = {}) {
       });
     }
   }
-  if (shellWin && !shellWin.isDestroyed()) {
-    shellWin.webContents.send('athena:model-changed', state);
-  }
+  broadcastModelChanged(state);
   if (providerRuntimeEnabled) await rotatePersistentProvider('model_settings_changed');
   return selectorActivation ? { ok: true, state, selectorActivation } : { ok: true, state };
+}
+
+// 셸(설정 모델 카드·작성창 툴바)과 오브(컨트롤 스트립)가 같은 상태를 받는다.
+function broadcastModelChanged(state = handleModelGet()) {
+  if (shellWin && !shellWin.isDestroyed()) shellWin.webContents.send('athena:model-changed', state);
+  if (orbWin && !orbWin.isDestroyed()) orbWin.webContents.send('athena:model-changed', state);
 }
 
 ipcMain.handle('athena:model-get', handleModelGet);
@@ -5343,6 +5358,11 @@ async function broadcastCliChanged({ rotateReason = null, list: suppliedList = n
   if (shellWin && !shellWin.isDestroyed()) {
     shellWin.webContents.send('athena:cli-changed', list);
   }
+  // 활성 계정이 바뀌면 active(공급자·모델·강도)도 바뀐다 — 오브는 계정 목록을 받지
+  // 않으니 모델 상태로 알린다. 셸에는 안 보낸다: 설정 모델 카드가 model-changed마다
+  // athena:cli-list(codex 프로브 최대 5초)를 다시 돌리므로 같은 변경에 두 번이 된다.
+  // 셸 툴바는 cli-changed를 받는 chat.js applyCliState가 model-get을 다시 읽는다.
+  if (orbWin && !orbWin.isDestroyed()) orbWin.webContents.send('athena:model-changed', handleModelGet());
   if (rotateReason) {
     await rotatePersistentProvider(rotateReason, { activeAccount: activeAccountFromCliList(list) });
   }
