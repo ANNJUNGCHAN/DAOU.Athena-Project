@@ -1,0 +1,71 @@
+[suite] start verify:paper-manifest budget=30000
+[suite] verify:paper-manifest ok=true timedOut=false code=0
+[suite] start verify:paper-cards-static budget=30000
+[suite] verify:paper-cards-static ok=false timedOut=false code=1
+[suite] start verify:paper-cards-mount budget=900000
+[suite] verify:paper-cards-mount ok=false timedOut=false code=1
+[suite] start verify:paper-screens budget=420000
+[suite] verify:paper-screens ok=false timedOut=false code=1
+[suite] start verify:paper-mini-static budget=30000
+[suite] verify:paper-mini-static ok=false timedOut=false code=1
+[suite] start verify:paper-mini-template budget=120000
+[suite] verify:paper-mini-template ok=true timedOut=false code=0
+{
+  "ok": false,
+  "results": [
+    {
+      "script": "verify:paper-manifest",
+      "ok": true,
+      "code": 0,
+      "timedOut": false,
+      "budgetMs": 30000,
+      "stdoutTail": "\n> athena-shell@0.1.0 verify:paper-manifest\n> node scripts/paper-manifest-check.mjs\n\npaper manifest verification passed — screen=95 card_template=96 card_spec=8 mini_template=11 mini_card=192 contract=14 record=17 reference=8 retired=3\n",
+      "stderrTail": ""
+    },
+    {
+      "script": "verify:paper-cards-static",
+      "ok": false,
+      "code": 1,
+      "timedOut": false,
+      "budgetMs": 30000,
+      "stdoutTail": "\n> athena-shell@0.1.0 verify:paper-cards-static\n> node scripts/paper-cards-static.mjs\n\n",
+      "stderrTail": "[paper-cards-static] 보드 96장 · 통과 96 · 실패 0\n  S1 매니페스트     ok\n  S2 텍스트 다중집합 ok\n  S3 상태 링크      ok (마크 82 · 대상 83 · 미해소 0)\n  S4 Paper 트리     ok\n  S5 레지스트리     exit 1\n  S6 색인 대칭      ok (97)\n  리포트 app/captures/paper-gates/PAPER-CARDS.json\n"
+    },
+    {
+      "script": "verify:paper-cards-mount",
+      "ok": false,
+      "code": 1,
+      "timedOut": false,
+      "budgetMs": 900000,
+      "stdoutTail": "\n> athena-shell@0.1.0 verify:paper-cards-mount\n> electron probe-paper-cards-mount.js\n\n\r\n[paper-cards-mount] CC-01 · 보드 14장\n[paper-cards-mount] CC-02 · 보드 6장\n[paper-cards-mount] CC-03 · 보드 31장\n[paper-cards-mount] CC-04 · 보드 9장\n[paper-cards-mount] CC-06 · 보드 21장\n[paper-cards-mount] CC-05 · 보드 15장\n",
+      "stderrTail": "[paper-cards-mount] 보드 96장 · 통과 94 · 실패 2\n  폭 원본 · 2분할 · 4분할 · 최소 · 청크 6 · 27초\n  FAIL 137X-2 (CC-03) — state_board_missing_in_dom, text_multiset_dom_mismatch\n  FAIL 2R3M-1 (CC-03) — text_multiset_dom_mismatch\n  리포트 app/captures/paper-gates/PAPER-CARDS.json\n"
+    },
+    {
+      "script": "verify:paper-screens",
+      "ok": false,
+      "code": 1,
+      "timedOut": false,
+      "budgetMs": 420000,
+      "stdoutTail": "이전트 대화 — 제어 제안 턴 A~E\n  ok   4330-1 · 08 · 에이전트 대화 — 결과 턴\n  ok   43WD-1 · 09 · 에이전트 — 새 알람 · 말로 설명하면 AI가 감시 함수를 만든다\n  ok   446V-1 · 10 · 에이전트 — 알람 노드·흐름 · 검사 결과 · 승인\n  ok   44HD-1 · 11 · 에이전트 — 노드에서 ‘이상해요’ → AI가 고치고 다시 검사\n  ok   44RV-1 · 12 · 에이전트 — 활성 코드 알람 · 상세·발화 이력\n  ok   56X-0 · 01 · 셸 — 알림 파생 방\n  ok   ARM-0 · 02 · 에이전트 — 알람 센터 · 라이브 관제\n  ok   B57-0 · 03 · 에이전트 — 실행 이력·결과\n  ok   BIM-0 · 04 · 에이전트 — 프로액티브\n  ok   BV0-0 · 05 · 에이전트 — 작업\n  ok   15J-0 · 02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)\n  ok   2NW8-2 · 05 · 플러그인 — 설치 승인 (캔버스 카드)\n  ok   2NXS-2 · 06 · 플러그인 — 상태 모음 (6상태)\n  ok   3ZJD-0 · 07 · 플러그인 대화 — 제안 턴 5동작\n  ok   3ZLW-0 · 08 · 플러그인 대화 — 결과 턴\n  ok   3ZNO-0 · 09 · 플러그인 창 복원\n  ok   CU0-0 · 03 · 플러그인 — 허브·설치\n  ok   CVY-0 · 04 · 플러그인 — 관리·마켓플레이스\n  ok   FT6-0 · 01 · 플러그인 — 기능 허용 (AT-ST-006)\n  ok   2LFW-2 · 09 · 키우미 — 미니 카드 10종\n  FAIL 4TY-0 · 04 · 키우미 — 대화·콘텐츠 전개\n  ok   C8G-0 · 07 · 키우미 메뉴 — 셸 오버레이\n  ok   CLE-0 · 06 · 키우미 메뉴 — 두 진입점과 항목\n  ok   DO-0 · 01 · 키우미 — 상황별 표현·크기 매핑\n  ok   1SW0-0 · 01 · 백테스트 — 설계 (폼)\n  ok   1T5K-0 · 02 · 백테스트 — 설계 (코드)\n  ok   1TGA-1 · 03 · 백테스트 — 결과\n  ok   1TPF-1 · 04 · 백테스트 — 데이터 수집 승인\n  ok   1WSI-1 · 05 · 백테스트 — 이력·비교\n  ok   1WZJ-1 · 06 · 백테스트 — 최적화\n  ok   2FMM-2 · 07 · 백테스트 — 전략 배포 · 실전 적용\n  FAIL 2FR9-2 · 08 · 백테스트 — 코드 플로우 지도\n  ok   2FY9-2 · 09 · 백테스트 — 오류 진단 · 자동 수정 승인\n  ok   3XL4-1 · 17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)\n  ok   3Y38-1 · 11 · 백테스트 — 시각 전략 설계 · 편집 가능\n  ok   3YFV-1 · 12 · 백테스트 — 시각 전략 검증 · 연결 오류\n  ok   3YQ0-1 · 13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결\n  ok   3Z0X-1 · 14 · 백테스트 — 그래프·코드 동기화 완료 · 실행 전\n  ok   3Z8U-1 · 09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)\n  ok   3ZAA-1 · 10 · 그래프 — \"이 노드 설명해줘\" (관계·근거·이력·대화 원문)\n  ok   3ZC2-1 · 11 · 그래프 — 편집은 제안까지 · 도구 계약\n  ok   40EV-1 · 19 · 백테스트 — 기법 목록 · 새 기법\n  ok   42FW-1 · 23 · 백테스트 — 승인 → 기법 목록에 추가 → 실매매 적용(키우미가 켜지면 자동 매매)\n  ok   43DP-1 · 20 · 백테스트 — 새 기법 만들기 · 폴더·편집기·터미널·단계 카드\n  ok   43O1-1 · 21 · 백테스트 — 노드·흐름 창 · 노드를 누르면 @칩이 입력창에 들어간다\n  ok   452D-1 · 22 · 백테스트 — 고치기 순환 · 단계 카드를 누르면 diff와 터미널이 열린다\n",
+      "stderrTail": "[paper-screens] 보드 109장 · 통과 101 · 실패 8\n  라우트 없음 4 · 계약 2/14 실패 · 357초\n  FAIL 4TY-0 (C-2) — phrase_missing\n  FAIL 2FR9-2 (8-1) — phrase_missing, structure_mismatch\n  FAIL 1XA2-0 (F-1) — contract_no_sentence\n  FAIL 2DZE-0 (F-1) — contract_no_sentence\n  리포트 app/captures/paper-gates/PAPER-SCREENS.json\n[ratchet] 회귀: 2FR9-2 — 잠긴 보드가 깨졌다\n[ratchet] 회귀: 4TY-0 — 잠긴 보드가 깨졌다\n"
+    },
+    {
+      "script": "verify:paper-mini-static",
+      "ok": false,
+      "code": 1,
+      "timedOut": false,
+      "budgetMs": 30000,
+      "stdoutTail": "\n> athena-shell@0.1.0 verify:paper-mini-static\n> node scripts/paper-mini-static.mjs\n\n",
+      "stderrTail": "[paper-mini-static] 보드 192장(실카드 96 · 주석 96) · 대장 96행\n  M1 매니페스트   ok\n  M2 짝짓기       ok\n  M3 행 대조      일치 19 · 어긋남 77 (행 432개 중 212개)\n     paper_cross_board 10 · form_deviation 17 · ledger_stale 136 · unbacked 49\n     대장에만 있는 element 182개\n  M4 주석 대조    어긋난 주석 94장\n  M5 문법 커버리지 ok (견본 11장이 10종)\n  기준선 대조 (backend/ref/kiumi/evidence/paper-ledger-divergence-20260904.json)\n     증거 match 10 · divergent 84 · unresolved 2 · rows 227 · missing 190\n     측정 match 19 · divergent 77 · unresolved 0 · rows 212 · missing 182\n     재현 불일치 — 증거는 LLM 실측이라 해시가 아니다(리포트 baseline.deltas 참조)\n  리포트 app/captures/paper-gates/PAPER-MINI.json\n  어긋난 보드 171장 — 정본 결정 규칙 §5.2에 따라 대장은 고치지 않는다\n"
+    },
+    {
+      "script": "verify:paper-mini-template",
+      "ok": true,
+      "code": 0,
+      "timedOut": false,
+      "budgetMs": 120000,
+      "stdoutTail": "\n> athena-shell@0.1.0 verify:paper-mini-template\n> electron probe-paper-mini-template.js\n\n\r\n[probe-paper-mini-template] envelopes=11\n[layout] 화면(2560x1392)이 설계 치수를 그대로 수용 — 축소 없음\n[probe-paper-mini-template] render-loop-done count=11\n[probe-paper-mini-template] 견본 11장 · 그려짐 11 · 실패 0\n[probe-paper-mini-template] 문법 10/10\npaper mini template verification passed\n",
+      "stderrTail": ""
+    }
+  ]
+}

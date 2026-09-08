@@ -1,0 +1,1387 @@
+{
+  "schema_version": 1,
+  "status": "complete",
+  "scope": "CODE-001..CODE-081; independent current-source audit",
+  "baseline": "53055acb5504b703a02719efb903689d5a49b490 (tree identical to da5cd98f) plus frozen uncommitted clearWorkspace correction; audit completed before any reviewer authoring.",
+  "status_definitions": {
+    "fixed": "현재 구현에서 원인이 해소되고 해당 변경/현재 검증 경계를 확인함",
+    "open": "현재 소스에 남은 제품 결함·검증 공백·정확성 부채. severity 및 limitation이 중요하며 모두 같은 위험도가 아님",
+    "refuted": "원래 주장이 현재 증거와 양립하지 않음",
+    "historical-only": "과거 기록의 문제이며 현재 제품 결함/현재 완료 근거로 사용하지 않음"
+  },
+  "findings": [
+    {
+      "id": "CODE-001",
+      "status": "fixed",
+      "locations": [
+        [
+          "app/canvas.js",
+          2565
+        ]
+      ],
+      "evidence": "마운트 전에 loading 상태를 기록한다. 첫 paint는 renderSettled 유무를 pending으로 보내고 같은 correlation의 후속 ack가 실제 data/empty/error를 보낸다(547-596). 옛 loading 누락에 의한 무조건 data는 해소됐다. 현 renderLiveChart/mountAitsChartPanel 함수를 VM에서 실행하고 임시 body를 통합 root로 옮긴 뒤 deferred openPanel을 성공/실패시켜 실제 대상 기록을 확인했다.",
+      "commit": "c7a8ae00",
+      "tests": [
+        "contracts: aits-chart-panel",
+        "contracts: rest-dataset-runner",
+        "offline-boundaries: chart success/failure"
+      ],
+      "limitation": "DOM/라이브러리 주입 경계 검사이며 실제 Chromium/GPU/AITS 라이브러리 import 자체는 실행하지 않음."
+    },
+    {
+      "id": "CODE-002",
+      "status": "fixed",
+      "locations": [
+        [
+          "app/canvas.js",
+          2569
+        ]
+      ],
+      "evidence": "실패 시 chartBody.closest('.card')로 현재 통합 root를 찾고 chartBody.parentElement에 오류를 붙인 뒤 chartBody를 제거한다. 제거된 임시 body에만 오류를 남기던 경로가 사라졌다. 현 renderLiveChart/mountAitsChartPanel 함수를 VM에서 실행하고 임시 body를 통합 root로 옮긴 뒤 deferred openPanel을 성공/실패시켜 실제 대상 기록을 확인했다.",
+      "commit": "c7a8ae00",
+      "tests": [
+        "contracts: aits-chart-panel",
+        "offline-boundaries: chart success/failure"
+      ],
+      "limitation": "DOM/라이브러리 주입 경계 검사이며 실제 Chromium/GPU/AITS 라이브러리 import 자체는 실행하지 않음."
+    },
+    {
+      "id": "CODE-003",
+      "status": "fixed",
+      "locations": [
+        [
+          "app/lib/backtest-canvas.js",
+          2088
+        ],
+        [
+          "app/lib/backtest-canvas.test.js",
+          2412
+        ]
+      ],
+      "evidence": "목록 화면의 preset 없는 spec_draft는 startTechniqueFromChat으로 새 뼈대를 만든 뒤 patch를 적용한다. 종목값 반영·applied:true·목록 해제·실제 초안 탭을 검사한다.",
+      "commit": "e88ed203",
+      "tests": [
+        "backtest-canvas"
+      ],
+      "limitation": "실제 모델의 propose_spec 호출은 하지 않음."
+    },
+    {
+      "id": "CODE-004",
+      "status": "fixed",
+      "locations": [
+        [
+          "app/lib/backtest-canvas.js",
+          2136
+        ],
+        [
+          "app/lib/backtest-canvas.test.js",
+          2437
+        ]
+      ],
+      "evidence": "목록의 code_draft가 먼저 새 기법을 세운다. 회귀는 실제 코드 편집기 1개와 목록 0개, 코드·컨텍스트 일치를 단언한다.",
+      "commit": "e88ed203",
+      "tests": [
+        "backtest-canvas"
+      ],
+      "limitation": "DOM stub 검사; 실제 모델/파일 생성 없음."
+    },
+    {
+      "id": "CODE-005",
+      "status": "fixed",
+      "locations": [
+        [
+          "app/lib/main/simple-chart-fast-path.js",
+          28
+        ]
+      ],
+      "evidence": "차트 앞 구간에 다른 화면 코어+접속 조사가 남으면 false를 반환한다. 공유 KOREAN_SCREEN_CORE/JOIN을 사용하며 양쪽 어순의 compound와 각 단일 바인더 비중첩을 실행한다.",
+      "commit": "ab8aeb13",
+      "tests": [
+        "contracts: simple-chart-fast-path",
+        "contracts: rest-dataset-runner"
+      ],
+      "limitation": "현 소스·호출자 대조. 라이브 서비스/Electron 없이 확인한 범위."
+    },
+    {
+      "id": "CODE-006",
+      "status": "fixed",
+      "locations": [
+        [
+          "app/lib/main/simple-chart-fast-path.js",
+          28
+        ]
+      ],
+      "evidence": "CODE-005와 동일 원인·수정이다. 시세랑 차트/호가하고 차트/현재가와 차트가 단순 차트 fast path에서 탈락해 compound 2항목으로 간다.",
+      "commit": "ab8aeb13",
+      "tests": [
+        "contracts: simple-chart-fast-path",
+        "contracts: rest-dataset-runner"
+      ],
+      "limitation": "현 소스·호출자 대조. 라이브 서비스/Electron 없이 확인한 범위."
+    },
+    {
+      "id": "CODE-007",
+      "status": "fixed",
+      "locations": [
+        [
+          "app/lib/paper-card-routing.js",
+          67
+        ]
+      ],
+      "evidence": "과도한 ka1008[1-5] 정규식을 제거하고 manifest AITS 19개 op 집합을 쓴다. ka10084·ka10085 table은 보호하지 않으며 renderer/보드의 실제 마운트 능력으로 판정한다.",
+      "commit": "c04b442e",
+      "tests": [
+        "contracts: paper-card-routing"
+      ],
+      "limitation": "현 소스·호출자 대조. 라이브 서비스/Electron 없이 확인한 범위."
+    },
+    {
+      "id": "CODE-008",
+      "status": "fixed",
+      "locations": [
+        [
+          "app/scripts/run-verify-suite.js",
+          57
+        ]
+      ],
+      "evidence": "타임아웃은 terminateTree(child)를 호출하고 완료까지 기다린다. timedOut 이후 close(0)도 성공으로 뒤집히지 않으며 기존 child.kill 단독 경로가 제거됐다.",
+      "commit": "9e99667f",
+      "tests": [
+        "contracts: run-verify-suite"
+      ],
+      "limitation": "주입한 자식/종료 트리 테스트. 실제 Windows 프로세스 강제종료는 이번 lane에서 실행하지 않음."
+    },
+    {
+      "id": "CODE-009",
+      "status": "fixed",
+      "locations": [
+        [
+          "app/verify-semantic-workspaces.js",
+          295
+        ]
+      ],
+      "evidence": "검증기가 앱의 preservesAppPrimary와 boardTemplateRegistry.primaryRendererFor를 직접 호출한다. recipe 3개 별도 리터럴을 제거했으며 해당 배선과 실제 라우팅 전집합 대조 테스트가 있다.",
+      "commit": "d6d63ab7",
+      "tests": [
+        "contracts: paper-card-routing"
+      ],
+      "limitation": "실제 semantic-workspaces 전체 Electron 검증은 root의 별도 증거. 대표 샘플만으로 전 op 렌더링 완료를 주장하지 않음."
+    },
+    {
+      "id": "CODE-010",
+      "status": "fixed",
+      "locations": [
+        [
+          "app/canvas.js",
+          1982
+        ]
+      ],
+      "evidence": "openPanel 완료 뒤 살아 있는 통합 카드에 sessionId/trId/generation/renderState를 쓴다. 임시 card만 갱신하던 경로를 liveChartCard가 대체한다. 현 renderLiveChart/mountAitsChartPanel 함수를 VM에서 실행하고 임시 body를 통합 root로 옮긴 뒤 deferred openPanel을 성공/실패시켜 실제 대상 기록을 확인했다.",
+      "commit": "c7a8ae00",
+      "tests": [
+        "contracts: aits-chart-panel",
+        "offline-boundaries: chart success/failure"
+      ],
+      "limitation": "DOM/라이브러리 주입 경계 검사이며 실제 Chromium/GPU/AITS 라이브러리 import 자체는 실행하지 않음."
+    },
+    {
+      "id": "CODE-011",
+      "status": "open",
+      "locations": [
+        [
+          "app/chat.css",
+          427
+        ]
+      ],
+      "evidence": "빈 안내 selector는 backtest 모드와 history:empty만 보며 기법 선택 상태를 보지 않는다. 문구는 여전히 '아직 고른 기법이 없습니다'.",
+      "tests": [],
+      "limitation": "현재 CSS와 선택 경로 정적 대조; Electron 재현 미실행.",
+      "commit": null
+    },
+    {
+      "id": "CODE-012",
+      "status": "open",
+      "locations": [
+        [
+          "app/chat.js",
+          4898
+        ],
+        [
+          "app/chat.js",
+          2460
+        ],
+        [
+          "app/chat.js",
+          2499
+        ]
+      ],
+      "evidence": "athena:chat-submit 수신부는 text 유무만 검사하고 dispatchUserQuery를 부른다. state/remoteQueryBusy 게이트가 수신부에 없다. dispatchUserQuery/runQuery도 state 또는 remoteQueryBusy를 검사하지 않는다. 현재 main의 orb 기원 동시 요청 거부는 추가됐으나 shell의 현재 턴 UI를 새 기법 버튼이 다시 시작하는 경계는 별개다.",
+      "tests": [],
+      "limitation": "origin/main7efe1c4 소스 확인; 통합 후 현재 행번호 재확인 및 dispatchUserQuery 내부 게이트 재검토 필요.",
+      "commit": null
+    },
+    {
+      "id": "CODE-013",
+      "status": "open",
+      "locations": [
+        [
+          "app/lib/agent-canvas.js",
+          874
+        ]
+      ],
+      "evidence": "fixture liveCol의 첫 라이브 캡션에 데모 배지만 있고 다음24시간 캡션은 무표시다. 진짜 data-source=live WS 행도 같은 fixture 부모 안에 있어 표시 적용 범위가 불명확하다.",
+      "commit": null,
+      "tests": [
+        "ui: agent-canvas"
+      ],
+      "limitation": "현 소스·호출자 대조. 라이브 서비스/Electron 없이 확인한 범위."
+    },
+    {
+      "id": "CODE-014",
+      "status": "open",
+      "locations": [
+        [
+          "app/lib/agent-canvas.js",
+          2618
+        ]
+      ],
+      "evidence": "상세 최근 실행 캡션에는 fixtureMark가 없고 뒤 logsWrap는 fixtureLogs를 순회한다. data-source 속성만 있으므로 사람이 보는 실행 이력은 여전히 샘플인지 표시되지 않는다.",
+      "commit": null,
+      "tests": [
+        "ui: agent-canvas"
+      ],
+      "limitation": "현 소스·호출자 대조. 라이브 서비스/Electron 없이 확인한 범위."
+    },
+    {
+      "id": "CODE-015",
+      "status": "open",
+      "locations": [
+        [
+          "app/lib/agent-canvas.test.js",
+          88
+        ]
+      ],
+      "evidence": "fixture 카드의 데모 존재와 live 카드 개수만 확인한다. live 카드 내부에 demo-mark가 없다는 음성 단언은 없다. 현재 구현 자체는 stat.source==='fixture'로 조건부 부착한다.",
+      "commit": null,
+      "tests": [
+        "ui: agent-canvas"
+      ],
+      "limitation": "현 테스트 본문 대조. 과거 117개 mutation 결과를 현재 테스트 수로 재사용하지 않음."
+    },
+    {
+      "id": "CODE-016",
+      "status": "open",
+      "locations": [
+        [
+          "app/lib/aits-chart-panel.test.js",
+          361
+        ]
+      ],
+      "evidence": "재조회 8초/clearTimeout 철자를 lowLevel과 canvas 두 파일에서 계속 요구한다. 테스트 그룹의 실제 adapter 동작 검사는 존재하지만 이 두 타임아웃의 만료/정리 동작 대신 같은 구현 배치를 잠근다.",
+      "commit": null,
+      "tests": [
+        "contracts: aits-chart-panel"
+      ],
+      "limitation": "현 소스·호출자 대조. 라이브 서비스/Electron 없이 확인한 범위."
+    },
+    {
+      "id": "CODE-017",
+      "status": "open",
+      "locations": [
+        [
+          "app/lib/backtest-canvas.js",
+          2588
+        ],
+        [
+          "app/lib/backtest-canvas.test.js",
+          2468
+        ]
+      ],
+      "evidence": "e88ed203이 목록 navigate의 applied:true 오류를 고쳐 false/기법 먼저 선택 안내를 반환한다. 다만 원 발견의 초기 컨텍스트 문제는 남아 있다: 목록의 ctx.designTab은 여전히 form이며 별도의 목록 screen 식별이 없다. 항목 전체 종결로 합산하지 않는다.",
+      "commit": "e88ed203",
+      "tests": [
+        "backtest-canvas"
+      ],
+      "limitation": "부분 수정. 초기 화면 컨텍스트 잔존; 모델 실행 없음."
+    },
+    {
+      "id": "CODE-018",
+      "status": "open",
+      "locations": [
+        [
+          "app/lib/backtest-canvas.js",
+          3163
+        ]
+      ],
+      "evidence": "목록 상단에 '처음 있던 N개와 내가 만든 M개를 구분하지 않습니다' 설명을 계속 생성한다.",
+      "tests": [],
+      "limitation": "현재 문자열/렌더 경로 확인; 디자인 규범 기반 지적.",
+      "commit": null
+    },
+    {
+      "id": "CODE-019",
+      "status": "open",
+      "locations": [
+        [
+          "app/lib/chart-card.js",
+          357
+        ]
+      ],
+      "evidence": "HistogramSeries의 priceFormat은 여전히 type:'volume'이며 한국어 만/억 formatter가 없다. 영문 축 단위 요구사항은 구현되지 않았다.",
+      "commit": null,
+      "tests": [
+        "contracts: chart-card"
+      ],
+      "limitation": "설치된 라이브러리 volume formatter 경로 대조. 실제 차트 캡처 없음."
+    },
+    {
+      "id": "CODE-020",
+      "status": "open",
+      "locations": [
+        [
+          "app/probe-live-full.js",
+          271
+        ]
+      ],
+      "evidence": "클릭 표본은 닫힌 SAFE_CLICK_IDS이고 현재 표본 라벨은 LOCKED_CLICKS에 걸리지 않는다. 실동작 안전 경계는 allowlist이며 금지 행동 스킵 목록은 실제 위험 버튼의 차단을 동적으로 검증하지 않는다. 보안 경계 우회가 재현됐다는 뜻은 아니다.",
+      "commit": null,
+      "tests": [],
+      "limitation": "현재 소스 대조. 라이브 서비스나 Electron 실행 없음."
+    },
+    {
+      "id": "CODE-021",
+      "status": "open",
+      "locations": [
+        [
+          "app/probe-live-full.js",
+          324
+        ]
+      ],
+      "evidence": "expectCard:false인 QA-FIN/QA-NEWS는 queryOk를 true로 정한다. result.ok=false 또는 질의 실패여도 최종 검사 성공으로 기록할 수 있다.",
+      "commit": null,
+      "tests": [],
+      "limitation": "현재 소스 대조. 라이브 서비스나 Electron 실행 없음."
+    },
+    {
+      "id": "CODE-022",
+      "status": "open",
+      "locations": [
+        [
+          "app/lib/live-full-catalog.js",
+          62
+        ]
+      ],
+      "evidence": "live-full 전체 예산 180초가 개별 질의 제한과 질의 후 최대 8회 화면 재시도(각 eval 2초 + 대기), 화면 이동 시간을 모두 포괄하지 않는다. 느린 정상 실행도 runner 시간초과가 될 수 있다.",
+      "commit": null,
+      "tests": [],
+      "limitation": "정적 최악 상한 확인. 180초 live 실행/모델 호출은 하지 않음."
+    },
+    {
+      "id": "CODE-023",
+      "status": "open",
+      "locations": [
+        [
+          "app/probe-live-full.js",
+          18
+        ]
+      ],
+      "evidence": "기본 userData가 실제 athena-shell 프로필이다. verify-settings-cards.js도 별도 app.setPath(userData) 격리가 없다. 현재 실행 중 앱과 단일 인스턴스 락/저장 상태를 공유할 수 있다.",
+      "commit": null,
+      "tests": [],
+      "limitation": "현재 소스 대조. 라이브 서비스나 Electron 실행 없음."
+    },
+    {
+      "id": "CODE-024",
+      "status": "open",
+      "locations": [
+        [
+          "app/lib/live-full-catalog.test.js",
+          76
+        ]
+      ],
+      "evidence": "기본 VERIFY_SCRIPTS의 포함 항목만 package scripts 존재 여부로 검사한다. package의 검증 스크립트 전집합을 default/paper/provider/명시 제외로 빠짐없이 분류하는 역방향 검사가 없다. 별도 Paper 스위트가 있으므로 모든 검사를 default로 합쳐야 한다는 뜻은 아니다.",
+      "commit": null,
+      "tests": [
+        "contracts: live-full-catalog"
+      ],
+      "limitation": "현재 소스 대조. 라이브 서비스나 Electron 실행 없음."
+    },
+    {
+      "id": "CODE-025",
+      "status": "open",
+      "locations": [
+        [
+          "app/lib/live-full-catalog.js",
+          57
+        ]
+      ],
+      "evidence": "CODE-024와 같은 수집 완전성 공백이다. 별도 Paper suite 도입은 확인했지만 모든 verify/probe 명령에 대한 포함/제외 원장은 없으며 기본 목록의 수동 선택 누락을 검사하지 않는다.",
+      "commit": null,
+      "tests": [
+        "contracts: live-full-catalog"
+      ],
+      "limitation": "현재 소스 대조. 라이브 서비스나 Electron 실행 없음."
+    },
+    {
+      "id": "CODE-026",
+      "status": "open",
+      "locations": [
+        [
+          "app/lib/main/claude-agent-session.js",
+          752
+        ]
+      ],
+      "evidence": "실패 result/errors를 safeText로 제한해 원문 그대로 turn_failed로 보낸다. CLAUDE_RATE_LIMIT warning 이벤트는 있으나 실제 runtime bootstrap에 onWarning 한국어 변환 소비자가 없다.",
+      "commit": null,
+      "tests": [
+        "ui: claude-agent-session"
+      ],
+      "limitation": "실 CLI/한도 이벤트는 유발하지 않음. 입력 정화와 한국어 제품 문구 변환은 별개다."
+    },
+    {
+      "id": "CODE-027",
+      "status": "open",
+      "locations": [
+        [
+          "app/lib/main/live-prompt.js",
+          608
+        ]
+      ],
+      "evidence": "register_strategy 안내가 여전히 '설계 폼의 내 전략'이라고 쓰며 실제 기법 탭의 목록과 어휘가 다르다.",
+      "tests": [],
+      "limitation": "원격7efe1c4의 현재 프롬프트를 정적 확인; 모델 응답 재현 없음.",
+      "commit": null
+    },
+    {
+      "id": "CODE-028",
+      "status": "open",
+      "locations": [
+        [
+          "app/lib/main/rest-dataset-runner.js",
+          179
+        ]
+      ],
+      "evidence": "restItemForScreenKind의 quote/orderbook/chart 계약이 1056/1079/1124의 단일 빌더와 중복 정의된다. op/args 변경 시 양쪽 동기화가 필요하며 공유 builder로 합쳐지지 않았다.",
+      "commit": null,
+      "tests": [
+        "contracts: rest-dataset-runner"
+      ],
+      "limitation": "현 소스·호출자 대조. 라이브 서비스/Electron 없이 확인한 범위."
+    },
+    {
+      "id": "CODE-029",
+      "status": "fixed",
+      "locations": [
+        [
+          "app/lib/main/rest-dataset-runner.test.js",
+          988
+        ]
+      ],
+      "evidence": "main 문자열 순서 잠금을 제거하고 compound 2항목과 단일 quote/chart/orderbook 및 simple-chart 비중첩을 같은 입력으로 실행한다. 단순 chart 양성 대조도 함께 있다.",
+      "commit": "ab8aeb13",
+      "tests": [
+        "contracts: rest-dataset-runner"
+      ],
+      "limitation": "현 소스·호출자 대조. 라이브 서비스/Electron 없이 확인한 범위."
+    },
+    {
+      "id": "CODE-030",
+      "status": "fixed",
+      "locations": [
+        [
+          "app/lib/main/inflight-once.test.js",
+          26
+        ]
+      ],
+      "evidence": "실제 createOnce를 import해 진행 중 동일 promise, 성공 후 재사용, 실패 후 재시도, 관측/미관측 거부, 재사용 콜백을 실행한다. startup-readiness 테스트는 main 배선을 추가 확인한다.",
+      "commit": "a00a6ffc",
+      "tests": [
+        "contracts: inflight-once",
+        "contracts: startup-readiness"
+      ],
+      "limitation": "현재 소스 대조. 라이브 서비스나 Electron 실행 없음."
+    },
+    {
+      "id": "CODE-031",
+      "status": "fixed",
+      "locations": [
+        [
+          "app/lib/paper-card-routing.test.js",
+          202
+        ]
+      ],
+      "evidence": "chart op 집합 밖 base:ka10001로 canvas_type chart/table/fell_back를 격리한다. chart 축이 없어도 op regex가 대신 통과하던 옛 약한 표본을 교체했다.",
+      "commit": "c04b442e",
+      "tests": [
+        "contracts: paper-card-routing"
+      ],
+      "limitation": "현 소스·호출자 대조. 라이브 서비스/Electron 없이 확인한 범위."
+    },
+    {
+      "id": "CODE-032",
+      "status": "fixed",
+      "locations": [
+        [
+          "app/main.js",
+          368
+        ]
+      ],
+      "evidence": "createWindows가 createOnce(async factory)로 감싸진다. 실패한 별도 deferred promise를 reject하고 다시 throw하던 이중 거부 경로가 사라졌다. inflight-once는 반환 promise에 관측 catch를 걸며 호출자 오류는 보존한다.",
+      "commit": "a00a6ffc",
+      "tests": [
+        "contracts: inflight-once",
+        "contracts: startup-readiness"
+      ],
+      "limitation": "이번 orb admission 수정과 별개인 기존 수정만 평가. 실제 Electron 창 생성 실패 주입은 하지 않음."
+    },
+    {
+      "id": "CODE-033",
+      "status": "open",
+      "locations": [
+        [
+          "app/phase4-traversal.js",
+          117
+        ]
+      ],
+      "evidence": "NAV_LABELS의 설정 네 번째 항목이 여전히 그래프다. 현재 설정 라벨 성향・이력과 어긋나 이 하네스의 탐색 대상으로 쓸 수 없다.",
+      "commit": null,
+      "tests": [],
+      "limitation": "현재 소스 대조. 라이브 서비스나 Electron 실행 없음."
+    },
+    {
+      "id": "CODE-034",
+      "status": "open",
+      "locations": [
+        [
+          "app/probe-backtest-e2e.js",
+          73
+        ]
+      ],
+      "evidence": "목록/하위 탭 클릭은 요소가 있으면 click하고 없어도 true를 반환한다. 실제 선택 여부 단언 없이 고정 wait(400/200) 뒤 계속한다.",
+      "commit": null,
+      "tests": [],
+      "limitation": "현재 소스 대조. 라이브 서비스나 Electron 실행 없음."
+    },
+    {
+      "id": "CODE-035",
+      "status": "open",
+      "locations": [
+        [
+          "app/probe-live-full.js",
+          105
+        ]
+      ],
+      "evidence": "chromeMatches는 headerHidden/title/sub만 비교한다. 같은 함수가 수집한 emptyHistory는 카탈로그의 기대값과 대조하지 않는다.",
+      "commit": null,
+      "tests": [],
+      "limitation": "현재 소스 대조. 라이브 서비스나 Electron 실행 없음."
+    },
+    {
+      "id": "CODE-036",
+      "status": "open",
+      "locations": [
+        [
+          "app/probe-live-full.js",
+          218
+        ]
+      ],
+      "evidence": "8초 고정 대기 뒤 indexReady에 ok:true를 기록한다. 종목 색인의 실제 준비 상태를 판정하지 않는다.",
+      "commit": null,
+      "tests": [],
+      "limitation": "현재 소스 대조. 라이브 서비스나 Electron 실행 없음."
+    },
+    {
+      "id": "CODE-037",
+      "status": "open",
+      "locations": [
+        [
+          "app/probe-live-full.js",
+          323
+        ]
+      ],
+      "evidence": "painted가 cardDelta>0 || result.ok여서 모델 성공만으로 카드 paint 조건을 대체한다. QA-REST 추가 조건 외 일반 expectCard 질의는 실제 카드가 없어도 통과 가능하다.",
+      "commit": null,
+      "tests": [],
+      "limitation": "현재 소스 대조. 라이브 서비스나 Electron 실행 없음."
+    },
+    {
+      "id": "CODE-038",
+      "status": "fixed",
+      "locations": [
+        [
+          "app/scripts/run-verify-suite.js",
+          18
+        ]
+      ],
+      "evidence": "--only 값이 없거나 다음 인수가 플래그이면 오류를 반환한다. 전체 실행을 뜻하는 null로 떨어지는 옛 동작을 양쪽 회귀로 막는다.",
+      "commit": "9e99667f",
+      "tests": [
+        "contracts: run-verify-suite"
+      ],
+      "limitation": "현재 소스 대조. 라이브 서비스나 Electron 실행 없음."
+    },
+    {
+      "id": "CODE-039",
+      "status": "open",
+      "locations": [
+        [
+          "app/scripts/run-verify-suite.js",
+          39
+        ]
+      ],
+      "evidence": "runOne은 exit/timedOut과 stdout/stderr tail만 집계한다. 하네스가 덮어쓰는 리포트·캡처를 해당 실행 ID/시각/해시로 연결하지 않으므로 과거 파일을 이번 실행 근거로 오독할 여지가 남는다.",
+      "commit": null,
+      "tests": [],
+      "limitation": "현재 소스 대조. 라이브 서비스나 Electron 실행 없음."
+    },
+    {
+      "id": "CODE-040",
+      "status": "open",
+      "locations": [
+        [
+          "app/shell.css",
+          722
+        ]
+      ],
+      "evidence": "새 기법 배너 normal/hover가 #fff5fa/#ffedf6 직접값을 유지한다. tokens.css의 토큰/브랜드 알파 규칙으로 대체되지 않았다.",
+      "commit": null,
+      "tests": [],
+      "limitation": "정적 디자인 규칙 불일치. 시각적 색 차이를 새 결함으로 확대하지 않음."
+    },
+    {
+      "id": "CODE-041",
+      "status": "open",
+      "locations": [
+        [
+          "app/shell.css",
+          683
+        ]
+      ],
+      "evidence": "2열 1fr 1fr 트랙과 이름의 white-space:nowrap(778), 이름 자체 min-width/overflow 방어 부재가 유지된다. 긴 사용자 이름의 min-content 폭이 트랙 크기에 영향을 줄 수 있다.",
+      "commit": null,
+      "tests": [],
+      "limitation": "정적 레이아웃 위험 확인. 현재 Electron에서 긴 이름의 가로 스크롤을 직접 재측정하지 않아 실측 재현으로 주장하지 않음."
+    },
+    {
+      "id": "CODE-042",
+      "status": "open",
+      "locations": [
+        [
+          "app/styles/board-surface.css",
+          47
+        ]
+      ],
+      "evidence": "상위 폭 전달에 대한 min-content 설명과 여러 min-width:0 선언은 유지된다. 해당 선언을 문자열로 확인하는 테스트만으로 M 구간 진입 원인을 입증하지 못한다.",
+      "commit": null,
+      "tests": [
+        "ui: board-parity"
+      ],
+      "limitation": "현재 실제 M 폭 실패를 재현한 판정은 아니다. 이후 responsive CSS가 추가되어 과거 'M이 여전히 안 뜬다' 추정까지 계승하지 않고 근거/주석 부채만 열어 둠."
+    },
+    {
+      "id": "CODE-043",
+      "status": "open",
+      "locations": [
+        [
+          "app/verify-settings.js",
+          275
+        ]
+      ],
+      "evidence": "catch에서 app.quit()을 먼저 호출한 뒤 process.exitCode=1을 둔다. 명시 app.exit(1) 또는 종료코드 보존 단언이 없어 실패 시 비정상 종료코드 계약을 보장하지 않는다.",
+      "commit": null,
+      "tests": [],
+      "limitation": "정적 종료 순서 확인. 설정을 바꾸는 Electron 하네스는 재실행하지 않음."
+    },
+    {
+      "id": "CODE-044",
+      "status": "open",
+      "locations": [
+        [
+          "app/verify.js",
+          4242
+        ]
+      ],
+      "evidence": "인접 캡처 중복 비교에 skipped 제외 조건이 없다. 연속 skip 레코드는 hash와 winTitle이 모두 undefined여서 같다고 집계한다.",
+      "commit": null,
+      "tests": [],
+      "limitation": "현재 소스 대조. 라이브 서비스나 Electron 실행 없음."
+    },
+    {
+      "id": "CODE-045",
+      "status": "open",
+      "locations": [
+        [
+          "app/verify.js",
+          3863
+        ]
+      ],
+      "evidence": "Paper 캡처 점수는 width/height>0을 성공 조건에 쓰고 보고서 screenshot 경로는 skip 여부와 관계없이 넣는다. 캡처 실패와 제품 표면 실패/이번 파일의 존재를 구분하지 않는다.",
+      "commit": null,
+      "tests": [],
+      "limitation": "현재 소스 대조. 라이브 서비스나 Electron 실행 없음."
+    },
+    {
+      "id": "CODE-046",
+      "status": "open",
+      "locations": [
+        [
+          "app/verify.js",
+          4244
+        ]
+      ],
+      "evidence": "CODE-044와 동일 원인이다. EXPECTED_IDENTICAL만 제외하며 skip 레코드에는 hash/winTitle이 없지만 비교에 진입한다. 중복 항목으로 연결하며 별도 독립 결함 수로 합산하지 않는다.",
+      "commit": null,
+      "tests": [],
+      "limitation": "현재 소스 대조. 라이브 서비스나 Electron 실행 없음."
+    },
+    {
+      "id": "CODE-047",
+      "status": "open",
+      "locations": [
+        [
+          "docs/handoff/2026-09-07-codex-resume/historical-findings.json",
+          833
+        ]
+      ],
+      "evidence": "원문 두 문서는 c4124f92에서 계좌 식별자가 마스킹됐지만 현 historical-findings의 CODE-047 title/detail/evidence에 전체 식별자가 재복사되어 있다(833-835). 원문 마스킹과 이력 고지만으로 현재 새 원장의 노출까지 해소되지 않았다.",
+      "commit": "c4124f92",
+      "tests": [],
+      "limitation": "민감값을 이 산출물에는 복사하지 않음. 과거 Git 이력 자체의 소급 삭제는 요청/수행하지 않음."
+    },
+    {
+      "id": "CODE-048",
+      "status": "historical-only",
+      "locations": [
+        [
+          "docs/handoff/beta-test-live/ATHENA-BETA-FEEDBACK.md",
+          98
+        ]
+      ],
+      "evidence": "과거 B-06의 GET /api/v1/kiwoom/stock-master 404 설명은 여전히 남아 있다. 현재 실제 적재는 rest-dataset-runner.js:1029의 POST /api/v1/tr/stockinfo/ka10099이며 976의 shape 오류와 별개다. 과거 근인 설명을 현재 진단 증거로 쓰지 않는다.",
+      "commit": null,
+      "tests": [
+        "contracts: rest-dataset-runner"
+      ],
+      "limitation": "현재 종목 인덱스 실패 자체를 이 옛 URL 관측으로 재확정하지 않음."
+    },
+    {
+      "id": "CODE-049",
+      "status": "open",
+      "locations": [
+        [
+          "app/canvas.js",
+          732
+        ]
+      ],
+      "evidence": "renderPrimaryEnvelope 주석은 알려진 3종(table/stream/reader)이지만 현재 분기는 chart/facts/compound/event/action/status도 포함한다. 주석과 실행 표면 종류가 다르다.",
+      "commit": null,
+      "tests": [],
+      "limitation": "현 소스·호출자 대조. 라이브 서비스/Electron 없이 확인한 범위."
+    },
+    {
+      "id": "CODE-050",
+      "status": "refuted",
+      "locations": [
+        [
+          "app/lib/aits-chart-panel.test.js",
+          336
+        ]
+      ],
+      "evidence": "fromIndex 없는 음성 slice 단언은 336에 남아 있으나 현재 281-296의 추가 양성 단언이 같은 slice를 사용한다. renderFreeCanvas가 앞으로 이동해 slice가 비면 assert.match(live, loading 등)가 실패하므로 원문 주장인 '전체 테스트가 조용히 통과'는 현 테스트에서 성립하지 않는다. 범위 헬퍼의 유지보수 개선 가능성만으로 같은 결함을 다시 열지 않는다.",
+      "commit": null,
+      "tests": [
+        "contracts: aits-chart-panel"
+      ],
+      "limitation": "현재 전체 파일의 양성/음성 단언 결합을 정적으로 검토. 함수 순서 변이의 전체 테스트 재실행은 하지 않음."
+    },
+    {
+      "id": "CODE-051",
+      "status": "open",
+      "locations": [
+        [
+          "app/lib/aits-chart-panel.test.js",
+          365
+        ]
+      ],
+      "evidence": "AITS adapter 정적 계약 테스트가 probe-live capture skip/wait(12000)과 orderbook fake json 함수의 철자까지 확인한다. 하네스 구현 변경이 관계없는 adapter 테스트를 깨뜨리는 결합이 남는다.",
+      "commit": null,
+      "tests": [
+        "contracts: aits-chart-panel"
+      ],
+      "limitation": "현 소스·호출자 대조. 라이브 서비스/Electron 없이 확인한 범위."
+    },
+    {
+      "id": "CODE-052",
+      "status": "open",
+      "locations": [
+        [
+          "app/lib/backtest-canvas.js",
+          2914
+        ],
+        [
+          "app/lib/backtest-canvas.js",
+          2921
+        ]
+      ],
+      "evidence": "오류 복귀 버튼 두 경로가 여전히 '설계로 돌아가기'이며 MODE_TABS의 표시 이름은 '기법'이다.",
+      "tests": [],
+      "limitation": "현재 제품 문구 정적 확인.",
+      "commit": null
+    },
+    {
+      "id": "CODE-053",
+      "status": "open",
+      "locations": [
+        [
+          "app/lib/backtest-canvas.js",
+          2991
+        ],
+        [
+          "app/lib/backtest-canvas.test.js",
+          1889
+        ]
+      ],
+      "evidence": "spec 없는 optimize/deploy 예외는 유지된다. 기존 모드 탭 테스트는 상수 목록을 확인하며 이 예외의 렌더 동작을 검증하지 않는다.",
+      "tests": [
+        "backtest-canvas"
+      ],
+      "limitation": "전체 관련 테스트의 전제 추가 대조 필요; 부재를 전체 repo 미검사로 단정하지 않음.",
+      "commit": null
+    },
+    {
+      "id": "CODE-054",
+      "status": "open",
+      "locations": [
+        [
+          "app/lib/backtest-canvas.js",
+          3011
+        ],
+        [
+          "app/lib/backtest-canvas.js",
+          3160
+        ]
+      ],
+      "evidence": "동일 presets.length+userStrategies.length가 헤더 '기법 N개'와 목록 제목 '기법 — N개' 양쪽에 남아 있다.",
+      "tests": [],
+      "limitation": "정적 렌더 경로 대조.",
+      "commit": null
+    },
+    {
+      "id": "CODE-055",
+      "status": "open",
+      "locations": [
+        [
+          "app/lib/backtest-canvas.js",
+          3077
+        ],
+        [
+          "app/lib/backtest-canvas.js",
+          3119
+        ]
+      ],
+      "evidence": "동일 함수의 앞부분 listFirst() 조기반환 이후 !spec&&!userStrategyId&&!techniqueDraft 조건이 다시 있어 도달 불가능 분기가 남는다.",
+      "tests": [],
+      "limitation": "동기 함수 제어흐름 검토.",
+      "commit": null
+    },
+    {
+      "id": "CODE-056",
+      "status": "open",
+      "locations": [
+        [
+          "app/lib/backtest-canvas.js",
+          6469
+        ]
+      ],
+      "evidence": "최적화 적용 버튼이 여전히 '이 값을 설계에 넣기'로 표시된다.",
+      "tests": [],
+      "limitation": "현재 제품 문구 정적 확인.",
+      "commit": null
+    },
+    {
+      "id": "CODE-057",
+      "status": "open",
+      "locations": [
+        [
+          "app/lib/backtest-canvas.test.js",
+          602
+        ]
+      ],
+      "evidence": "목록 mount 검사에 data.symbols/pydantic 부재 단언이 남아 있다. 같은 테스트는 실제 오류 응답을 주입하지 않는다.",
+      "tests": [
+        "backtest-canvas"
+      ],
+      "limitation": "해당 두 단언의 회귀 증거 부족 판정. 다른 목록 동작 단언의 효용까지 부정하지 않음.",
+      "commit": null
+    },
+    {
+      "id": "CODE-058",
+      "status": "open",
+      "locations": [
+        [
+          "app/lib/board-parity.test.js",
+          479
+        ]
+      ],
+      "evidence": "상위폭 min-width 검사는 board-surface와 panel>card 두 문자열뿐이다. viewport/panel/card 보드 선언 변화와 실제 800px에서 M 규칙 진입을 동적으로 확인하지 않는다.",
+      "commit": null,
+      "tests": [
+        "ui: board-parity"
+      ],
+      "limitation": "CODE-042와 연관된 검증 범위 부채. viewport가 column flex의 주축 최소폭을 결정한다는 원문 단정은 채택하지 않음."
+    },
+    {
+      "id": "CODE-059",
+      "status": "open",
+      "locations": [
+        [
+          "app/lib/chart-card.js",
+          760
+        ]
+      ],
+      "evidence": "사용자 note에 재조회 실패 + 원문 reloadFailure가 출력되며 780의 재조회 8초 한도를 넘겼다 메시지가 그대로 노출된다. 한국어 명사구 제품 문구 개선은 미반영이다.",
+      "commit": null,
+      "tests": [
+        "contracts: chart-card"
+      ],
+      "limitation": "현 소스·호출자 대조. 라이브 서비스/Electron 없이 확인한 범위."
+    },
+    {
+      "id": "CODE-060",
+      "status": "open",
+      "locations": [
+        [
+          "app/lib/chart-card.js",
+          777
+        ]
+      ],
+      "evidence": "onReloadRequest 호출 내부 canvas.js:1936에서 8초 timer가 먼저 생기고 외부 chart-card race도 8초 timer를 만든다. 동일 경로에서 같은 deadline 중복은 유지된다.",
+      "commit": null,
+      "tests": [
+        "contracts: chart-card",
+        "contracts: aits-chart-panel"
+      ],
+      "limitation": "마지막 호출자 외 다른 독립 라이브러리 사용에서는 outer guard가 의미 있을 수 있으므로 전부 삭제해야 한다는 결론은 내리지 않음."
+    },
+    {
+      "id": "CODE-061",
+      "status": "open",
+      "locations": [
+        [
+          "app/lib/graph-mode/controller.test.js",
+          1399
+        ]
+      ],
+      "evidence": "다섯 모드 대화 크롬 테스트가 1338의 CSS 문구 및 뒤 1448 D4 배타표 축을 반복한다. 같은 문자열은 live-full-catalog.test에도 있어 변경 비용이 중복된다.",
+      "commit": null,
+      "tests": [],
+      "limitation": "현 소스·호출자 대조. 라이브 서비스/Electron 없이 확인한 범위."
+    },
+    {
+      "id": "CODE-062",
+      "status": "open",
+      "locations": [
+        [
+          "app/lib/live-full-catalog.js",
+          19
+        ]
+      ],
+      "evidence": "MODES에 emptyHistory 기대값이 있으나 probe의 chromeMatches가 이를 읽지 않는다. CODE-035와 같은 미사용 계약 축이다.",
+      "commit": null,
+      "tests": [],
+      "limitation": "현재 소스 대조. 라이브 서비스나 Electron 실행 없음."
+    },
+    {
+      "id": "CODE-063",
+      "status": "open",
+      "locations": [
+        [
+          "app/lib/main/rest-dataset-runner.js",
+          687
+        ]
+      ],
+      "evidence": "첫 성공/로딩 피드백 전에는 두 번째 항목도 startedAt+firstCanvasDeadlineMs를 쓴다. 첫 항목 fetch/render 실패에는 markFirstFeedback가 호출되지 않고 775의 직렬 순서 뒤 남은 예산만 두 번째에 전달된다. 현재 main.js:3575/3613의 실제 direct deadline 30000ms를 읽어 사용했다. 첫 실패 0ms+두 번째 resolve 200ms는 카드 1개, 첫 실패 29900ms+resolve 200ms는 전달된 paint 잔여 -100ms이다. 이 소진 예산을 거부하는 주입 emitCanvas에서는 카드 0개다.",
+      "commit": null,
+      "tests": [
+        "contracts: rest-dataset-runner",
+        "offline-boundaries: first failure / second paint budget"
+      ],
+      "limitation": "fake clock/HTTP/paint 주입으로 예산 계약을 재현했다. main은 이 예산을 최소 1ms로 clamp한다. 과거 3초 사례는 현재 direct 경로에 그대로 적용되지 않으며 실제 네트워크 30초 장애는 유발하지 않았다."
+    },
+    {
+      "id": "CODE-064",
+      "status": "historical-only",
+      "locations": [
+        [
+          "app/lib/settings-cards.js",
+          10
+        ]
+      ],
+      "evidence": "5957776의 chore(comments) 커밋에 동작 동등한 실행 코드 정리가 섞였다는 과거 커밋 범위 지적이다. 현재 실행 오류로 재현되는 결함이 아니며 과거 제목을 고쳤다고 주장하지 않는다.",
+      "commit": "5957776",
+      "tests": [],
+      "limitation": "현 소스·호출자 대조. 라이브 서비스/Electron 없이 확인한 범위."
+    },
+    {
+      "id": "CODE-065",
+      "status": "fixed",
+      "locations": [
+        [
+          "app/lib/settings-cards.js",
+          1546
+        ]
+      ],
+      "evidence": "카드 제목이 성향·이력으로 바뀌고 실제 투자 성향/대화 이력 및 내보내기/삭제를 다룬다. 그래프 수집·노출은 그래프 모드로 분리됐으며 backend가 준 행만 만드는 테스트가 있다.",
+      "commit": "01b24d3e",
+      "tests": [
+        "ui: settings-cards"
+      ],
+      "limitation": "현 소스·호출자 대조. 라이브 서비스/Electron 없이 확인한 범위."
+    },
+    {
+      "id": "CODE-066",
+      "status": "open",
+      "locations": [
+        [
+          "app/probe-backtest-full.js",
+          710
+        ],
+        [
+          "app/probe-backtest-full.js",
+          715
+        ]
+      ],
+      "evidence": "A08이 subtab 0개를 검사한 직후 goSubtab(shellWin,1)을 무조건 호출하고 결과를 보지 않는다.",
+      "tests": [],
+      "limitation": "Electron 대형 프로브는 root와 직렬; 본 감사에서 실행하지 않음.",
+      "commit": null
+    },
+    {
+      "id": "CODE-067",
+      "status": "open",
+      "locations": [
+        [
+          "app/probe-backtest-showcase.js",
+          402
+        ]
+      ],
+      "evidence": "01-mode-empty 캡처 기록 문구가 여전히 '폼 하위탭의 프리셋 목록'이다.",
+      "tests": [],
+      "limitation": "실제 캡처를 새로 생성하지 않고 현재 기록 문자열 확인.",
+      "commit": null
+    },
+    {
+      "id": "CODE-068",
+      "status": "open",
+      "locations": [
+        [
+          "app/probe-live-chart.js",
+          49
+        ]
+      ],
+      "evidence": "lastPrice가 읽는 chart-legend-foot 선택자는 앱 js/css 검색 결과 해당 프로브 한 곳뿐이다. 없는 DOM을 읽어 null인 가격 관측 필드가 남는다.",
+      "commit": null,
+      "tests": [],
+      "limitation": "현 소스·호출자 대조. 라이브 서비스/Electron 없이 확인한 범위."
+    },
+    {
+      "id": "CODE-069",
+      "status": "open",
+      "locations": [
+        [
+          "app/probe-live-chart.js",
+          82
+        ]
+      ],
+      "evidence": "captureOrSkip는 capturePage와 12초 race를 바로 호출한다. 캡처 직전 compositor rAF 2회 확인이나 최신 프레임 보증이 없다.",
+      "commit": null,
+      "tests": [],
+      "limitation": "현 소스·호출자 대조. 라이브 서비스/Electron 없이 확인한 범위."
+    },
+    {
+      "id": "CODE-070",
+      "status": "open",
+      "locations": [
+        [
+          "app/probe-live-chart.js",
+          86
+        ]
+      ],
+      "evidence": "캡처 시간초과 시 console skip 후 return하며 같은 이름의 기존 PNG는 삭제/실행별 구분하지 않는다. CAPTURES도 mkdir만 해서 이전 파일이 현 실행 화면처럼 남을 수 있다.",
+      "commit": null,
+      "tests": [],
+      "limitation": "현 소스·호출자 대조. 라이브 서비스/Electron 없이 확인한 범위."
+    },
+    {
+      "id": "CODE-071",
+      "status": "open",
+      "locations": [
+        [
+          "app/probe-live-full.js",
+          146
+        ]
+      ],
+      "evidence": "실제 앱과 userData를 공유할 때 단일 인스턴스 락으로 main exports가 준비되지 않아 getWins가 없어질 수 있는 경로가 남는다. CODE-023의 하네스 실행 경계와 같은 원인이다.",
+      "commit": null,
+      "tests": [],
+      "limitation": "현재 소스 대조. 라이브 서비스나 Electron 실행 없음."
+    },
+    {
+      "id": "CODE-072",
+      "status": "open",
+      "locations": [
+        [
+          "app/probe-live-full.js",
+          54
+        ]
+      ],
+      "evidence": "captureOrSkip 함수가 인수 창을 사용하지 않고 항상 skipped:true를 반환한다. 카탈로그의 live-full 실행은 스크린샷 증거를 만들 수 없다.",
+      "commit": null,
+      "tests": [],
+      "limitation": "현재 소스 대조. 라이브 서비스나 Electron 실행 없음."
+    },
+    {
+      "id": "CODE-073",
+      "status": "open",
+      "locations": [
+        [
+          "app/probe-live-full.js",
+          121
+        ]
+      ],
+      "evidence": "mode.view.replace('summary','mosaic') 분기는 summary를 앞에서 별도 처리한 뒤라 불필요하다. visible 진단 목록과 실제 exclusiveCanvas 판정의 매핑도 별도여서 메타데이터가 중복된다.",
+      "commit": null,
+      "tests": [],
+      "limitation": "현재 소스 대조. 라이브 서비스나 Electron 실행 없음."
+    },
+    {
+      "id": "CODE-074",
+      "status": "fixed",
+      "locations": [
+        [
+          "app/scripts/run-verify-suite.js",
+          51
+        ]
+      ],
+      "evidence": "stdout와 stderr 스트림을 utf8로 설정해 청크 중간에서 나뉜 한글을 이어 디코드한다. StringDecoder FakeStream으로 4바이트 경계 분할 회귀를 실행한다.",
+      "commit": "9e99667f",
+      "tests": [
+        "contracts: run-verify-suite"
+      ],
+      "limitation": "현재 소스 대조. 라이브 서비스나 Electron 실행 없음."
+    },
+    {
+      "id": "CODE-075",
+      "status": "open",
+      "locations": [
+        [
+          "app/scripts/run-verify-suite.js",
+          127
+        ]
+      ],
+      "evidence": "진행 로그와 최종 JSON을 stdout에 출력할 뿐 run ID를 갖는 결과 JSON 파일을 기록하지 않는다. 종료 후 독립 기계 판정용 영속 출력은 호출자의 리다이렉션에 의존한다.",
+      "commit": null,
+      "tests": [],
+      "limitation": "현재 소스 대조. 라이브 서비스나 Electron 실행 없음."
+    },
+    {
+      "id": "CODE-076",
+      "status": "open",
+      "locations": [
+        [
+          "app/shell.css",
+          738
+        ]
+      ],
+      "evidence": "배너 +의 font-size:17px와 chip의 11px 직접값이 그대로다. tokens.css 유한 타이포 단계와 어긋나는 선언을 정리하지 않았다.",
+      "commit": null,
+      "tests": [],
+      "limitation": "현 소스·호출자 대조. 라이브 서비스/Electron 없이 확인한 범위."
+    },
+    {
+      "id": "CODE-077",
+      "status": "open",
+      "locations": [
+        [
+          "app/shell.css",
+          798
+        ]
+      ],
+      "evidence": "카드 오른쪽 버튼이라는 주석과 실제 column row + align-self:flex-end(아래 오른쪽) 배치가 일치하지 않는다. 실행 위치가 잘못됐다는 의미가 아닌 주석 부채다.",
+      "commit": null,
+      "tests": [],
+      "limitation": "현 소스·호출자 대조. 라이브 서비스/Electron 없이 확인한 범위."
+    },
+    {
+      "id": "CODE-078",
+      "status": "open",
+      "locations": [
+        [
+          "app/shell.css",
+          807
+        ]
+      ],
+      "evidence": "column으로 바뀐 row에 item flex:1 1 auto/min-width:0, missing flex:0 0 100%가 남는다. 특히 missing의 100%는 가로 전체줄이 아니라 세로 basis여서 원래 의도와 달라졌다.",
+      "commit": null,
+      "tests": [],
+      "limitation": "현재 카드 높이 자동 배치에서 눈에 보이는 회귀를 직접 재현하지 않음. 정리 후보를 무조건 제품 고장으로 분류하지 않음."
+    },
+    {
+      "id": "CODE-079",
+      "status": "open",
+      "locations": [
+        [
+          "app/verify.js",
+          172
+        ]
+      ],
+      "evidence": "bootPixelFrames의 누락과 실제 프레임 크기 불일치를 같은 조건과 frame-size-mismatch 사유로 묶는다. 캡처 skip과 크기 변화의 원인을 보고서에서 구별하지 못한다.",
+      "commit": null,
+      "tests": [],
+      "limitation": "현재 소스 대조. 라이브 서비스나 Electron 실행 없음."
+    },
+    {
+      "id": "CODE-080",
+      "status": "open",
+      "locations": [
+        [
+          "app/verify.js",
+          2776
+        ]
+      ],
+      "evidence": "설정 순서 안내 주석의 네 번째 항목 그래프가 현재 성향・이력 라벨과 다르다. CODE-033과 달리 실행 탐색 실패가 아닌 주석 부채다.",
+      "commit": null,
+      "tests": [],
+      "limitation": "현재 소스 대조. 라이브 서비스나 Electron 실행 없음."
+    },
+    {
+      "id": "CODE-081",
+      "status": "historical-only",
+      "locations": [
+        [
+          "docs/handoff/beta-test-live/prd.json",
+          1
+        ]
+      ],
+      "evidence": "과거 베타 PRD의 US-001/002/003/004/006는 passes:true이나 acceptanceCriteria가 없고 US-004 메모에는 남은 화면 범위가 있다. 현 handoff가 보존한 역사 기록으로만 취급하며 이를 현재 전수 종결 증거로 쓰지 않는다.",
+      "commit": null,
+      "tests": [],
+      "limitation": "과거 세션의 완료 판정을 소급 복구하거나 제품 결함 수정으로 주장하지 않음."
+    }
+  ],
+  "test_groups": [
+    {
+      "id": "contracts",
+      "log": ".omc/artifacts/full-review/code-audit-contract-tests.log",
+      "tests": 149,
+      "pass": 149,
+      "fail": 0,
+      "exit_code": 0,
+      "duration_ms": 1022.9365,
+      "scope": "run-verify-suite/inflight-once/startup-readiness/simple-chart-fast-path/paper-card-routing/aits-chart-panel/chart-card/rest-dataset-runner/live-full-catalog"
+    },
+    {
+      "id": "ui-pre-freeze",
+      "log": ".omc/artifacts/full-review/code-audit-ui-tests.log",
+      "tests": 599,
+      "pass": 590,
+      "fail": 9,
+      "exit_code": 1,
+      "scope": "읽기 시점이 clearWorkspace 작성자 RED 단계와 겹침. 아래 최종 실행과 구분하여 보존"
+    },
+    {
+      "id": "ui",
+      "log": ".omc/artifacts/full-review/code-audit-ui-final.log",
+      "tests": 599,
+      "pass": 599,
+      "fail": 0,
+      "exit_code": 0,
+      "duration_ms": 22897.5906,
+      "scope": "backtest-canvas/agent-canvas/settings-cards/board-parity/claude-agent-session"
+    },
+    {
+      "id": "clear-state",
+      "log": ".omc/artifacts/full-review/code-review-clear-state.log",
+      "tests": 13,
+      "pass": 13,
+      "fail": 0,
+      "exit_code": 0,
+      "duration_ms": 1782.614,
+      "scope": "ui 그룹에 포함되는 13개 focused 회귀; 별도 합산 금지"
+    },
+    {
+      "id": "offline-boundaries",
+      "script": ".omc/artifacts/full-review/verify-code-audit-boundaries.js",
+      "log": ".omc/artifacts/full-review/code-audit-boundaries.log",
+      "result": ".omc/artifacts/full-review/code-audit-boundaries.json",
+      "checks": 4,
+      "pass": 4,
+      "fail": 0,
+      "exit_code": 0,
+      "scope": "actual current canvas function extraction with deferred library and movable DOM; actual REST runner with main deadline and fake transport/clock/paint"
+    }
+  ],
+  "limitations": [
+    "라이브 모델·브로커·실주문·실백엔드 호출 없음.",
+    "Electron은 root와 다른 승인 lane의 실행을 중복 실행하지 않음.",
+    "테스트 그룹의 총 PASS는 각 finding의 동작 재현과 동일하지 않으며 정적 검사인 곳을 명시함.",
+    "서로 중복인 finding과 중첩 실행 수를 독립 결함·독립 테스트 수로 더하지 않음."
+  ],
+  "review_role": "Independent read-only source reviewer for this audit. Only .omc audit artifacts were authored in this lane. Subsequent CODE-047 redaction authoring is a separate phase requiring another lane's approval; CODE-047 remains open in this audit snapshot.",
+  "counts": {
+    "fixed": 17,
+    "open": 60,
+    "refuted": 1,
+    "historical-only": 3
+  },
+  "distinct_root_cause_caution": [
+    "CODE-005/006",
+    "CODE-024/025",
+    "CODE-035/062",
+    "CODE-023/071",
+    "CODE-044/046",
+    "CODE-042/058"
+  ],
+  "recorded_at": "2026-09-07T07:39:21.443460+00:00",
+  "head": "53055acb5504b703a02719efb903689d5a49b490",
+  "source_sha256": {
+    "app/canvas.js": "31a7ffafb29000447a6ac438088b182d61f116f2f3f7180e9ae5b2ef70b6b7a7",
+    "app/chat.css": "1823dd70c8d0645817abc662d7e24361b93723af428d705bfda313101f633c0a",
+    "app/chat.js": "04da415612c01c2eb66850edfa70a35c20dec49232053fc5c41dd12507b8554d",
+    "app/lib/agent-canvas.js": "bc0bd8489d01fab27666aa59c209f7a6b9f4c38bfc39dc8cdc1bb85909fb2a2e",
+    "app/lib/agent-canvas.test.js": "1f5c5ff4c85af61c38feddcf1893da684e3c4e77ffa283f9c9b9cd1a74fb3b1c",
+    "app/lib/aits-chart-panel.test.js": "d9a9bb004c1e4c39ca8d04b97b3569a84744a83d3210c70ab781af054ee2ae11",
+    "app/lib/backtest-canvas.js": "3c753e78fd740c76e6c860923375e1a512560a40d45d349021bc8947dbe480a0",
+    "app/lib/backtest-canvas.test.js": "5e8f741768410b00fe6ad3ea85f6255cb86b3193dcddcec0327ff9bbe6b6b185",
+    "app/lib/board-parity.test.js": "3dfcb8c1733c4f38946a20d7809f0ee59ed0e0f9fbc87deb2f29350663779db0",
+    "app/lib/chart-card.js": "932b256f76ed10e5cd8b32727e42cde4d4b89a30878059d25f5a7baafab9e31e",
+    "app/lib/graph-mode/controller.test.js": "8da30d557a3545847d868af6432663b09caf4ee2cf3181d49bccfa5acc281665",
+    "app/lib/live-full-catalog.js": "9d176261173f76570b948bcd9f118502de1735941ddfaa79d1d8673a1b6db89f",
+    "app/lib/live-full-catalog.test.js": "b2efbf9ae118d2eecbde88428f08388de168d5669def322dd3aef06ad7d79c65",
+    "app/lib/main/claude-agent-session.js": "1570fc3d1ddb8f5d5e7eaf712bcb484782cb6905a45ec31d63b0610f8c59109d",
+    "app/lib/main/inflight-once.test.js": "b9e66f437d5341fbe4ec17dda14e070278e1a69890c42d01a1ee1f73b91cd34b",
+    "app/lib/main/live-prompt.js": "1da43307c19110aa9be5dbdd63be1b64d83b4aa373e51df002ee8c3260e9f945",
+    "app/lib/main/rest-dataset-runner.js": "35362c31c93bc1d14b25312f6b8789b35671bacb598cbc48e86676532fb0c020",
+    "app/lib/main/rest-dataset-runner.test.js": "bbfad55e7ef4aed5aae5a51aae04d49e77fdeb60a3915cc08037ac7f114df20d",
+    "app/lib/main/simple-chart-fast-path.js": "3a8fee1a76d14ae9101c12755b4af94a6dc5455f3215487797f017c8b0475204",
+    "app/lib/paper-card-routing.js": "aae224c78d9ff3bd8f2518f9295ad6c8ea9da31624c74ce5afe692ccf932c9ad",
+    "app/lib/paper-card-routing.test.js": "8c8da7e0113f47849f1e97972d4664981ca7e480c580275a1b8faad27ea1cb36",
+    "app/lib/settings-cards.js": "01adac3acd88c103a3eadfac23c739424cb13160d61e06d5c2f674a32873ebda",
+    "app/main.js": "6f6f652135944a882eaa30eede56b2791dcc1a0b97d514f182364fc8281f04e7",
+    "app/phase4-traversal.js": "0b3867ad844ec561341a4aed583fb2c40c9bf2b6a5363466aa054cb8b40ed4a8",
+    "app/probe-backtest-e2e.js": "ec03ebd7e8d9ec054276b7e3ff40d9f3d5a2266b483ed643662ab9df008d34cb",
+    "app/probe-backtest-full.js": "0e0e25a66799c6726eba1eb09831980dc21be5703ab495cd56e958943d7f2490",
+    "app/probe-backtest-showcase.js": "763e85cd4a3559a7b21342b140b0b72456105fbd1a4ada103463904adf68e0f6",
+    "app/probe-live-chart.js": "6612a8071fd215e5822aa971ccc488c57f04e2ad4fe78eba60e2b6da2c161607",
+    "app/probe-live-full.js": "c579c9a4706dfa6c9ed9298d80702e0e4adb48794e87f65709a3535e5a48ea15",
+    "app/scripts/run-verify-suite.js": "51b23035ca6a42d9f58d51a566900993ba1bcd5904d8d50f4fb91ce8893438e4",
+    "app/shell.css": "12b195452f0454120b8693fa085ab65c34ba07fd614d15e5f186a3f9edc4f94f",
+    "app/styles/board-surface.css": "5a6af33c14d387a56745df5dc8c26ec12a32688d34d1c9f632649749d6f53a8e",
+    "app/verify-semantic-workspaces.js": "febf8a7eebfb5af4a383033709ae85b07e3f203ae4e279cbcef1dfff436de3da",
+    "app/verify-settings.js": "1965f7b10b95e01a20e952f2930565fe5c4650321007ca160a4fdd4c17b9c16c",
+    "app/verify.js": "49bbc5087dd63a2891c65a683d7bd3abcb06fee8e393a2fafdfe09c20defa37e",
+    "docs/handoff/2026-09-07-codex-resume/historical-findings.json": "f1944b85794ab1a5a32775803e9fc819e6e89563287dae6500928553c8111059",
+    "docs/handoff/beta-test-live/ATHENA-BETA-FEEDBACK.md": "3e31fb64a26635575f17cee40e6a5d4940f23e4bce9fbcefbdf6a56da501af2b",
+    "docs/handoff/beta-test-live/prd.json": "745496e98aa962e96f60dcd3a814a5d5d51f2d3f8b9961ad220e64f14832242f"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "scope": "handoff artifact integrity only, not approval of product WIP",
+  "finding_ids_unique": 342,
+  "wip_files_byte_identical": 9,
+  "tracked_patch_reverse_apply_check": "PASS",
+  "new_file_included": true,
+  "known_prior_account_identifier_reexposure": 0,
+  "product_code_modified_by_documentation_task": false
+}

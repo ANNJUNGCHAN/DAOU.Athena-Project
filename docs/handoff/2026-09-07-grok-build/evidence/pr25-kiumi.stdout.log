@@ -1,0 +1,26 @@
+
+[layout] 화면(2560x1392)이 설계 치수를 그대로 수용 — 축소 없음
+[verify-kiumi] OK — 검증 준비: 부팅 창을 정리한 셸이 보인다: {"bootPresent":false,"shellVisible":true}
+[verify-kiumi] OK — 보드 08: 다섯 모드에서 data-mode가 모드 키와 같다: [{"view":"summary","dataMode":"chat"},{"view":"graph","dataMode":"graph"},{"view":"agent","dataMode":"agent"},{"view":"plugin","dataMode":"plugin"},{"view":"backtest","dataMode":"backtest"}]
+[verify-kiumi] OK — 보드 08: 어느 모드에서도 보이는 얼굴은 정확히 하나다: [{"mode":"chat","visibleCount":1},{"mode":"graph","visibleCount":1},{"mode":"agent","visibleCount":1},{"mode":"plugin","visibleCount":1},{"mode":"backtest","visibleCount":1}]
+[verify-kiumi] OK — 보드 08: 다섯 모드가 같은 키우미 얼굴 하나를 쓴다 — 모드별 얼굴은 없다: [{"mode":"chat","face":"kiumi-face"},{"mode":"graph","face":"kiumi-face"},{"mode":"agent","face":"kiumi-face"},{"mode":"plugin","face":"kiumi-face"},{"mode":"backtest","face":"kiumi-face"}]
+[verify-kiumi] OK — 보드 08: 얼굴은 도형으로 그려진다(빈 얼굴 없음): [{"mode":"chat","shapes":2},{"mode":"graph","shapes":2},{"mode":"agent","shapes":2},{"mode":"plugin","shapes":2},{"mode":"backtest","shapes":2}]
+[verify-kiumi] OK — 보드 08: 22px 원 · 바이저색 #2F3BA8: {"size":[22,22],"color":"rgb(47, 59, 168)"}
+[verify-kiumi] OK — 보드 07: 메뉴는 380px 굴절형이다: {"width":380,"backdropFilter":"blur(3px) saturate(1.12)"}
+[verify-kiumi] OK — 보드 06: 세 구역 — 추가 · 플러그인 · 설정: {"sections":["추가","플러그인","설정"]}
+[verify-kiumi] OK — 보드 06: 앞 4항목과 뒤 2항목이 Paper 목록과 같다: {"titles":["파일 첨부","폴더 첨부","목표","계획 모드","설치된 플러그인 없음","모델 설정","플러그인 관리"]}
+[verify-kiumi] OK — 보드 06: 플러그인 구역은 등록된 서버 1~6개(없으면 빈 상태 1개): {"middle":["설치된 플러그인 없음"]}
+[verify-kiumi] OK — 보드 06: 아이콘은 전부 선형 SVG이고 바이저색 하나로 통일: {"colors":["rgb(47, 59, 168)"]}
+[verify-kiumi] OK — 보드 06: 이모지 아이콘 0건 · 행 높이 36px 이상: {"minRowHeight":37.296875,"hasEmoji":false}
+[verify-kiumi] OK — 보드 05 DISPLAY B: 알림을 먼저 보여주되 키우미 대화 입력은 열려 있다: {"orbMode":"alert","inputStackHidden":false,"chatBodyHidden":true,"headerTitle":"알림"}
+[verify-kiumi] OK — 보드 05 DISPLAY A: 셸을 숨기면 같은 패널이 미니 채팅이 된다: {"orbMode":"chat","inputStackHidden":false,"chatBodyHidden":false,"headerTitle":"키우미 대화"}
+[verify-kiumi] OK — 보드 01: 접힘 원은 76×76이다: {"size":[76,76]}
+[verify-kiumi] OK — 보드 01: 감시 0건이면 궤도 링을 그리지 않는다: {"orbSize":[76,76],"ringDisplayWhenNoWatch":"none","watching":"false","countText":"","countDisplay":"none","alert":"none","face":"drowsy"}
+[verify-kiumi] OK — 보드 01: 미확인 0건이면 배지를 그리지 않는다(0을 안 그린다): {"orbSize":[76,76],"ringDisplayWhenNoWatch":"none","watching":"false","countText":"","countDisplay":"none","alert":"none","face":"drowsy"}
+[verify-kiumi] OK — 보드 02/03: 얼굴은 공식 상태값 하나를 들고 있다: {"face":"drowsy"}
+[verify-kiumi] OK — 보드 01: 감시가 있으면 점선 궤도가 나타난다: {"ringDisplay":"block","ringBorderStyle":"dashed","countDisplay":"flex","countFont":"\"Geist Mono\", ui-monospace, \"Cascadia Code\", monospace"}
+[verify-kiumi] OK — 보드 01: 미확인이 있으면 배지가 나타난다(모노 숫자): {"ringDisplay":"block","ringBorderStyle":"dashed","countDisplay":"flex","countFont":"\"Geist Mono\", ui-monospace, \"Cascadia Code\", monospace"}
+[verify-kiumi] OK — 보드 05 DISPLAY B: 셸이 다시 보이면 창은 숨고 알림 모드 입력은 유지된다: {"orbVisible":false,"orbMode":"alert","inputStackHidden":false}
+[verify-kiumi] OK — 보드 05 DISPLAY B: 발화가 오면 알림과 키우미 대화 입력이 함께 뜬다: {"orbVisible":true,"orbMode":"alert","inputStackHidden":false}
+[verify-kiumi] OK — 보드 05: 셸 최소화는 표시 모드를 바꾸지 않는다 — 알림과 입력이 유지된다: {"orbMode":"alert","inputStackHidden":false}
+[verify-kiumi] ALL OK (23)

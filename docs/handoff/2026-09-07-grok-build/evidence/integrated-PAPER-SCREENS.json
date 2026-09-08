@@ -1,0 +1,1449 @@
+{
+  "schema_version": 1,
+  "gate": "verify:paper-screens",
+  "generated_at": "2026-09-07T07:43:23.063Z",
+  "selection": {
+    "canonical": true,
+    "boards": 109
+  },
+  "elapsed_ms": 356765,
+  "totals": {
+    "boards": 109,
+    "pass": 101,
+    "fail": 8,
+    "route_missing": 4,
+    "contract": 14,
+    "contract_fail": 2
+  },
+  "ratchet": {
+    "file": "app/lib/paper-screens-ratchet.json",
+    "passing_count": 103,
+    "regressions": [
+      "2FR9-2",
+      "4TY-0"
+    ],
+    "newly_passing": [],
+    "missing": []
+  },
+  "boards": [
+    {
+      "board_id": "11D-0",
+      "page": "1-0",
+      "name": "24 · 주문 — 거래 기능 연결 안내",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 6,
+        "structure": 4,
+        "visible_text_length": 672
+      }
+    },
+    {
+      "board_id": "16OD-2",
+      "page": "1-0",
+      "name": "02 · 부팅 — READY · 0–240ms",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 2,
+        "structure": 3,
+        "visible_text_length": 23
+      }
+    },
+    {
+      "board_id": "16OJ-2",
+      "page": "1-0",
+      "name": "03 · 부팅 — TYPE A→AT · 240–560ms",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 3,
+        "structure": 2,
+        "visible_text_length": 27
+      }
+    },
+    {
+      "board_id": "16OQ-2",
+      "page": "1-0",
+      "name": "04 · 부팅 — TYPE ATH→ATHE · 560–880ms",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 3,
+        "structure": 2,
+        "visible_text_length": 31
+      }
+    },
+    {
+      "board_id": "16OX-2",
+      "page": "1-0",
+      "name": "05 · 부팅 — COMPLETE · 880–1440ms",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 2,
+        "structure": 3,
+        "visible_text_length": 39
+      }
+    },
+    {
+      "board_id": "16P3-2",
+      "page": "1-0",
+      "name": "06 · 부팅 — DIRECT SHELL EXPAND · 1440–1920ms",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 3,
+        "structure": 1,
+        "visible_text_length": 129
+      }
+    },
+    {
+      "board_id": "1DX-0",
+      "page": "1-0",
+      "name": "07 · 온보딩 — CLI 연결 (AT-SY-002)",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 6,
+        "structure": 3,
+        "visible_text_length": 286
+      }
+    },
+    {
+      "board_id": "1FN-0",
+      "page": "1-0",
+      "name": "08 · 온보딩 — 계좌 연결 (AT-SY-003)",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 6,
+        "structure": 3,
+        "visible_text_length": 404
+      }
+    },
+    {
+      "board_id": "1I0-0",
+      "page": "1-0",
+      "name": "19 · 인증 — OAuth 토큰 ready",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 3,
+        "visible_text_length": 231
+      }
+    },
+    {
+      "board_id": "1KK-0",
+      "page": "1-0",
+      "name": "20 · 인증 — 토큰 4상태",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 4,
+        "structure": 3,
+        "visible_text_length": 136
+      }
+    },
+    {
+      "board_id": "1M3-0",
+      "page": "1-0",
+      "name": "21 · 인증 — 계좌 전환",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 5,
+        "visible_text_length": 275
+      }
+    },
+    {
+      "board_id": "1OP-0",
+      "page": "1-0",
+      "name": "22 · 주문 — 검토·영향·확인",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 2,
+        "visible_text_length": 260
+      }
+    },
+    {
+      "board_id": "1Y3-0",
+      "page": "1-0",
+      "name": "11 · 대화 — 모델 팝오버 · 루틴 승인",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 1,
+        "visible_text_length": 143
+      }
+    },
+    {
+      "board_id": "25Q-0",
+      "page": "1-0",
+      "name": "09 · 셸 — 질문 입력 · Task Canvas",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 4,
+        "structure": 2,
+        "visible_text_length": 204
+      }
+    },
+    {
+      "board_id": "2UWT-1",
+      "page": "1-0",
+      "name": "32 · 설정 — 성향·이력",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 2,
+        "visible_text_length": 213
+      }
+    },
+    {
+      "board_id": "2V0K-1",
+      "page": "1-0",
+      "name": "33 · 온보딩 — CLI 연결 실패 (AT-SY-002)",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 5,
+        "structure": 2,
+        "visible_text_length": 310
+      }
+    },
+    {
+      "board_id": "2V27-1",
+      "page": "1-0",
+      "name": "34 · 사이드바 검색 — 결과·빈 결과",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 6,
+        "structure": 3,
+        "visible_text_length": 245
+      }
+    },
+    {
+      "board_id": "3JL-0",
+      "page": "1-0",
+      "name": "12 · 계정 메뉴 — 설정 진입",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 4,
+        "structure": 2,
+        "visible_text_length": 61
+      }
+    },
+    {
+      "board_id": "3KM-0",
+      "page": "1-0",
+      "name": "10 · 셸 — 답변 중 · Task Canvas",
+      "role": "screen",
+      "status": "fail",
+      "failures": [
+        {
+          "code": "route_missing"
+        }
+      ]
+    },
+    {
+      "board_id": "3VHD-1",
+      "page": "1-0",
+      "name": "08 · 그래프 — 되물을 것들 카드 · 지난 대화 읽기 전용",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 2,
+        "visible_text_length": 174
+      }
+    },
+    {
+      "board_id": "3VIQ-1",
+      "page": "1-0",
+      "name": "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 6,
+        "structure": 2,
+        "visible_text_length": 208
+      }
+    },
+    {
+      "board_id": "3VS6-1",
+      "page": "1-0",
+      "name": "36 · 프로젝트 추가 — 폴더 점유",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 3,
+        "visible_text_length": 229
+      }
+    },
+    {
+      "board_id": "3VV8-1",
+      "page": "1-0",
+      "name": "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 3,
+        "visible_text_length": 292
+      }
+    },
+    {
+      "board_id": "3VV9-1",
+      "page": "1-0",
+      "name": "38 · 펜 — 새 대화창 모드 선택",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 5,
+        "structure": 2,
+        "visible_text_length": 305
+      }
+    },
+    {
+      "board_id": "3W9B-1",
+      "page": "1-0",
+      "name": "39 · 동시 실행 — 상태 4종 · 스피너",
+      "role": "screen",
+      "status": "fail",
+      "failures": [
+        {
+          "code": "route_missing"
+        }
+      ]
+    },
+    {
+      "board_id": "3WBZ-1",
+      "page": "1-0",
+      "name": "41 · 세션 복원 — 다시 누르면 그대로",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 3,
+        "visible_text_length": 280
+      }
+    },
+    {
+      "board_id": "3ZPB-0",
+      "page": "1-0",
+      "name": "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 6,
+        "structure": 4,
+        "visible_text_length": 496
+      }
+    },
+    {
+      "board_id": "AJ-0",
+      "page": "1-0",
+      "name": "13 · 설정 — 셸 오버레이",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 5,
+        "structure": 1,
+        "visible_text_length": 230
+      }
+    },
+    {
+      "board_id": "AMZ-0",
+      "page": "1-0",
+      "name": "25 · 모드 전환 — 대화 유지·작업공간 교체",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 5,
+        "structure": 2,
+        "visible_text_length": 21
+      }
+    },
+    {
+      "board_id": "COS-0",
+      "page": "1-0",
+      "name": "26 · 빈 작업공간 — 대화·그래프·백테스트",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 2,
+        "structure": 3,
+        "visible_text_length": 34
+      }
+    },
+    {
+      "board_id": "DH2-0",
+      "page": "1-0",
+      "name": "30 · 대화 턴 — 복원 실패",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 5,
+        "structure": 3,
+        "visible_text_length": 212
+      }
+    },
+    {
+      "board_id": "F9-0",
+      "page": "1-0",
+      "name": "14 · 설정 — 계좌 (AT-ST-001)",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 5,
+        "structure": 0,
+        "visible_text_length": 251
+      }
+    },
+    {
+      "board_id": "FLM-0",
+      "page": "1-0",
+      "name": "16 · 계좌 등록 — 인증 실패 (AT-ST-002)",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 5,
+        "structure": 4,
+        "visible_text_length": 527
+      }
+    },
+    {
+      "board_id": "FPE-0",
+      "page": "1-0",
+      "name": "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 5,
+        "structure": 3,
+        "visible_text_length": 513
+      }
+    },
+    {
+      "board_id": "G5B-0",
+      "page": "1-0",
+      "name": "28 · Windows 반응형 창 · Snap",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 5,
+        "structure": 3,
+        "visible_text_length": 119
+      }
+    },
+    {
+      "board_id": "GCF-0",
+      "page": "1-0",
+      "name": "29 · 프로젝트·최근·새 채팅",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 4,
+        "structure": 3,
+        "visible_text_length": 260
+      }
+    },
+    {
+      "board_id": "OJ-0",
+      "page": "1-0",
+      "name": "18 · 설정 — 모델 · AI 제공업체 계정",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 5,
+        "structure": 0,
+        "visible_text_length": 1120
+      }
+    },
+    {
+      "board_id": "XI-0",
+      "page": "1-0",
+      "name": "15 · 계좌 등록 — 인증 확인 중 (AT-ST-002)",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 6,
+        "structure": 6,
+        "visible_text_length": 514
+      }
+    },
+    {
+      "board_id": "2FIA-2",
+      "page": "D-2",
+      "name": "05 · 그래프 — 수집·노출·브레인 제어",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 3,
+        "visible_text_length": 417
+      }
+    },
+    {
+      "board_id": "2QA3-2",
+      "page": "D-2",
+      "name": "06 · 그래프 — 헤더 필터 (기간·정렬·연결 수)",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 3,
+        "structure": 3,
+        "visible_text_length": 12
+      }
+    },
+    {
+      "board_id": "2QCN-2",
+      "page": "D-2",
+      "name": "07 · 그래프 — 정직성 상태 (이름·인코딩·빈 값)",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 4,
+        "structure": 2,
+        "visible_text_length": 303
+      }
+    },
+    {
+      "board_id": "31H-0",
+      "page": "D-2",
+      "name": "04 · 그래프 — 노드 선택 · 공통 패널",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 4,
+        "visible_text_length": 590
+      }
+    },
+    {
+      "board_id": "3NE-0",
+      "page": "D-2",
+      "name": "01 · 셸 — 그래프 모드 · 요약 뷰",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 4,
+        "structure": 1,
+        "visible_text_length": 172
+      }
+    },
+    {
+      "board_id": "4AN-0",
+      "page": "D-2",
+      "name": "02 · 셸 — 그래프 요약 · 행 선택",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 6,
+        "structure": 4,
+        "visible_text_length": 676
+      }
+    },
+    {
+      "board_id": "4IA-0",
+      "page": "D-2",
+      "name": "03 · 그래프 — 기본 군집 지도",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 3,
+        "visible_text_length": 303
+      }
+    },
+    {
+      "board_id": "2IJN-2",
+      "page": "A-2",
+      "name": "06 · 에이전트 — 작업 설정",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 3,
+        "visible_text_length": 310
+      }
+    },
+    {
+      "board_id": "432Z-1",
+      "page": "A-2",
+      "name": "07 · 에이전트 대화 — 제어 제안 턴 A~E",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 3,
+        "visible_text_length": 486
+      }
+    },
+    {
+      "board_id": "4330-1",
+      "page": "A-2",
+      "name": "08 · 에이전트 대화 — 결과 턴",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 5,
+        "structure": 2,
+        "visible_text_length": 142
+      }
+    },
+    {
+      "board_id": "43WD-1",
+      "page": "A-2",
+      "name": "09 · 에이전트 — 새 알람 · 말로 설명하면 AI가 감시 함수를 만든다",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 4,
+        "structure": 2,
+        "visible_text_length": 530
+      }
+    },
+    {
+      "board_id": "446V-1",
+      "page": "A-2",
+      "name": "10 · 에이전트 — 알람 노드·흐름 · 검사 결과 · 승인",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 12,
+        "visible_text_length": 999
+      }
+    },
+    {
+      "board_id": "44HD-1",
+      "page": "A-2",
+      "name": "11 · 에이전트 — 노드에서 ‘이상해요’ → AI가 고치고 다시 검사",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 5,
+        "visible_text_length": 1071
+      }
+    },
+    {
+      "board_id": "44RV-1",
+      "page": "A-2",
+      "name": "12 · 에이전트 — 활성 코드 알람 · 상세·발화 이력",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 4,
+        "visible_text_length": 817
+      }
+    },
+    {
+      "board_id": "56X-0",
+      "page": "A-2",
+      "name": "01 · 셸 — 알림 파생 방",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 3,
+        "structure": 2,
+        "visible_text_length": 62
+      }
+    },
+    {
+      "board_id": "ARM-0",
+      "page": "A-2",
+      "name": "02 · 에이전트 — 알람 센터 · 라이브 관제",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 1,
+        "visible_text_length": 259
+      }
+    },
+    {
+      "board_id": "B57-0",
+      "page": "A-2",
+      "name": "03 · 에이전트 — 실행 이력·결과",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 4,
+        "structure": 1,
+        "visible_text_length": 87
+      }
+    },
+    {
+      "board_id": "BIM-0",
+      "page": "A-2",
+      "name": "04 · 에이전트 — 프로액티브",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 3,
+        "structure": 1,
+        "visible_text_length": 101
+      }
+    },
+    {
+      "board_id": "BV0-0",
+      "page": "A-2",
+      "name": "05 · 에이전트 — 작업",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 5,
+        "structure": 1,
+        "visible_text_length": 272
+      }
+    },
+    {
+      "board_id": "15J-0",
+      "page": "B-2",
+      "name": "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 3,
+        "visible_text_length": 514
+      }
+    },
+    {
+      "board_id": "2NW8-2",
+      "page": "B-2",
+      "name": "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 2,
+        "visible_text_length": 670
+      }
+    },
+    {
+      "board_id": "2NXS-2",
+      "page": "B-2",
+      "name": "06 · 플러그인 — 상태 모음 (6상태)",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 6,
+        "structure": 4,
+        "visible_text_length": 880
+      }
+    },
+    {
+      "board_id": "3ZJD-0",
+      "page": "B-2",
+      "name": "07 · 플러그인 대화 — 제안 턴 5동작",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 2,
+        "visible_text_length": 1042
+      }
+    },
+    {
+      "board_id": "3ZLW-0",
+      "page": "B-2",
+      "name": "08 · 플러그인 대화 — 결과 턴",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 2,
+        "visible_text_length": 829
+      }
+    },
+    {
+      "board_id": "3ZNO-0",
+      "page": "B-2",
+      "name": "09 · 플러그인 창 복원",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 4,
+        "visible_text_length": 954
+      }
+    },
+    {
+      "board_id": "CU0-0",
+      "page": "B-2",
+      "name": "03 · 플러그인 — 허브·설치",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 2,
+        "visible_text_length": 383
+      }
+    },
+    {
+      "board_id": "CVY-0",
+      "page": "B-2",
+      "name": "04 · 플러그인 — 관리·마켓플레이스",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 4,
+        "visible_text_length": 335
+      }
+    },
+    {
+      "board_id": "FT6-0",
+      "page": "B-2",
+      "name": "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 6,
+        "structure": 2,
+        "visible_text_length": 470
+      }
+    },
+    {
+      "board_id": "2I7Z-2",
+      "page": "C-2",
+      "name": "08 · 키우미 — 입력 스트립 모드별 얼굴",
+      "role": "screen",
+      "status": "fail",
+      "failures": [
+        {
+          "code": "route_missing"
+        }
+      ]
+    },
+    {
+      "board_id": "2LFW-2",
+      "page": "C-2",
+      "name": "09 · 키우미 — 미니 카드 10종",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 6,
+        "structure": 2,
+        "visible_text_length": 1122
+      }
+    },
+    {
+      "board_id": "4TY-0",
+      "page": "C-2",
+      "name": "04 · 키우미 — 대화·콘텐츠 전개",
+      "role": "screen",
+      "status": "fail",
+      "failures": [
+        {
+          "code": "phrase_missing",
+          "root": "#orbPanel",
+          "phrases": [
+            "메인 대화"
+          ]
+        }
+      ]
+    },
+    {
+      "board_id": "C8G-0",
+      "page": "C-2",
+      "name": "07 · 키우미 메뉴 — 셸 오버레이",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 2,
+        "visible_text_length": 295
+      }
+    },
+    {
+      "board_id": "CLE-0",
+      "page": "C-2",
+      "name": "06 · 키우미 메뉴 — 두 진입점과 항목",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 1,
+        "visible_text_length": 165
+      }
+    },
+    {
+      "board_id": "DO-0",
+      "page": "C-2",
+      "name": "01 · 키우미 — 상황별 표현·크기 매핑",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 3,
+        "structure": 3,
+        "visible_text_length": 227
+      }
+    },
+    {
+      "board_id": "1SW0-0",
+      "page": "8-1",
+      "name": "01 · 백테스트 — 설계 (폼)",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 3,
+        "visible_text_length": 668
+      }
+    },
+    {
+      "board_id": "1T5K-0",
+      "page": "8-1",
+      "name": "02 · 백테스트 — 설계 (코드)",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 4,
+        "structure": 2,
+        "visible_text_length": 404
+      }
+    },
+    {
+      "board_id": "1TGA-1",
+      "page": "8-1",
+      "name": "03 · 백테스트 — 결과",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 2,
+        "visible_text_length": 565
+      }
+    },
+    {
+      "board_id": "1TPF-1",
+      "page": "8-1",
+      "name": "04 · 백테스트 — 데이터 수집 승인",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 6,
+        "structure": 2,
+        "visible_text_length": 188
+      }
+    },
+    {
+      "board_id": "1WSI-1",
+      "page": "8-1",
+      "name": "05 · 백테스트 — 이력·비교",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 2,
+        "structure": 2,
+        "visible_text_length": 326
+      }
+    },
+    {
+      "board_id": "1WZJ-1",
+      "page": "8-1",
+      "name": "06 · 백테스트 — 최적화",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 6,
+        "structure": 3,
+        "visible_text_length": 258
+      }
+    },
+    {
+      "board_id": "2FMM-2",
+      "page": "8-1",
+      "name": "07 · 백테스트 — 전략 배포 · 실전 적용",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 2,
+        "visible_text_length": 708
+      }
+    },
+    {
+      "board_id": "2FR9-2",
+      "page": "8-1",
+      "name": "08 · 백테스트 — 코드 플로우 지도",
+      "role": "screen",
+      "status": "fail",
+      "failures": [
+        {
+          "code": "phrase_missing",
+          "root": "#backtestCanvas",
+          "phrases": [
+            "앱이 준비해서 건넵니다",
+            "봉 데이터를 모읍니다",
+            "조절할 값을 정합니다",
+            "가격을 지표로 바꿉니다",
+            "사고·파는 순간을 찍습니다",
+            "성과를 냅니다"
+          ]
+        },
+        {
+          "code": "structure_mismatch",
+          "what": "count",
+          "selector": ".backtest-flow-node.is-app",
+          "expected": 4,
+          "actual": 0
+        },
+        {
+          "code": "structure_mismatch",
+          "what": "count",
+          "selector": ".backtest-flow-node.is-mine",
+          "expected": 4,
+          "actual": 0
+        },
+        {
+          "code": "structure_mismatch",
+          "what": "count",
+          "selector": ".backtest-flow-boundary",
+          "expected": 3,
+          "actual": 0
+        }
+      ]
+    },
+    {
+      "board_id": "2FY9-2",
+      "page": "8-1",
+      "name": "09 · 백테스트 — 오류 진단 · 자동 수정 승인",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 3,
+        "structure": 2,
+        "visible_text_length": 348
+      }
+    },
+    {
+      "board_id": "2GZM-2",
+      "page": "8-1",
+      "name": "10 · 백테스트 — 전략 고르기 · 실패·비활성 상태",
+      "role": "screen",
+      "status": "fail",
+      "failures": [
+        {
+          "code": "route_missing"
+        }
+      ]
+    },
+    {
+      "board_id": "3XL4-1",
+      "page": "8-1",
+      "name": "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 4,
+        "visible_text_length": 872
+      }
+    },
+    {
+      "board_id": "3Y38-1",
+      "page": "8-1",
+      "name": "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 3,
+        "visible_text_length": 799
+      }
+    },
+    {
+      "board_id": "3YFV-1",
+      "page": "8-1",
+      "name": "12 · 백테스트 — 시각 전략 검증 · 연결 오류",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 3,
+        "visible_text_length": 1039
+      }
+    },
+    {
+      "board_id": "3YQ0-1",
+      "page": "8-1",
+      "name": "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 6,
+        "structure": 3,
+        "visible_text_length": 1124
+      }
+    },
+    {
+      "board_id": "3Z0X-1",
+      "page": "8-1",
+      "name": "14 · 백테스트 — 그래프·코드 동기화 완료 · 실행 전",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 2,
+        "visible_text_length": 799
+      }
+    },
+    {
+      "board_id": "3Z8U-1",
+      "page": "8-1",
+      "name": "09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 3,
+        "structure": 2,
+        "visible_text_length": 417
+      }
+    },
+    {
+      "board_id": "3ZAA-1",
+      "page": "8-1",
+      "name": "10 · 그래프 — \"이 노드 설명해줘\" (관계·근거·이력·대화 원문)",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 2,
+        "structure": 4,
+        "visible_text_length": 294
+      }
+    },
+    {
+      "board_id": "3ZC2-1",
+      "page": "8-1",
+      "name": "11 · 그래프 — 편집은 제안까지 · 도구 계약",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 5,
+        "structure": 2,
+        "visible_text_length": 134
+      }
+    },
+    {
+      "board_id": "40EV-1",
+      "page": "8-1",
+      "name": "19 · 백테스트 — 기법 목록 · 새 기법",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 6,
+        "structure": 3,
+        "visible_text_length": 553
+      }
+    },
+    {
+      "board_id": "42FW-1",
+      "page": "8-1",
+      "name": "23 · 백테스트 — 승인 → 기법 목록에 추가 → 실매매 적용(키우미가 켜지면 자동 매매)",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 7,
+        "structure": 3,
+        "visible_text_length": 716
+      }
+    },
+    {
+      "board_id": "43DP-1",
+      "page": "8-1",
+      "name": "20 · 백테스트 — 새 기법 만들기 · 폴더·편집기·터미널·단계 카드",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 4,
+        "structure": 3,
+        "visible_text_length": 1272
+      }
+    },
+    {
+      "board_id": "43O1-1",
+      "page": "8-1",
+      "name": "21 · 백테스트 — 노드·흐름 창 · 노드를 누르면 @칩이 입력창에 들어간다",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 4,
+        "structure": 2,
+        "visible_text_length": 759
+      }
+    },
+    {
+      "board_id": "452D-1",
+      "page": "8-1",
+      "name": "22 · 백테스트 — 고치기 순환 · 단계 카드를 누르면 diff와 터미널이 열린다",
+      "role": "screen",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "phrases": 4,
+        "structure": 3,
+        "visible_text_length": 2020
+      }
+    },
+    {
+      "board_id": "9GJ-0",
+      "page": "1-0",
+      "name": "23 · 주문 — 완료·보류·재시도",
+      "role": "contract",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "sentences": 10
+      }
+    },
+    {
+      "board_id": "177W-2",
+      "page": "F-1",
+      "name": "CC-04 / R02-B · 시간외·통합·금현물 호가",
+      "role": "contract",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "sentences": 1
+      }
+    },
+    {
+      "board_id": "17F8-2",
+      "page": "F-1",
+      "name": "CC-01 / R10-B · 증거금·담보·금현물 잔고",
+      "role": "contract",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "sentences": 5
+      }
+    },
+    {
+      "board_id": "17IH-2",
+      "page": "F-1",
+      "name": "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+      "role": "contract",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "sentences": 4
+      }
+    },
+    {
+      "board_id": "17MB-2",
+      "page": "F-1",
+      "name": "CC-06 / R06-B · 조건검색·이어보기·실시간 해제",
+      "role": "contract",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "sentences": 4
+      }
+    },
+    {
+      "board_id": "1XA2-0",
+      "page": "F-1",
+      "name": "CC-03 / R01-B · 차트 전체 항목·행 상세",
+      "role": "contract",
+      "status": "fail",
+      "failures": [
+        {
+          "code": "contract_no_sentence"
+        }
+      ]
+    },
+    {
+      "board_id": "1XGW-0",
+      "page": "F-1",
+      "name": "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+      "role": "contract",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "sentences": 1
+      }
+    },
+    {
+      "board_id": "24GR-0",
+      "page": "F-1",
+      "name": "CC-04 / R02-X1 · 정규·통합 호가 공식 원문 — ka10004·ka10007",
+      "role": "contract",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "sentences": 1
+      }
+    },
+    {
+      "board_id": "24GS-0",
+      "page": "F-1",
+      "name": "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+      "role": "contract",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "sentences": 1
+      }
+    },
+    {
+      "board_id": "24GT-0",
+      "page": "F-1",
+      "name": "CC-04 / R02-X3 · 시간외·금현물·프로토콜 공식 원문 — 0E·ka10087·ka50101",
+      "role": "contract",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "sentences": 3
+      }
+    },
+    {
+      "board_id": "2DZE-0",
+      "page": "F-1",
+      "name": "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+      "role": "contract",
+      "status": "fail",
+      "failures": [
+        {
+          "code": "contract_no_sentence"
+        }
+      ]
+    },
+    {
+      "board_id": "2E4E-0",
+      "page": "F-1",
+      "name": "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+      "role": "contract",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "sentences": 1
+      }
+    },
+    {
+      "board_id": "322V-0",
+      "page": "F-1",
+      "name": "RX-1 · 순위·정렬 상태 ↔ TR 사양",
+      "role": "contract",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "sentences": 2
+      }
+    },
+    {
+      "board_id": "3XV1-1",
+      "page": "8-1",
+      "name": "18 · 백테스트 — 흐름 지도 강화 명세 · 칸·동사·버전·동기화·로딩",
+      "role": "contract",
+      "status": "pass",
+      "failures": [],
+      "measured": {
+        "sentences": 8
+      }
+    }
+  ]
+}

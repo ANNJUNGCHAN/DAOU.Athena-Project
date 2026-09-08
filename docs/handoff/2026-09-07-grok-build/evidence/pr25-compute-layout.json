@@ -1,0 +1,125 @@
+{
+  "pass": 8,
+  "rows": [
+    {
+      "workArea": {
+        "width": 2560,
+        "height": 1392
+      },
+      "scale": 1,
+      "screen": {
+        "sw": 2560,
+        "sh": 1392
+      },
+      "shellW": 2120,
+      "shellH": 1165,
+      "originX": 220,
+      "originY": 113
+    },
+    {
+      "workArea": {
+        "width": 1920,
+        "height": 1040
+      },
+      "scale": 0.8927038626609443,
+      "screen": {
+        "sw": 1920,
+        "sh": 1040
+      },
+      "shellW": 1893,
+      "shellH": 1040,
+      "originX": 13,
+      "originY": 0
+    },
+    {
+      "workArea": {
+        "width": 1536,
+        "height": 824
+      },
+      "scale": 0.7072961373390558,
+      "screen": {
+        "sw": 1536,
+        "sh": 824
+      },
+      "shellW": 1499,
+      "shellH": 824,
+      "originX": 18,
+      "originY": 0
+    },
+    {
+      "workArea": {
+        "width": 1366,
+        "height": 728
+      },
+      "scale": 0.6248927038626609,
+      "screen": {
+        "sw": 1366,
+        "sh": 728
+      },
+      "shellW": 1325,
+      "shellH": 728,
+      "originX": 20,
+      "originY": 0
+    },
+    {
+      "workArea": {
+        "width": 1280,
+        "height": 720
+      },
+      "scale": 0.6037735849056604,
+      "screen": {
+        "sw": 1280,
+        "sh": 720
+      },
+      "shellW": 1280,
+      "shellH": 703,
+      "originX": 0,
+      "originY": 8
+    },
+    {
+      "workArea": {
+        "width": 1024,
+        "height": 768
+      },
+      "scale": 0.4830188679245283,
+      "screen": {
+        "sw": 1024,
+        "sh": 768
+      },
+      "shellW": 1024,
+      "shellH": 563,
+      "originX": 0,
+      "originY": 102
+    },
+    {
+      "workArea": {
+        "width": 800,
+        "height": 600
+      },
+      "scale": 0.37735849056603776,
+      "screen": {
+        "sw": 800,
+        "sh": 600
+      },
+      "shellW": 800,
+      "shellH": 440,
+      "originX": 0,
+      "originY": 80
+    },
+    {
+      "workArea": {
+        "width": 600,
+        "height": 900
+      },
+      "scale": 0.2830188679245283,
+      "screen": {
+        "sw": 600,
+        "sh": 900
+      },
+      "shellW": 600,
+      "shellH": 330,
+      "originX": 0,
+      "originY": 285
+    }
+  ]
+}

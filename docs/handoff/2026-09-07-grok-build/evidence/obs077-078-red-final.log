@@ -1,0 +1,979 @@
+TAP version 13
+# Subtest: mount(): 헤더(타이틀·부제·탭 3종·검색·CTA)와 통계 카드 4장이 렌더된다
+ok 1 - mount(): 헤더(타이틀·부제·탭 3종·검색·CTA)와 통계 카드 4장이 렌더된다
+  ---
+  duration_ms: 5.7531
+  ...
+# Subtest: 통계 카드: "진행 중"만 fixture, 나머지 3장은 live로 표시된다(3단계 라이브 승격)
+ok 2 - 통계 카드: "진행 중"만 fixture, 나머지 3장은 live로 표시된다(3단계 라이브 승격)
+  ---
+  duration_ms: 0.9606
+  ...
+# Subtest: 통계 카드: 데이터가 없을 때 "다음 실행"·"오늘 발화"는 지어낸 값 없이 정직한 빈 상태를 보여준다(P3)
+ok 3 - 통계 카드: 데이터가 없을 때 "다음 실행"·"오늘 발화"는 지어낸 값 없이 정직한 빈 상태를 보여준다(P3)
+  ---
+  duration_ms: 1.2693
+  ...
+# Subtest: 통계 카드: 예약(scheduled) 라우틴이 있으면 "다음 실행"이 그 next_fire_at으로 채워진다
+ok 4 - 통계 카드: 예약(scheduled) 라우틴이 있으면 "다음 실행"이 그 next_fire_at으로 채워진다
+  ---
+  duration_ms: 23.3568
+  ...
+# Subtest: 성향 제안 카드만 is-accent가 붙는다
+ok 5 - 성향 제안 카드만 is-accent가 붙는다
+  ---
+  duration_ms: 0.6982
+  ...
+# Subtest: refresh(): 라우틴을 받아오면 부제(루틴 N · 감시 M)가 채워진다
+ok 6 - refresh(): 라우틴을 받아오면 부제(루틴 N · 감시 M)가 채워진다
+  ---
+  duration_ms: 1.2632
+  ...
+# Subtest: "모두" 탭: watch 2건 + draft 1건(8단계, ◌ 점선 핑크) + 예약(schedule) 1건이 모두 live로 보인다(3단계)
+ok 7 - "모두" 탭: watch 2건 + draft 1건(8단계, ◌ 점선 핑크) + 예약(schedule) 1건이 모두 live로 보인다(3단계)
+  ---
+  duration_ms: 0.852
+  ...
+# Subtest: 예약(schedule) 행에는 live 출처가 코드로 표시된다(3단계 — 더 이상 fixture가 아니다, P3)
+ok 8 - 예약(schedule) 행에는 live 출처가 코드로 표시된다(3단계 — 더 이상 fixture가 아니다, P3)
+  ---
+  duration_ms: 1.0676
+  ...
+# Subtest: 라이브 라우틴이 하나도 없으면 "조건에 맞는 작업이 없습니다"가 뜬다(예약 fixture 폴백 없음, 3단계)
+ok 9 - 라이브 라우틴이 하나도 없으면 "조건에 맞는 작업이 없습니다"가 뜬다(예약 fixture 폴백 없음, 3단계)
+  ---
+  duration_ms: 0.5813
+  ...
+# Subtest: 탭 "활성": 감시 active 1건 + 예약(schedule) active 1건이 남는다
+ok 10 - 탭 "활성": 감시 active 1건 + 예약(schedule) active 1건이 남는다
+  ---
+  duration_ms: 1.3764
+  ...
+# Subtest: 탭 "일시중지": 감시 paused 1건 + 예약(schedule) paused 1건이 남는다
+ok 11 - 탭 "일시중지": 감시 paused 1건 + 예약(schedule) paused 1건이 남는다
+  ---
+  duration_ms: 0.6419
+  ...
+# Subtest: 예약(schedule) 행은 watch(periodic)와 아이콘 색이 구분된다(사실11⑥, statusRowIcon 3분기)
+ok 12 - 예약(schedule) 행은 watch(periodic)와 아이콘 색이 구분된다(사실11⑥, statusRowIcon 3분기)
+  ---
+  duration_ms: 0.7001
+  ...
+# Subtest: 검색어를 입력하면 감시·예약 모두에서 제목/부제 부분일치로 좁혀진다
+ok 13 - 검색어를 입력하면 감시·예약 모두에서 제목/부제 부분일치로 좁혀진다
+  ---
+  duration_ms: 1.1449
+  ...
+# Subtest: 검색 결과가 0건이면 "조건에 맞는 작업이 없습니다"가 뜬다
+ok 14 - 검색 결과가 0건이면 "조건에 맞는 작업이 없습니다"가 뜬다
+  ---
+  duration_ms: 0.6134
+  ...
+# Subtest: 기본으로 첫 행이 선택돼 상세 패널에 채워진다
+ok 15 - 기본으로 첫 행이 선택돼 상세 패널에 채워진다
+  ---
+  duration_ms: 0.9202
+  ...
+# Subtest: 행을 클릭하면 상세 패널이 그 항목으로 바뀐다
+ok 16 - 행을 클릭하면 상세 패널이 그 항목으로 바뀐다
+  ---
+  duration_ms: 1.1273
+  ...
+# Subtest: 감시(watch) 상세는 백엔드 실제 필드(소스·쿨다운)만 보여준다 — 지어내지 않는다
+ok 17 - 감시(watch) 상세는 백엔드 실제 필드(소스·쿨다운)만 보여준다 — 지어내지 않는다
+  ---
+  duration_ms: 0.746
+  ...
+# Subtest: 예약(schedule) 상세는 백엔드 실제 필드(소스·쿨다운·다음 실행)를 보여주고 data-source가 live다(3단계)
+ok 18 - 예약(schedule) 상세는 백엔드 실제 필드(소스·쿨다운·다음 실행)를 보여주고 data-source가 live다(3단계)
+  ---
+  duration_ms: 0.8145
+  ...
+# Subtest: 예약(schedule) 상세 — "브리핑 모델" 설정값과 "실행 위치"(최근 브리핑 보고 destination)가 실데이터로 렌더된다(6단계)
+ok 19 - 예약(schedule) 상세 — "브리핑 모델" 설정값과 "실행 위치"(최근 브리핑 보고 destination)가 실데이터로 렌더된다(6단계)
+  ---
+  duration_ms: 13.8568
+  ...
+# Subtest: "실행 위치"는 refresh()마다 재조회된다 — 같은 항목을 계속 봐도 낡은 값이 남지 않는다
+ok 20 - "실행 위치"는 refresh()마다 재조회된다 — 같은 항목을 계속 봐도 낡은 값이 남지 않는다
+  ---
+  duration_ms: 5.2192
+  ...
+# Subtest: 감시(watch) active 항목은 "❚❚ 일시중지" 버튼이 활성화돼 있고 클릭 시 pauseRoutine을 부른다
+ok 21 - 감시(watch) active 항목은 "❚❚ 일시중지" 버튼이 활성화돼 있고 클릭 시 pauseRoutine을 부른다
+  ---
+  duration_ms: 0.7932
+  ...
+# Subtest: 감시(watch) paused 항목은 "▶ 재개" 버튼이 활성화돼 있고 클릭 시 resumeRoutine을 부른다
+ok 22 - 감시(watch) paused 항목은 "▶ 재개" 버튼이 활성화돼 있고 클릭 시 resumeRoutine을 부른다
+  ---
+  duration_ms: 0.5067
+  ...
+# Subtest: 예약(schedule) 항목은 일시중지 버튼이 항상 비활성이다(F1 최소선 스코프 밖 — 3단계)
+ok 23 - 예약(schedule) 항목은 일시중지 버튼이 항상 비활성이다(F1 최소선 스코프 밖 — 3단계)
+  ---
+  duration_ms: 0.4992
+  ...
+# Subtest: pauseRoutine 호출 후 상세 패널이 refresh()로 실제 상태를 다시 받아 재개 버튼으로 바뀐다
+ok 24 - pauseRoutine 호출 후 상세 패널이 refresh()로 실제 상태를 다시 받아 재개 버튼으로 바뀐다
+  ---
+  duration_ms: 0.5098
+  ...
+# Subtest: 일시중지 성공은 성공 결과 한 건을 낸다 — 배지·리드·사실행 세 조각
+ok 25 - 일시중지 성공은 성공 결과 한 건을 낸다 — 배지·리드·사실행 세 조각
+  ---
+  duration_ms: 1.1993
+  ...
+# Subtest: 제어가 거절당하면 실패 결과에 다시 시도 칩이 붙고 코드 번호는 빠진다
+ok 26 - 제어가 거절당하면 실패 결과에 다시 시도 칩이 붙고 코드 번호는 빠진다
+  ---
+  duration_ms: 1.1101
+  ...
+# Subtest: 실패 결과에는 다시 부를 손잡이가 함께 온다 — 같은 제어를 그대로 다시 부른다
+ok 27 - 실패 결과에는 다시 부를 손잡이가 함께 온다 — 같은 제어를 그대로 다시 부른다
+  ---
+  duration_ms: 0.8402
+  ...
+# Subtest: onControlResult 배선이 없으면 제어는 그대로 돌아간다 — 조용히 넘어간다
+ok 28 - onControlResult 배선이 없으면 제어는 그대로 돌아간다 — 조용히 넘어간다
+  ---
+  duration_ms: 0.5197
+  ...
+# Subtest: 최근 실행 로그는 fixture로 표시된다(ledger 라이브 연결은 10단계 몫)
+ok 29 - 최근 실행 로그는 fixture로 표시된다(ledger 라이브 연결은 10단계 몫)
+  ---
+  duration_ms: 0.3642
+  ...
+# Subtest: watch 상세: "루틴 발화 — 묻지 않은 턴입니다" + "채팅에서 열기 ↗" 버튼이 뜬다
+ok 30 - watch 상세: "루틴 발화 — 묻지 않은 턴입니다" + "채팅에서 열기 ↗" 버튼이 뜬다
+  ---
+  duration_ms: 0.4791
+  ...
+# Subtest: schedule 상세에도 "채팅에서 열기 ↗"가 뜬다(watch 전용이 아니다 — 예약도 능동 턴을 만든다)
+ok 31 - schedule 상세에도 "채팅에서 열기 ↗"가 뜬다(watch 전용이 아니다 — 예약도 능동 턴을 만든다)
+  ---
+  duration_ms: 0.8752
+  ...
+# Subtest: draft 상세에는 "채팅에서 열기 ↗"가 없다(draft는 발화한 적이 없다, 최근 실행 섹션과 같은 가드)
+ok 32 - draft 상세에는 "채팅에서 열기 ↗"가 없다(draft는 발화한 적이 없다, 최근 실행 섹션과 같은 가드)
+  ---
+  duration_ms: 0.3913
+  ...
+# Subtest: "채팅에서 열기 ↗" 클릭은 onOpenInChat을 그 항목의 id로 부른다
+ok 33 - "채팅에서 열기 ↗" 클릭은 onOpenInChat을 그 항목의 id로 부른다
+  ---
+  duration_ms: 0.3907
+  ...
+# Subtest: 사용자가 고른 행이 필터로 사라지면 상세 패널이 남은 첫 항목으로 넘어간다
+ok 34 - 사용자가 고른 행이 필터로 사라지면 상세 패널이 남은 첫 항목으로 넘어간다
+  ---
+  duration_ms: 0.4543
+  ...
+# Subtest: 사용자가 선택하기 전까지는 새로고침 때마다 항상 "지금 첫 항목"을 따라간다
+ok 35 - 사용자가 선택하기 전까지는 새로고침 때마다 항상 "지금 첫 항목"을 따라간다
+  ---
+  duration_ms: 0.4016
+  ...
+# Subtest: CTA 클릭은 onNewTaskClick을 부른다(43번 원칙 — 시트를 열지 않는다)
+ok 36 - CTA 클릭은 onNewTaskClick을 부른다(43번 원칙 — 시트를 열지 않는다)
+  ---
+  duration_ms: 0.3213
+  ...
+# Subtest: fetchRoutines가 실패하면 정직하게 빈 목록이다(3단계부터 예약 fixture 폴백이 없다, P3)
+ok 37 - fetchRoutines가 실패하면 정직하게 빈 목록이다(3단계부터 예약 fixture 폴백이 없다, P3)
+  ---
+  duration_ms: 0.4381
+  ...
+# Subtest: stale-응답 가드: 먼저 보낸 요청이 나중에 도착해도 최신 데이터를 덮지 않는다
+ok 38 - stale-응답 가드: 먼저 보낸 요청이 나중에 도착해도 최신 데이터를 덮지 않는다
+  ---
+  duration_ms: 35.5381
+  ...
+# Subtest: container가 없으면 mount/refresh가 조용히 아무 것도 안 한다
+ok 39 - container가 없으면 mount/refresh가 조용히 아무 것도 안 한다
+  ---
+  duration_ms: 0.4259
+  ...
+# Subtest: fetchProfileSummary가 없으면 제안 섹션이 숨는다(빈 라벨을 노출하지 않는다, P3)
+ok 40 - fetchProfileSummary가 없으면 제안 섹션이 숨는다(빈 라벨을 노출하지 않는다, P3)
+  ---
+  duration_ms: 0.615
+  ...
+# Subtest: 제안 섹션: 신호가 있으면 보이고 제목·근거문이 실제 필드로만 채워진다(지어내지 않는다)
+ok 41 - 제안 섹션: 신호가 있으면 보이고 제목·근거문이 실제 필드로만 채워진다(지어내지 않는다)
+  ---
+  duration_ms: 0.6914
+  ...
+# Subtest: rationale이 없으면(nullable) 근거문에서 그 부분만 빠진다 — 지어내지 않는다
+ok 42 - rationale이 없으면(nullable) 근거문에서 그 부분만 빠진다 — 지어내지 않는다
+  ---
+  duration_ms: 0.4308
+  ...
+# Subtest: "추가" 클릭 시 onAddSuggestion이 실제 필드로 조합한 문장을 받는다(시트를 열지 않는다, 43 원칙)
+ok 43 - "추가" 클릭 시 onAddSuggestion이 실제 필드로 조합한 문장을 받는다(시트를 열지 않는다, 43 원칙)
+  ---
+  duration_ms: 0.5635
+  ...
+# Subtest: fetchProfileSummary가 실패하면 제안 섹션이 숨는다(지어낸 제안을 보여주지 않는다, P3)
+ok 44 - fetchProfileSummary가 실패하면 제안 섹션이 숨는다(지어낸 제안을 보여주지 않는다, P3)
+  ---
+  duration_ms: 0.5278
+  ...
+# Subtest: 제안 stale-응답 가드: 먼저 보낸 요청이 나중에 도착해도 최신 데이터를 덮지 않는다
+ok 45 - 제안 stale-응답 가드: 먼저 보낸 요청이 나중에 도착해도 최신 데이터를 덮지 않는다
+  ---
+  duration_ms: 42.7595
+  ...
+# Subtest: 라우틴 refresh가 실패해도 제안 refresh는 독립적으로 성공한다(서로 무관한 왕복)
+ok 46 - 라우틴 refresh가 실패해도 제안 refresh는 독립적으로 성공한다(서로 무관한 왕복)
+  ---
+  duration_ms: 0.6081
+  ...
+# Subtest: draft 행은 ◌ 아이콘·"초안 — 채팅에서 만드는 중" 부제·"지금" trailing을 갖는다
+ok 47 - draft 행은 ◌ 아이콘·"초안 — 채팅에서 만드는 중" 부제·"지금" trailing을 갖는다
+  ---
+  duration_ms: 0.4294
+  ...
+# Subtest: draft 상세: 상태 배지가 "초안"이고, 일시중지 버튼도 "최근 실행" 섹션도 없다(읽기 전용, 동선 규칙③)
+ok 48 - draft 상세: 상태 배지가 "초안"이고, 일시중지 버튼도 "최근 실행" 섹션도 없다(읽기 전용, 동선 규칙③)
+  ---
+  duration_ms: 0.427
+  ...
+# Subtest: 탭 "일시중지"·"활성"에는 draft가 나타나지 않는다(draft는 두 상태 어느 쪽도 아니다)
+ok 49 - 탭 "일시중지"·"활성"에는 draft가 나타나지 않는다(draft는 두 상태 어느 쪽도 아니다)
+  ---
+  duration_ms: 0.3655
+  ...
+# Subtest: mount(): 뷰 탭 4종(작업/알람/라이브/제안)이 있고 "작업"이 기본 활성이다(11단계에서 제안 추가)
+ok 50 - mount(): 뷰 탭 4종(작업/알람/라이브/제안)이 있고 "작업"이 기본 활성이다(11단계에서 제안 추가)
+  ---
+  duration_ms: 0.2483
+  ...
+# Subtest: mount(): "작업" 뷰에서는 통계·리스트가 보이고 알람·라이브 컬럼은 숨는다
+ok 51 - mount(): "작업" 뷰에서는 통계·리스트가 보이고 알람·라이브 컬럼은 숨는다
+  ---
+  duration_ms: 0.2401
+  ...
+# Subtest: setActiveView("alerts"): 통계·리스트·검색·CTA가 숨고 알람·라이브 컬럼과 "모두 읽음으로"가 보인다
+ok 52 - setActiveView("alerts"): 통계·리스트·검색·CTA가 숨고 알람·라이브 컬럼과 "모두 읽음으로"가 보인다
+  ---
+  duration_ms: 1.3472
+  ...
+# Subtest: 알람 행: 실제 fetchAlerts() 필드(title·sub·firedAt)만 쓴다 — 미확인은 is-unread
+ok 53 - 알람 행: 실제 fetchAlerts() 필드(title·sub·firedAt)만 쓴다 — 미확인은 is-unread
+  ---
+  duration_ms: 0.5599
+  ...
+# Subtest: 알람 탭 라벨: 미확인 개수가 있으면 "알람 N", 없으면 "알람"
+ok 54 - 알람 탭 라벨: 미확인 개수가 있으면 "알람 N", 없으면 "알람"
+  ---
+  duration_ms: 0.3896
+  ...
+# Subtest: 알람이 하나도 없으면 "받은 알람이 없습니다"가 뜬다(fixture로 채우지 않는다, P3)
+ok 55 - 알람이 하나도 없으면 "받은 알람이 없습니다"가 뜬다(fixture로 채우지 않는다, P3)
+  ---
+  duration_ms: 0.2527
+  ...
+# Subtest: "모두 읽음으로" 클릭 시 markAllAlertsRead가 불리고 알람 컬럼이 다시 그려진다
+ok 56 - "모두 읽음으로" 클릭 시 markAllAlertsRead가 불리고 알람 컬럼이 다시 그려진다
+  ---
+  duration_ms: 0.3347
+  ...
+# Subtest: 라이브 컬럼: 진행바 2건 + "다음 24시간" 타임라인 4건이 fixture로 뜬다
+ok 57 - 라이브 컬럼: 진행바 2건 + "다음 24시간" 타임라인 4건이 fixture로 뜬다
+  ---
+  duration_ms: 0.2626
+  ...
+# Subtest: "WS 연결됨" — getWsConnected()가 실데이터다, false면 정직하게 "연결 안 됨"
+ok 58 - "WS 연결됨" — getWsConnected()가 실데이터다, false면 정직하게 "연결 안 됨"
+  ---
+  duration_ms: 0.2562
+  ...
+# Subtest: 감시(watch) 상세에만 "전체 이력 보기 →"가 있다 — draft·예약(schedule)에는 없다
+ok 59 - 감시(watch) 상세에만 "전체 이력 보기 →"가 있다 — draft·예약(schedule)에는 없다
+  ---
+  duration_ms: 0.4647
+  ...
+# Subtest: "전체 이력 보기 →" 클릭 시 브레드크럼("작업 › 이름"+배지)이 뜨고 작업 화면이 숨는다
+ok 60 - "전체 이력 보기 →" 클릭 시 브레드크럼("작업 › 이름"+배지)이 뜨고 작업 화면이 숨는다
+  ---
+  duration_ms: 4.0013
+  ...
+# Subtest: 최근 30회는 fetchRuns(id) 실데이터 — 최신 먼저, ledger 실제 verdict 3종만 아이콘화한다(AC10)
+ok 61 - 최근 30회는 fetchRuns(id) 실데이터 — 최신 먼저, ledger 실제 verdict 3종만 아이콘화한다(AC10)
+  ---
+  duration_ms: 2.1366
+  ...
+# Subtest: 실행 이력이 없으면 "실행 이력이 없습니다"가 뜬다(지어내지 않는다, P3)
+ok 62 - 실행 이력이 없으면 "실행 이력이 없습니다"가 뜬다(지어내지 않는다, P3)
+  ---
+  duration_ms: 4.0961
+  ...
+# Subtest: 30회 통계 3타일(평균·발화→열람·이어진 대화)은 전부 live다(F-stage5b-FE, R2에서 지표 정의 미확정 타일 제거)
+ok 63 - 30회 통계 3타일(평균·발화→열람·이어진 대화)은 전부 live다(F-stage5b-FE, R2에서 지표 정의 미확정 타일 제거)
+  ---
+  duration_ms: 14.0578
+  ...
+# Subtest: "발화→열람"·"이어진 대화" 타일: fetchEngagement가 없거나 실패하면 지어낸 숫자 없이 "—"를 보여준다(P3)
+ok 64 - "발화→열람"·"이어진 대화" 타일: fetchEngagement가 없거나 실패하면 지어낸 숫자 없이 "—"를 보여준다(P3)
+  ---
+  duration_ms: 1.3488
+  ...
+# Subtest: "발화→열람"·"이어진 대화" 타일: opened_rate/replied_count(F-stage5b-BE)를 라이브로 표시한다
+ok 65 - "발화→열람"·"이어진 대화" 타일: opened_rate/replied_count(F-stage5b-BE)를 라이브로 표시한다
+  ---
+  duration_ms: 13.6923
+  ...
+# Subtest: "평균" 타일: fetchAvgDuration이 없거나 실패하면 지어낸 숫자 없이 "—"를 보여준다(P3)
+ok 66 - "평균" 타일: fetchAvgDuration이 없거나 실패하면 지어낸 숫자 없이 "—"를 보여준다(P3)
+  ---
+  duration_ms: 15.9835
+  ...
+# Subtest: "평균" 타일: avg_duration_ms(4단계, ms)를 초 단위 문자열로 라이브 표시한다
+ok 67 - "평균" 타일: avg_duration_ms(4단계, ms)를 초 단위 문자열로 라이브 표시한다
+  ---
+  duration_ms: 15.775
+  ...
+# Subtest: "오늘 산출물" 카드 — 오늘 발화된 브리핑 본문이 있으면 실데이터로 렌더된다(6단계, fixture 제거)
+ok 68 - "오늘 산출물" 카드 — 오늘 발화된 브리핑 본문이 있으면 실데이터로 렌더된다(6단계, fixture 제거)
+  ---
+  duration_ms: 15.8569
+  ...
+# Subtest: "오늘 산출물" 카드 — 오늘 발화 브리핑이 없으면(어제 것뿐이어도) 카드 자체를 렌더하지 않는다
+ok 69 - "오늘 산출물" 카드 — 오늘 발화 브리핑이 없으면(어제 것뿐이어도) 카드 자체를 렌더하지 않는다
+  ---
+  duration_ms: 14.8504
+  ...
+# Subtest: "오늘 산출물" 카드 — truncated면 절단 사실을 명시한다(잘렸다는 사실을 숨기지 않는다, P3)
+ok 70 - "오늘 산출물" 카드 — truncated면 절단 사실을 명시한다(잘렸다는 사실을 숨기지 않는다, P3)
+  ---
+  duration_ms: 16.1093
+  ...
+# Subtest: "작업 ›" 클릭 시 드릴인이 닫히고 "작업" 화면이 복원된다
+ok 71 - "작업 ›" 클릭 시 드릴인이 닫히고 "작업" 화면이 복원된다
+  ---
+  duration_ms: 1.6748
+  ...
+# Subtest: "작업 ›" 클릭 후에는 "작업" 탭이 다시 활성으로 표시된다(실측 버그 수정 — 이전엔 복귀 후 아무 탭도 활성이 아니었다)
+ok 72 - "작업 ›" 클릭 후에는 "작업" 탭이 다시 활성으로 표시된다(실측 버그 수정 — 이전엔 복귀 후 아무 탭도 활성이 아니었다)
+  ---
+  duration_ms: 13.9721
+  ...
+# Subtest: setActiveView("proactive"): 작업 화면이 숨고 프로액티브 화면 + "그래프 모드에서 근거 보기 →"가 보인다
+ok 73 - setActiveView("proactive"): 작업 화면이 숨고 프로액티브 화면 + "그래프 모드에서 근거 보기 →"가 보인다
+  ---
+  duration_ms: 0.5063
+  ...
+# Subtest: "그래프 모드에서 근거 보기 →" 클릭 시 onOpenGraph가 불린다(사이드바 모드 네비 재사용)
+ok 74 - "그래프 모드에서 근거 보기 →" 클릭 시 onOpenGraph가 불린다(사이드바 모드 네비 재사용)
+  ---
+  duration_ms: 0.3733
+  ...
+# Subtest: "지금 읽히는 성향" 스트립은 suggestionsCache(7단계와 같은 원천)의 relation_kind를 합친다 — 지어내지 않는다
+ok 75 - "지금 읽히는 성향" 스트립은 suggestionsCache(7단계와 같은 원천)의 relation_kind를 합친다 — 지어내지 않는다
+  ---
+  duration_ms: 0.6228
+  ...
+# Subtest: 스트립 우측 메타: 가장 최근 observed_at으로 신선도를 낸다(분 단위)
+ok 76 - 스트립 우측 메타: 가장 최근 observed_at으로 신선도를 낸다(분 단위)
+  ---
+  duration_ms: 1.2724
+  ...
+# Subtest: 스트립 우측 메타: observed_at이 없으면 신선도를 지어내지 않고 신호 수만 남긴다(P3)
+ok 77 - 스트립 우측 메타: observed_at이 없으면 신선도를 지어내지 않고 신호 수만 남긴다(P3)
+  ---
+  duration_ms: 0.4202
+  ...
+# Subtest: 신호가 없으면 스트립이 정직하게 "아직 읽히는 성향이 없습니다"를 보여준다(P3)
+ok 78 - 신호가 없으면 스트립이 정직하게 "아직 읽히는 성향이 없습니다"를 보여준다(P3)
+  ---
+  duration_ms: 0.3101
+  ...
+# Subtest: 제안 카드: 칩 "루틴으로"/"보류"가 있고, "루틴으로"는 7단계와 같은 문장을 채팅에 심는다
+ok 79 - 제안 카드: 칩 "루틴으로"/"보류"가 있고, "루틴으로"는 7단계와 같은 문장을 채팅에 심는다
+  ---
+  duration_ms: 0.4544
+  ...
+# Subtest: "보류" 클릭 시 그 카드는 이번 세션에서만 숨는다(저장 안 됨, P3) — 탭 배지도 줄어든다
+ok 80 - "보류" 클릭 시 그 카드는 이번 세션에서만 숨는다(저장 안 됨, P3) — 탭 배지도 줄어든다
+  ---
+  duration_ms: 0.4973
+  ...
+# Subtest: 모든 제안을 보류하면 "지금은 표시할 제안이 없습니다"가 뜬다
+ok 81 - 모든 제안을 보류하면 "지금은 표시할 제안이 없습니다"가 뜬다
+  ---
+  duration_ms: 0.4008
+  ...
+# Subtest: 말걸기 가드: 라이브 데이터 도착 전엔 "불러오는 중"으로 정직하게 보인다(F-stage9, P3)
+ok 82 - 말걸기 가드: 라이브 데이터 도착 전엔 "불러오는 중"으로 정직하게 보인다(F-stage9, P3)
+  ---
+  duration_ms: 0.2343
+  ...
+# Subtest: 말걸기 가드: GET /api/v1/nudge-guard 라이브 값으로 태그 4개 + 안내 문구를 채운다(F-stage9, 8단계 백엔드 연결)
+ok 83 - 말걸기 가드: GET /api/v1/nudge-guard 라이브 값으로 태그 4개 + 안내 문구를 채운다(F-stage9, 8단계 백엔드 연결)
+  ---
+  duration_ms: 0.426
+  ...
+# Subtest: 말걸기 가드: 값이 꺼져 있으면 "끔" 문구로 정확히 반영한다(지어내지 않는다)
+ok 84 - 말걸기 가드: 값이 꺼져 있으면 "끔" 문구로 정확히 반영한다(지어내지 않는다)
+  ---
+  duration_ms: 0.4463
+  ...
+# Subtest: 말걸기 가드: fetchNudgeGuard가 실패해도 지어낸 값으로 채우지 않는다(P3)
+ok 85 - 말걸기 가드: fetchNudgeGuard가 실패해도 지어낸 값으로 채우지 않는다(P3)
+  ---
+  duration_ms: 0.4113
+  ...
+# Subtest: 이중 제어 규칙: 작업 뷰 하단 캡션은 「이중 제어 규칙」이다
+ok 86 - 이중 제어 규칙: 작업 뷰 하단 캡션은 「이중 제어 규칙」이다
+  ---
+  duration_ms: 0.2807
+  ...
+# Subtest: 이중 제어 규칙: 3줄이 Paper C6V-0~C6X-0 원문 그대로다
+ok 87 - 이중 제어 규칙: 3줄이 Paper C6V-0~C6X-0 원문 그대로다
+  ---
+  duration_ms: 0.3143
+  ...
+# Subtest: 이중 제어 규칙: 문구가 GUI 입구를 부정하지 않는다
+ok 88 - 이중 제어 규칙: 문구가 GUI 입구를 부정하지 않는다
+  ---
+  duration_ms: 0.3088
+  ...
+# Subtest: 이중 제어 규칙: 화면 자신의 계약이라 data-source 표기를 달지 않는다
+ok 89 - 이중 제어 규칙: 화면 자신의 계약이라 data-source 표기를 달지 않는다
+  ---
+  duration_ms: 0.2652
+  ...
+# Subtest: 이중 제어 규칙: 알람·라이브·제안 뷰로 가면 작업 뷰와 함께 숨는다
+ok 90 - 이중 제어 규칙: 알람·라이브·제안 뷰로 가면 작업 뷰와 함께 숨는다
+  ---
+  duration_ms: 0.3138
+  ...
+# Subtest: 실행 목록: 오늘·어제·그 이전을 날짜 그룹 머리로 끊는다(Paper 보드 03)
+ok 91 - 실행 목록: 오늘·어제·그 이전을 날짜 그룹 머리로 끊는다(Paper 보드 03)
+  ---
+  duration_ms: 4.8447
+  ...
+# Subtest: 실행 목록: 같은 날 실행 2건은 그룹 머리를 한 번만 만든다
+ok 92 - 실행 목록: 같은 날 실행 2건은 그룹 머리를 한 번만 만든다
+  ---
+  duration_ms: 2.9255
+  ...
+# Subtest: 실행 목록: 행 시각은 날짜 없이 HH:MM만 남는다(날짜는 그룹 머리 몫)
+ok 93 - 실행 목록: 행 시각은 날짜 없이 HH:MM만 남는다(날짜는 그룹 머리 몫)
+  ---
+  duration_ms: 15.7315
+  ...
+# Subtest: 실행 목록: 6건까지만 펼쳐 두고 나머지는 "지난 실행 N건 더" 뒤에 둔다
+ok 94 - 실행 목록: 6건까지만 펼쳐 두고 나머지는 "지난 실행 N건 더" 뒤에 둔다
+  ---
+  duration_ms: 1.1357
+  ...
+# Subtest: 실행 목록: 6건 이하면 더보기 푸터를 만들지 않는다
+ok 95 - 실행 목록: 6건 이하면 더보기 푸터를 만들지 않는다
+  ---
+  duration_ms: 14.1643
+  ...
+# Subtest: 알람 피드: 6건까지만 보이고 나머지는 "지난 알람 N건 더" 뒤에 둔다
+ok 96 - 알람 피드: 6건까지만 보이고 나머지는 "지난 알람 N건 더" 뒤에 둔다
+  ---
+  duration_ms: 0.6852
+  ...
+# Subtest: 알람 피드: 접혀 있어도 탭 배지는 전체 미확인 수를 센다(가려진 건도 미확인이다)
+ok 97 - 알람 피드: 접혀 있어도 탭 배지는 전체 미확인 수를 센다(가려진 건도 미확인이다)
+  ---
+  duration_ms: 0.3206
+  ...
+# Subtest: 타임라인: 각 행이 시각 열을 갖는다
+ok 98 - 타임라인: 각 행이 시각 열을 갖는다
+  ---
+  duration_ms: 0.2489
+  ...
+# Subtest: 타임라인: 점 색이 갈래별로 갈린다(예약·프로액티브·감시)
+ok 99 - 타임라인: 점 색이 갈래별로 갈린다(예약·프로액티브·감시)
+  ---
+  duration_ms: 0.2713
+  ...
+# Subtest: 알람 아이콘: 예약(scheduled) 발화는 ● 초록, 조건 감시 발화는 ◆ 핑크
+ok 100 - 알람 아이콘: 예약(scheduled) 발화는 ● 초록, 조건 감시 발화는 ◆ 핑크
+  ---
+  duration_ms: 0.3108
+  ...
+# Subtest: 알람 아이콘: mode가 없는(하이드레이션 이전) 방은 조건 감시 쪽 ◆로 떨어진다
+ok 101 - 알람 아이콘: mode가 없는(하이드레이션 이전) 방은 조건 감시 쪽 ◆로 떨어진다
+  ---
+  duration_ms: 0.2402
+  ...
+# Subtest: 드릴인 세그먼트: 작업 뷰에서는 숨고, 드릴인을 열면 [이력][설정]이 나온다
+ok 102 - 드릴인 세그먼트: 작업 뷰에서는 숨고, 드릴인을 열면 [이력][설정]이 나온다
+  ---
+  duration_ms: 3.0857
+  ...
+# Subtest: 드릴인 세그먼트: "설정"을 누르면 이력 본문이 숨고 「설정 — 요약」이 나온다
+ok 103 - 드릴인 세그먼트: "설정"을 누르면 이력 본문이 숨고 「설정 — 요약」이 나온다
+  ---
+  duration_ms: 10.5885
+  ...
+# Subtest: 드릴인 설정: 요약만 있는 동안에는 값을 바꾸는 입력이 하나도 없다
+ok 104 - 드릴인 설정: 요약만 있는 동안에는 값을 바꾸는 입력이 하나도 없다
+  ---
+  duration_ms: 14.9179
+  ...
+# Subtest: 드릴인 설정: [설정 편집]이 상세를 1회 불러 실시간 소스 폼(8필드)을 세운다
+ok 105 - 드릴인 설정: [설정 편집]이 상세를 1회 불러 실시간 소스 폼(8필드)을 세운다
+  ---
+  duration_ms: 17.4277
+  ...
+# Subtest: 드릴인 설정: 예약 소스 폼에는 연속 틱이 없다(7필드) — 분기는 소스 명세가 낸다
+ok 106 - 드릴인 설정: 예약 소스 폼에는 연속 틱이 없다(7필드) — 분기는 소스 명세가 낸다
+  ---
+  duration_ms: 13.8969
+  ...
+# Subtest: 드릴인 설정: 코드 감시 폼에는 조건 행 자체가 없다(백엔드가 폼 편집을 막는다)
+ok 107 - 드릴인 설정: 코드 감시 폼에는 조건 행 자체가 없다(백엔드가 폼 편집을 막는다)
+  ---
+  duration_ms: 16.0027
+  ...
+# Subtest: 드릴인 설정: [저장]은 폼 값을 update로 보내고 만료를 비워 두면 안 싣는다
+ok 108 - 드릴인 설정: [저장]은 폼 값을 update로 보내고 만료를 비워 두면 안 싣는다
+  ---
+  duration_ms: 16.2076
+  ...
+# Subtest: 드릴인 설정: 저장이 실패하면 폼을 닫지 않고 사유를 남기며 친 값도 그대로 둔다
+ok 109 - 드릴인 설정: 저장이 실패하면 폼을 닫지 않고 사유를 남기며 친 값도 그대로 둔다
+  ---
+  duration_ms: 14.5295
+  ...
+# Subtest: 드릴인 설정: [이력]에 갔다 [설정]으로 돌아와도 폼에 친 값이 남는다
+ok 110 - 드릴인 설정: [이력]에 갔다 [설정]으로 돌아와도 폼에 친 값이 남는다
+  ---
+  duration_ms: 2.6124
+  ...
+# Subtest: 드릴인 설정: 폼 버튼 행에 "채팅에서 고치기 ↗"가 남는다 — 두 입구가 같은 게이트
+ok 111 - 드릴인 설정: 폼 버튼 행에 "채팅에서 고치기 ↗"가 남는다 — 두 입구가 같은 게이트
+  ---
+  duration_ms: 1.9025
+  ...
+# Subtest: 드릴인 설정: 상세를 못 받으면 빈 폼 대신 그 사실을 적는다
+ok 112 - 드릴인 설정: 상세를 못 받으면 빈 폼 대신 그 사실을 적는다
+  ---
+  duration_ms: 10.7454
+  ...
+# Subtest: settingsUpdateBody: 브리핑 모델을 "앱 기본"으로 되돌리면 null로 나간다
+ok 113 - settingsUpdateBody: 브리핑 모델을 "앱 기본"으로 되돌리면 null로 나간다
+  ---
+  duration_ms: 0.427
+  ...
+# Subtest: settingsUpdateBody: 설명을 안 건드리고 조건만 고치면 note를 안 싣는다
+ok 114 - settingsUpdateBody: 설명을 안 건드리고 조건만 고치면 note를 안 싣는다
+  ---
+  duration_ms: 0.3018
+  ...
+# Subtest: settingsFormModel: 소스 명세가 없으면 폼을 만들지 않는다
+ok 115 - settingsFormModel: 소스 명세가 없으면 폼을 만들지 않는다
+  ---
+  duration_ms: 0.1338
+  ...
+# Subtest: settingsSummaryLines: 다음 실행은 그 값이 있을 때만 요약에 붙는다
+ok 116 - settingsSummaryLines: 다음 실행은 그 값이 있을 때만 요약에 붙는다
+  ---
+  duration_ms: 0.3973
+  ...
+# Subtest: 드릴인 세그먼트: 드릴인을 닫으면 세그먼트가 숨고 다음 진입은 "이력"으로 시작한다
+ok 117 - 드릴인 세그먼트: 드릴인을 닫으면 세그먼트가 숨고 다음 진입은 "이력"으로 시작한다
+  ---
+  duration_ms: 14.1463
+  ...
+# Subtest: 제안 카드: 설명(rationale)과 "근거:" 줄을 따로 낸다
+ok 118 - 제안 카드: 설명(rationale)과 "근거:" 줄을 따로 낸다
+  ---
+  duration_ms: 0.5651
+  ...
+# Subtest: 제안 카드: rationale이 없으면 설명 줄 자체를 만들지 않는다(빈 줄 금지, P3)
+ok 119 - 제안 카드: rationale이 없으면 설명 줄 자체를 만들지 않는다(빈 줄 금지, P3)
+  ---
+  duration_ms: 0.3947
+  ...
+# Subtest: 제안 미니 목록(작업 뷰)은 좁은 폭이라 여전히 한 줄로 합친다
+ok 120 - 제안 미니 목록(작업 뷰)은 좁은 폭이라 여전히 한 줄로 합친다
+  ---
+  duration_ms: 0.3548
+  ...
+# Subtest: A-1 목록 행: code-watch는 「코드 감시 · 장중 N분마다」 — 「주기 확인」으로 안 떨어진다
+ok 121 - A-1 목록 행: code-watch는 「코드 감시 · 장중 N분마다」 — 「주기 확인」으로 안 떨어진다
+  ---
+  duration_ms: 13.6285
+  ...
+# Subtest: A-1 목록 행: 확인 주기를 모르면 1분으로 적는다(보드 12 기본값)
+ok 122 - A-1 목록 행: 확인 주기를 모르면 1분으로 적는다(보드 12 기본값)
+  ---
+  duration_ms: 2.0958
+  ...
+# Subtest: A-2 상세: 노드 카드 수가 함수 수와 같고(4칸) 각 칸에 제목·영어명·들어감·나옴이 있다
+ok 123 - A-2 상세: 노드 카드 수가 함수 수와 같고(4칸) 각 칸에 제목·영어명·들어감·나옴이 있다
+  ---
+  duration_ms: 13.9771
+  ...
+# Subtest: A-2 상세: 두 칸짜리 감시 함수는 카드도 두 장이다
+ok 124 - A-2 상세: 두 칸짜리 감시 함수는 카드도 두 장이다
+  ---
+  duration_ms: 15.2056
+  ...
+# Subtest: A-3 상세: 「방금 바뀜」은 바뀐 칸에만 붙는다
+ok 125 - A-3 상세: 「방금 바뀜」은 바뀐 칸에만 붙는다
+  ---
+  duration_ms: 16.0989
+  ...
+# Subtest: A-3 상세: 칸을 고르면 진한 테두리와 「이상해요」·「물어볼게요」 칩이 붙는다
+ok 126 - A-3 상세: 칸을 고르면 진한 테두리와 「이상해요」·「물어볼게요」 칩이 붙는다
+  ---
+  duration_ms: 16.2865
+  ...
+# Subtest: A-4 상세: 코드는 접혀 있고 라벨이 「코드 · 참고 · 펼치기」다
+ok 127 - A-4 상세: 코드는 접혀 있고 라벨이 「코드 · 참고 · 펼치기」다
+  ---
+  duration_ms: 14.8187
+  ...
+# Subtest: A-5 상세: 울린 기록·일시중지·취소·고치기·만료가 있고 조건 편집 폼은 없다
+not ok 128 - A-5 상세: 울린 기록·일시중지·취소·고치기·만료가 있고 조건 편집 폼은 없다
+  ---
+  duration_ms: 3.0472
+  location: 'C:\\Projects\\DAOU.Athena\\app\\lib\\agent-canvas.test.js:2240:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+      {
+    -   '데이터': '일봉 + 오늘 현재가',
+        '만료': '2026-10-03',
+        '쿨다운': '1일',
+        '확인 주기': '장중 1분'
+      }
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    확인 주기: '장중 1분'
+    쿨다운: '1일'
+    만료: '2026-10-03'
+    데이터: '일봉 + 오늘 현재가'
+  actual:
+    확인 주기: '장중 1분'
+    쿨다운: '1일'
+    만료: '2026-10-03'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Projects\DAOU.Athena\app\lib\agent-canvas.test.js:2251:10)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: A-5 상세: 안 불린 함수 칸은 「이번엔 안 쓰임」으로 남는다
+ok 129 - A-5 상세: 안 불린 함수 칸은 「이번엔 안 쓰임」으로 남는다
+  ---
+  duration_ms: 11.9135
+  ...
+# Subtest: A-12 활성: 「고치기 — 말로」는 먼저 멈춤을 묻는다(거절 사유 문구 없음)
+ok 130 - A-12 활성: 「고치기 — 말로」는 먼저 멈춤을 묻는다(거절 사유 문구 없음)
+  ---
+  duration_ms: 2.6891
+  ...
+# Subtest: A-12 활성: 「그대로 두기」를 고르면 아무것도 안 부르고 확인 줄만 닫는다
+ok 131 - A-12 활성: 「그대로 두기」를 고르면 아무것도 안 부르고 확인 줄만 닫는다
+  ---
+  duration_ms: 13.3881
+  ...
+# Subtest: A-12 일시중지: 확인 없이 바로 고치기로 넘어간다
+ok 132 - A-12 일시중지: 확인 없이 바로 고치기로 넘어간다
+  ---
+  duration_ms: 15.3183
+  ...
+# Subtest: 초안: 승인 패널의 「이 알람 승인」은 채팅 칩과 같은 confirmRoutine 게이트를 부른다
+ok 133 - 초안: 승인 패널의 「이 알람 승인」은 채팅 칩과 같은 confirmRoutine 게이트를 부른다
+  ---
+  duration_ms: 16.198
+  ...
+# Subtest: 초안: 승인 패널의 「취소」는 cancelRoutine을 부른다 — 상태 제어 행의 취소와 같은 채널
+ok 134 - 초안: 승인 패널의 「취소」는 cancelRoutine을 부른다 — 상태 제어 행의 취소와 같은 채널
+  ---
+  duration_ms: 3.3291
+  ...
+# Subtest: 켜진 알람에는 승인 패널이 없다 — 승인은 초안 한 번뿐이다
+ok 135 - 켜진 알람에는 승인 패널이 없다 — 승인은 초안 한 번뿐이다
+  ---
+  duration_ms: 11.9932
+  ...
+# Subtest: 446V 데이터 행: draft 코드 감시는 실행기의 일봉·현재가 입력 계약을 표시한다
+not ok 136 - 446V 데이터 행: draft 코드 감시는 실행기의 일봉·현재가 입력 계약을 표시한다
+  ---
+  duration_ms: 16.3275
+  location: 'C:\\Projects\\DAOU.Athena\\app\\lib\\agent-canvas.test.js:2348:3'
+  failureType: 'testCodeFailure'
+  error: '검사 전에도 실제 감시 실행기가 받을 데이터 종류를 알아야 한다'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (C:\Projects\DAOU.Athena\app\lib\agent-canvas.test.js:2352:12)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: 446V 데이터 행: active 코드 감시는 실행기의 일봉·현재가 입력 계약을 표시한다
+not ok 137 - 446V 데이터 행: active 코드 감시는 실행기의 일봉·현재가 입력 계약을 표시한다
+  ---
+  duration_ms: 15.7206
+  location: 'C:\\Projects\\DAOU.Athena\\app\\lib\\agent-canvas.test.js:2348:3'
+  failureType: 'testCodeFailure'
+  error: '검사 전에도 실제 감시 실행기가 받을 데이터 종류를 알아야 한다'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (C:\Projects\DAOU.Athena\app\lib\agent-canvas.test.js:2352:12)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: 446V 데이터 행: paused 코드 감시는 실행기의 일봉·현재가 입력 계약을 표시한다
+not ok 138 - 446V 데이터 행: paused 코드 감시는 실행기의 일봉·현재가 입력 계약을 표시한다
+  ---
+  duration_ms: 15.8854
+  location: 'C:\\Projects\\DAOU.Athena\\app\\lib\\agent-canvas.test.js:2348:3'
+  failureType: 'testCodeFailure'
+  error: '검사 전에도 실제 감시 실행기가 받을 데이터 종류를 알아야 한다'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (C:\Projects\DAOU.Athena\app\lib\agent-canvas.test.js:2352:12)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: 초안: 검사 요약과 「검사」 버튼이 있고 누르면 검사 1회를 돈다
+ok 139 - 초안: 검사 요약과 「검사」 버튼이 있고 누르면 검사 1회를 돈다
+  ---
+  duration_ms: 16.715
+  ...
+# Subtest: 446V 첫 검사: 상태 띠와 패널이 실제 기간·쿨다운·발화값을 표시한다
+ok 140 - 446V 첫 검사: 상태 띠와 패널이 실제 기간·쿨다운·발화값을 표시한다
+  ---
+  duration_ms: 14.972
+  ...
+# Subtest: 446V 첫 검사: 성공한 0회만 조용한 점 띠를 그리고 없는 쿨다운을 현재 설정으로 메우지 않는다
+ok 141 - 446V 첫 검사: 성공한 0회만 조용한 점 띠를 그리고 없는 쿨다운을 현재 설정으로 메우지 않는다
+  ---
+  duration_ms: 15.7244
+  ...
+# Subtest: 446V 첫 검사 실패: 진단과 경고를 보이고 실패 기본 count=0을 울림 수로 표시하지 않는다
+ok 142 - 446V 첫 검사 실패: 진단과 경고를 보이고 실패 기본 count=0을 울림 수로 표시하지 않는다
+  ---
+  duration_ms: 14.448
+  ...
+# Subtest: 446V 첫 검사 전: 없는 결과·노드 수·점 띠를 만들지 않는다
+ok 143 - 446V 첫 검사 전: 없는 결과·노드 수·점 띠를 만들지 않는다
+  ---
+  duration_ms: 16.026
+  ...
+# Subtest: 446V 이후 고침: 첫 검사 패널과 상태 띠 대신 기존 순환·다시 검사·영수증을 표시한다
+ok 144 - 446V 이후 고침: 첫 검사 패널과 상태 띠 대신 기존 순환·다시 검사·영수증을 표시한다
+  ---
+  duration_ms: 15.2202
+  ...
+# Subtest: 채팅 검사 왕복: 응답의 날짜가 실제 30개 점과 울린 날 목록에 도착한다
+not ok 145 - 채팅 검사 왕복: 응답의 날짜가 실제 30개 점과 울린 날 목록에 도착한다
+  ---
+  duration_ms: 3.0664
+  location: 'C:\\Projects\\DAOU.Athena\\app\\lib\\watch-check-card-render.test.js:55:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    0 !== 30
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 30
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Projects\DAOU.Athena\app\lib\watch-check-card-render.test.js:61:10)
+    async Test.run (node:internal/test_runner/test:980:9)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# Subtest: 채팅 검사 실패: 남아 온 날짜가 있어도 성공 점 띠·울린 목록·승인을 내지 않는다
+ok 146 - 채팅 검사 실패: 남아 온 날짜가 있어도 성공 점 띠·울린 목록·승인을 내지 않는다
+  ---
+  duration_ms: 1.4379
+  ...
+# Subtest: 채팅 검사 0회: 실제 구간만 조용한 7칸으로 표시하고 목록을 만들지 않는다
+not ok 147 - 채팅 검사 0회: 실제 구간만 조용한 7칸으로 표시하고 목록을 만들지 않는다
+  ---
+  duration_ms: 1.1745
+  location: 'C:\\Projects\\DAOU.Athena\\app\\lib\\watch-check-card-render.test.js:81:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    0 !== 7
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 7
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Projects\DAOU.Athena\app\lib\watch-check-card-render.test.js:84:10)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: 브라우저 배선: shell의 실제 script 순서로 불러온 모델도 날짜·종가를 전달한다
+not ok 148 - 브라우저 배선: shell의 실제 script 순서로 불러온 모델도 날짜·종가를 전달한다
+  ---
+  duration_ms: 11.8115
+  location: 'C:\\Projects\\DAOU.Athena\\app\\lib\\watch-check-card-render.test.js:89:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(Array.isArray(result.fireDots))
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (C:\Projects\DAOU.Athena\app\lib\watch-check-card-render.test.js:98:10)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: checkCardModel(통과): 보드 10 문구 — 배지·제목·노드 줄·오늘 고지
+ok 149 - checkCardModel(통과): 보드 10 문구 — 배지·제목·노드 줄·오늘 고지
+  ---
+  duration_ms: 1.5091
+  ...
+# Subtest: checkCardModel(통과): 칩 2개 — 승인·고치기 모두 누를 수 있다
+ok 150 - checkCardModel(통과): 칩 2개 — 승인·고치기 모두 누를 수 있다
+  ---
+  duration_ms: 0.1834
+  ...
+# Subtest: 검사 결과: 센 마지막 날을 끝으로 30칸과 실제 울린 날짜·종가만 전달한다
+not ok 151 - 검사 결과: 센 마지막 날을 끝으로 30칸과 실제 울린 날짜·종가만 전달한다
+  ---
+  duration_ms: 0.566
+  location: 'C:\\Projects\\DAOU.Athena\\app\\lib\\watch-check-card.test.js:49:1'
+  failureType: 'testCodeFailure'
+  error: '센 날짜를 점 띠 모델로 전달한다'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (C:\Projects\DAOU.Athena\app\lib\watch-check-card.test.js:53:10)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: 검사 결과: 성공한 0회는 조용한 칸만, 실패는 결과 띠·목록 모두 없음
+not ok 152 - 검사 결과: 성공한 0회는 조용한 칸만, 실패는 결과 띠·목록 모두 없음
+  ---
+  duration_ms: 0.2232
+  location: 'C:\\Projects\\DAOU.Athena\\app\\lib\\watch-check-card.test.js:63:1'
+  failureType: 'testCodeFailure'
+  error: '성공한 0회도 검사 구간을 전달한다'
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (C:\Projects\DAOU.Athena\app\lib\watch-check-card.test.js:65:10)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: 검사 결과: 날짜 구간이나 종가가 없으면 달력·배수를 추정하지 않는다
+not ok 153 - 검사 결과: 날짜 구간이나 종가가 없으면 달력·배수를 추정하지 않는다
+  ---
+  duration_ms: 0.422
+  location: 'C:\\Projects\\DAOU.Athena\\app\\lib\\watch-check-card.test.js:74:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    
+    undefined !== []
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Projects\DAOU.Athena\app\lib\watch-check-card.test.js:76:10)
+    Test.runInAsyncScope (node:async_hooks:211:14)
+    Test.run (node:internal/test_runner/test:979:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+    Test.postRun (node:internal/test_runner/test:1090:19)
+    Test.run (node:internal/test_runner/test:1018:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+  ...
+# Subtest: checkCardModel(실패): 사유를 싣고 승인 칩은 내지 않는다
+ok 154 - checkCardModel(실패): 사유를 싣고 승인 칩은 내지 않는다
+  ---
+  duration_ms: 0.2494
+  ...
+# Subtest: checkCardModel(실패): reason이 비면 진단 제목으로 대체
+ok 155 - checkCardModel(실패): reason이 비면 진단 제목으로 대체
+  ---
+  duration_ms: 0.1258
+  ...
+# Subtest: checkCardModel: 0번·last_fire 없음이면 마지막 날짜 칸을 붙이지 않는다
+ok 156 - checkCardModel: 0번·last_fire 없음이면 마지막 날짜 칸을 붙이지 않는다
+  ---
+  duration_ms: 0.1734
+  ...
+# Subtest: checkCardModel: lookback_days 없으면 30일, last_fire 없으면 fires 마지막을 쓴다
+ok 157 - checkCardModel: lookback_days 없으면 30일, last_fire 없으면 fires 마지막을 쓴다
+  ---
+  duration_ms: 0.3693
+  ...
+# Subtest: shortDate: 2026-08-26 → 8/26, 파싱 실패는 원문
+ok 158 - shortDate: 2026-08-26 → 8/26, 파싱 실패는 원문
+  ---
+  duration_ms: 0.3594
+  ...
+# Subtest: nodeSummary: 한국어 제목이 없으면 영어 함수명으로 대체
+ok 159 - nodeSummary: 한국어 제목이 없으면 영어 함수명으로 대체
+  ---
+  duration_ms: 0.1479
+  ...
+# Subtest: A-9 문자열 린트: 서술형 종결·내부 용어 없음
+ok 160 - A-9 문자열 린트: 서술형 종결·내부 용어 없음
+  ---
+  duration_ms: 0.3275
+  ...
+1..160
+# tests 160
+# suites 0
+# pass 150
+# fail 10
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 886.9911

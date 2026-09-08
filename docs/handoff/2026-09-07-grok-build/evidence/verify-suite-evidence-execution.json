@@ -1,0 +1,84 @@
+{
+  "date": "2026-09-07",
+  "baseline": "ac493800",
+  "status": "frozen for non-author review",
+  "role": "executor; does not self-approve",
+  "findings": [
+    "CODE-039",
+    "CODE-075"
+  ],
+  "scope": [
+    "app/scripts/run-verify-suite.js",
+    "app/scripts/run-verify-suite.test.js"
+  ],
+  "behavior": "Each run owns a unique timestamp/random directory under app/captures/verify-suite. result.json is atomically replaced at start, each step, and completion; pending runs have ok:null. Each subprocess has complete streamed stdout/stderr files, bounded legacy tails, exit/timeout/error, start/end/time. Git commit/dirty/worktree content hash is captured at both run boundaries. Shared child report/capture ownership is explicitly unverified.",
+  "red": {
+    "command": "cd app; node --test --test-reporter=spec scripts/run-verify-suite.test.js",
+    "tests": 20,
+    "pass": 13,
+    "fail": 7,
+    "failure_kind": "New durable-run and source-identity entry points absent; existing 13 tests pass. Initial RED is feature-absence evidence, not a live subprocess/model failure.",
+    "log": ".omc/artifacts/full-review/verify-suite-evidence-red.log"
+  },
+  "green": {
+    "command": "cd app; node --test --test-reporter=spec scripts/run-verify-suite.test.js lib/live-full-catalog.test.js",
+    "tests": 31,
+    "pass": 31,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "duration_ms": 882.4883,
+    "log": ".omc/artifacts/full-review/verify-suite-evidence-green.log"
+  },
+  "new_regressions": [
+    "in-progress state and final real result/log files",
+    "nonzero subprocess exit preserves previous step",
+    "timeout with late close(0) preserves failure",
+    "synchronous spawn failure records failed step",
+    "child error event records failed step",
+    "two runs preserve prior run bytes; stale successful shared artifacts cannot flip current failure",
+    "real Git commit/dirty/worktree hash",
+    "different start/end source snapshots reported honestly",
+    "real filesystem log-write failure makes exit0 insufficient"
+  ],
+  "cli_smoke": {
+    "command": "cd app; node scripts/run-verify-suite.js --suite paper --only verify:paper-manifest",
+    "exit_code": 0,
+    "run_id": "2026-09-07T07-58-27-753Z-4VhhQf",
+    "report_path": "C:\\Projects\\DAOU.Athena\\app\\captures\\verify-suite\\2026-09-07T07-58-27-753Z-4VhhQf\\result.json",
+    "step_duration_ms": 799,
+    "source": {
+      "commit": "ac4938008690a86e19c22e2c2d612db11aa52b03",
+      "dirty": true,
+      "worktreeSha256": "3791bebb79b01c1aef3fcd89cbe626e2854402e80e54bf12496e459687b9e875"
+    },
+    "sourceSnapshotsMatch": true,
+    "assertions": [
+      "stdout JSON equals persisted result.json",
+      "first two final JSON keys remain ok/results",
+      "step code0 and actual stdout/stderr files exist",
+      "file content ends with recorded tails",
+      "sharedArtifacts.verified remains false"
+    ],
+    "stdout": ".omc/artifacts/full-review/verify-suite-evidence-cli.stdout.log",
+    "stderr": ".omc/artifacts/full-review/verify-suite-evidence-cli.stderr.log"
+  },
+  "other_checks": [
+    "node --check app/scripts/run-verify-suite.js",
+    "node --check app/scripts/run-verify-suite.test.js",
+    "git diff --check -- app/scripts/run-verify-suite.js app/scripts/run-verify-suite.test.js",
+    "no test.skip/test.only/TODO/FIXME in owned files"
+  ],
+  "sha256": {
+    "app/scripts/run-verify-suite.js": "ed34eeb6c125274be2502847fc284196c458cdee08b6d3bea23ffc15b0f890c0",
+    "app/scripts/run-verify-suite.test.js": "74a689e868a740aaa3cc0bca456ae4bf16c9a08309a05eb4dd6406b0401822ff"
+  },
+  "limits": [
+    "ok retains subprocess success meaning, with log-write failure also preventing a false success receipt; it does not attest shared child captures/reports.",
+    "Source comparison is two boundary snapshots, not continuous file locking or monitoring. If Git/source reading fails, the error and unavailable hash are explicit; sourceSnapshotsMatch cannot become true without a hash.",
+    "Default source hashing excludes Git-ignored files such as .env, dependencies, generated captures and profiles. It identifies the nonignored working copy, not its entire runtime environment.",
+    "No live model, broker or order operation, no Electron/UI probe was invoked. The real CLI smoke runs only a static local manifest check.",
+    "No commit/push by this writer. Root owns integration and independent review."
+  ]
+}
