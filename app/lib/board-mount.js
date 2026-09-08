@@ -323,6 +323,18 @@ function collapseEmptyColumns(surface, emptyColumns) {
   const hidden = [];
   for (const column of columns) {
     const slotIds = Array.isArray(column && column.slot_ids) ? column.slot_ids : [];
+    // 표 전체가 빈 경우는 칸마다 감추지 않고 표를 담은 상자를 한 번에 감춘다 —
+    // 머리글만 남은 표를 화면에 남기지 않으려는 것이다.
+    if (column.whole_table) {
+      const elements = slotIds.map((slotId) => bySlot.get(slotId)).filter(Boolean);
+      const box = elements.length ? commonAncestor(elements) : null;
+      if (box && box !== surface) {
+        setHidden(box, true);
+        if (box.dataset) box.dataset.bsTableCollapsed = 'true';
+        hidden.push({ column: column.column, cells: elements.length });
+        continue;
+      }
+    }
     let count = 0;
     for (const slotId of slotIds) {
       const el = bySlot.get(slotId);

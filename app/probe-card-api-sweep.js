@@ -21,6 +21,7 @@ const {
   BOARD_WINDOW_PRESETS,
   activateBoardTab,
   boardInstanceId,
+  boardStepProbe,
   sendBoardEnvelope,
   settleBoardLayout,
 } = require('./lib/board-probe');
@@ -219,6 +220,11 @@ async function probeBoard(win, boardId, ordinal, token) {
       }
       await activateBoardTab(win, surface.instanceId);
       await settleBoardLayout(win, surface.instanceId);
+      // 실데이터가 실린 뒤 글자가 서로 겹치는 자리도 잘림과 함께 잰다 —
+      // 목업보다 긴 값이 들어오면 칸이 서로 침범한다(board-glyph-geometry).
+      const geometry = await win.webContents.executeJavaScript(
+        boardStepProbe(surface.instanceId),
+      );
       const clip = await win.webContents.executeJavaScript(TEXT_CLIP_PROBE(surface.instanceId));
       const missing = await win.webContents.executeJavaScript(
         MISSING_TEXT_PROBE(surface.instanceId),
@@ -247,7 +253,18 @@ async function probeBoard(win, boardId, ordinal, token) {
         reachable_clip_total: clip.reachable_total,
         rows_collapsed: missing.rows_collapsed,
         rows_skipped: missing.rows_skipped,
+        overlap_total: geometry && geometry.text_overlap_total,
+        overlap_nodes: (geometry && geometry.text_overlap_nodes) || [],
+        wrap_total: geometry && geometry.atomic_wrap_total,
       });
+      if (geometry && geometry.text_overlap_total > 0) {
+        record.failures.push({
+          code: 'text_overlap',
+          preset: preset.name,
+          count: geometry.text_overlap_total,
+          nodes: (geometry.text_overlap_nodes || []).slice(0, 5),
+        });
+      }
       if (missing.total > 0) {
         record.failures.push({
           code: 'missing_text_visible', preset: preset.name, count: missing.total,
@@ -293,7 +310,8 @@ async function main() {
     console.log(
       `[${index + 1}/${boardIds.length}] ${boardId} `
       + `api=${record.api ? record.api.filled : 'x'} `
-      + `missing=${worst.missing} clipped=${worst.clipped}`
+      + `missing=${worst.missing} clipped=${worst.clipped} `
+      + `overlap=${Math.max(0, ...record.steps.map((step) => step.overlap_total || 0))}`
       + (broke ? ` FAIL ${broke.error}` : ''),
     );
   }
@@ -305,6 +323,8 @@ async function main() {
     missing_sum: boards.reduce((acc, board) => acc + worstOf(board, 'missing_total'), 0),
     clipped_boards: boards.filter((board) => worstOf(board, 'clipped_total') > 0).length,
     clipped_sum: boards.reduce((acc, board) => acc + worstOf(board, 'clipped_total'), 0),
+    overlap_boards: boards.filter((board) => worstOf(board, 'overlap_total') > 0).length,
+    overlap_sum: boards.reduce((acc, board) => acc + worstOf(board, 'overlap_total'), 0),
     broken_boards: boards.filter(
       (board) => board.failures.some((failure) => failure.code.endsWith('failed')),
     ).length,
@@ -322,7 +342,8 @@ async function main() {
   fs.mkdirSync(path.dirname(REPORT_PATH), { recursive: true });
   fs.writeFileSync(REPORT_PATH, `${JSON.stringify(runtime, null, 1)}\n`);
   console.log(JSON.stringify(totals));
-  const failed = totals.missing_boards + totals.clipped_boards + totals.broken_boards;
+  const failed = totals.missing_boards + totals.clipped_boards + totals.broken_boards
+    + totals.overlap_boards;
   console.log(failed ? `card api sweep failed — ${REPORT_PATH}` : 'card api sweep passed');
   app.exit(failed ? 1 : 0);
 }

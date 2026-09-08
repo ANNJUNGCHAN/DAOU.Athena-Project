@@ -394,14 +394,41 @@ def _empty_columns(board: BoardTemplate, filled: set[str]) -> list[dict[str, Any
         rows_seen.setdefault(key, set()).add(str(cell.row))
         if slot.slot_id in filled:
             bound_columns.add(key)
-    return [
-        {"column": f"{table_id}:{col}", "slot_ids": sorted(slot_ids)}
+    empty = [
+        (table_id, col, slot_ids)
         for (table_id, col), slot_ids in sorted(cells.items(), key=lambda item: str(item[0]))
         # 값 바인딩이 두 줄 이상 있는 열만 본다 — 한 줄짜리는 열이 아니라 한 칸이고,
         # 그 칸의 결측은 그 자리의 정직한 결측이다.
         if (table_id, col) not in bound_columns
         and len(rows_seen.get((table_id, col), ())) >= 2
     ]
+    # 표의 **모든** 열이 비면 머리글만 남은 표가 된다. 그 표는 통째로 접는다 —
+    # 자료 없는 표의 머리글만 남기는 것은 화면에 뜻 없는 줄을 남기는 것이다.
+    columns_by_table: dict[str, set[int]] = {}
+    for table_id, col in cells:
+        columns_by_table.setdefault(table_id, set()).add(col)
+    empty_by_table: dict[str, set[int]] = {}
+    for table_id, col, _ in empty:
+        empty_by_table.setdefault(table_id, set()).add(col)
+    dead_tables = {
+        table_id
+        for table_id, columns in columns_by_table.items()
+        if table_id in empty_by_table and empty_by_table[table_id] == columns
+    }
+    result = [
+        {"column": f"{table_id}:{col}", "slot_ids": sorted(slot_ids)}
+        for table_id, col, slot_ids in empty
+        if table_id not in dead_tables
+    ]
+    for table_id in sorted(dead_tables):
+        slot_ids = sorted(
+            slot_id
+            for (owner, _), ids in cells.items()
+            if owner == table_id
+            for slot_id in ids
+        )
+        result.append({"column": f"{table_id}:*", "slot_ids": slot_ids, "whole_table": True})
+    return result
 
 
 def _state_boards(
