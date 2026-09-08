@@ -28,6 +28,10 @@ const envelope = label => ({
 });
 
 app.whenReady().then(async () => {
+  const conversations = require('./lib/main/conversations');
+  const originalBegin = conversations.begin;
+  let conversationBegins = 0;
+  conversations.begin = (...args) => { conversationBegins++; return originalBegin(...args); };
   const main = require('./main');
   const confirmations = [];
   const openings = [];
@@ -94,9 +98,11 @@ app.whenReady().then(async () => {
   });
   fire();
   await until(`!!document.querySelector('.routine-alert-popup:not([hidden]) .routine-alert-popup__card:not(:disabled)')`, 'popup card choice');
+  const beginsBeforeCard = conversationBegins;
   await run(`document.querySelector('.routine-alert-popup__card').click()`);
   await until(`document.querySelectorAll('#grid .card').length === 1 && document.getElementById('grid').textContent.includes('선택한 알람 메인 카드')`, 'single selected card');
   assert.equal(openings.length, 1);
+  assert.equal(conversationBegins - beginsBeforeCard, 1, 'Card navigation creates exactly one conversation');
   assert.notEqual(openings[0].conversationId, original, 'Card navigation must create its own conversation');
   assert.equal(await run(`document.getElementById('grid').textContent.includes('기존 대화 카드')`), false);
   const captures = captureRoot(__dirname);

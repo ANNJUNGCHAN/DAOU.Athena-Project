@@ -1,5 +1,7 @@
 'use strict';
 
+const crypto = require('node:crypto');
+
 // 플러그인 승인 제안의 게이트·1회용 소비·실행 순서를 소유하는 순수 모듈.
 // **electron도 main.js도 require하지 않는다** — 프로덕션에서는 main.js가
 // mcpCli를, verify-plugins.js는 같은 mcpCli를 직접 주입한다. 그래서 검증
@@ -26,6 +28,8 @@ const ACTIONS = Object.freeze([
 const BLOCKED_ALIASES = new Set(['kiwoom', 'kiwoom-selector', 'kiwoom-mcp', 'brain', 'athena']);
 
 const BLOCKED_MESSAGE = '아테나 기본 기능이라 여기서 다룰 수 없습니다';
+const MAX_ALIAS_LEN = 28;
+const NON_PACKAGE_ARGS = new Set(['-y', '--yes', '-q', '--quiet', 'run', 'exec', '--']);
 
 // 소비 기록과 대기 목록의 상한. 앱을 오래 켜둬도 무한히 자라지 않게 오래된
 // 것부터 버린다 — 소비 기록은 한 세션 안의 재승인만 막으면 되고, 대기 목록은
@@ -39,13 +43,37 @@ function isBlockedAlias(alias) {
 }
 
 // 스니펫 파싱 규칙도 백엔드와 같다 — 서버는 한 개만 담는다.
+function sanitizeAlias(raw) {
+  const original = String(raw == null ? '' : raw);
+  let cleaned = original.replace(/[^A-Za-z0-9_-]+/g, '-').replace(/-{2,}/g, '-').replace(/^[-_]+|[-_]+$/g, '');
+  if (!cleaned) cleaned = 'server';
+  if (cleaned.length <= MAX_ALIAS_LEN) return cleaned;
+  const digest = crypto.createHash('sha1').update(original, 'utf8').digest('hex').slice(0, 6);
+  return `${cleaned.slice(0, MAX_ALIAS_LEN - digest.length - 1)}-${digest}`;
+}
+
+// onboarding.py derive_alias()와 같은 별칭을 계산한다. 중복을 원문 키로만 보면
+// `DART MCP`가 기존 `DART-MCP`를 피해 `DART-MCP-2`로 조용히 등록될 수 있다.
+function deriveSnippetAlias(name, config) {
+  const fromName = sanitizeAlias(name);
+  if (fromName !== 'server') return fromName;
+  const args = config && Array.isArray(config.args) ? config.args : [];
+  for (let i = args.length - 1; i >= 0; i -= 1) {
+    const candidate = typeof args[i] === 'string' ? args[i] : '';
+    if (!candidate || candidate.startsWith('-') || NON_PACKAGE_ARGS.has(candidate)) continue;
+    const derived = sanitizeAlias(candidate);
+    if (derived !== 'server') return derived;
+  }
+  return sanitizeAlias(config && typeof config.command === 'string' ? config.command : '');
+}
+
 function snippetAliases(raw) {
   if (typeof raw !== 'string' || !raw.trim()) return { aliases: [], error: '설정 내용이 비어 있습니다' };
   let data;
   try { data = JSON.parse(raw); } catch { return { aliases: [], error: '설정을 읽을 수 없습니다 — 형식을 확인해 주세요' }; }
   const servers = data && typeof data === 'object' ? data.mcpServers : null;
   if (!servers || typeof servers !== 'object') return { aliases: [], error: '설정에 등록할 내용이 없습니다' };
-  const aliases = Object.keys(servers);
+  const aliases = Object.entries(servers).map(([name, config]) => deriveSnippetAlias(name, config));
   if (!aliases.length) return { aliases: [], error: '설정에 등록할 내용이 없습니다' };
   if (aliases.length > 1) return { aliases: [], error: '한 번에 하나만 등록합니다' };
   return { aliases, error: null };
@@ -90,6 +118,7 @@ function createPluginProposalRegistry({ executor, catalog = [] } = {}) {
       if (installed === null) installed = installedAliases();
       return installed;
     };
+    const plannedAdditions = new Set();
     for (const action of actions) {
       const kind = action && action.action;
       if (!ACTIONS.includes(kind)) return { ok: false, error: '다룰 수 없는 요청입니다' };
@@ -101,6 +130,19 @@ function createPluginProposalRegistry({ executor, catalog = [] } = {}) {
         const parsed = snippetAliases(action.snippet);
         if (parsed.error) return { ok: false, error: parsed.error };
         if (parsed.aliases.some(isBlockedAlias)) return { ok: false, error: BLOCKED_MESSAGE };
+        const alias = parsed.aliases[0];
+        const aliasKey = alias.toLowerCase();
+        const existing = [...installedNow()].find((candidate) => String(candidate).toLowerCase() === aliasKey);
+        if (existing) {
+          return {
+            ok: false,
+            error: `'${existing}'은 이미 등록된 플러그인입니다. 기존 연결 설정과 권한을 확인해 주세요. 교체가 필요할 때만 기존 항목을 삭제한 뒤 다시 등록해 주세요`,
+          };
+        }
+        if (plannedAdditions.has(aliasKey)) {
+          return { ok: false, error: `'${alias}' 직접 등록이 같은 요청에 중복됩니다. 하나만 남겨 다시 시도해 주세요` };
+        }
+        plannedAdditions.add(aliasKey);
         continue;
       }
       const target = typeof action.target === 'string' ? action.target.trim() : '';
@@ -108,7 +150,13 @@ function createPluginProposalRegistry({ executor, catalog = [] } = {}) {
       if (isBlockedAlias(target)) return { ok: false, error: BLOCKED_MESSAGE };
       if (kind === 'install') {
         if (!catalogById.has(target)) return { ok: false, error: '추천 목록에 없어 설치할 수 없습니다' };
-        if (installedNow().has(target)) return { ok: false, error: '이미 설치돼 있습니다' };
+        const targetKey = target.toLowerCase();
+        const existing = [...installedNow()].find((candidate) => String(candidate).toLowerCase() === targetKey);
+        if (existing) return { ok: false, error: '이미 설치돼 있습니다' };
+        if (plannedAdditions.has(targetKey)) {
+          return { ok: false, error: `'${target}' 설치가 같은 요청에 중복됩니다. 하나만 남겨 다시 시도해 주세요` };
+        }
+        plannedAdditions.add(targetKey);
       } else if (!installedNow().has(target)) {
         return { ok: false, error: '설치돼 있지 않습니다' };
       }

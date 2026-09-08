@@ -146,6 +146,81 @@ async def test_list_tools_only_exposes_approved_tools_plus_builtins(gateway, tmp
     assert SAVE_CANVAS_TOOL in names
 
 
+async def test_grok_wire_names_avoid_nested_namespace_and_route_exactly(tmp_path, monkeypatch):
+    """Grok owns ``server__tool``; the Athena tool part must not contain ``__``."""
+    monkeypatch.setenv("ATHENA_MCP_TOOL_NAME_STYLE", "grok")
+    gw, handle = _gateway_with_fake_tool(
+        tmp_path, alias="dart-mcp", upstream_name="search.disclosure"
+    )
+    server = build_mcp_server(gw)
+    list_handler = server.request_handlers[types.ListToolsRequest]
+    listed = await list_handler(types.ListToolsRequest(method="tools/list"))
+    names = {tool.name for tool in listed.root.tools}
+
+    assert "dart-mcp_search_disclosure" in names
+    assert "athena_render_canvas" in names
+    assert all("__" not in name and "." not in name for name in names)
+
+    call_handler = server.request_handlers[types.CallToolRequest]
+    called = await call_handler(
+        types.CallToolRequest(
+            method="tools/call",
+            params=types.CallToolRequestParams(
+                name="dart-mcp_search_disclosure", arguments={}
+            ),
+        )
+    )
+
+    assert called.root.isError is False
+    assert handle.calls == [("search.disclosure", {})]
+
+
+async def test_grok_wire_name_collision_is_not_exposed_or_callable(tmp_path, monkeypatch):
+    monkeypatch.setenv("ATHENA_MCP_TOOL_NAME_STYLE", "grok")
+    gw, handle = _gateway_with_fake_tool(
+        tmp_path, alias="dart", upstream_name="search.disclosure"
+    )
+    server = build_mcp_server(gw)
+    list_handler = server.request_handlers[types.ListToolsRequest]
+    first = await list_handler(types.ListToolsRequest(method="tools/list"))
+    assert "dart_search_disclosure" in {tool.name for tool in first.root.tools}
+
+    gw.consent_store.approve(
+        "dart", approved_tools={"search.disclosure", "search_disclosure"}
+    )
+    gw.aggregator.update_alias_tools(
+        "dart",
+        [
+            types.Tool(name="search.disclosure", inputSchema={}),
+            types.Tool(name="search_disclosure", inputSchema={}),
+        ],
+    )
+    listed = await list_handler(types.ListToolsRequest(method="tools/list"))
+
+    assert "dart_search_disclosure" not in {tool.name for tool in listed.root.tools}
+    call_handler = server.request_handlers[types.CallToolRequest]
+    blocked = await call_handler(
+        types.CallToolRequest(
+            method="tools/call",
+            params=types.CallToolRequestParams(
+                name="dart_search_disclosure", arguments={}
+            ),
+        )
+    )
+    assert blocked.root.isError is True
+    assert handle.calls == []
+
+    for raw_name in ("dart__search.disclosure", "dart__search_disclosure"):
+        raw_blocked = await call_handler(
+            types.CallToolRequest(
+                method="tools/call",
+                params=types.CallToolRequestParams(name=raw_name, arguments={}),
+            )
+        )
+        assert raw_blocked.root.isError is True
+    assert handle.calls == []
+
+
 async def test_dispatch_call_routes_to_upstream_and_audits(gateway, tmp_path):
     await _connected(gateway, tmp_path)
     result = await gateway.dispatch_call("fixture__echo", {"message": "hi"})

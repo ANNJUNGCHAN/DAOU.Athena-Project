@@ -110,3 +110,45 @@ test('답변 중 제안 채택은 칩을 잠그지 않아 끝난 뒤 다시 누�
   assert.equal(events.length, 1);
   assert.equal(buttons.every((button) => button.disabled), true);
 });
+
+test('제어 응답을 기다리는 동안 대화를 바꿔도 결과 봉투는 원래 대화 id를 유지한다', async () => {
+  const events = [];
+  let resolveUpdate;
+  const scope = {
+    document: { dispatchEvent() {} },
+    CustomEvent: class {
+      constructor(type, init) { this.type = type; this.detail = init && init.detail; }
+    },
+    window: {
+      dispatchEvent: (event) => events.push(event),
+      athena: {
+        invoke: () => new Promise((resolve) => { resolveUpdate = resolve; }),
+      },
+      AthenaNotify: null,
+    },
+    controlTurnLib: {
+      controlFactLine: () => '현재 값',
+      buildControlResultTurn: (model) => ({ ...model, tone: 'ok', statusBadge: '완료', chips: [] }),
+    },
+    proposalTurnLib: { updateAppliedLead: () => '바뀜' },
+    unreadAlertCount: () => 0,
+    openAgentCanvas() {},
+    _btn() {},
+    _mountTurn() {},
+    appendSystemLine() {},
+    state: 'idle',
+    remoteQueryBusy: false,
+  };
+  vm.createContext(scope);
+  vm.runInContext(source.slice(start, end), scope);
+
+  const pending = scope.acceptProposal({
+    control: 'update', routineId: 'routine-a', badge: '작업 설정', current: {}, proposed: {},
+  }, 'conversation-a');
+  resolveUpdate({ ok: true });
+  await pending;
+
+  assert.equal(events.length, 1);
+  assert.equal(events[0].type, 'athena:routine-control-result');
+  assert.equal(events[0].detail.conversationId, 'conversation-a');
+});

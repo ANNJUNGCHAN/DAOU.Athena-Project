@@ -43,6 +43,32 @@ const preload = read("preload.js");
 const mainJs = read("main.js");
 const HARNESSES = ["verify.js", "verify-settings.js", "verify-settings-cards.js"];
 
+function domEventLiteralSpans(line) {
+  const spans = [];
+  const patterns = [
+    /\b(?:document|window)\s*\.\s*(?:addEventListener|removeEventListener)\s*\(\s*(['"`])(athena:[a-z0-9-]+)\1/g,
+    /\b(?:new\s+)?CustomEvent\s*\(\s*(['"`])(athena:[a-z0-9-]+)\1/g,
+  ];
+  for (const pattern of patterns) {
+    for (const match of line.matchAll(pattern)) {
+      const start = match.index + match[0].lastIndexOf(match[2]);
+      spans.push([start, start + match[2].length]);
+    }
+  }
+  return spans;
+}
+
+export function unknownIpcChannels(line, known) {
+  const domEventSpans = domEventLiteralSpans(line);
+  return [...line.matchAll(/['"`](athena:[a-z0-9-]+)['"`]/g)]
+    .filter((match) => {
+      const channelStart = match.index + 1;
+      return !domEventSpans.some(([start, end]) => channelStart >= start && channelStart < end);
+    })
+    .map((match) => match[1])
+    .filter((channel) => !known.has(channel));
+}
+
 if (!shellHtml || !preload || !mainJs) {
   console.error("[harness-freshness] 대조 원본 소스가 없다:");
   for (const f of failures) console.error("  - " + f);
@@ -93,8 +119,8 @@ for (const rel of HARNESSES) {
       if (!knownIds.has(m[1])) failures.push(`${loc}: 사라진 DOM id '#${m[1]}' 참조 — ${line.trim().slice(0, 90)}`);
     }
     if (!/ipc-channels:allow-dead/.test(rawLine) && !(i > 0 && /ipc-channels:allow-dead/.test(lines[i - 1]))) {
-      for (const m of line.matchAll(/['"`](athena:[a-z0-9-]+)['"`]/g)) {
-        if (!knownChannels.has(m[1])) failures.push(`${loc}: 미등록 IPC 채널 '${m[1]}' 참조 — ${line.trim().slice(0, 90)}`);
+      for (const channel of unknownIpcChannels(line, knownChannels)) {
+        failures.push(`${loc}: 미등록 IPC 채널 '${channel}' 참조 — ${line.trim().slice(0, 90)}`);
       }
     }
   });

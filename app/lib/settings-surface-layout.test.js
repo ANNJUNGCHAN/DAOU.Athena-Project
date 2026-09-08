@@ -78,9 +78,14 @@ test('UI 배율은 설정 버튼만 쓰고 shell 렌더러 단축키를 되살�
   assert.doesNotMatch(shellSource, /addEventListener\(\s*['"]wheel['"]/);
 });
 
-test('보유잔고 조회 주기는 토글 옆 기능 그룹이며 컨트롤 이름이 있다', () => {
+test('조회 주기는 세 수집원 모두 토글 옆 기능 그룹이며 컨트롤 이름이 소스를 말한다', () => {
   assert.match(collectionSource, /graph-settings-source-controls/);
-  assert.match(collectionSource, /setAttribute\('aria-label', '보유잔고 조회 주기'\)/);
+  // 2026-09-08 — 주기 선택기·수동 실행이 소스별로 붙으면서 이름은 소스 라벨에서 조립한다.
+  assert.match(collectionSource, /setAttribute\('aria-label', `\$\{source\.label\} 조회 주기`\)/);
+  assert.match(collectionSource, /setAttribute\('aria-label', `\$\{source\.label\} 지금 실행`\)/);
+  assert.match(collectionSource, /label: '대화', intervalKey: 'chatIntervalMin'/);
+  assert.match(collectionSource, /label: '체결내역', intervalKey: 'fillsIntervalMin'/);
+  assert.match(collectionSource, /label: '보유잔고', intervalKey: 'holdingsIntervalMin'/);
   assert.match(collectionSource, /'보유잔고 수집'/);
   assert.doesNotMatch(settingsCss, /\.uk-holdings-sub\b/);
 });
