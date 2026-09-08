@@ -3790,7 +3790,8 @@ async function relinkWatchProject(r, status, buttons) {
   const progressLine = renderWatchProgressTurn(r);
   const check = await runWatchCheck(r);
   progressLine.remove();
-  status.textContent = '';
+  // 상태줄은 지우지 않는다 — 보드 10-b ③처럼 「폴더 다시 지정됨 — 검사 다시 돌림」이 남아
+  // 무엇이 이 새 카드를 불렀는지 말한다.
   renderWatchCheckCard(r, check || { ok: false, reason: '감시 코드 자리를 못 찾음 — 대화로 다시 만들기' });
 }
 
@@ -3885,7 +3886,8 @@ function renderWatchCheckCard(r, check) {
   status.className = 'agent-mode';
   const buttons = [];
   for (const chip of model.chips) {
-    const btn = _btn(chip.label, chip.action === 'confirm' ? 'routine-btn routine-btn-approve' : 'routine-btn');
+    const btn = _btn(chip.label, chip.action === 'confirm' ? 'routine-btn routine-btn-approve'
+      : chip.action === 'relink' ? 'routine-btn routine-btn-relink' : 'routine-btn');
     btn.disabled = !chip.enabled || (chip.action === 'confirm' && !!r.activation_blocker);
     if (chip.action === 'confirm') {
       btn.addEventListener('click', async () => {
@@ -4198,7 +4200,7 @@ function renderApprovalCard(r, { autoCheck = false } = {}) {
 
   // 초안 카드도 「프로젝트 폴더 없음」이면 폴더를 다시 고르는 길을 낸다(검사 카드와 같은 칩).
   const relink = isCodeWatch && watchCheckCardLib.isProjectFolderMissing(r.activation_blocker)
-    ? _btn(watchCheckCardLib.CHIP_RELINK, 'routine-btn') : null;
+    ? _btn(watchCheckCardLib.CHIP_RELINK, 'routine-btn routine-btn-relink') : null;
   if (relink) {
     relink.addEventListener('click', () => { void relinkWatchProject(r, status, [preview, activate, relink, fix]); });
   }
