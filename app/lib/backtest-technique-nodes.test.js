@@ -1,8 +1,7 @@
 'use strict';
 
 // backtest-technique-nodes.js 단위 테스트 — jsdom 없이 최소 DOM 스텁으로 검증한다
-// (backtest-visual-editor.test.js가 세운 관례를 그대로 가져온다). 그 스텁에서 여기가
-// 기대는 것은 셋이다:
+// (렌더러 모듈 테스트가 이 저장소에서 쓰는 관례다). 그 스텁에서 여기가 기대는 것은 셋이다:
 //   ① createElementNS — 흐름선이 SVG라서 필요하다
 //   ② focus()/tagName — "Tab이 다음 노드 카드로 간다"는 접근성 계약을 사람 눈이 아니라
 //      테스트가 판정하게 하려면 초점을 기록해야 한다
