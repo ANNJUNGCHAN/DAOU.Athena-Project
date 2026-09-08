@@ -13,6 +13,7 @@ const { app, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const { captureRoot } = require('./lib/probe-captures');
+const { writeProbeModelPrefs } = require('./lib/probe-model-prefs');
 
 // 캡처 전용이라 GPU가 필요 없다 — 이 머신에서는 GPU 경로가 warmup 창 ready-to-show를 5초 안에 못
 // 넘겨 프로브가 시작도 못 한다(probe-chat-input-width.js와 같은 조치).
@@ -25,6 +26,7 @@ fs.writeFileSync(
   path.join(PROFILE, 'athena-onboarding.json'),
   JSON.stringify({ cliDone: true, accountDone: true }),
 );
+writeProbeModelPrefs(PROFILE);
 app.setPath('userData', PROFILE);
 
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));

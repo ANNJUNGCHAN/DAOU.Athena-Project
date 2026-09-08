@@ -23,6 +23,7 @@ const { app } = require('electron');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
+const { writeProbeModelPrefs } = require('./lib/probe-model-prefs');
 
 const APP_DIR = __dirname;
 const REPO_DIR = path.resolve(APP_DIR, '..');
@@ -68,6 +69,7 @@ async function main() {
     JSON.stringify({ cliDone: true, accountDone: true }, null, 2),
     'utf8',
   );
+writeProbeModelPrefs(PROBE_ROOT);
 
   Object.assign(process.env, {
     ATHENA_NO_AUTOSTART: '1',

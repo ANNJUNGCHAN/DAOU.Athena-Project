@@ -4,6 +4,7 @@ process.env.ATHENA_NO_AUTOSTART = '1';
 const { app } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const { writeProbeModelPrefs } = require('./lib/probe-model-prefs');
 
 const PROFILE = path.join(__dirname, '.probe-int-profile');
 fs.rmSync(PROFILE, { recursive: true, force: true });
@@ -12,6 +13,7 @@ fs.writeFileSync(
   path.join(PROFILE, 'athena-onboarding.json'),
   JSON.stringify({ cliDone: true, accountDone: true })
 );
+writeProbeModelPrefs(PROFILE);
 app.setPath('userData', PROFILE);
 
 const CAPTURES = path.join(__dirname, 'captures');

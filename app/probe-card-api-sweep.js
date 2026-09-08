@@ -29,6 +29,7 @@ const { TEXT_CLIP_PROBE, MISSING_TEXT_PROBE } = require('./lib/board-text-clip')
 const { hydrateBoard } = require('./lib/main/board-hydrate');
 const { kindOfBoard, resolveKindCode } = require('./lib/board-sweep-targets');
 const { readLocalBearerToken } = require('./lib/main/backend-launcher');
+const { writeProbeModelPrefs } = require('./lib/probe-model-prefs');
 
 const APP = __dirname;
 const ROOT = path.resolve(APP, '..');
@@ -60,6 +61,7 @@ fs.writeFileSync(
   path.join(PROFILE, 'athena-onboarding.json'),
   JSON.stringify({ cliDone: true, accountDone: true }),
 );
+writeProbeModelPrefs(PROFILE);
 app.setPath('userData', PROFILE);
 app.disableHardwareAcceleration();
 
