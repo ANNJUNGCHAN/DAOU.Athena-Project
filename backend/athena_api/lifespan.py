@@ -2,9 +2,11 @@
 
 import asyncio
 import logging
-from collections.abc import AsyncIterator, Mapping
+from collections.abc import AsyncIterator, Callable, Mapping
 from contextlib import asynccontextmanager, suppress
 from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import StrEnum
 
 import httpx
 from fastapi import FastAPI
@@ -75,6 +77,10 @@ class BrainRuntime:
     ingestion_last_error: str | None = None
     extraction_enabled: bool = False
     hourly_task: asyncio.Task[None] | None = None
+    # 소스별(대화·체결·잔고) 조회 주기와 실행 시각의 주인(2026-09-08). hourly_task는
+    # 이 스케줄러의 루프를 품은 태스크다 — 외부가 주기를 소유하면(external) 루프는
+    # 없지만 스케줄러는 있다: 수동 실행과 상태 조회는 그래도 되어야 한다.
+    scheduler: "BrainIngestScheduler | None" = None
     # WP-H(2026-09-03) — 기동 직후 한 번 도는 체결 백필 + 잔고 스냅숏. 참조를 들고
     # 있어야 GC에 안 걷히고(hourly_task와 같은 관례), teardown이 취소할 수 있다.
     producer_task: asyncio.Task[None] | None = None
@@ -82,35 +88,52 @@ class BrainRuntime:
     startup_ingestion_lock: asyncio.Lock = field(default_factory=asyncio.Lock, repr=False)
 
 
+async def _produce_trade_facts(backfill: TradeBackfill | None) -> str | None:
+    """체결을 이력에 적재한다(WP-H). 실패는 다음 주기가 다시 시도하므로 삼키고
+    예외 **형 이름**만 돌려준다 — 상류 메시지에 경로·자격증명 조각이 실릴 수 있다.
+    취소만 그대로 통과시킨다: teardown이 이 코루틴을 품은 태스크를 cancel-and-await한다.
+    """
+    if backfill is None:
+        return None
+    try:
+        await backfill.run()
+    except asyncio.CancelledError:
+        raise
+    except Exception as exc:
+        logger.warning("brain trade backfill failed type=%s", type(exc).__name__)
+        return type(exc).__name__
+    return None
+
+
+async def _produce_holding_facts(holdings: HoldingSnapshotIngestor | None) -> str | None:
+    """잔고 스냅숏을 이력에 적재한다(WP-H). 계약은 _produce_trade_facts와 같다."""
+    if holdings is None:
+        return None
+    try:
+        await holdings.ingest()
+    except asyncio.CancelledError:
+        raise
+    except PartialHoldingsError:
+        # 계좌 일부만 조회된 주기 — 반쪽을 적재하면 실패한 계좌의 보유가
+        # "매도"로 보인다(holdings.py). 이번 주기를 통째로 건너뛴다.
+        logger.warning("brain holding snapshot skipped: partial account failure")
+        return PartialHoldingsError.__name__
+    except Exception as exc:
+        logger.warning("brain holding snapshot failed type=%s", type(exc).__name__)
+        return type(exc).__name__
+    return None
+
+
 async def _produce_trade_and_holding_facts(
     backfill: TradeBackfill | None, holdings: HoldingSnapshotIngestor | None
 ) -> None:
-    """체결·잔고를 이력에 적재한다(WP-H). 실패는 다음 주기가 다시 시도하므로 삼킨다.
+    """체결·잔고를 이력에 적재한다(WP-H).
 
     체결이 먼저다 — 백필 커서는 단조 증가라 실패한 날부터 다시 하고, 잔고 실패가
-    체결을 막을 이유가 없다(서로 다른 사실이다). 취소만 그대로 통과시킨다:
-    teardown이 이 코루틴을 품은 태스크를 cancel-and-await한다.
+    체결을 막을 이유가 없다(서로 다른 사실이다).
     """
-    if backfill is not None:
-        try:
-            await backfill.run()
-        except asyncio.CancelledError:
-            raise
-        except Exception as exc:
-            # 형만 남긴다 — 상류 메시지에 경로·자격증명 조각이 실릴 수 있다
-            # (_hourly_ingest_loop의 로그 관례 그대로).
-            logger.warning("brain trade backfill failed type=%s", type(exc).__name__)
-    if holdings is not None:
-        try:
-            await holdings.ingest()
-        except asyncio.CancelledError:
-            raise
-        except PartialHoldingsError:
-            # 계좌 일부만 조회된 주기 — 반쪽을 적재하면 실패한 계좌의 보유가
-            # "매도"로 보인다(holdings.py). 이번 주기를 통째로 건너뛴다.
-            logger.warning("brain holding snapshot skipped: partial account failure")
-        except Exception as exc:
-            logger.warning("brain holding snapshot failed type=%s", type(exc).__name__)
+    await _produce_trade_facts(backfill)
+    await _produce_holding_facts(holdings)
 
 
 async def _startup_produce(
@@ -130,6 +153,146 @@ async def _startup_produce(
         logger.warning("brain produce enqueue failed type=%s", type(exc).__name__)
 
 
+class BrainSource(StrEnum):
+    """화면(보드 05 수집·노출)의 세 칸과 1:1 — 대화 · 체결내역 · 보유잔고."""
+
+    CHAT = "chat"
+    FILLS = "fills"
+    HOLDINGS = "holdings"
+
+
+@dataclass(slots=True)
+class SourceSchedule:
+    """소스 하나의 조회 주기와 실행 시각. 상태 API가 그대로 내보낸다."""
+
+    interval_seconds: float
+    # 체결·잔고는 키움 계정이 결선돼 있어야 실제로 적재된다. 안 돼 있으면 "돌긴 돌지만
+    # 새 사실은 없다"는 뜻이라 화면이 그 사실을 숨기지 않게 따로 든다(§0 정직성).
+    producer_wired: bool
+    last_run_at: datetime | None = None
+    next_run_at: datetime | None = None
+    running: bool = False
+    # 마지막 실행에서 난 예외의 형 이름만 — 메시지는 남기지 않는다(로그 관례와 같다).
+    last_error: str | None = None
+
+
+class BrainIngestScheduler:
+    """소스별 조회 주기로 체결·잔고를 적재하고 수집 잡을 넣는다(ADR §9 gate G005의 후신).
+
+    예전 `_hourly_ingest_loop`는 주기 하나로 셋을 한꺼번에 돌렸다. 이제 소스마다
+    주기가 다르되 **같은 틱에 만기된 소스는 한 번에 처리한다** — 생산(체결→잔고)을
+    먼저 하고 잡은 하나만 넣는다. 그래야 그 잡이 방금 생긴 사실을 투영하고, 기본값
+    (셋 다 60분)에서는 예전과 완전히 같은 순서·같은 잡 수가 된다.
+
+    대화 소스의 "실행"은 잡 하나를 넣는 것이다 — 원문은 앱이 이미 /brain/chat으로
+    밀어 넣어 두었고, 잡이 그것을 그래프에 투영한다.
+
+    수동 실행(run_now)은 예전 enqueue(JobTrigger.MANUAL) 경로 그대로다. 취소는
+    그대로 통과시킨다: _teardown_brain이 루프 태스크를 cancel-and-await한다.
+    """
+
+    def __init__(
+        self,
+        coordinator: IngestionCoordinator,
+        interval_seconds: float,
+        *,
+        backfill: TradeBackfill | None = None,
+        holdings: HoldingSnapshotIngestor | None = None,
+        clock: Callable[[], datetime] = utc_now,
+    ) -> None:
+        self._coordinator = coordinator
+        self._backfill = backfill
+        self._holdings = holdings
+        self._clock = clock
+        self._wakeup = asyncio.Event()
+        first = clock() + timedelta(seconds=interval_seconds)
+        self.schedules: dict[BrainSource, SourceSchedule] = {
+            BrainSource.CHAT: SourceSchedule(interval_seconds, True, next_run_at=first),
+            BrainSource.FILLS: SourceSchedule(
+                interval_seconds, backfill is not None, next_run_at=first
+            ),
+            BrainSource.HOLDINGS: SourceSchedule(
+                interval_seconds, holdings is not None, next_run_at=first
+            ),
+        }
+
+    def set_interval(self, source: BrainSource, interval_seconds: float) -> SourceSchedule:
+        """주기를 바꾸고 다음 실행 시각을 마지막 실행 기준으로 다시 잰다.
+
+        마지막 실행이 없으면 지금 기준이다. 줄인 주기가 이미 지났으면 루프가 곧바로
+        돈다 — 사용자가 "더 자주"를 골랐는데 옛 주기의 남은 시간을 기다리게 하지 않는다.
+        """
+        if interval_seconds <= 0:
+            raise ValueError("interval_seconds must be positive")
+        schedule = self.schedules[source]
+        schedule.interval_seconds = interval_seconds
+        base = schedule.last_run_at or self._clock()
+        schedule.next_run_at = base + timedelta(seconds=interval_seconds)
+        self._wakeup.set()
+        return schedule
+
+    async def run_now(self, source: BrainSource) -> SourceSchedule:
+        await self._run_sources([source], JobTrigger.MANUAL)
+        return self.schedules[source]
+
+    async def _run_sources(self, sources: list[BrainSource], trigger: JobTrigger) -> None:
+        for source in sources:
+            self.schedules[source].running = True
+            self.schedules[source].last_error = None
+        try:
+            if BrainSource.FILLS in sources:
+                self.schedules[BrainSource.FILLS].last_error = await _produce_trade_facts(
+                    self._backfill
+                )
+            if BrainSource.HOLDINGS in sources:
+                self.schedules[BrainSource.HOLDINGS].last_error = await _produce_holding_facts(
+                    self._holdings
+                )
+            try:
+                await self._coordinator.enqueue(trigger)
+            except asyncio.CancelledError:
+                raise
+            except Exception as exc:
+                # A transient scheduler/coordinator failure must not permanently disable
+                # later refreshes. Log only the exception type: upstream messages can
+                # contain paths, command arguments, or provider response fragments.
+                logger.warning(
+                    "brain ingestion tick failed type=%s; retrying next interval",
+                    type(exc).__name__,
+                )
+                for source in sources:
+                    self.schedules[source].last_error = type(exc).__name__
+        finally:
+            done = self._clock()
+            for source in sources:
+                schedule = self.schedules[source]
+                schedule.running = False
+                schedule.last_run_at = done
+                schedule.next_run_at = done + timedelta(seconds=schedule.interval_seconds)
+
+    async def run_loop(self) -> None:
+        """만기된 소스를 모아 돌리고, 가장 이른 다음 시각까지 잔다(주기 변경이면 깨어난다)."""
+        while True:
+            now = self._clock()
+            due = [
+                source
+                for source, schedule in self.schedules.items()
+                if schedule.next_run_at is not None and schedule.next_run_at <= now
+            ]
+            if due:
+                await self._run_sources(due, JobTrigger.HOURLY)
+                continue
+            soonest = min(
+                schedule.next_run_at
+                for schedule in self.schedules.values()
+                if schedule.next_run_at is not None
+            )
+            delay = max(0.0, (soonest - now).total_seconds())
+            self._wakeup.clear()
+            with suppress(TimeoutError):
+                await asyncio.wait_for(self._wakeup.wait(), timeout=delay)
+
+
 async def _hourly_ingest_loop(
     coordinator: IngestionCoordinator,
     interval_seconds: float,
@@ -137,31 +300,10 @@ async def _hourly_ingest_loop(
     backfill: TradeBackfill | None = None,
     holdings: HoldingSnapshotIngestor | None = None,
 ) -> None:
-    """Self-enqueue JobTrigger.HOURLY on a fixed period (ADR §9 gate G005).
-
-    Manual runs still use the pre-existing enqueue(JobTrigger.MANUAL) path unaffected by
-    this. Cancellation must propagate: _teardown_brain cancels and awaits this task
-    before stopping the coordinator, so CancelledError here is the ordinary shutdown
-    path, not a failure to swallow.
-
-    체결·잔고 생산자(WP-H)가 결선돼 있으면 **잡을 넣기 전에** 적재한다 — 그래야
-    바로 이어지는 잡이 방금 생긴 사실을 투영한다. 안 돼 있으면(None) 예전과 같다.
-    """
-    while True:
-        await asyncio.sleep(interval_seconds)
-        await _produce_trade_and_holding_facts(backfill, holdings)
-        try:
-            await coordinator.enqueue(JobTrigger.HOURLY)
-        except asyncio.CancelledError:
-            raise
-        except Exception as exc:
-            # A transient scheduler/coordinator failure must not permanently disable
-            # later hourly refreshes. Log only the exception type: upstream messages
-            # can contain paths, command arguments, or provider response fragments.
-            logger.warning(
-                "brain hourly ingestion tick failed type=%s; retrying next interval",
-                type(exc).__name__,
-            )
+    """주기 하나로 셋을 도는 옛 진입점 — BrainIngestScheduler의 기본 상태와 같다."""
+    await BrainIngestScheduler(
+        coordinator, interval_seconds, backfill=backfill, holdings=holdings
+    ).run_loop()
 
 
 async def _refresh_instrument_identity(
@@ -361,14 +503,15 @@ async def _open_brain(
                 if hourly_interval_seconds is not None
                 else settings.brain_ingest_interval_minutes * 60
             )
+            brain.scheduler = BrainIngestScheduler(
+                coordinator,
+                interval_seconds,
+                backfill=backfill,
+                holdings=holdings_ingestor,
+            )
             if settings.brain_ingest_schedule_owner == "backend":
                 brain.hourly_task = asyncio.create_task(
-                    _hourly_ingest_loop(
-                        coordinator,
-                        interval_seconds,
-                        backfill=backfill,
-                        holdings=holdings_ingestor,
-                    ),
+                    brain.scheduler.run_loop(),
                     name="athena-brain-hourly-ingest",
                 )
         return brain
