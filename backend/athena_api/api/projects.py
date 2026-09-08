@@ -171,6 +171,24 @@ async def open_project(request: Request, body: dict[str, Any]) -> dict[str, Any]
     return {"project": _project_view(entry)}
 
 
+@router.post("/{project_id}/relink")
+async def relink_project(request: Request, project_id: str, body: dict[str, Any]) -> dict[str, Any]:
+    """폴더 다시 지정 — 같은 프로젝트 id의 경로만 새 폴더로 바꾼다(코드 감시 초안이
+    "프로젝트 폴더 없음 — 다시 연결"로 막혔을 때의 그 「다시 연결」). 디스크는 건드리지 않는다."""
+    path = _text_field(body, "path")
+    try:
+        entry = _store(request).relink(project_id, path)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="프로젝트가 존재하지 않는다") from None
+    except ProjectMissingError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    except (ProjectNameError, ProjectNotADirectoryError) as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    except ProjectExistsError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+    return {"project": _project_view(entry)}
+
+
 @router.delete("/{project_id}")
 async def unregister_project(request: Request, project_id: str) -> dict[str, Any]:
     """등록 해제 — **디스크의 파일은 그대로 둔다**. 응답이 그 사실을 말한다."""

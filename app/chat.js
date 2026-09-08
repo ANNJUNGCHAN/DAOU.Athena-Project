@@ -173,6 +173,96 @@ let abortToken = 0;
 // 복귀처럼 타이핑 없이 셸이 다시 보이게 되는 경로가 있어 방어적으로 공유한다
 // (main.js broadcastLiveQueryBusy — "단일 실행 잠금은 공유한다").
 let remoteQueryBusy = false;
+// ---------- 다중 대화(2026-09-08) ----------
+// 대화마다 턴 상태가 따로 산다. 위 state/liveProgressEl/abortToken은 **지금 보고 있는 대화**의
+// 거울이다 — 갈아탈 때 syncDisplayedTurn()이 그 대화의 기록으로 갈아 끼운다. 진행 중인 턴의
+// 클로저는 자기 대화의 기록(turnRecordFor)만 보고, 화면 반영은 자기 대화가 보일 때만 한다.
+let displayedConversationId = null;
+let switchingConversation = false;
+const turnRecords = new Map(); // conversationId -> { conversationId, token, state, progressEl }
+// 화면에서 내려간 대화의 말풍선 DOM — 갈아탈 때 통째로 떼어 보관하고 돌아오면 다시 붙인다.
+// 진행 중 턴의 스트림은 떼어진 노드에 계속 이어붙으므로 돌아왔을 때 그대로 보인다.
+const conversationPanes = new Map(); // conversationId -> HTMLElement(holder)
+// main이 방송하는 진행 중 대화 집합 — 보고 있는 대화가 여기 있고 내 턴이 아니면(오브 기원) 잠근다.
+let remoteBusyIds = new Set();
+
+function turnRecordFor(conversationId) {
+  const key = conversationId || '';
+  let rec = turnRecords.get(key);
+  if (!rec) { rec = { conversationId: key, token: 0, state: 'idle', progressEl: null }; turnRecords.set(key, rec); }
+  return rec;
+}
+function isDisplayedConversation(conversationId) {
+  return (conversationId || '') === (displayedConversationId || '');
+}
+function paneHolderFor(conversationId) {
+  const key = conversationId || '';
+  let holder = conversationPanes.get(key);
+  if (!holder) { holder = document.createElement('div'); conversationPanes.set(key, holder); }
+  return holder;
+}
+// 턴이 말풍선을 붙일 뿌리 — 자기 대화가 보이면 $history, 아니면 보관된 holder.
+function paneRootFor(conversationId) {
+  return isDisplayedConversation(conversationId) ? $history : paneHolderFor(conversationId);
+}
+function setTurnState(rec, next) {
+  rec.state = next;
+  if (isDisplayedConversation(rec.conversationId)) state = next;
+}
+function setTurnProgress(rec, el) {
+  rec.progressEl = el;
+  if (isDisplayedConversation(rec.conversationId)) liveProgressEl = el;
+}
+// 오브 기원 질의(main 방송) 잠금 — 내 턴이 아니고, 보고 있는 대화가 진행 중일 때만.
+let remoteLockShown = false;
+function setRemoteLock(locked, text) {
+  // 이미 풀려 있으면 다시 풀지 않는다 — 다른 잠금 주인(온보딩·주문 확인)을 건드리지 않는다.
+  if (!locked && !remoteLockShown) return;
+  remoteLockShown = locked;
+  setLocked(locked, text);
+}
+function applyRemoteLock() {
+  if (state !== 'idle') { remoteQueryBusy = false; return; }
+  if (displayedConversationId === null) {
+    // 새 대화의 id를 아직 못 받았다(athena:conversation-active 대기) — 이 틈에 보낸 질문은 어느
+    // 대화에도 못 붙는다. 잠깐 잠근다.
+    remoteQueryBusy = true;
+    setRemoteLock(true, '새 대화를 여는 중…');
+    return;
+  }
+  const busy = !!displayedConversationId && remoteBusyIds.has(displayedConversationId);
+  remoteQueryBusy = busy;
+  setRemoteLock(busy, busy ? '오브에서 대화 중 — 잠시 후 다시 시도하세요' : undefined);
+}
+// 지금 보이는 대화의 거울(state/liveProgressEl/abortToken)과 입력 잠금을 그 대화의 기록으로 맞춘다.
+function syncDisplayedTurn() {
+  const rec = turnRecordFor(displayedConversationId);
+  state = rec.state;
+  liveProgressEl = rec.progressEl;
+  abortToken = rec.token;
+  if (state !== 'idle') {
+    remoteQueryBusy = false;
+    setDot(state === 'calling' ? 'calling' : 'judging');
+    setLocked(true, 'Claude에게 물어보는 중 — 수십 초 걸릴 수 있다');
+  } else {
+    setDot(null);
+    applyRemoteLock();
+  }
+}
+// 화면에서 내려가는 대화의 말풍선을 보관한다(비우지 않는다 — 진행 중 턴이 계속 쓴다).
+function stashDisplayedPane() {
+  if (displayedConversationId === null) return;
+  const holder = paneHolderFor(displayedConversationId);
+  while ($history.firstChild) holder.appendChild($history.firstChild);
+}
+// 보관해 둔 대화의 말풍선을 다시 붙인다. 보관본이 없으면 false — 호출자가 저장본으로 그린다.
+function mountStoredPane(conversationId) {
+  const holder = conversationPanes.get(conversationId || '');
+  if (!holder) return false;
+  while ($history.firstChild) $history.removeChild($history.firstChild);
+  while (holder.firstChild) $history.appendChild(holder.firstChild);
+  return true;
+}
 let onboardCleanup = null; // 현재 노출 중인 온보딩/인증 화면의 정리 함수(리스너·타이머 해제)
 const onboardingRevision = onboarding.createOnboardingRevisionGuard();
 let onboardingAccountId = null;
@@ -780,6 +870,7 @@ function maybeShowCoachmark() {
 // ---------- 초기 정보 수신 ----------
 window.athena.on('athena:init', (payload) => {
   canvasSource = (payload && payload.canvasSource) || 'live';
+  if (payload && payload.conversationId) displayedConversationId = payload.conversationId;
 });
 
 // ---------- 창 표면의 유리 두께 ----------
@@ -1109,7 +1200,15 @@ function paintUserBubbleText(el, text) {
 }
 
 async function runQueryLive(text) {
-  const myToken = ++abortToken;
+  // 이 턴의 대화 — 제출 시점에 보고 있던 대화에 묶인다(다중 대화, 2026-09-08). 갈아타도 이 턴의
+  // 말풍선·상태는 그 대화의 기록(rec)과 보관 DOM(paneRootFor)에만 붙는다.
+  const cid = displayedConversationId;
+  const rec = turnRecordFor(cid);
+  const myToken = ++rec.token;
+  if (isDisplayedConversation(cid)) abortToken = rec.token;
+  const mine = () => myToken === rec.token;
+  const forMe = (payload) => !payload || !payload.conversationId || payload.conversationId === cid;
+  const onScreen = () => isDisplayedConversation(cid);
   let clientSubmitId = null;
   const claimProviderVisible = (meta, owner, node) => {
     if (!meta || !clientSubmitId || meta.clientSubmitId !== clientSubmitId) return false;
@@ -1131,14 +1230,14 @@ async function runQueryLive(text) {
   qText.className = 'turn-q';
   paintUserBubbleText(qText, text);
   qLine.appendChild(qText);
-  $history.appendChild(qLine);
-  scrollHistoryToBottom(true); // 새 질문은 무조건 바닥으로 — 위에서 읽던 중이어도 새 턴이 우선이다
-  scrollAfterRender();
+  paneRootFor(cid).appendChild(qLine);
+  if (onScreen()) scrollHistoryToBottom(true); // 새 질문은 무조건 바닥으로 — 위에서 읽던 중이어도 새 턴이 우선이다
+  if (onScreen()) scrollAfterRender();
   // 새 턴 시작 — "기록 안 됨" 배지가 붙을 줄 참조를 갱신(main이 진입 직후 role:user
   // 저장을 이미 시도하므로 여기서부터 실패 이벤트가 올 수 있다).
   saveFailedRouter.startTurn(qLine);
 
-  state = 'judging';
+  setTurnState(rec, 'judging');
   setDot('judging');
   setLocked(true, 'Claude에게 물어보는 중 — 수십 초 걸릴 수 있다');
   // 진행 상태 텍스트는 하단 잠금 힌트(setLocked) 한 곳에만 쓴다(2026-08-27
@@ -1152,10 +1251,10 @@ async function runQueryLive(text) {
   const toolSteps = document.createElement('div');
   toolSteps.className = 'progress-tool-steps';
   progress.appendChild(toolSteps);
-  $history.appendChild(progress);
-  liveProgressEl = progress;
-  liveProgressEl.startedAt = startedAt; // Esc 핸들러가 중단 헤더의 경과초를 재려면 필요하다
-  scrollAfterRender();
+  paneRootFor(cid).appendChild(progress);
+  setTurnProgress(rec, progress);
+  progress.startedAt = startedAt; // Esc 핸들러가 중단 헤더의 경과초를 재려면 필요하다
+  if (onScreen()) scrollAfterRender();
 
   let cardCount = 0;
   let calling = false;
@@ -1184,7 +1283,7 @@ async function runQueryLive(text) {
   });
   const elapsedText = () => `${((Date.now() - startedAt) / 1000).toFixed(1)}s`;
   const renderProgress = () => {
-    if (myToken !== abortToken) return;
+    if (!mine()) return;
     // 문구는 대화 브랜치 디자인 정합(9ce2279)을 따르고, 표시는 main 결정(2026-08-27
     // 버블 안 중복 제거)대로 하단 잠금 힌트 한 곳에만 쓴다(병합 2026-08-27).
     //
@@ -1199,20 +1298,20 @@ async function runQueryLive(text) {
       // 닫아 두는데(live-prompt.js) 진행 문구만 그것을 몰랐다. 모드와 무관하게
       // 참인 말로 바꾼다 — 무엇을 고르는 중인지는 TOOL_STEP_LABELS가 곧 말해 준다.
       : '판단 중 — 어떤 도구를 쓸지 고르는 중';
-    setLocked(true, base, elapsedText());
+    if (onScreen()) setLocked(true, base, elapsedText());
     renderAgentCardElapsed();
   };
   // 100ms 간격 — 표기는 소수 1자리(29.3s)인데 1초 간격으로 갱신하면 소수 자리가
   // 항상 .0으로만 보여 정수 표시와 구별되지 않았다(2026-08-18 사용자 지시).
   const tick = setInterval(renderProgress, 100); // 진행이 눈에 보이게 — 조용히 멈춘 것처럼 보이면 안 된다
 
-  const onLiveCanvasAdded = () => {
-    if (myToken !== abortToken) return;
-    if (!calling) { calling = true; state = 'calling'; setDot('calling'); }
+  const onLiveCanvasAdded = (payload) => {
+    if (!mine() || !forMe(payload)) return;
+    if (!calling) { calling = true; setTurnState(rec, 'calling'); if (onScreen()) setDot('calling'); }
     cardCount += 1;
     releaseLadder.onCanvasLanded(); // 카드 우선 표시(US-006) 조건(a) — 카드 우선의 본래 목적.
     renderProgress();
-    scrollAfterRender();
+    if (onScreen()) scrollAfterRender();
   };
   const unsubscribeLiveCanvasAdded = window.athena.on('athena:live-canvas-added', onLiveCanvasAdded);
 
@@ -1223,13 +1322,13 @@ async function runQueryLive(text) {
   // Esc 핸들러(top-level 리스너, 이 클로저 밖)가 "접을 기록이 있는가"를 판정할
   // 유일한 다리 — liveProgressEl 프로퍼티로 노출한다(2026-08-27, foldExecutionRecord
   // 위 주석의 aborted 분기와 짝).
-  liveProgressEl.toolStepStates = toolStepStates;
+  progress.toolStepStates = toolStepStates;
   const toolStepEls = new Map();
   const onLiveToolStep = (step) => {
-    if (myToken !== abortToken) return;
+    if (!mine() || !forMe(step)) return;
     const result = toolStepTrack.applyToolStep(toolStepStates, step);
     if (!result) return;
-    if (!calling) { calling = true; state = 'calling'; setDot('calling'); }
+    if (!calling) { calling = true; setTurnState(rec, 'calling'); if (onScreen()) setDot('calling'); }
     // 카드 우선 표시(US-006) — result는 이미 {id,label,done} 모양이라
     // 사다리가 그대로 받는다(새 IPC 없음, 기존 tool-step 구독 재사용).
     releaseLadder.onToolStep(result);
@@ -1256,7 +1355,7 @@ async function runQueryLive(text) {
     el.querySelector('.progress-tool-step-label').textContent = result.label;
     el.querySelector('.progress-tool-step-note').textContent = result.note || '';
     el.querySelector('.progress-tool-step-time').textContent = result.timeText;
-    scrollAfterRender();
+    if (onScreen()) scrollAfterRender();
     claimProviderVisible({ ...step, rendererReceivedAt: performance.now() }, 'chat', el);
   };
   const unsubscribeLiveToolStep = window.athena.on('athena:live-tool-step', onLiveToolStep);
@@ -1349,7 +1448,7 @@ async function runQueryLive(text) {
     renderAgentCardElapsed();
   }
   const onLiveSubagentStep = (step) => {
-    if (myToken !== abortToken || !step || !step.taskId) return;
+    if (!mine() || !forMe(step) || !step || !step.taskId) return;
     let s = subagentStates.get(step.taskId);
     if (!s) {
       s = { description: null, status: 'running' };
@@ -1367,7 +1466,7 @@ async function runQueryLive(text) {
       if (step.status === 'completed') s.status = 'completed';
     }
     renderAgentCard();
-    scrollAfterRender();
+    if (onScreen()) scrollAfterRender();
   };
   const unsubscribeLiveSubagentStep = window.athena.on('athena:live-subagent-step', onLiveSubagentStep);
 
@@ -1375,8 +1474,8 @@ async function runQueryLive(text) {
   // propose로 불렀다면 main.js가 tool_result에서 뽑아 보낸다(아래
   // renderGuardConfirmCard 참고, 폴링으로는 발견 불가능한 비영속 데이터라
   // 이 턴 전용 구독이 유일한 신호다).
-  const onNudgeGuardProposed = (payload) => {
-    if (myToken !== abortToken) return;
+  const onNudgeGuardProposed = (payload, meta) => {
+    if (!mine() || !forMe(meta) || (meta && meta.deferred)) return;
     renderGuardConfirmCard(payload, text);
   };
   const unsubscribeNudgeGuardProposed = window.athena.on('athena:nudge-guard-proposed', onNudgeGuardProposed);
@@ -1384,8 +1483,8 @@ async function runQueryLive(text) {
   // 모델이 낸 플러그인 제안은 이 턴의 산물이다 — 채팅에는 제안 턴 한 장만
   // 남는다. 캔버스 카드는 canvas.js의 모듈 스코프 구독이 그리고(턴이 끝나도
   // 카드는 남아야 한다), GUI 버튼 경로는 채팅 턴을 만들지 않는다.
-  const onPluginProposed = (envelope) => {
-    if (myToken !== abortToken) return;
+  const onPluginProposed = (envelope, meta) => {
+    if (!mine() || !forMe(meta) || (meta && meta.deferred)) return;
     // 모드 밖이면 캔버스가 봉투를 폐기한다 — 그때 채팅에 남는 것은 폐기를
     // 알리는 한 줄뿐이고, 제안 턴은 만들지 않는다(없는 카드를 가리키게 된다).
     if (pluginModeLib.currentMode() !== 'plugin') return;
@@ -1408,9 +1507,10 @@ async function runQueryLive(text) {
     thinkingLine = null;
     thinkingBody = null;
   };
-  const onLiveThinkingDelta = ({ text: delta } = {}) => {
-    if (myToken !== abortToken || !delta) return;
-    if (!calling) { calling = true; state = 'calling'; setDot('calling'); }
+  const onLiveThinkingDelta = (payload = {}) => {
+    const delta = payload.text;
+    if (!mine() || !forMe(payload) || !delta) return;
+    if (!calling) { calling = true; setTurnState(rec, 'calling'); if (onScreen()) setDot('calling'); }
     if (!thinkingLine) {
       thinkingLine = document.createElement('div');
       thinkingLine.className = 'turn turn-thinking-preview';
@@ -1421,11 +1521,11 @@ async function runQueryLive(text) {
       thinkingBody.className = 'turn-thinking-body';
       thinkingLine.appendChild(label);
       thinkingLine.appendChild(thinkingBody);
-      $history.appendChild(thinkingLine);
+      paneRootFor(cid).appendChild(thinkingLine);
     }
     thinkingText += delta;
     thinkingBody.textContent = thinkingText;
-    scrollAfterRender();
+    if (onScreen()) scrollAfterRender();
   };
   const unsubscribeLiveThinkingDelta = window.athena.on('athena:live-thinking-delta', onLiveThinkingDelta);
 
@@ -1443,20 +1543,20 @@ async function runQueryLive(text) {
       streamAText = document.createElement('div');
       streamAText.className = 'turn-a';
       streamALine.appendChild(streamAText);
-      $history.appendChild(streamALine);
+      paneRootFor(cid).appendChild(streamALine);
     }
     streamedText += text;
     // 마크다운으로 다시 그린다 — **강조**·`코드`·목록 기호가 원문 그대로
     // 노출되던 문제(2026-08-31 사용자 지적). 전체 재렌더지만 조각당 정규식
     // 몇 개 수준이라 스트리밍에 부담이 없다.
     window.AthenaLib.Markdown.render(streamAText, streamedText);
-    scrollAfterRender();
+    if (onScreen()) scrollAfterRender();
     claimProviderVisible(meta, 'chat', streamAText);
   };
   const onLiveTextDelta = (payload = {}) => {
     const { text: delta } = payload;
-    if (myToken !== abortToken || !delta) return;
-    if (!calling) { calling = true; state = 'calling'; setDot('calling'); }
+    if (!mine() || !forMe(payload) || !delta) return;
+    if (!calling) { calling = true; setTurnState(rec, 'calling'); if (onScreen()) setDot('calling'); }
     releaseLadder.onTextDelta(); // 첫 조각에서만 조건(c) 유예 타이머를 켠다(사다리 내부 판단).
     if (!releaseLadder.released) {
       bufferedText += delta; // 아직 방출 조건이 안 왔다 — 화면엔 안 그리고 모아만 둔다.
@@ -1478,7 +1578,7 @@ async function runQueryLive(text) {
     window.AthenaProviderFirstPaint.registerSubmit({ clientSubmitId, rendererSubmittedAt, origin: 'shell' });
     // @멘션은 여기서만 동봉한다 — 사용자 버블(qText)에는 타이핑 원문이 남는다.
     result = await window.athena.invoke('athena__render_canvas', {
-      source: 'live', query: augmentMentions(text), expand: prefs.autoExpandCanvas,
+      source: 'live', query: augmentMentions(text), expand: prefs.autoExpandCanvas, conversationId: cid,
       clientSubmitId, rendererSubmittedAt,
       // 백테스트 설계 턴 — main.js가 모드·폼 상태를 buildLiveTurnPrompt에 넘긴다. 모델은
       // 폼을 읽기만 하고, 바꾸는 것은 propose_spec 초안 카드의 [적용]을 사람이 누를 때다.
@@ -1507,24 +1607,27 @@ async function runQueryLive(text) {
     // stale 턴은 끄지 않는다 — Esc로 죽인 질의 A가 새 질의 B 도중 뒤늦게 settle하면
     // 무조건 끄기가 B의 THINK 얼굴을 삼킨다(2026-08-27 병합 점검 결함②).
     // 중단된 턴의 끄기는 Esc 핸들러가 즉시 보낸다(아래 keydown의 짝 주석 참고).
-    if (myToken === abortToken) window.athena.send('athena:orb-signal', { signal: 'think', active: false });
+    if (mine()) window.athena.send('athena:orb-signal', { signal: 'think', active: false });
     // 방어적 — 답변 조각이 한 번도 안 오고 턴이 끝나는 경로(예: 조기 중단)에서도
     // 미리보기가 턴 기록에 남지 않게 한다.
     clearThinkingPreview();
   }
-  if (myToken !== abortToken) return;
+  if (!mine()) return;
 
   // 오브 "완료" 실신호 — 성공한 턴에만 붙인다(result ok). 실패는 웃을 일이 아니다.
   if (result && result.ok) {
     window.athena.send('athena:orb-signal', { signal: 'done', active: true });
   }
 
-  state = 'idle';
-  setDot(null);
-  setLocked(false);
+  setTurnState(rec, 'idle');
+  if (onScreen()) {
+    setDot(null);
+    setLocked(false);
+    applyRemoteLock();
+  }
   const execRecord = foldExecutionRecord(toolSteps, startedAt, { steps: toolStepStates });
   progress.remove();
-  liveProgressEl = null;
+  setTurnProgress(rec, null);
 
   // 스트리밍 중 만든 버블이 있으면 그대로 이어 쓴다(재부착 없음 — 이미
   // $history 안에 있다). 없으면(REST 직결·캐시 리플레이·조각 0개) 기존처럼 새로 만든다.
@@ -1564,16 +1667,16 @@ async function runQueryLive(text) {
     chip.textContent = canvasTypeLabel(t);
     meta.appendChild(chip);
   }
-  updateResultDock(cardCount, canvasTypes, result && result.canvasCaptions);
+  if (onScreen()) updateResultDock(cardCount, canvasTypes, result && result.canvasCaptions);
   // 처리 경로·소요시간 푸터("claude -p · 11.0s")는 내부 진단 정보라 제거했다
   // (2026-08-31 사용자 확정) — 실행 세부는 접히는 실행 기록이 이미 갖고 있다.
   aLine.appendChild(meta);
   renderRecommendations(aLine, result && result.recommendations);
 
-  if (!streamALine) $history.appendChild(aLine);
+  if (!streamALine) paneRootFor(cid).appendChild(aLine);
   saveFailedRouter.setAssistantLine(aLine);
-  scrollAfterRender();
-  $input.focus();
+  if (onScreen()) scrollAfterRender();
+  if (onScreen()) $input.focus();
 
   // 방금 턴에서 모델이 athena_routine(draft)로 제안했을 수 있다 — 승인 카드는
   // 스트림 파싱이 아니라 백엔드 목록 재조회로 결정론적으로 띄운다(P3).
@@ -2267,8 +2370,10 @@ function pastMessageTurn(message) {
   return line;
 }
 
-function restoreConversation(switched, messages, snapshot) {
-  while ($history.firstChild) $history.removeChild($history.firstChild);
+function restoreConversation(switched, messages, snapshot, { stored = false, conversationId = null } = {}) {
+  // 보관본(다중 대화)이 있으면 그대로 붙인다 — 진행 중 턴의 말풍선까지 그 자리에 있다.
+  const mounted = stored && mountStoredPane(conversationId);
+  if (!mounted) while ($history.firstChild) $history.removeChild($history.firstChild);
   if (window.AthenaShell && typeof window.AthenaShell.clearCanvases === 'function') {
     window.AthenaShell.clearCanvases();
   }
@@ -2287,7 +2392,9 @@ function restoreConversation(switched, messages, snapshot) {
   // 말할 게 없다(41번 보드 "전부 돌아왔으면 아무 말도 하지 않는다"). 문맥이 이어지는지
   // (switched.resumed)는 main의 커서가 정하고, 화면은 그것을 따로 알리지 않는다.
 
-  if (!messages.length) {
+  if (mounted) {
+    // 보관본을 그대로 붙였다 — 저장본으로 다시 그리지 않는다.
+  } else if (!messages.length) {
     // 못 읽은 것과 없는 것은 다르다 — 조회는 됐고 메시지가 0건인 경우다
     // (이력 저장이 붙기 전에 만들어진 대화가 여기 해당한다).
     const empty = document.createElement('div');
@@ -2325,29 +2432,42 @@ function restoreConversation(switched, messages, snapshot) {
 // sidebar.js가 부르는 다리(shell.js 버스). 돌아갔으면 true.
 window.AthenaShell.registerOpenConversation(async (conv) => {
   if (!conv || !conv.id) return false;
-  // 답변 중에는 전환하지 않는다 — 진행 중 턴이 다른 대화 밑으로 사라진다.
-  if (state !== 'idle' || remoteQueryBusy) return false;
+  if (switchingConversation) return false;
+  // 다중 대화(2026-09-08) — 답변 중에도 갈아탄다. 진행 중 턴은 자기 대화의 보관된 말풍선에 계속
+  // 이어붙고, 돌아오면 그대로 보인다(conversationPanes). main도 전환 때 턴을 끊지 않는다.
   // 갈아타기 전에 이 세션의 지연 보고를 흘린다 — main은 받은 시점의 세션에 적으므로
   // 전환 뒤에 도착한 보고는 앞 세션의 작업공간을 다음 세션 기록에 적는다.
   if (window.AthenaSessionWorkspace) window.AthenaSessionWorkspace.flush();
-  const switched = await window.athena.invoke('athena:conversations-set-active', { id: conv.id })
-    .catch(() => null);
-  if (!switched || !switched.restorable) return false;
-  if (switched.isCurrent) return true;
-  // 메시지의 원본은 세션 스토어다(42번 보드). 스냅샷의 currentId 경로만 그린다 — 분기가
-  // 있어도 한 줄로 보인다. 스토어에 없으면(이 배선 전에 만든 대화) 브레인 이력으로 폴백.
-  const snapshot = await window.athena.invoke('athena:session-load', { id: conv.id }).catch(() => null);
-  const snapshotLib = window.AthenaLib && window.AthenaLib.SessionSnapshot;
-  let messages = snapshot && snapshotLib ? snapshotLib.messagePath(snapshot.messages, snapshot.currentId) : [];
-  if (!messages.length) {
-    const res = await window.athena.invoke('athena:conversation-messages', { conversationId: conv.id })
+  switchingConversation = true;
+  try {
+    const switched = await window.athena.invoke('athena:conversations-set-active', { id: conv.id })
       .catch(() => null);
-    messages = res && res.ok && Array.isArray(res.messages) ? res.messages : [];
+    if (!switched || !switched.restorable) return false;
+    if (switched.isCurrent) return true;
+    // 메시지의 원본은 세션 스토어다(42번 보드). 스냅샷의 currentId 경로만 그린다 — 분기가
+    // 있어도 한 줄로 보인다. 스토어에 없으면(이 배선 전에 만든 대화) 브레인 이력으로 폴백.
+    const snapshot = await window.athena.invoke('athena:session-load', { id: conv.id }).catch(() => null);
+    const stored = conversationPanes.has(conv.id);
+    let messages = [];
+    if (!stored) {
+      const snapshotLib = window.AthenaLib && window.AthenaLib.SessionSnapshot;
+      messages = snapshot && snapshotLib ? snapshotLib.messagePath(snapshot.messages, snapshot.currentId) : [];
+      if (!messages.length) {
+        const res = await window.athena.invoke('athena:conversation-messages', { conversationId: conv.id })
+          .catch(() => null);
+        messages = res && res.ok && Array.isArray(res.messages) ? res.messages : [];
+      }
+    }
+    stashDisplayedPane();
+    displayedConversationId = conv.id;
+    restoreConversation(switched, messages, snapshot, { stored, conversationId: conv.id });
+    syncDisplayedTurn();
+    // 카드는 main이 저장된 봉투를 같은 페인트 채널로 다시 흘린다 — 캔버스를 비운 뒤라 순서가 맞는다.
+    void window.athena.invoke('athena:session-replay-cards', { id: conv.id }).catch(() => {});
+    return true;
+  } finally {
+    switchingConversation = false;
   }
-  restoreConversation(switched, messages, snapshot);
-  // 카드는 main이 저장된 봉투를 같은 페인트 채널로 다시 흘린다 — 캔버스를 비운 뒤라 순서가 맞는다.
-  void window.athena.invoke('athena:session-replay-cards', { id: conv.id }).catch(() => {});
-  return true;
 });
 
 // Claude 데스크톱의 @ 멘션과 같은 UX: 입력란에서 @를 치면 등록된 MCP 서버 목록이
@@ -2516,10 +2636,36 @@ $input.addEventListener('keydown', (e) => {
 });
 
 // 오브가 질의를 돌리는 동안 셸 입력도 잠근다(위 remoteQueryBusy 선언 참고).
-window.athena.on('athena:live-query-state', ({ busy } = {}) => {
-  if (state !== 'idle') return; // 셸 자신이 이미 진행 중이면 그쪽 setLocked가 우선한다
-  remoteQueryBusy = !!busy;
-  setLocked(remoteQueryBusy, remoteQueryBusy ? '오브에서 대화 중 — 잠시 후 다시 시도하세요' : undefined);
+window.athena.on('athena:live-query-state', ({ busy, busyConversationIds } = {}) => {
+  // 다중 대화(2026-09-08) — 진행 중 대화 집합을 받고, 보고 있는 대화가 그 안에 있을 때만 잠근다.
+  remoteBusyIds = new Set(Array.isArray(busyConversationIds)
+    ? busyConversationIds
+    : (busy && displayedConversationId ? [displayedConversationId] : []));
+  applyRemoteLock();
+});
+
+// main이 발행한 활성 대화 id(다중 대화, 2026-09-08). 갈아타기(registerOpenConversation)는 자기가
+// 화면을 바꾸므로 그동안은 무시하고, 새 대화(athena:new-conversation 뒤)처럼 아직 보고 있는
+// 대화가 없을 때 그 id를 받는다.
+window.athena.on('athena:conversation-active', ({ conversationId } = {}) => {
+  if (!conversationId || switchingConversation || displayedConversationId === conversationId) return;
+  if (displayedConversationId !== null) stashDisplayedPane();
+  displayedConversationId = conversationId;
+  mountStoredPane(conversationId);
+  syncDisplayedTurn();
+});
+
+// 배경 대화의 턴이 낸 채팅 전용 카드(말걸기 가드·플러그인 제안)는 main이 미뤄 두고, 그 대화로 돌아온
+// 뒤(athena:session-replay-cards) meta.deferred=true로 흘린다. 그때는 그 턴의 구독이 이미 끝났으므로
+// 여기 모듈 스코프에서 그린다 — 보고 있는 대화의 것일 때만.
+window.athena.on('athena:nudge-guard-proposed', (payload, meta) => {
+  if (!meta || !meta.deferred || meta.conversationId !== displayedConversationId) return;
+  renderGuardConfirmCard(payload, '');
+});
+window.athena.on('athena:plugin-proposed', (envelope, meta) => {
+  if (!meta || !meta.deferred || meta.conversationId !== displayedConversationId) return;
+  if (pluginModeLib.currentMode() !== 'plugin') return;
+  renderPluginProposalTurn(envelope);
 });
 
 // 오브 "듣는 중" 실신호(2026-08-26 board-32) — 입력 지점은 이 창 하나뿐이라
@@ -2926,8 +3072,9 @@ refreshModelState();
 window.athena.invoke('athena:cli-list').then(applyCliState, () => {});
 
 // Paper 54의 새 대화는 DOM만 비우는 동작이 아니다. 진행 중인 턴의 렌더 토큰을
-// 먼저 폐기해 이전 응답이 새 방에 뒤늦게 붙는 것을 막고, main의 실행도 함께
-// 중단한다. sidebar.js가 새 기록 id를 요청하기 직전에 이 이벤트를 보낸다.
+// 새 대화(다중 대화, 2026-09-08) — 진행 중 턴을 끊지 **않는다**. 지금 보이는 대화의 말풍선을
+// 보관하고 빈 화면으로 넘어간다. 새 기록 id는 main의 athena:conversation-active 방송으로 온다.
+// sidebar.js가 새 기록 id를 요청하기 직전에 이 이벤트를 보낸다.
 window.addEventListener('athena:new-conversation', () => {
   // 새 기록 id를 받기 전에 흘린다 — 이력 행 클릭과 같은 이유다(전환 뒤에 터진 보고는
   // 앞 세션의 작업공간을 새 대화의 기록에 적는다). 흘린 뒤 앞 세션의 복원 표식을 거둔다:
@@ -2936,25 +3083,25 @@ window.addEventListener('athena:new-conversation', () => {
     window.AthenaSessionWorkspace.flush();
     window.AthenaSessionWorkspace.clear();
   }
-  abortToken += 1;
-  window.athena.send('athena:abort-live-query');
-  window.athena.send('athena:orb-signal', { signal: 'think', active: false });
+  stashDisplayedPane();
+  displayedConversationId = null;
   state = 'idle';
+  liveProgressEl = null;
+  abortToken = 0;
+  applyRemoteLock(); // 새 대화 id가 오기 전까지 잠깐 잠근다 — athena:conversation-active가 푼다
   setDot(null);
-  setLocked(false);
-  if (liveProgressEl) {
-    liveProgressEl.remove();
-    liveProgressEl = null;
-  }
+
 });
 
 // 실행 중 턴 중단 — Esc(아래 keydown)와 입력 상자의 ■ 버튼(Paper 44)이 같은 경로를 탄다.
 function abortLiveTurn() {
-  abortToken++; // 중단 — UI 반영 차단
-  window.athena.send('athena:abort-live-query'); // 실배선 프로세스 트리도 실제로 죽인다
+  const rec = turnRecordFor(displayedConversationId);
+  rec.token += 1; // 중단 — UI 반영 차단(이 대화의 턴만)
+  abortToken = rec.token;
+  window.athena.send('athena:abort-live-query', { conversationId: displayedConversationId }); // 이 대화의 실배선 프로세스만 죽인다
   // 죽는 질의의 finally는 이제 stale이라 침묵한다(결함② 수정과 짝) — 여기서 즉시 끈다.
   window.athena.send('athena:orb-signal', { signal: 'think', active: false });
-  state = 'idle';
+  setTurnState(rec, 'idle');
   setDot(null);
   setLocked(false);
   if (liveProgressEl) {
@@ -2974,7 +3121,7 @@ function abortLiveTurn() {
       $history.appendChild(aLine);
     }
     liveProgressEl.remove();
-    liveProgressEl = null;
+    setTurnProgress(rec, null);
   }
   scrollAfterRender();
 }
@@ -3167,7 +3314,9 @@ window.athena.on('athena:routine-event', (event) => {
 // Fast Selector의 guarded order 결과는 기존 주문 확인 티켓에만 착지한다.
 // 이 이벤트 경로에서는 athena:order-execute를 호출하지 않는다 — 실행은 아래
 // 티켓 안의 사용자 클릭 핸들러 하나로 계속 제한된다.
-window.athena.on('athena:selector-order-draft', (payload) => {
+window.athena.on('athena:selector-order-draft', (payload, meta) => {
+  // 다중 대화 — 다른 대화의 초안은 main이 미뤄 두고 그 대화로 돌아올 때 흘린다. 혹시 늦게 온 것은 버린다.
+  if (meta && meta.conversationId && meta.conversationId !== displayedConversationId) return;
   const prefill = orderTicketLib.buildSelectorOrderPrefill(payload);
   if (prefill) openOrderTicket(prefill);
 });
@@ -3585,6 +3734,41 @@ function renderWatchProgressTurn(r) {
   return line;
 }
 
+// 「폴더 다시 지정」 — 프로젝트 폴더가 사라진 코드 감시를 살린다. 폴더는 main의 대화상자로
+// 사람이 고르고, 백엔드가 같은 project_id의 경로만 바꾼다(새 id 없음). 성공하면 검사를 바로
+// 다시 돌려 새 카드로 답한다 — 사람이 「검사」를 한 번 더 누르게 하지 않는다. 취소는 조용히 끝난다.
+async function relinkWatchProject(r, status, buttons) {
+  const watch = await watchBlockOf(r);
+  if (!watch || !watch.project_id) {
+    status.textContent = '감시 프로젝트를 알 수 없음 — 대화로 다시 만들기';
+    return;
+  }
+  for (const b of buttons) b.disabled = true;
+  status.textContent = '폴더 고르는 중';
+  let res;
+  try { res = await window.athena.invoke('athena:project-relink', { id: watch.project_id }); }
+  catch (e) { res = { ok: false, error: String((e && e.message) || e) }; }
+  if (!res || !res.ok || res.canceled) {
+    for (const b of buttons) b.disabled = false;
+    status.textContent = res && res.canceled ? '' : `폴더 지정 실패: ${(res && res.error) || '알 수 없는 오류'}`;
+    return;
+  }
+  // 카드가 든 차단 사유는 폴더가 없던 때의 것이다 — 백엔드가 지금 보는 사유로 바꾼다.
+  try {
+    const detail = await window.athena.invoke('athena:routine-detail', { id: r.id });
+    if (detail && detail.ok && detail.data && 'activation_blocker' in detail.data) {
+      r.activation_blocker = detail.data.activation_blocker;
+    }
+  } catch { /* 새 검사 카드가 지금의 사실을 말한다 */ }
+  status.textContent = '폴더 다시 지정됨 — 검사 다시 돌림';
+  const progressLine = renderWatchProgressTurn(r);
+  const check = await runWatchCheck(r);
+  progressLine.remove();
+  // 상태줄은 지우지 않는다 — 보드 10-b ③처럼 「폴더 다시 지정됨 — 검사 다시 돌림」이 남아
+  // 무엇이 이 새 카드를 불렀는지 말한다.
+  renderWatchCheckCard(r, check || { ok: false, reason: '감시 코드 자리를 못 찾음 — 대화로 다시 만들기' });
+}
+
 function renderWatchCheckCard(r, check) {
   const model = watchCheckCardLib.checkCardModel(check, r);
   const line = document.createElement('div');
@@ -3676,7 +3860,8 @@ function renderWatchCheckCard(r, check) {
   status.className = 'agent-mode';
   const buttons = [];
   for (const chip of model.chips) {
-    const btn = _btn(chip.label, chip.action === 'confirm' ? 'routine-btn routine-btn-approve' : 'routine-btn');
+    const btn = _btn(chip.label, chip.action === 'confirm' ? 'routine-btn routine-btn-approve'
+      : chip.action === 'relink' ? 'routine-btn routine-btn-relink' : 'routine-btn');
     btn.disabled = !chip.enabled || (chip.action === 'confirm' && !!r.activation_blocker);
     if (chip.action === 'confirm') {
       btn.addEventListener('click', async () => {
@@ -3690,6 +3875,8 @@ function renderWatchCheckCard(r, check) {
           btn.disabled = !!r.activation_blocker;
         }
       });
+    } else if (chip.action === 'relink') {
+      btn.addEventListener('click', () => { void relinkWatchProject(r, status, buttons); });
     } else {
       btn.addEventListener('click', () => {
         const repairContext = model.failed
@@ -3996,8 +4183,16 @@ function renderApprovalCard(r) {
     $input.focus();
   });
 
+  // 초안 카드도 「프로젝트 폴더 없음」이면 폴더를 다시 고르는 길을 낸다(검사 카드와 같은 칩).
+  const relink = isCodeWatch && watchCheckCardLib.isProjectFolderMissing(r.activation_blocker)
+    ? _btn(watchCheckCardLib.CHIP_RELINK, 'routine-btn routine-btn-relink') : null;
+  if (relink) {
+    relink.addEventListener('click', () => { void relinkWatchProject(r, status, [preview, activate, relink, fix]); });
+  }
+
   row.appendChild(preview);
   row.appendChild(activate);
+  if (relink) row.appendChild(relink);
   row.appendChild(fix);
   row.appendChild(status);
   card.appendChild(row);

@@ -139,6 +139,8 @@ const VERIFY_SUITE = Object.freeze([
   { script: 'verify:plugins', budgetMs: 90000 },
   { script: 'verify:kiumi', budgetMs: 90000 },
   { script: 'verify:orb-conversation', budgetMs: 30000 },
+  // 다중 대화 동시 진행(2026-09-08) — 모델 왕복을 모킹으로 쥐고 전환·격리·복귀·Esc 15건. 실측 ~15초.
+  { script: 'verify:multi-chat', budgetMs: 60000 },
   { script: 'verify:kiumi-cards', budgetMs: 90000 },
   { script: 'verify:chat-v3', budgetMs: 90000 },
   { script: 'verify:agent-paper-parity', budgetMs: 90000 },
