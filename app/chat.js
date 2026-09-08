@@ -272,6 +272,7 @@ function prepareRestReceiptSurface() {
   $boot.hidden = true;
   $settings.hidden = true;
   $order.hidden = true;
+  $shell.inert = false;
   $app.hidden = false;
   settingsOpen = false;
   orderOpen = false;
@@ -5453,7 +5454,8 @@ document.addEventListener('athena:chat-insert', (event) => {
 
 // ---------- 주문 확인 모드 — #order (P4, 2026-08-19) ----------
 // 유일하게 미착수였던 모드의 실체(GLOSSARY §1). 온보딩·설정과 같은 형제 패널
-// 문법 — 열리면 #app이 물러나고 높이는 모드가 소유한다. 프리필은 AI(루틴
+// 문법 — 열리면 현재 셸 위 가운데에 모달로 뜨고, 배경 셸은 보이되 조작되지
+// 않는다. 프리필은 AI(루틴
 // 발화)가, 방향·수량·실행은 사람만. 집행은 기존 3중 게이트 백엔드 라우트
 // 그대로(새 주문 경로 없음), IN_DOUBT(409)는 재전송하지 않는다.
 const orderTicketLib = window.AthenaLib.OrderTicket;
@@ -5465,8 +5467,9 @@ let orderOpen = false;
 function openOrderTicket(prefill) {
   if (orderOpen || settingsOpen || !$onboard.hidden) return;
   orderOpen = true;
-  $app.hidden = true;
+  $shell.inert = true;
   $order.hidden = false;
+  $order.focus();
   renderOrderTicket(prefill);
 }
 
@@ -5475,7 +5478,7 @@ function closeOrderTicket() {
   orderOpen = false;
   $orderBody.replaceChildren();
   $order.hidden = true;
-  $app.hidden = false;
+  $shell.inert = false;
   $input.focus();
 }
 
@@ -5634,6 +5637,7 @@ async function renderOrderTicket(prefill) {
   execRow.append(execBtn, closeBtn);
   card.append(execRow, status, execNote);
   $orderBody.appendChild(card);
+  if (orderOpen) qtyInput.focus();
 
   const paintQtyChips = () => {
     const model = orderTicketLib.qtyChipModel({
