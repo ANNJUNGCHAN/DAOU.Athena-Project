@@ -159,10 +159,10 @@ def _slot_value(
             if isinstance(first, (dict, list, tuple, set)):
                 return _UNBOUND
             if first is None or (isinstance(first, str) and not first.strip()):
-                return _UNBOUND
+                return _EMPTY
             return first
         if value is None or (isinstance(value, str) and not value.strip()):
-            return _UNBOUND
+            return _EMPTY
         return value
     if not isinstance(value, list):
         return _UNBOUND
@@ -174,7 +174,7 @@ def _slot_value(
         return _UNBOUND
     row_value = value[slot.row_index]
     if row_value is None or (isinstance(row_value, str) and not row_value.strip()):
-        return _UNBOUND
+        return _EMPTY
     return row_value
 
 
@@ -195,10 +195,18 @@ def _resolve_slot(
         enumerate(slot.bindings),
         key=lambda item: (priority.get(item[1].mapping_id, len(priority)), item[0]),
     )
+    empty: tuple[str | None, Any] | None = None
     for _, binding in ranked:
         value = _slot_value(slot, binding.occurrence_id, bound, solo_occurrences)
+        if value is _EMPTY:
+            # 다른 op가 실제 값을 실어 왔을 수 있다 — 빈 값은 마지막에 쓴다.
+            if empty is None:
+                empty = (binding.occurrence_id, value)
+            continue
         if value is not _UNBOUND:
             return binding.occurrence_id, value
+    if empty is not None:
+        return empty
     return None, _UNBOUND
 
 
@@ -216,6 +224,8 @@ def _composite_value(
     for part in composite.parts:
         occurrence_id = part.occurrence_id
         value = _slot_value(slot, occurrence_id, bound, solo_occurrences)
+        if value is _EMPTY:
+            return _EMPTY
         if value is _UNBOUND:
             return _UNBOUND
         assert occurrence_id is not None
@@ -242,6 +252,23 @@ class _Unbound:
 
 
 _UNBOUND = _Unbound()
+
+
+class _EmptyValue:
+    """응답이 그 자리를 **빈 값으로 답했다**. 결측(안 왔다)과 구분한다.
+
+    업스트림이 필드를 싣고 값만 비운 자리다(실측 2VIN-0의 ETF `drng` 스무 줄 중
+    열다섯). 「미제공」은 「제공되지 않는다」는 뜻이라 여기 쓰면 거짓말이 된다 —
+    제공됐고, 그 줄에는 해당 값이 없다. 화면은 빈 칸으로 둔다.
+    """
+
+    __slots__ = ()
+
+    def __repr__(self) -> str:  # pragma: no cover - 진단 표시용
+        return "<empty>"
+
+
+_EMPTY = _EmptyValue()
 
 
 def _row_key(slot: SurfaceSlot) -> tuple[str, str, int | str] | None:
@@ -342,6 +369,41 @@ def _realtime_pending_slots(board: BoardTemplate, filled: set[str]) -> list[str]
     return pending
 
 
+def _empty_columns(board: BoardTemplate, filled: set[str]) -> list[dict[str, Any]]:
+    """값이 **한 줄도** 안 온 표의 열 — 화면에서 지울 열의 목록.
+
+    응답이 어떤 필드를 아예 싣지 않으면 그 열은 모든 줄에서 결측이다(실측 2VIN-0:
+    14칸 중 3~4칸이 스무 줄 내리 결측어). 줄 접기(:func:`_empty_rows`)와 같은
+    처리를 열 단위로 한다 — 머리글까지 함께 지워 열이 통째로 사라진다. 값이 한
+    칸이라도 오면 그 열은 목록에 없다.
+
+    열 하나에 두 줄 셀(병기)이 필드 둘을 실을 수 있으므로 판정은 (표·열) 단위다.
+    """
+
+    cells: dict[tuple[str, int], list[str]] = {}
+    bound_columns: set[tuple[str, int]] = set()
+    rows_seen: dict[tuple[str, int], set[str]] = {}
+    for slot in board.slots:
+        cell = slot.table
+        if cell is None:
+            continue
+        key = (cell.table_id, cell.col)
+        cells.setdefault(key, []).append(slot.slot_id)
+        if not slot.binds_a_field:
+            continue
+        rows_seen.setdefault(key, set()).add(str(cell.row))
+        if slot.slot_id in filled:
+            bound_columns.add(key)
+    return [
+        {"column": f"{table_id}:{col}", "slot_ids": sorted(slot_ids)}
+        for (table_id, col), slot_ids in sorted(cells.items(), key=lambda item: str(item[0]))
+        # 값 바인딩이 두 줄 이상 있는 열만 본다 — 한 줄짜리는 열이 아니라 한 칸이고,
+        # 그 칸의 결측은 그 자리의 정직한 결측이다.
+        if (table_id, col) not in bound_columns
+        and len(rows_seen.get((table_id, col), ())) >= 2
+    ]
+
+
 def _state_boards(
     registry: CardSurfaceRegistry, board: BoardTemplate
 ) -> list[dict[str, Any]]:
@@ -421,6 +483,7 @@ def _board_contract(
     solo_occurrences = _solo_array_occurrences(board)
     slot_values: list[dict[str, Any]] = []
     unbound_slots: list[str] = []
+    empty_value_slots: list[str] = []
     for slot in board.slots:
         if not slot.binds_a_field:
             # 보드 HTML이 이미 갖고 있는 고정 문구(라벨)다 — 채울 값이 없다.
@@ -433,6 +496,11 @@ def _board_contract(
             occurrence_id, value = _resolve_slot(
                 slot, bound, priority, solo_occurrences
             )
+        if value is _EMPTY:
+            # 응답이 빈 값으로 답한 자리 — 결측어가 아니라 빈 칸이다.
+            empty_value_slots.append(slot.slot_id)
+            unbound_slots.append(slot.slot_id)
+            continue
         if value is _UNBOUND:
             unbound_slots.append(slot.slot_id)
             continue
@@ -459,6 +527,12 @@ def _board_contract(
         "card_id": board.card_id,
         # 자료가 한 칸도 없는 되풀이 줄 — 프론트가 그 줄을 접는다(:func:`_empty_rows`).
         "empty_rows": _empty_rows(
+            board, {entry["slot_id"] for entry in slot_values}
+        ),
+        # 응답이 빈 값으로 답한 자리 — 프론트가 빈 칸으로 둔다(결측어 아님).
+        "empty_value_slots": empty_value_slots,
+        # 값이 한 줄도 없는 표의 열 — 프론트가 머리글까지 지운다(:func:`_empty_columns`).
+        "empty_columns": _empty_columns(
             board, {entry["slot_id"] for entry in slot_values}
         ),
         # 실시간 프레임만이 채울 수 있는 잎 — 첫 프레임 전에는 빈 칸이다.

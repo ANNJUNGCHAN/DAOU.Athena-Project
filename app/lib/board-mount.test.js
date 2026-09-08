@@ -7,7 +7,8 @@ const path = require('node:path');
 const {
   collapsePlan, mountPlan, pairedGroups, nodeIndex, applyPlan, setHidden, isValueSlot,
   hoistLayout, applyResponsiveHooks, RESPONSIVE_REGIONS, HOISTED_PROPERTIES, primaryMountPoint,
-  collapsePrimaryMockup, restorePrimaryMockup, collapseEmptyRows, markDeclaredScrollBox,
+  collapsePrimaryMockup, restorePrimaryMockup, collapseEmptyRows, collapseEmptyColumns,
+  markDeclaredScrollBox,
   createLatestBoardLoad, nextHydrationSlots,
   slotValueEntries, realtimeSlotIndex, updateRealtimeValue, pairedClosure, realtimePlan, applyRealtimeSlots,
   stateLinksFromMarks, stateControlActivationOwner, wireStateControlActivation,
@@ -1736,4 +1737,22 @@ test('디자인 문구만 남은 줄은 여전히 빈 줄로 접힌다', () => {
 
   assert.deepEqual(hidden.map((entry) => entry.node), ['row1']);
   assert.equal(row.hidden, true);
+});
+
+
+test('값이 한 줄도 없는 열은 머리글까지 감춘다', () => {
+  const head = linked({ slotId: 'c1.head' });
+  const cellOne = linked({ slotId: 'c1.r0', missing: 'true' });
+  const cellTwo = linked({ slotId: 'c1.r1', missing: 'true' });
+  const keep = linked({ slotId: 'c0.r0' });
+  const surface = linked({ node: 'surface' }, [head, cellOne, cellTwo, keep]);
+
+  const hidden = collapseEmptyColumns(surface, [
+    { column: 'T:1', slot_ids: ['c1.head', 'c1.r0', 'c1.r1'] },
+  ]);
+
+  assert.deepEqual(hidden, [{ column: 'T:1', cells: 3 }]);
+  assert.equal(head.hidden, true);
+  assert.equal(cellTwo.hidden, true);
+  assert.equal(keep.hidden, false);
 });
