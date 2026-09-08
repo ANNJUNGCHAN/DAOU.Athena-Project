@@ -150,9 +150,6 @@ const $lockText = document.getElementById('lockText');
 const $lockTime = document.getElementById('lockTime');
 // 컴포저(Paper 44, 2026-09-05) — 중단 버튼·하단 툴바.
 const $stopBtn = document.getElementById('stopBtn');
-const $composerSpinner = document.getElementById('composerSpinner');
-const $attachBtn = document.getElementById('attachBtn');
-const $mentionBtn = document.getElementById('mentionBtn');
 const $modelBtn = document.getElementById('modelBtn');
 const $effortBtn = document.getElementById('effortBtn');
 const $onboard = document.getElementById('onboard');
@@ -969,7 +966,6 @@ function setLocked(locked, text, time) {
   $input.placeholder = locked ? '' : idle;
   $lockHint.hidden = !locked;
   $stopBtn.hidden = !locked;
-  $composerSpinner.hidden = !locked;
   if (text) $lockText.textContent = text;
   $lockTime.textContent = locked && time ? time : '';
 }
@@ -1802,10 +1798,9 @@ async function runHistoryCommand(text) {
 // "원칙 1 — 채팅은 절대 접히지 않는다, 모드는 캔버스만 바꾼다"). 실제 모드
 // 엔진은 그대로 canvas.js의 graphMode(lib/graph-mode/controller.js) 하나다.
 $dot.addEventListener('click', () => { toggleKiumiMenu(); });
-// 하단 툴바(Paper 44 composer-bar, 2026-09-05) — +는 키우미 메뉴(파일·폴더 첨부)의 두 번째 문,
-// @는 커서에 @를 넣어 플러그인 멘션 메뉴를 연다. 모델·강도 버튼은 아래 모델 팝오버 절에 있다.
-$attachBtn.addEventListener('click', () => { toggleKiumiMenu(); });
-$mentionBtn.addEventListener('click', () => {
+// 옛 툴바 [@] 버튼의 일(2026-09-08, 키우미 메뉴로 이동) — 커서 자리에 @를 넣어 플러그인
+// 멘션 메뉴를 연다. 앞 글자에 붙지 않게 한 칸 띄운다.
+function insertMentionAtCaret() {
   if ($input.disabled) return;
   const start = $input.selectionStart == null ? $input.value.length : $input.selectionStart;
   const end = $input.selectionEnd == null ? start : $input.selectionEnd;
@@ -1816,7 +1811,7 @@ $mentionBtn.addEventListener('click', () => {
   $input.focus();
   $input.setSelectionRange(caret, caret);
   $input.dispatchEvent(new Event('input', { bubbles: true }));
-});
+}
 // 사이드바 계정 메뉴(Paper 보드 16)의 "설정" 항목이 쓰는 다리 — lib/sidebar.js
 // 참고.
 window.AthenaShell.registerOpenSettings(openSettings);
@@ -2870,6 +2865,11 @@ function renderKiumiMenu() {
     }
   };
   $kiumiMenu.appendChild(kiumiSection('플러그인'));
+  // 옛 툴바 [@] 버튼 — 이 메뉴가 이어받았다(2026-09-08).
+  $kiumiMenu.appendChild(kiumiItem('plugin', '@ 플러그인 지정', '커서에 @를 넣어 멘션 메뉴를 연다', () => {
+    closeKiumiMenu();
+    insertMentionAtCaret();
+  }));
   if (mentionState.aliases.length) {
     mentionState.aliases.slice(0, 6).forEach((server) => {
       $kiumiMenu.appendChild(kiumiItem(
@@ -2920,7 +2920,7 @@ function toggleKiumiMenu() {
 
 document.addEventListener('mousedown', (e) => {
   if ($kiumiMenu.hidden) return;
-  if ($kiumiMenu.contains(e.target) || $dot.contains(e.target) || $attachBtn.contains(e.target)) return;
+  if ($kiumiMenu.contains(e.target) || $dot.contains(e.target)) return;
   closeKiumiMenu();
 });
 window.athena.on('athena:model-changed', () => refreshModelState());
