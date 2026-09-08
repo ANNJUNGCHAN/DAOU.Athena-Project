@@ -57,6 +57,10 @@ function buildAgentSidebarRows(routines) {
       id: r.id,
       title: r.note || r.symbol || r.id,
       icon: statusIconFor(r),
+      mainCardCandidate: r.main_card_candidate || null,
+      mainCard: r.main_card || null,
+      mainCardConfirmedAt: r.main_card_confirmed_at || null,
+      mainCardPending: r.main_card_pending === true,
     }));
 }
 
@@ -82,6 +86,7 @@ function buildHydratedRooms(routines) {
       // 알람 센터(Paper 보드 02)가 갈래별 아이콘을 고를 때 쓴다 — 실시간
       // 이벤트 경로(handleRoutineEvent)가 event.mode로 넣는 것과 같은 값이다.
       mode: typeof r.mode === 'string' ? r.mode : '',
+      mainCard: r.main_card || null,
     }))
     .filter((r) => Number.isFinite(r.firedAt))
     .sort((a, b) => b.firedAt - a.firedAt);

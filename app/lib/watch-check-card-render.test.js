@@ -8,6 +8,7 @@ const vm = require('node:vm');
 const checkLib = require('./watch-check-card');
 const progressLib = require('./watch-progress-card');
 const fixCycleLib = require('./watch-fix-cycle');
+const mainCardLib = require('./routine-main-card');
 
 // 실제 IPC 응답 전달·카드 조립을 실행한다. Electron 대신 DOM/IPC 경계만 주입한다.
 const source = fs.readFileSync(path.join(__dirname, '..', 'chat.js'), 'utf8');
@@ -41,6 +42,10 @@ function renderHarness(check, lastCheck = null, detailFails = false) {
   const history = element('history'), calls = [];
   const scope = {
     document: { createElement: element }, watchCheckCardLib: checkLib, watchFixCycleLib: fixCycleLib,
+    routineMainCardLib: mainCardLib,
+    firstSeenSignatureById: new Map(),
+    registerRoutineDraftView() {}, registerTypedMainCardConfirmation() {},
+    refreshRoutineDraftViews() {},
     routineTurnLib: { describeMode: (mode) => mode },
     window: { AthenaLib: { WatchProgressCard: progressLib }, athena: {
       invoke: async (channel, body) => {

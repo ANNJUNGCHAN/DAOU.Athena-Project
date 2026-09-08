@@ -68,28 +68,55 @@ test('dismiss advances without opening or acknowledging a routine', () => {
   assert.deepEqual(popup.getState(), { currentId: 'b', queuedIds: [] });
 });
 
-test('alarm confirmation opens the current routine id and advances', () => {
+test('agent choice opens the current routine id and advances', () => {
   const document = fakeDocument();
   const opened = [];
   const popup = createRoutineAlertPopup({ document, onOpen: (id) => opened.push(id) });
   popup.show(room('routine-17'));
   popup.show(room('routine-18'));
 
-  findByClass(document.body, 'routine-alert-popup__open').click();
+  findByClass(document.body, 'routine-alert-popup__agent').click();
 
   assert.deepEqual(opened, ['routine-17']);
   assert.equal(popup.getState().currentId, 'routine-18');
 });
 
-test('alarm confirmation preserves the original routine id type', () => {
+test('agent choice preserves the original routine id type', () => {
   const document = fakeDocument();
   const opened = [];
   const popup = createRoutineAlertPopup({ document, onOpen: (id) => opened.push(id) });
   popup.show(room(17));
 
-  findByClass(document.body, 'routine-alert-popup__open').click();
+  findByClass(document.body, 'routine-alert-popup__agent').click();
 
   assert.deepEqual(opened, [17]);
+});
+
+test('card choice opens only when the alarm has a confirmed main card', () => {
+  const document = fakeDocument();
+  const cards = [];
+  const agents = [];
+  const popup = createRoutineAlertPopup({
+    document,
+    onOpenCard: (id) => cards.push(id),
+    onOpenAgent: (id) => agents.push(id),
+  });
+  popup.show(room('without-card'));
+  const cardButton = findByClass(document.body, 'routine-alert-popup__card');
+  const agentButton = findByClass(document.body, 'routine-alert-popup__agent');
+  assert.equal(cardButton.disabled, true);
+  assert.equal(findByClass(document.body, 'routine-alert-popup__card-hint').hidden, false);
+  cardButton.click();
+  assert.deepEqual(cards, []);
+  assert.equal(popup.getState().currentId, 'without-card');
+  agentButton.click();
+  assert.deepEqual(agents, ['without-card']);
+
+  popup.show(room('with-card', { mainCard: { title: '\uc2dc\uc138' } }));
+  assert.equal(cardButton.disabled, false);
+  assert.equal(findByClass(document.body, 'routine-alert-popup__card-hint').hidden, true);
+  cardButton.click();
+  assert.deepEqual(cards, ['with-card']);
 });
 
 test('invalid alarm data is ignored and does not create visible state', () => {
@@ -101,4 +128,18 @@ test('invalid alarm data is ignored and does not create visible state', () => {
   assert.equal(popup.show({ id: 'a', title: '  ' }), false);
   assert.deepEqual(popup.getState(), { currentId: null, queuedIds: [] });
   assert.equal(findByClass(document.body, 'routine-alert-popup').hidden, true);
+});
+
+test('late card detail updates only an alarm that is still current or queued', () => {
+  const document = fakeDocument();
+  const popup = createRoutineAlertPopup({ document, onOpenAgent() {} });
+  popup.show(room('a'));
+  popup.show(room('b'));
+  popup.dismiss();
+  assert.equal(popup.getState().currentId, 'b');
+  assert.equal(popup.update('a', { mainCard: { title: '시세' } }), false);
+  assert.deepEqual(popup.getState(), { currentId: 'b', queuedIds: [] });
+  assert.equal(findByClass(document.body, 'routine-alert-popup__card').disabled, true);
+  assert.equal(popup.update('b', { mainCard: { title: '차트' } }), true);
+  assert.equal(findByClass(document.body, 'routine-alert-popup__card').disabled, false);
 });

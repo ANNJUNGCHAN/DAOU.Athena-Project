@@ -10,6 +10,7 @@ from typing import Any
 
 from fastapi import APIRouter, HTTPException, Request
 
+from athena_api.routines.main_card import MainCardValidationError, validate_main_card
 from athena_api.routines.models import SOURCES, parse_schedule_value, source_spec
 from athena_api.routines.revisions import (
     WatchRevision,
@@ -147,10 +148,17 @@ def _view(
         "unread": _is_unread(last_fired_at, last_read_at),
         "briefing_model": spec.briefing_model,
         "briefing_effort": spec.briefing_effort,
+        "main_card_candidate": (
+            spec.main_card_candidate.to_dict() if spec.main_card_candidate else None
+        ),
+        "main_card": spec.main_card.to_dict() if spec.main_card else None,
+        "main_card_confirmed_at": (
+            spec.main_card_confirmed_at.isoformat() if spec.main_card_confirmed_at else None
+        ),
+        "main_card_pending": (spec.main_card_candidate is not None and spec.main_card is None),
         # 놓친 예약은 활성 루틴에서만 의미가 있다 — 캐치업(catchup-fire)도
         # active만 허용하므로 뷰와 실행 가능성이 일치한다.
-        "missed": spec.status == "active"
-        and _is_missed(_missed_since(spec), last_fired_at),
+        "missed": spec.status == "active" and _is_missed(_missed_since(spec), last_fired_at),
     }
     if spec.watch is not None:
         # 코드 감시 알람만 갖는 블록 — 다른 모드의 행 모양은 그대로다.
@@ -184,6 +192,14 @@ def _detail_view(spec: Any, runtime: RoutinesRuntime) -> dict[str, Any]:
         "activation_blocker": runtime.can_activate(spec),
         "experimental_source": source.experimental,
         "goal": spec.goal,
+        "main_card_candidate": (
+            spec.main_card_candidate.to_dict() if spec.main_card_candidate else None
+        ),
+        "main_card": spec.main_card.to_dict() if spec.main_card else None,
+        "main_card_confirmed_at": (
+            spec.main_card_confirmed_at.isoformat() if spec.main_card_confirmed_at else None
+        ),
+        "main_card_pending": (spec.main_card_candidate is not None and spec.main_card is None),
         "condition": spec.condition.to_dict(),
         "source_spec": {
             "ops": list(source.ops),
@@ -257,8 +273,7 @@ async def list_routines(request: Request) -> dict[str, Any]:
                 pass
     return {
         "routines": [
-            _view(s, runtime, latest_fired=latest_fired.get(s.id))
-            for s in runtime.store.list_all()
+            _view(s, runtime, latest_fired=latest_fired.get(s.id)) for s in runtime.store.list_all()
         ],
         "last_error": runtime.last_error,
         "fired_today": fired_today,
@@ -588,9 +603,7 @@ async def get_routine(request: Request, routine_id: str) -> dict[str, Any]:
 
 
 @router.post("/{routine_id}/update")
-async def update_routine(
-    request: Request, routine_id: str, body: dict[str, Any]
-) -> dict[str, Any]:
+async def update_routine(request: Request, routine_id: str, body: dict[str, Any]) -> dict[str, Any]:
     """설정 편집 — 저장된 스펙에 허용 필드만 덮어쓰고 **전량 재검증**한다.
 
     symbol과 condition.source는 바꿀 수 없다(다른 루틴이 되고 구독·모드가
@@ -604,9 +617,7 @@ async def update_routine(
         raise HTTPException(status_code=409, detail="취소된 작업 — 수정 불가")
     if spec.condition.source not in SOURCES:
         # 레거시 소스는 새 조건 검증을 통과할 수 없다 — 편집이 아니라 재생성이다.
-        raise HTTPException(
-            status_code=409, detail="지원하지 않는 조건 — 취소 후 새로 만들기"
-        )
+        raise HTTPException(status_code=409, detail="지원하지 않는 조건 — 취소 후 새로 만들기")
 
     body_condition = body.get("condition")
     if body_condition is not None and not isinstance(body_condition, dict):
@@ -618,18 +629,15 @@ async def update_routine(
             status_code=422, detail="코드 감시 조건은 폼에서 못 바꿈 — 고치기는 말로"
         )
     if "poll_interval_s" in body and spec.watch is None:
-        raise HTTPException(
-            status_code=422, detail="확인 주기는 코드 감시 알람에서만 바꿀 수 있음"
-        )
+        raise HTTPException(status_code=422, detail="확인 주기는 코드 감시 알람에서만 바꿀 수 있음")
     if "symbol" in body and body["symbol"] != spec.symbol:
         raise HTTPException(status_code=422, detail="종목 — 변경 불가 · 취소 후 새로 만들기")
-    if (
-        "source" in body_condition
-        and body_condition["source"] != spec.condition.source
-    ):
+    if "source" in body_condition and body_condition["source"] != spec.condition.source:
         raise HTTPException(status_code=422, detail="조건 소스 — 변경 불가 · 취소 후 새로 만들기")
 
     merged = spec.to_dict()
+    merged.pop("main_card", None)
+    merged.pop("main_card_confirmed_at", None)
     condition = dict(merged["condition"])
     for key in _UPDATABLE_CONDITION_FIELDS:
         if key in body_condition:
@@ -655,6 +663,8 @@ async def update_routine(
     updated.status = spec.status
     updated.created_at = spec.created_at
     updated.approved_at = spec.approved_at
+    updated.main_card = spec.main_card
+    updated.main_card_confirmed_at = spec.main_card_confirmed_at
     updated.revisions = spec.revisions  # 편집이 고침 이력을 지우지 않는다
     if "expires_days" not in body:
         updated.expires_at = spec.expires_at  # 편집이 만료를 몰래 연장하지 않는다
@@ -665,6 +675,51 @@ async def update_routine(
     return _detail_view(updated, runtime)
 
 
+@router.post("/{routine_id}/main-card/confirm")
+async def confirm_main_card(
+    request: Request, routine_id: str, body: dict[str, Any]
+) -> dict[str, Any]:
+    """사람이 화면에서 본 후보와 현재 후보가 같을 때만 메인 카드로 선점한다."""
+    runtime = _runtime(request)
+    spec = runtime.store.get(routine_id)
+    if spec is None:
+        raise HTTPException(status_code=404, detail="루틴이 존재하지 않는다")
+    if spec.status != "draft":
+        raise HTTPException(status_code=409, detail="초안 상태에서만 메인 카드를 확인할 수 있다")
+    candidate = spec.main_card_candidate
+    if candidate is None:
+        raise HTTPException(status_code=409, detail="확인할 메인 카드 후보가 없다")
+    expected = body.get("expected_candidate") if isinstance(body, dict) else None
+    if expected != candidate.to_dict():
+        raise HTTPException(
+            status_code=409, detail="카드 후보가 바뀌었다 — 현재 후보를 다시 확인해야 한다"
+        )
+    spec.main_card = candidate
+    spec.main_card_confirmed_at = datetime.now(UTC)
+    runtime.store.upsert(spec)
+    return _detail_view(spec, runtime)
+
+
+@router.post("/{routine_id}/main-card/candidate")
+async def replace_main_card_candidate(
+    request: Request, routine_id: str, body: dict[str, Any]
+) -> dict[str, Any]:
+    """거절된 후보를 같은 초안에서 새 후보로 바꾼다. 확정·활성화는 하지 않는다."""
+    runtime = _runtime(request)
+    spec = runtime.store.get(routine_id)
+    if spec is None:
+        raise HTTPException(status_code=404, detail="루틴이 존재하지 않는다")
+    if spec.status != "draft" or spec.main_card is not None:
+        raise HTTPException(status_code=409, detail="확정 전 초안의 카드 후보만 바꿀 수 있다")
+    try:
+        candidate = validate_main_card(body.get("candidate"), symbol=spec.symbol)
+    except MainCardValidationError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    spec.main_card_candidate = candidate
+    runtime.store.upsert(spec)
+    return _detail_view(spec, runtime)
+
+
 @router.post("/{routine_id}/confirm")
 async def confirm_routine(request: Request, routine_id: str) -> dict[str, Any]:
     """사람의 승인 — 평가 경로가 살아 있을 때만 활성화한다(정직 게이트)."""
@@ -672,6 +727,8 @@ async def confirm_routine(request: Request, routine_id: str) -> dict[str, Any]:
     spec = runtime.store.get(routine_id)
     if spec is None:
         raise HTTPException(status_code=404, detail="루틴이 존재하지 않는다")
+    if spec.main_card_candidate is not None and spec.main_card is None:
+        raise HTTPException(status_code=409, detail="대화창 메인 카드를 먼저 확인해야 한다")
     blocker = runtime.can_activate(spec)
     if blocker is not None:
         raise HTTPException(status_code=409, detail=blocker)
@@ -679,9 +736,7 @@ async def confirm_routine(request: Request, routine_id: str) -> dict[str, Any]:
         try:
             await runtime.ensure_realtime_subscription(spec.symbol)
         except Exception as exc:
-            raise HTTPException(
-                status_code=502, detail="실시간 구독 등록에 실패했다"
-            ) from exc
+            raise HTTPException(status_code=502, detail="실시간 구독 등록에 실패했다") from exc
     spec = runtime.store.transition(routine_id, "active")
     return _view(spec, runtime)
 
@@ -704,6 +759,8 @@ async def resume_routine(request: Request, routine_id: str) -> dict[str, Any]:
     spec = runtime.store.get(routine_id)
     if spec is None:
         raise HTTPException(status_code=404, detail="루틴이 존재하지 않는다")
+    if spec.main_card_candidate is not None and spec.main_card is None:
+        raise HTTPException(status_code=409, detail="대화창 메인 카드를 먼저 확인해야 한다")
     blocker = runtime.can_activate(spec)
     if blocker is not None:
         raise HTTPException(status_code=409, detail=blocker)
@@ -711,9 +768,7 @@ async def resume_routine(request: Request, routine_id: str) -> dict[str, Any]:
         try:
             await runtime.ensure_realtime_subscription(spec.symbol)
         except Exception as exc:
-            raise HTTPException(
-                status_code=502, detail="실시간 구독 등록에 실패했다"
-            ) from exc
+            raise HTTPException(status_code=502, detail="실시간 구독 등록에 실패했다") from exc
     spec = runtime.store.transition(routine_id, "active")
     return _view(spec, runtime)
 
@@ -754,9 +809,7 @@ async def rollback_watch_fix(request: Request, routine_id: str) -> dict[str, Any
     if not spec.revisions:
         raise HTTPException(status_code=409, detail="되돌릴 고침이 없음")
     if spec.status not in ("draft", "paused"):
-        raise HTTPException(
-            status_code=409, detail="켜져 있는 알람은 못 되돌림 — 먼저 일시중지"
-        )
+        raise HTTPException(status_code=409, detail="켜져 있는 알람은 못 되돌림 — 먼저 일시중지")
 
     entry = WatchRevision.from_dict(spec.revisions[-1])
     try:
@@ -811,9 +864,7 @@ async def catchup_fire(request: Request, routine_id: str) -> dict[str, Any]:
         if isinstance(ts, str):
             try:
                 if datetime.fromisoformat(ts) >= missed_at:
-                    raise HTTPException(
-                        status_code=409, detail="이미 발화 처리된 예약이다"
-                    )
+                    raise HTTPException(status_code=409, detail="이미 발화 처리된 예약이다")
             except ValueError:
                 continue
     row = record_scheduled_fire(
@@ -854,9 +905,7 @@ async def record_briefing_result(
     content = body.get("content")
     if status != "failed" and (not isinstance(title, str) or not isinstance(content, str)):
         # 검증은 전부 기록 앞에 — 422 응답에 부분 기록(engagement만)을 남기지 않는다.
-        raise HTTPException(
-            status_code=422, detail="성공 보고에는 title·content 문자열이 필수다"
-        )
+        raise HTTPException(status_code=422, detail="성공 보고에는 title·content 문자열이 필수다")
 
     engagement_row = runtime.engagement.record(
         "briefed",
@@ -906,9 +955,7 @@ async def list_routine_runs(request: Request, routine_id: str) -> dict[str, Any]
             r["briefing_destination"] = briefing.get("destination")
     # 최근 30건(옛 jsonl은 duration_ms 키 자체가 없을 수 있다 — 하위호환 방어).
     recent = rows[-30:]
-    durations = [
-        r["duration_ms"] for r in recent if isinstance(r.get("duration_ms"), (int, float))
-    ]
+    durations = [r["duration_ms"] for r in recent if isinstance(r.get("duration_ms"), (int, float))]
     avg_duration_ms = sum(durations) / len(durations) if durations else None
 
     # 발화→열람/이어진 대화(F2-스트레치) — engagement.py 모듈 독스트링의 지표
@@ -948,9 +995,7 @@ async def record_engagement(
         raise HTTPException(status_code=404, detail="루틴이 존재하지 않는다")
     event = body.get("event")
     if event not in ("opened", "replied"):
-        raise HTTPException(
-            status_code=422, detail="event는 'opened' 또는 'replied'만 허용된다"
-        )
+        raise HTTPException(status_code=422, detail="event는 'opened' 또는 'replied'만 허용된다")
     row = runtime.engagement.record(event, routine_id=routine_id)
     return row
 

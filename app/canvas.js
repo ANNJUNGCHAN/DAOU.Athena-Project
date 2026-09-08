@@ -187,6 +187,11 @@ window.athena.on('athena:prefs-changed', (next) => applyFontSizePref(next));
 // 카드별 destroy 콜백 — closeCard가 lightweight-charts 인스턴스를 누수 없이
 // 정리하도록 카드 DOM 노드에 매달아둔다(WeakMap: 카드가 GC되면 콜백도 같이 사라짐).
 const cardDestroyers = new WeakMap();
+let routineMainCardRenderer = null;
+const routineMainCardSessionClearGuard = window.AthenaLib.RoutineMainCard.createSessionClearGuard();
+window.addEventListener('athena:routine-main-card-preserve-session', () => {
+  routineMainCardSessionClearGuard.preserveNextClear();
+});
 // 통합 카드 하나 안의 각 mode/section은 기존 차트·호가 renderer의 lifecycle을
 // 그대로 소유한다. 같은 panel key가 갱신될 때만 해당 lifecycle을 닫고, 카드가
 // 닫히면 남은 panel을 모두 닫는다.
@@ -507,6 +512,8 @@ window.athena.on('athena:add-canvas', ({ type, sessionCardId }) => {
 // IPC로 보냈다. 두 영역이 같은 문서에 사는 지금은 IPC를 왕복할 이유가 없다:
 // chat.js의 Esc(유휴 상태)가 shell.js 버스를 통해 이 함수를 직접 부른다.
 function clearCanvases() {
+  const shouldReportSessionCards = routineMainCardSessionClearGuard.shouldReportAfterClear();
+  if (routineMainCardRenderer) routineMainCardRenderer.invalidate();
   for (const card of grid.querySelectorAll('.card')) {
     destroyCard(card);
   }
@@ -516,7 +523,7 @@ function clearCanvases() {
     discardCanvasTabDeck();
   }
   activeDatasetId = null;
-  reportSessionCards();
+  if (shouldReportSessionCards) reportSessionCards();
 }
 
 window.AthenaShell.registerCanvasClear(clearCanvases);
@@ -753,6 +760,31 @@ async function addLiveCard(result) {
   if (route === 'blocked') return renderLiveNotice(paperCardRouting.blockedReason(envelope));
   return renderPrimaryEnvelope(envelope);
 }
+
+// 알람의 「대화창에서 카드 보기」는 main이 정확한 operation_ref+args로 다시
+// 실행해 돌려준 한 장만 그린다. 일반 live broadcast를 재사용하지 않아 기존
+// 대화의 카드가 섞이지 않으며, 연속 클릭의 늦은 응답도 generation으로 버린다.
+routineMainCardRenderer = window.AthenaLib.RoutineMainCard.createExclusiveRenderer({
+  clear: clearCanvases,
+  render: addLiveCard,
+  list: () => Array.from(grid.querySelectorAll('.card')),
+  destroy: destroyCard,
+  onRendered(node, result) {
+    tagSessionCard(lastCardOr(node), {
+      channel: 'routine-main-card',
+      kind: result.envelope.canvas_type || null,
+      envelope: result.envelope,
+    });
+    reportSessionCards();
+  },
+});
+window.addEventListener('athena:conversation-scope-changed', () => routineMainCardRenderer.invalidate());
+window.AthenaRoutineMainCardCanvas = {
+  renderOnly(result) {
+    if (!result || result.status !== 'success' || !result.envelope) return Promise.resolve(false);
+    return routineMainCardRenderer.renderOnly(result);
+  },
+};
 
 function renderPrimaryEnvelope(envelope, options = {}) {
   // 표면 계약이 실려 오면 Paper 보드 원문을 그대로 마운트한다(D1) — 런타임 레이아웃
