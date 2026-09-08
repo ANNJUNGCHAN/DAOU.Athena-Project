@@ -1150,31 +1150,19 @@ html.is-boot-expanding #winControls { opacity: 0; }
 }
 .lock-time:empty { display: none; }
 
-/* 하단 툴바(Paper 44 composer-bar) — [키우미][+ 첨부][@ 플러그인] ··· [모델][강도][스피너]. */
+/* 하단 툴바(Paper 44 composer-bar, 2026-09-08 정리) — ··· [모델][강도][키우미]. */
 .composer-bar { display: flex; align-items: center; gap: 6px; min-height: 28px; padding: 0 4px; }
 .composer-spacer { flex: 1 1 0%; }
-.composer-icon,
 .composer-text {
   display: inline-flex; align-items: center; justify-content: center;
   height: 24px; padding: 0; border: none; border-radius: var(--radius-sm);
   background: transparent; color: var(--color-k-dim); cursor: pointer; appearance: none;
   font-family: var(--font-body); font-size: var(--text-sm); line-height: 16px;
 }
-.composer-icon { width: 24px; }
-.composer-icon-at { font-family: var(--font-mono); font-size: 13px; }
 .composer-text { padding: 0 4px; }
-.composer-icon:hover,
 .composer-text:hover { background: rgb(16 19 26 / 6%); color: var(--color-k-text); }
-.composer-icon:focus-visible,
 .composer-text:focus-visible,
 .composer-stop:focus-visible { outline: 2px solid var(--color-k-text); outline-offset: 1px; }
-.composer-spinner {
-  flex-shrink: 0; width: 12px; height: 12px; border-radius: 50%;
-  border: 1.5px solid var(--color-k-line);
-  border-top-color: var(--color-k-dim);
-  animation: composer-spin 0.9s linear infinite;
-}
-@keyframes composer-spin { to { transform: rotate(360deg); } }
 /* 중단 버튼(Esc와 같은 경로) — 상자 오른쪽 아래 22px 네모 안 8px 네모. 실행 중에만 보인다. */
 .composer-stop {
   flex-shrink: 0; display: flex; align-items: center; justify-content: center;
@@ -1185,7 +1173,7 @@ html.is-boot-expanding #winControls { opacity: 0; }
 .composer-stop:hover { border-color: var(--color-k-dim); }
 .composer-stop-square { width: 8px; height: 8px; border-radius: 1.5px; background: var(--color-k-dim); }
 @media (prefers-reduced-motion: reduce) {
-  .turn-status-icon, .composer-spinner { animation: none; }
+  .turn-status-icon { animation: none; }
 }
 
 .onb-root { position: absolute; inset: 0; }

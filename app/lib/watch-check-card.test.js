@@ -87,6 +87,20 @@ test('checkCardModel(실패): 사유를 싣고 승인 칩은 내지 않는다', 
   assert.deepEqual(m.chips, [{ label: '고칠 게 있어', action: 'revise', enabled: true }]);
 });
 
+test('checkCardModel(실패): 프로젝트 폴더 없음이면 「폴더 다시 지정」 칩이 고치기 앞에 선다', () => {
+  const m = checkCardModel({ ok: false, reason: '프로젝트 폴더 없음 — 다시 연결' }, DRAFT);
+  assert.deepEqual(m.chips, [
+    { label: '폴더 다시 지정', action: 'relink', enabled: true },
+    { label: '고칠 게 있어', action: 'revise', enabled: true },
+  ]);
+  // 등록 자체가 없는 「프로젝트 없음 — 다시 선택」과 파일 없음은 폴더를 다시 지정해도 살지 않는다.
+  for (const reason of ['프로젝트 없음 — 다시 선택', '감시 코드 파일 없음 — 다시 만들기']) {
+    assert.deepEqual(checkCardModel({ ok: false, reason }, DRAFT).chips.map((c) => c.action), ['revise'], reason);
+  }
+  // 성공 카드에는 절대 나오지 않는다.
+  assert.equal(checkCardModel(OK_CHECK, DRAFT).chips.some((c) => c.action === 'relink'), false);
+});
+
 test('checkCardModel(실패): reason이 비면 진단 제목으로 대체', () => {
   const m = checkCardModel({ ok: false, diagnosis: { title: '3번째 줄 괄호가 안 닫힘' } }, DRAFT);
   assert.equal(m.reason, '3번째 줄 괄호가 안 닫힘');

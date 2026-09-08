@@ -474,6 +474,25 @@ async function tokenRefresh(id) {
 }
 
 // ---------------------------------------------------------------------------
+// 앱 기동 시 활성 계좌 토큰 선발급 — main.js 부팅 작업 'account-token'이 백엔드
+// 기동과 동시에 부른다. 토큰이 없거나(needed) 만료됐거나(expired) 남은 시간이
+// minRemainingSec 아래면 재발급하고, 충분히 남았으면 그대로 둔다(auth-screen.js
+// "남은 10분에" 규칙과 같은 기준). 등록 계좌가 없으면 할 일이 없다.
+// ---------------------------------------------------------------------------
+async function ensureActiveToken({ minRemainingSec = 600, refresh = tokenRefresh } = {}) {
+  const state = readState();
+  const entry = state.accounts.find((a) => a.id === state.activeId);
+  if (!entry) return { ok: true, skipped: true, reason: 'no-account' };
+  const before = tokenStatus(entry.id);
+  if (before.state === 'ready' && before.expiresInSec > minRemainingSec) {
+    return { ok: true, skipped: true, reason: 'still-valid', id: entry.id, alias: entry.alias, expiresInSec: before.expiresInSec };
+  }
+  const result = await refresh(entry.id);
+  const after = tokenStatus(entry.id);
+  return { ok: !!result.ok, skipped: false, id: entry.id, alias: entry.alias, state: result.state, expiresInSec: after.expiresInSec };
+}
+
+// ---------------------------------------------------------------------------
 // athena:auth-token-revoke — auth-screen.js의 "연결 해제" 버튼. 갭이었던 IPC
 // 채널을 여기서 채운다(2026-08-17, 팀리드 지시). backend/athena_api/kiwoom/
 // auth.py의 KiwoomAuth.revoke_token()이 이미 이 upstream을 실제로 호출해
@@ -523,6 +542,7 @@ module.exports = {
   tokenStatus,
   tokenRefresh,
   tokenRevoke,
+  ensureActiveToken,
   onTokenChange,
   listBackendAliases,
   bindBackendAlias,

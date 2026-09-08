@@ -186,13 +186,12 @@ function orbDisplayMode(shellWin) {
  * show/hide를 반복하지 않아 포커스·컴포지터 이벤트를 불필요하게 만들지 않는다.
  * 반환값은 동기화 뒤 키우미가 보여야 하는지다.
  *
- * `alert`는 루틴 발화·복원 실패가 도착했다는 뜻이다 — 셸이 보이는 동안에도 알림
- * 전용 패널(모드 B)을 실제로 띄운다. 포커스는 뺏지 않는다(showInactive).
+ * 알림 도착 여부와 무관하게 셸 창이 보이면 키우미를 숨긴다. 기존 호출부가 세 번째
+ * options 인자를 넘겨도 JavaScript의 추가 인자 규칙에 따라 호환된다.
  */
-function syncOrbVisibility(shellWin, orbWin, { alert = false } = {}) {
+function syncOrbVisibility(shellWin, orbWin) {
   if (!orbWin || orbWin.isDestroyed()) return false;
-  const shellAlive = Boolean(shellWin) && !shellWin.isDestroyed();
-  const shouldShow = shouldShowOrbForShell(shellWin) || (alert && shellAlive);
+  const shouldShow = shouldShowOrbForShell(shellWin);
   if (shouldShow && !orbWin.isVisible()) orbWin.showInactive();
   if (!shouldShow && orbWin.isVisible()) orbWin.hide();
   return shouldShow;

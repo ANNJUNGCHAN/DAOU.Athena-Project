@@ -2554,11 +2554,11 @@ const ROUTES = Object.freeze([
     phrases: [
       '들어감', '나옴', '이 알람 승인',
       '승인 전까지 실행 없음 · 채팅 칩으로도, 이 버튼으로도 — 같은 게이트',
-      '고치기 — 말로', '확인 주기', '쿨다운',
+      '확인 주기', '쿨다운',
     ],
     // Paper 보드 10의 노드 행은 네 칸이고, 아직 아무 칸도 고르지 않았으며
     // (칩 없음) 첫 검사라 바뀐 칸도 없다. 승인 패널의 문은 둘이다
-    // ([이 알람 승인][취소] — 「고치기 — 말로」는 위 상태 제어 행에 있다).
+    // ([이 알람 승인][취소]).
     structure: [
       { what: 'count', selector: '.agent-node-card', equals: 4 },
       { what: 'absent', selector: '.agent-node-chip' },
@@ -2629,14 +2629,14 @@ const ROUTES = Object.freeze([
     ],
     root: '#agentCanvas',
     phrases: [
-      '코드 감시', '일시중지', '취소', '고치기 — 말로',
+      '코드 감시', '일시중지', '취소',
       '울린 기록 · 최근', '채팅에서 열기 ↗', '전체 이력 보기 →',
     ],
-    // Paper 보드 12의 상태 제어 행은 [일시중지][취소][고치기 — 말로] 셋이고,
+    // 상태 제어 행은 [일시중지][취소] 둘이고,
     // 켜진 알람에는 초안의 「검사」가 없다. 설정 요약은 확인 주기·쿨다운·만료와
     // 데이터 출처 네 줄이다 — 값(「1일」·「2026-10-03」)은 봉투가 주므로 개수로만 잰다.
     structure: [
-      { what: 'count', selector: '.agent-code-controls button', equals: 3 },
+      { what: 'count', selector: '.agent-code-controls button', equals: 2 },
       { what: 'absent', selector: '.agent-code-check-btn' },
       { what: 'count', selector: '.agent-view-tab', equals: 4 },
       { what: 'count', selector: '.agent-detail-field', equals: 4 },
@@ -3250,8 +3250,6 @@ const ROUTES = Object.freeze([
       '이 노드의 관계',
       '왜 숨은 연관인가',
       '이 그래프에서 가장 놀라운 연결입니다',
-      '이 연결을 확인하지 않으셨습니다.',
-      '채팅에서 물어보기',
     ],
     // 관계 세 줄(성향 · 구조 · 숨은)·최근 변화 세 줄·패널 탭 둘 — Paper가 그린
     // 수 그대로다. 요약 표는 물러나 있어야 한다.

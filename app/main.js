@@ -651,11 +651,9 @@ function sendRoutineEventToRenderers(event) {
   // 행을 각자 렌더할 뿐이고 백엔드 신규 경로는 0건이다 — 설계서 §판단서 요지.
   if (orbWin && !orbWin.isDestroyed()) {
     orbWin.webContents.send('athena:routine-event', event);
-    // 발화·복원 실패는 셸이 보이는 동안에도 알림 전용 패널로 실제 화면에 선다
-    // (Paper 보드 05 5FX-0 「셸이 보이는 동안 오브는 알림 전용이다」). 감시형
-    // 신호는 배경 상태라 창을 띄우지 않는다.
+    // 발화·복원 실패도 셸 가시성 정책을 따른다. 셸이 보이면 키우미는 숨긴다.
     if (event && (event.type === 'routine-fired' || event.type === 'routine-restore-failed')) {
-      orbWindow.syncOrbVisibility(shellWin, orbWin, { alert: true });
+      orbWindow.syncOrbVisibility(shellWin, orbWin);
     }
   }
 }
@@ -1675,6 +1673,32 @@ ipcMain.handle('athena:project-add', async (_e, { path: givenPath, name } = {}) 
 ipcMain.handle('athena:project-pin', (_e, { id, pinned } = {}) => conversations.setProjectPinned(id, Boolean(pinned)));
 // '프로젝트 수정'(29번 보드) — 이름·설명만. 폴더는 건드리지 않는다.
 ipcMain.handle('athena:project-update', (_e, { id, label, description } = {}) => conversations.updateProject({ id, label, description }));
+// '폴더 다시 지정' — 코드 감시 카드의 「프로젝트 폴더 없음 — 다시 연결」이 부른다. 폴더는 사람이
+// 대화상자로 고르고, 백엔드가 같은 project_id의 경로만 바꾼다(새 id 없음 — 초안이 든 id가 그대로
+// 살아난다). 사이드바 레코드도 같은 경로를 적는다. 백엔드가 거절하면 사이드바도 건드리지 않는다.
+ipcMain.handle('athena:project-relink', async (_e, { id } = {}) => {
+  const projectId = typeof id === 'string' && id.trim() ? id.trim() : null;
+  if (!projectId) return { ok: false, reason: 'unknown_project' };
+  let picked = null;
+  try {
+    const res = await dialog.showOpenDialog(shellWin, { properties: ['openDirectory'] });
+    picked = res.canceled ? null : ((res.filePaths || [])[0] || null);
+  } catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+  if (!picked) return { ok: true, canceled: true };
+  let relinked;
+  try {
+    relinked = await backtestBridge.relinkProject({
+      backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch, project_id: projectId, path: picked,
+    });
+  } catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+  if (!relinked || !relinked.ok) {
+    return { ok: false, error: String((relinked && relinked.error) || '백엔드가 폴더를 받지 않았다') };
+  }
+  const project = relinked.data && relinked.data.project ? relinked.data.project : null;
+  // 사이드바에 그 레코드가 없을 수 있다(백엔드만 아는 프로젝트) — 그때는 백엔드 결과만 돌려준다.
+  const record = conversations.setProjectPath(projectId, (project && project.path) || picked);
+  return { ok: true, path: (project && project.path) || picked, project, sidebarUpdated: Boolean(record && record.ok) };
+});
 ipcMain.handle('athena:project-reveal', async (_e, { id } = {}) => {
   const project = conversations.projectById(id);
   if (!project || !project.path) return { ok: false, reason: 'no_path' };
@@ -2566,6 +2590,17 @@ function resolveLiveQueryProviderId() {
   if (selected && selected.providerId) return selected.providerId;
   const peeked = cliAccounts.peekActiveAccount();
   return (peeked && peeked.providerId) || 'claude';
+}
+
+// 지금 질의가 돌 공급자와 그 공급자의 모델·사고 강도 — 실행(runLiveQuery)·셸 툴바
+// (chat.js renderComposerModel)·오브 컨트롤 스트립(orb.js refreshChatControlStrip)이
+// 전부 이 한 값을 읽는다. 어디서 쓰든 모델 종류가 같아야 한다 — 판정을 렌더러마다
+// 따로 두면 오브는 FABLE, 셸은 Grok-4.5를 말하는 사고가 난다(2026-09-08 실측).
+// Grok 계정이 활성이면 grok 값, 그 밖(Claude·Codex·미연결)은 claude 값이다.
+function resolveActiveModelSelection(prefsState = modelPrefs.get()) {
+  const provider = resolveLiveQueryProviderId() === 'grok' ? 'grok' : 'claude';
+  const { model, effort } = prefsState[provider];
+  return { provider, model, effort };
 }
 
 function noteLiveQueryProvider(providerId) {
@@ -4419,8 +4454,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   const resumeSessionId = liveSessionId;
   // 설정 화면 모델 패널(lib/main/model-prefs.js) 값 — null이면 buildArgs가
   // --model/--effort를 안 붙여 CLI 기본값을 쓴다.
-  const prefsState = modelPrefs.get();
-  const { model, effort } = liveProviderId === 'grok' ? prefsState.grok : prefsState.claude;
+  const { model, effort } = resolveActiveModelSelection();
   // 턴 텍스트는 한 번만 만든다 — chat.js가 제출에 실은 canvasMode·backtestContext를
   // 그대로 넘기면 백테스트 설계 모드에서만 접두가 붙고(live-prompt.js
   // buildBacktestModePrefix), 그 외 모드는 문자열 호출과 바이트 동일하다. 캐시 키
@@ -5281,13 +5315,14 @@ ipcMain.handle('athena:settings:expose-to-model:set', async (_e, { enabled } = {
 // 전역 기본값이다. 검증은 각 모듈이 한다, 여기선 라우팅 + 성공 시 병합·방송만
 // 담당한다(prefs와 같은 문법 — 셸 창이 같은 렌더러의 #settings 패널이라도
 // 명시적으로 보낸다).
-// IPC 계약: athena:model-get/-set → { claude, grok, codex } 각 {model,effort}.
+// IPC 계약: athena:model-get/-set → { claude, grok, codex } 각 {model,effort} +
+// active {provider, model, effort} — 지금 질의가 실제로 쓸 값(resolveActiveModelSelection).
 // ---------------------------------------------------------------------------
 
 function handleModelGet() {
   const { claude, grok } = modelPrefs.get();
   const { model, effort } = codexConfig.readModelSettings();
-  return { claude, grok, codex: { model, effort } };
+  return { claude, grok, codex: { model, effort }, active: resolveActiveModelSelection({ claude, grok }) };
 }
 
 async function handleModelSet(e, payload = {}) {
@@ -5321,11 +5356,15 @@ async function handleModelSet(e, payload = {}) {
       });
     }
   }
-  if (shellWin && !shellWin.isDestroyed()) {
-    shellWin.webContents.send('athena:model-changed', state);
-  }
+  broadcastModelChanged(state);
   if (providerRuntimeEnabled) await rotatePersistentProvider('model_settings_changed');
   return selectorActivation ? { ok: true, state, selectorActivation } : { ok: true, state };
+}
+
+// 셸(설정 모델 카드·작성창 툴바)과 오브(컨트롤 스트립)가 같은 상태를 받는다.
+function broadcastModelChanged(state = handleModelGet()) {
+  if (shellWin && !shellWin.isDestroyed()) shellWin.webContents.send('athena:model-changed', state);
+  if (orbWin && !orbWin.isDestroyed()) orbWin.webContents.send('athena:model-changed', state);
 }
 
 ipcMain.handle('athena:model-get', handleModelGet);
@@ -5352,12 +5391,17 @@ function reportSafeCliError(error) {
 
 async function broadcastCliChanged({ rotateReason = null, list: suppliedList = null } = {}) {
   const list = suppliedList || await cliAccounts.list();
-  if (shellWin && !shellWin.isDestroyed()) {
-    shellWin.webContents.send('athena:cli-changed', list);
-  }
   if (rotateReason) {
     await rotatePersistentProvider(rotateReason, { activeAccount: activeAccountFromCliList(list) });
   }
+  if (shellWin && !shellWin.isDestroyed()) {
+    shellWin.webContents.send('athena:cli-changed', list);
+  }
+  // 활성 계정이 바뀌면 active(공급자·모델·강도)도 바뀐다 — 오브는 계정 목록을 받지
+  // 않으니 모델 상태로 알린다. 셸에는 안 보낸다: 설정 모델 카드가 model-changed마다
+  // athena:cli-list(codex 프로브 최대 5초)를 다시 돌리므로 같은 변경에 두 번이 된다.
+  // 셸 툴바는 cli-changed를 받는 chat.js applyCliState가 model-get을 다시 읽는다.
+  if (orbWin && !orbWin.isDestroyed()) orbWin.webContents.send('athena:model-changed', handleModelGet());
   return list;
 }
 
@@ -5925,6 +5969,7 @@ app.on('will-quit', () => {
 // 장기 재연결 루프는 시작 여부만 기록하고 종료를 기다리지 않는다.
 const BOOT_TASKS = [
   { id: 'mcp-env', label: '보안 환경 확인', kind: 'gate' },
+  { id: 'account-token', label: '계좌 인증 토큰 발급', kind: 'gate' },
   { id: 'provider-warm', label: '대화 연결 준비', kind: 'gate' },
   { id: 'backend', label: 'ATHENA 서비스 연결', kind: 'gate' },
   { id: 'stock-index', label: '종목 검색 데이터 준비', kind: 'gate' },
@@ -6175,6 +6220,18 @@ function registerLiveBootRunners(createWindowsPromise) {
     return { detail: result.migrated.length ? `${result.migrated.length}건 이전 완료` : '이전할 평문 환경값 없음' };
   });
   startupReadiness.setRunner('backend', ensureBackendStrict);
+  startupReadiness.setRunner('account-token', async () => {
+    // 활성 계좌의 키움 토큰을 백엔드 기동과 동시에 받아 둔다 — 첫 화면에서 사이드바
+    // 토큰 상태가 바로 ready가 된다. 키움을 직접 호출하므로 backend gate와 무관하게
+    // concurrentTaskIds에 둔다. postKiwoomJson이 10초 타임아웃으로 항상 resolve하므로
+    // 별도 deadline은 두지 않는다(중간에 끊으면 상태 파일이 'refreshing'으로 남는다).
+    const result = await accounts.ensureActiveToken();
+    if (result.skipped && result.reason === 'no-account') return { disabled: true, detail: '등록된 계좌 없음' };
+    const remain = `${Math.floor((result.expiresInSec || 0) / 60)}분 남음`;
+    if (result.skipped) return { detail: `${result.alias} · 유효한 토큰 유지 · ${remain}` };
+    if (!result.ok) throw new Error(`${result.alias} 토큰 발급 실패 — 자격증명·네트워크 확인`);
+    return { detail: `${result.alias} 토큰 발급 완료 · ${remain}` };
+  });
   startupReadiness.setRunner('provider-warm', async () => {
     // 플래그를 먼저 본다 — 뒤에 두면 기능이 꺼져 있어도 매 부팅마다 CLI 계정
     // 조회·MCP 스냅샷·시스템 프롬프트 해시를 계산하고, 이 태스크는 gate라
@@ -6258,7 +6315,7 @@ async function startLiveBoot(createWindowsPromise) {
     // stock-index는 백엔드 프록시를 타므로 backend gate 뒤에 둔다 — 앞에 두면 앱이
     // 백엔드를 직접 띄우는 부팅에서 12초 예산이 백엔드 기동 시간에 잡아먹혀 매번
     // 실패한다(2026-09-07 실측: 종목명 인덱스 12초 안에 미적재 → degraded).
-    concurrentTaskIds: [],
+    concurrentTaskIds: ['account-token'],
     dependencyTaskChains: [['mcp-env', 'provider-warm']],
     dependencyTaskId: 'backend',
     dependentTaskIds: ['stock-index', 'alarm-bootstrap', 'routine-feed', 'canvas-feed'],

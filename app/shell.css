@@ -2722,26 +2722,6 @@ body { margin: 0; overflow: hidden; }
   flex-direction: column;
   gap: 12px;
 }
-/* ---------- 동선 규칙(Paper 에이전트 보드 05 하단) ---------- */
-.agent-route-rules {
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 8px 8px 12px;
-  background: var(--color-k-panel);
-  border: 1px solid var(--color-k-line);
-  border-radius: 12px;
-}
-.agent-route-rule {
-  padding: 0 12px;
-  color: var(--color-k-dim); /* 작은 본문 최소 대비 기준(#5B6270, 검수 대장 공통 규칙) */
-  font-family: var(--font-body);
-  font-weight: 300;
-  font-size: var(--text-xs);
-  line-height: 17px;
-}
-
 /* ---------- 예약·감시 리스트 + 상세 패널(5단계, Paper 보드 39 실측) ---------- */
 .agent-panels {
   display: flex;
@@ -3987,11 +3967,6 @@ body { margin: 0; overflow: hidden; }
   #chatRegion .input-row {
     gap: 10px;
     padding: 0 10px;
-  }
-
-  /* 44px 레일 폭에서는 첨부·@ 아이콘도 접는다 — 둘 다 키우미 메뉴 안에 있다. */
-  #chatRegion .composer-icon {
-    display: none;
   }
 }
 
@@ -7087,48 +7062,6 @@ body { margin: 0; overflow: hidden; }
   font-size: var(--text-sm);
   cursor: pointer;
 }
-.agent-code-edit {
-  flex-shrink: 0;
-  border: 1px solid var(--color-k-line);
-  border-radius: var(--radius-full);
-  padding: 5px 14px;
-  background: transparent;
-  color: var(--color-k-text);
-  font-family: var(--font-strong);
-  font-size: var(--text-sm);
-  white-space: nowrap;
-  cursor: pointer;
-}
-.agent-code-edit-confirm {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding: 8px 10px;
-  border: 1px solid var(--color-k-line);
-  border-radius: var(--radius-md);
-  background: var(--color-k-panel3);
-}
-.agent-code-edit-confirm-text {
-  flex: 1 1 100%;
-  color: var(--color-k-text);
-  font-size: var(--text-sm);
-  word-break: keep-all;
-}
-.agent-code-edit-chip {
-  flex-shrink: 0;
-  height: 28px;
-  border: 1px solid var(--color-k-line);
-  border-radius: var(--radius-full);
-  padding: 0 12px;
-  background: var(--color-k-panel);
-  color: var(--color-k-text);
-  font-family: var(--font-body);
-  font-weight: 300;
-  font-size: var(--text-xs);
-  white-space: nowrap;
-  cursor: pointer;
-}
 
 /* 「코드 · 참고 · 펼치기」 — 접힌 채로 사는 흐린 한 줄, 위에 얇은 선(보드 10). */
 .agent-code-source {
@@ -7299,6 +7232,116 @@ body { margin: 0; overflow: hidden; }
   font-weight: 300;
   font-size: var(--text-2xs);
   word-break: keep-all;
+}
+
+/* 실시간 라우틴 발화 — 사용 흐름을 막지 않되 우측 상단에서 분명히 인지되는 카드. */
+.routine-alert-popup {
+  position: fixed;
+  z-index: 240;
+  top: 52px;
+  right: 20px;
+  box-sizing: border-box;
+  width: 440px;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 72px);
+  overflow: auto;
+  padding: 20px 22px 18px;
+  border: 1px solid rgb(235 42 124 / 42%);
+  border-left: 5px solid var(--color-brand, #eb2a7c);
+  border-radius: 16px;
+  background: rgb(255 255 255 / 96%);
+  box-shadow: 0 18px 48px rgb(16 19 26 / 22%), 0 3px 10px rgb(235 42 124 / 12%);
+  color: var(--color-k-text, #10131a);
+  font-family: var(--font-body, sans-serif);
+  animation: routine-alert-popup-in 180ms ease-out;
+}
+.routine-alert-popup[hidden] { display: none; }
+.routine-alert-popup__header {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--color-brand, #eb2a7c);
+  font-size: 14px;
+}
+.routine-alert-popup__bell {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgb(235 42 124 / 12%);
+  font-size: 15px;
+}
+.routine-alert-popup__count {
+  margin-left: auto;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgb(235 42 124 / 10%);
+  font-size: 12px;
+}
+.routine-alert-popup__title {
+  margin-top: 16px;
+  font-family: var(--font-strong, sans-serif);
+  font-size: 18px;
+  font-weight: 650;
+  line-height: 1.4;
+  word-break: keep-all;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+}
+.routine-alert-popup__sub {
+  margin-top: 8px;
+  color: var(--color-k-dim, #5d6470);
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+.routine-alert-popup__time {
+  display: block;
+  margin-top: 8px;
+  color: var(--color-k-faint, #858b95);
+  font-size: 12px;
+}
+.routine-alert-popup__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 20px;
+}
+.routine-alert-popup__actions button {
+  min-height: 38px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+.routine-alert-popup__open {
+  border: 1px solid var(--color-brand, #eb2a7c);
+  background: var(--color-brand, #eb2a7c);
+  color: #fff;
+}
+.routine-alert-popup__dismiss {
+  border: 1px solid var(--color-k-line, #d9dce2);
+  background: transparent;
+  color: var(--color-k-dim, #5d6470);
+}
+.routine-alert-popup__actions button:focus-visible {
+  outline: 3px solid rgb(235 42 124 / 28%);
+  outline-offset: 2px;
+}
+@keyframes routine-alert-popup-in {
+  from { opacity: 0; transform: translateY(-8px) scale(.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .routine-alert-popup { animation: none; }
 }
 
 /* ---------- 세션 복원 표식·안내(Paper 보드 41) ----------

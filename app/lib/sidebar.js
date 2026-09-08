@@ -1062,36 +1062,7 @@
   // 한 쌍뿐이다. 모듈이 없으면 조용히 건너뛴다(위 modeNav 가드와 같은 방식).
   const RUN_STATE_LABELS = { running: '실행 중', waiting: '대기', done: '완료', failed: '실패' };
 
-  // 이력 머리의 "실행 중 3 · 대기 1" 알약(39번 보드). 하나도 없으면 사라진다.
-  let $runSummary = null;
-  function renderRunSummary() {
-    const nav = document.getElementById('sidebarModeNav');
-    if (!nav || !nav.parentElement) return;
-    let running = 0;
-    let waiting = 0;
-    for (const c of conversationsCache) {
-      if (c.runState === 'running') running += 1;
-      else if (c.runState === 'waiting') waiting += 1;
-    }
-    if (!running && !waiting) {
-      if ($runSummary) $runSummary.hidden = true;
-      return;
-    }
-    if (!$runSummary) {
-      $runSummary = el('div', 'sidebar-run-summary');
-      $runSummary.id = 'sidebarRunSummary';
-      nav.parentElement.insertBefore($runSummary, nav);
-    }
-    const parts = [];
-    if (running) parts.push(`실행 중 ${running}`);
-    if (waiting) parts.push(`대기 ${waiting}`);
-    $runSummary.textContent = parts.join(' · ');
-    $runSummary.classList.toggle('is-waiting-only', running === 0);
-    $runSummary.hidden = false;
-  }
-
   function updateModeCounts() {
-    renderRunSummary();
     // 모드 구역 머리의 대화 수(35번 보드) — 모드별 숫자와 달리 거르지 않은 전체다.
     if ($modeTotal) $modeTotal.textContent = `${conversationsCache.length}개 대화`;
     const historyView = window.AthenaLib && window.AthenaLib.SessionHistoryView;
@@ -1190,6 +1161,12 @@
   // 발화·읽음 여부는 유지된다 — sub·title 같은 표시용 필드까지 영속화하는 건
   // 아니다(그건 매번 routines 요약 뷰에서 다시 만든다).
   const notifyRooms = [];
+  const routineAlertPopup = (window.AthenaLib && window.AthenaLib.RoutineAlertPopup)
+    ? window.AthenaLib.RoutineAlertPopup.createRoutineAlertPopup({
+        document,
+        onOpen: (id) => selectNotifyRoom(id),
+      })
+    : null;
 
   // 에이전트 모드 네비 배지(원칙2) — notifyRooms의 !read 개수를 그대로 노출한다.
   // notifyRooms 자체가 이미 "라우틴 상태의 파생물"이라 별도로 다시 세거나
@@ -1239,6 +1216,7 @@
     }
     renderList();
     updateAgentBadge();
+    if (routineAlertPopup) routineAlertPopup.show(existing || notifyRooms[0]);
   }
 
   function selectNotifyRoom(id) {
