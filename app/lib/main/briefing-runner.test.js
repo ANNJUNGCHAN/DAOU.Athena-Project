@@ -127,8 +127,12 @@ test('예산 소진이면 claude를 부르지 않고 보고도 없다(능동 턴
 
 test('성공 시 reportResult payload — title/content/destination/모델 설정 전부 정확', async () => {
   runner._resetForTest();
-  const h = harness();
-  h.deps.event = baseEvent({ briefing_model: 'claude-sonnet-5', briefing_effort: 'low' });
+  // 모델은 앱 모델 설정(resolveModelSelection) 하나에서 온다 — 이벤트에 저장된
+  // briefing_model은 다른 값을 두어 읽히지 않음을 함께 잰다.
+  const h = harness({
+    resolveModelSelection: () => ({ provider: 'claude', model: 'claude-sonnet-5', effort: 'low' }),
+  });
+  h.deps.event = baseEvent({ briefing_model: 'opus', briefing_effort: 'max' });
   const out = await runner.runBriefingTurn(h.deps);
   assert.equal(out.ok, true);
   assert.equal(h.calls.report.length, 1);
@@ -147,6 +151,44 @@ test('성공 시 reportResult payload — title/content/destination/모델 설�
   assert.equal(h.calls.claude[0].effort, 'low');
   assert.equal(h.calls.claude[0].resumeSessionId, undefined);
   assert.deepEqual(h.calls.deltas, ['본문']);
+});
+
+test('앱 모델 설정이 Grok이면 grok 러너로 돌고 보고 payload도 그 값이다 — 키우미·셸과 같은 모델', async () => {
+  runner._resetForTest();
+  const grokCalls = [];
+  const h = harness({
+    resolveModelSelection: () => ({ provider: 'grok', model: 'grok-4.5', effort: 'high' }),
+    grokRunner: {
+      runGrokQuery: async (opts) => {
+        grokCalls.push(opts);
+        if (opts.onSpawn) opts.onSpawn({ pid: 2, kill() {} });
+        if (opts.onTextDelta) opts.onTextDelta('그록 본문');
+        return { ok: true };
+      },
+    },
+  });
+  const out = await runner.runBriefingTurn(h.deps);
+  assert.equal(out.ok, true);
+  assert.equal(h.calls.claude.length, 0, 'Grok이 활성이면 claude를 스폰하지 않는다');
+  assert.equal(grokCalls.length, 1);
+  assert.equal(grokCalls[0].model, 'grok-4.5');
+  assert.equal(grokCalls[0].effort, 'high');
+  assert.equal(grokCalls[0].trustProjectFolder, true, '사용자 턴과 같은 cwd 신뢰 표시');
+  assert.equal(grokCalls[0].resumeSessionId, undefined);
+  assert.equal(h.calls.report[0].model, 'grok-4.5');
+  assert.equal(h.calls.report[0].effort, 'high');
+  assert.equal(h.calls.report[0].content, '그록 본문');
+});
+
+test('resolveModelSelection이 없으면 claude 기본(모델·강도 null)으로 돈다', async () => {
+  runner._resetForTest();
+  const h = harness();
+  h.deps.event = baseEvent({ briefing_model: 'opus', briefing_effort: 'high' });
+  await runner.runBriefingTurn(h.deps);
+  assert.equal(h.calls.claude[0].model, null, '루틴 저장값은 읽지 않는다');
+  assert.equal(h.calls.claude[0].effort, null);
+  assert.equal(h.calls.report[0].model, null);
+  assert.equal(h.calls.report[0].effort, null);
 });
 
 test('onCanvasResult가 1회 이상 오면 destination은 canvas다', async () => {

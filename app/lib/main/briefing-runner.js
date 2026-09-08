@@ -157,8 +157,9 @@ async function execute(args) {
           destination,
           title: buildTitle(event),
           content: attempt.content,
-          model: event.briefing_model || null,
-          effort: event.briefing_effort || null,
+          // 실제로 돈 값 — 루틴 저장값이 아니라 스폰 시점의 앱 모델 설정이다.
+          model: attempt.model,
+          effort: attempt.effort,
         };
         ipc.sendQueryState({ busy: false, ok: true });
         // 보고 실패가 완성된 브리핑을 되돌릴 수는 없다 — 조용히 넘긴다(본문은
@@ -196,8 +197,20 @@ async function safeBudget(fetchBudget) {
   }
 }
 
+// 브리핑이 쓸 공급자·모델·강도 — 앱 모델 설정(main.js resolveActiveModelSelection)
+// 하나다. 루틴에 저장된 briefing_model/briefing_effort는 읽지 않는다: 키우미·셸·
+// 브리핑 어디서 돌든 모델 종류는 같아야 한다(2026-09-08 사용자 확정).
+function selectModel(args) {
+  const picked = args.resolveModelSelection ? args.resolveModelSelection() : null;
+  return {
+    provider: picked && picked.provider === 'grok' ? 'grok' : 'claude',
+    model: (picked && picked.model) || null,
+    effort: (picked && picked.effort) || null,
+  };
+}
+
 async function runOnce(args) {
-  const { event, ipc, claudeRunner } = args;
+  const { event, ipc, claudeRunner, grokRunner } = args;
   // 스폰 직전 최종 선점 확인 — 이 검사와 아래 runClaudeQuery 호출 사이에는
   // await가 없어(onSpawn은 동기 호출) 선점이 끼어들 틈이 없다.
   if (preemptRequested) {
@@ -205,13 +218,20 @@ async function runOnce(args) {
   }
   let content = '';
   let canvasCount = 0;
-  const result = await claudeRunner.runClaudeQuery({
+  const selection = selectModel(args);
+  // 활성 계정이 Grok이면 grok CLI — 사용자 턴(main.js runLiveQueryInner)과 같은 분기다.
+  const runQuery = selection.provider === 'grok' && grokRunner
+    ? grokRunner.runGrokQuery
+    : claudeRunner.runClaudeQuery;
+  const result = await runQuery({
     prompt: buildBriefingPrompt(event),
     cwd: args.cwd,
     configFile: args.configFile,
     // resumeSessionId 없음(의도적 생략) — 독립 세션. liveSessionId 오염 금지(BLOCKER).
-    model: event.briefing_model || null,
-    effort: event.briefing_effort || null,
+    model: selection.model,
+    effort: selection.effort,
+    // cwd는 앱 userData 아래 전용 폴더다(사용자 턴과 같은 이유로 grok에 신뢰 표시).
+    trustProjectFolder: true,
     onSpawn: (h) => { currentBriefingHandle = h; },
     onEvent: (ev) => { if (args.onEvent) args.onEvent(ev); },
     onTextDelta: (text) => {
@@ -228,6 +248,8 @@ async function runOnce(args) {
   return {
     ok: !!(result && result.ok),
     aborted: !!(result && result.aborted),
+    model: selection.model,
+    effort: selection.effort,
     content,
     canvasCount,
   };
