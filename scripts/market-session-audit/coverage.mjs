@@ -1,4 +1,5 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -10,12 +11,22 @@ export const DEFAULT_PATHS = Object.freeze({
     'artifacts/market-session-audit/2026-09-07/read-sweep-20260907T102242KST.json',
   ]),
   readInputChain: 'artifacts/market-session-audit/2026-09-07/read-input-chain-20260907T131253KST.json',
+  finalReadInputs: Object.freeze([
+    'artifacts/market-session-audit/read-final-inputs-20260907140429KST.json',
+    'artifacts/market-session-audit/2026-09-07/read-final-inputs-20260907142216KST.json',
+  ]),
   customReadSweep: 'artifacts/market-session-audit/2026-09-07/custom-read-sweep-20260907T003436-339Z.json',
   customReadChains: Object.freeze([
     'artifacts/market-session-audit/2026-09-07/custom-read-chain-live-20260907T015345-885Z.json',
     'artifacts/market-session-audit/2026-09-07/custom-read-chain-live-20260907T033434-309Z.json',
   ]),
   postMetadataProbe: 'artifacts/market-session-audit/2026-09-07/post-metadata-probe-20260907T040802-456Z.json',
+  customComputeProbe: 'artifacts/market-session-audit/2026-09-07/custom-compute-probe-20260907151307KST.json',
+  mcpBuiltinsProbe: 'artifacts/market-session-audit/2026-09-07/mcp-builtins-probe/run-20260907T134502KST/report.json',
+  activeWsHistory: Object.freeze([
+    'artifacts/market-session-audit/2026-09-07/ws-active-stock-20260907T052815-996Z.json',
+    'artifacts/market-session-audit/2026-09-07/ws-active-stock-20260907T054609-218Z.json',
+  ]),
   liveUis: Object.freeze([
     'artifacts/market-session-audit/2026-09-07/live-ui-2026-09-07T00-48-39-849Z-49728.json',
     'artifacts/market-session-audit/2026-09-07/live-ui-2026-09-07T03-29-36-409Z-16660.json',
@@ -58,8 +69,39 @@ const POST_METADATA_TARGET_IDS = Object.freeze([
   'custom-api:POST:/api/v1/llm/tools/search',
   'custom-api:POST:/api/v1/llm/tools/describe',
 ]);
+const CUSTOM_COMPUTE_TARGET_IDS = Object.freeze([
+  'custom-api:POST:/api/v1/backtest/validate',
+  'custom-api:POST:/api/v1/backtest/flow',
+  'custom-api:POST:/api/v1/backtest/map',
+  'custom-api:POST:/api/v1/backtest/codegen',
+  'custom-api:POST:/api/v1/backtest/diagnose',
+  'custom-api:POST:/api/v1/backtest/optimize/plan',
+  'custom-api:POST:/api/v1/backtest/technique/nodes',
+  'custom-api:POST:/api/v1/backtest/visual/from-spec',
+  'custom-api:POST:/api/v1/backtest/visual/validate',
+  'custom-api:POST:/api/v1/backtest/visual/compile',
+  'custom-api:POST:/api/v1/backtest/visual/question',
+  'custom-api:POST:/api/v1/backtest/visual/patch',
+]);
 const READ_INPUT_SOURCE_IDS = Object.freeze(['base:ka01300', 'base:ka10102', 'base:ka40007', 'base:ka90001']);
 const READ_INPUT_TARGET_IDS = Object.freeze(['base:ka01301', 'base:ka10039', 'base:ka10043', 'base:ka10052', 'base:ka10078', 'base:ka40001', 'base:ka90002']);
+const FINAL_READ_SOURCE_IDS = Object.freeze([
+  'base:ka10075',
+  'detail:ka10004:sell_bid_prices',
+  'detail:ka10001:current_trading',
+]);
+const FINAL_READ_TARGET_IDS = Object.freeze([
+  'base:ka10088',
+  'detail:kt00010:margin_order_capacity',
+  'detail:kt00010:cash_and_withdrawal_capacity',
+  'detail:kt00010:purchase_settlement',
+  'base:ka30003',
+]);
+const FINAL_READ_FIRST_SHA256 = '49ea9078196e1732bd732b7f5db75c1f9d6a40f17b6b84b606fff3ab38aea437';
+const ACTIVE_WS_LATEST_SHA256 = '787ebf412e934e8deb8d94af06a371d81a3065974098fe3cd3669fcf713ceb4b';
+const CUSTOM_COMPUTE_SHA256 = '67b94493ca2e18746aabd9be086e8056b7a87a0e368fe179638def40800ac4d1';
+const MCP_NAME_FINGERPRINT = 'dc90701f8e7fcdea6528404725892c545596cbc8f45d6bba7e61fd26d368f5c2';
+const MCP_SCHEMA_FINGERPRINT = '0e5bd7c6e0f9649df5b7a8ad1b79e8f577d1dfbd199f340e33018f4916f65195';
 
 function uniqueMap(rows, keyFn, label) {
   const map = new Map();
@@ -183,6 +225,21 @@ function fixtureEvidence(item, maps, paths) {
   };
 }
 
+function readableReadState(value, kind) {
+  if (typeof value === 'string' && value) return value;
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return 'NOT_RECORDED';
+  const state = typeof value.state === 'string' && value.state ? value.state : 'UNKNOWN';
+  if (kind === 'pagination') {
+    const pages = Number.isInteger(value.pagesFetched) ? value.pagesFetched : 'UNKNOWN';
+    const max = Number.isInteger(value.maxPages) ? value.maxPages : 'UNKNOWN';
+    return `state=${state}, pages=${pages}/${max}`;
+  }
+  const qualifiers = [];
+  if (typeof value.contractBasis === 'string' && value.contractBasis) qualifiers.push(`basis=${value.contractBasis}`);
+  if (typeof value.sourceDateRelation === 'string' && value.sourceDateRelation) qualifiers.push(`relation=${value.sourceDateRelation}`);
+  return qualifiers.length ? `state=${state}, ${qualifiers.join(', ')}` : `state=${state}`;
+}
+
 function liveEvidence(item, maps, paths) {
   if (item.source === 'screen_definition' && item.classification === 'read_display') {
     const observations = maps.sweepObservations.get(item.source_id) || [];
@@ -206,10 +263,22 @@ function liveEvidence(item, maps, paths) {
         observed_at: entry.attemptedAt || null,
         verdict: entry.verdict,
         reason: entry.reason || 'UNSPECIFIED',
+        timestamp_basis: entry.timestampBasis || 'PER_RESULT',
+        adjudication: entry.adjudication || null,
         evidence_path: entry.__evidence_path,
       })),
-      detail: `latest_verdict=${row.verdict}; latest_reason=${row.reason || 'UNSPECIFIED'}; observations=${observations.length}; pagination=${row.pagination || 'NOT_RECORDED'}; freshness=${row.freshness || 'NOT_RECORDED'}; ${boundedRootObservation ? 'HTTP/JSON/business code와 선언 root 또는 source 값만 관찰; 전체 schema/end-to-end/전체 페이지/현재성 검증 아님' : 'FAIL은 제품 결함 확정 전 판정 대기'}`,
+      detail: `latest_verdict=${row.verdict}; latest_reason=${row.reason || 'UNSPECIFIED'}; observations=${observations.length}; pagination=${readableReadState(row.pagination, 'pagination')}; freshness=${readableReadState(row.freshness, 'freshness')}; timestamp_basis=${row.timestampBasis || 'PER_RESULT'}${row.adjudication ? `; adjudication=${row.adjudication}` : ''}; ${boundedRootObservation ? 'HTTP/JSON/business code와 선언 root 또는 source 값만 관찰; 전체 schema/end-to-end/전체 페이지/현재성 검증 아님' : row.verdict === 'BLOCKED' ? '요청 차단 또는 입력 부재; 전체 schema/end-to-end/전체 페이지/현재성 검증 아님' : 'FAIL은 제품 결함 확정 전 판정 대기'}`,
       evidence: [...new Set(observations.map((entry) => entry.__evidence_path))],
+    };
+  }
+  if (item.id === 'custom-api:WEBSOCKET:/api/v1/ws/stream' && maps.activeWsValidated) {
+    return {
+      status: 'LIVE_WS_FRESH_EVENT_OBSERVED_CLEANUP_UNVERIFIED',
+      phase: maps.activeWs.market.phase,
+      observed_at: maps.activeWs.observed_at,
+      observations: maps.activeWsHistory.map((artifact, index) => ({ phase: artifact.market.phase, observed_at: artifact.observed_at, verdict: artifact.verdict, reason: index === 0 ? 'HARNESS_TIME_PARSER_FALSE_NEGATIVE' : 'FRESH_TARGET_EVENT_OBSERVED_CLEANUP_UNVERIFIED', evidence_path: paths.activeWsHistory[index] })),
+      detail: `latest REAL envelopes=${maps.activeWs.events.counts.real_envelope}; baseline_matching_before_REG=${maps.activeWs.events.counts.baseline_matching}; post_REG_matching=${maps.activeWs.events.counts.matching_row}; valid_fresh=${maps.activeWs.events.counts.valid}; freshness=${maps.activeWs.events.freshness_bucket}; upstream REMOVE ACK=${maps.activeWs.control.upstream_remove_ack_verified}; 기존 159-envelope 실행의 invalid_time 판정은 harness parser false negative; baseline 42건은 REG 전 traffic이라 REG 인과성 증거가 아님; custom REST execution 집계와 별도`,
+      evidence: paths.activeWsHistory,
     };
   }
   if (item.source === 'custom_api_route') {
@@ -226,6 +295,7 @@ function liveEvidence(item, maps, paths) {
     else if (row.attempted === false) status = 'LIVE_BLOCKED';
     else if (row.verdict === 'PASS' || row.verdict === 'PASS_HTTP_SCHEMA_ONLY') status = 'LIVE_HTTP_SCHEMA_PASS';
     else if (row.verdict === 'PASS_HTTP_JSON_SHAPE_ONLY') status = 'LIVE_HTTP_JSON_SHAPE_OBSERVED';
+    else if (row.verdict === 'PASS_HTTP_JSON_SEMANTIC_CONTRACT') status = 'LIVE_HTTP_JSON_SEMANTIC_CONTRACT_OBSERVED';
     else if (row.verdict === 'NOT_APPLICABLE') status = 'LIVE_RUNNER_NOT_APPLICABLE';
     else if (row.verdict === 'FAIL') status = 'LIVE_FAIL_UNADJUDICATED';
     else status = 'LIVE_BLOCKED';
@@ -238,12 +308,15 @@ function liveEvidence(item, maps, paths) {
     const postMetadataNote = row.verdict === 'PASS_HTTP_JSON_SHAPE_ONLY'
       ? '; metadata-only: HTTP 2xx+JSON shape 관찰, 완전한 schema/필드 의미/데이터 정확성/하위 기능/UI 검증 아님'
       : '';
+    const computeSemanticNote = row.verdict === 'PASS_HTTP_JSON_SEMANTIC_CONTRACT'
+      ? '; explicit repository fixture에 대한 compute API HTTP/JSON 의미 계약만 관찰; UI/graph 실행/optimizer 실행/지속화/시장 데이터 정확성 검증 아님'
+      : '';
     return {
       status,
       phase,
       observed_at: observedAt,
       observations,
-      detail: `verdict=${row.verdict}; attempted=${row.attempted ?? Boolean(observedAt)}; reason=${row.reason}; http_status=${row.evidence?.http_status ?? row.http_status ?? 'NOT_EXECUTED'}; actual_observations=${observations.filter((entry) => entry.observed_at).length}${envNote}${legacySchemaNote}${postMetadataNote}`,
+      detail: `verdict=${row.verdict}; attempted=${row.attempted ?? Boolean(observedAt)}; reason=${row.reason}; http_status=${row.evidence?.http_status ?? row.http_status ?? row.httpStatus ?? 'NOT_EXECUTED'}; actual_observations=${observations.filter((entry) => entry.observed_at).length}${envNote}${legacySchemaNote}${postMetadataNote}${computeSemanticNote}`,
       evidence: [...new Set([
         ...(expectedDisabled ? [paths.customReadAdjudication] : []),
         ...(row.__evidence_path ? [row.__evidence_path] : []),
@@ -252,6 +325,16 @@ function liveEvidence(item, maps, paths) {
     };
   }
   if (item.source === 'screen_definition' && item.classification === 'websocket') {
+    if (item.source_id === 'base:0B' && maps.activeWsValidated) {
+      return {
+        status: 'LIVE_WS_FRESH_EVENT_OBSERVED_CLEANUP_UNVERIFIED',
+        phase: maps.activeWs.market.phase,
+        observed_at: maps.activeWs.observed_at,
+        observations: maps.activeWsHistory.map((artifact, index) => ({ phase: artifact.market.phase, observed_at: artifact.observed_at, verdict: artifact.verdict, reason: index === 0 ? 'HARNESS_TIME_PARSER_FALSE_NEGATIVE' : 'FRESH_0B_EVENT_OBSERVED_CLEANUP_UNVERIFIED', evidence_path: paths.activeWsHistory[index] })),
+        detail: `REG=${maps.activeWs.control.reg_requests}; REMOVE=${maps.activeWs.control.remove_requests}; REAL envelopes=${maps.activeWs.events.counts.real_envelope}; baseline_matching_before_REG=${maps.activeWs.events.counts.baseline_matching}; post_REG_matching=${maps.activeWs.events.counts.matching_row}; valid_fresh=${maps.activeWs.events.counts.valid}; freshness=${maps.activeWs.events.freshness_bucket}; upstream REMOVE ACK=${maps.activeWs.control.upstream_remove_ack_verified}; socket=${maps.activeWs.socket.close_status}; baseline 42건은 REG 인과성 증거가 아님; 0B만 실행했고 다른 22개 source는 실행하지 않음`,
+        evidence: paths.activeWsHistory,
+      };
+    }
     const row = maps.wsEvents.get(item.source_id);
     if (!row) return { status: 'LIVE_BLOCKED', phase: null, observed_at: null, observations: [], detail: 'passive WS exact source_id 결과 없음', evidence: [] };
     const conditionOperation = maps.wsConditionIds.has(item.source_id);
@@ -315,7 +398,7 @@ function liveEvidence(item, maps, paths) {
       phase: null,
       observed_at: null,
       observations: [],
-      detail: 'server.py builtin 정적 원천만 확인; 실제 MCP tools/list 또는 call 실측 없음',
+      detail: '격리 tools/list protocol metadata만 확인; 사용자 실행 gateway의 tool call/기능 실행 실측 없음',
       evidence: [],
     };
   }
@@ -359,6 +442,15 @@ function sourceEvidence(item, maps, paths) {
       evidence: found ? [paths.runtimeDiscovery] : [],
     };
   }
+  if ((item.source === 'mcp_tool' || item.source === 'mcp_tool_action') && maps.mcpProtocolMetadataMatched) {
+    return {
+      status: 'PROTOCOL_METADATA_MATCHED',
+      detail: item.source === 'mcp_tool'
+        ? '격리 stdio tools/list의 exact name 및 schema fingerprint가 pinned source와 일치; tool call은 실행하지 않음'
+        : '격리 stdio tools/list의 action schema fingerprint가 pinned source와 일치; action은 실행하지 않음',
+      evidence: [paths.mcpBuiltinsProbe],
+    };
+  }
   return {
     status: item.executable ? 'SOURCE_DECLARED' : 'SOURCE_RECORD_ONLY',
     detail: item.source_path || 'inventory source reference',
@@ -375,10 +467,35 @@ function remainingGap(item, fixture, live) {
   return gaps.length ? gaps.join('; ') : '없음 (fixture와 live는 각각 별도 증거로만 판정)';
 }
 
-export function reconcileCoverage({ inventory, readSweeps, readInputChain = null, customReadSweep, customReadChains, postMetadataProbe = null, customReadAdjudication = '', modeFixtureDetails = '', liveUis, passiveWs, runtimeDiscovery, paperCards, paperScreens, paperMini, paths = DEFAULT_PATHS }) {
+export function reconcileCoverage({ inventory, readSweeps, readInputChain = null, finalReadInputs = null, customReadSweep, customReadChains, postMetadataProbe = null, customComputeProbe = null, mcpBuiltinsProbe = null, activeWsHistory = null, customReadAdjudication = '', modeFixtureDetails = '', liveUis, passiveWs, runtimeDiscovery, paperCards, paperScreens, paperMini, paths = DEFAULT_PATHS }) {
   if (!Array.isArray(inventory?.items)) throw new Error('inventory.items is required');
   const inventoryById = uniqueMap(inventory.items, (row) => row.id, 'inventory');
   if (inventoryById.size !== inventory.items.length) throw new Error('inventory ID mismatch');
+  const mcpToolRows = inventory.items.filter((row) => row.source === 'mcp_tool');
+  const mcpActionRows = inventory.items.filter((row) => row.source === 'mcp_tool_action');
+  const mcpProtocolRequired = mcpToolRows.length > 0 || mcpActionRows.length > 0;
+  let mcpProtocolMetadataMatched = false;
+  if (mcpProtocolRequired) {
+    const observation = mcpBuiltinsProbe?.observation || {};
+    const scope = mcpBuiltinsProbe?.scope || {};
+    const isolation = mcpBuiltinsProbe?.isolation || {};
+    const cleanup = mcpBuiltinsProbe?.cleanup || {};
+    if (mcpBuiltinsProbe?.kind !== 'athena_mcp_builtins_protocol_probe'
+      || mcpBuiltinsProbe?.mode !== 'isolated_stdio_protocol'
+      || mcpBuiltinsProbe?.verdict !== 'PASS_PROTOCOL_METADATA_ONLY'
+      || scope.initialize_count !== 1 || scope.list_tools_count !== 1 || scope.call_tool_count !== 0
+      || scope.provider_processes_authorized !== 0 || scope.user_registry_read !== false
+      || scope.user_runtime_proven !== false || scope.upstream_connectivity_proven !== false
+      || isolation.source_pin_count !== 13 || isolation.sdk_stdio_source_pin_verified !== true
+      || observation.tool_count !== mcpToolRows.length || observation.action_metadata_count !== mcpActionRows.length
+      || observation.exact_name_set_match !== true || observation.expected_action_count_match !== true
+      || observation.name_fingerprint_sha256 !== MCP_NAME_FINGERPRINT
+      || observation.schema_fingerprint_sha256 !== MCP_SCHEMA_FINGERPRINT || observation.schema_fingerprint_match !== true
+      || cleanup.sdk_context_cleanup_complete !== true || cleanup.os_process_exit_independently_verified !== false) {
+      throw new Error('MCP builtin probe is not approved isolated protocol metadata evidence');
+    }
+    mcpProtocolMetadataMatched = true;
+  }
 
   const readInventoryIds = new Set(inventory.items
     .filter((row) => row.source === 'screen_definition' && row.classification === 'read_display')
@@ -417,6 +534,82 @@ export function reconcileCoverage({ inventory, readSweeps, readInputChain = null
         throw new Error(`read input chain result contract mismatch: ${operationRef}`);
       }
       sweepObservations.get(operationRef).push({ ...row, __evidence_path: paths.readInputChain });
+    }
+  }
+  const finalReadRequired = FINAL_READ_TARGET_IDS.some((id) => readInventoryIds.has(id));
+  if (finalReadRequired) {
+    const expectedInventoryIds = [...FINAL_READ_SOURCE_IDS, ...FINAL_READ_TARGET_IDS];
+    if (expectedInventoryIds.some((id) => !readInventoryIds.has(id))) throw new Error('final read input inventory exact set mismatch');
+    if (!Array.isArray(finalReadInputs) || finalReadInputs.length !== 2 || !Array.isArray(paths.finalReadInputs) || paths.finalReadInputs.length !== 2) {
+      throw new Error('two explicit final read input artifacts are required');
+    }
+    const [outsideWindow, regularWindow] = finalReadInputs;
+    const outsideExpectedIds = [...expectedInventoryIds].sort();
+    const regularExpectedIds = expectedInventoryIds.filter((id) => id !== 'detail:ka10001:current_trading').sort();
+    const validateCommon = (artifact, label, expectedIds, expectedObservedAt) => {
+      if (artifact?.mode !== 'loopback_live'
+        || artifact?.scope?.targetCount !== FINAL_READ_TARGET_IDS.length
+        || artifact?.scope?.businessRequestLimit !== 8
+        || artifact?.scope?.orderSideEffects !== 'FORBIDDEN'
+        || artifact?.scenario?.side !== 'BUY'
+        || artifact?.scenario?.uvMeaning !== 'HYPOTHETICAL_CAPACITY_SCENARIO_PRICE'
+        || artifact?.scenario?.freshness !== 'NOT_VERIFIED_NO_SOURCE_TIMESTAMP_CONTRACT'
+        || artifact?.observedAt !== expectedObservedAt) throw new Error(`${label} is not approved loopback-live evidence`);
+      const rows = uniqueMap(artifact?.results || [], (row) => row.operationRef, `${label} results`);
+      if (rows.size !== expectedIds.length || expectedIds.some((id) => !rows.has(id))) throw new Error(`${label} result exact set mismatch`);
+      return rows;
+    };
+    if (outsideWindow?.revision !== null
+      || outsideWindow?.summary?.targetAttempted !== 1
+      || outsideWindow?.summary?.businessRequestCount !== 4
+      || outsideWindow?.summary?.metadataRequestCount !== 2) throw new Error('outside-window final read input contract mismatch');
+    const outsideRows = validateCommon(outsideWindow, 'outside-window final read input', outsideExpectedIds, '2026-09-07T05:04:27.820Z');
+    if ([...outsideRows.values()].some((row) => row.attemptedAt)) throw new Error('outside-window final read input unexpectedly has per-result timestamps');
+    if (outsideRows.get('base:ka30003')?.verdict !== 'PASS'
+      || outsideRows.get('base:ka30003')?.reason !== 'PASS_HTTP_JSON_DECLARED_ROOT_PRESENT'
+      || outsideRows.get('base:ka30003')?.httpStatus !== 200
+      || String(outsideRows.get('base:ka30003')?.returnCode) !== '0'
+      || outsideRows.get('base:ka10088')?.attempted !== false
+      || outsideRows.get('base:ka10088')?.reason !== 'NO_EXISTING_UNFILLED_ORDER') throw new Error('outside-window final read input target contract mismatch');
+
+    if (!regularWindow?.revision
+      || regularWindow?.summary?.targetAttempted !== 4
+      || regularWindow?.summary?.businessRequestCount !== 6
+      || regularWindow?.summary?.metadataRequestCount !== 2) throw new Error('regular-window final read input contract mismatch');
+    const regularRows = validateCommon(regularWindow, 'regular-window final read input', regularExpectedIds, '2026-09-07T05:22:13.463Z');
+    const blockedCapacityIds = FINAL_READ_TARGET_IDS.filter((id) => id.startsWith('detail:kt00010:'));
+    for (const id of blockedCapacityIds) {
+      const row = regularRows.get(id);
+      if (row?.attempted !== true || !row.attemptedAt || row.verdict !== 'BLOCKED'
+        || row.reason !== 'DETAIL_PROJECTION_BUSINESS_OR_CONTRACT_FAILURE'
+        || row.httpStatus !== 200 || String(row.returnCode) !== '20') throw new Error(`regular-window blocked target contract mismatch: ${id}`);
+    }
+    if (regularRows.get('base:ka10088')?.attempted !== false
+      || regularRows.get('base:ka10088')?.reason !== 'NO_EXISTING_UNFILLED_ORDER'
+      || regularRows.get('detail:ka10004:sell_bid_prices')?.verdict !== 'PASS'
+      || regularRows.get('detail:ka10004:sell_bid_prices')?.returnCode !== 'NOT_EXPOSED_BY_DETAIL_PROJECTION') {
+      throw new Error('regular-window source or unfilled-order contract mismatch');
+    }
+    for (const [index, artifactRows] of [outsideRows, regularRows].entries()) {
+      const artifact = finalReadInputs[index];
+      for (const [operationRef, row] of artifactRows) {
+        if (!ALLOWED_SWEEP_VERDICTS.has(row.verdict)) throw new Error(`unsupported final read verdict: ${row.verdict}`);
+        const aggregateTimestamp = index === 0 && row.attempted === true ? artifact.observedAt : null;
+        const normalizedTimestamp = row.attemptedAt || aggregateTimestamp;
+        const normalizedPhase = typeof row.marketPhase === 'string'
+          ? row.marketPhase
+          : row.marketPhase?.phase || marketPhaseAt(normalizedTimestamp);
+        const harnessBug = index === 0 && row.returnCode === 'INVALID';
+        sweepObservations.get(operationRef).push({
+          ...row,
+          attemptedAt: normalizedTimestamp,
+          marketPhase: normalizedPhase,
+          freshness: row.freshness || artifact.scenario.freshness,
+          timestampBasis: aggregateTimestamp ? 'ARTIFACT_LEVEL_ONLY_NO_PER_RESULT_TIMESTAMP' : row.attempted ? 'PER_RESULT' : 'NOT_ATTEMPTED',
+          adjudication: harnessBug ? 'HARNESS_RETURN_CODE_EXTRACTION_BUG_NOT_PROVIDER_FAILURE' : null,
+          __evidence_path: paths.finalReadInputs[index],
+        });
+      }
     }
   }
   const missingReadIds = [...sweepObservations].filter(([, rows]) => rows.length === 0).map(([id]) => id);
@@ -479,6 +672,51 @@ export function reconcileCoverage({ inventory, readSweeps, readInputChain = null
       customLatest.set(id, { ...row, reason: 'HTTP_JSON_SHAPE_SANITIZED', __evidence_path: paths.postMetadataProbe });
     }
   }
+  const computeRequired = CUSTOM_COMPUTE_TARGET_IDS.some((id) => customInventoryIds.has(id));
+  let customComputeTargets = new Map();
+  if (computeRequired) {
+    if (CUSTOM_COMPUTE_TARGET_IDS.some((id) => !customInventoryIds.has(id))
+      || customComputeProbe?.schemaVersion !== 1
+      || customComputeProbe?.kind !== 'athena_custom_compute_probe'
+      || customComputeProbe?.mode !== 'loopback_live'
+      || customComputeProbe?.observedAt !== '2026-09-07T06:13:05.829Z'
+      || customComputeProbe?.marketPhaseAtStart?.phase !== 'REGULAR'
+      || customComputeProbe?.scope?.targetCount !== CUSTOM_COMPUTE_TARGET_IDS.length
+      || customComputeProbe?.scope?.businessRequestLimit !== 16
+      || customComputeProbe?.scope?.sideEffects !== 'FORBIDDEN'
+      || customComputeProbe?.scope?.providerCalls !== 'FORBIDDEN'
+      || customComputeProbe?.scope?.optimizerExecution !== 'FORBIDDEN'
+      || customComputeProbe?.fixture?.source !== 'REPO_TEST_AND_PRESET_DERIVED_EXPLICIT_AUDIT_FIXTURE'
+      || customComputeProbe?.fixture?.rawFixturePersisted !== false
+      || customComputeProbe?.fixture?.marketDataIncluded !== false
+      || !/^[0-9a-f]{64}$/.test(customComputeProbe?.fixture?.yamlSha256 || '')
+      || !/^[0-9a-f]{64}$/.test(customComputeProbe?.fixture?.pythonSha256 || '')
+      || !/^[0-9a-f]{64}$/.test(customComputeProbe?.fixture?.diagnosePythonSha256 || '')
+      || customComputeProbe?.summary?.targetCount !== CUSTOM_COMPUTE_TARGET_IDS.length
+      || customComputeProbe?.summary?.attempted !== CUSTOM_COMPUTE_TARGET_IDS.length
+      || customComputeProbe?.summary?.pass !== CUSTOM_COMPUTE_TARGET_IDS.length
+      || customComputeProbe?.summary?.blocked !== 0
+      || customComputeProbe?.summary?.businessRequests !== CUSTOM_COMPUTE_TARGET_IDS.length
+      || customComputeProbe?.summary?.metadataRequests !== 1) throw new Error('custom compute probe is not approved bounded evidence');
+    customComputeTargets = uniqueMap(customComputeProbe?.results || [], (row) => `custom-api:${row.method}:${row.route}`, 'custom compute probe targets');
+    if (customComputeTargets.size !== CUSTOM_COMPUTE_TARGET_IDS.length || CUSTOM_COMPUTE_TARGET_IDS.some((id) => !customComputeTargets.has(id))) {
+      throw new Error('custom compute probe result exact set mismatch');
+    }
+    for (const [id, row] of customComputeTargets) {
+      if (row.method !== 'POST' || row.attempted !== true || !row.attemptedAt
+        || (typeof row.marketPhase === 'string' ? row.marketPhase : row.marketPhase?.phase) !== 'REGULAR'
+        || row.httpStatus !== 200 || row.verdict !== 'PASS'
+        || row.reason !== 'PASS_HTTP_JSON_SEMANTIC_CONTRACT') throw new Error(`custom compute probe result contract mismatch: ${id}`);
+      customLatest.set(id, {
+        ...row,
+        id,
+        observed_at: row.attemptedAt,
+        market_phase: row.marketPhase,
+        verdict: 'PASS_HTTP_JSON_SEMANTIC_CONTRACT',
+        __evidence_path: paths.customComputeProbe,
+      });
+    }
+  }
   const customObservations = new Map([...customInventoryIds].map((id) => [id, []]));
   const addCustomObservation = (id, row, role, includeUnobserved = false) => {
     if (!row?.observed_at && !includeUnobserved) return;
@@ -500,12 +738,19 @@ export function reconcileCoverage({ inventory, readSweeps, readInputChain = null
       evidence_path: row.__evidence_path,
     });
   };
-  for (const [id, row] of customSweep) addCustomObservation(id, { ...row, __evidence_path: paths.customReadSweep }, 'baseline_target', postMetadataTargets.has(id));
+  for (const [id, row] of customSweep) addCustomObservation(id, { ...row, __evidence_path: paths.customReadSweep }, 'baseline_target', postMetadataTargets.has(id) || customComputeTargets.has(id));
   for (const run of customChainRuns) {
     for (const [id, row] of run.sources) addCustomObservation(id, { ...row, __evidence_path: run.evidencePath }, run.targets.has(id) ? 'target_source' : 'prerequisite_source');
     for (const [id, row] of run.targets) if (row.attempted) addCustomObservation(id, { ...row, __evidence_path: run.evidencePath }, 'chain_target');
   }
   for (const [id, row] of postMetadataTargets) addCustomObservation(id, { ...row, reason: 'HTTP_JSON_SHAPE_SANITIZED', __evidence_path: paths.postMetadataProbe }, 'post_metadata_target');
+  for (const [id, row] of customComputeTargets) addCustomObservation(id, {
+    ...row,
+    observed_at: row.attemptedAt,
+    market_phase: row.marketPhase,
+    verdict: 'PASS_HTTP_JSON_SEMANTIC_CONTRACT',
+    __evidence_path: paths.customComputeProbe,
+  }, 'compute_fixture_target');
   for (const list of customObservations.values()) {
     list.sort((a, b) => String(a.observed_at || '').localeCompare(String(b.observed_at || '')));
     for (const entry of list) delete entry.__key;
@@ -533,14 +778,64 @@ export function reconcileCoverage({ inventory, readSweeps, readInputChain = null
     if (!modeFixtureDetails.includes(marker)) throw new Error(`mode fixture evidence missing marker: ${marker}`);
   }
 
-  const revisions = [runtimeDiscovery?.revision, ...readSweeps.map((artifact) => artifact?.revision), ...(readInputRequired ? [readInputChain?.revision] : []), customReadSweep?.revision, ...customReadChains.map((artifact) => artifact?.revision), ...(postRequired ? [postMetadataProbe?.revision] : []), passiveWs?.revision].filter(Boolean);
-  if (revisions.length !== readSweeps.length + customReadChains.length + 3 + (readInputRequired ? 1 : 0) + (postRequired ? 1 : 0) || new Set(revisions).size !== 1) {
-    throw new Error('evidence revision mismatch or missing revision');
-  }
-
   const websocketInventoryIds = new Set(inventory.items
     .filter((row) => row.source === 'screen_definition' && row.classification === 'websocket')
     .map((row) => row.source_id));
+  const activeWsRequired = websocketInventoryIds.has('base:0B');
+  let activeWsValidated = false;
+  let activeWs = null;
+  if (activeWsRequired) {
+    if (!Array.isArray(activeWsHistory) || activeWsHistory.length !== 2 || !Array.isArray(paths.activeWsHistory) || paths.activeWsHistory.length !== 2) {
+      throw new Error('two explicit active WS artifacts are required');
+    }
+    const [blockedParserRun, freshEventRun] = activeWsHistory;
+    const commonActiveWsInvalid = (artifact) => artifact?.schema_version !== 1
+      || artifact?.kind !== 'athena_active_ws_stock_probe'
+      || artifact?.mode !== 'EXECUTE'
+      || artifact?.market?.phase !== 'REGULAR'
+      || artifact?.target?.tr_id !== '0B'
+      || artifact?.target?.item !== '005930'
+      || artifact?.source_reconciliation?.expected_count !== websocketInventoryIds.size
+      || artifact?.source_reconciliation?.exact_set_equal !== true
+      || artifact?.control?.reg_requests !== 1
+      || artifact?.control?.reg_status !== 'CONTROL_ACK'
+      || artifact?.control?.remove_requests !== 1
+      || artifact?.control?.cleanup_status !== 'CLEANUP_API_ZERO_ACK_OR_SYNTHETIC'
+      || artifact?.control?.upstream_remove_ack_verified !== false
+      || artifact?.socket?.owned_socket_only !== true
+      || artifact?.socket?.close_status !== 'OWNED_SOCKET_CLOSED'
+      || artifact?.safety?.other_tr_sent !== false
+      || artifact?.safety?.condition_sent !== false
+      || artifact?.safety?.order_sent !== false;
+    if (!customInventoryIds.has('custom-api:WEBSOCKET:/api/v1/ws/stream')
+      || commonActiveWsInvalid(blockedParserRun)
+      || blockedParserRun?.observed_at !== '2026-09-07T05:28:15.996Z'
+      || blockedParserRun?.events?.status !== 'BLOCKED_NO_LIVE_EVENT'
+      || blockedParserRun?.events?.counts?.real_envelope !== 159
+      || blockedParserRun?.events?.counts?.invalid_time !== 288
+      || blockedParserRun?.events?.counts?.valid !== 0
+      || blockedParserRun?.verdict !== 'BLOCKED_NO_LIVE_EVENT'
+      || commonActiveWsInvalid(freshEventRun)
+      || freshEventRun?.observed_at !== '2026-09-07T05:46:09.218Z'
+      || freshEventRun?.events?.status !== 'OBSERVED_VALID'
+      || freshEventRun?.events?.counts?.real_envelope !== 23
+      || freshEventRun?.events?.counts?.baseline_matching !== 42
+      || freshEventRun?.events?.counts?.matching_row !== 1
+      || freshEventRun?.events?.counts?.invalid_time !== 0
+      || freshEventRun?.events?.counts?.stale !== 0
+      || freshEventRun?.events?.counts?.valid !== 1
+      || freshEventRun?.events?.identity_match !== true
+      || freshEventRun?.events?.time_shape_valid !== true
+      || freshEventRun?.events?.fresh_within_120s !== true
+      || freshEventRun?.events?.freshness_bucket !== '<=5s'
+      || freshEventRun?.verdict !== 'PASS_WITH_CLEANUP_UNVERIFIED') throw new Error('active WS artifact history is not approved bounded evidence');
+    activeWs = freshEventRun;
+    activeWsValidated = true;
+  }
+  const revisions = [runtimeDiscovery?.revision, ...readSweeps.map((artifact) => artifact?.revision), ...(readInputRequired ? [readInputChain?.revision] : []), ...(finalReadRequired ? [finalReadInputs?.[1]?.revision] : []), customReadSweep?.revision, ...customReadChains.map((artifact) => artifact?.revision), ...(postRequired ? [postMetadataProbe?.revision] : []), ...(computeRequired ? [customComputeProbe?.revision] : []), ...(activeWsRequired ? activeWsHistory.map((artifact) => artifact?.revision) : []), passiveWs?.revision].filter(Boolean);
+  if (revisions.length !== readSweeps.length + customReadChains.length + 3 + (readInputRequired ? 1 : 0) + (finalReadRequired ? 1 : 0) + (postRequired ? 1 : 0) + (computeRequired ? 1 : 0) + (activeWsRequired ? 2 : 0) || new Set(revisions).size !== 1) {
+    throw new Error('evidence revision mismatch or missing revision');
+  }
   const wsEvents = uniqueMap(passiveWs?.events?.source_ids || [], (row) => row.id, 'passive WS source IDs');
   if (wsEvents.size !== websocketInventoryIds.size
     || [...wsEvents.keys()].some((id) => !websocketInventoryIds.has(id))
@@ -584,6 +879,9 @@ export function reconcileCoverage({ inventory, readSweeps, readInputChain = null
     customObservations,
     expectedDisabledCustomIds,
     wsEvents,
+    activeWs,
+    activeWsHistory,
+    activeWsValidated,
     wsConditionIds: new Set(['base:ka10171', 'base:ka10172', 'base:ka10173', 'base:ka10174']),
     wsPhase: passiveWs?.market?.phase || null,
     wsObservedAt: passiveWs?.observed_at || null,
@@ -621,6 +919,7 @@ export function reconcileCoverage({ inventory, readSweeps, readInputChain = null
       && (runtimeDiscovery?.reconciliation?.generated_api?.runtime_only?.length || 0) === 0
       && (runtimeDiscovery?.reconciliation?.diff?.static_only?.length || 0) === 0
       && (runtimeDiscovery?.reconciliation?.diff?.runtime_only?.length || 0) === 0,
+    mcpProtocolMetadataMatched,
   };
   const rows = inventory.items.map((item) => {
     const source = sourceEvidence(item, maps, paths);
@@ -701,12 +1000,15 @@ export function renderMarkdown(rows, metadata) {
   const readNeverAttempted = readRows.length - readActualUnique;
   const readLatestCounts = countBy(readRows, (row) => row.live_evidence.status);
   const customRows = rows.filter((row) => row.source === 'custom_api_route');
-  const customActualUnique = customRows.filter((row) => row.live_evidence.observations?.some((observation) => observation.observed_at)).length;
-  const customLatestCounts = countBy(customRows, (row) => row.live_evidence.status);
+  const customRestRows = customRows.filter((row) => row.classification !== 'websocket');
+  const customActualUnique = customRestRows.filter((row) => row.live_evidence.observations?.some((observation) => observation.observed_at)).length;
+  const customLatestCounts = countBy(customRestRows, (row) => row.live_evidence.status);
+  const customWsActualUnique = customRows.filter((row) => row.classification === 'websocket' && row.live_evidence.observations?.some((observation) => observation.observed_at)).length;
   const customChainSummary = metadata.custom_chain || {
     initial_actual: 0,
     new_target_actual: 0,
     post_metadata_actual: 0,
+    compute_actual: 0,
     chain_runs: 0,
     business_requests: 0,
     latest_business_requests: 0,
@@ -741,7 +1043,8 @@ export function renderMarkdown(rows, metadata) {
     `- Live: ${Object.entries(liveCounts).map(([k, v]) => `${k}=${v}`).join(', ')}`,
     `- Live observations by phase: ${Object.entries(phaseObservationCounts).map(([k, v]) => `${k}=${v}`).join(', ')}`,
     `- Read execution coverage: actual_unique=${readActualUnique}, never_attempted_input_blocked=${readNeverAttempted}, latest=${Object.entries(readLatestCounts).map(([k, v]) => `${k}=${v}`).join(', ')}. LIVE_HTTP_JSON_ROOT_OBSERVED는 HTTP/JSON/business code와 선언 root 관찰이며 전체 schema/end-to-end/전체 페이지/현재성 PASS가 아니다.`,
-    `- Custom execution coverage: actual_unique=${customActualUnique} (initial_get=${customChainSummary.initial_actual}, chain_get_target_unique=${customChainSummary.new_target_actual}, post_metadata=${customChainSummary.post_metadata_actual}); chain_runs=${customChainSummary.chain_runs}, chain_business_requests_history=${customChainSummary.business_requests}, latest_business_requests=${customChainSummary.latest_business_requests}, metadata_requests=${customChainSummary.metadata_requests}; latest=${Object.entries(customLatestCounts).map(([k, v]) => `${k}=${v}`).join(', ')}. LIVE_HTTP_SCHEMA_PASS 수는 legacy label 집계이며 완전한 schema pass가 아니다. LIVE_HTTP_JSON_SHAPE_OBSERVED는 POST metadata handler의 HTTP/JSON shape 관찰일 뿐 하위 기능 실행이나 제품 PASS가 아니다.`,
+    `- Custom REST execution coverage: actual_unique=${customActualUnique} (initial_get=${customChainSummary.initial_actual}, chain_get_target_unique=${customChainSummary.new_target_actual}, post_metadata=${customChainSummary.post_metadata_actual}, compute_fixture=${customChainSummary.compute_actual}); chain_runs=${customChainSummary.chain_runs}, chain_business_requests_history=${customChainSummary.business_requests}, latest_business_requests=${customChainSummary.latest_business_requests}, metadata_requests=${customChainSummary.metadata_requests}; latest=${Object.entries(customLatestCounts).map(([k, v]) => `${k}=${v}`).join(', ')}. 원본 non-GET runner snapshot 77개 중 POST 14개가 실제 관찰되어 미관찰 snapshot 분류는 63개다. LIVE_HTTP_SCHEMA_PASS 수는 legacy label 집계이며 완전한 schema pass가 아니다. LIVE_HTTP_JSON_SHAPE_OBSERVED는 POST metadata handler의 HTTP/JSON shape 관찰일 뿐 하위 기능 실행이나 제품 PASS가 아니다. LIVE_HTTP_JSON_SEMANTIC_CONTRACT_OBSERVED는 명시적 compute fixture의 API 계약 증거이며 UI/graph/optimizer 실행 또는 지속화 PASS가 아니다.`,
+    `- Custom WebSocket execution coverage: actual_unique=${customWsActualUnique}. REST actual_unique와 별도다. 0B fresh event 1건을 관찰했지만 upstream cleanup ACK와 REG 인과성이 미검증이므로 제품 전체 PASS가 아니다.`,
     '',
     `## 전체 ${rows.length.toLocaleString('en-US')}행`,
     '',
@@ -761,6 +1064,13 @@ async function loadJson(repoRoot, relativePath) {
   return JSON.parse(await readFile(path.join(repoRoot, relativePath), 'utf8'));
 }
 
+async function loadJsonWithSha256(repoRoot, relativePath, expectedSha256) {
+  const bytes = await readFile(path.join(repoRoot, relativePath));
+  const actualSha256 = createHash('sha256').update(bytes).digest('hex');
+  if (actualSha256 !== expectedSha256) throw new Error(`evidence SHA-256 mismatch: ${relativePath}`);
+  return JSON.parse(bytes.toString('utf8'));
+}
+
 export async function generateCoverage(options = {}) {
   const repoRoot = path.resolve(options.repoRoot || path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..'));
   const paths = { ...DEFAULT_PATHS, ...(options.paths || {}) };
@@ -768,9 +1078,19 @@ export async function generateCoverage(options = {}) {
     inventory: await loadJson(repoRoot, paths.inventory),
     readSweeps: await Promise.all(paths.readSweeps.map((relativePath) => loadJson(repoRoot, relativePath))),
     readInputChain: await loadJson(repoRoot, paths.readInputChain),
+    finalReadInputs: await Promise.all([
+      loadJsonWithSha256(repoRoot, paths.finalReadInputs[0], FINAL_READ_FIRST_SHA256),
+      loadJson(repoRoot, paths.finalReadInputs[1]),
+    ]),
     customReadSweep: await loadJson(repoRoot, paths.customReadSweep),
     customReadChains: await Promise.all(paths.customReadChains.map((relativePath) => loadJson(repoRoot, relativePath))),
     postMetadataProbe: await loadJson(repoRoot, paths.postMetadataProbe),
+    customComputeProbe: await loadJsonWithSha256(repoRoot, paths.customComputeProbe, CUSTOM_COMPUTE_SHA256),
+    mcpBuiltinsProbe: await loadJson(repoRoot, paths.mcpBuiltinsProbe),
+    activeWsHistory: await Promise.all([
+      loadJson(repoRoot, paths.activeWsHistory[0]),
+      loadJsonWithSha256(repoRoot, paths.activeWsHistory[1], ACTIVE_WS_LATEST_SHA256),
+    ]),
     customReadAdjudication: await readFile(path.join(repoRoot, paths.customReadAdjudication), 'utf8'),
     modeFixtureDetails: await readFile(path.join(repoRoot, paths.modeFixtureDetails), 'utf8'),
     liveUis: await Promise.all(paths.liveUis.map((relativePath) => loadJson(repoRoot, relativePath))),
@@ -795,6 +1115,7 @@ export async function generateCoverage(options = {}) {
       initial_actual: inputs.customReadSweep.results.filter((row) => row.observed_at).length,
       new_target_actual: chainTargetActualIds.size,
       post_metadata_actual: inputs.postMetadataProbe.results.filter((row) => row.attempted === true).length,
+      compute_actual: inputs.customComputeProbe.results.filter((row) => row.attempted === true).length,
       chain_runs: inputs.customReadChains.length,
       business_requests: inputs.customReadChains.reduce((sum, artifact) => sum + artifact.entrypoint.business_request_count, 0),
       latest_business_requests: latestCustomReadChain.entrypoint.business_request_count,
@@ -806,6 +1127,8 @@ export async function generateCoverage(options = {}) {
       'live boot alarm-bootstrap/routine-feed: DOCUMENTED_EXPECTED_DISABLED / BLOCKED_SAFE_CONFIG (감사 환경 routines 비활성화)',
       `live UI coverage declaration: routes90=${latestLiveUi.coverage?.live_routes_90}; cards96=${latestLiveUi.coverage?.live_cards_96}; mini10=${latestLiveUi.coverage?.live_mini_10}`,
       `dynamic read input chain: mode=${inputs.readInputChain.mode}; sources=${inputs.readInputChain.summary?.sources}; targets=${inputs.readInputChain.summary?.targets}; attempted=${inputs.readInputChain.summary?.attempted}; business requests=${inputs.readInputChain.summary?.businessRequestCount}; metadata requests=${inputs.readInputChain.summary?.metadataRequestCount}. target 7개는 한 페이지의 HTTP/JSON/business code와 선언 root만 관찰했고 pagination=${inputs.readInputChain.results?.[0]?.pagination}, freshness=${inputs.readInputChain.results?.[0]?.freshness}다.`,
+      `final read inputs history: outside-window=${inputs.finalReadInputs[0].observedAt}, revision=NULL, per-result timestamps=ABSENT, artifact SHA-256=${FINAL_READ_FIRST_SHA256}; regular=${inputs.finalReadInputs[1].observedAt}, revision=${inputs.finalReadInputs[1].revision}. 첫 실행 시각은 artifact-level 관찰 시각이며 호출별 시각이 아니다. 첫 실행의 returnCode=INVALID source 결과는 harness 추출 결함으로 보존하고 provider 실패로 판정하지 않는다.`,
+      `final read inputs latest: ka30003=HTTP200/code0 선언 root 관찰; kt00010 detail 3개=attempted HTTP200/code20 BLOCKED; ka10088=기존 미체결 주문 없음으로 NOT_ATTEMPTED. 주문을 만들지 않았고 전체 schema/end-to-end/pagination/freshness PASS를 부여하지 않는다.`,
       `passive WS: connection=${inputs.passiveWs.connection?.status}; close=${inputs.passiveWs.connection?.close_code}; cleanup=${inputs.passiveWs.connection?.cleanup_status}; auth=${inputs.passiveWs.authentication?.outcome}; REAL events=${inputs.passiveWs.events?.status}`,
       'mode/session fixture: Backtest 5/5 PASS; Agent parity 실패 0 PASS; Session restore 42/42 PASS; Graph 초기 STATUS_BREAKPOINT 후 격리 userData 재시도 140/140 PASS',
       'full fixture verify: 5 assertions FAIL (OS 알림 1, region contract 2, 격리 Claude account row 1, timing 1); 제품 live 불량으로 일괄 판정하지 않음',
@@ -813,6 +1136,9 @@ export async function generateCoverage(options = {}) {
       `custom-read-chain latest: targets=${latestCustomReadChain.summary?.total}; attempted=${latestCustomReadChain.summary?.attempted}; schema_only=${latestCustomReadChain.summary?.PASS_HTTP_SCHEMA_ONLY}; blocked=${latestCustomReadChain.summary?.BLOCKED}; business requests=${latestCustomReadChain.entrypoint?.business_request_count}; metadata requests=${latestCustomReadChain.entrypoint?.metadata_request_count}`,
       `custom-read-chain history: runs=${inputs.customReadChains.length}; business requests=${inputs.customReadChains.reduce((sum, artifact) => sum + artifact.entrypoint.business_request_count, 0)}; metadata requests=${inputs.customReadChains.reduce((sum, artifact) => sum + artifact.entrypoint.metadata_request_count, 0)}. target 판정은 최신 실행으로 갱신하고 같은 ID+observed_at은 한 번만 세며 prerequisite 중복 요청을 신규 target으로 계산하지 않는다.`,
       `POST metadata probe: mode=${inputs.postMetadataProbe.mode}; exact targets=${inputs.postMetadataProbe.summary?.total}; HTTP200+JSON shape=${inputs.postMetadataProbe.summary?.pass_http_json_shape_only}; metadata requests=${inputs.postMetadataProbe.admission?.metadata_requests}; business requests=${inputs.postMetadataProbe.admission?.business_requests}; responses=${inputs.postMetadataProbe.admission?.transport_responses_received}. search/describe metadata handler만 관찰했으며 quote/resolve/render/data 정확성/UI 결과는 실행·검증하지 않았다.`,
+      `custom compute probe: mode=${inputs.customComputeProbe.mode}; exact POST targets=${inputs.customComputeProbe.summary?.targetCount}; attempted=${inputs.customComputeProbe.summary?.attempted}; HTTP200 semantic-contract=${inputs.customComputeProbe.summary?.pass}; business requests=${inputs.customComputeProbe.summary?.businessRequests}; metadata requests=${inputs.customComputeProbe.summary?.metadataRequests}; artifact SHA-256=${CUSTOM_COMPUTE_SHA256}. repository test/preset derived fixture와 graph/code hash dependency를 사용한 compute API 계약 관찰이며 UI, graph 실행, optimizer 실행, persistence, provider/market-data 정확성 증거가 아니다.`,
+      `MCP builtin protocol metadata: mode=${inputs.mcpBuiltinsProbe.mode}; verdict=${inputs.mcpBuiltinsProbe.verdict}; tools=${inputs.mcpBuiltinsProbe.observation?.tool_count}; actions=${inputs.mcpBuiltinsProbe.observation?.action_metadata_count}; initialize=${inputs.mcpBuiltinsProbe.scope?.initialize_count}; tools/list=${inputs.mcpBuiltinsProbe.scope?.list_tools_count}; call=${inputs.mcpBuiltinsProbe.scope?.call_tool_count}. 격리 stdio의 이름·action schema fingerprint 대조이며 사용자 실행 gateway/provider 연결성/도구 기능 실행 증거가 아니다; OS process 종료는 독립 확인되지 않았다.`,
+      `active WS 0B history: first REAL=${inputs.activeWsHistory[0].events?.counts?.real_envelope}, invalid_time=${inputs.activeWsHistory[0].events?.counts?.invalid_time}, verdict=${inputs.activeWsHistory[0].verdict} (harness parser false negative); latest REAL=${inputs.activeWsHistory[1].events?.counts?.real_envelope}, baseline before REG=${inputs.activeWsHistory[1].events?.counts?.baseline_matching}, post-REG matching=${inputs.activeWsHistory[1].events?.counts?.matching_row}, valid fresh=${inputs.activeWsHistory[1].events?.counts?.valid}, freshness=${inputs.activeWsHistory[1].events?.freshness_bucket}, verdict=${inputs.activeWsHistory[1].verdict}, SHA-256=${ACTIVE_WS_LATEST_SHA256}. upstream REMOVE ACK=${inputs.activeWsHistory[1].control?.upstream_remove_ack_verified}; owned socket=${inputs.activeWsHistory[1].socket?.close_status}. baseline 42건은 REG 전 traffic이라 REG 인과성 증거가 아니며, 23개 source exact reconciliation은 23개 실행을 뜻하지 않고 0B 한 건만 실행했다.`,
     ],
     paths,
     validation,

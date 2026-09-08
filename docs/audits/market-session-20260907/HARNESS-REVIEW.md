@@ -1,5 +1,21 @@
 # 검사 도구 독립 리뷰와 검증
 
+## 15:44 최신 통합 검증
+
+새 감사 worktree에서 명시한17개 Node 테스트 파일을 실행해 **203/203, fail/cancel/skip/todo0, exit0,17.086초**를 확인했다. 실제 실행은15:44:29.692–15:44:46.980 KST다. `harness-regression-20260907T154446KST.json`에 정확한 파일 목록과 결과를 기록했다. 이 집계에는 별도 Python MCP15개와 WS catalog4개가 포함되지 않는다. 검사 도구 회귀 통과를 제품·실서비스 전체 통과로 사용하지 않는다.
+
+이 통합 뒤 독립 검토에서 WS 행 설명에만 남은 과거 REST43 숫자를 발견했다. 집계55는 이미 정확했고, 설명을 숫자 없는 별도 집계 문구로 고쳤다. 보고서를 재생성하고 focused coverage24/24를 통과했다. 최신 script SHA는 `05DDFB0EDD79F0CEEF95B96D45CF34F413653A58072AB5C70EA9A9024EEB88E1`, test는 `1824A9CA002FB652CB826055E2E271E26F00B5B0DE957DB843A1590ACF1938AF`, report는 `DC49B5FC59791DAC620A6C9B67B6B252CA59461FDF972C13AE5EA76861100DCE`다.203개 결과는15:44 snapshot이며 이 문구 수정 뒤 전체 suite를 다시 실행한 결과로 표시하지 않는다.
+
+앞서14:55·14:58 통합 실행은 각각187/188 실패였고,15:23에는 실제 시계가 동시호가 시간으로 바뀌어 REGULAR를 기대하던 계산 fixture 한 개가 실패해201/202였다. 세 실패 기록을 유지한다. 이후 두 timing 테스트는 OS 조회의 명시적 측정 불가와 실제 AbortSignal 경계를 검증하도록 바꾸고, 계산 fixture는 고정 시각과 실제15:25/15:35 시장 단계 회귀를 추가했다. 제품 구현과 production timeout은 바꾸지 않았으며 각각 독립25/25 및13/13 승인을 거쳐 위203개 통합을 실행했다.
+
+현재 coverage는 원천1396행, 실제 read263/264, custom REST55 및 별도 WS stream1을 연결한다. 계산12개는15:13 실제 HTTP/JSON 의미 계약을 좁게 통과했고,0B 한 유형의 fresh event 관찰은 정리 ACK·구독 인과성·소유권 한계를 유지한다. 새 WS catalog는 공유 구독 소유권을 증명할 수 없어 active executor를 제거한23행 분류 도구로 축소했다. 실행 요청도 credential/socket/network 전에 차단하며 실제 catalog 실행은0이다. 아래 이전 숫자와 해시는 당시 snapshot이다.
+
+## 감사 worktree 분리 후 검증
+
+- 실행 위치를 `C:\Projects\DAOU.Athena-market-audit-20260907`로 분리한 뒤 기존14개 Node 테스트 파일을 새 위치에서 실행했다. **148/148, fail/cancel/skip/todo0,9.171초,exit0**이다. 새 WS/MCP/마지막read5개 모듈은 이 통합 실행에서 제외했다.
+- 독립 verifier가 baseline248행의 pagination/freshness 객체가 `[object Object]`로 표시되는 오류를 발견했다. generator를 실제 state/pages/basis/relation을 렌더하도록 고치고, object case가 LIVE_BLOCKED를 그대로 유지하는 회귀를 추가했다. 현재 문자열 강제변환 잔여0, read259/custom43/1396행과 history는 유지된다. 표시 수정 script SHA `17320D0C759014554D0FF9CD6C39915C1F1F54C411CA1531633925AC6825E7E8`, test `D191339AA81ABFCDD6D314B16F37C3103ED99D397F0DE1EE8DBEF51F1AFCBB30`, report `EEE09DD1190C4225E000E71E16A903060191CD4B2A59848F6149839EEA2B4921`이다. 별도 verifier가 재확인한다.
+- 이 분리는 다른 작업의 `app/shell.css`와 백테스트 editor test 변경을 보호한다. 원래 runtime 프로세스와 계속 기록 중인 watcher를 새 worktree 실행으로 잘못 표기하지 않는다. `WORKTREE-ISOLATION.md`를 함께 읽는다.
+
 ## 13:16 추가 실행과 독립 승인
 
 - inventory는 원본1394개를 변경/삭제하지 않고 MCP canvas builtin2개를 추가한 별도1396개 artifact로 확장했다. 독립 verifier가 source registration, 새두ID만추가, coverage exact1396, 기존 read252/custom41/UI9/WS23 이력 보존을 확인했다. 이는 이후 조회7개와POST2개 증거 반영 전 snapshot이다.

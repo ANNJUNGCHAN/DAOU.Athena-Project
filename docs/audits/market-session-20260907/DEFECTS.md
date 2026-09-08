@@ -6,6 +6,66 @@
 
 ID, 제목, P0–P3, 분류, 기능 ID, 최초/최종 시각과 시장 단계, revision/환경, 선행조건, 재현 절차, 기대/실제 결과, 증거 경로, 빈도, 영향, 원인 근거, 관련 파일, 수정 소유자, 회귀 검사, 독립 검토, live 재검증, 남은 검증.
 
+## HARNESS-FINAL5-001 — detail-price 성공 응답의 return_code projection 누락
+
+- 심각도 P1(잔여 read 검증 차단), 분류 감사 하네스 결함. 최초 실제 관찰은2026-09-07 14:04:27 KST/REGULAR이다. 제품 price endpoint 실패로 확정하지 않는다.
+- 최초 final-5 실행은 business4/metadata2 요청을 수행했다. `detail:ka10004:sell_bid_prices`와 `detail:ka10001:current_trading`은 HTTP200을 받았지만 성공 응답 projection에 `return_code`가 없어서 raw artifact에 `returnCode:"INVALID"`와 `HTTP_OR_RETURN_CODE_FAILURE`로 기록됐다.
+- 기대: 성공 응답의 실제 `return_code`를 projection에 포함해 HTTP와 business code를 함께 판정한다. 실제: projection 누락 때문에 HTTP200 응답 두 개가 하네스 단계에서 차단됐고 이를 사용하는3개 capacity target도 `NO_OBSERVED_SCENARIO_PRICE`로 미시도됐다.
+- 영향: 최초 실행에서 새 target `base:ka30003`만 HTTP200/returnCode0으로 통과했다. 당시 대상5개 중1개 통과/4개 차단이며 read 실제 합집합은260/264였다. 잘못된 `INVALID`를 제품 불량이나4개 target 실제 실패로 승격하지 않는다.
+- raw 증거는 `artifacts/market-session-audit/read-final-inputs-20260907140429KST.json`, SHA-256 `49EA9078196E1732BD732B7F5DB75C1F9D6A40F17B6B84B606FFF3AB38AEA437`이다. `revision:null` 원본은 수정하지 않고 `artifacts/market-session-audit/2026-09-07/runtime-handoff-first-final5-context-20260907T142208KST.json`에 당시 audit HEAD/PID/source/delta context를 추가했다.
+- 수정 상태: success projection 보강과 독립17개 mock 검토 후14:22 실제 재시도를 완료했다. best-ask source가 정상 projection돼 dependent target3개를 실제 호출했으므로 하네스 결함 수정은 live 재검증됐다. 재시도 artifact는 `artifacts/market-session-audit/2026-09-07/read-final-inputs-20260907142216KST.json`, SHA-256 `5E509C64944954714AD3947AC2137F0A83A8D91D1D94FB0C490475ED0BB88EA2`다.
+- 재시도 결과: business6/metadata2, target4시도/1PASS/4BLOCKED. 주문이력은HTTP200/code0이나 미체결 주문이 없어 `ka10088`은 미시도, best-ask source는PASS, `kt00010` detail3개는HTTP200/code20 BLOCKED, `ka30003`은HTTP200/code0 PASS다. read 실행 합집합263/264는 통과 수가 아니다. 하네스 결함 완료와4개 제품 기능의 통과 여부를 분리한다.
+- runtime 경계: 당시 backend37764→13080 신원과 audit HEAD `ac8452f` 대상 primitive source는 확인했다. 원래 폴더는14:04 `card_surface_contract.py`,14:17에는 `card_surface_templates.py`까지 변경돼 dependency 검토 중이다. 전체 backend baseline 동일성은 주장하지 않는다.
+
+## HARNESS-WS-EVENT-001 — REAL envelope의 nested FID20을 읽지 못함
+
+- 심각도 P1(WS 기능 판정 차단), 분류 감사 parser 결함 확인.2026-09-07 14:28:15 KST/REGULAR, audit `ac8452f`, 원래 폴더 backend39728→listener41172 대상이다. provider 제품 실패로 확정하지 않는다.
+- 실제: 메시지159개가 모두 REAL envelope로 수신됐고 wrong_type0/wrong_item0이었다. envelope 내부 event record 집계에서 invalid_time288, valid/fresh0이었다. 일부 matched envelope는 accepted FID20 시간 값이 없거나 현재 parser의 허용 형태를 충족하지 않았다.
+- 판정 경계: artifact의 `BLOCKED_NO_LIVE_EVENT`는 네트워크 트래픽0을 뜻하지 않는다. REAL 트래픽은 있었지만 시간·freshness 계약을 통과한 기능 이벤트가0이라는 뜻이다. invalid_time 수가 메시지 수보다 큰 것은 envelope 내 복수 event record 집계 가능성이 있어 source/parser 조사 전 임의로 오류 수를 메시지 수와 같게 만들지 않는다.
+- 제어·정리: REG1은 `CONTROL_ACK`, REMOVE1은 `CLEANUP_API_ZERO_ACK_OR_SYNTHETIC`, socket은 `OWNED_SOCKET_CLOSED`다. upstream REMOVE ACK는 false이며 cleanup API0을 upstream 해제 완료로 해석하지 않는다. 주문·조건·계좌 mutation은0이다.
+- 증거: `artifacts/market-session-audit/2026-09-07/ws-active-stock-20260907T052815-996Z.json`, SHA-256 `CE5760E161B183D23DF8A0105DEC79559978A1A8A8DB9D83D516F49367D4E622`. 승인된 probe script SHA prefix는 `D8B031`이다.
+- 원인: 기존 parser는 top-level `row["20"]`만 읽었지만 source와 canonical fixture의 체결시간은 nested `row.values["20"]`에 있다. 이 때문에 실제 REAL row의 시간을 받아들이지 못했다.
+- 수정 상태: nested canonical 형태를 읽도록 수정했고 집중20개 mock 및 독립 검토를 통과했다.14:43 첫 재실행 preflight는 새 original production diff `api/canvas_push.py`의 dependency 독립성 확인을 위해 CLI/network 이전에 중단했다. 검토 후14:46 실제 재실행에서 nested FID20 valid/fresh row1개를 관찰해 parser 수정은 live 재검증됐다. 원본159 REAL artifact는 변경하지 않는다.
+- 재실행 경계:23 REAL messages, REG 전 baseline matching42, REG 뒤 matching/valid/fresh1(`<=5s`), invalid/stale0. `PASS_WITH_CLEANUP_UNVERIFIED`는 matching fresh data 관찰을 뜻한다. baseline traffic 때문에 REG 인과관계는 미검증이고 REMOVE API0/synthetic는 upstream ACK가 아니다. 다른22 WS route의 실제 기능은 미검증이다.
+
+## HARNESS-WATCH-ADMISSION-001 — null 생성시각 뒤 watcher를 시작함
+
+- 심각도 P2, 분류 watcher handoff admission 결함.2026-09-07 14:36:30 KST, 후보 app34040 대상이다.
+- 기대: PID·실행경로·생성시각을 모두 검증하고 어느 값이든 null이면 watcher 시작 전에 fail closed한다. 실제: null CreationDate가 nonterminating PowerShell 오류만 만들고 Start-Process가 계속돼 watcher41668이 시작됐다.
+- 영향: target34040은 이미 사라져 첫 artifact `watch-20260907T053631-114Z.json`이 root_found false였다. 이를 정상 handoff나 제품 앱 실패로 기록하지 않는다.
+- 정리: 엄격한 null 검사와 `ErrorActionPreference=Stop`으로 소유를 확인한 뒤 watcher41668만14:37:23.963 KST에 종료했다. 사용자 app/backend 등 제품 프로세스는 제어하지 않았다. 기존 watcher39368은 새 watcher44784의 첫 검증이 끝날 때까지 endpoint와 root6104 missing을 기록했다.
+- 후속: 미래 retarget 명령은 null을 terminating error로 처리해 Start-Process 전에 중단한다. 안정된 현재 앱 신원이 확인될 때까지 후보 PID를 반복 추격하지 않는다.
+- live 재검증:14:41 app30288의 non-null creation/path exact 검사를 통과한 뒤 watcher44784를 시작했고 첫 표본 root validated true/HTTP4/4=200을 확인했다. 새 watcher 검증 뒤에만 구 watcher39368을 종료했다. 이후 동일 fail-closed 절차로 watcher46776, watcher46644까지 검증 후 순차 인계했으며, 현재 동결 기준 watcher46644/app36856 첫 표본과15:55:52.043 표본은 root validated true/HTTP4/4=200이다.
+
+## HARNESS-WATCH-PROCESS-001 — 검증된 root의 process_count 측정 공백
+
+- 심각도 P2(관찰 품질), 분류 observer process probe 일시 실패. watcher44784/app30288,14:44:53~14:47:53 KST 네 표본이다.
+- 실제: process probe failure로 root_found/root_validated가 미기록돼 신원 판정이 불가했고 process_count는 null, HTTP4/4=200이었다.14:48:53에는 root probe가 다시 정상 값을 기록했다.
+- 판정: app 부재 증거가 아니며, 반대로 해당 구간의 연속 app process 건강·자원 사용량 증거도 아니다. HTTP endpoint 준비와 app process 측정을 분리한다.
+- 후속: 원본 표본을 보존하고 process probe failure의 오류 분류·재시도 경계를 검토한다. 결측값을0이나 직전 값으로 채우지 않는다.
+
+- 추가 관찰: 새 watcher46776의 첫15:42:48.192 표본도 동일하게 root 필드 미기록/process_count null/HTTP4/4였으나 다음15:43:48.201 표본에서 root34680 true/true, process_count73으로 회복했다. 첫 표본을 app 부재로 분류하지 않는다.
+
+## HARNESS-PHASE-CLOCK-001 — wall-time 1초 단언의 실행 부하 민감성
+
+- 심각도 P2(검사 안정성), 제품 결함 아님.15:23:25.507 실행은202개 중201pass/1fail이며 phase-clock wall-time `<1s` 단언이 실패했다. 이전188개 집계의 live-PID probe 실패2회와 구분한다.
+- 수정·검토: test-only phase-clock 경계를 수정하고 집중13/13 승인을 받았다. 최신17파일 집계는15:44:29.692~15:44:46.980에203/203, fail/skip/todo0,17,085.5596ms다.
+- 판정: 최신 통과는 하네스 수정 증거다. 이전 실패를 제품 성능 실패로 바꾸거나 serial16의 별도187/188을 전체 통과로 표시하지 않는다. timeout을 임의로 느슨하게 만드는 해결은 사용하지 않는다.
+
+## WS-OWNERSHIP-001 — active catalog23종의 충돌 없는 소유권 발견 부재
+
+- 심각도 P1(WS 전수 검증 차단), 제품 기능 실패 아님. catalog23종은 PURE로 분류됐지만 shared runtime의 기존 lease/구독과 충돌하지 않는 권위적 occupancy·ownership 발견 경로가 없다.
+- 안전 판정:23종 모두 unconditional `BLOCKED_OWNERSHIP_DISCOVERY`, control request0이다. 독립 `ws_catalog_review`는4/4 exact23/block-all-network로 승인됐다. 분류 이전에 잡힌 executor 오류는 actual 전 제거됐고 live 제품 실패가 아니다.
+- 기존 증거:0B 한 종의 random-group actual은 matching fresh data를 관찰했지만 verdict `PASS_WITH_CLEANUP_UNVERIFIED`이고 upstream REMOVE ACK가 없다. random group은 권위적인 collision-free ownership 증거가 아니다. 사용자 lease가 손상됐다는 증거도 없다.
+- 후속: shared runtime에서 추가REG/REMOVE를 하지 않는다. 소유권 발견·충돌 방지·cleanup 검증 계약이 확정되기 전 나머지22종 actual을 실행하거나 전체 WS 정상/불량을 판정하지 않는다.
+
+## OBSERVATION-RUNTIME-002 — 사용자 runtime 교체 중 endpoint 부분 timeout
+
+- 심각도 P2(관찰 경계), 제품 원인 미확정.15:50:48 POSTCLOSE 표본에서 구 app34680은 root false, health/ready는HTTP200, accounts/OpenAPI는각 약2초 timeout/status null이었다.15:51:48에는 HTTP4/4=200으로 회복됐다.
+- 새 user app36856은15:49:55.773470에 생성됐고15:51:51 첫 새 watcher 표본에서 root found/validated true였다. backend command 후보 parent46068→uvicorn34264도15:49:26에 생성됐다.
+- 판정: runtime 교체와 두 timeout의 인과관계 및 정확한 지속시간은 입증되지 않았다. user replacement가 이미 존재했으므로 전체 앱 outage로 분류하지 않는다. backend 후보는 command에 port8010이 포함됐지만 해당 snapshot에서 TCP listener table과 독립 결합하지 않았다.
+- watcher handoff:46644 첫 표본 검증 뒤에만 구 watcher46776을 종료했다. 제품 프로세스 제어0. 증거는 `observer-20260907T065048-270Z.json`, `observer-20260907T065148-292Z.json`, `observer-20260907T065151-994Z.json`, `runtime-handoff-20260907T155321KST.json`이다.
+
 ## OBSERVATION-001 — 호스트 재부팅 전후 장중 관찰 공백
 
 - 심각도 P1(감사 증거 공백), 분류 환경/관찰 중단. 앱 제품 crash는 입증되지 않았다. 기준ac8452f, 정규장.

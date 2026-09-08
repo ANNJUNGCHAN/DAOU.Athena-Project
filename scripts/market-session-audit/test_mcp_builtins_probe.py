@@ -3,6 +3,8 @@ from __future__ import annotations
 import asyncio
 import importlib.util
 import json
+import os
+import tempfile
 from contextlib import asynccontextmanager
 from pathlib import Path
 from types import SimpleNamespace
@@ -60,6 +62,11 @@ def fake_transport(captured: dict):
     @asynccontextmanager
     async def factory(parameters):
         captured["parameters"] = parameters
+        effective = probe.effective_child_environment(parameters)
+        captured["environment_directories_at_enter"] = {
+            key: Path(effective[key]).is_dir()
+            for key in ("APPDATA", "LOCALAPPDATA", "USERPROFILE", "TEMP", "TMP")
+        }
         captured["entered"] = True
         try:
             yield object(), object()
@@ -112,6 +119,7 @@ def test_exact_metadata_uses_only_initialize_and_list_tools_and_closes_contexts(
     assert sessions[0].calls == ["initialize", "list_tools", "session_exit"]
     assert captured["entered"] and captured["exited"]
     assert report["cleanup"]["sdk_context_cleanup_complete"] is True
+    assert all(captured["environment_directories_at_enter"].values())
     persisted = json.loads(output.read_text(encoding="utf-8"))
     assert persisted["scope"]["call_tool_count"] == 0
     assert "description" not in output.read_text(encoding="utf-8")
@@ -127,12 +135,66 @@ def test_server_command_uses_backend_venv_and_exact_new_absolute_paths(tmp_path)
         "-m", "athena_mcp", "--state-dir", str(state.resolve()),
         "--registry", str(registry.resolve()), "serve",
     ]
-    assert parameters.env["PYTHONUTF8"] == "1"
-    assert not any("TOKEN" in key or "SECRET" in key or "KEY" in key for key in parameters.env)
+    effective = probe.effective_child_environment(parameters)
+    synthetic_profile = state.parent / "profile"
+    synthetic_temp = state.parent / "temp"
+    assert effective["PYTHONUTF8"] == "1"
+    assert effective["PYTHONDONTWRITEBYTECODE"] == "1"
+    assert effective["APPDATA"] == str(synthetic_profile / "AppData" / "Roaming")
+    assert effective["LOCALAPPDATA"] == str(synthetic_profile / "AppData" / "Local")
+    assert effective["USERPROFILE"] == str(synthetic_profile)
+    assert effective["TEMP"] == effective["TMP"] == str(synthetic_temp)
+    assert effective["USERNAME"] == "athena-audit"
+    assert Path(effective["HOMEDRIVE"] + effective["HOMEPATH"]).resolve() == synthetic_profile.resolve()
+    assert not any("TOKEN" in key or "SECRET" in key or "API_KEY" in key for key in effective)
+    for key in ("APPDATA", "LOCALAPPDATA", "USERPROFILE", "TEMP"):
+        if os.environ.get(key):
+            assert effective[key] != os.environ[key]
+    assert effective["PATH"].split(os.pathsep) == [
+        str(probe._expected_python(ROOT).parent),
+        str(Path(effective["SYSTEMROOT"]) / "System32"),
+    ]
+    probe.validate_effective_environment(parameters, state.parent)
     assert report["isolation"]["state_path_is_owned"] is True
     assert report["isolation"]["registry_path_is_owned"] is True
+    assert report["isolation"]["effective_environment_profile_is_owned"] is True
+    assert report["isolation"]["effective_environment_directories_created"] is True
+    assert (synthetic_profile / "AppData" / "Roaming").is_dir()
+    assert (synthetic_profile / "AppData" / "Local").is_dir()
+    assert synthetic_temp.is_dir()
     assert not registry.exists()
     assert owned.exists()
+
+
+def test_effective_environment_rejects_host_profile_injection_for_production_owned_root(monkeypatch):
+    host_profile = r"C:\Users\host-profile-fixture"
+    run_root = Path("C:/Projects/athena-mcp-audit-env-fixture/run-1")
+    parameters = probe.build_server_parameters(
+        run_root / "state",
+        run_root / "registry-new.json",
+        repo_root=ROOT,
+        python_executable=probe._expected_python(ROOT),
+    )
+    parameters.env["PATH"] = os.pathsep.join((parameters.env["PATH"], host_profile))
+    monkeypatch.setenv("USERPROFILE", host_profile)
+    with pytest.raises(probe.ProbeError, match="HOST_PROFILE_ENVIRONMENT_INHERITED"):
+        probe.validate_effective_environment(parameters, run_root)
+
+
+def test_effective_environment_routes_python_tempfile_under_owned_root(tmp_path, monkeypatch):
+    _report, _output, captured, _sessions = run_fixture(tmp_path)
+    effective = probe.effective_child_environment(captured["parameters"])
+    previous_tempdir = tempfile.tempdir
+    try:
+        monkeypatch.delenv("TMPDIR", raising=False)
+        monkeypatch.setenv("TEMP", effective["TEMP"])
+        monkeypatch.setenv("TMP", effective["TMP"])
+        tempfile.tempdir = None
+        with tempfile.NamedTemporaryFile() as handle:
+            created = Path(handle.name).resolve()
+            assert probe._is_relative_to(created, Path(effective["TEMP"]).resolve())
+    finally:
+        tempfile.tempdir = previous_tempdir
 
 
 def test_missing_or_changed_tool_blocks_but_still_closes_owned_context(tmp_path):
@@ -144,6 +206,8 @@ def test_missing_or_changed_tool_blocks_but_still_closes_owned_context(tmp_path)
     assert captured["exited"] is True
     assert sessions[0].calls[-1] == "session_exit"
     assert report["cleanup"]["sdk_context_cleanup_complete"] is True
+    assert report["cleanup"]["os_process_identity_captured"] is False
+    assert report["cleanup"]["os_process_exit_independently_verified"] is False
 
 
 def test_protocol_timeout_never_lists_or_calls_tools_and_contexts_exit(tmp_path):
@@ -243,3 +307,17 @@ def test_execute_flag_and_backend_venv_are_mandatory(tmp_path):
         probe.build_server_parameters(
             state, registry, repo_root=ROOT, python_executable=tmp_path / "python.exe"
         )
+
+
+@pytest.mark.parametrize("timeout", [float("nan"), float("inf"), float("-inf")])
+def test_non_finite_timeout_is_rejected_before_owned_path_creation(tmp_path, timeout):
+    owned, state, registry, output = paths(tmp_path)
+    with pytest.raises(probe.ProbeError, match="TIMEOUT_OUT_OF_RANGE"):
+        asyncio.run(
+            probe.run_probe(
+                execute=True, state_dir=state, registry_path=registry, output_path=output,
+                repo_root=ROOT, owned_root=owned, timeout_seconds=timeout,
+                python_executable=probe._expected_python(ROOT),
+            )
+        )
+    assert not owned.exists()

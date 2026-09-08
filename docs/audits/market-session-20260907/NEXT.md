@@ -1,8 +1,34 @@
 # 다음 실행에서 이어갈 작업
 
+**16:35 이후 최우선:** 예정 관찰은16:30 완료됐고 watcher34120은 종료됐다. 새 watcher를 만들거나 다음 거래일 관찰을 시작하지 않는다. `checkpoint-20260907T163000KST.json`과 PHASE-CHECKPOINTS를 확인하고 현재 native agent `fix_boot_001`, `fix_boot_002`, `fix_boot_003`, `fix_auth_002`, `fix_visual_diagnostics`의 결과를 이어간다. 재현/수정4개는 각 `C:\Projects\DAOU.Athena-fix-<ID>`의 `codex/market-fix-<ID>` ac8452f, 진단은 `C:\Projects\DAOU.Athena-fix-DIAGNOSTICS`의 main53055ac 기준이다. 원래 main을 수정하지 않는다. 각 결과 독립 리뷰 후 feature별 소유 파일만 commit하고 최신 main을 별도 통합 후보에 직렬 반영·검증한다. 실제 구독 소유권·계좌 권위 source·격리 cold-start 준비가 없으면 해당 acceptance는 미검증으로 남긴다.
+
+**16:13 최신 실행 신원:** 현재 감사 watcher34120(UTC07:12:18.4933780Z)이 사용자 app47980(UTC07:07:53.1609180Z)을 관찰한다. 기록은 `watch-20260907T071218-597Z.json`, 인계 증거는 `runtime-handoff-20260907T161258KST.json`이다. 아래15시대 watcher46644/app36856 값은 역사 기록이며 재사용하지 않는다.16:06 실패·16:08 endpoint 회복을 보존하고16:30 실제 표본 및 종료 후 FIX-LANES를 이어간다. 제품 프로세스는 제어하지 않는다.
+
+## 우선 적용할 작업 위치 — 13시대 분리 이후
+
+- 모든 코드·문서·테스트 작업은 **`C:\Projects\DAOU.Athena-market-audit-20260907`**에서 한다. 브랜치는 감사용 `codex/market-session-audit-20260907`, HEAD `ac8452f`다. 원래 `C:\Projects\DAOU.Athena`는 다른 작업 `백테스트 UI 정렬 오류 수정`이 사용하며 branch/product파일을 checkout/수정/stage하지 않는다.
+- `WORKTREE-ISOLATION.md`를 먼저 읽는다. 현재 검증된 사용자 app36856(15:49:55.773470 생성)은 원래 폴더 소유이고 감사 watcher46644가 새 worktree에서 관찰한다. 첫15:51:51.994 표본은 root validated true/process_count73/HTTP4/4=200이다. 구 watcher46776은 새 watcher 검증 후에만 종료했다. backend는 command-line 기준 parent46068→uvicorn34264 후보이며 TCP listener table 결합은 미검증이다. 감사가 어느 제품 프로세스도 시작·종료하지 않았다.
+- 새 worktree에 문서26+scripts35파일과 증거310파일을 복사했고 문서/scripts61개 전부 SHA가 동일했다. shared dependency junction만 제공했으며 credential은 복사하지 않았다. 명시한 root 경로가 없는 이전 명령을 그대로 재사용하지 않는다.
+- MCP probe는13:46 격리 metadata1회 실행을완료했지만 기능 실행 통과가 아니다. final-5 재시도는14:22 완료했다: business6/metadata2, target4시도/1PASS/4BLOCKED, 실제 실행 합집합263/264다.14:28 active WS는 REG1/REMOVE1/소유socket종료까지 완료했으며159 REAL messages를 받았다. valid/fresh0은 accepted FID20 시간 검증 실패288건 때문이므로 무이벤트·provider 실패로 단정하지 않는다.
+- 현재 coverage는 read 실제 실행 합집합263/264, REST 실제 고유55(GET41+POST14), WS stream1 별도, 원천1396행을 반영한다.263은 PASS 수가 아니다. 단일 WS 행 문구 수정·재생성은 focused24/24로 확인됐고, 최신17파일203/203 집계는 그 수정 전에 실행됐다. 분리 직후14파일148/148은 역사적 snapshot이며 어느 수도 제품 전수 통과 수가 아니다.
+
+## 현재 재개 기준 — 15:53 KST
+
+1. 현재 동결 기준 사용자 app은36856, 감사 watcher는46644다. 첫 표본과15:55:52.043 표본에서 root found/validated true, HTTP4/4를 확인했다. backend는 process command 기준 parent46068→uvicorn34264 후보이며 TCP table 독립 결합과 loaded module hash는 모른다. 매 재개 시 PID·생성시각을 다시 확인하고 제품 프로세스는 제어하지 않는다.
+2. `runtime-handoff-first-final5-context-20260907T142208KST.json`을 읽어 사용자 재시작, watcher 전환, final-5의 null revision 보완을 함께 해석한다. 구 watcher의 실패·복구 표본과 중간 repoRoot mismatch snapshot을 삭제하거나 자발적 crash로 바꾸지 않는다.
+3. final-5 실제 재시도는 `2026-09-07/read-final-inputs-20260907142216KST.json`으로 완료됐다. raw14:04 artifact는 보존한다. target1 PASS/4 BLOCKED와 실행 합집합263/264를 구분하고, code20 3개 및 미체결주문 부재1개의 후속 판정은 `READ-LAST-FIVE.md`를 따른다.
+4. 현재 원래 폴더 제품 변경 `card_surface_contract.py`와 `card_surface_templates.py`의 dependency 검토가 끝나기 전 전체 baseline 동일성 또는 카드 기능 전체 정상 판정을 하지 않는다.
+5.14:28 active WS 원본과14:43 중단 preflight를 보존한다. dependency 독립성 검토 뒤14:46 재실행은 matching fresh nested-FID20 row1개를 관찰해 `PASS_WITH_CLEANUP_UNVERIFIED`다. REG 전 matching row42개가 있어 REG 인과관계는 미검증이고 upstream REMOVE ACK도 false다. 다른22 WS route는 actual0으로 유지한다.
+6. watcher46644가 동결 기준 app36856을 관찰한다. future retarget도 안정된 PID·생성시각·실행경로를 한 번에 확인하고 null이면 `ErrorActionPreference=Stop`으로 시작 전에 중단한다. 후보 PID를 반복 추격하거나 제품 프로세스를 제어하지 않는다.
+7. root 소유 `checkpoint-20260907T152000KST.json`, `checkpoint-20260907T153000KST.json`, `checkpoint-20260907T154000KST.json`, `runtime-handoff-20260907T154519KST.json`, `runtime-handoff-20260907T155321KST.json`을 보존한다.16:00/16:30 실제 관찰과 장후1시간 수집을 계속하고 기존77분55.708초 공백은 미검증으로 유지한다.
+8. watcher44784의14:44:53~14:47:53 process probe failure4개는 root_found/root_validated가 미기록돼 신원 판정이 불가하고 process_count는 null인 측정 공백이다.14:48:53 회복 전 구간을 앱 부재나 연속 건강으로 바꾸지 않는다.
+9.16:30 이후 수정은 승인된 FIX-LANES SHA `70C5A001D58AFEE14DBDE95DB764C3950AB2B70952EDB661FDA189DDE005256D`를 따라 격리 브랜치에서 병렬 시작하고 integration은 직렬화한다. custom compute12는15:13 actual12/12 완료됐으며 fixture semantic 증거로만 사용한다.
+10. WS catalog23종은 소유권 발견이 없어 모두 `BLOCKED_OWNERSHIP_DISCOVERY`, controls0이다. 독립4/4 exact23/block-all-network 검토를 통과했으므로 shared runtime REG/REMOVE를 추가하지 않는다. 기존0B narrow pass를 나머지22종이나 cleanup/lease 안전 통과로 확대하지 않는다.
+11. 최신17파일203/203을 현재 하네스 기준으로 사용하되 이전 concurrency live-PID 및 phase-clock assertion 실패를 삭제하지 않는다. serial16 별도 실행은187/188이므로 전체 통과로 사용하지 않는다.
+
 이 문서는 2026-09-07 장 운영 전수 검사 작업의 실제 재개 지점이다. `PLAN.md`와 최신 `STATUS.md`를 먼저 읽고 현재 branch/revision/시간을 다시 확인한다. 전체 정상 판정은 아직 불가하다.
 
-## 현재 재개 기준 — 13:16 KST
+## 이전 재개 기준 — 13:16 KST
 
 1. 브랜치 `codex/market-session-audit-20260907`, HEAD/main 기준 `ac8452f5b62a338d74826ac27cf65da12d99320b`; 제품 tracked 변경0이다. 과거 PID를 사용하지 말고 현재 소유 앱16660(12:29:36.012074), backend 부모30112(12:27:26.951550)→리스너30248(12:27:27.010355), watcher27844(12:29:36.035973,root16660)의 경로와 생성시각을 재확인한다. 13:07:36 관찰은 HTTP4/4=200이다.
 2. `watch-20260907T032936-158Z.json`이 현재 watcher 기록이다. 구 watcher의 마지막11:11:40.477과 새 첫12:29:36.185 사이77분55.708초는 관찰 공백이다. 원본과 host recovery 증거를 보존한다. 정확한 downtime이나 제품 crash로 단정하지 않는다.
