@@ -8,7 +8,7 @@ const {
   collapsePlan, mountPlan, pairedGroups, nodeIndex, applyPlan, setHidden, isValueSlot,
   hoistLayout, applyResponsiveHooks, RESPONSIVE_REGIONS, HOISTED_PROPERTIES, primaryMountPoint,
   collapsePrimaryMockup, restorePrimaryMockup, collapseEmptyRows, collapseEmptyColumns,
-  markDeclaredScrollBox, isRelaxableRow,
+  markDeclaredScrollBox, isRelaxableRow, squeezedRow,
   createLatestBoardLoad, nextHydrationSlots,
   slotValueEntries, realtimeSlotIndex, updateRealtimeValue, pairedClosure, realtimePlan, applyRealtimeSlots,
   stateLinksFromMarks, stateControlActivationOwner, wireStateControlActivation,
@@ -1801,4 +1801,39 @@ test('부모가 준 폭을 넘는 가로 줄만 접기 후보다', (t) => {
   assert.equal(isRelaxableRow(columnRow, surface, 500), false, '세로 줄은 접지 않는다');
   assert.equal(isRelaxableRow(alreadyWrapped, surface, 500), false);
   assert.equal(isRelaxableRow(table, surface, 500), false, '표는 열 폭이 계약이다');
+});
+
+
+// 잎의 상자는 표면 안에 있는데 그 안의 글자가 새는 자리 — 눌린 칸이다(실측 2YS8-0:
+// 폭 11px 칸 안의 「장중 투자자 상위」가 표면을 3px 넘었다). 그때는 자기 내용이 자기
+// 칸보다 넓은 가로 묶음을 직접 찾고, 표면에 가장 가까운 하나를 고른다.
+test('눌린 칸이 있으면 내용이 넘치는 가로 줄을 표면 가까운 쪽에서 고른다', (t) => {
+  const original = globalThis.getComputedStyle;
+  globalThis.getComputedStyle = (el) => el.__style;
+  t.after(() => { globalThis.getComputedStyle = original; });
+
+  const rowShape = (extra) => ({
+    dataset: {},
+    classList: { contains: () => false },
+    closest: () => null,
+    __style: { display: 'flex', flexDirection: 'row', flexWrap: 'nowrap' },
+    ...extra,
+  });
+  const surface = { clientWidth: 375, querySelectorAll: null };
+  const shallow = rowShape({ clientWidth: 315, scrollWidth: 361, parentElement: surface });
+  const deep = rowShape({ clientWidth: 255, scrollWidth: 331, parentElement: shallow });
+  const fits = rowShape({ clientWidth: 200, scrollWidth: 200, parentElement: surface });
+  const column = rowShape({
+    clientWidth: 100, scrollWidth: 200, parentElement: surface,
+    __style: { display: 'flex', flexDirection: 'column', flexWrap: 'nowrap' },
+  });
+  surface.querySelectorAll = () => [deep, column, fits, shallow];
+
+  assert.equal(squeezedRow(surface), shallow, '표면에 가장 가까운 줄을 고른다');
+
+  surface.querySelectorAll = () => [deep, column, fits];
+  assert.equal(squeezedRow(surface), deep);
+
+  surface.querySelectorAll = () => [column, fits];
+  assert.equal(squeezedRow(surface), null, '세로 줄과 딱 맞는 줄은 후보가 아니다');
 });

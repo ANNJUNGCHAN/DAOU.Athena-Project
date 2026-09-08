@@ -1224,7 +1224,8 @@ function applyResponsiveHooks(surface) {
 // wrap을 주면 넘친 것이 오른쪽 새 열로 간다, markSplitRow와 같은 판단).
 const RELAX_PASSES = 6;
 
-function isRelaxableRow(el, surface, bound) {
+// 접기를 줄 수 있는 **모양**인가 — 기하는 보지 않는다.
+function isRowShape(el, surface) {
   if (!el || el === surface || !el.classList || !el.dataset) return false;
   if (el.dataset.bsWrapRow === 'true') return false;
   if (el.classList.contains('bs-table')) return false;
@@ -1234,6 +1235,11 @@ function isRelaxableRow(el, surface, bound) {
   if (style.display !== 'flex') return false;
   if (style.flexDirection === 'column' || style.flexDirection === 'column-reverse') return false;
   if (style.flexWrap === 'wrap') return false;
+  return true;
+}
+
+function isRelaxableRow(el, surface, bound) {
+  if (!isRowShape(el, surface)) return false;
   // **자기 칸보다 넓은가**가 아니라 **부모가 준 폭을 넘는가**를 본다. 안 줄어드는 줄은
   // 스스로는 딱 맞고(scrollWidth == clientWidth) 부모 밖으로 나가 있다 — 실측 2VDA-0
   // `3HKY-0`은 459/459인데 표면은 375다. 자기 칸만 보면 원인을 못 짚는다.
@@ -1255,6 +1261,20 @@ function isRelaxableRow(el, surface, bound) {
 
 // 표면 밖으로 나간 **잎 요소**들. 텍스트 노드를 Range로 재지 않는다 — 보드 하나에
 // 텍스트 노드가 수백 개라 폭 4단계 전수에서 그 비용이 실행 시간을 지배했다(실측).
+// 가로로 **스크롤해서 닿는가**. 클래스로 판정하지 않는다 — `.bs-r-scroll`은 좁은
+// 단계에서만 `overflow-x: auto`가 되고(board-surface.css 381) 그 밖에서는 세로 스크롤
+// 상자일 뿐이다. 이름만 보고 안쪽을 통째로 빼면 **닿을 수 없는** 가로 잘림까지 놓칠
+// 수 있으니 계산된 값을 본다. 두 판정 모두 실측에서 같은 결과였고(전수 프로브 잘림 0 ·
+// 마운트 게이트 68/33), 계산값 쪽이 규칙을 그대로 말한다.
+function reachesByScroll(el, surface) {
+  for (let up = el.parentElement; up; up = up.parentElement) {
+    const overflow = getComputedStyle(up).overflowX;
+    if (overflow === 'auto' || overflow === 'scroll') return true;
+    if (up === surface) break;
+  }
+  return false;
+}
+
 // 잎의 사각형만 봐도 어느 줄이 넘치는지 짚는 데 충분하다.
 function overflowingLeaves(surface) {
   const bound = surface.getBoundingClientRect().left
@@ -1267,10 +1287,33 @@ function overflowingLeaves(surface) {
     // 스크롤로 닿는 자리는 결함이 아니다(계획 §2). 그 안쪽 글자까지 후보로 잡으면
     // 스크롤 표가 있는 보드에서 수십 개가 걸려 접기·줄바꿈이 판을 흔든다(실측:
     // 마운트 게이트가 카드 1종에서 정착 한도에 걸렸다).
-    if (el.closest('.bs-r-scroll, .bs-r-scroll-table, [data-bs-scroll-declared]')) continue;
+    if (reachesByScroll(el, surface)) continue;
     if (el.getBoundingClientRect().right > bound + 1) leaves.push(el);
   }
   return leaves;
+}
+
+// 잎의 사각형으로는 못 짚는 넘침이 있다. 칸이 눌려 글자가 **자기 상자 밖으로** 새면
+// 잎의 상자는 표면 안에 남는다 — 실측 2YS8-0 `2YWF-0`은 폭 11px인데 그 안의
+// 「장중 투자자 상위」가 표면을 3px 넘었고, 같은 자리가 보드 7장에 있었다.
+// 그때는 **자기 내용이 자기 칸보다 넓은 가로 묶음**을 직접 찾는다(그 줄의 알약 4개가
+// 255px 칸에 331px로 들어 있었다). 표면에 가장 가까운 하나만 고른다 — 깊은 줄을
+// 접으면 그 줄만 아랫줄로 가고 위 줄은 그대로 넘친다.
+function squeezedRow(surface) {
+  let picked = null;
+  let depth = Infinity;
+  for (const el of surface.querySelectorAll('*')) {
+    if (el.scrollWidth <= el.clientWidth + 1) continue;
+    if (el.closest('[hidden]')) continue;
+    if (!isRowShape(el, surface)) continue;
+    let steps = 0;
+    for (let up = el.parentElement; up && up !== surface; up = up.parentElement) steps += 1;
+    if (steps < depth) {
+      picked = el;
+      depth = steps;
+    }
+  }
+  return picked;
 }
 
 // 글자가 자기 상자보다 넓어 표면을 넘는 자리. 값은 접지 않는다 — 원자값이 두 줄이
@@ -1328,6 +1371,8 @@ function relaxOverflowRows(surface) {
         steps += 1;
       }
     }
+    // 잎이 하나도 안 걸렸어도 표면은 여전히 넘친다 — 눌린 칸에서 글자가 샌 자리다.
+    if (!picked) picked = squeezedRow(surface);
     if (!picked) {
       // 접을 줄이 없다 — 남은 것은 **글자 자체가 상자보다 넓은** 자리다(실측
       // 30ZW-0 「전체 814건 · 19건 표시」 6px · 2V71-0 「장중 투자자 상위」 23px).
@@ -1552,7 +1597,9 @@ const __exports = {
   ROLLUP_MARK, RESPONSIVE_REGIONS, HOISTED_PROPERTIES, CARD_SHELL_PROPERTIES, normalizeCardShell,
   isValueSlot, anchorOf, staticTextOf, collapsePlan, mountPlan, pairedGroups,
   nodeIndex, elementChildCount, setHidden, applyPlan, collapseEmptyRows, collapseEmptyColumns,
-  relaxOverflowRows, isRelaxableRow, watchSurfaceWidth, wrapOverflowingLabels,
+  relaxOverflowRows, isRelaxableRow, isRowShape, squeezedRow, reachesByScroll,
+  watchSurfaceWidth,
+  wrapOverflowingLabels,
   markDeclaredScrollBox,
   hoistLayout, hoistRigidBox, applyResponsiveHooks, surfaceRoot,
   primaryMountPoint, collapsePrimaryMockup, restorePrimaryMockup, mountBoard, mountBoardAsync,
