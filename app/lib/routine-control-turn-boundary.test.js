@@ -53,5 +53,12 @@ test('shell.html이 순수 모델을 watch-nodes 뒤에 싣는다 — 로드 순
 test('다시 부를 손잡이가 채널을 함께 탄다 — 「다시 시도」가 막다른 길이 되지 않는다', () => {
   // 캔버스는 turn 옆에 retry를 싣고, 채팅은 그것을 결과 턴에 넘긴다.
   assert.match(canvasSource, /detail: \{ turn, retry \}/);
-  assert.match(chatSource, /renderControlResultTurn\(turn, typeof detail\.retry === 'function'/);
+  assert.match(chatSource, /renderControlResultTurn\([\s\S]{0,80}typeof detail\.retry === 'function'/);
+});
+
+test('비동기 제어 결과는 제안이 속한 대화 id로 마운트된다', () => {
+  assert.match(chatSource, /async function acceptProposal\(turn, conversationId\)/);
+  assert.match(chatSource, /detail: \{ turn, retry: retry \|\| null, conversationId \}/);
+  assert.match(chatSource, /renderControlResultTurn\([\s\S]{0,180}detail\.conversationId/);
+  assert.match(chatSource, /function renderControlResultTurn\(turn, retry, conversationId\)[\s\S]{0,2200}_mountTurn\(line, card, conversationId\)/);
 });
