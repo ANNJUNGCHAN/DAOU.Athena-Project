@@ -2298,8 +2298,12 @@
   async function refreshChatControlStrip() {
     try {
       const st = await window.athena.invoke('athena:model-get');
-      const c = (st && st.claude) || {};
-      $chatCli.textContent = c.model ? c.model.toUpperCase() : 'CLAUDE';
+      // 셸 툴바(chat.js renderComposerModel)와 같은 값 — main.js resolveActiveModelSelection이
+      // 정한 active(공급자·모델·강도)다. 오브가 Claude 값을 따로 읽으면 Grok 계정이 활성일 때
+      // 셸은 Grok-4.5, 오브는 FABLE을 말한다(2026-09-08 실측). 모델이 없으면 공급자 이름.
+      const a = (st && st.active) || { provider: 'claude', model: null, effort: null };
+      const label = String(a.model || a.provider || 'claude').toUpperCase();
+      $chatCli.textContent = a.effort ? `${label} · ${String(a.effort).toUpperCase()}` : label;
     } catch { /* 표시만 못한다 — 대화 기능에는 영향 없다 */ }
     try {
       const res = await window.athena.invoke('athena:routines-list');
@@ -2326,6 +2330,8 @@
     listening = false;
     resolveAmbientFace();
   });
+  // 모델·강도 변경이나 계정 전환(main.js broadcastModelChanged)이 오면 스트립을 다시 읽는다.
+  window.athena.on('athena:model-changed', () => { if (chatModeActive) refreshChatControlStrip(); });
   $esc.addEventListener('click', () => abortChat());
   // 대화 이어짐(board-34 A→B) — 셸을 앞으로 가져온다, 새 방을 열지 않는다.
   $chatGo.addEventListener('click', () => {
