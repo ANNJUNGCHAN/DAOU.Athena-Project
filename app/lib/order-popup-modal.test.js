@@ -5,6 +5,21 @@ const path = require('node:path');
 const vm = require('node:vm');
 
 const chatSource = fs.readFileSync(path.join(__dirname, '..', 'chat.js'), 'utf8');
+const mainSource = fs.readFileSync(path.join(__dirname, '..', 'main.js'), 'utf8');
+
+function functionSource(source, signature) {
+  const start = source.indexOf(signature);
+  assert.ok(start >= 0, `missing ${signature}`);
+  const open = source.indexOf('{', start);
+  assert.ok(open > start, `missing body for ${signature}`);
+  let depth = 0;
+  for (let index = open; index < source.length; index += 1) {
+    if (source[index] === '{') depth += 1;
+    if (source[index] === '}') depth -= 1;
+    if (depth === 0) return source.slice(start, index + 1);
+  }
+  throw new Error(`unclosed ${signature}`);
+}
 const prepareRestReceiptSurface = chatSource.match(
   /function prepareRestReceiptSurface\(\) \{[\s\S]*?\n\}/
 );
@@ -28,8 +43,10 @@ test('주문 모달 중 영수증 복귀는 배경 셸의 inert 잠금을 해제
     boot: { hidden: false },
     settings: { hidden: false },
     order: { hidden: false },
+    orderBody: { replaceChildren() {} },
     shell: { inert: true },
     app: { hidden: false },
+    input: { focus() {} },
   };
   const context = { nodes };
 
@@ -38,13 +55,18 @@ test('주문 모달 중 영수증 복귀는 배경 셸의 inert 잠금을 해제
     const $boot = nodes.boot;
     const $settings = nodes.settings;
     const $order = nodes.order;
+    const $orderBody = nodes.orderBody;
     const $shell = nodes.shell;
     const $app = nodes.app;
+    const $input = nodes.input;
     let settingsOpen = false;
     let orderOpen = true;
+    let orderTicketRevision = 4;
+    let orderTicketOwner = { conversationId: 'conversation-a', revision: 4 };
+    ${closeOrderTicket[0]}
     ${prepareRestReceiptSurface[0]}
     result = prepareRestReceiptSurface();
-    finalState = { settingsOpen, orderOpen };
+    finalState = { settingsOpen, orderOpen, orderTicketRevision, orderTicketOwner };
   `, context);
 
   assert.equal(context.result, true);
@@ -53,7 +75,7 @@ test('주문 모달 중 영수증 복귀는 배경 셸의 inert 잠금을 해제
   assert.equal(nodes.shell.inert, false);
   assert.deepEqual(
     { ...context.finalState },
-    { settingsOpen: false, orderOpen: false }
+    { settingsOpen: false, orderOpen: false, orderTicketRevision: 5, orderTicketOwner: null }
   );
 });
 
@@ -159,4 +181,55 @@ test('같은 대화와 렌더 리비전의 사용자 클릭만 주문 실행 직
     chatSource,
     /if \(!switched \|\| !switched\.restorable\) return false;\s*if \(switched\.isCurrent\) return true;[\s\S]*?closeOrderTicketForConversationChange\(conv\.id\);/
   );
+});
+
+test('A 주문 응답이 지연돼 B로 전환돼도 결과는 실행 당시 A 세션으로 라우팅된다', async () => {
+  let resolveFetch;
+  const fetchResult = new Promise((resolve) => { resolveFetch = resolve; });
+  let activeConversationId = 'conversation-b';
+  let fetchCalls = 0;
+  const published = [];
+  const context = vm.createContext({
+    BACKEND_HTTP_BASE: 'http://backend.test',
+    process: { env: {} },
+    orderTicket: { interpretExecuteStatus: () => 'done' },
+    protectedCards: { buildOrderActionCard: (value) => ({ status: 'success', envelope: value }) },
+  });
+  vm.runInContext(functionSource(mainSource, 'async function executeOrderRequest('), context);
+
+  const rejected = await context.executeOrderRequest({
+    trId: 'kt10000',
+    body: { stk_cd: '005930', ord_qty: '1' },
+    idempotencyKey: 'stale-ticket-a',
+    conversationId: 'conversation-a',
+  }, {
+    fetchImpl: () => { fetchCalls += 1; return fetchResult; },
+    activeConversationId: () => activeConversationId,
+    publishResult: (result, metadata) => published.push({ result, metadata }),
+  });
+  assert.equal(rejected.ok, false);
+  assert.equal(fetchCalls, 0);
+  assert.equal(published.length, 0);
+
+  activeConversationId = 'conversation-a';
+  const pending = context.executeOrderRequest({
+    trId: 'kt10000',
+    body: { stk_cd: '005930', ord_qty: '1' },
+    idempotencyKey: 'ticket-a',
+    conversationId: 'conversation-a',
+  }, {
+    fetchImpl: () => { fetchCalls += 1; return fetchResult; },
+    activeConversationId: () => activeConversationId,
+    publishResult: (result, metadata) => published.push({ result, metadata }),
+  });
+  activeConversationId = 'conversation-b';
+  resolveFetch({ ok: true, status: 200, json: async () => ({ ord_no: 'A-1' }) });
+  const response = await pending;
+
+  assert.equal(response.ok, true);
+  assert.equal(fetchCalls, 1);
+  assert.equal(published.length, 1);
+  assert.equal(published[0].metadata.conversationId, 'conversation-a');
+  assert.equal(published[0].result.envelope.response.data.ord_no, 'A-1');
+  assert.doesNotMatch(chatSource, /addLiveCard\(protectedCardsLib\.buildOrderActionCard/);
 });

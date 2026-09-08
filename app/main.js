@@ -75,6 +75,8 @@ const { createClaudeSelectorWorkerPool } = require('./lib/main/claude-selector-w
 const chartReload = require('./lib/main/chart-reload');
 const chartReloadAuthority = chartReload.createChartReloadAuthority();
 const ticketCapacity = require('./lib/main/ticket-capacity');
+const orderTicket = require('./lib/order-ticket');
+const protectedCards = require('./lib/protected-cards');
 
 function isQueryOnlyRetryDataset(dataset) {
   try {
@@ -1289,12 +1291,22 @@ async function routineHttp(method, path, jsonBody, { signal } = {}) {
   return { ok: true, data: body };
 }
 
-ipcMain.handle('athena:order-execute', async (_e, { trId, body, idempotencyKey }) => {
+async function executeOrderRequest(payload, dependencies) {
+  const { trId, body, idempotencyKey, conversationId } = payload || {};
+  const deps = dependencies || {};
+  const fetchImpl = deps.fetchImpl || fetch;
+  const activeConversationId = deps.activeConversationId || historyConversationId;
+  const publishResult = deps.publishResult || sendLiveCanvasResult;
   if (!/^kt1000[01]$/.test(String(trId))) {
     return { ok: false, status: 0, error: '허용되지 않는 주문 TR' };
   }
+  const executionConversationId = typeof conversationId === 'string' ? conversationId : '';
+  if (!executionConversationId || executionConversationId !== activeConversationId()) {
+    return { ok: false, status: 0, error: '대화가 바뀌어 주문을 실행하지 않았습니다.' };
+  }
+  let result;
   try {
-    const res = await fetch(`${BACKEND_HTTP_BASE}/api/v1/order/${trId}`, {
+    const res = await fetchImpl(`${BACKEND_HTTP_BASE}/api/v1/order/${trId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -1305,13 +1317,22 @@ ipcMain.handle('athena:order-execute', async (_e, { trId, body, idempotencyKey }
       body: JSON.stringify(body || {}),
     });
     const data = await res.json().catch(() => ({}));
-    return res.ok
+    result = res.ok
       ? { ok: true, status: res.status, data }
       : { ok: false, status: res.status, error: data.detail || `HTTP ${res.status}` };
   } catch (e) {
-    return { ok: false, status: 0, error: String((e && e.message) || e) };
+    result = { ok: false, status: 0, error: String((e && e.message) || e) };
   }
-});
+  publishResult(protectedCards.buildOrderActionCard({
+    trId,
+    body,
+    outcome: orderTicket.interpretExecuteStatus(result.status || 0),
+    response: result,
+  }), { conversationId: executionConversationId });
+  return result;
+}
+
+ipcMain.handle('athena:order-execute', (_e, payload) => executeOrderRequest(payload));
 
 ipcMain.handle('athena:ticket-capacity', async (_e, { symbol } = {}) => {
   try {
