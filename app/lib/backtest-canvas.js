@@ -97,12 +97,6 @@ const MODE_TABS = [
 ];
 const MODE_TABS_LIST = MODE_TABS.slice(0, 3);
 
-// 기법을 고른 뒤의 첫 표면은 지도다(사용자 확정 2026-09-03). 고르기 전 첫 화면은
-// 보드 19 기법 목록 — 프리셋 0번을 자동으로 열지 않는다. 탭 순서는 지도 → 폼 → 코드.
-const DESIGN_TABS = [
-  ['flow', '지도'], ['form', '폼'], ['code', '코드 · 최후의 보루'], ['nodes', '노드·흐름'],
-];
-
 // 새 기법을 만드는 중에는 지도도 폼도 없다 — 신호를 만드는 것은 이 코드고, 그 코드를
 // 읽어 만든 노드가 다음 표면이다(보드 20). 코드는 여기서 최후의 보루가 아니라 첫
 // 표면이라 이름도 그냥 '코드'다.
@@ -146,7 +140,6 @@ const NODE_BY_FIELD = {
 // 지도가 그리는 순서 — 대상 한 줄 다음에 ①~④다(mapmodel.NUMERALS와 같은 차례).
 const MAP_NODE_ORDER = ['target', 'params', 'indicators', 'conditions', 'guard'];
 
-// 실행경로 2분기(폼/코드). 코드가 있어야만 헤더에 뜬다.
 // ── 출처에서 지도로(보드 17) ─────────────────────────────────────────────────
 // 문구는 백엔드가 주는 것(단계 이름·부제·칸 문장)과 화면이 가진 것(머리·띠 라벨)으로
 // 갈린다. 여기 있는 것은 뒤쪽뿐이다 — 단계가 무엇을 했는지는 잡이 말한다.
@@ -164,8 +157,6 @@ const SOURCE_CODE_PENDING = '아직 없음 — 지도가 끝나면 자동으로 
 const SOURCE_DATA_ONLY_NOTE = '출처의 문장은 자료일 뿐입니다 — 앱은 그 안의 지시를 따르지 않습니다';
 // 단계 줄의 표식 — Paper의 ✓/●/○ 그대로다. 상태를 색으로만 말하면 못 읽는 사람이 있다.
 const SOURCE_STEP_MARKS = { done: '✓', running: '●', todo: '○' };
-
-const RUN_PATHS = [['form', '폼'], ['code', '코드']];
 
 // 시각 편집기의 서버 왕복 간격 — 매 키입력마다 검증을 보내면 서버가 타자를 따라 뛴다.
 const VISUAL_DEBOUNCE_MS = 400;
@@ -1069,7 +1060,7 @@ function createBacktestCanvas(options) {
   // 명령창을 펼쳐 끝으로 굴렸는가([출력 보기]가 켠다).
   let techniqueTerminalOpen = false;
   let state = {
-    view: 'empty', tab: 'design', designTab: 'flow', mapVersion: 0, technique: TECHNIQUE_EMPTY,
+    view: 'empty', tab: 'design', designTab: 'code', mapVersion: 0, technique: TECHNIQUE_EMPTY,
   };
   // ── 세션 복원(41번 보드) ──────────────────────────────────────────────────
   // 봉인해 둔 봉투와 그중 무엇이 실제로 되살아났는가. [다시 시도]가 이 둘을 다시 맞댄다.
@@ -1306,15 +1297,17 @@ function createBacktestCanvas(options) {
     clearRestoreMarks();
     // 처음 있던 기법도 그냥 기법이다(사용자 확정) — 폴더 배선이 있으면 내 기법과 같은
     // 기법 하나의 화면(보드 20)으로 간다: yaml에서 코드를 만들어 그 기법의 폴더에 두고
-    // 그 파일을 편집기에 연다. 배선이 없는 하네스에서만 지금까지의 지도·폼 표면이 선다.
+    // 그 파일을 편집기에 연다. 배선이 없는 하네스에서는 폼 표면만 선다.
     if (presetWorkspaceWired()) { void openPresetWorkspace(preset); return; }
-    // 새 전략은 새 지도다 — 앞 전략에서 세던 버전을 이어 세면 "지도 v7"이 무엇을 센
-    // 숫자인지 아무도 모르게 된다.
+    // 새 전략은 새 판이다 — 앞 전략에서 세던 버전을 이어 세면 그 숫자가 무엇을 센
+    // 것인지 아무도 모르게 된다.
     setState({
       restore: null,
-      formErrors: [], codeErrors: [], codeFromMap: false, designTab: 'flow', mapVersion: 1,
+      formErrors: [], codeErrors: [], codeFromMap: false, designTab: 'form', mapVersion: 1,
       codeSpan: null, visualCodeAhead: false, diagnosis: null,
     });
+    // 칸 판정(진단 제목·영수증의 ①~④)은 이 페이로드에서 읽는다 — 그리는 지도는
+    // 없어졌지만 어느 칸이 멈췄고 무엇이 바뀌었는지는 여전히 백엔드가 안다.
     void loadMap();
   }
 
@@ -1602,7 +1595,7 @@ function createBacktestCanvas(options) {
     // 굴려 둔 목록 자리를 돌려준다 — 0은 되돌릴 것이 없다는 뜻이다.
     pendingScrollTop = homeScrollTop || null;
     setState({
-      view: 'design', tab: 'design', designTab: 'flow', mapVersion: 0, message: null,
+      view: 'design', tab: 'design', designTab: 'code', mapVersion: 0, message: null,
       restore: null, formErrors: [], codeErrors: [], codeFromMap: false, codeSpan: null,
       visualCodeAhead: false, diagnosis: null, flowRange: null, fileDraft: null, map: null,
     });
@@ -2378,8 +2371,6 @@ function createBacktestCanvas(options) {
     if (!action || typeof action !== 'object') return null;
     if (action.kind === 'spec_draft') return applySpecAction(action);
     if (action.kind === 'code_draft') return applyCodeAction(action);
-    // 출처 주소 하나(보드 17) — 화면은 다섯 단계 진행으로 갈아서고, 지도는 그 잡이 만든다.
-    if (action.kind === 'source_url') return applySourceAction(action);
     // 파일만 비동기다 — diff의 왼쪽(지금 파일)을 디스크에서 읽어야 하기 때문이다.
     if (action.kind === 'file_draft') return applyFileAction(action);
     if (action.kind === 'navigate') return navigateAction(action);
@@ -2435,13 +2426,11 @@ function createBacktestCanvas(options) {
     const switched = (!techniqueDraft && typeof patch.preset === 'string' && presetWorkspaceWired())
       ? presets.find((entry) => entry.id === patch.preset) || null
       : null;
-    // 반영된 결과를 보는 자리는 지도다 — 대화가 고치는 것이 폼 칸이 아니라 흐름이라는
-    // 규칙이 여기서 화면으로 지켜진다.
+    // 반영된 결과를 보는 자리는 그 기법의 코드다 — 한 페이지가 한 알고리즘이라
+    // 대화가 고친 설정도 그 화면 안에서 읽힌다(2026-09-07 사용자 확정).
     setState({
       draft: null, formErrors: pending, view: 'design', tab: 'design',
-      // 새 기법 초안에는 지도 탭이 없다(TECHNIQUE_DRAFT_TABS) — 거기로 찍으면 화면은
-      // 코드인데 컨텍스트만 '지도'라고 말한다. 기법 화면도 코드가 첫 표면이다.
-      designTab: (techniqueDraft || switched) ? 'code' : 'flow',
+      designTab: 'code',
       mapVersion: version.to,
     });
     const receipt = remember(makeReceipt('spec_draft', {
@@ -2910,7 +2899,9 @@ function createBacktestCanvas(options) {
     if (!MODE_TABS.some(([key]) => key === tab)) return null;
     if (isBusyView()) return busyReceipt('navigate', envelopeNote(payload));
     const wanted = payload.designTab;
-    const designTab = DESIGN_TABS.some(([key]) => key === wanted) ? wanted : null;
+    // 하위 탭은 기법 하나의 화면 것뿐이다(workspaceTabs) — 없는 탭으로 옮겼다고
+    // 답하면 다음 턴 컨텍스트만 화면과 갈라진다.
+    const designTab = workspaceTabs().some(([key]) => key === wanted) ? wanted : null;
     // 고르기 전 목록 화면에는 하위 탭 막대 자체가 없다(보드 19) — 옮겼다고 답하면
     // 다음 턴 컨텍스트만 화면과 갈라진다. 모드 탭(이력·결과)은 그대로 선다.
     if (designTab && listFirst()) {
@@ -2923,7 +2914,6 @@ function createBacktestCanvas(options) {
     else if (tab === 'deploy') void loadDeployments();
     else {
       setState({ view: tab === 'result' && state.result ? 'result' : 'design', tab });
-      if (designTab === 'flow') void loadMap();
     }
     return remember(makeReceipt('navigate', {
       applied: true, note: envelopeNote(payload),
@@ -3271,14 +3261,6 @@ function createBacktestCanvas(options) {
         if (spec) setState({ view: 'design', tab: 'design', designTab: 'form', message: null });
         else void loadPresets();
       }));
-      // 오류에서 지도로 가는 길(보드 12) — 무엇이 멈췄는지는 줄 번호가 아니라 칸 위에서
-      // 읽힌다. 전략이 있어야 그릴 지도가 있다.
-      if (spec || codeSource.trim()) {
-        panel.appendChild(button('backtest-error-map', '지도에서 보기', () => {
-          setState({ view: 'design', tab: 'design', designTab: 'flow', message: null });
-          void loadMap();
-        }));
-      }
       container.appendChild(panel);
       return;
     }
@@ -3403,7 +3385,8 @@ function createBacktestCanvas(options) {
     return head;
   }
 
-  // 보드 01/03 헤더 — 전략 이름·버전, 모드 탭, 실행 버튼.
+  // 보드 01/03 헤더 — 전략 이름·버전, 모드 탭, 실행 버튼. 폼/코드 갈래와 그래프 검증
+  // 상태는 없다 — 한 페이지가 한 알고리즘만 다룬다(2026-09-07 사용자 확정).
   function renderHeader() {
     if (workspaceActive() && !isSourcing()) return renderWorkspaceHeader();
     const head = el('div', 'backtest-head');
@@ -3421,11 +3404,6 @@ function createBacktestCanvas(options) {
     if (spec) {
       title.appendChild(el('span', 'backtest-head-strategy', spec.name));
       if (activeVersionId) title.appendChild(el('span', 'backtest-head-version', '코드 버전 활성'));
-    }
-    // 이력에서 다시 연 버전이면 무엇을 보고 있는지가 제목 옆에 선다 — 지금 편집 중인
-    // 초안과 지난 버전을 화면 어디에서도 구분할 수 없으면 사람은 옛 그래프를 고치려 든다.
-    if (openedVersion) {
-      title.appendChild(el('span', 'backtest-head-opened', openedVersionText()));
     }
     // 홈 머리의 한 줄(보드 19) — 몇 개가 있는지만 말한다. 「마지막 수정」은 목록 응답에
     // 그런 시각이 없어(프리셋은 id·name·category·yaml, 내 기법은 id·name·project_id·
@@ -3457,36 +3435,6 @@ function createBacktestCanvas(options) {
       tabs.appendChild(tab);
     });
     head.appendChild(tabs);
-
-    // 코드가 있을 때만 갈래가 생긴다 — 빈 편집기에 "코드로 실행"을 걸어둘 이유가 없다.
-    if (codeSource.trim()) {
-      const paths = el('div', 'backtest-runpath');
-      RUN_PATHS.forEach(([value, label]) => {
-        const isOn = runPath === value;
-        const item = button(`backtest-runpath-item${isOn ? ' is-on' : ''}`, label, () => {
-          runPath = value;
-          render();
-        });
-        item.setAttribute('aria-pressed', String(isOn));
-        paths.appendChild(item);
-      });
-      head.appendChild(paths);
-    }
-
-    // 시각 설계가 서면 실행 버튼 옆에 지금 검증 상태가 선다(US-007). 유효하지 않은
-    // 그래프로는 실행이 시작되지 않고, 버튼이 다음 행동을 대신 말한다.
-    if (visualActive()) {
-      head.appendChild(renderVisualStatus());
-      head.appendChild(button('backtest-visual-validate', '검증', () => { void runVisualValidate(); }));
-      const blocked = visualState === 'invalid';
-      const run = button(
-        'backtest-run-button', blocked ? VISUAL_RUN_BLOCKED : '실행',
-        () => { if (!blocked) void handleRun(false); },
-      );
-      if (blocked) { run.disabled = true; run.setAttribute('aria-disabled', 'true'); }
-      head.appendChild(run);
-      return head;
-    }
     // 보드 19 목록 화면에는 실행이 없다 — 고른 뒤에만 선다.
     if (spec || techniqueDraft) {
       head.appendChild(button('backtest-run-button', '실행', () => { void handleRun(false); }));
@@ -3502,13 +3450,12 @@ function createBacktestCanvas(options) {
       wrap.appendChild(renderTechniqueList());
       return wrap;
     }
-    const workspace = workspaceActive();
     const subtabs = el('div', 'backtest-subtabs');
-    // 초안에서는 하위 탭이 둘뿐이다 — 지도도 폼도 아직 없다(보드 20). 목록에서 고른 내
+    // 초안에서는 하위 탭이 둘뿐이다 — 폼도 아직 없다(보드 20). 목록에서 고른 내
     // 기법은 폼과 이력·최적화·실매매까지 여기 선다(workspaceTabs). 결과는 어느 쪽이든
     // 돌려본 뒤에만 하위 탭으로 선다(단계 카드의 [결과 보기]가 여는 자리 — 모드 탭이
-    // 없으니 여기가 그 문이다). 옛 표면(지도·폼)은 그대로 DESIGN_TABS다.
-    const tabs = workspace ? workspaceTabs() : DESIGN_TABS;
+    // 없으니 여기가 그 문이다).
+    const tabs = workspaceTabs();
     const designTab = workspaceTabKey(tabs);
     tabs.forEach(([key, label]) => {
       const isOn = designTab === key;
@@ -3518,7 +3465,6 @@ function createBacktestCanvas(options) {
         if (key === 'history') { void loadHistory(); return; }
         if (key === 'optimize') { setState({ view: 'design', tab: 'optimize' }); return; }
         setState({ view: 'design', tab: 'design', designTab: key });
-        if (key === 'flow') void loadMap();
         // 기존 기법의 노드는 여기서 읽는다(보드 21) — 초안의 노드는 검사가 연다.
         if (key === 'nodes' && !techniqueDraft) void loadTechniqueNodesForTechnique();
       });
@@ -3549,8 +3495,6 @@ function createBacktestCanvas(options) {
       if (techniqueDraft) wrap.appendChild(renderTechniqueTerminal());
       return closeDraft();
     }
-    if (designTab === 'flow') { wrap.appendChild(renderFlowTab()); return wrap; }
-
     // 폼 — 목록은 여기 서지 않는다. 목록은 홈이고, 기법 하나의 화면 안에서 다른 기법을
     // 고르게 하면 한 페이지가 여러 알고리즘을 세팅하는 화면이 된다(2026-09-07 사용자 지적).
     if (!spec) return wrap;
@@ -6426,7 +6370,7 @@ function createBacktestCanvas(options) {
     // 결과·체결도 그 세션의 것이다 — 봉투의 run_id로 다시 읽기 전까지는 비어 있어야 한다.
     const patch = { view: 'design', result: null, runId: null, trades: [] };
     if (MODE_TABS.some(([key]) => key === saved.tab)) patch.tab = saved.tab;
-    if (DESIGN_TABS.some(([key]) => key === saved.designTab)) patch.designTab = saved.designTab;
+    if (workspaceTabs().some(([key]) => key === saved.designTab)) patch.designTab = saved.designTab;
     patch.restore = SessionRestore.restoreReport(saved, applied);
     setState(patch);
 
@@ -7398,7 +7342,6 @@ const __exports = {
   METRIC_TILES,
   MODE_TABS,
   MODE_TABS_LIST,
-  DESIGN_TABS,
   DEPLOY_MODES,
   SIGNAL_STAGES,
   SIGNAL_STAGE_LABELS,
