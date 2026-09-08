@@ -1674,12 +1674,10 @@ async function runQueryLive(text) {
   if (onScreen()) scrollAfterRender();
   if (onScreen()) $input.focus();
 
-  // 방금 턴에서 모델이 athena_routine(draft)로 제안했을 수 있다 — 승인 카드는
-  // 스트림 파싱이 아니라 백엔드 목록 재조회로 결정론적으로 띄운다(P3).
-  refreshRoutineDrafts({ autoCheck: true });
 }
 
 async function runQueryFixture(text) {
+  const cid = displayedConversationId;
   const myToken = ++abortToken;
   const types = pickCardTypes(text);
 
@@ -1778,7 +1776,7 @@ async function runQueryFixture(text) {
   // 직후 draft를 다시 조회해 승인 카드를 띄운다. canvasSource가 fixture인 건
   // 캔버스 카드 출처일 뿐 라우틴 서브시스템과는 무관하다 — 이 호출이 없으면
   // fixture 모드(verify.js)에서 8단계 흐름을 검증할 방법이 없다.
-  refreshRoutineDrafts({ autoCheck: true });
+  refreshRoutineDrafts({ autoCheck: true, conversationId: cid });
 }
 
 // 한글 받침 유무에 따른 을/를 조사 선택 (예: "스트림"→을, "테이블"→을, "리더"→를)
@@ -3175,13 +3173,15 @@ function _btn(label, className) {
   return b;
 }
 
-function _mountTurn(line, el) {
+function _mountTurn(line, el, conversationId = displayedConversationId) {
   line.appendChild(el);
-  $history.appendChild(line);
+  paneRootFor(conversationId).appendChild(line);
   // 등장은 굴절 변조 — chat.css의 .turn-agent 전이. reduced-motion이면 즉시.
   requestAnimationFrame(() => el.classList.add('is-in'));
-  $history.scrollTop = $history.scrollHeight;
-  scrollAfterRender();
+  if (isDisplayedConversation(conversationId)) {
+    $history.scrollTop = $history.scrollHeight;
+    scrollAfterRender();
+  }
 }
 
 function renderAgentTurn(event) {
@@ -3511,7 +3511,7 @@ window.athena.on('athena:orb-turn-committed', ({ query, result } = {}) => {
 // 언제부터 이 카드를 보여주고 있었나"를 잰다. dedup 겸용(Set 대신 Map).
 const firstSeenAtById = new Map();
 
-async function refreshRoutineDrafts({ autoCheck = false } = {}) {
+async function refreshRoutineDrafts({ autoCheck = false, conversationId = displayedConversationId } = {}) {
   let routines;
   try {
     const res = await window.athena.invoke('athena:routines-list');
@@ -3519,10 +3519,16 @@ async function refreshRoutineDrafts({ autoCheck = false } = {}) {
       ? res.data.routines : [];
   } catch { return; }
   for (const r of routines) {
-    if (r.status !== 'draft' || firstSeenAtById.has(r.id)) continue;
-    firstSeenAtById.set(r.id, new Date().toISOString());
-    renderApprovalCard(r, { autoCheck });
+    revealRoutineDraft(r, { autoCheck, conversationId });
   }
+}
+
+function revealRoutineDraft(r, { autoCheck = false, conversationId = displayedConversationId } = {}) {
+  if (!r || r.status !== 'draft' || typeof r.id !== 'string' || !r.id.trim()) return false;
+  if (firstSeenAtById.has(r.id)) return false;
+  firstSeenAtById.set(r.id, new Date().toISOString());
+  renderApprovalCard(r, { autoCheck, conversationId });
+  return true;
 }
 
 // ---------- 코드 알람 검사 카드(Step 6, Paper 보드 10/446V-1) ----------
@@ -3723,7 +3729,7 @@ function appendWatchProgress(card, progress) {
 
 // 검사가 도는 동안의 카드. 결과가 오면 이 턴을 걷고 검사 카드가 그 자리에 선다 —
 // 같은 사실을 두 카드가 반복하지 않는다.
-function renderWatchProgressTurn(r) {
+function renderWatchProgressTurn(r, conversationId) {
   const line = document.createElement('div');
   line.className = 'turn';
   const card = document.createElement('div');
@@ -3733,17 +3739,17 @@ function renderWatchProgressTurn(r) {
     symbol: r.symbol,
     lookback_days: (r.watch && r.watch.lookback_days) || null,
   }));
-  _mountTurn(line, card);
+  _mountTurn(line, card, conversationId);
   return line;
 }
 
 // 새 코드 알람 초안은 사람이 칩을 누르기 전에 기존 격리 검사 경로를 한 번 돈다.
 // 초안의 검사 칩은 실패·통로 오류 뒤 재시도 경로로 그대로 남긴다. 검사 자체는
 // 승인이나 활성화를 부르지 않고, 통과 카드의 승인 칩만 사람이 누를 수 있다.
-async function runAndRenderWatchDraftCheck(r, status, trigger) {
+async function runAndRenderWatchDraftCheck(r, status, trigger, conversationId) {
   if (trigger) trigger.disabled = true;
   status.textContent = '검사 중 — 지난 30일 다시 돌려 봄';
-  const progressLine = renderWatchProgressTurn(r);
+  const progressLine = renderWatchProgressTurn(r, conversationId);
   let result;
   try {
     result = await runWatchCheck(r);
@@ -3756,14 +3762,14 @@ async function runAndRenderWatchDraftCheck(r, status, trigger) {
     if (trigger) trigger.disabled = false;
     status.textContent = '';
   }
-  renderWatchCheckCard(r, result);
+  renderWatchCheckCard(r, result, conversationId);
   return result;
 }
 
 // 「폴더 다시 지정」 — 프로젝트 폴더가 사라진 코드 감시를 살린다. 폴더는 main의 대화상자로
 // 사람이 고르고, 백엔드가 같은 project_id의 경로만 바꾼다(새 id 없음). 성공하면 검사를 바로
 // 다시 돌려 새 카드로 답한다 — 사람이 「검사」를 한 번 더 누르게 하지 않는다. 취소는 조용히 끝난다.
-async function relinkWatchProject(r, status, buttons) {
+async function relinkWatchProject(r, status, buttons, conversationId) {
   const watch = await watchBlockOf(r);
   if (!watch || !watch.project_id) {
     status.textContent = '감시 프로젝트를 알 수 없음 — 대화로 다시 만들기';
@@ -3787,15 +3793,19 @@ async function relinkWatchProject(r, status, buttons) {
     }
   } catch { /* 새 검사 카드가 지금의 사실을 말한다 */ }
   status.textContent = '폴더 다시 지정됨 — 검사 다시 돌림';
-  const progressLine = renderWatchProgressTurn(r);
+  const progressLine = renderWatchProgressTurn(r, conversationId);
   const check = await runWatchCheck(r);
   progressLine.remove();
   // 상태줄은 지우지 않는다 — 보드 10-b ③처럼 「폴더 다시 지정됨 — 검사 다시 돌림」이 남아
   // 무엇이 이 새 카드를 불렀는지 말한다.
-  renderWatchCheckCard(r, check || { ok: false, reason: '감시 코드 자리를 못 찾음 — 대화로 다시 만들기' });
+  renderWatchCheckCard(
+    r,
+    check || { ok: false, reason: '감시 코드 자리를 못 찾음 — 대화로 다시 만들기' },
+    conversationId,
+  );
 }
 
-function renderWatchCheckCard(r, check) {
+function renderWatchCheckCard(r, check, conversationId) {
   const model = watchCheckCardLib.checkCardModel(check, r);
   const line = document.createElement('div');
   line.className = 'turn';
@@ -3902,7 +3912,7 @@ function renderWatchCheckCard(r, check) {
         }
       });
     } else if (chip.action === 'relink') {
-      btn.addEventListener('click', () => { void relinkWatchProject(r, status, buttons); });
+      btn.addEventListener('click', () => { void relinkWatchProject(r, status, buttons, conversationId); });
     } else {
       btn.addEventListener('click', () => {
         const repairContext = model.failed
@@ -4047,7 +4057,7 @@ function renderWatchCheckCard(r, check) {
     card.appendChild(receipt);
   }
 
-  _mountTurn(line, card);
+  _mountTurn(line, card, conversationId);
 }
 
 function approvalModeLine(r) {
@@ -4102,7 +4112,7 @@ async function beginWatchRepair(context) {
   }
 }
 
-function renderApprovalCard(r, { autoCheck = false } = {}) {
+function renderApprovalCard(r, { autoCheck = false, conversationId = displayedConversationId } = {}) {
   const line = document.createElement('div');
   line.className = 'turn';
   const card = document.createElement('div');
@@ -4163,7 +4173,7 @@ function renderApprovalCard(r, { autoCheck = false } = {}) {
   if (isCodeWatch) {
     preview.title = '지난 30일 완성 봉으로 몇 번 울렸을지 세어 봄';
     preview.addEventListener('click', async () => {
-      await runAndRenderWatchDraftCheck(r, status, preview);
+      await runAndRenderWatchDraftCheck(r, status, preview, conversationId);
     });
   } else {
     preview.disabled = true;
@@ -4202,7 +4212,9 @@ function renderApprovalCard(r, { autoCheck = false } = {}) {
   const relink = isCodeWatch && watchCheckCardLib.isProjectFolderMissing(r.activation_blocker)
     ? _btn(watchCheckCardLib.CHIP_RELINK, 'routine-btn routine-btn-relink') : null;
   if (relink) {
-    relink.addEventListener('click', () => { void relinkWatchProject(r, status, [preview, activate, relink, fix]); });
+    relink.addEventListener('click', () => {
+      void relinkWatchProject(r, status, [preview, activate, relink, fix], conversationId);
+    });
   }
 
   row.appendChild(preview);
@@ -4212,11 +4224,20 @@ function renderApprovalCard(r, { autoCheck = false } = {}) {
   row.appendChild(status);
   card.appendChild(row);
 
-  _mountTurn(line, card);
-  if (isCodeWatch && autoCheck) void runAndRenderWatchDraftCheck(r, status, preview);
+  _mountTurn(line, card, conversationId);
+  if (isCodeWatch && autoCheck) {
+    void runAndRenderWatchDraftCheck(r, status, preview, conversationId);
+  }
 }
 
 refreshRoutineDrafts();
+
+window.athena.on('athena:routine-draft-created', (routine, meta) => {
+  revealRoutineDraft(routine, {
+    autoCheck: true,
+    conversationId: (meta && meta.conversationId) || displayedConversationId,
+  });
+});
 
 // ---------- 말걸기 가드 확인 카드 (F-stage9, Paper 보드 42/BIM-0) ----------
 // athena_nudge_guard의 propose 결과는 라우틴 draft와 달리 아무것도 디스크에
@@ -4327,10 +4348,14 @@ window.addEventListener('athena:routine-control-result', (event) => {
   const detail = (event && event.detail) || {};
   const turn = detail.turn || null;
   if (!turn || !turn.lead) return;
-  renderControlResultTurn(turn, typeof detail.retry === 'function' ? detail.retry : null);
+  renderControlResultTurn(
+    turn,
+    typeof detail.retry === 'function' ? detail.retry : null,
+    detail.conversationId,
+  );
 });
 
-function renderControlResultTurn(turn, retry) {
+function renderControlResultTurn(turn, retry, conversationId) {
   const line = document.createElement('div');
   line.className = 'turn';
   const card = document.createElement('div');
@@ -4384,7 +4409,7 @@ function renderControlResultTurn(turn, retry) {
     card.appendChild(row);
   }
 
-  _mountTurn(line, card);
+  _mountTurn(line, card, conversationId);
 }
 
 // ---------- 제어 제안 턴 (Paper 보드 07 · 432Z-1, 2026-09-06) ----------
@@ -4412,10 +4437,10 @@ function adoptSeedText(subject) {
 }
 
 // 결과 턴은 캔버스 클릭과 같은 채널로 보낸다 — 마운트 지점은 그 구독 하나뿐이다.
-function emitControlResult(model, retry) {
+function emitControlResult(model, retry, conversationId) {
   const turn = controlTurnLib.buildControlResultTurn(model);
   window.dispatchEvent(new CustomEvent('athena:routine-control-result', {
-    detail: { turn, retry: retry || null },
+    detail: { turn, retry: retry || null, conversationId },
   }));
 }
 
@@ -4428,17 +4453,24 @@ function moveAgentView(view) {
   if (view.filter && typeof canvas.setActiveTab === 'function') canvas.setActiveTab(view.filter);
 }
 
-async function acceptProposal(turn) {
+async function acceptProposal(turn, conversationId) {
   if (turn.control === 'update') {
     const res = await window.athena.invoke('athena:routine-update', { id: turn.routineId, body: turn.proposed });
     // 쿨다운은 리드가 말한다(436B-1) — 사실행은 종목과 설명만 든다(436C-1).
     // 한 카드에 「600초 반영」과 옛 「5분」이 같이 서면 안 된다.
     const fact = controlTurnLib.controlFactLine({ ...turn.current, cooldown_s: null });
     if (res && res.ok) {
-      emitControlResult({ kind: 'success', badge: turn.badge, lead: proposalTurnLib.updateAppliedLead(turn.proposed), fact });
+      emitControlResult(
+        { kind: 'success', badge: turn.badge, lead: proposalTurnLib.updateAppliedLead(turn.proposed), fact },
+        null,
+        conversationId,
+      );
     } else {
-      emitControlResult({ kind: 'fail', badge: turn.badge, reason: (res && res.error) || '', fact },
-        () => acceptProposal(turn));
+      emitControlResult(
+        { kind: 'fail', badge: turn.badge, reason: (res && res.error) || '', fact },
+        () => acceptProposal(turn, conversationId),
+        conversationId,
+      );
     }
     return;
   }
@@ -4448,7 +4480,11 @@ async function acceptProposal(turn) {
     if (window.AthenaNotify && typeof window.AthenaNotify.markAllRead === 'function') {
       window.AthenaNotify.markAllRead();
     }
-    emitControlResult({ kind: 'success', badge: turn.badge, lead: proposalTurnLib.ackAppliedLead(unread) });
+    emitControlResult(
+      { kind: 'success', badge: turn.badge, lead: proposalTurnLib.ackAppliedLead(unread) },
+      null,
+      conversationId,
+    );
     return;
   }
   if (turn.control === 'adopt') {
@@ -4465,10 +4501,13 @@ async function acceptProposal(turn) {
       emitControlResult({
         kind: 'success', badge: turn.badge,
         lead: proposalTurnLib.fireAppliedLead(res.data && res.data.fired_at),
-      });
+      }, null, conversationId);
     } else {
-      emitControlResult({ kind: 'fail', badge: turn.badge, reason: (res && res.error) || '' },
-        () => acceptProposal(turn));
+      emitControlResult(
+        { kind: 'fail', badge: turn.badge, reason: (res && res.error) || '' },
+        () => acceptProposal(turn, conversationId),
+        conversationId,
+      );
     }
   }
 }
@@ -4481,7 +4520,7 @@ function declineProposal(turn) {
   }
 }
 
-function renderControlProposalTurn(turn) {
+function renderControlProposalTurn(turn, conversationId) {
   const line = document.createElement('div');
   line.className = 'turn';
   const card = document.createElement('div');
@@ -4545,22 +4584,22 @@ function renderControlProposalTurn(turn) {
           declineProposal(turn);
           return;
         }
-        Promise.resolve(acceptProposal(turn)).catch(() => {});
+        Promise.resolve(acceptProposal(turn, conversationId)).catch(() => {});
       });
       row.appendChild(button);
     });
     card.appendChild(row);
   }
 
-  _mountTurn(line, card);
+  _mountTurn(line, card, conversationId);
   // 뷰 이동은 그리는 즉시 일어난다 — 이 턴은 이미 일어난 일의 기록이다.
   if (turn.control === 'view') moveAgentView(turn.view);
 }
 
-window.athena.on('athena:routine-proposed', (envelope) => {
+window.athena.on('athena:routine-proposed', (envelope, meta) => {
   const turn = proposalTurnLib.buildProposalTurn(envelope, { unread: unreadAlertCount() });
   if (!turn) return;
-  renderControlProposalTurn(turn);
+  renderControlProposalTurn(turn, (meta && meta.conversationId) || displayedConversationId);
 });
 
 window.athena.on('athena:watch-create', (envelope) => {
