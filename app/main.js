@@ -28,6 +28,7 @@ const { CATALOG: PLUGIN_CATALOG } = require('./lib/plugin-catalog');
 // 결정 D1의 실배선 — claude -p 스폰 + stream-json 파싱 + .mcp.json 생성.
 const { runClaudeQuery } = require('./lib/main/claude-runner');
 const { runGrokQuery } = require('./lib/main/grok-runner');
+const { createGrokAcpSession } = require('./lib/main/grok-acp-session');
 // 툴 호출 진행 단계(board-33) 라벨링에 render_canvas 판정 하나만 빌려 쓴다 —
 // 파서 자체는 손대지 않는다(sendLiveToolStep 근처 주석 참고).
 const streamJsonParser = require('./lib/main/stream-json-parser');
@@ -2626,7 +2627,18 @@ function createLiveChatSessionForConversation() {
 }
 
 function getLiveChatSession(conversationId = historyConversationId()) {
-  return liveRuntimes.chatSession(conversationId, createLiveChatSessionForConversation);
+  return liveRuntimes.chatSession(conversationId, createLiveChatSessionForConversation, 'claude');
+}
+
+function getLiveGrokSession(conversationId) {
+  return liveRuntimes.chatSession(conversationId, () => {
+    const { dir, grokProfilePath } = getLiveMcpConfig();
+    return createGrokAcpSession({
+      cwd: dir,
+      profilePath: grokProfilePath,
+      rules: buildLiveSystemPrompt('grok'),
+    });
+  }, 'grok');
 }
 
 function stopLiveClaudeChatSession(reason) {
@@ -2654,9 +2666,11 @@ function resolveActiveModelSelection(prefsState = modelPrefs.get()) {
 }
 
 function noteLiveQueryProvider(providerId) {
-  if (liveQueryProviderId && liveQueryProviderId !== providerId) liveRuntimes.clearIdleCursors();
+  if (liveQueryProviderId && liveQueryProviderId !== providerId) {
+    liveRuntimes.clearIdleCursors();
+    stopLiveClaudeChatSession('provider_changed');
+  }
   liveQueryProviderId = providerId;
-  if (providerId === 'grok') stopLiveClaudeChatSession('grok_active');
 }
 
 // 캔버스 결과 하나(stream-json-parser.classifyCanvasBlock의 출력)를 캔버스
@@ -4727,11 +4741,18 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
     };
   }
   // 두 경로(상주 세션/콜드 스폰)가 같은 콜백을 공유한다 — 스트림 계약이 동일하다.
+  let firstVisibleTextAt = null;
+  const providerStartedAt = performance.now();
   const turnCallbacks = {
     onSpawn: (h) => { myHandle = h; runtime.activeLiveQuery = h; },
     // 성공 resolve 1건과 render 1건의 토큰이 정확히 같은 경우만 캐시한다.
     onEvent: (ev) => { replayTurnCapture.observe(ev); trackToolStep(ev); trackSubagent(ev); },
     onTextDelta: (text, metadata) => {
+      if (text && firstVisibleTextAt === null) {
+        firstVisibleTextAt = performance.now();
+        mdlog(`대화 첫 텍스트 전송 — conversation=${turnConversationId} provider=${liveProviderId} `
+          + `elapsedMs=${Math.round(firstVisibleTextAt - queryStartedAt)}`);
+      }
       sendLiveTextDelta(text, { ...metadata, conversationId: turnConversationId }, origin);
       const bridge = getSessionBridge();
       if (bridge) bridge.journalDelta({ sessionId: turnConversationId, messageId: sessionAssistantId, text });
@@ -4774,7 +4795,17 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   // 아래 세션 체인·캐시·저장 로직은 분기를 모른다. ATHENA_PERSISTENT_CHAT=0
   // 이면 기존 왕복(runClaudeQuery)으로 폴백한다(킬 스위치).
   let result;
-  if (liveProviderId === 'grok') {
+  if (liveProviderId === 'grok' && process.env.ATHENA_GROK_PERSISTENT_CHAT !== '0') {
+    result = await getLiveGrokSession(turnConversationId).run({
+      prompt: turnPrompt,
+      resumeSessionId,
+      model,
+      effort,
+      identityKey: currentProviderSelection.activeAccount && currentProviderSelection.activeAccount.id,
+      securityKey: `${providerSecurityGeneration}:${getLiveMcpConfig().grokConfigPath}`,
+      ...turnCallbacks,
+    });
+  } else if (liveProviderId === 'grok') {
     result = await runGrokQuery({
       prompt: buildLivePrompt(liveTurnInput),
       cwd: dir,
@@ -4817,6 +4848,10 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
       if (activeLegacyQueryCompletion === legacyQueryCompletion) activeLegacyQueryCompletion = null;
     }
   }
+  mdlog(`대화 모델 완료 — conversation=${turnConversationId} provider=${liveProviderId} `
+    + `preProviderMs=${Math.round(providerStartedAt - queryStartedAt)} `
+    + `providerMs=${Math.round(performance.now() - providerStartedAt)} `
+    + `ok=${!!result.ok} reused=${result.spawnedFresh === false}`);
   if (typeof result.firstEventMs === 'number') {
     mdlog(`상주 채팅 턴 — 제출→첫 스트림 이벤트 ${Math.round(result.firstEventMs)}ms `
       + `(프로세스 ${result.spawnedFresh ? '신규 기동' : '재사용'})`);
@@ -4837,7 +4872,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
     // 재개 실패 — 세션 파일이 사라졌거나 CLI가 재개를 거부했을 수 있다. 다음
     // 질의가 계속 같은 이유로 죽지 않게 세션을 버린다(fail-open은 새 대화 시작).
     runtime.liveSessionId = null;
-    if (/session/i.test(String(result.error || ''))) {
+    if (result.submitted !== true && /session/i.test(String(result.error || ''))) {
       // 세션 문제로 죽은 게 분명하면 이번 질의만은 새 세션으로 1회 재시도한다 —
       // liveSessionId가 이미 null이라 재귀는 한 단계에서 끝난다.
       // origin을 반드시 실어 보낸다 — 누락하면 오브 기원 질의가 이 재시도를
@@ -5592,11 +5627,14 @@ async function handleModelSet(e, payload = {}) {
     // 커서로 폴백하는데, 그 값이 중단된 턴의 포크를 가리킬 수 있다(아키텍트
     // 리뷰 결함 1). 대화 커서의 진실은 이 파일의 liveSessionId 하나다.
     if (persistentChatEnabled()) {
-      liveRuntimes.forEachChatSession((session, runtime) => session.warm({
+      liveRuntimes.forEachChatSession((session, runtime) => {
+        if (runtime.chatSessionProviderId === 'grok') return;
+        session.warm({
         model: state.claude.model,
         effort: state.claude.effort,
         resumeSessionId: liveResumeCursor(runtime.conversationId),
-      }));
+        });
+      });
     }
   }
   broadcastModelChanged(state);
