@@ -735,6 +735,15 @@ const boardStepProbe = (instanceId) => `(async () => {
             flex_basis: style.flexBasis, flex_shrink: style.flexShrink,
             overflow_x: style.overflowX,
             padding_inline: [style.paddingLeft, style.paddingRight],
+            // 넘침 처방(relaxOverflowRows)이 이 상자를 접을 수 있는지 바로 읽히게
+            // 남긴다 — 접기는 가로 flex 줄에만 걸린다.
+            display: style.display,
+            direction: style.flexDirection,
+            wrap: style.flexWrap,
+            wrap_row: el.dataset ? el.dataset.bsWrapRow === 'true' : false,
+            in_table: typeof el.closest === 'function'
+              ? Boolean(el.closest('.bs-table, .bs-r-scroll, .bs-r-scroll-table'))
+              : false,
           });
         }
       }
