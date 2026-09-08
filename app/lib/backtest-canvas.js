@@ -93,7 +93,7 @@ const MODE_TABS = [
   ['result', '결과'],
   ['history', '이력'],
   ['optimize', '최적화'],
-  ['deploy', '배포'],
+  ['deploy', '실매매 적용'],
 ];
 const MODE_TABS_LIST = MODE_TABS.slice(0, 3);
 
@@ -110,11 +110,24 @@ const TECHNIQUE_DRAFT_TABS = [['code', '코드'], ['nodes', '노드·흐름']];
 // 목록에서 고른 내 기법(폴더가 있는 기법)의 하위 탭 — 초안과 같은 둘에, 대상·파라미터를
 // 손으로 잡는 폼 하나가 더 선다. 지도는 없다(요약 지도 폐기, 2026-09-03 사용자 확정).
 const USER_TECHNIQUE_TABS = [['code', '코드'], ['nodes', '노드·흐름'], ['form', '폼']];
+// 목록에 오른 기법의 뒷줄 하위 탭(보드 23, 규칙 32-04) — 이력·최적화·실매매는 모드 탭이
+// 아니라 그 기법 화면 안의 자리다. 모드 탭으로만 닿으면 홈에서 기법 없이 열려 무엇의
+// 이력인지 말할 수 없는 화면이 된다. 초안에는 서지 않는다(승인이 먼저다).
+const WORKSPACE_EXTRA_TABS = [['history', '이력'], ['optimize', '최적화'], ['deploy', '실매매 적용']];
+// 하위 탭인데 state.designTab이 아니라 state.tab에 사는 것들 — 옛 모드 탭과 자리를
+// 공유하므로(loadHistory·loadDeployments가 tab을 쓴다) 어느 탭에 서 있는지는 여기로 가른다.
+const WORKSPACE_MODE_TABS = ['result', 'history', 'optimize', 'deploy'];
 // 기법 하나의 화면(보드 20) 헤더 — 폴더 이름 옆의 한 줄과 목록으로 돌아가는 문.
 const WORKSPACE_SUB = '폴더 하나가 기법 하나 · 대화 하나';
 const WORKSPACE_NO_FOLDER = '폴더 없이 화면 버퍼로';
 const WORKSPACE_QUIT_LABEL = '그만두기';
 const WORKSPACE_HOME_LABEL = '기법 목록';
+// 홈으로 가는 문은 하나다(규칙 32-04) — 빵조각의 첫 조각. 헤더의 [기법 목록] 버튼은
+// 이것과 같은 일을 하던 둘째 문이라 없앴다.
+const CRUMB_HOME_LABEL = '⌂ 팔라스 홈';
+const CRUMB_SEP = '›';
+// 보드 19 목록 바닥의 한 줄 — 기법을 열면 화면이 통째로 바뀐다는 사실을 누르기 전에 적는다.
+const LIST_FOOTER_NOTE = '기법을 열면 전용 작업 화면으로 이동합니다. 다른 기법 선택과 새 기법 만들기는 홈에서 시작하세요.';
 // 폼 탭 파라미터 카드의 부제 — 내 기법은 범위를 화면이 잡았고, 처음 있던 기법은 yaml이 정했다.
 const USER_PARAMS_NOTE = '신호는 이 파일의 파이썬이 만듭니다 · 슬라이더 범위는 기본값에서 화면이 잡은 것입니다';
 const PRESET_PARAMS_NOTE = '신호는 이 폴더의 파이썬이 만듭니다 · 범위는 기법이 정한 값입니다';
@@ -1258,6 +1271,10 @@ function createBacktestCanvas(options) {
   function selectPreset(id) {
     const preset = presets.find((p) => p.id === id);
     if (!preset) return;
+    // 같은 기법을 다시 연 것이면 넣어 둔 자리에서 이어 간다(규칙 32-05) — 코드를 다시
+    // 만들지도, 폴더를 다시 찾지도 않는다. 새로 세우는 아래 길은 다른 기법의 것이다.
+    if (parked.has(`preset:${id}`)) { void resumeParked(`preset:${id}`); return; }
+    keepHomeScroll();
     spec = Object.assign(SpecModel.presetToSpec(preset), keptTarget());
     // 프리셋을 고르는 것은 새 전략을 세우는 것이다 — 앞 전략의 코드를 남기면 화면은
     // 프리셋인데 도는 것은 그 파이썬이고, 서랍의 "이 지도 뒤의 코드"도 남의 코드를
@@ -1314,6 +1331,8 @@ function createBacktestCanvas(options) {
   // 그 파일이 진실이다(D2) — 사람이 고쳐 둔 것을 yaml로 덮지 않는다. 폴더를 못 만들면
   // 코드는 화면 버퍼에만 있고 헤더가 그 사실을 적는다.
   async function openPresetWorkspace(preset) {
+    // 대화(spec_draft)로 들어온 길도 같은 규칙이다 — 넣어 둔 그 기법이면 이어 간다.
+    if (parked.has(`preset:${preset.id}`)) { await resumeParked(`preset:${preset.id}`); return; }
     const generation = workspaceGeneration;
     userStrategyId = null;
     techniqueDraft = false;
@@ -1398,6 +1417,9 @@ function createBacktestCanvas(options) {
     const generation = workspaceGeneration;
     const entry = userStrategies.find((s) => s.id === id);
     if (!entry) return;
+    // 넣어 둔 자리가 있으면 거기서 이어 간다(규칙 32-05) — selectPreset과 같은 규칙이다.
+    if (parked.has(`user:${id}`)) { await resumeParked(`user:${id}`); return; }
+    keepHomeScroll();
     const ide = ensureProjectIde();
     if (!ide) {
       setState({ formErrors: ['이 화면에는 프로젝트 배선이 없어 내 전략을 열 수 없습니다'] });
@@ -1430,11 +1452,132 @@ function createBacktestCanvas(options) {
     else render();
   }
 
-  // 헤더의 [그만두기]·[기법 목록] — 기법 하나의 화면에서 목록(홈)으로 돌아간다. 초안의
-  // 폴더는 디스크에 그대로 남는다(등록 전이라 목록에는 없다). 앞 기법의 코드·오류·검사는
-  // 다음 기법의 것이 아니다(selectPreset이 비우는 것과 같은 규칙). 저장 안 한 편집이 있으면
-  // 탭은 남기되 잠재운다 — 남겨둔 채 활성이면 다음 기법의 [실행]이 그 파일을 돈다.
+  // 홈으로 나가는 것은 버리는 것이 아니다(규칙 32-05) — 기법 하나가 들고 있던 것을
+  // 그 기법의 열쇠에 묶어 넣어 두고, 같은 기법을 다시 열면 그 자리에서 이어 간다.
+  // 다른 기법을 열면 지금까지처럼 새로 세운다(앞 기법의 코드가 새 기법 화면에서 돌면
+  // 안 된다는 selectPreset의 이유는 그대로다).
+  const parked = new Map();
+
+  // 기법의 정체 — 초안 하나, 내 기법은 등록 id, 처음 있던 기법은 프리셋 id. 옛 표면의
+  // 프리셋(폴더 없이 지도·폼으로 여는 길)은 여기 들지 않는다: 그 길은 손대지 않는다.
+  function parkKey() {
+    if (techniqueDraft) return 'draft';
+    if (userStrategyId) return `user:${userStrategyId}`;
+    if (presetProject) return `preset:${presetProject.presetId}`;
+    return null;
+  }
+
+  function parkCurrent() {
+    const key = parkKey();
+    if (!key) return;
+    const project = projectIde ? projectIde.currentProject() : null;
+    const t = techniqueState();
+    parked.set(key, {
+      // 홈의 「수정 중」 카드가 읽을 이름 — 잠재운 뒤에는 폴더를 물어볼 수 없어 지금 적는다.
+      name: (project && project.name) || (spec && spec.name) || TECHNIQUE_NEW_NAME,
+      projectId: t.projectId || null,
+      path: t.path || TECHNIQUE_STRATEGY_PATH,
+      spec,
+      userStrategyId,
+      presetProject,
+      techniqueDraft,
+      strategyId,
+      activeVersionId,
+      runPath,
+      codeSource,
+      codeOnly,
+      codeOnlyGraph,
+      openedVersion,
+      ideOwnsCode,
+      deploySignals,
+      techniqueTerminalOpen,
+      techniqueNodesShown,
+      techniqueNodesSource,
+      techniqueHandEdit,
+      techniqueDiffOpen,
+      technique: t,
+      result: state.result,
+      deployments: state.deployments,
+      // 보고 있던 하위 탭은 두 자리에 나뉘어 산다 — 결과·이력·최적화·실매매는 state.tab,
+      // 코드·노드·폼은 state.designTab이다. 둘 다 넣어야 그 자리로 돌아온다.
+      tab: state.tab,
+      designTab: state.designTab,
+    });
+  }
+
+  // 같은 기법을 다시 열었다 — 넣어 둔 것을 그 자리에 되돌린다. 편집기는 잠재우기만
+  // 했으므로(closeAll을 부르지 않는다) 그 파일을 다시 고르면 열려 있던 탭이 저장 안 한
+  // 편집까지 그대로 살아난다. 초안·결과·로그·진행 중인 검사가 이 함수로 이어진다.
+  async function resumeParked(key) {
+    const snap = parked.get(key);
+    if (!snap) return false;
+    parked.delete(key);
+    const generation = workspaceGeneration;
+    spec = snap.spec;
+    userStrategyId = snap.userStrategyId;
+    presetProject = snap.presetProject;
+    techniqueDraft = snap.techniqueDraft;
+    strategyId = snap.strategyId;
+    activeVersionId = snap.activeVersionId;
+    runPath = snap.runPath;
+    codeSource = snap.codeSource;
+    codeOnly = snap.codeOnly;
+    codeOnlyGraph = snap.codeOnlyGraph;
+    openedVersion = snap.openedVersion;
+    ideOwnsCode = snap.ideOwnsCode;
+    deploySignals = snap.deploySignals;
+    techniqueTerminalOpen = snap.techniqueTerminalOpen;
+    techniqueNodesShown = snap.techniqueNodesShown;
+    techniqueNodesSource = snap.techniqueNodesSource;
+    techniqueHandEdit = snap.techniqueHandEdit;
+    techniqueDiffOpen = snap.techniqueDiffOpen;
+    lastError = null;
+    setState({
+      view: snap.tab === 'result' ? 'result' : 'design',
+      tab: snap.tab || 'design',
+      designTab: snap.designTab,
+      message: null,
+      technique: snap.technique, result: snap.result, deployments: snap.deployments,
+    });
+    const ide = snap.projectId ? ensureProjectIde() : null;
+    if (ide) {
+      const opened = await ide.openAt(snap.projectId, snap.path);
+      if (generation !== workspaceGeneration) return true;
+      ideOwnsCode = !!opened;
+      render();
+    }
+    return true;
+  }
+
+  // 홈의 스크롤 자리(규칙 32-05) — 목록을 한참 내려가 고른 사람이 돌아왔을 때 맨 위에
+  // 서 있으면 그 자리를 다시 찾아야 한다. 되돌리는 길은 세션 복원과 같다(pendingScrollTop:
+  // 사람이 굴려 그 자리를 뺏을 때까지 매 그리기에 다시 세운다).
+  let homeScrollTop = 0;
+  function keepHomeScroll() {
+    if (listFirst() && bodyEl && Number.isFinite(bodyEl.scrollTop)) homeScrollTop = bodyEl.scrollTop;
+  }
+
+  // 빵조각 첫 조각 [⌂ 팔라스 홈] — 기법 하나의 화면에서 목록(홈)으로 돌아간다. 초안의
+  // 폴더는 디스크에 그대로 남는다(등록 전이라 목록에는 없다). 지금 기법이 들고 있던 것은
+  // 버리지 않고 넣어 둔다(parkCurrent) — 저장 안 한 편집이 있는 탭도 닫지 않고 잠재우기만
+  // 한다: 남겨둔 채 활성이면 다음 기법의 [실행]이 그 파일을 돈다.
   function goHome() {
+    parkCurrent();
+    keepHomeScroll();
+    goHomeReset();
+  }
+
+  // [그만두기] — 초안을 버린다. 넣어 둔 자리도 함께 지우고 탭도 닫는다: 홈의 「수정 중」
+  // 카드가 가리킬 것이 남아 있으면 버린 것이 아니다.
+  function quitTechnique() {
+    const key = parkKey();
+    if (key) parked.delete(key);
+    if (projectIde && typeof projectIde.closeAll === 'function') projectIde.closeAll();
+    keepHomeScroll();
+    goHomeReset();
+  }
+
+  function goHomeReset() {
     homeTarget = keptTarget();
     spec = null;
     userStrategyId = null;
@@ -1450,14 +1593,14 @@ function createBacktestCanvas(options) {
     openedVersion = null;
     codegenCache = null;
     // 폴더도 내려놓는다 — 잠재우면(suspend) 활성 파일과 폴더가 화면·컨텍스트에서 사라지고,
-    // 저장 안 한 편집이 있던 탭은 남아 그 기법을 다시 고르면 되살아난다.
-    if (projectIde) {
-      projectIde.closeAll();
-      projectIde.suspend();
-    }
+    // 열어 둔 탭은 남아 그 기법을 다시 고르면 되살아난다. closeAll은 부르지 않는다: 그것이
+    // 저장 안 한 탭 말고 나머지를 닫아버려 「이어 간다」가 반쪽이 됐다(규칙 32-05).
+    if (projectIde) projectIde.suspend();
     ideOwnsCode = false;
     resetTechnique();
     clearRestoreMarks();
+    // 굴려 둔 목록 자리를 돌려준다 — 0은 되돌릴 것이 없다는 뜻이다.
+    pendingScrollTop = homeScrollTop || null;
     setState({
       view: 'design', tab: 'design', designTab: 'flow', mapVersion: 0, message: null,
       restore: null, formErrors: [], codeErrors: [], codeFromMap: false, codeSpan: null,
@@ -3105,6 +3248,9 @@ function createBacktestCanvas(options) {
       const badge = errorStateBadge(message);
       // 어느 상태인지 먼저 말한다(보드 10) — 같은 화면이 실패와 비활성 둘을 그린다.
       const panel = renderMessagePanel('backtest-canvas-error', message, badge);
+      // 홈으로 가는 문은 오류 화면에도 선다(규칙 32-04) — 돌아갈 설계가 없는 자리에서
+      // [기법으로 돌아가기]는 아무 데도 데려가지 못한다. 지금 기법은 버리지 않고 넣어 둔다.
+      panel.appendChild(button('backtest-error-home', CRUMB_HOME_LABEL, goHome));
       // 막다른 길 금지(보드 10) — 오류 화면에서 설계로 돌아갈 길이 없어 사용자가 갇혔다
       // (2026-09-02 실측 "뒤로가기가 없어"). 전략이 있으면 설계 폼으로, 없으면 프리셋부터.
       //
@@ -3157,9 +3303,10 @@ function createBacktestCanvas(options) {
     else if (state.view === 'approval') body.appendChild(renderApproval());
     else if (state.view === 'running') body.appendChild(renderRunning());
     else if (state.view === 'diagnosis') body.appendChild(renderDiagnosisPanel());
-    // 기법 하나의 화면(보드 20)에는 모드 탭이 없다 — 결과도 그 화면의 하위 탭 하나다.
+    // 기법 하나의 화면(보드 20)에는 모드 탭이 없다 — 결과·이력·최적화·실매매도 전부
+    // 그 화면의 하위 탭이다(규칙 32-04). 옛 모드 탭 경로는 그대로 아래로 흐른다.
     else if (state.tab === 'design'
-      || (workspaceActive() && (state.tab === 'result' || state.tab === 'deploy'))) {
+      || (workspaceActive() && WORKSPACE_MODE_TABS.indexOf(state.tab) >= 0)) {
       body.appendChild(renderDesign());
     } else if (state.tab === 'result') body.appendChild(renderResult());
     else if (state.tab === 'history') body.appendChild(renderHistory());
@@ -3198,14 +3345,47 @@ function createBacktestCanvas(options) {
     return MODE_TABS_LIST;
   }
 
+  // 기법 하나의 화면 하위 탭(보드 20~23) — 초안은 코드·노드뿐이고, 목록에 오른 기법은
+  // 폼 뒤로 이력·최적화·실매매까지 여기 선다(규칙 32-04). 결과는 돌려본 뒤에만 문이 열린다.
+  function workspaceTabs() {
+    let tabs = techniqueDraft ? TECHNIQUE_DRAFT_TABS : USER_TECHNIQUE_TABS;
+    if (state.result) tabs = tabs.concat([['result', '결과']]);
+    if (!techniqueDraft) tabs = tabs.concat(WORKSPACE_EXTRA_TABS);
+    return tabs;
+  }
+
+  // 지금 서 있는 하위 탭. 없는 탭에 서 있을 수는 없다(세션 복원·채팅 navigate) — 첫 탭으로
+  // 본다. 이력·최적화처럼 state.tab에 사는 자리는 designTab보다 그것이 먼저다.
+  function workspaceTabKey(tabs) {
+    const wanted = WORKSPACE_MODE_TABS.indexOf(state.tab) >= 0 ? state.tab : state.designTab;
+    return tabs.some(([key]) => key === wanted) ? wanted : tabs[0][0];
+  }
+
+  // 빵조각(보드 21/22/23, 규칙 32-04) — 홈으로 가는 문은 첫 조각 하나뿐이고, 나머지는
+  // 지금 어디에 서 있는지를 말하는 표시다(누르는 곳이 아니라 읽는 곳이다).
+  function renderWorkspaceCrumbs(name) {
+    const row = el('div', 'backtest-crumbs');
+    row.appendChild(button('backtest-crumb backtest-crumb-home', CRUMB_HOME_LABEL, goHome));
+    row.appendChild(el('span', 'backtest-crumb-sep', CRUMB_SEP));
+    row.appendChild(el('span', 'backtest-crumb', name));
+    const tabs = workspaceTabs();
+    const current = tabs.find(([key]) => key === workspaceTabKey(tabs));
+    if (current) {
+      row.appendChild(el('span', 'backtest-crumb-sep', CRUMB_SEP));
+      row.appendChild(el('span', 'backtest-crumb', current[1]));
+    }
+    return row;
+  }
+
   // 보드 20 헤더 — 기법 하나의 화면. 폴더 이름이 제목이고, 모드 탭·폼/코드 갈래는 없다
-  // (한 페이지가 한 알고리즘만 다룬다, 2026-09-07 사용자 확정). 오른쪽은 검사 진행과
-  // [실행], 그리고 목록으로 돌아가는 문 하나다.
+  // (한 페이지가 한 알고리즘만 다룬다, 2026-09-07 사용자 확정). 맨 윗줄은 홈으로 가는
+  // 빵조각이고, 오른쪽은 검사 진행과 [실행], 초안이면 [그만두기]다.
   function renderWorkspaceHeader() {
     const head = el('div', 'backtest-head is-workspace');
     const title = el('div', 'backtest-head-title');
     const project = projectIde ? projectIde.currentProject() : null;
     const name = project ? project.name : ((spec && spec.name) || TECHNIQUE_NEW_NAME);
+    head.appendChild(renderWorkspaceCrumbs(name));
     title.appendChild(el('span', 'backtest-head-folder', project ? `${name}/` : name));
     const parts = [WORKSPACE_SUB];
     const files = project && projectIde ? projectIde.fileCount() : 0;
@@ -3215,9 +3395,11 @@ function createBacktestCanvas(options) {
     head.appendChild(title);
     if (techniqueDraft) head.appendChild(renderTechniqueProgress());
     head.appendChild(button('backtest-run-button', '실행', () => { void handleRun(false); }));
-    head.appendChild(button(
-      'backtest-head-home', techniqueDraft ? WORKSPACE_QUIT_LABEL : WORKSPACE_HOME_LABEL, goHome,
-    ));
+    // [기법 목록]은 없다 — 빵조각의 첫 조각이 그 문이다(규칙 32-04). 초안의 [그만두기]는
+    // 홈으로 가는 문이 아니라 **버리는** 문이라 남는다.
+    if (techniqueDraft) {
+      head.appendChild(button('backtest-head-home', WORKSPACE_QUIT_LABEL, quitTechnique));
+    }
     return head;
   }
 
@@ -3245,9 +3427,23 @@ function createBacktestCanvas(options) {
     if (openedVersion) {
       title.appendChild(el('span', 'backtest-head-opened', openedVersionText()));
     }
+    // 홈 머리의 한 줄(보드 19) — 몇 개가 있는지만 말한다. 「마지막 수정」은 목록 응답에
+    // 그런 시각이 없어(프리셋은 id·name·category·yaml, 내 기법은 id·name·project_id·
+    // path·exists·params뿐이다) 붙이지 않는다: 없는 사실을 지어내지 않는다.
+    const homeScreen = listFirst() && state.tab === 'design';
+    if (homeScreen) {
+      title.appendChild(el(
+        'span', 'backtest-head-sub', `기법 ${presets.length + userStrategies.length}개`,
+      ));
+    }
     head.appendChild(title);
     // 기법을 고른 뒤 목록으로 돌아가는 문 — 목록은 홈이고 기법 화면 안에는 서지 않는다.
     if (hasTechnique()) head.appendChild(button('backtest-head-home', WORKSPACE_HOME_LABEL, goHome));
+
+    // 홈에는 모드 탭이 없다(규칙 32-01/02) — 기법을 여는 문은 목록의 카드뿐이고,
+    // 이력·최적화·실매매는 그 기법 화면 안의 하위 탭이다. 다른 탭에 서 있는 자리에서는
+    // 그대로 세운다: 나갈 길까지 없애면 막다른 길이 된다.
+    if (homeScreen) return head;
 
     const tabs = el('div', 'backtest-tabs');
     visibleModeTabs().forEach(([key, label]) => {
@@ -3309,21 +3505,18 @@ function createBacktestCanvas(options) {
     const workspace = workspaceActive();
     const subtabs = el('div', 'backtest-subtabs');
     // 초안에서는 하위 탭이 둘뿐이다 — 지도도 폼도 아직 없다(보드 20). 목록에서 고른 내
-    // 기법은 대상·파라미터를 잡는 폼이 하나 더 선다. 둘 다 결과는 돌려본 뒤에만 하위 탭으로
-    // 선다(단계 카드의 [결과 보기]가 여는 자리 — 모드 탭이 없으니 여기가 그 문이다).
-    // 없는 탭에 서 있을 수는 없다(세션 복원·채팅 navigate) — 첫 탭으로 본다.
-    let tabs = techniqueDraft ? TECHNIQUE_DRAFT_TABS : (workspace ? USER_TECHNIQUE_TABS : DESIGN_TABS);
-    if (workspace && state.result) tabs = tabs.concat([['result', '결과']]);
-    // 목록에 오른 기법은 실매매로 나가는 문이 여기 선다(보드 23) — 초안은 승인이 먼저다.
-    if (workspace && !techniqueDraft) tabs = tabs.concat([['deploy', '배포']]);
-    const wanted = (workspace && (state.tab === 'result' || state.tab === 'deploy'))
-      ? state.tab : state.designTab;
-    const designTab = tabs.some(([key]) => key === wanted) ? wanted : tabs[0][0];
+    // 기법은 폼과 이력·최적화·실매매까지 여기 선다(workspaceTabs). 결과는 어느 쪽이든
+    // 돌려본 뒤에만 하위 탭으로 선다(단계 카드의 [결과 보기]가 여는 자리 — 모드 탭이
+    // 없으니 여기가 그 문이다). 옛 표면(지도·폼)은 그대로 DESIGN_TABS다.
+    const tabs = workspace ? workspaceTabs() : DESIGN_TABS;
+    const designTab = workspaceTabKey(tabs);
     tabs.forEach(([key, label]) => {
       const isOn = designTab === key;
       const tab = button(`backtest-subtab${isOn ? ' is-on' : ''}`, label, () => {
         if (key === 'result') { setState({ view: 'result', tab: 'result' }); return; }
         if (key === 'deploy') { void loadDeployments(); return; }
+        if (key === 'history') { void loadHistory(); return; }
+        if (key === 'optimize') { setState({ view: 'design', tab: 'optimize' }); return; }
         setState({ view: 'design', tab: 'design', designTab: key });
         if (key === 'flow') void loadMap();
         // 기존 기법의 노드는 여기서 읽는다(보드 21) — 초안의 노드는 검사가 연다.
@@ -3340,6 +3533,9 @@ function createBacktestCanvas(options) {
     const closeDraft = () => { if (techniqueDraft) wrap.appendChild(renderTechniqueApproveBar()); return wrap; };
     if (designTab === 'result') { wrap.appendChild(renderResult()); return closeDraft(); }
     if (designTab === 'deploy') { wrap.appendChild(renderDeploy()); return wrap; }
+    // 이력·최적화도 그 기법 화면 안이다(규칙 32-04) — 모드 탭으로만 닿던 두 판이 여기 선다.
+    if (designTab === 'history') { wrap.appendChild(renderHistory()); return wrap; }
+    if (designTab === 'optimize') { wrap.appendChild(renderOptimize()); return wrap; }
     if (designTab === 'nodes') { wrap.appendChild(renderNodesTab()); return closeDraft(); }
     if (designTab === 'code') {
       // 띠는 코드 위, 명령창은 코드 아래다(보드 20) — 코드 탭 자체는 건드리지 않는다.
@@ -3395,8 +3591,28 @@ function createBacktestCanvas(options) {
     return '';
   }
 
+  const TECHNIQUE_STATUS_KO = { verified: '검증됨', editing: '수정 중' };
+
   function techniqueStatusLabel(status) {
-    return status === 'verified' ? '검증됨' : '';
+    return TECHNIQUE_STATUS_KO[String(status || '')] || '';
+  }
+
+  // 카드 아래 한 줄(보드 19) — 목록 응답에 실려 오는 것만 적는다. 판번호·마지막 검증
+  // 시각·거래 수는 그 응답에 없다(GET /backtest/presets는 id·name·category·yaml,
+  // GET /backtest/user-strategies는 id·name·project_id·path·exists·params뿐이다).
+  // 그래서 셀 수 있는 것만 센다 — 없으면 빈 문자열이고 그때 줄 자체가 서지 않는다.
+  function techniqueMeta(kind, entry) {
+    const parts = [];
+    if (kind === 'preset') {
+      const parsed = SpecModel.presetToSpec(entry);
+      const names = Object.keys(parsed.params || {});
+      if (names.length) parts.push(`파라미터 ${names.length}개`);
+      if ((parsed.indicators || []).length) parts.push(`지표 ${parsed.indicators.length}개`);
+    } else {
+      const names = Object.keys((entry && entry.params) || {});
+      if (names.length) parts.push(`파라미터 ${names.length}개`);
+    }
+    return parts.join(' · ');
   }
 
   function renderTechniqueStatus(status) {
@@ -3479,6 +3695,22 @@ function createBacktestCanvas(options) {
     head.appendChild(renderTechniqueFilters());
     wrap.appendChild(head);
     const list = el('div', 'backtest-technique-list');
+    // 손대다 홈으로 나온 초안(규칙 32-05) — 홈에서 닿지 못하면 넣어 둔 것이 아니라 잃은
+    // 것이다. 등록 전이라 분류도 검증도 없으니 필터가 걸린 자리에서는 서지 않는다.
+    const draftPark = parked.get('draft');
+    if (draftPark && !techniqueCategoryFilter && techniqueStatusFilter !== 'verified') {
+      const row = el('div', 'backtest-technique-row');
+      const item = button('backtest-technique-draft backtest-technique-card', null, () => {
+        void resumeParked('draft');
+      });
+      const cardHead = el('div', 'backtest-technique-card-head');
+      cardHead.appendChild(el('div', 'backtest-preset-name', draftPark.name || TECHNIQUE_NEW_NAME));
+      cardHead.appendChild(renderTechniqueStatus('editing'));
+      item.appendChild(cardHead);
+      item.appendChild(el('div', 'backtest-technique-desc', '만들다 둔 기법입니다 — 누르면 그 자리에서 이어 갑니다'));
+      row.appendChild(item);
+      list.appendChild(row);
+    }
     presets.forEach((preset) => {
       if (!techniquePassesFilters('preset', preset)) return;
       const isSelected = spec && !userStrategyId && preset.id === spec.presetId;
@@ -3497,6 +3729,8 @@ function createBacktestCanvas(options) {
       item.appendChild(cardHead);
       const desc = techniqueDescription(preset);
       if (desc) item.appendChild(el('div', 'backtest-technique-desc', desc));
+      const meta = techniqueMeta('preset', preset);
+      if (meta) item.appendChild(el('div', 'backtest-technique-meta', meta));
       row.appendChild(item);
       row.appendChild(renderTechniqueEdit(() => selectPreset(preset.id)));
       list.appendChild(row);
@@ -3523,6 +3757,8 @@ function createBacktestCanvas(options) {
       if (entry.exists === false) {
         item.appendChild(el('div', 'backtest-user-strategy-missing', '파일이 없습니다'));
       }
+      const meta = techniqueMeta('user', entry);
+      if (meta) item.appendChild(el('div', 'backtest-technique-meta', meta));
       row.appendChild(item);
       const actions = el('div', 'backtest-technique-actions');
       actions.appendChild(renderTechniqueEdit(() => { void selectUserStrategy(entry.id); }));
@@ -3536,6 +3772,9 @@ function createBacktestCanvas(options) {
       list.appendChild(el('div', 'backtest-design-empty', '아직 기법이 없습니다'));
     }
     wrap.appendChild(list);
+    // 누르기 전에 무슨 일이 일어나는지 적는다(보드 19) — 카드를 누르면 화면이 통째로
+    // 바뀌고, 다른 기법으로 갈아타는 자리는 그 화면 안이 아니라 여기다.
+    wrap.appendChild(el('div', 'backtest-technique-foot', LIST_FOOTER_NOTE));
     return wrap;
   }
 
@@ -3574,6 +3813,7 @@ function createBacktestCanvas(options) {
 
   // 위 두 길이 함께 쓰는 뼈대 세우기 — 화면이 한 가지여야 대화도 한 가지다.
   function beginTechniqueDraft() {
+    keepHomeScroll();
     spec = Object.assign(
       SpecModel.createSpec(null, { name: TECHNIQUE_NEW_NAME, params: {} }), keptTarget(),
     );
@@ -3684,19 +3924,6 @@ function createBacktestCanvas(options) {
     } catch { /* CustomEvent가 없는 하네스 */ }
   }
 
-  // 보내지 않는다 — **입력창에 넣기만 한다**(사용자 확정: 노드를 눌러도 메시지가 나가지
-  // 않는다). 사람이 참조 몇 개를 모아 자기 문장을 이어 쓸 수 있어야 한다. 커서 자리에
-  // 넣고 포커스를 주는 것은 chat.js의 일이다(입력창은 거기 하나뿐이다).
-  function emitChatInsert(text) {
-    try {
-      if (typeof document !== 'undefined'
-        && typeof document.dispatchEvent === 'function'
-        && typeof CustomEvent === 'function') {
-        document.dispatchEvent(new CustomEvent('athena:chat-insert', { detail: { text } }));
-      }
-    } catch { /* CustomEvent가 없는 하네스 */ }
-  }
-
   // ── 보드 20·21 · 새 기법 만들기(코드창 · 명령창 · 노드·흐름 창) ───────────
   //
   // 사용자 확정: 코드창은 편집 가능하지만 **AI가 제어한다**. AI가 질문 카드를 하나씩
@@ -3744,6 +3971,9 @@ function createBacktestCanvas(options) {
       nodes: t.nodes || [],
       flows: t.flows || {},
       granularity: t.granularity || 'function',
+      // 참조 칩이 "어느 파일의 몇째 줄"까지 말할 수 있어야 한다(보드 21) — 줄 범위는
+      // 노드가 들고 있지만 파일 이름은 이 층만 안다.
+      path: t.path || TECHNIQUE_STRATEGY_PATH,
       unknown: [],
       error: null,
     };
@@ -4449,11 +4679,11 @@ function createBacktestCanvas(options) {
         stats: techniqueState().stats,
         selected: techniqueState().selectedNode,
         // Tab 순회(onSelect)는 선택만 적는다 — 지나친 노드마다 참조가 쌓이면 안 된다.
-        // 참조는 클릭·Enter(onExplainNode)에서만 입력창에 들어간다.
+        // 참조는 클릭·Enter·흐름 머리·[전체]에서만 붙는다.
         onSelect: (nodeId) => noteSelectedNode(nodeId),
-        onExplainNode: (nodeId) => referenceTechniqueNode(nodeId),
-        onExplainFlow: (kind) => referenceTechniqueFlow(kind),
-        onExplainAll: () => referenceTechniqueAll(),
+        // 참조는 DOM 이벤트로 넘긴다 — 캔버스와 채팅은 같은 렌더러 문서를 공유하지만
+        // 서로를 import하지 않는다(칩을 그리는 일은 컴포저의 몫이다).
+        onReference: (ref) => document.dispatchEvent(new CustomEvent('athena:chat-reference', { detail: ref })),
         onOpenCode: (nodeId) => openTechniqueNodeCode(nodeId),
       });
     } catch { return null; }
@@ -4463,23 +4693,10 @@ function createBacktestCanvas(options) {
     techniqueNodesPainted = techniqueState().nodes;
     return view;
   }
-  // 노드를 누르면 **메시지가 나가지 않는다**(사용자 확정) — 입력창에 그 함수의 참조가
-  // 들어갈 뿐이다. 무엇을 물을지는 사람이 이어서 쓴다("@should_exit 여기 왜 3일이야?").
+  // 노드를 누르면 **메시지가 나가지 않는다**(사용자 확정) — 그 함수의 참조가 칩으로
+  // 붙을 뿐이다. 무엇을 물을지는 사람이 이어서 쓴다("@should_exit 여기 왜 3일이야?").
   // 캔버스가 문장을 대신 지어 보내면, 사람은 자기가 묻고 싶던 것을 물을 자리를 잃는다.
-  function referenceTechniqueNode(nodeId) {
-    const id = String(nodeId || '');
-    if (!id) return;
-    noteSelectedNode(id);
-    emitChatInsert(`@${id} `);
-  }
-
-  function referenceTechniqueFlow(kind) {
-    emitChatInsert(String(kind || '') === 'exit' ? '@청산 흐름 ' : '@진입 흐름 ');
-  }
-
-  function referenceTechniqueAll() {
-    emitChatInsert('@전체 ');
-  }
+  // 칩을 쌓고 지우고 접는 일은 컴포저의 몫이라 여기서는 athena:chat-reference만 던진다.
 
   // 노드에서 코드로 — 그 함수가 선 줄을 짚는다. 편집기는 render()가 새로 만들므로
   // flowRange에 남겨야 다음 그리기에서도 표식이 산다(renderCodeTab이 다시 칠한다).
