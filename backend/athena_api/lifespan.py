@@ -333,21 +333,41 @@ async def _hourly_ingest_loop(
 async def _refresh_instrument_identity(
     index: InstrumentIdentityIndex, client: KiwoomClient
 ) -> None:
-    """기동 뒤 백그라운드 1회 — 실패해도 기동을 약화시키지 않는다(빈 스냅숏 = fail-closed)."""
+    """Run one background refresh without weakening the last committed master."""
     try:
         await index.refresh(client)
     except asyncio.CancelledError:
         raise
     except Exception as exc:
-        # Identity availability may never weaken startup or leak upstream contents. The
-        # empty prior snapshot makes selector planning fail closed until a future complete
-        # refresh succeeds.
+        # A failed fetch never replaces the last complete SQLite transaction. A first-run
+        # failure leaves the master empty so selector planning still fails closed.
         logger.warning("instrument identity refresh failed type=%s", type(exc).__name__)
+
+
+async def _instrument_identity_refresh_loop(
+    app: FastAPI,
+    index: InstrumentIdentityIndex,
+    interval_seconds: float,
+) -> None:
+    """Refresh immediately, then hourly, always using the current default account."""
+    wakeup: asyncio.Event = app.state.instrument_identity_wakeup
+    while True:
+        wakeup.clear()
+        client = getattr(app.state, "kiwoom_client", None)
+        if client is not None and client.is_ready:
+            await _refresh_instrument_identity(index, client)
+        try:
+            await asyncio.wait_for(wakeup.wait(), timeout=interval_seconds)
+        except TimeoutError:
+            pass
 
 
 async def _teardown_instrument_identity(app: FastAPI) -> None:
     task: asyncio.Task[None] | None = getattr(app.state, "instrument_identity_task", None)
     app.state.instrument_identity_task = None
+    wakeup: asyncio.Event | None = getattr(app.state, "instrument_identity_wakeup", None)
+    if wakeup is not None:
+        wakeup.set()
     if task is None or task.done():
         return
     task.cancel()
@@ -730,9 +750,12 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
 
     @asynccontextmanager
     async def lifespan(app: FastAPI) -> AsyncIterator[None]:
-        instrument_identity = InstrumentIdentityIndex()
+        instrument_identity = InstrumentIdentityIndex(
+            db_path=runtime_settings.instrument_db_path
+        )
         app.state.instrument_identity = instrument_identity
         app.state.instrument_identity_task = None
+        app.state.instrument_identity_wakeup = asyncio.Event()
         app.state.selector_service = build_selector_service(instrument_identity)
         app.state.settings = runtime_settings
         app.state.local_bearer_token = (
@@ -747,14 +770,17 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
                 current_routines = getattr(app.state, "routines_runtime", None)
                 if current_routines is not None:
                     await current_routines.rebind_ws_client(runtime.ws_client)
-            task: asyncio.Task[None] | None = getattr(
-                app.state, "instrument_identity_task", None
-            )
+            task: asyncio.Task[None] | None = getattr(app.state, "instrument_identity_task", None)
             if task is None or task.done():
                 app.state.instrument_identity_task = asyncio.create_task(
-                    _refresh_instrument_identity(instrument_identity, runtime.data_client),
-                    name="athena-instrument-identity-refresh",
+                    _instrument_identity_refresh_loop(
+                        app,
+                        instrument_identity,
+                        runtime_settings.instrument_refresh_interval_seconds,
+                    ),
+                    name="athena-instrument-identity-refresh-loop",
                 )
+            app.state.instrument_identity_wakeup.set()
 
         async def publish_runtime_removed(alias: str) -> None:
             if getattr(app.state, "kiwoom_default_account", None) is None:
@@ -762,6 +788,7 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
                 current_routines = getattr(app.state, "routines_runtime", None)
                 if current_routines is not None:
                     await current_routines.rebind_ws_client(None)
+            app.state.instrument_identity_wakeup.set()
 
         account_registry = RuntimeAccountRegistry(
             app,
@@ -827,17 +854,16 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
                 default_runtime = runtimes.get(runtime_settings.kiwoom_default_account or "")
                 _publish_default(app, default_runtime)
                 if default_runtime is not None and default_runtime.ready:
-                    # 식별 인덱스 구성(ka10099 3개 시장 → 별칭 정규식 3,500여 개 컴파일)은
-                    # CPU로 30초 안팎이 걸린다(2026-09-07 실측: 앱 부팅과 겹치면 60초 이상).
-                    # 기동 앞에 두면 앱 launcher의 60초 준비 한도를 넘겨 부팅이 degraded로
-                    # 끝나므로 뒤에서 돌린다 — 끝나기 전에는 빈 스냅숏이라 셀렉터가
-                    # fail-closed로 동작한다(refresh 실패 때와 같은 상태). 참조는 teardown이
-                    # 취소할 수 있게 app.state에 둔다(brain.hourly_task와 같은 관례).
+                    # ka10099 세 시장의 전체 목록 수집과 SQLite 교체는 앱 기동 뒤에서 돈다.
+                    # 기존 커밋은 수집 중과 실패 뒤에도 계속 조회 가능하고, 최초 기동에서
+                    # 저장본이 없을 때만 준비 전 상태다. 참조는 teardown 취소용으로 둔다.
                     app.state.instrument_identity_task = asyncio.create_task(
-                        _refresh_instrument_identity(
-                            instrument_identity, default_runtime.data_client
+                        _instrument_identity_refresh_loop(
+                            app,
+                            instrument_identity,
+                            runtime_settings.instrument_refresh_interval_seconds,
                         ),
-                        name="athena-instrument-identity-refresh",
+                        name="athena-instrument-identity-refresh-loop",
                     )
             if runtime_settings.brain_enabled:
                 # 준비된 계좌의 data_client만 넘긴다 — 토큰 발급에 실패한 계좌로
