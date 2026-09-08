@@ -64,10 +64,8 @@ const providerContractDecision = require('./test-fixtures/provider-contract/deci
 const restDatasetRunner = require('./lib/main/rest-dataset-runner');
 const accountBoundDataset = require('./lib/main/account-bound-dataset');
 const { RestRetryRegistry } = require('./lib/main/rest-retry-registry');
-const {
-  createStockEntityIndexReadiness,
-  reconcileStockIndexStartupTask,
-} = require('./lib/main/stock-entity-index-readiness');
+const stockMasterClient = require('./lib/main/stock-master-client');
+const { reconcileStockIndexStartupTask } = require('./lib/main/stock-entity-index-readiness');
 const { createChartFollowupTracker } = require('./lib/main/chart-followup');
 const simpleChartFastPath = require('./lib/main/simple-chart-fast-path');
 const selectorFastPath = require('./lib/main/selector-fast-path');
@@ -932,7 +930,7 @@ const integratedRealtimeShutdown = integratedCardRealtime.createBoundedShutdownC
     }
     stopOrbCursorPoll(); // 인터벌 누수 금지 — 창이 죽기 전에 정리한다
     chartReloadAuthority.clear();
-    stockEntityIndexReadiness.stop();
+    stockMasterAbortController.abort(new Error('Athena 앱 종료'));
     // 트레이로 숨겨진 동안에는 selector worker를 유지하고 실제 종료에서만 닫는다.
     selectorClaudePool.stop(new Error('Athena 앱 종료'));
     liveRuntimes.stopAllChatSessions(new Error('Athena 앱 종료'));
@@ -4061,38 +4059,8 @@ const providerConversationRotationQueue = createConversationRotationQueue({
     })
     : Promise.resolve(),
 });
-const stockEntityIndex = new restDatasetRunner.StockEntityIndex();
-let lastStockIndexErrorLogAt = 0;
-async function refreshActiveStockEntityIndex(index, { signal } = {}) {
-  const bound = await createActiveBackendAccountInvoker((options) => (
-    restDatasetRunner.refreshStockEntityIndex(index, {
-      backendBase: BACKEND_HTTP_BASE,
-      signal,
-      ...options,
-    })
-  ));
-  if (!bound.ok) throw new Error(bound.error || '조회에 사용할 서버 계좌를 확인할 수 없다');
-  return bound.run();
-}
-const stockEntityIndexReadiness = createStockEntityIndexReadiness({
-  index: stockEntityIndex,
-  refresh: async (index, { signal }) => {
-    const count = await refreshActiveStockEntityIndex(index, { signal });
-    mdlog(`Kiwoom 종목명 인덱스 갱신 — 종목 ${count}개`);
-    return count;
-  },
-  onError: (error) => {
-    const now = Date.now();
-    if (now - lastStockIndexErrorLogAt < 30_000) return;
-    lastStockIndexErrorLogAt = now;
-    mdlog(`Kiwoom 종목명 인덱스 갱신 보류(재시도 예정): ${String((error && error.message) || error)}`);
-  },
-  onReady: ({ size }) => {
-    if (reconcileStockIndexStartupTask(startupReadiness, size)) {
-      mdlog(`Kiwoom 종목명 인덱스 회복 — 부팅 준비 상태 갱신 · 종목 ${size}개`);
-    }
-  },
-});
+const stockMasterAbortController = new AbortController();
+let stockMasterRecoveryPromise = null;
 const chartFollowupTracker = createChartFollowupTracker();
 const DIRECT_FEEDBACK_WATCHDOG_MS = 2200;
 const DIRECT_DATASET_SETTLE_TIMEOUT_MS = 30_000;
@@ -4379,6 +4347,10 @@ async function runLiveQueryInnerBody(query, expand, origin, turnConversationId, 
     runtime.activeSelectorFastRun.abort(new Error('새 질의가 이전 Selector fast path를 대체했다'));
     runtime.activeSelectorFastRun = null;
   }
+  if (runtime.activeStockMasterLookup) {
+    runtime.activeStockMasterLookup.abort(new Error('새 질의가 이전 SQLite 종목 검색을 대체했다'));
+    runtime.activeStockMasterLookup = null;
+  }
   // 모드 전용 채팅(백테스트·그래프·에이전트)은 모델 앞의 빠른 경로 4종(차트 후속·단순 차트·
   // REST 직결·Selector)을 전부 건너뛴다 — 넷 다 모델을 안 부르고 카드를 밀어, 모드 규율과
   // 턴 프리픽스(live-prompt.js)가 무력화된다. 그래프 모드는 이유가 하나 더 있다: 그 모드의
@@ -4403,10 +4375,31 @@ async function runLiveQueryInnerBody(query, expand, origin, turnConversationId, 
   }
   chartFollowupTracker.invalidateForQuery(query);
 
+  let stockResolution = { ready: false, instrument: null };
+  if (!modePromptRequired) {
+    try {
+      stockResolution = await stockMasterClient.resolveCurrentStockMasterQuery(query, {
+        runtime,
+        backendBase: BACKEND_HTTP_BASE,
+        fetchImpl: fetch,
+        shutdownSignal: stockMasterAbortController.signal,
+      });
+    } catch (error) {
+      if (error && error.name === 'AbortError') throw error;
+      mdlog(`SQLite 종목 검색 보류: ${String((error && error.message) || error)}`);
+    }
+  }
+  // 기존 닫힌 문법 빌더에는 SQLite가 이 질문에서 확정한 한 종목만 전달한다.
+  // 전체 종목 목록은 Electron 프로세스에 적재하거나 보관하지 않는다.
+  const queryStockEntityIndex = stockMasterClient.createQueryScopedIndex(
+    restDatasetRunner.StockEntityIndex,
+    stockResolution,
+  );
+
   const simpleChartRoute = modePromptRequired ? { handled: false } : await simpleChartFastPath.runSimpleChartFastPath({
     query,
-    index: stockEntityIndex,
-    ensureReady: (timeoutMs) => stockEntityIndexReadiness.ensureReady(timeoutMs),
+    index: queryStockEntityIndex,
+    ensureReady: async () => stockResolution.ready,
     buildDataset: (question, index) => restDatasetRunner.buildChartDataset(question, index, {
       idFactory: () => `rest-${crypto.randomUUID()}`,
     }),
@@ -4433,19 +4426,19 @@ async function runLiveQueryInnerBody(query, expand, origin, turnConversationId, 
   }
   // 정형 질의 모델 우회 확장(2026-08-26 속도 레버) — 순서는 의미 없다(각자
   // 닫힌 문법이라 서로 안 겹친다, rest-dataset-runner.js 테스트로 고정).
-  const directDataset = modePromptRequired ? null : restDatasetRunner.buildCompoundScreenDataset(query, stockEntityIndex, {
+  const directDataset = modePromptRequired ? null : restDatasetRunner.buildCompoundScreenDataset(query, queryStockEntityIndex, {
     idFactory: () => `rest-${crypto.randomUUID()}`,
-  }) || restDatasetRunner.buildQuoteDataset(query, stockEntityIndex, {
+  }) || restDatasetRunner.buildQuoteDataset(query, queryStockEntityIndex, {
     idFactory: () => `rest-${crypto.randomUUID()}`,
-  }) || restDatasetRunner.buildChartDataset(query, stockEntityIndex, {
+  }) || restDatasetRunner.buildChartDataset(query, queryStockEntityIndex, {
     idFactory: () => `rest-${crypto.randomUUID()}`,
-  }) || restDatasetRunner.buildOrderBookDataset(query, stockEntityIndex, {
+  }) || restDatasetRunner.buildOrderBookDataset(query, queryStockEntityIndex, {
     idFactory: () => `rest-${crypto.randomUUID()}`,
-  }) || restDatasetRunner.buildInvestorFlowDataset(query, stockEntityIndex, {
+  }) || restDatasetRunner.buildInvestorFlowDataset(query, queryStockEntityIndex, {
     idFactory: () => `rest-${crypto.randomUUID()}`,
-  }) || restDatasetRunner.buildTradingSourceDataset(query, stockEntityIndex, {
+  }) || restDatasetRunner.buildTradingSourceDataset(query, queryStockEntityIndex, {
     idFactory: () => `rest-${crypto.randomUUID()}`,
-  }) || restDatasetRunner.buildStockInfoDataset(query, stockEntityIndex, {
+  }) || restDatasetRunner.buildStockInfoDataset(query, queryStockEntityIndex, {
     idFactory: () => `rest-${crypto.randomUUID()}`,
   }) || restDatasetRunner.buildProgramTradeDataset(query, {
     idFactory: () => `rest-${crypto.randomUUID()}`,
@@ -4464,7 +4457,7 @@ async function runLiveQueryInnerBody(query, expand, origin, turnConversationId, 
   // render까지 끝낸다. 애매함/인자 부족/비조회 응답만 기존 Claude 경로로 넘긴다.
   // 단순 시장가 주문은 별도 닫힌 문법에서만 intent=order로 보내고, 실행하지 않은
   // guarded 초안을 채팅 주문확인 UI에 전달한다.
-  const orderDraft = selectorFastPath.buildMarketOrderDraft(query, stockEntityIndex);
+  const orderDraft = selectorFastPath.buildMarketOrderDraft(query, queryStockEntityIndex);
   const selectorController = new AbortController();
   runtime.activeSelectorFastRun = selectorController;
   try {
@@ -4991,6 +4984,10 @@ function abortRuntimeWork(runtime, reason) {
   if (runtime.activeSelectorFastRun) {
     runtime.activeSelectorFastRun.abort(reason || new Error('대화 작업을 취소했다'));
     runtime.activeSelectorFastRun = null;
+  }
+  if (runtime.activeStockMasterLookup) {
+    runtime.activeStockMasterLookup.abort(reason || new Error('대화 작업을 취소했다'));
+    runtime.activeStockMasterLookup = null;
   }
   if (runtime.activeRestRun) {
     runtime.activeRestRun.abort(reason || new Error('대화 작업을 취소했다'));
@@ -6508,17 +6505,51 @@ async function withDeadline(promise, timeoutMs, message) {
 }
 
 async function waitForStockIndex(context) {
-  stockEntityIndexReadiness.start();
-  await waitForInitialReadiness({
-    ensureReady: (timeoutMs) => stockEntityIndexReadiness.ensureReady(timeoutMs),
-    maxAttempts: 6,
-    attemptTimeoutMs: 2_000,
-    onRetry: (attempt) => context.update({
-      state: 'retrying', detail: `종목명 인덱스 적재 재시도 중 (${attempt}/6)`,
-    }),
-    errorMessage: '종목명 인덱스를 12초 안에 처음 적재하지 못함',
-  });
-  return { detail: `종목 ${stockEntityIndex.size}개 적재 완료` };
+  let readyStatus = null;
+  try {
+    await waitForInitialReadiness({
+      ensureReady: async (timeoutMs) => {
+        readyStatus = await stockMasterClient.waitForStockMasterReady({
+          backendBase: BACKEND_HTTP_BASE,
+          fetchImpl: fetch,
+          timeoutMs,
+          signal: stockMasterAbortController.signal,
+        });
+        return !!readyStatus;
+      },
+      maxAttempts: 6,
+      attemptTimeoutMs: 2_000,
+      onRetry: (attempt) => context.update({
+        state: 'retrying', detail: `SQLite 종목 마스터 준비 확인 중 (${attempt}/6)`,
+      }),
+      errorMessage: 'SQLite 종목 마스터를 12초 안에 준비하지 못함',
+    });
+  } catch (error) {
+    startStockMasterReadinessRecovery();
+    throw error;
+  }
+  return { detail: `SQLite 종목 마스터 ${readyStatus.size}개 준비 완료` };
+}
+
+function startStockMasterReadinessRecovery() {
+  if (stockMasterRecoveryPromise || stockMasterAbortController.signal.aborted) return;
+  stockMasterRecoveryPromise = stockMasterClient.recoverStockMasterReady({
+    backendBase: BACKEND_HTTP_BASE,
+    fetchImpl: fetch,
+    signal: stockMasterAbortController.signal,
+    onReady: ({ size }) => {
+      const task = startupReadiness.snapshot().tasks.find((candidate) => candidate.id === 'stock-index');
+      if (task && task.state === 'succeeded') return true;
+      if (!reconcileStockIndexStartupTask(startupReadiness, size)) return false;
+      mdlog(`SQLite 종목 마스터 늦은 준비 완료 — 부팅 상태 회복 · 종목 ${size}개`);
+      return true;
+    },
+  }).catch((error) => {
+    if (!stockMasterAbortController.signal.aborted) {
+      mdlog(`SQLite 종목 마스터 회복 확인 실패: ${String((error && error.message) || error)}`);
+    }
+    return null;
+  }).finally(() => { stockMasterRecoveryPromise = null; });
 }
 
 async function waitForBrainStartup(context) {
@@ -6687,9 +6718,8 @@ async function startLiveBoot(createWindowsPromise) {
   registerLiveBootRunners(createWindowsPromise);
   await runStartupOrchestration({
     readiness: startupReadiness,
-    // stock-index는 백엔드 프록시를 타므로 backend gate 뒤에 둔다 — 앞에 두면 앱이
-    // 백엔드를 직접 띄우는 부팅에서 12초 예산이 백엔드 기동 시간에 잡아먹혀 매번
-    // 실패한다(2026-09-07 실측: 종목명 인덱스 12초 안에 미적재 → degraded).
+    // stock-index는 백엔드 SQLite 상태를 확인하므로 backend gate 뒤에 둔다.
+    // 전체 종목 갱신과 1시간 배치는 백엔드 lifespan이 단독 소유한다.
     concurrentTaskIds: ['account-token'],
     dependencyTaskChains: [['mcp-env', 'provider-warm']],
     dependencyTaskId: 'backend',

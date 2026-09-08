@@ -23,7 +23,7 @@ function loadSelectorStage(dispatch) {
     shellForConversation: () => ({ send() {} }),
     modePromptRequired: false,
     simpleChartRoute: { handled: false },
-    stockEntityIndex: {},
+    queryStockEntityIndex: {},
     selectorFastPath: {
       buildMarketOrderDraft: () => ({ intent: 'order', arguments: { symbol: '005930' } }),
       runSelectorFastPath: dispatch,
