@@ -689,7 +689,13 @@ window.athena.on('athena:rest-retry-available', (payload = {}) => {
 // main.js가 athena__render_canvas(source:'live')로 claude -p를 실왕복한 뒤 매
 // render_canvas tool_result마다 이걸 보낸다. status는 success/fallback(둘 다
 // canvas_type을 읽어 렌더한다) · rejected/error/unparseable(카드 대신 안내만).
+// 다중 대화(2026-09-08) — 배경 대화의 카드는 main이 그 대화의 세션에 적어 두고 여기로 보내지 않지만,
+// 갈아타는 찰나에 늦게 도착한 카드까지 걸러야 다른 대화의 캔버스에 섞이지 않는다.
+let canvasConversationId = null;
+window.athena.on('athena:init', (payload) => { if (payload && payload.conversationId) canvasConversationId = payload.conversationId; });
+window.athena.on('athena:conversation-active', ({ conversationId } = {}) => { if (conversationId) canvasConversationId = conversationId; });
 window.athena.on('athena:add-canvas-live', async (result) => {
+  if (result && result.conversationId && canvasConversationId && result.conversationId !== canvasConversationId) return;
   const rendererReceivedAt = performance.now();
   const node = await addLiveCard(result);
   if (!node || !result || (result.status !== 'success' && result.status !== 'fallback')) return;
