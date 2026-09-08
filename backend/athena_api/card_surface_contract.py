@@ -364,7 +364,10 @@ def _realtime_pending_slots(board: BoardTemplate, filled: set[str]) -> list[str]
         bindings = slot.bindings
         if not bindings:
             continue
-        if all(_operation_is_realtime(binding.mapping_id) for binding in bindings):
+        # 실시간 바인딩이 **하나라도** 있으면 그 잎의 주 출처는 실시간 채널이다.
+        # REST 대체 바인딩이 값을 못 실어 왔더라도 프레임이 오면 채워지므로, 첫
+        # 프레임 전에 「미제공」을 찍는 것은 여전히 거짓말이다.
+        if any(_operation_is_realtime(binding.mapping_id) for binding in bindings):
             pending.append(slot.slot_id)
     return pending
 

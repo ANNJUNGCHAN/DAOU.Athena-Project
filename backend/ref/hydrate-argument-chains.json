@@ -1,6 +1,6 @@
 {
  "version": "hydrate-argument-chains.v1",
- "description": "화면이 안 보낸 필수 조회 인자 중, 값을 API 자신이 목록으로 알려주는 자리. 그 목록 op를 먼저 부르고 첫 항목을 쓴다 — 코드를 지어내지 않는다. 목록의 첫 항목은 그 화면이 처음 여는 항목이기도 하다(정렬은 조회가 정한다).",
+ "description": "화면이 안 보낸 필수 조회 인자 중, 값을 API 자신이 목록으로 알려주는 자리. 그 목록 op를 먼저 부르고 첫 항목을 쓴다 — 코드를 지어내지 않는다. 목록의 첫 항목은 그 화면이 처음 여는 항목이기도 하다(정렬은 조회가 정한다). 목록 op가 조회 대상을 요구하면 요청의 target을 그대로 물려 쓴다.",
  "chains": {
   "mmcm_cd": {
    "operation_ref": "base:ka10102",
@@ -18,9 +18,9 @@
    "why": "그룹SEQ — Kiwoom 설명문이 'ka01300 응답 결과의 gcod값을 입력'이라고 적어 둔 자리"
   },
   "etfobjt_idex_cd": {
-   "operation_ref": "base:ka40004",
-   "json_path": "$.etfall_mrpr[].trace_idex_cd",
-   "why": "ETF대상지수코드 — ETF 전체시세(ka40004) 응답이 싣는 추적지수 코드"
+   "operation_ref": "base:ka40007",
+   "json_path": "$.etfobjt_idex_cd",
+   "why": "ETF대상지수코드 — 그 ETF의 시간별 체결(ka40007) 응답이 자기 대상지수 코드를 싣는다. 조회 대상(stk_cd)을 그대로 물려 쓴다."
   }
  }
 }

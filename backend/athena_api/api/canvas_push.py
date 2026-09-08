@@ -1137,7 +1137,7 @@ async def _resolve_chained_arguments(
             continue
         if alias not in resolved:
             resolved[alias] = await _first_chain_value(
-                chain, request, client, selector
+                chain, target, request, client, selector
             )
         value = resolved[alias]
         if value is not None:
@@ -1147,11 +1147,16 @@ async def _resolve_chained_arguments(
 
 async def _first_chain_value(
     chain: Mapping[str, str],
+    target: Mapping[str, Any],
     request: Request,
     client: KiwoomClient,
     selector: SelectorService,
 ) -> str | None:
-    """목록 op를 부르고 그 경로의 첫 값을 돌려준다. 실패는 ``None``."""
+    """목록 op를 부르고 그 경로의 첫 값을 돌려준다. 실패는 ``None``.
+
+    목록 op가 조회 대상을 요구하면(「이 ETF의 대상지수 코드」처럼) 요청의 ``target``을
+    그대로 물려 쓴다 — 그 값은 화면이 이미 지목한 것이다.
+    """
 
     operation_ref = chain["operation_ref"]
     document = selector.catalog.find_exact(operation_ref)
@@ -1161,7 +1166,7 @@ async def _first_chain_value(
         (field.alias or name): field.is_required()
         for name, field in document.request_model.model_fields.items()
     }
-    arguments = fill_missing_arguments(operation_ref, {}, aliases)
+    arguments = fill_missing_arguments(operation_ref, target, aliases)
     if any(required and alias not in arguments for alias, required in aliases.items()):
         return None
     try:
