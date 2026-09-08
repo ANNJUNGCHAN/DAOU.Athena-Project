@@ -1,2776 +1,2776 @@
 {
- "schema_version": 1,
- "paper_file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
- "exported_at": "2026-09-05",
- "pages": [
-  {
-   "id": "1-0",
-   "name": "화면",
-   "boards": 45
-  },
-  {
-   "id": "D-2",
-   "name": "그래프",
-   "boards": 7
-  },
-  {
-   "id": "A-2",
-   "name": "에이전트",
-   "boards": 13
-  },
-  {
-   "id": "B-2",
-   "name": "플러그인",
-   "boards": 9
-  },
-  {
-   "id": "C-2",
-   "name": "키우미",
-   "boards": 9
-  },
-  {
-   "id": "5-1",
-   "name": "카드",
-   "boards": 109
-  },
-  {
-   "id": "F-1",
-   "name": "증명",
-   "boards": 12
-  },
-  {
-   "id": "H-1",
-   "name": "카드미니",
-   "boards": 203
-  },
-  {
-   "id": "8-1",
-   "name": "백테스트",
-   "boards": 26
-  },
-  {
-   "id": "G-1",
-   "name": "백테스트 구현 현황",
-   "boards": 17
-  }
- ],
- "boards": [
-  {
-   "id": "11D-0",
-   "page": "1-0",
-   "name": "24 · 주문 — 거래 기능 연결 안내",
-   "role": "screen"
-  },
-  {
-   "id": "164F-2",
-   "page": "1-0",
-   "name": "01 · 화면 정본 — 최신 흐름과 상태 지도",
-   "role": "reference",
-   "why": "설명 보드 — 화면 정본 지도(다른 보드들의 색인)라 구현 대상 표면이 아니다"
-  },
-  {
-   "id": "16OD-2",
-   "page": "1-0",
-   "name": "02 · 부팅 — READY · 0–240ms",
-   "role": "screen"
-  },
-  {
-   "id": "16OJ-2",
-   "page": "1-0",
-   "name": "03 · 부팅 — TYPE A→AT · 240–560ms",
-   "role": "screen"
-  },
-  {
-   "id": "16OQ-2",
-   "page": "1-0",
-   "name": "04 · 부팅 — TYPE ATH→ATHE · 560–880ms",
-   "role": "screen"
-  },
-  {
-   "id": "16OX-2",
-   "page": "1-0",
-   "name": "05 · 부팅 — COMPLETE · 880–1440ms",
-   "role": "screen"
-  },
-  {
-   "id": "16P3-2",
-   "page": "1-0",
-   "name": "06 · 부팅 — DIRECT SHELL EXPAND · 1440–1920ms",
-   "role": "screen"
-  },
-  {
-   "id": "1DX-0",
-   "page": "1-0",
-   "name": "07 · 온보딩 — CLI 연결 (AT-SY-002)",
-   "role": "screen"
-  },
-  {
-   "id": "1FN-0",
-   "page": "1-0",
-   "name": "08 · 온보딩 — 계좌 연결 (AT-SY-003)",
-   "role": "screen"
-  },
-  {
-   "id": "1I0-0",
-   "page": "1-0",
-   "name": "19 · 인증 — OAuth 토큰 ready",
-   "role": "screen"
-  },
-  {
-   "id": "1KK-0",
-   "page": "1-0",
-   "name": "20 · 인증 — 토큰 4상태",
-   "role": "screen"
-  },
-  {
-   "id": "1M3-0",
-   "page": "1-0",
-   "name": "21 · 인증 — 계좌 전환",
-   "role": "screen"
-  },
-  {
-   "id": "1OP-0",
-   "page": "1-0",
-   "name": "22 · 주문 — 검토·영향·확인",
-   "role": "screen"
-  },
-  {
-   "id": "1Y3-0",
-   "page": "1-0",
-   "name": "11 · 대화 — 모델 팝오버 · 루틴 승인",
-   "role": "screen"
-  },
-  {
-   "id": "25Q-0",
-   "page": "1-0",
-   "name": "09 · 셸 — 질문 입력 · Task Canvas",
-   "role": "screen"
-  },
-  {
-   "id": "2USX-1",
-   "page": "1-0",
-   "name": "31 · 설정 — 플러그인 (스니펫 등록·감사 로그)",
-   "role": "retired",
-   "why": "보드 옆 폐기 각주(43BL-1)가 「폐기 · 플러그인 모드 02로 이동(2026-09-03)」을 선언한다 — 스니펫 등록·감사 로그는 플러그인 모드 캔버스(app/lib/plugin-canvas.js)에 있다"
-  },
-  {
-   "id": "2UWT-1",
-   "page": "1-0",
-   "name": "32 · 설정 — 성향·이력",
-   "role": "screen"
-  },
-  {
-   "id": "2V0K-1",
-   "page": "1-0",
-   "name": "33 · 온보딩 — CLI 연결 실패 (AT-SY-002)",
-   "role": "screen"
-  },
-  {
-   "id": "2V27-1",
-   "page": "1-0",
-   "name": "34 · 사이드바 검색 — 결과·빈 결과",
-   "role": "screen"
-  },
-  {
-   "id": "3JL-0",
-   "page": "1-0",
-   "name": "12 · 계정 메뉴 — 설정 진입",
-   "role": "screen"
-  },
-  {
-   "id": "3KM-0",
-   "page": "1-0",
-   "name": "10 · 셸 — 답변 중 · Task Canvas",
-   "role": "reference",
-   "why": "빈 캔버스 정본은 보드 26(COS-0, 빈 캔버스 v3). 이 보드가 그린 v1 히어로(아직 답변 카드가 없습니다 · 성향 그래프 열기)는 앱이 그리지 않고, 빈 이력 「새 대화」는 CSS :empty 의사요소라 화면계 문구 게이트가 텍스트 노드로 못 잰다. 그 계약은 verify.js 1b-2와 COS-0 라우트가 진다"
-  },
-  {
-   "id": "3VHD-1",
-   "page": "1-0",
-   "name": "08 · 그래프 — 되물을 것들 카드 · 지난 대화 읽기 전용",
-   "role": "screen"
-  },
-  {
-   "id": "3VIQ-1",
-   "page": "1-0",
-   "name": "35 · 대화 이력 — 모드 5구역 · 세션 목록",
-   "role": "screen"
-  },
-  {
-   "id": "3VS6-1",
-   "page": "1-0",
-   "name": "36 · 프로젝트 추가 — 폴더 점유",
-   "role": "screen"
-  },
-  {
-   "id": "3VV8-1",
-   "page": "1-0",
-   "name": "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
-   "role": "screen"
-  },
-  {
-   "id": "3VV9-1",
-   "page": "1-0",
-   "name": "38 · 펜 — 새 대화창 모드 선택",
-   "role": "screen"
-  },
-  {
-   "id": "3VVU-1",
-   "page": "1-0",
-   "name": "40 · 모드 전환 — 조용한 전환 · 새 대화",
-   "role": "reference",
-   "why": "창 프레임 없이 전환 3단계를 나란히 놓은 흐름 도해라 한 순간에 도달할 화면이 아니다 — 그린 장면은 보드 25·35·41 이 각자 진다"
-  },
-  {
-   "id": "3W9B-1",
-   "page": "1-0",
-   "name": "39 · 동시 실행 — 상태 4종 · 스피너",
-   "role": "reference",
-   "why": "보드 자신의 Gap Note가 「지금은 상주 채팅 세션이 프로세스 전역에 하나뿐 … 스피너 셋이 동시에 도는 이 화면은 그 구조 위에 없습니다」라고 적는다. 사용자 결정 2026-09-07: 구현 범위를 정하기 전에는 다중 실행 구조를 도입하지 않는다. 도달할 화면이 아니다"
-  },
-  {
-   "id": "3WBZ-1",
-   "page": "1-0",
-   "name": "41 · 세션 복원 — 다시 누르면 그대로",
-   "role": "screen"
-  },
-  {
-   "id": "3WOP-1",
-   "page": "1-0",
-   "name": "42 · 스냅샷 명세 — 모드별 저장 항목",
-   "role": "reference",
-   "why": "설명 보드 — 모드 다섯 × 저장 항목 아홉의 값·참조 표와 저장 시점·위치 요약뿐이라 그리는 화면이 없다(창·사이드바·패널을 한 프레임도 그리지 않는다). 같은 계열의 43번(세션 저장 모델)도 같은 이유로 reference다"
-  },
-  {
-   "id": "3WXE-1",
-   "page": "1-0",
-   "name": "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
-   "role": "reference",
-   "why": "설명 보드 — Open WebUI·Orca 외부 참조 모델을 적은 자료라 구현 대상 표면이 아니다"
-  },
-  {
-   "id": "3ZPB-0",
-   "page": "1-0",
-   "name": "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
-   "role": "screen"
-  },
-  {
-   "id": "9GI-0",
-   "page": "1-0",
-   "name": "27 · 접근성 — 투명도·모션 감소",
-   "role": "reference",
-   "why": "Paper가 창 프레임 없이 그린 1680×352 명세 시트 — 제목 띠와 문서 두 칸(투명도 감소·모션 감소)뿐이라 도달할 화면이 아니다. 폴백 자체는 app/styles/access.css 가 구현하고 app/lib/semantic-workspace-accessibility.test.js 가 잰다"
-  },
-  {
-   "id": "9GJ-0",
-   "page": "1-0",
-   "name": "23 · 주문 — 완료·보류·재시도",
-   "role": "contract",
-   "why": "창 프레임 없이 실행 전 차단 규칙과 실행 후 상태 범례(428·409·기타)를 그린 규칙·범례 보드 — 계약 문장 10개를 docs/architecture/paper-contracts.md 로 옮겼다"
-  },
-  {
-   "id": "AJ-0",
-   "page": "1-0",
-   "name": "13 · 설정 — 셸 오버레이",
-   "role": "screen"
-  },
-  {
-   "id": "AMZ-0",
-   "page": "1-0",
-   "name": "25 · 모드 전환 — 대화 유지·작업공간 교체",
-   "role": "screen"
-  },
-  {
-   "id": "COS-0",
-   "page": "1-0",
-   "name": "26 · 빈 작업공간 — 대화·그래프·백테스트",
-   "role": "screen"
-  },
-  {
-   "id": "DH2-0",
-   "page": "1-0",
-   "name": "30 · 대화 턴 — 복원 실패",
-   "role": "screen"
-  },
-  {
-   "id": "F9-0",
-   "page": "1-0",
-   "name": "14 · 설정 — 계좌 (AT-ST-001)",
-   "role": "screen"
-  },
-  {
-   "id": "FLM-0",
-   "page": "1-0",
-   "name": "16 · 계좌 등록 — 인증 실패 (AT-ST-002)",
-   "role": "screen"
-  },
-  {
-   "id": "FPE-0",
-   "page": "1-0",
-   "name": "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
-   "role": "screen"
-  },
-  {
-   "id": "G5B-0",
-   "page": "1-0",
-   "name": "28 · Windows 반응형 창 · Snap",
-   "role": "screen"
-  },
-  {
-   "id": "GCF-0",
-   "page": "1-0",
-   "name": "29 · 프로젝트·최근·새 채팅",
-   "role": "screen"
-  },
-  {
-   "id": "OJ-0",
-   "page": "1-0",
-   "name": "18 · 설정 — 모델 · AI 제공업체 계정",
-   "role": "screen"
-  },
-  {
-   "id": "XI-0",
-   "page": "1-0",
-   "name": "15 · 계좌 등록 — 인증 확인 중 (AT-ST-002)",
-   "role": "screen"
-  },
-  {
-   "id": "2FIA-2",
-   "page": "D-2",
-   "name": "05 · 그래프 — 수집·노출·브레인 제어",
-   "role": "screen"
-  },
-  {
-   "id": "2QA3-2",
-   "page": "D-2",
-   "name": "06 · 그래프 — 헤더 필터 (기간·정렬·연결 수)",
-   "role": "screen"
-  },
-  {
-   "id": "2QCN-2",
-   "page": "D-2",
-   "name": "07 · 그래프 — 정직성 상태 (이름·인코딩·빈 값)",
-   "role": "screen"
-  },
-  {
-   "id": "31H-0",
-   "page": "D-2",
-   "name": "04 · 그래프 — 노드 선택 · 공통 패널",
-   "role": "screen"
-  },
-  {
-   "id": "3NE-0",
-   "page": "D-2",
-   "name": "01 · 셸 — 그래프 모드 · 요약 뷰",
-   "role": "screen"
-  },
-  {
-   "id": "4AN-0",
-   "page": "D-2",
-   "name": "02 · 셸 — 그래프 요약 · 행 선택",
-   "role": "screen"
-  },
-  {
-   "id": "4IA-0",
-   "page": "D-2",
-   "name": "03 · 그래프 — 기본 군집 지도",
-   "role": "screen"
-  },
-  {
-   "id": "2IJN-2",
-   "page": "A-2",
-   "name": "06 · 에이전트 — 작업 설정",
-   "role": "screen"
-  },
-  {
-   "id": "432Z-1",
-   "page": "A-2",
-   "name": "07 · 에이전트 대화 — 제어 제안 턴 A~E",
-   "role": "screen"
-  },
-  {
-   "id": "4330-1",
-   "page": "A-2",
-   "name": "08 · 에이전트 대화 — 결과 턴",
-   "role": "screen"
-  },
-  {
-   "id": "43WD-1",
-   "page": "A-2",
-   "name": "09 · 에이전트 — 새 알람 · 말로 설명하면 AI가 감시 함수를 만든다",
-   "role": "screen"
-  },
-  {
-   "id": "446V-1",
-   "page": "A-2",
-   "name": "10 · 에이전트 — 알람 노드·흐름 · 검사 결과 · 승인",
-   "role": "screen"
-  },
-  {
-   "id": "4BAP-1",
-   "page": "A-2",
-   "name": "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
-   "role": "screen"
-  },
-  {
-   "id": "44HD-1",
-   "page": "A-2",
-   "name": "11 · 에이전트 — 노드에서 ‘이상해요’ → AI가 고치고 다시 검사",
-   "role": "screen"
-  },
-  {
-   "id": "44RV-1",
-   "page": "A-2",
-   "name": "12 · 에이전트 — 활성 코드 알람 · 상세·발화 이력",
-   "role": "screen"
-  },
-  {
-   "id": "56X-0",
-   "page": "A-2",
-   "name": "01 · 셸 — 알림 파생 방",
-   "role": "screen"
-  },
-  {
-   "id": "ARM-0",
-   "page": "A-2",
-   "name": "02 · 에이전트 — 알람 센터 · 라이브 관제",
-   "role": "screen"
-  },
-  {
-   "id": "B57-0",
-   "page": "A-2",
-   "name": "03 · 에이전트 — 실행 이력·결과",
-   "role": "screen"
-  },
-  {
-   "id": "BIM-0",
-   "page": "A-2",
-   "name": "04 · 에이전트 — 프로액티브",
-   "role": "screen"
-  },
-  {
-   "id": "BV0-0",
-   "page": "A-2",
-   "name": "05 · 에이전트 — 작업",
-   "role": "screen"
-  },
-  {
-   "id": "15J-0",
-   "page": "B-2",
-   "name": "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
-   "role": "screen"
-  },
-  {
-   "id": "2NW8-2",
-   "page": "B-2",
-   "name": "05 · 플러그인 — 설치 승인 (캔버스 카드)",
-   "role": "screen"
-  },
-  {
-   "id": "2NXS-2",
-   "page": "B-2",
-   "name": "06 · 플러그인 — 상태 모음 (6상태)",
-   "role": "screen"
-  },
-  {
-   "id": "3ZJD-0",
-   "page": "B-2",
-   "name": "07 · 플러그인 대화 — 제안 턴 5동작",
-   "role": "screen"
-  },
-  {
-   "id": "3ZLW-0",
-   "page": "B-2",
-   "name": "08 · 플러그인 대화 — 결과 턴",
-   "role": "screen"
-  },
-  {
-   "id": "3ZNO-0",
-   "page": "B-2",
-   "name": "09 · 플러그인 창 복원",
-   "role": "screen"
-  },
-  {
-   "id": "CU0-0",
-   "page": "B-2",
-   "name": "03 · 플러그인 — 허브·설치",
-   "role": "screen"
-  },
-  {
-   "id": "CVY-0",
-   "page": "B-2",
-   "name": "04 · 플러그인 — 관리·마켓플레이스",
-   "role": "screen"
-  },
-  {
-   "id": "FT6-0",
-   "page": "B-2",
-   "name": "01 · 플러그인 — 기능 허용 (AT-ST-006)",
-   "role": "screen"
-  },
-  {
-   "id": "2I7Z-2",
-   "page": "C-2",
-   "name": "08 · 키우미 — 입력 스트립 모드별 얼굴",
-   "role": "retired",
-   "why": "사용자 결정 2026-09-01: 키우미 얼굴은 1종. Paper 08의 모드별 얼굴 5종은 폐기. kiumi-face.test.js와 verify:kiumi가 5모드 전부 visibleCount:1을 잰다"
-  },
-  {
-   "id": "2LFW-2",
-   "page": "C-2",
-   "name": "09 · 키우미 — 미니 카드 10종",
-   "role": "screen"
-  },
-  {
-   "id": "2TJ-0",
-   "page": "C-2",
-   "name": "02 · 키우미 — 표정 10종",
-   "role": "reference",
-   "why": "얼굴 썸네일 10칸과 라벨뿐인 사양 판 — 앱은 표정을 도형으로만 그리고 이 열 칸을 나열하는 화면이 없다. 표정 계약은 verify:kiumi 와 scripts/gates/check-orb.mjs 가 잰다"
-  },
-  {
-   "id": "4TY-0",
-   "page": "C-2",
-   "name": "04 · 키우미 — 대화·콘텐츠 전개",
-   "role": "screen"
-  },
-  {
-   "id": "5EU-0",
-   "page": "C-2",
-   "name": "05 · 키우미 — 셸 숨김·표시",
-   "role": "reference",
-   "why": "표시 모드 A(셸 숨김)·B(셸 표시)를 나란히 놓은 사양 판이라 두 모드가 한 화면에 함께 설 수 없다 — 표시 모드 계약은 verify:kiumi 가 잰다"
-  },
-  {
-   "id": "5H3-0",
-   "page": "C-2",
-   "name": "03 · 키우미 — 시선·시간 루프",
-   "role": "reference",
-   "why": "시선 9방향·시간 루프 3종·신호 14가지 매핑표를 적은 사양 판 — 앱은 그 동작을 도형 움직임으로만 그린다. 동작 계약은 verify:kiumi 와 scripts/gates/check-orb.mjs(페이드 금지)가 잰다"
-  },
-  {
-   "id": "C8G-0",
-   "page": "C-2",
-   "name": "07 · 키우미 메뉴 — 셸 오버레이",
-   "role": "screen"
-  },
-  {
-   "id": "CLE-0",
-   "page": "C-2",
-   "name": "06 · 키우미 메뉴 — 두 진입점과 항목",
-   "role": "screen"
-  },
-  {
-   "id": "DO-0",
-   "page": "C-2",
-   "name": "01 · 키우미 — 상황별 표현·크기 매핑",
-   "role": "screen"
-  },
-  {
-   "id": "133H-2",
-   "page": "5-1",
-   "name": "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
-   "role": "card_template"
-  },
-  {
-   "id": "135M-2",
-   "page": "5-1",
-   "name": "CC-02 / R11 · 삼성전자 10주 시장가 매수",
-   "role": "card_template"
-  },
-  {
-   "id": "137X-2",
-   "page": "5-1",
-   "name": "CC-03 / R01 · 삼성전자 3개월 차트",
-   "role": "card_template"
-  },
-  {
-   "id": "13BC-2",
-   "page": "5-1",
-   "name": "CC-04 / R02 · 삼성전자 실시간 호가·체결",
-   "role": "card_template"
-  },
-  {
-   "id": "13K0-2",
-   "page": "5-1",
-   "name": "CC-06 / R04 · 거래대금 상위 저평가 탐색",
-   "role": "card_template"
-  },
-  {
-   "id": "15J9-2",
-   "page": "5-1",
-   "name": "CC-06 / R05 · 반도체 업종·AI 테마",
-   "role": "card_template"
-  },
-  {
-   "id": "15L8-2",
-   "page": "5-1",
-   "name": "CC-06 / R06 · 관심종목·조건 신호",
-   "role": "card_template"
-  },
-  {
-   "id": "15N5-2",
-   "page": "5-1",
-   "name": "CC-03 / R07 · KODEX 200 ETF",
-   "role": "card_template"
-  },
-  {
-   "id": "15P5-2",
-   "page": "5-1",
-   "name": "CC-03 / R08 · ELW 위험·만기",
-   "role": "card_template"
-  },
-  {
-   "id": "15R0-2",
-   "page": "5-1",
-   "name": "CC-06 / R09 · 시장 체온·VI",
-   "role": "card_template"
-  },
-  {
-   "id": "15XT-2",
-   "page": "5-1",
-   "name": "C01 · 좁은 데스크톱 — 차트",
-   "role": "card_spec"
-  },
-  {
-   "id": "15Y5-2",
-   "page": "5-1",
-   "name": "C02 · 좁은 데스크톱 — 실시간 호가",
-   "role": "card_spec"
-  },
-  {
-   "id": "15YH-2",
-   "page": "5-1",
-   "name": "C03 · 좁은 데스크톱 — 주문 확인",
-   "role": "card_spec"
-  },
-  {
-   "id": "161Q-2",
-   "page": "5-1",
-   "name": "S00 · 공통 상태·재시도",
-   "role": "card_spec"
-  },
-  {
-   "id": "1745-2",
-   "page": "5-1",
-   "name": "D01 · 문맥형 상세·이어보기 정본",
-   "role": "card_spec"
-  },
-  {
-   "id": "1IG2-0",
-   "page": "5-1",
-   "name": "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
-   "role": "card_spec"
-  },
-  {
-   "id": "1IG3-0",
-   "page": "5-1",
-   "name": "S01 · 시간 초과·취소·인증 만료·장 마감",
-   "role": "card_spec"
-  },
-  {
-   "id": "1JPU-0",
-   "page": "5-1",
-   "name": "A04 · 호가 정본 — 실시간 통합 호가",
-   "role": "card_template"
-  },
-  {
-   "id": "1JZW-0",
-   "page": "5-1",
-   "name": "A02×A04 · 호가 주문 정본 — 시장가 매수",
-   "role": "card_template"
-  },
-  {
-   "id": "1UO5-1",
-   "page": "5-1",
-   "name": "A02×A04 · 목록 펼침 검증 — 최근 체결 20건",
-   "role": "card_spec"
-  },
-  {
-   "id": "1WOB-1",
-   "page": "5-1",
-   "name": "A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위",
-   "role": "card_template"
-  },
-  {
-   "id": "2QFO-2",
-   "page": "5-1",
-   "name": "CC-05 / R03-T1 · 수급 — 투자자별",
-   "role": "card_template"
-  },
-  {
-   "id": "2QM7-2",
-   "page": "5-1",
-   "name": "CC-05 / R03-T2 · 수급 — 거래원",
-   "role": "card_template"
-  },
-  {
-   "id": "2QRP-1",
-   "page": "5-1",
-   "name": "CC-04 / R02-T2 · 호가 — 시간외 단일가",
-   "role": "card_template"
-  },
-  {
-   "id": "2QX1-1",
-   "page": "5-1",
-   "name": "CC-04 / R02-T3 · 호가 — KRX 금현물",
-   "role": "card_template"
-  },
-  {
-   "id": "2R3M-1",
-   "page": "5-1",
-   "name": "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
-   "role": "card_template"
-  },
-  {
-   "id": "2RBO-1",
-   "page": "5-1",
-   "name": "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
-   "role": "card_template"
-  },
-  {
-   "id": "2RJ7-1",
-   "page": "5-1",
-   "name": "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
-   "role": "card_template"
-  },
-  {
-   "id": "2ROJ-1",
-   "page": "5-1",
-   "name": "CC-05 / R03-T3 · 수급 — 프로그램",
-   "role": "card_template"
-  },
-  {
-   "id": "2RWK-1",
-   "page": "5-1",
-   "name": "CC-05 / R03-T4 · 수급 — 신용·대차",
-   "role": "card_template"
-  },
-  {
-   "id": "2S4E-1",
-   "page": "5-1",
-   "name": "CC-05 / R03-T5 · 수급 — 종목 동향",
-   "role": "card_template"
-  },
-  {
-   "id": "2SCE-1",
-   "page": "5-1",
-   "name": "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
-   "role": "card_template"
-  },
-  {
-   "id": "2SKU-1",
-   "page": "5-1",
-   "name": "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
-   "role": "card_template"
-  },
-  {
-   "id": "2SRV-1",
-   "page": "5-1",
-   "name": "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
-   "role": "card_template"
-  },
-  {
-   "id": "2SYW-1",
-   "page": "5-1",
-   "name": "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
-   "role": "card_template"
-  },
-  {
-   "id": "2T63-1",
-   "page": "5-1",
-   "name": "CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도",
-   "role": "card_template"
-  },
-  {
-   "id": "2TAG-1",
-   "page": "5-1",
-   "name": "CC-02 / R11-T2 · 정정 — 삼성전자 지정가 정정",
-   "role": "card_template"
-  },
-  {
-   "id": "2TET-1",
-   "page": "5-1",
-   "name": "CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소",
-   "role": "card_template"
-  },
-  {
-   "id": "2TJ6-1",
-   "page": "5-1",
-   "name": "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
-   "role": "card_template"
-  },
-  {
-   "id": "2TNJ-1",
-   "page": "5-1",
-   "name": "CC-02 / R11-T5 · 금현물 매수 — 금 99.99K 10g 시장가",
-   "role": "card_template"
-  },
-  {
-   "id": "2TRW-1",
-   "page": "5-1",
-   "name": "CC-04 / R02-T4 · 호가 — 정규장 5단",
-   "role": "card_template"
-  },
-  {
-   "id": "2TZN-1",
-   "page": "5-1",
-   "name": "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
-   "role": "card_template"
-  },
-  {
-   "id": "2U5L-1",
-   "page": "5-1",
-   "name": "CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
-   "role": "card_template"
-  },
-  {
-   "id": "2UBO-1",
-   "page": "5-1",
-   "name": "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
-   "role": "card_template"
-  },
-  {
-   "id": "2UHM-1",
-   "page": "5-1",
-   "name": "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
-   "role": "card_template"
-  },
-  {
-   "id": "2UN6-1",
-   "page": "5-1",
-   "name": "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
-   "role": "card_template"
-  },
-  {
-   "id": "2V71-0",
-   "page": "5-1",
-   "name": "CC-05 / R03-T6 · 수급 — 순위",
-   "role": "card_template"
-  },
-  {
-   "id": "2VDA-0",
-   "page": "5-1",
-   "name": "CC-03 / R01-T4 · 순위 — 주식 신호·순위",
-   "role": "card_template"
-  },
-  {
-   "id": "2VIN-0",
-   "page": "5-1",
-   "name": "CC-03 / R01-T5 · 순위 — ETF 전체시세",
-   "role": "card_template"
-  },
-  {
-   "id": "2VO0-0",
-   "page": "5-1",
-   "name": "CC-03 / R01-T6 · 순위 — ELW 순위",
-   "role": "card_template"
-  },
-  {
-   "id": "2WZK-0",
-   "page": "5-1",
-   "name": "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
-   "role": "card_template"
-  },
-  {
-   "id": "2X5N-0",
-   "page": "5-1",
-   "name": "CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
-   "role": "card_template"
-  },
-  {
-   "id": "2XA5-0",
-   "page": "5-1",
-   "name": "CC-03 / R01-T6-2 · 순위 — ELW 등락률",
-   "role": "card_template"
-  },
-  {
-   "id": "2XG6-0",
-   "page": "5-1",
-   "name": "CC-06 / R04-S3 · 종목찾기 — 전일 거래량",
-   "role": "card_template"
-  },
-  {
-   "id": "2XKO-0",
-   "page": "5-1",
-   "name": "CC-06 / R04-S4 · 종목찾기 — 등락률",
-   "role": "card_template"
-  },
-  {
-   "id": "2XP6-0",
-   "page": "5-1",
-   "name": "CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
-   "role": "card_template"
-  },
-  {
-   "id": "2XTO-0",
-   "page": "5-1",
-   "name": "CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위",
-   "role": "card_template"
-  },
-  {
-   "id": "2XY6-0",
-   "page": "5-1",
-   "name": "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
-   "role": "card_template"
-  },
-  {
-   "id": "2Y47-0",
-   "page": "5-1",
-   "name": "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
-   "role": "card_template"
-  },
-  {
-   "id": "2YA8-0",
-   "page": "5-1",
-   "name": "CC-06 / R04-S7 · 종목찾기 — 호가잔량 급증",
-   "role": "card_template"
-  },
-  {
-   "id": "2YEQ-0",
-   "page": "5-1",
-   "name": "CC-06 / R04-S8 · 종목찾기 — 잔량률 급증",
-   "role": "card_template"
-  },
-  {
-   "id": "2YJ8-0",
-   "page": "5-1",
-   "name": "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
-   "role": "card_template"
-  },
-  {
-   "id": "2YNQ-0",
-   "page": "5-1",
-   "name": "CC-06 / R04-S10 · 종목찾기 — 시간외 등락률",
-   "role": "card_template"
-  },
-  {
-   "id": "2YS8-0",
-   "page": "5-1",
-   "name": "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
-   "role": "card_template"
-  },
-  {
-   "id": "2YXS-0",
-   "page": "5-1",
-   "name": "CC-03 / R01-T4-2 · 순위 — 상하한가",
-   "role": "card_template"
-  },
-  {
-   "id": "2Z49-0",
-   "page": "5-1",
-   "name": "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
-   "role": "card_template"
-  },
-  {
-   "id": "2ZBB-0",
-   "page": "5-1",
-   "name": "CC-05 / R03-T6-3 · 순위 — 대차 상위",
-   "role": "card_template"
-  },
-  {
-   "id": "2ZHC-0",
-   "page": "5-1",
-   "name": "CC-03 / R01-T4-3 · 순위 — 고저가근접",
-   "role": "card_template"
-  },
-  {
-   "id": "2ZN9-0",
-   "page": "5-1",
-   "name": "CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
-   "role": "card_template"
-  },
-  {
-   "id": "2ZTA-0",
-   "page": "5-1",
-   "name": "CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
-   "role": "card_template"
-  },
-  {
-   "id": "2ZZ7-0",
-   "page": "5-1",
-   "name": "CC-03 / R01-T4-4 · 순위 — 가격급등락",
-   "role": "card_template"
-  },
-  {
-   "id": "3063-0",
-   "page": "5-1",
-   "name": "CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
-   "role": "card_template"
-  },
-  {
-   "id": "30C1-0",
-   "page": "5-1",
-   "name": "CC-03 / R01-T4-5 · 순위 — 거래량갱신",
-   "role": "card_template"
-  },
-  {
-   "id": "30HY-0",
-   "page": "5-1",
-   "name": "CC-05 / R03-T6-6 · 순위 — 외국인·기관 상위",
-   "role": "card_template"
-  },
-  {
-   "id": "30O1-0",
-   "page": "5-1",
-   "name": "CC-03 / R01-T4-6 · 순위 — 매물대집중",
-   "role": "card_template"
-  },
-  {
-   "id": "30TY-0",
-   "page": "5-1",
-   "name": "CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
-   "role": "card_template"
-  },
-  {
-   "id": "30ZW-0",
-   "page": "5-1",
-   "name": "CC-03 / R01-T4-7 · 순위 — 고저 PER",
-   "role": "card_template"
-  },
-  {
-   "id": "316O-0",
-   "page": "5-1",
-   "name": "CC-03 / R01-T4-8 · 순위 — 시가대비 등락",
-   "role": "card_template"
-  },
-  {
-   "id": "31CL-0",
-   "page": "5-1",
-   "name": "CC-05 / R03-T6-8 · 순위 — 동일순매매",
-   "role": "card_template"
-  },
-  {
-   "id": "31II-0",
-   "page": "5-1",
-   "name": "CC-03 / R01-T4-9 · 순위 — VI 발동",
-   "role": "card_template"
-  },
-  {
-   "id": "31OF-0",
-   "page": "5-1",
-   "name": "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
-   "role": "card_template"
-  },
-  {
-   "id": "31UD-0",
-   "page": "5-1",
-   "name": "CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
-   "role": "card_template"
-  },
-  {
-   "id": "32S7-0",
-   "page": "5-1",
-   "name": "CC-03 / R01-T7 · 차트 — 업종 지수",
-   "role": "card_template"
-  },
-  {
-   "id": "32XM-0",
-   "page": "5-1",
-   "name": "CC-03 / R01-T8 · 순위 — 신주인수권 전체",
-   "role": "card_template"
-  },
-  {
-   "id": "3BQB-0",
-   "page": "5-1",
-   "name": "CC-06 / R04-T1-X · 업종 — 업종 목록 펼침",
-   "role": "card_template"
-  },
-  {
-   "id": "3D4I-0",
-   "page": "5-1",
-   "name": "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
-   "role": "card_template"
-  },
-  {
-   "id": "3DI2-0",
-   "page": "5-1",
-   "name": "CC-03 / R01-X · 투자자 12주체",
-   "role": "card_template"
-  },
-  {
-   "id": "3DZ1-0",
-   "page": "5-1",
-   "name": "CC-03 / R08-X · ELW 바스켓·만기평가",
-   "role": "card_template"
-  },
-  {
-   "id": "3EWN-0",
-   "page": "5-1",
-   "name": "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
-   "role": "card_template"
-  },
-  {
-   "id": "3FR6-0",
-   "page": "5-1",
-   "name": "CC-03 / R01-T1-X · 분봉 시세",
-   "role": "card_template"
-  },
-  {
-   "id": "3GRO-0",
-   "page": "5-1",
-   "name": "CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
-   "role": "card_template"
-  },
-  {
-   "id": "3IGR-0",
-   "page": "5-1",
-   "name": "CC-01 / R10-T2-X2 · 증거금 재원·담보 상세",
-   "role": "card_template"
-  },
-  {
-   "id": "3JT4-0",
-   "page": "5-1",
-   "name": "CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
-   "role": "card_template"
-  },
-  {
-   "id": "3JZ3-0",
-   "page": "5-1",
-   "name": "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
-   "role": "card_template"
-  },
-  {
-   "id": "3K7K-0",
-   "page": "5-1",
-   "name": "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
-   "role": "card_template"
-  },
-  {
-   "id": "3LGC-0",
-   "page": "5-1",
-   "name": "CC-01 / R10-T2-X3 · 거래내역 상세",
-   "role": "card_template"
-  },
-  {
-   "id": "3MTJ-0",
-   "page": "5-1",
-   "name": "CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
-   "role": "card_template"
-  },
-  {
-   "id": "3N4O-0",
-   "page": "5-1",
-   "name": "A04-X · 호가 정본 — 단계별 낱값",
-   "role": "card_template"
-  },
-  {
-   "id": "3NVG-0",
-   "page": "5-1",
-   "name": "CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
-   "role": "card_template"
-  },
-  {
-   "id": "3ODO-0",
-   "page": "5-1",
-   "name": "CC-01 / R10-B-X1 · 금현물 잔고·거래내역",
-   "role": "card_template"
-  },
-  {
-   "id": "3OIM-0",
-   "page": "5-1",
-   "name": "CC-01 / R10-B-X2 · 금현물 주문·체결",
-   "role": "card_template"
-  },
-  {
-   "id": "3TCO-0",
-   "page": "5-1",
-   "name": "CC-03 / R01-T4-9-X · VI 발동 전체 12건",
-   "role": "card_template"
-  },
-  {
-   "id": "3TOM-0",
-   "page": "5-1",
-   "name": "CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
-   "role": "card_template"
-  },
-  {
-   "id": "3UTA-0",
-   "page": "5-1",
-   "name": "CC-01 / R10-T2-X6 · 부채·미수·연체 상세",
-   "role": "card_template"
-  },
-  {
-   "id": "4A9H-1",
-   "page": "5-1",
-   "name": "CC-06 / R04-S12 · 종목찾기 — 시장 고르기",
-   "role": "card_template"
-  },
-  {
-   "id": "4AGN-1",
-   "page": "5-1",
-   "name": "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
-   "role": "card_template"
-  },
-  {
-   "id": "4ANS-1",
-   "page": "5-1",
-   "name": "CC-06 / R04-S14 · 종목찾기 — 시가총액 고르기",
-   "role": "card_template"
-  },
-  {
-   "id": "4AUX-1",
-   "page": "5-1",
-   "name": "CC-06 / R04-S15 · 종목찾기 — 유동성 고르기",
-   "role": "card_template"
-  },
-  {
-   "id": "4B22-1",
-   "page": "5-1",
-   "name": "CC-06 / R04-S16 · 종목찾기 — 전체 100개 펼침",
-   "role": "card_template"
-  },
-  {
-   "id": "177W-2",
-   "page": "F-1",
-   "name": "CC-04 / R02-B · 시간외·통합·금현물 호가",
-   "role": "contract"
-  },
-  {
-   "id": "17F8-2",
-   "page": "F-1",
-   "name": "CC-01 / R10-B · 증거금·담보·금현물 잔고",
-   "role": "contract"
-  },
-  {
-   "id": "17IH-2",
-   "page": "F-1",
-   "name": "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
-   "role": "contract"
-  },
-  {
-   "id": "17MB-2",
-   "page": "F-1",
-   "name": "CC-06 / R06-B · 조건검색·이어보기·실시간 해제",
-   "role": "contract"
-  },
-  {
-   "id": "1XA2-0",
-   "page": "F-1",
-   "name": "CC-03 / R01-B · 차트 전체 항목·행 상세",
-   "role": "contract"
-  },
-  {
-   "id": "1XGW-0",
-   "page": "F-1",
-   "name": "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
-   "role": "contract"
-  },
-  {
-   "id": "24GR-0",
-   "page": "F-1",
-   "name": "CC-04 / R02-X1 · 정규·통합 호가 공식 원문 — ka10004·ka10007",
-   "role": "contract"
-  },
-  {
-   "id": "24GS-0",
-   "page": "F-1",
-   "name": "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
-   "role": "contract"
-  },
-  {
-   "id": "24GT-0",
-   "page": "F-1",
-   "name": "CC-04 / R02-X3 · 시간외·금현물·프로토콜 공식 원문 — 0E·ka10087·ka50101",
-   "role": "contract"
-  },
-  {
-   "id": "2DZE-0",
-   "page": "F-1",
-   "name": "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
-   "role": "contract"
-  },
-  {
-   "id": "2E4E-0",
-   "page": "F-1",
-   "name": "DV-3 · 거래·가격 이력 — 공식 189개 필드",
-   "role": "contract"
-  },
-  {
-   "id": "322V-0",
-   "page": "F-1",
-   "name": "RX-1 · 순위·정렬 상태 ↔ TR 사양",
-   "role": "contract"
-  },
-  {
-   "id": "45S7-0",
-   "page": "H-1",
-   "name": "template/compound",
-   "role": "mini_template"
-  },
-  {
-   "id": "45S8-0",
-   "page": "H-1",
-   "name": "template/table",
-   "role": "mini_template"
-  },
-  {
-   "id": "45S9-0",
-   "page": "H-1",
-   "name": "template/facts",
-   "role": "mini_template"
-  },
-  {
-   "id": "45SA-0",
-   "page": "H-1",
-   "name": "template/order_confirm",
-   "role": "mini_template"
-  },
-  {
-   "id": "45SB-0",
-   "page": "H-1",
-   "name": "template/order_ticket",
-   "role": "mini_template"
-  },
-  {
-   "id": "45SC-0",
-   "page": "H-1",
-   "name": "template/chart",
-   "role": "mini_template"
-  },
-  {
-   "id": "45SD-0",
-   "page": "H-1",
-   "name": "template/event",
-   "role": "mini_template"
-  },
-  {
-   "id": "45SE-0",
-   "page": "H-1",
-   "name": "template/auth",
-   "role": "mini_template"
-  },
-  {
-   "id": "45SF-0",
-   "page": "H-1",
-   "name": "template/reader",
-   "role": "mini_template"
-  },
-  {
-   "id": "45SG-0",
-   "page": "H-1",
-   "name": "template/stream",
-   "role": "mini_template"
-  },
-  {
-   "id": "45SH-0",
-   "page": "H-1",
-   "name": "template/2SCE-1",
-   "role": "mini_template"
-  },
-  {
-   "id": "46AX-0",
-   "page": "H-1",
-   "name": "mini/CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
-   "role": "mini_card"
-  },
-  {
-   "id": "46BW-0",
-   "page": "H-1",
-   "name": "mini/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
-   "role": "mini_card"
-  },
-  {
-   "id": "46CV-0",
-   "page": "H-1",
-   "name": "mini/CC-02 / R11 · 삼성전자 10주 시장가 매수",
-   "role": "mini_card"
-  },
-  {
-   "id": "46DE-0",
-   "page": "H-1",
-   "name": "mini/CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도",
-   "role": "mini_card"
-  },
-  {
-   "id": "46E2-0",
-   "page": "H-1",
-   "name": "mini/CC-03 / R01 · 삼성전자 3개월 차트",
-   "role": "mini_card"
-  },
-  {
-   "id": "46FL-0",
-   "page": "H-1",
-   "name": "mini/CC-04 / R02 · 삼성전자 실시간 호가·체결",
-   "role": "mini_card"
-  },
-  {
-   "id": "46GK-0",
-   "page": "H-1",
-   "name": "mini/A04-X · 호가 정본 — 단계별 낱값",
-   "role": "mini_card"
-  },
-  {
-   "id": "46H8-0",
-   "page": "H-1",
-   "name": "mini/A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위",
-   "role": "mini_card"
-  },
-  {
-   "id": "46IV-0",
-   "page": "H-1",
-   "name": "mini/CC-06 / R04 · 거래대금 상위 저평가 탐색",
-   "role": "mini_card"
-  },
-  {
-   "id": "46JU-0",
-   "page": "H-1",
-   "name": "mini/CC-06 / R09 · 시장 체온·VI",
-   "role": "mini_card"
-  },
-  {
-   "id": "46KI-0",
-   "page": "H-1",
-   "name": "mini/CC-01 / R10 · 내 계좌 — 손익·결제·위험",
-   "role": "mini_card"
-  },
-  {
-   "id": "46L6-0",
-   "page": "H-1",
-   "name": "mini/CC-06 / R05 · 반도체 업종·AI 테마",
-   "role": "mini_card"
-  },
-  {
-   "id": "46M5-0",
-   "page": "H-1",
-   "name": "mini/CC-06 / R06 · 관심종목·조건 신호",
-   "role": "mini_card"
-  },
-  {
-   "id": "46MT-0",
-   "page": "H-1",
-   "name": "mini/CC-03 / R07 · KODEX 200 ETF",
-   "role": "mini_card"
-  },
-  {
-   "id": "46NS-0",
-   "page": "H-1",
-   "name": "mini/CC-03 / R08 · ELW 위험·만기",
-   "role": "mini_card"
-  },
-  {
-   "id": "46OR-0",
-   "page": "H-1",
-   "name": "mini/A04 · 호가 정본 — 실시간 통합 호가",
-   "role": "mini_card"
-  },
-  {
-   "id": "46PQ-0",
-   "page": "H-1",
-   "name": "mini/A02×A04 · 호가 주문 정본 — 시장가 매수",
-   "role": "mini_card"
-  },
-  {
-   "id": "46QP-0",
-   "page": "H-1",
-   "name": "mini/CC-05 / R03-T1 · 수급 — 투자자별",
-   "role": "mini_card"
-  },
-  {
-   "id": "46RD-0",
-   "page": "H-1",
-   "name": "mini/CC-05 / R03-T2 · 수급 — 거래원",
-   "role": "mini_card"
-  },
-  {
-   "id": "46S1-0",
-   "page": "H-1",
-   "name": "mini/CC-04 / R02-T2 · 호가 — 시간외 단일가",
-   "role": "mini_card"
-  },
-  {
-   "id": "46T0-0",
-   "page": "H-1",
-   "name": "mini/CC-04 / R02-T3 · 호가 — KRX 금현물",
-   "role": "mini_card"
-  },
-  {
-   "id": "46TZ-0",
-   "page": "H-1",
-   "name": "mini/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
-   "role": "mini_card"
-  },
-  {
-   "id": "46UY-0",
-   "page": "H-1",
-   "name": "mini/CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
-   "role": "mini_card"
-  },
-  {
-   "id": "46VM-0",
-   "page": "H-1",
-   "name": "mini/CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
-   "role": "mini_card"
-  },
-  {
-   "id": "46WL-0",
-   "page": "H-1",
-   "name": "mini/CC-05 / R03-T3 · 수급 — 프로그램",
-   "role": "mini_card"
-  },
-  {
-   "id": "46XK-0",
-   "page": "H-1",
-   "name": "mini/CC-05 / R03-T4 · 수급 — 신용·대차",
-   "role": "mini_card"
-  },
-  {
-   "id": "46YJ-0",
-   "page": "H-1",
-   "name": "mini/CC-05 / R03-T5 · 수급 — 종목 동향",
-   "role": "mini_card"
-  },
-  {
-   "id": "46ZI-0",
-   "page": "H-1",
-   "name": "mini/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
-   "role": "mini_card"
-  },
-  {
-   "id": "470H-0",
-   "page": "H-1",
-   "name": "mini/CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
-   "role": "mini_card"
-  },
-  {
-   "id": "471G-0",
-   "page": "H-1",
-   "name": "mini/CC-02 / R11-T2 · 정정 — 삼성전자 지정가 정정",
-   "role": "mini_card"
-  },
-  {
-   "id": "4724-0",
-   "page": "H-1",
-   "name": "mini/CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소",
-   "role": "mini_card"
-  },
-  {
-   "id": "472S-0",
-   "page": "H-1",
-   "name": "mini/CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
-   "role": "mini_card"
-  },
-  {
-   "id": "473G-0",
-   "page": "H-1",
-   "name": "mini/CC-02 / R11-T5 · 금현물 매수 — 금 99.99K 10g 시장가",
-   "role": "mini_card"
-  },
-  {
-   "id": "4744-0",
-   "page": "H-1",
-   "name": "mini/CC-04 / R02-T4 · 호가 — 정규장 5단",
-   "role": "mini_card"
-  },
-  {
-   "id": "4753-0",
-   "page": "H-1",
-   "name": "mini/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
-   "role": "mini_card"
-  },
-  {
-   "id": "4762-0",
-   "page": "H-1",
-   "name": "mini/CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
-   "role": "mini_card"
-  },
-  {
-   "id": "4771-0",
-   "page": "H-1",
-   "name": "mini/CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
-   "role": "mini_card"
-  },
-  {
-   "id": "4780-0",
-   "page": "H-1",
-   "name": "mini/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
-   "role": "mini_card"
-  },
-  {
-   "id": "478Z-0",
-   "page": "H-1",
-   "name": "mini/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
-   "role": "mini_card"
-  },
-  {
-   "id": "479Y-0",
-   "page": "H-1",
-   "name": "mini/CC-05 / R03-T6 · 수급 — 순위",
-   "role": "mini_card"
-  },
-  {
-   "id": "47AX-0",
-   "page": "H-1",
-   "name": "mini/CC-03 / R01-T4 · 순위 — 주식 신호·순위",
-   "role": "mini_card"
-  },
-  {
-   "id": "47BW-0",
-   "page": "H-1",
-   "name": "mini/CC-03 / R01-T5 · 순위 — ETF 전체시세",
-   "role": "mini_card"
-  },
-  {
-   "id": "47CV-0",
-   "page": "H-1",
-   "name": "mini/CC-03 / R01-T6 · 순위 — ELW 순위",
-   "role": "mini_card"
-  },
-  {
-   "id": "47DU-0",
-   "page": "H-1",
-   "name": "mini/CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
-   "role": "mini_card"
-  },
-  {
-   "id": "47EI-0",
-   "page": "H-1",
-   "name": "mini/CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
-   "role": "mini_card"
-  },
-  {
-   "id": "47FH-0",
-   "page": "H-1",
-   "name": "mini/CC-03 / R01-T6-2 · 순위 — ELW 등락률",
-   "role": "mini_card"
-  },
-  {
-   "id": "47GG-0",
-   "page": "H-1",
-   "name": "mini/CC-06 / R04-S3 · 종목찾기 — 전일 거래량",
-   "role": "mini_card"
-  },
-  {
-   "id": "47H4-0",
-   "page": "H-1",
-   "name": "mini/CC-06 / R04-S4 · 종목찾기 — 등락률",
-   "role": "mini_card"
-  },
-  {
-   "id": "47HS-0",
-   "page": "H-1",
-   "name": "mini/CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
-   "role": "mini_card"
-  },
-  {
-   "id": "47IG-0",
-   "page": "H-1",
-   "name": "mini/CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위",
-   "role": "mini_card"
-  },
-  {
-   "id": "47J4-0",
-   "page": "H-1",
-   "name": "mini/CC-03 / R01-T6-3 · 순위 — ELW 근접율",
-   "role": "mini_card"
-  },
-  {
-   "id": "47K3-0",
-   "page": "H-1",
-   "name": "mini/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
-   "role": "mini_card"
-  },
-  {
-   "id": "47L2-0",
-   "page": "H-1",
-   "name": "mini/CC-06 / R04-S7 · 종목찾기 — 호가잔량 급증",
-   "role": "mini_card"
-  },
-  {
-   "id": "47LQ-0",
-   "page": "H-1",
-   "name": "mini/CC-06 / R04-S8 · 종목찾기 — 잔량률 급증",
-   "role": "mini_card"
-  },
-  {
-   "id": "47ME-0",
-   "page": "H-1",
-   "name": "mini/CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
-   "role": "mini_card"
-  },
-  {
-   "id": "47N2-0",
-   "page": "H-1",
-   "name": "mini/CC-06 / R04-S10 · 종목찾기 — 시간외 등락률",
-   "role": "mini_card"
-  },
-  {
-   "id": "47NQ-0",
-   "page": "H-1",
-   "name": "mini/CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
-   "role": "mini_card"
-  },
-  {
-   "id": "47OP-0",
-   "page": "H-1",
-   "name": "mini/CC-03 / R01-T4-2 · 순위 — 상하한가",
-   "role": "mini_card"
-  },
-  {
-   "id": "47PO-0",
-   "page": "H-1",
-   "name": "mini/CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
-   "role": "mini_card"
-  },
-  {
-   "id": "47QN-0",
-   "page": "H-1",
-   "name": "mini/CC-05 / R03-T6-3 · 순위 — 대차 상위",
-   "role": "mini_card"
-  },
-  {
-   "id": "47RM-0",
-   "page": "H-1",
-   "name": "mini/CC-03 / R01-T4-3 · 순위 — 고저가근접",
-   "role": "mini_card"
-  },
-  {
-   "id": "47SL-0",
-   "page": "H-1",
-   "name": "mini/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
-   "role": "mini_card"
-  },
-  {
-   "id": "47TK-0",
-   "page": "H-1",
-   "name": "mini/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
-   "role": "mini_card"
-  },
-  {
-   "id": "47UJ-0",
-   "page": "H-1",
-   "name": "mini/CC-03 / R01-T4-4 · 순위 — 가격급등락",
-   "role": "mini_card"
-  },
-  {
-   "id": "47VI-0",
-   "page": "H-1",
-   "name": "mini/CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
-   "role": "mini_card"
-  },
-  {
-   "id": "47WH-0",
-   "page": "H-1",
-   "name": "mini/CC-03 / R01-T4-5 · 순위 — 거래량갱신",
-   "role": "mini_card"
-  },
-  {
-   "id": "47XG-0",
-   "page": "H-1",
-   "name": "mini/CC-05 / R03-T6-6 · 순위 — 외국인·기관 상위",
-   "role": "mini_card"
-  },
-  {
-   "id": "47Y4-0",
-   "page": "H-1",
-   "name": "mini/CC-03 / R01-T4-6 · 순위 — 매물대집중",
-   "role": "mini_card"
-  },
-  {
-   "id": "47Z3-0",
-   "page": "H-1",
-   "name": "mini/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
-   "role": "mini_card"
-  },
-  {
-   "id": "4802-0",
-   "page": "H-1",
-   "name": "mini/CC-03 / R01-T4-7 · 순위 — 고저 PER",
-   "role": "mini_card"
-  },
-  {
-   "id": "4811-0",
-   "page": "H-1",
-   "name": "mini/CC-03 / R01-T4-8 · 순위 — 시가대비 등락",
-   "role": "mini_card"
-  },
-  {
-   "id": "4820-0",
-   "page": "H-1",
-   "name": "mini/CC-05 / R03-T6-8 · 순위 — 동일순매매",
-   "role": "mini_card"
-  },
-  {
-   "id": "482Z-0",
-   "page": "H-1",
-   "name": "mini/CC-03 / R01-T4-9 · 순위 — VI 발동",
-   "role": "mini_card"
-  },
-  {
-   "id": "483Y-0",
-   "page": "H-1",
-   "name": "mini/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
-   "role": "mini_card"
-  },
-  {
-   "id": "484X-0",
-   "page": "H-1",
-   "name": "mini/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
-   "role": "mini_card"
-  },
-  {
-   "id": "485W-0",
-   "page": "H-1",
-   "name": "mini/CC-03 / R01-T7 · 차트 — 업종 지수",
-   "role": "mini_card"
-  },
-  {
-   "id": "486G-0",
-   "page": "H-1",
-   "name": "mini/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
-   "role": "mini_card"
-  },
-  {
-   "id": "487F-0",
-   "page": "H-1",
-   "name": "mini/CC-06 / R04-T1-X · 업종 — 업종 목록 펼침",
-   "role": "mini_card"
-  },
-  {
-   "id": "4883-0",
-   "page": "H-1",
-   "name": "mini/CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
-   "role": "mini_card"
-  },
-  {
-   "id": "4892-0",
-   "page": "H-1",
-   "name": "mini/CC-03 / R01-X · 투자자 12주체",
-   "role": "mini_card"
-  },
-  {
-   "id": "489Q-0",
-   "page": "H-1",
-   "name": "mini/CC-03 / R08-X · ELW 바스켓·만기평가",
-   "role": "mini_card"
-  },
-  {
-   "id": "48AP-0",
-   "page": "H-1",
-   "name": "mini/CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
-   "role": "mini_card"
-  },
-  {
-   "id": "48BO-0",
-   "page": "H-1",
-   "name": "mini/CC-03 / R01-T1-X · 분봉 시세",
-   "role": "mini_card"
-  },
-  {
-   "id": "48CN-0",
-   "page": "H-1",
-   "name": "mini/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
-   "role": "mini_card"
-  },
-  {
-   "id": "48DM-0",
-   "page": "H-1",
-   "name": "mini/CC-01 / R10-T2-X2 · 증거금 재원·담보 상세",
-   "role": "mini_card"
-  },
-  {
-   "id": "48EL-0",
-   "page": "H-1",
-   "name": "mini/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
-   "role": "mini_card"
-  },
-  {
-   "id": "48FK-0",
-   "page": "H-1",
-   "name": "mini/CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
-   "role": "mini_card"
-  },
-  {
-   "id": "48GJ-0",
-   "page": "H-1",
-   "name": "mini/CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
-   "role": "mini_card"
-  },
-  {
-   "id": "48H7-0",
-   "page": "H-1",
-   "name": "mini/CC-01 / R10-T2-X3 · 거래내역 상세",
-   "role": "mini_card"
-  },
-  {
-   "id": "48I6-0",
-   "page": "H-1",
-   "name": "mini/CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
-   "role": "mini_card"
-  },
-  {
-   "id": "48J5-0",
-   "page": "H-1",
-   "name": "mini/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
-   "role": "mini_card"
-  },
-  {
-   "id": "48K4-0",
-   "page": "H-1",
-   "name": "mini/CC-01 / R10-B-X1 · 금현물 잔고·거래내역",
-   "role": "mini_card"
-  },
-  {
-   "id": "48L3-0",
-   "page": "H-1",
-   "name": "mini/CC-01 / R10-B-X2 · 금현물 주문·체결",
-   "role": "mini_card"
-  },
-  {
-   "id": "48M2-0",
-   "page": "H-1",
-   "name": "mini/CC-03 / R01-T4-9-X · VI 발동 전체 12건",
-   "role": "mini_card"
-  },
-  {
-   "id": "48N1-0",
-   "page": "H-1",
-   "name": "mini/CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
-   "role": "mini_card"
-  },
-  {
-   "id": "48O0-0",
-   "page": "H-1",
-   "name": "mini/CC-01 / R10-T2-X6 · 부채·미수·연체 상세",
-   "role": "mini_card"
-  },
-  {
-   "id": "48OZ-0",
-   "page": "H-1",
-   "name": "note/CC-01 / R10 · 내 계좌 — 손익·결제·위험",
-   "role": "mini_card"
-  },
-  {
-   "id": "48P9-0",
-   "page": "H-1",
-   "name": "note/CC-02 / R11 · 삼성전자 10주 시장가 매수",
-   "role": "mini_card"
-  },
-  {
-   "id": "48PJ-0",
-   "page": "H-1",
-   "name": "note/CC-03 / R01 · 삼성전자 3개월 차트",
-   "role": "mini_card"
-  },
-  {
-   "id": "48PT-0",
-   "page": "H-1",
-   "name": "note/CC-04 / R02 · 삼성전자 실시간 호가·체결",
-   "role": "mini_card"
-  },
-  {
-   "id": "48Q3-0",
-   "page": "H-1",
-   "name": "note/CC-06 / R04 · 거래대금 상위 저평가 탐색",
-   "role": "mini_card"
-  },
-  {
-   "id": "48QD-0",
-   "page": "H-1",
-   "name": "note/CC-06 / R05 · 반도체 업종·AI 테마",
-   "role": "mini_card"
-  },
-  {
-   "id": "48QN-0",
-   "page": "H-1",
-   "name": "note/CC-06 / R06 · 관심종목·조건 신호",
-   "role": "mini_card"
-  },
-  {
-   "id": "48QX-0",
-   "page": "H-1",
-   "name": "note/CC-03 / R07 · KODEX 200 ETF",
-   "role": "mini_card"
-  },
-  {
-   "id": "48R7-0",
-   "page": "H-1",
-   "name": "note/CC-03 / R08 · ELW 위험·만기",
-   "role": "mini_card"
-  },
-  {
-   "id": "48RH-0",
-   "page": "H-1",
-   "name": "note/CC-06 / R09 · 시장 체온·VI",
-   "role": "mini_card"
-  },
-  {
-   "id": "48RR-0",
-   "page": "H-1",
-   "name": "note/A04 · 호가 정본 — 실시간 통합 호가",
-   "role": "mini_card"
-  },
-  {
-   "id": "48S1-0",
-   "page": "H-1",
-   "name": "note/A02×A04 · 호가 주문 정본 — 시장가 매수",
-   "role": "mini_card"
-  },
-  {
-   "id": "48SB-0",
-   "page": "H-1",
-   "name": "note/A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위",
-   "role": "mini_card"
-  },
-  {
-   "id": "48SL-0",
-   "page": "H-1",
-   "name": "note/CC-05 / R03-T1 · 수급 — 투자자별",
-   "role": "mini_card"
-  },
-  {
-   "id": "48SV-0",
-   "page": "H-1",
-   "name": "note/CC-05 / R03-T2 · 수급 — 거래원",
-   "role": "mini_card"
-  },
-  {
-   "id": "48T5-0",
-   "page": "H-1",
-   "name": "note/CC-04 / R02-T2 · 호가 — 시간외 단일가",
-   "role": "mini_card"
-  },
-  {
-   "id": "48TF-0",
-   "page": "H-1",
-   "name": "note/CC-04 / R02-T3 · 호가 — KRX 금현물",
-   "role": "mini_card"
-  },
-  {
-   "id": "48TP-0",
-   "page": "H-1",
-   "name": "note/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
-   "role": "mini_card"
-  },
-  {
-   "id": "48TZ-0",
-   "page": "H-1",
-   "name": "note/CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
-   "role": "mini_card"
-  },
-  {
-   "id": "48U9-0",
-   "page": "H-1",
-   "name": "note/CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
-   "role": "mini_card"
-  },
-  {
-   "id": "48UJ-0",
-   "page": "H-1",
-   "name": "note/CC-05 / R03-T3 · 수급 — 프로그램",
-   "role": "mini_card"
-  },
-  {
-   "id": "48UT-0",
-   "page": "H-1",
-   "name": "note/CC-05 / R03-T4 · 수급 — 신용·대차",
-   "role": "mini_card"
-  },
-  {
-   "id": "48V3-0",
-   "page": "H-1",
-   "name": "note/CC-05 / R03-T5 · 수급 — 종목 동향",
-   "role": "mini_card"
-  },
-  {
-   "id": "48VD-0",
-   "page": "H-1",
-   "name": "note/CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
-   "role": "mini_card"
-  },
-  {
-   "id": "48VN-0",
-   "page": "H-1",
-   "name": "note/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
-   "role": "mini_card"
-  },
-  {
-   "id": "48VX-0",
-   "page": "H-1",
-   "name": "note/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
-   "role": "mini_card"
-  },
-  {
-   "id": "48W7-0",
-   "page": "H-1",
-   "name": "note/CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
-   "role": "mini_card"
-  },
-  {
-   "id": "48WH-0",
-   "page": "H-1",
-   "name": "note/CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도",
-   "role": "mini_card"
-  },
-  {
-   "id": "48WR-0",
-   "page": "H-1",
-   "name": "note/CC-02 / R11-T2 · 정정 — 삼성전자 지정가 정정",
-   "role": "mini_card"
-  },
-  {
-   "id": "48X1-0",
-   "page": "H-1",
-   "name": "note/CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소",
-   "role": "mini_card"
-  },
-  {
-   "id": "48XB-0",
-   "page": "H-1",
-   "name": "note/CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
-   "role": "mini_card"
-  },
-  {
-   "id": "48XL-0",
-   "page": "H-1",
-   "name": "note/CC-02 / R11-T5 · 금현물 매수 — 금 99.99K 10g 시장가",
-   "role": "mini_card"
-  },
-  {
-   "id": "48XV-0",
-   "page": "H-1",
-   "name": "note/CC-04 / R02-T4 · 호가 — 정규장 5단",
-   "role": "mini_card"
-  },
-  {
-   "id": "48Y5-0",
-   "page": "H-1",
-   "name": "note/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
-   "role": "mini_card"
-  },
-  {
-   "id": "48YF-0",
-   "page": "H-1",
-   "name": "note/CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
-   "role": "mini_card"
-  },
-  {
-   "id": "48YP-0",
-   "page": "H-1",
-   "name": "note/CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
-   "role": "mini_card"
-  },
-  {
-   "id": "48YZ-0",
-   "page": "H-1",
-   "name": "note/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
-   "role": "mini_card"
-  },
-  {
-   "id": "48Z9-0",
-   "page": "H-1",
-   "name": "note/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
-   "role": "mini_card"
-  },
-  {
-   "id": "48ZJ-0",
-   "page": "H-1",
-   "name": "note/CC-05 / R03-T6 · 수급 — 순위",
-   "role": "mini_card"
-  },
-  {
-   "id": "48ZT-0",
-   "page": "H-1",
-   "name": "note/CC-03 / R01-T4 · 순위 — 주식 신호·순위",
-   "role": "mini_card"
-  },
-  {
-   "id": "4903-0",
-   "page": "H-1",
-   "name": "note/CC-03 / R01-T5 · 순위 — ETF 전체시세",
-   "role": "mini_card"
-  },
-  {
-   "id": "490D-0",
-   "page": "H-1",
-   "name": "note/CC-03 / R01-T6 · 순위 — ELW 순위",
-   "role": "mini_card"
-  },
-  {
-   "id": "490N-0",
-   "page": "H-1",
-   "name": "note/CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
-   "role": "mini_card"
-  },
-  {
-   "id": "490X-0",
-   "page": "H-1",
-   "name": "note/CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
-   "role": "mini_card"
-  },
-  {
-   "id": "4917-0",
-   "page": "H-1",
-   "name": "note/CC-03 / R01-T6-2 · 순위 — ELW 등락률",
-   "role": "mini_card"
-  },
-  {
-   "id": "491H-0",
-   "page": "H-1",
-   "name": "note/CC-06 / R04-S3 · 종목찾기 — 전일 거래량",
-   "role": "mini_card"
-  },
-  {
-   "id": "491R-0",
-   "page": "H-1",
-   "name": "note/CC-06 / R04-S4 · 종목찾기 — 등락률",
-   "role": "mini_card"
-  },
-  {
-   "id": "4921-0",
-   "page": "H-1",
-   "name": "note/CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
-   "role": "mini_card"
-  },
-  {
-   "id": "492B-0",
-   "page": "H-1",
-   "name": "note/CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위",
-   "role": "mini_card"
-  },
-  {
-   "id": "492L-0",
-   "page": "H-1",
-   "name": "note/CC-03 / R01-T6-3 · 순위 — ELW 근접율",
-   "role": "mini_card"
-  },
-  {
-   "id": "492V-0",
-   "page": "H-1",
-   "name": "note/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
-   "role": "mini_card"
-  },
-  {
-   "id": "4935-0",
-   "page": "H-1",
-   "name": "note/CC-06 / R04-S7 · 종목찾기 — 호가잔량 급증",
-   "role": "mini_card"
-  },
-  {
-   "id": "493F-0",
-   "page": "H-1",
-   "name": "note/CC-06 / R04-S8 · 종목찾기 — 잔량률 급증",
-   "role": "mini_card"
-  },
-  {
-   "id": "493P-0",
-   "page": "H-1",
-   "name": "note/CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
-   "role": "mini_card"
-  },
-  {
-   "id": "493Z-0",
-   "page": "H-1",
-   "name": "note/CC-06 / R04-S10 · 종목찾기 — 시간외 등락률",
-   "role": "mini_card"
-  },
-  {
-   "id": "4949-0",
-   "page": "H-1",
-   "name": "note/CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
-   "role": "mini_card"
-  },
-  {
-   "id": "494J-0",
-   "page": "H-1",
-   "name": "note/CC-03 / R01-T4-2 · 순위 — 상하한가",
-   "role": "mini_card"
-  },
-  {
-   "id": "494T-0",
-   "page": "H-1",
-   "name": "note/CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
-   "role": "mini_card"
-  },
-  {
-   "id": "4953-0",
-   "page": "H-1",
-   "name": "note/CC-05 / R03-T6-3 · 순위 — 대차 상위",
-   "role": "mini_card"
-  },
-  {
-   "id": "495D-0",
-   "page": "H-1",
-   "name": "note/CC-03 / R01-T4-3 · 순위 — 고저가근접",
-   "role": "mini_card"
-  },
-  {
-   "id": "495N-0",
-   "page": "H-1",
-   "name": "note/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
-   "role": "mini_card"
-  },
-  {
-   "id": "495X-0",
-   "page": "H-1",
-   "name": "note/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
-   "role": "mini_card"
-  },
-  {
-   "id": "4967-0",
-   "page": "H-1",
-   "name": "note/CC-03 / R01-T4-4 · 순위 — 가격급등락",
-   "role": "mini_card"
-  },
-  {
-   "id": "496H-0",
-   "page": "H-1",
-   "name": "note/CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
-   "role": "mini_card"
-  },
-  {
-   "id": "496R-0",
-   "page": "H-1",
-   "name": "note/CC-03 / R01-T4-5 · 순위 — 거래량갱신",
-   "role": "mini_card"
-  },
-  {
-   "id": "4971-0",
-   "page": "H-1",
-   "name": "note/CC-05 / R03-T6-6 · 순위 — 외국인·기관 상위",
-   "role": "mini_card"
-  },
-  {
-   "id": "497B-0",
-   "page": "H-1",
-   "name": "note/CC-03 / R01-T4-6 · 순위 — 매물대집중",
-   "role": "mini_card"
-  },
-  {
-   "id": "497L-0",
-   "page": "H-1",
-   "name": "note/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
-   "role": "mini_card"
-  },
-  {
-   "id": "497V-0",
-   "page": "H-1",
-   "name": "note/CC-03 / R01-T4-7 · 순위 — 고저 PER",
-   "role": "mini_card"
-  },
-  {
-   "id": "4985-0",
-   "page": "H-1",
-   "name": "note/CC-03 / R01-T4-8 · 순위 — 시가대비 등락",
-   "role": "mini_card"
-  },
-  {
-   "id": "498F-0",
-   "page": "H-1",
-   "name": "note/CC-05 / R03-T6-8 · 순위 — 동일순매매",
-   "role": "mini_card"
-  },
-  {
-   "id": "498P-0",
-   "page": "H-1",
-   "name": "note/CC-03 / R01-T4-9 · 순위 — VI 발동",
-   "role": "mini_card"
-  },
-  {
-   "id": "498Z-0",
-   "page": "H-1",
-   "name": "note/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
-   "role": "mini_card"
-  },
-  {
-   "id": "4999-0",
-   "page": "H-1",
-   "name": "note/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
-   "role": "mini_card"
-  },
-  {
-   "id": "499J-0",
-   "page": "H-1",
-   "name": "note/CC-03 / R01-T7 · 차트 — 업종 지수",
-   "role": "mini_card"
-  },
-  {
-   "id": "499T-0",
-   "page": "H-1",
-   "name": "note/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
-   "role": "mini_card"
-  },
-  {
-   "id": "49A3-0",
-   "page": "H-1",
-   "name": "note/CC-06 / R04-T1-X · 업종 — 업종 목록 펼침",
-   "role": "mini_card"
-  },
-  {
-   "id": "49AD-0",
-   "page": "H-1",
-   "name": "note/CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
-   "role": "mini_card"
-  },
-  {
-   "id": "49AN-0",
-   "page": "H-1",
-   "name": "note/CC-03 / R01-X · 투자자 12주체",
-   "role": "mini_card"
-  },
-  {
-   "id": "49AX-0",
-   "page": "H-1",
-   "name": "note/CC-03 / R08-X · ELW 바스켓·만기평가",
-   "role": "mini_card"
-  },
-  {
-   "id": "49B7-0",
-   "page": "H-1",
-   "name": "note/CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
-   "role": "mini_card"
-  },
-  {
-   "id": "49BH-0",
-   "page": "H-1",
-   "name": "note/CC-03 / R01-T1-X · 분봉 시세",
-   "role": "mini_card"
-  },
-  {
-   "id": "49BR-0",
-   "page": "H-1",
-   "name": "note/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
-   "role": "mini_card"
-  },
-  {
-   "id": "49C1-0",
-   "page": "H-1",
-   "name": "note/CC-01 / R10-T2-X2 · 증거금 재원·담보 상세",
-   "role": "mini_card"
-  },
-  {
-   "id": "49CB-0",
-   "page": "H-1",
-   "name": "note/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
-   "role": "mini_card"
-  },
-  {
-   "id": "49CL-0",
-   "page": "H-1",
-   "name": "note/CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
-   "role": "mini_card"
-  },
-  {
-   "id": "49CV-0",
-   "page": "H-1",
-   "name": "note/CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
-   "role": "mini_card"
-  },
-  {
-   "id": "49D5-0",
-   "page": "H-1",
-   "name": "note/CC-01 / R10-T2-X3 · 거래내역 상세",
-   "role": "mini_card"
-  },
-  {
-   "id": "49DF-0",
-   "page": "H-1",
-   "name": "note/CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
-   "role": "mini_card"
-  },
-  {
-   "id": "49DP-0",
-   "page": "H-1",
-   "name": "note/A04-X · 호가 정본 — 단계별 낱값",
-   "role": "mini_card"
-  },
-  {
-   "id": "49DZ-0",
-   "page": "H-1",
-   "name": "note/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
-   "role": "mini_card"
-  },
-  {
-   "id": "49E9-0",
-   "page": "H-1",
-   "name": "note/CC-01 / R10-B-X1 · 금현물 잔고·거래내역",
-   "role": "mini_card"
-  },
-  {
-   "id": "49EJ-0",
-   "page": "H-1",
-   "name": "note/CC-01 / R10-B-X2 · 금현물 주문·체결",
-   "role": "mini_card"
-  },
-  {
-   "id": "49ET-0",
-   "page": "H-1",
-   "name": "note/CC-03 / R01-T4-9-X · VI 발동 전체 12건",
-   "role": "mini_card"
-  },
-  {
-   "id": "49F3-0",
-   "page": "H-1",
-   "name": "note/CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
-   "role": "mini_card"
-  },
-  {
-   "id": "49FD-0",
-   "page": "H-1",
-   "name": "note/CC-01 / R10-T2-X6 · 부채·미수·연체 상세",
-   "role": "mini_card"
-  },
-  {
-   "id": "1SW0-0",
-   "page": "8-1",
-   "name": "01 · 백테스트 — 설계 (폼)",
-   "role": "screen"
-  },
-  {
-   "id": "1T5K-0",
-   "page": "8-1",
-   "name": "02 · 백테스트 — 설계 (코드)",
-   "role": "screen"
-  },
-  {
-   "id": "1TGA-1",
-   "page": "8-1",
-   "name": "03 · 백테스트 — 결과",
-   "role": "screen"
-  },
-  {
-   "id": "1TPF-1",
-   "page": "8-1",
-   "name": "04 · 백테스트 — 데이터 수집 승인",
-   "role": "screen"
-  },
-  {
-   "id": "1WSI-1",
-   "page": "8-1",
-   "name": "05 · 백테스트 — 이력·비교",
-   "role": "screen"
-  },
-  {
-   "id": "1WZJ-1",
-   "page": "8-1",
-   "name": "06 · 백테스트 — 최적화",
-   "role": "screen"
-  },
-  {
-   "id": "2FMM-2",
-   "page": "8-1",
-   "name": "07 · 백테스트 — 전략 배포 · 실전 적용",
-   "role": "screen"
-  },
-  {
-   "id": "2FR9-2",
-   "page": "8-1",
-   "name": "08 · 백테스트 — 코드 플로우 지도",
-   "role": "screen"
-  },
-  {
-   "id": "2FY9-2",
-   "page": "8-1",
-   "name": "09 · 백테스트 — 오류 진단 · 자동 수정 승인",
-   "role": "screen"
-  },
-  {
-   "id": "2GZM-2",
-   "page": "8-1",
-   "name": "10 · 백테스트 — 전략 고르기 · 실패·비활성 상태",
-   "role": "reference",
-   "why": "사용자 결정 2026-09-07: 보드 19(40EV-1)가 정본 — 40EY-1 「프리셋이라는 구분은 없습니다」가 이 보드의 프리셋 고르기를 부정한다. 오류 상태 절반(실패·비활성 배지)은 앱에 구현됨, 그 계약은 backtest-canvas.test.js가 잰다"
-  },
-  {
-   "id": "3X7M-1",
-   "page": "8-1",
-   "name": "15 · 백테스트 — 설계 (흐름 지도) · 대화로 고치는 1급 표면 — 폐기(요약 지도 제거, 보드 19~22 현행)",
-   "role": "retired",
-   "why": "보드 제목이 폐기 선언"
-  },
-  {
-   "id": "3XE7-1",
-   "page": "8-1",
-   "name": "16 · 백테스트 — 지도 실행 → 멈춤 → 대화로 고침 — 폐기(요약 지도 제거, 보드 19~22 현행)",
-   "role": "retired",
-   "why": "보드 제목이 폐기 선언"
-  },
-  {
-   "id": "3XL4-1",
-   "page": "8-1",
-   "name": "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
-   "role": "screen"
-  },
-  {
-   "id": "3XV1-1",
-   "page": "8-1",
-   "name": "18 · 백테스트 — 흐름 지도 강화 명세 · 칸·동사·버전·동기화·로딩",
-   "role": "contract",
-   "why": "원장이 스스로 「보드 11·12·13이 장면이라면 이 보드는 규칙입니다」라 적은 A~H 여덟 칸 규칙표 — 계약 문장 8개를 docs/architecture/paper-contracts.md 로 옮겼다"
-  },
-  {
-   "id": "3Y38-1",
-   "page": "8-1",
-   "name": "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
-   "role": "screen"
-  },
-  {
-   "id": "3YFV-1",
-   "page": "8-1",
-   "name": "12 · 백테스트 — 시각 전략 검증 · 연결 오류",
-   "role": "screen"
-  },
-  {
-   "id": "3YQ0-1",
-   "page": "8-1",
-   "name": "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
-   "role": "screen"
-  },
-  {
-   "id": "3Z0X-1",
-   "page": "8-1",
-   "name": "14 · 백테스트 — 그래프·코드 동기화 완료 · 실행 전",
-   "role": "screen"
-  },
-  {
-   "id": "3Z8U-1",
-   "page": "8-1",
-   "name": "09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)",
-   "role": "screen"
-  },
-  {
-   "id": "3ZAA-1",
-   "page": "8-1",
-   "name": "10 · 그래프 — \"이 노드 설명해줘\" (관계·근거·이력·대화 원문)",
-   "role": "screen"
-  },
-  {
-   "id": "3ZC2-1",
-   "page": "8-1",
-   "name": "11 · 그래프 — 편집은 제안까지 · 도구 계약",
-   "role": "screen"
-  },
-  {
-   "id": "40EV-1",
-   "page": "8-1",
-   "name": "19 · 백테스트 — 기법 목록 · 새 기법",
-   "role": "screen"
-  },
-  {
-   "id": "42FW-1",
-   "page": "8-1",
-   "name": "23 · 백테스트 — 승인 → 기법 목록에 추가 → 실매매 적용(키우미가 켜지면 자동 매매)",
-   "role": "screen"
-  },
-  {
-   "id": "43DP-1",
-   "page": "8-1",
-   "name": "20 · 백테스트 — 새 기법 만들기 · 폴더·편집기·터미널·단계 카드",
-   "role": "screen"
-  },
-  {
-   "id": "43O1-1",
-   "page": "8-1",
-   "name": "21 · 백테스트 — 노드·흐름 창 · 노드를 누르면 @칩이 입력창에 들어간다",
-   "role": "screen"
-  },
-  {
-   "id": "452D-1",
-   "page": "8-1",
-   "name": "22 · 백테스트 — 고치기 순환 · 단계 카드를 누르면 diff와 터미널이 열린다",
-   "role": "screen"
-  },
-  {
-   "id": "402S-1",
-   "page": "G-1",
-   "name": "00 · 백테스트 — 지금 구현된 것 · 요약과 의도 편차",
-   "role": "record"
-  },
-  {
-   "id": "405P-1",
-   "page": "G-1",
-   "name": "00b · 백테스트 — 의도 대비 구현 상태 표",
-   "role": "record"
-  },
-  {
-   "id": "40AA-1",
-   "page": "G-1",
-   "name": "01 · 백테스트 모드 진입 — 프리셋 10종",
-   "role": "record"
-  },
-  {
-   "id": "40AL-1",
-   "page": "G-1",
-   "name": "02 · 지도 탭 — 요약 지도 ①~④",
-   "role": "record"
-  },
-  {
-   "id": "40AW-1",
-   "page": "G-1",
-   "name": "03 · 지도 탭 — 시각 편집기(팔레트·캔버스·검사기)",
-   "role": "record"
-  },
-  {
-   "id": "40B7-1",
-   "page": "G-1",
-   "name": "04 · 노드 검사기 — ma_fast 하향 돌파",
-   "role": "record"
-  },
-  {
-   "id": "40BI-1",
-   "page": "G-1",
-   "name": "05 · 폼 탭 — 프리셋·대상·지표",
-   "role": "record"
-  },
-  {
-   "id": "40BT-1",
-   "page": "G-1",
-   "name": "06 · 코드 탭 — 지도가 만든 파이썬",
-   "role": "record"
-  },
-  {
-   "id": "40C4-1",
-   "page": "G-1",
-   "name": "07 · 연결을 끊은 지도 — BTG-PORT-002",
-   "role": "record"
-  },
-  {
-   "id": "40CF-1",
-   "page": "G-1",
-   "name": "08 · 오류 칸 → 코드 미리보기(__MISSING__)",
-   "role": "record"
-  },
-  {
-   "id": "40CQ-1",
-   "page": "G-1",
-   "name": "09 · 질문 카드 — 한 가지만 확인할게요",
-   "role": "record"
-  },
-  {
-   "id": "40D1-1",
-   "page": "G-1",
-   "name": "10 · 수정안 카드 — 그래프 + 코드 패치",
-   "role": "record"
-  },
-  {
-   "id": "40DC-1",
-   "page": "G-1",
-   "name": "11 · 적용 — 동기화 완료(v1 → v2)",
-   "role": "record"
-  },
-  {
-   "id": "40DN-1",
-   "page": "G-1",
-   "name": "12 · 실행 결과 탭",
-   "role": "record"
-  },
-  {
-   "id": "40DY-1",
-   "page": "G-1",
-   "name": "13 · 이력 탭 — 저장된 버전 2개·실행 이력",
-   "role": "record"
-  },
-  {
-   "id": "40E9-1",
-   "page": "G-1",
-   "name": "14 · 코드가 지도보다 앞섬 — 두 갈래",
-   "role": "record"
-  },
-  {
-   "id": "40EK-1",
-   "page": "G-1",
-   "name": "15 · 창 폭 860px — 지도 탭",
-   "role": "record"
-  }
- ]
+  "schema_version": 1,
+  "paper_file_id": "01M0VGPX92K1TER4ZV9PWGQJJZ",
+  "exported_at": "2026-09-05",
+  "pages": [
+    {
+      "id": "1-0",
+      "name": "화면",
+      "boards": 45
+    },
+    {
+      "id": "D-2",
+      "name": "그래프",
+      "boards": 7
+    },
+    {
+      "id": "A-2",
+      "name": "에이전트",
+      "boards": 13
+    },
+    {
+      "id": "B-2",
+      "name": "플러그인",
+      "boards": 9
+    },
+    {
+      "id": "C-2",
+      "name": "키우미",
+      "boards": 9
+    },
+    {
+      "id": "5-1",
+      "name": "카드",
+      "boards": 109
+    },
+    {
+      "id": "F-1",
+      "name": "증명",
+      "boards": 12
+    },
+    {
+      "id": "H-1",
+      "name": "카드미니",
+      "boards": 203
+    },
+    {
+      "id": "8-1",
+      "name": "백테스트",
+      "boards": 26
+    },
+    {
+      "id": "G-1",
+      "name": "백테스트 구현 현황",
+      "boards": 17
+    }
+  ],
+  "boards": [
+    {
+      "id": "11D-0",
+      "page": "1-0",
+      "name": "24 · 주문 — 거래 기능 연결 안내",
+      "role": "screen"
+    },
+    {
+      "id": "164F-2",
+      "page": "1-0",
+      "name": "01 · 화면 정본 — 최신 흐름과 상태 지도",
+      "role": "reference",
+      "why": "설명 보드 — 화면 정본 지도(다른 보드들의 색인)라 구현 대상 표면이 아니다"
+    },
+    {
+      "id": "16OD-2",
+      "page": "1-0",
+      "name": "02 · 부팅 — READY · 0–240ms",
+      "role": "screen"
+    },
+    {
+      "id": "16OJ-2",
+      "page": "1-0",
+      "name": "03 · 부팅 — TYPE A→AT · 240–560ms",
+      "role": "screen"
+    },
+    {
+      "id": "16OQ-2",
+      "page": "1-0",
+      "name": "04 · 부팅 — TYPE ATH→ATHE · 560–880ms",
+      "role": "screen"
+    },
+    {
+      "id": "16OX-2",
+      "page": "1-0",
+      "name": "05 · 부팅 — COMPLETE · 880–1440ms",
+      "role": "screen"
+    },
+    {
+      "id": "16P3-2",
+      "page": "1-0",
+      "name": "06 · 부팅 — DIRECT SHELL EXPAND · 1440–1920ms",
+      "role": "screen"
+    },
+    {
+      "id": "1DX-0",
+      "page": "1-0",
+      "name": "07 · 온보딩 — CLI 연결 (AT-SY-002)",
+      "role": "screen"
+    },
+    {
+      "id": "1FN-0",
+      "page": "1-0",
+      "name": "08 · 온보딩 — 계좌 연결 (AT-SY-003)",
+      "role": "screen"
+    },
+    {
+      "id": "1I0-0",
+      "page": "1-0",
+      "name": "19 · 인증 — OAuth 토큰 ready",
+      "role": "screen"
+    },
+    {
+      "id": "1KK-0",
+      "page": "1-0",
+      "name": "20 · 인증 — 토큰 4상태",
+      "role": "screen"
+    },
+    {
+      "id": "1M3-0",
+      "page": "1-0",
+      "name": "21 · 인증 — 계좌 전환",
+      "role": "screen"
+    },
+    {
+      "id": "1OP-0",
+      "page": "1-0",
+      "name": "22 · 주문 — 검토·영향·확인",
+      "role": "screen"
+    },
+    {
+      "id": "1Y3-0",
+      "page": "1-0",
+      "name": "11 · 대화 — 모델 팝오버 · 루틴 승인",
+      "role": "screen"
+    },
+    {
+      "id": "25Q-0",
+      "page": "1-0",
+      "name": "09 · 셸 — 질문 입력 · Task Canvas",
+      "role": "screen"
+    },
+    {
+      "id": "2USX-1",
+      "page": "1-0",
+      "name": "31 · 설정 — 플러그인 (스니펫 등록·감사 로그)",
+      "role": "retired",
+      "why": "보드 옆 폐기 각주(43BL-1)가 「폐기 · 플러그인 모드 02로 이동(2026-09-03)」을 선언한다 — 스니펫 등록·감사 로그는 플러그인 모드 캔버스(app/lib/plugin-canvas.js)에 있다"
+    },
+    {
+      "id": "2UWT-1",
+      "page": "1-0",
+      "name": "32 · 설정 — 성향·이력",
+      "role": "screen"
+    },
+    {
+      "id": "2V0K-1",
+      "page": "1-0",
+      "name": "33 · 온보딩 — CLI 연결 실패 (AT-SY-002)",
+      "role": "screen"
+    },
+    {
+      "id": "2V27-1",
+      "page": "1-0",
+      "name": "34 · 사이드바 검색 — 결과·빈 결과",
+      "role": "screen"
+    },
+    {
+      "id": "3JL-0",
+      "page": "1-0",
+      "name": "12 · 계정 메뉴 — 설정 진입",
+      "role": "screen"
+    },
+    {
+      "id": "3KM-0",
+      "page": "1-0",
+      "name": "10 · 셸 — 답변 중 · Task Canvas",
+      "role": "reference",
+      "why": "빈 캔버스 정본은 보드 26(COS-0, 빈 캔버스 v3). 이 보드가 그린 v1 히어로(아직 답변 카드가 없습니다 · 성향 그래프 열기)는 앱이 그리지 않고, 빈 이력 「새 대화」는 CSS :empty 의사요소라 화면계 문구 게이트가 텍스트 노드로 못 잰다. 그 계약은 verify.js 1b-2와 COS-0 라우트가 진다"
+    },
+    {
+      "id": "3VHD-1",
+      "page": "1-0",
+      "name": "08 · 그래프 — 되물을 것들 카드 · 지난 대화 읽기 전용",
+      "role": "screen"
+    },
+    {
+      "id": "3VIQ-1",
+      "page": "1-0",
+      "name": "35 · 대화 이력 — 모드 5구역 · 세션 목록",
+      "role": "screen"
+    },
+    {
+      "id": "3VS6-1",
+      "page": "1-0",
+      "name": "36 · 프로젝트 추가 — 폴더 점유",
+      "role": "screen"
+    },
+    {
+      "id": "3VV8-1",
+      "page": "1-0",
+      "name": "37 · 프로젝트 ⋯ — 고정·탐색기·제거",
+      "role": "screen"
+    },
+    {
+      "id": "3VV9-1",
+      "page": "1-0",
+      "name": "38 · 펜 — 새 대화창 모드 선택",
+      "role": "screen"
+    },
+    {
+      "id": "3VVU-1",
+      "page": "1-0",
+      "name": "40 · 모드 전환 — 조용한 전환 · 새 대화",
+      "role": "reference",
+      "why": "창 프레임 없이 전환 3단계를 나란히 놓은 흐름 도해라 한 순간에 도달할 화면이 아니다 — 그린 장면은 보드 25·35·41 이 각자 진다"
+    },
+    {
+      "id": "3W9B-1",
+      "page": "1-0",
+      "name": "39 · 동시 실행 — 상태 4종 · 스피너",
+      "role": "reference",
+      "why": "보드 자신의 Gap Note가 「지금은 상주 채팅 세션이 프로세스 전역에 하나뿐 … 스피너 셋이 동시에 도는 이 화면은 그 구조 위에 없습니다」라고 적는다. 사용자 결정 2026-09-07: 구현 범위를 정하기 전에는 다중 실행 구조를 도입하지 않는다. 도달할 화면이 아니다"
+    },
+    {
+      "id": "3WBZ-1",
+      "page": "1-0",
+      "name": "41 · 세션 복원 — 다시 누르면 그대로",
+      "role": "screen"
+    },
+    {
+      "id": "3WOP-1",
+      "page": "1-0",
+      "name": "42 · 스냅샷 명세 — 모드별 저장 항목",
+      "role": "reference",
+      "why": "설명 보드 — 모드 다섯 × 저장 항목 아홉의 값·참조 표와 저장 시점·위치 요약뿐이라 그리는 화면이 없다(창·사이드바·패널을 한 프레임도 그리지 않는다). 같은 계열의 43번(세션 저장 모델)도 같은 이유로 reference다"
+    },
+    {
+      "id": "3WXE-1",
+      "page": "1-0",
+      "name": "43 · 세션 저장 모델 — Open WebUI·Orca 참조",
+      "role": "reference",
+      "why": "설명 보드 — Open WebUI·Orca 외부 참조 모델을 적은 자료라 구현 대상 표면이 아니다"
+    },
+    {
+      "id": "3ZPB-0",
+      "page": "1-0",
+      "name": "55 · 캔버스 탭 스트립 — 카드 1개 뷰포트 · 승인 대기",
+      "role": "screen"
+    },
+    {
+      "id": "9GI-0",
+      "page": "1-0",
+      "name": "27 · 접근성 — 투명도·모션 감소",
+      "role": "reference",
+      "why": "Paper가 창 프레임 없이 그린 1680×352 명세 시트 — 제목 띠와 문서 두 칸(투명도 감소·모션 감소)뿐이라 도달할 화면이 아니다. 폴백 자체는 app/styles/access.css 가 구현하고 app/lib/semantic-workspace-accessibility.test.js 가 잰다"
+    },
+    {
+      "id": "9GJ-0",
+      "page": "1-0",
+      "name": "23 · 주문 — 완료·보류·재시도",
+      "role": "contract",
+      "why": "창 프레임 없이 실행 전 차단 규칙과 실행 후 상태 범례(428·409·기타)를 그린 규칙·범례 보드 — 계약 문장 10개를 docs/architecture/paper-contracts.md 로 옮겼다"
+    },
+    {
+      "id": "AJ-0",
+      "page": "1-0",
+      "name": "13 · 설정 — 셸 오버레이",
+      "role": "screen"
+    },
+    {
+      "id": "AMZ-0",
+      "page": "1-0",
+      "name": "25 · 모드 전환 — 대화 유지·작업공간 교체",
+      "role": "screen"
+    },
+    {
+      "id": "COS-0",
+      "page": "1-0",
+      "name": "26 · 빈 작업공간 — 대화·그래프·백테스트",
+      "role": "screen"
+    },
+    {
+      "id": "DH2-0",
+      "page": "1-0",
+      "name": "30 · 대화 턴 — 복원 실패",
+      "role": "screen"
+    },
+    {
+      "id": "F9-0",
+      "page": "1-0",
+      "name": "14 · 설정 — 계좌 (AT-ST-001)",
+      "role": "screen"
+    },
+    {
+      "id": "FLM-0",
+      "page": "1-0",
+      "name": "16 · 계좌 등록 — 인증 실패 (AT-ST-002)",
+      "role": "screen"
+    },
+    {
+      "id": "FPE-0",
+      "page": "1-0",
+      "name": "17 · 계좌 등록 — 확인 완료 (AT-ST-002)",
+      "role": "screen"
+    },
+    {
+      "id": "G5B-0",
+      "page": "1-0",
+      "name": "28 · Windows 반응형 창 · Snap",
+      "role": "screen"
+    },
+    {
+      "id": "GCF-0",
+      "page": "1-0",
+      "name": "29 · 프로젝트·최근·새 채팅",
+      "role": "screen"
+    },
+    {
+      "id": "OJ-0",
+      "page": "1-0",
+      "name": "18 · 설정 — 모델 · AI 제공업체 계정",
+      "role": "screen"
+    },
+    {
+      "id": "XI-0",
+      "page": "1-0",
+      "name": "15 · 계좌 등록 — 인증 확인 중 (AT-ST-002)",
+      "role": "screen"
+    },
+    {
+      "id": "2FIA-2",
+      "page": "D-2",
+      "name": "05 · 그래프 — 수집·노출·브레인 제어",
+      "role": "screen"
+    },
+    {
+      "id": "2QA3-2",
+      "page": "D-2",
+      "name": "06 · 그래프 — 헤더 필터 (기간·정렬·연결 수)",
+      "role": "screen"
+    },
+    {
+      "id": "2QCN-2",
+      "page": "D-2",
+      "name": "07 · 그래프 — 정직성 상태 (이름·인코딩·빈 값)",
+      "role": "screen"
+    },
+    {
+      "id": "31H-0",
+      "page": "D-2",
+      "name": "04 · 그래프 — 노드 선택 · 공통 패널",
+      "role": "screen"
+    },
+    {
+      "id": "3NE-0",
+      "page": "D-2",
+      "name": "01 · 셸 — 그래프 모드 · 요약 뷰",
+      "role": "screen"
+    },
+    {
+      "id": "4AN-0",
+      "page": "D-2",
+      "name": "02 · 셸 — 그래프 요약 · 행 선택",
+      "role": "screen"
+    },
+    {
+      "id": "4IA-0",
+      "page": "D-2",
+      "name": "03 · 그래프 — 기본 군집 지도",
+      "role": "screen"
+    },
+    {
+      "id": "2IJN-2",
+      "page": "A-2",
+      "name": "06 · 에이전트 — 작업 설정",
+      "role": "screen"
+    },
+    {
+      "id": "432Z-1",
+      "page": "A-2",
+      "name": "07 · 에이전트 대화 — 제어 제안 턴 A~E",
+      "role": "screen"
+    },
+    {
+      "id": "4330-1",
+      "page": "A-2",
+      "name": "08 · 에이전트 대화 — 결과 턴",
+      "role": "screen"
+    },
+    {
+      "id": "43WD-1",
+      "page": "A-2",
+      "name": "09 · 에이전트 — 새 알람 · 말로 설명하면 AI가 감시 함수를 만든다",
+      "role": "screen"
+    },
+    {
+      "id": "446V-1",
+      "page": "A-2",
+      "name": "10 · 에이전트 — 알람 노드·흐름 · 검사 결과 · 승인",
+      "role": "screen"
+    },
+    {
+      "id": "4BAP-1",
+      "page": "A-2",
+      "name": "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+      "role": "screen"
+    },
+    {
+      "id": "44HD-1",
+      "page": "A-2",
+      "name": "11 · 에이전트 — 노드에서 ‘이상해요’ → AI가 고치고 다시 검사",
+      "role": "screen"
+    },
+    {
+      "id": "44RV-1",
+      "page": "A-2",
+      "name": "12 · 에이전트 — 활성 코드 알람 · 상세·발화 이력",
+      "role": "screen"
+    },
+    {
+      "id": "56X-0",
+      "page": "A-2",
+      "name": "01 · 셸 — 알림 파생 방",
+      "role": "screen"
+    },
+    {
+      "id": "ARM-0",
+      "page": "A-2",
+      "name": "02 · 에이전트 — 알람 센터 · 라이브 관제",
+      "role": "screen"
+    },
+    {
+      "id": "B57-0",
+      "page": "A-2",
+      "name": "03 · 에이전트 — 실행 이력·결과",
+      "role": "screen"
+    },
+    {
+      "id": "BIM-0",
+      "page": "A-2",
+      "name": "04 · 에이전트 — 프로액티브",
+      "role": "screen"
+    },
+    {
+      "id": "BV0-0",
+      "page": "A-2",
+      "name": "05 · 에이전트 — 작업",
+      "role": "screen"
+    },
+    {
+      "id": "15J-0",
+      "page": "B-2",
+      "name": "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)",
+      "role": "screen"
+    },
+    {
+      "id": "2NW8-2",
+      "page": "B-2",
+      "name": "05 · 플러그인 — 설치 승인 (캔버스 카드)",
+      "role": "screen"
+    },
+    {
+      "id": "2NXS-2",
+      "page": "B-2",
+      "name": "06 · 플러그인 — 상태 모음 (6상태)",
+      "role": "screen"
+    },
+    {
+      "id": "3ZJD-0",
+      "page": "B-2",
+      "name": "07 · 플러그인 대화 — 제안 턴 5동작",
+      "role": "screen"
+    },
+    {
+      "id": "3ZLW-0",
+      "page": "B-2",
+      "name": "08 · 플러그인 대화 — 결과 턴",
+      "role": "screen"
+    },
+    {
+      "id": "3ZNO-0",
+      "page": "B-2",
+      "name": "09 · 플러그인 창 복원",
+      "role": "screen"
+    },
+    {
+      "id": "CU0-0",
+      "page": "B-2",
+      "name": "03 · 플러그인 — 허브·설치",
+      "role": "screen"
+    },
+    {
+      "id": "CVY-0",
+      "page": "B-2",
+      "name": "04 · 플러그인 — 관리·마켓플레이스",
+      "role": "screen"
+    },
+    {
+      "id": "FT6-0",
+      "page": "B-2",
+      "name": "01 · 플러그인 — 기능 허용 (AT-ST-006)",
+      "role": "screen"
+    },
+    {
+      "id": "2I7Z-2",
+      "page": "C-2",
+      "name": "08 · 키우미 — 입력 스트립 모드별 얼굴",
+      "role": "retired",
+      "why": "사용자 결정 2026-09-01: 키우미 얼굴은 1종. Paper 08의 모드별 얼굴 5종은 폐기. kiumi-face.test.js와 verify:kiumi가 5모드 전부 visibleCount:1을 잰다"
+    },
+    {
+      "id": "2LFW-2",
+      "page": "C-2",
+      "name": "09 · 키우미 — 미니 카드 10종",
+      "role": "screen"
+    },
+    {
+      "id": "2TJ-0",
+      "page": "C-2",
+      "name": "02 · 키우미 — 표정 10종",
+      "role": "reference",
+      "why": "얼굴 썸네일 10칸과 라벨뿐인 사양 판 — 앱은 표정을 도형으로만 그리고 이 열 칸을 나열하는 화면이 없다. 표정 계약은 verify:kiumi 와 scripts/gates/check-orb.mjs 가 잰다"
+    },
+    {
+      "id": "4TY-0",
+      "page": "C-2",
+      "name": "04 · 키우미 — 대화·콘텐츠 전개",
+      "role": "screen"
+    },
+    {
+      "id": "5EU-0",
+      "page": "C-2",
+      "name": "05 · 키우미 — 셸 숨김·표시",
+      "role": "reference",
+      "why": "표시 모드 A(셸 숨김)·B(셸 표시)를 나란히 놓은 사양 판이라 두 모드가 한 화면에 함께 설 수 없다 — 표시 모드 계약은 verify:kiumi 가 잰다"
+    },
+    {
+      "id": "5H3-0",
+      "page": "C-2",
+      "name": "03 · 키우미 — 시선·시간 루프",
+      "role": "reference",
+      "why": "시선 9방향·시간 루프 3종·신호 14가지 매핑표를 적은 사양 판 — 앱은 그 동작을 도형 움직임으로만 그린다. 동작 계약은 verify:kiumi 와 scripts/gates/check-orb.mjs(페이드 금지)가 잰다"
+    },
+    {
+      "id": "C8G-0",
+      "page": "C-2",
+      "name": "07 · 키우미 메뉴 — 셸 오버레이",
+      "role": "screen"
+    },
+    {
+      "id": "CLE-0",
+      "page": "C-2",
+      "name": "06 · 키우미 메뉴 — 두 진입점과 항목",
+      "role": "screen"
+    },
+    {
+      "id": "DO-0",
+      "page": "C-2",
+      "name": "01 · 키우미 — 상황별 표현·크기 매핑",
+      "role": "screen"
+    },
+    {
+      "id": "133H-2",
+      "page": "5-1",
+      "name": "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+      "role": "card_template"
+    },
+    {
+      "id": "135M-2",
+      "page": "5-1",
+      "name": "CC-02 / R11 · 삼성전자 10주 시장가 매수",
+      "role": "card_template"
+    },
+    {
+      "id": "137X-2",
+      "page": "5-1",
+      "name": "CC-03 / R01 · 삼성전자 3개월 차트",
+      "role": "card_template"
+    },
+    {
+      "id": "13BC-2",
+      "page": "5-1",
+      "name": "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+      "role": "card_template"
+    },
+    {
+      "id": "13K0-2",
+      "page": "5-1",
+      "name": "CC-06 / R04 · 거래대금 상위 저평가 탐색",
+      "role": "card_template"
+    },
+    {
+      "id": "15J9-2",
+      "page": "5-1",
+      "name": "CC-06 / R05 · 반도체 업종·AI 테마",
+      "role": "card_template"
+    },
+    {
+      "id": "15L8-2",
+      "page": "5-1",
+      "name": "CC-06 / R06 · 관심종목·조건 신호",
+      "role": "card_template"
+    },
+    {
+      "id": "15N5-2",
+      "page": "5-1",
+      "name": "CC-03 / R07 · KODEX 200 ETF",
+      "role": "card_template"
+    },
+    {
+      "id": "15P5-2",
+      "page": "5-1",
+      "name": "CC-03 / R08 · ELW 위험·만기",
+      "role": "card_template"
+    },
+    {
+      "id": "15R0-2",
+      "page": "5-1",
+      "name": "CC-06 / R09 · 시장 체온·VI",
+      "role": "card_template"
+    },
+    {
+      "id": "15XT-2",
+      "page": "5-1",
+      "name": "C01 · 좁은 데스크톱 — 차트",
+      "role": "card_spec"
+    },
+    {
+      "id": "15Y5-2",
+      "page": "5-1",
+      "name": "C02 · 좁은 데스크톱 — 실시간 호가",
+      "role": "card_spec"
+    },
+    {
+      "id": "15YH-2",
+      "page": "5-1",
+      "name": "C03 · 좁은 데스크톱 — 주문 확인",
+      "role": "card_spec"
+    },
+    {
+      "id": "161Q-2",
+      "page": "5-1",
+      "name": "S00 · 공통 상태·재시도",
+      "role": "card_spec"
+    },
+    {
+      "id": "1745-2",
+      "page": "5-1",
+      "name": "D01 · 문맥형 상세·이어보기 정본",
+      "role": "card_spec"
+    },
+    {
+      "id": "1IG2-0",
+      "page": "5-1",
+      "name": "C04–C07 · 좁은 데스크톱 — 계좌·수급·탐색·상품",
+      "role": "card_spec"
+    },
+    {
+      "id": "1IG3-0",
+      "page": "5-1",
+      "name": "S01 · 시간 초과·취소·인증 만료·장 마감",
+      "role": "card_spec"
+    },
+    {
+      "id": "1JPU-0",
+      "page": "5-1",
+      "name": "A04 · 호가 정본 — 실시간 통합 호가",
+      "role": "card_template"
+    },
+    {
+      "id": "1JZW-0",
+      "page": "5-1",
+      "name": "A02×A04 · 호가 주문 정본 — 시장가 매수",
+      "role": "card_template"
+    },
+    {
+      "id": "1UO5-1",
+      "page": "5-1",
+      "name": "A02×A04 · 목록 펼침 검증 — 최근 체결 20건",
+      "role": "card_spec"
+    },
+    {
+      "id": "1WOB-1",
+      "page": "5-1",
+      "name": "A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위",
+      "role": "card_template"
+    },
+    {
+      "id": "2QFO-2",
+      "page": "5-1",
+      "name": "CC-05 / R03-T1 · 수급 — 투자자별",
+      "role": "card_template"
+    },
+    {
+      "id": "2QM7-2",
+      "page": "5-1",
+      "name": "CC-05 / R03-T2 · 수급 — 거래원",
+      "role": "card_template"
+    },
+    {
+      "id": "2QRP-1",
+      "page": "5-1",
+      "name": "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+      "role": "card_template"
+    },
+    {
+      "id": "2QX1-1",
+      "page": "5-1",
+      "name": "CC-04 / R02-T3 · 호가 — KRX 금현물",
+      "role": "card_template"
+    },
+    {
+      "id": "2R3M-1",
+      "page": "5-1",
+      "name": "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+      "role": "card_template"
+    },
+    {
+      "id": "2RBO-1",
+      "page": "5-1",
+      "name": "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+      "role": "card_template"
+    },
+    {
+      "id": "2RJ7-1",
+      "page": "5-1",
+      "name": "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+      "role": "card_template"
+    },
+    {
+      "id": "2ROJ-1",
+      "page": "5-1",
+      "name": "CC-05 / R03-T3 · 수급 — 프로그램",
+      "role": "card_template"
+    },
+    {
+      "id": "2RWK-1",
+      "page": "5-1",
+      "name": "CC-05 / R03-T4 · 수급 — 신용·대차",
+      "role": "card_template"
+    },
+    {
+      "id": "2S4E-1",
+      "page": "5-1",
+      "name": "CC-05 / R03-T5 · 수급 — 종목 동향",
+      "role": "card_template"
+    },
+    {
+      "id": "2SCE-1",
+      "page": "5-1",
+      "name": "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+      "role": "card_template"
+    },
+    {
+      "id": "2SKU-1",
+      "page": "5-1",
+      "name": "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+      "role": "card_template"
+    },
+    {
+      "id": "2SRV-1",
+      "page": "5-1",
+      "name": "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+      "role": "card_template"
+    },
+    {
+      "id": "2SYW-1",
+      "page": "5-1",
+      "name": "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+      "role": "card_template"
+    },
+    {
+      "id": "2T63-1",
+      "page": "5-1",
+      "name": "CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도",
+      "role": "card_template"
+    },
+    {
+      "id": "2TAG-1",
+      "page": "5-1",
+      "name": "CC-02 / R11-T2 · 정정 — 삼성전자 지정가 정정",
+      "role": "card_template"
+    },
+    {
+      "id": "2TET-1",
+      "page": "5-1",
+      "name": "CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소",
+      "role": "card_template"
+    },
+    {
+      "id": "2TJ6-1",
+      "page": "5-1",
+      "name": "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+      "role": "card_template"
+    },
+    {
+      "id": "2TNJ-1",
+      "page": "5-1",
+      "name": "CC-02 / R11-T5 · 금현물 매수 — 금 99.99K 10g 시장가",
+      "role": "card_template"
+    },
+    {
+      "id": "2TRW-1",
+      "page": "5-1",
+      "name": "CC-04 / R02-T4 · 호가 — 정규장 5단",
+      "role": "card_template"
+    },
+    {
+      "id": "2TZN-1",
+      "page": "5-1",
+      "name": "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+      "role": "card_template"
+    },
+    {
+      "id": "2U5L-1",
+      "page": "5-1",
+      "name": "CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
+      "role": "card_template"
+    },
+    {
+      "id": "2UBO-1",
+      "page": "5-1",
+      "name": "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+      "role": "card_template"
+    },
+    {
+      "id": "2UHM-1",
+      "page": "5-1",
+      "name": "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+      "role": "card_template"
+    },
+    {
+      "id": "2UN6-1",
+      "page": "5-1",
+      "name": "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+      "role": "card_template"
+    },
+    {
+      "id": "2V71-0",
+      "page": "5-1",
+      "name": "CC-05 / R03-T6 · 수급 — 순위",
+      "role": "card_template"
+    },
+    {
+      "id": "2VDA-0",
+      "page": "5-1",
+      "name": "CC-03 / R01-T4 · 순위 — 주식 신호·순위",
+      "role": "card_template"
+    },
+    {
+      "id": "2VIN-0",
+      "page": "5-1",
+      "name": "CC-03 / R01-T5 · 순위 — ETF 전체시세",
+      "role": "card_template"
+    },
+    {
+      "id": "2VO0-0",
+      "page": "5-1",
+      "name": "CC-03 / R01-T6 · 순위 — ELW 순위",
+      "role": "card_template"
+    },
+    {
+      "id": "2WZK-0",
+      "page": "5-1",
+      "name": "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+      "role": "card_template"
+    },
+    {
+      "id": "2X5N-0",
+      "page": "5-1",
+      "name": "CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
+      "role": "card_template"
+    },
+    {
+      "id": "2XA5-0",
+      "page": "5-1",
+      "name": "CC-03 / R01-T6-2 · 순위 — ELW 등락률",
+      "role": "card_template"
+    },
+    {
+      "id": "2XG6-0",
+      "page": "5-1",
+      "name": "CC-06 / R04-S3 · 종목찾기 — 전일 거래량",
+      "role": "card_template"
+    },
+    {
+      "id": "2XKO-0",
+      "page": "5-1",
+      "name": "CC-06 / R04-S4 · 종목찾기 — 등락률",
+      "role": "card_template"
+    },
+    {
+      "id": "2XP6-0",
+      "page": "5-1",
+      "name": "CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
+      "role": "card_template"
+    },
+    {
+      "id": "2XTO-0",
+      "page": "5-1",
+      "name": "CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위",
+      "role": "card_template"
+    },
+    {
+      "id": "2XY6-0",
+      "page": "5-1",
+      "name": "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+      "role": "card_template"
+    },
+    {
+      "id": "2Y47-0",
+      "page": "5-1",
+      "name": "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+      "role": "card_template"
+    },
+    {
+      "id": "2YA8-0",
+      "page": "5-1",
+      "name": "CC-06 / R04-S7 · 종목찾기 — 호가잔량 급증",
+      "role": "card_template"
+    },
+    {
+      "id": "2YEQ-0",
+      "page": "5-1",
+      "name": "CC-06 / R04-S8 · 종목찾기 — 잔량률 급증",
+      "role": "card_template"
+    },
+    {
+      "id": "2YJ8-0",
+      "page": "5-1",
+      "name": "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+      "role": "card_template"
+    },
+    {
+      "id": "2YNQ-0",
+      "page": "5-1",
+      "name": "CC-06 / R04-S10 · 종목찾기 — 시간외 등락률",
+      "role": "card_template"
+    },
+    {
+      "id": "2YS8-0",
+      "page": "5-1",
+      "name": "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+      "role": "card_template"
+    },
+    {
+      "id": "2YXS-0",
+      "page": "5-1",
+      "name": "CC-03 / R01-T4-2 · 순위 — 상하한가",
+      "role": "card_template"
+    },
+    {
+      "id": "2Z49-0",
+      "page": "5-1",
+      "name": "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+      "role": "card_template"
+    },
+    {
+      "id": "2ZBB-0",
+      "page": "5-1",
+      "name": "CC-05 / R03-T6-3 · 순위 — 대차 상위",
+      "role": "card_template"
+    },
+    {
+      "id": "2ZHC-0",
+      "page": "5-1",
+      "name": "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+      "role": "card_template"
+    },
+    {
+      "id": "2ZN9-0",
+      "page": "5-1",
+      "name": "CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+      "role": "card_template"
+    },
+    {
+      "id": "2ZTA-0",
+      "page": "5-1",
+      "name": "CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+      "role": "card_template"
+    },
+    {
+      "id": "2ZZ7-0",
+      "page": "5-1",
+      "name": "CC-03 / R01-T4-4 · 순위 — 가격급등락",
+      "role": "card_template"
+    },
+    {
+      "id": "3063-0",
+      "page": "5-1",
+      "name": "CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
+      "role": "card_template"
+    },
+    {
+      "id": "30C1-0",
+      "page": "5-1",
+      "name": "CC-03 / R01-T4-5 · 순위 — 거래량갱신",
+      "role": "card_template"
+    },
+    {
+      "id": "30HY-0",
+      "page": "5-1",
+      "name": "CC-05 / R03-T6-6 · 순위 — 외국인·기관 상위",
+      "role": "card_template"
+    },
+    {
+      "id": "30O1-0",
+      "page": "5-1",
+      "name": "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+      "role": "card_template"
+    },
+    {
+      "id": "30TY-0",
+      "page": "5-1",
+      "name": "CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+      "role": "card_template"
+    },
+    {
+      "id": "30ZW-0",
+      "page": "5-1",
+      "name": "CC-03 / R01-T4-7 · 순위 — 고저 PER",
+      "role": "card_template"
+    },
+    {
+      "id": "316O-0",
+      "page": "5-1",
+      "name": "CC-03 / R01-T4-8 · 순위 — 시가대비 등락",
+      "role": "card_template"
+    },
+    {
+      "id": "31CL-0",
+      "page": "5-1",
+      "name": "CC-05 / R03-T6-8 · 순위 — 동일순매매",
+      "role": "card_template"
+    },
+    {
+      "id": "31II-0",
+      "page": "5-1",
+      "name": "CC-03 / R01-T4-9 · 순위 — VI 발동",
+      "role": "card_template"
+    },
+    {
+      "id": "31OF-0",
+      "page": "5-1",
+      "name": "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+      "role": "card_template"
+    },
+    {
+      "id": "31UD-0",
+      "page": "5-1",
+      "name": "CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+      "role": "card_template"
+    },
+    {
+      "id": "32S7-0",
+      "page": "5-1",
+      "name": "CC-03 / R01-T7 · 차트 — 업종 지수",
+      "role": "card_template"
+    },
+    {
+      "id": "32XM-0",
+      "page": "5-1",
+      "name": "CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+      "role": "card_template"
+    },
+    {
+      "id": "3BQB-0",
+      "page": "5-1",
+      "name": "CC-06 / R04-T1-X · 업종 — 업종 목록 펼침",
+      "role": "card_template"
+    },
+    {
+      "id": "3D4I-0",
+      "page": "5-1",
+      "name": "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+      "role": "card_template"
+    },
+    {
+      "id": "3DI2-0",
+      "page": "5-1",
+      "name": "CC-03 / R01-X · 투자자 12주체",
+      "role": "card_template"
+    },
+    {
+      "id": "3DZ1-0",
+      "page": "5-1",
+      "name": "CC-03 / R08-X · ELW 바스켓·만기평가",
+      "role": "card_template"
+    },
+    {
+      "id": "3EWN-0",
+      "page": "5-1",
+      "name": "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+      "role": "card_template"
+    },
+    {
+      "id": "3FR6-0",
+      "page": "5-1",
+      "name": "CC-03 / R01-T1-X · 분봉 시세",
+      "role": "card_template"
+    },
+    {
+      "id": "3GRO-0",
+      "page": "5-1",
+      "name": "CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+      "role": "card_template"
+    },
+    {
+      "id": "3IGR-0",
+      "page": "5-1",
+      "name": "CC-01 / R10-T2-X2 · 증거금 재원·담보 상세",
+      "role": "card_template"
+    },
+    {
+      "id": "3JT4-0",
+      "page": "5-1",
+      "name": "CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+      "role": "card_template"
+    },
+    {
+      "id": "3JZ3-0",
+      "page": "5-1",
+      "name": "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+      "role": "card_template"
+    },
+    {
+      "id": "3K7K-0",
+      "page": "5-1",
+      "name": "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+      "role": "card_template"
+    },
+    {
+      "id": "3LGC-0",
+      "page": "5-1",
+      "name": "CC-01 / R10-T2-X3 · 거래내역 상세",
+      "role": "card_template"
+    },
+    {
+      "id": "3MTJ-0",
+      "page": "5-1",
+      "name": "CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
+      "role": "card_template"
+    },
+    {
+      "id": "3N4O-0",
+      "page": "5-1",
+      "name": "A04-X · 호가 정본 — 단계별 낱값",
+      "role": "card_template"
+    },
+    {
+      "id": "3NVG-0",
+      "page": "5-1",
+      "name": "CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+      "role": "card_template"
+    },
+    {
+      "id": "3ODO-0",
+      "page": "5-1",
+      "name": "CC-01 / R10-B-X1 · 금현물 잔고·거래내역",
+      "role": "card_template"
+    },
+    {
+      "id": "3OIM-0",
+      "page": "5-1",
+      "name": "CC-01 / R10-B-X2 · 금현물 주문·체결",
+      "role": "card_template"
+    },
+    {
+      "id": "3TCO-0",
+      "page": "5-1",
+      "name": "CC-03 / R01-T4-9-X · VI 발동 전체 12건",
+      "role": "card_template"
+    },
+    {
+      "id": "3TOM-0",
+      "page": "5-1",
+      "name": "CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
+      "role": "card_template"
+    },
+    {
+      "id": "3UTA-0",
+      "page": "5-1",
+      "name": "CC-01 / R10-T2-X6 · 부채·미수·연체 상세",
+      "role": "card_template"
+    },
+    {
+      "id": "4A9H-1",
+      "page": "5-1",
+      "name": "CC-06 / R04-S12 · 종목찾기 — 시장 고르기",
+      "role": "card_template"
+    },
+    {
+      "id": "4AGN-1",
+      "page": "5-1",
+      "name": "CC-06 / R04-S13 · 종목찾기 — 등락 고르기",
+      "role": "card_template"
+    },
+    {
+      "id": "4ANS-1",
+      "page": "5-1",
+      "name": "CC-06 / R04-S14 · 종목찾기 — 시가총액 고르기",
+      "role": "card_template"
+    },
+    {
+      "id": "4AUX-1",
+      "page": "5-1",
+      "name": "CC-06 / R04-S15 · 종목찾기 — 유동성 고르기",
+      "role": "card_template"
+    },
+    {
+      "id": "4B22-1",
+      "page": "5-1",
+      "name": "CC-06 / R04-S16 · 종목찾기 — 전체 100개 펼침",
+      "role": "card_template"
+    },
+    {
+      "id": "177W-2",
+      "page": "F-1",
+      "name": "CC-04 / R02-B · 시간외·통합·금현물 호가",
+      "role": "contract"
+    },
+    {
+      "id": "17F8-2",
+      "page": "F-1",
+      "name": "CC-01 / R10-B · 증거금·담보·금현물 잔고",
+      "role": "contract"
+    },
+    {
+      "id": "17IH-2",
+      "page": "F-1",
+      "name": "CC-02 / R11-B · 신용·금현물·정정·취소 주문",
+      "role": "contract"
+    },
+    {
+      "id": "17MB-2",
+      "page": "F-1",
+      "name": "CC-06 / R06-B · 조건검색·이어보기·실시간 해제",
+      "role": "contract"
+    },
+    {
+      "id": "1XA2-0",
+      "page": "F-1",
+      "name": "CC-03 / R01-B · 차트 전체 항목·행 상세",
+      "role": "contract"
+    },
+    {
+      "id": "1XGW-0",
+      "page": "F-1",
+      "name": "DV-1 · 종목 탐색 결과 — 공식 128개 필드",
+      "role": "contract"
+    },
+    {
+      "id": "24GR-0",
+      "page": "F-1",
+      "name": "CC-04 / R02-X1 · 정규·통합 호가 공식 원문 — ka10004·ka10007",
+      "role": "contract"
+    },
+    {
+      "id": "24GS-0",
+      "page": "F-1",
+      "name": "CC-04 / R02-X2 · 실시간 KRX·NXT·LP 공식 원문 — 0C·0D",
+      "role": "contract"
+    },
+    {
+      "id": "24GT-0",
+      "page": "F-1",
+      "name": "CC-04 / R02-X3 · 시간외·금현물·프로토콜 공식 원문 — 0E·ka10087·ka50101",
+      "role": "contract"
+    },
+    {
+      "id": "2DZE-0",
+      "page": "F-1",
+      "name": "DV-2 · 기업·가치 프로필 — 공식 39개 필드",
+      "role": "contract"
+    },
+    {
+      "id": "2E4E-0",
+      "page": "F-1",
+      "name": "DV-3 · 거래·가격 이력 — 공식 189개 필드",
+      "role": "contract"
+    },
+    {
+      "id": "322V-0",
+      "page": "F-1",
+      "name": "RX-1 · 순위·정렬 상태 ↔ TR 사양",
+      "role": "contract"
+    },
+    {
+      "id": "45S7-0",
+      "page": "H-1",
+      "name": "template/compound",
+      "role": "mini_template"
+    },
+    {
+      "id": "45S8-0",
+      "page": "H-1",
+      "name": "template/table",
+      "role": "mini_template"
+    },
+    {
+      "id": "45S9-0",
+      "page": "H-1",
+      "name": "template/facts",
+      "role": "mini_template"
+    },
+    {
+      "id": "45SA-0",
+      "page": "H-1",
+      "name": "template/order_confirm",
+      "role": "mini_template"
+    },
+    {
+      "id": "45SB-0",
+      "page": "H-1",
+      "name": "template/order_ticket",
+      "role": "mini_template"
+    },
+    {
+      "id": "45SC-0",
+      "page": "H-1",
+      "name": "template/chart",
+      "role": "mini_template"
+    },
+    {
+      "id": "45SD-0",
+      "page": "H-1",
+      "name": "template/event",
+      "role": "mini_template"
+    },
+    {
+      "id": "45SE-0",
+      "page": "H-1",
+      "name": "template/auth",
+      "role": "mini_template"
+    },
+    {
+      "id": "45SF-0",
+      "page": "H-1",
+      "name": "template/reader",
+      "role": "mini_template"
+    },
+    {
+      "id": "45SG-0",
+      "page": "H-1",
+      "name": "template/stream",
+      "role": "mini_template"
+    },
+    {
+      "id": "45SH-0",
+      "page": "H-1",
+      "name": "template/2SCE-1",
+      "role": "mini_template"
+    },
+    {
+      "id": "46AX-0",
+      "page": "H-1",
+      "name": "mini/CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+      "role": "mini_card"
+    },
+    {
+      "id": "46BW-0",
+      "page": "H-1",
+      "name": "mini/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+      "role": "mini_card"
+    },
+    {
+      "id": "46CV-0",
+      "page": "H-1",
+      "name": "mini/CC-02 / R11 · 삼성전자 10주 시장가 매수",
+      "role": "mini_card"
+    },
+    {
+      "id": "46DE-0",
+      "page": "H-1",
+      "name": "mini/CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도",
+      "role": "mini_card"
+    },
+    {
+      "id": "46E2-0",
+      "page": "H-1",
+      "name": "mini/CC-03 / R01 · 삼성전자 3개월 차트",
+      "role": "mini_card"
+    },
+    {
+      "id": "46FL-0",
+      "page": "H-1",
+      "name": "mini/CC-04 / R02 · 삼성전자 실시간 호가·체결",
+      "role": "mini_card"
+    },
+    {
+      "id": "46GK-0",
+      "page": "H-1",
+      "name": "mini/A04-X · 호가 정본 — 단계별 낱값",
+      "role": "mini_card"
+    },
+    {
+      "id": "46H8-0",
+      "page": "H-1",
+      "name": "mini/A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위",
+      "role": "mini_card"
+    },
+    {
+      "id": "46IV-0",
+      "page": "H-1",
+      "name": "mini/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+      "role": "mini_card"
+    },
+    {
+      "id": "46JU-0",
+      "page": "H-1",
+      "name": "mini/CC-06 / R09 · 시장 체온·VI",
+      "role": "mini_card"
+    },
+    {
+      "id": "46KI-0",
+      "page": "H-1",
+      "name": "mini/CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+      "role": "mini_card"
+    },
+    {
+      "id": "46L6-0",
+      "page": "H-1",
+      "name": "mini/CC-06 / R05 · 반도체 업종·AI 테마",
+      "role": "mini_card"
+    },
+    {
+      "id": "46M5-0",
+      "page": "H-1",
+      "name": "mini/CC-06 / R06 · 관심종목·조건 신호",
+      "role": "mini_card"
+    },
+    {
+      "id": "46MT-0",
+      "page": "H-1",
+      "name": "mini/CC-03 / R07 · KODEX 200 ETF",
+      "role": "mini_card"
+    },
+    {
+      "id": "46NS-0",
+      "page": "H-1",
+      "name": "mini/CC-03 / R08 · ELW 위험·만기",
+      "role": "mini_card"
+    },
+    {
+      "id": "46OR-0",
+      "page": "H-1",
+      "name": "mini/A04 · 호가 정본 — 실시간 통합 호가",
+      "role": "mini_card"
+    },
+    {
+      "id": "46PQ-0",
+      "page": "H-1",
+      "name": "mini/A02×A04 · 호가 주문 정본 — 시장가 매수",
+      "role": "mini_card"
+    },
+    {
+      "id": "46QP-0",
+      "page": "H-1",
+      "name": "mini/CC-05 / R03-T1 · 수급 — 투자자별",
+      "role": "mini_card"
+    },
+    {
+      "id": "46RD-0",
+      "page": "H-1",
+      "name": "mini/CC-05 / R03-T2 · 수급 — 거래원",
+      "role": "mini_card"
+    },
+    {
+      "id": "46S1-0",
+      "page": "H-1",
+      "name": "mini/CC-04 / R02-T2 · 호가 — 시간외 단일가",
+      "role": "mini_card"
+    },
+    {
+      "id": "46T0-0",
+      "page": "H-1",
+      "name": "mini/CC-04 / R02-T3 · 호가 — KRX 금현물",
+      "role": "mini_card"
+    },
+    {
+      "id": "46TZ-0",
+      "page": "H-1",
+      "name": "mini/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+      "role": "mini_card"
+    },
+    {
+      "id": "46UY-0",
+      "page": "H-1",
+      "name": "mini/CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+      "role": "mini_card"
+    },
+    {
+      "id": "46VM-0",
+      "page": "H-1",
+      "name": "mini/CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+      "role": "mini_card"
+    },
+    {
+      "id": "46WL-0",
+      "page": "H-1",
+      "name": "mini/CC-05 / R03-T3 · 수급 — 프로그램",
+      "role": "mini_card"
+    },
+    {
+      "id": "46XK-0",
+      "page": "H-1",
+      "name": "mini/CC-05 / R03-T4 · 수급 — 신용·대차",
+      "role": "mini_card"
+    },
+    {
+      "id": "46YJ-0",
+      "page": "H-1",
+      "name": "mini/CC-05 / R03-T5 · 수급 — 종목 동향",
+      "role": "mini_card"
+    },
+    {
+      "id": "46ZI-0",
+      "page": "H-1",
+      "name": "mini/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+      "role": "mini_card"
+    },
+    {
+      "id": "470H-0",
+      "page": "H-1",
+      "name": "mini/CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+      "role": "mini_card"
+    },
+    {
+      "id": "471G-0",
+      "page": "H-1",
+      "name": "mini/CC-02 / R11-T2 · 정정 — 삼성전자 지정가 정정",
+      "role": "mini_card"
+    },
+    {
+      "id": "4724-0",
+      "page": "H-1",
+      "name": "mini/CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소",
+      "role": "mini_card"
+    },
+    {
+      "id": "472S-0",
+      "page": "H-1",
+      "name": "mini/CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+      "role": "mini_card"
+    },
+    {
+      "id": "473G-0",
+      "page": "H-1",
+      "name": "mini/CC-02 / R11-T5 · 금현물 매수 — 금 99.99K 10g 시장가",
+      "role": "mini_card"
+    },
+    {
+      "id": "4744-0",
+      "page": "H-1",
+      "name": "mini/CC-04 / R02-T4 · 호가 — 정규장 5단",
+      "role": "mini_card"
+    },
+    {
+      "id": "4753-0",
+      "page": "H-1",
+      "name": "mini/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+      "role": "mini_card"
+    },
+    {
+      "id": "4762-0",
+      "page": "H-1",
+      "name": "mini/CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
+      "role": "mini_card"
+    },
+    {
+      "id": "4771-0",
+      "page": "H-1",
+      "name": "mini/CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+      "role": "mini_card"
+    },
+    {
+      "id": "4780-0",
+      "page": "H-1",
+      "name": "mini/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+      "role": "mini_card"
+    },
+    {
+      "id": "478Z-0",
+      "page": "H-1",
+      "name": "mini/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+      "role": "mini_card"
+    },
+    {
+      "id": "479Y-0",
+      "page": "H-1",
+      "name": "mini/CC-05 / R03-T6 · 수급 — 순위",
+      "role": "mini_card"
+    },
+    {
+      "id": "47AX-0",
+      "page": "H-1",
+      "name": "mini/CC-03 / R01-T4 · 순위 — 주식 신호·순위",
+      "role": "mini_card"
+    },
+    {
+      "id": "47BW-0",
+      "page": "H-1",
+      "name": "mini/CC-03 / R01-T5 · 순위 — ETF 전체시세",
+      "role": "mini_card"
+    },
+    {
+      "id": "47CV-0",
+      "page": "H-1",
+      "name": "mini/CC-03 / R01-T6 · 순위 — ELW 순위",
+      "role": "mini_card"
+    },
+    {
+      "id": "47DU-0",
+      "page": "H-1",
+      "name": "mini/CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+      "role": "mini_card"
+    },
+    {
+      "id": "47EI-0",
+      "page": "H-1",
+      "name": "mini/CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
+      "role": "mini_card"
+    },
+    {
+      "id": "47FH-0",
+      "page": "H-1",
+      "name": "mini/CC-03 / R01-T6-2 · 순위 — ELW 등락률",
+      "role": "mini_card"
+    },
+    {
+      "id": "47GG-0",
+      "page": "H-1",
+      "name": "mini/CC-06 / R04-S3 · 종목찾기 — 전일 거래량",
+      "role": "mini_card"
+    },
+    {
+      "id": "47H4-0",
+      "page": "H-1",
+      "name": "mini/CC-06 / R04-S4 · 종목찾기 — 등락률",
+      "role": "mini_card"
+    },
+    {
+      "id": "47HS-0",
+      "page": "H-1",
+      "name": "mini/CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
+      "role": "mini_card"
+    },
+    {
+      "id": "47IG-0",
+      "page": "H-1",
+      "name": "mini/CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위",
+      "role": "mini_card"
+    },
+    {
+      "id": "47J4-0",
+      "page": "H-1",
+      "name": "mini/CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+      "role": "mini_card"
+    },
+    {
+      "id": "47K3-0",
+      "page": "H-1",
+      "name": "mini/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+      "role": "mini_card"
+    },
+    {
+      "id": "47L2-0",
+      "page": "H-1",
+      "name": "mini/CC-06 / R04-S7 · 종목찾기 — 호가잔량 급증",
+      "role": "mini_card"
+    },
+    {
+      "id": "47LQ-0",
+      "page": "H-1",
+      "name": "mini/CC-06 / R04-S8 · 종목찾기 — 잔량률 급증",
+      "role": "mini_card"
+    },
+    {
+      "id": "47ME-0",
+      "page": "H-1",
+      "name": "mini/CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+      "role": "mini_card"
+    },
+    {
+      "id": "47N2-0",
+      "page": "H-1",
+      "name": "mini/CC-06 / R04-S10 · 종목찾기 — 시간외 등락률",
+      "role": "mini_card"
+    },
+    {
+      "id": "47NQ-0",
+      "page": "H-1",
+      "name": "mini/CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+      "role": "mini_card"
+    },
+    {
+      "id": "47OP-0",
+      "page": "H-1",
+      "name": "mini/CC-03 / R01-T4-2 · 순위 — 상하한가",
+      "role": "mini_card"
+    },
+    {
+      "id": "47PO-0",
+      "page": "H-1",
+      "name": "mini/CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+      "role": "mini_card"
+    },
+    {
+      "id": "47QN-0",
+      "page": "H-1",
+      "name": "mini/CC-05 / R03-T6-3 · 순위 — 대차 상위",
+      "role": "mini_card"
+    },
+    {
+      "id": "47RM-0",
+      "page": "H-1",
+      "name": "mini/CC-03 / R01-T4-3 · 순위 — 고저가근접",
+      "role": "mini_card"
+    },
+    {
+      "id": "47SL-0",
+      "page": "H-1",
+      "name": "mini/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+      "role": "mini_card"
+    },
+    {
+      "id": "47TK-0",
+      "page": "H-1",
+      "name": "mini/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+      "role": "mini_card"
+    },
+    {
+      "id": "47UJ-0",
+      "page": "H-1",
+      "name": "mini/CC-03 / R01-T4-4 · 순위 — 가격급등락",
+      "role": "mini_card"
+    },
+    {
+      "id": "47VI-0",
+      "page": "H-1",
+      "name": "mini/CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
+      "role": "mini_card"
+    },
+    {
+      "id": "47WH-0",
+      "page": "H-1",
+      "name": "mini/CC-03 / R01-T4-5 · 순위 — 거래량갱신",
+      "role": "mini_card"
+    },
+    {
+      "id": "47XG-0",
+      "page": "H-1",
+      "name": "mini/CC-05 / R03-T6-6 · 순위 — 외국인·기관 상위",
+      "role": "mini_card"
+    },
+    {
+      "id": "47Y4-0",
+      "page": "H-1",
+      "name": "mini/CC-03 / R01-T4-6 · 순위 — 매물대집중",
+      "role": "mini_card"
+    },
+    {
+      "id": "47Z3-0",
+      "page": "H-1",
+      "name": "mini/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+      "role": "mini_card"
+    },
+    {
+      "id": "4802-0",
+      "page": "H-1",
+      "name": "mini/CC-03 / R01-T4-7 · 순위 — 고저 PER",
+      "role": "mini_card"
+    },
+    {
+      "id": "4811-0",
+      "page": "H-1",
+      "name": "mini/CC-03 / R01-T4-8 · 순위 — 시가대비 등락",
+      "role": "mini_card"
+    },
+    {
+      "id": "4820-0",
+      "page": "H-1",
+      "name": "mini/CC-05 / R03-T6-8 · 순위 — 동일순매매",
+      "role": "mini_card"
+    },
+    {
+      "id": "482Z-0",
+      "page": "H-1",
+      "name": "mini/CC-03 / R01-T4-9 · 순위 — VI 발동",
+      "role": "mini_card"
+    },
+    {
+      "id": "483Y-0",
+      "page": "H-1",
+      "name": "mini/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+      "role": "mini_card"
+    },
+    {
+      "id": "484X-0",
+      "page": "H-1",
+      "name": "mini/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+      "role": "mini_card"
+    },
+    {
+      "id": "485W-0",
+      "page": "H-1",
+      "name": "mini/CC-03 / R01-T7 · 차트 — 업종 지수",
+      "role": "mini_card"
+    },
+    {
+      "id": "486G-0",
+      "page": "H-1",
+      "name": "mini/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+      "role": "mini_card"
+    },
+    {
+      "id": "487F-0",
+      "page": "H-1",
+      "name": "mini/CC-06 / R04-T1-X · 업종 — 업종 목록 펼침",
+      "role": "mini_card"
+    },
+    {
+      "id": "4883-0",
+      "page": "H-1",
+      "name": "mini/CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+      "role": "mini_card"
+    },
+    {
+      "id": "4892-0",
+      "page": "H-1",
+      "name": "mini/CC-03 / R01-X · 투자자 12주체",
+      "role": "mini_card"
+    },
+    {
+      "id": "489Q-0",
+      "page": "H-1",
+      "name": "mini/CC-03 / R08-X · ELW 바스켓·만기평가",
+      "role": "mini_card"
+    },
+    {
+      "id": "48AP-0",
+      "page": "H-1",
+      "name": "mini/CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+      "role": "mini_card"
+    },
+    {
+      "id": "48BO-0",
+      "page": "H-1",
+      "name": "mini/CC-03 / R01-T1-X · 분봉 시세",
+      "role": "mini_card"
+    },
+    {
+      "id": "48CN-0",
+      "page": "H-1",
+      "name": "mini/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+      "role": "mini_card"
+    },
+    {
+      "id": "48DM-0",
+      "page": "H-1",
+      "name": "mini/CC-01 / R10-T2-X2 · 증거금 재원·담보 상세",
+      "role": "mini_card"
+    },
+    {
+      "id": "48EL-0",
+      "page": "H-1",
+      "name": "mini/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+      "role": "mini_card"
+    },
+    {
+      "id": "48FK-0",
+      "page": "H-1",
+      "name": "mini/CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+      "role": "mini_card"
+    },
+    {
+      "id": "48GJ-0",
+      "page": "H-1",
+      "name": "mini/CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+      "role": "mini_card"
+    },
+    {
+      "id": "48H7-0",
+      "page": "H-1",
+      "name": "mini/CC-01 / R10-T2-X3 · 거래내역 상세",
+      "role": "mini_card"
+    },
+    {
+      "id": "48I6-0",
+      "page": "H-1",
+      "name": "mini/CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
+      "role": "mini_card"
+    },
+    {
+      "id": "48J5-0",
+      "page": "H-1",
+      "name": "mini/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+      "role": "mini_card"
+    },
+    {
+      "id": "48K4-0",
+      "page": "H-1",
+      "name": "mini/CC-01 / R10-B-X1 · 금현물 잔고·거래내역",
+      "role": "mini_card"
+    },
+    {
+      "id": "48L3-0",
+      "page": "H-1",
+      "name": "mini/CC-01 / R10-B-X2 · 금현물 주문·체결",
+      "role": "mini_card"
+    },
+    {
+      "id": "48M2-0",
+      "page": "H-1",
+      "name": "mini/CC-03 / R01-T4-9-X · VI 발동 전체 12건",
+      "role": "mini_card"
+    },
+    {
+      "id": "48N1-0",
+      "page": "H-1",
+      "name": "mini/CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
+      "role": "mini_card"
+    },
+    {
+      "id": "48O0-0",
+      "page": "H-1",
+      "name": "mini/CC-01 / R10-T2-X6 · 부채·미수·연체 상세",
+      "role": "mini_card"
+    },
+    {
+      "id": "48OZ-0",
+      "page": "H-1",
+      "name": "note/CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+      "role": "mini_card"
+    },
+    {
+      "id": "48P9-0",
+      "page": "H-1",
+      "name": "note/CC-02 / R11 · 삼성전자 10주 시장가 매수",
+      "role": "mini_card"
+    },
+    {
+      "id": "48PJ-0",
+      "page": "H-1",
+      "name": "note/CC-03 / R01 · 삼성전자 3개월 차트",
+      "role": "mini_card"
+    },
+    {
+      "id": "48PT-0",
+      "page": "H-1",
+      "name": "note/CC-04 / R02 · 삼성전자 실시간 호가·체결",
+      "role": "mini_card"
+    },
+    {
+      "id": "48Q3-0",
+      "page": "H-1",
+      "name": "note/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+      "role": "mini_card"
+    },
+    {
+      "id": "48QD-0",
+      "page": "H-1",
+      "name": "note/CC-06 / R05 · 반도체 업종·AI 테마",
+      "role": "mini_card"
+    },
+    {
+      "id": "48QN-0",
+      "page": "H-1",
+      "name": "note/CC-06 / R06 · 관심종목·조건 신호",
+      "role": "mini_card"
+    },
+    {
+      "id": "48QX-0",
+      "page": "H-1",
+      "name": "note/CC-03 / R07 · KODEX 200 ETF",
+      "role": "mini_card"
+    },
+    {
+      "id": "48R7-0",
+      "page": "H-1",
+      "name": "note/CC-03 / R08 · ELW 위험·만기",
+      "role": "mini_card"
+    },
+    {
+      "id": "48RH-0",
+      "page": "H-1",
+      "name": "note/CC-06 / R09 · 시장 체온·VI",
+      "role": "mini_card"
+    },
+    {
+      "id": "48RR-0",
+      "page": "H-1",
+      "name": "note/A04 · 호가 정본 — 실시간 통합 호가",
+      "role": "mini_card"
+    },
+    {
+      "id": "48S1-0",
+      "page": "H-1",
+      "name": "note/A02×A04 · 호가 주문 정본 — 시장가 매수",
+      "role": "mini_card"
+    },
+    {
+      "id": "48SB-0",
+      "page": "H-1",
+      "name": "note/A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위",
+      "role": "mini_card"
+    },
+    {
+      "id": "48SL-0",
+      "page": "H-1",
+      "name": "note/CC-05 / R03-T1 · 수급 — 투자자별",
+      "role": "mini_card"
+    },
+    {
+      "id": "48SV-0",
+      "page": "H-1",
+      "name": "note/CC-05 / R03-T2 · 수급 — 거래원",
+      "role": "mini_card"
+    },
+    {
+      "id": "48T5-0",
+      "page": "H-1",
+      "name": "note/CC-04 / R02-T2 · 호가 — 시간외 단일가",
+      "role": "mini_card"
+    },
+    {
+      "id": "48TF-0",
+      "page": "H-1",
+      "name": "note/CC-04 / R02-T3 · 호가 — KRX 금현물",
+      "role": "mini_card"
+    },
+    {
+      "id": "48TP-0",
+      "page": "H-1",
+      "name": "note/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+      "role": "mini_card"
+    },
+    {
+      "id": "48TZ-0",
+      "page": "H-1",
+      "name": "note/CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+      "role": "mini_card"
+    },
+    {
+      "id": "48U9-0",
+      "page": "H-1",
+      "name": "note/CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+      "role": "mini_card"
+    },
+    {
+      "id": "48UJ-0",
+      "page": "H-1",
+      "name": "note/CC-05 / R03-T3 · 수급 — 프로그램",
+      "role": "mini_card"
+    },
+    {
+      "id": "48UT-0",
+      "page": "H-1",
+      "name": "note/CC-05 / R03-T4 · 수급 — 신용·대차",
+      "role": "mini_card"
+    },
+    {
+      "id": "48V3-0",
+      "page": "H-1",
+      "name": "note/CC-05 / R03-T5 · 수급 — 종목 동향",
+      "role": "mini_card"
+    },
+    {
+      "id": "48VD-0",
+      "page": "H-1",
+      "name": "note/CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+      "role": "mini_card"
+    },
+    {
+      "id": "48VN-0",
+      "page": "H-1",
+      "name": "note/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+      "role": "mini_card"
+    },
+    {
+      "id": "48VX-0",
+      "page": "H-1",
+      "name": "note/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+      "role": "mini_card"
+    },
+    {
+      "id": "48W7-0",
+      "page": "H-1",
+      "name": "note/CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+      "role": "mini_card"
+    },
+    {
+      "id": "48WH-0",
+      "page": "H-1",
+      "name": "note/CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도",
+      "role": "mini_card"
+    },
+    {
+      "id": "48WR-0",
+      "page": "H-1",
+      "name": "note/CC-02 / R11-T2 · 정정 — 삼성전자 지정가 정정",
+      "role": "mini_card"
+    },
+    {
+      "id": "48X1-0",
+      "page": "H-1",
+      "name": "note/CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소",
+      "role": "mini_card"
+    },
+    {
+      "id": "48XB-0",
+      "page": "H-1",
+      "name": "note/CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+      "role": "mini_card"
+    },
+    {
+      "id": "48XL-0",
+      "page": "H-1",
+      "name": "note/CC-02 / R11-T5 · 금현물 매수 — 금 99.99K 10g 시장가",
+      "role": "mini_card"
+    },
+    {
+      "id": "48XV-0",
+      "page": "H-1",
+      "name": "note/CC-04 / R02-T4 · 호가 — 정규장 5단",
+      "role": "mini_card"
+    },
+    {
+      "id": "48Y5-0",
+      "page": "H-1",
+      "name": "note/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+      "role": "mini_card"
+    },
+    {
+      "id": "48YF-0",
+      "page": "H-1",
+      "name": "note/CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
+      "role": "mini_card"
+    },
+    {
+      "id": "48YP-0",
+      "page": "H-1",
+      "name": "note/CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+      "role": "mini_card"
+    },
+    {
+      "id": "48YZ-0",
+      "page": "H-1",
+      "name": "note/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+      "role": "mini_card"
+    },
+    {
+      "id": "48Z9-0",
+      "page": "H-1",
+      "name": "note/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+      "role": "mini_card"
+    },
+    {
+      "id": "48ZJ-0",
+      "page": "H-1",
+      "name": "note/CC-05 / R03-T6 · 수급 — 순위",
+      "role": "mini_card"
+    },
+    {
+      "id": "48ZT-0",
+      "page": "H-1",
+      "name": "note/CC-03 / R01-T4 · 순위 — 주식 신호·순위",
+      "role": "mini_card"
+    },
+    {
+      "id": "4903-0",
+      "page": "H-1",
+      "name": "note/CC-03 / R01-T5 · 순위 — ETF 전체시세",
+      "role": "mini_card"
+    },
+    {
+      "id": "490D-0",
+      "page": "H-1",
+      "name": "note/CC-03 / R01-T6 · 순위 — ELW 순위",
+      "role": "mini_card"
+    },
+    {
+      "id": "490N-0",
+      "page": "H-1",
+      "name": "note/CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+      "role": "mini_card"
+    },
+    {
+      "id": "490X-0",
+      "page": "H-1",
+      "name": "note/CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
+      "role": "mini_card"
+    },
+    {
+      "id": "4917-0",
+      "page": "H-1",
+      "name": "note/CC-03 / R01-T6-2 · 순위 — ELW 등락률",
+      "role": "mini_card"
+    },
+    {
+      "id": "491H-0",
+      "page": "H-1",
+      "name": "note/CC-06 / R04-S3 · 종목찾기 — 전일 거래량",
+      "role": "mini_card"
+    },
+    {
+      "id": "491R-0",
+      "page": "H-1",
+      "name": "note/CC-06 / R04-S4 · 종목찾기 — 등락률",
+      "role": "mini_card"
+    },
+    {
+      "id": "4921-0",
+      "page": "H-1",
+      "name": "note/CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
+      "role": "mini_card"
+    },
+    {
+      "id": "492B-0",
+      "page": "H-1",
+      "name": "note/CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위",
+      "role": "mini_card"
+    },
+    {
+      "id": "492L-0",
+      "page": "H-1",
+      "name": "note/CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+      "role": "mini_card"
+    },
+    {
+      "id": "492V-0",
+      "page": "H-1",
+      "name": "note/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+      "role": "mini_card"
+    },
+    {
+      "id": "4935-0",
+      "page": "H-1",
+      "name": "note/CC-06 / R04-S7 · 종목찾기 — 호가잔량 급증",
+      "role": "mini_card"
+    },
+    {
+      "id": "493F-0",
+      "page": "H-1",
+      "name": "note/CC-06 / R04-S8 · 종목찾기 — 잔량률 급증",
+      "role": "mini_card"
+    },
+    {
+      "id": "493P-0",
+      "page": "H-1",
+      "name": "note/CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+      "role": "mini_card"
+    },
+    {
+      "id": "493Z-0",
+      "page": "H-1",
+      "name": "note/CC-06 / R04-S10 · 종목찾기 — 시간외 등락률",
+      "role": "mini_card"
+    },
+    {
+      "id": "4949-0",
+      "page": "H-1",
+      "name": "note/CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+      "role": "mini_card"
+    },
+    {
+      "id": "494J-0",
+      "page": "H-1",
+      "name": "note/CC-03 / R01-T4-2 · 순위 — 상하한가",
+      "role": "mini_card"
+    },
+    {
+      "id": "494T-0",
+      "page": "H-1",
+      "name": "note/CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+      "role": "mini_card"
+    },
+    {
+      "id": "4953-0",
+      "page": "H-1",
+      "name": "note/CC-05 / R03-T6-3 · 순위 — 대차 상위",
+      "role": "mini_card"
+    },
+    {
+      "id": "495D-0",
+      "page": "H-1",
+      "name": "note/CC-03 / R01-T4-3 · 순위 — 고저가근접",
+      "role": "mini_card"
+    },
+    {
+      "id": "495N-0",
+      "page": "H-1",
+      "name": "note/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+      "role": "mini_card"
+    },
+    {
+      "id": "495X-0",
+      "page": "H-1",
+      "name": "note/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+      "role": "mini_card"
+    },
+    {
+      "id": "4967-0",
+      "page": "H-1",
+      "name": "note/CC-03 / R01-T4-4 · 순위 — 가격급등락",
+      "role": "mini_card"
+    },
+    {
+      "id": "496H-0",
+      "page": "H-1",
+      "name": "note/CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
+      "role": "mini_card"
+    },
+    {
+      "id": "496R-0",
+      "page": "H-1",
+      "name": "note/CC-03 / R01-T4-5 · 순위 — 거래량갱신",
+      "role": "mini_card"
+    },
+    {
+      "id": "4971-0",
+      "page": "H-1",
+      "name": "note/CC-05 / R03-T6-6 · 순위 — 외국인·기관 상위",
+      "role": "mini_card"
+    },
+    {
+      "id": "497B-0",
+      "page": "H-1",
+      "name": "note/CC-03 / R01-T4-6 · 순위 — 매물대집중",
+      "role": "mini_card"
+    },
+    {
+      "id": "497L-0",
+      "page": "H-1",
+      "name": "note/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+      "role": "mini_card"
+    },
+    {
+      "id": "497V-0",
+      "page": "H-1",
+      "name": "note/CC-03 / R01-T4-7 · 순위 — 고저 PER",
+      "role": "mini_card"
+    },
+    {
+      "id": "4985-0",
+      "page": "H-1",
+      "name": "note/CC-03 / R01-T4-8 · 순위 — 시가대비 등락",
+      "role": "mini_card"
+    },
+    {
+      "id": "498F-0",
+      "page": "H-1",
+      "name": "note/CC-05 / R03-T6-8 · 순위 — 동일순매매",
+      "role": "mini_card"
+    },
+    {
+      "id": "498P-0",
+      "page": "H-1",
+      "name": "note/CC-03 / R01-T4-9 · 순위 — VI 발동",
+      "role": "mini_card"
+    },
+    {
+      "id": "498Z-0",
+      "page": "H-1",
+      "name": "note/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+      "role": "mini_card"
+    },
+    {
+      "id": "4999-0",
+      "page": "H-1",
+      "name": "note/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+      "role": "mini_card"
+    },
+    {
+      "id": "499J-0",
+      "page": "H-1",
+      "name": "note/CC-03 / R01-T7 · 차트 — 업종 지수",
+      "role": "mini_card"
+    },
+    {
+      "id": "499T-0",
+      "page": "H-1",
+      "name": "note/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+      "role": "mini_card"
+    },
+    {
+      "id": "49A3-0",
+      "page": "H-1",
+      "name": "note/CC-06 / R04-T1-X · 업종 — 업종 목록 펼침",
+      "role": "mini_card"
+    },
+    {
+      "id": "49AD-0",
+      "page": "H-1",
+      "name": "note/CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+      "role": "mini_card"
+    },
+    {
+      "id": "49AN-0",
+      "page": "H-1",
+      "name": "note/CC-03 / R01-X · 투자자 12주체",
+      "role": "mini_card"
+    },
+    {
+      "id": "49AX-0",
+      "page": "H-1",
+      "name": "note/CC-03 / R08-X · ELW 바스켓·만기평가",
+      "role": "mini_card"
+    },
+    {
+      "id": "49B7-0",
+      "page": "H-1",
+      "name": "note/CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+      "role": "mini_card"
+    },
+    {
+      "id": "49BH-0",
+      "page": "H-1",
+      "name": "note/CC-03 / R01-T1-X · 분봉 시세",
+      "role": "mini_card"
+    },
+    {
+      "id": "49BR-0",
+      "page": "H-1",
+      "name": "note/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+      "role": "mini_card"
+    },
+    {
+      "id": "49C1-0",
+      "page": "H-1",
+      "name": "note/CC-01 / R10-T2-X2 · 증거금 재원·담보 상세",
+      "role": "mini_card"
+    },
+    {
+      "id": "49CB-0",
+      "page": "H-1",
+      "name": "note/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+      "role": "mini_card"
+    },
+    {
+      "id": "49CL-0",
+      "page": "H-1",
+      "name": "note/CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+      "role": "mini_card"
+    },
+    {
+      "id": "49CV-0",
+      "page": "H-1",
+      "name": "note/CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+      "role": "mini_card"
+    },
+    {
+      "id": "49D5-0",
+      "page": "H-1",
+      "name": "note/CC-01 / R10-T2-X3 · 거래내역 상세",
+      "role": "mini_card"
+    },
+    {
+      "id": "49DF-0",
+      "page": "H-1",
+      "name": "note/CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
+      "role": "mini_card"
+    },
+    {
+      "id": "49DP-0",
+      "page": "H-1",
+      "name": "note/A04-X · 호가 정본 — 단계별 낱값",
+      "role": "mini_card"
+    },
+    {
+      "id": "49DZ-0",
+      "page": "H-1",
+      "name": "note/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+      "role": "mini_card"
+    },
+    {
+      "id": "49E9-0",
+      "page": "H-1",
+      "name": "note/CC-01 / R10-B-X1 · 금현물 잔고·거래내역",
+      "role": "mini_card"
+    },
+    {
+      "id": "49EJ-0",
+      "page": "H-1",
+      "name": "note/CC-01 / R10-B-X2 · 금현물 주문·체결",
+      "role": "mini_card"
+    },
+    {
+      "id": "49ET-0",
+      "page": "H-1",
+      "name": "note/CC-03 / R01-T4-9-X · VI 발동 전체 12건",
+      "role": "mini_card"
+    },
+    {
+      "id": "49F3-0",
+      "page": "H-1",
+      "name": "note/CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
+      "role": "mini_card"
+    },
+    {
+      "id": "49FD-0",
+      "page": "H-1",
+      "name": "note/CC-01 / R10-T2-X6 · 부채·미수·연체 상세",
+      "role": "mini_card"
+    },
+    {
+      "id": "1SW0-0",
+      "page": "8-1",
+      "name": "01 · 백테스트 — 설계 (폼)",
+      "role": "screen"
+    },
+    {
+      "id": "1T5K-0",
+      "page": "8-1",
+      "name": "02 · 백테스트 — 설계 (코드)",
+      "role": "screen"
+    },
+    {
+      "id": "1TGA-1",
+      "page": "8-1",
+      "name": "03 · 백테스트 — 결과",
+      "role": "screen"
+    },
+    {
+      "id": "1TPF-1",
+      "page": "8-1",
+      "name": "04 · 백테스트 — 데이터 수집 승인",
+      "role": "screen"
+    },
+    {
+      "id": "1WSI-1",
+      "page": "8-1",
+      "name": "05 · 백테스트 — 이력·비교",
+      "role": "screen"
+    },
+    {
+      "id": "1WZJ-1",
+      "page": "8-1",
+      "name": "06 · 백테스트 — 최적화",
+      "role": "screen"
+    },
+    {
+      "id": "2FMM-2",
+      "page": "8-1",
+      "name": "07 · 백테스트 — 전략 배포 · 실전 적용",
+      "role": "screen"
+    },
+    {
+      "id": "2FR9-2",
+      "page": "8-1",
+      "name": "08 · 백테스트 — 코드 플로우 지도",
+      "role": "screen"
+    },
+    {
+      "id": "2FY9-2",
+      "page": "8-1",
+      "name": "09 · 백테스트 — 오류 진단 · 자동 수정 승인",
+      "role": "screen"
+    },
+    {
+      "id": "2GZM-2",
+      "page": "8-1",
+      "name": "10 · 백테스트 — 전략 고르기 · 실패·비활성 상태",
+      "role": "reference",
+      "why": "사용자 결정 2026-09-07: 보드 19(40EV-1)가 정본 — 40EY-1 「프리셋이라는 구분은 없습니다」가 이 보드의 프리셋 고르기를 부정한다. 오류 상태 절반(실패·비활성 배지)은 앱에 구현됨, 그 계약은 backtest-canvas.test.js가 잰다"
+    },
+    {
+      "id": "3X7M-1",
+      "page": "8-1",
+      "name": "15 · 백테스트 — 설계 (흐름 지도) · 대화로 고치는 1급 표면 — 폐기(요약 지도 제거, 보드 19~22 현행)",
+      "role": "retired",
+      "why": "보드 제목이 폐기 선언"
+    },
+    {
+      "id": "3XE7-1",
+      "page": "8-1",
+      "name": "16 · 백테스트 — 지도 실행 → 멈춤 → 대화로 고침 — 폐기(요약 지도 제거, 보드 19~22 현행)",
+      "role": "retired",
+      "why": "보드 제목이 폐기 선언"
+    },
+    {
+      "id": "3XL4-1",
+      "page": "8-1",
+      "name": "17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)",
+      "role": "screen"
+    },
+    {
+      "id": "3XV1-1",
+      "page": "8-1",
+      "name": "18 · 백테스트 — 흐름 지도 강화 명세 · 칸·동사·버전·동기화·로딩",
+      "role": "contract",
+      "why": "원장이 스스로 「보드 11·12·13이 장면이라면 이 보드는 규칙입니다」라 적은 A~H 여덟 칸 규칙표 — 계약 문장 8개를 docs/architecture/paper-contracts.md 로 옮겼다"
+    },
+    {
+      "id": "3Y38-1",
+      "page": "8-1",
+      "name": "11 · 백테스트 — 시각 전략 설계 · 편집 가능",
+      "role": "screen"
+    },
+    {
+      "id": "3YFV-1",
+      "page": "8-1",
+      "name": "12 · 백테스트 — 시각 전략 검증 · 연결 오류",
+      "role": "screen"
+    },
+    {
+      "id": "3YQ0-1",
+      "page": "8-1",
+      "name": "13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결",
+      "role": "screen"
+    },
+    {
+      "id": "3Z0X-1",
+      "page": "8-1",
+      "name": "14 · 백테스트 — 그래프·코드 동기화 완료 · 실행 전",
+      "role": "screen"
+    },
+    {
+      "id": "3Z8U-1",
+      "page": "8-1",
+      "name": "09 · 그래프 — 채팅이 화면을 몬다 (navigate · select · filter)",
+      "role": "screen"
+    },
+    {
+      "id": "3ZAA-1",
+      "page": "8-1",
+      "name": "10 · 그래프 — \"이 노드 설명해줘\" (관계·근거·이력·대화 원문)",
+      "role": "screen"
+    },
+    {
+      "id": "3ZC2-1",
+      "page": "8-1",
+      "name": "11 · 그래프 — 편집은 제안까지 · 도구 계약",
+      "role": "screen"
+    },
+    {
+      "id": "40EV-1",
+      "page": "8-1",
+      "name": "19 · 백테스트 — 기법 목록 · 새 기법",
+      "role": "screen"
+    },
+    {
+      "id": "42FW-1",
+      "page": "8-1",
+      "name": "23 · 백테스트 — 승인 → 기법 목록에 추가 → 실매매 적용(키우미가 켜지면 자동 매매)",
+      "role": "screen"
+    },
+    {
+      "id": "43DP-1",
+      "page": "8-1",
+      "name": "20 · 백테스트 — 새 기법 만들기 · 폴더·편집기·터미널·단계 카드",
+      "role": "screen"
+    },
+    {
+      "id": "43O1-1",
+      "page": "8-1",
+      "name": "21 · 백테스트 — 노드·흐름 창 · 노드를 누르면 @칩이 입력창에 들어간다",
+      "role": "screen"
+    },
+    {
+      "id": "452D-1",
+      "page": "8-1",
+      "name": "22 · 백테스트 — 고치기 순환 · 단계 카드를 누르면 diff와 터미널이 열린다",
+      "role": "screen"
+    },
+    {
+      "id": "402S-1",
+      "page": "G-1",
+      "name": "00 · 백테스트 — 지금 구현된 것 · 요약과 의도 편차",
+      "role": "record"
+    },
+    {
+      "id": "405P-1",
+      "page": "G-1",
+      "name": "00b · 백테스트 — 의도 대비 구현 상태 표",
+      "role": "record"
+    },
+    {
+      "id": "40AA-1",
+      "page": "G-1",
+      "name": "01 · 백테스트 모드 진입 — 프리셋 10종",
+      "role": "record"
+    },
+    {
+      "id": "40AL-1",
+      "page": "G-1",
+      "name": "02 · 지도 탭 — 요약 지도 ①~④",
+      "role": "record"
+    },
+    {
+      "id": "40AW-1",
+      "page": "G-1",
+      "name": "03 · 지도 탭 — 시각 편집기(팔레트·캔버스·검사기)",
+      "role": "record"
+    },
+    {
+      "id": "40B7-1",
+      "page": "G-1",
+      "name": "04 · 노드 검사기 — ma_fast 하향 돌파",
+      "role": "record"
+    },
+    {
+      "id": "40BI-1",
+      "page": "G-1",
+      "name": "05 · 폼 탭 — 프리셋·대상·지표",
+      "role": "record"
+    },
+    {
+      "id": "40BT-1",
+      "page": "G-1",
+      "name": "06 · 코드 탭 — 지도가 만든 파이썬",
+      "role": "record"
+    },
+    {
+      "id": "40C4-1",
+      "page": "G-1",
+      "name": "07 · 연결을 끊은 지도 — BTG-PORT-002",
+      "role": "record"
+    },
+    {
+      "id": "40CF-1",
+      "page": "G-1",
+      "name": "08 · 오류 칸 → 코드 미리보기(__MISSING__)",
+      "role": "record"
+    },
+    {
+      "id": "40CQ-1",
+      "page": "G-1",
+      "name": "09 · 질문 카드 — 한 가지만 확인할게요",
+      "role": "record"
+    },
+    {
+      "id": "40D1-1",
+      "page": "G-1",
+      "name": "10 · 수정안 카드 — 그래프 + 코드 패치",
+      "role": "record"
+    },
+    {
+      "id": "40DC-1",
+      "page": "G-1",
+      "name": "11 · 적용 — 동기화 완료(v1 → v2)",
+      "role": "record"
+    },
+    {
+      "id": "40DN-1",
+      "page": "G-1",
+      "name": "12 · 실행 결과 탭",
+      "role": "record"
+    },
+    {
+      "id": "40DY-1",
+      "page": "G-1",
+      "name": "13 · 이력 탭 — 저장된 버전 2개·실행 이력",
+      "role": "record"
+    },
+    {
+      "id": "40E9-1",
+      "page": "G-1",
+      "name": "14 · 코드가 지도보다 앞섬 — 두 갈래",
+      "role": "record"
+    },
+    {
+      "id": "40EK-1",
+      "page": "G-1",
+      "name": "15 · 창 폭 860px — 지도 탭",
+      "role": "record"
+    }
+  ]
 }
