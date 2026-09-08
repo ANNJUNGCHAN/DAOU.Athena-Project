@@ -1678,6 +1678,32 @@ ipcMain.handle('athena:project-add', async (_e, { path: givenPath, name } = {}) 
 ipcMain.handle('athena:project-pin', (_e, { id, pinned } = {}) => conversations.setProjectPinned(id, Boolean(pinned)));
 // '프로젝트 수정'(29번 보드) — 이름·설명만. 폴더는 건드리지 않는다.
 ipcMain.handle('athena:project-update', (_e, { id, label, description } = {}) => conversations.updateProject({ id, label, description }));
+// '폴더 다시 지정' — 코드 감시 카드의 「프로젝트 폴더 없음 — 다시 연결」이 부른다. 폴더는 사람이
+// 대화상자로 고르고, 백엔드가 같은 project_id의 경로만 바꾼다(새 id 없음 — 초안이 든 id가 그대로
+// 살아난다). 사이드바 레코드도 같은 경로를 적는다. 백엔드가 거절하면 사이드바도 건드리지 않는다.
+ipcMain.handle('athena:project-relink', async (_e, { id } = {}) => {
+  const projectId = typeof id === 'string' && id.trim() ? id.trim() : null;
+  if (!projectId) return { ok: false, reason: 'unknown_project' };
+  let picked = null;
+  try {
+    const res = await dialog.showOpenDialog(shellWin, { properties: ['openDirectory'] });
+    picked = res.canceled ? null : ((res.filePaths || [])[0] || null);
+  } catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+  if (!picked) return { ok: true, canceled: true };
+  let relinked;
+  try {
+    relinked = await backtestBridge.relinkProject({
+      backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch, project_id: projectId, path: picked,
+    });
+  } catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
+  if (!relinked || !relinked.ok) {
+    return { ok: false, error: String((relinked && relinked.error) || '백엔드가 폴더를 받지 않았다') };
+  }
+  const project = relinked.data && relinked.data.project ? relinked.data.project : null;
+  // 사이드바에 그 레코드가 없을 수 있다(백엔드만 아는 프로젝트) — 그때는 백엔드 결과만 돌려준다.
+  const record = conversations.setProjectPath(projectId, (project && project.path) || picked);
+  return { ok: true, path: (project && project.path) || picked, project, sidebarUpdated: Boolean(record && record.ok) };
+});
 ipcMain.handle('athena:project-reveal', async (_e, { id } = {}) => {
   const project = conversations.projectById(id);
   if (!project || !project.path) return { ok: false, reason: 'no_path' };
