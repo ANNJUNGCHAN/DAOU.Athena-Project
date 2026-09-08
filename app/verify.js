@@ -5976,7 +5976,6 @@ app.whenReady().then(async () => {
       type: 'routine-fired', routine_id: 'vbrief1', symbol: '005930',
       source: 'schedule.daily', mode: 'scheduled', observed: '07:30',
       threshold: 'ALL@07:30', note: '브리핑 검증 루틴', fired_at: briefFiredAt,
-      briefing_model: null, briefing_effort: null,
     };
     mainMod.handleRoutineFeedEvent(briefEvent);
     await wait(300);
@@ -6078,7 +6077,6 @@ app.whenReady().then(async () => {
     });
     const missedView = (id, note) => ({
       id, note, symbol: '005930', mode: 'scheduled', status: 'active', missed: true,
-      briefing_model: null, briefing_effort: null,
     });
     const findMissedCard = (note) => `(() => {
       const cards = Array.from(document.querySelectorAll('.turn-agent.routine-missed'));

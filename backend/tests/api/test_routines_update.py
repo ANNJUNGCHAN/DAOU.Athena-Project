@@ -102,8 +102,6 @@ def test_update_reflects_allowed_fields(app_client):
         json={
             "note": "손절선 감시",
             "cooldown_s": 600,
-            "briefing_model": "claude-sonnet-5",
-            "briefing_effort": "high",
             "condition": {"op": "<=", "value": 190000},
         },
     )
@@ -111,8 +109,6 @@ def test_update_reflects_allowed_fields(app_client):
     body = res.json()
     assert body["note"] == "손절선 감시"
     assert body["cooldown_s"] == 600
-    assert body["briefing_model"] == "claude-sonnet-5"
-    assert body["briefing_effort"] == "high"
     assert body["condition"] == {
         "source": "price.current",
         "op": "<=",

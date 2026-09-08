@@ -328,8 +328,6 @@ const WATCH_DETAIL = Object.freeze({
     cooldown_s: 300,
     expires_at: '2026-09-10T09:00:00',
     note: '삼성전자 88,000 감시',
-    briefing_model: 'opus',
-    briefing_effort: 'high',
     condition: { source: 'price.current', op: '>=', value: 88000, consecutive_ticks: 1 },
     source_spec: { ops: ['<', '<=', '>', '>='], value_type: 'number', transport: 'ws', label: '현재가' },
   },
