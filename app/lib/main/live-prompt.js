@@ -267,15 +267,17 @@ const LIVE_RULES_TEXT = [
 // 존재하지 않는 도구를 여러 번 추측하므로 Grok 콜드 경로에만 이 변환 규칙을 준다.
 const GROK_MCP_RULES_TEXT = [
   '[Grok MCP 호출 규칙]',
-  '- Athena 도구는 먼저 search_tool로 찾고, 반환된 정확한 server__tool 이름을 use_tool의 tool_name에 넣는다. bare 이름이나 추측한 별칭을 쓰지 않는다.',
+  '- 조회·작업 실행이 필요 없는 설명이나 일반 대화는 도구를 호출하지 않고 바로 답한다. 실제 시세·계좌·공시·주문 정보가 필요한 질문은 반드시 해당 도구로 확인한다.',
+  '- Athena 도구의 정확한 이름과 입력 스키마를 현재 대화에서 이미 확인했다면 use_tool로 바로 호출한다. 이름이나 스키마를 모를 때만 search_tool로 찾고, 반환된 정확한 server__tool 이름을 tool_name에 넣는다. bare 이름이나 추측한 별칭을 쓰지 않는다.',
+  '- search_tool은 필요한 도구 하나의 정확한 이름으로 검색하고 limit:1부터 사용한다. 전체 도구 목록을 요청받지 않았다면 athena 같은 넓은 검색어로 모든 스키마를 나열하지 않는다. 첫 결과가 맞지 않으면 검색을 구체화한다.',
   '- 이 앱의 Athena 서버 이름은 athena다. 백테스트 도구의 qualified 이름은 athena__athena_backtest다.',
   '- 캔버스 도구의 qualified 이름은 athena__athena_render_canvas다(위 규칙의 athena__render_canvas는 Grok에서 이 이름으로 보인다). athena__render_canvas·athena__athena__render_canvas는 존재하지 않으니 시도하지 않는다. 호출 예시: {"tool_name":"athena__athena_render_canvas","tool_input":{"plan_token":"..."}}',
   '- 폼 변경 예시: {"tool_name":"athena__athena_backtest","tool_input":{"action":"propose_spec","propose_spec":{"patch":{"symbols":["005930"],"period":"day"}}}}',
   '- propose_spec의 patch는 반드시 propose_spec 객체 안에 넣는다. period는 day·week·month 중 하나만 지원한다. 분봉을 지원한다고 말하거나 period=min을 보내지 않는다.',
 ].join('\n');
 
-function buildLiveSystemPrompt() {
-  return LIVE_RULES_TEXT;
+function buildLiveSystemPrompt(providerId = 'claude') {
+  return providerId === 'grok' ? `${LIVE_RULES_TEXT}\n\n${GROK_MCP_RULES_TEXT}` : LIVE_RULES_TEXT;
 }
 
 // 백테스트 모드 접두(2026-09-02) — 캔버스가 백테스트 모드일 때만 턴 앞에 붙는다.
@@ -793,10 +795,7 @@ function buildLiveTurnPrompt(input) {
 // 동일해야 한다(live-prompt.test.js가 합성 규칙을 고정). query는 문자열이든
 // buildLiveTurnPrompt와 같은 객체든 그대로 통과시킨다.
 function buildLivePrompt(query) {
-  const providerRules = query && typeof query === 'object' && query.providerId === 'grok'
-    ? `\n\n${GROK_MCP_RULES_TEXT}`
-    : '';
-  return `${LIVE_RULES_TEXT}${providerRules}\n\n${buildLiveTurnPrompt(query)}`;
+  return `${buildLiveSystemPrompt(query && query.providerId)}\n\n${buildLiveTurnPrompt(query)}`;
 }
 
 module.exports = {

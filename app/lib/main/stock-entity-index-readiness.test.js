@@ -9,6 +9,7 @@ const {
   createStockEntityIndexReadiness,
   reconcileStockIndexStartupTask,
 } = require('./stock-entity-index-readiness');
+const { recoverStockMasterReady } = require('./stock-master-client');
 
 function deferred() {
   let resolve;
@@ -272,6 +273,39 @@ test('BOOT-003: a complete background refresh reconciles one failed startup task
   assert.equal(startupReadiness.snapshot().revision, recovered.revision);
 });
 
+test('BOOT-003: failed SQLite startup state recovers when backend status becomes ready later', async () => {
+  const startupReadiness = new StartupReadiness({
+    runId: 'boot-sqlite-late-ready',
+    tasks: [{ id: 'stock-index', label: '종목 검색 데이터 준비', kind: 'gate' }],
+  });
+  startupReadiness.update('stock-index', {
+    state: 'failed', detail: 'SQLite 종목 마스터를 12초 안에 준비하지 못함',
+  });
+  const failedRevision = startupReadiness.snapshot().revision;
+  let requests = 0;
+
+  const status = await recoverStockMasterReady({
+    backendBase: 'http://backend',
+    retryBaseMs: 1,
+    wait: async () => {},
+    fetchImpl: async () => {
+      requests += 1;
+      const body = requests === 1
+        ? { ready: false, size: 0, refreshedAt: null }
+        : { ready: true, size: 3210, refreshedAt: 'now' };
+      return { ok: true, json: async () => body };
+    },
+    onReady: ({ size }) => reconcileStockIndexStartupTask(startupReadiness, size),
+  });
+
+  const recovered = startupReadiness.snapshot();
+  assert.equal(status.size, 3210);
+  assert.equal(requests, 2);
+  assert.equal(recovered.phase, 'ready');
+  assert.equal(recovered.revision, failedRevision + 1);
+  assert.equal(recovered.tasks[0].state, 'succeeded');
+});
+
 test('BOOT-003: a partial empty refresh never reconciles startup failure', async () => {
   const index = { size: 0 };
   const timers = manualTimers();
@@ -364,14 +398,12 @@ test('BOOT-003: an aborted stale refresh after restart never reconciles startup 
   readiness.stop();
 });
 
-test('BOOT-003: main wires complete background index recovery into startup reconciliation', () => {
+test('BOOT-003: main leaves background master ownership to SQLite backend', () => {
   const source = fs.readFileSync(path.join(__dirname, '..', '..', 'main.js'), 'utf8');
-  const start = source.indexOf('const stockEntityIndexReadiness = createStockEntityIndexReadiness({');
-  const end = source.indexOf('const chartFollowupTracker', start);
-  assert.ok(start >= 0 && end > start);
-  const wiring = source.slice(start, end);
-  assert.match(wiring, /onReady:\s*\(\{ size \}\)\s*=>/);
-  assert.match(wiring, /reconcileStockIndexStartupTask\(startupReadiness, size\)/);
+  assert.doesNotMatch(source, /createStockEntityIndexReadiness/);
+  assert.match(source, /stockMasterClient\.waitForStockMasterReady/);
+  assert.match(source, /stockMasterClient\.recoverStockMasterReady/);
+  assert.match(source, /reconcileStockIndexStartupTask\(startupReadiness, size\)/);
 
   const broadcastStart = source.indexOf('function broadcastBootReadiness(snapshot)');
   const broadcastEnd = source.indexOf('function attemptShellHandoff()', broadcastStart);

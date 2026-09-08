@@ -170,7 +170,16 @@ function ensureMcpConfig(userDataDir) {
   };
   atomicWriteFileSync(configPath, JSON.stringify(config, null, 2));
   const grokConfigPath = writeGrokProjectMcpConfig(dir);
-  return { dir, configFile: '.mcp.json', configPath, grokConfigPath };
+  const grokProfilePath = path.join(dir, 'athena-grok-agent.md');
+  atomicWriteFileSync(grokProfilePath, [
+    '---',
+    'name: athena-chat',
+    'description: Athena conversation and approved MCP tools',
+    'tools: search_tool, use_tool',
+    '---',
+    '',
+  ].join('\n'));
+  return { dir, configFile: '.mcp.json', configPath, grokConfigPath, grokProfilePath };
 }
 
 module.exports = {

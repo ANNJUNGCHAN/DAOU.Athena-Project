@@ -1,27 +1,29 @@
-"""Atomic, value-private instrument identity resolution from Kiwoom ka10099."""
+"""Persistent, fail-closed instrument identity resolution from Kiwoom ka10099."""
 
 from __future__ import annotations
 
 import asyncio
 import re
+import sqlite3
+import threading
 import unicodedata
 from collections import defaultdict
 from collections.abc import Awaitable, Callable, Iterable, Mapping
 from dataclasses import dataclass
+from datetime import UTC, datetime
+from pathlib import Path
 from types import MappingProxyType
 from typing import Any
 
 from athena_api.generated.models import Ka10099Response
 from athena_api.generated.registry import TR_REGISTRY
+from athena_api.kiwoom import RequestOptions
+from athena_api.kiwoom.return_codes import normalize_return_code
 from athena_api.routing_contract import EntityKind
 
 IDENTITY_MARKETS: tuple[str, ...] = ("0", "10", "8")
 IDENTITY_MARKET_KINDS: Mapping[str, EntityKind] = MappingProxyType(
-    {
-        "0": EntityKind.STOCK,
-        "10": EntityKind.STOCK,
-        "8": EntityKind.ETF,
-    }
+    {"0": EntityKind.STOCK, "10": EntityKind.STOCK, "8": EntityKind.ETF}
 )
 
 _AMBIGUOUS_CONTEXT = re.compile(
@@ -46,10 +48,9 @@ class TargetResolution:
 class _ResolvedInstrument:
     code: str
     target: TargetResolution
-    # 질문이 이미 6자리 코드를 담고 있으면 이름→코드 해석이 한 일이 없다.
-    # 평가 계층이 "식별 보조를 받은 질문"과 "날 것 그대로의 질문"을 구분해야 하므로
-    # 보조 여부만 값 없이 남긴다 — 어떤 이름이 맞았는지는 여전히 노출하지 않는다.
     identity_assisted: bool = True
+    name: str = ""
+    market: str = ""
 
 
 @dataclass(frozen=True, slots=True)
@@ -62,7 +63,7 @@ class _IdentityRecord:
 
 @dataclass(frozen=True, slots=True)
 class InstrumentIdentitySnapshot:
-    """Immutable lookup state replaced with one pointer assignment after refresh."""
+    """Compatibility view for fixtures and offline evaluation tools."""
 
     records_by_code: Mapping[str, _IdentityRecord]
     alias_codes: Mapping[str, frozenset[str]]
@@ -92,7 +93,7 @@ def _alias_pattern(alias: str) -> re.Pattern[str]:
 def build_identity_snapshot(
     market_records: Mapping[str, Iterable[Mapping[str, Any]]],
 ) -> InstrumentIdentitySnapshot:
-    """Validate all reviewed markets and build a complete immutable snapshot."""
+    """Validate all reviewed markets and build one complete candidate set."""
     if set(market_records) != set(IDENTITY_MARKETS):
         raise ValueError("instrument identity refresh requires markets 0, 10, and 8")
     candidates: defaultdict[str, set[_IdentityRecord]] = defaultdict(set)
@@ -103,38 +104,27 @@ def build_identity_snapshot(
             name = str(item.get("name") or "").strip()
             market = str(item.get("marketCode") or item.get("market_code") or "").strip()
             kind = IDENTITY_MARKET_KINDS.get(market)
-            # ka10099 market 0 is an aggregate response containing funds, ETNs, and
-            # alphanumeric product identifiers. Only the reviewed returned market and
-            # six-digit domestic numeric identity contract may enter this index.
             if kind is None or not re.fullmatch(r"\d{6}", code) or not name:
                 continue
-            record = _IdentityRecord(code=code, name=name, market=market, kind=kind)
-            candidates[code].add(record)
+            candidates[code].add(_IdentityRecord(code, name, market, kind))
 
     records: dict[str, _IdentityRecord] = {}
     for code, code_candidates in sorted(candidates.items()):
-        # Overlap between the aggregate market-0 response and the dedicated ETF
-        # response is expected. Identical returned identity metadata is one entity;
-        # conflicting metadata is ambiguous and therefore excluded in full.
         if len(code_candidates) != 1:
             continue
         record = next(iter(code_candidates))
         records[code] = record
-        name = record.name
         aliases[_normalize_identity(code)].add(code)
-        aliases[_normalize_identity(name)].add(code)
+        aliases[_normalize_identity(record.name)].add(code)
     frozen_aliases = MappingProxyType(
         {alias: frozenset(codes) for alias, codes in sorted(aliases.items()) if alias}
     )
     if any(len(alias) < 2 for alias in frozen_aliases if not alias.isdigit()):
         raise ValueError("instrument aliases must contain at least two identity characters")
-    name_aliases = tuple(
-        alias for alias in frozen_aliases if not alias.isdigit()
-    )
     return InstrumentIdentitySnapshot(
         records_by_code=MappingProxyType(dict(sorted(records.items()))),
         alias_codes=frozen_aliases,
-        name_aliases=name_aliases,
+        name_aliases=tuple(alias for alias in frozen_aliases if not alias.isdigit()),
     )
 
 
@@ -142,70 +132,233 @@ FetchMarket = Callable[[str], Awaitable[Iterable[Mapping[str, Any]]]]
 
 
 class InstrumentIdentityIndex:
-    """Process-local identity index with fail-closed, all-or-nothing refresh."""
+    """SQLite-backed identity master with transactional full replacement."""
 
-    def __init__(self, snapshot: InstrumentIdentitySnapshot | None = None) -> None:
-        self._snapshot = snapshot or InstrumentIdentitySnapshot.empty()
+    def __init__(
+        self,
+        snapshot: InstrumentIdentitySnapshot | None = None,
+        *,
+        db_path: Path | str | None = None,
+    ) -> None:
+        self._db_path = Path(db_path) if db_path is not None else None
+        self._memory_connection = (
+            sqlite3.connect(":memory:", check_same_thread=False) if db_path is None else None
+        )
+        self._memory_lock = threading.RLock()
+        self._compat_snapshot = InstrumentIdentitySnapshot.empty() if db_path is None else None
+        self._initialized = False
+        if self._memory_connection is not None:
+            self._run(lambda _connection: None)
+        if snapshot is not None:
+            self._replace_snapshot(snapshot)
+
+    def _connect(self) -> sqlite3.Connection:
+        if self._memory_connection is not None:
+            return self._memory_connection
+        assert self._db_path is not None
+        self._db_path.parent.mkdir(parents=True, exist_ok=True)
+        connection = sqlite3.connect(self._db_path, timeout=30)
+        connection.execute("PRAGMA busy_timeout=30000")
+        return connection
+
+    def _run(self, operation):
+        with self._memory_lock:
+            connection = self._connect()
+            try:
+                if not self._initialized:
+                    self._initialize_connection(connection)
+                    self._initialized = True
+                return operation(connection)
+            finally:
+                if self._memory_connection is None:
+                    connection.close()
+
+    def _initialize_connection(self, connection: sqlite3.Connection) -> None:
+        if self._memory_connection is None:
+            connection.execute("PRAGMA journal_mode=WAL")
+        connection.executescript(
+            """
+                CREATE TABLE IF NOT EXISTS instruments (
+                    code TEXT PRIMARY KEY,
+                    name TEXT NOT NULL,
+                    normalized_name TEXT NOT NULL,
+                    market_code TEXT NOT NULL,
+                    kind TEXT NOT NULL CHECK (kind IN ('stock', 'etf'))
+                );
+                CREATE INDEX IF NOT EXISTS instruments_normalized_name_idx
+                    ON instruments(normalized_name);
+                CREATE TABLE IF NOT EXISTS instrument_metadata (
+                    key TEXT PRIMARY KEY,
+                    value TEXT NOT NULL
+                );
+            """
+        )
 
     @property
     def snapshot(self) -> InstrumentIdentitySnapshot:
-        return self._snapshot
+        if self._compat_snapshot is not None:
+            return self._compat_snapshot
+        return self._read_snapshot()
+
+    def _read_snapshot(self) -> InstrumentIdentitySnapshot:
+        rows = self._run(
+            lambda connection: connection.execute(
+                "SELECT code, name, market_code FROM instruments ORDER BY code"
+            ).fetchall()
+        )
+        market_records = {market: [] for market in IDENTITY_MARKETS}
+        for code, name, market in rows:
+            market_records[market].append({"code": code, "name": name, "marketCode": market})
+        return build_identity_snapshot(market_records)
 
     @property
     def size(self) -> int:
-        return len(self._snapshot.records_by_code)
+        return self._run(
+            lambda connection: int(
+                connection.execute("SELECT COUNT(*) FROM instruments").fetchone()[0]
+            )
+        )
+
+    @property
+    def refreshed_at(self) -> str | None:
+        def read(connection: sqlite3.Connection) -> str | None:
+            row = connection.execute(
+                "SELECT value FROM instrument_metadata WHERE key = 'refreshed_at'"
+            ).fetchone()
+            return str(row[0]) if row else None
+
+        return self._run(read)
+
+    @property
+    def ready(self) -> bool:
+        return self.size > 0
+
+    def status(self) -> tuple[bool, int, str | None]:
+        def read(connection: sqlite3.Connection) -> tuple[bool, int, str | None]:
+            connection.execute("BEGIN")
+            try:
+                size = int(connection.execute("SELECT COUNT(*) FROM instruments").fetchone()[0])
+                row = connection.execute(
+                    "SELECT value FROM instrument_metadata WHERE key = 'refreshed_at'"
+                ).fetchone()
+                return size > 0, size, str(row[0]) if row else None
+            finally:
+                connection.rollback()
+
+        return self._run(read)
+
+    def _replace_snapshot(self, snapshot: InstrumentIdentitySnapshot) -> int:
+        refreshed_at = datetime.now(UTC).isoformat()
+        rows = [
+            (
+                record.code,
+                record.name,
+                _normalize_identity(record.name),
+                record.market,
+                record.kind.value,
+            )
+            for record in snapshot.records_by_code.values()
+        ]
+        def replace(connection: sqlite3.Connection) -> None:
+            with connection:
+                connection.execute("DELETE FROM instruments")
+                connection.executemany(
+                    "INSERT INTO instruments(code, name, normalized_name, market_code, kind) "
+                    "VALUES (?, ?, ?, ?, ?)",
+                    rows,
+                )
+                connection.execute(
+                    "INSERT INTO instrument_metadata(key, value) VALUES ('refreshed_at', ?) "
+                    "ON CONFLICT(key) DO UPDATE SET value = excluded.value",
+                    (refreshed_at,),
+                )
+
+        self._run(replace)
+        if self._compat_snapshot is not None:
+            self._compat_snapshot = snapshot
+        return len(rows)
 
     def replace(self, market_records: Mapping[str, Iterable[Mapping[str, Any]]]) -> int:
-        next_snapshot = build_identity_snapshot(market_records)
-        self._snapshot = next_snapshot
-        return len(next_snapshot.records_by_code)
+        return self._replace_snapshot(build_identity_snapshot(market_records))
 
     async def refresh_from(self, fetch_market: FetchMarket) -> int:
-        """Fetch every reviewed market before atomically publishing any result."""
         market_records: dict[str, tuple[Mapping[str, Any], ...]] = {}
         for market in IDENTITY_MARKETS:
             market_records[market] = tuple(await fetch_market(market))
-        # 별칭 정규식 3,500여 개 컴파일은 CPU 수십 초다(2026-09-07 실측 30초). 이벤트 루프
-        # 위에서 하면 그동안 헬스체크·모든 요청이 멎으므로 워커 스레드에서 만들고, 완성된
-        # 스냅숏만 포인터 하나로 교체한다(all-or-nothing 의미는 그대로).
-        next_snapshot = await asyncio.to_thread(build_identity_snapshot, market_records)
-        self._snapshot = next_snapshot
-        return len(next_snapshot.records_by_code)
+            if not market_records[market]:
+                raise ValueError(f"instrument identity market {market} returned no records")
+        snapshot = await asyncio.to_thread(build_identity_snapshot, market_records)
+        accepted_markets = {record.market for record in snapshot.records_by_code.values()}
+        if accepted_markets != set(IDENTITY_MARKETS):
+            raise ValueError("instrument identity refresh omitted a reviewed market")
+        return await asyncio.to_thread(self._replace_snapshot, snapshot)
 
     async def refresh(self, client: Any) -> int:
         spec = TR_REGISTRY["ka10099"]
 
         async def fetch_market(market: str) -> Iterable[Mapping[str, Any]]:
-            envelope = await client.post_with_headers(
-                "ka10099",
-                spec.upstream_path,
-                {"mrkt_tp": market},
-            )
-            response = Ka10099Response.model_validate(envelope.body)
-            return tuple(item.model_dump(by_alias=True) for item in response.list_)
+            records: list[Mapping[str, Any]] = []
+            options = RequestOptions()
+            seen_keys: set[str] = set()
+            while True:
+                envelope = await client.post_with_headers(
+                    "ka10099", spec.upstream_path, {"mrkt_tp": market}, options
+                )
+                return_code = normalize_return_code(envelope.body.get("return_code"))
+                if return_code not in {"", "0"}:
+                    raise ValueError("ka10099 returned a non-success return_code")
+                response = Ka10099Response.model_validate(envelope.body)
+                records.extend(item.model_dump(by_alias=True) for item in response.list_)
+                if envelope.cont_yn != "Y":
+                    return tuple(records)
+                if not envelope.next_key or envelope.next_key in seen_keys:
+                    raise ValueError("ka10099 continuation metadata is incomplete")
+                seen_keys.add(envelope.next_key)
+                options = RequestOptions(cont_yn="Y", next_key=envelope.next_key)
 
         return await self.refresh_from(fetch_market)
 
     def resolve(self, question: str) -> _ResolvedInstrument | None:
-        """Resolve one exact indexed name/code without exposing aliases downstream."""
         text = unicodedata.normalize("NFKC", str(question)).casefold()
         if not text or _AMBIGUOUS_CONTEXT.search(text):
             return None
-        snapshot = self._snapshot
         explicit_codes = set(_EXPLICIT_CODE.findall(text))
-        if len(explicit_codes) > 1 or any(
-            code not in snapshot.records_by_code for code in explicit_codes
-        ):
+        if len(explicit_codes) > 1:
+            return None
+        normalized_question = _normalize_identity(text)
+
+        def candidates(connection: sqlite3.Connection):
+            placeholders = ",".join("?" for _ in explicit_codes) or "NULL"
+            connection.execute("BEGIN")
+            try:
+                rows = connection.execute(
+                    "SELECT code, name, normalized_name, market_code, kind FROM instruments "
+                    f"WHERE instr(?, normalized_name) > 0 OR code IN ({placeholders})",
+                    (normalized_question, *sorted(explicit_codes)),
+                ).fetchall()
+                known_codes = {
+                    row[0]
+                    for row in connection.execute(
+                        f"SELECT code FROM instruments WHERE code IN ({placeholders})",
+                        tuple(sorted(explicit_codes)),
+                    )
+                }
+                return rows, known_codes
+            finally:
+                connection.rollback()
+
+        rows, known_codes = self._run(candidates)
+        if explicit_codes != known_codes:
             return None
         matched_codes = set(explicit_codes)
         alias_matched = False
-        normalized_question = _normalize_identity(text)
-        for alias in snapshot.name_aliases:
-            if alias not in normalized_question:
-                continue
-            if _alias_pattern(alias).search(text) is None:
-                continue
-            codes = snapshot.alias_codes[alias]
+        by_code: dict[str, tuple[str, str, str]] = {}
+        alias_codes: defaultdict[str, set[str]] = defaultdict(set)
+        for code, name, normalized_name, market, kind in rows:
+            by_code[code] = (name, market, kind)
+            if normalized_name and _alias_pattern(normalized_name).search(text) is not None:
+                alias_codes[normalized_name].add(code)
+        for codes in alias_codes.values():
             if len(codes) != 1:
                 return None
             alias_matched = True
@@ -213,13 +366,16 @@ class InstrumentIdentityIndex:
         if len(matched_codes) != 1:
             return None
         code = next(iter(matched_codes))
-        record = snapshot.records_by_code.get(code)
+        record = by_code.get(code)
         if record is None:
             return None
+        name, market, kind = record
         return _ResolvedInstrument(
-            code,
-            TargetResolution(record.kind),
+            code=code,
+            target=TargetResolution(EntityKind(kind)),
             identity_assisted=alias_matched,
+            name=name,
+            market=market,
         )
 
     def resolve_target(self, question: str) -> TargetResolution | None:

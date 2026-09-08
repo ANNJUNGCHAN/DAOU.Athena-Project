@@ -24,7 +24,7 @@ function functionSource(source, signature) {
 
 function loadMainAccountBoundDataCalls({ activeId, bindings, historyAccountId = activeId }) {
   const source = fs.readFileSync(path.join(__dirname, '..', '..', 'main.js'), 'utf8');
-  const calls = { chart: [], series: [], stock: [], reload: [], resolved: [] };
+  const calls = { chart: [], series: [], reload: [], resolved: [] };
   const shellContents = {};
   const context = vm.createContext({
     accountBoundDataset,
@@ -48,13 +48,9 @@ function loadMainAccountBoundDataCalls({ activeId, bindings, historyAccountId = 
     runDirectRestDataset: async (_request, _expand, options) => { calls.reload.push(options); return { ok: true }; },
     chartPage: { fetchChartPage: async (options) => { calls.chart.push(options); return { ok: true, candles: [{}] }; } },
     chartSeries: { fetchChartSeries: async (options) => { calls.series.push(options); return { ok: true, series: [{}] }; } },
-    restDatasetRunner: {
-      refreshStockEntityIndex: async (_index, options) => { calls.stock.push(options); return 1; },
-    },
   });
   vm.runInContext([
     functionSource(source, 'function createActiveBackendAccountInvoker('),
-    functionSource(source, 'async function refreshActiveStockEntityIndex('),
     functionSource(source, 'async function handleChartPanelReload('),
     functionSource(source, 'async function handleChartHistoryPage('),
     functionSource(source, 'async function handleChartSeries('),
@@ -65,7 +61,6 @@ function loadMainAccountBoundDataCalls({ activeId, bindings, historyAccountId = 
     chart: context.handleChartHistoryPage,
     reload: context.handleChartPanelReload,
     series: context.handleChartSeries,
-    stock: context.refreshActiveStockEntityIndex,
   };
 }
 
@@ -115,27 +110,23 @@ test('chart-page redirect 거부는 데이터 성공으로 바꾸지 않는다',
   assert.match(result.error, /redirect disallowed/);
 });
 
-test('실제 main chart/series/stock 경계는 활성 local ID를 같은 검증 alias로 바꾼다', async () => {
+test('실제 main chart/series 경계는 활성 local ID를 같은 검증 alias로 바꾼다', async () => {
   for (const [activeId, backendAccountAlias] of [['local-a', 'server-a'], ['local-b', 'server-b']]) {
     const runtime = loadMainAccountBoundDataCalls({ activeId, bindings: { [activeId]: backendAccountAlias } });
     await runtime.chart(runtime.event, {});
     await runtime.series(runtime.event, { operationRef: 'base:ka10064', fields: ['frgnr_invsr'] });
-    await runtime.stock({ size: 0 });
-    assert.deepEqual(runtime.calls.resolved, [activeId, activeId, activeId]);
+    assert.deepEqual(runtime.calls.resolved, [activeId, activeId]);
     assert.equal(runtime.calls.chart[0].backendAccountAlias, backendAccountAlias);
     assert.equal(runtime.calls.series[0].backendAccountAlias, backendAccountAlias);
-    assert.equal(runtime.calls.stock[0].backendAccountAlias, backendAccountAlias);
   }
 });
 
-test('실제 main mapping 실패는 chart/series/stock 데이터 호출 전에 차단한다', async () => {
+test('실제 main mapping 실패는 chart/series 데이터 호출 전에 차단한다', async () => {
   const runtime = loadMainAccountBoundDataCalls({ activeId: 'local-missing', bindings: {} });
   assert.equal((await runtime.chart(runtime.event, {})).ok, false);
   assert.equal((await runtime.series(runtime.event, {})).ok, false);
-  await assert.rejects(runtime.stock({ size: 0 }), /연결 없음/);
   assert.equal(runtime.calls.chart.length, 0);
   assert.equal(runtime.calls.series.length, 0);
-  assert.equal(runtime.calls.stock.length, 0);
 });
 
 test('실제 main history는 계좌 전환 뒤에도 패널 원본 local account를 재검증한다', async () => {

@@ -4,6 +4,21 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const { createConversationRuntimes } = require('./conversation-runtimes');
 
+test('공급자가 같으면 연결을 재사용하고 바뀌면 이전 연결만 닫는다', () => {
+  const rt = createConversationRuntimes();
+  const claude = rt.chatSession('A', () => fakeSession(), 'claude');
+  const other = rt.chatSession('B', () => fakeSession(), 'claude');
+  const grok = rt.chatSession('A', () => fakeSession(), 'grok');
+  assert.notEqual(grok, claude);
+  assert.ok(claude.stopped instanceof Error);
+  assert.equal(other.stopped, null);
+  assert.equal(rt.get('A').chatSessionProviderId, 'grok');
+  assert.equal(rt.chatSession('A', () => { throw new Error('must reuse'); }, 'grok'), grok);
+  rt.stopAllChatSessions();
+  assert.ok(grok.stopped instanceof Error);
+  assert.equal(rt.get('A').chatSessionProviderId, null);
+});
+
 function fakeSession(state = 'idle') {
   const session = {
     state,
