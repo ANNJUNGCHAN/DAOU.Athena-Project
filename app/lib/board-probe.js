@@ -38,6 +38,11 @@ function boardInstanceId(boardId) {
   return `board-${String(boardId).toLowerCase()}`;
 }
 
+// 프로브가 보드마다 쓰는 조회 대상. 카드 자신의 종목 이름·코드(`identity`)가 이 값에서
+// 나오므로(canvas가 봉투의 operation_args를 읽는다) 기대 다중집합을 만드는 쪽도 같은
+// 상수를 봐야 한다 — 값이 갈라지면 게이트가 자기 픽스처와 싸운다.
+const BOARD_PROBE_ARGS = Object.freeze({ stk_cd: '005930' });
+
 function assertSurfaceGeometry(boardId, preset, probe) {
   if (probe.overflow_x > 1) {
     throw new Error(
@@ -108,7 +113,7 @@ async function sendBoardEnvelope(win, surface) {
     ipcMain.on('athena:rest-canvas-painted', onPainted);
     win.webContents.send('athena:add-rest-canvas', {
       operationRef: surface.operationRef,
-      operationArgs: { stk_cd: '005930' },
+      operationArgs: { ...BOARD_PROBE_ARGS },
       canvasType: 'facts',
       envelope: {
         card_id: surface.contract.card_id,
@@ -836,6 +841,7 @@ module.exports = {
   boardStepProbe,
   inspectBoardChrome,
   loadRealBoardContract,
+  BOARD_PROBE_ARGS,
   sendBoardEnvelope,
   settleBoardLayout,
 };

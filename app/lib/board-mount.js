@@ -1369,8 +1369,10 @@ function relaxOverflowRows(surface) {
   const relaxed = [];
   for (let pass = 0; pass < RELAX_PASSES; pass += 1) {
     if (surface.scrollWidth <= surface.clientWidth + 1) break;
+    // 표면 밖으로 **나간 잎이 없어도** 표면은 넘칠 수 있다 — 눌린 칸의 내용이 자기
+    // 상자 밖으로만 새는 자리다(실측 137X-2 `14T8-2`: 535px 칸에 내용 547px, 표면
+    // 밖으로 나간 잎은 없다). 그래서 잎이 비어도 접을 줄 찾기까지는 간다.
     const leaves = overflowingLeaves(surface);
-    if (!leaves.length) break;
     const bound = surface.getBoundingClientRect().left
       + surface.clientLeft + surface.clientWidth;
     let picked = null;
@@ -1388,7 +1390,6 @@ function relaxOverflowRows(surface) {
         steps += 1;
       }
     }
-    // 잎이 하나도 안 걸렸어도 표면은 여전히 넘친다 — 눌린 칸에서 글자가 샌 자리다.
     if (!picked) picked = squeezedRow(surface);
     if (!picked) {
       // 접을 줄이 없다 — 남은 것은 **글자 자체가 상자보다 넓은** 자리다(실측

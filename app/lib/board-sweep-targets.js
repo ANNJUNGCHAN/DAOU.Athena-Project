@@ -3,39 +3,46 @@
 // 보드마다 **그 보드가 다루는 종목 종류**로 조회 대상을 고른다.
 //
 // 카드 표면 101장에는 ELW·ETF·금현물 화면이 섞여 있다. 전부 삼성전자(005930)로
-// 조회하면 그 화면들의 응답이 빈 배열로 와서 결측어가 잔뜩 뜬다 — 제품 결함이 아니라
-// 검사가 잘못 물어본 것이다(실측 2XY6-0: ka30011이 005930에 빈 배열).
+// 조회하면 그 화면들의 응답이 빈 배열로 오거나(실측 2XY6-0: ka30011이 005930에 빈
+// 배열) 상류가 502로 끊는다(실측 2RJ7-1: ka50012·ka50079~83) — 제품 결함이 아니라
+// 검사가 잘못 물어본 것이다.
 //
-// 종류별 코드는 **API가 직접 알려준다**. 목록 op를 한 번 부르고 첫 항목을 쓴다 —
-// 코드를 지어내지 않는다(백엔드의 연쇄 인자와 같은 규칙).
+// 종류별 코드는 **API가 알려준 것만** 쓴다. 목록 op가 있으면 한 번 부르고 첫 항목을
+// 쓰고, 없으면 그 op 요청 설명문에 Kiwoom이 적어 둔 코드를 쓴다 — 코드를 지어내지
+// 않는다(백엔드의 연쇄 인자와 같은 규칙). 표는 백엔드 ref 하나에 있고 파이썬 검사기도
+// 같은 파일을 읽는다(`scripts/card-api-sweep/verify_operations.py`).
 
-// TR id 접두 → 종목 종류. Kiwoom TR 번호대가 곧 종류다(ka30=ELW · ka40=ETF ·
-// ka50=금현물). 보드가 그 종류의 op를 하나라도 쓰면 그 종류의 코드로 조회한다.
-const KIND_BY_PREFIX = Object.freeze([
-  { prefix: 'ka30', kind: 'elw' },
-  { prefix: 'ka40', kind: 'etf' },
-  { prefix: 'ka50', kind: 'gold' },
-]);
+const fs = require('node:fs');
+const path = require('node:path');
 
-// 종류별 코드를 알려주는 목록 op와 그 경로. 실측으로 자료가 오는 op를 골랐다.
-const KIND_SOURCE = Object.freeze({
-  elw: { path: '/api/v1/tr/elw/ka30009', body: {}, list: 'elwflu_rt_rank', field: 'stk_cd' },
-  etf: { path: '/api/v1/tr/etf/ka40004', body: { txon_type: '0', navpre: '0', mngmcomp: '0000', txon_yn: '0', trace_idex: '0', stex_tp: '3' }, list: 'etfall_mrpr', field: 'stk_cd' },
-});
+const REF = path.resolve(
+  __dirname, '..', '..', 'backend', 'ref', 'probe-instrument-targets.json',
+);
+
+function loadKinds() {
+  const payload = JSON.parse(fs.readFileSync(REF, 'utf8'));
+  return Object.freeze(payload.kinds.map((entry) => Object.freeze(entry)));
+}
+
+const KINDS = loadKinds();
 
 function kindOfBoard(operationRefs) {
   for (const ref of operationRefs || []) {
     const parts = String(ref).split(':');
     const trId = parts.length >= 2 ? parts[1] : '';
-    for (const entry of KIND_BY_PREFIX) {
-      if (trId.startsWith(entry.prefix)) return entry.kind;
+    for (const entry of KINDS) {
+      if (entry.tr_prefixes.some((prefix) => trId.startsWith(prefix))) return entry.kind;
     }
   }
   return 'stock';
 }
 
 async function resolveKindCode(kind, { backendBase, fetchImpl }) {
-  const source = KIND_SOURCE[kind];
+  const entry = KINDS.find((candidate) => candidate.kind === kind);
+  if (!entry) return null;
+  // 설명문이 코드를 적어 둔 종류는 호출 없이 그 코드를 쓴다.
+  if (entry.code) return entry.code;
+  const source = entry.list;
   if (!source) return null;
   const fetcher = fetchImpl || globalThis.fetch;
   if (typeof fetcher !== 'function') return null;
@@ -44,7 +51,7 @@ async function resolveKindCode(kind, { backendBase, fetchImpl }) {
     response = await fetcher(`${backendBase}${source.path}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(source.body),
+      body: JSON.stringify(source.body || {}),
     });
   } catch {
     return null;
@@ -56,12 +63,16 @@ async function resolveKindCode(kind, { backendBase, fetchImpl }) {
   } catch {
     return null;
   }
-  const rows = payload && Array.isArray(payload[source.list]) ? payload[source.list] : [];
+  const rows = payload && Array.isArray(payload[source.list_field])
+    ? payload[source.list_field]
+    : [];
   for (const row of rows) {
-    const code = row && typeof row[source.field] === 'string' ? row[source.field].trim() : '';
+    const code = row && typeof row[source.code_field] === 'string'
+      ? row[source.code_field].trim()
+      : '';
     if (code) return code;
   }
   return null;
 }
 
-module.exports = { KIND_BY_PREFIX, KIND_SOURCE, kindOfBoard, resolveKindCode };
+module.exports = { KINDS, kindOfBoard, resolveKindCode };

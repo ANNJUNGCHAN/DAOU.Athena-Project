@@ -1,0 +1,47 @@
+{
+ "version": "probe-instrument-targets.v1",
+ "description": "검사기가 보드 종류에 맞는 조회 대상을 고를 때 쓰는 표. 카드 표면에는 ELW·ETF·금현물 화면이 섞여 있어 전부 주식 코드로 물으면 상류가 빈 배열이나 502로 답한다 — 제품 결함이 아니라 검사가 잘못 물어본 것이다. 종류는 Kiwoom TR 번호대가 정한다. 코드는 지어내지 않는다: 종목 목록을 싣는 op가 있으면 그 op를 먼저 부르고 첫 항목을 쓰고, 없으면 그 op 요청 설명문에 Kiwoom이 적어 둔 코드를 쓴다.",
+ "kinds": [
+  {
+   "kind": "elw",
+   "tr_prefixes": ["ka30"],
+   "list": {
+    "path": "/api/v1/tr/elw/ka30005",
+    "body": {
+     "isscomp_cd": "000000000000",
+     "bsis_aset_cd": "000000000000",
+     "rght_tp": "0",
+     "lpcd": "000000000000",
+     "sort_tp": "0"
+    },
+    "list_field": "elwcnd_qry",
+    "code_field": "stk_cd"
+   },
+   "why": "ELW 조건검색(ka30005)의 첫 종목. 인자는 그 op 설명문의 「전체」 코드다. 순위 op(ka30009·ka30010)는 장이 닫히면 빈 배열이라 코드를 못 얻는다(실측)."
+  },
+  {
+   "kind": "etf",
+   "tr_prefixes": ["ka40"],
+   "list": {
+    "path": "/api/v1/tr/etf/ka40004",
+    "body": {
+     "txon_type": "0",
+     "navpre": "0",
+     "mngmcomp": "0000",
+     "txon_yn": "0",
+     "trace_idex": "0",
+     "stex_tp": "3"
+    },
+    "list_field": "etfall_mrpr",
+    "code_field": "stk_cd"
+   },
+   "why": "ETF 전체시세(ka40004)의 첫 종목."
+  },
+  {
+   "kind": "gold",
+   "tr_prefixes": ["ka50"],
+   "code": "M04020000",
+   "why": "금현물에는 종목 목록 op가 없다. 금현물 시세·차트 op 요청 설명문이 코드를 직접 적어 둔다 — 「종목코드 — M04020000 금 99.99_1kg, M04020100 미니금 99.99_100g」(ka50010·ka50100·ka50087 동일). 주식 코드로 물으면 상류가 502로 끊는다(실측 2RJ7-1: ka50012·ka50079~83 여섯 자리). 계좌 op(kt50*)는 종목코드를 받지 않으므로 종류 판정에 넣지 않는다 — 넣으면 예수금 카드가 금현물로 분류된다(실측 2SKU-1)."
+  }
+ ]
+}
