@@ -85,6 +85,9 @@
           // 눌렀다고 쓰던 대화를 버리면 그건 기능이 아니라 사고다.
           const previousView = currentMode();
           const modeChanged = previousView !== view;
+          // 앞 모드의 작업공간을 먼저 흘리고 채팅을 비운다. setView()가 앞서면
+          // athena:new-conversation 구독자가 앞 세션을 새 모드 상태로 저장한다.
+          if (modeChanged) startNewConversation(currentProjectId, view);
           if (window.AthenaCanvasMode && typeof window.AthenaCanvasMode.setView === 'function') {
             window.AthenaCanvasMode.setView(view);
           }
@@ -111,10 +114,8 @@
           } else if (!modeChanged) {
             renderList();
           }
-          // 새 대화로 갈아타기 — 위 renderList()를 modeChanged일 때 건너뛴 이유가
-          // 이것이다. startNewConversation()은 clearConversationUi()로 채팅을 비우고
-          // 목록까지 다시 그린다(그 함수 주석 참고). 여기서 또 부르면 두 번 그린다.
-          if (modeChanged) startNewConversation(currentProjectId, view);
+          // startNewConversation()이 목록까지 다시 그리므로 modeChanged일 때는 위에서
+          // renderList()를 다시 부르지 않는다.
         },
       })
     : null;
@@ -1222,6 +1223,17 @@
   function selectNotifyRoom(id) {
     const room = notifyRooms.find((r) => r.id === id);
     if (!room) return;
+    // 알림 방도 대화 경계다. 다른 방으로 옮기거나 다른 모드에서 들어오면 앞 세션을
+    // 먼저 흘리고 에이전트 대화를 새로 연다. clearConversationUi()가 방 배너와
+    // selectedNotifyId를 거두므로, 이 호출은 아래 배너 적용보다 반드시 앞선다.
+    const needsConversationBoundary = selectedNotifyId !== id || currentMode() !== 'agent';
+    if (needsConversationBoundary) startNewConversation(currentProjectId, 'agent');
+    if (window.AthenaCanvasMode && typeof window.AthenaCanvasMode.setView === 'function') {
+      window.AthenaCanvasMode.setView('agent');
+    }
+    if (window.AthenaModeNav && typeof window.AthenaModeNav.setActive === 'function') {
+      window.AthenaModeNav.setActive('agent');
+    }
     // F-stage5b-FE — engagement.py의 "opened" 정의(능동 턴이 뜬 방을 사용자가
     // 실제로 선택해 열람한 사건)와 맞추려면 이미 읽은 방을 다시 눌렀을 때는
     // 세지 않는다 — 안 그러면 재클릭마다 opened가 쌓여 발화→열람 비율이
