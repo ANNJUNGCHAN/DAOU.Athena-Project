@@ -910,3 +910,26 @@ def test_board_hydrate_never_names_an_initial_state_board(surface_templates):
     contract = _hydrate(client).json()["surface_contract"]
 
     assert contract["initial_state_board"] is None
+
+
+def test_board_hydrate_blanks_slots_the_answered_operation_did_not_carry(
+    surface_templates,
+):
+    """정상으로 답한 조회가 싣지 않은 값은 결측어가 아니라 빈 칸이다.
+
+    결측어는 「물어볼 수 없었다」(호출 안 됨·업스트림 실패)에만 남는다.
+    """
+
+    data = _DataSpy({"ka10085": _KA10085_BODY, "kt00003": {}})
+    client = TestClient(_hydrate_app(data))
+
+    response = _hydrate(client)
+
+    assert response.status_code == 200, response.text
+    payload = response.json()
+    statuses = _statuses(payload)
+    assert statuses["base:kt00003"]["status"] == "bound"
+    contract = payload["surface_contract"]
+    # kt00003이 답했지만 예수금을 싣지 않았다 — 그 자리는 빈 칸이다.
+    assert "kpi_prsm_dpst_aset_amt" in contract["empty_value_slots"]
+    assert "kpi_prsm_dpst_aset_amt" in contract["unbound_slots"]
