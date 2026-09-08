@@ -80,3 +80,18 @@ test('stopAllChatSessions는 전부 닫고 참조를 비운다', () => {
   rt.forEachChatSession(() => { visited += 1; });
   assert.equal(visited, 0);
 });
+
+test('stopIdleChatSessions·clearIdleCursors는 답변 중인 대화를 건드리지 않는다', () => {
+  const rt = createConversationRuntimes();
+  const a = rt.chatSession('A', () => fakeSession('busy'));
+  const b = rt.chatSession('B', () => fakeSession());
+  rt.get('A').busyDepth = 1;
+  rt.get('A').liveSessionId = 'sess-a';
+  rt.get('B').liveSessionId = 'sess-b';
+  rt.stopIdleChatSessions(new Error('provider switch'));
+  rt.clearIdleCursors();
+  assert.equal(a.stopped, null, '진행 중 A의 세션은 산다');
+  assert.ok(b.stopped instanceof Error, '유휴 B의 세션은 닫힌다');
+  assert.equal(rt.get('A').liveSessionId, 'sess-a');
+  assert.equal(rt.get('B').liveSessionId, null);
+});

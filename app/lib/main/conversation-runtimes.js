@@ -16,7 +16,6 @@ function createRuntime(conversationId, now) {
   return {
     conversationId,
     busyDepth: 0,
-    orbBusyDepth: 0,
     activeLiveQuery: null,
     activeRestRun: null,
     activeSelectorFastRun: null,
@@ -109,9 +108,23 @@ function createConversationRuntimes({
     for (const runtime of runtimes.values()) stopSession(runtime, reason);
   }
 
+  // 프로바이더 전환처럼 "지금부터 새 세션"이 필요한 경우 — 답변 중인 대화의 세션은 건드리지 않는다.
+  // 그 대화는 턴이 끝난 뒤 다음 질의에서 스스로 갈아탄다.
+  function stopIdleChatSessions(reason) {
+    for (const runtime of runtimes.values()) {
+      if (runtime.busyDepth > 0 || !sessionIsIdle(runtime.chatSession)) continue;
+      stopSession(runtime, reason);
+    }
+  }
+
   // 프로바이더가 바뀌면 이전 프로바이더의 세션 커서는 전부 무효다(main.js noteLiveQueryProvider).
   function clearCursors() {
     for (const runtime of runtimes.values()) runtime.liveSessionId = null;
+  }
+
+  // 답변 중인 대화의 커서는 그 턴이 끝나며 다시 적히므로 여기서 지우지 않는다.
+  function clearIdleCursors() {
+    for (const runtime of runtimes.values()) if (runtime.busyDepth === 0) runtime.liveSessionId = null;
   }
 
   function dispose(conversationId, reason) {
@@ -128,7 +141,6 @@ function createConversationRuntimes({
       rows.push({
         conversationId: runtime.conversationId,
         busyDepth: runtime.busyDepth,
-        orbBusyDepth: runtime.orbBusyDepth,
         hasChatSession: !!runtime.chatSession,
         liveSessionId: runtime.liveSessionId === undefined ? undefined : runtime.liveSessionId,
       });
@@ -137,8 +149,8 @@ function createConversationRuntimes({
   }
 
   return Object.freeze({
-    get, peek, isBusy, busyIds, chatSession, forEachChatSession, stopAllChatSessions,
-    clearCursors, dispose, snapshot,
+    get, peek, isBusy, busyIds, chatSession, forEachChatSession, stopAllChatSessions, stopIdleChatSessions,
+    clearCursors, clearIdleCursors, dispose, snapshot,
     size: () => runtimes.size,
   });
 }

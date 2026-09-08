@@ -493,7 +493,7 @@ function reportSessionCards() {
       protected: node.dataset.protected === 'true',
     });
   }
-  try { window.athena.send('athena:session-cards', { cards }); } catch { /* 채널이 없는 하네스 — 보고는 그림의 필요조건이 아니다 */ }
+  try { window.athena.send('athena:session-cards', { cards, conversationId: canvasConversationId }); } catch { /* 채널이 없는 하네스 — 보고는 그림의 필요조건이 아니다 */ }
 }
 
 window.athena.on('athena:add-canvas', ({ type, sessionCardId }) => {
@@ -525,6 +525,8 @@ window.athena.on('athena:add-rest-canvas', async (payload) => {
   const receivedAt = performance.now();
   const correlation = payload && payload.envelope && payload.envelope.correlation;
   if (!payload || !isValidCorrelation(correlation)) return;
+  // 다중 대화(2026-09-08) — 다른 대화의 REST 카드가 늦게 도착하면 그리지 않는다(main이 그 대화의 세션에 적는다).
+  if (payload.conversationId && canvasConversationId && payload.conversationId !== canvasConversationId) return;
   try {
     const envelope = Object.assign({}, payload.envelope, {
       operation_ref: payload.operationRef,

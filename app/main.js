@@ -2465,7 +2465,7 @@ async function resetAccountBoundRealtime() {
   }
 }
 
-async function emitRestCanvasAndWaitForPaint(payload, { expand = true, timeoutMs = 3000 } = {}) {
+async function emitRestCanvasAndWaitForPaint(payload, { expand = true, timeoutMs = 3000, conversationId = null } = {}) {
   if (!shellWin || shellWin.isDestroyed()) throw new Error('셸 창이 준비되지 않았다');
   // The direct REST lane has a hard three-second feedback budget. Reveal the
   // already-loaded surface without changing application focus. The renderer
@@ -2523,6 +2523,7 @@ async function emitRestCanvasAndWaitForPaint(payload, { expand = true, timeoutMs
       operationArgs: payload.operationArgs,
       canvasType: payload.canvasType,
       retryCardId: payload.retryCardId,
+      conversationId,
     });
   });
 }
@@ -2561,7 +2562,9 @@ function getLiveChatSession(conversationId = historyConversationId()) {
 }
 
 function stopLiveClaudeChatSession(reason) {
-  liveRuntimes.stopAllChatSessions(new Error(reason || 'provider switch'));
+  // 다중 대화(2026-09-08) — 다른 대화가 답변 중이면 그 세션은 살려 둔다. 그 턴이 끝난 뒤 다음 질의가
+  // 프로바이더 불일치를 보고 스스로 갈아탄다(noteLiveQueryProvider).
+  liveRuntimes.stopIdleChatSessions(new Error(reason || 'provider switch'));
 }
 
 function resolveLiveQueryProviderId() {
@@ -2572,7 +2575,7 @@ function resolveLiveQueryProviderId() {
 }
 
 function noteLiveQueryProvider(providerId) {
-  if (liveQueryProviderId && liveQueryProviderId !== providerId) liveRuntimes.clearCursors();
+  if (liveQueryProviderId && liveQueryProviderId !== providerId) liveRuntimes.clearIdleCursors();
   liveQueryProviderId = providerId;
   if (providerId === 'grok') stopLiveClaudeChatSession('grok_active');
 }
@@ -2580,21 +2583,21 @@ function noteLiveQueryProvider(providerId) {
 // 캔버스 결과 하나(stream-json-parser.classifyCanvasBlock의 출력)를 캔버스
 // 창으로 보낸다. 렌더러(canvas.js)가 status별로 카드를 그리거나 안내를 띄운다.
 function sendLiveCanvasResult(result, metadata = null) {
-  if (!shellWin || shellWin.isDestroyed()) return;
   const payload = metadata ? { ...result, ...metadata } : result;
   const conversationId = metadata && typeof metadata.conversationId === 'string' ? metadata.conversationId : null;
   if (conversationId && conversationId !== historyConversationId()) {
     // 화면에 없는 대화의 카드(다중 대화, 2026-09-08) — 지금 보이는 캔버스에 그리지 않고 그
-    // 대화의 세션 카드로 적어 둔다. 돌아오면 athena:session-replay-cards가 같은 채널로 그린다.
+    // 대화의 세션 카드로 적어 둔다(셸 창이 없어도). 돌아오면 athena:session-replay-cards가 같은 채널로 그린다.
     persistBackgroundCanvasCard(conversationId, result);
   } else {
+    if (!shellWin || shellWin.isDestroyed()) return;
     shellWin.webContents.send('athena:add-canvas-live', payload);
   }
   // 채팅 영역의 3상태 표시가 실제 진행을 보여줄 수 있도록 카드 하나가 뜰 때마다
   // 알린다 — 43초짜리 왕복 동안 조용히 멈춘 것처럼 보이면 안 된다(오케스트레이터 지시).
   // 두 채널은 같은 렌더러의 서로 다른 영역이 받는다(shell.html — 캔버스 영역은
   // canvas.js가, 채팅 영역은 chat.js가 구독한다). conversationId로 턴 구독이 자기 것만 센다.
-  shellWin.webContents.send('athena:live-canvas-added', { status: result.status, conversationId });
+  if (shellWin && !shellWin.isDestroyed()) shellWin.webContents.send('athena:live-canvas-added', { status: result.status, conversationId });
 }
 
 // 답변 텍스트 조각(claude-runner.js의 onTextDelta) — 채팅 버블에 실시간으로
@@ -3032,6 +3035,7 @@ function createToolStepTracker(
             // 이 한 줄이 sendFn보다 앞이어야 부제가 done 이벤트에 함께 실린다.
             // 이 턴의 대화 id — 아래 전달자들이 배경 대화면 셸 전송을 미룬다(shellForConversation).
             forwardingConversationId = conversationId;
+            try {
             const note = forwardNudgeGuard ? maybeForwardBrainEntity(step, block) : '';
             sendFn({
               id: block.tool_use_id,
@@ -3050,7 +3054,9 @@ function createToolStepTracker(
               maybeForwardGraphChatAction(step, block);
               maybeForwardPluginProposal(step, block);
             }
-            forwardingConversationId = null;
+            } finally {
+              forwardingConversationId = null;
+            }
           }
         }
       }
@@ -3299,6 +3305,10 @@ function persistBackgroundCanvasCard(conversationId, result) {
   if (!bridge) return;
   let stack = backgroundCanvasCards.get(conversationId);
   if (!stack) {
+    // 디바운스 대기 중인 카드 보고를 먼저 적어야 저장본이 최신이다 — 안 그러면 방금 보던 카드를 덮는다.
+    try { bridge.flush(conversationId); } catch { /* 대기분이 없으면 no-op */ }
+  }
+  if (!stack) {
     const snapshot = bridge.load(conversationId);
     const stored = snapshot && Array.isArray(snapshot.canvasCards) ? snapshot.canvasCards : [];
     stack = stored.map((card) => ({
@@ -3326,14 +3336,15 @@ let forwardingConversationId = null;
 function shellForConversation(conversationId) {
   return {
     send(channel, payload) {
-      if (!shellWin || shellWin.isDestroyed()) return;
-      if (!conversationId || conversationId === historyConversationId()) {
-        shellWin.webContents.send(channel, payload);
+      if (conversationId && conversationId !== historyConversationId()) {
+        const queue = deferredShellEvents.get(conversationId) || [];
+        queue.push({ channel, payload });
+        deferredShellEvents.set(conversationId, queue);
         return;
       }
-      const queue = deferredShellEvents.get(conversationId) || [];
-      queue.push({ channel, payload });
-      deferredShellEvents.set(conversationId, queue);
+      if (!shellWin || shellWin.isDestroyed()) return;
+      // 두 번째 인자(meta)는 preload의 on()이 그대로 넘긴다 — 봉투 모양은 건드리지 않고 대화 id를 싣는다.
+      shellWin.webContents.send(channel, payload, { conversationId: conversationId || historyConversationId(), deferred: false });
     },
   };
 }
@@ -3341,7 +3352,7 @@ function flushDeferredShellEvents(conversationId) {
   const queue = deferredShellEvents.get(conversationId);
   deferredShellEvents.delete(conversationId);
   if (!queue || !shellWin || shellWin.isDestroyed()) return 0;
-  for (const { channel, payload } of queue) shellWin.webContents.send(channel, payload);
+  for (const { channel, payload } of queue) shellWin.webContents.send(channel, payload, { conversationId, deferred: true });
   return queue.length;
 }
 
@@ -4002,7 +4013,7 @@ async function runDirectRestDataset(dataset, expand = true, overrides = {}) {
           }
           return emitRestCanvasForOrigin({ ...payload, retryCardId, accountId: retryAccountId }, {
             expand,
-            origin: overrides.origin,
+            origin: overrides.origin, conversationId: turnConversationId,
             timeoutMs: Math.max(1, payload.paintDeadlineAt - performance.now()),
           });
         }),
@@ -4189,14 +4200,12 @@ async function runLiveQuery(query, expand, origin = 'shell', turnConversationId 
   const runtime = liveRuntimes.get(turnConversationId);
   liveQueryBusyDepth += 1;
   runtime.busyDepth += 1;
-  if (origin === 'orb') runtime.orbBusyDepth += 1;
   if (runtime.busyDepth === 1) broadcastLiveQueryBusy(true, turnConversationId);
   liveSubmitContexts.set(turnConversationId, submit);
   try {
     return await runLiveQueryInner(query, expand, origin, turnConversationId);
   } finally {
     liveSubmitContexts.delete(turnConversationId);
-    if (origin === 'orb') runtime.orbBusyDepth -= 1;
     runtime.busyDepth -= 1;
     liveQueryBusyDepth -= 1;
     if (runtime.busyDepth === 0) broadcastLiveQueryBusy(false, turnConversationId);
@@ -4346,7 +4355,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
         }
         return emitRestCanvasForOrigin({ ...payload, accountId: selectorAccount.accountId }, {
           expand,
-          origin,
+          origin, conversationId: turnConversationId,
           timeoutMs: Math.max(1, payload.paintDeadlineAt - performance.now()),
         });
       },
@@ -4355,8 +4364,9 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
           throw new Error('교체된 Selector fast path의 늦은 주문 초안은 표시하지 않는다');
         }
         if (!shellWin || shellWin.isDestroyed()) throw new Error('셸 창이 준비되지 않았다');
-        if (expand) revealShell({ focus: false });
-        shellWin.webContents.send('athena:selector-order-draft', payload);
+        // 주문 초안은 그 대화의 것이다(다중 대화) — 배경 대화의 초안은 그 대화로 돌아올 때까지 미룬다.
+        if (expand && historyConversationId() === turnConversationId) revealShell({ focus: false });
+        shellForConversation(turnConversationId).send('athena:selector-order-draft', payload);
       },
       persistTurn: ({ question, answerText }) => {
         historySink.saveChatMessage(
@@ -4417,7 +4427,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
             }
             return emitRestCanvasForOrigin({ ...payload, accountId: selectorAccount.accountId }, {
               expand,
-              origin,
+              origin, conversationId: turnConversationId,
               timeoutMs: Math.max(1, payload.paintDeadlineAt - performance.now()),
             });
           },
@@ -4916,7 +4926,8 @@ ipcMain.handle('athena__render_canvas', async (e, payload = {}) => {
   const shellConversationId = (typeof payload.conversationId === 'string' && payload.conversationId
     && payload.conversationId !== historyConversationId() && knownConversation(payload.conversationId))
     ? payload.conversationId : historyConversationId();
-  if (liveRuntimes.get(shellConversationId).orbBusyDepth > 0) {
+  // 셸이 오브 대화를 열어 두고 오브가 그 대화에서 답변 중이면 거절한다(죽이지 않는다 — 오브 턴은 오브의 것).
+  if (shellConversationId === orbConversationId && liveRuntimes.isBusy(shellConversationId)) {
     return { ok: false, source: 'live', error: '키우미에서 답변 중 — 잠시 후 다시 시도하세요' };
   }
   return runLiveQuery(query, expand, 'shell', shellConversationId, {
@@ -5626,8 +5637,13 @@ ipcMain.handle('athena:session-load', (_e, payload = {}) => {
 // 투영이고 쓰기 주체는 main이다 — 브리지가 디바운스해 스토어에 적는다.
 // 렌더러는 세션 id를 모른다 — 기록 대상의 진실은 main의 historyConversationId()다.
 ipcMain.on('athena:session-cards', (_e, payload = {}) => {
-  const bridge = ensureSessionRecord(historyConversationId());
-  if (bridge && payload) bridge.saveCards({ sessionId: historyConversationId(), cards: payload.cards });
+  // 다중 대화(2026-09-08) — 렌더러는 자기 캔버스가 어느 대화의 것인지(athena:conversation-active로
+  // 받은 id)를 함께 보고한다. 전환 찰나에 늦게 온 보고가 새 활성 대화에 적히지 않게 그 id를
+  // 우선하고, 없거나 모르는 id면 활성 대화(historyConversationId())다.
+  const reported = payload && typeof payload.conversationId === 'string' && payload.conversationId ? payload.conversationId : null;
+  const sessionId = reported && knownConversation(reported) ? reported : historyConversationId();
+  const bridge = ensureSessionRecord(sessionId);
+  if (bridge && payload) bridge.saveCards({ sessionId, cards: payload.cards });
 });
 // 렌더러는 바뀐 조각(patch)만 보낸다 — 모드마다 다른 컨트롤러가 자기 조각만 알기 때문이다.
 // 병합과 kind(=그 대화의 모드) 도장은 여기서 한다. 통째로 온 workspace도 받는다(옛 계약).
@@ -6090,7 +6106,7 @@ function sendRendererStartupNotification(target, payload) {
 
 function emitRestCanvasForOrigin(
   payload,
-  { expand = true, timeoutMs = 3000, origin = 'shell' } = {},
+  { expand = true, timeoutMs = 3000, origin = 'shell', conversationId = null } = {},
 ) {
   // REST·Selector의 inline 응답은 WS 사이드 채널을 거치지 않는다. 따라서
   // 오브에서 시작한 턴은 메인 캔버스의 기존 paint 계약을 그대로 수행하면서,
@@ -6102,7 +6118,16 @@ function emitRestCanvasForOrigin(
       envelope: payload.envelope,
     });
   }
-  return emitRestCanvasAndWaitForPaint(payload, { expand, timeoutMs });
+  if (conversationId && conversationId !== historyConversationId()) {
+    // 배경 대화의 REST·Selector 카드(다중 대화, 2026-09-08) — 지금 보이는 캔버스에 그리지 않고 그
+    // 대화의 세션 카드로 적는다. canvas.js가 그릴 때와 같은 봉투 모양(operation_ref/args 병합)이다.
+    persistBackgroundCanvasCard(conversationId, {
+      status: 'success',
+      envelope: Object.assign({}, payload.envelope, { operation_ref: payload.operationRef, operation_args: payload.operationArgs }),
+    });
+    return Promise.resolve({ verifiedVisible: false, background: true, visiblePaintAt: performance.now(), rect: null });
+  }
+  return emitRestCanvasAndWaitForPaint(payload, { expand, timeoutMs, conversationId });
 }
 
 async function notifyStartupFailuresAfterExpansion(snapshot) {
