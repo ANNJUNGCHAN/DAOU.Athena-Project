@@ -2606,17 +2606,9 @@ async function refreshModelState() {
 function applyCliState(list) {
   if (!list) return; // 못 읽으면 이전에 읽은 것을 그대로 쓴다 — 추측값을 쓰지 않는다.
   cliStateCache = list;
-  if (!$modelPopover.hidden) renderModelPopover();
-  renderComposerModel();
-}
-
-// 질의가 실제로 도는 공급자. 활성 계정이 Grok이면 grok CLI, 그 밖(Claude·Codex·
-// 미연결)은 claude CLI다 — main.js resolveLiveQueryProviderId·noteLiveQueryProvider와
-// 같은 판정이라 툴바가 실행기와 다른 이름을 말하지 않는다.
-function activeQueryProvider() {
-  const providers = (cliStateCache && cliStateCache.providers) || [];
-  const active = providers.find((p) => ((p && p.accounts) || []).some((a) => a && a.active));
-  return active && active.id === 'grok' ? 'grok' : 'claude';
+  // 활성 계정이 바뀌면 main이 정하는 active(공급자·모델·강도)도 바뀐다 — 툴바 라벨은
+  // 그 값을 말하니 다시 읽는다(model-get은 파일 읽기 하나, cli-list처럼 비싸지 않다).
+  void refreshModelState();
 }
 
 function providerConnected(id) {
@@ -2631,10 +2623,11 @@ function composerChoiceLabel(chips, value, fallback) {
   const label = hit && hit.value !== null ? hit.label : fallback;
   return label.charAt(0).toUpperCase() + label.slice(1);
 }
+// 어느 공급자의 값을 말할지는 main.js resolveActiveModelSelection이 정한다(athena:model-get의
+// active) — 실행기·오브 컨트롤 스트립이 읽는 바로 그 값이라 툴바가 다른 이름을 말하지 않는다.
 function renderComposerModel() {
-  const provider = activeQueryProvider();
-  const grok = provider === 'grok';
-  const s = (modelStateCache && modelStateCache[provider]) || { model: null, effort: null };
+  const s = (modelStateCache && modelStateCache.active) || { provider: 'claude', model: null, effort: null };
+  const grok = s.provider === 'grok';
   $modelBtn.textContent = composerChoiceLabel(
     grok ? PILL_GROK_MODEL_CHIPS : PILL_MODEL_CHIPS, s.model, grok ? 'Grok' : 'Claude');
   $effortBtn.textContent = composerChoiceLabel(
@@ -2924,9 +2917,10 @@ document.addEventListener('mousedown', (e) => {
   closeKiumiMenu();
 });
 window.athena.on('athena:model-changed', () => refreshModelState());
-// 계정 전환·로그인이 활성 공급자를 바꾸면 툴바 라벨과 Grok 잠금도 따라가야 한다
-// (설정 모델 카드가 구독하는 그 신호 — settings-cards.js renderModel). 이벤트가
-// 목록을 그대로 싣고 오므로(main.js broadcastCliChanged) 다시 묻지 않는다.
+// 계정 전환·로그인이 활성 공급자를 바꾸면 Grok 잠금이 따라가야 한다(설정 모델 카드가
+// 구독하는 그 신호 — settings-cards.js renderModel). 이벤트가 목록을 그대로 싣고
+// 오므로(main.js broadcastCliChanged) 다시 묻지 않는다. 툴바 라벨은 applyCliState가
+// model-get(active)을 다시 읽어 그린다.
 window.athena.on('athena:cli-changed', (list) => applyCliState(list));
 refreshModelState();
 window.athena.invoke('athena:cli-list').then(applyCliState, () => {});
