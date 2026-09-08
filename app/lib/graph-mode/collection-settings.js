@@ -14,9 +14,18 @@
 // localStorage도 IPC도 여기서 직접 잡지 않는다. canvas.js가 settings-cards.js의
 // 기존 함수를 그대로 넘겨 준다(같은 규칙을 두 벌 쓰지 않는다).
 //
-// **브레인 상태 카드는 "못 하는 것"을 숨기지 않는다.** 배치 주기는 설정 파일이
-// 소유하고, 마지막·다음 실행 시각은 상태 API가 아직 안 준다 — Paper가 그 두 줄을
-// 굳이 그려 둔 이유는 화면이 조용히 없는 척하지 않게 하기 위해서다(§0 정직성).
+// **조회 주기·수동 실행·실행 시각은 소스마다 있다(2026-09-08).** 예전 브레인 상태
+// 카드의 「배치 주기」(설정 파일이 소유, 못 바꿈)와 「수동 실행 · 실행 시각」(제공 안
+// 함) 두 행은 지웠다 — 백엔드 스케줄러(/brain/schedule)가 대화·체결내역·보유잔고를
+// 각자 주기로 돌리고 마지막·다음 실행 시각을 주므로, 그 셋은 각 수집원 칸 우측에
+// 작은 글씨로 붙는다. 주기 값의 주인은 여전히 localStorage다: 백엔드는 기동마다
+// 설정 파일 기본값으로 돌아오고 canvas.js가 브레인 준비 뒤 저장값을 다시 밀어 넣는다.
+
+const SOURCES = Object.freeze([
+  { id: 'chat', label: '대화', intervalKey: 'chatIntervalMin' },
+  { id: 'fills', label: '체결내역', intervalKey: 'fillsIntervalMin' },
+  { id: 'holdings', label: '보유잔고', intervalKey: 'holdingsIntervalMin' },
+]);
 
 function el(name, className, text) {
   const node = document.createElement(name);
@@ -45,23 +54,145 @@ function toggle(initial, onChange, ariaLabel) {
   return button;
 }
 
-function sourceCell(label, control) {
-  const cell = el('div', 'graph-settings-source');
-  cell.appendChild(el('span', 'graph-settings-source-label', label));
-  cell.appendChild(control);
-  return cell;
+// 재생 삼각형 — 아이콘 폰트를 들이지 않는다(이 리포의 다른 아이콘과 같이 인라인 SVG).
+function playIcon() {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', '0 0 12 12');
+  svg.setAttribute('width', '10');
+  svg.setAttribute('height', '10');
+  svg.setAttribute('aria-hidden', 'true');
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  path.setAttribute('d', 'M2.5 1.5v9l8-4.5z');
+  path.setAttribute('fill', 'currentColor');
+  svg.appendChild(path);
+  return svg;
 }
 
-// 상태 행(브레인 카드) — 제목 · 설명 · 우측 곁말/컨트롤. 우측이 텍스트면
-// "이 화면은 못 한다"는 뜻이고, 버튼이면 할 수 있다는 뜻이다.
-function statusRow(title, note, aside, muted) {
-  const row = el('div', `graph-settings-row${muted ? ' is-muted' : ''}`);
-  const main = el('div', 'graph-settings-row-main');
-  main.appendChild(el('div', 'graph-settings-row-title', title));
-  if (note) main.appendChild(note);
-  row.appendChild(main);
-  if (aside) row.appendChild(aside);
-  return row;
+// ── 실행 시각 문구 ────────────────────────────────────────────────────────────
+//
+// 같은 날이면 "14:05", 다른 날이면 "9/7 14:05". 분 단위로 도는 값이라 초는 소음이다.
+function formatClock(iso, nowMs) {
+  const t = Date.parse(iso);
+  if (!Number.isFinite(t)) return null;
+  const d = new Date(t);
+  const now = new Date(Number.isFinite(nowMs) ? nowMs : Date.now());
+  const hhmm = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+  const sameDay = d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth()
+    && d.getDate() === now.getDate();
+  return sameDay ? hhmm : `${d.getMonth() + 1}/${d.getDate()} ${hhmm}`;
+}
+
+// 백엔드 응답 `{ schedule_owner, sources: [{ source, ... }] }`에서 소스 하나를 꺼낸다.
+function scheduleFor(schedule, sourceId) {
+  const list = schedule && Array.isArray(schedule.sources) ? schedule.sources : [];
+  return list.find((row) => row && row.source === sourceId) || null;
+}
+
+// 문구는 "그래서 지금 무엇이 참인가"를 말한다(§0 정직성) — 스케줄을 못 읽었으면
+// 시각을 지어내지 않고, 자동 주기의 주인이 이 백엔드가 아니면(external) 다음 시각을
+// 약속하지 않는다.
+function scheduleText(schedule, sourceId, nowMs) {
+  const row = scheduleFor(schedule, sourceId);
+  if (!row) return '실행 시각 알 수 없음';
+  if (row.running) return '실행 중…';
+  const parts = [];
+  const last = row.last_run_at ? formatClock(row.last_run_at, nowMs) : null;
+  parts.push(`마지막 ${last || '—'}`);
+  if (schedule.schedule_owner === 'external') parts.push('자동 실행 없음');
+  else {
+    const next = row.next_run_at ? formatClock(row.next_run_at, nowMs) : null;
+    parts.push(`다음 ${next || '—'}`);
+  }
+  if (row.last_error) parts.push(`실패(${row.last_error})`);
+  if (sourceId !== 'chat' && row.producer_wired === false) parts.push('계정 미연결');
+  return parts.join(' · ');
+}
+
+// 이미 그려진 세 칸의 실행 시각·실행 버튼만 갱신한다 — 전체를 다시 그리면 열려 있던
+// select가 닫히고 포커스가 날아간다.
+function applySchedule(root, schedule, nowMs) {
+  if (!root) return;
+  for (const cell of root.querySelectorAll('.graph-settings-source')) {
+    const sourceId = cell.getAttribute('data-source');
+    if (!sourceId) continue;
+    const meta = cell.querySelectorAll('.graph-settings-source-meta')[0];
+    if (meta) meta.textContent = scheduleText(schedule, sourceId, nowMs);
+    const run = cell.querySelectorAll('.graph-settings-run')[0];
+    if (run && !run.__busy) {
+      const row = scheduleFor(schedule, sourceId);
+      run.disabled = !row || Boolean(row.running);
+    }
+  }
+}
+
+function sourceCell(source, settings, deps, card, collectToggle) {
+  const cell = el('div', 'graph-settings-source');
+  cell.setAttribute('data-source', source.id);
+  // 실행 시각 줄 — 칸의 우측 아래, 작은 글씨(사용자 요청 2026-09-08).
+  const meta = el('div', 'graph-settings-source-meta', scheduleText(deps.schedule, source.id));
+  const row = el('div', 'graph-settings-source-row');
+  row.appendChild(el('span', 'graph-settings-source-label', source.label));
+  const controls = el('div', 'graph-settings-source-controls');
+
+  controls.appendChild(el('span', 'graph-settings-interval-label', '조회 주기'));
+  const select = el('select', 'graph-settings-interval-select');
+  select.setAttribute('aria-label', `${source.label} 조회 주기`);
+  for (const minutes of deps.intervalOptions || []) {
+    const option = el('option', null, `${minutes}분`);
+    option.value = String(minutes);
+    if (minutes === settings[source.intervalKey]) option.selected = true;
+    select.appendChild(option);
+  }
+  // 저장은 동기(localStorage), 백엔드 반영은 비동기 — 반영에 실패해도 저장값은 남고
+  // 이유를 적는다(다음 브레인 준비 때 canvas.js가 저장값을 다시 밀어 넣는다).
+  select.addEventListener('change', async () => {
+    const minutes = Number(select.value);
+    deps.writeSettings({ [source.intervalKey]: minutes });
+    if (typeof deps.setSourceInterval !== 'function') return;
+    select.disabled = true;
+    try {
+      const next = await deps.setSourceInterval(source.id, minutes);
+      if (next) applySchedule(card, next);
+    } catch (error) {
+      showError(card, (error && error.message) || `${source.label} 조회 주기를 백엔드에 반영하지 못했습니다.`);
+    } finally {
+      select.disabled = false;
+    }
+  });
+  controls.appendChild(select);
+
+  const run = el('button', 'graph-settings-run');
+  run.setAttribute('type', 'button');
+  run.setAttribute('aria-label', `${source.label} 지금 실행`);
+  run.setAttribute('title', '지금 실행');
+  run.appendChild(playIcon());
+  const initial = scheduleFor(deps.schedule, source.id);
+  run.disabled = !initial || Boolean(initial.running) || typeof deps.runSource !== 'function';
+  run.addEventListener('click', async () => {
+    if (typeof deps.runSource !== 'function') return;
+    run.disabled = true;
+    run.__busy = true;
+    run.classList.add('is-running');
+    meta.textContent = '실행 중…';
+    try {
+      const next = await deps.runSource(source.id);
+      delete run.__busy;
+      applySchedule(card, next || deps.schedule);
+    } catch (error) {
+      delete run.__busy;
+      applySchedule(card, deps.schedule);
+      showError(card, (error && error.message) || `${source.label}을(를) 지금 실행하지 못했습니다.`);
+    } finally {
+      run.classList.remove('is-running');
+    }
+  });
+  controls.appendChild(run);
+
+  controls.appendChild(collectToggle);
+  row.appendChild(controls);
+  cell.appendChild(row);
+  cell.appendChild(meta);
+  return cell;
 }
 
 function renderSourcesCard(settings, deps) {
@@ -92,34 +223,15 @@ function renderSourcesCard(settings, deps) {
       button.disabled = false;
     }
   }, '대화 수집');
-  sources.appendChild(sourceCell('대화', chatToggle));
+  sources.appendChild(sourceCell(SOURCES[0], settings, deps, card, chatToggle));
 
-  sources.appendChild(sourceCell('체결내역', toggle(settings.collectFills, (next) => {
+  sources.appendChild(sourceCell(SOURCES[1], settings, deps, card, toggle(settings.collectFills, (next) => {
     deps.writeSettings({ collectFills: next });
   }, '체결내역 수집')));
 
-  // 보유잔고 칸만 조회 주기 선택기를 함께 문다(보드 05 실측 — 세 번째 칸에만 있다).
-  const holdings = el('div', 'graph-settings-source');
-  holdings.appendChild(el('span', 'graph-settings-source-label', '보유잔고'));
-  const controls = el('div', 'graph-settings-source-controls');
-  controls.appendChild(el('span', 'graph-settings-interval-label', '조회 주기'));
-  const select = el('select', 'graph-settings-interval-select');
-  select.setAttribute('aria-label', '보유잔고 조회 주기');
-  for (const minutes of deps.intervalOptions || []) {
-    const option = el('option', null, `${minutes}분`);
-    option.value = String(minutes);
-    if (minutes === settings.holdingsIntervalMin) option.selected = true;
-    select.appendChild(option);
-  }
-  select.addEventListener('change', () => {
-    deps.writeSettings({ holdingsIntervalMin: Number(select.value) });
-  });
-  controls.appendChild(select);
-  controls.appendChild(toggle(settings.collectHoldings, (next) => {
+  sources.appendChild(sourceCell(SOURCES[2], settings, deps, card, toggle(settings.collectHoldings, (next) => {
     deps.writeSettings({ collectHoldings: next });
-  }, '보유잔고 수집'));
-  holdings.appendChild(controls);
-  sources.appendChild(holdings);
+  }, '보유잔고 수집')));
   card.appendChild(sources);
 
   const expose = el('div', 'graph-settings-expose');
@@ -143,6 +255,17 @@ function showError(card, message) {
   box.textContent = message;
 }
 
+// 상태 행(브레인 카드) — 제목 · 설명 · 우측 컨트롤.
+function statusRow(title, note, aside) {
+  const row = el('div', 'graph-settings-row');
+  const main = el('div', 'graph-settings-row-main');
+  main.appendChild(el('div', 'graph-settings-row-title', title));
+  if (note) main.appendChild(note);
+  row.appendChild(main);
+  if (aside) row.appendChild(aside);
+  return row;
+}
+
 function renderBrainCard(deps) {
   const card = el('section', 'graph-settings-card');
   const head = el('header', 'graph-settings-card-head');
@@ -152,31 +275,6 @@ function renderBrainCard(deps) {
     deps.brainReady ? '브레인 준비됨' : '브레인 준비 안 됨');
   head.appendChild(badge);
   card.appendChild(head);
-
-  // 배치 주기 — 값의 주인이 설정 파일이라는 사실 자체가 이 행의 내용이다.
-  //
-  // 사람 말을 먼저 쓴다(2026-09-03 실사용: "배치 주기를 뭔가 보유잔고처럼 정할 수
-  // 있으면 좋겠고, 수동실행, 마지막 다음 실행시각은 뭔지 모르겠다"). 예전에는 환경변수
-  // 이름이 문장의 첫머리였다 — 그 이름을 모르는 사람에게는 행 전체가 읽히지 않았다.
-  // 이름 자체는 지우지 않는다: 값을 실제로 바꿀 수 있는 사람에게는 그것이 유일한
-  // 단서다. 무엇을 하는 주기인지 → 지금 값 → 어디서 바꾸는지 순서로 바꿔 적는다.
-  const intervalNote = el('div', 'graph-settings-row-note');
-  intervalNote.appendChild(el('span', null,
-    `대화와 체결을 모아 성향 그래프에 넣는 주기입니다 · 지금 ${deps.defaultIngestIntervalMinutes}분마다 · `));
-  intervalNote.appendChild(el('span', null, '이 화면에서는 못 바꿉니다(설정 파일 '));
-  intervalNote.appendChild(el('code', 'graph-settings-envvar', 'ATHENA_BRAIN_INGEST_INTERVAL_MINUTES'));
-  intervalNote.appendChild(el('span', null, ').'));
-  card.appendChild(statusRow('배치 주기', intervalNote, el('span', 'graph-settings-row-aside', '설정 파일')));
-
-  // 수동 실행·실행 시각 — 상태 API가 아직 안 주는 값이라 자리만 정직하게 남긴다.
-  // 문구는 "무엇이 없는가"가 아니라 "그래서 지금 무엇이 참인가"를 말한다 — 앞 문구는
-  // API 사정을 아는 사람에게만 뜻이 있었다(같은 제보).
-  card.appendChild(statusRow(
-    '수동 실행 · 마지막·다음 실행 시각',
-    el('div', 'graph-settings-row-note',
-      '아직 없습니다 — 지금은 위 주기로만 자동으로 돌고, 사람이 직접 돌리거나 언제 돌았는지 볼 방법은 없습니다.'),
-    el('span', 'graph-settings-row-aside', '제공 안 함'),
-    true));
 
   const resetButton = el('button', 'graph-settings-danger', '전체 삭제');
   resetButton.setAttribute('type', 'button');
@@ -255,7 +353,7 @@ function describeRendered(container) {
   };
 }
 
-const __exports = { renderCollectionSettings, describeRendered };
+const __exports = { renderCollectionSettings, describeRendered, applySchedule, scheduleText, formatClock, SOURCES };
 
 // UMD 각주(2026-08-18 렌더러 격리) — column-fold.js와 같은 패턴.
 if (typeof module !== 'undefined' && module.exports) {
