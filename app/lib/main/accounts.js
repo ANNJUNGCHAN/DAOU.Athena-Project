@@ -28,6 +28,10 @@ const REVOKE_PATH = '/oauth2/revoke';
 const REVOKE_API_ID = 'au10002';
 const BACKEND_ALIAS_PATTERN = /^[a-z0-9][a-z0-9_-]{0,31}$/;
 const backendAliasMutationGeneration = new Map();
+const backendSyncInFlight = new Map();
+const backendSyncPromisesByAccount = new Map();
+const backendRuntimeStatus = new Map();
+const backendRemovalInFlight = new Set();
 
 function statePath() {
   return path.join(app.getPath('userData'), 'athena-accounts.json');
@@ -37,9 +41,15 @@ function readState() {
   try {
     const raw = fs.readFileSync(statePath(), 'utf-8');
     const parsed = JSON.parse(raw);
-    return { activeId: parsed.activeId || null, accounts: Array.isArray(parsed.accounts) ? parsed.accounts : [] };
+    return {
+      activeId: parsed.activeId || null,
+      selectionRevision: Number.isSafeInteger(parsed.selectionRevision) && parsed.selectionRevision >= 0
+        ? parsed.selectionRevision
+        : 0,
+      accounts: Array.isArray(parsed.accounts) ? parsed.accounts : [],
+    };
   } catch {
-    return { activeId: null, accounts: [] };
+    return { activeId: null, selectionRevision: 0, accounts: [] };
   }
 }
 
@@ -208,6 +218,7 @@ function list() {
   return {
     accounts: state.accounts.map((a) => {
       const tokenState = computeTokenState(a);
+      const backendStatus = backendRuntimeStatus.get(String(a.id));
       return {
         id: a.id,
         alias: a.alias,
@@ -218,6 +229,8 @@ function list() {
         tokenState,
         appKeyChars: secrets.getCharCount(a.id, 'appKey'),
         secretKeyChars: secrets.getCharCount(a.id, 'secretKey'),
+        backendConnected: backendStatus ? backendStatus.connected === true : false,
+        backendSyncError: backendStatus ? backendStatus.error : null,
       };
     }),
   };
@@ -225,6 +238,159 @@ function list() {
 
 function backendRequestHeaders(authorization) {
   return authorization ? { Authorization: authorization } : {};
+}
+
+function loopbackBackendUrl(backendBase, suffix) {
+  let url;
+  try {
+    url = new URL(String(backendBase || ''));
+  } catch {
+    return null;
+  }
+  const hostname = url.hostname.toLowerCase();
+  if (!['http:', 'https:'].includes(url.protocol)
+    || !['127.0.0.1', 'localhost', '[::1]', '::1'].includes(hostname)
+    || url.username || url.password || url.search || url.hash) {
+    return null;
+  }
+  url.pathname = `${url.pathname.replace(/\/$/, '')}${suffix}`;
+  return url.toString();
+}
+
+function runtimeAccountUrl(backendBase, accountId) {
+  return loopbackBackendUrl(backendBase, `/runtime/accounts/${encodeURIComponent(accountId)}`);
+}
+
+function backendSyncError(accountId, error, generation) {
+  if ((generation == null || backendAliasMutationGeneration.get(accountId) === generation)
+    && readState().accounts.some((account) => String(account.id) === accountId)) {
+    backendRuntimeStatus.set(accountId, { connected: false, error });
+  }
+  return { ok: false, accountId, backendConnected: false, backendSyncError: error, error };
+}
+
+function accountSyncFingerprint({
+  appKey, secretKey, backendBase, authorization, active, selectionRevision, orderApi,
+}) {
+  return crypto.createHash('sha256')
+    .update(String(appKey))
+    .update('\0')
+    .update(String(secretKey))
+    .update('\0')
+    .update(String(backendBase))
+    .update('\0')
+    .update(String(authorization))
+    .update('\0')
+    .update(active ? 'active' : 'inactive')
+    .update('\0')
+    .update(String(selectionRevision))
+    .update('\0')
+    .update(orderApi ? 'order-enabled' : 'query-only')
+    .digest('hex');
+}
+
+async function syncBackendAccount({
+  id,
+  backendBase,
+  fetchImpl = globalThis.fetch,
+  authorization = '',
+  timeoutMs = 10_000,
+} = {}) {
+  const accountId = String(id || '');
+  const state = readState();
+  const entry = state.accounts.find((account) => String(account.id) === accountId);
+  if (!entry) return backendSyncError(accountId, '계좌를 찾을 수 없다');
+  if (backendRemovalInFlight.has(accountId)) {
+    return backendSyncError(accountId, '계좌 연결 해제가 진행 중이다');
+  }
+  if (typeof fetchImpl !== 'function') return backendSyncError(accountId, '서버 계좌를 연결할 수 없다');
+  if (!/^Bearer\s+\S+$/.test(String(authorization || ''))) {
+    return backendSyncError(accountId, '서버 계좌를 연결할 인증이 없다');
+  }
+  const requestUrl = runtimeAccountUrl(backendBase, accountId);
+  if (!requestUrl) return backendSyncError(accountId, '로컬 백엔드 주소가 올바르지 않다');
+
+  const appKey = secrets.getValue(accountId, 'appKey');
+  const secretKey = secrets.getValue(accountId, 'secretKey');
+  if (!appKey || !secretKey) return backendSyncError(accountId, '계좌 자격증명을 읽을 수 없다');
+
+  const active = state.activeId === accountId;
+  const selectionRevision = state.selectionRevision;
+  const orderApi = entry.orderApi === true;
+  const fingerprint = accountSyncFingerprint({
+    appKey, secretKey, backendBase, authorization, active, selectionRevision, orderApi,
+  });
+  const current = backendSyncInFlight.get(accountId);
+  if (current && current.fingerprint === fingerprint) return current.promise;
+
+  const generation = (backendAliasMutationGeneration.get(accountId) || 0) + 1;
+  backendAliasMutationGeneration.set(accountId, generation);
+  backendRuntimeStatus.set(accountId, { connected: false, error: null });
+
+  const promise = (async () => {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const response = await fetchImpl(requestUrl, {
+        method: 'PUT',
+        headers: {
+          ...backendRequestHeaders(authorization),
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          app_key: appKey,
+          secret_key: secretKey,
+          active,
+          selection_revision: selectionRevision,
+          order_api: orderApi,
+        }),
+        redirect: 'error',
+        signal: controller.signal,
+      });
+      if (!response || !response.ok) {
+        const error = response && response.status === 409
+          ? '이 계좌 ID에는 다른 자격증명이 이미 연결돼 있다'
+          : '서버 계좌를 연결할 수 없다';
+        return backendSyncError(accountId, error, generation);
+      }
+      const body = await response.json();
+      const backendAlias = body && typeof body.backend_alias === 'string'
+        ? body.backend_alias.trim()
+        : '';
+      if (!body || body.ok !== true || body.ready !== true || !BACKEND_ALIAS_PATTERN.test(backendAlias)) {
+        return backendSyncError(accountId, '서버 계좌 연결 응답이 올바르지 않다', generation);
+      }
+      if (backendAliasMutationGeneration.get(accountId) !== generation
+        || !readState().accounts.some((account) => String(account.id) === accountId)) {
+        return { ok: false, stale: true, accountId, error: '계좌 상태가 변경되어 이전 연결 결과를 버렸다' };
+      }
+      const persisted = persistBackendAlias(accountId, backendAlias);
+      if (!persisted.ok) return backendSyncError(accountId, persisted.error, generation);
+      backendRuntimeStatus.set(accountId, { connected: true, error: null });
+      return {
+        ok: true,
+        accountId,
+        backendAlias,
+        backendConnected: true,
+        backendSyncError: null,
+      };
+    } catch {
+      return backendSyncError(accountId, '서버 계좌를 연결할 수 없다', generation);
+    } finally {
+      clearTimeout(timer);
+    }
+  })();
+
+  backendSyncInFlight.set(accountId, { fingerprint, promise });
+  const accountPromises = backendSyncPromisesByAccount.get(accountId) || new Set();
+  accountPromises.add(promise);
+  backendSyncPromisesByAccount.set(accountId, accountPromises);
+  promise.finally(() => {
+    if (backendSyncInFlight.get(accountId)?.promise === promise) backendSyncInFlight.delete(accountId);
+    accountPromises.delete(promise);
+    if (accountPromises.size === 0) backendSyncPromisesByAccount.delete(accountId);
+  });
+  return promise;
 }
 
 async function listBackendAliases({
@@ -237,10 +403,12 @@ async function listBackendAliases({
   if (!/^Bearer\s+\S+$/.test(String(authorization || ''))) {
     return { ok: false, aliases: [], error: '서버 계좌 정보를 확인할 인증이 없다' };
   }
+  const requestUrl = loopbackBackendUrl(backendBase, '/ready/accounts');
+  if (!requestUrl) return { ok: false, aliases: [], error: '로컬 백엔드 주소가 올바르지 않다' };
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const response = await fetchImpl(`${backendBase}/ready/accounts`, {
+    const response = await fetchImpl(requestUrl, {
       method: 'GET',
       headers: backendRequestHeaders(authorization),
       redirect: 'error',
@@ -275,37 +443,63 @@ function persistBackendAlias(id, backendAlias) {
   return { ok: true, backendAlias: cleanAlias };
 }
 
-async function bindBackendAlias({ id, backendAlias, backendBase, fetchImpl, authorization } = {}) {
-  const accountId = String(id || '');
-  if (!readState().accounts.some((account) => account.id === accountId)) {
-    return { ok: false, error: '계좌를 찾을 수 없다' };
-  }
-  const generation = (backendAliasMutationGeneration.get(accountId) || 0) + 1;
-  backendAliasMutationGeneration.set(accountId, generation);
-  const available = await listBackendAliases({ backendBase, fetchImpl, authorization });
-  if (!available.ok) return available;
-  if (backendAliasMutationGeneration.get(accountId) !== generation) {
-    return { ok: false, stale: true, aliases: available.aliases, error: '더 최근의 서버 계좌 선택이 이미 반영됐다' };
-  }
-  const cleanAlias = String(backendAlias || '').trim();
-  if (!available.aliases.includes(cleanAlias)) {
-    return { ok: false, aliases: available.aliases, error: '선택한 서버 계좌가 현재 backend에 없다' };
-  }
-  return { ...persistBackendAlias(accountId, cleanAlias), aliases: available.aliases };
+async function bindBackendAlias(options = {}) {
+  return syncBackendAccount(options);
 }
 
-async function resolveBackendAlias({ id, backendBase, fetchImpl, authorization } = {}) {
-  const state = readState();
-  const entry = state.accounts.find((account) => account.id === id);
-  if (!entry) return { ok: false, error: '활성 계좌를 찾을 수 없다' };
-  const backendAlias = String(entry.backendAlias || '').trim();
-  if (!backendAlias) return { ok: false, error: '조회에 사용할 서버 계좌를 먼저 연결해야 한다' };
-  const available = await listBackendAliases({ backendBase, fetchImpl, authorization });
-  if (!available.ok) return available;
-  if (!available.aliases.includes(backendAlias)) {
-    return { ok: false, error: '연결한 서버 계좌가 현재 backend에 없다' };
+async function resolveBackendAlias(options = {}) {
+  return syncBackendAccount(options);
+}
+
+async function removeFromBackend({
+  id,
+  backendBase,
+  fetchImpl = globalThis.fetch,
+  authorization = '',
+  timeoutMs = 10_000,
+} = {}) {
+  const accountId = String(id || '');
+  if (!readState().accounts.some((account) => String(account.id) === accountId)) {
+    return { ok: false, error: '계좌를 찾을 수 없다' };
   }
-  return { ok: true, accountId: String(entry.id), backendAlias };
+  if (typeof fetchImpl !== 'function') return { ok: false, error: '서버 계좌 연결을 해제할 수 없다' };
+  if (!/^Bearer\s+\S+$/.test(String(authorization || ''))) {
+    return { ok: false, error: '서버 계좌 연결을 해제할 인증이 없다' };
+  }
+  const requestUrl = runtimeAccountUrl(backendBase, accountId);
+  if (!requestUrl) return { ok: false, error: '로컬 백엔드 주소가 올바르지 않다' };
+
+  backendRemovalInFlight.add(accountId);
+  backendAliasMutationGeneration.set(accountId, (backendAliasMutationGeneration.get(accountId) || 0) + 1);
+  const state = readState();
+  state.selectionRevision += 1;
+  const removalRevision = state.selectionRevision;
+  writeState(state);
+  const pendingSyncs = [...(backendSyncPromisesByAccount.get(accountId) || [])];
+  if (pendingSyncs.length) await Promise.allSettled(pendingSyncs);
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const response = await fetchImpl(requestUrl, {
+      method: 'DELETE',
+      headers: {
+        ...backendRequestHeaders(authorization),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ selection_revision: removalRevision }),
+      redirect: 'error',
+      signal: controller.signal,
+    });
+    if (!response || !response.ok) return { ok: false, error: '서버 계좌 연결을 해제할 수 없다' };
+    backendRuntimeStatus.set(accountId, { connected: false, error: null });
+    return { ok: true, accountId };
+  } catch {
+    return { ok: false, error: '서버 계좌 연결을 해제할 수 없다' };
+  } finally {
+    clearTimeout(timer);
+    backendRemovalInFlight.delete(accountId);
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -342,13 +536,21 @@ async function register({ alias, appKey, secretKey, verifyOnly }) {
   }
   if (verifyOnly) return { ok: true, verified: true };
 
+  // OAuth 왕복 중 다른 계좌가 활성화되거나 제거될 수 있으므로, 호출 시작 때의
+  // state 스냅샷을 쓰지 않는다. 최신 선택 revision을 보존하고 동일 표시 별칭이
+  // 그 사이 추가됐는지도 다시 확인한 뒤 새 계좌만 append한다.
+  const latestState = readState();
+  if (latestState.accounts.some((a) => a.alias === cleanAlias)) {
+    return { ok: false, error: 'invalid' };
+  }
+
   const id = crypto.randomUUID();
   secrets.setValue(id, 'appKey', appKey);
   secrets.setValue(id, 'secretKey', secretKey);
   secrets.setValue(id, 'kiwoomToken', result.token);
 
   const nowIso = new Date().toISOString();
-  state.accounts.push({
+  latestState.accounts.push({
     id,
     alias: cleanAlias,
     createdAt: nowIso,
@@ -356,8 +558,11 @@ async function register({ alias, appKey, secretKey, verifyOnly }) {
     tokenExpiresAt: parseKiwoomDatetime(result.expiresDt).toISOString(),
     orderApi: false,
   });
-  if (!state.activeId) state.activeId = id;
-  writeState(state);
+  if (!latestState.activeId) {
+    latestState.activeId = id;
+    latestState.selectionRevision += 1;
+  }
+  writeState(latestState);
   return { ok: true, id };
 }
 
@@ -368,17 +573,23 @@ async function register({ alias, appKey, secretKey, verifyOnly }) {
 function setActive(id) {
   const state = readState();
   if (!state.accounts.some((a) => a.id === id)) return { ok: false };
+  if (state.activeId === id) return { ok: true };
   state.activeId = id;
+  state.selectionRevision += 1;
   writeState(state);
   return { ok: true };
 }
 
 function remove(id) {
+  const accountId = String(id || '');
+  backendAliasMutationGeneration.set(accountId, (backendAliasMutationGeneration.get(accountId) || 0) + 1);
+  backendRuntimeStatus.delete(accountId);
   const state = readState();
   const had = state.accounts.some((a) => a.id === id);
   state.accounts = state.accounts.filter((a) => a.id !== id);
   if (state.activeId === id) {
     state.activeId = state.accounts.length ? state.accounts[0].id : null;
+    state.selectionRevision += 1;
   }
   writeState(state);
   if (had) secrets.deleteNamespace(id);
@@ -399,7 +610,9 @@ function orderApiSet(id, enabled) {
 
   if (!enabled) {
     // 되돌리기(OFF)는 항상 즉시 반영된다 — 확인 게이트 없음(Desc 5).
+    const changed = entry.orderApi === true;
     entry.orderApi = false;
+    if (changed) state.selectionRevision += 1;
     writeState(state);
     return {
       ok: true,
@@ -417,7 +630,9 @@ function orderApiSet(id, enabled) {
   if (!tokenMet) {
     return { ok: false, checklist, error: '로컬 인증 토큰이 설정되지 않았다 — 계좌 인증 상태를 먼저 확인한다' };
   }
+  const changed = entry.orderApi !== true;
   entry.orderApi = true;
+  if (changed) state.selectionRevision += 1;
   writeState(state);
   return { ok: true, checklist };
 }
@@ -547,4 +762,6 @@ module.exports = {
   listBackendAliases,
   bindBackendAlias,
   resolveBackendAlias,
+  syncBackendAccount,
+  removeFromBackend,
 };
