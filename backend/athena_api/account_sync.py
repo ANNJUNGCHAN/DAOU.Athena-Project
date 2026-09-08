@@ -6,7 +6,7 @@ import asyncio
 import hashlib
 import ipaddress
 import json
-from collections.abc import Callable
+from collections.abc import Awaitable, Callable
 from contextlib import suppress
 from dataclasses import dataclass
 from typing import Any
@@ -119,8 +119,8 @@ class RuntimeAccountRegistry:
         settings: Settings,
         *,
         ws_connect: Any = None,
-        on_ready: Callable[[AccountRuntime], None] | None = None,
-        on_removed: Callable[[str], None] | None = None,
+        on_ready: Callable[[AccountRuntime], Awaitable[None]] | None = None,
+        on_removed: Callable[[str], Awaitable[None]] | None = None,
     ) -> None:
         self.app = app
         self.settings = settings
@@ -234,19 +234,19 @@ class RuntimeAccountRegistry:
                     raise RuntimeAccountConflict(
                         "app account id is already bound to different credentials"
                     )
-                self._reserve_selection(account_id, credentials)
+                await self._reserve_selection(account_id, credentials)
                 runtime = self.runtimes[bound_alias]
                 if not runtime.ready:
                     await runtime.token_manager.issue()
                     runtime.ready = True
                     await self._start_websocket(runtime)
                 self._apply_binding_config(account_id, bound_alias, credentials)
-                self._apply_selection(account_id, bound_alias, credentials)
+                await self._apply_selection(account_id, bound_alias, credentials)
                 return RuntimeAccountResult(backend_alias=bound_alias, ready=True)
 
             existing_alias = self.fingerprint_aliases.get(identity)
             if existing_alias is not None:
-                self._reserve_selection(account_id, credentials)
+                await self._reserve_selection(account_id, credentials)
                 runtime = self.runtimes[existing_alias]
                 if not runtime.ready:
                     await runtime.token_manager.issue()
@@ -254,7 +254,7 @@ class RuntimeAccountRegistry:
                     await self._start_websocket(runtime)
                 self.account_bindings[account_id] = existing_alias
                 self._apply_binding_config(account_id, existing_alias, credentials)
-                self._apply_selection(account_id, existing_alias, credentials)
+                await self._apply_selection(account_id, existing_alias, credentials)
                 return RuntimeAccountResult(backend_alias=existing_alias, ready=True)
 
             if requested_alias in self.runtimes:
@@ -262,7 +262,7 @@ class RuntimeAccountRegistry:
                     "derived backend alias is already bound to different credentials"
                 )
 
-            self._reserve_selection(account_id, credentials)
+            await self._reserve_selection(account_id, credentials)
             lock = CredentialProcessLock.for_credentials(
                 account.credential_fingerprint, label=requested_alias
             )
@@ -291,7 +291,7 @@ class RuntimeAccountRegistry:
             self.runtime_base_scopes[requested_alias] = None
             self.account_bindings[account_id] = requested_alias
             self._apply_binding_config(account_id, requested_alias, credentials)
-            self._apply_selection(account_id, requested_alias, credentials)
+            await self._apply_selection(account_id, requested_alias, credentials)
             return RuntimeAccountResult(backend_alias=requested_alias, ready=True)
 
     def _validate_selection(
@@ -306,7 +306,7 @@ class RuntimeAccountRegistry:
                 "selection revision is already bound to a different app account"
             )
 
-    def _apply_selection(
+    async def _apply_selection(
         self, account_id: UUID, alias: str, credentials: RuntimeAccountCredentials
     ) -> None:
         if (
@@ -318,9 +318,9 @@ class RuntimeAccountRegistry:
             return
         self.app.state.kiwoom_default_account = alias
         if self.on_ready is not None:
-            self.on_ready(self.runtimes[alias])
+            await self.on_ready(self.runtimes[alias])
 
-    def _reserve_selection(
+    async def _reserve_selection(
         self, account_id: UUID, credentials: RuntimeAccountCredentials
     ) -> None:
         if (
@@ -333,7 +333,7 @@ class RuntimeAccountRegistry:
         self.selected_account_id = account_id
         self.app.state.kiwoom_default_account = None
         if self.on_removed is not None:
-            self.on_removed(previous_alias or "")
+            await self.on_removed(previous_alias or "")
 
     def _validate_binding_config(
         self, account_id: UUID, credentials: RuntimeAccountCredentials
@@ -391,7 +391,7 @@ class RuntimeAccountRegistry:
                 if getattr(self.app.state, "kiwoom_default_account", None) == alias:
                     self.app.state.kiwoom_default_account = None
                     if self.on_removed is not None:
-                        self.on_removed(alias)
+                        await self.on_removed(alias)
             if alias in self.configured_aliases or alias in self.account_bindings.values():
                 self._apply_order_scope(alias)
                 return alias, False

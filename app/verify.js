@@ -1370,10 +1370,25 @@ app.whenReady().then(async () => {
       while (Date.now() < blockedUntil) { /* intentional verify-only event-loop delay */ }
       stall.actualMs = Date.now() - enteredAt;
     }, stall.scheduledAtMs);
-    const result = await mainMod.runDirectRestDataset(delayedFeedbackDataset, true, {
-      fetchImpl: delayedFetch,
-    });
-    clearTimeout(mainDelay);
+    // 이 검사는 계좌 인증이 아니라 느린 조회의 영수증을 잰다. 빈 검증 프로필의
+    // 계좌 거절로 즉시 끝나지 않도록 계좌 경계 응답만 이 시행 동안 고정한다.
+    const fixtureAccounts = require('./lib/main/accounts');
+    const resolveBackendAlias = fixtureAccounts.resolveBackendAlias;
+    fixtureAccounts.resolveBackendAlias = async ({ id }) => {
+      if (id !== 'verify-delayed-account') throw new Error('Unexpected fixture account');
+      return { ok: true, backendAlias: 'verify-delayed-backend' };
+    };
+    let result;
+    try {
+      result = await mainMod.runDirectRestDataset(delayedFeedbackDataset, true, {
+        accountId: 'verify-delayed-account',
+        fetchImpl: delayedFetch,
+        skipHistory: true,
+      });
+    } finally {
+      fixtureAccounts.resolveBackendAlias = resolveBackendAlias;
+      clearTimeout(mainDelay);
+    }
 
     const stallEndedAtMs = stall.startedAtMs === null ? null : stall.startedAtMs + stall.actualMs;
     const trial = {
@@ -2210,33 +2225,56 @@ app.whenReady().then(async () => {
   }))()`);
   await shot(shellWin, '03g-plugin-manage.png');
 
-  // 기능 허용 화면(Paper 01)은 probe 결과가 있어야 의미가 있다. 검증에서 실제
-  // upstream 서버를 띄우면 네트워크·패키지 캐시에 의존하게 되므로, 호스트 계약인
-  // setData로 probe가 돌아온 그 모양을 그대로 넣고 렌더만 잰다. 실제 왕복은
-  // `npm run verify:plugins`가 따로 검증한다.
-  await shellWin.webContents.executeJavaScript(`
-    window.AthenaPluginCanvas.setView('hub');
-    window.AthenaPluginCanvas.setData({
-      installed: [{
-        id: 'korea-stock', name: '한국 주식 시세',
-        description: '국내 종목 시세·재무를 대화에서 조회합니다',
-        source: '연결 확인됨', enabled: true, featureCount: 6, error: null,
-        features: [
-          { id: 'search_stock_code', name: 'search_stock_code', description: '종목 검색', allowed: true },
-          { id: 'get_stock_price_by_code', name: 'get_stock_price_by_code', description: '종목 시세', allowed: true },
-          { id: 'get_market_cap_stocks', name: 'get_market_cap_stocks', description: '시총 상위', allowed: true },
-          { id: 'get_dividend_yield_stocks', name: 'get_dividend_yield_stocks', description: '배당 상위', allowed: true },
-          { id: 'get_themes_with_leaders', name: 'get_themes_with_leaders', description: '테마주', allowed: false },
-          { id: 'get_etfs_by_market_cap', name: 'get_etfs_by_market_cap', description: 'ETF', allowed: false },
-        ],
-      }],
-      recommended: [],
-      marketplaces: [{ id: 'athena-official', name: 'athena-official', description: '앱 내장 카탈로그', enabled: true }],
-    });
-    document.querySelector('.plugin-canvas-card[data-plugin-id="korea-stock"] .plugin-canvas-action').click();
-  `);
-  await wait(120);
-  const pluginPermission = await shellWin.webContents.executeJavaScript(`(() => {
+  // 기능 허용 화면은 실제 렌더러 계약(list → 권한 클릭 → probe → list 갱신)으로
+  // 잰다. 외부 MCP 서버는 띄우지 않고 이 두 IPC만 고정한다. direct setData로
+  // 설치 행을 만든 뒤 실제 probe를 함께 시작하면 격리 레지스트리의 빈 목록이
+  // 늦게 도착해 fixture를 덮는 경합이 생긴다.
+  const pluginFixtureServer = {
+    alias: 'korea-stock', command: 'npx', argsPreview: '-y @drfirst/korea-stock-mcp',
+    approved: true, toolCount: 4, health: 'ok', warnings: [],
+  };
+  const pluginFixtureTools = [
+    ['search_stock_code', '종목 검색'],
+    ['get_stock_price_by_code', '종목 시세'],
+    ['get_market_cap_stocks', '시총 상위'],
+    ['get_dividend_yield_stocks', '배당 상위'],
+    ['get_themes_with_leaders', '테마주'],
+    ['get_etfs_by_market_cap', 'ETF'],
+  ].map(([name, description], index) => ({ name, description, allowed: index < 4 }));
+  let pluginProbeFixture = { ok: false, error: 'spawn npx ENOENT' };
+  let pluginPermission;
+  let pluginProbeFailure;
+  ipcMain.removeHandler('athena:mcp-list');
+  ipcMain.handle('athena:mcp-list', async () => ({ servers: [pluginFixtureServer], revision: 12 }));
+  ipcMain.removeHandler('athena:mcp-probe');
+  ipcMain.handle('athena:mcp-probe', async () => pluginProbeFixture);
+  try {
+    await shellWin.webContents.executeJavaScript(`
+      window.AthenaPluginCanvas.setView('hub');
+      document.querySelector('.plugin-canvas-action.is-manage').click();
+    `);
+    await wait(120);
+    await shellWin.webContents.executeJavaScript(`
+      window.AthenaPluginCanvas.setView('hub');
+      document.querySelector('.plugin-canvas-card[data-plugin-id="korea-stock"] .plugin-canvas-action').click();
+    `);
+    await wait(120);
+
+    // 첫 probe 실패 — 이유가 화면에 남고 다시 확인이 있어야 한다.
+    pluginProbeFailure = await shellWin.webContents.executeJavaScript(`(() => {
+      const panel = document.querySelector('.plugin-canvas-permissions-view');
+      return {
+        bannerText: panel?.querySelector('.plugin-canvas-error-text')?.textContent || '',
+        retryLabel: panel?.querySelector('.is-retry')?.textContent || '',
+        emptyCopy: panel?.querySelector('.plugin-canvas-empty')?.textContent || '',
+      };
+    })()`);
+    await shot(shellWin, '03h2-plugin-probe-failure.png');
+
+    pluginProbeFixture = { ok: true, tools: pluginFixtureTools };
+    await shellWin.webContents.executeJavaScript(`document.querySelector('.plugin-canvas-action.is-retry').click()`);
+    await wait(120);
+    pluginPermission = await shellWin.webContents.executeJavaScript(`(() => {
     const panel = document.querySelector('.plugin-canvas-permissions-view');
     return {
       dialogCount: document.querySelectorAll('.plugin-canvas-sheet[role="dialog"]').length,
@@ -2252,29 +2290,13 @@ app.whenReady().then(async () => {
       inert: panel?.hasAttribute('inert') || false,
     };
   })()`);
-  await shot(shellWin, '03h-plugin-permission.png');
-
-  // probe 실패 상태 — 이유가 화면에 남고 다시 확인이 있어야 한다.
-  await shellWin.webContents.executeJavaScript(`
-    window.AthenaPluginCanvas.setData({
-      installed: [{
-        id: 'korea-stock', name: '한국 주식 시세', description: '국내 종목 시세·재무를 대화에서 조회합니다',
-        source: '연결 미확인 — 권한 화면을 열면 확인한다', enabled: true, featureCount: 0,
-        features: [], error: 'spawn npx ENOENT',
-      }],
-      recommended: [], marketplaces: [],
-    });
-  `);
-  await wait(100);
-  const pluginProbeFailure = await shellWin.webContents.executeJavaScript(`(() => {
-    const panel = document.querySelector('.plugin-canvas-permissions-view');
-    return {
-      bannerText: panel?.querySelector('.plugin-canvas-error-text')?.textContent || '',
-      retryLabel: panel?.querySelector('.is-retry')?.textContent || '',
-      emptyCopy: panel?.querySelector('.plugin-canvas-empty')?.textContent || '',
-    };
-  })()`);
-  await shot(shellWin, '03h2-plugin-probe-failure.png');
+    await shot(shellWin, '03h-plugin-permission.png');
+  } finally {
+    ipcMain.removeHandler('athena:mcp-list');
+    ipcMain.handle('athena:mcp-list', mainMod.settingsHandlers.mcpList);
+    ipcMain.removeHandler('athena:mcp-probe');
+    ipcMain.handle('athena:mcp-probe', mainMod.settingsHandlers.mcpProbe);
+  }
   await shellWin.webContents.executeJavaScript(`document.querySelector('.plugin-canvas-action.is-sheet-cancel')?.click(); document.getElementById('modeNavSummary').click()`);
   await wait(100);
   report.pluginMode = {
@@ -2738,9 +2760,24 @@ app.whenReady().then(async () => {
     "document.querySelectorAll('#settingsGrid .card.accounts').length"
   );
 
-  const navClickModel = await shellWin.webContents.executeJavaScript(clickNavItemScript('모델'));
-  await wait(500);
-  const modelPanelProbe = await shellWin.webContents.executeJavaScript(`
+  // 모델 화면 검증은 개인 CLI 로그인 상태나 감지 지연에 의존하지 않는다.
+  // 실제 IPC/렌더러를 쓰되 이 화면을 여는 동안만 계정 목록을 고정한다.
+  ipcMain.removeHandler('athena:cli-list');
+  ipcMain.handle('athena:cli-list', async () => ({ providers: [
+    { id: 'claude', accounts: [{ id: 'claude:verify', label: 'verify@example.com', active: true, current: true }] },
+    { id: 'grok', accounts: [] },
+    { id: 'codex', accounts: [] },
+  ] }));
+  let navClickModel;
+  let modelPanelProbe;
+  try {
+    navClickModel = await shellWin.webContents.executeJavaScript(clickNavItemScript('모델'));
+    await waitUntil(() => shellWin.webContents.executeJavaScript(`(() => {
+      const card = document.querySelector('#settingsGrid .card.model');
+      return !!card && card.querySelectorAll('.uk-model-account-row').length === 1
+        && card.querySelectorAll('.uk-chip-row .uk-chip').length > 0;
+    })()`), { timeoutMs: 5000 });
+    modelPanelProbe = await shellWin.webContents.executeJavaScript(`
     (() => {
       const card = document.querySelector('#settingsGrid .card.model');
       return {
@@ -2750,6 +2787,10 @@ app.whenReady().then(async () => {
       };
     })()
   `);
+  } finally {
+    ipcMain.removeHandler('athena:cli-list');
+    ipcMain.handle('athena:cli-list', mainMod.settingsHandlers.cliList);
+  }
 
   const chatProbe = await shellWin.webContents.executeJavaScript(`
     (() => ({
@@ -2807,9 +2848,8 @@ app.whenReady().then(async () => {
     // nav에서 각 항목을 고르면 그 카드 하나만 뜬다
     accountsPanelOnNavSelect: accountsPanelCardCount === 1,
     modelPanelOnNavSelect: modelPanelProbe.modelCardCount === 1,
-    // 모델 패널 — Claude 계정 행(활성 계정이 최소 1개, cli-accounts.js가 이 머신의
-    // ~/.claude/.credentials.json을 실측 감지) + 모델 칩이 실제로 그려진다
-    modelPanelHasClaudeAccountRow: modelPanelProbe.claudeAccountRows >= 1,
+    // 결정론적 Claude 계정 한 행과 모델 칩이 실제 렌더러에 그려진다.
+    modelPanelHasClaudeAccountRow: modelPanelProbe.claudeAccountRows === 1,
     modelPanelHasModelChips: modelPanelProbe.modelChipCount > 0,
     // 설정은 캔버스의 일이 아니다
     noSettingsCardsOnCanvas: canvasProbe.settingsCardsOnCanvas === 0,
@@ -4064,14 +4104,19 @@ app.whenReady().then(async () => {
       arcAfterOpen: Number(document.getElementById('orbRing').style.getPropertyValue('--orb-arc')),
       countAfterOpen: txt('orbCount'),
       // **없어야 하는 것** — DOM 실측. 정적 게이트(check-orb.mjs)와 이중으로 건다.
-      // 2026-08-26 board-33/34 규범 개정 — "입력창 0개"가 "#orbInput 하나까지,
-      // 셸이 보이는 동안은 잠겨 있다"로 좁아졌다(check-orb.mjs 상단 주석과 짝).
-      // id 화이트리스트 + 지금 이 검증 시점(셸이 보이는 상태, closeToBackground
-      // 이후 restoreFromBackground로 이미 복귀됨)에 실제로 안 살아있는지를 같이 잰다.
+      // 셸이 보이는 B 모드도 알림에 빠르게 답할 수 있다. 입력창은 하나이며
+      // 패널 안에 보여야 한다(probe-orb-conversation.js와 같은 현재 계약).
       inputIds: [...document.querySelectorAll('input, textarea, [contenteditable]')].map((n) => n.id).sort(),
-      chatInputStackHidden: (() => {
-        const el = document.getElementById('orbInputStack');
-        return el ? el.hidden : true;
+      quickReply: (() => {
+        const input = document.getElementById('orbInput');
+        const panel = document.getElementById('orbPanel');
+        const rect = input.getBoundingClientRect();
+        const bounds = panel.getBoundingClientRect();
+        return {
+          mode: document.getElementById('orbRoot').dataset.orbMode,
+          visible: input.getClientRects().length > 0 && getComputedStyle(input).display !== 'none',
+          fits: rect.top >= bounds.top && rect.bottom <= bounds.bottom,
+        };
       })(),
       buttonIds: [...document.querySelectorAll('button')].map((b) => b.id).sort(),
     };
@@ -4183,12 +4228,10 @@ app.whenReady().then(async () => {
       orbPanelProbe.cardScrollHeight <= orbPanelProbe.cardClientHeight + 2,
     markedReadOnOpen: orbPanelProbe.arcAfterOpen === 0 && orbPanelProbe.countAfterOpen === '',
     // (c) 없어야 하는 것 / 있어도 되는 것의 상한
-    // board-33/34 — 입력창은 #orbInput 하나까지만 허용하고(그 밖의 id·이름 없는
-    // input·textarea·contenteditable은 여전히 0개), 이 검증 시점(셸이 보이는
-    // 상태 — 검증9d에서 restoreFromBackground로 이미 복귀됨)에는 대화 모드가
-    // 꺼져 있어야 하므로 그 하나도 실제로 안 살아있어야 한다.
+    // 셸 표시 중에는 B 모드 빠른 답장 입력 하나가 패널 안에 있어야 한다.
     onlyAllowedInput: JSON.stringify(orbPanelProbe.inputIds) === JSON.stringify(['orbInput']),
-    chatInputGatedByShellVisibility: orbPanelProbe.chatInputStackHidden === true,
+    quickReplyFitsVisibleShell: orbPanelProbe.quickReply.mode === 'alert'
+      && orbPanelProbe.quickReply.visible && orbPanelProbe.quickReply.fits,
     // CP2 미니 티켓(3a85be5) 버튼 2종 포함 — 오브 병합 후 full verify 미실행으로
     // 기대 목록이 낡아 있었다(2026-08-27 병합 점검 M5). 티켓은 사용자 승인 범위.
     onlyAllowedButtons: JSON.stringify(orbPanelProbe.buttonIds) === JSON.stringify(['orbChatGo', 'orbClose', 'orbEsc', 'orbMore', 'orbTicketCancel', 'orbTicketExec', 'orbToggle']),
@@ -4203,7 +4246,7 @@ app.whenReady().then(async () => {
     'expandGrewWindow', 'orbCornerStayed', 'roundTripRestoresPosition',
     'hasFiredBadge', 'hasModeLabel', 'hasRelativeTime', 'hasSourceLabel',
     'statesValueIsAtFireTime', 'representativeCardRendered', 'representativeCardFullyVisible', 'markedReadOnOpen',
-    'onlyAllowedInput', 'chatInputGatedByShellVisibility', 'onlyAllowedButtons',
+    'onlyAllowedInput', 'quickReplyFitsVisibleShell', 'onlyAllowedButtons',
   ]) {
     assertOk(`orbWindow.${key}`, report.orbWindow[key] === true);
   }

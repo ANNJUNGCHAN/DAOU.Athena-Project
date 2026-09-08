@@ -326,7 +326,7 @@ function createPluginCanvas(options) {
     const features = featureRowsFor(plugin, false);
     const base = {};
     features.forEach((feature) => { base[feature.name] = feature.allowed; });
-    const sheet = { kind: 'permissions', plugin, features, base, divergence: [] };
+    const sheet = { kind: 'permissions', plugin, features, base, divergence: [], dirty: false };
     restoreDraft(sheet);
     activeSheet = sheet;
     render();
@@ -337,6 +337,7 @@ function createPluginCanvas(options) {
   function restoreDraft(sheet) {
     const pluginId = sheet.plugin.id || sheet.plugin.name;
     if (!permissionDraft || permissionDraft.pluginId !== pluginId) return;
+    sheet.dirty = true;
     const divergence = [];
     sheet.features.forEach((feature) => {
       const was = permissionDraft.base[feature.name];
@@ -350,6 +351,9 @@ function createPluginCanvas(options) {
   // 모드를 나가거나 목록이 갈리기 직전에 지금 화면의 토글을 초안으로 굳힌다.
   function keepDraft() {
     if (!activeSheet || activeSheet.kind !== 'permissions') return;
+    // 화면을 열기만 한 상태는 사람의 초안이 아니다. probe가 늦게 도착했을 때
+    // 현재 캐시를 초안으로 굳히면 새 허용 상태를 옛 값으로 다시 덮는다.
+    if (!activeSheet.dirty) return;
     const draft = {};
     activeSheet.features.forEach((feature) => { draft[feature.name] = feature.allowed; });
     permissionDraft = {
@@ -716,6 +720,7 @@ function createPluginCanvas(options) {
       toggle.appendChild(el('span', 'plugin-canvas-toggle-knob'));
       toggle.addEventListener('click', () => {
         feature.allowed = !feature.allowed;
+        activeSheet.dirty = true;
         toggle.className = `plugin-canvas-toggle ${feature.allowed ? 'is-on' : 'is-off'}`;
         toggle.setAttribute('aria-checked', String(feature.allowed));
         toggle.setAttribute('aria-label', `${feature.name} ${feature.allowed ? '허용 끄기' : '허용 켜기'}`);

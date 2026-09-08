@@ -64,29 +64,84 @@ class RoutinesRuntime:
     ready: bool = False
     last_error: str | None = None
     _symbol_refcounts: dict[str, int] = field(default_factory=dict)
+    _ws_lock: asyncio.Lock = field(default_factory=asyncio.Lock, repr=False)
 
     async def ensure_realtime_subscription(self, symbol: str) -> None:
         """활성 realtime 루틴의 종목을 REAL로 구독한다(REG는 리미터 소모 — 참조카운트 0→1에서만)."""
-        if self.ws_client is None:
+        async with self._ws_lock:
+            await self._ensure_realtime_subscription_unlocked(symbol)
+
+    async def _ensure_realtime_subscription_unlocked(self, symbol: str) -> None:
+        client = self.ws_client
+        if client is None:
             raise RuntimeError("키움 WS 미가용 — 실시간 루틴을 활성화할 수 없다")
         count = self._symbol_refcounts.get(symbol, 0)
         if count == 0:
-            for tr_id in REALTIME_TR_IDS:
-                await self.ws_client.register(tr_id, [symbol])
+            registered: list[str] = []
+            try:
+                for tr_id in REALTIME_TR_IDS:
+                    await client.register(tr_id, [symbol])
+                    registered.append(tr_id)
+            except Exception:
+                for tr_id in registered:
+                    with suppress(Exception):
+                        await client.remove(tr_id, [symbol])
+                raise
         self._symbol_refcounts[symbol] = count + 1
 
     async def release_realtime_subscription(self, symbol: str) -> None:
         """realtime 루틴 종료(cancel/pause/expire)의 구독 해제 — 참조카운트 1→0에서만 REMOVE."""
+        async with self._ws_lock:
+            await self._release_realtime_subscription_unlocked(symbol)
+
+    async def _release_realtime_subscription_unlocked(self, symbol: str) -> None:
         count = self._symbol_refcounts.get(symbol, 0)
         if count <= 0:
             return
         count -= 1
         if count == 0:
             del self._symbol_refcounts[symbol]
-            for tr_id in REALTIME_TR_IDS:
-                await self.ws_client.remove(tr_id, [symbol])
+            client = self.ws_client
+            if client is not None:
+                for tr_id in REALTIME_TR_IDS:
+                    await client.remove(tr_id, [symbol])
         else:
             self._symbol_refcounts[symbol] = count
+
+    async def rebind_ws_client(self, ws_client: KiwoomWsClient | None) -> None:
+        """Move active REAL leases and the scheduler event queue to a new default account."""
+        async with self._ws_lock:
+            if ws_client is self.ws_client:
+                return
+            previous = self.ws_client
+            await self.scheduler.stop()
+            if previous is not None:
+                for symbol in tuple(self._symbol_refcounts):
+                    for tr_id in REALTIME_TR_IDS:
+                        with suppress(Exception):
+                            await previous.remove(tr_id, [symbol])
+            self.ws_client = ws_client
+            self.scheduler.subscribe_ticks = (
+                ws_client.subscribe_events if ws_client is not None else None
+            )
+            self.scheduler.unsubscribe_ticks = (
+                ws_client.unsubscribe_events if ws_client is not None else None
+            )
+            if ws_client is not None:
+                try:
+                    for symbol in tuple(self._symbol_refcounts):
+                        for tr_id in REALTIME_TR_IDS:
+                            await ws_client.register(tr_id, [symbol])
+                except Exception as exc:
+                    self.last_error = f"실시간 계좌 전환 실패: {type(exc).__name__}"
+                    for symbol in tuple(self._symbol_refcounts):
+                        for tr_id in REALTIME_TR_IDS:
+                            with suppress(Exception):
+                                await ws_client.remove(tr_id, [symbol])
+                    self.ws_client = None
+                    self.scheduler.subscribe_ticks = None
+                    self.scheduler.unsubscribe_ticks = None
+            await self.scheduler.start()
 
     def can_activate(self, spec: RoutineSpec) -> str | None:
         """활성화 가능성 사전 판정 — 불가 사유 문자열, 가능하면 None.

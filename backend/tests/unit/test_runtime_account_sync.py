@@ -13,7 +13,11 @@ from fastapi.testclient import TestClient
 from athena_api.account_sync import RuntimeAccountCredentials
 from athena_api.config import Settings
 from athena_api.kiwoom import KiwoomWsError
-from athena_api.lifespan import build_lifespan
+from athena_api.lifespan import (
+    _CurrentDefaultClient,
+    _ReadyAccountClients,
+    build_lifespan,
+)
 from athena_api.main import create_app
 
 pytestmark = pytest.mark.xdist_group(name="kiwoom-runtime-account-sync")
@@ -48,6 +52,48 @@ def _token_response() -> httpx.Response:
             "expires_dt": expires.strftime("%Y%m%d%H%M%S"),
         },
     )
+
+
+@pytest.mark.asyncio
+async def test_background_default_client_resolves_each_call() -> None:
+    app = FastAPI()
+
+    class Client:
+        def __init__(self, marker: str) -> None:
+            self.marker = marker
+
+        async def probe(self) -> str:
+            return self.marker
+
+    first = Client("first")
+    second = Client("second")
+    proxy = _CurrentDefaultClient(app)
+    app.state.kiwoom_client = first
+    assert await proxy.probe() == "first"
+    app.state.kiwoom_client = second
+    assert await proxy.probe() == "second"
+    app.state.kiwoom_client = None
+
+    def resolve_probe():
+        return proxy.probe
+
+    with pytest.raises(RuntimeError, match="기본 키움 계좌"):
+        resolve_probe()
+
+
+def test_ready_account_client_view_tracks_pool_mutations() -> None:
+    first_client = object()
+    second_client = object()
+    runtime = type("Runtime", (), {"ready": True, "data_client": first_client})()
+    runtimes = {"first": runtime}
+    clients = _ReadyAccountClients(runtimes)
+    assert dict(clients) == {"first": first_client}
+
+    runtime.ready = False
+    runtimes["second"] = type(
+        "Runtime", (), {"ready": True, "data_client": second_client}
+    )()
+    assert dict(clients) == {"second": second_client}
 
 
 @pytest.fixture(autouse=True)
