@@ -26,12 +26,14 @@ const { app } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
+const { writeProbeModelPrefs } = require('./lib/probe-model-prefs');
 
 const PROFILE = fs.mkdtempSync(path.join(os.tmpdir(), 'athena-probe-bt-showcase-'));
 fs.writeFileSync(
   path.join(PROFILE, 'athena-onboarding.json'),
   JSON.stringify({ cliDone: true, accountDone: true }),
 );
+writeProbeModelPrefs(PROFILE);
 app.setPath('userData', PROFILE);
 
 const BACKEND = process.env.ATHENA_BACKEND_URL || 'http://127.0.0.1:8010';

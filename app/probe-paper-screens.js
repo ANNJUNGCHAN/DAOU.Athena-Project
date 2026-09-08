@@ -56,6 +56,7 @@ const { ROUTES } = require('./lib/paper-screen-routes.js');
 const { MODES } = require('./lib/live-full-catalog.js');
 const { measureScript } = require('./lib/paper-screen-measure.js');
 const { waitForDomCount } = require('./lib/paper-screen-wait.js');
+const { writeProbeModelPrefs } = require('./lib/probe-model-prefs');
 const {
   blessRatchet,
   contractRecord,
@@ -82,6 +83,7 @@ fs.writeFileSync(
   path.join(PROFILE, 'athena-onboarding.json'),
   JSON.stringify({ cliDone: true, accountDone: true }),
 );
+writeProbeModelPrefs(PROFILE);
 app.setPath('userData', PROFILE);
 
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));

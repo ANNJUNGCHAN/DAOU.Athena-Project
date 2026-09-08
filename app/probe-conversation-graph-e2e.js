@@ -10,6 +10,7 @@ const path = require('path');
 const net = require('net');
 const crypto = require('crypto');
 const { spawn, execFileSync } = require('child_process');
+const { writeProbeModelPrefs } = require('./lib/probe-model-prefs');
 
 const APP_DIR = __dirname;
 const REPO_DIR = path.resolve(APP_DIR, '..');
@@ -606,6 +607,7 @@ async function main() {
     JSON.stringify({ cliDone: true, accountDone: true }, null, 2),
     'utf8',
   );
+writeProbeModelPrefs(userDataDir);
 
   // Every process-wide ATHENA setting is fixed before main.js or any of its
   // cached dependencies is loaded. Backend and Electron therefore share one

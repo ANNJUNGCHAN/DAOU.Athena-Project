@@ -40,6 +40,7 @@ const {
   inspectBoardChrome,
   loadRealBoardContract,
   sendBoardEnvelope,
+  BOARD_PROBE_ARGS,
   settleBoardLayout,
 } = require('./lib/board-probe');
 const { resolveBoardSelection } = require('./lib/integrated-card-capture-hygiene');
@@ -51,6 +52,9 @@ const {
   uniqueStateControls,
 } = require('./lib/paper-cards-mount-report');
 const { mergeMountLayer } = require('./lib/paper-cards-report');
+const boardRegistry = require('./lib/board-template-registry');
+const boardMount = require('./lib/board-mount');
+const { writeProbeModelPrefs } = require('./lib/probe-model-prefs');
 
 const APP = __dirname;
 const ROOT = path.resolve(APP, '..');
@@ -66,6 +70,7 @@ fs.writeFileSync(
   path.join(PROFILE, 'athena-onboarding.json'),
   JSON.stringify({ cliDone: true, accountDone: true }),
 );
+writeProbeModelPrefs(PROFILE);
 app.setPath('userData', PROFILE);
 app.disableHardwareAcceleration();
 
@@ -141,11 +146,56 @@ async function bootShell() {
 // slots.json의 텍스트 다중집합. 없으면 던진다 — `{}`로 넘어가면 DOM 텍스트가 전부
 // added로 잡혀 `text_multiset_dom_mismatch`로 빨개지고, 진짜 원인(「템플릿에 다중집합이
 // 없다」)이 리포트에서 안 읽힌다.
-function readTextMultiset(boardId) {
+function readTextMultiset(boardId, surfaceContract) {
   const slotsPath = path.join(TEMPLATE_ROOT, boardId, 'slots.json');
   const { text_multiset: multiset } = JSON.parse(fs.readFileSync(slotsPath, 'utf8'));
   if (!multiset) throw new Error(`slots.json에 text_multiset이 없다: ${boardId}`);
-  return multiset;
+  // 마운트 계약이 `static: "blank"`로 표시한 자리는 화면에서 빈 칸이다(생성기
+  // `_static_mode`: 응답에 없는 수치라 Paper 목업 숫자를 그대로 둘 수 없다). 화면에
+  // 없는 글자는 기대 다중집합에서도 빠져야 한다 — 판정은 계약 하나에서만 읽는다.
+  const contract = boardRegistry.contractFor(boardId);
+  const expected = { ...multiset };
+  const drop = (text) => {
+    const key = typeof text === 'string' ? text.trim() : '';
+    if (!key || !(key in expected)) return;
+    expected[key] -= 1;
+    if (expected[key] <= 0) delete expected[key];
+  };
+  const add = (text) => {
+    const key = typeof text === 'string' ? text.trim() : '';
+    if (!key) return;
+    expected[key] = (expected[key] || 0) + 1;
+  };
+  const slots = (contract && contract.slots) || [];
+  for (const slot of slots) {
+    if (slot.static === 'blank') drop(slot.paper_text);
+  }
+  // 종목 카드(CC-03)의 첫 두 자리는 **카드 자신의 종목 이름·코드**로 덮인다 — 탭을
+  // 옮겨도 원래 종목을 지키는 계약이다(`mountPlan`의 identity). 그러면 화면 글자가
+  // Paper 문면이 아니므로(예: 「005930 · KOSPI · KRX」 → 「005930」) 기대 쪽도 같이
+  // 바꿔 센다. 안 바꾸면 게이트가 자기 픽스처의 종목코드를 결함으로 신고한다.
+  // 판정 조건을 마운트와 **똑같이** 둔다: 종목 카드(CC-03)만, s001이 값 자리일 때만,
+  // 그리고 덮이는 자리가 값 자리일 때만이다(라벨은 값을 무시한다 — 실측 2QX1-1의
+  // s002는 라벨 「실시간」이라 종목코드로 덮이지 않는다).
+  const identity = boardRegistry.cardIdFor(boardId) === 'CC-03'
+    ? boardMount.boardIdentityFromEnvelope({
+      surface_contract: surfaceContract,
+      operation_args: { ...BOARD_PROBE_ARGS },
+    })
+    : { name: '', code: '' };
+  const byId = new Map(slots.map((slot) => [slot.slot_id, slot]));
+  const overwrites = (slotId) => (byId.get(slotId) || {}).kind === 'value';
+  if (overwrites('s001') && (identity.name || identity.code)) {
+    if (identity.name) {
+      drop(byId.get('s001').paper_text);
+      add(identity.name);
+    }
+    if (identity.code && overwrites('s002')) {
+      drop(byId.get('s002').paper_text);
+      add(identity.code);
+    }
+  }
+  return expected;
 }
 
 // `boardStepProbe`가 안 재는 둘을 한 번에 더 잰다.
@@ -184,9 +234,10 @@ async function probeChunk(win, chunk) {
   const surfaces = [];
   for (const [index, boardId] of chunk.board_ids.entries()) {
     try {
+      const surface = loadRealBoardContract(boardId, (index % 6) + 1, TEMPLATE_ROOT);
       surfaces.push({
-        ...loadRealBoardContract(boardId, (index % 6) + 1, TEMPLATE_ROOT),
-        expectedTextMultiset: readTextMultiset(boardId),
+        ...surface,
+        expectedTextMultiset: readTextMultiset(boardId, surface.contract),
       });
     } catch (error) {
       // 계약을 못 읽는 보드도 그 보드만 빨갛게 남긴다 — 여기서 던지면 청크가 아니라

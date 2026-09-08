@@ -166,6 +166,10 @@ const EXCLUDED_VERIFY_SCRIPTS = Object.freeze([
   'verify:provider-sessions:node-injected',
   'verify:provider-sessions:electron-runtime',
   'verify:provider-sessions:os-leak',
+  // 실제 백엔드(8010)와 실제 모의 API가 살아 있어야 도는 전수 검사다 — 결정론
+  // 스위트에 넣으면 네트워크·장 상태가 판정을 흔든다. 손으로 돌린다(인계
+  // docs/handoff/2026-09-09-card-api-sweep.md).
+  'verify:card-api-sweep',
 ]);
 
 // Paper 전수 스위트. electron 항목이 분 단위라 기본 스위트(약 22분)에 넣으면 40분이 된다 —

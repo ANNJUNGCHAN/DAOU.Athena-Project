@@ -21,6 +21,7 @@ const path = require('path');
 const fs = require('fs');
 const os = require('os');
 const { execFileSync } = require('child_process');
+const { writeProbeModelPrefs } = require('./lib/probe-model-prefs');
 
 const OUT_DIR = path.join(__dirname, 'captures');
 fs.mkdirSync(OUT_DIR, { recursive: true });
@@ -32,6 +33,7 @@ fs.writeFileSync(
   path.join(PROFILE, 'athena-onboarding.json'),
   JSON.stringify({ cliDone: true, accountDone: true }),
 );
+writeProbeModelPrefs(PROFILE);
 app.setPath('userData', PROFILE);
 
 process.env.ATHENA_CANVAS_SOURCE = 'fixture'; // WS 사이드채널(범위 밖) 끈다

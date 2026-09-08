@@ -6479,7 +6479,10 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "unbound_reason": "신호 건수 — ka01301.bgb는 행별 북마크 구분이며 화면의 집계 건수를 나타내는 정확한 잎이 아니다"
+      "unbound_reason": "신호 건수 — ka01301.bgb는 행별 북마크 구분이며 화면의 집계 건수를 나타내는 정확한 잎이 아니다",
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "감시 신호 건수 — 이 보드의 op 응답에 없다"
     },
     {
       "slot_id": "s195",

@@ -23,6 +23,7 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const fs = require('node:fs');
 const path = require('node:path');
 const { publicPolicies } = require('./lib/main/integrated-card-realtime');
+const { writeProbeModelPrefs } = require('./lib/probe-model-prefs');
 const {
   activateBoardTab,
   loadRealBoardContract,
@@ -48,6 +49,7 @@ fs.writeFileSync(
   path.join(PROFILE, 'athena-onboarding.json'),
   JSON.stringify({ cliDone: true, accountDone: true }),
 );
+writeProbeModelPrefs(PROFILE);
 app.setPath('userData', PROFILE);
 app.disableHardwareAcceleration();
 

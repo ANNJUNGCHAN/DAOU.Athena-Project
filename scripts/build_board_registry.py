@@ -122,6 +122,40 @@ _MOUNT_FIELDS = (
 )
 
 
+# 저작이 `static: true`로 못박은 값 자리 — 응답이 채우는 자리가 아니다. 런타임은 둘을
+# 갈라야 한다(안 가르면 결측어를 찍는다, 실측 2,320자리):
+#
+#   "text"  — 화면 문구 자체다(`D+1 예상` · 단계 번호 · 표 머리글 · 기간 표기).
+#             Paper 원문을 그대로 둔다.
+#   "blank" — **응답에 없는 수치**다. 저작이 사유에 그렇게 적었다(「…필드가 없다」·
+#             「계산값」·「파생」·「집계한 값」). Paper 원문은 목업 숫자라 그대로 두면
+#             없는 값을 지어내는 것이 되고, 결측어를 찍으면 「이번 응답에 안 왔다」는
+#             거짓말이 된다(그 화면에는 원래 그 값이 없다). 빈 칸으로 둔다.
+_BLANK_REASON_MARKS = ("없다", "없음", "계산값", "파생", "집계한 값", "산출")
+_STATIC_MODES = ("text", "blank")
+
+
+def _static_mode(slot: dict) -> str | None:
+    """이 static 자리를 화면에서 어떻게 다룰지. 저작이 적었으면 그것이 정본이다.
+
+    ``static_mode``를 명시하면 그대로 쓴다 — 사유 문장에서 낱말을 주워 판정하는 것은
+    저작이 문장을 고쳐 쓰는 순간 조용히 뒤집힌다. 옛 저작(사유만 있는 자리)을 위해
+    낱말 판정은 폴백으로 남긴다.
+    """
+
+    if not slot.get("static"):
+        return None
+    declared = slot.get("static_mode")
+    if declared in _STATIC_MODES:
+        return declared
+    if declared is not None:
+        raise SystemExit(f"알 수 없는 static_mode: {declared!r} ({slot.get('slot_id')})")
+    reason = str(slot.get("static_reason") or "")
+    if any(mark in reason for mark in _BLANK_REASON_MARKS):
+        return "blank"
+    return "text"
+
+
 def _mount_contract(slots_path: Path) -> list[dict]:
     if not slots_path.exists():
         return []
@@ -135,6 +169,9 @@ def _mount_contract(slots_path: Path) -> list[dict]:
                 entry[field] = value
         if slot.get("format"):
             entry["format"] = slot["format"]
+        static_mode = _static_mode(slot)
+        if static_mode:
+            entry["static"] = static_mode
         projected.append(entry)
     return projected
 

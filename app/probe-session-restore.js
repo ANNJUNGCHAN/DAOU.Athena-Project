@@ -14,6 +14,7 @@ const { app, ipcMain } = require('electron');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
+const { writeProbeModelPrefs } = require('./lib/probe-model-prefs');
 
 const APP_DIR = __dirname;
 const checks = [];
@@ -32,6 +33,7 @@ async function main() {
     JSON.stringify({ cliDone: true, accountDone: true }, null, 2),
     'utf8',
   );
+writeProbeModelPrefs(userDataDir);
   // 이력을 씨앗한다 — 대화 행은 첫 사용자 입력에만 생기므로 프로브는 파일로 넣는다.
   const conversationsPath = path.join(userDataDir, 'athena-conversations.json');
   fs.writeFileSync(conversationsPath, JSON.stringify({

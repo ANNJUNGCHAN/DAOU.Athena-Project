@@ -562,7 +562,10 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "static": true,
+      "static_mode": "text",
+      "static_reason": "장 세션 칩 — 화면 문구"
     },
     {
       "slot_id": "s004",
@@ -585,7 +588,10 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "static": true,
+      "static_mode": "text",
+      "static_reason": "갱신 방식 칩 — 화면 문구"
     },
     {
       "slot_id": "s005",
@@ -953,7 +959,10 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "시가·고가·저가 시각 셋을 한 문장에 합친 목업 — 대응 필드가 없다"
     },
     {
       "slot_id": "s018",
@@ -1145,7 +1154,10 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "unbound_reason": "업종 평균 PER — 응답에 업종 비교값 필드가 없다(같은 칸의 PER만 필드다)"
+      "unbound_reason": "업종 평균 PER — 응답에 업종 비교값 필드가 없다(같은 칸의 PER만 필드다)",
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "업종 평균 PER 비교값 — 이 보드의 op 응답에 없다"
     },
     {
       "slot_id": "s024",
@@ -1217,7 +1229,10 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "unbound_reason": "업종 평균 PBR — 응답에 업종 비교값 필드가 없다"
+      "unbound_reason": "업종 평균 PBR — 응답에 업종 비교값 필드가 없다",
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "업종 평균 PBR 비교값 — 이 보드의 op 응답에 없다"
     },
     {
       "slot_id": "s027",
@@ -1288,7 +1303,10 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "unbound_reason": "전년 ROE — 응답에 전년 비교값 필드가 없다"
+      "unbound_reason": "전년 ROE — 응답에 전년 비교값 필드가 없다",
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "전년 배당수익률 비교값 — 이 보드의 op 응답에 없다"
     },
     {
       "slot_id": "s030",
@@ -1552,7 +1570,10 @@
       "collapse_group": null,
       "expanded_board": null,
       "unbound_reason": "최우선 매도·매수 호가의 차 — 계산 표기라 대응 응답 필드가 없다",
-      "formula": "(최우선)매도호가 − (최우선)매수호가"
+      "formula": "(최우선)매도호가 − (최우선)매수호가",
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "호가단위 — 가격대에서 계산하는 파생값이고 응답 필드가 없다"
     },
     {
       "slot_id": "s040",
@@ -2057,7 +2078,10 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "체결 구분 열 — 실시간 체결(0B) 응답에 체결구분 필드가 없다"
     },
     {
       "slot_id": "s058",
@@ -2302,7 +2326,10 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "체결 구분 열 — 실시간 체결(0B) 응답에 체결구분 필드가 없다"
     },
     {
       "slot_id": "s066",
@@ -2547,7 +2574,10 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "체결 구분 열 — 실시간 체결(0B) 응답에 체결구분 필드가 없다"
     },
     {
       "slot_id": "s074",
@@ -2792,7 +2822,10 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "체결 구분 열 — 실시간 체결(0B) 응답에 체결구분 필드가 없다"
     },
     {
       "slot_id": "s082",
@@ -3037,7 +3070,10 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "체결 구분 열 — 실시간 체결(0B) 응답에 체결구분 필드가 없다"
     },
     {
       "slot_id": "s090",
@@ -3282,7 +3318,10 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "체결 구분 열 — 실시간 체결(0B) 응답에 체결구분 필드가 없다"
     },
     {
       "slot_id": "s098",
@@ -3527,7 +3566,10 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "체결 구분 열 — 실시간 체결(0B) 응답에 체결구분 필드가 없다"
     },
     {
       "slot_id": "s106",
@@ -3772,7 +3814,10 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "체결 구분 열 — 실시간 체결(0B) 응답에 체결구분 필드가 없다"
     },
     {
       "slot_id": "s114",
@@ -4017,7 +4062,10 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "체결 구분 열 — 실시간 체결(0B) 응답에 체결구분 필드가 없다"
     },
     {
       "slot_id": "s122",
@@ -4768,7 +4816,10 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "unbound_reason": "거래 상태 — 현재 조회 응답에 검증된 상태 필드가 없다"
+      "unbound_reason": "거래 상태 — 현재 조회 응답에 검증된 상태 필드가 없다",
+      "static": true,
+      "static_mode": "text",
+      "static_reason": "거래 상태 칩 — 화면 문구"
     },
     {
       "slot_id": "s147",
@@ -4979,7 +5030,10 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "static": true,
+      "static_mode": "text",
+      "static_reason": "장 세션 칩 — 화면 문구"
     },
     {
       "slot_id": "s155",
@@ -5244,7 +5298,10 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "unbound_reason": "상·하한 발생 여부 — 현재 조회 응답에 검증된 발생 상태 필드가 없다"
+      "unbound_reason": "상·하한 발생 여부 — 현재 조회 응답에 검증된 발생 상태 필드가 없다",
+      "static": true,
+      "static_mode": "text",
+      "static_reason": "VI 발동 여부 칩 — 화면 문구"
     },
     {
       "slot_id": "s166",
@@ -6136,7 +6193,10 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "unbound_reason": "주간 등락률 — 일별 응답 한 행의 등락률을 주간 수익률로 사용할 수 없다"
+      "unbound_reason": "주간 등락률 — 일별 응답 한 행의 등락률을 주간 수익률로 사용할 수 없다",
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "기간 등락률 비교값 — 이 보드의 op 응답에 없다"
     },
     {
       "slot_id": "s201",
@@ -6202,7 +6262,10 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "unbound_reason": "월간 등락률 — 일별 응답 한 행의 등락률을 월간 수익률로 사용할 수 없다"
+      "unbound_reason": "월간 등락률 — 일별 응답 한 행의 등락률을 월간 수익률로 사용할 수 없다",
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "기간 등락률 비교값 — 이 보드의 op 응답에 없다"
     },
     {
       "slot_id": "s204",
@@ -7639,7 +7702,10 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "static": true,
+      "static_mode": "text",
+      "static_reason": "현재가·체결 갱신 안내줄 — 화면 문구"
     },
     {
       "slot_id": "s259",
@@ -7662,7 +7728,10 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "체결 건수·전일 대비·마지막 체결 시각을 합친 목업 문장 — 대응 필드가 없다"
     }
   ],
   "unbound_fields": [

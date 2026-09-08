@@ -19,6 +19,7 @@ const net = require('node:net');
 const path = require('node:path');
 const crypto = require('node:crypto');
 const { spawn, spawnSync } = require('node:child_process');
+const { writeProbeModelPrefs } = require('./lib/probe-model-prefs');
 
 const APP_DIR = __dirname;
 const REPO_DIR = path.resolve(APP_DIR, '..');
@@ -61,6 +62,7 @@ async function main() {
   fs.mkdirSync(userDataDir, { recursive: true });
   fs.writeFileSync(path.join(userDataDir, 'athena-onboarding.json'),
     JSON.stringify({ cliDone: true, accountDone: true }), 'utf8');
+writeProbeModelPrefs(userDataDir);
 
   const seeded = spawnSync(PYTHON_EXE, [SEED_SCRIPT, '--db', brainDbPath], {
     cwd: BACKEND_DIR, encoding: 'utf8', windowsHide: true,

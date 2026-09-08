@@ -12,7 +12,7 @@ test('CC-03 tab headers retain the original stock when ETF hydration is missing 
   assert.deepEqual(identity, { name: 'LG전자', code: '066570' });
   for (const boardId of ['137X-2', '2RBO-1', '3DI2-0', '3FR6-0', '15N5-2', '137X-2']) {
     for (const values of [{}, { s001: { missing: 'not_provided' }, s002: '069500' }, { s001: 'KODEX 200 ETF', s002: '069500' }]) {
-      const plan = mountPlan(registry.contractFor(boardId), values, identity);
+      const plan = mountPlan(registry.contractFor(boardId), values, { identity });
       assert.equal(plan.assignments.find((slot) => slot.slotId === 's001').text, 'LG전자', boardId);
       assert.equal(plan.assignments.find((slot) => slot.slotId === 's002').text, '066570', boardId);
     }
@@ -29,6 +29,7 @@ test('identity uses initial surface values or explicit response name without tem
 test('ranking and sector titles remain unchanged when reached from a stock card', () => {
   for (const boardId of ['2VDA-0', '32S7-0']) {
     const contract = registry.contractFor(boardId);
-    assert.deepEqual(mountPlan(contract, {}, { name: 'LG전자', code: '066570' }), mountPlan(contract, {}));
+    const identity = { name: 'LG전자', code: '066570' };
+    assert.deepEqual(mountPlan(contract, {}, { identity }), mountPlan(contract, {}));
   }
 });
