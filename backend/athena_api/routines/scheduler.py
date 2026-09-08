@@ -41,7 +41,7 @@ CODE_RUN_FAILED_REASON = "감시 함수 실행 실패"
 
 
 def _hhmm_minutes(hhmm: str, fallback: int) -> int:
-    """"HH:MM" → 자정부터의 분. 형식이 깨졌으면 기본 창으로 돌아간다."""
+    """ "HH:MM" → 자정부터의 분. 형식이 깨졌으면 기본 창으로 돌아간다."""
     try:
         hh, mm = hhmm.split(":")
         return int(hh) * 60 + int(mm)
@@ -209,9 +209,7 @@ class RoutineScheduler:
 
     # ---------- 공통 ----------
 
-    async def _fire(
-        self, spec: RoutineSpec, observed: Any, *, fired_at: str | None = None
-    ) -> None:
+    async def _fire(self, spec: RoutineSpec, observed: Any, *, fired_at: str | None = None) -> None:
         """발화 알림 조립 — 조건-감시(_handle_verdict)와 벽시계(_schedule_loop)가 공유.
 
         fired_at(선택)은 ledger에 실제로 기록된 ts다 — 예약 발화는 이 값이 브리핑
@@ -233,12 +231,11 @@ class RoutineScheduler:
                 # 브리핑 실행 설정(R1) — main이 별도 왕복 없이 즉시 받도록 동봉.
                 "briefing_model": spec.briefing_model,
                 "briefing_effort": spec.briefing_effort,
+                "main_card": spec.main_card.to_dict() if spec.main_card else None,
             }
         )
 
-    async def _notify_near(
-        self, spec: RoutineSpec, *, active: bool, observed: Any
-    ) -> None:
+    async def _notify_near(self, spec: RoutineSpec, *, active: bool, observed: Any) -> None:
         await self.notify(
             {
                 "type": "routine-near",
@@ -288,9 +285,7 @@ class RoutineScheduler:
             return
         await self._notify_near(spec, active=False, observed=None)
 
-    async def _handle_verdict(
-        self, spec: RoutineSpec, verdict: str | None, observed: Any
-    ) -> None:
+    async def _handle_verdict(self, spec: RoutineSpec, verdict: str | None, observed: Any) -> None:
         was_near = self._near_active.get(spec.id, False)
         if verdict == "near":
             if not was_near:  # 진입 — 연속 근접 틱마다 다시 알리지 않는다
@@ -331,9 +326,7 @@ class RoutineScheduler:
                 observations = adapt_real_message(message)
                 if not observations:
                     continue
-                active = [
-                    s for s in self.store.list_active() if s.mode == "realtime-ws"
-                ]
+                active = [s for s in self.store.list_active() if s.mode == "realtime-ws"]
                 for symbol, source, value in observations:
                     for spec in active:
                         if spec.symbol != symbol or spec.condition.source != source:
@@ -378,8 +371,7 @@ class RoutineScheduler:
                 # rules.py가 draft 시점에 막았어야 한다 — 여기 도달하면 저장된
                 # 값이 손상된 것이다. 조용히 넘기지 않고 사유를 남긴다(프리모템 1).
                 self.last_error = (
-                    f"루틴 {spec.id}의 예약 형식이 올바르지 않다: "
-                    f"{spec.condition.value!r}"
+                    f"루틴 {spec.id}의 예약 형식이 올바르지 않다: {spec.condition.value!r}"
                 )
                 continue
             days, target_hhmm = parsed
@@ -532,14 +524,10 @@ class RoutineScheduler:
         assert watch is not None
         result = await runner.run(source, df, watch.params)
         if not result.ok:
-            self._record_code_skip(
-                spec, CODE_RUN_FAILED_REASON, duration_ms=result.duration_ms
-            )
+            self._record_code_skip(spec, CODE_RUN_FAILED_REASON, duration_ms=result.duration_ms)
             self._remember_run(runtime, spec, result, skip_reason=CODE_RUN_FAILED_REASON)
             return
-        verdict = self.engine.evaluate(
-            spec, result.observed, duration_ms=result.duration_ms
-        )
+        verdict = self.engine.evaluate(spec, result.observed, duration_ms=result.duration_ms)
         await self._handle_verdict(spec, verdict, result.observed)
         if verdict == "fired":
             # 재시작 뒤에도 쿨다운이 살아 있어야 한다(B-20) — 벽시계 시각을 남긴다.

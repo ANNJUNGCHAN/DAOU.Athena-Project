@@ -55,6 +55,77 @@ DRAFT = {
     "expires_days": 7,
 }
 
+CARD_CANDIDATE = {
+    "operation_ref": "base:ka10005",
+    "args": {"stk_cd": "005930"},
+    "title": "시세",
+}
+
+
+def test_main_card_requires_explicit_fresh_confirmation_before_activation(app_client):
+    client, _ = app_client
+    created = client.post(
+        "/api/v1/routines/draft",
+        json=dict(DRAFT, main_card_candidate=CARD_CANDIDATE),
+    )
+    assert created.status_code == 200
+    body = created.json()
+    rid = body["id"]
+    canonical = body["main_card_candidate"]
+    assert body["main_card"] is None
+    assert body["main_card_pending"] is True
+
+    blocked = client.post(f"/api/v1/routines/{rid}/confirm")
+    assert blocked.status_code == 409
+    assert "메인 카드" in blocked.json()["detail"]
+
+    stale = client.post(
+        f"/api/v1/routines/{rid}/main-card/confirm",
+        json={"expected_candidate": {**canonical, "title": "오래된 후보"}},
+    )
+    assert stale.status_code == 409
+
+    confirmed = client.post(
+        f"/api/v1/routines/{rid}/main-card/confirm",
+        json={"expected_candidate": canonical},
+    )
+    assert confirmed.status_code == 200
+    selected = confirmed.json()
+    assert selected["status"] == "draft"
+    assert selected["main_card"] == canonical
+    assert selected["main_card_confirmed_at"]
+    assert selected["main_card_pending"] is False
+
+    updated = client.post(
+        f"/api/v1/routines/{rid}/update", json={"note": "카드 유지 확인"}
+    )
+    assert updated.status_code == 200
+    assert updated.json()["main_card"] == canonical
+    assert updated.json()["main_card_confirmed_at"] == selected["main_card_confirmed_at"]
+
+
+def test_rejected_candidate_can_be_replaced_on_same_draft(app_client):
+    client, _ = app_client
+    created = client.post(
+        "/api/v1/routines/draft",
+        json=dict(DRAFT, main_card_candidate=CARD_CANDIDATE),
+    ).json()
+    replacement = {
+        "operation_ref": "base:ka10006",
+        "args": {"stk_cd": "005930"},
+        "title": "새 후보",
+    }
+    changed = client.post(
+        f"/api/v1/routines/{created['id']}/main-card/candidate",
+        json={"candidate": replacement},
+    )
+    assert changed.status_code == 200
+    body = changed.json()
+    assert body["id"] == created["id"]
+    assert body["main_card"] is None
+    assert body["main_card_candidate"]["operation_ref"] == "base:ka10006"
+    assert body["main_card_pending"] is True
+
 
 def test_disabled_deployment_is_503():
     app = FastAPI()
@@ -222,9 +293,7 @@ def test_schedule_confirm_succeeds_and_external_source_draft_is_rejected(app_cli
 def test_legacy_external_source_lists_but_confirm_and_resume_are_blocked(app_client):
     client, runtime = app_client
     legacy = RoutineSpec(
-        condition=Condition(
-            source="disclosure.title_keyword", op="contains", value="유상증자"
-        ),
+        condition=Condition(source="disclosure.title_keyword", op="contains", value="유상증자"),
         symbol="207940",
         cooldown_s=3600,
         expires_at=datetime.now(UTC) + timedelta(days=7),
@@ -579,9 +648,7 @@ def test_ack_persists_across_restart(tmp_path):
     )
     ack_res = client1.post(f"/api/v1/routines/{rid}/ack")
     assert ack_res.status_code == 200
-    row1 = next(
-        r for r in client1.get("/api/v1/routines").json()["routines"] if r["id"] == rid
-    )
+    row1 = next(r for r in client1.get("/api/v1/routines").json()["routines"] if r["id"] == rid)
     assert row1["unread"] is False
     loop.run_until_complete(teardown_routines(runtime1))
 
@@ -593,9 +660,7 @@ def test_ack_persists_across_restart(tmp_path):
     app2.state.routines_runtime = runtime2
     client2 = TestClient(app2)
 
-    row2 = next(
-        r for r in client2.get("/api/v1/routines").json()["routines"] if r["id"] == rid
-    )
+    row2 = next(r for r in client2.get("/api/v1/routines").json()["routines"] if r["id"] == rid)
     assert row2["unread"] is False  # 재기동 후에도 읽음 유지
     loop.run_until_complete(teardown_routines(runtime2))
     loop.close()
@@ -687,9 +752,7 @@ def test_runs_may_return_fewer_than_30_after_rollover(app_client):
 
 def test_draft_briefing_model_and_effort_roundtrip(app_client):
     client, _ = app_client
-    draft = dict(
-        SCHEDULE_DRAFT, briefing_model="claude-sonnet-5", briefing_effort="low"
-    )
+    draft = dict(SCHEDULE_DRAFT, briefing_model="claude-sonnet-5", briefing_effort="low")
     res = client.post("/api/v1/routines/draft", json=draft)
     assert res.status_code == 200
     body = res.json()
@@ -926,9 +989,7 @@ def _watch_settings(tmp_path):
 
 def _fake_request(runtime):
     """라우트 함수만 직접 부르기 위한 최소 요청 — TestClient 없이 확정·재개를 탄다."""
-    return SimpleNamespace(
-        app=SimpleNamespace(state=SimpleNamespace(routines_runtime=runtime))
-    )
+    return SimpleNamespace(app=SimpleNamespace(state=SimpleNamespace(routines_runtime=runtime)))
 
 
 async def test_code_watch_never_registers_a_realtime_subscription(tmp_path, monkeypatch):

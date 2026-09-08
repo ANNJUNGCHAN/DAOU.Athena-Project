@@ -8,6 +8,7 @@ const vm = require('node:vm');
 const checkLib = require('./watch-check-card');
 const progressLib = require('./watch-progress-card');
 const fixCycleLib = require('./watch-fix-cycle');
+const mainCardLib = require('./routine-main-card');
 
 // 실제 IPC 응답 전달·카드 조립을 실행한다. Electron 대신 DOM/IPC 경계만 주입한다.
 const source = fs.readFileSync(path.join(__dirname, '..', 'chat.js'), 'utf8');
@@ -19,6 +20,7 @@ function element(tag) {
   return {
     tag, className: '', textContent: '', children: [], attrs: {}, listeners: {}, disabled: false,
     appendChild(child) { child.parent = this; this.children.push(child); return child; },
+    append(...children) { children.forEach((child) => this.appendChild(child)); },
     setAttribute(key, value) { this.attrs[key] = String(value); },
     addEventListener(kind, handler) { this.listeners[kind] = handler; },
     remove() {
@@ -43,12 +45,17 @@ function renderHarness(check, lastCheck = null, detailFails = false) {
   const scope = {
     displayedConversationId: 'B',
     document: { createElement: element }, watchCheckCardLib: checkLib, watchFixCycleLib: fixCycleLib,
+    routineMainCardLib: mainCardLib,
+    firstSeenSignatureById: new Map(),
+    registerRoutineDraftView() {}, registerTypedMainCardConfirmation() {},
+    refreshRoutineDraftViews() {},
     routineTurnLib: { describeMode: (mode) => mode },
     window: { AthenaLib: {
       WatchCheckCard: checkLib,
       WatchFixCycle: fixCycleLib,
       WatchProgressCard: progressLib,
-    }, athena: {
+      RoutineMainCard: mainCardLib,
+    }, addEventListener() {}, athena: {
       invoke: async (channel, body) => {
         calls.push({ channel, body });
         if (channel === 'athena:routine-watch-check') return { ok: true, data: check };
@@ -153,6 +160,55 @@ test('A/B 초안이 동시에 와도 승인·검사 진행·결과는 각각 만
   await new Promise((resolve) => setImmediate(resolve));
   assert.equal(h.histories.B.children.length, 2);
   assert.equal(byClass(h.histories.B, 'routine-btn-approve').length, 2);
+});
+
+test('메인 카드 후보 교체는 같은 초안과 원래 대화에 새 확인 카드로 이어진다', async () => {
+  const h = renderHarness(checked());
+  const first = {
+    operation_ref: 'detail:ka10001:current_trading',
+    args: { stk_cd: '005930' },
+    title: '현재가',
+  };
+  const replacement = {
+    operation_ref: 'detail:ka10081:daily_chart',
+    args: { stk_cd: '005930', base_dt: '$today' },
+    title: '일봉',
+  };
+  h.scope.window.athena.invoke = async (channel, body) => {
+    h.calls.push({ channel, body });
+    if (channel === 'athena:routine-main-card-confirm') {
+      return { ok: true, data: {
+        ...draft,
+        status: 'draft',
+        main_card_candidate: body.expected_candidate,
+        main_card: body.expected_candidate,
+        main_card_confirmed_at: '2026-09-08T12:00:00Z',
+      } };
+    }
+    return { ok: true };
+  };
+
+  h.scope.revealRoutineDraft({ ...draft, status: 'draft', main_card_candidate: first }, {
+    conversationId: 'A',
+  });
+  h.scope.revealRoutineDraft({ ...draft, status: 'draft', main_card_candidate: replacement }, {
+    conversationId: 'A',
+  });
+
+  assert.equal(h.histories.A.children.length, 2);
+  assert.equal(h.histories.B.children.length, 0);
+  const choices = byClass(h.histories.A, 'routine-main-card-choice');
+  assert.equal(choices[0].disabled, true, '이전 후보 확인은 폐기된다');
+  assert.equal(choices[2].disabled, false, '교체 후보만 확인할 수 있다');
+
+  choices[2].listeners.click();
+  await new Promise((resolve) => setImmediate(resolve));
+  const confirm = h.calls.find((call) => call.channel === 'athena:routine-main-card-confirm');
+  assert.deepEqual(JSON.parse(JSON.stringify(confirm.body)), {
+    id: 'draft-1', expected_candidate: replacement,
+  });
+  const approvals = byClass(h.histories.A, 'routine-btn-approve');
+  assert.equal(approvals.at(-1).disabled, false, '메인 카드 확인 뒤 해당 초안의 승인만 열린다');
 });
 
 test('앱을 다시 열어 발견한 기존 초안은 자동 재검사하지 않는다', async () => {

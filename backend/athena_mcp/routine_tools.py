@@ -4,7 +4,8 @@ selector_tools.py와 같은 이유로 `athena_api`를 import하지 않고 이미
 백엔드에 루프백 호출만 한다. **재시도 없음** — 같은 문서의 규율 그대로.
 
 허용 액션은 `draft`(제안 초안)·`list`(읽기 전용)·`propose`(제어 제안)·
-`propose_watch_code`(감시 코드 파일 착지) **넷뿐**이다. confirm·cancel 액션은
+`propose_main_card`(거절된 카드 후보 교체)·`propose_watch_code`(감시 코드 파일 착지)다.
+confirm·cancel 액션은
 존재하지 않는다 — 상태를 바꾸는 행위는
 사람 클릭(렌더러) 전용이다(실행계획 §7-6, 델타 검토 blocker: 모델이
 취소해놓고 사용자는 감시 중이라 믿는 경로를 원천 차단). 이 부재는 테스트가
@@ -39,6 +40,7 @@ _ALLOWED_ACTIONS: tuple[str, ...] = (
     "draft",
     "list",
     "propose",
+    "propose_main_card",
     "propose_watch_code",
 )
 
@@ -83,6 +85,7 @@ _INPUT_SCHEMA: dict[str, Any] = {
                 "list = 등록된 루틴 목록 조회(읽기 전용), "
                 "propose = 기존 루틴에 대한 제어 제안(실행 아님 — 칩을 사람이 "
                 "눌러야 반영), "
+                "propose_main_card = 거절된 카드 후보를 같은 초안에서 교체(확정·활성화 아님), "
                 "propose_watch_code = 감시 함수 코드를 프로젝트 폴더의 watch 파일로 "
                 "저장(검사 전 — 저장만으로는 아무것도 감시하지 않는다). "
                 "승인·취소 액션은 존재하지 않는다 — 사람만 할 수 있다."
@@ -114,8 +117,15 @@ _INPUT_SCHEMA: dict[str, Any] = {
                 "(임의로 지어내지 마라). briefing_model/briefing_effort는 "
                 "예약 브리핑 자동 실행에 쓸 모델·노력 설정(선택) — 생략하면 "
                 "앱 기본값을 따른다. effort는 low/medium/high/xhigh/max만 "
-                "허용된다."
+                "허용된다. main_card_candidate는 이 알람이 울렸을 때 대화창에 "
+                "단독으로 표시할 읽기 전용 정규 카드다. 먼저 athena_search와 "
+                "athena_describe로 관련 query operation을 확인하고 "
+                "{operation_ref,args,title}을 제안하라. args.stk_cd는 symbol과 "
+                "같아야 하며 최신 차트의 base_dt는 '$today'로 둔다. 이 도구로 "
+                "카드를 확정하거나 알람을 활성화할 수 없다 — 사람에게 이 카드가 "
+                "맞는지 물어야 한다."
             ),
+            "required": ["symbol", "condition", "main_card_candidate"],
             "properties": {
                 "symbol": {"type": "string", "description": "6자리 종목코드"},
                 "condition": {
@@ -145,6 +155,31 @@ _INPUT_SCHEMA: dict[str, Any] = {
                 "briefing_effort": {
                     "type": "string",
                     "description": "예약 브리핑 노력 수준(선택): low/medium/high/xhigh/max",
+                },
+                "main_card_candidate": {
+                    "type": "object",
+                    "description": (
+                        "알람 발화 시 대화창에 단독 표시할 카드 후보. title은 "
+                        "서버가 operation_ref의 정규 카드 제목으로 교정한다. "
+                        "확정은 사람만 별도 화면에서 한다."
+                    ),
+                    "required": ["operation_ref", "args", "title"],
+                    "additionalProperties": False,
+                    "properties": {
+                        "operation_ref": {"type": "string"},
+                        "args": {
+                            "type": "object",
+                            "description": (
+                                "athena_describe의 request schema에 맞는 인자. "
+                                "stk_cd는 draft.symbol과 동일. 최신 차트의 "
+                                "base_dt만 '$today' 동적 표식 사용 가능."
+                            ),
+                        },
+                        "title": {
+                            "type": "string",
+                            "description": "사람에게 제안할 카드 제목(서버가 정규화)",
+                        },
+                    },
                 },
                 "watch": {
                     "type": "object",
@@ -243,6 +278,24 @@ _INPUT_SCHEMA: dict[str, Any] = {
                 },
             },
         },
+        "id": {
+            "type": "string",
+            "description": "action=propose_main_card일 때 후보를 바꿀 draft 루틴 id",
+        },
+        "main_card_candidate": {
+            "type": "object",
+            "description": (
+                "action=propose_main_card일 때의 새 후보. draft 후보와 같은 "
+                "{operation_ref,args,title} 계약이며 사람 확인 전에는 메인 카드가 아니다."
+            ),
+            "required": ["operation_ref", "args", "title"],
+            "additionalProperties": False,
+            "properties": {
+                "operation_ref": {"type": "string"},
+                "args": {"type": "object"},
+                "title": {"type": "string"},
+            },
+        },
     },
 }
 
@@ -260,11 +313,7 @@ _PROPOSE_NOTICE = "확인 대기"
 
 def _condition_keys(proposed: dict[str, Any]) -> list[str]:
     """update 제안에서 조건을 건드리려는 키 — 중첩(condition)·평면(condition.op) 둘 다."""
-    return sorted(
-        k
-        for k in proposed
-        if not isinstance(k, str) or k not in _UPDATABLE_FIELDS
-    )
+    return sorted(k for k in proposed if not isinstance(k, str) or k not in _UPDATABLE_FIELDS)
 
 
 def builtin_tool_defs() -> list[types.Tool]:
@@ -286,7 +335,8 @@ async def dispatch(
         # confirm·cancel을 포함한 그 외 전부 — 사람 전용 행위임을 명시한다.
         return _blocked(
             f"허용되지 않는 action: {action!r}. draft(제안)·list(조회)·"
-            "propose(제어 제안)·propose_watch_code(감시 코드 저장)만 가능하다 — "
+            "propose(제어 제안)·propose_main_card(카드 후보 교체)·"
+            "propose_watch_code(감시 코드 저장)만 가능하다 — "
             "승인·취소는 사용자가 앱에서 직접 한다."
         )
 
@@ -312,15 +362,32 @@ async def dispatch(
                     "사용자가 설정 화면에서 직접 고친다."
                 )
 
+    if action == "draft":
+        draft = arguments.get("draft")
+        if not isinstance(draft, dict) or not isinstance(draft.get("main_card_candidate"), dict):
+            return _blocked(
+                "새 알람에는 main_card_candidate가 필요하다. athena_search와 "
+                "athena_describe로 관련 읽기 전용 카드를 찾은 뒤 다시 제안하라."
+            )
+    if action == "propose_main_card":
+        if not isinstance(arguments.get("id"), str) or not isinstance(
+            arguments.get("main_card_candidate"), dict
+        ):
+            return _blocked("propose_main_card에는 id와 main_card_candidate가 필요하다")
+
     try:
         if action in ("list", "propose"):
-            response = await http_client.get(
-                "/api/v1/routines", timeout=_TIMEOUT_SECONDS
-            )
+            response = await http_client.get("/api/v1/routines", timeout=_TIMEOUT_SECONDS)
         elif action == "propose_watch_code":
             response = await http_client.post(
                 "/api/v1/routines/watch/code",
                 json=arguments.get("watch_code") or {},
+                timeout=_TIMEOUT_SECONDS,
+            )
+        elif action == "propose_main_card":
+            response = await http_client.post(
+                f"/api/v1/routines/{arguments['id']}/main-card/candidate",
+                json={"candidate": arguments["main_card_candidate"]},
                 timeout=_TIMEOUT_SECONDS,
             )
         else:
@@ -365,11 +432,7 @@ async def dispatch(
         current = None
         if isinstance(routines, list) and isinstance(routine_id, str):
             current = next(
-                (
-                    row
-                    for row in routines
-                    if isinstance(row, dict) and row.get("id") == routine_id
-                ),
+                (row for row in routines if isinstance(row, dict) and row.get("id") == routine_id),
                 None,
             )
         return _success(
@@ -392,6 +455,11 @@ async def dispatch(
                 "notice": "저장됨 — 검사 전",
             }
         )
+    if action == "propose_main_card":
+        payload = {
+            **payload,
+            "notice": "새 카드 후보 — 아직 사람이 확인하지 않음",
+        }
     if action == "draft":
         payload = {
             **payload,

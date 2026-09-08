@@ -70,6 +70,10 @@ DETAIL_KEYS = {
     "goal",
     "condition",
     "source_spec",
+    "main_card_candidate",
+    "main_card",
+    "main_card_confirmed_at",
+    "main_card_pending",
 }
 
 
