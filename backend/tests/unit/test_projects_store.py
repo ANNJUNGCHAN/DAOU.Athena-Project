@@ -388,3 +388,64 @@ def test_package_spec_allows_names_and_pins_and_nothing_else() -> None:
         "p" * 129,
     ):
         assert is_valid_package_spec(bad) is False, bad
+
+
+# ── 폴더 다시 지정(relink) ────────────────────────────────────────────────────
+
+
+def test_relink_moves_only_the_path_and_unblocks_the_watch_file(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """옮겨진 폴더를 같은 id로 다시 잇는다 — 그 id를 든 코드 감시 초안이 살아난다."""
+    from athena_api.projects import store as store_module
+    from athena_api.routines.runtime import resolve_watch_file
+
+    store = _store(tmp_path)
+    old = tmp_path / "옛자리"
+    old.mkdir()
+    entry = store.open_external(str(old), "감시 프로젝트")
+    new = tmp_path / "새자리"
+    old.rename(new)
+    (new / "watch").mkdir()
+    (new / "watch" / "volume_spike.py").write_text("def signals(df, p):\n    return df\n", encoding="utf-8")
+    monkeypatch.setattr(
+        store_module, "resolve_project_path", lambda project_id: store.get(project_id).path
+    )
+    with pytest.raises(ProjectMissingError):
+        resolve_watch_file(entry.id, "watch/volume_spike.py")
+
+    relinked = store.relink(entry.id, str(new))
+
+    assert relinked.id == entry.id
+    assert relinked.name == "감시 프로젝트"
+    assert relinked.kind == "external"
+    assert relinked.created_at == entry.created_at
+    assert relinked.path == new.resolve()
+    assert [row.id for row in store.load().entries] == [entry.id]
+    assert resolve_watch_file(entry.id, "watch/volume_spike.py") == (new / "watch" / "volume_spike.py").resolve()
+    assert sorted(p.name for p in new.iterdir()) == ["watch"]
+
+
+def test_relink_rejects_unknown_id_missing_folder_file_and_occupied_folder(tmp_path: Path) -> None:
+    store = _store(tmp_path)
+    mine = tmp_path / "mine"
+    mine.mkdir()
+    other = tmp_path / "other"
+    other.mkdir()
+    entry = store.open_external(str(mine))
+    store.open_external(str(other))
+    a_file = tmp_path / "파일.txt"
+    a_file.write_text("x", encoding="utf-8")
+
+    with pytest.raises(KeyError):
+        store.relink("없는-id", str(mine))
+    with pytest.raises(ProjectMissingError):
+        store.relink(entry.id, str(tmp_path / "없는폴더"))
+    with pytest.raises(ProjectNotADirectoryError):
+        store.relink(entry.id, str(a_file))
+    with pytest.raises(ProjectNameError):
+        store.relink(entry.id, "  ")
+    with pytest.raises(ProjectExistsError):
+        store.relink(entry.id, str(other))
+    # 자기 자신의 현재 폴더로 다시 지정하는 것은 거절이 아니다(드라이브가 돌아온 경우).
+    assert store.relink(entry.id, str(mine)).path == mine.resolve()
