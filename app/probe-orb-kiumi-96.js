@@ -7,6 +7,7 @@ const fs = require('fs');
 const os = require('os');
 const { execFileSync } = require('child_process');
 const { captureRoot } = require('./lib/probe-captures');
+const { writeProbeModelPrefs } = require('./lib/probe-model-prefs');
 
 const APP_ROOT = __dirname;
 const REPO_ROOT = path.resolve(APP_ROOT, '..');
@@ -21,6 +22,7 @@ fs.writeFileSync(
   path.join(PROFILE, 'athena-onboarding.json'),
   JSON.stringify({ cliDone: true, accountDone: true }),
 );
+writeProbeModelPrefs(PROFILE);
 app.setPath('userData', PROFILE);
 process.env.ATHENA_CANVAS_SOURCE = 'fixture';
 process.env.ATHENA_PERSISTENT_CHAT = '0';

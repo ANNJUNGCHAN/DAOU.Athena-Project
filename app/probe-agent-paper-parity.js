@@ -29,6 +29,7 @@ const { app, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const { captureRoot } = require('./lib/probe-captures');
+const { writeProbeModelPrefs } = require('./lib/probe-model-prefs');
 const CAPTURES = captureRoot(__dirname);
 
 const PROFILE = path.join(__dirname, '.probe-agent-paper-parity-profile');
@@ -38,6 +39,7 @@ fs.writeFileSync(
   path.join(PROFILE, 'athena-onboarding.json'),
   JSON.stringify({ cliDone: true, accountDone: true }),
 );
+writeProbeModelPrefs(PROFILE);
 app.setPath('userData', PROFILE);
 
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));

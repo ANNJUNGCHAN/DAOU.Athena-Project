@@ -113,19 +113,26 @@ def _registry_with_composite(tmp_path: Path, parts: list[dict]):
     return load_registry(root, universe=universe)
 
 
-def test_contract_does_not_bind_a_whole_array_to_an_unindexed_scalar_slot(
+def test_unindexed_array_leaf_takes_the_first_element_only_when_drawn_once(
     registry,
 ) -> None:
-    """목록/시계열 열은 행을 지정하지 않은 텍스트 잎 한 칸에 들어갈 수 없다."""
+    """행 좌표 없는 배열 잎의 두 갈래.
+
+    한 자리에만 그려진 잎은 응답 정렬의 **첫 원소**를 말한다. 반대로 같은 배열
+    자리를 잎 여럿이 나눠 그리고 있으면(행 좌표를 잃은 열) 어느 잎이 어느 행인지
+    알 수 없어 채우지 않는다 — 전부 첫 원소로 채우면 같은 값이 여러 줄 반복되는
+    틀린 화면이 된다. 픽스처의 ``col_cur_prc``는 ``col_cur_prc_paired``와 같은
+    occurrence를 나눠 쓴다.
+    """
 
     bound = bind_surface_values("base:ka10085", SOURCE)
     contract = build_surface_contract("base:ka10085", bound, registry)
 
     values = _by_slot(contract)
-    assert "col_stk_nm" not in values
+    assert values["col_stk_nm"]["value"] == "삼성전자"
     assert "col_cur_prc" not in values
-    assert "col_stk_nm" in contract["unbound_slots"]
     assert "col_cur_prc" in contract["unbound_slots"]
+    assert "col_cur_prc_paired" in contract["unbound_slots"]
 
 
 def test_contract_reports_slots_the_payload_did_not_supply(registry) -> None:
@@ -134,8 +141,8 @@ def test_contract_reports_slots_the_payload_did_not_supply(registry) -> None:
     bound = bind_surface_values("base:ka10085", SOURCE)
     contract = build_surface_contract("base:ka10085", bound, registry)
 
-    # 행 인덱스가 없는 배열 열과 다른 op(base:kt00003)의 KPI는 미제공으로 남는다.
-    assert "col_stk_nm" in contract["unbound_slots"]
+    # 잎 여럿이 나눠 쓰는 배열 열과 다른 op(base:kt00003)의 KPI는 미제공으로 남는다.
+    assert "col_cur_prc" in contract["unbound_slots"]
     assert "kpi_prsm_dpst_aset_amt" in contract["unbound_slots"]
     assert set(contract["unbound_slots"]).isdisjoint(_by_slot(contract))
 
@@ -178,8 +185,8 @@ def test_attach_puts_the_contract_on_the_card_metadata(registry) -> None:
     attach_surface_contract(card_contract, "base:ka10085", SOURCE, registry=registry)
 
     assert card_contract["surface_contract"]["board_id"] == "2SKU-1"
-    assert "col_stk_nm" not in _by_slot(card_contract["surface_contract"])
-    assert "col_stk_nm" in card_contract["surface_contract"]["unbound_slots"]
+    assert "col_cur_prc" not in _by_slot(card_contract["surface_contract"])
+    assert "col_cur_prc" in card_contract["surface_contract"]["unbound_slots"]
 
 
 def test_attach_without_a_source_produces_the_value_free_skeleton(registry) -> None:
@@ -301,7 +308,9 @@ def test_composite_is_unbound_when_any_part_is_missing(tmp_path) -> None:
     assert "t1_kpi_summary" in contract["unbound_slots"]
 
 
-def test_composite_is_unbound_when_an_unindexed_part_is_an_array(tmp_path) -> None:
+def test_composite_part_without_a_row_takes_the_first_element(tmp_path) -> None:
+    """되풀이 밖에 한 번 그려진 part는 응답 정렬의 첫 원소를 말한다."""
+
     registry = _registry_with_composite(
         tmp_path,
         [
@@ -311,6 +320,30 @@ def test_composite_is_unbound_when_an_unindexed_part_is_an_array(tmp_path) -> No
     )
     bound = {
         **bind_surface_values("base:ka10085", SOURCE),
+        **bind_surface_values("base:kt00003", {"prsm_dpst_aset_amt": "12340000"}),
+    }
+
+    contract = build_board_surface_contract("2SKU-1-T1", bound, registry)
+
+    parts = _by_slot(contract)["t1_kpi_summary"]["value"]["composite"]["parts"]
+    assert [part["value"] for part in parts] == ["삼성전자", "12340000"]
+    assert "t1_kpi_summary" not in contract["unbound_slots"]
+
+
+def test_composite_is_unbound_when_an_unindexed_part_is_an_empty_array(
+    tmp_path,
+) -> None:
+    """빈 목록은 값이 아니다 — 첫 원소 규칙도 빈 배열은 채우지 않는다."""
+
+    registry = _registry_with_composite(
+        tmp_path,
+        [
+            {"mapping_id": "base:ka10085", "f": "stk_nm"},
+            {"mapping_id": "base:kt00003", "f": "prsm_dpst_aset_amt"},
+        ],
+    )
+    bound = {
+        **bind_surface_values("base:ka10085", {"acnt_prft_rt": []}),
         **bind_surface_values("base:kt00003", {"prsm_dpst_aset_amt": "12340000"}),
     }
 
@@ -503,8 +536,8 @@ def test_board_contract_merges_values_from_every_operation_of_the_board(
     contract = build_board_surface_contract("2SKU-1", bound, registry)
 
     values = _by_slot(contract)
-    assert "col_stk_nm" not in values
-    assert "col_stk_nm" in contract["unbound_slots"]
+    assert "col_cur_prc" not in values
+    assert "col_cur_prc" in contract["unbound_slots"]
     assert values["kpi_prsm_dpst_aset_amt"]["value"] == "12340000"
     assert "kpi_prsm_dpst_aset_amt" not in contract["unbound_slots"]
 
@@ -669,14 +702,16 @@ def test_same_response_composite_part_is_not_an_alternate_surface_value() -> Non
     sell_total = "base:0E|$.data[].131|1"
     buy_total = "base:0E|$.data[].135|1"
 
+    # 실시간 프레임 목록에서 이 leaf가 쓰는 것은 첫 프레임이다(행을 지정하지 않은
+    # 잎의 첫 원소 규칙). 둘째 part가 첫째를 대체해 leaf 전체를 차지하지는 않는다.
     full_response = build_board_surface_contract(
         "13BC-2",
         {sell_total: ["SELL"], buy_total: ["BUY"]},
         registry,
         ("base:0E",),
     )
-    assert "s024" in full_response["unbound_slots"]
-    assert "s024" not in _by_slot(full_response)
+    assert _by_slot(full_response)["s024"]["occurrence_id"] == sell_total
+    assert _by_slot(full_response)["s024"]["value"] == "SELL"
 
     buy_only = build_board_surface_contract(
         "13BC-2", {buy_total: ["BUY"]}, registry, ("base:0E",)
@@ -720,3 +755,52 @@ def test_same_response_composite_part_is_not_an_alternate_surface_value() -> Non
     assert _by_slot(buy_atomic)["s075"]["occurrence_id"] == buy_total
     assert _by_slot(buy_atomic)["s075"]["value"] == "BUY"
     assert buy_total not in registry.coverage()["uncovered_occurrences"]
+
+
+def test_container_leaf_in_a_repeated_row_shows_its_ordinal() -> None:
+    """배열 자체를 가리키며 되풀이 줄에 앉은 잎은 그 줄의 순번이다(문면 자릿수 유지)."""
+
+    registry = load_registry(TEMPLATE_ROOT, strict=False)
+    occurrence = "base:ka10029|$.exp_cntr_flu_rt_upper|1"
+    rows = [{"stk_cd": "1"}, {"stk_cd": "2"}, {"stk_cd": "3"}]
+
+    contract = build_board_surface_contract("2XP6-0", {occurrence: rows}, registry)
+    values = {entry["slot_id"]: entry["value"] for entry in contract["slot_values"]}
+
+    assert values["s039"] == "01"
+    assert values["s050"] == "02"
+    assert values["s061"] == "03"
+    # 응답 행수를 넘는 줄은 순번도 없다 — 그 줄은 접힌다.
+    assert "s072" in contract["unbound_slots"]
+
+
+def test_container_leaf_outside_a_row_shows_the_count_with_its_unit() -> None:
+    """문면 전체가 「수 + 수량 단위」인 잎은 배열 길이다. 다른 말이 붙으면 손대지 않는다."""
+
+    registry = load_registry(TEMPLATE_ROOT, strict=False)
+    occurrence = "detail:kt00004:position_valuation|$.stk_acnt_evlt_prst|1"
+
+    contract = build_board_surface_contract(
+        "133H-2", {occurrence: [{"a": 1}, {"a": 2}]}, registry
+    )
+    values = {entry["slot_id"]: entry["value"] for entry in contract["slot_values"]}
+
+    assert values["s019"] == "2종목"
+    # `8종목 · 평가액 순 · 09:42 기준`은 뒤 문면까지 목업이라 채우지 않는다.
+    assert "s027" in contract["unbound_slots"]
+
+
+def test_empty_rows_lists_repeat_rows_with_no_value() -> None:
+    """값이 한 칸도 없는 되풀이 줄은 계약이 목록으로 알린다(프론트가 접는다)."""
+
+    registry = load_registry(TEMPLATE_ROOT, strict=False)
+    occurrence = "base:ka10029|$.exp_cntr_flu_rt_upper|1"
+
+    contract = build_board_surface_contract(
+        "2XP6-0", {occurrence: [{"stk_cd": "1"}]}, registry
+    )
+    rows = {entry["row"] for entry in contract["empty_rows"]}
+
+    # 응답이 1행만 실어 왔다 — 표의 첫 줄은 살고 나머지 줄은 접을 목록에 든다.
+    assert not any(row.endswith(":0") for row in rows if row.startswith("table:"))
+    assert any(row.startswith("table:") and row.endswith(":2") for row in rows)

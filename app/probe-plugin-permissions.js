@@ -10,6 +10,7 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const { captureRoot } = require('./lib/probe-captures');
+const { writeProbeModelPrefs } = require('./lib/probe-model-prefs');
 
 const PROFILE = fs.mkdtempSync(path.join(os.tmpdir(), 'athena-probe-plugin-permissions-'));
 const CAPTURES = captureRoot(__dirname);
@@ -19,6 +20,7 @@ fs.writeFileSync(
   path.join(PROFILE, 'athena-onboarding.json'),
   JSON.stringify({ cliDone: true, accountDone: true }),
 );
+writeProbeModelPrefs(PROFILE);
 app.setPath('userData', PROFILE);
 process.env.ATHENA_MCP_REGISTRY_PATH = path.join(PROFILE, '.athena', 'mcp_servers.json');
 process.env.CODEX_HOME = path.join(PROFILE, '.codex-home');

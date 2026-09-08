@@ -881,6 +881,14 @@ function boardStateOf(host) {
       values: {}, links: [], unbound: [], boardId: null,
       valuesByBoard: new Map(), unboundByBoard: new Map(), hydrationByBoard: new Map(),
       realtimeByBoard: new Map(),
+      // 자료가 한 칸도 없는 되풀이 줄(계약의 empty_rows) — 보드별로 격리한다.
+      emptyRows: [], emptyRowsByBoard: new Map(),
+      // 값이 한 줄도 없는 표의 열(계약의 empty_columns).
+      emptyColumns: [], emptyColumnsByBoard: new Map(),
+      // 응답이 빈 값으로 답한 자리(계약의 empty_value_slots).
+      emptyValueSlots: [], emptyValueSlotsByBoard: new Map(),
+      // 값이 조회 응답 밖에서 오는 잎(계약의 deferred_value_slots).
+      deferredValueSlots: [], deferredValueSlotsByBoard: new Map(),
       // binding_id → [slot_id]. 봉투가 두 표를 같이 실을 때만 채워진다 —
       // 비어 있으면 실시간 프레임은 보드에 아무것도 안 한다(추측하지 않는다).
       realtimeSlots: new Map(), surface: null, mountContract: null,
@@ -914,6 +922,25 @@ function seedBoardState(state, contract, envelope) {
   state.realtimeByBoard.set(
     boardId, boardMount.realtimeSlotIndex(contract, realtimeBindingsOf(envelope)),
   );
+  // 자료가 한 칸도 없는 되풀이 줄 — 마운트가 그 줄을 접는다(결측어 벽 방지).
+  state.emptyRowsByBoard.set(
+    boardId, Array.isArray(contract.empty_rows) ? contract.empty_rows.slice() : [],
+  );
+  // 응답이 빈 값으로 답한 자리 — 결측어가 아니라 빈 칸이다.
+  state.emptyValueSlotsByBoard.set(
+    boardId,
+    Array.isArray(contract.empty_value_slots) ? contract.empty_value_slots.slice() : [],
+  );
+  // 값이 한 줄도 없는 표의 열 — 마운트가 머리글까지 지운다.
+  state.emptyColumnsByBoard.set(
+    boardId, Array.isArray(contract.empty_columns) ? contract.empty_columns.slice() : [],
+  );
+  // 값이 조회 응답 밖(실시간 프레임·주문 응답)에서 오는 잎 — 그전에는 빈 칸이다.
+  state.deferredValueSlotsByBoard.set(
+    boardId,
+    Array.isArray(contract.deferred_value_slots)
+      ? contract.deferred_value_slots.slice() : [],
+  );
 }
 
 function activateBoardState(state, boardId) {
@@ -925,6 +952,14 @@ function activateBoardState(state, boardId) {
   state.unboundByBoard.set(id, state.unbound);
   state.realtimeSlots = state.realtimeByBoard.get(id) || boardMount.realtimeSlotIndex(null, []);
   state.realtimeByBoard.set(id, state.realtimeSlots);
+  state.emptyRows = state.emptyRowsByBoard.get(id) || [];
+  state.emptyRowsByBoard.set(id, state.emptyRows);
+  state.deferredValueSlots = state.deferredValueSlotsByBoard.get(id) || [];
+  state.deferredValueSlotsByBoard.set(id, state.deferredValueSlots);
+  state.emptyColumns = state.emptyColumnsByBoard.get(id) || [];
+  state.emptyColumnsByBoard.set(id, state.emptyColumns);
+  state.emptyValueSlots = state.emptyValueSlotsByBoard.get(id) || [];
+  state.emptyValueSlotsByBoard.set(id, state.emptyValueSlots);
 }
 
 // 마운트 계약(어느 노드에 어떤 슬롯이 앉는가)은 정적이라 board-template-registry가
@@ -932,6 +967,14 @@ function activateBoardState(state, boardId) {
 function boardMountOptions(host, envelope) {
   return {
     identity: boardMount.boardIdentityFromEnvelope(envelope),
+    // 백엔드가 「자료가 한 칸도 없다」고 표시한 줄. 마운트가 그 줄만 감춘다.
+    emptyRows: boardStateOf(host).emptyRows || [],
+    // 실시간 프레임·주문 응답이 오기 전에는 빈 칸으로 두는 잎.
+    deferredValueSlots: boardStateOf(host).deferredValueSlots || [],
+    // 값이 한 줄도 없어 머리글까지 지울 열.
+    emptyColumns: boardStateOf(host).emptyColumns || [],
+    // 응답이 빈 값으로 답해 빈 칸으로 둘 자리.
+    emptyValueSlots: boardStateOf(host).emptyValueSlots || [],
     // ▸ 펼침 = 상태 보드 템플릿 교체(D5). 링크에 있는 보드로만 바꾼다 — 없으면
     // 아무것도 하지 않는다(없는 화면을 지어내지 않는다).
     onExpand: (boardId) => switchStateBoard(host, boardId, envelope),

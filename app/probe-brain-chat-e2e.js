@@ -6,6 +6,7 @@ const fs = require('fs');
 const os = require('os');
 const crypto = require('crypto');
 const { spawn, execFileSync } = require('child_process');
+const { writeProbeModelPrefs } = require('./lib/probe-model-prefs');
 
 const APP_DIR = __dirname;
 const BACKEND_DIR = path.join(__dirname, '..', 'backend');
@@ -32,6 +33,7 @@ fs.writeFileSync(
   JSON.stringify({ cliDone: true, accountDone: true }, null, 2),
   'utf-8'
 );
+writeProbeModelPrefs(userDataDir);
 
 const bearerToken = crypto.randomBytes(24).toString('hex');
 

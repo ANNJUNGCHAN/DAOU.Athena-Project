@@ -17,6 +17,7 @@ const { app, ipcMain } = require('electron');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
+const { writeProbeModelPrefs } = require('./lib/probe-model-prefs');
 
 const APP_DIR = __dirname;
 const checks = [];
@@ -32,6 +33,7 @@ async function main() {
   fs.mkdirSync(userDataDir, { recursive: true });
   fs.writeFileSync(path.join(userDataDir, 'athena-onboarding.json'),
     JSON.stringify({ cliDone: true, accountDone: true }, null, 2), 'utf8');
+writeProbeModelPrefs(userDataDir);
   const conversationsPath = path.join(userDataDir, 'athena-conversations.json');
   const stamp = (iso) => ({ createdAt: iso, updatedAt: iso, resumeSessionId: null });
   fs.writeFileSync(conversationsPath, JSON.stringify({

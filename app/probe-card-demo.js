@@ -63,6 +63,7 @@ process.env.ATHENA_NO_AUTOSTART = '1';
 const { app } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const { writeProbeModelPrefs } = require('./lib/probe-model-prefs');
 
 const OUT_DIR = path.join(__dirname, 'captures', 'card-demo');
 fs.mkdirSync(OUT_DIR, { recursive: true });
@@ -74,6 +75,7 @@ fs.writeFileSync(
   path.join(PROFILE, 'athena-onboarding.json'),
   JSON.stringify({ cliDone: true, accountDone: true }),
 );
+writeProbeModelPrefs(PROFILE);
 app.setPath('userData', PROFILE);
 
 const BACKEND = process.env.ATHENA_BACKEND_URL || 'http://127.0.0.1:8010';

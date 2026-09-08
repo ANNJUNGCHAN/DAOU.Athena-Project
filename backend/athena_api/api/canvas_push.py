@@ -39,6 +39,11 @@ from athena_api.canvas_transform import (
     resolve_fixed_card_title,
     resolve_screen_render_contract,
 )
+from athena_api.hydrate_defaults import (
+    chain_for,
+    fill_missing_arguments,
+    missing_required_aliases,
+)
 from athena_api.card_surface_contract import (
     attach_surface_contract,
     bind_surface_values,
@@ -984,12 +989,17 @@ def _hydrate_operation_refs(board: Any, slot_ids: list[str] | None) -> tuple[str
             for slot in board.slots
             if slot.slot_id in requested and slot.binds_a_field
         )
-    needed = {
-        binding.mapping_id
-        for slot in slots
-        for binding in slot.bindings
-    }
-    return tuple(ref for ref in board.operation_refs if ref in needed)
+    needed: list[str] = []
+    for slot in slots:
+        for binding in slot.bindings:
+            if binding.mapping_id not in needed:
+                needed.append(binding.mapping_id)
+    # 선언 순서가 먼저다. 그다음 **슬롯이 실제로 가리키는데 board.operation_refs에는
+    # 없는 op**를 슬롯 순서로 잇는다 — 이 꼬리를 버리면 그 슬롯은 어떤 호출도 받지
+    # 못해 영구히 결측으로 남는다(2026-09-09 실측: 보드 41장 · op 139개).
+    declared = [ref for ref in board.operation_refs if ref in needed]
+    extra = [ref for ref in needed if ref not in board.operation_refs]
+    return tuple(declared + extra)
 
 
 def _same_query_arguments(
@@ -1065,7 +1075,9 @@ def _hydrate_arguments(
         (field_info.alias or name): field_info.is_required()
         for name, field_info in document.request_model.model_fields.items()
     }
-    arguments = {key: value for key, value in target.items() if key in aliases}
+    # 화면이 안 보낸 **필수** 조회 조건은 그 보드의 기본 조건으로 채운다. 안 채우면
+    # op가 호출조차 되지 않아 보드 전체가 결측어가 된다(hydrate_defaults 모듈 주석).
+    arguments = fill_missing_arguments(document.operation_ref, target, aliases)
     try:
         return document.request_model.model_validate(arguments), None
     except ValidationError:
@@ -1095,6 +1107,86 @@ def _hydrate_data_client(
     return runtime.data_client
 
 
+async def _resolve_chained_arguments(
+    document: Any,
+    target: Mapping[str, Any],
+    request: Request,
+    client: KiwoomClient,
+    selector: SelectorService,
+    resolved: dict[str, str | None],
+) -> dict[str, Any]:
+    """비어 있는 필수 인자 중 **API가 목록으로 알려주는** 값을 채운다.
+
+    회원사코드·테마그룹코드·감시그룹SEQ·ETF 대상지수는 화면이 고르는 값이지만, 그
+    후보 목록을 API가 직접 싣는다(``ref/hydrate-argument-chains.json``). 목록 op를
+    먼저 부르고 **첫 항목**을 쓴다 — 코드를 지어내지 않고, 첫 항목은 그 화면이 처음
+    여는 항목이다. 한 요청 안에서 같은 목록은 한 번만 부른다.
+    """
+
+    aliases = {
+        (field.alias or name): field.is_required()
+        for name, field in document.request_model.model_fields.items()
+    }
+    missing = missing_required_aliases(document.operation_ref, target, aliases)
+    if not missing:
+        return {}
+    filled: dict[str, Any] = {}
+    for alias in missing:
+        chain = chain_for(alias)
+        if chain is None:
+            continue
+        if alias not in resolved:
+            resolved[alias] = await _first_chain_value(
+                chain, target, request, client, selector
+            )
+        value = resolved[alias]
+        if value is not None:
+            filled[alias] = value
+    return filled
+
+
+async def _first_chain_value(
+    chain: Mapping[str, str],
+    target: Mapping[str, Any],
+    request: Request,
+    client: KiwoomClient,
+    selector: SelectorService,
+) -> str | None:
+    """목록 op를 부르고 그 경로의 첫 값을 돌려준다. 실패는 ``None``.
+
+    목록 op가 조회 대상을 요구하면(「이 ETF의 대상지수 코드」처럼) 요청의 ``target``을
+    그대로 물려 쓴다 — 그 값은 화면이 이미 지목한 것이다.
+    """
+
+    operation_ref = chain["operation_ref"]
+    document = selector.catalog.find_exact(operation_ref)
+    if document is None or document.kind != "query" or not document.generic_callable:
+        return None
+    aliases = {
+        (field.alias or name): field.is_required()
+        for name, field in document.request_model.model_fields.items()
+    }
+    arguments = fill_missing_arguments(operation_ref, target, aliases)
+    if any(required and alias not in arguments for alias, required in aliases.items()):
+        return None
+    try:
+        model = document.request_model.model_validate(arguments)
+    except ValidationError:
+        return None
+    try:
+        result = await call_typed_tr(document.tr_id, model, request, Response(), client)
+    except (KiwoomError, httpx.HTTPError, TimeoutError, ValueError):
+        return None
+    if isinstance(result, JSONResponse):
+        return None
+    values = [
+        value
+        for value in json_path_values(result.model_dump(by_alias=True), chain["json_path"])
+        if isinstance(value, (str, int)) and str(value).strip()
+    ]
+    return str(values[0]) if values else None
+
+
 async def _hydrate_operation(
     operation_ref: str,
     document: Any,
@@ -1102,6 +1194,8 @@ async def _hydrate_operation(
     request: Request,
     client: KiwoomClient,
     fetched: dict[tuple[str, str], tuple[BaseModel | None, str | None]],
+    selector: SelectorService | None = None,
+    chained: dict[str, str | None] | None = None,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     """read op 하나를 호출해 (상태, 바인딩)으로 돌려준다. 실패는 예외로 새지 않는다."""
 
@@ -1121,7 +1215,14 @@ async def _hydrate_operation(
         return unbound("not_a_rest_read")
     if not document.generic_callable:
         return unbound("not_generic_callable")
-    arguments, reason = _hydrate_arguments(document, payload.target)
+    target: Mapping[str, Any] = payload.target
+    if selector is not None and chained is not None:
+        chain_values = await _resolve_chained_arguments(
+            document, target, request, client, selector, chained
+        )
+        if chain_values:
+            target = {**target, **chain_values}
+    arguments, reason = _hydrate_arguments(document, target)
     if arguments is None:
         assert reason is not None
         return unbound(reason)
@@ -1207,6 +1308,8 @@ async def internal_canvas_board_hydrate(
     # 보드 한 장 안에서는 한 번만 호출하고, 원본 응답을 각 operation_ref의 가시
     # occurrence로 따로 투영한다. 같은 실패도 다시 호출하지 않는다.
     fetched: dict[tuple[str, str], tuple[BaseModel | None, str | None]] = {}
+    # 연쇄 인자(회원사·테마 등)는 요청 하나에서 한 번만 조회한다.
+    chained: dict[str, str | None] = {}
     for operation_ref in _hydrate_operation_refs(board, payload.slot_ids):
         status, values = await _hydrate_operation(
             operation_ref,
@@ -1215,6 +1318,8 @@ async def internal_canvas_board_hydrate(
             request,
             data_client,
             fetched,
+            selector,
+            chained,
         )
         operations.append(status)
         bound.update(values)
@@ -1236,6 +1341,29 @@ async def internal_canvas_board_hydrate(
             if slot.slot_id in set(payload.slot_ids)
         )
     )
+    # **답한 조회가 싣지 않은 값**은 결측어가 아니라 빈 칸이다.
+    #
+    # 결측어(「미제공」)는 「물어볼 수 없었다」에 남긴다 — op가 호출되지 않았거나
+    # 업스트림이 실패한 자리다. 그 카드는 실패해서 불완전한 것이고, 렌더러가 재조회
+    # 안내와 함께 그 상태를 보여준다. 반대로 조회가 **정상으로 답했는데** 그 필드가
+    # 응답에 없으면 그 자리에는 값이 없는 것이고, 스무 줄 내리 「미제공」을 찍는 것은
+    # 「제공되지 않는다」는 스무 번의 거짓말이다(실측: 답한 조회 뒤 남은 결측어가
+    # 화면 결측어의 대부분).
+    answered_refs = {
+        status["operation_ref"]
+        for status in operations
+        if status.get("status") == "bound"
+    }
+    if answered_refs:
+        blanks = set(surface_contract.get("empty_value_slots") or [])
+        for slot in board.binding_slots:
+            if slot.slot_id in filled or slot.slot_id in blanks:
+                continue
+            refs = {binding.mapping_id for binding in slot.bindings}
+            if refs and refs <= answered_refs:
+                blanks.add(slot.slot_id)
+        surface_contract["empty_value_slots"] = sorted(blanks)
+
     surface_contract["hydration_slot_ids"] = [
         slot.slot_id
         for slot in requested_slots

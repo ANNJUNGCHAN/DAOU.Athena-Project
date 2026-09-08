@@ -18,7 +18,7 @@ import json
 import logging
 import re
 from collections.abc import Iterable, Mapping
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from functools import cache, lru_cache
 from pathlib import Path
 from types import MappingProxyType
@@ -891,6 +891,168 @@ def _parse_slot(
     )
 
 
+def _occurrence_json_path(occurrence_id: str | None) -> str:
+    """``mapping|$.rows[].key|1`` 안의 JSONPath 조각. 형식이 아니면 빈 문자열."""
+
+    if not occurrence_id:
+        return ""
+    parts = occurrence_id.split("|")
+    return parts[1] if len(parts) >= 2 else ""
+
+
+def _path_segments(node_path: str | None) -> tuple[str, ...] | None:
+    if not isinstance(node_path, str) or not node_path:
+        return None
+    return tuple(part for part in node_path.split("/") if part != "")
+
+
+def _row_rank_key(segment: str) -> tuple[int, int | str]:
+    return (0, int(segment)) if segment.isdigit() else (1, segment)
+
+
+def _row_depth(segments: list[tuple[tuple[str, ...], SurfaceSlot]]) -> int | None:
+    """되풀이의 줄이 갈리는 경로 깊이. 확신할 수 없으면 ``None``.
+
+    되풀이의 줄은 **같은 필드 묶음이 반복되는 자리**다. 그래서 어떤 깊이로 잘랐을 때
+    묶음마다 필드 집합이 똑같이 나오면 그 깊이가 줄이다. 셀 깊이로 잘리면 묶음마다
+    필드가 다르고(종목 칸 대 가격 칸), 블록 깊이로 잘리면 한 묶음에 같은 필드가 여러
+    번 들어간다 — 두 경우 모두 여기서 걸러진다.
+
+    확신이 없을 때 아무 깊이나 고르면 **다른 줄의 값을 그 줄에 그린다**. 결측어보다
+    나쁘다. 그래서 조건을 만족하는 깊이가 없으면 ``None``을 돌려 손대지 않는다.
+    """
+
+    longest = max(len(paths) for paths, _ in segments)
+    for depth in range(1, longest):
+        buckets: dict[tuple[str, ...], list[str]] = {}
+        consistent = True
+        for paths, slot in segments:
+            # 이 깊이보다 얕은 잎은 되풀이 밖에 있다(머리글 KPI 같은 자리) —
+            # 판정에서 빼고, 줄 번호도 주지 않는다.
+            if len(paths) <= depth:
+                continue
+            # 병기 사본(2줄 셀의 둘째 줄)만 판정에서 뺀다. ``display_dup``은 빼지
+            # 않는다 — 로더에 줄 개념이 없던 때 저작이 되풀이의 2~n번째 **줄 전체**에
+            # 그 표시를 붙였고(실측 4AUX-1), 그것을 빼면 줄이 하나로 보인다. 한 줄
+            # 안의 진짜 재표시는 같은 필드가 두 번 들어와 이 깊이가 기각된다.
+            if slot.layer == "병기":
+                continue
+            aliases = buckets.setdefault(paths[:depth], [])
+            alias = slot.f or ""
+            if alias in aliases:
+                consistent = False
+                break
+            aliases.append(alias)
+        if not consistent or len(buckets) < 2:
+            continue
+        shapes = {frozenset(aliases) for aliases in buckets.values()}
+        if len(shapes) == 1:
+            return depth
+    return None
+
+
+# 되풀이 블록의 최대 행수. Paper 보드가 그리는 목록은 헌장 밀도 예산(표 22행)을
+# 넘지 않는다 — 이보다 많은 무리는 되풀이가 아니라 판정이 틀린 것이다.
+_MAX_DERIVED_ROWS = 40
+
+
+def _repeated_table_cells(slots: tuple[SurfaceSlot, ...]) -> set[tuple[str, int, str]]:
+    """표의 어느 (표·열·필드)가 **배열의 여러 행**을 세로로 늘어놓은 자리인가.
+
+    표 셀의 ``table.row``는 화면의 줄 번호이고, 그것이 배열 행과 같다는 보장은 없다.
+    두 종류가 섞여 있다(실측):
+
+    * 배열 반복 — 한 열의 여러 줄이 **같은 필드**를 적는다(보유종목 표의 종목명).
+      그 줄 번호가 곧 배열 행이다.
+    * 필드 나열 — 줄마다 **다른 필드**를 적는다(장전/장중/장후 거래량 = 한 원소의
+      세 필드, 4AUX-1). 그 줄 번호를 배열 행으로 쓰면 없는 행을 찾아 전부 결측이 된다.
+
+    판정은 열이 아니라 **필드 단위**로 한다 — 두 줄 셀(병기)이 한 열에 필드 둘을
+    싣는 표가 있어(133H-2 종목명+코드) 열 단위로 보면 반복을 놓친다.
+    """
+
+    rows_by_cell: dict[tuple[str, int, str], set[str]] = {}
+    for slot in slots:
+        cell = slot.table
+        if cell is None or not slot.binds_a_field or not str(cell.row).isdigit():
+            continue
+        key = (cell.table_id, cell.col, slot.f or "")
+        rows_by_cell.setdefault(key, set()).add(str(cell.row))
+    return {key for key, rows in rows_by_cell.items() if len(rows) >= 2}
+
+
+def _derive_array_rows(slots: tuple[SurfaceSlot, ...]) -> tuple[SurfaceSlot, ...]:
+    """배열을 가리키는 잎의 ``row_index``를 저작된 좌표에서 되찾는다.
+
+    계약 파생은 ``row_index`` 하나만 보고 배열의 원소를 고른다. 그런데 추출물은 행
+    좌표를 두 곳에 적는다 — 표 셀은 ``table.row``, 표가 아닌 되풀이 블록은 아무
+    곳에도(추출기가 되풀이를 판정하지 못한다). 두 경우 모두 ``row_index``가 비어
+    배열이 온 잎이 전부 결측으로 닫힌다(2026-09-09 실측: 표 셀 3,873개 · 되풀이
+    블록 1,390개).
+
+    되찾는 규칙 둘:
+
+    1. **표 셀** — ``table.row``가 숫자면 그것이 배열 행이다.
+    2. **되풀이 블록** — :func:`_row_depth`가 찾은 줄 깊이의 한 단계 위(줄들을 담은
+       그릇)를 블록으로 보고, 블록마다 줄을 0부터 센다. 같은 배열을 두 자리에 그린
+       보드(목록 + 레일)에서 레일이 목록 뒤쪽 행을 가리키지 않게 하려는 것이다 —
+       두 자리 모두 그 목록의 처음부터 보여준다.
+
+    무리는 배열·op·``region``까지 같은 잎들로 끊는다. 한 배열을 여러 구역에 그린
+    보드에서 한 구역의 구조가 다른 구역의 줄 판정을 망치지 않게 한다.
+    """
+
+    derived: dict[str, int] = {}
+    groups: dict[tuple[str, str, str], list[SurfaceSlot]] = {}
+    repeated_cells = _repeated_table_cells(slots)
+    for slot in slots:
+        if slot.row_index is not None:
+            continue
+        cell = slot.table
+        if cell is not None:
+            repeat_key = (cell.table_id, cell.col, slot.f or "")
+            if str(cell.row).isdigit() and repeat_key in repeated_cells:
+                derived[slot.slot_id] = int(cell.row)
+            continue
+        for binding in slot.bindings:
+            path = _occurrence_json_path(binding.occurrence_id)
+            if "[]" not in path:
+                continue
+            key = (binding.mapping_id, path.split("[]")[0], slot.region or "")
+            groups.setdefault(key, []).append(slot)
+
+    for members in groups.values():
+        segments = [(_path_segments(slot.node_path), slot) for slot in members]
+        if any(paths is None for paths, _ in segments):
+            continue
+        depth = _row_depth(segments)
+        if depth is None:
+            continue
+        blocks: dict[tuple[str, ...], list[tuple[tuple[str, ...], SurfaceSlot]]] = {}
+        for paths, slot in segments:
+            if len(paths) <= depth:
+                continue
+            blocks.setdefault(paths[: depth - 1], []).append((paths, slot))
+        for block in blocks.values():
+            rows = sorted({paths[depth - 1] for paths, _ in block}, key=_row_rank_key)
+            if len(rows) > _MAX_DERIVED_ROWS:
+                continue
+            rank = {segment: index for index, segment in enumerate(rows)}
+            for paths, slot in block:
+                # 한 잎이 두 배열에 걸리면(대체 바인딩) 먼저 정해진 줄을 지킨다 —
+                # 둘 중 하나만 참일 수 있고, 주 바인딩이 먼저 온다.
+                derived.setdefault(slot.slot_id, rank[paths[depth - 1]])
+
+    if not derived:
+        return slots
+    return tuple(
+        replace(slot, row_index=derived[slot.slot_id])
+        if slot.row_index is None and slot.slot_id in derived
+        else slot
+        for slot in slots
+    )
+
+
 def _parse_binding(raw: Any, board_id: str, slot_id: str) -> SlotBinding:
     entry = _require_mapping(raw, f"board {board_id!r} slot {slot_id!r} alt_mappings entry")
     mapping_id = entry.get("mapping_id") or None
@@ -1099,7 +1261,9 @@ def _parse_board(board_dir: Path, declared_board_id: str) -> BoardTemplate:
             )
         density[key] = value
     index_patterns = _index_patterns(payload.get("column_bindings"), board_id)
-    slots = tuple(_parse_slot(raw, board_id, index_patterns) for raw in payload["slots"])
+    slots = _derive_array_rows(
+        tuple(_parse_slot(raw, board_id, index_patterns) for raw in payload["slots"])
+    )
     slot_ids = [slot.slot_id for slot in slots]
     if len(set(slot_ids)) != len(slot_ids):
         raise CardSurfaceTemplateError(f"board {board_id!r} has duplicate slot_id")

@@ -15,7 +15,6 @@
     960
   ],
   "operation_refs": [
-    "detail:ka10001:identity_and_capital",
     "base:ka10005",
     "base:ka10006"
   ],
@@ -616,7 +615,9 @@
       "f": "stk_nm",
       "alt_mappings": null,
       "kor": "종목명",
-      "format": {"kind": "text"},
+      "format": {
+        "kind": "text"
+      },
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null

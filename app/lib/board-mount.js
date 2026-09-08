@@ -29,7 +29,17 @@ function anchorOf(slot) {
 
 // 라벨은 데이터가 아니라 디자인 문구다 — 값이 안 실려도 `미제공`으로 지우지 않고
 // Paper 원문을 그대로 둔다. 값 슬롯은 반대로 값이 없으면 결측어를 쓴다(신념 5).
+//
+// 예외가 하나 더 있다: 저작이 `static`으로 못박은 값 자리(생성기 `_static_mode`).
+//   'text'  — 화면 문구 자체다(`D+1 예상`·단계 번호) → Paper 원문.
+//   'blank' — 응답에 그 필드가 없다고 사유까지 적힌 자리다 → 빈 칸. Paper 원문은
+//             목업 숫자라 그대로 두면 없는 값을 지어내고, 결측어를 찍으면 「이번
+//             응답에 안 왔다」는 거짓말이 된다(그 화면에는 원래 그 값이 없다).
 function staticTextOf(slot) {
+  if (slot.static === 'text' || slot.static === true) {
+    return typeof slot.paper_text === 'string' ? slot.paper_text : '';
+  }
+  if (slot.static === 'blank') return '';
   return slot.kind === 'label' && typeof slot.paper_text === 'string' ? slot.paper_text : null;
 }
 
@@ -79,12 +89,38 @@ function collapsePlan(contract, values) {
 }
 
 // 순수 계획 — DOM 없이 검증 가능한 층. 텍스트·색·접힘 결정을 전부 여기서 내린다.
-function mountPlan(contract, values, identity) {
+// 결측어를 쓰지 않고 **빈 칸**으로 두는 잎. 두 갈래를 한 집합으로 모은다.
+//
+//   deferredValueSlots  값이 조회 응답 밖(실시간 프레임·주문 응답)에서 온다 —
+//                       아직 오지 않은 값이다.
+//   emptyValueSlots     응답이 그 자리를 빈 값으로 답했다 — 그 줄에는 해당 값이 없다.
+//
+// 둘 다 「제공되지 않는다」가 아니므로 결측어를 찍으면 거짓말이 된다.
+function pendingSet(options) {
+  const blanks = new Set();
+  for (const key of ['deferredValueSlots', 'emptyValueSlots']) {
+    const list = options && options[key];
+    if (!Array.isArray(list)) continue;
+    for (const slotId of list) blanks.add(String(slotId));
+  }
+  return blanks;
+}
+
+function mountPlan(contract, values, options = {}) {
+  const pending = pendingSet(options);
+  const identity = options.identity;
+  const identitySlots = new Set();
   if (identity && (identity.name || identity.code)
     && slotList(contract).some((slot) => slot.slot_id === 's001' && slot.kind === 'value')) {
     values = { ...values };
-    if (identity.name) values.s001 = identity.name;
-    if (identity.code) values.s002 = identity.code;
+    if (identity.name) {
+      values.s001 = identity.name;
+      identitySlots.add('s001');
+    }
+    if (identity.code) {
+      values.s002 = identity.code;
+      identitySlots.add('s002');
+    }
   }
   const slots = slotList(contract);
   const collapse = collapsePlan(contract, values);
@@ -99,7 +135,14 @@ function mountPlan(contract, values, identity) {
     const node = anchorOf(slot);
     const override = rollupText.get(slot.slot_id);
     const bound = values ? values[slot.slot_id] : undefined;
-    const staticText = bound === undefined || bound === null ? staticTextOf(slot) : null;
+    // static 자리는 응답이 채우는 자리가 아니다 — 값이 실려 와도 디자인 문구가 이긴다.
+    const missingBound = bound === undefined || bound === null;
+    // 카드 자신의 종목 이름·코드는 응답이 채우는 자리가 아니라 **카드의 주제**다.
+    // 「응답에 그 값이 없다」는 빈 칸(`static: "blank"`)보다 이쪽이 앞선다 — 실측
+    // 15N5-2 `s002`를 빈 칸으로 덮으면 탭을 옮길 때 종목 코드가 사라졌다.
+    const staticText = (missingBound || (slot.static && !identitySlots.has(slot.slot_id)))
+      ? (missingBound && pending.has(String(slot.slot_id)) ? '' : staticTextOf(slot))
+      : null;
     const formatted = override
       ? { text: override, tone: null, missing: false }
       : (staticText !== null
@@ -111,6 +154,8 @@ function mountPlan(contract, values, identity) {
       text: formatted.text,
       tone: formatted.tone,
       missing: formatted.missing,
+      // 값이 아니라 디자인이 정한 글자(Paper 라벨·static 문면·빈 칸).
+      designText: !override && staticText !== null,
       valueAtomic: slot.static !== true && slot.kind !== 'label'
         && slot.kind !== 'static' && isValueSlot(slot),
       pairedWith: slot.paired_with || null,
@@ -255,6 +300,125 @@ function hasTextContent(el) {
   return typeof el.textContent === 'string' && el.textContent.trim() !== '';
 }
 
+// ---------- 빈 줄 접기 (자료가 한 칸도 없는 되풀이 줄) ----------
+//
+// 응답이 20줄짜리 목록에 3줄만 실어 오면 나머지 17줄은 자료가 없는 줄이다. 칸마다
+// 결측어를 찍으면 보드가 결측어 벽이 된다. 백엔드가 그 줄 목록을 계약에 실어 주고
+// (`surface_contract.empty_rows`), 여기서 **그 줄만 담은 가장 작은 상자**를 찾아
+// 감춘다. 값이 실린 잎을 품는 상자는 감추지 않는다 — 자료를 지우는 접기는 없다.
+
+function slotElementIndex(root) {
+  const index = new Map();
+  for (const el of root.querySelectorAll('[data-slot-id]')) {
+    const slotId = el.dataset ? el.dataset.slotId : el.getAttribute('data-slot-id');
+    if (slotId) index.set(slotId, el);
+  }
+  return index;
+}
+
+function commonAncestor(elements) {
+  let ancestor = elements[0];
+  for (const el of elements.slice(1)) {
+    while (ancestor && !ancestor.contains(el)) ancestor = ancestor.parentElement;
+    if (!ancestor) return null;
+  }
+  return ancestor;
+}
+
+// 이 상자가 값 있는 잎을 품고 있는가. 품고 있으면 접을 수 없다.
+function holdsValue(box, valued) {
+  for (const el of valued) if (box.contains(el)) return true;
+  return false;
+}
+
+// 값이 한 줄도 없는 표의 열은 머리글까지 지운다(계약의 `empty_columns`). 줄 접기와
+// 같은 이유다 — 스무 줄 내리 결측어인 열은 「이번 응답에 그 필드가 없다」를 스무 번
+// 말하는 자리다. 열은 여러 줄에 흩어져 있으므로 공통 상자가 아니라 칸마다 감춘다.
+function collapseEmptyColumns(surface, emptyColumns) {
+  const columns = Array.isArray(emptyColumns) ? emptyColumns : [];
+  if (!columns.length || typeof surface.querySelectorAll !== 'function') return [];
+  const bySlot = slotElementIndex(surface);
+  const hidden = [];
+  for (const column of columns) {
+    const slotIds = Array.isArray(column && column.slot_ids) ? column.slot_ids : [];
+    // 표 전체가 빈 경우는 칸마다 감추지 않고 표를 담은 상자를 한 번에 감춘다 —
+    // 머리글만 남은 표를 화면에 남기지 않으려는 것이다.
+    if (column.whole_table) {
+      const elements = slotIds.map((slotId) => bySlot.get(slotId)).filter(Boolean);
+      const box = elements.length ? commonAncestor(elements) : null;
+      if (box && box !== surface) {
+        setHidden(box, true);
+        if (box.dataset) box.dataset.bsTableCollapsed = 'true';
+        hidden.push({ column: column.column, cells: elements.length });
+        continue;
+      }
+    }
+    let count = 0;
+    for (const slotId of slotIds) {
+      const el = bySlot.get(slotId);
+      if (!el) continue;
+      setHidden(el, true);
+      if (el.dataset) el.dataset.bsColumnCollapsed = 'true';
+      count += 1;
+    }
+    if (count) hidden.push({ column: column.column, cells: count });
+  }
+  if (surface.dataset) surface.dataset.bsColumnsCollapsed = String(hidden.length);
+  return hidden;
+}
+
+function collapseEmptyRows(surface, emptyRows, options = {}) {
+  const rows = Array.isArray(emptyRows) ? emptyRows : [];
+  if (!rows.length || typeof surface.querySelectorAll !== 'function') return [];
+  const bySlot = slotElementIndex(surface);
+  const valued = [];
+  for (const el of bySlot.values()) {
+    const data = el.dataset || {};
+    const missing = el.dataset ? data.missing : el.getAttribute('data-missing');
+    const design = el.dataset ? data.bsDesignText : el.getAttribute('data-bs-design-text');
+    // 디자인 문구는 자료가 아니다 — 그것만 남은 줄은 여전히 빈 줄이다(실측:
+    // 표 첫 칸의 순번·구분 라벨이 접기를 막아 결측어 벽이 그대로 남았다).
+    if (missing === undefined || missing === null) {
+      if (design === undefined || design === null) valued.push(el);
+    }
+  }
+  const hidden = [];
+  const skipped = [];
+  for (const row of rows) {
+    const slotIds = Array.isArray(row && row.slot_ids) ? row.slot_ids : [];
+    const elements = slotIds.map((slotId) => bySlot.get(slotId)).filter(Boolean);
+    if (!elements.length) {
+      skipped.push({ row: row.row, why: 'no_anchor' });
+      continue;
+    }
+    const box = commonAncestor(elements);
+    // 값 있는 잎을 품는 상자는 접지 않는다 — 자료를 지우는 접기는 없다. 표면
+    // 자체가 그 상자면 접을 것이 없다(줄이 아니라 보드 전체다).
+    if (!box) {
+      skipped.push({ row: row.row, why: 'no_common_box' });
+      continue;
+    }
+    if (box === surface) {
+      skipped.push({ row: row.row, why: 'box_is_surface' });
+      continue;
+    }
+    if (holdsValue(box, valued)) {
+      skipped.push({ row: row.row, why: 'box_holds_value' });
+      continue;
+    }
+    setHidden(box, true);
+    if (box.dataset) box.dataset.bsRowCollapsed = 'true';
+    hidden.push({ row: row.row, node: (box.dataset && box.dataset.node) || '', slots: slotIds.length });
+  }
+  // 왜 못 접었는지는 리포트가 읽는다(프로브의 collapse 진단).
+  if (surface.dataset) {
+    surface.dataset.bsRowsCollapsed = String(hidden.length);
+    surface.dataset.bsRowsSkipped = JSON.stringify(skipped.slice(0, 8));
+  }
+  if (typeof options.onCollapse === 'function') options.onCollapse(hidden);
+  return hidden;
+}
+
 // DOM 쓰기 층 — 텍스트 노드만 건드린다. 구조·인라인 스타일 원문은 손대지 않는다(D1).
 function applyPlan(root, plan, options = {}) {
   const index = nodeIndex(root);
@@ -273,6 +437,10 @@ function applyPlan(root, plan, options = {}) {
       else delete el.dataset.bsValueAtomic;
       if (assignment.missing) el.dataset.missing = 'true';
       else delete el.dataset.missing;
+      // 디자인 문구(라벨·static)는 값이 아니다 — 빈 줄 접기가 이 표시를 보고
+      // 「이 줄에 자료가 있다」고 오해하지 않게 남긴다.
+      if (assignment.designText) el.dataset.bsDesignText = 'true';
+      else delete el.dataset.bsDesignText;
     }
     syncPairedMirrors(el, mirrors.get(assignment.node));
   }
@@ -297,14 +465,22 @@ function applyPlan(root, plan, options = {}) {
   // 계약이 모르는 채로 화면에 글자를 내는 노드만 잉여로 센다. 컨테이너 앵커는
   // 그 자체로 글자를 내지 않으므로(자식이 낸다) 잉여가 아니다.
   // 부분 갱신(실시간 프레임)은 계획에 슬롯 몇 개만 들어 있어 이 셈이 뜻을 잃는다.
-  if (options.partial) return { unbound, unmapped: [], containers };
+  const collapsedRows = options.partial
+    ? []
+    : collapseEmptyRows(root, options.emptyRows, options);
+  const collapsedColumns = options.partial
+    ? []
+    : collapseEmptyColumns(root, options.emptyColumns);
+  if (options.partial) {
+    return { unbound, unmapped: [], containers, collapsedRows, collapsedColumns };
+  }
   const claimed = new Set(plan.assignments.map((assignment) => assignment.node));
   const unmapped = [];
   for (const [key, el] of index) {
     if (claimed.has(key)) continue;
     if (elementChildCount(el) === 0 && hasTextContent(el)) unmapped.push(key);
   }
-  return { unbound, unmapped, containers };
+  return { unbound, unmapped, containers, collapsedRows, collapsedColumns };
 }
 
 // ---------- 실시간 슬롯 이음매 (봉투 계약 ↔ 보드 잎) ----------
@@ -840,6 +1016,15 @@ function markSplitRow(el) {
 const WRAP_ROW_ALWAYS = Object.freeze(['bs-header', 'bs-strip']);
 const WRAP_ROW_WHEN_COLUMN = Object.freeze(['bs-primary', 'bs-rail', 'bs-footer']);
 
+// 영역 직계가 아닌 **더 깊은 가로 묶음**에도 같은 처방이 필요한 자리가 있다. 좁은
+// 폭에서 안 줄어드는 줄이 거기 남는다 — flex item 기본 `min-width: auto`가 자식들의
+// min-content를 지키기 때문이다(실측 2VDA-0 `3HKY-0` 459px ↔ 표면 375px: 「금현물」·
+// 「순위」가 표면 밖으로 40·98px 나가 스크롤로도 닿지 않았다).
+//
+// 그렇다고 **구조만 보고 미리** 걸 수는 없다. 모든 깊이의 가로 묶음에 접기를 주면
+// 접힘이 높이를 바꾸고 높이가 다시 폭 계약을 건드려 레이아웃이 정착하지 않는다
+// (실측: 마운트 게이트가 카드 1종 14장에서 정착 한도 10초에 계속 걸려 7분을 넘겼다).
+// 그래서 이 자리는 **재고 나서**만 손댄다 — :func:`relaxOverflowRows`.
 function markWrapRow(el) {
   if (!el || !el.dataset || !el.style || !el.classList) return;
   if (el.style.getPropertyValue('display').trim() !== 'flex') return;
@@ -848,6 +1033,8 @@ function markWrapRow(el) {
   const parent = el.parentElement;
   if (!parent || !parent.classList) return;
   if (parent.classList.contains('bs-table')) return;
+  if (typeof el.closest === 'function'
+    && el.closest('.bs-table, .bs-r-scroll, .bs-r-scroll-table')) return;
   const always = WRAP_ROW_ALWAYS.some((name) => parent.classList.contains(name));
   const whenColumn = WRAP_ROW_WHEN_COLUMN.some((name) => parent.classList.contains(name));
   if (!always && !whenColumn) return;
@@ -882,6 +1069,25 @@ function markElasticCells(owner) {
     if (!String(cell.textContent || '').trim()) continue;
     cell.dataset.bsElasticCell = 'true';
   }
+}
+
+// Paper가 레이어 이름으로 「스크롤」이라고 선언한 상자는 실제로 스크롤해야 한다.
+//
+// 실측 1WOB-1 `1WST-1`(이름: "목록 본문 · 펼침 · 520px 스크롤")은 추출물이
+// `height: 520px; overflow: clip`으로 나와, 실데이터가 실리면 내용 720px의 아래
+// 200px이 **잘려서 안 보인다**(글자 64자리, 폭 4단계 전부). 디자인은 그 자리를
+// 스크롤로 그렸고 추출이 그 뜻을 잃은 것이다. 그래서 세로만 스크롤로 돌린다 —
+// 가로 계약(폭·overflow-x)은 그대로 두고, Paper 문면도 건드리지 않는다.
+function markDeclaredScrollBox(el) {
+  if (!el || !el.dataset || !el.style) return false;
+  const name = el.dataset.name || '';
+  if (!name.includes('스크롤')) return false;
+  const overflowY = el.style.getPropertyValue('overflow-y').trim()
+    || el.style.getPropertyValue('overflow').trim();
+  if (overflowY !== 'clip' && overflowY !== 'hidden') return false;
+  el.style.setProperty('overflow-y', 'auto');
+  el.dataset.bsScrollDeclared = 'true';
+  return true;
 }
 
 // 스크롤 소유자의 인라인 `overflow`는 정책을 이긴다 — 지워야 한다.
@@ -1011,6 +1217,10 @@ function applyResponsiveHooks(surface) {
   for (const owner of surface.querySelectorAll('.bs-r-scroll, .bs-r-scroll-table')) {
     stripScrollOwnerOverflow(owner);
   }
+  // Paper 이름이 스크롤이라고 적힌 상자를 실제로 스크롤시킨다(위 주석의 1WOB-1).
+  for (const box of surface.querySelectorAll('[data-name]')) {
+    markDeclaredScrollBox(box);
+  }
   // 접기 소유자의 탄력 자식에도 바닥을 준다 — flow는 `flex-wrap`만 주고, 칸이
   // 탄력이면 그 wrap이 발동하지 않는다(markElasticCells 주석의 2T63-1 실측).
   for (const owner of surface.querySelectorAll('.bs-r-flow')) {
@@ -1018,6 +1228,255 @@ function applyResponsiveHooks(surface) {
   }
   markPairedHost(surface);
   return hoisted;
+}
+
+// ---------- 마지막 처방: **재고 나서** 넘친 줄만 접는다 ----------
+//
+// 구조만 보고 미리 접으면 레이아웃이 정착하지 않는다(markWrapRow 위 주석의 실측).
+// 그래서 실제로 넘친 뒤에만, 넘친 글자의 조상 사슬에서 가장 얕은 가로 묶음 하나에
+// 접기 표시를 준다 — 이미 있는 CSS 계약(`[data-bs-wrap-row]`)을 그대로 쓴다. 한 번에
+// 하나씩 주고 다시 재서 넘침이 사라지면 멈춘다.
+//
+// 손대지 않는 것: 표(열 폭이 계약)·스크롤 소유자(스크롤로 닿는다)·세로 묶음(세로 줄에
+// wrap을 주면 넘친 것이 오른쪽 새 열로 간다, markSplitRow와 같은 판단).
+const RELAX_PASSES = 6;
+
+// 접기를 줄 수 있는 **모양**인가 — 기하는 보지 않는다.
+function isRowShape(el, surface) {
+  if (!el || el === surface || !el.classList || !el.dataset) return false;
+  if (el.dataset.bsWrapRow === 'true') return false;
+  if (el.classList.contains('bs-table')) return false;
+  if (typeof el.closest === 'function'
+    && el.closest('.bs-table, .bs-r-scroll, .bs-r-scroll-table')) return false;
+  const style = getComputedStyle(el);
+  if (style.display !== 'flex') return false;
+  if (style.flexDirection === 'column' || style.flexDirection === 'column-reverse') return false;
+  if (style.flexWrap === 'wrap') return false;
+  return true;
+}
+
+function isRelaxableRow(el, surface, bound) {
+  if (!isRowShape(el, surface)) return false;
+  // **자기 칸보다 넓은가**가 아니라 **부모가 준 폭을 넘는가**를 본다. 안 줄어드는 줄은
+  // 스스로는 딱 맞고(scrollWidth == clientWidth) 부모 밖으로 나가 있다 — 실측 2VDA-0
+  // `3HKY-0`은 459/459인데 표면은 375다. 자기 칸만 보면 원인을 못 짚는다.
+  const parent = el.parentElement;
+  const room = parent ? parent.clientWidth : 0;
+  if (room && el.getBoundingClientRect().width > room + 1) return true;
+  if (el.getBoundingClientRect().right > bound + 1) return true;
+  // 줄 자체는 부모 안에 들어가는데 **칸이 눌려** 그 안의 글자가 새는 자리도 있다
+  // (실측 30ZW-0 `313O-0` 282px 안의 `3R7S-0`이 폭 0으로 눌리고 글자가 6px 넘쳤다).
+  // 그 줄을 접으면 눌린 칸이 자기 줄을 받아 폭이 생긴다.
+  for (const child of elementChildren(el) || []) {
+    if (!child || !child.getBoundingClientRect) continue;
+    if (!String(child.textContent || '').trim()) continue;
+    if (child.clientWidth === 0) return true;
+    if (child.scrollWidth > child.clientWidth + 1) return true;
+  }
+  return false;
+}
+
+// 표면 밖으로 나간 **잎 요소**들. 텍스트 노드를 Range로 재지 않는다 — 보드 하나에
+// 텍스트 노드가 수백 개라 폭 4단계 전수에서 그 비용이 실행 시간을 지배했다(실측).
+// 가로로 **스크롤해서 닿는가**. 클래스로 판정하지 않는다 — `.bs-r-scroll`은 좁은
+// 단계에서만 `overflow-x: auto`가 되고(board-surface.css 381) 그 밖에서는 세로 스크롤
+// 상자일 뿐이다. 이름만 보고 안쪽을 통째로 빼면 **닿을 수 없는** 가로 잘림까지 놓칠
+// 수 있으니 계산된 값을 본다. 두 판정 모두 실측에서 같은 결과였고(전수 프로브 잘림 0 ·
+// 마운트 게이트 68/33), 계산값 쪽이 규칙을 그대로 말한다.
+function reachesByScroll(el, surface) {
+  for (let up = el.parentElement; up; up = up.parentElement) {
+    const overflow = getComputedStyle(up).overflowX;
+    if (overflow === 'auto' || overflow === 'scroll') return true;
+    if (up === surface) break;
+  }
+  return false;
+}
+
+// 잎의 사각형만 봐도 어느 줄이 넘치는지 짚는 데 충분하다.
+function overflowingLeaves(surface) {
+  const bound = surface.getBoundingClientRect().left
+    + surface.clientLeft + surface.clientWidth;
+  const leaves = [];
+  for (const el of surface.querySelectorAll('*')) {
+    if (el.firstElementChild) continue;
+    if (!String(el.textContent || '').trim()) continue;
+    if (el.closest('[hidden]')) continue;
+    // 스크롤로 닿는 자리는 결함이 아니다(계획 §2). 그 안쪽 글자까지 후보로 잡으면
+    // 스크롤 표가 있는 보드에서 수십 개가 걸려 접기·줄바꿈이 판을 흔든다(실측:
+    // 마운트 게이트가 카드 1종에서 정착 한도에 걸렸다).
+    if (reachesByScroll(el, surface)) continue;
+    if (el.getBoundingClientRect().right > bound + 1) leaves.push(el);
+  }
+  return leaves;
+}
+
+// 잎의 사각형으로는 못 짚는 넘침이 있다. 칸이 눌려 글자가 **자기 상자 밖으로** 새면
+// 잎의 상자는 표면 안에 남는다 — 실측 2YS8-0 `2YWF-0`은 폭 11px인데 그 안의
+// 「장중 투자자 상위」가 표면을 3px 넘었고, 같은 자리가 보드 7장에 있었다.
+// 그때는 **자기 내용이 자기 칸보다 넓은 가로 묶음**을 직접 찾는다(그 줄의 알약 4개가
+// 255px 칸에 331px로 들어 있었다). 표면에 가장 가까운 하나만 고른다 — 깊은 줄을
+// 접으면 그 줄만 아랫줄로 가고 위 줄은 그대로 넘친다.
+function squeezedRow(surface) {
+  let picked = null;
+  let depth = Infinity;
+  for (const el of surface.querySelectorAll('*')) {
+    if (el.scrollWidth <= el.clientWidth + 1) continue;
+    if (el.closest('[hidden]')) continue;
+    if (!isRowShape(el, surface)) continue;
+    let steps = 0;
+    for (let up = el.parentElement; up && up !== surface; up = up.parentElement) steps += 1;
+    if (steps < depth) {
+      picked = el;
+      depth = steps;
+    }
+  }
+  return picked;
+}
+
+// 글자가 자기 상자보다 넓어 표면을 넘는 자리. 값은 접지 않는다 — 원자값이 두 줄이
+// 되면 숫자가 쪼개져 읽힌다(헌장, `.bs-r-atomic`·`data-bs-value-atomic`). 문장 라벨은
+// 접어도 뜻이 그대로다: 「전체 814건 · 19건 표시」가 두 줄이 되는 것이 6px 잘려 보이지
+// 않는 것보다 낫다. 띄어쓰기나 가운뎃점이 있는 글자만 문장으로 본다.
+const SENTENCE_TEXT = /[\s·]/u;
+
+function wrapOverflowingLabels(leaves) {
+  let wrapped = 0;
+  for (const leaf of leaves) {
+    if (!leaf || !leaf.style || !leaf.dataset) continue;
+    if (leaf.dataset.bsLabelWrap === 'true') continue;
+    if (leaf.dataset.bsValueAtomic !== undefined) continue;
+    if (typeof leaf.closest === 'function' && leaf.closest('.bs-r-atomic')) continue;
+    if (leaf.classList && leaf.classList.contains('bs-r-atomic')) continue;
+    if (!SENTENCE_TEXT.test(String(leaf.textContent || ''))) continue;
+    leaf.style.setProperty('white-space', 'normal');
+    leaf.style.setProperty('overflow-wrap', 'anywhere');
+    leaf.dataset.bsLabelWrap = 'true';
+    wrapped += 1;
+  }
+  return wrapped > 0;
+}
+
+// 접을 줄도, 접을 라벨도 없을 때의 마지막 처방. 남는 것은 **열 폭이 계약인 표**와
+// 그 안의 칸들이다(실측: 남은 보드 9장의 넘친 상자가 전부 표 안이었다). 열을 줄이면
+// 표의 계약이 깨지므로 대신 **가로로 스크롤해서 닿게** 한다 — 스크롤로 닿는 자리는
+// 결함이 아니고(계획 §2), 잘려서 못 닿는 것보다 낫다. 이미 있는 스크롤 소유자 계약을
+// 그대로 쓰고(`data-bs-scroll-declared`), 표면에 가장 가까운 상자 하나만 소유자로
+// 만든다 — 깊은 칸을 스크롤로 만들면 칸마다 스크롤바가 생긴다.
+function scrollOverflowOwner(surface) {
+  let picked = null;
+  let depth = Infinity;
+  for (const el of surface.querySelectorAll('*')) {
+    if (el.scrollWidth <= el.clientWidth + 1) continue;
+    if (!String(el.textContent || '').trim()) continue;
+    if (el.closest('[hidden]')) continue;
+    if (el.dataset && el.dataset.bsScrollDeclared === 'true') continue;
+    // 이미 스크롤로 닿는 상자 안쪽은 건드리지 않는다.
+    if (reachesByScroll(el, surface)) continue;
+    let steps = 0;
+    for (let up = el.parentElement; up && up !== surface; up = up.parentElement) steps += 1;
+    if (steps < depth) {
+      picked = el;
+      depth = steps;
+    }
+  }
+  if (!picked || !picked.style || !picked.dataset) return null;
+  // 폭은 건드리지 않는다 — `min-width: 0`을 주면 상자 폭이 바뀌고, 폭이 컨테이너
+  // 질의(board-surface.css)의 단계를 바꿔 다른 자리의 접힘까지 흔든다(실측 2SYW-1
+  // 최소 폭에서 결측어 11자리가 되살아났다). 스크롤만 준다.
+  picked.style.setProperty('overflow-x', 'auto');
+  picked.dataset.bsScrollDeclared = 'true';
+  return picked;
+}
+
+function relaxOverflowRows(surface) {
+  if (!surface || typeof surface.querySelectorAll !== 'function') return [];
+  if (typeof getComputedStyle !== 'function' || typeof document === 'undefined') return [];
+  // 같은 폭에서 두 번 재지 않는다. 제품에서는 표면의 관찰자가, 게이트에서는 정착
+  // 판정이 같은 함수를 부르므로 그대로 두면 같은 폭에서 여러 번 돌고, 그때마다
+  // 레이아웃이 조금씩 바뀌어 정착 판정이 한도까지 늘어진다(실측: 마운트 게이트가
+  // 카드 1종 14장에서 8분을 넘겼다).
+  const width = surface.clientWidth;
+  if (surface.__bsRelaxWidth === width) return [];
+  surface.__bsRelaxWidth = width;
+  const relaxed = [];
+  for (let pass = 0; pass < RELAX_PASSES; pass += 1) {
+    if (surface.scrollWidth <= surface.clientWidth + 1) break;
+    // 표면 밖으로 **나간 잎이 없어도** 표면은 넘칠 수 있다 — 눌린 칸의 내용이 자기
+    // 상자 밖으로만 새는 자리다(실측 137X-2 `14T8-2`: 535px 칸에 내용 547px, 표면
+    // 밖으로 나간 잎은 없다). 그래서 잎이 비어도 접을 줄 찾기까지는 간다.
+    const leaves = overflowingLeaves(surface);
+    const bound = surface.getBoundingClientRect().left
+      + surface.clientLeft + surface.clientWidth;
+    let picked = null;
+    let depth = -1;
+    for (const leaf of leaves) {
+      let steps = 0;
+      for (let el = leaf; el && el !== surface.parentElement; el = el.parentElement) {
+        // 사슬을 위로 훑으며 **가장 얕은**(표면에 가까운) 후보를 남긴다 — 깊은 칸을
+        // 접으면 그 칸만 아랫줄로 가고 줄은 그대로 넘친다.
+        if (isRelaxableRow(el, surface, bound) && steps > depth) {
+          picked = el;
+          depth = steps;
+        }
+        if (el === surface) break;
+        steps += 1;
+      }
+    }
+    if (!picked) picked = squeezedRow(surface);
+    if (!picked) {
+      // 접을 줄이 없다 — 남은 것은 **글자 자체가 상자보다 넓은** 자리다(실측
+      // 30ZW-0 「전체 814건 · 19건 표시」 6px · 2V71-0 「장중 투자자 상위」 23px).
+      // 값은 절대 접지 않는다(헌장: 원자값은 한 줄) — 문장 라벨만 접는다.
+      if (wrapOverflowingLabels(leaves)) {
+        relaxed.push('label-wrap');
+        continue;
+      }
+      const owner = scrollOverflowOwner(surface);
+      if (!owner) break;
+      relaxed.push(`scroll:${(owner.dataset && owner.dataset.node) || ''}`);
+      continue;
+    }
+    picked.dataset.bsWrapRow = 'true';
+    markElasticCells(picked);
+    relaxed.push((picked.dataset && picked.dataset.node) || '');
+  }
+  if (relaxed.length && surface.dataset) {
+    surface.dataset.bsRelaxedRows = String(
+      Number(surface.dataset.bsRelaxedRows || 0) + relaxed.length,
+    );
+  }
+  return relaxed;
+}
+
+// 폭이 바뀌면 다시 잰다 — CSS 단계는 폭에 반응하지만 이 처방은 실측이 근거다.
+// 표면 하나에 관찰자 하나만 붙이고, 프레임 하나 뒤에 잰다(리사이즈 직후에는 아직
+// 새 폭으로 배치되지 않은 프레임을 본다).
+function watchSurfaceWidth(surface) {
+  if (!surface || surface.__bsWidthWatch) return null;
+  if (typeof ResizeObserver !== 'function') return null;
+  let last = surface.clientWidth;
+  // 콜백은 배치가 끝난 뒤에 온다 — 여기서 바로 재는 것이 맞다. rAF로 한 프레임
+  // 미루면 오클루전된 창에서 프레임이 눌려 알림이 한 단계씩 늦는다(실측: 전수
+  // 프로브가 폭을 네 번 바꾸는 동안 처방이 늘 한 단계 뒤에 걸렸다).
+  // 콜백 안에서 배치를 바꾸므로 관찰자가 다시 불린다 — 재진입을 막지 않으면
+  // 「ResizeObserver loop completed with undelivered notifications」가 뜬다(실측).
+  // 폭이 실제로 달라졌을 때만, 그리고 한 번에 하나만 돌린다.
+  let running = false;
+  const observer = new ResizeObserver(() => {
+    if (running) return;
+    const width = surface.clientWidth;
+    if (Math.abs(width - last) < 2) return;
+    last = width;
+    running = true;
+    try {
+      relaxOverflowRows(surface);
+    } finally {
+      running = false;
+    }
+  });
+  observer.observe(surface);
+  surface.__bsWidthWatch = observer;
+  return observer;
 }
 
 // Paper 레이어 이름(data-name)에 박힌 원시 식별자 앵커를 걷어낸다. 카드 커버리지
@@ -1122,7 +1581,7 @@ function mountBoard(root, boardId, values, options = {}) {
 
   // 탭의 예시 종목이나 누락된 조회 응답이 원래 카드 종목을 바꾸지 않는다.
   const identity = registry.cardIdFor(boardId) === 'CC-03' ? options.identity : null;
-  const plan = mountPlan(contract, values, identity);
+  const plan = mountPlan(contract, values, { ...options, identity });
   let surface = root.__bsSurface;
   if (!surface || root.__bsBoardId !== String(boardId) || !root.contains(surface)) {
     root.replaceChildren(template.content.cloneNode(true));
@@ -1134,6 +1593,10 @@ function mountBoard(root, boardId, values, options = {}) {
     root.__bsBoardId = String(boardId);
   }
   const report = applyPlan(surface, plan, options);
+  // 값이 실린 뒤에 잰다 — 목업보다 긴 값이 들어오면 줄이 그때 넘친다. 폭이 바뀌면
+  // 표면의 관찰자가 다시 잰다.
+  relaxOverflowRows(surface);
+  watchSurfaceWidth(surface);
   // 렌더러가 저작된 보드에서만 자리를 딸려 보낸다 — 그 자리에 앱 렌더러를 얹는 것은
   // 호출부(canvas) 몫이고, 여기는 자리를 찾아 주기만 한다.
   const primary = contract.primary && contract.primary.renderer
@@ -1207,7 +1670,12 @@ function nextHydrationSlots(pending, filled, surfaceContract) {
 const __exports = {
   ROLLUP_MARK, RESPONSIVE_REGIONS, HOISTED_PROPERTIES, CARD_SHELL_PROPERTIES, normalizeCardShell,
   isValueSlot, anchorOf, staticTextOf, collapsePlan, mountPlan, pairedGroups,
-  nodeIndex, elementChildCount, setHidden, applyPlan,
+  nodeIndex, elementChildCount, setHidden, applyPlan, collapseEmptyRows, collapseEmptyColumns,
+  relaxOverflowRows, isRelaxableRow, isRowShape, squeezedRow, reachesByScroll,
+  scrollOverflowOwner,
+  watchSurfaceWidth,
+  wrapOverflowingLabels,
+  markDeclaredScrollBox,
   hoistLayout, hoistRigidBox, applyResponsiveHooks, surfaceRoot,
   primaryMountPoint, collapsePrimaryMockup, restorePrimaryMockup, mountBoard, mountBoardAsync,
   boardIdentityFromEnvelope,
