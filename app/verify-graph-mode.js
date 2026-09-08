@@ -653,10 +653,11 @@ async function main() {
         toggles: document.querySelectorAll('#graphSettingsBody .graph-settings-toggle').length,
         sourceLabels: [...document.querySelectorAll('#graphSettingsBody .graph-settings-source-label')].map((n) => n.textContent),
         badge: t('#graphSettingsBody .graph-settings-badge'),
-        asides: [...document.querySelectorAll('#graphSettingsBody .graph-settings-row-aside')].map((n) => n.textContent),
-        envVar: t('#graphSettingsBody .graph-settings-envvar'),
+        rowTitles: [...document.querySelectorAll('#graphSettingsBody .graph-settings-row-title')].map((n) => n.textContent),
         danger: !!document.querySelector('#graphSettingsBody .graph-settings-danger'),
-        interval: !!document.querySelector('#graphSettingsBody .graph-settings-interval-select'),
+        intervals: document.querySelectorAll('#graphSettingsBody .graph-settings-interval-select').length,
+        runs: document.querySelectorAll('#graphSettingsBody .graph-settings-run').length,
+        metas: [...document.querySelectorAll('#graphSettingsBody .graph-settings-source-meta')].map((n) => n.textContent),
         summaryHidden: document.getElementById('graphSummaryTable').hidden,
         mapHidden: document.getElementById('graphCanvas').hidden,
         panelHidden: document.getElementById('graphPanel').hidden,
@@ -666,12 +667,14 @@ async function main() {
     check('토글 네 개가 있다', settings.toggles === 4, settings.toggles);
     check('수집원 라벨이 Paper 그대로다',
       JSON.stringify(settings.sourceLabels) === JSON.stringify(['대화', '체결내역', '보유잔고']), settings.sourceLabels);
-    check('보유잔고 조회 주기 선택기가 있다', settings.interval === true, settings.interval);
+    check('세 수집원마다 조회 주기 선택기가 있다', settings.intervals === 3, settings.intervals);
+    check('세 수집원마다 수동 실행 버튼이 있다', settings.runs === 3, settings.runs);
+    check('세 수집원마다 실행 시각 줄이 있고 시각을 지어내지 않는다',
+      settings.metas.length === 3 && settings.metas.every((m) => /^마지막 /.test(m) || m === '실행 중…' || m === '실행 시각 알 수 없음'),
+      settings.metas);
     check('브레인 상태 배지가 준비됨을 말한다', settings.badge === '브레인 준비됨', settings.badge);
-    check('못 바꾸는 값이 정직하게 표시된다',
-      JSON.stringify(settings.asides) === JSON.stringify(['설정 파일', '제공 안 함']), settings.asides);
-    check('배치 주기 환경변수 이름이 노출된다',
-      String(settings.envVar || '').includes('ATHENA_BRAIN_INGEST_INTERVAL_MINUTES'), settings.envVar);
+    check('브레인 상태 카드에는 전체 삭제 행만 남았다(배치 주기·수동 실행 행은 수집원 칸으로 갔다)',
+      JSON.stringify(settings.rowTitles) === JSON.stringify(['전체 삭제']), settings.rowTitles);
     check('전체 삭제 버튼이 있다', settings.danger === true, settings.danger);
     check('3중 배타 — 요약·지도는 숨는다', settings.summaryHidden && settings.mapHidden, settings);
     check('수집·노출에서는 노드 패널을 접는다', settings.panelHidden === true, settings.panelHidden);
