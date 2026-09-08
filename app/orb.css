@@ -486,9 +486,16 @@ html, body {
   margin: 0;
   font-size: var(--text-base);
   line-height: 1.5;
+  min-height: 0;
+  overflow-y: auto;
   -webkit-app-region: no-drag;
   user-select: text;
 }
+
+.orb-body::-webkit-scrollbar { width: 6px; }
+.orb-body::-webkit-scrollbar-track { background: transparent; }
+.orb-body::-webkit-scrollbar-thumb { background: rgb(16 19 26 / 18%); border-radius: 999px; }
+.orb-body::-webkit-scrollbar-thumb:hover { background: rgb(16 19 26 / 32%); }
 
 /* 대표 카드 — 이벤트 원장 행의 1:1 렌더. 값은 숫자 정렬이 필요하므로 mono. */
 .orb-card {
