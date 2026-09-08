@@ -9,7 +9,7 @@
  * 이 검사가 그 부류를 막는다(fail-closed).
  *
  * 불변식 6개:
- *   I1  sum(pages[].boards) == boards[].length == 449
+ *   I1  sum(pages[].boards) == boards[].length == 450
  *   I2  페이지별 boards[] 실개수 == pages[].boards
  *   I3  role=="card_template" 집합 == card-surface-templates/index.json 101개 (정확 상등)
  *   I4  role=="retired"는 why 필수 — 사유 없는 제외 금지
@@ -30,7 +30,7 @@ const REPO_ROOT = path.resolve(APP_DIR, '..');
 
 export const LEDGER_DIR = path.join(REPO_ROOT, 'backend', 'ref', 'paper-ledger');
 export const CARD_INDEX_PATH = path.join(REPO_ROOT, 'backend', 'ref', 'card-surface-templates', 'index.json');
-export const TOTAL_BOARDS = 449;
+export const TOTAL_BOARDS = 450;
 export const ROLES = Object.freeze([
   'screen',
   'card_template',
