@@ -271,11 +271,11 @@ function prepareRestReceiptSurface() {
   if (!$onboard.hidden) return false;
   $boot.hidden = true;
   $settings.hidden = true;
-  $order.hidden = true;
+  if (orderOpen || orderTicketOwner) closeOrderTicket();
+  else $order.hidden = true;
   $shell.inert = false;
   $app.hidden = false;
   settingsOpen = false;
-  orderOpen = false;
   return true;
 }
 window.athena.on('athena:add-rest-receipt', async (payload = {}) => {
@@ -5501,7 +5501,6 @@ document.addEventListener('athena:chat-insert', (event) => {
 // 발화)가, 방향·수량·실행은 사람만. 집행은 기존 3중 게이트 백엔드 라우트
 // 그대로(새 주문 경로 없음), IN_DOUBT(409)는 재전송하지 않는다.
 const orderTicketLib = window.AthenaLib.OrderTicket;
-const protectedCardsLib = window.AthenaLib.ProtectedCards;
 const $order = document.getElementById('order');
 const $orderBody = document.getElementById('orderBody');
 let orderOpen = false;
@@ -5800,6 +5799,7 @@ async function renderOrderTicket(prefill, owner) {
       trId: payload.tr_id,
       body: payload.body,
       idempotencyKey: orderTicketLib.newIdempotencyKey(),
+      conversationId: owner.conversationId,
     });
     const outcome = orderTicketLib.interpretExecuteStatus((res && res.status) || 0);
     orderTicketLib.transition(ticket, orderTicketLib.ticketStateAfterExecute(outcome));
@@ -5807,11 +5807,6 @@ async function renderOrderTicket(prefill, owner) {
     // 워크플로) — 실행 버튼이 없는 영수증일 뿐, 이 티켓 패널이 유일한 실행
     // 표면이라는 확정 결정 3 경계는 그대로다. addLiveCard는 canvas.js가 선언한
     // 전역 함수다(같은 문서, canvas.js가 chat.js보다 먼저 로드된다 — shell.html).
-    if (typeof addLiveCard === 'function' && protectedCardsLib) {
-      addLiveCard(protectedCardsLib.buildOrderActionCard({
-        trId: payload.tr_id, body: payload.body, outcome, response: res,
-      }));
-    }
     status.className = `ticket-status is-${orderTicketLib.executeOutcomeTone(outcome)}`;
     status.textContent = orderTicketLib.executeOutcomeCopy(outcome, res);
     if (outcome !== 'done' && outcome !== 'in_doubt') syncExec();
