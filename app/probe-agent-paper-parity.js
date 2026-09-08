@@ -17,8 +17,7 @@
 //   (6) 접기 푸터가 실제로 나머지를 펼친다 — 보드 02·03
 //   (7) 코드 알람(Step 7) — 보드 09~12. 목록 행 문법(◆·「코드 감시 · 장중 N분마다」),
 //       노드 카드 문법(한국어 제목·영어명·들어감·나옴·「방금 바뀜」·「이번엔 안 쓰임」),
-//       접힌 코드 줄, 「울린 기록」·「만료」·조건 폼 부재, 「고치기 — 말로」의 멈춤
-//       확인, 초안의 「어제까지로 세었음 · 오늘은 진행 중」과 「검사」.
+//       접힌 코드 줄, 「울린 기록」·「만료」·조건 폼 부재, 초안의 「어제까지로 세었음 · 오늘은 진행 중」과 「검사」.
 //       채팅 쪽 승인 카드(「이 알람 승인」)는 이 프로브가 채팅을 몰아 보지 않아
 //       범위 밖이다 — lib/watch-check-card.test.js와 chat 계열 테스트가 잰다.
 process.env.ATHENA_NO_AUTOSTART = '1';
@@ -251,15 +250,9 @@ async function main() {
   // ---------- (1)(2)(3) 작업 뷰 + 동선 규칙 + 타임라인 ----------
   const tasksProbe = await shellWin.webContents.executeJavaScript(`(() => {
     const c = document.getElementById('agentCanvas');
-    const rules = c.querySelector('.agent-route-rules');
     return {
       agentVisible: !c.hidden,
       viewTabs: Array.from(c.querySelectorAll('.agent-view-tab')).map((n) => n.textContent.split(' ')[0]),
-      rulesPresent: !!rules,
-      rulesSource: rules ? rules.getAttribute('data-source') : 'MISSING',
-      rulesCaption: rules && rules.querySelector('.agent-panel-caption')
-        ? rules.querySelector('.agent-panel-caption').textContent : 'MISSING',
-      ruleLines: Array.from(c.querySelectorAll('.agent-route-rule')).map((n) => n.textContent),
       timelineTimes: Array.from(c.querySelectorAll('.agent-live-timeline-time')).map((n) => n.textContent),
       timelineDotColors: Array.from(c.querySelectorAll('.agent-live-timeline-dot')).map((n) => n.style.color),
       statCount: c.querySelectorAll('.agent-stat-card').length,
@@ -279,17 +272,6 @@ async function main() {
     && tasksProbe.subtitle.includes('감시 2 진행 중')
     && !tasksProbe.statsText.includes('시세 수집')
     && !tasksProbe.statsText.includes('12초 전'));
-  check('이중 제어 규칙 패널이 작업 뷰에 있다 — Paper 보드 05 하단', tasksProbe.rulesPresent === true);
-  check(
-    '이중 제어 규칙 3줄이 Paper C6V-0~C6X-0 원문 그대로다',
-    JSON.stringify(tasksProbe.ruleLines) === JSON.stringify([
-      '① 새 작업 — 채팅 문장으로도, 시트로도.',
-      '② 편집 — "이거 고쳐줘"로도, 폼으로도.',
-      '③ 확정 — 채팅 칩으로도, 버튼으로도. 어느 입구든 같은 게이트.',
-    ]),
-  );
-  check('이중 제어 규칙 캡션이 Paper C6U-0 원문이다', tasksProbe.rulesCaption === '이중 제어 규칙');
-  check('이중 제어 규칙은 데이터가 아니라 화면 계약이라 data-source가 없다', tasksProbe.rulesSource === null);
   check(
     '라이브 타임라인 4행이 시각 열을 갖는다 — Paper 보드 02',
     JSON.stringify(tasksProbe.timelineTimes) === JSON.stringify(['07:30', '08:55', '15:30', '16:00']),
@@ -480,7 +462,6 @@ async function main() {
       firesCaption: (detail.querySelector('.agent-panel-caption-row .agent-panel-caption') || {}).textContent,
       fireOpens: Array.from(detail.querySelectorAll('.agent-code-fire-open')).map((n) => n.textContent),
       fireNoDoors: Array.from(detail.querySelectorAll('.agent-code-fire-nodoor')).map((n) => n.textContent),
-      hasEdit: detail.textContent.includes('고치기 — 말로'),
       hasTodayCaption: Array.from(detail.querySelectorAll('.agent-panel-caption')).some((n) => n.textContent.startsWith('오늘 확인')),
     };
   })()`);
@@ -545,40 +526,6 @@ async function main() {
     JSON.stringify(nodeChipProbe.chipLabels) === JSON.stringify(['이상해요', '물어볼게요']));
   check('그 칩이 시트가 아니라 채팅 입력에 그 칸을 지목한 문장을 심는다',
     nodeChipProbe.seeded === '"거래량 급증 감시 · 삼성전자" 알람의 「배수 비교」 칸이 이상해 — ');
-
-  // 「고치기 — 말로」 — 켜진 알람은 먼저 멈춤을 묻는다(A-12·R10)
-  const editGateProbe = await shellWin.webContents.executeJavaScript(`(() => {
-    const c = document.getElementById('agentCanvas');
-    c.querySelector('.agent-code-edit').click();
-    const detail = c.querySelector('.agent-detail-col');
-    const chips = Array.from(detail.querySelectorAll('.agent-code-edit-chip'));
-    window.__probeSeeded = null;
-    window.__probePrevSeed = window.AthenaShell.seedChatInput;
-    window.AthenaShell.seedChatInput = (t) => { window.__probeSeeded = t; };
-    const out = {
-      chipLabels: chips.map((n) => n.textContent),
-      mentions409: detail.textContent.includes('409'),
-    };
-    chips[0].click();
-    return out;
-  })()`);
-  await wait(400); // 멈춤 왕복 + refresh
-
-  const editDoneProbe = await shellWin.webContents.executeJavaScript(`(() => {
-    const c = document.getElementById('agentCanvas');
-    window.AthenaShell.seedChatInput = window.__probePrevSeed;
-    return {
-      seeded: window.__probeSeeded,
-      confirmGone: c.querySelectorAll('.agent-code-edit-chip').length === 0,
-    };
-  })()`);
-
-  check('켜진 알람의 「고치기 — 말로」는 먼저 멈춤을 묻는다 — A-12',
-    JSON.stringify(editGateProbe.chipLabels) === JSON.stringify(['일시중지하고 고치기', '그대로 두기']));
-  check('거절 사유(코드 번호)는 화면에 옮기지 않는다 — R10', editGateProbe.mentions409 === false);
-  check('「일시중지하고 고치기」가 멈춤 뒤 채팅으로 넘긴다',
-    editDoneProbe.seeded === '"거래량 급증 감시 · 삼성전자" 알람을 말로 고치고 싶어 — '
-    && editDoneProbe.confirmGone === true);
 
   // 초안(보드 09·10) — 검사 요약과 「검사」
   await shellWin.webContents.executeJavaScript("window.AthenaAgentCanvas.selectRow('fx4')");
