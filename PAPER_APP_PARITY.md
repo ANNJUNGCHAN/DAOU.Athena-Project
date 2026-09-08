@@ -112,7 +112,7 @@ Paper 파일: `01M0VGPX92K1TER4ZV9PWGQJJZ` — `Athena — 코드 기반 화면 
 | `3VS6-1` · 36 · 프로젝트 추가 — 폴더 점유 | app/lib/sidebar.js:317-350 (addProjectFolder·makeProjectAddButton), app/main.js:1528-1550 (athena:project-add) | 부분 |
 | `3VV8-1` · 37 · 프로젝트 ⋯ — 고정·탐색기·제거 | app/lib/sidebar-project-menu.js:33-52 (menuItemsFor·removeConfirmState), app/lib/sidebar.js:497-548, 388-436 (makeProjectRemovePanel), app/main.js:1552-1585 | 적용 · 게이트 (3ad5c20) |
 | `3VV9-1` · 38 · 펜 — 새 대화창 모드 선택 | app/lib/sidebar.js:352-380 (makeModePicker), app/lib/sidebar-project-menu.js:20-27 (MODE_CHOICES), app/styles/sidebar-session.css:122-150 | 적용 · 게이트 |
-| `3W9B-1` · 39 · 동시 실행 — 상태 4종 · 스피너 | app/lib/sidebar.js:213-221 (상태 점), 706-729 (renderRunSummary), app/lib/main/session-bridge.js:179-187, app/styles/sidebar-session.css:31-83 | 부분 |
+| `3W9B-1` · 39 · 동시 실행 — 상태 4종 · 스피너 | app/lib/sidebar.js (상태 점), app/lib/main/session-bridge.js:179-187, app/styles/sidebar-session.css | 부분 — 이력 머리 「실행 중 N · 대기 N」 알약은 2026-09-08 앱·Paper 양쪽에서 제거(`3WAM-1` 삭제). 행 스피너·모드 옆 스피너만 남는다 |
 | `3VVU-1` · 40 · 모드 전환 — 조용한 전환 · 새 대화 | app/lib/sidebar.js:59-105 (modeNav onSelect), app/main.js:5011-5019 (athena:conversations-new), app/lib/main/conversations.js:181-224 | 부분 |
 | `3WBZ-1` · 41 · 세션 복원 — 다시 누르면 그대로 | app/chat.js:2128-2186 (restoreConversation), 2189-2212 (openConversation), app/main.js:5008 (conversations-set-active), app/probe-session-restore.js | 부분 |
 | `3WOP-1` · 42 · 스냅샷 명세 — 모드별 저장 항목 | app/lib/session-snapshot.js, app/lib/main/session-store.js, app/lib/main/session-bridge.js, app/main.js:4907-4966, app/lib/session-workspace.js | 부분 |
@@ -144,9 +144,9 @@ Paper 파일: `01M0VGPX92K1TER4ZV9PWGQJJZ` — `Athena — 코드 기반 화면 
 | Paper 보드 | 실앱 소유 표면 | 판정 |
 | --- | --- | --- |
 | `3NE-0` · 01 · 셸 — 그래프 모드 · 요약 뷰 | app/shell.html:173-224 (#graphSummaryTable) · app/lib/graph-mode/summary-table.js · theme-clusters.js · hidden-links.js · app/canvas.js:3520-3578 | 적용 · 게이트 |
-| `4AN-0` · 02 · 셸 — 그래프 요약 · 행 선택 | app/lib/graph-mode/controller.js:806-1040 (renderPanelContent) · app/canvas.css:561-592 | 적용 · 게이트 |
+| `4AN-0` · 02 · 셸 — 그래프 요약 · 행 선택 | app/lib/graph-mode/controller.js:806-1040 (renderPanelContent) · app/canvas.css:561-592 | 적용 · 게이트 — 패널 바닥 CTA(`4GS-0`)는 2026-09-08 앱·Paper 양쪽에서 제거 |
 | `4IA-0` · 03 · 그래프 — 기본 군집 지도 | app/lib/graph-mode/live-map.js · controller.js:1100-1155 (draw) · app/shell.html:229-261 | 적용 · 게이트 |
-| `31H-0` · 04 · 그래프 — 노드 선택 · 공통 패널 | app/lib/graph-mode/controller.js:911-1040 · graph-edit-proposal.js | 적용 · 게이트 (3ff1fa4) |
+| `31H-0` · 04 · 그래프 — 노드 선택 · 공통 패널 | app/lib/graph-mode/controller.js:911-1040 · graph-edit-proposal.js | 적용 · 게이트 (3ff1fa4) — 패널 바닥 CTA(`3F6-0` 리드인 + 「채팅에서 물어보기」)는 2026-09-08 앱·Paper 양쪽에서 제거 |
 | `2FIA-2` · 05 · 그래프 — 수집·노출·브레인 제어 | app/lib/graph-mode/collection-settings.js · app/shell.html:267-278 (#graphSettingsCanvas) · app/canvas.js:3686-3701 | 적용 · 게이트 |
 | `2QA3-2` · 06 · 그래프 — 헤더 필터 (기간·정렬·연결 수) | app/lib/graph-mode/graph-filters.js · graph-mode-prefs.js · app/canvas.js renderFilterChips/wireFilterSelect · app/shell.html:198-200, 251-253 | 적용 · 게이트 |
 | `2QCN-2` · 07 · 그래프 — 정직성 상태 (이름·인코딩·빈 값) | app/lib/graph-mode/theme-clusters.js:65-73 · controller.js:62-72, 395-402 · live-map.js · cluster-grouping.js | 부분 (ec8c701) |
@@ -158,7 +158,7 @@ Paper 파일: `01M0VGPX92K1TER4ZV9PWGQJJZ` — `Athena — 코드 기반 화면 
 | 군집 버블 | 무지개 hue 회전 · 중앙 숫자 없음 · 채움 알파 = 응집도(0.74 → 74%) | Paper 실측 회귀: 반지름 `1.4+5.52√n`, 알파 `0.02+0.19·응집도`, 중앙 구성원 수, 흰 라벨 칩 |
 | 2단계 | 펼친 군집 하나만 · 1단계 좌표 재사용(이름표 겹침) | 펼친 군집 + 이웃 1홉, 보이는 부분만 재배치(초점 중앙), 이웃 군집 타원 |
 | 공통 패널 | 요약 카드 **안**에 있어 지도에서는 화면에 안 나타남 | 세 표면의 형제 — 요약·지도 어느 쪽에서 골라도 옆에 선다 |
-| 패널 내용 | 보강 수 한 줄 + 숨은 연관만 | 헤더 부제(군집·연결·유일 노드 / 보강·최근), 관계 목록 전체, 왜 숨은 연관인가, CTA 리드인 |
+| 패널 내용 | 보강 수 한 줄 + 숨은 연관만 | 헤더 부제(군집·연결·유일 노드 / 보강·최근), 관계 목록 전체, 왜 숨은 연관인가 |
 | 필터 칩 | 정적 `<span>` — "최근 90일"이라 쓰고 아무것도 안 걸었다 | 기간·정렬·연결 수 실적용 + 기본값 아님을 파란 칩으로 표시 |
 | 수집·노출 | 설정 오버레이에만 존재 | 그래프 모드 3번째 탭(보드 `05`) + 브레인 상태 카드 |
 | 지도 노드 | 투자자 프로필이 차수 39 허브로 지도를 지배 | 분석용 투영에서 제외 — 그 관계는 노드 속성으로 패널에 |
@@ -179,8 +179,8 @@ Paper 파일: `01M0VGPX92K1TER4ZV9PWGQJJZ` — `Athena — 코드 기반 화면 
 | `ARM-0` · 02 · 에이전트 — 알람 센터 · 라이브 관제 | app/lib/agent-canvas.js:127-134(VIEWS)·:288-307(머리·모두 읽음으로)·:560-643(알람 컬럼)·:644-730(라이브 컬럼) | 적용 · 게이트 |
 | `B57-0` · 03 · 에이전트 — 실행 이력·결과 | app/lib/agent-canvas.js:309-341(브레드크럼·[이력][설정] 세그먼트)·:745-885(최근 30회·산출물·30회 통계)·:1084-1130(setHistoryTab/openHistory) | 적용 · 게이트 |
 | `BIM-0` · 04 · 에이전트 — 프로액티브 | app/lib/agent-canvas.js:344-350(그래프 링크)·:1152-1162(성향 스트립)·:1163-1210(말걸기 가드)·:1240-1290(제안 카드·칩) · app/chat.js:3421-3495(가드 변경 확인 카드) | 적용 · 게이트 |
-| `BV0-0` · 05 · 에이전트 — 작업 | app/lib/agent-canvas.js:353-397(작업 뷰 머리·필터·검색·CTA)·:200-277(통계 4장)·:425-490(리스트·제안 미니목록)·:533-547(규칙 3줄)·:1820-1870(상세 머리 제어) | 적용 · 게이트 (3767668) · 불일치 — Paper가 2026-09-03에 이중 제어 시트(`42W3-1`)로 갱신됐고 앱 반영은 보류다(아래 05·06 절) |
-| `2IJN-2` · 06 · 에이전트 — 작업 설정 | app/lib/agent-canvas.js:327-341(설정 세그먼트)·:1084-1110(setHistoryTab)·:1000-1060(설정 패널) · app/main.js:1296·1302·1322·1328(routine-update/draft/detail/source-catalog IPC) | 불일치 |
+| `BV0-0` · 05 · 에이전트 — 작업 | app/lib/agent-canvas.js:353-397(작업 뷰 머리·필터·검색·CTA)·:200-277(통계 4장)·:425-490(리스트·제안 미니목록)·:1820-1870(상세 머리 제어) | 적용 · 게이트 (3767668·5737bf11) — 설정 드릴인의 편집 폼·[저장]·[채팅에서 고치기 ↗]까지 연결됐다(아래 05·06 절). 앱 하단 「이중 제어 규칙」 3줄(`C6T-0`)은 2026-09-08 제거 |
+| `2IJN-2` · 06 · 에이전트 — 작업 설정 | app/lib/agent-canvas.js:1220-1453(설정 요약·편집 폼·저장·채팅 진입) · app/canvas.js:4110-4112·4153-4159(상세 조회·저장 배선) · app/main.js:1409-1415·1442-1447(routine-update/detail IPC) | 적용 · 게이트 (5737bf11) |
 | `432Z-1` · 07 · 에이전트 대화 — 제어 제안 턴 A~E | 없음 — app/main.js:2437-2457이 athena:routine-proposed를 보내고 app/preload.js:325가 통로를 열어 두었으나 렌더러 구독자 0건 | 미구현 |
 | `4330-1` · 08 · 에이전트 대화 — 결과 턴 | app/lib/routine-control-turn.js CONTROL_RESULT_KINDS(16-21)·failLead(30-40)·buildControlResultTurn(60-77) · app/lib/agent-canvas.js reportControl(1518-1527)·제안 보류(1281-1288) · app/canvas.js onControlResult(3883-3885) · app/chat.js renderControlResultTurn(3753-3808) | 적용 (0db0399) |
 | `43WD-1` · 09 · 에이전트 — 새 알람 · 말로 설명하면 AI가 감시 함수를 만든다 | app/lib/agent-canvas.js (toDraftItem 1355-1365 · renderCodeDetail 1599-1811) · app/chat.js 초안 카드 3319-3417 · app/lib/main/live-prompt.js buildAgentModePrefix 656-678 | 부분 |
@@ -194,9 +194,9 @@ Paper 파일: `01M0VGPX92K1TER4ZV9PWGQJJZ` — `Athena — 코드 기반 화면 
 
 `4330-1`(08 · 결과 턴)은 0db0399로 세웠다(위 표의 「없음」은 수정 전 스냅샷이 남긴 것이라 실제 소유 파일로 바꿨다). 판정·칩·서버 상태 변화 여부를 `app/lib/routine-control-turn.js` 한 표로 두고, 캔버스의 일시중지·재개·취소·승인과 제안 「보류」가 그 결과를 채팅에 남긴다. 실패 리드에서 백엔드 코드 번호는 걷어냈고, 1c9a3ef가 실패 결과 턴의 「다시 시도」를 실제로 같은 제어를 다시 부르는 손잡이로 바꿨다.
 
-### 05·06 — Paper가 앞서고 앱이 뒤처진 자리
+### 05·06 — 이중 제어 반영 상태
 
-Paper `05`·`06`은 2026-09-03 이후 이중 제어(시트·폼·확정 버튼)를 그린다. 앱은 아직 보기 전용 드릴인이다. 3767668이 작업 뷰 하단 규칙을 Paper `C6U-0~C6X-0` 「이중 제어 규칙」 원문으로 되돌려(옛 문구는 GUI 입구를 부정했다) 문면은 맞췄지만, 폼·확정 버튼 자체는 남은 작업이다. `PAPER_DESIGN_AUDIT.md`의 2026-09-01 「드릴인 설정 탭은 보기 전용」 결정은 2026-09-03에 뒤집혔다 — 그 문서의 결정 로그를 읽을 때 이 절을 함께 본다.
+`5737bf11` 이후 앱의 설정 드릴인은 보기 전용이 아니다. `[설정 편집]`이 상세를 한 번 불러 소스 명세에 맞는 폼을 열고, `[저장]`은 `athena:routine-update` 한 경로로 반영한다. 같은 버튼 행의 `[채팅에서 고치기 ↗]`는 루틴 제목을 채팅 입력에 심어 말로 고치는 두 번째 입구를 유지한다. 작업 뷰 하단 「이중 제어 규칙」 패널(옛 `C6T-0`·`C6U-0~C6X-0`)은 2026-09-08에 제거됐다. `PAPER_DESIGN_AUDIT.md`의 2026-09-01 「드릴인 설정 탭은 보기 전용」 결정은 현재 구현 설명으로 쓰면 안 된다.
 
 ### 09~12 — 코드 알람 보드 대조
 
@@ -204,14 +204,14 @@ Paper `05`·`06`은 2026-09-03 이후 이중 제어(시트·폼·확정 버튼)�
 | --- | --- |
 | 보드 12 목록 행 `◆ 코드 감시 · 장중 1분마다` | `statusRowIcon()`의 `code-watch` 분기(◆, 일시중지는 흐리게) + `toWatchItem()`의 `WatchNodes.watchSubLabel()`. 「주기 확인」 폴백으로 절대 안 떨어진다 |
 | 보드 12 머리 `활성` · 제목 · `코드 감시 · v2` | `agent-status-badge` + `agent-detail-title` + `agent-code-kind`(해시 앞 6글자). 해시가 없으면 갈래 이름만 남기고 버전을 지어내지 않는다 |
-| 보드 12 제어 행 `일시중지` `취소` `고치기 — 말로` | `agent-code-controls` — 앞 둘은 `athena:routine-pause/resume`·`athena:routine-cancel`, 셋째는 채팅으로 넘기는 한 경로 |
+| 보드 12 제어 행 `일시중지` `취소` | `agent-code-controls` — `athena:routine-pause/resume`·`athena:routine-cancel`. 「고치기 — 말로」 버튼(`45PY-1`·보드 10 `45GJ-1`)은 2026-09-08 앱·Paper 양쪽에서 제거 — 고치는 길은 채팅 문장 하나다 |
 | 보드 12 `쿨다운` 표기 | f7419f4 — `86400초`를 「1일」로 고쳤다(한국어 단위 규칙). 머리는 「울린 기록 · 최근」이고, 문은 울린 줄에만 단다 — 억제된 줄은 `—`다(dd31d7a) |
 | 보드 10·11 노드 카드 4칸 | `agent-node-card` — 한국어 제목 / 영어 함수명 작게 / 「들어감」 행들 / 구분선 / 「나옴」 굵게. 카드 수 = 감시 함수의 최상위 함수 수 |
 | 보드 10 승인 게이트 「입구 둘 · 게이트 하나」 | cbe8a1b — 초안 상세에 승인 패널(안내 한 줄 · `[이 알람 승인][취소]` · 게이트 고지). 채팅 초안 카드와 같은 `athena:routine-confirm` 하나만 부른다 |
 | 보드 09 자동 검사 진행 5줄 | f2bada5 — `app/lib/watch-progress-card.js`가 마크 세 종류(`✓ ◐ ○`)와 「격리 실행」 고지를 쥔다. 실값이 없는 줄은 아예 만들지 않고, d8633eb 뒤로는 검사가 못 돌았으면 `1/3`을 통과로 적지 않는다 |
 | 보드 11 순환·재검사·한 바퀴 영수증·되돌리기 | **아직 없다.** 노드 행만으로 게이트를 잠근 것은 잘못된 잠금이라 b7b7732가 `44HD-1`을 래칫에서 빼 남은 작업으로 되돌렸다 |
 
-**Paper와 다르게 한 것.** 켜진 알람의 「고치기 — 말로」는 바로 채팅으로 넘어가지 않는다 — 먼저 멈춤을 묻는 줄(`일시중지하고 고치기` · `그대로 두기`)이 상세 안에 뜬다. 켜진 알람의 코드 파일은 백엔드가 덮어쓰기를 막기 때문인데, 거절 사유(코드 번호)는 화면에 옮기지 않고 사람이 할 수 있는 다음 행동 둘만 보여준다. 보드 11의 「되돌리기」·「지난 고침 N건」은 채팅 카드가 소유한 고침 이력이라 캔버스에 중복해 만들지 않았다.
+**Paper와 다르게 한 것.** (2026-09-08 이전) 켜진 알람의 「고치기 — 말로」는 먼저 멈춤을 묻는 줄(A-12)을 띄웠다 — 버튼이 사라지며 그 줄도 함께 걷어냈다. 켜진 알람의 코드 파일 덮어쓰기는 여전히 백엔드가 막는다(채팅 경로에서 409). 보드 11의 「되돌리기」·「지난 고침 N건」은 채팅 카드가 소유한 고침 이력이라 캔버스에 중복해 만들지 않았다.
 
 ---
 
@@ -258,7 +258,7 @@ Paper `05`·`06`은 2026-09-03 이후 이중 제어(시트·폼·확정 버튼)�
 | `5H3-0` · 03 · 키우미 — 시선·시간 루프 | app/orb.css [data-face] 치수 · app/orb.js 시선/루프 상수 | 적용 |
 | `4TY-0` · 04 · 키우미 — 대화·콘텐츠 전개 | app/orb.html · app/orb.js · app/orb.css | 적용 · 게이트 |
 | `5EU-0` · 05 · 키우미 — 셸 숨김·표시 | app/main.js broadcastShellVisibility · app/lib/main/orb-window.js · app/orb.js applyMode | 부분 (597268e) |
-| `CLE-0` · 06 · 키우미 메뉴 — 두 진입점과 항목 | app/chat.js renderKiumiMenu()/kiumiItem() · app/chat.css .kiumi-menu | 적용 · 게이트 (f53bb65) |
+| `CLE-0` · 06 · 키우미 메뉴 — 두 진입점과 항목 | app/chat.js renderKiumiMenu()/kiumiItem() · app/chat.css .kiumi-menu | 적용 · 게이트 (f53bb65) — 2026-09-08 플러그인 구역 첫 항목 「@ 플러그인 지정」(`4BDW-1`) 추가: 컴포저 툴바에서 뺀 `[+]`·`[@]`의 일을 키우미 메뉴가 이어받고, 얼굴은 툴바 오른쪽 끝(화면 44 `49PM-0` · 45 `49TF-0`·`49UF-0`)으로 옮겼다 |
 | `C8G-0` · 07 · 키우미 메뉴 — 셸 오버레이 | app/shell.html #kiumiMenu · app/chat.css .kiumi-menu | 적용 · 게이트 (f53bb65) |
 | `2I7Z-2` · 08 · 키우미 — 입력 스트립 모드별 얼굴 | app/shell.html .kiumi-face · app/chat.css .dot/.kiumi-visor · app/lib/kiumi-face.test.js | 폐기 |
 | `2LFW-2` · 09 · 키우미 — 미니 카드 10종 | app/lib/orb-mini-card.js · app/orb.js buildOrbCanvasCard | 적용 |
@@ -682,7 +682,7 @@ Paper `05`·`06`은 2026-09-03 이후 이중 제어(시트·폼·확정 버튼)�
 - **키우미 얼굴 5종.** Paper `2I7Z-2`(키우미 08)의 모드별 얼굴은 2026-09-01 사용자 결정으로 폐기했다. `app/lib/kiumi-face.test.js`가 5종의 마크업·CSS 부재를 고정하고 `verify:kiumi`가 5모드 전부 `visibleCount:1`을 잰다.
 - **설정 안의 플러그인 표면.** Paper `2USX-1`(화면 31)은 플러그인 모드 관리 뷰(`15J-0`)로 흡수했다. 같은 레지스트리를 두 화면에서 부르지 않는다.
 - **캔버스의 「되돌리기」·「지난 고침 N건」.** 채팅 카드가 소유한 고침 이력이라 캔버스에 중복해 그리지 않는다(에이전트 보드 11).
-- **에이전트 드릴인의 조건 편집 폼.** 조건은 감시 함수 자체라 「고치기 — 말로」로만 바뀐다.
+- **에이전트 드릴인의 감시 함수 코드 직접 편집 칸.** 구조화된 설정은 편집 폼과 `[저장]`으로 바꾸고, 감시 함수 자체를 고치는 길은 같은 폼의 `[채팅에서 고치기 ↗]`가 맡는다.
 - **요약 지도 표면.** 백테스트 `15`·`16`이 폐기한 자리다. 되살리면 회귀다.
 - **OAuth 인증 2종.** 299 카드 집계에서 제외하고 화면 페이지의 인증 상태 보드에 남겼다.
 
