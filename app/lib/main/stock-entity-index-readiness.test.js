@@ -2,7 +2,13 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { createStockEntityIndexReadiness } = require('./stock-entity-index-readiness');
+const fs = require('node:fs');
+const path = require('node:path');
+const { StartupReadiness } = require('./startup-readiness');
+const {
+  createStockEntityIndexReadiness,
+  reconcileStockIndexStartupTask,
+} = require('./stock-entity-index-readiness');
 
 function deferred() {
   let resolve;
@@ -214,4 +220,163 @@ test('a successful refresh stops background retries', async () => {
   readiness.start();
   await settle();
   assert.equal(calls, 2);
+});
+
+test('BOOT-003: a complete background refresh reconciles one failed startup task and broadcasts one revision', async () => {
+  const index = { size: 0 };
+  const timers = manualTimers();
+  const snapshots = [];
+  const startupReadiness = new StartupReadiness({
+    runId: 'boot-003',
+    tasks: [{ id: 'stock-index', label: '종목 검색 데이터 준비', kind: 'gate' }],
+    onChange: (snapshot) => snapshots.push(snapshot),
+  });
+  startupReadiness.update('stock-index', {
+    state: 'failed',
+    detail: '종목명 인덱스를 12초 안에 처음 적재하지 못함',
+  });
+  const failedRevision = startupReadiness.snapshot().revision;
+  let calls = 0;
+  const readiness = createStockEntityIndexReadiness({
+    index,
+    refresh: async () => {
+      calls += 1;
+      if (calls === 1) throw new Error('stock-master 502');
+      index.size = 3;
+    },
+    onReady: ({ size }) => reconcileStockIndexStartupTask(startupReadiness, size),
+    ...timers,
+  });
+
+  readiness.start();
+  await settle();
+  timers.runNext();
+  await settle();
+
+  const recovered = startupReadiness.snapshot();
+  assert.equal(recovered.revision, failedRevision + 1);
+  assert.equal(recovered.phase, 'ready');
+  assert.deepEqual(recovered.tasks[0], {
+    id: 'stock-index',
+    label: '종목 검색 데이터 준비',
+    kind: 'gate',
+    state: 'succeeded',
+    attempt: 0,
+    retryable: true,
+    detail: '종목 3개 적재 완료',
+  });
+  assert.equal(snapshots.at(-1).revision, recovered.revision);
+
+  readiness.start();
+  await settle();
+  assert.equal(startupReadiness.snapshot().revision, recovered.revision);
+});
+
+test('BOOT-003: a partial empty refresh never reconciles startup failure', async () => {
+  const index = { size: 0 };
+  const timers = manualTimers();
+  let notified = 0;
+  const readiness = createStockEntityIndexReadiness({
+    index,
+    refresh: async () => {},
+    onReady: () => { notified += 1; },
+    ...timers,
+  });
+
+  readiness.start();
+  await settle();
+
+  assert.equal(notified, 0);
+  assert.equal(timers.size, 1);
+  readiness.stop();
+});
+
+test('BOOT-003: a throwing recovery callback cannot reject readiness or schedule another refresh', async () => {
+  const index = { size: 0 };
+  const timers = manualTimers();
+  const errors = [];
+  let refreshes = 0;
+  let notifications = 0;
+  const readiness = createStockEntityIndexReadiness({
+    index,
+    refresh: async () => {
+      refreshes += 1;
+      index.size = 3;
+    },
+    onReady: () => {
+      notifications += 1;
+      throw new Error('synthetic broadcast failure');
+    },
+    onError: (error) => errors.push(error.message),
+    ...timers,
+  });
+
+  readiness.start();
+  const waiting = readiness.ensureReady(1_000);
+  assert.equal(await waiting, true);
+  await settle();
+
+  assert.equal(refreshes, 1);
+  assert.equal(notifications, 1);
+  assert.deepEqual(errors, ['synthetic broadcast failure']);
+  assert.equal(timers.size, 0);
+  assert.equal(await readiness.ensureReady(0), true);
+  readiness.start();
+  await settle();
+  assert.equal(notifications, 1);
+});
+
+test('BOOT-003: an aborted stale refresh after restart never reconciles startup failure', async () => {
+  const startupReadiness = new StartupReadiness({
+    runId: 'boot-003-negative',
+    tasks: [{ id: 'stock-index', label: '종목 검색 데이터 준비', kind: 'gate' }],
+  });
+  startupReadiness.update('stock-index', { state: 'failed', detail: 'initial failure' });
+  const failedRevision = startupReadiness.snapshot().revision;
+  const index = { size: 0 };
+  const pending = deferred();
+  let notified = 0;
+  const readiness = createStockEntityIndexReadiness({
+    index,
+    refresh: async () => {
+      await pending.promise;
+      index.size = 3;
+    },
+    onReady: ({ size }) => {
+      notified += 1;
+      reconcileStockIndexStartupTask(startupReadiness, size);
+    },
+  });
+
+  readiness.start();
+  await settle();
+  readiness.stop();
+  readiness.start();
+  pending.resolve();
+  await settle();
+
+  assert.equal(notified, 0);
+  assert.equal(startupReadiness.snapshot().revision, failedRevision);
+  assert.equal(startupReadiness.snapshot().tasks[0].state, 'failed');
+
+  assert.equal(reconcileStockIndexStartupTask(startupReadiness, 0), false);
+  assert.equal(startupReadiness.snapshot().revision, failedRevision);
+  readiness.stop();
+});
+
+test('BOOT-003: main wires complete background index recovery into startup reconciliation', () => {
+  const source = fs.readFileSync(path.join(__dirname, '..', '..', 'main.js'), 'utf8');
+  const start = source.indexOf('const stockEntityIndexReadiness = createStockEntityIndexReadiness({');
+  const end = source.indexOf('const chartFollowupTracker', start);
+  assert.ok(start >= 0 && end > start);
+  const wiring = source.slice(start, end);
+  assert.match(wiring, /onReady:\s*\(\{ size \}\)\s*=>/);
+  assert.match(wiring, /reconcileStockIndexStartupTask\(startupReadiness, size\)/);
+
+  const broadcastStart = source.indexOf('function broadcastBootReadiness(snapshot)');
+  const broadcastEnd = source.indexOf('function attemptShellHandoff()', broadcastStart);
+  assert.ok(broadcastStart >= 0 && broadcastEnd > broadcastStart);
+  const broadcast = source.slice(broadcastStart, broadcastEnd);
+  assert.match(broadcast, /for \(const \[target, label\] of \[/);
+  assert.match(broadcast, /try \{\s*target\.webContents\.send\('athena:boot-readiness', snapshot\);\s*\} catch \(error\)/);
 });

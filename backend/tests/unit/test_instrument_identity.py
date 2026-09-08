@@ -12,7 +12,12 @@ from fastapi.testclient import TestClient
 from athena_api.config import Settings
 from athena_api.main import create_app
 from athena_api.routing_contract import BindingRole
-from athena_api.selector import PlanSigner, SelectorService, build_operation_catalog
+from athena_api.selector import (
+    PlanSigner,
+    SelectorService,
+    build_operation_catalog,
+    instrument_identity,
+)
 from athena_api.selector.errors import InvalidArgumentsError, NoConfidentMatchError
 from athena_api.selector.instrument_identity import InstrumentIdentityIndex
 from athena_api.selector.schemas import DiscoveryIntent, ResolveRequest
@@ -40,6 +45,24 @@ def _verified_arguments(service: SelectorService, request: ResolveRequest) -> tu
     response = service.resolve(request)
     plan = service.signer.verify(response.plan_token, service.catalog)
     return response.operation_ref, plan.arguments
+
+
+def test_snapshot_build_defers_alias_regex_compilation_until_resolve(monkeypatch) -> None:
+    calls: list[str] = []
+    original = instrument_identity._alias_pattern
+
+    def counted(alias: str):
+        calls.append(alias)
+        return original(alias)
+
+    monkeypatch.setattr(instrument_identity, "_alias_pattern", counted)
+    index = InstrumentIdentityIndex()
+
+    index.replace(_market_records())
+
+    assert calls == []
+    assert index.resolve("삼성전자 현재가").code == "005930"
+    assert calls == ["삼성전자"]
 
 
 def test_production_index_matches_shared_python_javascript_conformance() -> None:

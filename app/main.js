@@ -60,8 +60,12 @@ const { resolveCodexDisabledSelection } = require('./lib/main/codex-live-disable
 const { GATEWAY_ALLOWED_TOOLS, DISALLOWED_EXECUTION_TOOLS } = require('./lib/main/claude-tool-policy');
 const providerContractDecision = require('./test-fixtures/provider-contract/decision.json');
 const restDatasetRunner = require('./lib/main/rest-dataset-runner');
+const accountBoundDataset = require('./lib/main/account-bound-dataset');
 const { RestRetryRegistry } = require('./lib/main/rest-retry-registry');
-const { createStockEntityIndexReadiness } = require('./lib/main/stock-entity-index-readiness');
+const {
+  createStockEntityIndexReadiness,
+  reconcileStockIndexStartupTask,
+} = require('./lib/main/stock-entity-index-readiness');
 const { createChartFollowupTracker } = require('./lib/main/chart-followup');
 const simpleChartFastPath = require('./lib/main/simple-chart-fast-path');
 const selectorFastPath = require('./lib/main/selector-fast-path');
@@ -893,6 +897,7 @@ const orderbookRealtime = require('./lib/main/orderbook-realtime');
 const integratedCardRealtime = require('./lib/main/integrated-card-realtime');
 // 보드 슬롯 하이드레이션 — 봉투가 못 채운 슬롯을 마운트 뒤에 한 번 더 채운다.
 const boardHydrate = require('./lib/main/board-hydrate');
+const chartPage = require('./lib/main/chart-page');
 const chartSeries = require('./lib/main/chart-series');
 // 백테스트 REST 프록시(P4, backtest-mode-plan.md §8.1) — routineHttp와 같은 원칙이지만
 // main.js 밖 순수 함수라 단위 테스트(backtest-bridge.test.js)를 직접 붙일 수 있다.
@@ -2385,6 +2390,7 @@ async function emitRestCanvasAndWaitForPaint(payload, { expand = true, timeoutMs
         correlation,
         operationRef: payload.operationRef,
         operationArgs: payload.operationArgs,
+        accountId: payload.accountId,
         chartBody: chart,
         chartMeta: payload && payload.envelope && payload.envelope.data && payload.envelope.data.chart_meta,
       },
@@ -3135,6 +3141,24 @@ function activeRestAccountId() {
   }
 }
 
+function backendAccountAuthorization() {
+  return LOCAL_BEARER_TOKEN ? `Bearer ${LOCAL_BEARER_TOKEN}` : '';
+}
+
+function createActiveBackendAccountInvoker(run, requestedAccountId) {
+  return accountBoundDataset.createAccountBoundInvoker({
+    requestedAccountId,
+    getActiveAccountId: activeRestAccountId,
+    resolveBackendAlias: (options) => accounts.resolveBackendAlias(options),
+    resolveOptions: {
+      backendBase: BACKEND_HTTP_BASE,
+      fetchImpl: fetch,
+      authorization: backendAccountAuthorization(),
+    },
+    run,
+  });
+}
+
 // 이력 사이드바(리프 1.2.2) 최소 영속화 — 첫 사용자 메시지에서 제목을 뽑아
 // athena-conversations.json에 적는다. historyConversationId()는 현재 선택된
 // 대화 하나에 고정되며, 새 대화/기존 대화 선택 경계에서만 교체된다.
@@ -3650,13 +3674,21 @@ const providerConversationRotationQueue = createConversationRotationQueue({
 });
 const stockEntityIndex = new restDatasetRunner.StockEntityIndex();
 let lastStockIndexErrorLogAt = 0;
+async function refreshActiveStockEntityIndex(index, { signal } = {}) {
+  const bound = await createActiveBackendAccountInvoker((options) => (
+    restDatasetRunner.refreshStockEntityIndex(index, {
+      backendBase: BACKEND_HTTP_BASE,
+      signal,
+      ...options,
+    })
+  ));
+  if (!bound.ok) throw new Error(bound.error || '조회에 사용할 서버 계좌를 확인할 수 없다');
+  return bound.run();
+}
 const stockEntityIndexReadiness = createStockEntityIndexReadiness({
   index: stockEntityIndex,
   refresh: async (index, { signal }) => {
-    const count = await restDatasetRunner.refreshStockEntityIndex(index, {
-      backendBase: BACKEND_HTTP_BASE,
-      signal,
-    });
+    const count = await refreshActiveStockEntityIndex(index, { signal });
     mdlog(`Kiwoom 종목명 인덱스 갱신 — 종목 ${count}개`);
     return count;
   },
@@ -3665,6 +3697,11 @@ const stockEntityIndexReadiness = createStockEntityIndexReadiness({
     if (now - lastStockIndexErrorLogAt < 30_000) return;
     lastStockIndexErrorLogAt = now;
     mdlog(`Kiwoom 종목명 인덱스 갱신 보류(재시도 예정): ${String((error && error.message) || error)}`);
+  },
+  onReady: ({ size }) => {
+    if (reconcileStockIndexStartupTask(startupReadiness, size)) {
+      mdlog(`Kiwoom 종목명 인덱스 회복 — 부팅 준비 상태 갱신 · 종목 ${size}개`);
+    }
   },
 });
 const chartFollowupTracker = createChartFollowupTracker();
@@ -3706,23 +3743,33 @@ async function runDirectRestDataset(dataset, expand = true, overrides = {}) {
   };
   let result;
   try {
-    result = await restDatasetRunner.runRestDataset({
-      dataset: Object.assign({}, dataset, { firstCanvasDeadlineMs: DIRECT_DATASET_SETTLE_TIMEOUT_MS }),
-      backendBase: BACKEND_HTTP_BASE,
-      fetchImpl: overrides.fetchImpl,
-      signal: overrides.signal || ownController.signal,
-      hardSignal: overrides.hardSignal,
-      onEvent: handleDirectEvent,
-      emitCanvas: overrides.emitCanvas || ((payload) => {
-        if (ownController && activeRestRun !== ownController) {
-          throw new Error('교체된 REST 데이터셋의 늦은 카드는 표시하지 않는다');
-        }
-        return emitRestCanvasForOrigin({ ...payload, retryCardId }, {
-          expand,
-          origin: overrides.origin,
-          timeoutMs: Math.max(1, payload.paintDeadlineAt - performance.now()),
-        });
-      }),
+    result = await accountBoundDataset.runAccountBoundDataset({
+      requestedAccountId: retryAccountId,
+      resolveBackendAlias: (options) => accounts.resolveBackendAlias(options),
+      resolveOptions: {
+        backendBase: BACKEND_HTTP_BASE,
+        fetchImpl: overrides.accountMetadataFetchImpl || fetch,
+        authorization: backendAccountAuthorization(),
+      },
+      runRestDataset: (options) => restDatasetRunner.runRestDataset(options),
+      runnerOptions: {
+        dataset: Object.assign({}, dataset, { firstCanvasDeadlineMs: DIRECT_DATASET_SETTLE_TIMEOUT_MS }),
+        backendBase: BACKEND_HTTP_BASE,
+        fetchImpl: overrides.fetchImpl,
+        signal: overrides.signal || ownController.signal,
+        hardSignal: overrides.hardSignal,
+        onEvent: handleDirectEvent,
+        emitCanvas: overrides.emitCanvas || ((payload) => {
+          if (ownController && activeRestRun !== ownController) {
+            throw new Error('교체된 REST 데이터셋의 늦은 카드는 표시하지 않는다');
+          }
+          return emitRestCanvasForOrigin({ ...payload, retryCardId, accountId: retryAccountId }, {
+            expand,
+            origin: overrides.origin,
+            timeoutMs: Math.max(1, payload.paintDeadlineAt - performance.now()),
+          });
+        }),
+      },
     });
   } finally {
     if (feedbackWatchdog) clearTimeout(feedbackWatchdog);
@@ -3809,7 +3856,11 @@ async function handleChartPanelReload(event, payload) {
     throw new Error('AITS chart reload는 셸 창에서만 허용된다');
   }
   const request = chartReloadAuthority.buildDataset(payload);
-  const result = await runDirectRestDataset(request, false, { skipHistory: true, allowRetry: true });
+  const result = await runDirectRestDataset(request, false, {
+    skipHistory: true,
+    allowRetry: true,
+    accountId: request.accountId,
+  });
   return chartReloadAuthority.acceptResult(request, result);
 }
 
@@ -3831,28 +3882,14 @@ async function handleChartHistoryPage(event, payload) {
   // 공유해 진행 중인 조회를 abort시키고 캔버스 배달·패널 권위 수명에 엮인다 —
   // 과거 조회는 화면을 그리는 일이 아니라 봉만 가져오는 일이라 그 전부가 부작용이다
   // (실측 2026-08-25: 자동 발화 시 두 요청이 서로를 취소해 영영 pending으로 남았다).
-  let res;
-  try {
-    res = await fetch(`${BACKEND_HTTP_BASE}/api/v1/canvas/chart-page`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ operation_ref: item.operationRef, args: item.args }),
-    });
-  } catch (err) {
-    return { ok: false, error: `과거 조회 실패 — ${String((err && err.message) || err)}`, candles: [] };
-  }
-  if (!res.ok) {
-    const detail = await res.json().catch(() => null);
-    return {
-      ok: false,
-      error: `과거 조회 거부(HTTP ${res.status})${detail && detail.detail ? ` — ${detail.detail}` : ''}`,
-      candles: [],
-    };
-  }
-  const body = await res.json().catch(() => null);
-  const candles = body && Array.isArray(body.candles) ? body.candles : [];
-  if (!candles.length) return { ok: false, error: '과거 봉이 없다', candles: [] };
-  return { ok: true, candles, trId: body.tr_id || null };
+  const bound = await createActiveBackendAccountInvoker((options) => chartPage.fetchChartPage({
+    backendBase: BACKEND_HTTP_BASE,
+    operationRef: item.operationRef,
+    args: item.args,
+    ...options,
+  }), request.accountId);
+  if (!bound.ok) return { ok: false, error: bound.error, candles: [] };
+  return bound.run();
 }
 
 ipcMain.handle('athena:chart-history-page', handleChartHistoryPage);
@@ -3864,13 +3901,16 @@ async function handleChartSeries(event, payload) {
     throw new Error('수급 시계열 조회는 셸 창에서만 허용된다');
   }
   const input = payload && typeof payload === 'object' ? payload : {};
-  return chartSeries.fetchChartSeries({
+  const bound = await createActiveBackendAccountInvoker((options) => chartSeries.fetchChartSeries({
     backendBase: BACKEND_HTTP_BASE,
     operationRef: input.operationRef,
     args: input.args,
     fields: input.fields,
     baseDt: input.baseDt,
-  });
+    ...options,
+  }));
+  if (!bound.ok) return { ok: false, error: bound.error, series: [] };
+  return bound.run();
 }
 
 ipcMain.handle('athena:chart-series', handleChartSeries);
@@ -4026,9 +4066,32 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   const selectorController = new AbortController();
   activeSelectorFastRun = selectorController;
   try {
+    const selectorAccount = modePromptRequired
+      ? null
+      : await accountBoundDataset.createAccountBoundInvoker({
+        getActiveAccountId: activeRestAccountId,
+        resolveBackendAlias: (options) => accounts.resolveBackendAlias(options),
+        resolveOptions: {
+          backendBase: BACKEND_HTTP_BASE,
+          fetchImpl: fetch,
+          authorization: backendAccountAuthorization(),
+        },
+        run: (options) => selectorFastPath.runSelectorFastPath(options),
+      });
+    if (orderDraft && selectorAccount && !selectorAccount.ok) {
+      return persistLocalLiveResult(query, {
+        ok: false,
+        source: 'selector-fast',
+        error: selectorAccount.error || '조회에 사용할 서버 계좌를 확인할 수 없다',
+        answerText: '주문 내용을 만들기 전에 설정의 계좌 화면에서 조회에 사용할 서버 계좌를 연결해 주세요.',
+        canvasTypes: [],
+        modelCalls: 0,
+        durationMs: Math.max(0, performance.now() - queryStartedAt),
+      }, turnConversationId);
+    }
     const selectorResult = modePromptRequired
       ? { handled: false, reason: '모드 전용 채팅 — 모델 경로로 넘긴다' }
-      : await selectorFastPath.runSelectorFastPath({
+      : selectorAccount.ok ? await selectorAccount.run({
       question: query,
       backendBase: BACKEND_HTTP_BASE,
       intent: orderDraft ? orderDraft.intent : 'auto',
@@ -4040,7 +4103,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
         if (activeSelectorFastRun !== selectorController) {
           throw new Error('교체된 Selector fast path의 늦은 카드는 표시하지 않는다');
         }
-        return emitRestCanvasForOrigin(payload, {
+        return emitRestCanvasForOrigin({ ...payload, accountId: selectorAccount.accountId }, {
           expand,
           origin,
           timeoutMs: Math.max(1, payload.paintDeadlineAt - performance.now()),
@@ -4060,10 +4123,22 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
           { onSaveFailed: emitHistorySaveFailed, mdlog },
         );
       },
-    });
+    }) : { handled: false, reason: 'backend_account_unavailable' };
     if (selectorResult.handled) {
       mdlog(`Selector 단일 dispatch 적중 — ${selectorResult.durationMs}ms (모델 무호출)`);
       return selectorResult;
+    }
+    if (orderDraft) {
+      mdlog(`주문 초안 Selector 처리 실패 — 모델 폴백 차단: ${selectorResult.reason || 'unknown'}`);
+      return persistLocalLiveResult(query, {
+        ok: false,
+        source: 'selector-fast',
+        error: selectorResult.reason || 'selector_dispatch_failed',
+        answerText: '주문 내용을 안전하게 확인하지 못해 초안을 만들지 않았습니다.',
+        canvasTypes: [],
+        modelCalls: 0,
+        durationMs: Math.max(0, performance.now() - queryStartedAt),
+      }, turnConversationId);
     }
     if (simpleChartRoute.inferenceFallback) {
       mdlog('종목 인덱스 준비 전 Selector 직접 처리 불가 — Claude 폴백 차단');
@@ -4085,7 +4160,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
         }),
         // 두 분류기는 읽기 전용이다. 첫 유효안이 정해진 뒤에만 단 하나의
         // proposal을 순차 dispatch하여 조회 외 operation의 중복 효과를 막는다.
-        dispatchProposal: (proposal) => selectorFastPath.runSelectorFastPath({
+        dispatchProposal: (proposal) => selectorAccount.run({
           question: query,
           backendBase: BACKEND_HTTP_BASE,
           intent: proposal.intent,
@@ -4099,7 +4174,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
             if (activeSelectorFastRun !== selectorController) {
               throw new Error('교체된 Selector cold path의 늦은 카드는 표시하지 않는다');
             }
-            return emitRestCanvasForOrigin(payload, {
+            return emitRestCanvasForOrigin({ ...payload, accountId: selectorAccount.accountId }, {
               expand,
               origin,
               timeoutMs: Math.max(1, payload.paintDeadlineAt - performance.now()),
@@ -4135,6 +4210,18 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
       mdlog(`종목 인덱스 준비 전 Selector 오류 — Claude 폴백 차단: ${String((error && error.message) || error)}`);
       return persistLocalLiveResult(query, {
         ...simpleChartRoute.inferenceFallback,
+        durationMs: Math.max(0, performance.now() - queryStartedAt),
+      }, turnConversationId);
+    }
+    if (orderDraft) {
+      mdlog(`주문 초안 Selector 오류 — 모델 폴백 차단: ${String((error && error.message) || error)}`);
+      return persistLocalLiveResult(query, {
+        ok: false,
+        source: 'selector-fast',
+        error: String((error && error.message) || error),
+        answerText: '주문 내용을 안전하게 확인하지 못해 초안을 만들지 않았습니다.',
+        canvasTypes: [],
+        modelCalls: 0,
         durationMs: Math.max(0, performance.now() - queryStartedAt),
       }, turnConversationId);
     }
@@ -5211,6 +5298,24 @@ function handleAccountSetActive(e, { id } = {}) {
   return accounts.setActive(id);
 }
 
+function handleAccountRuntimeOptions() {
+  return accounts.listBackendAliases({
+    backendBase: BACKEND_HTTP_BASE,
+    fetchImpl: fetch,
+    authorization: backendAccountAuthorization(),
+  });
+}
+
+function handleAccountSetBackendAlias(e, { id, backendAlias } = {}) {
+  return accounts.bindBackendAlias({
+    id,
+    backendAlias,
+    backendBase: BACKEND_HTTP_BASE,
+    fetchImpl: fetch,
+    authorization: backendAccountAuthorization(),
+  });
+}
+
 function handleAccountRemove(e, { id } = {}) {
   return accounts.remove(id);
 }
@@ -5358,6 +5463,8 @@ ipcMain.handle('athena:conversations-new', async (e, { projectId, mode, verifier
 ipcMain.handle('athena:account-list', handleAccountList);
 ipcMain.handle('athena:account-register', handleAccountRegister);
 ipcMain.handle('athena:account-set-active', handleAccountSetActive);
+ipcMain.handle('athena:account-runtime-options', handleAccountRuntimeOptions);
+ipcMain.handle('athena:account-set-backend-alias', handleAccountSetBackendAlias);
 ipcMain.handle('athena:account-remove', handleAccountRemove);
 ipcMain.handle('athena:order-api-set', handleOrderApiSet);
 ipcMain.handle('athena:auth-token-status', handleAuthTokenStatus);
@@ -5738,11 +5845,13 @@ async function notifyStartupFailuresAfterExpansion(snapshot) {
 }
 
 function broadcastBootReadiness(snapshot) {
-  if (bootWin && !bootWin.isDestroyed()) {
-    bootWin.webContents.send('athena:boot-readiness', snapshot);
-  }
-  if (shellWin && !shellWin.isDestroyed()) {
-    shellWin.webContents.send('athena:boot-readiness', snapshot);
+  for (const [target, label] of [[bootWin, 'boot'], [shellWin, 'shell']]) {
+    if (!target || target.isDestroyed() || target.webContents.isDestroyed()) continue;
+    try {
+      target.webContents.send('athena:boot-readiness', snapshot);
+    } catch (error) {
+      mdlog(`부팅 준비 상태 ${label} 창 전달 실패: ${String((error && error.message) || error)}`);
+    }
   }
 }
 

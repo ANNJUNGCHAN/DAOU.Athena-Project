@@ -48,11 +48,14 @@ process.env.ATHENA_ORB_CANVAS_PROBE = '1';
 
 const { app, ipcMain } = require('electron');
 const fs = require('node:fs');
+const os = require('node:os');
 const path = require('node:path');
 const { pathToFileURL } = require('node:url');
 
 const { ROUTES } = require('./lib/paper-screen-routes.js');
 const { MODES } = require('./lib/live-full-catalog.js');
+const { measureScript } = require('./lib/paper-screen-measure.js');
+const { waitForDomCount } = require('./lib/paper-screen-wait.js');
 const {
   blessRatchet,
   contractRecord,
@@ -74,9 +77,7 @@ for (const name of fs.readdirSync(path.join(ROOT, 'docs', 'architecture'))) {
 }
 
 // 검증 전용 프로필 — 이 머신의 개인 상태(계좌·온보딩·비밀값)에 기대지 않는다.
-const PROFILE = path.join(APP, '.probe-paper-screens-profile');
-fs.rmSync(PROFILE, { recursive: true, force: true });
-fs.mkdirSync(PROFILE, { recursive: true });
+const PROFILE = fs.mkdtempSync(path.join(os.tmpdir(), 'athena-paper-screens-profile-'));
 fs.writeFileSync(
   path.join(PROFILE, 'athena-onboarding.json'),
   JSON.stringify({ cliDone: true, accountDone: true }),
@@ -280,6 +281,12 @@ async function runStep(win, step) {
     case 'wait':
       await wait(step.ms);
       return;
+    case 'wait-for':
+      await waitForDomCount(win, step.selector, step.count, {
+        timeoutMs: step.timeout,
+        visibility: step.visibility,
+      });
+      return;
     case 'settle':
       await settle(win);
       return;
@@ -289,35 +296,6 @@ async function runStep(win, step) {
     default:
       throw new Error(`어휘 밖 스텝 ${step.do}`);
   }
-}
-
-/**
- * root 아래의 **가시** 텍스트와 구조 셈을 한 번에 잰다.
- * 텍스트 노드마다 부모의 `checkVisibility()`를 물어 hidden 서브트리를 뺀다 —
- * innerText 는 root 자체가 안 그려질 때 textContent 로 되돌아가 공허 통과를 만든다.
- */
-function measureScript(route) {
-  return `(() => {
-    const root = document.querySelector(${JSON.stringify(route.root)});
-    if (!root) return { root_found: false, root_visible: false, visible_text: '', structure: [] };
-    const visible = (el) => !!el && el.checkVisibility({ checkVisibilityCSS: true });
-    if (!visible(root)) return { root_found: true, root_visible: false, visible_text: '', structure: [] };
-    const parts = [];
-    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-    for (let node = walker.nextNode(); node; node = walker.nextNode()) {
-      const text = node.nodeValue.trim();
-      if (!text || !visible(node.parentElement)) continue;
-      parts.push(text);
-    }
-    const structure = ${JSON.stringify(route.structure)}.map((check, index) => {
-      const found = Array.from(root.querySelectorAll(check.selector)).filter(visible);
-      return {
-        index,
-        actual: check.what === 'order' ? found.map((el) => el.textContent.trim()) : found.length,
-      };
-    });
-    return { root_found: true, root_visible: true, visible_text: parts.join('\\n'), structure };
-  })()`;
 }
 
 // 도달한 화면을 PNG로 남긴다(--shot) — 판정이 아니라 눈으로 보는 증거다. 판정에는 안 쓴다.

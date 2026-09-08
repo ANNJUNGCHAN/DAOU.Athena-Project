@@ -19,10 +19,10 @@ const {
   buildTradingSourceDataset,
   buildStockInfoDataset,
   buildProgramTradeDataset,
-  refreshStockEntityIndex,
+  refreshStockEntityIndex: refreshStockEntityIndexWithAccount,
   normalizeDataset,
   normalizeRecommendations,
-  runRestDataset,
+  runRestDataset: runRestDatasetWithAccount,
 } = require('./rest-dataset-runner');
 const { isSimpleDailyChartQuery } = require('./simple-chart-fast-path');
 
@@ -31,6 +31,14 @@ const RESOLVER_VECTOR_PATH = path.resolve(
   '../../../backend/tests/fixtures/stock_entity_resolver_conformance.json',
 );
 const RESOLVER_VECTOR = JSON.parse(fs.readFileSync(RESOLVER_VECTOR_PATH, 'utf8'));
+
+function runRestDataset(options) {
+  return runRestDatasetWithAccount({ backendAccountAlias: 'server-a', ...options });
+}
+
+function refreshStockEntityIndex(index, options) {
+  return refreshStockEntityIndexWithAccount(index, { backendAccountAlias: 'server-a', ...options });
+}
 
 function resolverRecords() {
   return RESOLVER_VECTOR.records.map((record) => ({
@@ -102,7 +110,7 @@ function successfulFetch({ dataByOrdinal } = {}) {
   const operationByPlan = new Map();
   const fetchImpl = async (url, options) => {
     const body = JSON.parse(options.body);
-    calls.push({ url, body });
+    calls.push({ url, body, headers: options.headers, redirect: options.redirect });
     if (url.endsWith('/resolve')) {
       const planToken = `plan-${calls.length}`;
       operationByPlan.set(planToken, body.question);
@@ -114,6 +122,75 @@ function successfulFetch({ dataByOrdinal } = {}) {
   fetchImpl.calls = calls;
   return fetchImpl;
 }
+
+test('계좌 A/B는 resolve와 render-plan 모두 같은 명시적 서버 alias를 보낸다', async () => {
+  for (const backendAccountAlias of ['server-a', 'server-b']) {
+    const fetchImpl = successfulFetch();
+    const result = await runRestDatasetWithAccount({
+      dataset: dataset(),
+      backendBase: 'http://backend',
+      backendAccountAlias,
+      fetchImpl,
+      emitCanvas: async (payload) => ({
+        verifiedVisible: true,
+        visiblePaintAt: payload.requestStartedAt + 10,
+      }),
+    });
+    assert.equal(result.ok, true);
+    assert.deepEqual(fetchImpl.calls.map((call) => call.headers['X-Athena-Account']), [
+      backendAccountAlias,
+      backendAccountAlias,
+    ]);
+    assert.deepEqual(fetchImpl.calls.map((call) => call.redirect), ['error', 'error']);
+  }
+});
+
+test('서버 alias가 없으면 selector와 render-plan을 한 번도 호출하지 않는다', async () => {
+  let fetches = 0;
+  const result = await runRestDatasetWithAccount({
+    dataset: dataset(),
+    backendBase: 'http://backend',
+    fetchImpl: async () => { fetches += 1; return response({}); },
+  });
+  assert.equal(result.ok, false);
+  assert.equal(result.errorCode, 'missing_backend_account_alias');
+  assert.equal(result.physicalCalls, 0);
+  assert.equal(fetches, 0);
+});
+
+test('selector redirect가 거부되면 render-plan을 호출하지 않고 실패한다', async () => {
+  const calls = [];
+  const result = await runRestDatasetWithAccount({
+    dataset: dataset(),
+    backendBase: 'http://backend',
+    backendAccountAlias: 'server-a',
+    fetchImpl: async (url, options) => {
+      calls.push({ url, redirect: options.redirect });
+      throw new TypeError('redirect disallowed');
+    },
+  });
+  assert.equal(result.ok, false);
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].redirect, 'error');
+  assert.match(calls[0].url, /\/resolve$/);
+});
+
+test('render-plan redirect가 거부되어도 우회하지 않고 실패한다', async () => {
+  const calls = [];
+  const result = await runRestDatasetWithAccount({
+    dataset: dataset(),
+    backendBase: 'http://backend',
+    backendAccountAlias: 'server-a',
+    fetchImpl: async (url, options) => {
+      calls.push({ url, redirect: options.redirect });
+      if (url.endsWith('/resolve')) return response({ plan_token: 'plan-1' });
+      throw new TypeError('redirect disallowed');
+    },
+  });
+  assert.equal(result.ok, false);
+  assert.deepEqual(calls.map((call) => call.redirect), ['error', 'error']);
+  assert.match(calls[1].url, /\/render-plan$/);
+});
 
 test('exact direct lane uses only resolve and inline render-plan, then emits paint ack', async () => {
   const fetchImpl = successfulFetch({ dataByOrdinal: { 1: { fields: [{ key: 'cur_prc', label: '현재가', value: '73500' }] } } });
@@ -1359,6 +1436,39 @@ test('ETF, unknown code, intent uncertainty, and unknown market never bind the s
   assert.equal(refreshed.resolveQuery('시장0 현재가')?.kind, 'stock');
   assert.equal(refreshed.resolveQuery('시장10 현재가')?.kind, 'stock');
   assert.equal(refreshed.resolveQuery('시장8 현재가')?.kind, 'etf');
+});
+
+test('stock-master A/B refresh는 모든 시장 요청에 같은 검증 alias와 redirect 차단을 보낸다', async () => {
+  for (const backendAccountAlias of ['server-a', 'server-b']) {
+    const index = new StockEntityIndex();
+    const calls = [];
+    await refreshStockEntityIndexWithAccount(index, {
+      backendBase: 'http://backend', backendAccountAlias,
+      wait: async () => {},
+      fetchImpl: async (_url, options) => {
+        calls.push(options);
+        const market = JSON.parse(options.body).mrkt_tp;
+        return response({ list: [{ code: `${Number(market) + 1}`.padStart(6, '0'), name: `시장${market}`, marketCode: market }] });
+      },
+    });
+    assert.equal(calls.length, 3);
+    assert.deepEqual(calls.map((options) => options.headers['X-Athena-Account']), [
+      backendAccountAlias, backendAccountAlias, backendAccountAlias,
+    ]);
+    assert.deepEqual(calls.map((options) => options.redirect), ['error', 'error', 'error']);
+  }
+});
+
+test('stock-master alias 누락/형식 오류는 첫 시장 fetch 전에 차단한다', async () => {
+  let fetches = 0;
+  for (const backendAccountAlias of ['', 'LOCAL-UUID', 'server a']) {
+    await assert.rejects(refreshStockEntityIndexWithAccount(new StockEntityIndex(), {
+      backendBase: 'http://backend', backendAccountAlias,
+      wait: async () => {},
+      fetchImpl: async () => { fetches += 1; },
+    }), (error) => error && error.code === 'missing_backend_account_alias');
+  }
+  assert.equal(fetches, 0);
 });
 
 test('stock-master refresh publishes one atomic returned-market snapshot and deduplicates aggregate overlap', async () => {

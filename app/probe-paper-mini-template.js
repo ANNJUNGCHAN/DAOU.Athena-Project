@@ -12,7 +12,7 @@
 //
 // 성공 표지: paper mini template verification passed
 
-const { app } = require('electron');
+const { app, session } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
@@ -39,7 +39,9 @@ fs.writeFileSync(
 app.setPath('userData', PROFILE);
 process.env.ATHENA_NO_AUTOSTART = '1';
 process.env.ATHENA_CANVAS_SOURCE = 'fixture';
+process.env.ATHENA_NO_AUTOSTART = '1';
 process.env.ATHENA_PERSISTENT_CHAT = '0';
+process.env.ATHENA_CHAT_HISTORY_DB_PATH = path.join(PROFILE, 'athena-chat-outbox.sqlite3');
 
 const readJson = (file) => JSON.parse(fs.readFileSync(file, 'utf8'));
 
@@ -197,11 +199,17 @@ async function main() {
   process.env.ATHENA_CLAUDE_BIN = compileFakeClaude();
   console.log(`[probe-paper-mini-template] envelopes=${ENVELOPES.length}`);
 
+  // 검증 창은 file/data 리소스만 쓴다. main.js를 로드하기 전에 HTTP와 WebSocket을
+  // 막아 공유 backend/provider에 닿는 경로를 fail-closed로 만든다.
+  session.defaultSession.webRequest.onBeforeRequest((details, callback) => {
+    callback({ cancel: /^(?:https?|wss?):/i.test(details.url) });
+  });
   const mainModule = require('./main.js');
   require('./lib/main/history-sink').configureChatHistoryStore({
     dbPath: path.join(PROFILE, 'athena-chat-outbox.sqlite3'),
   });
   await mainModule.createWindows();
+  mainModule.startBootReadinessForVerify();
   const { shellWin, orbWin } = mainModule.getWins();
   if (!shellWin || !orbWin) throw new Error('shellWin/orbWin을 찾지 못했다');
   orbWin.webContents.on('console-message', (_event, details) => {
@@ -235,6 +243,17 @@ async function main() {
     input.value = '카드미니 견본 확인';
     input.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
   })()`);
+
+  const queryAccepted = await waitFor(() => orbWin.webContents.executeJavaScript(
+    "Array.from(document.querySelectorAll('#orbChatTurns .orb-turn-q')).some((node) => node.textContent === '카드미니 견본 확인')",
+  ), 3000);
+  if (!queryAccepted) {
+    const inputState = await orbWin.webContents.executeJavaScript(`(() => {
+      const input = document.getElementById('orbInput');
+      return { disabled: input.disabled, value: input.value };
+    })()`);
+    throw new Error(`오브가 견본 질의를 수락하지 않았다: ${JSON.stringify(inputState)}`);
+  }
 
   const deadline = Date.now() + 45000;
   let rendered = 0;

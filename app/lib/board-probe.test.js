@@ -118,7 +118,7 @@ test('boardStepProbe는 인스턴스 키를 박은 실행 가능한 식을 만�
   assert.doesNotThrow(() => new Function(`return ${source};`)); // eslint-disable-line no-new-func
 });
 
-test('loadRealBoardContract는 넘겨받은 템플릿 뿌리에서 paper_text만 계약에 싣는다', (t) => {
+test('loadRealBoardContract는 Paper 완성 표기를 사전 포맷 값으로 계약에 싣는다', (t) => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'board-probe-'));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   const boardDir = path.join(root, '13BC-2');
@@ -146,7 +146,9 @@ test('loadRealBoardContract는 넘겨받은 템플릿 뿌리에서 paper_text만
   assert.deepEqual(surface.realtimeBindings, []);
   assert.equal(surface.slotCount, 3);
   assert.equal(surface.boundCount, 1);
-  assert.deepEqual(surface.contract.slot_values, { 'header.price': '150,850' });
+  assert.deepEqual(surface.contract.slot_values, {
+    'header.price': { value: '150,850', text: '150,850' },
+  });
   assert.equal(surface.contract.surface_version, 'card-surface.v1');
   assert.equal(surface.contract.card_id, 'CC-03');
   assert.deepEqual(surface.contract.column_priority, ['1', '4']);

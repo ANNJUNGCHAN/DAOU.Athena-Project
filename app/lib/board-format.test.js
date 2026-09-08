@@ -212,6 +212,13 @@ test('미리 만들어진 표기(text)는 그대로 쓰고 포맷터를 다시 �
     formatSlot({ kind: 'number', suffix: '원' }, { value: 150850, text: '150,850원' }).text,
     '150,850원',
   );
+  for (const [boardId, slotId, value, text] of [
+    ['137X-2', 's019', 2140000, '거래대금 2.14조원'],
+    ['2R3M-1', 's030', '094218', '현재가 · 09:42:18 체결'],
+  ]) {
+    const result = formatSlot(boardSlot(boardId, slotId).format, { value, text, tone: 'flat' });
+    assert.deepEqual([result.text, result.tone], [text, 'flat']);
+  }
 });
 
 test('Paper 원문을 슬롯 값으로 넣어도 접두·접미를 한 번 더 붙이지 않는다', () => {

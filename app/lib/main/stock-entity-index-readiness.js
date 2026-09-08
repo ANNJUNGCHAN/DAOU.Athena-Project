@@ -10,6 +10,7 @@ class StockEntityIndexReadiness {
     retryBaseMs = DEFAULT_RETRY_BASE_MS,
     retryMaxMs = DEFAULT_RETRY_MAX_MS,
     onError = () => {},
+    onReady = () => {},
     setTimeoutImpl = setTimeout,
     clearTimeoutImpl = clearTimeout,
   }) {
@@ -18,12 +19,14 @@ class StockEntityIndexReadiness {
     }
     if (typeof refresh !== 'function') throw new TypeError('refresh must be a function');
     if (typeof onError !== 'function') throw new TypeError('onError must be a function');
+    if (typeof onReady !== 'function') throw new TypeError('onReady must be a function');
 
     this._index = index;
     this._refresh = refresh;
     this._retryBaseMs = Math.max(1, Number(retryBaseMs) || DEFAULT_RETRY_BASE_MS);
     this._retryMaxMs = Math.max(this._retryBaseMs, Number(retryMaxMs) || DEFAULT_RETRY_MAX_MS);
     this._onError = onError;
+    this._onReady = onReady;
     this._setTimeout = setTimeoutImpl;
     this._clearTimeout = clearTimeoutImpl;
     this._started = false;
@@ -95,7 +98,7 @@ class StockEntityIndexReadiness {
     this._refreshController = controller;
     const inFlight = Promise.resolve()
       .then(() => this._refresh(this._index, { signal: controller.signal }))
-      .then(() => this._index.size > 0)
+      .then(() => this._index.size > 0 && !controller.signal.aborted)
       .catch((error) => {
         if (!(controller.signal.aborted && !this._started)) this._onError(error);
         return false;
@@ -103,6 +106,17 @@ class StockEntityIndexReadiness {
       .then((ready) => {
         if (ready) {
           this._retryAttempt = 0;
+          if (this._started) {
+            try {
+              this._onReady({ size: this._index.size });
+            } catch (error) {
+              try {
+                this._onError(error);
+              } catch {
+                // 성공한 refresh와 waiter 해제는 observer 오류와 분리한다.
+              }
+            }
+          }
           this._resolveWaiters(true);
         } else {
           this._scheduleRetry();
@@ -135,6 +149,22 @@ class StockEntityIndexReadiness {
   }
 }
 
+function reconcileStockIndexStartupTask(startupReadiness, size) {
+  if (!startupReadiness || typeof startupReadiness.snapshot !== 'function'
+      || typeof startupReadiness.update !== 'function') {
+    throw new TypeError('startupReadiness with snapshot and update is required');
+  }
+  if (!Number.isInteger(size) || size <= 0) return false;
+  const task = startupReadiness.snapshot().tasks
+    .find((candidate) => candidate.id === 'stock-index');
+  if (!task || task.state !== 'failed') return false;
+  startupReadiness.update('stock-index', {
+    state: 'succeeded',
+    detail: `종목 ${size}개 적재 완료`,
+  });
+  return true;
+}
+
 function createStockEntityIndexReadiness(options) {
   return new StockEntityIndexReadiness(options);
 }
@@ -144,4 +174,5 @@ module.exports = {
   DEFAULT_RETRY_MAX_MS,
   StockEntityIndexReadiness,
   createStockEntityIndexReadiness,
+  reconcileStockIndexStartupTask,
 };

@@ -40,6 +40,16 @@ const run = async (routes, overrides = {}) => {
   return checkPaperRoutes({ routes, ...BASE(), ...overrides });
 };
 
+test('knownChannels recognizes both public and renderer-query channel forms', async () => {
+  const { knownChannels } = await load();
+  const channels = knownChannels([
+    "ipcRenderer.invoke('athena:account-list')",
+    "ipcRenderer.invoke('athena__render_canvas')",
+    "ipcRenderer.invoke('athena__render.canvas')",
+  ]);
+  assert.deepEqual([...channels], ['athena:account-list', 'athena__render_canvas']);
+});
+
 test('a table whose every reference is real passes', async () => {
   assert.deepEqual(await run([ROUTE()]), []);
 });

@@ -238,14 +238,40 @@ async def test_one_failed_account_does_not_block_the_others() -> None:
 
 
 def test_ready_accounts_reports_each_account_separately() -> None:
-    app = create_app(_pooled_settings())
+    app = create_app(_pooled_settings(local_bearer_token="local-test"))
     with respx.mock(base_url="https://mockapi.kiwoom.com") as mock:
         _mock_token(mock)
         with TestClient(app) as client:
-            body = client.get("/ready/accounts").json()
+            body = client.get(
+                "/ready/accounts", headers={"Authorization": "Bearer local-test"}
+            ).json()
     assert body["default"] == "sangsi"
     assert set(body["accounts"]) == {"daeju", "sangsi"}
     assert body["accounts"]["daeju"]["ready"] is True
+
+
+def test_ready_accounts_requires_the_local_bearer_before_aliases_are_returned() -> None:
+    app = create_app(_pooled_settings(local_bearer_token="local-test"))
+    with respx.mock(base_url="https://mockapi.kiwoom.com") as mock:
+        _mock_token(mock)
+        with TestClient(app) as client:
+            health = client.get("/health")
+            ready = client.get("/ready")
+            missing = client.get("/ready/accounts")
+            wrong = client.get(
+                "/ready/accounts", headers={"Authorization": "Bearer wrong"}
+            )
+            valid = client.get(
+                "/ready/accounts", headers={"Authorization": "Bearer local-test"}
+            )
+    assert health.status_code == 200
+    assert ready.status_code == 200
+    assert missing.status_code == 401
+    assert wrong.status_code == 401
+    assert "accounts" not in missing.json()
+    assert "accounts" not in wrong.json()
+    assert valid.status_code == 200
+    assert set(valid.json()["accounts"]) == {"daeju", "sangsi"}
 
 
 # --- request routing ---------------------------------------------------------------
@@ -626,7 +652,9 @@ def test_ready_accounts_reports_order_scopes() -> None:
     with respx.mock(base_url="https://mockapi.kiwoom.com") as mock:
         _mock_token(mock)
         with TestClient(app) as client:
-            accounts = client.get("/ready/accounts").json()["accounts"]
+            accounts = client.get(
+                "/ready/accounts", headers={"Authorization": "Bearer local-test"}
+            ).json()["accounts"]
     assert accounts["daeju"]["order_scopes"] == []
     assert accounts["sangsi"]["order_scopes"] == ["cash"]
 

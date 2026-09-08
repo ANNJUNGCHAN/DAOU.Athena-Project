@@ -26,6 +26,8 @@ const INVOKE_CHANNELS = new Set([
   'athena:account-list',
   'athena:account-register',
   'athena:account-set-active',
+  'athena:account-runtime-options',
+  'athena:account-set-backend-alias',
   'athena:account-remove',
   'athena:order-api-set',
   'athena:auth-token-status',
