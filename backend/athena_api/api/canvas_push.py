@@ -1336,6 +1336,29 @@ async def internal_canvas_board_hydrate(
             if slot.slot_id in set(payload.slot_ids)
         )
     )
+    # **답한 조회가 싣지 않은 값**은 결측어가 아니라 빈 칸이다.
+    #
+    # 결측어(「미제공」)는 「물어볼 수 없었다」에 남긴다 — op가 호출되지 않았거나
+    # 업스트림이 실패한 자리다. 그 카드는 실패해서 불완전한 것이고, 렌더러가 재조회
+    # 안내와 함께 그 상태를 보여준다. 반대로 조회가 **정상으로 답했는데** 그 필드가
+    # 응답에 없으면 그 자리에는 값이 없는 것이고, 스무 줄 내리 「미제공」을 찍는 것은
+    # 「제공되지 않는다」는 스무 번의 거짓말이다(실측: 답한 조회 뒤 남은 결측어가
+    # 화면 결측어의 대부분).
+    answered_refs = {
+        status["operation_ref"]
+        for status in operations
+        if status.get("status") == "bound"
+    }
+    if answered_refs:
+        blanks = set(surface_contract.get("empty_value_slots") or [])
+        for slot in board.binding_slots:
+            if slot.slot_id in filled or slot.slot_id in blanks:
+                continue
+            refs = {binding.mapping_id for binding in slot.bindings}
+            if refs and refs <= answered_refs:
+                blanks.add(slot.slot_id)
+        surface_contract["empty_value_slots"] = sorted(blanks)
+
     surface_contract["hydration_slot_ids"] = [
         slot.slot_id
         for slot in requested_slots
