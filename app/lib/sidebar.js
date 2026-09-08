@@ -85,6 +85,8 @@
           // 눌렀다고 쓰던 대화를 버리면 그건 기능이 아니라 사고다.
           const previousView = currentMode();
           const modeChanged = previousView !== view;
+          // 앞 모드의 작업공간을 먼저 흘리고 채팅을 비운다.
+          if (modeChanged) startNewConversation(currentProjectId, view);
           if (window.AthenaCanvasMode && typeof window.AthenaCanvasMode.setView === 'function') {
             window.AthenaCanvasMode.setView(view);
           }
@@ -111,10 +113,6 @@
           } else if (!modeChanged) {
             renderList();
           }
-          // 새 대화로 갈아타기 — 위 renderList()를 modeChanged일 때 건너뛴 이유가
-          // 이것이다. startNewConversation()은 clearConversationUi()로 채팅을 비우고
-          // 목록까지 다시 그린다(그 함수 주석 참고). 여기서 또 부르면 두 번 그린다.
-          if (modeChanged) startNewConversation(currentProjectId, view);
         },
       })
     : null;
@@ -1196,14 +1194,15 @@
   }
 
   async function openRoutineMainCard(id) {
-    selectNotifyRoom(id);
+    markNotifyRoom(id);
+    const pendingConversation = startNewConversation(currentProjectId, 'summary', { preserveSessionCards: true });
     if (window.AthenaCanvasMode && typeof window.AthenaCanvasMode.setView === 'function') {
       window.AthenaCanvasMode.setView('summary');
     }
     if (window.AthenaModeNav && typeof window.AthenaModeNav.setActive === 'function') {
       window.AthenaModeNav.setActive('summary');
     }
-    const conversationId = await startNewConversation(currentProjectId, 'summary', { preserveSessionCards: true });
+    const conversationId = await pendingConversation;
     if (!conversationId) {
       window.dispatchEvent(new CustomEvent('athena:routine-main-card-open-error', {
         detail: { message: '카드 대화창을 만들지 못했습니다.' },
@@ -1324,6 +1323,19 @@
   }
 
   function selectNotifyRoom(id) {
+    if (!notifyRooms.some((r) => r.id === id)) return;
+    const needsConversationBoundary = selectedNotifyId !== id || currentMode() !== 'agent';
+    if (needsConversationBoundary) startNewConversation(currentProjectId, 'agent');
+    if (window.AthenaCanvasMode && typeof window.AthenaCanvasMode.setView === 'function') {
+      window.AthenaCanvasMode.setView('agent');
+    }
+    if (window.AthenaModeNav && typeof window.AthenaModeNav.setActive === 'function') {
+      window.AthenaModeNav.setActive('agent');
+    }
+    markNotifyRoom(id);
+  }
+
+  function markNotifyRoom(id) {
     const room = notifyRooms.find((r) => r.id === id);
     if (!room) return;
     // F-stage5b-FE — engagement.py의 "opened" 정의(능동 턴이 뜬 방을 사용자가

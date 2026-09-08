@@ -79,6 +79,9 @@ test('isRenderCanvasToolName: 이름과 별칭이 다른 경우 둘 다 매칭',
   assert.equal(isRenderCanvasToolName('mcp__my-alias__athena__render_canvas'), true);
   assert.equal(isRenderCanvasToolName('mcp__athena__athena__save_canvas'), false);
   assert.equal(isRenderCanvasToolName('mcp__everything__echo'), false);
+  assert.equal(isRenderCanvasToolName('athena__athena_render_canvas'), true);
+  assert.equal(isRenderCanvasToolName('mcp__athena__athena_render_canvas'), true);
+  assert.equal(isRenderCanvasToolName('other__athena_render_canvas'), false);
   assert.equal(isRenderCanvasToolName(undefined), false);
 });
 

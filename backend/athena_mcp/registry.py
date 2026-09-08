@@ -229,12 +229,19 @@ class ServerRegistry:
             "servers": servers,
         }
 
-    def _mutate(self, mutation):
+    def _mutate(self, mutation, *, skip_if_unchanged: bool = False):
         lock_path = self.path.with_name(f".{self.path.name}.lock")
         with exclusive_state_lock(lock_path):
-            entries, revision, _ = self._read_disk_state()
+            entries, revision, fingerprint = self._read_disk_state()
             working = deepcopy(entries)
             result = mutation(working)
+            if skip_if_unchanged and working == entries:
+                # 자가보고 메타데이터의 동일 재관측 전용. 다른 변이는 기존처럼
+                # 매 호출마다 revision을 올려 제안 만료·보안 스냅샷 계약을 지킨다.
+                self._entries = entries
+                self._revision = revision
+                self._fingerprint = fingerprint
+                return result
             next_revision = revision + 1
             payload = self._payload(working, next_revision)
             atomic_write_json(self.path, payload)
@@ -331,20 +338,31 @@ class ServerRegistry:
         def mutation(entries: dict[str, ServerEntry]) -> None:
             if alias not in entries:
                 raise UnknownAliasError(alias)
+            current = entries[alias].self_reported_server_info
+            if (
+                current is not None
+                and current.reported_name == reported_name
+                and current.reported_version == reported_version
+                and current.protocol_version == protocol_version
+            ):
+                return
             entries[alias].self_reported_server_info = SelfReportedServerInfo(
                 reported_name=reported_name,
                 reported_version=reported_version,
                 protocol_version=protocol_version,
                 observed_at=datetime.now(UTC).isoformat(),
             )
-        self._mutate(mutation)
+        self._mutate(mutation, skip_if_unchanged=True)
 
     def record_encoding_smoke_test(self, alias: str, mojibake_detected: bool) -> None:
         def mutation(entries: dict[str, ServerEntry]) -> None:
             if alias not in entries:
                 raise UnknownAliasError(alias)
-            entries[alias].encoding_smoke_test_warning = mojibake_detected
-        self._mutate(mutation)
+            detected = bool(mojibake_detected)
+            if entries[alias].encoding_smoke_test_warning == detected:
+                return
+            entries[alias].encoding_smoke_test_warning = detected
+        self._mutate(mutation, skip_if_unchanged=True)
 
     def set_env_sentinel(self, alias: str, key: str) -> None:
         """`env[key]`를 `SECRET_SENTINEL`로 치환한다 — 마이그레이션 전용 연산.

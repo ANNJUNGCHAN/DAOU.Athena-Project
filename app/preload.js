@@ -280,7 +280,7 @@ const ON_CHANNELS = new Set([
   'athena:window-state',
   'athena:boot-readiness',
   'athena:app-notification',
-  // 8XX  \ � ��(39� ��)  �t� �X �<�.
+  // 8XX  \ � ��(39� ��)  �t� �X �<�.
   'athena:session-run-state',
   'athena:add-canvas',
   'athena:add-canvas-live',
@@ -348,6 +348,8 @@ const ON_CHANNELS = new Set([
   // 루틴 제어 제안 카드(Step 6) — athena_routine propose 결과, 비영속.
   // 확정은 사람이 카드의 칩을 눌렀을 때 렌더러가 직접 REST를 부른다.
   'athena:routine-proposed',
+  // athena_routine draft 성공 결과 — 정확한 초안과 원래 대화 id를 함께 받는다.
+  'athena:routine-draft-created',
   // 새 알람 만들기 영수증·질문 카드 — propose_watch_code 성공 결과, 비영속.
   'athena:watch-create',
   // 백테스트 채팅 액션 — athena_backtest의 propose_spec·propose_code·navigate·
@@ -357,6 +359,8 @@ const ON_CHANNELS = new Set([
   'athena:plugin-proposed',
   // 질의 왕복이 도는 동안 셸·오브 입력을 함께 잠그는 신호 — {busy: boolean}.
   'athena:live-query-state',
+  // 활성 대화 id(다중 대화, 2026-09-08) — {conversationId}. 새 대화·전환 때 main이 발행한다.
+  'athena:conversation-active',
   // 오브에서 오간 턴을 셸의 대화 이력에도 늦게 채워 넣는다(셸이 숨어 있는 동안
   // chat.js가 그릴 수 없었으므로) — {query, result}. 셸에서만 구독한다.
   'athena:orb-turn-committed',
