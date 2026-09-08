@@ -51,6 +51,7 @@ const {
   uniqueStateControls,
 } = require('./lib/paper-cards-mount-report');
 const { mergeMountLayer } = require('./lib/paper-cards-report');
+const boardRegistry = require('./lib/board-template-registry');
 
 const APP = __dirname;
 const ROOT = path.resolve(APP, '..');
@@ -145,7 +146,19 @@ function readTextMultiset(boardId) {
   const slotsPath = path.join(TEMPLATE_ROOT, boardId, 'slots.json');
   const { text_multiset: multiset } = JSON.parse(fs.readFileSync(slotsPath, 'utf8'));
   if (!multiset) throw new Error(`slots.json에 text_multiset이 없다: ${boardId}`);
-  return multiset;
+  // 마운트 계약이 `static: "blank"`로 표시한 자리는 화면에서 빈 칸이다(생성기
+  // `_static_mode`: 응답에 없는 수치라 Paper 목업 숫자를 그대로 둘 수 없다). 화면에
+  // 없는 글자는 기대 다중집합에서도 빠져야 한다 — 판정은 계약 하나에서만 읽는다.
+  const contract = boardRegistry.contractFor(boardId);
+  const expected = { ...multiset };
+  for (const slot of (contract && contract.slots) || []) {
+    if (slot.static !== 'blank') continue;
+    const text = typeof slot.paper_text === 'string' ? slot.paper_text.trim() : '';
+    if (!text || !(text in expected)) continue;
+    expected[text] -= 1;
+    if (expected[text] <= 0) delete expected[text];
+  }
+  return expected;
 }
 
 // `boardStepProbe`가 안 재는 둘을 한 번에 더 잰다.

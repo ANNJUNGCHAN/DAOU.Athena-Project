@@ -32,7 +32,10 @@ from athena_api.card_surface_templates import (  # noqa: E402
     get_registry,
     visible_contracts,
 )
-from athena_api.hydrate_defaults import fill_missing_arguments  # noqa: E402
+from athena_api.hydrate_defaults import (  # noqa: E402
+    chain_for,
+    fill_missing_arguments,
+)
 from athena_api.selector.catalog import build_operation_catalog  # noqa: E402
 from athena_api.generated.registry import DETAIL_REGISTRY, TR_REGISTRY  # noqa: E402
 
@@ -66,7 +69,31 @@ def post(path: str, body: dict, timeout: float = 30.0):
         return 0, None
 
 
-def call_operation(document, target: dict, cache: dict):
+def resolve_chain(alias: str, catalog, cache: dict, chained: dict):
+    """연쇄 인자 — 목록 op를 부르고 첫 값을 쓴다(하이드레이션과 같은 규칙)."""
+
+    if alias in chained:
+        return chained[alias]
+    chain = chain_for(alias)
+    chained[alias] = None
+    if chain is None:
+        return None
+    document = catalog.find_exact(chain["operation_ref"])
+    if document is None:
+        return None
+    payload, _ = call_operation(document, {}, cache, catalog, chained)
+    if payload is None:
+        return None
+    values = [
+        value
+        for value in json_path_values(payload, chain["json_path"])
+        if isinstance(value, (str, int)) and str(value).strip()
+    ]
+    chained[alias] = str(values[0]) if values else None
+    return chained[alias]
+
+
+def call_operation(document, target: dict, cache: dict, catalog=None, chained=None):
     """op 하나를 실제로 부른다. 같은 (tr, 인자)는 한 번만."""
 
     aliases = {
@@ -77,6 +104,12 @@ def call_operation(document, target: dict, cache: dict):
     missing = sorted(
         alias for alias, required in aliases.items() if required and alias not in arguments
     )
+    if missing and catalog is not None and chained is not None:
+        for alias in list(missing):
+            value = resolve_chain(alias, catalog, cache, chained)
+            if value is not None:
+                arguments[alias] = value
+                missing.remove(alias)
     if missing:
         return None, f"op_not_called_arguments:{','.join(missing)}"
     path = route_for(document)
@@ -130,6 +163,7 @@ def main() -> int:
     only = [b for b in (os.environ.get("SWEEP_BOARDS") or "").split(",") if b]
     boards = [b for b in registry.boards.values() if not only or b.board_id in only]
     cache: dict = {}
+    chained: dict[str, str | None] = {}
     reason_totals: collections.Counter[str] = collections.Counter()
     per_board = []
     for index, board in enumerate(boards, 1):
@@ -154,7 +188,9 @@ def main() -> int:
             if not document.generic_callable:
                 op_reason[operation_ref] = "op_not_called_not_generic"
                 continue
-            payload, reason = call_operation(document, target, cache)
+            payload, reason = call_operation(
+                document, target, cache, catalog, chained
+            )
             if payload is None:
                 op_reason[operation_ref] = reason or "upstream_error"
                 continue

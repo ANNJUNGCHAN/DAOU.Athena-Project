@@ -320,16 +320,37 @@ function collapseEmptyRows(surface, emptyRows, options = {}) {
     }
   }
   const hidden = [];
+  const skipped = [];
   for (const row of rows) {
     const slotIds = Array.isArray(row && row.slot_ids) ? row.slot_ids : [];
     const elements = slotIds.map((slotId) => bySlot.get(slotId)).filter(Boolean);
-    if (!elements.length) continue;
+    if (!elements.length) {
+      skipped.push({ row: row.row, why: 'no_anchor' });
+      continue;
+    }
     const box = commonAncestor(elements);
     // 값 있는 잎을 품는 상자는 접지 않는다 — 자료를 지우는 접기는 없다. 표면
     // 자체가 그 상자면 접을 것이 없다(줄이 아니라 보드 전체다).
-    if (!box || box === surface || holdsValue(box, valued)) continue;
+    if (!box) {
+      skipped.push({ row: row.row, why: 'no_common_box' });
+      continue;
+    }
+    if (box === surface) {
+      skipped.push({ row: row.row, why: 'box_is_surface' });
+      continue;
+    }
+    if (holdsValue(box, valued)) {
+      skipped.push({ row: row.row, why: 'box_holds_value' });
+      continue;
+    }
     setHidden(box, true);
+    if (box.dataset) box.dataset.bsRowCollapsed = 'true';
     hidden.push({ row: row.row, node: (box.dataset && box.dataset.node) || '', slots: slotIds.length });
+  }
+  // 왜 못 접었는지는 리포트가 읽는다(프로브의 collapse 진단).
+  if (surface.dataset) {
+    surface.dataset.bsRowsCollapsed = String(hidden.length);
+    surface.dataset.bsRowsSkipped = JSON.stringify(skipped.slice(0, 8));
   }
   if (typeof options.onCollapse === 'function') options.onCollapse(hidden);
   return hidden;

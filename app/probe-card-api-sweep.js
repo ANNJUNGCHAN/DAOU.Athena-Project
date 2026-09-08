@@ -35,6 +35,10 @@ const CARD_INDEX = path.join(TEMPLATE_ROOT, 'index.json');
 const REPORT_PATH = path.join(APP, 'captures', 'card-api-sweep', 'CARD-API-SWEEP.json');
 const BACKEND_BASE = process.env.ATHENA_BACKEND_BASE || 'http://127.0.0.1:8010';
 const TARGET = JSON.parse(process.env.ATHENA_SWEEP_TARGET || '{"stk_cd":"005930"}');
+// 눈으로 볼 보드 — `ATHENA_SWEEP_CAPTURE=4AUX-1,133H-2` 또는 `*`.
+const CAPTURE = new Set(
+  (process.env.ATHENA_SWEEP_CAPTURE || '').split(',').map((value) => value.trim()).filter(Boolean),
+);
 const CARD_KIND = Object.freeze({
   'CC-01': 'account', 'CC-02': 'order', 'CC-03': 'instrument',
   'CC-04': 'orderbook', 'CC-05': 'flow', 'CC-06': 'explorer',
@@ -201,6 +205,19 @@ async function probeBoard(win, boardId, ordinal, token) {
         MISSING_TEXT_PROBE(surface.instanceId),
       );
       if (clip.error || missing.error) throw new Error(clip.error || missing.error);
+      if (CAPTURE.has(boardId) || CAPTURE.has('*')) {
+        // 두 프레임을 기다린다 — 바로 찍으면 마운트 전 프레임이 나온다.
+        await win.webContents.executeJavaScript(
+          'new Promise((done) => requestAnimationFrame('
+          + '() => requestAnimationFrame(() => done(true))))',
+        );
+        const image = await win.webContents.capturePage();
+        const file = path.join(
+          path.dirname(REPORT_PATH), `${boardId}-${preset.name}.png`,
+        );
+        fs.mkdirSync(path.dirname(file), { recursive: true });
+        fs.writeFileSync(file, image.toPNG());
+      }
       record.steps.push({
         preset: preset.name,
         missing_total: missing.total,
@@ -209,6 +226,8 @@ async function probeBoard(win, boardId, ordinal, token) {
         clipped_total: clip.clipped_total,
         clipped_nodes: clip.clipped_nodes,
         reachable_clip_total: clip.reachable_total,
+        rows_collapsed: missing.rows_collapsed,
+        rows_skipped: missing.rows_skipped,
       });
       if (missing.total > 0) {
         record.failures.push({
