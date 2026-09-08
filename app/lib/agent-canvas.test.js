@@ -802,14 +802,14 @@ test('rationale이 없으면(nullable) 근거문에서 그 부분만 빠진다 �
   const container = fakeNode('div');
   const canvas = createAgentCanvas({
     container, fetchRoutines: async () => [],
-    fetchProfileSummary: async () => [profileEntry({ rationale: null })],
+    fetchProfileSummary: async () => [profileEntry({ rationale: null, confidence: 'INFERRED' })],
   });
   canvas.mount();
   await canvas.refresh();
   assert.equal(findByClass(container, 'agent-suggest-rationale')[0].textContent, '단기 회전 성향 21회 보강');
 });
 
-test('"추가" 클릭 시 onAddSuggestion이 실제 필드로 조합한 문장을 받는다(시트를 열지 않는다, 43 원칙)', async () => {
+test('"추가" 클릭은 근거를 보존하고 선택 질문 없이 초안·자동 검사까지 요청한다', async () => {
   const container = fakeNode('div');
   let seeded = null;
   const canvas = createAgentCanvas({
@@ -822,7 +822,30 @@ test('"추가" 클릭 시 onAddSuggestion이 실제 필드로 조합한 문장�
   const addBtn = findByClass(container, 'agent-suggest-add')[0];
   assert.equal(addBtn.textContent, '추가');
   addBtn.dispatchEvent({ type: 'click' });
-  assert.equal(seeded, '"삼성전자"에 대한 단기 회전 성향이 21회 보강됐어요 — 관련 루틴을 만들어줄까요?');
+  assert.match(seeded, /^"삼성전자" 관련 루틴을 완성해줘\. 근거 신호\(EXTRACTED\): 단기 회전 성향 21회 보강 — 매매일마다 정리가 필요해 보여요\./);
+  assert.match(seeded, /대상 식별자와 기준값은 사용 가능한 조회 도구로 확인하고/);
+  assert.match(seeded, /지원되는 합리적인 기본값으로 네가 정해서/);
+  assert.match(seeded, /추가 질문이나 제안 확인 없이 실제 초안을 만들어줘/);
+  assert.match(seeded, /감시 코드를 작성하고 초안을 만든 뒤 자동 검사까지 진행해서 승인 대기 상태로 준비해줘/);
+  assert.match(seeded, /근거 신호를 내 투자 선호라고 단정하지 말고/);
+  assert.match(seeded, /정한 조건·확인 주기·쿨다운·만료를 제안 설정으로 모두 밝혀줘/);
+  assert.match(seeded, /실제 활성화는 내가 승인할 때만 해/);
+  assert.doesNotMatch(seeded, /만들어줄까요|골라|선택해/);
+});
+
+test('"추가" 요청은 rationale이 없어도 실제 relation_kind와 reinforcement만 근거로 쓴다', async () => {
+  const container = fakeNode('div');
+  let submitted = null;
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [],
+    fetchProfileSummary: async () => [profileEntry({ rationale: null, confidence: 'INFERRED' })],
+    onAddSuggestion: (text) => { submitted = text; },
+  });
+  canvas.mount();
+  await canvas.refresh();
+  findByClass(container, 'agent-suggest-add')[0].dispatchEvent({ type: 'click' });
+  assert.match(submitted, /근거 신호\(INFERRED\): 단기 회전 성향 21회 보강\./);
+  assert.doesNotMatch(submitted, /undefined|null/);
 });
 
 test('fetchProfileSummary가 실패하면 제안 섹션이 숨는다(지어낸 제안을 보여주지 않는다, P3)', async () => {
@@ -1392,7 +1415,7 @@ test('신호가 없으면 스트립이 정직하게 "아직 읽히는 성향이 
   assert.equal(findByClass(container, 'agent-proactive-strip-value')[0].textContent, '아직 읽히는 성향이 없습니다');
 });
 
-test('제안 카드: 칩 "루틴으로"/"보류"가 있고, "루틴으로"는 7단계와 같은 문장을 채팅에 심는다', async () => {
+test('제안 카드: "루틴으로"는 미니 목록과 같은 완결형 요청을 보낸다', async () => {
   const container = fakeNode('div');
   let seeded = null;
   const canvas = createAgentCanvas({
@@ -1408,7 +1431,9 @@ test('제안 카드: 칩 "루틴으로"/"보류"가 있고, "루틴으로"는 7�
   const chips = findByClass(cards[0], 'agent-proactive-chip').map((n) => n.textContent);
   assert.deepEqual(chips, ['루틴으로', '보류']);
   findByClass(cards[0], 'agent-proactive-chip')[0].dispatchEvent({ type: 'click' });
-  assert.equal(seeded, '"삼성전자"에 대한 단기 회전 성향이 21회 보강됐어요 — 관련 루틴을 만들어줄까요?');
+  assert.match(seeded, /^"삼성전자" 관련 루틴을 완성해줘\. 근거 신호\(EXTRACTED\):/);
+  assert.match(seeded, /자동 검사까지 진행해서 승인 대기 상태로 준비해줘/);
+  assert.doesNotMatch(seeded, /만들어줄까요/);
 });
 
 test('"보류" 클릭 시 그 카드는 이번 세션에서만 숨는다(저장 안 됨, P3) — 탭 배지도 줄어든다', async () => {
