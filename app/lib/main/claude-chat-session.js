@@ -132,6 +132,7 @@ class ClaudeChatSession {
     this._proc = null;
     this._stopped = false;
     this._lastSessionId = null;
+    this._respawnSessionId = null;
     this._lastConfig = { model: null, effort: null };
     this._respawnTimer = null;
     this._failureStreak = 0;
@@ -173,6 +174,8 @@ class ClaudeChatSession {
       this._removeProcess(proc);
     }
     const spawnCursor = resumeSessionId !== undefined ? resumeSessionId : this._lastSessionId;
+    // 예열 직후 종료돼도 같은 설정으로 복구해 다음 턴의 불필요한 재기동을 막는다.
+    this._lastConfig = config;
     this._spawnProcess({ config, resumeSessionId: spawnCursor });
     return this.snapshot();
   }
@@ -341,6 +344,7 @@ class ClaudeChatSession {
   // -- 내부 ------------------------------------------------------------------
 
   _spawnProcess({ config, resumeSessionId = null }) {
+    this._respawnSessionId = resumeSessionId || null;
     if (this._respawnTimer !== null) {
       this._clearTimeout(this._respawnTimer);
       this._respawnTimer = null;
@@ -471,7 +475,10 @@ class ClaudeChatSession {
     if (typeof finalResult.session_id === 'string' && finalResult.session_id) {
       // 완결된 턴만 계보·커서를 갱신한다 — 중단 턴의 포크 id는 여기 못 온다.
       proc.lineage = finalResult.session_id;
-      if (!isError) this._lastSessionId = finalResult.session_id;
+      if (!isError) {
+        this._lastSessionId = finalResult.session_id;
+        this._respawnSessionId = finalResult.session_id;
+      }
     }
     this._settleTurn(proc, {
       ok: !isError,
@@ -602,7 +609,7 @@ class ClaudeChatSession {
     this._respawnTimer = this._setTimeout(() => {
       this._respawnTimer = null;
       if (this._stopped || (this._proc && !this._proc.removed)) return;
-      this._spawnProcess({ config: this._lastConfig, resumeSessionId: this._lastSessionId });
+      this._spawnProcess({ config: this._lastConfig, resumeSessionId: this._respawnSessionId });
     }, delay);
   }
 }
