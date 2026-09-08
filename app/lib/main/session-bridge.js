@@ -69,6 +69,32 @@ class SessionBridge {
     return appended;
   }
 
+  // 답변 턴의 모든 반환 경로가 같은 수명주기를 쓴다. 빠른 경로가 모델 경로보다
+  // 먼저 return하거나 예외를 던져도 placeholder와 chat.turn job을 끝낸다.
+  // 본문이 finishAssistant를 직접 호출한 경우에는 버퍼가 이미 사라졌으므로
+  // 사용량·thinking·최종 상태를 다시 덮어쓰지 않는다.
+  async runAssistantTurn({ sessionId, messageId, parentId, run } = {}) {
+    this.beginAssistant({ sessionId, messageId, parentId });
+    try {
+      const result = await run();
+      if (this.buffers.has(`${sessionId}:${messageId}`)) {
+        this.finishAssistant({
+          sessionId,
+          messageId,
+          text: result && typeof result.answerText === 'string' ? result.answerText : undefined,
+          error: result && result.ok === false ? String(result.error || '') : null,
+          interrupted: Boolean(result && result.ok === false),
+        });
+      }
+      return result;
+    } catch (error) {
+      if (this.buffers.has(`${sessionId}:${messageId}`)) {
+        this.finishAssistant({ sessionId, messageId, error, interrupted: true });
+      }
+      throw error;
+    }
+  }
+
   journalDelta({ sessionId, messageId, text, thinking } = {}) {
     const key = `${sessionId}:${messageId}`;
     const buf = this.buffers.get(key);
