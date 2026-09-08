@@ -129,19 +129,27 @@ function createRealtimeRegistrar(opts) {
   const trId = o.trId || REAL_TR_ID;
   const backendBase = o.backendBase;
   const fetchImpl = o.fetchImpl || globalThis.fetch;
-  const account = o.account || null;
+  const account = String(o.backendAccountAlias || '');
   const mdlog = o.mdlog || (() => {});
   const refCounts = new Map(); // code -> 열린 참조 수(0 이하는 저장하지 않는다)
   const pendingRegister = new Map(); // code -> 진행 중인 REG의 Promise(경합 방지)
+  const pendingRemove = new Set(); // 진행 중인 일반 release REMOVE
+  let draining = false;
+  let drainCleanupOk = true;
+  let drainCompletion = Promise.resolve(true);
 
   async function postFrame(trnm, code) {
+    if (!/^[a-z0-9][a-z0-9_-]{0,31}$/.test(account)) {
+      mdlog(`REAL ${trnm} 차단(${code}): 조회 서버 계좌가 연결되지 않았다`);
+      return false;
+    }
     const headers = { 'Content-Type': 'application/json' };
-    if (account) headers['X-Athena-Account'] = account;
+    headers['X-Athena-Account'] = account;
     const body = trnm === 'REMOVE' ? buildRemoveBody([code], trId) : buildRegisterBody([code], trId);
     let res;
     try {
       res = await fetchImpl(`${backendBase}/api/v1/websocket/${trId}`, {
-        method: 'POST', headers, body: JSON.stringify(body),
+        method: 'POST', redirect: 'error', headers, body: JSON.stringify(body),
       });
     } catch (err) {
       mdlog(`REAL ${trnm} 실패(${code}): ${String((err && err.message) || err)}`);
@@ -163,7 +171,7 @@ function createRealtimeRegistrar(opts) {
   // 하나씩 올린다.
   async function acquire(symbol) {
     const code = String(symbol || '').trim();
-    if (!code) return false;
+    if (!code || draining) return false;
     const count = refCounts.get(code) || 0;
     if (count > 0) {
       refCounts.set(code, count + 1);
@@ -171,7 +179,12 @@ function createRealtimeRegistrar(opts) {
     }
     let inFlight = pendingRegister.get(code);
     if (!inFlight) {
-      inFlight = postFrame('REG', code).finally(() => { pendingRegister.delete(code); });
+      inFlight = (async () => {
+        const registered = await postFrame('REG', code);
+        if (!registered || !draining) return registered;
+        if (!await postFrame('REMOVE', code)) drainCleanupOk = false;
+        return false;
+      })().finally(() => { pendingRegister.delete(code); });
       pendingRegister.set(code, inFlight);
     }
     const ok = await inFlight;
@@ -199,15 +212,41 @@ function createRealtimeRegistrar(opts) {
       return true;
     }
     refCounts.delete(code);
-    const ok = await postFrame('REMOVE', code);
-    if (ok) mdlog(`REAL ${trId} 해제 — ${code}`);
-    else refCounts.set(code, 1);
-    return ok;
+    const inFlight = postFrame('REMOVE', code).then((ok) => {
+      if (ok) mdlog(`REAL ${trId} 해제 — ${code}`);
+      else {
+        refCounts.set(code, 1);
+        if (draining) drainCleanupOk = false;
+      }
+      return ok;
+    }).finally(() => { pendingRemove.delete(inFlight); });
+    pendingRemove.add(inFlight);
+    return inFlight;
+  }
+
+  async function releaseAll() {
+    draining = true;
+    const pending = [...pendingRegister.values(), ...pendingRemove];
+    const activeCleanup = Promise.all([...refCounts.keys()].map(async (code) => {
+      const ok = await postFrame('REMOVE', code);
+      if (ok) refCounts.delete(code);
+      else drainCleanupOk = false;
+      return ok;
+    }));
+    drainCompletion = Promise.allSettled([...pending, activeCleanup]).then((results) => (
+      drainCleanupOk
+      && refCounts.size === 0
+      && results.every((result) => result.status === 'fulfilled')
+    ));
+    const results = await activeCleanup;
+    return pending.length === 0 && results.every(Boolean);
   }
 
   return {
     acquire,
     release,
+    releaseAll,
+    whenDrained: () => drainCompletion,
     isRegistered: (s) => (refCounts.get(String(s || '').trim()) || 0) > 0,
     refCount: (s) => refCounts.get(String(s || '').trim()) || 0,
     size: () => refCounts.size,

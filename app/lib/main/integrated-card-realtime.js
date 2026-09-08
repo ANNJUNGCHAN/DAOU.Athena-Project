@@ -2,6 +2,7 @@
 
 const {
   buildRegisterBody,
+  buildRemoveBody,
   createRealtimeRegistrar,
 } = require('./chart-realtime');
 
@@ -192,6 +193,10 @@ function resolveLeaseBindings(config = {}) {
   const cardId = clean(config.cardId);
   const mode = clean(config.mode) || 'overview';
   const accountId = clean(config.accountId);
+  const backendAccountAlias = clean(config.backendAccountAlias);
+  if (!/^[a-z0-9][a-z0-9_-]{0,31}$/.test(backendAccountAlias)) {
+    throw new TypeError('invalid backend account alias');
+  }
   const verifiedRefs = Array.isArray(config.verifiedOperationRefs)
     ? config.verifiedOperationRefs
     : (Array.isArray(config.operationRefs) ? config.operationRefs : []);
@@ -215,6 +220,7 @@ function resolveLeaseBindings(config = {}) {
           releaseOperationId: operation.releaseOperationId || operation.operationId,
           target,
           accountId,
+          backendAccountAlias,
         }));
       }
     }
@@ -223,7 +229,7 @@ function resolveLeaseBindings(config = {}) {
 }
 
 function physicalKey(binding) {
-  return `${binding.operationId}\u0000${binding.accountId || ''}\u0000${binding.target}`;
+  return `${binding.operationId}\u0000${binding.backendAccountAlias || ''}\u0000${binding.accountId || ''}\u0000${binding.target}`;
 }
 
 function samePresentation(configA, configB) {
@@ -294,12 +300,12 @@ function createRegistrarTransport(options = {}) {
     fetchImpl: createValidatedFetch(fetchImpl),
     mdlog,
     trId: binding.operationId,
-    account: binding.accountId || null,
+    backendAccountAlias: binding.backendAccountAlias || null,
   }));
   const registrars = new Map();
 
   function registrarFor(binding) {
-    const key = `${binding.operationId}\u0000${binding.accountId || ''}`;
+    const key = `${binding.operationId}\u0000${binding.backendAccountAlias || ''}`;
     let registrar = registrars.get(key);
     if (!registrar) {
       registrar = registrarProvider(binding);
@@ -308,12 +314,15 @@ function createRegistrarTransport(options = {}) {
     return registrar;
   }
 
-  async function post(operationId, body, accountId) {
+  async function post(operationId, body, backendAccountAlias) {
+    if (!/^[a-z0-9][a-z0-9_-]{0,31}$/.test(clean(backendAccountAlias))) {
+      return { ok: false, error: 'backend account alias is required' };
+    }
     const headers = { 'Content-Type': 'application/json' };
-    if (accountId) headers['X-Athena-Account'] = accountId;
+    headers['X-Athena-Account'] = clean(backendAccountAlias);
     try {
       const response = await fetchImpl(`${backendBase}/api/v1/websocket/${operationId}`, {
-        method: 'POST', headers, body: JSON.stringify(body),
+        method: 'POST', redirect: 'error', headers, body: JSON.stringify(body),
       });
       if (!response || !response.ok) {
         return { ok: false, error: `HTTP ${response ? response.status : '?'}` };
@@ -335,7 +344,7 @@ function createRegistrarTransport(options = {}) {
     if (binding.operationId === 'ka10173') {
       const result = await post('ka10173', {
         trnm: 'CNSRREQ', seq: binding.target, search_type: '1', stex_tp: 'K',
-      }, binding.accountId);
+      }, binding.backendAccountAlias);
       return result.ok;
     }
     return registrarFor(binding).acquire(binding.target);
@@ -345,10 +354,25 @@ function createRegistrarTransport(options = {}) {
     if (binding.operationId === 'ka10173') {
       const result = await post('ka10174', {
         trnm: 'CNSRCLR', seq: binding.target,
-      }, binding.accountId);
+      }, binding.backendAccountAlias);
       return result.ok;
     }
     return registrarFor(binding).release(binding.target);
+  }
+
+  async function forceRelease(binding) {
+    if (binding.operationId === 'ka10173') {
+      const result = await post('ka10174', {
+        trnm: 'CNSRCLR', seq: binding.target,
+      }, binding.backendAccountAlias);
+      return result.ok;
+    }
+    const result = await post(
+      binding.operationId,
+      buildRemoveBody([binding.target], binding.operationId),
+      binding.backendAccountAlias,
+    );
+    return result.ok;
   }
 
   async function reconnect(bindings) {
@@ -360,13 +384,13 @@ function createRegistrarTransport(options = {}) {
       const result = await post(
         binding.operationId,
         buildRegisterBody([binding.target], binding.operationId),
-        binding.accountId,
+        binding.backendAccountAlias,
       );
       return { binding, ok: result.ok, error: result.error || null };
     }));
   }
 
-  async function command(operationId, payload = {}, accountId = '') {
+  async function command(operationId, payload = {}, backendAccountAlias = '') {
     const operation = OPERATION_POLICIES.find((entry) => entry.operationId === operationId);
     if (!operation || operation.behavior !== 'command') {
       return { ok: false, error: 'unsupported realtime command' };
@@ -382,10 +406,10 @@ function createRegistrarTransport(options = {}) {
         ...(payload.next_key ? { next_key: clean(payload.next_key) } : {}),
       };
     if (operationId === 'ka10172' && !body.seq) return { ok: false, error: 'condition id is required' };
-    return post(operationId, body, clean(accountId));
+    return post(operationId, body, clean(backendAccountAlias));
   }
 
-  return { acquire, release, reconnect, command };
+  return { acquire, release, forceRelease, reconnect, command };
 }
 
 class CardLeaseManager {
@@ -398,6 +422,10 @@ class CardLeaseManager {
     this._physical = new Map();
     this._tombstones = new Map();
     this._queue = Promise.resolve();
+    this._lifecycleGeneration = 1;
+    this._draining = false;
+    this._drainPromise = null;
+    this._drainCleanupOk = true;
     this._connectionGeneration = Number(options.initialConnectionGeneration) || 1;
     this._needsReconnect = false;
   }
@@ -455,6 +483,8 @@ class CardLeaseManager {
     }
     if ((state === 'open' || state === 'connected') && this._needsReconnect) {
       return this._serialized(async () => {
+        const lifecycleGeneration = this._lifecycleGeneration;
+        if (this._draining) return { ok: false, status: 'draining' };
         if (!this._needsReconnect) return { ok: true, status: 'active' };
         this._needsReconnect = false;
         this._connectionGeneration = observed
@@ -462,11 +492,19 @@ class CardLeaseManager {
         const activeEntries = [...this._physical.values()].filter((entry) => entry.owners.size > 0);
         const bindings = activeEntries.map((entry) => entry.binding);
         let results = bindings.length === 0 ? [] : await this._transport.reconnect(bindings);
+        if (this._draining || lifecycleGeneration !== this._lifecycleGeneration) {
+          await this._releaseSuccessfulReconnects(results);
+          return { ok: false, status: 'draining' };
+        }
         let failed = results.filter((result) => !result.ok);
         if (failed.length) {
           const retry = await this._transport.reconnect(failed.map((result) => result.binding));
           const retried = new Map(retry.map((result) => [physicalKey(result.binding), result]));
           results = results.map((result) => retried.get(physicalKey(result.binding)) || result);
+          if (this._draining || lifecycleGeneration !== this._lifecycleGeneration) {
+            await this._releaseSuccessfulReconnects(results);
+            return { ok: false, status: 'draining' };
+          }
           failed = results.filter((result) => !result.ok);
         }
         const failedKeys = new Set(failed.map((result) => physicalKey(result.binding)));
@@ -532,13 +570,37 @@ class CardLeaseManager {
   }
 
   releaseAll() {
-    return this._serialized(async () => {
-      const ids = [...this._leases.keys()];
-      const results = [];
-      for (const id of ids) results.push(await this._unmountNow(id));
-      await this._retryPendingRemovals();
-      return { ok: this._tombstones.size === 0, results, pending: this._tombstones.size };
-    });
+    if (this._drainPromise) return this._drainPromise;
+    this._draining = true;
+    this._lifecycleGeneration += 1;
+    const leases = [...this._leases.values()];
+    const physical = [...this._physical.values()];
+    this._leases.clear();
+    this._physical.clear();
+    this._tombstones.clear();
+    for (const lease of leases) {
+      this._emit({ ...this._snapshotLease(lease), status: 'unmounted' });
+    }
+    this._drainPromise = (async () => {
+      const results = await Promise.all(physical.map(async (entry) => ({
+        binding: entry.binding,
+        ok: await this._transport.release(entry.binding),
+      })));
+      const pending = results.filter((result) => !result.ok).length;
+      if (pending) this._drainCleanupOk = false;
+      return { ok: pending === 0, results, pending };
+    })();
+    return this._drainPromise;
+  }
+
+  async whenDrained() {
+    try {
+      const drain = this._drainPromise ? await this._drainPromise : { ok: true };
+      await this._queue;
+      return Boolean(drain.ok && this._drainCleanupOk);
+    } catch {
+      return false;
+    }
   }
 
   _serialized(fn) {
@@ -548,6 +610,8 @@ class CardLeaseManager {
   }
 
   async _mountOrUpdate(config, requireExisting) {
+    const lifecycleGeneration = this._lifecycleGeneration;
+    if (this._draining) return { ok: false, status: 'error', error: 'realtime manager is draining' };
     const id = clean(config.leaseId);
     if (!id) return { ok: false, status: 'error', error: 'leaseId is required' };
     const old = this._leases.get(id) || null;
@@ -573,6 +637,9 @@ class CardLeaseManager {
         return { ok: false, status: 'error', error: String((error && error.message) || error) };
       }
     }
+    if (this._draining || lifecycleGeneration !== this._lifecycleGeneration) {
+      return { ok: false, status: 'error', error: 'realtime manager is draining' };
+    }
     const oldKeys = new Set(old ? old.bindings.map(physicalKey) : []);
     const nextKeys = new Set(bindings.map(physicalKey));
     if (old && oldKeys.size === nextKeys.size && [...oldKeys].every((key) => nextKeys.has(key))) {
@@ -595,6 +662,13 @@ class CardLeaseManager {
       const key = physicalKey(binding);
       if (oldKeys.has(key) || this._physical.has(key)) continue;
       const ok = await this._transport.acquire(binding);
+      if (this._draining || lifecycleGeneration !== this._lifecycleGeneration) {
+        if (ok) staged.push(binding);
+        for (const acquired of staged.reverse()) {
+          if (!await this._transport.release(acquired)) this._drainCleanupOk = false;
+        }
+        return { ok: false, status: 'error', error: 'realtime manager is draining' };
+      }
       if (!ok) {
         for (const acquired of staged.reverse()) await this._transport.release(acquired);
         const failed = old || {
@@ -682,6 +756,13 @@ class CardLeaseManager {
     }
     if (![...this._physical.values()].some((entry) => entry.pendingRemove)) {
       this._tombstones.clear();
+    }
+  }
+
+  async _releaseSuccessfulReconnects(results) {
+    const release = this._transport.forceRelease || this._transport.release;
+    for (const result of results) {
+      if (result.ok && !await release(result.binding)) this._drainCleanupOk = false;
     }
   }
 
