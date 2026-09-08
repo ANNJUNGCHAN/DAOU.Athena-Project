@@ -750,35 +750,23 @@ def test_runs_may_return_fewer_than_30_after_rollover(app_client):
 # ---------- 브리핑 스키마·캐치업·본문 스토어·예산(R1, 3단계) ----------
 
 
-def test_draft_briefing_model_and_effort_roundtrip(app_client):
+def test_draft_ignores_legacy_briefing_settings(app_client):
+    """루틴에는 브리핑 모델 설정이 없다 — 예약 브리핑은 앱 모델 설정으로 돈다
+    (app/lib/main/briefing-runner.js selectModel, 2026-09-08). 옛 클라이언트가
+    briefing_model/briefing_effort를 실어 보내도 422 없이 무시되고, 응답·목록에도
+    그 키가 없다."""
     client, _ = app_client
     draft = dict(SCHEDULE_DRAFT, briefing_model="claude-sonnet-5", briefing_effort="low")
     res = client.post("/api/v1/routines/draft", json=draft)
     assert res.status_code == 200
     body = res.json()
-    assert body["briefing_model"] == "claude-sonnet-5"
-    assert body["briefing_effort"] == "low"
+    assert "briefing_model" not in body
+    assert "briefing_effort" not in body
 
     listing = client.get("/api/v1/routines").json()["routines"]
     row = next(r for r in listing if r["id"] == body["id"])
-    assert row["briefing_model"] == "claude-sonnet-5"
-    assert row["briefing_effort"] == "low"
-
-
-@pytest.mark.parametrize(
-    "patch",
-    [
-        {"briefing_model": "-bad"},  # 선두 하이픈 금지(model-prefs.js:21 이식)
-        {"briefing_model": "한글모델"},
-        {"briefing_model": "a" * 65},
-        {"briefing_effort": "extreme"},  # 닫힌 목록 밖
-        {"briefing_effort": 3},
-    ],
-)
-def test_draft_rejects_invalid_briefing_settings(app_client, patch):
-    client, _ = app_client
-    res = client.post("/api/v1/routines/draft", json=dict(SCHEDULE_DRAFT, **patch))
-    assert res.status_code == 422
+    assert "briefing_model" not in row
+    assert "briefing_effort" not in row
 
 
 def test_missed_is_true_for_active_schedule_without_fired(app_client):
