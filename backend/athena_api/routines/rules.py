@@ -40,12 +40,6 @@ _MAX_KEYWORD_LEN = 64
 # 제어문자·개행 금지 — 원장/카드에 그대로 실리는 문자열이다.
 _KEYWORD_RE = re.compile(r"^[^\x00-\x1f\x7f]+$")
 _MAX_CONSECUTIVE_TICKS = 20
-# 브리핑 모델·노력 검증(R1) — 이 목록은 `app/lib/main/model-prefs.js:12,17`과
-# 수동 동기화 대상이다. JS/Python 교차 언어라 코드 공유가 불가능하므로 한쪽이
-# 바뀌면 다른 쪽도 수동 갱신해야 한다. 하이픈은 문자셋에 포함되므로 "선두
-# 하이픈 금지"는 별도 검사한다(model-prefs.js:21과 동형).
-_MODEL_CHARSET_RE = re.compile(r"^[A-Za-z0-9.\[\]-]{1,64}$")
-_BRIEFING_EFFORTS = frozenset({"low", "medium", "high", "xhigh", "max"})
 
 # 코드 감시(code.watch) — 감시 코드는 조건이 아니라 프로젝트 폴더의 파일이다.
 # 그래서 검증할 것은 "어느 파일인가"뿐이고, 여기서 폴더 밖·확장자·주기를 막는다.
@@ -262,22 +256,8 @@ def validate_draft(raw: Any, *, now: datetime | None = None) -> RoutineSpec:
     goal = raw.get("goal", False)
     if not isinstance(goal, bool):
         _fail("goal은 불리언이어야 한다")
-    briefing_model = raw.get("briefing_model")
-    if briefing_model is not None:
-        if (
-            not isinstance(briefing_model, str)
-            or briefing_model.startswith("-")
-            or not _MODEL_CHARSET_RE.match(briefing_model)
-        ):
-            _fail(
-                "briefing_model은 영문·숫자·점·대괄호·하이픈 1~64자여야 한다"
-                "(선두 하이픈 금지)"
-            )
-
-    briefing_effort = raw.get("briefing_effort")
-    if briefing_effort is not None:
-        if not isinstance(briefing_effort, str) or briefing_effort not in _BRIEFING_EFFORTS:
-            _fail("briefing_effort는 low/medium/high/xhigh/max 중 하나여야 한다")
+    # briefing_model/briefing_effort는 받지 않는다 — 옛 클라이언트가 실어 보내도
+    # 무시된다(최상위 미지 키는 검사하지 않는다). 브리핑 모델은 앱 모델 설정이다.
 
     spec = RoutineSpec(
         condition=condition,
@@ -286,8 +266,6 @@ def validate_draft(raw: Any, *, now: datetime | None = None) -> RoutineSpec:
         expires_at=now + timedelta(days=expires_days),
         note=note,
         goal=goal,
-        briefing_model=briefing_model,
-        briefing_effort=briefing_effort,
         watch=watch,
     )
     if not note:

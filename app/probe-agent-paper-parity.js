@@ -173,8 +173,6 @@ async function main() {
           cooldown_s: 300,
           expires_at: '2026-09-10T09:00:00',
           note: '삼성전자 88,000 감시',
-          briefing_model: 'opus',
-          briefing_effort: 'high',
           condition: { source: 'price.current', op: '>=', value: 88000, consecutive_ticks: 1 },
           source_spec: {
             ops: ['<', '<=', '>', '>='], value_type: 'number', transport: 'ws', label: '현재가',
@@ -226,8 +224,6 @@ async function main() {
         note: body.note,
         cooldown_s: body.cooldown_s,
         expires_at: '2026-09-10T09:00:00',
-        briefing_model: body.briefing_model,
-        briefing_effort: body.briefing_effort,
       },
     };
   });
@@ -425,10 +421,9 @@ async function main() {
   check('편집으로 들어가는 문은 [설정 편집] 하나다', settingsProbe.editLabel === '설정 편집');
   check('[설정 편집]이 「상세 패널 — 설정 편집」 폼을 연다',
     settingsProbe.formCaption === '상세 패널 — 설정 편집');
-  // Paper 06 폼의 '브리핑 모델'·'노력' 두 칸은 앱에 없다 — 브리핑은 앱 모델 설정을
-  // 쓴다(2026-09-08 사용자 확정, briefing-runner.js selectModel). Paper 보드가 그 두
-  // 칸을 지우면 여기 주석도 걷는다.
-  check('실시간 소스 폼은 Paper의 6필드 그대로다(브리핑 모델·노력 제외)',
+  // '브리핑 모델'·'노력' 칸은 Paper 05·06 보드에서도 지웠다(2026-09-08) — 브리핑은
+  // 앱 모델 설정을 쓴다(briefing-runner.js selectModel). 6필드가 보드 원문이다.
+  check('실시간 소스 폼은 Paper의 6필드 그대로다',
     JSON.stringify(settingsProbe.fieldLabels) === JSON.stringify(
       ['조건 비교', '조건 값', '연속 틱', '쿨다운(초)', '만료(일)', '설명']));
   check('종목·모드·소스는 읽기 전용이고 소스에 「변경 불가」가 붙는다',
