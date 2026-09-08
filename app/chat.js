@@ -2453,6 +2453,7 @@ window.AthenaShell.registerOpenConversation(async (conv) => {
       }
     }
     stashDisplayedPane();
+    closeOrderTicketForConversationChange(conv.id);
     displayedConversationId = conv.id;
     restoreConversation(switched, messages, snapshot, { stored, conversationId: conv.id });
     syncDisplayedTurn();
@@ -2644,6 +2645,7 @@ window.athena.on('athena:live-query-state', ({ busy, busyConversationIds } = {})
 window.athena.on('athena:conversation-active', ({ conversationId } = {}) => {
   if (!conversationId || switchingConversation || displayedConversationId === conversationId) return;
   if (displayedConversationId !== null) stashDisplayedPane();
+  closeOrderTicketForConversationChange(conversationId);
   displayedConversationId = conversationId;
   mountStoredPane(conversationId);
   syncDisplayedTurn();
@@ -3083,6 +3085,7 @@ window.addEventListener('athena:new-conversation', () => {
     window.AthenaSessionWorkspace.clear();
   }
   stashDisplayedPane();
+  closeOrderTicketForConversationChange(null);
   displayedConversationId = null;
   state = 'idle';
   liveProgressEl = null;
@@ -5502,19 +5505,45 @@ const protectedCardsLib = window.AthenaLib.ProtectedCards;
 const $order = document.getElementById('order');
 const $orderBody = document.getElementById('orderBody');
 let orderOpen = false;
+let orderTicketRevision = 0;
+let orderTicketOwner = null;
+
+function isCurrentOrderTicket(owner) {
+  return !!owner
+    && orderOpen
+    && orderTicketOwner === owner
+    && owner.conversationId === displayedConversationId
+    && owner.revision === orderTicketRevision;
+}
+
+function closeOrderTicketForConversationChange(nextConversationId) {
+  if (nextConversationId !== displayedConversationId && (orderOpen || orderTicketOwner)) {
+    closeOrderTicket();
+  }
+}
 
 function openOrderTicket(prefill) {
-  if (orderOpen || settingsOpen || !$onboard.hidden) return;
+  if (orderOpen || switchingConversation || displayedConversationId === null
+    || settingsOpen || !$onboard.hidden) return;
   orderOpen = true;
+  orderTicketRevision += 1;
+  const owner = {
+    conversationId: displayedConversationId,
+    revision: orderTicketRevision,
+  };
+  orderTicketOwner = owner;
   $shell.inert = true;
   $order.hidden = false;
   $order.focus();
-  renderOrderTicket(prefill);
+  renderOrderTicket(prefill, owner);
 }
 
-function closeOrderTicket() {
-  if (!orderOpen) return;
+function closeOrderTicket(expectedOwner = null) {
+  if (expectedOwner && orderTicketOwner !== expectedOwner) return;
+  if (!orderOpen && !orderTicketOwner) return;
   orderOpen = false;
+  orderTicketRevision += 1;
+  orderTicketOwner = null;
   $orderBody.replaceChildren();
   $order.hidden = true;
   $shell.inert = false;
@@ -5534,7 +5563,7 @@ function _ticketRow(label, value) {
   return row;
 }
 
-async function renderOrderTicket(prefill) {
+async function renderOrderTicket(prefill, owner) {
   $orderBody.replaceChildren();
   const ticket = orderTicketLib.createTicket(prefill || null);
 
@@ -5632,10 +5661,12 @@ async function renderOrderTicket(prefill) {
   gateLine.textContent = gateBlocked;
   try {
     const res = await window.athena.invoke('athena:account-list');
+    if (!isCurrentOrderTicket(owner)) return;
     const accounts = (res && res.accounts) || [];
     const active = accounts.find((a) => a.active) || accounts[0] || null;
     gateBlocked = orderTicketLib.gateBlocker(active);
   } catch {
+    if (!isCurrentOrderTicket(owner)) return;
     gateBlocked = orderTicketLib.gateBlocker(null);
   }
   const lock = orderTicketLib.gateLockModel(gateBlocked);
@@ -5718,11 +5749,13 @@ async function renderOrderTicket(prefill) {
     const cap = await window.athena.invoke('athena:ticket-capacity', {
       symbol: prefill && prefill.symbol,
     });
+    if (!isCurrentOrderTicket(owner)) return;
     if (cap && (cap.buyingPower != null || cap.holdings != null)) {
       ticket.buyingPower = cap.buyingPower;
       ticket.holdings = cap.holdings;
     }
   } catch {
+    if (!isCurrentOrderTicket(owner)) return;
     // 조회 실패는 칩을 비활성으로 둔다. 잔고를 짓지 않는다.
   }
   paintQtyChips();
@@ -5743,7 +5776,7 @@ async function renderOrderTicket(prefill) {
     syncExec();
   });
   qtyInput.addEventListener('input', () => { syncExec(); syncTotal(); });
-  closeBtn.addEventListener('click', closeOrderTicket);
+  closeBtn.addEventListener('click', () => closeOrderTicket(owner));
 
   execBtn.addEventListener('click', async () => {
     if (execBtn.disabled) return;
@@ -5759,6 +5792,10 @@ async function renderOrderTicket(prefill) {
     orderTicketLib.transition(ticket, 'executing');
     execBtn.disabled = true;
     status.textContent = '집행 중… (무재시도 — 응답을 기다립니다)';
+    if (!isCurrentOrderTicket(owner)) {
+      closeOrderTicket(owner);
+      return;
+    }
     const res = await window.athena.invoke('athena:order-execute', {
       trId: payload.tr_id,
       body: payload.body,
