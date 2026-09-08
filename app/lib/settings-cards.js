@@ -38,10 +38,13 @@ function toggleSwitch(initial, onChange, ariaLabel) {
   t.setAttribute('aria-checked', String(on));
   if (ariaLabel) t.setAttribute('aria-label', ariaLabel);
   t.appendChild(el('span', 'uk-toggle-thumb'));
-  t.addEventListener('click', () => {
-    on = !on;
+  t.setChecked = (next) => {
+    on = !!next;
     t.classList.toggle('is-on', on);
     t.setAttribute('aria-checked', String(on));
+  };
+  t.addEventListener('click', () => {
+    t.setChecked(!on);
     onChange(on);
   });
   return t;
@@ -382,7 +385,6 @@ async function refreshAccountsCard(card, head, body) {
   // 수백 ms 동안 완전히 빈 채로 남는다(실측) — 사용자에겐 카드가 깨진 것처럼
   // 보인다. 이전 내용을 그대로 둔 채 기다렸다가 한 번에 교체한다.
   let data;
-  let runtimeOptions = { ok: false, aliases: [], error: '서버 계좌 정보를 확인할 수 없다' };
   try {
     data = await window.athena.invoke('athena:account-list');
   } catch (err) {
@@ -392,10 +394,6 @@ async function refreshAccountsCard(card, head, body) {
     body.appendChild(errorNote(String((err && err.message) || err)));
     return;
   }
-  try {
-    const options = await window.athena.invoke('athena:account-runtime-options');
-    if (options && typeof options === 'object') runtimeOptions = options;
-  } catch { /* 로컬 OAuth 목록은 유지하고 서버 계좌 연결만 fail-closed한다 */ }
   clear(head);
   clear(body);
 
@@ -417,8 +415,6 @@ async function refreshAccountsCard(card, head, body) {
       accounts,
       refresh,
       (account) => openOrderApiSheet(card, account, refresh),
-      (account) => openBackendAccountSheet(card, account, runtimeOptions, refresh),
-      runtimeOptions,
     ));
   }
 
@@ -429,17 +425,15 @@ async function refreshAccountsCard(card, head, body) {
 }
 
 function acctStatusPill(a) {
-  // AT-ST-001 Desc 3은 정상/검증 필요/실패 3종을 말하지만, 고정 IPC 계약
-  // (athena:account-list)은 connected: bool 하나만 준다 — 3종 중 관측 가능한
-  // 두 값(정상/검증 필요)만 이 bool로 표현한다. "실패"는 spec 자체도 색·문구가
-  // 미정이라(Open Questions #4) 이 bool 계약으로는 별도 구분이 불가능하다.
-  return a.connected ? pill('정상', 'ok') : pill('검증 필요', 'warn');
+  if (a.backendConnected === true) return pill('마지막 연결 성공', 'ok');
+  if (a.backendSyncError) return pill('조회 연결 실패', 'warn');
+  return pill('연결 확인 필요', 'warn');
 }
 
 // canDelete === false는 "등록된 계좌가 이 하나뿐"이다(AT-ST-001 Desc 1.1
 // "마지막 하나는 삭제 불가"). 백엔드(accounts.remove())는 이 규칙을 강제하지
 // 않으므로 — 강제할 수 있는 유일한 자리인 UI에서 막는다.
-function buildAccountRow(a, refresh, openOrderApi, openBackendAccount, runtimeOptions, canDelete) {
+function buildAccountRow(a, refresh, openOrderApi, canDelete) {
   const aliasCell = row('uk-col-alias', [
     el('span', 'uk-cell-strong', a.alias),
     badge(!!a.active, a.active ? '활성' : '비활성'),
@@ -467,26 +461,51 @@ function buildAccountRow(a, refresh, openOrderApi, openBackendAccount, runtimeOp
 
   const actionsCell = el('div', 'uk-col-actions');
   actionsCell.addEventListener('click', (e) => e.stopPropagation());
-  const backendButton = button('text', a.backendAlias
-    ? `서버: ${a.backendAlias}`
-    : '서버 계좌 연결');
+  const backendButton = button('text', a.backendSyncError ? '다시 시도' : '연결 확인');
   backendButton.classList.add('uk-account-backend-button');
-  backendButton.disabled = !runtimeOptions.ok;
-  backendButton.title = runtimeOptions.ok
-    ? '조회에 사용할 서버 계좌 선택'
-    : (runtimeOptions.error || '서버 계좌 정보를 확인할 수 없다');
-  backendButton.addEventListener('click', () => openBackendAccount(a));
+  backendButton.title = '이 계좌의 저장된 자격 증명으로 조회 연결을 확인합니다';
+  const actionStatus = el('div', 'uk-account-backend-status');
+  if (a.backendSyncError) actionStatus.appendChild(errorNote(a.backendSyncError));
+  backendButton.addEventListener('click', async () => {
+    clear(actionStatus);
+    backendButton.disabled = true;
+    backendButton.textContent = '확인 중…';
+    let result;
+    try {
+      result = await window.athena.invoke('athena:account-set-backend-alias', { id: a.id });
+    } catch (err) {
+      result = { ok: false, error: String((err && err.message) || err) };
+    }
+    if (!result || !result.ok || result.backendConnected === false) {
+      actionStatus.appendChild(errorNote(
+        (result && (result.backendSyncError || result.error)) || '조회 연결을 확인하지 못했습니다',
+      ));
+      backendButton.disabled = false;
+      backendButton.textContent = '다시 시도';
+      return;
+    }
+    await refresh();
+  });
   actionsCell.appendChild(backendButton);
+  actionsCell.appendChild(actionStatus);
 
   const normalCells = [aliasCell, appkeyCell, orderApiCell, statusCell, lastCheckCell, actionsCell];
   const r = row('uk-row', normalCells);
   if (!a.active) {
     r.classList.add('is-clickable');
     r.addEventListener('click', async () => {
+      clear(actionStatus);
+      let result;
       try {
-        await window.athena.invoke('athena:account-set-active', { id: a.id });
-      } catch { /* 핸들러 부재 — 조용히 무시하지 않되 카드 전체를 깨뜨리지 않는다 */ }
-      refresh();
+        result = await window.athena.invoke('athena:account-set-active', { id: a.id });
+      } catch (err) {
+        result = { ok: false, error: String((err && err.message) || err) };
+      }
+      if (!result || !result.ok) {
+        actionStatus.appendChild(errorNote((result && result.error) || '계좌를 활성화하지 못했습니다'));
+        return;
+      }
+      await refresh();
     });
   }
 
@@ -504,12 +523,15 @@ function buildAccountRow(a, refresh, openOrderApi, openBackendAccount, runtimeOp
         cancelBtn.disabled = true;
         confirmBtn.disabled = true;
         confirmBtn.querySelector('.uk-btn-label').textContent = '삭제 중…';
-        let threw = false;
+        let result;
         try {
-          await window.athena.invoke('athena:account-remove', { id: a.id });
-        } catch { threw = true; }
-        if (threw) {
-          bar.appendChild(errorNote('계좌 삭제 기능을 아직 사용할 수 없다 (athena:account-remove 핸들러 없음)'));
+          result = await window.athena.invoke('athena:account-remove', { id: a.id });
+        } catch (err) {
+          result = { ok: false, error: String((err && err.message) || err) };
+        }
+        if (!result || !result.ok) {
+          bar.appendChild(errorNote((result && result.error)
+            || '계좌 삭제 기능을 아직 사용할 수 없다 (athena:account-remove 핸들러 없음)'));
           cancelBtn.disabled = false;
           confirmBtn.disabled = false;
           confirmBtn.querySelector('.uk-btn-label').textContent = '삭제';
@@ -525,7 +547,7 @@ function buildAccountRow(a, refresh, openOrderApi, openBackendAccount, runtimeOp
   return r;
 }
 
-function buildAccountsTable(accounts, refresh, openOrderApi, openBackendAccount, runtimeOptions) {
+function buildAccountsTable(accounts, refresh, openOrderApi) {
   const wrap = el('div');
   wrap.appendChild(row('uk-col-head', [
     el('span', 'uk-col-alias', '별칭'),
@@ -538,77 +560,9 @@ function buildAccountsTable(accounts, refresh, openOrderApi, openBackendAccount,
 
   const canDelete = accounts.length > 1;
   for (const a of accounts) {
-    wrap.appendChild(buildAccountRow(a, refresh, openOrderApi, openBackendAccount, runtimeOptions, canDelete));
+    wrap.appendChild(buildAccountRow(a, refresh, openOrderApi, canDelete));
   }
   return wrap;
-}
-
-function openBackendAccountSheet(card, account, runtimeOptions, onDone) {
-  const { root, body } = sheet('조회에 사용할 서버 계좌', {
-    subtitle: `${account.alias}의 시세 조회에 사용할 서버 계좌를 연결합니다`,
-    onClose: () => detachSheet(card, root),
-  });
-  const group = el('div', 'uk-field-group');
-  group.appendChild(el('label', 'uk-field-label', '서버 계좌'));
-  const select = document.createElement('select');
-  select.className = 'uk-input uk-account-backend-select';
-  const placeholder = document.createElement('option');
-  placeholder.value = '';
-  placeholder.textContent = '서버 계좌를 선택하세요';
-  select.appendChild(placeholder);
-  const aliases = runtimeOptions.ok && Array.isArray(runtimeOptions.aliases) ? runtimeOptions.aliases : [];
-  for (const alias of aliases) {
-    const option = document.createElement('option');
-    option.value = alias;
-    option.textContent = alias;
-    select.appendChild(option);
-  }
-  select.value = aliases.includes(account.backendAlias) ? account.backendAlias : '';
-  select.disabled = !runtimeOptions.ok;
-  group.appendChild(select);
-  group.appendChild(el('div', 'uk-field-hint-static',
-    '저장된 계좌와 조회 서버의 계좌를 직접 연결합니다. 표시 별칭으로 자동 선택하지 않습니다.'));
-  body.appendChild(group);
-
-  const status = el('div');
-  if (!runtimeOptions.ok) status.appendChild(errorNote(runtimeOptions.error || '서버 계좌 정보를 확인할 수 없다'));
-  else if (!aliases.length) status.appendChild(errorNote('backend에 설정된 서버 계좌가 없다'));
-  body.appendChild(status);
-
-  const buttons = row('uk-btn-row-end', []);
-  const cancel = button('ghost', '취소', { onClick: () => detachSheet(card, root) });
-  const save = button('primary', '연결 저장');
-  save.classList.add('uk-account-backend-save');
-  save.disabled = !runtimeOptions.ok || aliases.length === 0;
-  save.addEventListener('click', async () => {
-    clear(status);
-    const backendAlias = String(select.value || '').trim();
-    if (!backendAlias) {
-      status.appendChild(errorNote('조회에 사용할 서버 계좌를 선택해 주세요.'));
-      return;
-    }
-    save.disabled = true;
-    let result;
-    try {
-      result = await window.athena.invoke('athena:account-set-backend-alias', {
-        id: account.id,
-        backendAlias,
-      });
-    } catch {
-      result = { ok: false, error: '서버 계좌 연결 기능을 사용할 수 없다' };
-    }
-    if (!result || !result.ok) {
-      status.appendChild(errorNote((result && result.error) || '서버 계좌를 연결하지 못했다'));
-      save.disabled = false;
-      return;
-    }
-    detachSheet(card, root);
-    await onDone();
-  });
-  buttons.appendChild(cancel);
-  buttons.appendChild(save);
-  body.appendChild(buttons);
-  attachSheet(card, root);
 }
 
 function accountErrorMessage(code) {
@@ -634,15 +588,21 @@ const ACCOUNT_SHEET_SUCCESS = '확인 완료 — 모의투자 계좌 연결 권�
 
 function accountSheetPhase(phase, extra) {
   const verifiedLike = phase === 'verified' || phase === 'saving';
+  const syncing = phase === 'syncing';
   return {
     phase,
-    hint: ACCOUNT_SHEET_HINTS[phase === 'saving' ? 'verified' : phase],
+    hint: phase === 'sync-failed'
+      ? '계좌는 저장됐지만 조회 연결을 확인하지 못했습니다'
+      : syncing ? '저장한 계좌의 조회 연결을 확인하고 있습니다'
+        : ACCOUNT_SHEET_HINTS[phase === 'saving' ? 'verified' : phase],
     verificationNote: phase === 'verifying' ? 'APP KEY와 SECRET KEY로 계좌 연결 권한을 확인하고 있습니다' : null,
-    submitLabel: phase === 'verifying' ? '확인 중…'
+    submitLabel: syncing ? '연결 확인 중…'
+      : phase === 'sync-failed' ? '연결 확인'
+        : phase === 'verifying' ? '확인 중…'
       : verifiedLike ? '계좌 저장'
         : phase === 'failed' ? '다시 검증' : '검증 후 저장',
-    submitDisabled: phase === 'verifying' || phase === 'saving',
-    inputsDisabled: phase === 'verifying' || phase === 'saving',
+    submitDisabled: phase === 'verifying' || phase === 'saving' || syncing,
+    inputsDisabled: phase === 'verifying' || phase === 'saving' || syncing || phase === 'sync-failed',
     wipeInputs: false,
     closeSheet: false,
     successBox: verifiedLike ? ACCOUNT_SHEET_SUCCESS : null,
@@ -660,6 +620,11 @@ function accountSheetState(prev, event) {
   if (type === 'verify') return accountSheetPhase('verifying');
   if (type === 'verified') return accountSheetPhase('verified');
   if (type === 'save') return accountSheetPhase('saving');
+  if (type === 'sync-failed') return accountSheetPhase('sync-failed', {
+    wipeInputs: true,
+    errorMessage: event && event.error,
+  });
+  if (type === 'sync') return accountSheetPhase('syncing');
   if (type === 'verify-failed' || type === 'save-failed') {
     return accountSheetPhase('failed', {
       errorMessage: accountErrorMessage(event && event.error),
@@ -676,7 +641,7 @@ function openAccountRegisterSheet(card, onDone) {
   const { root, body } = sheet('계좌 등록', {
     subtitle: '모의투자 계좌의 APP KEY / SECRET KEY를 등록한다',
     // 닫는 길은 전부 취소 이벤트를 거친다 — 그래야 값 비우기가 한 곳에서만 일어난다.
-    onClose: () => applyState(accountSheetState(sheetState, { type: 'cancel' })),
+    onClose: cancelSheet,
   });
 
   const cols = el('div', 'uk-two-col');
@@ -759,7 +724,7 @@ function openAccountRegisterSheet(card, onDone) {
 
   const btnRow = row('uk-btn-row-end', []);
   const cancelBtn = button('ghost', '취소', {
-    onClick: () => applyState(accountSheetState(sheetState, { type: 'cancel' })),
+    onClick: cancelSheet,
   });
   const submitBtn = button('primary', '검증 후 저장', { onClick: onPrimary });
   btnRow.appendChild(cancelBtn);
@@ -767,6 +732,12 @@ function openAccountRegisterSheet(card, onDone) {
   body.appendChild(btnRow);
 
   let sheetState = accountSheetState(null, { type: 'open' });
+  let savedAccountId = null;
+
+  function cancelSheet() {
+    applyState(accountSheetState(sheetState, { type: 'cancel' }));
+    if (savedAccountId) onDone();
+  }
 
   function wipeSecretInputs() {
     aliasInput.value = '';
@@ -819,8 +790,28 @@ function openAccountRegisterSheet(card, onDone) {
   }
 
   async function onPrimary() {
+    if (sheetState.phase === 'sync-failed') return onSync();
     if (sheetState.phase === 'verified') return onSave();
     return onVerify();
+  }
+
+  async function onSync() {
+    applyState(accountSheetState(sheetState, { type: 'sync' }));
+    let res;
+    try {
+      res = await window.athena.invoke('athena:account-set-backend-alias', { id: savedAccountId });
+    } catch (err) {
+      res = { ok: false, error: String((err && err.message) || err) };
+    }
+    if (!res || !res.ok || res.backendConnected === false) {
+      applyState(accountSheetState(sheetState, {
+        type: 'sync-failed',
+        error: (res && (res.backendSyncError || res.error)) || '조회 연결을 확인하지 못했습니다',
+      }));
+      return;
+    }
+    applyState(accountSheetState(sheetState, { type: 'saved' }));
+    await onDone();
   }
 
   async function onVerify() {
@@ -849,9 +840,17 @@ function openAccountRegisterSheet(card, onDone) {
       return;
     }
     if (res && res.ok) {
+      savedAccountId = res.id;
+      if (res.backendConnected === false) {
+        applyState(accountSheetState(sheetState, {
+          type: 'sync-failed',
+          error: res.backendSyncError || '조회 연결을 확인하지 못했습니다',
+        }));
+        return;
+      }
       // 목록 새로고침은 저장이 끝난 뒤다 — 검증만 한 시점에는 아직 계좌가 없다.
       applyState(accountSheetState(sheetState, { type: 'saved' }));
-      onDone();
+      await onDone();
       return;
     }
     applyState(accountSheetState(sheetState, { type: 'save-failed', error: res && res.error }));
@@ -913,16 +912,26 @@ function openOrderApiSheet(card, account, onDone) {
   toggleLabelCol.appendChild(el('div', 'uk-toggle-label', 'AI가 이 계좌의 주문 API를 호출하도록 허용'));
   const toggleEl = toggleSwitch(toggleState, async (next) => {
     toggleState = next;
-    // Desc 5 "되돌리기": 이미 켜진 상태에서 끄는 것은 즉시·무확인으로 반영한다.
+    // Desc 5 "되돌리기": 이미 켜진 상태에서 끄는 것은 로컬에 즉시 반영하고
+    // 서버 확인 결과를 같은 시트에 명시한다.
     // 켜는 것은 아래 "활성화" 버튼의 최종 확인을 반드시 거친다(Desc 2).
     if (!next && account.orderApi) {
+      clear(errBox);
+      account.orderApi = false;
+      statusPill.textContent = '로컬 OFF · 서버 확인 중';
+      renderChecklist();
       try {
         const res = await window.athena.invoke('athena:order-api-set', { id: account.id, enabled: false });
         if (res && res.ok) {
-          account.orderApi = false;
           statusPill.textContent = '현재 OFF';
+        } else {
+          statusPill.textContent = '로컬 OFF · 서버 확인 필요';
+          errBox.appendChild(errorNote((res && res.error) || '서버의 주문 API OFF 상태를 확인하지 못했습니다'));
         }
-      } catch { /* 핸들러 부재 — 로컬 토글 표시만 유지 */ }
+      } catch (err) {
+        statusPill.textContent = '로컬 OFF · 서버 확인 필요';
+        errBox.appendChild(errorNote(String((err && err.message) || err)));
+      }
     }
     renderChecklist();
   }, 'AI가 이 계좌의 주문 API를 호출하도록 허용');
@@ -955,14 +964,22 @@ function openOrderApiSheet(card, account, onDone) {
   btnRow.appendChild(activateBtn);
   body.appendChild(btnRow);
 
-  body.appendChild(el('div', 'uk-revert-note', '언제든 설정에서 OFF로 되돌릴 수 있다. 되돌리면 즉시 반영된다.'));
+  body.appendChild(el('div', 'uk-revert-note',
+    '언제든 설정에서 OFF로 되돌릴 수 있다. OFF는 로컬에 즉시 적용되며 서버 확인 결과를 함께 표시한다.'));
 
   async function onActivate() {
     clear(errBox);
     activateBtn.disabled = true;
     try {
       const res = await window.athena.invoke('athena:order-api-set', { id: account.id, enabled: toggleState });
+      if (res && res.orderApi === false) {
+        toggleState = false;
+        toggleEl.setChecked(false);
+        account.orderApi = false;
+        statusPill.textContent = '현재 OFF';
+      }
       if (res && res.checklist) renderChecklist(res.checklist);
+      else renderChecklist();
       if (res && res.ok) {
         account.orderApi = toggleState;
         detachSheet(card, root);

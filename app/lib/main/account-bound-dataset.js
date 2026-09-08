@@ -9,7 +9,7 @@ function blockedResult(error) {
     rejected: true,
     error: message,
     errorCode: 'backend_account_unavailable',
-    answerText: `${message}. 설정의 계좌 화면에서 조회에 사용할 서버 계좌를 연결해 주세요.`,
+    answerText: `${message}. 설정의 계좌 화면에서 선택한 계좌의 연결 상태를 확인해 주세요.`,
     answer: {
       delivery: 'separate',
       source: 'rejected-receipt',

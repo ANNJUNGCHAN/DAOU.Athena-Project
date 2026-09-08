@@ -278,8 +278,33 @@ function createPluginCanvas(options) {
   }
 
   function proposeSnippet(sheet) {
-    if (!String(sheet.snippet || '').trim()) {
-      sheet.error = 'Claude 설정 스니펫을 붙여넣습니다';
+    const snippet = String(sheet.snippet || '').trim();
+    if (!snippet) {
+      sheet.error = '설정 JSON을 붙여넣어 주세요';
+      render();
+      return;
+    }
+    let config;
+    try {
+      config = JSON.parse(snippet);
+    } catch {
+      sheet.error = '설정 JSON 형식을 확인해 주세요';
+      render();
+      return;
+    }
+    const servers = config && typeof config === 'object' && !Array.isArray(config)
+      ? config.mcpServers
+      : null;
+    const aliases = servers && typeof servers === 'object' && !Array.isArray(servers)
+      ? Object.keys(servers)
+      : [];
+    if (!aliases.length) {
+      sheet.error = 'mcpServers 아래에 서버 한 개를 넣어 주세요';
+      render();
+      return;
+    }
+    if (aliases.length > 1) {
+      sheet.error = '서버는 한 번에 하나만 추가할 수 있습니다';
       render();
       return;
     }
@@ -523,6 +548,11 @@ function createPluginCanvas(options) {
       'p',
       'plugin-canvas-description',
       '플러그인은 설치 후 기능별로 허용합니다. Kiwoom·brain은 Athena 내장 API라 이 목록에 표시하지 않습니다.',
+    ));
+    panel.appendChild(el(
+      'p',
+      'plugin-canvas-add-guide',
+      '추천 목록에 없으면 [+ 서버 추가]에서 배포 문서의 Claude Desktop 설정 JSON을 붙여넣습니다.',
     ));
 
     if (restartRequired) {
@@ -847,6 +877,14 @@ function createPluginCanvas(options) {
   function renderAddSheetBody(sheet) {
     const body = el('div', 'plugin-canvas-sheet-body');
 
+    body.appendChild(el('h3', 'plugin-canvas-sheet-section-title', '새 플러그인 추가 방법'));
+    const guide = el('div', 'plugin-canvas-add-steps');
+    guide.appendChild(el('div', 'plugin-canvas-add-step', '1. 플러그인 배포 문서에서 Claude Desktop용 설정 JSON을 복사합니다.'));
+    guide.appendChild(el('div', 'plugin-canvas-add-step', '2. mcpServers 아래 서버 한 개만 남겨 붙여넣습니다.'));
+    guide.appendChild(el('div', 'plugin-canvas-add-step', '3. [등록 제안]을 승인한 뒤 [관리]에서 해당 플러그인을 켜고 승인합니다.'));
+    guide.appendChild(el('div', 'plugin-canvas-add-step', '4. 설치됨 목록의 [권한]에서 연결을 확인하고 사용할 기능을 허용합니다.'));
+    body.appendChild(guide);
+
     const field = el('textarea', 'plugin-canvas-snippet-input');
     field.value = sheet.snippet || '';
     field.setAttribute('rows', '8');
@@ -859,6 +897,7 @@ function createPluginCanvas(options) {
     body.appendChild(field);
     body.appendChild(el('div', 'plugin-canvas-sheet-warning', '등록만으로는 실행되지 않습니다'));
     body.appendChild(el('div', 'plugin-canvas-sheet-warning', '승인 카드로 확정합니다'));
+    body.appendChild(el('div', 'plugin-canvas-sheet-warning', '켜기와 권한 변경도 승인 카드에서 확정하며, 적용 시점은 결과 카드에서 확인합니다'));
 
     if (sheet.error) body.appendChild(el('div', 'plugin-canvas-sheet-error', sheet.error));
 
