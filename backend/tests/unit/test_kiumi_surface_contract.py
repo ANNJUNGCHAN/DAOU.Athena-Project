@@ -28,13 +28,23 @@ GRAMMARS = {
     "stream",
 }
 LEDGER_PATH = TEMPLATE_ROOT.parent / "kiumi" / "kiumi-ledger.jsonl"
+# 8de87b36 added five query-control expansion states after the H-1 mini approval.
+QUERY_CONTROL_BOARDS = {"4A9H-1", "4AGN-1", "4ANS-1", "4AUX-1", "4B22-1"}
 
 
 def test_all_96_boards_have_an_approved_360_by_420_kiumi_spec() -> None:
     registry = load_registry(TEMPLATE_ROOT)
 
-    assert len(registry.boards) == 96
+    assert len(registry.boards) == 101
+    assert {
+        board_id for board_id, board in registry.boards.items() if board.kiumi is None
+    } == QUERY_CONTROL_BOARDS
     for board in registry.boards.values():
+        if board.board_id in QUERY_CONTROL_BOARDS:
+            assert board.state.kind == "expand", board.board_id
+            assert board.state.parent_board == "13K0-2", board.board_id
+            assert not board.operation_refs, board.board_id
+            continue
         spec = board.kiumi
         assert spec is not None, board.board_id
         assert spec["version"] == 1, board.board_id
@@ -99,7 +109,8 @@ def test_ledger_is_the_single_source_for_all_96_slots_specs() -> None:
     registry = load_registry(TEMPLATE_ROOT)
 
     assert len(ledger) == 96
-    assert set(ledger) == set(registry.boards)
+    assert set(ledger).isdisjoint(QUERY_CONTROL_BOARDS)
+    assert set(ledger) | QUERY_CONTROL_BOARDS == set(registry.boards)
     for board_id, record in ledger.items():
         expected = {key: value for key, value in record.items() if key != "board_id"}
         assert dict(registry.boards[board_id].kiumi) == expected, board_id

@@ -196,7 +196,35 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
     # POST /api/v1/backtest/source/map과 진행을 읽는 GET .../map/{job_id}. 멈추기는
     # DELETE라 위 DELETE들과 같은 이유로 이 필터(get/post만)에 안 잡힌다. 셋 다 사람이
     # 채팅에 붙인 주소에서만 도는 경로라 MCP 표면에는 없다.
-    assert len(operation_ids) == 414
+    # 421 = 414 + 7: 수집 주기 조회·수동 실행 2개(e17897f2; PUT은 제외),
+    # 프로젝트 경로 재연결 1개(ebb7786e), 알람 메인 카드 확인·후보 교체 2개(e7fbfd70),
+    # 종목 마스터 해석·상태 조회 2개(3645e5a6). 아래에서 각 경로와 이름도 고정한다.
+    assert len(operation_ids) == 421
+    for method, path, operation_id in (
+        ("get", "/api/v1/brain/schedule", "get_brain_schedule"),
+        ("post", "/api/v1/brain/schedule/{source}/run", "run_brain_schedule_source"),
+        (
+            "post", "/api/v1/projects/{project_id}/relink",
+            "relink_project_api_v1_projects__project_id__relink_post",
+        ),
+        (
+            "post", "/api/v1/routines/{routine_id}/main-card/confirm",
+            "confirm_main_card_api_v1_routines__routine_id__main_card_confirm_post",
+        ),
+        (
+            "post", "/api/v1/routines/{routine_id}/main-card/candidate",
+            "replace_main_card_candidate_api_v1_routines__routine_id__main_card_candidate_post",
+        ),
+        (
+            "post", "/api/v1/instruments/resolve",
+            "resolve_instrument_api_v1_instruments_resolve_post",
+        ),
+        (
+            "get", "/api/v1/instruments/status",
+            "instrument_status_api_v1_instruments_status_get",
+        ),
+    ):
+        assert schema["paths"][path][method]["operationId"] == operation_id
     assert "canvas_chart_page" in operation_ids
     assert "canvas_series_page" in operation_ids
     assert "get_internal_oauth_status" in operation_ids
