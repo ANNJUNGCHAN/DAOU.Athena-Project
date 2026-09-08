@@ -9,6 +9,8 @@ import pytest
 
 from athena_mcp.consent import ConsentStore
 from athena_mcp.onboarding import (
+    ProbeReport,
+    apply_probe_findings,
     derive_alias,
     probe_server,
     sanitize_alias,
@@ -207,6 +209,34 @@ async def test_probe_discovers_tools_and_records_findings(stores, tmp_path):
     assert report.protocol_version
     assert {t["name"] for t in report.tools} >= {"echo", "get_corp_code"}
     assert report.mojibake_in_tool_metadata is False
+
+
+def test_repeated_identical_probe_findings_preserve_revision_but_changed_warning_advances_it(
+    stores,
+):
+    registry, _ = stores
+    registry.add("fixture", command=FIXTURE_SERVER[0], args=FIXTURE_SERVER[1])
+    report = ProbeReport(
+        alias="fixture",
+        ok=True,
+        protocol_version="2025-11-25",
+        reported_name="fixture-server",
+        reported_version="1.0.0",
+        mojibake_in_tool_metadata=False,
+    )
+
+    apply_probe_findings(registry, report)
+    after_first_probe = registry.revision
+    observed_at = registry.get("fixture").self_reported_server_info.observed_at
+
+    apply_probe_findings(registry, report)
+    assert registry.revision == after_first_probe
+    assert registry.get("fixture").self_reported_server_info.observed_at == observed_at
+
+    report.mojibake_in_tool_metadata = True
+    apply_probe_findings(registry, report)
+    assert registry.revision == after_first_probe + 1
+    assert registry.get("fixture").encoding_smoke_test_warning is True
 
 
 async def test_probe_failure_is_reported_not_raised(stores, tmp_path):

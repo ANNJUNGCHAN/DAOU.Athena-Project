@@ -43,12 +43,28 @@ const preload = read("preload.js");
 const mainJs = read("main.js");
 const HARNESSES = ["verify.js", "verify-settings.js", "verify-settings-cards.js"];
 
+function domEventLiteralSpans(line) {
+  const spans = [];
+  const patterns = [
+    /\b(?:document|window)\s*\.\s*(?:addEventListener|removeEventListener)\s*\(\s*(['"`])(athena:[a-z0-9-]+)\1/g,
+    /\b(?:new\s+)?CustomEvent\s*\(\s*(['"`])(athena:[a-z0-9-]+)\1/g,
+  ];
+  for (const pattern of patterns) {
+    for (const match of line.matchAll(pattern)) {
+      const start = match.index + match[0].lastIndexOf(match[2]);
+      spans.push([start, start + match[2].length]);
+    }
+  }
+  return spans;
+}
+
 export function unknownIpcChannels(line, known) {
-  const ipcOnly = line.replace(
-    /\.\s*(?:addEventListener|removeEventListener)\s*\(\s*(['"`])athena:[a-z0-9-]+\1/g,
-    "",
-  );
-  return [...ipcOnly.matchAll(/['"`](athena:[a-z0-9-]+)['"`]/g)]
+  const domEventSpans = domEventLiteralSpans(line);
+  return [...line.matchAll(/['"`](athena:[a-z0-9-]+)['"`]/g)]
+    .filter((match) => {
+      const channelStart = match.index + 1;
+      return !domEventSpans.some(([start, end]) => channelStart >= start && channelStart < end);
+    })
     .map((match) => match[1])
     .filter((channel) => !known.has(channel));
 }
