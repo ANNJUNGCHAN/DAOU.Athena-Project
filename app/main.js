@@ -2632,13 +2632,43 @@ function getLiveChatSession(conversationId = historyConversationId()) {
 
 function getLiveGrokSession(conversationId) {
   return liveRuntimes.chatSession(conversationId, () => {
-    const { dir, grokProfilePath } = getLiveMcpConfig();
+    const { dir, grokProfilePath, configPath } = getLiveMcpConfig();
     return createGrokAcpSession({
       cwd: dir,
       profilePath: grokProfilePath,
+      trustProjectFolder: true,
       rules: buildLiveSystemPrompt('grok'),
+      mcpServersFn: () => {
+        const gateway = JSON.parse(fs.readFileSync(configPath, 'utf8')).mcpServers.athena;
+        return [{
+          name: 'athena', command: gateway.command, args: gateway.args,
+          env: Object.entries({ ...gateway.env, ATHENA_MCP_TOOL_NAME_STYLE: 'grok' })
+            .map(([name, value]) => ({ name, value })),
+        }];
+      },
+      // Athena 플러그인은 자체 게이트웨이에서 권한을 확인한다. 다른 코딩 앱의
+      // 전역 MCP를 함께 시작하면 질문마다 무관한 서버 준비를 기다리게 된다.
+      envOverridesFn: () => ({
+        ...mcpEnv.buildEnvOverrides(),
+        GROK_CLAUDE_MCPS_ENABLED: '0',
+        GROK_CURSOR_MCPS_ENABLED: '0',
+      }),
     });
   }, 'grok');
+}
+
+function liveGrokSecurityKey() {
+  const config = getLiveMcpConfig();
+  const registry = mcpEnv.registryPath();
+  return canonicalHash({
+    generation: providerSecurityGeneration,
+    config: fileRevision(config.configPath),
+    grokConfig: fileRevision(config.grokConfigPath),
+    profile: fileRevision(config.grokProfilePath),
+    registry: fileRevision(registry),
+    consent: fileRevision(path.join(path.dirname(registry), 'consent.json')),
+    secrets: fileRevision(path.join(app.getPath('userData'), 'athena-secrets.json')),
+  });
 }
 
 function stopLiveClaudeChatSession(reason) {
@@ -4801,8 +4831,8 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
       resumeSessionId,
       model,
       effort,
-      identityKey: currentProviderSelection.activeAccount && currentProviderSelection.activeAccount.id,
-      securityKey: `${providerSecurityGeneration}:${getLiveMcpConfig().grokConfigPath}`,
+      identityKey: (currentProviderSelection.activeAccount || cliAccounts.peekActiveAccount() || {}).accountId,
+      securityKey: liveGrokSecurityKey(),
       ...turnCallbacks,
     });
   } else if (liveProviderId === 'grok') {
