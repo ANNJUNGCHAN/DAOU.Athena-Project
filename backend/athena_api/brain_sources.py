@@ -113,7 +113,10 @@ class KiwoomExecutionSource:
     _SIDES = (("1", TradeSide.SELL), ("2", TradeSide.BUY))
 
     def __init__(self, clients: Mapping[str, KiwoomClient]) -> None:
-        self._clients = dict(clients)
+        # Keep the live account-pool view. Runtime account registration/removal happens
+        # after lifespan startup; copying here would keep closed clients forever and
+        # make newly registered accounts invisible to subsequent ingestion cycles.
+        self._clients = clients
 
     async def fetch_executions(self, alias: str, order_date: date) -> tuple[ExecutedTrade, ...]:
         client = self._clients.get(alias)
@@ -162,7 +165,7 @@ class KiwoomHoldingSource:
     """
 
     def __init__(self, clients: Mapping[str, KiwoomClient]) -> None:
-        self._clients = dict(clients)
+        self._clients = clients
 
     async def fetch_holdings(self, alias: str) -> tuple[AccountHolding, ...]:
         client = self._clients.get(alias)
