@@ -108,6 +108,20 @@ function pendingSet(options) {
 
 function mountPlan(contract, values, options = {}) {
   const pending = pendingSet(options);
+  const identity = options.identity;
+  const identitySlots = new Set();
+  if (identity && (identity.name || identity.code)
+    && slotList(contract).some((slot) => slot.slot_id === 's001' && slot.kind === 'value')) {
+    values = { ...values };
+    if (identity.name) {
+      values.s001 = identity.name;
+      identitySlots.add('s001');
+    }
+    if (identity.code) {
+      values.s002 = identity.code;
+      identitySlots.add('s002');
+    }
+  }
   const slots = slotList(contract);
   const collapse = collapsePlan(contract, values);
   const rollupText = new Map();
@@ -123,7 +137,10 @@ function mountPlan(contract, values, options = {}) {
     const bound = values ? values[slot.slot_id] : undefined;
     // static 자리는 응답이 채우는 자리가 아니다 — 값이 실려 와도 디자인 문구가 이긴다.
     const missingBound = bound === undefined || bound === null;
-    const staticText = (missingBound || slot.static)
+    // 카드 자신의 종목 이름·코드는 응답이 채우는 자리가 아니라 **카드의 주제**다.
+    // 「응답에 그 값이 없다」는 빈 칸(`static: "blank"`)보다 이쪽이 앞선다 — 실측
+    // 15N5-2 `s002`를 빈 칸으로 덮으면 탭을 옮길 때 종목 코드가 사라졌다.
+    const staticText = (missingBound || (slot.static && !identitySlots.has(slot.slot_id)))
       ? (missingBound && pending.has(String(slot.slot_id)) ? '' : staticTextOf(slot))
       : null;
     const formatted = override
@@ -1495,6 +1512,25 @@ function restorePrimaryMockup(collapsed) {
 
 // 보드 1장을 root 안에 세운다. <template>은 registry가 보드당 1회만 파싱하고
 // 여기서는 cloneNode만 한다 — 같은 보드를 다시 마운트하면 텍스트만 갈아끼운다.
+function boardIdentityFromEnvelope(envelope = {}) {
+  const stringValue = (value) => typeof value === 'string' ? value.trim() : '';
+  const args = envelope.operation_args || envelope.arguments || {};
+  const code = stringValue(envelope.stk_cd || args.stk_cd || envelope.symbol || args.symbol);
+  let name = stringValue(envelope.data && envelope.data.stk_nm);
+  for (const contract of [
+    envelope.surface_contract || envelope.surfaceContract,
+    envelope.initial_surface_contract || envelope.initialSurfaceContract,
+  ]) {
+    if (name || !contract || registry.cardIdFor(contract.board_id) !== 'CC-03'
+      || !slotList(registry.contractFor(contract.board_id))
+        .some((slot) => slot.slot_id === 's001' && slot.kind === 'value')) continue;
+    const raw = contract.slot_values || contract.slotValues || {};
+    name = stringValue(Array.isArray(raw)
+      ? (raw.find((slot) => slot.slot_id === 's001') || {}).value : raw.s001);
+  }
+  return { name, code };
+}
+
 function mountBoard(root, boardId, values, options = {}) {
   const doc = options.doc || (typeof document !== 'undefined' ? document : null);
   if (!root || !doc) return null;
@@ -1505,7 +1541,9 @@ function mountBoard(root, boardId, values, options = {}) {
   const template = registry.templateFor(boardId, doc);
   if (!template) throw new Error(`보드 템플릿이 없다 — ${boardId}`);
 
-  const plan = mountPlan(contract, values, options);
+  // 탭의 예시 종목이나 누락된 조회 응답이 원래 카드 종목을 바꾸지 않는다.
+  const identity = registry.cardIdFor(boardId) === 'CC-03' ? options.identity : null;
+  const plan = mountPlan(contract, values, { ...options, identity });
   let surface = root.__bsSurface;
   if (!surface || root.__bsBoardId !== String(boardId) || !root.contains(surface)) {
     root.replaceChildren(template.content.cloneNode(true));
@@ -1517,8 +1555,6 @@ function mountBoard(root, boardId, values, options = {}) {
     root.__bsBoardId = String(boardId);
   }
   const report = applyPlan(surface, plan, options);
-  // 값이 실린 뒤에 잰다 — 목업보다 긴 값이 들어오면 줄이 그때 넘친다. 폭이 바뀌면
-  // 관찰자가 다시 잰다.
   // 값이 실린 뒤에 잰다 — 목업보다 긴 값이 들어오면 줄이 그때 넘친다. 폭이 바뀌면
   // 표면의 관찰자가 다시 잰다.
   relaxOverflowRows(surface);
@@ -1603,6 +1639,7 @@ const __exports = {
   markDeclaredScrollBox,
   hoistLayout, hoistRigidBox, applyResponsiveHooks, surfaceRoot,
   primaryMountPoint, collapsePrimaryMockup, restorePrimaryMockup, mountBoard, mountBoardAsync,
+  boardIdentityFromEnvelope,
   createLatestBoardLoad, nextHydrationSlots,
   RAW_IDENTITY_NAME, scrubRawIdentityNames,
   slotValueEntries, observationIdsOfSlotEntry, realtimeSlotIndex, updateRealtimeValue,

@@ -1900,7 +1900,16 @@ def test_schedule_endpoints_are_not_exposed_to_the_model() -> None:
 
 
 def test_schedule_reports_three_sources_with_default_interval(tmp_path: Path) -> None:
-    app = create_app(_brain_settings(tmp_path, brain_ingest_interval_minutes=45))
+    app = create_app(
+        _brain_settings(
+            tmp_path,
+            brain_ingest_interval_minutes=45,
+            kiwoom_accounts=[],
+            kiwoom_default_account=None,
+            kiwoom_app_key=None,
+            kiwoom_secret_key=None,
+        )
+    )
     headers = {"Authorization": f"Bearer {BEARER}"}
     with TestClient(app) as client:
         response = client.get(SCHEDULE_PATH, headers=headers)
@@ -1914,9 +1923,14 @@ def test_schedule_reports_three_sources_with_default_interval(tmp_path: Path) ->
             assert row["next_run_at"] is not None
             assert row["running"] is False
             assert row["last_error"] is None
-        # 키움 계정이 없는 테스트 설정 — 체결·잔고 생산자는 결선되지 않았다고 말한다.
+        # 38b51654: 빈 계좌 풀에도 생산자를 결선해 기동 뒤 등록한 계좌를 따른다.
+        # wired는 적재할 계좌·데이터가 있다는 뜻이 아니라 어댑터가 연결됐다는 뜻이다.
+        assert app.state.kiwoom_accounts == {}
+        scheduler = app.state.brain_runtime.scheduler
+        assert scheduler._backfill._aliases() == ()
+        assert scheduler._holdings._aliases() == ()
         wired = {row["source"]: row["producer_wired"] for row in body["sources"]}
-        assert wired == {"chat": True, "fills": False, "holdings": False}
+        assert wired == {"chat": True, "fills": True, "holdings": True}
 
 
 def test_schedule_update_changes_only_the_named_sources(tmp_path: Path) -> None:

@@ -73,6 +73,18 @@ def _by_slot(contract: dict) -> dict:
     return {entry["slot_id"]: entry for entry in contract["slot_values"]}
 
 
+@pytest.mark.parametrize("board_id", ["137X-2", "2R3M-1", "2RBO-1", "3DI2-0", "3FR6-0"])
+def test_stock_state_boards_keep_the_requested_instrument_name(board_id: str) -> None:
+    registry = load_registry(TEMPLATE_ROOT)
+    bound = bind_surface_values(
+        "detail:ka10001:identity_and_capital", {"stk_cd": "066570", "stk_nm": "LG전자"}
+    )
+    contract = build_board_surface_contract(board_id, bound, registry)
+    values = _by_slot(contract)
+    assert values.get("s001", {}).get("value") == "LG전자"
+    assert values.get("s002", {}).get("value") == "066570"
+
+
 def _registry_with_composite(tmp_path: Path, parts: list[dict]):
     root = tmp_path / "card-surface"
     shutil.copytree(FIXTURE_ROOT, root)
