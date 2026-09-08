@@ -51,6 +51,17 @@ test('the four boards that were unrouted are classified off-screen with why', ()
   }
 });
 
+test('the boards the dropped spec path drew are classified off-screen with why', () => {
+  // 08 코드 플로우 지도 · 17 출처에서 지도로 · 11~14 시각 전략. 그 표면이 앱에서
+  // 없어졌으니 화면 보드가 아니다 — 라우트를 비워 두면 route_missing으로 영영 빨갛다.
+  const boards = Object.fromEntries(manifest.boards.map((board) => [board.id, board]));
+  for (const id of ['2FR9-2', '3XL4-1', '3Y38-1', '3YFV-1', '3YQ0-1', '3Z0X-1']) {
+    assert.equal(boards[id].role, 'retired', id);
+    assert.match(String(boards[id].why || ''), /스펙 경로 폐기/, id);
+    assert.equal(ROUTES.some((route) => route.board === id), false, id);
+  }
+});
+
 test('the screens ratchet universe matches the live manifest', () => {
   const ratchet = require('./paper-screens-ratchet.json');
   const screens = manifest.boards.filter((board) => board.role === 'screen').length;
@@ -189,25 +200,6 @@ test('the fired-orb fixture waits for the asynchronous routine count refresh', (
   const orb = fs.readFileSync(path.join(__dirname, '..', 'orb.js'), 'utf8');
   assert.match(orb, /refreshSatelliteRing[\s\S]+invoke\('athena:routines-list'\)/);
   assert.match(orb, /on\('athena:routine-event'[\s\S]+refreshSatelliteRing\(\)/);
-});
-
-test('the code-flow route fixtures the real map IPC and waits for its rendered nodes', () => {
-  const route = ROUTES.find((item) => item.board === '2FR9-2');
-  const fixture = route.reach.find((step) => step.do === 'ipc-fixture' && step.channel === 'athena:backtest-map');
-  assert.ok(fixture, '2FR9-2 must not depend on a live backtest-map backend');
-  assert.equal(fixture.data.ok, true);
-  assert.equal(fixture.data.data.source_kind, 'code');
-  assert.equal(fixture.data.data.app_before.length, 1);
-  assert.equal(fixture.data.data.app_after.length, 3);
-  assert.equal(fixture.data.data.nodes.length, 4);
-  const payloadText = JSON.stringify(fixture.data.data);
-  for (const phrase of route.phrases.slice(1)) assert.ok(payloadText.includes(phrase), phrase);
-  assert.ok(route.reach.some((step) => step.do === 'wait-for'
-    && step.selector === '.backtest-flow-node.is-mine' && step.count === 4));
-  const canvas = fs.readFileSync(path.join(__dirname, '..', 'canvas.js'), 'utf8');
-  assert.match(canvas, /invoke\('athena:backtest-map', body\)/);
-  const backendFlow = fs.readFileSync(path.join(REPO_ROOT, 'backend', 'athena_api', 'backtest', 'flow.py'), 'utf8');
-  for (const phrase of route.phrases.slice(1)) assert.ok(backendFlow.includes(phrase), phrase);
 });
 
 test('the screen probe creates a unique private profile without deleting an earlier run', () => {

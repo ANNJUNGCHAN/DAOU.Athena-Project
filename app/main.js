@@ -3013,20 +3013,18 @@ function maybeForwardBrainEntity(step, resultBlock) {
 
 const BACKTEST_TOOL_NAME = 'athena_backtest';
 
-// 백테스트 채팅 액션 카드 — athena_backtest의 카드 액션 아홉(backtest_tools.py의
-// propose_spec·propose_code·propose_file·navigate·propose_optimize, 시각 설계 왕복의
-// visual_question·visual_patch, 기법 저작의 technique_question, 그리고 주소 하나를
-// 다섯 단계 진행 화면으로 넘기는 source_map)을 셸 렌더러의 백테스트
-// 캔버스로 흘려보낸다. 캔버스는 채팅이 몰지만 폼·편집기에 실제로 들어가는 것은
-// 사용자가 카드의 [적용]을 누른 뒤이고, 실행·검증·탐색 시작은 따로 눌러야 시작된다.
+// 백테스트 채팅 액션 카드 — athena_backtest의 카드 액션 여섯(backtest_tools.py의
+// propose_spec·propose_code·propose_file·navigate·propose_optimize, 기법 저작의
+// technique_question)을 셸 렌더러의 백테스트 캔버스로 흘려보낸다. 캔버스는 채팅이
+// 몰지만 폼·편집기에 실제로 들어가는 것은 사용자가 카드의 [적용]을 누른 뒤이고,
+// 실행·검증·탐색 시작은 따로 눌러야 시작된다.
 // orbWin에는 안 보낸다 — 말걸기 가드 카드와 같은 이유(채팅 전용 사람 액션)다.
 // propose_code만 결과가 아니라 호출 입력(step.input.propose_code)에서 읽는다 —
 // strategy_id가 있으면 결과는 버전 저장 응답이라 초안 본문(source)이 안 실린다.
-// 시각 설계 2종(visual_question·visual_patch)만 백엔드를 부른다(/visual/question·
-// /visual/patch) — 그래도 저장·활성화·실행은 없다. 막는 오류가 없으면 봉투의
-// delivered가 null이라 빈 카드도 뜨지 않는다(backtest_tools.py _canvas_envelope).
-// 봉투는 {kind, payload} 모양 그대로 넘긴다 — 카드가 읽는 모양으로 바꾸는 일은
-// 캔버스의 onChatAction이 한다(chat.js 구독 → canvas.onChatAction → 카드 렌더).
+// 막는 오류가 없으면 봉투의 delivered가 null이라 빈 카드도 뜨지 않는다
+// (backtest_tools.py _canvas_envelope). 봉투는 {kind, payload} 모양 그대로 넘긴다 —
+// 카드가 읽는 모양으로 바꾸는 일은 캔버스의 onChatAction이 한다
+// (chat.js 구독 → canvas.onChatAction → 카드 렌더).
 function maybeForwardBacktestChatAction(step, resultBlock) {
   if (resultBlock.is_error === true) return;
   const base = String(step.name || '').split('__').pop();
@@ -3058,8 +3056,7 @@ function maybeForwardBacktestChatAction(step, resultBlock) {
       suggest_run: input.suggest_run === true,
     };
   } else if (action === 'propose_spec' || action === 'navigate' || action === 'propose_optimize'
-    || action === 'visual_question' || action === 'visual_patch'
-    || action === 'technique_question' || action === 'source_map') {
+    || action === 'technique_question') {
     const text = extractToolResultText(resultBlock.content);
     if (!text) return;
     let payload;
@@ -3077,18 +3074,10 @@ function maybeForwardBacktestChatAction(step, resultBlock) {
       };
     } else if (action === 'propose_optimize' && payload.kind === 'optimize_request') {
       message = { kind: 'optimize_request', method: payload.method, note };
-    } else if (action === 'visual_question' && payload.kind === 'visual_question') {
-      message = { kind: 'visual_question', payload: payload.payload };
-    } else if (action === 'visual_patch' && payload.kind === 'visual_patch') {
-      message = { kind: 'visual_patch', payload: payload.payload };
     } else if (action === 'technique_question' && payload.kind === 'technique_question') {
       // 새 기법 만들기의 질문 카드 — visual_question과 같은 모양이다. 고른 선택지는
       // 캔버스가 채팅 입력으로 되돌려 보낸다(모델이 대신 고르지 않는다).
       message = { kind: 'technique_question', payload: payload.payload };
-    } else if (action === 'source_map' && payload.kind === 'source_url') {
-      // 사람이 채팅에 붙인 주소 하나(보드 17) — 캔버스가 다섯 단계 진행 화면을 연다.
-      // 주소만 넘어간다: 출처 본문은 모델을 거치지 않고 그 잡 안에서만 읽힌다.
-      message = { kind: 'source_url', url: payload.url, note };
     }
   }
   if (!message) return;
