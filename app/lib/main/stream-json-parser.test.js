@@ -77,6 +77,9 @@ test('parseLine: 빈 줄도 ok:false', () => {
 test('isRenderCanvasToolName: 이름과 별칭이 다른 경우 둘 다 매칭', () => {
   assert.equal(isRenderCanvasToolName('mcp__athena__athena__render_canvas'), true);
   assert.equal(isRenderCanvasToolName('mcp__my-alias__athena__render_canvas'), true);
+  // Grok 접힌 이름(ATHENA_MCP_FLAT_TOOL_NAMES) — server.py가 __를 _로 접어 노출한다
+  assert.equal(isRenderCanvasToolName('athena__athena_render_canvas'), true);
+  assert.equal(isRenderCanvasToolName('athena__athena_save_canvas'), false);
   assert.equal(isRenderCanvasToolName('mcp__athena__athena__save_canvas'), false);
   assert.equal(isRenderCanvasToolName('mcp__everything__echo'), false);
   assert.equal(isRenderCanvasToolName(undefined), false);

@@ -146,6 +146,56 @@ async def test_list_tools_only_exposes_approved_tools_plus_builtins(gateway, tmp
     assert SAVE_CANVAS_TOOL in names
 
 
+async def test_flat_tool_names_fold_double_underscore_for_grok_and_unfold_on_call(
+    gateway, tmp_path
+):
+    """Grok CLI는 이름에 `__`가 든 MCP 툴을 카탈로그에서 버린다(2026-09-08 실측) —
+    접기 모드에서는 `__`가 `_`로 접혀 노출되고, 접힌 이름으로 온 호출이 원래
+    툴로 간다. 기본 모드(접기 꺼짐)는 위 테스트가 원래 이름을 고정한다."""
+    await _connected(gateway, tmp_path)
+    server = build_mcp_server(gateway, flat_tool_names=True)
+    list_handler = server.request_handlers[types.ListToolsRequest]
+    call_handler = server.request_handlers[types.CallToolRequest]
+
+    listed = await list_handler(types.ListToolsRequest(method="tools/list"))
+    names = {t.name for t in listed.root.tools}
+    assert not any("__" in n for n in names)
+    assert "athena_render_canvas" in names
+    assert "athena_save_canvas" in names
+    assert "fixture_echo" in names
+    assert "athena_search" in names  # 단일 밑줄 이름은 그대로
+
+    # 접힌 upstream 이름 → 원래 qualified 이름으로 되돌려 실제 upstream에 도달한다
+    echoed = await call_handler(
+        types.CallToolRequest(
+            method="tools/call",
+            params=types.CallToolRequestParams(name="fixture_echo", arguments={"message": "hi"}),
+        )
+    )
+    assert echoed.root.isError is False
+    assert "Echo: hi" in echoed.root.content[0].text
+
+    # 접힌 캔버스 이름은 render_canvas 게이트에 도달한다(빈 인자 → 그 게이트의 메시지)
+    blocked = await call_handler(
+        types.CallToolRequest(
+            method="tools/call",
+            params=types.CallToolRequestParams(name="athena_render_canvas", arguments={}),
+        )
+    )
+    assert blocked.root.isError is True
+    assert "plan_token 또는 data" in blocked.root.content[0].text
+
+
+def test_flat_tool_names_env_flag_parsing(monkeypatch):
+    from athena_mcp.server import FLAT_TOOL_NAMES_ENV, flat_tool_names_enabled
+
+    assert flat_tool_names_enabled({}) is False
+    assert flat_tool_names_enabled({FLAT_TOOL_NAMES_ENV: "1"}) is True
+    assert flat_tool_names_enabled({FLAT_TOOL_NAMES_ENV: "0"}) is False
+    monkeypatch.setenv(FLAT_TOOL_NAMES_ENV, "true")
+    assert flat_tool_names_enabled() is True
+
+
 async def test_dispatch_call_routes_to_upstream_and_audits(gateway, tmp_path):
     await _connected(gateway, tmp_path)
     result = await gateway.dispatch_call("fixture__echo", {"message": "hi"})

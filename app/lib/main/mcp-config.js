@@ -144,7 +144,10 @@ function writeGrokProjectMcpConfig(dir) {
     '[mcp_servers.athena]',
     `command = ${JSON.stringify(PYTHON_EXE)}`,
     `args = ${JSON.stringify(['-m', 'athena_mcp', 'serve'])}`,
-    `env = ${tomlInlineTable({ PYTHONPATH: BACKEND_DIR })}`,
+    // Grok은 이름에 `__`가 든 MCP 툴을 버린다 — 서버가 `__`를 `_`로 접어 노출하게
+    // 한다(backend/athena_mcp/server.py FLAT_TOOL_NAMES_ENV). Claude용 .mcp.json에는
+    // 넣지 않는다 — 그쪽 이름 계약은 원본이다.
+    `env = ${tomlInlineTable({ PYTHONPATH: BACKEND_DIR, ATHENA_MCP_FLAT_TOOL_NAMES: '1' })}`,
     'enabled = true',
     '',
   ].join('\n');

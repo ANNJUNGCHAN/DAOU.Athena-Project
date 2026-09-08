@@ -258,6 +258,7 @@ const GROK_MCP_RULES_TEXT = [
   '[Grok MCP 호출 규칙]',
   '- Athena 도구는 먼저 search_tool로 찾고, 반환된 정확한 server__tool 이름을 use_tool의 tool_name에 넣는다. bare 이름이나 추측한 별칭을 쓰지 않는다.',
   '- 이 앱의 Athena 서버 이름은 athena다. 백테스트 도구의 qualified 이름은 athena__athena_backtest다.',
+  '- 캔버스 도구의 qualified 이름은 athena__athena_render_canvas다(위 규칙의 athena__render_canvas는 Grok에서 이 이름으로 보인다). athena__render_canvas·athena__athena__render_canvas는 존재하지 않으니 시도하지 않는다. 호출 예시: {"tool_name":"athena__athena_render_canvas","tool_input":{"plan_token":"..."}}',
   '- 폼 변경 예시: {"tool_name":"athena__athena_backtest","tool_input":{"action":"propose_spec","propose_spec":{"patch":{"symbols":["005930"],"period":"day"}}}}',
   '- propose_spec의 patch는 반드시 propose_spec 객체 안에 넣는다. period는 day·week·month 중 하나만 지원한다. 분봉을 지원한다고 말하거나 period=min을 보내지 않는다.',
 ].join('\n');
