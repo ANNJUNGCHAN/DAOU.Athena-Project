@@ -143,11 +143,13 @@ test('프로젝트 목록·생성·열기·등록 해제: 경로와 몸체가 �
   await backtestBridge.createProject({ backendBase: 'http://x', fetchImpl, name: '내 전략' });
   await backtestBridge.openProject({ backendBase: 'http://x', fetchImpl, path: 'D:/quant/my' });
   await backtestBridge.unregisterProject({ backendBase: 'http://x', fetchImpl, project_id: 'p 1' });
+  await backtestBridge.relinkProject({ backendBase: 'http://x', fetchImpl, project_id: 'p 1', path: 'E:/quant/my' });
   assert.deepEqual(calls, [
     ['GET', 'http://x/api/v1/projects', null],
     ['POST', 'http://x/api/v1/projects', { name: '내 전략' }],
     ['POST', 'http://x/api/v1/projects/open', { path: 'D:/quant/my' }],
     ['DELETE', 'http://x/api/v1/projects/p%201', null],
+    ['POST', 'http://x/api/v1/projects/p%201/relink', { path: 'E:/quant/my' }],
   ]);
 });
 
