@@ -24,7 +24,9 @@ test('live turn captures one conversation id and never re-reads the mutable acti
   assert.ok(saveCalls.length > 0);
   for (const call of saveCalls) assert.match(call[1], /conversationId:\s*turnConversationId/);
   assert.doesNotMatch(turn, /touchConversationEntry\((query|question)\);/);
-  assert.match(turn, /historyConversationId\(\) === turnConversationId[\s\S]*liveSessionId = result\.finalResult\.session_id/);
+  // 커서는 그 턴의 대화 런타임에 적힌다(다중 대화, 2026-09-08) — 활성 대화 여부로 가리지 않는다.
+  assert.match(turn, /runtime\.liveSessionId = result\.finalResult\.session_id/);
+  assert.doesNotMatch(turn, /historyConversationId\(\) === turnConversationId[^\n]*\n[^\n]*session_id/);
 });
 
 test('new conversation serializes abort and provider rotation before record publication and persistence', async () => {

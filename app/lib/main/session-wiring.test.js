@@ -35,7 +35,7 @@ test('답변은 자리표시자로 먼저 적히고, 델타는 저널되며, 툴
   assert.match(inner, /const sessionAssistantId = crypto\.randomUUID\(\)/);
   assert.match(inner, /bridge\.beginAssistant\(\{ sessionId: turnConversationId, messageId: sessionAssistantId \}\)/);
   assert.match(inner, /createToolStepTracker\(\(step\) => \{[\s\S]*?bridge\.recordToolStep\(/);
-  assert.match(inner, /onTextDelta: \(text, metadata\) => \{[\s\S]*?sendLiveTextDelta\(text, metadata\);[\s\S]*?bridge\.journalDelta\(/);
+  assert.match(inner, /onTextDelta: \(text, metadata\) => \{[\s\S]*?sendLiveTextDelta\(text, \{ \.\.\.metadata, conversationId: turnConversationId \}, origin\);[\s\S]*?bridge\.journalDelta\(/);
   // 세션 재시도로 Inner에 다시 들어가기 전에 첫 시도의 자리표시자를 중단으로 확정한다.
   const retryAt = inner.indexOf('return runLiveQueryInner(query, expand, origin, turnConversationId);');
   const interruptAt = inner.lastIndexOf('interrupted: true', retryAt);
