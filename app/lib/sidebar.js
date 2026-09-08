@@ -85,7 +85,8 @@
           // 눌렀다고 쓰던 대화를 버리면 그건 기능이 아니라 사고다.
           const previousView = currentMode();
           const modeChanged = previousView !== view;
-          // 앞 모드의 작업공간을 먼저 흘리고 채팅을 비운다.
+          // 앞 모드의 작업공간을 먼저 흘리고 채팅을 비운다. setView()가 앞서면
+          // athena:new-conversation 구독자가 앞 세션을 새 모드 상태로 저장한다.
           if (modeChanged) startNewConversation(currentProjectId, view);
           if (window.AthenaCanvasMode && typeof window.AthenaCanvasMode.setView === 'function') {
             window.AthenaCanvasMode.setView(view);
@@ -113,6 +114,8 @@
           } else if (!modeChanged) {
             renderList();
           }
+          // startNewConversation()이 목록까지 다시 그리므로 modeChanged일 때는 위에서
+          // renderList()를 다시 부르지 않는다.
         },
       })
     : null;

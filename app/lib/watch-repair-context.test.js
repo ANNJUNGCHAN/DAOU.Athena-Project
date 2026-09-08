@@ -12,11 +12,12 @@ const start = source.indexOf('function draftFixSeedText(');
 const end = source.indexOf('function renderApprovalCard(', start);
 assert.ok(start >= 0 && end > start, 'chat repair handler must exist');
 
-function harness(detail) {
+function harness(detail, conversationId = 'chat-a') {
   const calls = [];
   const seeded = [];
   let opened = 0;
-  const repair = vm.runInNewContext(`${source.slice(start, end)}; beginWatchRepair`, {
+  const scope = {
+    displayedConversationId: conversationId,
     openAgentCanvas: () => { opened += 1; },
     watchFixCycleLib: WatchFixCycle,
     window: {
@@ -29,8 +30,9 @@ function harness(detail) {
       },
       AthenaShell: { seedChatInput: (text) => seeded.push(text) },
     },
-  });
-  return { repair, calls, seeded, opened: () => opened };
+  };
+  const repair = vm.runInNewContext(`${source.slice(start, end)}; beginWatchRepair`, scope);
+  return { repair, calls, seeded, scope, opened: () => opened };
 }
 
 const blocked = {
@@ -68,6 +70,16 @@ test('일반 코드 감시 수정은 조건을 임의로 복구하지 않고 기
   assert.equal(h.opened(), 1);
   assert.deepEqual(h.calls, []);
   assert.deepEqual(h.seeded, ['"정상 초안" 초안을 고쳐줘 — ']);
+});
+
+test('상세를 읽는 동안 다른 대화로 이동하면 복구 문구를 새 대화 입력에 넣지 않는다', async () => {
+  const h = harness({ ...blocked, symbol: '005930' });
+  const pending = h.repair(blocked, 'chat-a');
+  h.scope.displayedConversationId = 'chat-b';
+  await pending;
+  assert.equal(h.opened(), 1);
+  assert.equal(h.calls.length, 1);
+  assert.deepEqual(h.seeded, []);
 });
 
 test('캔버스의 프로젝트 소실 복구는 재생성 전에 폴더 연결을 안내한다', async () => {
