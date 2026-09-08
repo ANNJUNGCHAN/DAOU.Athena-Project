@@ -163,7 +163,7 @@ function cardActionEnvelope(action, options = {}) {
 // 채팅에 심을 씨문장. 짧은 사람 말이어야 하고(2026-09-03 사용자 지적 「문장이 너무
 // 길고 기계적이다」) 조건은 사람이 말한다 — 에이전트가 한 번에 하나씩 되묻는 것이
 // 그 화면의 계약이다(Paper A-2 09 「질문 2/3」). 이름 뒤 줄표는 조사 판정을 피하는
-// 집안 관례다(canvas.js onPanelCta 주석).
+// 집안 관례다.
 function cardActionSeed(action, stock) {
   if (!action || action.kind !== 'agent-watch') return '';
   const name = String((stock && stock.stockName) || '').trim();
