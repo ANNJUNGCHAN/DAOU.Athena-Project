@@ -26,6 +26,7 @@ const {
 } = require('./lib/board-probe');
 const { TEXT_CLIP_PROBE, MISSING_TEXT_PROBE } = require('./lib/board-text-clip');
 const { hydrateBoard } = require('./lib/main/board-hydrate');
+const { kindOfBoard, resolveKindCode } = require('./lib/board-sweep-targets');
 const { readLocalBearerToken } = require('./lib/main/backend-launcher');
 
 const APP = __dirname;
@@ -56,6 +57,9 @@ app.disableHardwareAcceleration();
 
 const BEARER_TOKEN = readLocalBearerToken(path.join(ROOT, 'backend'));
 const CARD_BOARDS = JSON.parse(fs.readFileSync(CARD_INDEX, 'utf8')).boards;
+const OPERATION_REFS_OF = new Map(
+  CARD_BOARDS.map((board) => [board.board_id, board.operation_refs || []]),
+);
 const BOARD_NAME_OF = new Map(CARD_BOARDS.map((board) => [board.board_id, board.name]));
 const CARD_ID_OF = new Map(CARD_BOARDS.map((board) => [board.board_id, board.card_id]));
 
@@ -75,7 +79,7 @@ function registerShellIpc() {
           backendBase: BACKEND_BASE,
           token: BEARER_TOKEN,
           boardId: request.boardId,
-          target: request.target || TARGET,
+          target: request.target || await targetFor(request.boardId),
           account: request.account,
           slotIds: request.slotIds,
         });
@@ -146,13 +150,27 @@ async function bootShell() {
   return win;
 }
 
+// 보드 종류별 조회 대상. ELW·ETF 화면은 그 종류의 코드로 물어야 한다 —
+// 종목 코드로 물으면 응답이 빈 배열이고, 그것은 제품 결함이 아니다.
+const KIND_CODES = new Map();
+
+async function targetFor(boardId) {
+  const kind = kindOfBoard(OPERATION_REFS_OF.get(boardId));
+  if (kind === 'stock') return TARGET;
+  if (!KIND_CODES.has(kind)) {
+    KIND_CODES.set(kind, await resolveKindCode(kind, { backendBase: BACKEND_BASE }));
+  }
+  const code = KIND_CODES.get(kind);
+  return code ? { ...TARGET, stk_cd: code } : TARGET;
+}
+
 // 실제 API 호출 — main 프로세스가 board-hydrate를 부른다(렌더러와 같은 경로).
 async function hydrate(boardId, token) {
   const reply = await hydrateBoard({
     backendBase: BACKEND_BASE,
     token,
     boardId,
-    target: TARGET,
+    target: await targetFor(boardId),
   });
   if (!reply.ok) {
     throw new Error(`board-hydrate ${reply.status}: ${reply.error || reply.httpStatus || ''}`);
@@ -177,6 +195,7 @@ async function probeBoard(win, boardId, ordinal, token) {
   }
   const contract = reply.surface_contract;
   record.api = {
+    target: await targetFor(boardId),
     operations: reply.operations,
     filled: reply.filled,
     unbound: Array.isArray(contract.unbound_slots) ? contract.unbound_slots.length : null,

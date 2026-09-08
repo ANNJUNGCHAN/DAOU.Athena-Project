@@ -883,6 +883,10 @@ function boardStateOf(host) {
       realtimeByBoard: new Map(),
       // 자료가 한 칸도 없는 되풀이 줄(계약의 empty_rows) — 보드별로 격리한다.
       emptyRows: [], emptyRowsByBoard: new Map(),
+      // 값이 한 줄도 없는 표의 열(계약의 empty_columns).
+      emptyColumns: [], emptyColumnsByBoard: new Map(),
+      // 응답이 빈 값으로 답한 자리(계약의 empty_value_slots).
+      emptyValueSlots: [], emptyValueSlotsByBoard: new Map(),
       // 실시간 프레임만이 채울 잎(계약의 realtime_pending_slots).
       realtimePending: [], realtimePendingByBoard: new Map(),
       // binding_id → [slot_id]. 봉투가 두 표를 같이 실을 때만 채워진다 —
@@ -922,6 +926,15 @@ function seedBoardState(state, contract, envelope) {
   state.emptyRowsByBoard.set(
     boardId, Array.isArray(contract.empty_rows) ? contract.empty_rows.slice() : [],
   );
+  // 응답이 빈 값으로 답한 자리 — 결측어가 아니라 빈 칸이다.
+  state.emptyValueSlotsByBoard.set(
+    boardId,
+    Array.isArray(contract.empty_value_slots) ? contract.empty_value_slots.slice() : [],
+  );
+  // 값이 한 줄도 없는 표의 열 — 마운트가 머리글까지 지운다.
+  state.emptyColumnsByBoard.set(
+    boardId, Array.isArray(contract.empty_columns) ? contract.empty_columns.slice() : [],
+  );
   // 실시간 프레임만이 채울 잎 — 첫 프레임 전에는 결측어 대신 빈 칸이다.
   state.realtimePendingByBoard.set(
     boardId,
@@ -943,6 +956,10 @@ function activateBoardState(state, boardId) {
   state.emptyRowsByBoard.set(id, state.emptyRows);
   state.realtimePending = state.realtimePendingByBoard.get(id) || [];
   state.realtimePendingByBoard.set(id, state.realtimePending);
+  state.emptyColumns = state.emptyColumnsByBoard.get(id) || [];
+  state.emptyColumnsByBoard.set(id, state.emptyColumns);
+  state.emptyValueSlots = state.emptyValueSlotsByBoard.get(id) || [];
+  state.emptyValueSlotsByBoard.set(id, state.emptyValueSlots);
 }
 
 // 마운트 계약(어느 노드에 어떤 슬롯이 앉는가)은 정적이라 board-template-registry가
@@ -953,6 +970,10 @@ function boardMountOptions(host, envelope) {
     emptyRows: boardStateOf(host).emptyRows || [],
     // 첫 실시간 프레임 전에는 빈 칸으로 두는 잎.
     realtimePending: boardStateOf(host).realtimePending || [],
+    // 값이 한 줄도 없어 머리글까지 지울 열.
+    emptyColumns: boardStateOf(host).emptyColumns || [],
+    // 응답이 빈 값으로 답해 빈 칸으로 둘 자리.
+    emptyValueSlots: boardStateOf(host).emptyValueSlots || [],
     // ▸ 펼침 = 상태 보드 템플릿 교체(D5). 링크에 있는 보드로만 바꾼다 — 없으면
     // 아무것도 하지 않는다(없는 화면을 지어내지 않는다).
     onExpand: (boardId) => switchStateBoard(host, boardId, envelope),

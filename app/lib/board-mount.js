@@ -89,11 +89,20 @@ function collapsePlan(contract, values) {
 }
 
 // 순수 계획 — DOM 없이 검증 가능한 층. 텍스트·색·접힘 결정을 전부 여기서 내린다.
-// 값이 실시간 프레임으로만 오는 잎(계약의 `realtime_pending_slots`). 첫 프레임 전에는
-// 결측어가 아니라 빈 칸이다 — 제공되지 않는 값이 아니라 아직 오지 않은 값이다.
+// 결측어를 쓰지 않고 **빈 칸**으로 두는 잎. 두 갈래를 한 집합으로 모은다.
+//
+//   realtimePending  값이 실시간 프레임으로만 온다 — 아직 오지 않은 값이다.
+//   emptyValueSlots  응답이 그 자리를 빈 값으로 답했다 — 그 줄에는 해당 값이 없다.
+//
+// 둘 다 「제공되지 않는다」가 아니므로 결측어를 찍으면 거짓말이 된다.
 function pendingSet(options) {
-  const list = options && options.realtimePending;
-  return new Set(Array.isArray(list) ? list.map(String) : []);
+  const blanks = new Set();
+  for (const key of ['realtimePending', 'emptyValueSlots']) {
+    const list = options && options[key];
+    if (!Array.isArray(list)) continue;
+    for (const slotId of list) blanks.add(String(slotId));
+  }
+  return blanks;
 }
 
 function mountPlan(contract, values, options = {}) {
@@ -304,6 +313,30 @@ function holdsValue(box, valued) {
   return false;
 }
 
+// 값이 한 줄도 없는 표의 열은 머리글까지 지운다(계약의 `empty_columns`). 줄 접기와
+// 같은 이유다 — 스무 줄 내리 결측어인 열은 「이번 응답에 그 필드가 없다」를 스무 번
+// 말하는 자리다. 열은 여러 줄에 흩어져 있으므로 공통 상자가 아니라 칸마다 감춘다.
+function collapseEmptyColumns(surface, emptyColumns) {
+  const columns = Array.isArray(emptyColumns) ? emptyColumns : [];
+  if (!columns.length || typeof surface.querySelectorAll !== 'function') return [];
+  const bySlot = slotElementIndex(surface);
+  const hidden = [];
+  for (const column of columns) {
+    const slotIds = Array.isArray(column && column.slot_ids) ? column.slot_ids : [];
+    let count = 0;
+    for (const slotId of slotIds) {
+      const el = bySlot.get(slotId);
+      if (!el) continue;
+      setHidden(el, true);
+      if (el.dataset) el.dataset.bsColumnCollapsed = 'true';
+      count += 1;
+    }
+    if (count) hidden.push({ column: column.column, cells: count });
+  }
+  if (surface.dataset) surface.dataset.bsColumnsCollapsed = String(hidden.length);
+  return hidden;
+}
+
 function collapseEmptyRows(surface, emptyRows, options = {}) {
   const rows = Array.isArray(emptyRows) ? emptyRows : [];
   if (!rows.length || typeof surface.querySelectorAll !== 'function') return [];
@@ -405,14 +438,19 @@ function applyPlan(root, plan, options = {}) {
   const collapsedRows = options.partial
     ? []
     : collapseEmptyRows(root, options.emptyRows, options);
-  if (options.partial) return { unbound, unmapped: [], containers, collapsedRows };
+  const collapsedColumns = options.partial
+    ? []
+    : collapseEmptyColumns(root, options.emptyColumns);
+  if (options.partial) {
+    return { unbound, unmapped: [], containers, collapsedRows, collapsedColumns };
+  }
   const claimed = new Set(plan.assignments.map((assignment) => assignment.node));
   const unmapped = [];
   for (const [key, el] of index) {
     if (claimed.has(key)) continue;
     if (elementChildCount(el) === 0 && hasTextContent(el)) unmapped.push(key);
   }
-  return { unbound, unmapped, containers, collapsedRows };
+  return { unbound, unmapped, containers, collapsedRows, collapsedColumns };
 }
 
 // ---------- 실시간 슬롯 이음매 (봉투 계약 ↔ 보드 잎) ----------
@@ -1317,7 +1355,7 @@ function nextHydrationSlots(pending, filled, surfaceContract) {
 const __exports = {
   ROLLUP_MARK, RESPONSIVE_REGIONS, HOISTED_PROPERTIES, CARD_SHELL_PROPERTIES, normalizeCardShell,
   isValueSlot, anchorOf, staticTextOf, collapsePlan, mountPlan, pairedGroups,
-  nodeIndex, elementChildCount, setHidden, applyPlan, collapseEmptyRows,
+  nodeIndex, elementChildCount, setHidden, applyPlan, collapseEmptyRows, collapseEmptyColumns,
   markDeclaredScrollBox,
   hoistLayout, hoistRigidBox, applyResponsiveHooks, surfaceRoot,
   primaryMountPoint, collapsePrimaryMockup, restorePrimaryMockup, mountBoard, mountBoardAsync,
