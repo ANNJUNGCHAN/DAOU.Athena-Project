@@ -18,6 +18,7 @@ const STARTUP_POLL_INTERVAL_MS = 500;
 // 이유가 어디에도 남지 않았다(2026-09-07 실측: 자격증명 프로세스 잠금 충돌이 원인).
 const BACKEND_LOG_PATH = path.join(os.homedir(), '.athena', 'logs', 'backend-uvicorn.log');
 const OUTPUT_TAIL_LINES = 40;
+const EXISTING_BACKEND_CHECK_ATTEMPTS = 3;
 const UVICORN_ARGS = [
   '-m', 'uvicorn', 'athena_api.main:app',
   '--host', HEALTH_HOST,
@@ -170,6 +171,7 @@ function watchBackendUntilHardDeadline({
   clearTimeoutFn = clearTimeout,
   pollIntervalMs = STARTUP_POLL_INTERVAL_MS,
   hardTimeoutMs = STARTUP_HARD_TIMEOUT_MS,
+  deadlineAt = spawnAt + hardTimeoutMs,
 }) {
   cancelBackendReadinessWatch();
   const watch = {
@@ -209,7 +211,7 @@ function watchBackendUntilHardDeadline({
       log(`ensureBackend: background readiness 확인 완료 — self-spawn 프로세스를 유지한다 (${nowFn() - spawnAt}ms)`);
       return;
     }
-    const remainingMs = Math.max(0, hardTimeoutMs - (nowFn() - spawnAt));
+    const remainingMs = Math.max(0, deadlineAt - nowFn());
     if (remainingMs === 0) {
       await retireHungChild();
       return;
@@ -217,7 +219,7 @@ function watchBackendUntilHardDeadline({
     watch.pollTimer = setTimeoutFn(poll, Math.min(pollIntervalMs, remainingMs));
   };
 
-  const remainingMs = Math.max(0, hardTimeoutMs - (nowFn() - spawnAt));
+  const remainingMs = Math.max(0, deadlineAt - nowFn());
   watch.hardTimer = setTimeoutFn(retireHungChild, remainingMs);
   watch.pollTimer = setTimeoutFn(poll, Math.min(pollIntervalMs, remainingMs));
 }
@@ -236,13 +238,19 @@ async function ensureBackend({ mdlog, _dependencies = {} } = {}) {
   const clearTimeoutFn = _dependencies.clearTimeoutFn || clearTimeout;
   const hardTimeoutMs = _dependencies.hardTimeoutMs || STARTUP_HARD_TIMEOUT_MS;
   const pollIntervalMs = _dependencies.pollIntervalMs || STARTUP_POLL_INTERVAL_MS;
+  const existingBackendCheckAttempts = _dependencies.existingBackendCheckAttempts
+    || EXISTING_BACKEND_CHECK_ATTEMPTS;
   const t0 = nowFn();
-  const healthy = await checkHealthFn();
-
-  if (healthy) lastStartupFailure = null;
-  if (!healthy && backendChild) {
-    log('ensureBackend: 기존 self-spawn 백엔드가 아직 기동 중 — 중복 스폰하지 않는다');
-    return { ok: true, spawned: false, ready: false, reason: 'startup-pending' };
+  let healthy = false;
+  let healthAttempt = 0;
+  while (!healthy && healthAttempt < existingBackendCheckAttempts) {
+    healthAttempt += 1;
+    healthy = await checkHealthFn();
+    if (healthy) lastStartupFailure = null;
+    if (!healthy && backendChild) {
+      log('ensureBackend: 기존 self-spawn 백엔드가 아직 기동 중 — 중복 스폰하지 않는다');
+      return { ok: true, spawned: false, ready: false, reason: 'startup-pending' };
+    }
   }
   if (!healthy && lastStartupFailure && nowFn() - lastStartupFailure.at < hardTimeoutMs) {
     if (lastStartupFailure.contention) {
@@ -264,7 +272,7 @@ async function ensureBackend({ mdlog, _dependencies = {} } = {}) {
 
   if (action === 'already-running') {
     if (backendChild) cancelBackendReadinessWatch(backendChild);
-    log(`ensureBackend: 헬스체크 성공 — 이미 기동 중이라 스폰하지 않는다 (${nowFn() - t0}ms, ${HEALTH_URL})`);
+    log(`ensureBackend: 헬스체크 성공 — 이미 기동 중이라 스폰하지 않는다 (${nowFn() - t0}ms, attempt=${healthAttempt}, ${HEALTH_URL})`);
     return { ok: true, spawned: false, ready: true, reason: 'already-running' };
   }
   if (action === 'no-venv') {
@@ -322,6 +330,7 @@ async function ensureBackend({ mdlog, _dependencies = {} } = {}) {
       watchBackendUntilHardDeadline({
         child, spawnAt, log, checkHealthFn, killTreeFn, nowFn,
         setTimeoutFn, clearTimeoutFn, pollIntervalMs, hardTimeoutMs,
+        deadlineAt: t0 + hardTimeoutMs,
       });
     }
     return {

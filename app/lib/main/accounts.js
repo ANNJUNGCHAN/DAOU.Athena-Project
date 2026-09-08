@@ -26,6 +26,8 @@ const TOKEN_PATH = '/oauth2/token';
 const TOKEN_API_ID = 'au10001';
 const REVOKE_PATH = '/oauth2/revoke';
 const REVOKE_API_ID = 'au10002';
+const BACKEND_ALIAS_PATTERN = /^[a-z0-9][a-z0-9_-]{0,31}$/;
+const backendAliasMutationGeneration = new Map();
 
 function statePath() {
   return path.join(app.getPath('userData'), 'athena-accounts.json');
@@ -209,6 +211,7 @@ function list() {
       return {
         id: a.id,
         alias: a.alias,
+        backendAlias: typeof a.backendAlias === 'string' ? a.backendAlias : '',
         connected: tokenState === 'ready',
         active: a.id === state.activeId,
         orderApi: !!a.orderApi,
@@ -218,6 +221,91 @@ function list() {
       };
     }),
   };
+}
+
+function backendRequestHeaders(authorization) {
+  return authorization ? { Authorization: authorization } : {};
+}
+
+async function listBackendAliases({
+  backendBase,
+  fetchImpl = globalThis.fetch,
+  authorization = '',
+  timeoutMs = 2_000,
+} = {}) {
+  if (typeof fetchImpl !== 'function') return { ok: false, aliases: [], error: '서버 계좌 정보를 확인할 수 없다' };
+  if (!/^Bearer\s+\S+$/.test(String(authorization || ''))) {
+    return { ok: false, aliases: [], error: '서버 계좌 정보를 확인할 인증이 없다' };
+  }
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const response = await fetchImpl(`${backendBase}/ready/accounts`, {
+      method: 'GET',
+      headers: backendRequestHeaders(authorization),
+      redirect: 'error',
+      signal: controller.signal,
+    });
+    if (!response || !response.ok) {
+      return { ok: false, aliases: [], error: '서버 계좌 정보를 확인할 수 없다' };
+    }
+    const body = await response.json();
+    if (!body || typeof body.accounts !== 'object' || Array.isArray(body.accounts)) {
+      return { ok: false, aliases: [], error: '서버 계좌 정보 형식이 올바르지 않다' };
+    }
+    const aliases = Object.keys(body.accounts)
+      .filter((alias) => BACKEND_ALIAS_PATTERN.test(alias))
+      .sort();
+    return { ok: true, aliases };
+  } catch {
+    return { ok: false, aliases: [], error: '서버 계좌 정보를 확인할 수 없다' };
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+function persistBackendAlias(id, backendAlias) {
+  const cleanAlias = String(backendAlias || '').trim();
+  if (!BACKEND_ALIAS_PATTERN.test(cleanAlias)) return { ok: false, error: '서버 계좌 별칭이 올바르지 않다' };
+  const state = readState();
+  const entry = state.accounts.find((account) => account.id === id);
+  if (!entry) return { ok: false, error: '계좌를 찾을 수 없다' };
+  entry.backendAlias = cleanAlias;
+  writeState(state);
+  return { ok: true, backendAlias: cleanAlias };
+}
+
+async function bindBackendAlias({ id, backendAlias, backendBase, fetchImpl, authorization } = {}) {
+  const accountId = String(id || '');
+  if (!readState().accounts.some((account) => account.id === accountId)) {
+    return { ok: false, error: '계좌를 찾을 수 없다' };
+  }
+  const generation = (backendAliasMutationGeneration.get(accountId) || 0) + 1;
+  backendAliasMutationGeneration.set(accountId, generation);
+  const available = await listBackendAliases({ backendBase, fetchImpl, authorization });
+  if (!available.ok) return available;
+  if (backendAliasMutationGeneration.get(accountId) !== generation) {
+    return { ok: false, stale: true, aliases: available.aliases, error: '더 최근의 서버 계좌 선택이 이미 반영됐다' };
+  }
+  const cleanAlias = String(backendAlias || '').trim();
+  if (!available.aliases.includes(cleanAlias)) {
+    return { ok: false, aliases: available.aliases, error: '선택한 서버 계좌가 현재 backend에 없다' };
+  }
+  return { ...persistBackendAlias(accountId, cleanAlias), aliases: available.aliases };
+}
+
+async function resolveBackendAlias({ id, backendBase, fetchImpl, authorization } = {}) {
+  const state = readState();
+  const entry = state.accounts.find((account) => account.id === id);
+  if (!entry) return { ok: false, error: '활성 계좌를 찾을 수 없다' };
+  const backendAlias = String(entry.backendAlias || '').trim();
+  if (!backendAlias) return { ok: false, error: '조회에 사용할 서버 계좌를 먼저 연결해야 한다' };
+  const available = await listBackendAliases({ backendBase, fetchImpl, authorization });
+  if (!available.ok) return available;
+  if (!available.aliases.includes(backendAlias)) {
+    return { ok: false, error: '연결한 서버 계좌가 현재 backend에 없다' };
+  }
+  return { ok: true, accountId: String(entry.id), backendAlias };
 }
 
 // ---------------------------------------------------------------------------
@@ -436,4 +524,7 @@ module.exports = {
   tokenRefresh,
   tokenRevoke,
   onTokenChange,
+  listBackendAliases,
+  bindBackendAlias,
+  resolveBackendAlias,
 };

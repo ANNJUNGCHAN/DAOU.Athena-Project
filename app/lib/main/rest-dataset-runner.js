@@ -535,6 +535,7 @@ async function runPool(items, limit, worker) {
 async function runRestDataset({
   dataset: rawDataset,
   backendBase,
+  backendAccountAlias,
   fetchImpl = globalThis.fetch,
   emitCanvas = async () => ({}),
   signal,
@@ -545,6 +546,9 @@ async function runRestDataset({
 } = {}) {
   let dataset;
   try {
+    if (!/^[a-z0-9][a-z0-9_-]{0,31}$/.test(String(backendAccountAlias || ''))) {
+      throw new RestDatasetError('missing_backend_account_alias', '조회에 사용할 서버 계좌가 연결되지 않았다');
+    }
     dataset = normalizeDataset(rawDataset);
   } catch (error) {
     return {
@@ -637,7 +641,11 @@ async function runRestDataset({
     onEvent({ type: 'resolve-start', datasetId: dataset.datasetId, itemId: item.itemId, ordinal: item.ordinal });
     const resolveBody = await readJson(await fetchImpl(`${backendBase}/api/v1/llm/tools/resolve`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      redirect: 'error',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Athena-Account': backendAccountAlias,
+      },
       signal: controller.signal,
       body: JSON.stringify({
         // Operation selection is already complete in RestDatasetPlan. Mint the
@@ -658,7 +666,11 @@ async function runRestDataset({
       : remainingRenderDeadlineMs(firstCanvasWindowStart, dataset.firstCanvasDeadlineMs, clock());
     const body = await readJson(await fetchImpl(`${backendBase}/api/v1/canvas/render-plan`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      redirect: 'error',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Athena-Account': backendAccountAlias,
+      },
       signal: controller.signal,
       body: JSON.stringify({
         plan_token: resolveBody.plan_token,
@@ -1021,11 +1033,15 @@ function buildStockMasterRefreshRecords(marketRecords) {
 
 async function refreshStockEntityIndex(index, {
   backendBase,
+  backendAccountAlias,
   fetchImpl = globalThis.fetch,
   markets = ['0', '10', '8'],
   wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
   signal,
 }) {
+  if (!/^[a-z0-9][a-z0-9_-]{0,31}$/.test(String(backendAccountAlias || ''))) {
+    throw new RestDatasetError('missing_backend_account_alias', '조회에 사용할 서버 계좌가 연결되지 않았다');
+  }
   const reviewedMarkets = markets
     .map(String)
     .filter((market, position, all) => REVIEWED_MARKET_ENTITY_KIND[market] && all.indexOf(market) === position);
@@ -1038,7 +1054,11 @@ async function refreshStockEntityIndex(index, {
     const market = reviewedMarkets[marketIndex];
     const response = await fetchImpl(`${backendBase}/api/v1/tr/stockinfo/ka10099`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      redirect: 'error',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Athena-Account': backendAccountAlias,
+      },
       body: JSON.stringify({ mrkt_tp: market }),
       signal,
     });

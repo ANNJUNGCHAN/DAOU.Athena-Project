@@ -66,7 +66,7 @@ class InstrumentIdentitySnapshot:
 
     records_by_code: Mapping[str, _IdentityRecord]
     alias_codes: Mapping[str, frozenset[str]]
-    alias_patterns: tuple[tuple[re.Pattern[str], frozenset[str]], ...]
+    name_aliases: tuple[str, ...]
 
     @classmethod
     def empty(cls) -> InstrumentIdentitySnapshot:
@@ -126,15 +126,15 @@ def build_identity_snapshot(
     frozen_aliases = MappingProxyType(
         {alias: frozenset(codes) for alias, codes in sorted(aliases.items()) if alias}
     )
-    patterns = tuple(
-        (_alias_pattern(alias), codes)
-        for alias, codes in frozen_aliases.items()
-        if not alias.isdigit()
+    if any(len(alias) < 2 for alias in frozen_aliases if not alias.isdigit()):
+        raise ValueError("instrument aliases must contain at least two identity characters")
+    name_aliases = tuple(
+        alias for alias in frozen_aliases if not alias.isdigit()
     )
     return InstrumentIdentitySnapshot(
         records_by_code=MappingProxyType(dict(sorted(records.items()))),
         alias_codes=frozen_aliases,
-        alias_patterns=patterns,
+        name_aliases=name_aliases,
     )
 
 
@@ -199,9 +199,13 @@ class InstrumentIdentityIndex:
             return None
         matched_codes = set(explicit_codes)
         alias_matched = False
-        for pattern, codes in snapshot.alias_patterns:
-            if pattern.search(text) is None:
+        normalized_question = _normalize_identity(text)
+        for alias in snapshot.name_aliases:
+            if alias not in normalized_question:
                 continue
+            if _alias_pattern(alias).search(text) is None:
+                continue
+            codes = snapshot.alias_codes[alias]
             if len(codes) != 1:
                 return None
             alias_matched = True

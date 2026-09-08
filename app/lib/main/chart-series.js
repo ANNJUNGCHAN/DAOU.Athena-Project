@@ -5,11 +5,14 @@
 // activeRestRun을 공유해 진행 중인 조회를 abort시키고 패널 권위 수명에 엮인다.
 'use strict';
 
+const BACKEND_ALIAS_PATTERN = /^[a-z0-9][a-z0-9_-]{0,31}$/;
+
 // 한 TR의 여러 열을 **한 번에** 받는다. 개인·기관·외국인을 따로 부르면 같은
 // 응답을 세 번 받는 셈이고 리미터도 세 배로 쓴다.
 async function fetchChartSeries(opts) {
   const o = opts || {};
   const backendBase = o.backendBase;
+  const backendAccountAlias = String(o.backendAccountAlias || '');
   const fetchImpl = o.fetchImpl || globalThis.fetch;
   const body = {
     operation_ref: String(o.operationRef || ''),
@@ -20,6 +23,9 @@ async function fetchChartSeries(opts) {
   // — ka10064의 input.field_allowlist에는 base_dt가 없다(실측).
   if (o.baseDt) body.base_dt = String(o.baseDt);
 
+  if (!BACKEND_ALIAS_PATTERN.test(backendAccountAlias)) {
+    return { ok: false, error: '조회에 사용할 서버 계좌가 연결되지 않았다', series: [] };
+  }
   if (!body.operation_ref) return { ok: false, error: 'operationRef가 비었다', series: [] };
   if (!body.fields.length) return { ok: false, error: '그릴 열이 비었다', series: [] };
 
@@ -27,7 +33,11 @@ async function fetchChartSeries(opts) {
   try {
     res = await fetchImpl(`${backendBase}/api/v1/canvas/series-page`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      redirect: 'error',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Athena-Account': backendAccountAlias,
+      },
       body: JSON.stringify(body),
     });
   } catch (err) {
