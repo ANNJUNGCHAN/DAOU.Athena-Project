@@ -190,32 +190,57 @@ async function runSelectorFastPath({
   const startedAt = clock();
   ensureCurrent(signal, isCurrent);
 
-  const response = await fetchImpl(`${String(backendBase || '').replace(/\/$/, '')}/api/v1/selector/dispatch`, {
-    method: 'POST',
-    redirect: 'error',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Athena-Account': backendAccountAlias,
-    },
-    signal,
-    body: JSON.stringify({
-      question: rawQuestion,
-      intent,
-      candidate_refs: Array.isArray(candidateRefs) ? candidateRefs : [],
-      ...(preferredRef ? { preferred_ref: preferredRef } : {}),
-      ...(detailGroup ? { detail_group: detailGroup } : {}),
-      arguments: operationArguments,
-      response_mode: 'auto',
-      continuation: { cont_yn: 'N', next_key: null },
-      ...correlation,
-      deadline_ms: deadlineMs,
-    }),
-  });
-  ensureCurrent(signal, isCurrent);
-  if (!response || !response.ok) {
-    return { handled: false, reason: `http_${response ? response.status : 'unknown'}` };
+  const dispatchDeadlineMs = Math.max(1, Number(deadlineMs) || DEFAULT_DEADLINE_MS);
+  const dispatchController = new AbortController();
+  const timeoutError = new SelectorFastPathError(
+    'dispatch_timeout',
+    'Selector dispatch 응답 제한 시간을 초과했다',
+  );
+  let timedOut = false;
+  const abortDispatch = () => dispatchController.abort(signal.reason);
+  if (signal) signal.addEventListener('abort', abortDispatch, { once: true });
+  const timeout = setTimeout(() => {
+    timedOut = true;
+    dispatchController.abort(timeoutError);
+  }, dispatchDeadlineMs);
+  let response;
+  let body;
+  try {
+    response = await fetchImpl(`${String(backendBase || '').replace(/\/$/, '')}/api/v1/selector/dispatch`, {
+      method: 'POST',
+      redirect: 'error',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Athena-Account': backendAccountAlias,
+      },
+      signal: dispatchController.signal,
+      body: JSON.stringify({
+        question: rawQuestion,
+        intent,
+        candidate_refs: Array.isArray(candidateRefs) ? candidateRefs : [],
+        ...(preferredRef ? { preferred_ref: preferredRef } : {}),
+        ...(detailGroup ? { detail_group: detailGroup } : {}),
+        arguments: operationArguments,
+        response_mode: 'auto',
+        continuation: { cont_yn: 'N', next_key: null },
+        ...correlation,
+        deadline_ms: dispatchDeadlineMs,
+      }),
+    });
+    ensureCurrent(signal, isCurrent);
+    if (!response || !response.ok) {
+      return { handled: false, reason: `http_${response ? response.status : 'unknown'}` };
+    }
+    body = await readJson(response);
+    if (timedOut) throw timeoutError;
+  } catch (error) {
+    if (signal && signal.aborted) throw abortError(signal);
+    if (timedOut) throw timeoutError;
+    throw error;
+  } finally {
+    clearTimeout(timeout);
+    if (signal) signal.removeEventListener('abort', abortDispatch);
   }
-  const body = await readJson(response);
   ensureCurrent(signal, isCurrent);
 
   if (FALLTHROUGH_STATUSES.has(String(body && body.status || '').toLowerCase())) {

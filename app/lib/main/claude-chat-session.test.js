@@ -67,6 +67,30 @@ function emitResult(child, result = '답', extra = {}) {
   emitLine(child, { type: 'result', subtype: 'success', is_error: false, result, ...extra });
 }
 
+test('prewarm recovery retains selected model and effort so the next turn reuses it', async () => {
+  const { session, spawns, kills } = createHarness();
+  try {
+    session.warm({ model: 'selected-model', effort: 'low', resumeSessionId: 'existing-session' });
+    lastChild(spawns).emit('close', 1);
+    await delay(20);
+    assert.equal(spawns.length, 2);
+    const recoveredArgs = spawns[1].args;
+    assert.equal(recoveredArgs[recoveredArgs.indexOf('--resume') + 1], 'existing-session');
+    assert.equal(session.lastSessionId(), null, 'prewarm must not claim a completed turn');
+    const recovered = lastChild(spawns);
+    const turn = session.run({ prompt: '안녕', model: 'selected-model', effort: 'low', resumeSessionId: 'existing-session' });
+    emitResult(lastChild(spawns), '안녕하세요', { session_id: 'warm-session' });
+    const result = await turn;
+    assert.equal(result.ok, true);
+    assert.equal(result.spawnedFresh, false);
+    assert.equal(lastChild(spawns), recovered);
+    assert.equal(spawns.length, 2);
+    assert.equal(kills.length, 1);
+  } finally {
+    session.stop();
+  }
+});
+
 test('buildChatSessionArgs — 전체 옵션이 정확한 순서로 붙는다', () => {
   assert.deepEqual(buildChatSessionArgs({
     configFile: '.mcp.json',

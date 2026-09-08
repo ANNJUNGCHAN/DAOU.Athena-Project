@@ -306,6 +306,13 @@ function sheetNode(tag) {
     get textContent() { return text + this.children.map((child) => child.textContent).join(''); },
     set textContent(value) { this.replaceChildren(); text = String(value); },
     appendChild(child) { this.children.push(child); child.parentNode = this; return child; },
+    insertBefore(child, before) {
+      const index = before ? this.children.indexOf(before) : -1;
+      if (index < 0) return this.appendChild(child);
+      this.children.splice(index, 0, child);
+      child.parentNode = this;
+      return child;
+    },
     replaceChildren() { text = ''; this.children.forEach((child) => { child.parentNode = null; }); this.children = []; },
     remove() {
       if (this.parentNode) this.parentNode.children = this.parentNode.children.filter((child) => child !== this);
@@ -338,14 +345,19 @@ function sheetDescendants(node) {
 
 async function renderRegisterSheet(t) {
   let resolveRegister;
+  let resolveSync;
   const registrations = [];
+  const syncs = [];
   let lists = 0;
   const priorDocument = global.document;
   const priorWindow = global.window;
   global.document = { createElement: sheetNode };
   global.window = { athena: { invoke(channel, payload) {
     if (channel === 'athena:account-list') { lists += 1; return Promise.resolve({ accounts: [] }); }
-    if (channel === 'athena:account-runtime-options') return Promise.resolve({ ok: true, aliases: ['server-a'] });
+    if (channel === 'athena:account-set-backend-alias') {
+      syncs.push(payload);
+      return new Promise((resolve) => { resolveSync = resolve; });
+    }
     assert.equal(channel, 'athena:account-register');
     registrations.push(payload);
     return new Promise((resolve) => { resolveRegister = resolve; });
@@ -361,10 +373,36 @@ async function renderRegisterSheet(t) {
   const inputs = sheetDescendants(sheet).filter((node) => node.tag === 'input');
   inputs.forEach((input, index) => { input.value = ['모의-검증', 'TEST_APP_KEY', 'TEST_SECRET_KEY'][index]; });
   return {
-    grid, sheet, inputs, registrations,
+    grid, sheet, inputs, registrations, syncs,
     submit: sheet.querySelector('.uk-btn-primary'),
     resolve: (result) => resolveRegister(result),
+    resolveSync: (result) => resolveSync(result),
     listCount: () => lists,
+  };
+}
+
+async function renderOrderSheet(t, account, setOrderApi) {
+  const priorDocument = global.document;
+  const priorWindow = global.window;
+  global.document = { createElement: sheetNode };
+  global.window = { athena: { async invoke(channel, payload) {
+    if (channel === 'athena:account-list') return { accounts: [account] };
+    if (channel === 'athena:order-api-set') return setOrderApi(payload);
+    throw new Error(`unexpected channel: ${channel}`);
+  } } };
+  t.after(() => {
+    if (priorDocument === undefined) delete global.document; else global.document = priorDocument;
+    if (priorWindow === undefined) delete global.window; else global.window = priorWindow;
+  });
+  const grid = sheetNode('div');
+  await settingsCards.renderAccounts(grid);
+  const orderApiChip = sheetDescendants(grid).find((node) => node.className.includes('is-clickable'));
+  orderApiChip.listeners.click({ stopPropagation() {} });
+  return {
+    grid,
+    sheet: grid.querySelector('.uk-sheet'),
+    toggle: grid.querySelector('.uk-toggle'),
+    activate: grid.querySelector('.uk-btn-primary'),
   };
 }
 
@@ -419,21 +457,53 @@ test('등록 시트의 저장 완료는 실제 입력을 비우고 시트를 닫
   assert.equal(saved.listCount(), 2);
 });
 
-test('기존 계좌는 서버 계좌를 자동 선택하지 않고 사용자가 고른 alias를 저장·재표시한다', async (t) => {
+test('계좌는 저장됐지만 조회 연결이 실패하면 오류와 같은 계좌 연결 확인을 제공한다', async (t) => {
+  const saved = await renderRegisterSheet(t);
+  const pendingVerify = saved.submit.click();
+  saved.resolve({ ok: true, verified: true });
+  await pendingVerify;
+
+  const pendingSave = saved.submit.click();
+  saved.resolve({
+    ok: true,
+    id: 'test-account',
+    backendConnected: false,
+    backendSyncError: '조회 서버가 응답하지 않았습니다',
+  });
+  await pendingSave;
+
+  assert.ok(saved.grid.querySelector('.uk-sheet'), '로컬 저장 성공만으로 준비 완료처럼 시트를 닫지 않는다');
+  assert.equal(saved.submit.textContent, '연결 확인');
+  assert.equal(saved.submit.disabled, false);
+  assert.deepEqual(saved.inputs.map((input) => input.value), ['', '', ''], '저장된 비밀값은 화면에서 즉시 지운다');
+  assert.match(saved.sheet.textContent, /계좌는 저장됐지만 조회 연결을 확인하지 못했습니다/);
+  assert.match(saved.sheet.textContent, /조회 서버가 응답하지 않았습니다/);
+  assert.equal(saved.listCount(), 1);
+
+  const pendingSync = saved.submit.click();
+  assert.deepEqual(saved.syncs, [{ id: 'test-account' }]);
+  saved.resolveSync({ ok: true, backendConnected: true });
+  await pendingSync;
+  assert.equal(saved.grid.querySelector('.uk-sheet'), null);
+  assert.equal(saved.listCount(), 2);
+});
+
+test('기존 계좌는 내부 서버 목록 없이 저장된 자격 증명으로 연결을 다시 확인한다', async (t) => {
   const priorDocument = global.document;
   const priorWindow = global.window;
-  let backendAlias = '';
+  let backendConnected = false;
   const calls = [];
   global.document = { createElement: sheetNode };
   global.window = { athena: loadPreloadBridge(async (channel, payload) => {
     calls.push([channel, payload]);
     if (channel === 'athena:account-list') {
-      return { accounts: [{ id: 'local-a', alias: '내 계좌', backendAlias, active: true }] };
+      return { accounts: [{
+        id: 'local-a', alias: '내 계좌', backendConnected, backendSyncError: backendConnected ? null : '조회 서버 연결 실패', active: true,
+      }] };
     }
-    if (channel === 'athena:account-runtime-options') return { ok: true, aliases: ['server-a', 'server-b'] };
     if (channel === 'athena:account-set-backend-alias') {
-      backendAlias = payload.backendAlias;
-      return { ok: true, backendAlias };
+      backendConnected = true;
+      return { ok: true, backendConnected: true };
     }
     throw new Error(`unexpected channel: ${channel}`);
   }) };
@@ -445,39 +515,36 @@ test('기존 계좌는 서버 계좌를 자동 선택하지 않고 사용자가 
   const grid = sheetNode('div');
   await settingsCards.renderAccounts(grid);
   const connect = grid.querySelector('.uk-account-backend-button');
-  assert.equal(connect.textContent, '서버 계좌 연결');
-  connect.click();
-  const select = grid.querySelector('.uk-account-backend-select');
-  assert.equal(select.value, '', 'backend 기본값이나 첫 option을 자동 선택하지 않는다');
-  select.value = 'server-b';
-  await grid.querySelector('.uk-account-backend-save').click();
+  assert.equal(connect.textContent, '다시 시도');
+  assert.match(grid.textContent, /조회 연결 실패/);
+  assert.equal(calls.some(([channel]) => channel === 'athena:account-runtime-options'), false);
+  await connect.click();
   assert.deepEqual(calls.find(([channel]) => channel === 'athena:account-set-backend-alias'), [
     'athena:account-set-backend-alias',
-    { id: 'local-a', backendAlias: 'server-b' },
+    { id: 'local-a' },
   ]);
-  assert.equal(grid.querySelector('.uk-account-backend-button').textContent, '서버: server-b');
+  assert.match(grid.textContent, /마지막 연결 성공/);
+  assert.equal(grid.textContent.includes('server-a'), false);
 });
 
-test('preload는 계좌 연결 IPC 둘만 main으로 전달하고 미허용 채널은 차단한다', async () => {
+test('preload는 계좌 ID만 담은 연결 확인 IPC를 main으로 전달하고 미허용 채널은 차단한다', async () => {
   const calls = [];
   const bridge = loadPreloadBridge(async (channel, payload) => {
     calls.push([channel, payload]);
     return { ok: true };
   });
-  await bridge.invoke('athena:account-runtime-options');
-  await bridge.invoke('athena:account-set-backend-alias', { id: 'local-a', backendAlias: 'server-a' });
+  await bridge.invoke('athena:account-set-backend-alias', { id: 'local-a' });
   assert.deepEqual(calls, [
-    ['athena:account-runtime-options', undefined],
-    ['athena:account-set-backend-alias', { id: 'local-a', backendAlias: 'server-a' }],
+    ['athena:account-set-backend-alias', { id: 'local-a' }],
   ]);
   await assert.rejects(
     bridge.invoke('athena:account-unknown', {}),
     /허용되지 않은 invoke 채널/,
   );
-  assert.equal(calls.length, 2);
+  assert.equal(calls.length, 1);
 });
 
-test('서버 계좌 metadata를 읽지 못하면 연결 control은 비활성이고 저장 IPC를 호출하지 않는다', async (t) => {
+test('연결 확인 실패는 오류를 표시하고 같은 계좌로 다시 시도할 수 있다', async (t) => {
   const priorDocument = global.document;
   const priorWindow = global.window;
   const calls = [];
@@ -485,10 +552,10 @@ test('서버 계좌 metadata를 읽지 못하면 연결 control은 비활성이�
   global.window = { athena: { async invoke(channel, payload) {
     calls.push([channel, payload]);
     if (channel === 'athena:account-list') {
-      return { accounts: [{ id: 'local-a', alias: '내 계좌', backendAlias: '', active: true }] };
+      return { accounts: [{ id: 'local-a', alias: '내 계좌', backendConnected: false, active: true }] };
     }
-    if (channel === 'athena:account-runtime-options') {
-      return { ok: false, aliases: [], error: '서버 계좌 정보를 확인할 수 없다' };
+    if (channel === 'athena:account-set-backend-alias') {
+      return { ok: false, error: '저장한 계좌를 조회 서버에 연결하지 못했습니다' };
     }
     throw new Error(`unexpected channel: ${channel}`);
   } } };
@@ -500,11 +567,133 @@ test('서버 계좌 metadata를 읽지 못하면 연결 control은 비활성이�
   const grid = sheetNode('div');
   await settingsCards.renderAccounts(grid);
   const connect = grid.querySelector('.uk-account-backend-button');
-  assert.equal(connect.disabled, true);
-  assert.match(connect.title, /확인할 수 없다/);
-  connect.click();
-  assert.equal(grid.querySelector('.uk-sheet'), null);
-  assert.equal(calls.some(([channel]) => channel === 'athena:account-set-backend-alias'), false);
+  assert.equal(connect.textContent, '연결 확인');
+  await connect.click();
+  assert.equal(connect.disabled, false);
+  assert.equal(connect.textContent, '다시 시도');
+  assert.match(grid.textContent, /저장한 계좌를 조회 서버에 연결하지 못했습니다/);
+  assert.deepEqual(calls.at(-1), ['athena:account-set-backend-alias', { id: 'local-a' }]);
+});
+
+test('계좌 활성화와 삭제 실패는 행을 닫거나 새로고침하지 않고 오류를 표시한다', async (t) => {
+  const priorDocument = global.document;
+  const priorWindow = global.window;
+  let lists = 0;
+  global.document = { createElement: sheetNode };
+  global.window = { athena: { async invoke(channel) {
+    if (channel === 'athena:account-list') {
+      lists += 1;
+      return { accounts: [
+        { id: 'active', alias: '주 계좌', backendConnected: true, active: true },
+        { id: 'inactive', alias: '보조 계좌', backendConnected: true, active: false },
+      ] };
+    }
+    if (channel === 'athena:account-set-active') return { ok: false, error: '계좌 활성화에 실패했습니다' };
+    if (channel === 'athena:account-remove') return { ok: false, error: '조회 서버에서 계좌를 삭제하지 못했습니다' };
+    throw new Error(`unexpected channel: ${channel}`);
+  } } };
+  t.after(() => {
+    if (priorDocument === undefined) delete global.document; else global.document = priorDocument;
+    if (priorWindow === undefined) delete global.window; else global.window = priorWindow;
+  });
+
+  const grid = sheetNode('div');
+  await settingsCards.renderAccounts(grid);
+  const accountRows = sheetDescendants(grid).filter((node) => node.className.split(/\s+/).includes('uk-row'));
+  const inactiveRow = accountRows.find((node) => node.textContent.includes('보조 계좌'));
+  await inactiveRow.listeners.click();
+  assert.match(inactiveRow.textContent, /계좌 활성화에 실패했습니다/);
+  assert.equal(lists, 1, '실패를 성공처럼 새로고침하지 않는다');
+
+  const deleteButton = sheetDescendants(inactiveRow).find((node) => node.className.includes('uk-row-delete'));
+  deleteButton.listeners.click({ stopPropagation() {} });
+  const confirmDelete = sheetDescendants(inactiveRow).find((node) => node.className.includes('is-danger'));
+  await confirmDelete.click();
+  assert.match(inactiveRow.textContent, /조회 서버에서 계좌를 삭제하지 못했습니다/);
+  assert.ok(inactiveRow.querySelector('.uk-row-confirm'), '삭제 실패 뒤 확인 행을 유지한다');
+  assert.equal(lists, 1);
+});
+
+test('계좌 전환 성공 뒤 조회 연결 실패는 선택된 계좌의 오류 상태로 즉시 새로고침한다', async (t) => {
+  const priorDocument = global.document;
+  const priorWindow = global.window;
+  let activated = false;
+  let lists = 0;
+  global.document = { createElement: sheetNode };
+  global.window = { athena: { async invoke(channel, payload) {
+    if (channel === 'athena:account-list') {
+      lists += 1;
+      return { accounts: [
+        { id: 'first', alias: '기존 계좌', backendConnected: true, active: !activated },
+        {
+          id: 'next', alias: '선택한 계좌', active: activated,
+          backendConnected: activated ? false : true,
+          backendSyncError: activated ? '선택한 계좌의 조회 연결에 실패했습니다' : null,
+        },
+      ] };
+    }
+    if (channel === 'athena:account-set-active') {
+      assert.deepEqual(payload, { id: 'next' });
+      activated = true;
+      return { ok: true, backendConnected: false, backendSyncError: '선택한 계좌의 조회 연결에 실패했습니다' };
+    }
+    throw new Error(`unexpected channel: ${channel}`);
+  } } };
+  t.after(() => {
+    if (priorDocument === undefined) delete global.document; else global.document = priorDocument;
+    if (priorWindow === undefined) delete global.window; else global.window = priorWindow;
+  });
+
+  const grid = sheetNode('div');
+  await settingsCards.renderAccounts(grid);
+  const inactiveRow = sheetDescendants(grid)
+    .filter((node) => node.className.split(/\s+/).includes('uk-row'))
+    .find((node) => node.textContent.includes('선택한 계좌'));
+  await inactiveRow.listeners.click();
+
+  assert.equal(lists, 2);
+  assert.match(grid.textContent, /선택한 계좌활성/);
+  assert.match(grid.textContent, /조회 연결 실패/);
+  assert.match(grid.textContent, /선택한 계좌의 조회 연결에 실패했습니다/);
+});
+
+test('주문 API OFF 서버 확인 실패는 로컬 OFF를 유지하고 확인 필요 오류를 표시한다', async (t) => {
+  let resolveDisable;
+  const view = await renderOrderSheet(t, {
+    id: 'local-a', alias: '내 계좌', orderApi: true, tokenState: 'ready', backendConnected: true, active: true,
+  }, () => new Promise((resolve) => { resolveDisable = resolve; }));
+
+  view.toggle.click();
+  assert.match(view.sheet.textContent, /로컬 OFF · 서버 확인 중/);
+  assert.match(view.sheet.textContent, /주문 API 허용 \(토글\)OFF/);
+  resolveDisable({ ok: false, orderApi: false, error: '서버의 OFF 상태를 확인하지 못했습니다' });
+  await new Promise((resolve) => setImmediate(resolve));
+
+  assert.equal(view.toggle.className.includes('is-on'), false);
+  assert.match(view.sheet.textContent, /로컬 OFF · 서버 확인 필요/);
+  assert.match(view.sheet.textContent, /서버의 OFF 상태를 확인하지 못했습니다/);
+});
+
+test('주문 API ON 실패 후 보상 결과가 OFF면 토글과 상태를 OFF로 맞추고 오류를 표시한다', async (t) => {
+  const view = await renderOrderSheet(t, {
+    id: 'local-a', alias: '내 계좌', orderApi: false, tokenState: 'ready', backendConnected: true, active: true,
+  }, async (payload) => {
+    assert.deepEqual(payload, { id: 'local-a', enabled: true });
+    return {
+      ok: false,
+      orderApi: false,
+      error: '활성화에 실패해 로컬 허용 상태를 OFF로 되돌렸습니다',
+      checklist: [{ key: 'orderApi', label: '주문 API 허용 (토글)', met: false }],
+    };
+  });
+
+  view.toggle.click();
+  await view.activate.click();
+
+  assert.equal(view.toggle.className.includes('is-on'), false);
+  assert.match(view.sheet.textContent, /현재 OFF/);
+  assert.match(view.sheet.textContent, /주문 API 허용 \(토글\)OFF/);
+  assert.match(view.sheet.textContent, /활성화에 실패해 로컬 허용 상태를 OFF로 되돌렸습니다/);
 });
 
 test('인증 실패는 입력을 비우지 않는다 — 다시 검증이 가능하다', () => {

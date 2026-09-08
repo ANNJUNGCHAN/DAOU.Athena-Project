@@ -22,6 +22,8 @@ function liveHandlers(t) {
   const busy = [];
   const pending = [];
   const aborted = [];
+  const shellWebContents = { id: 2, send() {} };
+  const orbWebContents = { id: 1, send() {} };
   const context = vm.createContext({
     Map, isQuitting: false, liveSubmitContexts: new Map(),
     historyConversationId: () => 'session-A',
@@ -35,7 +37,8 @@ function liveHandlers(t) {
       aborted.push(reason.message);
       jobs.forEach((job) => job.resolve({ ok: false, error: '중단됨' }));
     },
-    shellWin: { isDestroyed: () => false, webContents: { send() {} } },
+    shellWin: { isDestroyed: () => false, webContents: shellWebContents },
+    orbWin: { isDestroyed: () => false, webContents: orbWebContents },
     ipcMain: {
       handle: (name, handler) => { handlers[name] = handler; },
       on: (name, handler) => { handlers[name] = handler; },
@@ -56,11 +59,14 @@ function liveHandlers(t) {
     jobs, saved, busy, aborted,
     submit(origin, query) {
       const channel = origin === 'orb' ? 'athena:orb-chat-submit' : 'athena__render_canvas';
-      const promise = handlers[channel]({ sender: { id: origin === 'orb' ? 1 : 2 } }, { query });
+      const sender = origin === 'orb' ? orbWebContents : shellWebContents;
+      const promise = handlers[channel]({ sender }, { query });
       pending.push(promise);
       return promise;
     },
-    abort: () => handlers['athena:abort-live-query'](),
+    abort: (origin) => handlers['athena:abort-live-query']({
+      sender: origin === 'orb' ? orbWebContents : shellWebContents,
+    }),
   };
 }
 
@@ -108,7 +114,7 @@ for (const outcome of ['success', 'failure', 'throw']) {
 test('공유 질의 진입: 기존 Esc 중단 IPC와 중단 후 셸 재질의를 보존한다', async (t) => {
   const live = liveHandlers(t);
   const first = live.submit('orb', '중단할 질문');
-  live.abort();
+  live.abort('orb');
   assert.equal(live.aborted.length, 1);
   assert.equal((await first).ok, false);
   const next = live.submit('shell', '중단 뒤 질문');
@@ -117,3 +123,14 @@ test('공유 질의 진입: 기존 Esc 중단 IPC와 중단 후 셸 재질의를
   assert.equal((await next).ok, true);
   assert.deepEqual(live.busy, [true, false, true, false]);
 });
+
+for (const [activeOrigin, abortOrigin] of [['orb', 'shell'], ['shell', 'orb']]) {
+  test(`공유 질의 취소: ${abortOrigin} 취소 IPC는 진행 중인 ${activeOrigin} 턴을 중단하지 않는다`, async (t) => {
+    const live = liveHandlers(t);
+    const active = live.submit(activeOrigin, '다른 창이 중단하면 안 되는 질문');
+    live.abort(abortOrigin);
+    assert.equal(live.aborted.length, 0);
+    live.jobs[0].resolve({ ok: true, answerText: 'fixture' });
+    assert.equal((await active).ok, true);
+  });
+}

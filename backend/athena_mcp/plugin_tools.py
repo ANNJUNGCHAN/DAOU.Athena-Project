@@ -30,6 +30,7 @@ from typing import Any
 import mcp.types as types
 
 from athena_mcp.consent import ConsentStore
+from athena_mcp.onboarding import derive_alias
 from athena_mcp.registry import ServerRegistry
 from athena_mcp.result import (
     blocked as _blocked,
@@ -178,11 +179,23 @@ def _snippet_aliases(raw: Any) -> tuple[list[str], str | None]:
         return [], "설정 JSON에 서버가 하나도 없다 — 한 번에 한 서버만 등록한다."
     if len(aliases) > 1:
         return [], f"설정 JSON에 서버가 {len(aliases)}개다 — 한 번에 한 서버만 등록한다."
-    return aliases, None
+    name = aliases[0]
+    config = servers[name] if isinstance(servers[name], dict) else {}
+    command = config.get("command") if isinstance(config.get("command"), str) else ""
+    raw_args = config.get("args")
+    args = (
+        [value for value in raw_args if isinstance(value, str)]
+        if isinstance(raw_args, list)
+        else []
+    )
+    return [derive_alias(name, command, args)], None
 
 
 def _gate_action(
-    action: str, raw: dict[str, Any], known_aliases: set[str]
+    action: str,
+    raw: dict[str, Any],
+    known_aliases: set[str],
+    planned_additions: set[str],
 ) -> tuple[dict[str, Any] | None, str | None]:
     """액션 하나를 검사해 봉투 원소로 정규화한다. 거부되면 `(None, 사유)`."""
     if action == "stage_snippet":
@@ -196,6 +209,22 @@ def _gate_action(
         for alias in aliases:
             if _is_blocked_alias(alias):
                 return None, f"{alias!r}은 아테나 내장 기능이라 플러그인으로 등록할 수 없다."
+            alias_key = alias.casefold()
+            existing = next(
+                (candidate for candidate in known_aliases if candidate.casefold() == alias_key),
+                None,
+            )
+            if existing is not None:
+                return None, (
+                    f"{existing!r}은 이미 등록된 플러그인이다. 기존 연결 설정과 권한을 "
+                    "확인하라. 교체가 필요할 때만 기존 항목을 삭제한 뒤 다시 등록하라."
+                )
+            if alias_key in planned_additions:
+                return None, (
+                    f"{alias!r} 직접 등록이 같은 제안에 중복돼 있다. "
+                    "하나만 남겨 다시 제안하라."
+                )
+            planned_additions.add(alias_key)
         # 봉투의 target은 항상 null이다 — 카드 제목은 `직접 등록`으로 뜬다.
         return {"action": action, "target": None, "snippet": raw.get("snippet")}, None
 
@@ -212,6 +241,18 @@ def _gate_action(
             return None, (
                 f"{target!r}은 내장 마켓플레이스 목록에 없는 서버다 — 설치를 제안할 수 없다."
             )
+        target_key = target.casefold()
+        existing = next(
+            (candidate for candidate in known_aliases if candidate.casefold() == target_key),
+            None,
+        )
+        if existing is not None:
+            return None, f"{existing!r}은 이미 등록된 플러그인이다. 기존 연결과 권한을 관리하라."
+        if target_key in planned_additions:
+            return None, (
+                f"{target!r} 설치가 같은 제안에 중복돼 있다. 하나만 남겨 다시 제안하라."
+            )
+        planned_additions.add(target_key)
     elif target not in known_aliases:
         return None, f"{target!r}은 등록되지 않은 서버다 — {action} 제안의 대상이 아니다."
 
@@ -241,6 +282,7 @@ def dispatch(
     known_aliases = {str(server["alias"]) for server in snapshot.servers}
 
     normalized: list[dict[str, Any]] = []
+    planned_additions: set[str] = set()
     for raw in actions:
         if not isinstance(raw, dict):
             return _blocked("동작 하나하나는 객체여야 한다.")
@@ -251,7 +293,7 @@ def dispatch(
                 f"{' · '.join(_ALLOWED_ACTIONS)} 여섯뿐이다 — "
                 "확정은 사용자가 앱에서 직접 한다."
             )
-        entry, reason = _gate_action(action, raw, known_aliases)
+        entry, reason = _gate_action(action, raw, known_aliases, planned_additions)
         if reason is not None or entry is None:
             return _blocked(reason or f"{action} 제안을 만들 수 없다.")
         normalized.append(entry)

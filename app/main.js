@@ -4234,7 +4234,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
         ok: false,
         source: 'selector-fast',
         error: selectorAccount.error || '조회에 사용할 서버 계좌를 확인할 수 없다',
-        answerText: '주문 내용을 만들기 전에 설정의 계좌 화면에서 조회에 사용할 서버 계좌를 연결해 주세요.',
+        answerText: '주문 내용을 만들기 전에 설정의 계좌 화면에서 선택한 계좌의 연결 상태를 확인해 주세요.',
         canvasTypes: [],
         modelCalls: 0,
         durationMs: Math.max(0, performance.now() - queryStartedAt),
@@ -4734,7 +4734,16 @@ async function terminateColdLegacyRuntime(reason = 'mcp-security-mutation') {
 }
 
 // Esc 중단 — 렌더러의 abortToken은 UI 반영만 막는다. 프로세스는 여기서 실제로 죽인다.
-ipcMain.on('athena:abort-live-query', () => {
+// 셸과 오브는 이 채널을 공유하므로, 송신자가 현재 질의를 소유한 창일 때만 받는다.
+// 새 대화 이벤트처럼 한 창의 늦은 취소가 다른 창의 새 턴을 죽이면 안 된다.
+ipcMain.on('athena:abort-live-query', (event) => {
+  const sender = event && event.sender;
+  const fromOrb = !!(sender && orbWin && !orbWin.isDestroyed() && sender === orbWin.webContents);
+  const fromShell = !!(sender && shellWin && !shellWin.isDestroyed() && sender === shellWin.webContents);
+  const ownsActiveQuery = fromOrb
+    ? liveOrbQueryBusyDepth > 0
+    : (fromShell && liveQueryBusyDepth > liveOrbQueryBusyDepth);
+  if (!ownsActiveQuery) return;
   abortConversationWork(new Error('사용자가 진행 중인 대화 작업을 취소했다'));
 });
 
@@ -5443,14 +5452,28 @@ async function handleAccountRegister(e, payload = {}) {
   // payload = { alias, appKey, secretKey, verifyOnly? } — 값은 여기서 accounts.register()로
   // 그대로 전달될 뿐, main.js의 어떤 변수에도 남지 않는다. mdlog()에 절대
   // 넘기지 않는다(비밀값 로깅 금지 — AT-ST-007).
-  return accounts.register(payload);
+  const result = await accounts.register(payload);
+  if (!result.ok || payload.verifyOnly) return result;
+  const synced = await syncSelectedAccount(result.id);
+  return { ...result, backendConnected: synced.ok, backendSyncError: synced.error || null };
+}
+
+function syncSelectedAccount(id) {
+  return accounts.syncBackendAccount({
+    id,
+    backendBase: BACKEND_HTTP_BASE,
+    fetchImpl: fetch,
+    authorization: backendAccountAuthorization(),
+  });
 }
 
 async function handleAccountSetActive(e, { id } = {}) {
   const previous = activeRestAccountId();
   const result = accounts.setActive(id);
   if (result.ok && previous !== activeRestAccountId()) await resetAccountBoundRealtime();
-  return result;
+  if (!result.ok) return result;
+  const synced = await syncSelectedAccount(id);
+  return { ...result, backendConnected: synced.ok, backendSyncError: synced.error || null };
 }
 
 function handleAccountRuntimeOptions() {
@@ -5461,27 +5484,49 @@ function handleAccountRuntimeOptions() {
   });
 }
 
-async function handleAccountSetBackendAlias(e, { id, backendAlias } = {}) {
-  const result = await accounts.bindBackendAlias({
-    id,
-    backendAlias,
-    backendBase: BACKEND_HTTP_BASE,
-    fetchImpl: fetch,
-    authorization: backendAccountAuthorization(),
-  });
+async function handleAccountSetBackendAlias(e, { id } = {}) {
+  // 기존 IPC 이름은 호환용이다. 별칭 선택은 받지 않고 저장된 동일 계좌를 연결한다.
+  const result = await syncSelectedAccount(id);
   if (result.ok && String(id || '') === activeRestAccountId()) await resetAccountBoundRealtime();
   return result;
 }
 
 async function handleAccountRemove(e, { id } = {}) {
   const previous = activeRestAccountId();
+  const removed = await accounts.removeFromBackend({
+    id,
+    backendBase: BACKEND_HTTP_BASE,
+    fetchImpl: fetch,
+    authorization: backendAccountAuthorization(),
+  });
+  if (!removed.ok) return removed;
   const result = accounts.remove(id);
   if (result.ok && previous !== activeRestAccountId()) await resetAccountBoundRealtime();
+  if (result.ok && previous !== activeRestAccountId() && activeRestAccountId()) {
+    const synced = await syncSelectedAccount(activeRestAccountId());
+    return { ...result, backendConnected: synced.ok, backendSyncError: synced.error || null };
+  }
   return result;
 }
 
-function handleOrderApiSet(e, { id, enabled } = {}) {
-  return accounts.orderApiSet(id, enabled);
+async function handleOrderApiSet(e, { id, enabled } = {}) {
+  const result = accounts.orderApiSet(id, enabled);
+  if (!result.ok) return result;
+  const synced = await syncSelectedAccount(id);
+  if (synced.ok) return result;
+  if (enabled) {
+    const localRollback = accounts.orderApiSet(id, false);
+    const rollback = await syncSelectedAccount(id);
+    return {
+      ...localRollback,
+      ok: false,
+      orderApi: false,
+      error: rollback.ok
+        ? '주문 허용을 적용하지 못해 OFF로 되돌렸습니다.'
+        : '주문 허용을 OFF로 되돌렸지만 서버 반영을 확인하지 못했습니다. 계좌 연결을 다시 확인해 주세요.',
+    };
+  }
+  return { ...result, ok: false, orderApi: false, error: '주문은 앱에서 차단했지만 서버 반영을 확인하지 못했습니다. 계좌 연결을 다시 확인해 주세요.' };
 }
 
 function handleAuthTokenStatus(e, { id } = {}) {

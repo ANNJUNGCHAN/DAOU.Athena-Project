@@ -182,6 +182,7 @@ function prepareRestReceiptSurface() {
   $boot.hidden = true;
   $settings.hidden = true;
   $order.hidden = true;
+  $shell.inert = false;
   $app.hidden = false;
   settingsOpen = false;
   orderOpen = false;
@@ -1432,7 +1433,18 @@ async function runQueryLive(text) {
   let streamALine = null;
   let streamAText = null;
   let streamedText = '';
+  let streamPaintFrame = null;
+  let streamPaintMeta = null;
+  const paintStream = () => {
+    streamPaintFrame = null;
+    if (myToken !== abortToken) return;
+    window.AthenaLib.Markdown.render(streamAText, streamedText);
+    scrollAfterRender();
+    claimProviderVisible(streamPaintMeta, 'chat', streamAText);
+    streamPaintMeta = null;
+  };
   const appendToBubble = (text, meta = null) => {
+    const firstPaint = !streamALine;
     if (!streamALine) {
       streamALine = document.createElement('div');
       streamALine.className = 'turn';
@@ -1442,12 +1454,11 @@ async function runQueryLive(text) {
       $history.appendChild(streamALine);
     }
     streamedText += text;
-    // 마크다운으로 다시 그린다 — **강조**·`코드`·목록 기호가 원문 그대로
-    // 노출되던 문제(2026-08-31 사용자 지적). 전체 재렌더지만 조각당 정규식
-    // 몇 개 수준이라 스트리밍에 부담이 없다.
-    window.AthenaLib.Markdown.render(streamAText, streamedText);
-    scrollAfterRender();
-    claimProviderVisible(meta, 'chat', streamAText);
+    // 첫 조각은 즉시 표시하고 이후 조각은 프레임당 한 번만 전체 마크다운을 갱신한다.
+    // 같은 프레임에 몰린 델타마다 DOM 전체를 재생성하고 스크롤을 예약하지 않는다.
+    if (!streamPaintMeta) streamPaintMeta = meta;
+    if (firstPaint) paintStream();
+    else if (streamPaintFrame === null) streamPaintFrame = requestAnimationFrame(paintStream);
   };
   const onLiveTextDelta = (payload = {}) => {
     const { text: delta } = payload;
@@ -1499,6 +1510,8 @@ async function runQueryLive(text) {
     unsubscribePluginProposed();
     unsubscribeLiveThinkingDelta();
     unsubscribeLiveTextDelta();
+    if (streamPaintFrame !== null) cancelAnimationFrame(streamPaintFrame);
+    streamPaintFrame = null;
     releaseLadder.dispose(); // 유예 타이머 누수 방지 — 방출 자체는 아래 authoritative overwrite의 몫.
     // stale 턴은 끄지 않는다 — Esc로 죽인 질의 A가 새 질의 B 도중 뒤늦게 settle하면
     // 무조건 끄기가 B의 THINK 얼굴을 삼킨다(2026-08-27 병합 점검 결함②).
@@ -5302,7 +5315,8 @@ document.addEventListener('athena:chat-insert', (event) => {
 
 // ---------- 주문 확인 모드 — #order (P4, 2026-08-19) ----------
 // 유일하게 미착수였던 모드의 실체(GLOSSARY §1). 온보딩·설정과 같은 형제 패널
-// 문법 — 열리면 #app이 물러나고 높이는 모드가 소유한다. 프리필은 AI(루틴
+// 문법 — 열리면 현재 셸 위 가운데에 모달로 뜨고, 배경 셸은 보이되 조작되지
+// 않는다. 프리필은 AI(루틴
 // 발화)가, 방향·수량·실행은 사람만. 집행은 기존 3중 게이트 백엔드 라우트
 // 그대로(새 주문 경로 없음), IN_DOUBT(409)는 재전송하지 않는다.
 const orderTicketLib = window.AthenaLib.OrderTicket;
@@ -5314,8 +5328,9 @@ let orderOpen = false;
 function openOrderTicket(prefill) {
   if (orderOpen || settingsOpen || !$onboard.hidden) return;
   orderOpen = true;
-  $app.hidden = true;
+  $shell.inert = true;
   $order.hidden = false;
+  $order.focus();
   renderOrderTicket(prefill);
 }
 
@@ -5324,7 +5339,7 @@ function closeOrderTicket() {
   orderOpen = false;
   $orderBody.replaceChildren();
   $order.hidden = true;
-  $app.hidden = false;
+  $shell.inert = false;
   $input.focus();
 }
 
@@ -5483,6 +5498,7 @@ async function renderOrderTicket(prefill) {
   execRow.append(execBtn, closeBtn);
   card.append(execRow, status, execNote);
   $orderBody.appendChild(card);
+  if (orderOpen) qtyInput.focus();
 
   const paintQtyChips = () => {
     const model = orderTicketLib.qtyChipModel({
