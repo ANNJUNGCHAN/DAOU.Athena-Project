@@ -1501,16 +1501,20 @@ function renderHistory(grid) {
 // 왕복할 값이 없다.
 const GRAPH_SETTINGS_STORAGE_KEY = 'athena.graphSettings.prefs';
 
-// 보유잔고 조회 주기 — Paper 보드 22는 60분만 보이지만 선택지는 최소한으로
-// 늘려 뒀다(2026-08-26). 백엔드가 아직 이 값을 읽지 않는다는 한계는 위 주석과
-// 같다 — 화면 쪽 선호값일 뿐이다.
+// 조회 주기 선택지 — Paper 보드 22는 60분만 보이지만 선택지는 최소한으로 늘려
+// 뒀다(2026-08-26). 2026-09-08부터 세 소스(대화·체결내역·보유잔고)가 각자 주기를
+// 가지며, 이 값은 백엔드 스케줄러(/brain/schedule)로 밀어 넣어 실제 주기가 된다 —
+// 저장소는 여전히 이 localStorage다(백엔드는 기동마다 설정 파일 기본값으로 돌아온다).
 const HOLDINGS_INTERVAL_MINUTES = Object.freeze([30, 60, 120]);
+const GRAPH_INTERVAL_KEYS = Object.freeze(['chatIntervalMin', 'fillsIntervalMin', 'holdingsIntervalMin']);
 
 const GRAPH_SETTINGS_DEFAULTS = Object.freeze({
   collectChat: true,
   collectFills: true,
   collectHoldings: true,
   exposeToModel: true,
+  chatIntervalMin: 60,
+  fillsIntervalMin: 60,
   holdingsIntervalMin: 60,
 });
 
@@ -1518,12 +1522,14 @@ function normalizeGraphSettings(raw) {
   const source = raw && typeof raw === 'object' ? raw : {};
   const out = {};
   for (const key of Object.keys(GRAPH_SETTINGS_DEFAULTS)) {
-    if (key === 'holdingsIntervalMin') continue;
+    if (GRAPH_INTERVAL_KEYS.includes(key)) continue;
     out[key] = typeof source[key] === 'boolean' ? source[key] : GRAPH_SETTINGS_DEFAULTS[key];
   }
-  out.holdingsIntervalMin = HOLDINGS_INTERVAL_MINUTES.includes(source.holdingsIntervalMin)
-    ? source.holdingsIntervalMin
-    : GRAPH_SETTINGS_DEFAULTS.holdingsIntervalMin;
+  for (const key of GRAPH_INTERVAL_KEYS) {
+    out[key] = HOLDINGS_INTERVAL_MINUTES.includes(source[key])
+      ? source[key]
+      : GRAPH_SETTINGS_DEFAULTS[key];
+  }
   return out;
 }
 
