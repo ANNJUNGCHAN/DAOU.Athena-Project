@@ -2569,11 +2569,11 @@ const ROUTES = Object.freeze([
     phrases: [
       '들어감', '나옴', '이 알람 승인',
       '승인 전까지 실행 없음 · 채팅 칩으로도, 이 버튼으로도 — 같은 게이트',
-      '고치기 — 말로', '확인 주기', '쿨다운',
+      '확인 주기', '쿨다운',
     ],
     // Paper 보드 10의 노드 행은 네 칸이고, 아직 아무 칸도 고르지 않았으며
     // (칩 없음) 첫 검사라 바뀐 칸도 없다. 승인 패널의 문은 둘이다
-    // ([이 알람 승인][취소] — 「고치기 — 말로」는 위 상태 제어 행에 있다).
+    // ([이 알람 승인][취소]).
     structure: [
       { what: 'count', selector: '.agent-node-card', equals: 4 },
       { what: 'absent', selector: '.agent-node-chip' },
@@ -2644,14 +2644,14 @@ const ROUTES = Object.freeze([
     ],
     root: '#agentCanvas',
     phrases: [
-      '코드 감시', '일시중지', '취소', '고치기 — 말로',
+      '코드 감시', '일시중지', '취소',
       '울린 기록 · 최근', '채팅에서 열기 ↗', '전체 이력 보기 →',
     ],
-    // Paper 보드 12의 상태 제어 행은 [일시중지][취소][고치기 — 말로] 셋이고,
+    // 상태 제어 행은 [일시중지][취소] 둘이고,
     // 켜진 알람에는 초안의 「검사」가 없다. 설정 요약은 확인 주기·쿨다운·만료와
     // 데이터 출처 네 줄이다 — 값(「1일」·「2026-10-03」)은 봉투가 주므로 개수로만 잰다.
     structure: [
-      { what: 'count', selector: '.agent-code-controls button', equals: 3 },
+      { what: 'count', selector: '.agent-code-controls button', equals: 2 },
       { what: 'absent', selector: '.agent-code-check-btn' },
       { what: 'count', selector: '.agent-view-tab', equals: 4 },
       { what: 'count', selector: '.agent-detail-field', equals: 4 },
@@ -2825,7 +2825,6 @@ const ROUTES = Object.freeze([
       '↑↓ 이동 · Enter 선택 · Tab 패널 이동 · Esc 닫기',
       '두 영역과 카드에 함께 적용된다',
       '글자 크기',
-      '유리 투명도',
       'UI 배율',
       '접근성 — 이 컴퓨터의 OS 설정을 따른다',
     ],
@@ -3215,7 +3214,7 @@ const ROUTES = Object.freeze([
     ],
     root: '#shell',
     // 대상·관계·근거·보강, 군집 이름, 「보강 21회로…」 같은 것은 전부 봉투가 주는
-    // 값이라 한 글자도 안 넣는다. 남는 것은 앱이 리터럴로 그리는 제목·탭·버튼이다.
+    // 값이라 한 글자도 안 넣는다. 남는 것은 앱이 리터럴로 그리는 제목·버튼이다.
     // 열 머리는 안 적는다 — Paper는 넷(대상·관계·근거·보강)인데 앱은 출처·최근을
     // 더해 여섯이다(summary-table.js COLUMN_HEADS). 「체결 · 잔고」도 안 적는다:
     // 앱의 티어 라벨은 가운뎃점에 공백이 없는 「체결·잔고」다.
@@ -3227,11 +3226,11 @@ const ROUTES = Object.freeze([
       '두 출처가 다르게 말합니다',
       '채팅에서 답하기',
     ],
-    // 표 다섯 줄 · 패널 탭 둘 · 티어 카드 둘(체결·잔고와 대화) — Paper가 그린 수
+    // 표 다섯 줄 · 티어 카드 둘(체결·잔고와 대화) — Paper가 그린 수
     // 그대로다. 관계 목록은 Paper 02에 없고 앱도 표에서 고른 선택에는 안 그린다.
     structure: [
       { what: 'count', selector: '.summary-row', equals: 5 },
-      { what: 'count', selector: '.panel-tab', equals: 2 },
+      { what: 'absent', selector: '.panel-tab' },
       { what: 'count', selector: '.panel-tier-card', equals: 2 },
       { what: 'absent', selector: '.panel-relations' },
     ],
@@ -3303,15 +3302,13 @@ const ROUTES = Object.freeze([
       '이 노드의 관계',
       '왜 숨은 연관인가',
       '이 그래프에서 가장 놀라운 연결입니다',
-      '이 연결을 확인하지 않으셨습니다.',
-      '채팅에서 물어보기',
     ],
-    // 관계 세 줄(성향 · 구조 · 숨은)·최근 변화 세 줄·패널 탭 둘 — Paper가 그린
+    // 관계 세 줄(성향 · 구조 · 숨은)·최근 변화 세 줄 — Paper가 그린
     // 수 그대로다. 요약 표는 물러나 있어야 한다.
     structure: [
       { what: 'count', selector: '.panel-relation-row', equals: 3 },
       { what: 'count', selector: '.panel-change-row', equals: 3 },
-      { what: 'count', selector: '.panel-tab', equals: 2 },
+      { what: 'absent', selector: '.panel-tab' },
       { what: 'absent', selector: '#graphSummaryTable' },
     ],
   },

@@ -150,9 +150,6 @@ const $lockText = document.getElementById('lockText');
 const $lockTime = document.getElementById('lockTime');
 // 컴포저(Paper 44, 2026-09-05) — 중단 버튼·하단 툴바.
 const $stopBtn = document.getElementById('stopBtn');
-const $composerSpinner = document.getElementById('composerSpinner');
-const $attachBtn = document.getElementById('attachBtn');
-const $mentionBtn = document.getElementById('mentionBtn');
 const $modelBtn = document.getElementById('modelBtn');
 const $effortBtn = document.getElementById('effortBtn');
 const $onboard = document.getElementById('onboard');
@@ -1060,7 +1057,6 @@ function setLocked(locked, text, time) {
   $input.placeholder = locked ? '' : idle;
   $lockHint.hidden = !locked;
   $stopBtn.hidden = !locked;
-  $composerSpinner.hidden = !locked;
   if (text) $lockText.textContent = text;
   $lockTime.textContent = locked && time ? time : '';
 }
@@ -1680,7 +1676,7 @@ async function runQueryLive(text) {
 
   // 방금 턴에서 모델이 athena_routine(draft)로 제안했을 수 있다 — 승인 카드는
   // 스트림 파싱이 아니라 백엔드 목록 재조회로 결정론적으로 띄운다(P3).
-  refreshRoutineDrafts();
+  refreshRoutineDrafts({ autoCheck: true });
 }
 
 async function runQueryFixture(text) {
@@ -1782,7 +1778,7 @@ async function runQueryFixture(text) {
   // 직후 draft를 다시 조회해 승인 카드를 띄운다. canvasSource가 fixture인 건
   // 캔버스 카드 출처일 뿐 라우틴 서브시스템과는 무관하다 — 이 호출이 없으면
   // fixture 모드(verify.js)에서 8단계 흐름을 검증할 방법이 없다.
-  refreshRoutineDrafts();
+  refreshRoutineDrafts({ autoCheck: true });
 }
 
 // 한글 받침 유무에 따른 을/를 조사 선택 (예: "스트림"→을, "테이블"→을, "리더"→를)
@@ -1905,10 +1901,9 @@ async function runHistoryCommand(text) {
 // "원칙 1 — 채팅은 절대 접히지 않는다, 모드는 캔버스만 바꾼다"). 실제 모드
 // 엔진은 그대로 canvas.js의 graphMode(lib/graph-mode/controller.js) 하나다.
 $dot.addEventListener('click', () => { toggleKiumiMenu(); });
-// 하단 툴바(Paper 44 composer-bar, 2026-09-05) — +는 키우미 메뉴(파일·폴더 첨부)의 두 번째 문,
-// @는 커서에 @를 넣어 플러그인 멘션 메뉴를 연다. 모델·강도 버튼은 아래 모델 팝오버 절에 있다.
-$attachBtn.addEventListener('click', () => { toggleKiumiMenu(); });
-$mentionBtn.addEventListener('click', () => {
+// 옛 툴바 [@] 버튼의 일(2026-09-08, 키우미 메뉴로 이동) — 커서 자리에 @를 넣어 플러그인
+// 멘션 메뉴를 연다. 앞 글자에 붙지 않게 한 칸 띄운다.
+function insertMentionAtCaret() {
   if ($input.disabled) return;
   const start = $input.selectionStart == null ? $input.value.length : $input.selectionStart;
   const end = $input.selectionEnd == null ? start : $input.selectionEnd;
@@ -1919,7 +1914,7 @@ $mentionBtn.addEventListener('click', () => {
   $input.focus();
   $input.setSelectionRange(caret, caret);
   $input.dispatchEvent(new Event('input', { bubbles: true }));
-});
+}
 // 사이드바 계정 메뉴(Paper 보드 16)의 "설정" 항목이 쓰는 다리 — lib/sidebar.js
 // 참고.
 window.AthenaShell.registerOpenSettings(openSettings);
@@ -3009,6 +3004,11 @@ function renderKiumiMenu() {
     }
   };
   $kiumiMenu.appendChild(kiumiSection('플러그인'));
+  // 옛 툴바 [@] 버튼 — 이 메뉴가 이어받았다(2026-09-08).
+  $kiumiMenu.appendChild(kiumiItem('plugin', '@ 플러그인 지정', '커서에 @를 넣어 멘션 메뉴를 연다', () => {
+    closeKiumiMenu();
+    insertMentionAtCaret();
+  }));
   if (mentionState.aliases.length) {
     mentionState.aliases.slice(0, 6).forEach((server) => {
       $kiumiMenu.appendChild(kiumiItem(
@@ -3059,7 +3059,7 @@ function toggleKiumiMenu() {
 
 document.addEventListener('mousedown', (e) => {
   if ($kiumiMenu.hidden) return;
-  if ($kiumiMenu.contains(e.target) || $dot.contains(e.target) || $attachBtn.contains(e.target)) return;
+  if ($kiumiMenu.contains(e.target) || $dot.contains(e.target)) return;
   closeKiumiMenu();
 });
 window.athena.on('athena:model-changed', () => refreshModelState());
@@ -3511,7 +3511,7 @@ window.athena.on('athena:orb-turn-committed', ({ query, result } = {}) => {
 // 언제부터 이 카드를 보여주고 있었나"를 잰다. dedup 겸용(Set 대신 Map).
 const firstSeenAtById = new Map();
 
-async function refreshRoutineDrafts() {
+async function refreshRoutineDrafts({ autoCheck = false } = {}) {
   let routines;
   try {
     const res = await window.athena.invoke('athena:routines-list');
@@ -3521,7 +3521,7 @@ async function refreshRoutineDrafts() {
   for (const r of routines) {
     if (r.status !== 'draft' || firstSeenAtById.has(r.id)) continue;
     firstSeenAtById.set(r.id, new Date().toISOString());
-    renderApprovalCard(r);
+    renderApprovalCard(r, { autoCheck });
   }
 }
 
@@ -3567,7 +3567,10 @@ async function runWatchCheck(r) {
   };
   let res;
   try { res = await window.athena.invoke('athena:routine-watch-check', { body }); }
-  catch { return { ok: false, reason: '검사 통로가 막혀 있음' }; }
+  catch (error) {
+    const reason = String((error && error.message) || error || '검사 통로가 막혀 있음');
+    return { ok: false, reason: `검사 통로 오류: ${reason}` };
+  }
   if (res && res.ok && res.data) {
     const check = res.data;
     // 검사 응답에 빠진 날짜는 같은 검사의 상세 스냅샷에서만 보충한다.
@@ -3732,6 +3735,29 @@ function renderWatchProgressTurn(r) {
   }));
   _mountTurn(line, card);
   return line;
+}
+
+// 새 코드 알람 초안은 사람이 칩을 누르기 전에 기존 격리 검사 경로를 한 번 돈다.
+// 초안의 검사 칩은 실패·통로 오류 뒤 재시도 경로로 그대로 남긴다. 검사 자체는
+// 승인이나 활성화를 부르지 않고, 통과 카드의 승인 칩만 사람이 누를 수 있다.
+async function runAndRenderWatchDraftCheck(r, status, trigger) {
+  if (trigger) trigger.disabled = true;
+  status.textContent = '검사 중 — 지난 30일 다시 돌려 봄';
+  const progressLine = renderWatchProgressTurn(r);
+  let result;
+  try {
+    result = await runWatchCheck(r);
+    if (!result) result = { ok: false, reason: '감시 코드 자리를 못 찾음 — 대화로 다시 만들기' };
+  } catch (error) {
+    const reason = String((error && error.message) || error || '알 수 없는 오류');
+    result = { ok: false, reason: `검사를 끝내지 못함: ${reason}` };
+  } finally {
+    progressLine.remove();
+    if (trigger) trigger.disabled = false;
+    status.textContent = '';
+  }
+  renderWatchCheckCard(r, result);
+  return result;
 }
 
 // 「폴더 다시 지정」 — 프로젝트 폴더가 사라진 코드 감시를 살린다. 폴더는 main의 대화상자로
@@ -4076,7 +4102,7 @@ async function beginWatchRepair(context) {
   }
 }
 
-function renderApprovalCard(r) {
+function renderApprovalCard(r, { autoCheck = false } = {}) {
   const line = document.createElement('div');
   line.className = 'turn';
   const card = document.createElement('div');
@@ -4137,19 +4163,7 @@ function renderApprovalCard(r) {
   if (isCodeWatch) {
     preview.title = '지난 30일 완성 봉으로 몇 번 울렸을지 세어 봄';
     preview.addEventListener('click', async () => {
-      preview.disabled = true;
-      status.textContent = '검사 중 — 지난 30일 다시 돌려 봄';
-      const progressLine = renderWatchProgressTurn(r);
-      const check = await runWatchCheck(r);
-      // 결과가 오면 도는 중 카드를 걷는다 — 같은 사실을 두 카드가 반복하지 않는다.
-      progressLine.remove();
-      preview.disabled = false;
-      if (!check) {
-        status.textContent = '감시 코드 자리를 못 찾음 — 대화로 다시 만들기';
-        return;
-      }
-      status.textContent = '';
-      renderWatchCheckCard(r, check);
+      await runAndRenderWatchDraftCheck(r, status, preview);
     });
   } else {
     preview.disabled = true;
@@ -4158,7 +4172,8 @@ function renderApprovalCard(r) {
 
   // R8 — 코드 알람의 확정 문구는 「이 알람 승인」이다(보드 10 승인 패널).
   const activate = _btn(isCodeWatch ? '이 알람 승인' : '바로 활성화', 'routine-btn routine-btn-approve');
-  activate.disabled = !!r.activation_blocker;
+  activate.disabled = !!r.activation_blocker || (isCodeWatch && autoCheck);
+  if (isCodeWatch && autoCheck) activate.title = '자동 검사를 통과한 뒤 승인할 수 있음';
   activate.addEventListener('click', async () => {
     activate.disabled = true;
     fix.disabled = true;
@@ -4167,7 +4182,7 @@ function renderApprovalCard(r) {
       status.textContent = '활성 — 감시가 시작됐습니다';
     } else {
       status.textContent = `활성화 실패: ${(res && res.error) || '알 수 없는 오류'}`;
-      activate.disabled = !!r.activation_blocker;
+      activate.disabled = !!r.activation_blocker || (isCodeWatch && autoCheck);
       fix.disabled = false;
     }
   });
@@ -4198,6 +4213,7 @@ function renderApprovalCard(r) {
   card.appendChild(row);
 
   _mountTurn(line, card);
+  if (isCodeWatch && autoCheck) void runAndRenderWatchDraftCheck(r, status, preview);
 }
 
 refreshRoutineDrafts();
@@ -4392,7 +4408,7 @@ function unreadAlertCount() {
 }
 
 function adoptSeedText(subject) {
-  return `"${subject}" 감시로 등록해줘`;
+  return `"${subject}" 감시 루틴을 확인 주기와 쿨다운까지 알아서 정해 완성된 초안으로 만들고 자동 검사해줘. 승인은 하지 마.`;
 }
 
 // 결과 턴은 캔버스 클릭과 같은 채널로 보낸다 — 마운트 지점은 그 구독 하나뿐이다.
@@ -4436,9 +4452,11 @@ async function acceptProposal(turn) {
     return;
   }
   if (turn.control === 'adopt') {
-    // 초안 게이트 — 캔버스 제안 카드의 [루틴으로]와 같은 문이다. 그 문은 shell.js
-    // seedChatInput 버스 하나뿐이니 여기서도 그것을 부른다(캐럿 끝 보정까지 같이 온다).
-    window.AthenaShell.seedChatInput(adoptSeedText(turn.subject));
+    // 제안 채택은 완결형 요청을 곧바로 보낸다. 일반 채팅 제출 버스를 쓰되,
+    // 사용자가 입력 중인 composer 내용은 덮어쓰지 않는다.
+    document.dispatchEvent(new CustomEvent('athena:chat-submit', {
+      detail: { text: adoptSeedText(turn.subject) },
+    }));
     return;
   }
   if (turn.control === 'fire') {
@@ -4515,6 +4533,10 @@ function renderControlProposalTurn(turn) {
     buttons.forEach((button, index) => {
       const chip = turn.chips[index];
       button.addEventListener('click', () => {
+        if (chip.role === 'accept' && turn.control === 'adopt' && (state !== 'idle' || remoteQueryBusy)) {
+          appendSystemLine('답변 중');
+          return;
+        }
         for (const other of buttons) other.disabled = true;
         if (chip.role === 'decline') {
           // 상태 자리에는 상태만 선다(437W-1) — 칩 이름이 아니라 결과 턴 거부 열의
@@ -4544,7 +4566,6 @@ window.athena.on('athena:routine-proposed', (envelope) => {
 window.athena.on('athena:watch-create', (envelope) => {
   if (!envelope) return;
   if (envelope.receipt) renderWatchCreateReceipt(envelope.receipt);
-  if (envelope.poll) renderWatchCreateQuestion(envelope.poll);
 });
 
 // ---------- 플러그인 제안 턴 · 결과 턴 (US-004) ----------

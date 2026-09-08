@@ -654,11 +654,9 @@ function sendRoutineEventToRenderers(event) {
   // 행을 각자 렌더할 뿐이고 백엔드 신규 경로는 0건이다 — 설계서 §판단서 요지.
   if (orbWin && !orbWin.isDestroyed()) {
     orbWin.webContents.send('athena:routine-event', event);
-    // 발화·복원 실패는 셸이 보이는 동안에도 알림 전용 패널로 실제 화면에 선다
-    // (Paper 보드 05 5FX-0 「셸이 보이는 동안 오브는 알림 전용이다」). 감시형
-    // 신호는 배경 상태라 창을 띄우지 않는다.
+    // 발화·복원 실패도 셸 가시성 정책을 따른다. 셸이 보이면 키우미는 숨긴다.
     if (event && (event.type === 'routine-fired' || event.type === 'routine-restore-failed')) {
-      orbWindow.syncOrbVisibility(shellWin, orbWin, { alert: true });
+      orbWindow.syncOrbVisibility(shellWin, orbWin);
     }
   }
 }
@@ -4692,7 +4690,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
         }
         return;
       }
-      if (expand && !expandTriggered) {
+      if (expand && !expandTriggered && turnConversationId === historyConversationId()) {
         expandTriggered = true;
         // 첫 카드가 확정된 시점에 창을 앞으로 한 번만 가져온다 — 카드마다
         // moveTop()을 반복하면 사용자가 다른 앱으로 옮겨간 뒤에도 계속 튀어나온다.
@@ -5521,6 +5519,9 @@ function reportSafeCliError(error) {
 
 async function broadcastCliChanged({ rotateReason = null, list: suppliedList = null } = {}) {
   const list = suppliedList || await cliAccounts.list();
+  if (rotateReason) {
+    await rotatePersistentProvider(rotateReason, { activeAccount: activeAccountFromCliList(list) });
+  }
   if (shellWin && !shellWin.isDestroyed()) {
     shellWin.webContents.send('athena:cli-changed', list);
   }
@@ -5529,9 +5530,6 @@ async function broadcastCliChanged({ rotateReason = null, list: suppliedList = n
   // athena:cli-list(codex 프로브 최대 5초)를 다시 돌리므로 같은 변경에 두 번이 된다.
   // 셸 툴바는 cli-changed를 받는 chat.js applyCliState가 model-get을 다시 읽는다.
   if (orbWin && !orbWin.isDestroyed()) orbWin.webContents.send('athena:model-changed', handleModelGet());
-  if (rotateReason) {
-    await rotatePersistentProvider(rotateReason, { activeAccount: activeAccountFromCliList(list) });
-  }
   return list;
 }
 

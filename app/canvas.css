@@ -744,18 +744,6 @@ html, body { background: transparent; }
   display: flex; align-items: center; gap: 4px; padding: 11px 14px; flex-shrink: 0;
   border-bottom: 1px solid var(--color-k-line);
 }
-.panel-tab {
-  appearance: none; border: 1px solid transparent; background: none; cursor: pointer;
-  padding: 5px 12px; border-radius: 6px;
-  font-family: var(--font-body); font-size: var(--text-sm); color: var(--color-k-hint);
-}
-.panel-tab.is-active {
-  background: var(--color-k-panel); border-color: var(--color-k-line);
-  font-family: var(--font-strong); color: var(--color-k-bright);
-}
-/* 아직 콘텐츠 스펙이 없는 탭(이력) — 눌리는 것처럼 보이면 고장으로 읽힌다
- * (2026-09-03 실사용 "이력은 클릭해도 안열린다"). 없는 기능을 활성처럼 두지
- * 않는다(P3). 색을 한 단계 더 낮추고 커서로도 못 누른다고 말한다. */
 /* 관계 목록의 삭제 손잡이(Paper 보드 04 실측, 2026-09-03) — 11px · hint 톤 ·
  * 고정폭 24px 슬롯. 반복 행의 오른쪽 끝이 한 레인을 이뤄야 훑을 수 있다(빈
  * 행에서도 자리가 흔들리지 않게 flex-shrink:0). 색은 처음 ghost(30%)로 그렸다가
@@ -769,10 +757,6 @@ html, body { background: transparent; }
 }
 .panel-relation-delete:hover { color: var(--color-k-text); }
 
-.panel-tab.is-disabled {
-  color: var(--color-k-ghost);
-  cursor: default;
-}
 .panel-tabs-spacer { flex: 1 1 auto; }
 .panel-deselect {
   appearance: none; border: none; background: none; cursor: pointer;
@@ -905,23 +889,6 @@ html, body { background: transparent; }
   font-family: var(--font-body); font-size: var(--text-xs); line-height: 17px;
   color: var(--color-k-soft);
 }
-
-/* CTA(보드 02/04 §패널 CTA) — 위 최근 변화 섹션의 flexGrow:1이 CTA 블록을
- * 바닥에 붙인다(Paper 그대로). 리드인 문장("이 연결을 확인하지 않으셨습니다.")은
- * 확인할 것이 실제로 있을 때만 controller.js가 넣는다. */
-.panel-cta-block { flex-shrink: 0; display: flex; flex-direction: column; }
-.panel-cta-lead {
-  padding: 12px 16px 10px; border-top: 1px solid var(--color-k-line);
-  font-family: var(--font-body); font-size: var(--text-xs); line-height: 17px; color: var(--color-k-soft);
-}
-.panel-cta {
-  appearance: none; border: none; cursor: pointer; flex-shrink: 0;
-  background: var(--color-brand); border-top: 1px solid var(--color-k-line);
-  padding: 9px 14px; text-align: center;
-  font-family: var(--font-strong); font-size: var(--text-sm); color: #fff;
-}
-/* 리드인이 이미 위 경계선을 그렸으면 버튼이 선을 한 번 더 긋지 않는다. */
-.panel-cta-lead + .panel-cta { border-top: none; }
 
 /* entity 응답 패널(Paper 보드 10 3ZAA-1) — 같은 공통 패널 자리에 「관계 · 근거 ·
  * 원문 발췌 · 변경 이력」을 그린다. 값·간격은 위 노드 선택 패널의 어휘를 그대로

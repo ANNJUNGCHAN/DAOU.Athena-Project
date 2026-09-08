@@ -100,7 +100,6 @@ function setup(options) {
       return build(opts.revisions ? opts.revisions[calls - 1] : 7);
     },
     onError: opts.onError,
-    onPanelCta: opts.onPanelCta,
     getSurprisingConnections: opts.getSurprisingConnections,
     getProfileSummaryEntries: opts.getProfileSummaryEntries,
     fetchEntityTimeline: opts.fetchEntityTimeline,
@@ -325,28 +324,15 @@ function tablePanelData(overrides) {
   };
 }
 
-test('패널 탭 — "성향"(활성)·"이력"(비활성)이 둘 다 그려진다', () => {
+test('패널 — 성향·이력 탭 없이 상세 내용을 그린다', () => {
   const { controller, elements } = setup({ withPanel: true });
   controller.selectEntity('e:samsung', tablePanelData());
   const tabs = elements.panel.querySelectorAll('.panel-tab');
-  assert.equal(tabs.length, 2);
-  assert.equal(tabs[0].textContent, '성향');
-  assert.equal(tabs[0].classList.contains('is-active'), true);
-  assert.equal(tabs[1].textContent, '이력');
-  assert.equal(tabs[1].classList.contains('is-active'), false);
+  assert.equal(tabs.length, 0);
+  assert.equal(elements.panel.querySelector('.panel-name').textContent, '삼성전자');
 });
 
-test('패널 탭 — "이력" 탭은 클릭해도 전환 없다(Paper에 콘텐츠 스펙 없음, §6 범위 밖)', () => {
-  const { controller, elements } = setup({ withPanel: true });
-  controller.selectEntity('e:samsung', tablePanelData());
-  const historyTab = elements.panel.querySelectorAll('.panel-tab')[1];
-  assert.doesNotThrow(() => historyTab.dispatchEvent({ type: 'click' }));
-  // 클릭 핸들러 자체가 없다 — 활성 탭·패널 내용이 그대로다.
-  const traitTab = elements.panel.querySelectorAll('.panel-tab')[0];
-  assert.equal(traitTab.classList.contains('is-active'), true);
-});
-
-test('패널 탭 — "선택 해제" 클릭 시 clearSelection과 같은 결과(패널이 닫힌다)', () => {
+test('패널 — "선택 해제" 클릭 시 clearSelection과 같은 결과(패널이 닫힌다)', () => {
   const { controller, elements } = setup({ withPanel: true });
   controller.selectEntity('e:samsung', tablePanelData());
   const deselect = elements.panel.querySelector('.panel-deselect');
@@ -391,27 +377,12 @@ test('티어 대조 카드 — 근거가 없으면 조용히 빠지지 않고 �
   assert.equal(elements.panel.querySelector('.panel-tier-label'), null);
 });
 
-test('패널 탭 — 이력은 비활성이고 왜인지 말한다(콘텐츠 스펙이 아직 없다)', () => {
+test('그래프 노드 패널 — 성향·이력 탭 없이 선택 해제를 유지한다', () => {
   const { controller, elements } = setup({ payload: payloadTwoClusters, withPanel: true });
   controller.selectEntity('e:x', { name: '이름만', source: 'node' });
   const tabs = elements.panel.querySelectorAll('.panel-tab');
-  assert.equal(tabs.length, 2, '탭은 성향·이력 2종이다');
-  assert.ok(String(tabs[0].attrs.class).includes('is-active'), '성향이 활성이다');
-  // 예전에는 눌리는 것처럼 생긴 채로 아무 일도 안 했다(2026-09-03 실사용 제보).
-  assert.equal(tabs[1].textContent, '이력');
-  assert.ok(String(tabs[1].attrs.class).includes('is-disabled'));
-  assert.equal(tabs[1].attrs['aria-disabled'], 'true');
-  assert.ok(tabs[1].attrs.title, '왜 못 누르는지 말한다');
-});
-
-test('CTA "채팅에서 답하기" 클릭 시 onPanelCta가 불린다', () => {
-  let called = 0;
-  const { controller, elements } = setup({ withPanel: true, onPanelCta: () => { called += 1; } });
-  controller.selectEntity('e:samsung', tablePanelData());
-  const cta = elements.panel.querySelector('.panel-cta');
-  assert.equal(cta.textContent, '채팅에서 답하기');
-  cta.dispatchEvent({ type: 'click' });
-  assert.equal(called, 1);
+  assert.equal(tabs.length, 0);
+  assert.equal(elements.panel.querySelector('.panel-deselect').textContent, '선택 해제');
 });
 
 test('§10-4 최근 변화 — 데이터가 없어 섹션 자체를 안 그린다(§0 정책)', () => {
@@ -941,27 +912,11 @@ test('왜 숨은 연관인가 — 세 절이 전부 실데이터에서 나온다
   assert.equal(score, '이 그래프에서 가장 놀라운 연결입니다');
 });
 
-test('왜 숨은 연관인가 — 숨은 연관이 없는 노드에는 블록도 CTA 리드인도 없다(§0 정책)', async () => {
+test('왜 숨은 연관인가 — 숨은 연관이 없는 노드에는 블록이 없다(§0 정책)', async () => {
   const { controller, elements } = setup({ payload: payloadWithDetails, withPanel: true });
   await controller.toggle();
   selectNodeInPanel(controller, 'e:b');
   assert.equal(elements.panel.querySelector('.panel-reason'), null);
-  assert.equal(elements.panel.querySelector('.panel-cta-lead'), null);
-  assert.equal(elements.panel.querySelector('.panel-cta').textContent, '채팅에서 답하기');
-});
-
-test('CTA — 숨은 연관 노드는 리드인 + "채팅에서 물어보기"다(보드 04)', async () => {
-  const connections = [{
-    source_entity_id: 'e:a', target_entity_id: 'e:d',
-    kinds: ['relates_to'], source_cluster: 0, target_cluster: 1, surprise_score: 0.9,
-  }];
-  const { controller, elements } = setup({
-    payload: payloadWithDetails, withPanel: true, getSurprisingConnections: () => connections,
-  });
-  await controller.toggle();
-  selectNodeInPanel(controller, 'e:a');
-  assert.equal(elements.panel.querySelector('.panel-cta-lead').textContent, '이 연결을 확인하지 않으셨습니다.');
-  assert.equal(elements.panel.querySelector('.panel-cta').textContent, '채팅에서 물어보기');
 });
 
 // ── 보드 02 패널 — 티어 대조 ─────────────────────────────────────────────────
@@ -984,8 +939,6 @@ test('티어 대조 — 출처가 둘이고 서로 다르면 제목과 "↕ 어�
     ['체결·잔고', '대화']);
   assert.equal(elements.panel.querySelector('.panel-header-row2').textContent,
     '보강 21회로 그래프에서 가장 강한 신호 · 최근 1일 전');
-  assert.equal(elements.panel.querySelector('.panel-cta-lead').textContent,
-    '어느 쪽이 실제에 가까운지 아직 답하지 않으셨습니다.');
 });
 
 test('티어 대조 — 출처가 둘이어도 같은 tier면 갈등 제목을 안 붙인다(없는 갈등을 만들지 않는다)', () => {
@@ -1000,7 +953,6 @@ test('티어 대조 — 출처가 둘이어도 같은 tier면 갈등 제목을 �
   assert.equal(elements.panel.querySelector('.panel-tier-contrast-title'), null);
   assert.equal(elements.panel.querySelector('.panel-tier-divider'), null);
   assert.equal(elements.panel.querySelectorAll('.panel-tier-card').length, 2, '카드는 둘 다 보여준다');
-  assert.equal(elements.panel.querySelector('.panel-cta-lead'), null);
 });
 
 // ── 순수 헬퍼 ────────────────────────────────────────────────────────────────
@@ -1209,9 +1161,8 @@ test('§10-4 — IPC 실패면 섹션 없이 빈 상태를 유지하고 화면�
   controller.selectEntity('e:samsung', tablePanelData());
   await flushTimeline();
   assert.equal(elements.panel.querySelector('.panel-recent-changes'), null);
-  // 다른 섹션(헤더·CTA)은 멀쩡하다 — 실패가 패널 전체를 깨지 않는다.
+  // 다른 섹션(헤더)은 멀쩡하다 — 실패가 패널 전체를 깨지 않는다.
   assert.equal(elements.panel.querySelector('.panel-name').textContent, '삼성전자');
-  assert.ok(elements.panel.querySelector('.panel-cta'));
 });
 
 test('§10-4 — 빠른 재선택(A→B): A 응답이 B보다 늦게 도착해도 최종 렌더는 B다(stale 가드)', async () => {
@@ -1532,36 +1483,6 @@ test('getContext(): 선택 주입(getProfileSummaryEntries 등)이 없어도 빈
   assert.deepEqual(ctx.topSignals, []);
   assert.deepEqual(ctx.hiddenLinks, []);
   assert.equal(ctx.counts.uncertain, 0);
-});
-
-// ── CTA가 무엇을 물어야 하는지 함께 넘긴다(2026-09-02) ─────────────────────
-// 인자 없이 부르던 옛 판에서는 받는 쪽이 상황을 몰라 입력창에 포커스만 줬다.
-// 버튼 문구는 "채팅에서 답하기"인데 눌러도 아무 일이 없다는 제보의 원인이다.
-
-test('패널 CTA — 어긋나는 신호면 kind:conflict와 이름을 넘긴다', () => {
-  const asks = [];
-  const { controller, elements } = setup({ withPanel: true, onPanelCta: (a) => asks.push(a) });
-  controller.selectEntity('e:samsung', tablePanelData({
-    // 티어가 둘이면 "두 출처가 다르게 말합니다"가 뜨고 CTA가 conflict가 된다.
-    sources: [
-      { tier: 'deterministic', confidence: 'EXTRACTED', rationale: '체결 4건' },
-      { tier: 'conversational', confidence: 'INFERRED', rationale: '장기 보유라고 말했다' },
-    ],
-  }));
-  elements.panel.querySelector('.panel-cta').dispatchEvent({ type: 'click' });
-  assert.equal(asks.length, 1);
-  assert.equal(asks[0].kind, 'conflict');
-  assert.equal(asks[0].entityId, 'e:samsung');
-  assert.ok(asks[0].name);
-});
-
-test('패널 CTA — 어긋남·숨은연관이 없으면 kind:plain이다', () => {
-  const asks = [];
-  const { controller, elements } = setup({ withPanel: true, onPanelCta: (a) => asks.push(a) });
-  controller.selectEntity('e:samsung', tablePanelData());
-  elements.panel.querySelector('.panel-cta').dispatchEvent({ type: 'click' });
-  assert.equal(asks.length, 1);
-  assert.equal(asks[0].kind, 'plain');
 });
 
 // ---------- Paper 2QCN-2 「정직성 상태 — 모르는 것을 아는 척하지 않는 자리」 ----------

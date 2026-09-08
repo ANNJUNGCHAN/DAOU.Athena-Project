@@ -2494,10 +2494,11 @@ app.whenReady().then(async () => {
     && near(kiumiMenu.width, 380, 2)
     // 플러그인 구역은 고정 목록이 아니라 실제로 등록·승인된 서버다. 검증
     // 프로필의 레지스트리는 비어 있으므로(상단 ATHENA_MCP_REGISTRY_PATH) 안내
-    // 항목 한 줄만 뜬다 — 추가 4 + 플러그인 1 + 설정 2 = 7.
-    && kiumiMenu.itemCount === 7
+    // 항목 한 줄만 뜬다 — 추가 4 + 플러그인(@ 지정 1 + 안내 1) + 설정 2 = 8.
+    && kiumiMenu.itemCount === 8
     && JSON.stringify(kiumiMenu.sections) === JSON.stringify(['추가', '플러그인', '설정'])
-    && kiumiMenu.itemTitles[4] === '설치된 플러그인 없음'
+    && kiumiMenu.itemTitles[4] === '@ 플러그인 지정'
+    && kiumiMenu.itemTitles[5] === '설치된 플러그인 없음'
     && kiumiMenu.allIconsAreSvg === true
     && kiumiMenu.rowHeights.every((height) => height >= 36)
     && /blur\(3px\)/.test(kiumiMenu.backdropFilter));
@@ -4706,16 +4707,6 @@ app.whenReady().then(async () => {
         // 따라 붙으므로 접두사만 본다.
         viewTabLabels: Array.from(canvas.querySelectorAll('.agent-view-tab')).map((n) => n.textContent.split(' ')[0]),
       };
-      // 이중 제어 규칙(Paper 보드 05 하단 C6U-0~C6X-0) — 캡션·세 줄 원문과
-      // 출처 표기 없음까지 잰다.
-      const routeRulesEl = canvas.querySelector('.agent-route-rules');
-      const routeRulesCaptionEl = routeRulesEl ? routeRulesEl.querySelector('.agent-panel-caption') : null;
-      const routeRules = {
-        present: !!routeRulesEl,
-        sourceAttr: routeRulesEl ? routeRulesEl.getAttribute('data-source') : 'MISSING',
-        caption: routeRulesCaptionEl ? routeRulesCaptionEl.textContent : 'MISSING',
-        lines: Array.from(canvas.querySelectorAll('.agent-route-rule')).map((n) => n.textContent),
-      };
       // 라이브 "다음 24시간" 시각 열(Paper 보드 02) — 뷰를 옮기지 않고 DOM만 읽는다.
       const timelineTimes = Array.from(canvas.querySelectorAll('.agent-live-timeline-time')).map((n) => n.textContent);
       const statCards = Array.from(canvas.querySelectorAll('.agent-stat-card'));
@@ -4732,7 +4723,7 @@ app.whenReady().then(async () => {
       if (allTabBtn) allTabBtn.click();
       back.click();
       await new Promise((r) => setTimeout(r, 100));
-      return { wired: true, headerText, statCount, fixtureStatCount, allRowCount, activeRowCount, routeRules, timelineTimes };
+      return { wired: true, headerText, statCount, fixtureStatCount, allRowCount, activeRowCount, timelineTimes };
     })()`);
     report.agentCanvas = agentCanvasProbe;
     assertOk('agent-canvas: 헤더/캔버스 배선이 있다', agentCanvasProbe.wired === true);
@@ -4761,23 +4752,6 @@ app.whenReady().then(async () => {
       assertOk(
         'agent-canvas: 뷰 탭 4종(작업/알람/라이브/제안)이 있다(Paper 보드 02·04·05 통일안)',
         JSON.stringify(agentCanvasProbe.headerText.viewTabLabels) === JSON.stringify(['작업', '알람', '라이브', '제안']),
-      );
-      assertOk('agent-canvas: 이중 제어 규칙 패널이 작업 뷰에 있다(Paper 보드 05)', agentCanvasProbe.routeRules.present === true);
-      assertOk(
-        'agent-canvas: 이중 제어 규칙 캡션이 Paper C6U-0 원문이다',
-        agentCanvasProbe.routeRules.caption === '이중 제어 규칙',
-      );
-      assertOk(
-        'agent-canvas: 이중 제어 규칙 3줄이 Paper C6V-0~C6X-0 원문 그대로다',
-        JSON.stringify(agentCanvasProbe.routeRules.lines) === JSON.stringify([
-          '① 새 작업 — 채팅 문장으로도, 시트로도.',
-          '② 편집 — "이거 고쳐줘"로도, 폼으로도.',
-          '③ 확정 — 채팅 칩으로도, 버튼으로도. 어느 입구든 같은 게이트.',
-        ]),
-      );
-      assertOk(
-        'agent-canvas: 이중 제어 규칙은 데이터가 아니라 화면 계약이라 data-source를 달지 않는다',
-        agentCanvasProbe.routeRules.sourceAttr === null,
       );
       assertOk(
         'agent-canvas: 라이브 타임라인 4행 모두 시각 열을 갖는다(Paper 보드 02)',
@@ -5021,6 +4995,13 @@ app.whenReady().then(async () => {
       const input = document.getElementById('input');
       if (!nav || !back || !canvas || !input) return { wired: false };
       input.value = '';
+      let submittedText = null;
+      const interceptSubmit = (event) => {
+        submittedText = String((event && event.detail && event.detail.text) || '');
+        event.preventDefault();
+        event.stopImmediatePropagation();
+      };
+      document.addEventListener('athena:chat-submit', interceptSubmit, true);
       nav.click();
       await new Promise((r) => setTimeout(r, 600));
       const section = canvas.querySelector('.agent-suggest-section');
@@ -5028,15 +5009,18 @@ app.whenReady().then(async () => {
       const titles = Array.from(canvas.querySelectorAll('.agent-suggest-title')).map((n) => n.textContent);
       const rationales = Array.from(canvas.querySelectorAll('.agent-suggest-rationale')).map((n) => n.textContent);
       const addBtns = canvas.querySelectorAll('.agent-suggest-add');
-      addBtns[0].click();
-      await new Promise((r) => setTimeout(r, 50));
-      const seededValue = input.value;
+      try {
+        addBtns[0].click();
+        await new Promise((r) => setTimeout(r, 50));
+      } finally {
+        document.removeEventListener('athena:chat-submit', interceptSubmit, true);
+      }
       const orderHidden = document.getElementById('order').hidden;
       const settingsHidden = document.getElementById('settings').hidden;
       const onboardHidden = document.getElementById('onboard').hidden;
       back.click();
       await new Promise((r) => setTimeout(r, 100));
-      return { wired: true, sectionHidden, titles, rationales, seededValue, orderHidden, settingsHidden, onboardHidden };
+      return { wired: true, sectionHidden, titles, rationales, submittedText, inputValue: input.value, orderHidden, settingsHidden, onboardHidden };
     })()`);
     report.suggestions = suggestionProbe;
     assertOk('agent-canvas-7: 배선이 있다', suggestionProbe.wired === true);
@@ -5052,8 +5036,14 @@ app.whenReady().then(async () => {
           && suggestionProbe.rationales[1] === '응집 상승 성향 6회 보강',
       );
       assertOk(
-        'agent-canvas-7: "추가" 클릭 시 채팅 입력에 문장이 심긴다',
-        suggestionProbe.seededValue === '"삼성전자"에 대한 단기 회전 성향이 21회 보강됐어요 — 관련 루틴을 만들어줄까요?',
+        'agent-canvas-7: "추가" 클릭 시 완결형 요청이 채팅 제출 이벤트로 바로 나간다',
+        suggestionProbe.submittedText.startsWith('"삼성전자" 관련 루틴을 완성해줘. 근거 신호(EXTRACTED): 단기 회전 성향 21회 보강 — 매매일마다 정리가 필요해 보여요.')
+          && suggestionProbe.submittedText.includes('추가 질문이나 제안 확인 없이 실제 초안을 만들어줘')
+          && suggestionProbe.submittedText.includes('자동 검사까지 진행해서 승인 대기 상태로 준비해줘')
+          && suggestionProbe.submittedText.includes('정한 조건·확인 주기·쿨다운·만료를 제안 설정으로 모두 밝혀줘')
+          && suggestionProbe.submittedText.includes('실제 활성화는 내가 승인할 때만 해')
+          && !suggestionProbe.submittedText.includes('만들어줄까요?')
+          && suggestionProbe.inputValue === '',
       );
       assertOk(
         'agent-canvas-7: "추가"는 시트를 열지 않는다(주문/설정/온보딩 패널 모두 hidden 유지, 43 원칙)',
