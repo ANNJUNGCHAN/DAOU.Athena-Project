@@ -92,7 +92,6 @@ test('graph tier structures are flat ledger rows while controls and data bars re
   const functionalBackgrounds = new Map([
     ['.theme-cluster-bar', 'var(--color-k-bg)'],
     ['.theme-cluster-bar-fill', 'var(--color-k-text)'],
-    ['.panel-tab.is-active', 'var(--color-k-panel)'],
   ]);
   for (const [selector, expected] of functionalBackgrounds) {
     assertFunctionalBackground(canvasCss, selector, expected);

@@ -2772,7 +2772,6 @@ const ROUTES = Object.freeze([
       '↑↓ 이동 · Enter 선택 · Tab 패널 이동 · Esc 닫기',
       '두 영역과 카드에 함께 적용된다',
       '글자 크기',
-      '유리 투명도',
       'UI 배율',
       '접근성 — 이 컴퓨터의 OS 설정을 따른다',
     ],
@@ -3162,7 +3161,7 @@ const ROUTES = Object.freeze([
     ],
     root: '#shell',
     // 대상·관계·근거·보강, 군집 이름, 「보강 21회로…」 같은 것은 전부 봉투가 주는
-    // 값이라 한 글자도 안 넣는다. 남는 것은 앱이 리터럴로 그리는 제목·탭·버튼이다.
+    // 값이라 한 글자도 안 넣는다. 남는 것은 앱이 리터럴로 그리는 제목·버튼이다.
     // 열 머리는 안 적는다 — Paper는 넷(대상·관계·근거·보강)인데 앱은 출처·최근을
     // 더해 여섯이다(summary-table.js COLUMN_HEADS). 「체결 · 잔고」도 안 적는다:
     // 앱의 티어 라벨은 가운뎃점에 공백이 없는 「체결·잔고」다.
@@ -3174,11 +3173,11 @@ const ROUTES = Object.freeze([
       '두 출처가 다르게 말합니다',
       '채팅에서 답하기',
     ],
-    // 표 다섯 줄 · 패널 탭 둘 · 티어 카드 둘(체결·잔고와 대화) — Paper가 그린 수
+    // 표 다섯 줄 · 티어 카드 둘(체결·잔고와 대화) — Paper가 그린 수
     // 그대로다. 관계 목록은 Paper 02에 없고 앱도 표에서 고른 선택에는 안 그린다.
     structure: [
       { what: 'count', selector: '.summary-row', equals: 5 },
-      { what: 'count', selector: '.panel-tab', equals: 2 },
+      { what: 'absent', selector: '.panel-tab' },
       { what: 'count', selector: '.panel-tier-card', equals: 2 },
       { what: 'absent', selector: '.panel-relations' },
     ],
@@ -3251,12 +3250,12 @@ const ROUTES = Object.freeze([
       '왜 숨은 연관인가',
       '이 그래프에서 가장 놀라운 연결입니다',
     ],
-    // 관계 세 줄(성향 · 구조 · 숨은)·최근 변화 세 줄·패널 탭 둘 — Paper가 그린
+    // 관계 세 줄(성향 · 구조 · 숨은)·최근 변화 세 줄 — Paper가 그린
     // 수 그대로다. 요약 표는 물러나 있어야 한다.
     structure: [
       { what: 'count', selector: '.panel-relation-row', equals: 3 },
       { what: 'count', selector: '.panel-change-row', equals: 3 },
-      { what: 'count', selector: '.panel-tab', equals: 2 },
+      { what: 'absent', selector: '.panel-tab' },
       { what: 'absent', selector: '#graphSummaryTable' },
     ],
   },
