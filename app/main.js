@@ -4888,9 +4888,26 @@ async function terminateColdLegacyRuntime(reason = 'mcp-security-mutation') {
 }
 
 // Esc 중단 — 렌더러의 abortToken은 UI 반영만 막는다. 프로세스는 여기서 실제로 죽인다.
-ipcMain.on('athena:abort-live-query', (_event, payload = {}) => {
-  const conversationId = payload && typeof payload.conversationId === 'string' && payload.conversationId
-    ? payload.conversationId : historyConversationId();
+// 셸과 오브는 채널을 공유하지만 서로 다른 대화를 소유한다. 송신 창으로 소유권을 확인한 뒤
+// 오브는 항상 오브 대화, 셸은 자신이 표시한 알려진 대화만 끊는다. 한 창의 늦거나 위조된
+// 취소가 다른 창의 진행 중 턴을 죽여서는 안 된다.
+ipcMain.on('athena:abort-live-query', (event, payload = {}) => {
+  const sender = event && event.sender;
+  const fromOrb = !!(sender && orbWin && !orbWin.isDestroyed() && sender === orbWin.webContents);
+  const fromShell = !!(sender && shellWin && !shellWin.isDestroyed() && sender === shellWin.webContents);
+  let conversationId = null;
+  if (fromOrb) {
+    conversationId = ensureOrbConversationId();
+  } else if (fromShell) {
+    const requestedId = payload && typeof payload.conversationId === 'string'
+      ? payload.conversationId : '';
+    if (!requestedId) {
+      conversationId = historyConversationId();
+    } else if (requestedId !== orbConversationId && knownConversation(requestedId)) {
+      conversationId = requestedId;
+    }
+  }
+  if (!conversationId || !liveRuntimes.isBusy(conversationId)) return;
   abortConversationWork(new Error('사용자가 진행 중인 대화 작업을 취소했다'), conversationId);
 });
 

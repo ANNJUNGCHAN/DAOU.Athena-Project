@@ -27,6 +27,8 @@ function liveHandlers(t) {
   const pending = [];
   const aborted = [];
   const abortedIds = [];
+  const orbWebContents = { id: 1, send() {} };
+  const shellWebContents = { id: 2, send() {} };
   const context = vm.createContext({
     Map, isQuitting: false, liveSubmitContexts: new Map(), createConversationRuntimes,
     crypto: { randomUUID: () => 'session-orb' },
@@ -43,7 +45,8 @@ function liveHandlers(t) {
       abortedIds.push(conversationId);
       jobs.filter((job) => job.conversationId === conversationId).forEach((job) => job.resolve({ ok: false, error: '중단됨' }));
     },
-    shellWin: { isDestroyed: () => false, webContents: { send() {} } },
+    orbWin: { isDestroyed: () => false, webContents: orbWebContents },
+    shellWin: { isDestroyed: () => false, webContents: shellWebContents },
     ipcMain: {
       handle: (name, handler) => { handlers[name] = handler; },
       on: (name, handler) => { handlers[name] = handler; },
@@ -65,11 +68,16 @@ function liveHandlers(t) {
     setActive(id) { activeConversationId = id; },
     submit(origin, query, conversationId) {
       const channel = origin === 'orb' ? 'athena:orb-chat-submit' : 'athena__render_canvas';
-      const promise = handlers[channel]({ sender: { id: origin === 'orb' ? 1 : 2 } }, conversationId ? { query, conversationId } : { query });
+      const sender = origin === 'orb' ? orbWebContents : shellWebContents;
+      const promise = handlers[channel]({ sender }, conversationId ? { query, conversationId } : { query });
       pending.push(promise);
       return promise;
     },
-    abort: (conversationId) => handlers['athena:abort-live-query'](undefined, conversationId ? { conversationId } : undefined),
+    abort(origin = 'shell', conversationId) {
+      const sender = origin === 'orb' ? orbWebContents
+        : (origin === 'shell' ? shellWebContents : { id: 99 });
+      return handlers['athena:abort-live-query']({ sender }, conversationId ? { conversationId } : undefined);
+    },
   };
 }
 
@@ -132,7 +140,7 @@ for (const outcome of ['success', 'failure', 'throw']) {
 test('공유 질의 진입: 기존 Esc 중단 IPC와 중단 후 셸 재질의를 보존한다', async (t) => {
   const live = liveHandlers(t);
   const first = live.submit('shell', '중단할 질문');
-  live.abort();
+  live.abort('shell');
   assert.equal(live.aborted.length, 1);
   assert.equal((await first).ok, false);
   const next = live.submit('shell', '중단 뒤 질문');
@@ -173,11 +181,46 @@ test('다중 대화: Esc 중단은 그 대화의 턴만 끊는다', async (t) =>
   const a = live.submit('shell', 'A 질문');
   live.setActive('session-B');
   const b = live.submit('shell', 'B 질문');
-  live.abort('session-A');
+  live.abort('shell', 'session-A');
   assert.deepEqual(live.abortedIds, ['session-A']);
   assert.equal((await a).ok, false);
   live.jobs[1].resolve({ ok: true, answerText: 'B' });
   assert.equal((await b).ok, true);
+});
+
+test('다중 대화: payload 없는 오브 중단은 셸이 아니라 오브 대화만 끊는다', async (t) => {
+  const live = liveHandlers(t);
+  const orb = live.submit('orb', '오브 질문');
+  const shell = live.submit('shell', '셸 질문');
+  live.abort('orb');
+  assert.deepEqual(live.abortedIds, ['session-orb']);
+  assert.equal((await orb).ok, false);
+  live.jobs[1].resolve({ ok: true, answerText: '셸' });
+  assert.equal((await shell).ok, true);
+});
+
+test('다중 대화: 오브 payload가 셸 대화를 가리켜도 오브 대화만 끊는다', async (t) => {
+  const live = liveHandlers(t);
+  const orb = live.submit('orb', '오브 질문');
+  const shell = live.submit('shell', '셸 질문');
+  live.abort('orb', 'session-A');
+  assert.deepEqual(live.abortedIds, ['session-orb']);
+  assert.equal((await orb).ok, false);
+  live.jobs[1].resolve({ ok: true, answerText: '셸' });
+  assert.equal((await shell).ok, true);
+});
+
+test('다중 대화: 알 수 없는 송신자와 셸의 오브 대화 위조는 진행 중 턴을 끊지 않는다', async (t) => {
+  const live = liveHandlers(t);
+  const orb = live.submit('orb', '오브 질문');
+  const shell = live.submit('shell', '셸 질문');
+  live.abort('unknown', 'session-A');
+  live.abort('shell', 'session-orb');
+  assert.deepEqual(live.abortedIds, []);
+  live.jobs[0].resolve({ ok: true, answerText: '오브' });
+  live.jobs[1].resolve({ ok: true, answerText: '셸' });
+  assert.equal((await orb).ok, true);
+  assert.equal((await shell).ok, true);
 });
 
 test('다중 대화: 셸이 대화를 갈아타도 오브 대화의 턴은 그대로 돈다', async (t) => {
