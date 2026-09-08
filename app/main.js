@@ -4358,8 +4358,18 @@ async function runLiveQuery(query, expand, origin = 'shell', turnConversationId 
 // 오브 기원 엔벌로프만 orbWin에도 추가 relay하는 데 쓴다(board-33③④ 선행).
 async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   // 답변은 시작 전에 자리표시자(done:false)로 먼저 적는다 — 첫 토큰 전에 죽어도 질문은 남는다.
+  // 빠른 경로의 조기 반환과 예외까지 같은 wrapper가 닫아 persisted running을 남기지 않는다.
   const sessionAssistantId = crypto.randomUUID();
-  { const bridge = getSessionBridge(); if (bridge) bridge.beginAssistant({ sessionId: turnConversationId, messageId: sessionAssistantId }); }
+  const bridge = getSessionBridge();
+  if (!bridge) return runLiveQueryInnerBody(query, expand, origin, turnConversationId, sessionAssistantId);
+  return bridge.runAssistantTurn({
+    sessionId: turnConversationId,
+    messageId: sessionAssistantId,
+    run: () => runLiveQueryInnerBody(query, expand, origin, turnConversationId, sessionAssistantId),
+  });
+}
+
+async function runLiveQueryInnerBody(query, expand, origin, turnConversationId, sessionAssistantId) {
   const queryStartedAt = performance.now();
   const submit = liveSubmitContexts.get(turnConversationId) || {};
   const runtime = liveRuntimes.get(turnConversationId);

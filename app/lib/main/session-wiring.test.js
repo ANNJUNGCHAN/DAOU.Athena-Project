@@ -33,7 +33,8 @@ test('사용자 메시지는 질의가 모델로 가기 전에 세션에 적히�
 test('답변은 자리표시자로 먼저 적히고, 델타는 저널되며, 툴 단계는 이벤트로 저장된다', () => {
   const inner = slice('async function runLiveQueryInner(', '// finalResult.result는 claude -p의 마지막 assistant 텍스트다');
   assert.match(inner, /const sessionAssistantId = crypto\.randomUUID\(\)/);
-  assert.match(inner, /bridge\.beginAssistant\(\{ sessionId: turnConversationId, messageId: sessionAssistantId \}\)/);
+  assert.match(inner, /bridge\.runAssistantTurn\(\{[\s\S]*?sessionId: turnConversationId,[\s\S]*?messageId: sessionAssistantId,/);
+  assert.match(inner, /run: \(\) => runLiveQueryInnerBody\(query, expand, origin, turnConversationId, sessionAssistantId\)/);
   assert.match(inner, /createToolStepTracker\(\(step\) => \{[\s\S]*?bridge\.recordToolStep\(/);
   assert.match(inner, /onTextDelta: \(text, metadata\) => \{[\s\S]*?sendLiveTextDelta\(text, \{ \.\.\.metadata, conversationId: turnConversationId \}, origin\);[\s\S]*?bridge\.journalDelta\(/);
   // 세션 재시도로 Inner에 다시 들어가기 전에 첫 시도의 자리표시자를 중단으로 확정한다.
