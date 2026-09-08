@@ -2782,6 +2782,24 @@ function maybeForwardPluginProposal(step, resultBlock) {
 
 const ROUTINE_TOOL_NAME = 'athena_routine';
 
+// 루틴 초안 승인 카드 — 전역 목록을 다시 읽으면 동시에 만든 다른 대화의 초안까지
+// 먼저 차지할 수 있다. 이 tool_result가 돌려준 정확한 초안만 원래 대화로 보낸다.
+function maybeForwardRoutineDraft(step, resultBlock) {
+  if (resultBlock.is_error === true) return;
+  const base = String(step.name || '').split('__').pop();
+  if (base !== ROUTINE_TOOL_NAME) return;
+  if (!step.input || step.input.action !== 'draft') return;
+  const text = extractToolResultText(resultBlock.content);
+  if (!text) return;
+  let payload;
+  try { payload = JSON.parse(text); } catch { return; }
+  if (!payload || typeof payload !== 'object' || payload.status !== 'draft') return;
+  if (typeof payload.id !== 'string' || !payload.id.trim()) return;
+  if (shellWin && !shellWin.isDestroyed()) {
+    shellForConversation(forwardingConversationId).send('athena:routine-draft-created', payload);
+  }
+}
+
 // 루틴 제어 제안 카드(Step 6) — athena_routine의 propose 호출 결과
 // (routine_tools.py: control·routine_id·current·proposed·rationale·notice)를
 // 채팅 렌더러로 흘려보낸다. 위 말걸기 가드와 같은 이유로 비영속이다 —
@@ -3083,6 +3101,7 @@ function createToolStepTracker(
             });
             if (forwardNudgeGuard) {
               maybeForwardNudgeGuardProposal(step, block);
+              maybeForwardRoutineDraft(step, block);
               maybeForwardRoutineProposal(step, block);
               maybeForwardWatchCreate(step, block);
               if (forwardBacktestAction) maybeForwardBacktestChatAction(step, block);
@@ -4888,9 +4907,26 @@ async function terminateColdLegacyRuntime(reason = 'mcp-security-mutation') {
 }
 
 // Esc 중단 — 렌더러의 abortToken은 UI 반영만 막는다. 프로세스는 여기서 실제로 죽인다.
-ipcMain.on('athena:abort-live-query', (_event, payload = {}) => {
-  const conversationId = payload && typeof payload.conversationId === 'string' && payload.conversationId
-    ? payload.conversationId : historyConversationId();
+// 셸과 오브는 채널을 공유하지만 서로 다른 대화를 소유한다. 송신 창으로 소유권을 확인한 뒤
+// 오브는 항상 오브 대화, 셸은 자신이 표시한 알려진 대화만 끊는다. 한 창의 늦거나 위조된
+// 취소가 다른 창의 진행 중 턴을 죽여서는 안 된다.
+ipcMain.on('athena:abort-live-query', (event, payload = {}) => {
+  const sender = event && event.sender;
+  const fromOrb = !!(sender && orbWin && !orbWin.isDestroyed() && sender === orbWin.webContents);
+  const fromShell = !!(sender && shellWin && !shellWin.isDestroyed() && sender === shellWin.webContents);
+  let conversationId = null;
+  if (fromOrb) {
+    conversationId = ensureOrbConversationId();
+  } else if (fromShell) {
+    const requestedId = payload && typeof payload.conversationId === 'string'
+      ? payload.conversationId : '';
+    if (!requestedId) {
+      conversationId = historyConversationId();
+    } else if (requestedId !== orbConversationId && knownConversation(requestedId)) {
+      conversationId = requestedId;
+    }
+  }
+  if (!conversationId || !liveRuntimes.isBusy(conversationId)) return;
   abortConversationWork(new Error('사용자가 진행 중인 대화 작업을 취소했다'), conversationId);
 });
 

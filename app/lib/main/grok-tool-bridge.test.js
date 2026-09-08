@@ -50,6 +50,7 @@ function createHarness({ forwardBacktestAction = false } = {}) {
     ${resultTextExtractor}
     const maybeForwardBrainEntity = () => '';
     const maybeForwardNudgeGuardProposal = () => {};
+    const maybeForwardRoutineDraft = () => {};
     const maybeForwardRoutineProposal = () => {};
     const maybeForwardWatchCreate = () => {};
     const maybeForwardGraphChatAction = () => {};
