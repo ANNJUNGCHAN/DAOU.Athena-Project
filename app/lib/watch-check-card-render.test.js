@@ -12,15 +12,20 @@ const fixCycleLib = require('./watch-fix-cycle');
 // 실제 IPC 응답 전달·카드 조립을 실행한다. Electron 대신 DOM/IPC 경계만 주입한다.
 const source = fs.readFileSync(path.join(__dirname, '..', 'chat.js'), 'utf8');
 const start = source.indexOf('async function watchBlockOf(');
-const end = source.indexOf('function approvalModeLine(', start);
+const end = source.indexOf('\nrefreshRoutineDrafts();', start);
 assert.ok(start >= 0 && end > start);
 
 function element(tag) {
   return {
-    tag, className: '', textContent: '', children: [], attrs: {}, listeners: {},
-    appendChild(child) { this.children.push(child); return child; },
+    tag, className: '', textContent: '', children: [], attrs: {}, listeners: {}, disabled: false,
+    appendChild(child) { child.parent = this; this.children.push(child); return child; },
     setAttribute(key, value) { this.attrs[key] = String(value); },
     addEventListener(kind, handler) { this.listeners[kind] = handler; },
+    remove() {
+      if (!this.parent) return;
+      this.parent.children = this.parent.children.filter((child) => child !== this);
+      this.parent = null;
+    },
     set innerHTML(_value) { throw new Error('응답 문자열은 HTML로 쓰지 않는다'); },
   };
 }
@@ -36,6 +41,7 @@ function renderHarness(check, lastCheck = null, detailFails = false) {
   const history = element('history'), calls = [];
   const scope = {
     document: { createElement: element }, watchCheckCardLib: checkLib, watchFixCycleLib: fixCycleLib,
+    routineTurnLib: { describeMode: (mode) => mode },
     window: { AthenaLib: { WatchProgressCard: progressLib }, athena: {
       invoke: async (channel, body) => {
         calls.push({ channel, body });
@@ -54,7 +60,7 @@ function renderHarness(check, lastCheck = null, detailFails = false) {
   vm.runInContext(source.slice(start, end), scope);
   return { history, calls, scope };
 }
-const draft = { id: 'draft-1', symbol: '005930', note: '거래량 확인', cooldown_s: 86400,
+const draft = { id: 'draft-1', mode: 'code-watch', symbol: '005930', note: '거래량 확인', cooldown_s: 86400,
   watch: { project_id: 'p1', path: 'watch/a.py', lookback_days: 30 } };
 function checked(overrides = {}) {
   return { ok: true, count: 2, lookback_days: 30, counted_through: '2026-09-02',
@@ -85,6 +91,44 @@ test('채팅 검사 왕복: 응답의 날짜가 실제 30개 점과 울린 날 �
   assert.deepEqual(h.calls.map((call) => call.channel), ['athena:routine-watch-check', 'athena:routine-detail', 'athena:routine-confirm']);
   assert.equal(h.calls[2].body.id, 'draft-1');
   assert.equal(JSON.stringify(check), before);
+});
+
+test('새 코드 알람 초안은 자동 검사하고 통과 뒤에도 승인은 사람이 누른다', async () => {
+  const h = renderHarness(checked());
+  h.scope.renderApprovalCard(draft, { autoCheck: true });
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.deepEqual(h.calls.map((call) => call.channel), ['athena:routine-watch-check', 'athena:routine-detail']);
+  assert.equal(byClass(h.history, 'watch-progress').length, 1, '진행 카드는 걷고 결과 카드만 남는다');
+  const approvals = byClass(h.history, 'routine-btn-approve');
+  assert.equal(approvals.length, 2);
+  assert.equal(approvals[0].disabled, true, '검사 전 초안에서는 승인할 수 없다');
+  assert.equal(approvals[1].disabled, false, '통과 카드에서 사람이 승인할 수 있다');
+  assert.equal(h.calls.some((call) => call.channel === 'athena:routine-confirm'), false);
+});
+
+test('앱을 다시 열어 발견한 기존 초안은 자동 재검사하지 않는다', async () => {
+  const h = renderHarness(checked());
+  h.scope.renderApprovalCard(draft);
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.deepEqual(h.calls, []);
+  assert.notEqual(byClass(h.history, 'routine-btn-approve')[0].disabled, true);
+  assert.notEqual(byClass(h.history, 'routine-btn').find((btn) => btn.textContent === '검사').disabled, true);
+});
+
+test('자동 검사 통로 오류는 실제 사유를 보이고 검사 칩을 재시도 가능하게 둔다', async () => {
+  const h = renderHarness(null);
+  h.scope.window.athena.invoke = async (channel, body) => {
+    h.calls.push({ channel, body });
+    if (channel === 'athena:routine-watch-check') throw new Error('backend offline');
+    return { ok: true };
+  };
+  h.scope.renderApprovalCard(draft, { autoCheck: true });
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.ok(byClass(h.history, 'agent-source').some((node) => /검사 통로 오류: backend offline/.test(node.textContent)));
+  const retry = byClass(h.history, 'routine-btn').find((btn) => btn.textContent === '검사');
+  assert.ok(retry);
+  assert.equal(retry.disabled, false);
+  assert.equal(byClass(h.history, 'routine-btn-approve').every((btn) => btn.disabled), true);
 });
 
 test('채팅 검사 왕복: 상세가 다른 검사면 날짜를 섞지 않는다', async () => {
