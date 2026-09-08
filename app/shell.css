@@ -3968,11 +3968,6 @@ body { margin: 0; overflow: hidden; }
     gap: 10px;
     padding: 0 10px;
   }
-
-  /* 44px 레일 폭에서는 첨부·@ 아이콘도 접는다 — 둘 다 키우미 메뉴 안에 있다. */
-  #chatRegion .composer-icon {
-    display: none;
-  }
 }
 
 /* 이력 비교의 곡선 겹쳐보기(보드 05) — 실행 두 건을 같은 축에 놓는다. */
