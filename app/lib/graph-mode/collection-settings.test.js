@@ -165,7 +165,8 @@ test('스케줄을 못 읽었으면 재생 버튼은 잠기고 시각을 지어�
     ['실행 시각 알 수 없음', '실행 시각 알 수 없음', '실행 시각 알 수 없음']);
 });
 
-test('재생을 누르면 그 소스만 실행하고, 도는 동안 "실행 중…"을 적은 뒤 새 시각으로 바꾼다', async () => {
+test('재생을 누르면 그 소스만 실행하고, 도는 동안 "실행 중…"을 적은 뒤 새 시각으로 바꾼다', async (t) => {
+  t.mock.timers.enable({ apis: ['Date'], now: Date.parse('2026-09-08T09:00:00Z') });
   let release;
   const gate = new Promise((resolve) => { release = resolve; });
   const runCalls = [];
@@ -217,7 +218,7 @@ test('실행 시각은 같은 날이면 시:분, 다른 날이면 월/일 시:�
 
 test('아직 안 돌았으면 마지막은 —, 주기 주인이 외부면 다음 시각을 약속하지 않는다', () => {
   const never = schedule({ sources: [{ source: 'chat', interval_minutes: 60, producer_wired: true, last_run_at: null, next_run_at: '2026-09-08T06:05:00Z', running: false, last_error: null }] });
-  assert.match(scheduleText(never, 'chat'), /^마지막 — · 다음 \d\d:\d\d$/);
+  assert.match(scheduleText(never, 'chat', Date.parse('2026-09-08T09:00:00Z')), /^마지막 — · 다음 \d\d:\d\d$/);
   const external = schedule({ schedule_owner: 'external' });
   assert.match(scheduleText(external, 'chat'), /· 자동 실행 없음$/);
 });
@@ -241,7 +242,7 @@ test('applySchedule은 그려진 칸의 시각·버튼만 바꾸고 다시 그�
       { source: 'chat', interval_minutes: 60, producer_wired: true, last_run_at: '2026-09-08T05:05:00Z', next_run_at: '2026-09-08T06:05:00Z', running: false, last_error: null },
       { source: 'fills', interval_minutes: 60, producer_wired: true, last_run_at: null, next_run_at: null, running: true, last_error: null },
     ],
-  }));
+  }), Date.parse('2026-09-08T09:00:00Z'));
   const metas = byClass(container, 'graph-settings-source-meta').map((n) => n.textContent);
   assert.match(metas[0], /^마지막 \d\d:\d\d · 다음 \d\d:\d\d$/);
   assert.equal(metas[1], '실행 중…');
