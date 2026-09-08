@@ -4451,6 +4451,9 @@ function createBacktestCanvas(options) {
         // Tab 순회(onSelect)는 선택만 적는다 — 지나친 노드마다 참조가 쌓이면 안 된다.
         // 참조는 클릭·Enter(onExplainNode)에서만 입력창에 들어간다.
         onSelect: (nodeId) => noteSelectedNode(nodeId),
+        // 참조는 DOM 이벤트로 넘긴다 — 캔버스와 채팅은 같은 렌더러 문서를 공유하지만
+        // 서로를 import하지 않는다(칩을 그리는 일은 컴포저의 몫이다).
+        onReference: (ref) => document.dispatchEvent(new CustomEvent('athena:chat-reference', { detail: ref })),
         onExplainNode: (nodeId) => referenceTechniqueNode(nodeId),
         onExplainFlow: (kind) => referenceTechniqueFlow(kind),
         onExplainAll: () => referenceTechniqueAll(),

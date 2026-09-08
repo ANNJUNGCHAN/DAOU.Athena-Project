@@ -475,7 +475,9 @@ test('상태 한 줄은 role=status이고 고른 노드가 어느 흐름에 있�
   const { root, handle } = mount();
   const status = byClass(root, 'backtest-tnodes-status')[0];
   assert.equal(status.getAttribute('role'), 'status');
-  assert.equal(textOf(status), '노드를 고르면 설명을 들을 수 있습니다');
+  // 아무것도 고르지 않은 상태의 안내는 보드 21(2026-09-08 개정)의 발밑 문장이다 —
+  // 누르면 말이 나간다는 오해("설명을 들을 수 있습니다")를 안내가 직접 지운다.
+  assert.equal(textOf(status), "'이상해요' 같은 버튼은 없습니다. 무엇이 이상한지는 사람이 자기 말로 씁니다.");
   handle.select('compute_atr');
   assert.ok(textOf(byClass(handle.element, 'backtest-tnodes-status')[0]).indexOf('두 흐름 모두') !== -1);
   handle.select('should_exit');
@@ -503,6 +505,129 @@ test('unknown은 화면이 삼키지 않는다 — 역할을 못 읽었다는 �
   const { root } = mount({ payload: payload });
   const note = byClass(root, 'backtest-tnodes-status-unknown')[0];
   assert.equal(note.textContent, '역할을 못 읽은 함수 2개 · _debug, _tmp');
+});
+
+// ── 참조(보드 21, 2026-09-08 개정) ───────────────────────────────────────────
+//
+// 계약 하나만 본다: **누르면 메시지가 나가지 않고 참조만 나간다.** 그래서 onReference를
+// 넘긴 마운트에서는 explain* 콜백이 단 한 번도 불리지 않아야 한다.
+
+function mountRef(overrides) {
+  const refs = [];
+  const m = mount(Object.assign({ onReference: (ref) => refs.push(ref) }, overrides || {}));
+  m.refs = refs;
+  return m;
+}
+
+function statusOf(root) {
+  return textOf(byClass(root, 'backtest-tnodes-status')[0]);
+}
+
+test('카드를 누르면 노드 참조가 나가고 설명 콜백은 침묵한다 — 메시지는 나가지 않는다', () => {
+  const { root, handle, refs, calls } = mountRef();
+  click(cardsOf(root, 'exit')[1]);
+  assert.deepEqual(refs, [{
+    kind: 'node', label: '@should_exit', name: 'should_exit', lines: [48, 56], path: '',
+  }]);
+  assert.deepEqual(calls.explainNode, []);
+  assert.equal(handle.getSelected(), 'should_exit');
+  assert.equal(statusOf(handle.element), '선택됨 — 오른쪽 입력창에 @should_exit 가 붙었습니다');
+});
+
+test('레일에서 눌러도 같은 참조가 나가고, 초점을 입력창에서 빼앗지 않는다', () => {
+  const { root, refs, calls } = mountRef();
+  click(byClass(root, 'backtest-tnodes-rail-item')[4]); // signals — 카드가 없는 함수
+  assert.deepEqual(refs.map((r) => r.label), ['@signals']);
+  assert.deepEqual(calls.select, ['signals']);
+  // 참조가 붙었으면 초점은 대화 입력창의 것이다 — 여기서 되가져오면 이어서 타자할 수 없다.
+  assert.equal(focused, null);
+});
+
+test('Enter도 참조다 — 고른 노드의 줄 범위가 함께 실린다', () => {
+  const { handle, refs, calls } = mountRef();
+  handle.select('compute_atr');
+  key(handle.element, 'Enter');
+  assert.deepEqual(refs, [{
+    kind: 'node', label: '@compute_atr', name: 'compute_atr', lines: [12, 24], path: '',
+  }]);
+  assert.deepEqual(calls.explainNode, []);
+});
+
+test('줄 번호가 하나만 오면 [그 줄, 그 줄], 아예 없으면 lines는 null이다', () => {
+  const payload = breakout();
+  payload.nodes[3].last_line = null;
+  payload.nodes[2].first_line = null;
+  const { root, refs } = mountRef({ payload: payload });
+  click(cardsOf(root, 'exit')[1]);
+  assert.deepEqual(refs[0].lines, [48, 48]);
+  click(cardsOf(root, 'entry')[2]);
+  assert.equal(refs[1].lines, null);
+});
+
+test('서버가 소스 경로를 주면 참조가 그것을 나른다 — 없으면 지어내지 않는다', () => {
+  const payload = breakout();
+  payload.path = 'strategy.py';
+  const { root, refs } = mountRef({ payload: payload });
+  click(cardsOf(root, 'exit')[1]);
+  assert.equal(refs[0].path, 'strategy.py');
+  assert.equal(normalizePayload({}).path, '');
+});
+
+test('[이 흐름 설명]은 @진입 흐름 / @청산 흐름 참조가 되고, 무엇이 붙는지 스스로 말한다', () => {
+  const { root, handle, refs, calls } = mountRef();
+  const asks = byClass(root, 'backtest-tnodes-lane-explain');
+  assert.equal(asks[0].getAttribute('title'), '누르면 @진입 흐름');
+  assert.equal(asks[1].getAttribute('title'), '누르면 @청산 흐름');
+  click(asks[0]);
+  click(byClass(handle.element, 'backtest-tnodes-lane-explain')[1]);
+  assert.deepEqual(refs, [
+    { kind: 'flow', label: '@진입 흐름', name: '진입 흐름', lines: null, path: '' },
+    { kind: 'flow', label: '@청산 흐름', name: '청산 흐름', lines: null, path: '' },
+  ]);
+  assert.deepEqual(calls.explainFlow, []);
+  assert.equal(statusOf(handle.element), '선택됨 — 오른쪽 입력창에 @청산 흐름 가 붙었습니다');
+});
+
+test('캔버스 머리 오른쪽 [전체]는 @전체 참조다 — 발밑 버튼도 같은 손잡이다', () => {
+  const { root, handle, refs, calls } = mountRef();
+  const all = byClass(root, 'backtest-tnodes-canvas-all');
+  assert.equal(all.length, 1);
+  assert.equal(all[0].textContent, '전체');
+  assert.equal(all[0].getAttribute('title'), '누르면 @전체');
+  click(all[0]);
+  click(byClass(handle.element, 'backtest-tnodes-explain-all')[0]);
+  assert.deepEqual(refs, [
+    { kind: 'all', label: '@전체', name: '전체', lines: null, path: '' },
+    { kind: 'all', label: '@전체', name: '전체', lines: null, path: '' },
+  ]);
+  assert.equal(calls.explainAll, 0);
+  assert.equal(statusOf(handle.element), '선택됨 — 오른쪽 입력창에 @전체 가 붙었습니다');
+});
+
+test('다른 노드로 옮기거나 판이 갈리면 붙었다는 안내를 내린다 — 없는 사실을 남기지 않는다', () => {
+  const { root, handle } = mountRef();
+  click(cardsOf(root, 'exit')[1]);
+  assert.ok(statusOf(handle.element).indexOf('붙었습니다') !== -1);
+  handle.select('signals');
+  assert.equal(statusOf(handle.element).indexOf('붙었습니다'), -1);
+  click(byClass(handle.element, 'backtest-tnodes-rail-item')[0]);
+  assert.ok(statusOf(handle.element).indexOf('붙었습니다') !== -1);
+  handle.setPayload(stagePayload());
+  assert.equal(statusOf(handle.element).indexOf('붙었습니다'), -1);
+});
+
+test('onReference가 없으면 옛 explain* 배선이 그대로 산다 — 호스트를 조용히 죽이지 않는다', () => {
+  const { root, handle, calls } = mount(); // onReference 없음
+  click(cardsOf(root, 'exit')[1]);
+  assert.deepEqual(calls.explainNode, ['should_exit']);
+  click(byClass(handle.element, 'backtest-tnodes-lane-explain')[0]);
+  assert.deepEqual(calls.explainFlow, ['entry']);
+  click(byClass(handle.element, 'backtest-tnodes-canvas-all')[0]);
+  click(byClass(handle.element, 'backtest-tnodes-explain-all')[0]);
+  assert.equal(calls.explainAll, 2);
+  // 참조를 안 붙였으므로 상태 줄은 옛 '선택 · …' 그대로다.
+  assert.equal(statusOf(handle.element).indexOf('붙었습니다'), -1);
+  assert.equal(statusOf(handle.element).indexOf('선택 · '), 0);
 });
 
 // ── 손잡이 ───────────────────────────────────────────────────────────────────
