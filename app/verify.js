@@ -3602,7 +3602,8 @@ app.whenReady().then(async () => {
       .find((x) => x.textContent.includes('구매하기'));
     return {
       orderVisible: vis('order'),
-      appHidden: !vis('app'),
+      appVisible: vis('app'),
+      shellInert: document.getElementById('shell').inert,
       firedAtLabel: !!Array.from(document.querySelectorAll('#orderBody .ticket-label'))
         .find((l) => l.textContent.includes('발화 시점')),
       execDisabled: execBtn ? execBtn.disabled : null,
@@ -3612,8 +3613,10 @@ app.whenReady().then(async () => {
   report.orderTicket.visibleWindowCount = BrowserWindow.getAllWindows().filter((win) => win.isVisible()).length;
   report.orderTicket.handoffAllWindowCountBaseline = report.bootChatOnly.postHandoff.allWindowCountBaseline;
   console.log('[verify] 검증17(주문 티켓):', JSON.stringify(report.orderTicket));
-  assertOk('orderTicket: 모드 전이(#order 표시·#app 후퇴)',
-    report.orderTicket.orderVisible === true && report.orderTicket.appHidden === true);
+  assertOk('orderTicket: 중앙 모달 표시·배경 셸 유지 및 잠금',
+    report.orderTicket.orderVisible === true
+      && report.orderTicket.appVisible === true
+      && report.orderTicket.shellInert === true);
   // 주문 확인도 새 창이 아니라 모드다. handoff 직후 살아 있던 전체 BrowserWindow
   // 수를 baseline으로 삼는다 — 가시 창 수와 전체 창 수를 섞으면 hidden orb 때문에
   // 실제로 새 창이 없어도 실패한다.
@@ -3629,6 +3632,34 @@ app.whenReady().then(async () => {
     "(() => { const o = document.getElementById('order'); const a = document.getElementById('app'); return o.hidden && !a.hidden; })()"
   );
   assertOk('orderTicket: Esc 복귀', orderClosed === true);
+
+  // 주문 모달이 열린 동안 fail-closed 영수증이 도착하면 채팅 표면으로 복귀한다.
+  // 이 경로도 배경 셸의 inert 잠금을 반드시 풀어야 후속 입력이 가능하다.
+  await shellWin.webContents.executeJavaScript(`(() => {
+    const t = document.querySelector('.turn-agent.agent-fired');
+    const b = Array.from(t.querySelectorAll('button')).find((x) => x.textContent.includes('주문 티켓'));
+    b.click();
+  })()`);
+  await wait(600);
+  shellWin.webContents.send('athena:add-rest-receipt', {
+    receiptId: 'verify-order-modal-rest-receipt',
+    text: '주문 모달 중 영수증 복귀 검증',
+  });
+  await wait(300);
+  report.orderTicket.restReceiptRecovery = await shellWin.webContents.executeJavaScript(`(() => ({
+    orderHidden: document.getElementById('order').hidden,
+    appVisible: !document.getElementById('app').hidden,
+    shellInert: document.getElementById('shell').inert,
+    receiptVisible: !!document.querySelector('[data-receipt-id="verify-order-modal-rest-receipt"]'),
+  }))()`);
+  assertOk('orderTicket: 영수증 복귀 시 모달 닫힘·셸 잠금 해제',
+    report.orderTicket.restReceiptRecovery.orderHidden === true
+      && report.orderTicket.restReceiptRecovery.appVisible === true
+      && report.orderTicket.restReceiptRecovery.shellInert === false
+      && report.orderTicket.restReceiptRecovery.receiptVisible === true);
+  await shellWin.webContents.executeJavaScript(
+    "document.querySelector('[data-receipt-id=\"verify-order-modal-rest-receipt\"]')?.remove()"
+  );
 
   const badgeCheck = await shellWin.webContents.executeJavaScript(`(() => {
     const HistoryBadge = window.AthenaLib && window.AthenaLib.HistoryBadge;
