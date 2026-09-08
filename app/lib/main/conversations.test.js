@@ -297,6 +297,32 @@ test('updateProject는 이름·설명만 고치고, 빈 이름은 거절한다',
   });
 });
 
+test('setProjectPath는 폴더 경로만 바꾸고, 다른 레코드가 쓰는 폴더·모르는 id는 거절한다', async () => {
+  await withTempState({
+    projects: [
+      { id: 'p1', label: '하나', path: 'C:\\old\\one', pinned: true, description: '메모' },
+      { id: 'p2', label: '둘', path: 'C:\\two', pinned: false },
+    ],
+    currentProjectId: 'p1',
+    conversations: [],
+  }, () => {
+    const moved = conversations.setProjectPath('p1', 'D:\\new\\one');
+    assert.equal(moved.ok, true);
+    assert.equal(moved.project.path, 'D:\\new\\one');
+    assert.equal(moved.project.label, '하나');           // 이름·설명·고정·id는 그대로다.
+    assert.equal(moved.project.description, '메모');
+    assert.equal(moved.project.pinned, true);
+    assert.equal(moved.state.projects[0].path, 'D:\\new\\one');
+
+    assert.deepEqual(conversations.setProjectPath('p1', 'c:/TWO/'), {
+      ok: false, reason: 'folder_taken', project: conversations.list().projects[1],
+    });
+    assert.deepEqual(conversations.setProjectPath('p1', '  '), { ok: false, reason: 'invalid_path' });
+    assert.deepEqual(conversations.setProjectPath('없음', 'D:\\x'), { ok: false, reason: 'unknown_project' });
+    assert.equal(conversations.list().projects[0].path, 'D:\\new\\one'); // 거절은 아무것도 바꾸지 않는다.
+  });
+});
+
 test('removeProject는 프로젝트와 그 대화들을 지우고 현재 프로젝트·활성 대화를 정리한다', async () => {
   await withTempState({
     projects: [{ id: 'p1', label: '하나' }, { id: 'p2', label: '둘', path: 'C:/quant/two' }],

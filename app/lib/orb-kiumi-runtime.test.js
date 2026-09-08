@@ -78,7 +78,8 @@ test('오브는 main이 보낸 카드 개수를 모두 받을 때까지 canvas �
 test('오브 기원 REST·Selector 빠른 경로도 같은 카드 봉투를 오브에 전달한다', () => {
   assert.match(mainSource, /function emitRestCanvasForOrigin\(\s*payload,[\s\S]*?origin === 'orb'/);
   assert.match(mainSource, /athena:orb-canvas-result/);
-  assert.match(mainSource, /origin,\s*\n\s*timeoutMs:/);
+  // 다중 대화(2026-09-08) — emitCanvas는 origin 뒤에 그 턴의 대화 id도 함께 넘긴다.
+  assert.match(mainSource, /origin,(?: conversationId: turnConversationId,)?\s*\n\s*timeoutMs:/);
   assert.match(mainSource, /result\.canvasResultCount\s*=\s*Number\(result\.renderedCount\)/);
 });
 
