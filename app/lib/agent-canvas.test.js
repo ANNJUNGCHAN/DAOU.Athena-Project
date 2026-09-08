@@ -2333,6 +2333,33 @@ test('초안: 상세 조회에만 활성화 차단 사유가 있어도 승인을
   assert.ok(allText(detail).includes('지금은 켤 수 없음: 감시 코드 파일 없음 — 먼저 만들기'));
 });
 
+test('초안: 메인 카드 동의 전에는 에이전트의 승인 경로도 열리지 않는다', async () => {
+  const confirmed = [];
+  const { detail } = await mountCode({ status: 'draft' }, {
+    detail: { main_card_candidate: { title: '현재가' }, main_card: null },
+    confirmRoutine: async (id) => { confirmed.push(id); },
+  });
+  const approve = findByClass(detail, 'agent-code-approve-btn')[0];
+  assert.equal(approve.disabled, true);
+  assert.ok(allText(detail).includes('메인 카드를 먼저 확인'));
+  assert.equal(findByClass(detail, 'agent-code-repair-btn').length, 0);
+  await approve.dispatchEvent({ type: 'click' });
+  assert.deepEqual(confirmed, []);
+});
+
+test('초안: 새 상세의 확정 카드는 오래된 목록의 대기 상태를 해제한다', async () => {
+  const candidate = { title: '현재가' };
+  const confirmed = [];
+  const { detail } = await mountCode({ status: 'draft', main_card_candidate: candidate, main_card: null }, {
+    detail: { main_card_candidate: candidate, main_card: candidate },
+    confirmRoutine: async (id) => { confirmed.push(id); },
+  });
+  const approve = findByClass(detail, 'agent-code-approve-btn')[0];
+  assert.equal(approve.disabled, false);
+  await approve.dispatchEvent({ type: 'click' });
+  assert.deepEqual(confirmed, ['cw1']);
+});
+
 test('초안: 상세 조회의 activation_blocker null은 목록의 오래된 차단 사유를 해제한다', async () => {
   const confirmed = [];
   const { detail } = await mountCode({

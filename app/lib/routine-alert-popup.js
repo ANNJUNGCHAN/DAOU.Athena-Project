@@ -12,7 +12,8 @@
 
   function createRoutineAlertPopup(options) {
     const doc = options && options.document;
-    const onOpen = options && options.onOpen;
+    const onOpenCard = options && options.onOpenCard;
+    const onOpenAgent = options && (options.onOpenAgent || options.onOpen);
     if (!doc || typeof doc.createElement !== 'function' || !doc.body) {
       throw new TypeError('document is required');
     }
@@ -52,21 +53,32 @@
 
     const actions = doc.createElement('div');
     actions.className = 'routine-alert-popup__actions';
-    const openButton = doc.createElement('button');
-    openButton.type = 'button';
-    openButton.className = 'routine-alert-popup__open';
-    openButton.textContent = '\uc54c\ub78c \ud655\uc778';
+    const cardButton = doc.createElement('button');
+    cardButton.type = 'button';
+    cardButton.className = 'routine-alert-popup__card';
+    cardButton.textContent = '\ub300\ud654\ucc3d\uc5d0\uc11c \uce74\ub4dc \ubcf4\uae30';
+    const agentButton = doc.createElement('button');
+    agentButton.type = 'button';
+    agentButton.className = 'routine-alert-popup__agent';
+    agentButton.textContent = '\uc5d0\uc774\uc804\ud2b8\ub85c \uc774\ub3d9';
     const dismissButton = doc.createElement('button');
     dismissButton.type = 'button';
     dismissButton.className = 'routine-alert-popup__dismiss';
     dismissButton.textContent = '\ub2eb\uae30';
-    actions.appendChild(openButton);
+    actions.appendChild(cardButton);
+    actions.appendChild(agentButton);
     actions.appendChild(dismissButton);
+
+    const cardHint = doc.createElement('div');
+    cardHint.className = 'routine-alert-popup__card-hint';
+    cardHint.textContent = '\uc774 \uc54c\ub78c\uc5d0 \uc124\uc815\ub41c \uba54\uc778 \uce74\ub4dc\uac00 \uc5c6\uc5b4 \ub300\ud654\ucc3d\uc73c\ub85c \uc5f4 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4.';
+    cardHint.hidden = true;
 
     root.appendChild(header);
     root.appendChild(title);
     root.appendChild(sub);
     root.appendChild(time);
+    root.appendChild(cardHint);
     root.appendChild(actions);
     doc.body.appendChild(root);
 
@@ -80,6 +92,7 @@
         title: String(room.title),
         sub: room.sub == null ? '' : String(room.sub),
         firedAt: Number.isFinite(firedAt) ? firedAt : Date.now(),
+        mainCard: room.mainCard && typeof room.mainCard === 'object' ? room.mainCard : null,
       };
     }
 
@@ -99,6 +112,9 @@
       time.textContent = formatTime(current.firedAt);
       count.textContent = queue.length ? `\uc678 ${queue.length}\uac74` : '';
       count.hidden = queue.length === 0;
+      cardButton.disabled = !current.mainCard;
+      cardButton.title = current.mainCard ? current.mainCard.title || '' : cardHint.textContent;
+      cardHint.hidden = !!current.mainCard;
     }
 
     function advance() {
@@ -128,16 +144,38 @@
       return true;
     }
 
-    openButton.addEventListener('click', () => {
+    // 늦게 도착한 상세(main_card)은 아직 팝업에 남아 있는 같은 알람만 갱신한다.
+    // show()를 쓰면 사람이 이미 닫은 알람이 다시 살아나거나 큐 뒤에 재삽입된다.
+    function update(id, patch) {
+      const key = String(id);
+      let target = current && current.key === key ? current : null;
+      if (!target) target = queue.find((item) => item.key === key) || null;
+      if (!target) return false;
+      const normalized = normalize(Object.assign({}, target, patch || {}, { id: target.id }));
+      if (!normalized) return false;
+      if (target === current) current = normalized;
+      else queue[queue.indexOf(target)] = normalized;
+      render();
+      return true;
+    }
+
+    cardButton.addEventListener('click', () => {
+      if (!current || !current.mainCard) return;
+      const id = current.id;
+      if (typeof onOpenCard === 'function') onOpenCard(id);
+      advance();
+    });
+    agentButton.addEventListener('click', () => {
       if (!current) return;
       const id = current.id;
-      if (typeof onOpen === 'function') onOpen(id);
+      if (typeof onOpenAgent === 'function') onOpenAgent(id);
       advance();
     });
     dismissButton.addEventListener('click', dismiss);
 
     return {
       show,
+      update,
       dismiss,
       destroy() {
         current = null;

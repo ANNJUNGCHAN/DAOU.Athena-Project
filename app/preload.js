@@ -63,6 +63,8 @@ const INVOKE_CHANNELS = new Set([
   'athena:routine-draft',
   // 상세·소스 카탈로그(Step 6) — 설정 폼 프리필과 새 작업 시트가 1회씩 부른다.
   'athena:routine-detail',
+  'athena:routine-main-card-confirm',
+  'athena:routine-main-card-open',
   'athena:routine-source-catalog',
   // 감시 코드 검사·착지(Step 6) — POST /routines/watch/check · POST /routines/watch/code.
   'athena:routine-watch-check',
