@@ -2595,12 +2595,22 @@ function augmentMentions(text) {
 // ---------- 입력 ----------
 function dispatchUserQuery(text) {
   const normalized = String(text || '').trim() || '보유 종목 수급 요약해줘';
+  if (routineMainCardLib && !routineMainCardLib.affirmative(normalized)) {
+    routineMainCardConfirmations.invalidateCurrent();
+    invalidateTypedMainCardViews();
+  }
   if (isSettingsCommand(normalized)) {
     openSettings();
     return;
   }
   if (isHistoryCommand(normalized)) {
     runHistoryCommand(normalized);
+    return;
+  }
+  if (routineMainCardLib && routineMainCardLib.affirmative(normalized)) {
+    void routineMainCardConfirmations.handleAffirmative(normalized).then((handled) => {
+      if (!handled.handled) runQuery(normalized);
+    });
     return;
   }
   runQuery(normalized);
@@ -3094,6 +3104,11 @@ window.addEventListener('athena:new-conversation', () => {
     window.AthenaSessionWorkspace.flush();
     window.AthenaSessionWorkspace.clear();
   }
+  if (typeof routineMainCardConfirmations !== 'undefined') {
+    routineMainCardConfirmations.invalidateCurrent();
+    routineMainCardConfirmations.setCurrentConversation(null);
+    activeConversationScopeId = null;
+  }
   stashDisplayedPane();
   displayedConversationId = null;
   state = 'idle';
@@ -3523,6 +3538,80 @@ window.athena.on('athena:orb-turn-committed', ({ query, result } = {}) => {
 // id → 초안을 처음 본 시각(ISO, 앱측 클록) — 백엔드 생성 시각이 아니라 "우리가
 // 언제부터 이 카드를 보여주고 있었나"를 잰다. dedup 겸용(Set 대신 Map).
 const firstSeenAtById = new Map();
+const firstSeenSignatureById = new Map();
+const routineMainCardLib = window.AthenaLib.RoutineMainCard;
+const routineMainCardConfirmations = routineMainCardLib.createConfirmationController();
+const routineDraftViewsById = new Map();
+let activeConversationScopeId = null;
+
+function mainCardCandidateSignature(routine) {
+  return routineMainCardLib.descriptorSignature(routine && routine.main_card_candidate)
+    || 'legacy-no-candidate';
+}
+
+function registerRoutineDraftView(routine, view) {
+  let views = routineDraftViewsById.get(routine.id);
+  if (!views) { views = new Set(); routineDraftViewsById.set(routine.id, views); }
+  views.add(view);
+}
+
+function retireRoutineDraftViews(id) {
+  const views = routineDraftViewsById.get(id);
+  if (!views) return;
+  for (const view of views) {
+    if (typeof view.retire === 'function') view.retire();
+    if (view.originConversationId && view.routine) {
+      routineMainCardConfirmations.remove(
+        id,
+        view.originConversationId,
+        view.routine.main_card_candidate,
+      );
+    }
+  }
+  routineDraftViewsById.delete(id);
+}
+
+function refreshRoutineDraftViews(id, nextRoutine) {
+  const views = routineDraftViewsById.get(id);
+  if (!views) return;
+  for (const view of views) {
+    Object.assign(view.routine, nextRoutine || {});
+    if (typeof view.sync === 'function') view.sync();
+  }
+}
+
+function registerTypedMainCardConfirmation(view) {
+  if (!activeConversationScopeId || !view.typedEligible
+    || view.originConversationId !== activeConversationScopeId
+    || !routineMainCardLib.needsConfirmation(view.routine)) return;
+  routineMainCardConfirmations.register({
+    conversationId: view.originConversationId,
+    routineId: view.routine.id,
+    candidate: view.routine.main_card_candidate,
+    confirm: () => view.confirm(),
+  });
+}
+
+function invalidateTypedMainCardViews() {
+  for (const views of routineDraftViewsById.values()) {
+    for (const view of views) {
+      if (view.originConversationId === activeConversationScopeId) view.typedEligible = false;
+    }
+  }
+}
+
+window.addEventListener('athena:conversation-scope-changed', (event) => {
+  activeConversationScopeId = event && event.detail && event.detail.id
+    ? String(event.detail.id) : null;
+  routineMainCardConfirmations.setCurrentConversation(activeConversationScopeId);
+  for (const views of routineDraftViewsById.values()) {
+    for (const view of views) {
+      if (view.originConversationId === activeConversationScopeId) {
+        registerTypedMainCardConfirmation(view);
+      }
+    }
+  }
+});
 
 async function refreshRoutineDrafts({ autoCheck = false, conversationId = displayedConversationId } = {}) {
   let routines;
@@ -3538,8 +3627,11 @@ async function refreshRoutineDrafts({ autoCheck = false, conversationId = displa
 
 function revealRoutineDraft(r, { autoCheck = false, conversationId = displayedConversationId } = {}) {
   if (!r || r.status !== 'draft' || typeof r.id !== 'string' || !r.id.trim()) return false;
-  if (firstSeenAtById.has(r.id)) return false;
-  firstSeenAtById.set(r.id, new Date().toISOString());
+  const signature = mainCardCandidateSignature(r);
+  if (firstSeenSignatureById.get(r.id) === signature) return false;
+  if (firstSeenSignatureById.has(r.id)) retireRoutineDraftViews(r.id);
+  if (!firstSeenAtById.has(r.id)) firstSeenAtById.set(r.id, new Date().toISOString());
+  firstSeenSignatureById.set(r.id, signature);
   renderApprovalCard(r, { autoCheck, conversationId });
   return true;
 }
@@ -3911,9 +4003,19 @@ function renderWatchCheckCard(r, check, conversationId) {
   for (const chip of model.chips) {
     const btn = _btn(chip.label, chip.action === 'confirm' ? 'routine-btn routine-btn-approve'
       : chip.action === 'relink' ? 'routine-btn routine-btn-relink' : 'routine-btn');
-    btn.disabled = !chip.enabled || (chip.action === 'confirm' && !!r.activation_blocker);
+    const syncButton = () => {
+      btn.disabled = !chip.enabled || (chip.action === 'confirm'
+        && (!!r.activation_blocker || routineMainCardLib.needsConfirmation(r)));
+      if (chip.action === 'confirm' && routineMainCardLib.needsConfirmation(r)) {
+        btn.title = '메인 카드를 먼저 확인해 주세요';
+      } else if (chip.action === 'confirm') {
+        btn.title = '';
+      }
+    };
+    syncButton();
     if (chip.action === 'confirm') {
       btn.addEventListener('click', async () => {
+        if (routineMainCardLib.needsConfirmation(r)) return;
         for (const b of buttons) b.disabled = true;
         const res = await window.athena.invoke('athena:routine-confirm', { id: r.id });
         if (res && res.ok) {
@@ -3921,8 +4023,13 @@ function renderWatchCheckCard(r, check, conversationId) {
         } else {
           status.textContent = `켜기 실패: ${(res && res.error) || '알 수 없는 오류'}`;
           for (const b of buttons) b.disabled = false;
-          btn.disabled = !!r.activation_blocker;
+          syncButton();
         }
+      });
+      registerRoutineDraftView(r, {
+        routine: r,
+        sync: syncButton,
+        retire() { btn.disabled = true; },
       });
     } else if (chip.action === 'relink') {
       btn.addEventListener('click', () => { void relinkWatchProject(r, status, buttons, conversationId); });
@@ -3934,7 +4041,7 @@ function renderWatchCheckCard(r, check, conversationId) {
             repairReason: model.reason,
           })
           : r;
-        void beginWatchRepair(repairContext);
+        void beginWatchRepair(repairContext, conversationId);
       });
     }
     buttons.push(btn);
@@ -4104,7 +4211,7 @@ function draftFixSeedText(r) {
 // 코드 감시 수정은 에이전트 접두가 적용되는 화면에서 이어간다. 누락 파일 복구는
 // 캔버스가 보낸 구조화 컨텍스트를 사람이 검토할 문장으로 바꾸고, 일반 수정은 기존의
 // 열린 문장을 그대로 둔다. 둘 다 입력만 채우며 자동 제출·승인은 하지 않는다.
-async function beginWatchRepair(context) {
+async function beginWatchRepair(context, conversationId = displayedConversationId) {
   openAgentCanvas();
   let prepared = context || {};
   // 채팅 카드 목록에는 감시 블록·조건이 생략될 수 있다. 차단된 코드 감시는 상세를
@@ -4117,12 +4224,92 @@ async function beginWatchRepair(context) {
     } catch { /* 아래 merge가 목록 카드의 확인된 값으로 복구 문장을 만든다 */ }
     prepared = watchFixCycleLib.mergeRepairContext(prepared, detail);
   }
+  if (conversationId !== displayedConversationId) return;
   const text = prepared.repair === true
     ? watchFixCycleLib.repairSeedText(prepared)
     : draftFixSeedText(prepared);
   if (window.AthenaShell && typeof window.AthenaShell.seedChatInput === 'function') {
     window.AthenaShell.seedChatInput(text);
   }
+}
+
+function appendMainCardConfirmation(card, r, conversationId) {
+  const candidate = routineMainCardLib.normalizeDescriptor(r.main_card_candidate);
+  if (!candidate) return null;
+
+  const panel = document.createElement('div');
+  panel.className = 'routine-main-card-confirm';
+  const question = document.createElement('div');
+  question.className = 'routine-main-card-confirm__question';
+  question.textContent = `이 알람에 맞는 카드는 「${candidate.title}」인데 맞나요?`;
+  const actions = document.createElement('div');
+  actions.className = 'routine-main-card-confirm__actions';
+  const yes = _btn('네, 이 카드로 설정', 'routine-btn routine-btn-approve routine-main-card-choice');
+  const other = _btn('다른 카드로 선택', 'routine-btn routine-main-card-choice');
+  const status = document.createElement('span');
+  status.className = 'agent-mode routine-main-card-confirm__status';
+  actions.append(yes, other, status);
+  panel.append(question, actions);
+  card.appendChild(panel);
+
+  const view = {
+    routine: r,
+    originConversationId: conversationId ? String(conversationId) : null,
+    typedEligible: true,
+    retired: false,
+    sync() {
+      const confirmed = routineMainCardLib.hasConfirmedMainCard(r);
+      yes.disabled = confirmed || view.retired;
+      other.disabled = confirmed || view.retired;
+      if (confirmed) status.textContent = `메인 카드로 설정됨 · ${r.main_card.title}`;
+    },
+    retire() {
+      view.retired = true;
+      yes.disabled = true;
+      other.disabled = true;
+      status.textContent = '새 카드 후보가 제안됐습니다';
+    },
+    async confirm() {
+      if (view.retired || !routineMainCardLib.needsConfirmation(r)) return { ok: false };
+      yes.disabled = true;
+      other.disabled = true;
+      status.textContent = '메인 카드 설정 중';
+      let res = null;
+      try {
+        res = await window.athena.invoke('athena:routine-main-card-confirm', {
+          id: r.id,
+          expected_candidate: candidate,
+        });
+      } catch { /* 아래 실패 문구 */ }
+      if (res && res.ok && res.data
+        && routineMainCardLib.sameDescriptor(res.data.main_card, candidate)
+        && firstSeenSignatureById.get(r.id) === routineMainCardLib.descriptorSignature(candidate)) {
+        refreshRoutineDraftViews(r.id, res.data);
+        routineMainCardConfirmations.remove(r.id, view.originConversationId, candidate);
+        status.textContent = `메인 카드로 설정됨 · ${(res.data.main_card && res.data.main_card.title) || candidate.title}`;
+        return res;
+      }
+      status.textContent = `설정 실패: ${(res && res.error) || '카드 후보가 바뀌었는지 확인해 주세요'}`;
+      yes.disabled = false;
+      other.disabled = false;
+      return res || { ok: false };
+    },
+  };
+
+  yes.addEventListener('click', () => { void view.confirm(); });
+  other.addEventListener('click', () => {
+    view.typedEligible = false;
+    view.retire();
+    routineMainCardConfirmations.remove(r.id, view.originConversationId, candidate);
+    const seed = `루틴 ID ${r.id}의 메인 카드 후보를 다른 카드로 제안해줘. propose_main_card로 같은 초안을 갱신해줘 — `;
+    if (window.AthenaShell && typeof window.AthenaShell.seedChatInput === 'function') {
+      window.AthenaShell.seedChatInput(seed);
+    }
+  });
+  registerRoutineDraftView(r, view);
+  registerTypedMainCardConfirmation(view);
+  view.sync();
+  return view;
 }
 
 function renderApprovalCard(r, { autoCheck = false, conversationId = displayedConversationId } = {}) {
@@ -4171,6 +4358,8 @@ function renderApprovalCard(r, { autoCheck = false, conversationId = displayedCo
   notice.textContent = '활성화해도 주문은 자동 집행되지 않습니다 — 조건 도달 시 알림이 옵니다.';
   card.appendChild(notice);
 
+  appendMainCardConfirmation(card, r, conversationId);
+
   // 칩 3종(Paper 보드 43 실측): 미리보기 실행 / 바로 활성화 / 고칠 게 있어.
   // "취소"는 이 카드에서 빠졌다 — 동선 규칙③ "확정은 채팅 카드의 칩" 그대로,
   // 거부는 새 자연어 턴으로 이어간다(43 설계 그대로, 별도 취소 버튼 없음).
@@ -4195,9 +4384,21 @@ function renderApprovalCard(r, { autoCheck = false, conversationId = displayedCo
 
   // R8 — 코드 알람의 확정 문구는 「이 알람 승인」이다(보드 10 승인 패널).
   const activate = _btn(isCodeWatch ? '이 알람 승인' : '바로 활성화', 'routine-btn routine-btn-approve');
-  activate.disabled = !!r.activation_blocker || (isCodeWatch && autoCheck);
-  if (isCodeWatch && autoCheck) activate.title = '자동 검사를 통과한 뒤 승인할 수 있음';
+  const syncActivate = () => {
+    activate.disabled = !!r.activation_blocker
+      || routineMainCardLib.needsConfirmation(r)
+      || (isCodeWatch && autoCheck);
+    if (routineMainCardLib.needsConfirmation(r)) {
+      activate.title = '메인 카드를 먼저 확인해 주세요';
+    } else if (isCodeWatch && autoCheck) {
+      activate.title = '자동 검사를 통과한 뒤 승인할 수 있음';
+    } else {
+      activate.title = '';
+    }
+  };
+  syncActivate();
   activate.addEventListener('click', async () => {
+    if (routineMainCardLib.needsConfirmation(r)) return;
     activate.disabled = true;
     fix.disabled = true;
     const res = await window.athena.invoke('athena:routine-confirm', { id: r.id });
@@ -4205,7 +4406,7 @@ function renderApprovalCard(r, { autoCheck = false, conversationId = displayedCo
       status.textContent = '활성 — 감시가 시작됐습니다';
     } else {
       status.textContent = `활성화 실패: ${(res && res.error) || '알 수 없는 오류'}`;
-      activate.disabled = !!r.activation_blocker || (isCodeWatch && autoCheck);
+      syncActivate();
       fix.disabled = false;
     }
   });
@@ -4213,7 +4414,7 @@ function renderApprovalCard(r, { autoCheck = false, conversationId = displayedCo
   const fix = _btn('고칠 게 있어', 'routine-btn');
   fix.addEventListener('click', () => {
     if (isCodeWatch) {
-      void beginWatchRepair(r);
+      void beginWatchRepair(r, conversationId);
       return;
     }
     $input.value = draftFixSeedText(r);
@@ -4236,6 +4437,13 @@ function renderApprovalCard(r, { autoCheck = false, conversationId = displayedCo
   row.appendChild(fix);
   row.appendChild(status);
   card.appendChild(row);
+
+  const activationView = {
+    routine: r,
+    sync: syncActivate,
+    retire() { activate.disabled = true; },
+  };
+  registerRoutineDraftView(r, activationView);
 
   _mountTurn(line, card, conversationId);
   if (isCodeWatch && autoCheck) {
@@ -5474,6 +5682,11 @@ document.addEventListener('athena:chat-submit', (event) => {
     return;
   }
   dispatchUserQuery(text);
+});
+
+window.addEventListener('athena:routine-main-card-open-error', (event) => {
+  const message = String((event && event.detail && event.detail.message) || '').trim();
+  if (message) appendSystemLine(message);
 });
 
 // 에이전트 상세의 「다시 만들기」가 보내는 누락 파일 복구 요청. 캔버스는 루틴

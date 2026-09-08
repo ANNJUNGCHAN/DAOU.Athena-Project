@@ -16,6 +16,8 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
 from typing import Any, Literal
 
+from athena_api.routines.main_card import MainCardDescriptor
+
 Transport = Literal["ws", "periodic", "clock", "code"]
 Mode = Literal["realtime-ws", "periodic", "scheduled", "code-watch"]
 
@@ -62,9 +64,7 @@ LEGACY_DISABLED_SOURCES: dict[str, SourceSpec] = {
     ),
 }
 
-RoutineStatus = Literal[
-    "draft", "active", "paused", "expired", "cancelled", "failed"
-]
+RoutineStatus = Literal["draft", "active", "paused", "expired", "cancelled", "failed"]
 
 # 상태 전이 화이트리스트 — 이 표 밖의 전이는 전부 거부한다.
 ALLOWED_TRANSITIONS: dict[str, tuple[str, ...]] = {
@@ -208,6 +208,9 @@ class RoutineSpec:
     briefing_effort: str | None = None
     # 코드 감시(code.watch) 전용 — 그 밖의 소스에서는 항상 None이다.
     watch: WatchSpec | None = None
+    main_card_candidate: MainCardDescriptor | None = None
+    main_card: MainCardDescriptor | None = None
+    main_card_confirmed_at: datetime | None = None
     # 고침 이력 — 감시 코드를 덮어쓸 때마다 직전 판(코드 원문·마지막 검사)이 한 개씩
     # 쌓인다. 되돌리기가 되쓰는 것이 이 목록의 마지막 판이다(routines/revisions.py).
     revisions: list[dict[str, Any]] = field(default_factory=list)
@@ -248,6 +251,12 @@ class RoutineSpec:
         }
         if self.watch is not None:
             data["watch"] = self.watch.to_dict()
+        if self.main_card_candidate is not None:
+            data["main_card_candidate"] = self.main_card_candidate.to_dict()
+        if self.main_card is not None:
+            data["main_card"] = self.main_card.to_dict()
+        if self.main_card_confirmed_at is not None:
+            data["main_card_confirmed_at"] = self.main_card_confirmed_at.isoformat()
         if self.revisions:
             data["revisions"] = [dict(r) for r in self.revisions]
         return data
@@ -262,6 +271,7 @@ class RoutineSpec:
             consecutive_ticks=int(cond_raw.get("consecutive_ticks", 1)),
         )
         approved = raw.get("approved_at")
+        main_card_confirmed_at = raw.get("main_card_confirmed_at")
         return cls(
             condition=condition,
             symbol=raw["symbol"],
@@ -276,8 +286,17 @@ class RoutineSpec:
             # 옛 jsonl에는 키 자체가 없다 — .get()으로 하위호환.
             briefing_model=raw.get("briefing_model"),
             briefing_effort=raw.get("briefing_effort"),
-            watch=(
-                WatchSpec.from_dict(raw["watch"]) if raw.get("watch") else None
+            watch=(WatchSpec.from_dict(raw["watch"]) if raw.get("watch") else None),
+            main_card_candidate=(
+                MainCardDescriptor.from_dict(raw["main_card_candidate"])
+                if raw.get("main_card_candidate")
+                else None
+            ),
+            main_card=(
+                MainCardDescriptor.from_dict(raw["main_card"]) if raw.get("main_card") else None
+            ),
+            main_card_confirmed_at=(
+                datetime.fromisoformat(main_card_confirmed_at) if main_card_confirmed_at else None
             ),
             revisions=[dict(r) for r in (raw.get("revisions") or [])],
         )

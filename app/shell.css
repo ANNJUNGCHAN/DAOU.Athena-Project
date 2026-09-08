@@ -7310,6 +7310,7 @@ body { margin: 0; overflow: hidden; }
 }
 .routine-alert-popup__actions {
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-end;
   gap: 8px;
   margin-top: 20px;
@@ -7322,15 +7323,32 @@ body { margin: 0; overflow: hidden; }
   font-size: 14px;
   cursor: pointer;
 }
-.routine-alert-popup__open {
+.routine-alert-popup__card {
   border: 1px solid var(--color-brand, #eb2a7c);
   background: var(--color-brand, #eb2a7c);
   color: #fff;
+}
+.routine-alert-popup__agent {
+  border: 1px solid var(--color-brand, #eb2a7c);
+  background: rgb(235 42 124 / 7%);
+  color: var(--color-brand, #eb2a7c);
 }
 .routine-alert-popup__dismiss {
   border: 1px solid var(--color-k-line, #d9dce2);
   background: transparent;
   color: var(--color-k-dim, #5d6470);
+}
+.routine-alert-popup__actions button:disabled {
+  border-color: var(--color-k-line, #d9dce2);
+  background: var(--color-k-soft, #f2f3f5);
+  color: var(--color-k-faint, #858b95);
+  cursor: not-allowed;
+}
+.routine-alert-popup__card-hint {
+  margin-top: 12px;
+  color: var(--color-k-dim, #5d6470);
+  font-size: 12px;
+  line-height: 1.45;
 }
 .routine-alert-popup__actions button:focus-visible {
   outline: 3px solid rgb(235 42 124 / 28%);
@@ -7342,6 +7360,27 @@ body { margin: 0; overflow: hidden; }
 }
 @media (prefers-reduced-motion: reduce) {
   .routine-alert-popup { animation: none; }
+}
+
+.routine-main-card-confirm {
+  margin-top: 14px;
+  padding: 13px 14px;
+  border: 1px solid rgb(235 42 124 / 28%);
+  border-radius: 12px;
+  background: rgb(235 42 124 / 5%);
+}
+.routine-main-card-confirm__question {
+  color: var(--color-k-text);
+  font-family: var(--font-strong);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+}
+.routine-main-card-confirm__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
 }
 
 /* ---------- 세션 복원 표식·안내(Paper 보드 41) ----------

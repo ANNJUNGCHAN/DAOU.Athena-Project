@@ -13,6 +13,7 @@ import re
 from datetime import UTC, datetime, timedelta
 from typing import Any
 
+from athena_api.routines.main_card import MainCardValidationError, validate_main_card
 from athena_api.routines.models import (
     LEGACY_DISABLED_SOURCES,
     MAX_COOLDOWN_S,
@@ -122,9 +123,7 @@ def validate_condition(raw: Any) -> Condition:
     if ticks_raw > 1 and spec.transport != "ws":
         _fail("연속 틱 조건은 실시간(WS) source에서만 유효하다")
 
-    return Condition(
-        source=source, op=op, value=value, consecutive_ticks=ticks_raw
-    )
+    return Condition(source=source, op=op, value=value, consecutive_ticks=ticks_raw)
 
 
 def _validate_watch_path(text: Any) -> str:
@@ -192,10 +191,7 @@ def validate_watch(raw: Any) -> WatchSpec:
     if isinstance(lookback, bool) or not isinstance(lookback, int):
         _fail("watch.lookback_days는 정수여야 한다")
     if not WATCH_MIN_LOOKBACK_DAYS <= lookback <= WATCH_MAX_LOOKBACK_DAYS:
-        _fail(
-            f"watch.lookback_days는 {WATCH_MIN_LOOKBACK_DAYS}~"
-            f"{WATCH_MAX_LOOKBACK_DAYS} 범위다"
-        )
+        _fail(f"watch.lookback_days는 {WATCH_MIN_LOOKBACK_DAYS}~{WATCH_MAX_LOOKBACK_DAYS} 범위다")
 
     last_fired_at = raw.get("last_fired_at")
     if last_fired_at is not None:
@@ -240,6 +236,16 @@ def validate_draft(raw: Any, *, now: datetime | None = None) -> RoutineSpec:
     if not isinstance(symbol, str) or not _SYMBOL_RE.match(symbol):
         _fail("symbol은 6자리 종목코드여야 한다")
 
+    if raw.get("main_card") is not None or raw.get("main_card_confirmed_at") is not None:
+        _fail("확정 카드는 draft 입력으로 정할 수 없다")
+    candidate_raw = raw.get("main_card_candidate")
+    try:
+        main_card_candidate = (
+            validate_main_card(candidate_raw, symbol=symbol) if candidate_raw is not None else None
+        )
+    except MainCardValidationError as exc:
+        _fail(str(exc))
+
     cooldown = raw.get("cooldown_s", 1800)
     if isinstance(cooldown, bool) or not isinstance(cooldown, int):
         _fail("cooldown_s는 정수여야 한다")
@@ -269,10 +275,7 @@ def validate_draft(raw: Any, *, now: datetime | None = None) -> RoutineSpec:
             or briefing_model.startswith("-")
             or not _MODEL_CHARSET_RE.match(briefing_model)
         ):
-            _fail(
-                "briefing_model은 영문·숫자·점·대괄호·하이픈 1~64자여야 한다"
-                "(선두 하이픈 금지)"
-            )
+            _fail("briefing_model은 영문·숫자·점·대괄호·하이픈 1~64자여야 한다(선두 하이픈 금지)")
 
     briefing_effort = raw.get("briefing_effort")
     if briefing_effort is not None:
@@ -289,6 +292,7 @@ def validate_draft(raw: Any, *, now: datetime | None = None) -> RoutineSpec:
         briefing_model=briefing_model,
         briefing_effort=briefing_effort,
         watch=watch,
+        main_card_candidate=main_card_candidate,
     )
     if not note:
         spec.note = spec.human_summary()
