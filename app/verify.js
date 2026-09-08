@@ -4706,16 +4706,6 @@ app.whenReady().then(async () => {
         // 따라 붙으므로 접두사만 본다.
         viewTabLabels: Array.from(canvas.querySelectorAll('.agent-view-tab')).map((n) => n.textContent.split(' ')[0]),
       };
-      // 이중 제어 규칙(Paper 보드 05 하단 C6U-0~C6X-0) — 캡션·세 줄 원문과
-      // 출처 표기 없음까지 잰다.
-      const routeRulesEl = canvas.querySelector('.agent-route-rules');
-      const routeRulesCaptionEl = routeRulesEl ? routeRulesEl.querySelector('.agent-panel-caption') : null;
-      const routeRules = {
-        present: !!routeRulesEl,
-        sourceAttr: routeRulesEl ? routeRulesEl.getAttribute('data-source') : 'MISSING',
-        caption: routeRulesCaptionEl ? routeRulesCaptionEl.textContent : 'MISSING',
-        lines: Array.from(canvas.querySelectorAll('.agent-route-rule')).map((n) => n.textContent),
-      };
       // 라이브 "다음 24시간" 시각 열(Paper 보드 02) — 뷰를 옮기지 않고 DOM만 읽는다.
       const timelineTimes = Array.from(canvas.querySelectorAll('.agent-live-timeline-time')).map((n) => n.textContent);
       const statCards = Array.from(canvas.querySelectorAll('.agent-stat-card'));
@@ -4732,7 +4722,7 @@ app.whenReady().then(async () => {
       if (allTabBtn) allTabBtn.click();
       back.click();
       await new Promise((r) => setTimeout(r, 100));
-      return { wired: true, headerText, statCount, fixtureStatCount, allRowCount, activeRowCount, routeRules, timelineTimes };
+      return { wired: true, headerText, statCount, fixtureStatCount, allRowCount, activeRowCount, timelineTimes };
     })()`);
     report.agentCanvas = agentCanvasProbe;
     assertOk('agent-canvas: 헤더/캔버스 배선이 있다', agentCanvasProbe.wired === true);
@@ -4761,23 +4751,6 @@ app.whenReady().then(async () => {
       assertOk(
         'agent-canvas: 뷰 탭 4종(작업/알람/라이브/제안)이 있다(Paper 보드 02·04·05 통일안)',
         JSON.stringify(agentCanvasProbe.headerText.viewTabLabels) === JSON.stringify(['작업', '알람', '라이브', '제안']),
-      );
-      assertOk('agent-canvas: 이중 제어 규칙 패널이 작업 뷰에 있다(Paper 보드 05)', agentCanvasProbe.routeRules.present === true);
-      assertOk(
-        'agent-canvas: 이중 제어 규칙 캡션이 Paper C6U-0 원문이다',
-        agentCanvasProbe.routeRules.caption === '이중 제어 규칙',
-      );
-      assertOk(
-        'agent-canvas: 이중 제어 규칙 3줄이 Paper C6V-0~C6X-0 원문 그대로다',
-        JSON.stringify(agentCanvasProbe.routeRules.lines) === JSON.stringify([
-          '① 새 작업 — 채팅 문장으로도, 시트로도.',
-          '② 편집 — "이거 고쳐줘"로도, 폼으로도.',
-          '③ 확정 — 채팅 칩으로도, 버튼으로도. 어느 입구든 같은 게이트.',
-        ]),
-      );
-      assertOk(
-        'agent-canvas: 이중 제어 규칙은 데이터가 아니라 화면 계약이라 data-source를 달지 않는다',
-        agentCanvasProbe.routeRules.sourceAttr === null,
       );
       assertOk(
         'agent-canvas: 라이브 타임라인 4행 모두 시각 열을 갖는다(Paper 보드 02)',

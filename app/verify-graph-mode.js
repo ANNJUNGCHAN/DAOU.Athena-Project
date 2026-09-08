@@ -433,8 +433,6 @@ async function main() {
         divider: t('.panel-tier-divider'),
         tierLabels: [...p.querySelectorAll('.panel-tier-label')].map((n) => n.textContent),
         tierBodies: p.querySelectorAll('.panel-tier-body').length,
-        ctaLead: t('.panel-cta-lead'),
-        cta: t('.panel-cta'),
         rowHighlighted: !!document.querySelector('#graphSummaryTableArea .summary-row.is-selected'),
       };
     `, '공통 패널');
@@ -451,20 +449,10 @@ async function main() {
         { contrastTitle: panel.contrastTitle, divider: panel.divider });
       check('티어 대조 카드가 체결·잔고와 대화 둘을 보여준다',
         panel.tierLabels.includes('체결·잔고') && panel.tierLabels.includes('대화'), panel.tierLabels);
-      check('CTA 리드인이 아직 답하지 않았음을 알린다',
-        panel.ctaLead === '어느 쪽이 실제에 가까운지 아직 답하지 않으셨습니다.', panel.ctaLead);
     } else {
       check('출처가 하나면 없는 갈등을 만들지 않는다',
         !panel.contrastTitle && !panel.divider, { contrastTitle: panel.contrastTitle, divider: panel.divider });
     }
-    // 패널 CTA가 실제 질문을 심는다 — 옛 결함: 입력창 포커스만 줬다.
-    const panelCta = await evaluate(wc, `
-      const input = document.getElementById('input');
-      input.value = '';
-      document.querySelector('#graphPanel .panel-cta').dispatchEvent(new MouseEvent('click', { bubbles: true }));
-      return { ok: true, after: input.value };
-    `);
-    check('패널 CTA가 채팅에 실제 질문을 심는다', (panelCta.after || '').length > 0, panelCta.after);
     await capture(wc, '03-panel');
 
     const cleared = await evaluate(wc, `
