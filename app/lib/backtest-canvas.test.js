@@ -5172,25 +5172,29 @@ test('노드를 눌러도 메시지는 안 나간다 — 입력창에 @참조가
     made.canvas.onChatAction({ kind: 'code_draft', source: TECHNIQUE_SOURCE });
     await runPending(made);
     const before = sent.filter((e) => e.type === 'athena:chat-submit').length;
-    const texts = () => sent.filter((e) => e.type === 'athena:chat-insert')
-      .map((e) => e.detail.text);
+    const refs = () => sent.filter((e) => e.type === 'athena:chat-reference')
+      .map((e) => e.detail);
+
+    // 노드 창에 건네는 짐에 파일 이름이 실려야 참조가 "어느 파일의 몇째 줄"을 말한다.
+    assert.equal(seen.payload.path, 'strategy.py');
 
     // Tab 순회(onSelect)는 선택만 적는다 — 지나친 노드마다 @참조가 쌓이면 안 된다.
     seen.options.onSelect('compute_atr');
-    assert.equal(texts().length, 0);
+    assert.equal(refs().length, 0);
     assert.equal(made.canvas.getContext().technique.selectedNode, 'compute_atr');
 
-    // 클릭·Enter(onExplainNode)가 참조를 넣는다.
-    seen.options.onExplainNode('compute_atr');
-    assert.equal(texts().pop(), '@compute_atr ');
-    seen.options.onExplainNode('signals');
-    assert.equal(texts().pop(), '@signals ');
-    seen.options.onExplainFlow('entry');
-    assert.equal(texts().pop(), '@진입 흐름 ');
-    seen.options.onExplainFlow('exit');
-    assert.equal(texts().pop(), '@청산 흐름 ');
-    seen.options.onExplainAll();
-    assert.equal(texts().pop(), '@전체 ');
+    // 클릭·Enter·흐름 머리·[전체]가 참조를 칩으로 넘긴다. 이름만이 아니라 종류와
+    // 파일까지 실려야 컴포저가 알약 밖에 줄 범위를 적을 수 있다(보드 21).
+    seen.options.onReference({
+      kind: 'node', label: '@compute_atr', name: 'compute_atr', lines: [10, 13], path: 'strategy.py',
+    });
+    assert.deepEqual(refs().pop(), {
+      kind: 'node', label: '@compute_atr', name: 'compute_atr', lines: [10, 13], path: 'strategy.py',
+    });
+    seen.options.onReference({ kind: 'flow', label: '@진입 흐름', name: '진입 흐름', lines: null, path: '' });
+    assert.equal(refs().pop().name, '진입 흐름');
+    seen.options.onReference({ kind: 'all', label: '@전체', name: '전체', lines: null, path: '' });
+    assert.equal(refs().pop().kind, 'all');
     // 하나도 보내지 않았다 — 무엇을 물을지는 사람이 이어서 쓴다.
     assert.equal(sent.filter((e) => e.type === 'athena:chat-submit').length, before);
   } finally {

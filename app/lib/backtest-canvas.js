@@ -3924,19 +3924,6 @@ function createBacktestCanvas(options) {
     } catch { /* CustomEvent가 없는 하네스 */ }
   }
 
-  // 보내지 않는다 — **입력창에 넣기만 한다**(사용자 확정: 노드를 눌러도 메시지가 나가지
-  // 않는다). 사람이 참조 몇 개를 모아 자기 문장을 이어 쓸 수 있어야 한다. 커서 자리에
-  // 넣고 포커스를 주는 것은 chat.js의 일이다(입력창은 거기 하나뿐이다).
-  function emitChatInsert(text) {
-    try {
-      if (typeof document !== 'undefined'
-        && typeof document.dispatchEvent === 'function'
-        && typeof CustomEvent === 'function') {
-        document.dispatchEvent(new CustomEvent('athena:chat-insert', { detail: { text } }));
-      }
-    } catch { /* CustomEvent가 없는 하네스 */ }
-  }
-
   // ── 보드 20·21 · 새 기법 만들기(코드창 · 명령창 · 노드·흐름 창) ───────────
   //
   // 사용자 확정: 코드창은 편집 가능하지만 **AI가 제어한다**. AI가 질문 카드를 하나씩
@@ -3984,6 +3971,9 @@ function createBacktestCanvas(options) {
       nodes: t.nodes || [],
       flows: t.flows || {},
       granularity: t.granularity || 'function',
+      // 참조 칩이 "어느 파일의 몇째 줄"까지 말할 수 있어야 한다(보드 21) — 줄 범위는
+      // 노드가 들고 있지만 파일 이름은 이 층만 안다.
+      path: t.path || TECHNIQUE_STRATEGY_PATH,
       unknown: [],
       error: null,
     };
@@ -4689,11 +4679,11 @@ function createBacktestCanvas(options) {
         stats: techniqueState().stats,
         selected: techniqueState().selectedNode,
         // Tab 순회(onSelect)는 선택만 적는다 — 지나친 노드마다 참조가 쌓이면 안 된다.
-        // 참조는 클릭·Enter(onExplainNode)에서만 입력창에 들어간다.
+        // 참조는 클릭·Enter·흐름 머리·[전체]에서만 붙는다.
         onSelect: (nodeId) => noteSelectedNode(nodeId),
-        onExplainNode: (nodeId) => referenceTechniqueNode(nodeId),
-        onExplainFlow: (kind) => referenceTechniqueFlow(kind),
-        onExplainAll: () => referenceTechniqueAll(),
+        // 참조는 DOM 이벤트로 넘긴다 — 캔버스와 채팅은 같은 렌더러 문서를 공유하지만
+        // 서로를 import하지 않는다(칩을 그리는 일은 컴포저의 몫이다).
+        onReference: (ref) => document.dispatchEvent(new CustomEvent('athena:chat-reference', { detail: ref })),
         onOpenCode: (nodeId) => openTechniqueNodeCode(nodeId),
       });
     } catch { return null; }
@@ -4703,23 +4693,10 @@ function createBacktestCanvas(options) {
     techniqueNodesPainted = techniqueState().nodes;
     return view;
   }
-  // 노드를 누르면 **메시지가 나가지 않는다**(사용자 확정) — 입력창에 그 함수의 참조가
-  // 들어갈 뿐이다. 무엇을 물을지는 사람이 이어서 쓴다("@should_exit 여기 왜 3일이야?").
+  // 노드를 누르면 **메시지가 나가지 않는다**(사용자 확정) — 그 함수의 참조가 칩으로
+  // 붙을 뿐이다. 무엇을 물을지는 사람이 이어서 쓴다("@should_exit 여기 왜 3일이야?").
   // 캔버스가 문장을 대신 지어 보내면, 사람은 자기가 묻고 싶던 것을 물을 자리를 잃는다.
-  function referenceTechniqueNode(nodeId) {
-    const id = String(nodeId || '');
-    if (!id) return;
-    noteSelectedNode(id);
-    emitChatInsert(`@${id} `);
-  }
-
-  function referenceTechniqueFlow(kind) {
-    emitChatInsert(String(kind || '') === 'exit' ? '@청산 흐름 ' : '@진입 흐름 ');
-  }
-
-  function referenceTechniqueAll() {
-    emitChatInsert('@전체 ');
-  }
+  // 칩을 쌓고 지우고 접는 일은 컴포저의 몫이라 여기서는 athena:chat-reference만 던진다.
 
   // 노드에서 코드로 — 그 함수가 선 줄을 짚는다. 편집기는 render()가 새로 만들므로
   // flowRange에 남겨야 다음 그리기에서도 표식이 산다(renderCodeTab이 다시 칠한다).
