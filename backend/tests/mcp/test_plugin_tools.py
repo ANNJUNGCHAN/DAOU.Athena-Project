@@ -252,6 +252,95 @@ def test_valid_single_alias_snippet_passes_with_null_target(state):
     assert action["snippet"] == _SNIPPET
 
 
+@pytest.mark.parametrize(
+    "snippet",
+    [
+        json.dumps({"mcpServers": {"DART MCP": {"command": "uvx", "args": []}}}),
+        json.dumps(
+            {
+                "mcpServers": {
+                    "공시": {"command": "npx", "args": ["-y", "dart-mcp"]}
+                }
+            },
+            ensure_ascii=False,
+        ),
+    ],
+)
+def test_stage_snippet_rejects_existing_alias_after_onboarding_normalization(snippet, state):
+    state.registry.add("dart-mcp", command="uvx", args=["dart-mcp"], env={})
+    result = plugin_tools.dispatch(
+        {"actions": [{"action": "stage_snippet", "snippet": snippet}]},
+        state.registry,
+        state.consent,
+    )
+    assert result.isError
+    assert "'dart-mcp'은 이미 등록된 플러그인" in result.content[0].text
+    assert "기존 연결 설정과 권한을 확인" in result.content[0].text
+
+
+def test_stage_snippet_rejects_normalized_alias_collision_in_same_batch(state):
+    result = plugin_tools.dispatch(
+        {
+            "actions": [
+                {
+                    "action": "stage_snippet",
+                    "snippet": json.dumps(
+                        {"mcpServers": {"dart mcp": {"command": "uvx", "args": []}}}
+                    ),
+                },
+                {
+                    "action": "stage_snippet",
+                    "snippet": json.dumps(
+                        {"mcpServers": {"dart@mcp": {"command": "uvx", "args": []}}}
+                    ),
+                },
+            ]
+        },
+        state.registry,
+        state.consent,
+    )
+    assert result.isError
+    assert "같은 제안에 중복" in result.content[0].text
+
+
+@pytest.mark.parametrize(
+    "actions",
+    [
+        [
+            {"action": "install", "target": "time"},
+            {
+                "action": "stage_snippet",
+                "snippet": json.dumps(
+                    {"mcpServers": {"time": {"command": "uvx", "args": []}}}
+                ),
+            },
+        ],
+        [
+            {
+                "action": "stage_snippet",
+                "snippet": json.dumps(
+                    {"mcpServers": {"time": {"command": "uvx", "args": []}}}
+                ),
+            },
+            {"action": "install", "target": "time"},
+        ],
+    ],
+)
+def test_install_and_stage_snippet_cannot_add_same_alias_in_one_batch(actions, state):
+    result = plugin_tools.dispatch({"actions": actions}, state.registry, state.consent)
+    assert result.isError
+    assert "같은 제안에 중복" in result.content[0].text
+
+
+def test_existing_alias_update_action_is_not_blocked_by_snippet_duplicate_gate(state):
+    result = plugin_tools.dispatch(
+        {"actions": [{"action": "set_enabled", "target": "fetch", "enabled": False}]},
+        state.registry,
+        state.consent,
+    )
+    assert not result.isError, result.content[0].text
+
+
 def test_stage_snippet_rejects_an_explicit_target(state):
     result = plugin_tools.dispatch(
         {"actions": [{"action": "stage_snippet", "target": "weather", "snippet": _SNIPPET}]},
@@ -297,6 +386,30 @@ def test_revision_is_stamped_after_reload(state):
     assert envelope["revision"] == on_disk
     aliases = [server["alias"] for server in envelope["current"]["servers"]]
     assert aliases == ["fetch", "memory"]
+
+
+def test_identical_reconnect_metadata_keeps_plugin_proposal_revision_stable(state):
+    state.registry.record_self_reported_info(
+        "fetch",
+        reported_name="fetch",
+        reported_version="1.0.0",
+        protocol_version="2025-11-25",
+    )
+    before = _envelope(
+        plugin_tools.dispatch(TOOL_INPUTS["set_enabled"], state.registry, state.consent)
+    )["revision"]
+
+    state.registry.record_self_reported_info(
+        "fetch",
+        reported_name="fetch",
+        reported_version="1.0.0",
+        protocol_version="2025-11-25",
+    )
+    after = _envelope(
+        plugin_tools.dispatch(TOOL_INPUTS["set_enabled"], state.registry, state.consent)
+    )["revision"]
+
+    assert after == before
 
 
 def test_source_is_forced_to_model_even_when_arguments_say_gui(state):
