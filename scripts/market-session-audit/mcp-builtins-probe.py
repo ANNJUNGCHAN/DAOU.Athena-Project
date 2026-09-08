@@ -7,6 +7,7 @@ import argparse
 import asyncio
 import hashlib
 import json
+import math
 import os
 import sys
 from contextlib import asynccontextmanager
@@ -15,7 +16,8 @@ from pathlib import Path
 from typing import Any, AsyncIterator, Callable
 
 from mcp import ClientSession, StdioServerParameters
-from mcp.client.stdio import stdio_client
+import mcp.client.stdio as mcp_stdio
+from mcp.client.stdio import get_default_environment, stdio_client
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -37,6 +39,7 @@ EXPECTED_NAMES = (
 EXPECTED_NAME_FINGERPRINT = "dc90701f8e7fcdea6528404725892c545596cbc8f45d6bba7e61fd26d368f5c2"
 EXPECTED_SCHEMA_FINGERPRINT = "0e5bd7c6e0f9649df5b7a8ad1b79e8f577d1dfbd199f340e33018f4916f65195"
 EXPECTED_ACTION_COUNT = 58
+SDK_STDIO_SOURCE_PIN = "a23227cfe1e3456f16ab41311486a399cf547fcc6b645399bf9bf3a6dc6cf654"
 SOURCE_PINS = {
     "athena_mcp/registry.py": "e22483fa544e20d82af13db66191c0d42a9070513ed6ab36ac447268513fefc9",
     "athena_mcp/consent.py": "8c30d5e0f2563cbc0f09a1279503972bc8329c0c9529bcc2eb3714734acca089",
@@ -141,6 +144,30 @@ def verify_sources(repo_root: Path = REPO_ROOT) -> dict[str, str]:
     return observed
 
 
+def verify_sdk_source(repo_root: Path = REPO_ROOT) -> str:
+    expected_path = (
+        repo_root.resolve()
+        / "backend"
+        / ".venv"
+        / "Lib"
+        / "site-packages"
+        / "mcp"
+        / "client"
+        / "stdio"
+        / "__init__.py"
+    ).resolve()
+    actual_path = Path(mcp_stdio.__file__).resolve()
+    if actual_path != expected_path:
+        raise ProbeError("SDK_STDIO_SOURCE_PATH_MISMATCH")
+    try:
+        digest = _sha256(actual_path.read_bytes())
+    except OSError as exc:
+        raise ProbeError("SDK_STDIO_SOURCE_UNAVAILABLE") from exc
+    if digest != SDK_STDIO_SOURCE_PIN:
+        raise ProbeError("SDK_STDIO_SOURCE_PIN_MISMATCH")
+    return digest
+
+
 def _action_count(value: Any) -> int:
     if isinstance(value, list):
         return sum(_action_count(item) for item in value)
@@ -198,12 +225,35 @@ def build_server_parameters(
     python = (python_executable or Path(sys.executable)).resolve()
     if python != _expected_python(repo_root.resolve()):
         raise ProbeError("BACKEND_VENV_REQUIRED")
-    child_env = {
-        key: os.environ[key]
-        for key in ("SYSTEMROOT", "WINDIR", "COMSPEC", "PATH", "PATHEXT", "TEMP", "TMP")
-        if key in os.environ
+    system_root = Path(os.environ.get("SYSTEMROOT", r"C:\Windows"))
+    launch_env = {
+        "SYSTEMROOT": str(system_root),
+        "WINDIR": str(system_root),
+        "COMSPEC": str(system_root / "System32" / "cmd.exe"),
+        "PATH": os.pathsep.join((str(python.parent), str(system_root / "System32"))),
+        "PATHEXT": ".COM;.EXE;.BAT;.CMD",
+        "SYSTEMDRIVE": system_root.drive or "C:",
     }
-    child_env["PYTHONUTF8"] = "1"
+    if os.environ.get("PROCESSOR_ARCHITECTURE"):
+        launch_env["PROCESSOR_ARCHITECTURE"] = os.environ["PROCESSOR_ARCHITECTURE"]
+    run_root = state_dir.parent.resolve()
+    synthetic_profile = run_root / "profile"
+    synthetic_temp = run_root / "temp"
+    drive, home_path = os.path.splitdrive(str(synthetic_profile))
+    launch_env.update(
+        {
+            "APPDATA": str(synthetic_profile / "AppData" / "Roaming"),
+            "LOCALAPPDATA": str(synthetic_profile / "AppData" / "Local"),
+            "USERPROFILE": str(synthetic_profile),
+            "HOMEDRIVE": drive,
+            "HOMEPATH": home_path,
+            "USERNAME": "athena-audit",
+            "TEMP": str(synthetic_temp),
+            "TMP": str(synthetic_temp),
+            "PYTHONUTF8": "1",
+            "PYTHONDONTWRITEBYTECODE": "1",
+        }
+    )
     return StdioServerParameters(
         command=str(python),
         args=[
@@ -216,10 +266,50 @@ def build_server_parameters(
             "serve",
         ],
         cwd=repo_root.resolve() / "backend",
-        env=child_env,
+        env=launch_env,
         encoding="utf-8",
         encoding_error_handler="strict",
     )
+
+
+def effective_child_environment(parameters: StdioServerParameters) -> dict[str, str]:
+    return {**get_default_environment(), **(parameters.env or {})}
+
+
+def validate_effective_environment(parameters: StdioServerParameters, run_root: Path) -> None:
+    effective = effective_child_environment(parameters)
+    expected_profile = (run_root / "profile").resolve()
+    expected_temp = (run_root / "temp").resolve()
+    expected = {
+        "APPDATA": expected_profile / "AppData" / "Roaming",
+        "LOCALAPPDATA": expected_profile / "AppData" / "Local",
+        "USERPROFILE": expected_profile,
+        "TEMP": expected_temp,
+        "TMP": expected_temp,
+    }
+    if any(Path(effective.get(key, "")).resolve() != value for key, value in expected.items()):
+        raise ProbeError("EFFECTIVE_ENVIRONMENT_NOT_ISOLATED")
+    forbidden_keys = ("TOKEN", "SECRET", "API_KEY", "PASSWORD", "CREDENTIAL")
+    if any(any(marker in key.upper() for marker in forbidden_keys) for key in effective):
+        raise ProbeError("CREDENTIAL_ENVIRONMENT_INHERITED")
+    host_profile_value = os.environ.get("USERPROFILE", "").strip()
+    host_profile = Path(host_profile_value).resolve() if host_profile_value else None
+    if (
+        host_profile
+        and not _is_relative_to(run_root.resolve(), host_profile)
+        and any(str(host_profile).casefold() in value.casefold() for value in effective.values())
+    ):
+        raise ProbeError("HOST_PROFILE_ENVIRONMENT_INHERITED")
+
+
+def prepare_effective_environment_directories(run_root: Path) -> None:
+    profile = (run_root / "profile").resolve()
+    try:
+        (profile / "AppData" / "Roaming").mkdir(parents=True, exist_ok=False)
+        (profile / "AppData" / "Local").mkdir(exist_ok=False)
+        (run_root / "temp").resolve().mkdir(exist_ok=False)
+    except OSError as exc:
+        raise ProbeError("ENVIRONMENT_DIRECTORY_PREPARATION_FAILED") from exc
 
 
 @asynccontextmanager
@@ -244,12 +334,15 @@ async def run_probe(
 ) -> dict[str, Any]:
     if not execute:
         raise ProbeError("EXPLICIT_EXECUTE_REQUIRED")
-    if timeout_seconds <= 0 or timeout_seconds > 20:
+    if not math.isfinite(timeout_seconds) or timeout_seconds <= 0 or timeout_seconds > 20:
         raise ProbeError("TIMEOUT_OUT_OF_RANGE")
     state, registry, output = validate_owned_paths(state_dir, registry_path, output_path, owned_root=owned_root)
     source_pins = verify_sources(repo_root)
+    verify_sdk_source(repo_root)
     parameters = build_server_parameters(state, registry, repo_root=repo_root, python_executable=python_executable)
+    validate_effective_environment(parameters, state.parent)
     output.parent.mkdir(parents=True, exist_ok=False)
+    prepare_effective_environment_directories(state.parent)
     lifecycle = {
         "stdio_context_entered": False,
         "session_context_entered": False,
@@ -314,9 +407,17 @@ async def run_probe(
             "registry_path_is_owned": _is_relative_to(registry, owned_root.resolve()),
             "registry_existed_before": False,
             "source_pin_count": len(source_pins),
+            "sdk_stdio_source_pin_verified": True,
+            "effective_environment_profile_is_owned": True,
+            "effective_environment_directories_created": True,
         },
         "observation": observation,
-        "cleanup": {**lifecycle, "sdk_context_cleanup_complete": cleanup_complete},
+        "cleanup": {
+            **lifecycle,
+            "sdk_context_cleanup_complete": cleanup_complete,
+            "os_process_identity_captured": False,
+            "os_process_exit_independently_verified": False,
+        },
     }
     try:
         with output.open("x", encoding="utf-8", errors="strict") as handle:

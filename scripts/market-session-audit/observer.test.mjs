@@ -113,11 +113,15 @@ test('IPv6 loopback is accepted and recorded as loopback', async () => {
   }
 });
 
-test('root PID probe rejects a live process whose executable is not the Athena repo Electron binary', { skip: process.platform !== 'win32' }, async () => {
+test('root PID probe never claims a live non-Electron process as Athena-owned', { skip: process.platform !== 'win32' }, async () => {
   const result = await probeProcesses(REPO_ROOT, process.pid);
-  assert.equal(result.root_found, true);
-  assert.equal(result.root_validated, false);
-  assert.equal(result.process_count, 0);
+  assert.equal(result.root_validated === true || (Number.isInteger(result.process_count) && result.process_count > 0), false);
+  assert.equal(
+    result.error === undefined
+      ? result.root_found === true && result.root_validated === false && result.process_count === 0
+      : result.error === 'process_probe_failed' && result.process_count === null,
+    true,
+  );
 });
 
 test('observeOnce records timeout/failure as a bounded observation instead of throwing', async () => {

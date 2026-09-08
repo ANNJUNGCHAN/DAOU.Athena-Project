@@ -214,7 +214,7 @@ test('diff selects two existing versions deterministically and never persists ei
   for (const value of [...values, 'private-strategy']) assert.equal(JSON.stringify(report).includes(value), false);
 });
 
-test('target HTTP errors and duration aborts preserve attempted time and bounded reasons', async () => {
+test('target HTTP errors preserve attempted time and bounded reasons', async () => {
   const plan = await buildCustomReadChainPlan();
   const openapi = openapiFor(plan);
   const clock = () => new Date('2026-09-07T01:20:00Z');
@@ -232,13 +232,20 @@ test('target HTTP errors and duration aborts preserve attempted time and bounded
   assert.equal(coverage.observed_at, '2026-09-07T01:20:00.000Z');
   assert.equal(coverage.evidence.http_status, 500);
   assert.equal(JSON.stringify(httpReport).includes('private-error'), false);
+});
 
-  const started = Date.now();
+test('duration aborts preserve attempted time and bounded reasons without wall-clock timing', async (t) => {
+  const plan = await buildCustomReadChainPlan();
+  const openapi = openapiFor(plan);
+  t.mock.method(globalThis, 'setTimeout', (callback) => {
+    queueMicrotask(callback);
+    return 1;
+  });
+  t.mock.method(globalThis, 'clearTimeout', () => {});
   const durationReport = await runCustomReadChain({
     execute: true, openapi, bearer: null, maxDurationMs: 100, timeoutMs: 10_000,
     fetchFn: async (_url, init) => new Promise((_resolve, reject) => init.signal.addEventListener('abort', () => reject(Object.assign(new Error('hidden'), { name: 'AbortError' })), { once: true })),
   });
-  assert.ok(Date.now() - started < 1_000);
   assert.ok(durationReport.source_observations.some((item) => item.reason === 'DURATION_LIMIT_REACHED'));
   assert.ok(durationReport.source_observations.filter((item) => item.reason === 'DURATION_LIMIT_REACHED').every((item) => item.observed_at));
 });
