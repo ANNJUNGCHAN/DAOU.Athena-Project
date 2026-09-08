@@ -80,15 +80,6 @@ const knownChannels = new Set();
 for (const src of [preload, mainJs]) {
   for (const m of src.matchAll(/['"`](athena:[a-z0-9-]+)['"`]/g)) knownChannels.add(m[1]);
 }
-// 렌더러가 document.dispatchEvent(new CustomEvent('athena:…'))로 만드는 DOM 이벤트도
-// 'athena:' 접두를 쓴다(예: chat-submit — 입력창 Enter와 같은 경로). IPC 채널은 아니지만
-// 하네스가 가로채는 실재 이름이므로 실재로 친다(2026-09-08 verify.js 위양성 실측).
-// 리터럴 스캔이 아니라 CustomEvent 생성 자리만 본다 — 주석 속 언급으로 살아나지 않게.
-for (const rel of ["chat.js", "canvas.js", "shell.js", "lib/backtest-canvas.js", "lib/agent-canvas.js"]) {
-  const src = read(rel);
-  if (!src) continue;
-  for (const m of src.matchAll(/new CustomEvent\(\s*['"`](athena:[a-z0-9-]+)['"`]/g)) knownChannels.add(m[1]);
-}
 
 // ---------- 하네스 스캔 ----------
 for (const rel of HARNESSES) {
