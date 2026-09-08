@@ -8,9 +8,9 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import StrEnum
 
-import httpx
 from fastapi import FastAPI
 
+from athena_api.account_sync import RuntimeAccountRegistry
 from athena_api.accounts import AccountRuntime
 from athena_api.backtest import deploy_runner
 from athena_api.backtest.runner import BacktestRunner
@@ -34,18 +34,10 @@ from athena_api.brain import (
 )
 from athena_api.brain.db import SqliteOwner
 from athena_api.brain_sources import KiwoomExecutionSource, KiwoomHoldingSource
-from athena_api.config import KiwoomAccount, Settings, get_settings
+from athena_api.config import Settings, get_settings
 from athena_api.dependencies import build_selector_service
-from athena_api.errors import KiwoomAuthError
-from athena_api.kiwoom import (
-    KiwoomAuth,
-    KiwoomClient,
-    KiwoomWsClient,
-    KiwoomWsError,
-    RateLimiter,
-    TokenManager,
-)
-from athena_api.process_lock import BrainProcessLock, CredentialProcessLock
+from athena_api.kiwoom import KiwoomClient, RateLimiter
+from athena_api.process_lock import BrainProcessLock
 from athena_api.routines.guard_settings import GuardSettingsStore
 from athena_api.routines.runtime import (
     RoutinesRuntime,
@@ -666,9 +658,7 @@ async def _teardown_cluster_labeling_tasks(app: FastAPI) -> None:
 
 async def _cleanup_lifespan_resources(
     app: FastAPI,
-    runtimes: dict[str, AccountRuntime],
-    http_client: httpx.AsyncClient | None,
-    locks: list[CredentialProcessLock],
+    account_registry: RuntimeAccountRegistry,
     brain: BrainRuntime | None,
     routines: RoutinesRuntime | None,
     backtest: BacktestRuntime | None,
@@ -678,7 +668,7 @@ async def _cleanup_lifespan_resources(
     first_error = primary_error
     phases = (
         ("instrument-identity", lambda: _teardown_instrument_identity(app)),
-        ("accounts", lambda: _teardown(app, runtimes, http_client, locks)),
+        ("accounts", lambda: _teardown(app, account_registry)),
         ("cluster-labeling", lambda: _teardown_cluster_labeling_tasks(app)),
         ("brain", lambda: _teardown_brain(app, brain)),
         ("routines", lambda: teardown_routines(routines)),
@@ -696,42 +686,9 @@ async def _cleanup_lifespan_resources(
             if first_error is None:
                 first_error = exc
     _publish_routines(app, None)
+    _publish_default(app, None)
     if first_error is not None:
         raise first_error
-
-
-def _build_runtime(
-    account: KiwoomAccount,
-    settings: Settings,
-    http_client: httpx.AsyncClient,
-) -> AccountRuntime:
-    rate_limiter = RateLimiter(rate_per_second=5.0)
-    auth = KiwoomAuth(
-        account.app_key.get_secret_value(),
-        account.secret_key.get_secret_value(),
-        client=http_client,
-    )
-    return AccountRuntime(
-        alias=account.alias,
-        auth=auth,
-        token_manager=TokenManager(auth),
-        rate_limiter=rate_limiter,
-        order_scopes=account.order_scopes,
-        data_client=KiwoomClient(
-            auth,
-            rate_limiter,
-            client=http_client,
-            timeout_seconds=settings.request_timeout_seconds,
-            max_rate_limit_retries=settings.max_rate_limit_retries,
-        ),
-        order_client=KiwoomClient(
-            auth,
-            rate_limiter,
-            client=http_client,
-            timeout_seconds=settings.request_timeout_seconds,
-            max_rate_limit_retries=0,
-        ),
-    )
 
 
 def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
@@ -749,8 +706,33 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
             if runtime_settings.local_bearer_token is not None
             else None
         )
-        runtimes: dict[str, AccountRuntime] = {}
+        def publish_runtime_ready(runtime: AccountRuntime) -> None:
+            default_alias = getattr(app.state, "kiwoom_default_account", None)
+            if runtime.alias == default_alias:
+                _publish_default(app, runtime)
+            task: asyncio.Task[None] | None = getattr(
+                app.state, "instrument_identity_task", None
+            )
+            if task is None or task.done():
+                app.state.instrument_identity_task = asyncio.create_task(
+                    _refresh_instrument_identity(instrument_identity, runtime.data_client),
+                    name="athena-instrument-identity-refresh",
+                )
+
+        def publish_runtime_removed(alias: str) -> None:
+            if getattr(app.state, "kiwoom_default_account", None) is None:
+                _publish_default(app, None)
+
+        account_registry = RuntimeAccountRegistry(
+            app,
+            runtime_settings,
+            ws_connect=ws_connect,
+            on_ready=publish_runtime_ready,
+            on_removed=publish_runtime_removed,
+        )
+        runtimes = account_registry.runtimes
         app.state.kiwoom_accounts = runtimes
+        app.state.runtime_account_registry = account_registry
         app.state.kiwoom_default_account = runtime_settings.kiwoom_default_account
         # Injection point for brain.py's reset-and-restart route: None means "send this
         # process a real SIGTERM" (production default, see brain.py's _default_shutdown_hook).
@@ -795,41 +777,13 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
         # 의존이 없어 teardown도 필요 없다(파일 기반, 프로세스 종료로 충분).
         app.state.nudge_guard_store = GuardSettingsStore(runtime_settings.nudge_guard_path)
         app.state.nudge_guard_store.load()
-        http_client: httpx.AsyncClient | None = None
-        locks: list[CredentialProcessLock] = []
         brain: BrainRuntime | None = None
         routines: RoutinesRuntime | None = None
         backtest: BacktestRuntime | None = None
         try:
             if runtime_settings.has_credentials:
-                http_client = httpx.AsyncClient()
                 for account in runtime_settings.kiwoom_accounts:
-                    lock = CredentialProcessLock.for_credentials(
-                        account.credential_fingerprint, label=account.alias
-                    )
-                    lock.acquire()
-                    locks.append(lock)
-                    runtime = _build_runtime(account, runtime_settings, http_client)
-                    runtimes[account.alias] = runtime
-                    try:
-                        await runtime.token_manager.issue()
-                    except KiwoomAuthError:
-                        continue
-                    runtime.ready = True
-                    # Bind auth per iteration; a bare closure over the loop variable would
-                    # hand every account the last account's token.
-                    ws_client = KiwoomWsClient(
-                        lambda bound=runtime.auth: bound.access_token,
-                        runtime.rate_limiter,
-                        connect=ws_connect,
-                        ensure_token=runtime.auth.ensure_token,
-                    )
-                    try:
-                        await ws_client.start()
-                    except KiwoomWsError:
-                        await ws_client.close()
-                    else:
-                        runtime.ws_client = ws_client
+                    await account_registry.add_configured(account)
                 default_runtime = runtimes.get(runtime_settings.kiwoom_default_account or "")
                 _publish_default(app, default_runtime)
                 if default_runtime is not None and default_runtime.ready:
@@ -886,9 +840,7 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
         except BaseException as primary_error:
             await _cleanup_lifespan_resources(
                 app,
-                runtimes,
-                http_client,
-                locks,
+                account_registry,
                 brain,
                 routines,
                 backtest,
@@ -899,9 +851,7 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
         except BaseException as primary_error:
             await _cleanup_lifespan_resources(
                 app,
-                runtimes,
-                http_client,
-                locks,
+                account_registry,
                 brain,
                 routines,
                 backtest,
@@ -909,29 +859,14 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
             )
         else:
             await _cleanup_lifespan_resources(
-                app, runtimes, http_client, locks, brain, routines, backtest
+                app, account_registry, brain, routines, backtest
             )
 
     return lifespan
 
 
-async def _teardown(
-    app: FastAPI,
-    runtimes: dict[str, AccountRuntime],
-    http_client: httpx.AsyncClient | None,
-    locks: list[CredentialProcessLock],
-) -> None:
-    for runtime in runtimes.values():
-        if runtime.ws_client is not None:
-            await runtime.ws_client.close()
-            runtime.ws_client = None
-        runtime.auth.clear()
-        runtime.ready = False
-    runtimes.clear()
+async def _teardown(app: FastAPI, account_registry: RuntimeAccountRegistry) -> None:
+    """Account cleanup seam retained for lifecycle failure-isolation tests."""
+    await account_registry.close()
     _publish_default(app, None)
     app.state.kiwoom_accounts = {}
-    if http_client is not None and not http_client.is_closed:
-        await http_client.aclose()
-    for lock in locks:
-        lock.release()
-    locks.clear()

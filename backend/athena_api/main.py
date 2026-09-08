@@ -3,9 +3,17 @@
 import asyncio
 from collections import OrderedDict
 from typing import Annotated, Any
+from uuid import UUID
 
 from fastapi import FastAPI, Header, HTTPException, Request
 
+from athena_api.account_sync import (
+    RuntimeAccountConflict,
+    RuntimeAccountRegistry,
+    read_runtime_account_credentials,
+    read_runtime_account_removal,
+    require_loopback,
+)
 from athena_api.accounts import account_runtimes, default_account_alias
 from athena_api.api import router as api_router
 from athena_api.config import Settings, get_settings
@@ -82,6 +90,52 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 for alias, runtime in runtimes.items()
             },
         }
+
+    @app.put(
+        "/runtime/accounts/{account_id}",
+        tags=["Service"],
+        summary="Register an app-owned Kiwoom account runtime",
+        openapi_extra={"x-athena-llm-exposed": False},
+    )
+    async def put_runtime_account(
+        account_id: UUID,
+        request: Request,
+        authorization: Annotated[str, Header(alias="Authorization")] = "",
+    ) -> dict[str, Any]:
+        require_local_bearer(request, authorization)
+        require_loopback(request)
+        credentials = await read_runtime_account_credentials(request)
+        registry: RuntimeAccountRegistry = app.state.runtime_account_registry
+        try:
+            result = await registry.register(account_id, credentials)
+        except RuntimeAccountConflict as exc:
+            raise HTTPException(status_code=409, detail=str(exc)) from exc
+        return {
+            "ok": True,
+            "backend_alias": result.backend_alias,
+            "ready": result.ready,
+        }
+
+    @app.delete(
+        "/runtime/accounts/{account_id}",
+        tags=["Service"],
+        summary="Remove an app-owned Kiwoom account runtime",
+        openapi_extra={"x-athena-llm-exposed": False},
+    )
+    async def delete_runtime_account(
+        account_id: UUID,
+        request: Request,
+        authorization: Annotated[str, Header(alias="Authorization")] = "",
+    ) -> dict[str, Any]:
+        require_local_bearer(request, authorization)
+        require_loopback(request)
+        registry: RuntimeAccountRegistry = app.state.runtime_account_registry
+        removal = await read_runtime_account_removal(request)
+        try:
+            alias, removed = await registry.remove(account_id, removal.selection_revision)
+        except RuntimeAccountConflict as exc:
+            raise HTTPException(status_code=409, detail=str(exc)) from exc
+        return {"ok": True, "backend_alias": alias, "removed": removed}
 
     app.include_router(api_router)
     return app
