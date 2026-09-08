@@ -135,10 +135,13 @@ const VERIFY_SUITE = Object.freeze([
   { script: 'verify:live-full', budgetMs: 360000 },
   { script: 'verify', budgetMs: 180000 },
   { script: 'verify:settings', budgetMs: 90000 },
+  { script: 'verify:settings-models', budgetMs: 30000 },
+  { script: 'verify:plugin-permissions', budgetMs: 30000 },
   { script: 'verify:settings-cards', budgetMs: 120000 },
   { script: 'verify:plugins', budgetMs: 90000 },
   { script: 'verify:kiumi', budgetMs: 90000 },
   { script: 'verify:orb-conversation', budgetMs: 30000 },
+  { script: 'verify:orb-visibility', budgetMs: 30000 },
   // 다중 대화 동시 진행(2026-09-08) — 모델 왕복을 모킹으로 쥐고 전환·격리·복귀·Esc 15건. 실측 ~15초.
   { script: 'verify:multi-chat', budgetMs: 60000 },
   { script: 'verify:kiumi-cards', budgetMs: 90000 },
