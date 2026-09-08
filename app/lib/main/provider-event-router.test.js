@@ -55,6 +55,9 @@ function createMainBacktestCompletionHarness(contextEntries) {
   };
   const onTrustedToolCompleted = vm.runInNewContext(`
     const BACKTEST_TOOL_NAME = 'athena_backtest';
+    // 다중 대화(2026-09-08) — 전달자는 대화별 셸 전송을 거친다. 하네스에서는 바로 보낸다.
+    let forwardingConversationId = null;
+    const shellForConversation = () => ({ send: (channel, payload) => shellWin.webContents.send(channel, payload) });
     ${forwarder}
     ${resultTextExtractor}
     ({ ${callback} }).onTrustedToolCompleted;
