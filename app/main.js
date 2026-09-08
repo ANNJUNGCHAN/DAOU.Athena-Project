@@ -5095,6 +5095,44 @@ ipcMain.handle('athena:brain-status', async () => {
   return { ok: true, ...result.body };
 });
 
+// 소스별(대화·체결내역·보유잔고) 수집 주기·실행 시각(보드 05 수집·노출, 2026-09-08).
+// 값의 주인은 렌더러 localStorage다 — 여기는 백엔드 스케줄러(brain.py /schedule)로
+// 넘기고 결과를 그대로 돌려줄 뿐 두 번째 규칙을 두지 않는다.
+const BRAIN_SCHEDULE_SOURCES = Object.freeze(['chat', 'fills', 'holdings']);
+
+ipcMain.handle('athena:brain-schedule', async () => {
+  const result = await fetchBrainJson('/api/v1/brain/schedule');
+  if (!result.ok) return { ok: false, error: result.error };
+  return { ok: true, ...result.body };
+});
+
+ipcMain.handle('athena:brain-schedule-set', async (_e, patch = {}) => {
+  const payload = {};
+  for (const source of BRAIN_SCHEDULE_SOURCES) {
+    const minutes = patch && patch[source];
+    if (Number.isInteger(minutes) && minutes > 0) payload[source] = minutes;
+  }
+  const result = await fetchBrainJson('/api/v1/brain/schedule', { method: 'PUT', payload });
+  if (!result.ok) return { ok: false, error: result.error };
+  return { ok: true, ...result.body };
+});
+
+ipcMain.handle('athena:brain-schedule-run', async (_e, { source } = {}) => {
+  if (!BRAIN_SCHEDULE_SOURCES.includes(source)) return { ok: false, error: 'source가 없다' };
+  // 대화는 원문이 이 프로세스의 아웃박스에 남아 있을 수 있다 — 잡을 넣기 전에 밀어
+  // 넣어야 "지금 실행"이 지금까지의 대화를 뜻한다. 실패해도 실행은 막지 않는다.
+  if (source === 'chat') {
+    try {
+      await historySink.flushPendingChatMessages({ onSaveFailed: emitHistorySaveFailed, mdlog });
+    } catch (err) {
+      mdlog(`브레인 수동 실행 전 대화 flush 실패 — ${String((err && err.message) || err)}`);
+    }
+  }
+  const result = await fetchBrainJson(`/api/v1/brain/schedule/${source}/run`, { method: 'POST' });
+  if (!result.ok) return { ok: false, error: result.error };
+  return { ok: true, ...result.body };
+});
+
 // 그래프 모드가 그릴 군집 지도(leaf 8 / W2-3). 백엔드가 군집을 캐시하므로 왕복이
 // 싸고, 렌더러는 리비전이 그대로면 다시 그리지 않는다.
 ipcMain.handle('athena:brain-cluster-map', async () => {
