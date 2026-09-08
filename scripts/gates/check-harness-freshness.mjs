@@ -43,6 +43,21 @@ const preload = read("preload.js");
 const mainJs = read("main.js");
 const HARNESSES = ["verify.js", "verify-settings.js", "verify-settings-cards.js"];
 
+function domEventLiteralSpans(line) {
+  const spans = [];
+  const patterns = [
+    /\b(?:document|window)\s*\.\s*(?:addEventListener|removeEventListener)\s*\(\s*(['"`])(athena:[a-z0-9-]+)\1/g,
+    /\b(?:new\s+)?CustomEvent\s*\(\s*(['"`])(athena:[a-z0-9-]+)\1/g,
+  ];
+  for (const pattern of patterns) {
+    for (const match of line.matchAll(pattern)) {
+      const start = match.index + match[0].lastIndexOf(match[2]);
+      spans.push([start, start + match[2].length]);
+    }
+  }
+  return spans;
+}
+
 if (!shellHtml || !preload || !mainJs) {
   console.error("[harness-freshness] 대조 원본 소스가 없다:");
   for (const f of failures) console.error("  - " + f);
@@ -93,7 +108,10 @@ for (const rel of HARNESSES) {
       if (!knownIds.has(m[1])) failures.push(`${loc}: 사라진 DOM id '#${m[1]}' 참조 — ${line.trim().slice(0, 90)}`);
     }
     if (!/ipc-channels:allow-dead/.test(rawLine) && !(i > 0 && /ipc-channels:allow-dead/.test(lines[i - 1]))) {
+      const domEventSpans = domEventLiteralSpans(line);
       for (const m of line.matchAll(/['"`](athena:[a-z0-9-]+)['"`]/g)) {
+        const channelStart = m.index + 1;
+        if (domEventSpans.some(([start, end]) => channelStart >= start && channelStart < end)) continue;
         if (!knownChannels.has(m[1])) failures.push(`${loc}: 미등록 IPC 채널 '${m[1]}' 참조 — ${line.trim().slice(0, 90)}`);
       }
     }
