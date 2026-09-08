@@ -1057,8 +1057,7 @@ function createGraphModeController(deps) {
     }
   }
 
-  // 공통 패널 콘텐츠(보드 07 §10, 스텝8). §10-1 탭("이력" 탭은 Paper에 콘텐츠
-  // 스펙이 없어 클릭해도 전환 없음, §6 범위 밖) · §10-2 선택 헤더 · §10-3 티어
+  // 공통 패널 콘텐츠(보드 07 §10, 스텝8). §10-2 선택 헤더 · §10-3 티어
   // 대조(가용 필드가 rationale/confidence/tier뿐이라 두 카드 비교 "어긋남"
   // 대신 단일 카드로 축소, §0 정책) · §10-4 최근 변화(엔티티 타임라인, WP-G —
   // 유일한 비동기 채움 섹션, 아래 주석 참고) · §10-5 CTA를 그린다.
@@ -1066,21 +1065,6 @@ function createGraphModeController(deps) {
     while (panel.firstChild) panel.removeChild(panel.firstChild);
 
     const tabs = elp('div', 'panel-tabs');
-    const traitTab = elp('button', 'panel-tab is-active');
-    traitTab.setAttribute('type', 'button');
-    traitTab.textContent = '성향';
-    tabs.appendChild(traitTab);
-    // 이력 탭은 아직 콘텐츠 스펙이 없다(위 주석 §10-1). 예전에는 눌리는 것처럼
-    // 생긴 채로 아무 일도 안 해서 고장으로 읽혔다(2026-09-03 실사용: "이력은
-    // 클릭해도 안열린다"). 없는 기능을 활성처럼 두지 않는다(P3) — 비활성으로
-    // 표시하고 왜인지 말한다. 아래 §10-4 "최근 변화"가 지금은 그 역할을 한다.
-    const historyTab = elp('button', 'panel-tab is-disabled');
-    historyTab.setAttribute('type', 'button');
-    historyTab.setAttribute('disabled', '');
-    historyTab.setAttribute('aria-disabled', 'true');
-    historyTab.setAttribute('title', '아직 없습니다 — 최근 변화는 아래에 있습니다');
-    historyTab.textContent = '이력';
-    tabs.appendChild(historyTab);
     tabs.appendChild(elp('span', 'panel-tabs-spacer'));
     const deselectBtn = elp('button', 'panel-deselect');
     deselectBtn.setAttribute('type', 'button');
