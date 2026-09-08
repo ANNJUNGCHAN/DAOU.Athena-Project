@@ -672,11 +672,17 @@ function createAgentCanvas(deps) {
   suggestSection.appendChild(suggestList);
   listCol.appendChild(suggestSection);
 
-  // 추가 클릭 → 시트 없이 채팅으로(43 원칙). 실제 필드만 조합한다 — 지어낸
-  // 문구 없음(P3).
-  function suggestionSeedText(entry) {
+  // 추가 클릭 → 시트 없이 채팅으로(43 원칙). 실제 필드만 근거로 삼되, 확인 질문이
+  // 아니라 초안·검사까지 끝내라는 완결형 요청을 보낸다. 활성화는 여전히 사람 전용이다.
+  function suggestionRequestText(entry) {
     const name = entry.entity_name || entry.entity_id;
-    return `"${name}"에 대한 ${entry.relation_kind} 성향이 ${entry.reinforcement}회 보강됐어요 — 관련 루틴을 만들어줄까요?`;
+    const groundedRationale = `${entry.relation_kind} 성향 ${entry.reinforcement}회 보강`
+      + (entry.rationale ? ` — ${entry.rationale}` : '');
+    const evidenceLabel = entry.confidence ? `근거 신호(${entry.confidence})` : '근거 신호';
+    return `"${name}" 관련 루틴을 완성해줘. ${evidenceLabel}: ${groundedRationale}. `
+      + '대상 식별자와 기준값은 사용 가능한 조회 도구로 확인하고, 조건·확인 주기·쿨다운·만료는 지원되는 합리적인 기본값으로 네가 정해서 추가 질문이나 제안 확인 없이 실제 초안을 만들어줘. '
+      + '고정 조건으로 표현할 수 없으면 감시 코드를 작성하고 초안을 만든 뒤 자동 검사까지 진행해서 승인 대기 상태로 준비해줘. '
+      + '근거 신호를 내 투자 선호라고 단정하지 말고, 정한 조건·확인 주기·쿨다운·만료를 제안 설정으로 모두 밝혀줘. 실제 활성화는 내가 승인할 때만 해.';
   }
 
   function makeSuggestionRow(entry) {
@@ -697,7 +703,7 @@ function createAgentCanvas(deps) {
     addBtn.type = 'button';
     addBtn.textContent = '추가';
     addBtn.addEventListener('click', () => {
-      if (typeof onAddSuggestion === 'function') onAddSuggestion(suggestionSeedText(entry));
+      if (typeof onAddSuggestion === 'function') onAddSuggestion(suggestionRequestText(entry));
     });
     row.appendChild(addBtn);
     return row;
@@ -1627,7 +1633,7 @@ function createAgentCanvas(deps) {
     routineBtn.type = 'button';
     routineBtn.textContent = '루틴으로';
     routineBtn.addEventListener('click', () => {
-      if (typeof onAddSuggestion === 'function') onAddSuggestion(suggestionSeedText(entry));
+      if (typeof onAddSuggestion === 'function') onAddSuggestion(suggestionRequestText(entry));
     });
     head2.appendChild(routineBtn);
     const holdBtn = el('button', 'agent-proactive-chip');

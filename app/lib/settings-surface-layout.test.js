@@ -42,6 +42,12 @@ test('설정 토글 행의 수동 하단 설명과 무의미한 창 배치 행�
   assert.doesNotMatch(settingsSource, /uk-toggle-label', '창 배치'/);
 });
 
+test('화면 설정에는 유리 투명도 선택 옵션이 없다', () => {
+  assert.doesNotMatch(settingsSource, /유리 투명도/);
+  assert.doesNotMatch(settingsSource, /glassLevel/);
+  assert.doesNotMatch(settingsSource, /GLASS_CHIPS/);
+});
+
 test('설명문이 사라진 토글과 배율 컨트롤은 접근 가능한 이름을 가진다', () => {
   assert.match(settingsSource, /function toggleSwitch\(initial, onChange, ariaLabel\)/);
   for (const label of [

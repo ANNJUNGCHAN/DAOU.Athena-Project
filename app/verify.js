@@ -4995,6 +4995,13 @@ app.whenReady().then(async () => {
       const input = document.getElementById('input');
       if (!nav || !back || !canvas || !input) return { wired: false };
       input.value = '';
+      let submittedText = null;
+      const interceptSubmit = (event) => {
+        submittedText = String((event && event.detail && event.detail.text) || '');
+        event.preventDefault();
+        event.stopImmediatePropagation();
+      };
+      document.addEventListener('athena:chat-submit', interceptSubmit, true);
       nav.click();
       await new Promise((r) => setTimeout(r, 600));
       const section = canvas.querySelector('.agent-suggest-section');
@@ -5002,15 +5009,18 @@ app.whenReady().then(async () => {
       const titles = Array.from(canvas.querySelectorAll('.agent-suggest-title')).map((n) => n.textContent);
       const rationales = Array.from(canvas.querySelectorAll('.agent-suggest-rationale')).map((n) => n.textContent);
       const addBtns = canvas.querySelectorAll('.agent-suggest-add');
-      addBtns[0].click();
-      await new Promise((r) => setTimeout(r, 50));
-      const seededValue = input.value;
+      try {
+        addBtns[0].click();
+        await new Promise((r) => setTimeout(r, 50));
+      } finally {
+        document.removeEventListener('athena:chat-submit', interceptSubmit, true);
+      }
       const orderHidden = document.getElementById('order').hidden;
       const settingsHidden = document.getElementById('settings').hidden;
       const onboardHidden = document.getElementById('onboard').hidden;
       back.click();
       await new Promise((r) => setTimeout(r, 100));
-      return { wired: true, sectionHidden, titles, rationales, seededValue, orderHidden, settingsHidden, onboardHidden };
+      return { wired: true, sectionHidden, titles, rationales, submittedText, inputValue: input.value, orderHidden, settingsHidden, onboardHidden };
     })()`);
     report.suggestions = suggestionProbe;
     assertOk('agent-canvas-7: 배선이 있다', suggestionProbe.wired === true);
@@ -5026,8 +5036,14 @@ app.whenReady().then(async () => {
           && suggestionProbe.rationales[1] === '응집 상승 성향 6회 보강',
       );
       assertOk(
-        'agent-canvas-7: "추가" 클릭 시 채팅 입력에 문장이 심긴다',
-        suggestionProbe.seededValue === '"삼성전자"에 대한 단기 회전 성향이 21회 보강됐어요 — 관련 루틴을 만들어줄까요?',
+        'agent-canvas-7: "추가" 클릭 시 완결형 요청이 채팅 제출 이벤트로 바로 나간다',
+        suggestionProbe.submittedText.startsWith('"삼성전자" 관련 루틴을 완성해줘. 근거 신호(EXTRACTED): 단기 회전 성향 21회 보강 — 매매일마다 정리가 필요해 보여요.')
+          && suggestionProbe.submittedText.includes('추가 질문이나 제안 확인 없이 실제 초안을 만들어줘')
+          && suggestionProbe.submittedText.includes('자동 검사까지 진행해서 승인 대기 상태로 준비해줘')
+          && suggestionProbe.submittedText.includes('정한 조건·확인 주기·쿨다운·만료를 제안 설정으로 모두 밝혀줘')
+          && suggestionProbe.submittedText.includes('실제 활성화는 내가 승인할 때만 해')
+          && !suggestionProbe.submittedText.includes('만들어줄까요?')
+          && suggestionProbe.inputValue === '',
       );
       assertOk(
         'agent-canvas-7: "추가"는 시트를 열지 않는다(주문/설정/온보딩 패널 모두 hidden 유지, 43 원칙)',
