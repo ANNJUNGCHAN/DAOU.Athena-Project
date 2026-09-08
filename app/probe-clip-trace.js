@@ -16,6 +16,7 @@ const {
 } = require('./lib/board-probe');
 const { hydrateBoard } = require('./lib/main/board-hydrate');
 const { readLocalBearerToken } = require('./lib/main/backend-launcher');
+const { writeProbeModelPrefs } = require('./lib/probe-model-prefs');
 
 const APP = __dirname;
 const ROOT = path.resolve(APP, '..');
@@ -36,6 +37,7 @@ fs.writeFileSync(
   path.join(PROFILE, 'athena-onboarding.json'),
   JSON.stringify({ cliDone: true, accountDone: true }),
 );
+writeProbeModelPrefs(PROFILE);
 app.setPath('userData', PROFILE);
 app.disableHardwareAcceleration();
 

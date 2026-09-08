@@ -10,10 +10,12 @@ const fs = require('node:fs');
 const path = require('node:path');
 const os = require('node:os');
 const { captureRoot } = require('./lib/probe-captures');
+const { writeProbeModelPrefs } = require('./lib/probe-model-prefs');
 const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'athena-main-card-probe-'));
 app.setPath('userData', profile);
 app.disableHardwareAcceleration();
 fs.writeFileSync(path.join(profile, 'athena-onboarding.json'), JSON.stringify({ cliDone: true, accountDone: true }));
+writeProbeModelPrefs(profile);
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 const candidate = { operation_ref: 'detail:ka10001:current_trading', args: { stk_cd: '005930' }, title: '현재가' };
 const routine = {

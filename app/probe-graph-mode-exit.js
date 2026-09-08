@@ -25,6 +25,7 @@ const net = require('node:net');
 const path = require('node:path');
 const crypto = require('node:crypto');
 const { spawn, spawnSync } = require('node:child_process');
+const { writeProbeModelPrefs } = require('./lib/probe-model-prefs');
 
 const APP_DIR = __dirname;
 const REPO_DIR = path.resolve(APP_DIR, '..');
@@ -126,6 +127,7 @@ async function main() {
     JSON.stringify({ cliDone: true, accountDone: true }, null, 2),
     'utf8',
   );
+writeProbeModelPrefs(userDataDir);
   for (const suffix of ['', '-shm', '-wal']) {
     try { fs.rmSync(`${brainDbPath}${suffix}`, { force: true }); } catch { /* 없으면 그만 */ }
   }

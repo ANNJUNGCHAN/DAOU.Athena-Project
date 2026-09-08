@@ -33,6 +33,7 @@ const path = require('path');
 const fs = require('fs');
 const os = require('os');
 const { execFileSync } = require('child_process');
+const { writeProbeModelPrefs } = require('./lib/probe-model-prefs');
 
 const OUT_DIR = path.join(__dirname, 'captures');
 fs.mkdirSync(OUT_DIR, { recursive: true });
@@ -44,6 +45,7 @@ fs.writeFileSync(
   path.join(PROFILE, 'athena-onboarding.json'),
   JSON.stringify({ cliDone: true, accountDone: true }),
 );
+writeProbeModelPrefs(PROFILE);
 app.setPath('userData', PROFILE);
 
 // startCanvasFeed(WS 사이드채널)를 끈다 — 이 프로브는 범위 밖(WS 카드 지름길)을

@@ -54,6 +54,7 @@ const {
 const { mergeMountLayer } = require('./lib/paper-cards-report');
 const boardRegistry = require('./lib/board-template-registry');
 const boardMount = require('./lib/board-mount');
+const { writeProbeModelPrefs } = require('./lib/probe-model-prefs');
 
 const APP = __dirname;
 const ROOT = path.resolve(APP, '..');
@@ -69,6 +70,7 @@ fs.writeFileSync(
   path.join(PROFILE, 'athena-onboarding.json'),
   JSON.stringify({ cliDone: true, accountDone: true }),
 );
+writeProbeModelPrefs(PROFILE);
 app.setPath('userData', PROFILE);
 app.disableHardwareAcceleration();
 

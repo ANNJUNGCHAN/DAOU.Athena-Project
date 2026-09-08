@@ -13,6 +13,7 @@ process.env.ATHENA_CANVAS_SOURCE = 'fixture';
 const { app } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const { writeProbeModelPrefs } = require('./lib/probe-model-prefs');
 
 const CAPTURES = path.join(__dirname, 'captures');
 if (!fs.existsSync(CAPTURES)) fs.mkdirSync(CAPTURES, { recursive: true });
@@ -25,6 +26,7 @@ fs.writeFileSync(
   JSON.stringify({ cliDone: true, accountDone: true }, null, 2),
   'utf-8'
 );
+writeProbeModelPrefs(PROBE_PROFILE);
 app.setPath('userData', PROBE_PROFILE);
 
 function wait(ms) { return new Promise((r) => setTimeout(r, ms)); }

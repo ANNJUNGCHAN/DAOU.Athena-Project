@@ -10,6 +10,7 @@
 const { app } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const { writeProbeModelPrefs } = require('./lib/probe-model-prefs');
 
 const PROFILE = path.join(__dirname, '.probe-text-stream-profile');
 fs.rmSync(PROFILE, { recursive: true, force: true });
@@ -18,6 +19,7 @@ fs.writeFileSync(
   path.join(PROFILE, 'athena-onboarding.json'),
   JSON.stringify({ cliDone: true, accountDone: true }),
 );
+writeProbeModelPrefs(PROFILE);
 // 추론 미리보기가 실제로 눈에 보이려면 effort를 높여야 한다(기본 null=CLI 기본값은
 // 이 앱의 도구 제한 프롬프트에서 thinking_delta를 안 낼 수 있다 — 실측으로 확인).
 fs.writeFileSync(

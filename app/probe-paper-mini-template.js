@@ -21,6 +21,7 @@ const { execFileSync } = require('child_process');
 const { parseTreeRecords } = require('./lib/paper-tree');
 const { mergeTemplateLayer } = require('./lib/paper-mini-report');
 const { MINI_GRAMMARS, templateGrammarOf, grammarCoverage, templateEnvelopeSpec } = require('./lib/paper-mini-compare');
+const { writeProbeModelPrefs } = require('./lib/probe-model-prefs');
 
 const APP_ROOT = __dirname;
 const REPO_ROOT = path.resolve(APP_ROOT, '..');
@@ -36,6 +37,7 @@ fs.writeFileSync(
   path.join(PROFILE, 'athena-onboarding.json'),
   JSON.stringify({ cliDone: true, accountDone: true }),
 );
+writeProbeModelPrefs(PROFILE);
 app.setPath('userData', PROFILE);
 process.env.ATHENA_NO_AUTOSTART = '1';
 process.env.ATHENA_CANVAS_SOURCE = 'fixture';

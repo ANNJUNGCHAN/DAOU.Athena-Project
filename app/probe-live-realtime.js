@@ -15,12 +15,14 @@ fs.writeFileSync(
   path.join(PROFILE, 'athena-onboarding.json'),
   JSON.stringify({ cliDone: true, accountDone: true })
 );
+writeProbeModelPrefs(PROFILE);
 app.setPath('userData', PROFILE);
 
 const CAPTURES = path.join(__dirname, 'captures');
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const chartRealtime = require('./lib/main/chart-realtime');
+const { writeProbeModelPrefs } = require('./lib/probe-model-prefs');
 
 const DATASET = {
   dataset_id: 'probe-rt-chart',

@@ -24,9 +24,11 @@ fs.writeFileSync(
   path.join(PROFILE, 'athena-onboarding.json'),
   JSON.stringify({ completed: true, step: 3 })
 );
+writeProbeModelPrefs(PROFILE);
 app.setPath('userData', PROFILE);
 
 const { INDICATOR_DEFS } = require('./lib/chart-indicator-registry');
+const { writeProbeModelPrefs } = require('./lib/probe-model-prefs');
 const IMPLEMENTED = INDICATOR_DEFS.filter((d) => d.implemented);
 
 function wait(ms) { return new Promise((r) => setTimeout(r, ms)); }

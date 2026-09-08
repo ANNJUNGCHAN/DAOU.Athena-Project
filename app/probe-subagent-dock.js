@@ -29,6 +29,7 @@ process.env.ATHENA_CANVAS_SOURCE = 'fixture';
 const { app, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const { writeProbeModelPrefs } = require('./lib/probe-model-prefs');
 
 const PROFILE = path.join(__dirname, '.probe-subagent-dock-profile');
 fs.rmSync(PROFILE, { recursive: true, force: true });
@@ -37,6 +38,7 @@ fs.writeFileSync(
   path.join(PROFILE, 'athena-onboarding.json'),
   JSON.stringify({ cliDone: true, accountDone: true }),
 );
+writeProbeModelPrefs(PROFILE);
 app.setPath('userData', PROFILE);
 
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
