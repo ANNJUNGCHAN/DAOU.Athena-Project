@@ -803,6 +803,9 @@
   // 패널이 자라도 제자리다 — 새 계산이 필요 없다.
   const PANEL_HEIGHT_BASE = 400;
   const PANEL_HEIGHT_MAX = 640;
+  // 펼친 창에서도 오브 원이 앉는 모서리 76px은 패널 바깥에 남는다
+  // (orb.css의 네 anchor 모두 panel top/bottom에서 76px을 비운다).
+  const PANEL_ORB_RESERVE = 76;
 
   function measureContentHeight() {
     const head = $panel.querySelector('.orb-panel-head');
@@ -812,12 +815,19 @@
       ? [head, $chatBody, $inputStack].filter(Boolean)
       : [head, $body, $card, $foot, $inputStack].filter(Boolean);
     const visibleParts = parts.filter((el) => !el.hidden && !el.classList.contains('orb-mode-hidden'));
+    const borderY = (el) => {
+      const style = getComputedStyle(el);
+      return Number.parseFloat(style.borderTopWidth || '0')
+        + Number.parseFloat(style.borderBottomWidth || '0');
+    };
     // scrollHeight는 overflow:auto인 영역에서도 잘리지 않은 실제 콘텐츠 높이를
     // 준다 — 지금 보이는 크기가 아니라 필요한 크기를 재는 이유다.
-    const content = visibleParts.reduce((sum, el) => sum + Math.max(el.offsetHeight, el.scrollHeight), 0);
+    // scrollHeight에는 border가 빠지므로 border-box가 필요한 실제 높이에 맞춰 더한다.
+    const content = visibleParts.reduce(
+      (sum, el) => sum + Math.max(el.offsetHeight, el.scrollHeight + borderY(el)), 0);
     const gaps = 8 * Math.max(0, visibleParts.length - 1); // .orb-panel gap(orb.css)
     const padY = 28; // .orb-panel padding 14px 위아래(orb.css)
-    return content + gaps + padY;
+    return content + gaps + padY + borderY($panel) + PANEL_ORB_RESERVE;
   }
 
   function requestPanelHeight() {
@@ -889,6 +899,11 @@
       $panel.hidden = !isOpen;
     }
     expanded = nextExpanded;
+    // 접힌 동안 도착한 알림은 renderPanel() 시점에는 높이를 요청할 수 없다.
+    // main이 기본 높이로 펼침을 확정한 첫 상태에서 실제 DOM 높이를 다시 재야
+    // 대표 카드가 입력줄에 밀려 내부 스크롤로 잘리지 않는다. 같은 높이 확인
+    // 이벤트에서는 다시 요청하지 않아 resize 왕복을 만들지 않는다.
+    if (isOpen && stateChanged) requestPanelHeight();
     // B 모드에서 시작한 대화는 접어도 이력 자체를 유지한다. 다만 답변을 모두 읽은
     // 뒤 대기 알림이 있으면 현재 접힘이나 다음 펼침에서 알림 표면으로 돌아간다.
     // 진행 중/접힌 채 도착한 답은 먼저 대화에서 읽혀야 하므로 override를 유지한다.
