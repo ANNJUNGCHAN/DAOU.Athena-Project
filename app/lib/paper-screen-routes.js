@@ -4533,13 +4533,13 @@ const ROUTES = Object.freeze([
       { what: 'count', selector: '#orbTicket', equals: 1 },
     ],
   },
-  // ---------- 백테스트 7장 (8-1) ----------
-  // 일곱 보드는 한 캔버스의 일곱 상태다(#backtestCanvas). 기법을 고르기 전 첫 화면은
+  // ---------- 백테스트 6장 (8-1) ----------
+  // 여섯 보드는 한 캔버스의 여섯 상태다(#backtestCanvas). 기법을 고르기 전 첫 화면은
   // 기법 목록이라(backtest-canvas.js listFirst) 어느 보드든 먼저 기법 하나를 세워야 한다 —
   // 그 자극이 위 BACKTEST_TARGET이다. Paper의 머리·탭 이름은 안 적는다: Paper 보드 01의
   // 탭은 「폼 · 코드 · 실행」이고 보드 03은 「설계 · 결과 · 다시 실행」인데, 앱의 모드 탭은
-  // 다섯(기법 · 결과 · 이력 · 최적화 · 배포)이고 설계 하위 탭도 넷이라 어느 쪽 수를 적어도
-  // 거짓말이 된다(보드 19가 그 기법 목록 화면을 따로 그린다).
+  // 다섯(기법 · 결과 · 이력 · 최적화 · 배포)이고 기법 화면 하위 탭은 또 다른 여섯이라
+  // 어느 쪽 수를 적어도 거짓말이 된다(보드 19가 그 기법 목록 화면을 따로 그린다).
   {
     board: '1SW0-0', // 01 · 백테스트 — 설계 (폼)
     window: 'shell',
@@ -4548,25 +4548,21 @@ const ROUTES = Object.freeze([
       { do: 'mode', view: 'backtest' },
       { do: 'send', channel: 'athena:backtest-chat-action', data: BACKTEST_TARGET },
       { do: 'wait', ms: 300 },
-      // 설정을 얹으면 화면은 지도 탭에 선다(applySpecAction) — 폼은 그 옆 칸이다.
-      { do: 'click', selector: '#backtestCanvas .backtest-subtab:nth-child(2)' },
+      // 설정을 얹으면 화면은 그 기법의 코드에 선다(applySpecAction) — 폼은 그 옆 칸이다.
+      { do: 'click', selector: '#backtestCanvas .backtest-subtab:nth-child(3)' },
       { do: 'settle' },
     ],
     root: '#backtestCanvas',
-    // 종목코드·기간·지표 개수·수수료 숫자는 전부 값이라 안 넣는다. 남는 것은 카드 제목과
-    // 조건 카드의 논리 배지뿐이다 — 배지는 fixture가 아니라 그 기법의 AND/OR이다.
+    // 종목코드·기간·수수료 숫자는 전부 값이라 안 넣는다 — 남는 것은 카드 제목뿐이다.
+    // Paper가 그린 지표 카드·조건 빌더는 안 잰다: 신호를 만드는 것은 그 폴더의
+    // 파이썬이고, 폼에는 그 칸이 서지 않는다(2026-09-07 사용자 확정).
     phrases: [
       '대상 · 기간',
       '수정주가',
-      '지표',
-      '진입 조건',
-      '모두 만족 AND',
-      '청산 조건',
       '리스크 · 비용',
     ],
-    // Paper가 그린 조건 카드 둘(진입·청산) · 주기 세그먼트 셋(일·주·월) · 종목 칩 하나.
+    // 주기 세그먼트 셋(일·주·월) · 종목 칩 하나.
     structure: [
-      { what: 'count', selector: '.backtest-condition-card', equals: 2 },
       { what: 'count', selector: '.backtest-segment-item', equals: 3 },
       { what: 'count', selector: '.backtest-symbol-chip', equals: 1 },
     ],
@@ -4726,47 +4722,6 @@ const ROUTES = Object.freeze([
     ],
   },
   {
-    board: '3XL4-1', // 17 · 백테스트 — 출처에서 지도로 · 만드는 중(로딩)
-    window: 'shell',
-    reach: [
-      { do: 'ipc-fixture', channel: 'athena:backtest-presets', data: BACKTEST_PRESETS },
-      { do: 'ipc-fixture', channel: 'athena:backtest-source-map-start', data: SOURCE_MAP_JOB_START },
-      { do: 'ipc-fixture', channel: 'athena:backtest-source-map-status', data: SOURCE_MAP_AT_3 },
-      { do: 'mode', view: 'backtest' },
-      // 기법을 고르지 않은 채로 온다 — 출처에서 만드는 전략에는 아직 고를 기법이 없다.
-      { do: 'send', channel: 'athena:backtest-chat-action', data: SOURCE_URL_ACTION },
-      // 두 왕복(잡 시작 → 첫 폴링)이 돌아야 다섯 줄이 선다.
-      { do: 'wait', ms: 600 },
-      { do: 'settle' },
-    ],
-    root: '#backtestCanvas',
-    // 전부 앱이 가진 문장이다 — 단계 이름·부제(「✓ 출처 읽음」·「지도 뒤에서 자동」)는
-    // 위 봉투가 주는 글자라 한 글자도 안 넣었다. 헤더의 「새 전략 · 출처에서 만드는 중 ·
-    // 지도 v0」도 안 넣는다: 앱은 그 셋을 따로 그려 한 문장으로 붙지 않는다.
-    // 진행 띠의 첫 줄도 마찬가지다 — Paper의 그 줄은 단계 수·남은 시간까지 한 문장이라
-    // 값을 품고 있다.
-    phrases: [
-      '출처가 말한 대상',
-      '확인 필요',
-      '지도가 끝나면 채팅이 대상·기간부터 하나씩 묻습니다',
-      '멈추기',
-      '이 전략은 이렇게 흐릅니다',
-      '칸이 하나씩 채워집니다 · 다 그려지면 대화로 고칠 수 있습니다',
-      '여기부터 내 전략 — 출처에서 뽑은 칸들',
-    ],
-    // Paper가 그린 단계 다섯 줄, 지금 그리는 칸 하나(③의 「그리는 중」), 멈추는 버튼
-    // 하나, 그리고 아직 만들어지지 않은 코드 — 서랍에 여는 버튼이 없다는 사실이 그
-    // 뜻이다. 앞 둘은 위 봉투가 정한 값을 앱이 도는 것이라(다섯 줄·drawing 표식) 앱이
-    // 혼자 정하는 것은 뒤 둘이다: [멈추기]는 잡 상태와 무관하게 늘 서고(보드 18 F칸의
-    // 로딩 4요소 중 넷째), [코드 열기]는 만드는 중인 동안 아예 서지 않는다.
-    structure: [
-      { what: 'count', selector: '.backtest-source-step', equals: 5 },
-      { what: 'count', selector: '.backtest-flow-drawing', equals: 1 },
-      { what: 'count', selector: '.backtest-source-stop', equals: 1 },
-      { what: 'absent', selector: '.backtest-map-open-code' },
-    ],
-  },
-  {
     board: '2FMM-2', // 07 · 백테스트 — 전략 배포 · 실전 적용
     window: 'shell',
     reach: [
@@ -4812,54 +4767,6 @@ const ROUTES = Object.freeze([
     ],
   },
   {
-    board: '2FR9-2', // 08 · 백테스트 — 코드 플로우 지도
-    window: 'shell',
-    // 이 보드는 스스로 초기 안이라고 적었다 — 「현행 위계는 반대입니다 … 1급 표면으로
-    // 올린 모습은 보드 11, 규칙은 보드 14를 봅니다」. 그래서 지도 머리와 두 경계의
-    // 이름(「이 코드는 이렇게 흐릅니다」·「여기부터 내 코드 — golden_cross.py」·
-    // 「여기부터 다시 앱 — 코드가 손댈 수 없는 구간」)은 안 적는다: 앱을 그 문구로
-    // 되돌리면 Paper의 현행 보드 11~14와 어긋난다. 같은 보드가 「칸의 종류·사람 말
-    // 설명·실제 값 표기는 그대로 쓰고」라고 못 박은 부분만 잰다.
-    reach: [
-      { do: 'ipc-fixture', channel: 'athena:backtest-presets', data: BACKTEST_PRESETS },
-      { do: 'ipc-fixture', channel: 'athena:backtest-map', data: BACKTEST_FLOW_MAP },
-      { do: 'mode', view: 'backtest' },
-      { do: 'send', channel: 'athena:backtest-chat-action', data: BACKTEST_TARGET },
-      // 이 칸들이 서는 곳은 **코드 경로의 지도**다. 폼 경로에서는 같은 탭이 편집 표면
-      // (보드 11~14의 그래프)을 세우고 요약 지도를 빼기 때문이다(renderFlowTab의
-      // visualActive 분기, 2026-09-03 사용자 확정) — 보드 08이 그린 것은 파이썬 한
-      // 파일을 읽어 만든 지도이므로 코드를 얹어 그 경로로 옮긴다.
-      { do: 'send', channel: 'athena:backtest-chat-action', data: BACKTEST_CODE_DRAFT },
-      { do: 'wait-for', selector: '.backtest-code-host', count: 1, timeout: 2000, visibility: 'visible' },
-      // 하위 탭 첫째가 지도다(지도 · 폼 · 코드 · 노드·흐름). 지도를 읽는 왕복은 이
-      // 클릭이 낸다 — 코드를 얹는 길에는 그 호출이 없다.
-      { do: 'click', selector: '#backtestCanvas .backtest-subtab:nth-child(1)' },
-      { do: 'wait-for', selector: '.backtest-flow-node.is-mine', count: 4, timeout: 2000, visibility: 'visible' },
-      { do: 'settle' },
-    ],
-    root: '#backtestCanvas',
-    // 칸의 문장은 프런트가 갖고 있지 않다 — 백엔드 flow.py의 STAGE_LABELS·APP_STAGES가
-    // 그대로 화면 문구다(backtest-explain.js 머리말 「이 파일에는 레이아웃만 있고 칸의
-    // 문장은 하나도 없다」). 경계 이름 하나만 화면 상수다. ④는 안 적는다 — 보드 08의
-    // ④는 「두 열만 돌려줍니다」인데 현행 칸 여섯 종류에서 그 자리는 「지키는 선」이다
-    // (보드 18 A칸). 어느 쪽을 적어도 한 보드에게는 거짓말이 된다.
-    phrases: [
-      '앱이 준비해서 건넵니다',
-      '봉 데이터를 모읍니다',
-      '조절할 값을 정합니다',
-      '가격을 지표로 바꿉니다',
-      '사고·파는 순간을 찍습니다',
-      '성과를 냅니다',
-    ],
-    // Paper가 그린 앱 칸 넷(봉 데이터 · 체결가 · 비용 · 성과)과 내 칸 넷(①②③④),
-    // 그 사이를 가르는 경계 셋.
-    structure: [
-      { what: 'count', selector: '.backtest-flow-node.is-app', equals: 4 },
-      { what: 'count', selector: '.backtest-flow-node.is-mine', equals: 4 },
-      { what: 'count', selector: '.backtest-flow-boundary', equals: 3 },
-    ],
-  },
-  {
     board: '2FY9-2', // 09 · 백테스트 — 오류 진단 · 자동 수정 승인
     window: 'shell',
     // 08과 같은 사정이다 — 이 보드도 스스로 「초기 안 · 보드 12가 현행」이라 적었고,
@@ -4890,191 +4797,6 @@ const ROUTES = Object.freeze([
     structure: [
       { what: 'count', selector: '.backtest-diag-actions button', equals: 3 },
       { what: 'count', selector: '.backtest-diag-raw-toggle', equals: 1 },
-    ],
-  },
-  // ---------- 백테스트 시각 전략 4장 (8-1 · 보드 11~14) ----------
-  // 넷은 한 편집기의 네 상태다(backtest-visual-editor.js 머리말이 그 셋을 그대로 적었다):
-  // 검증 전 → 검증 통과(valid) → 연결 오류(invalid) → 코드까지 같아짐(synced). 상태를
-  // 가르는 것은 클릭이 아니라 **검증 왕복의 답**이라, 넷 다 같은 자리에서 봉투만 바꿔 선다.
-  // Paper의 머리·탭 이름(「20–60 골든크로스 · v5 초안」·「실행 검토」)은 안 적는다 —
-  // 판 번호와 전략 이름은 값이고, 앱의 실행 버튼은 유효할 때 「실행」이다.
-  {
-    board: '3Y38-1', // 11 · 백테스트 — 시각 전략 설계 · 편집 가능
-    window: 'shell',
-    reach: [
-      { do: 'ipc-fixture', channel: 'athena:backtest-presets', data: BACKTEST_PRESETS },
-      // Paper의 보드 폭은 1680이고 그 폭에서 팔레트·캔버스·검사기가 나란히 선다. 앱도
-      // 같은 규칙이지만 경계가 편집기 상자의 폭이라(VISUAL_NARROW_PX) 셸 창이 좁으면
-      // 팔레트와 검사기가 서랍으로 접힌다 — 창 폭이 곧 이 화면이라 보드 28과 같은
-      // 어휘로 세운다(러너가 라우트 전 bounds를 적어 두고 되돌린다).
-      { do: 'resize', width: 1680, height: 1080 },
-      { do: 'ipc-fixture', channel: 'athena:backtest-visual-registry', data: VISUAL_REGISTRY },
-      { do: 'ipc-fixture', channel: 'athena:backtest-visual-from-spec', data: VISUAL_FROM_SPEC },
-      { do: 'ipc-fixture', channel: 'athena:backtest-visual-validate', data: VISUAL_VALIDATE_OK },
-      // 「연결 정상」은 검증이 끝나고 **코드로 옮기는 왕복이 도는 동안**의 상태다
-      // (runVisualValidate가 valid를 세운 뒤 곧바로 compile을 기다린다). 봉투로 답하면
-      // 그 상태는 IPC 한 왕복만큼만 살고 보드 14의 「동기화」로 넘어간다 — 계좌 등록의
-      // 「확인 중」과 같은 사정이라 같은 어휘로 시간축을 세운다.
-      { do: 'ipc-hang', channel: 'athena:backtest-visual-compile' },
-      { do: 'mode', view: 'backtest' },
-      { do: 'send', channel: 'athena:backtest-chat-action', data: BACKTEST_TARGET },
-      { do: 'wait', ms: 400 },
-      { do: 'click', selector: '#backtestCanvas .backtest-visual-validate' },
-      { do: 'wait', ms: 300 },
-      // 검증이 끝난 자리에서 캔버스는 스스로 다시 그리지 않는다(편집기만 갱신된다) —
-      // 머리줄의 상태 문구를 재려면 캔버스를 한 번 더 그려야 한다. 모드 탭 첫째는
-      // 지금 서 있는 그 탭이라 화면을 옮기지 않고 다시 그리기만 한다.
-      { do: 'click', selector: '#backtestCanvas .backtest-tab:nth-child(1)' },
-      { do: 'wait', ms: 200 },
-      // 검사기는 노드를 고른 뒤에만 값을 그린다(고르기 전에는 「노드를 고르면…」 한 줄).
-      { do: 'click', selector: '#backtestCanvas .backtest-vis-node[data-node-id="n_fast"]' },
-      { do: 'settle' },
-    ],
-    root: '#backtestCanvas',
-    phrases: [
-      '서버 검증 가능',
-      '연결 정상',
-      '진입·청산 흐름',
-      '끌어서 전략에 놓기',
-      '선택한 노드',
-      'StrategySpec으로 변환할 수 있습니다',
-      '목록으로 보기',
-    ],
-    // Paper가 그린 노드 일곱·연결 여덟과 팔레트 네 묶음(데이터·지표·조건·출력).
-    structure: [
-      { what: 'count', selector: '.backtest-vis-node', equals: 7 },
-      { what: 'count', selector: '.backtest-vis-edge', equals: 8 },
-      { what: 'count', selector: '.backtest-vis-palette-group', equals: 4 },
-    ],
-  },
-  {
-    board: '3YFV-1', // 12 · 백테스트 — 시각 전략 검증 · 연결 오류
-    window: 'shell',
-    reach: [
-      { do: 'ipc-fixture', channel: 'athena:backtest-presets', data: BACKTEST_PRESETS },
-      // Paper의 보드 폭은 1680이고 그 폭에서 팔레트·캔버스·검사기가 나란히 선다. 앱도
-      // 같은 규칙이지만 경계가 편집기 상자의 폭이라(VISUAL_NARROW_PX) 셸 창이 좁으면
-      // 팔레트와 검사기가 서랍으로 접힌다 — 창 폭이 곧 이 화면이라 보드 28과 같은
-      // 어휘로 세운다(러너가 라우트 전 bounds를 적어 두고 되돌린다).
-      { do: 'resize', width: 1680, height: 1080 },
-      { do: 'ipc-fixture', channel: 'athena:backtest-visual-registry', data: VISUAL_REGISTRY },
-      { do: 'ipc-fixture', channel: 'athena:backtest-visual-from-spec', data: VISUAL_FROM_SPEC_BROKEN },
-      { do: 'ipc-fixture', channel: 'athena:backtest-visual-validate', data: VISUAL_VALIDATE_BROKEN },
-      { do: 'mode', view: 'backtest' },
-      { do: 'send', channel: 'athena:backtest-chat-action', data: BACKTEST_TARGET },
-      { do: 'wait', ms: 400 },
-      { do: 'click', selector: '#backtestCanvas .backtest-visual-validate' },
-      { do: 'wait', ms: 300 },
-      { do: 'click', selector: '#backtestCanvas .backtest-tab:nth-child(1)' },
-      { do: 'wait', ms: 200 },
-      // 오류 검사기는 **그 오류가 난 노드**를 골랐을 때만 선다.
-      { do: 'click', selector: '#backtestCanvas .backtest-vis-node[data-node-id="n_below"]' },
-      { do: 'settle' },
-    ],
-    root: '#backtestCanvas',
-    // 오류 문장(「느린 SMA 입력이 없습니다」)·포트 이름·줄 번호는 전부 백엔드 진단이
-    // 만드는 값이다. 남는 것은 검사기의 구조 라벨과 갈래 둘, 그리고 막힌 사실 한 줄이다.
-    phrases: [
-      '서버 검증 실패',
-      '오류가 난 노드',
-      '문제 위치',
-      '코드에서 열기',
-      '대화로 수정하기',
-      '설계와 오류 검토는 가능하지만, 이 상태에서는 최종 실행을 시작할 수 없습니다.',
-      '첫 오류로',
-    ],
-    // 연결 하나가 끊겼으니 노드는 그대로 일곱, 연결은 일곱이다. 같은 진단 코드가 네
-    // 곳에 붙는다는 계약(US-006)은 노드 카드·포트·검사기 상세·요약 바다.
-    structure: [
-      { what: 'count', selector: '.backtest-vis-node', equals: 7 },
-      { what: 'count', selector: '.backtest-vis-edge', equals: 7 },
-      { what: 'count', selector: '.backtest-vis-inspector-error', equals: 1 },
-    ],
-  },
-  {
-    board: '3YQ0-1', // 13 · 백테스트 — 오류 노드에서 코드로 · 줄 연결
-    window: 'shell',
-    // 보드 12에서 [코드에서 열기]를 누른 다음 화면이다. 여는 것은 실행 산출물이 아니라
-    // **미실행 미리보기**다(검증이 실패했으니 컴파일 산출물이 없다) — 그래서 파일 띠에
-    // 「그래프 호환 모드」가 붙고, 맨 아래 줄이 코드 전용 전환을 묻는다.
-    reach: [
-      { do: 'ipc-fixture', channel: 'athena:backtest-presets', data: BACKTEST_PRESETS },
-      // Paper의 보드 폭은 1680이고 그 폭에서 팔레트·캔버스·검사기가 나란히 선다. 앱도
-      // 같은 규칙이지만 경계가 편집기 상자의 폭이라(VISUAL_NARROW_PX) 셸 창이 좁으면
-      // 팔레트와 검사기가 서랍으로 접힌다 — 창 폭이 곧 이 화면이라 보드 28과 같은
-      // 어휘로 세운다(러너가 라우트 전 bounds를 적어 두고 되돌린다).
-      { do: 'resize', width: 1680, height: 1080 },
-      { do: 'ipc-fixture', channel: 'athena:backtest-visual-registry', data: VISUAL_REGISTRY },
-      { do: 'ipc-fixture', channel: 'athena:backtest-visual-from-spec', data: VISUAL_FROM_SPEC_BROKEN },
-      { do: 'ipc-fixture', channel: 'athena:backtest-visual-validate', data: VISUAL_VALIDATE_BROKEN },
-      { do: 'mode', view: 'backtest' },
-      { do: 'send', channel: 'athena:backtest-chat-action', data: BACKTEST_TARGET },
-      { do: 'wait', ms: 400 },
-      { do: 'click', selector: '#backtestCanvas .backtest-visual-validate' },
-      { do: 'wait', ms: 300 },
-      { do: 'click', selector: '#backtestCanvas .backtest-tab:nth-child(1)' },
-      { do: 'wait', ms: 200 },
-      { do: 'click', selector: '#backtestCanvas .backtest-vis-node[data-node-id="n_below"]' },
-      { do: 'wait', ms: 200 },
-      { do: 'click', selector: '#backtestCanvas .backtest-vis-open-code' },
-      { do: 'wait', ms: 400 },
-      { do: 'settle' },
-    ],
-    root: '#backtestCanvas',
-    phrases: [
-      '연결된 노드 · 하향 돌파',
-      '시각 설계에서 보기',
-      '전략 파일',
-      '그래프에서 생성됨',
-      '그래프 호환 모드',
-      '그래프로 표현할 수 없는 수정은 적용 전에 코드 전용 전환을 묻습니다',
-    ],
-    // Paper의 리본 한 줄 · 파일 띠 한 줄 · 맨 아래 연결 상태 한 줄.
-    structure: [
-      { what: 'count', selector: '.backtest-code-ribbon-back', equals: 1 },
-      { what: 'count', selector: '.backtest-code-filemeta', equals: 1 },
-      { what: 'count', selector: '.backtest-code-linkstatus', equals: 1 },
-    ],
-  },
-  {
-    board: '3Z0X-1', // 14 · 백테스트 — 그래프·코드 동기화 완료 · 실행 전
-    window: 'shell',
-    reach: [
-      { do: 'ipc-fixture', channel: 'athena:backtest-presets', data: BACKTEST_PRESETS },
-      // Paper의 보드 폭은 1680이고 그 폭에서 팔레트·캔버스·검사기가 나란히 선다. 앱도
-      // 같은 규칙이지만 경계가 편집기 상자의 폭이라(VISUAL_NARROW_PX) 셸 창이 좁으면
-      // 팔레트와 검사기가 서랍으로 접힌다 — 창 폭이 곧 이 화면이라 보드 28과 같은
-      // 어휘로 세운다(러너가 라우트 전 bounds를 적어 두고 되돌린다).
-      { do: 'resize', width: 1680, height: 1080 },
-      { do: 'ipc-fixture', channel: 'athena:backtest-visual-registry', data: VISUAL_REGISTRY },
-      { do: 'ipc-fixture', channel: 'athena:backtest-visual-from-spec', data: VISUAL_FROM_SPEC },
-      { do: 'ipc-fixture', channel: 'athena:backtest-visual-validate', data: VISUAL_VALIDATE_OK },
-      // 보드 11과 다른 것은 이 한 줄뿐이다 — 코드로 옮기는 왕복이 답하면 그래프와 코드가
-      // 같은 판을 가리키고, 그 사실이 요약 바와 머리줄에 그대로 선다.
-      { do: 'ipc-fixture', channel: 'athena:backtest-visual-compile', data: VISUAL_COMPILE },
-      { do: 'mode', view: 'backtest' },
-      { do: 'send', channel: 'athena:backtest-chat-action', data: BACKTEST_TARGET },
-      { do: 'wait', ms: 400 },
-      { do: 'click', selector: '#backtestCanvas .backtest-visual-validate' },
-      { do: 'wait', ms: 500 },
-      // Paper가 고른 노드는 방금 고쳐진 하향 돌파다 — 필수 입력이 둘이라 「입력 연결」
-      // 줄이 서는 것도 이 노드뿐이다.
-      { do: 'click', selector: '#backtestCanvas .backtest-vis-node[data-node-id="n_below"]' },
-      { do: 'settle' },
-    ],
-    root: '#backtestCanvas',
-    phrases: [
-      '그래프 · 코드 검증 완료',
-      '동기화',
-      '그래프와 코드가 같은 버전입니다',
-      '수정됨',
-      '입력 연결',
-      '연결과 값이 유효합니다',
-      '목록으로 보기',
-    ],
-    structure: [
-      { what: 'count', selector: '.backtest-vis-node', equals: 7 },
-      { what: 'count', selector: '.backtest-vis-edge', equals: 8 },
     ],
   },
   // ---------- 백테스트 기법 목록 1장 (8-1 · 보드 19) ----------
