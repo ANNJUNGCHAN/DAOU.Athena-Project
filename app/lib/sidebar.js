@@ -1161,6 +1161,12 @@
   // 발화·읽음 여부는 유지된다 — sub·title 같은 표시용 필드까지 영속화하는 건
   // 아니다(그건 매번 routines 요약 뷰에서 다시 만든다).
   const notifyRooms = [];
+  const routineAlertPopup = (window.AthenaLib && window.AthenaLib.RoutineAlertPopup)
+    ? window.AthenaLib.RoutineAlertPopup.createRoutineAlertPopup({
+        document,
+        onOpen: (id) => selectNotifyRoom(id),
+      })
+    : null;
 
   // 에이전트 모드 네비 배지(원칙2) — notifyRooms의 !read 개수를 그대로 노출한다.
   // notifyRooms 자체가 이미 "라우틴 상태의 파생물"이라 별도로 다시 세거나
@@ -1210,6 +1216,7 @@
     }
     renderList();
     updateAgentBadge();
+    if (routineAlertPopup) routineAlertPopup.show(existing || notifyRooms[0]);
   }
 
   function selectNotifyRoom(id) {
