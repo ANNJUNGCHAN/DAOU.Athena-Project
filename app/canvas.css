@@ -923,23 +923,6 @@ html, body { background: transparent; }
   color: var(--color-k-soft);
 }
 
-/* CTA(보드 02/04 §패널 CTA) — 위 최근 변화 섹션의 flexGrow:1이 CTA 블록을
- * 바닥에 붙인다(Paper 그대로). 리드인 문장("이 연결을 확인하지 않으셨습니다.")은
- * 확인할 것이 실제로 있을 때만 controller.js가 넣는다. */
-.panel-cta-block { flex-shrink: 0; display: flex; flex-direction: column; }
-.panel-cta-lead {
-  padding: 12px 16px 10px; border-top: 1px solid var(--color-k-line);
-  font-family: var(--font-body); font-size: var(--text-xs); line-height: 17px; color: var(--color-k-soft);
-}
-.panel-cta {
-  appearance: none; border: none; cursor: pointer; flex-shrink: 0;
-  background: var(--color-brand); border-top: 1px solid var(--color-k-line);
-  padding: 9px 14px; text-align: center;
-  font-family: var(--font-strong); font-size: var(--text-sm); color: #fff;
-}
-/* 리드인이 이미 위 경계선을 그렸으면 버튼이 선을 한 번 더 긋지 않는다. */
-.panel-cta-lead + .panel-cta { border-top: none; }
-
 /* entity 응답 패널(Paper 보드 10 3ZAA-1) — 같은 공통 패널 자리에 「관계 · 근거 ·
  * 원문 발췌 · 변경 이력」을 그린다. 값·간격은 위 노드 선택 패널의 어휘를 그대로
  * 쓴다(한 자리에 두 디자인 언어를 두지 않는다) — 새 토큰은 없다. */

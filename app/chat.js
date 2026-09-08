@@ -150,9 +150,6 @@ const $lockText = document.getElementById('lockText');
 const $lockTime = document.getElementById('lockTime');
 // 컴포저(Paper 44, 2026-09-05) — 중단 버튼·하단 툴바.
 const $stopBtn = document.getElementById('stopBtn');
-const $composerSpinner = document.getElementById('composerSpinner');
-const $attachBtn = document.getElementById('attachBtn');
-const $mentionBtn = document.getElementById('mentionBtn');
 const $modelBtn = document.getElementById('modelBtn');
 const $effortBtn = document.getElementById('effortBtn');
 const $onboard = document.getElementById('onboard');
@@ -969,7 +966,6 @@ function setLocked(locked, text, time) {
   $input.placeholder = locked ? '' : idle;
   $lockHint.hidden = !locked;
   $stopBtn.hidden = !locked;
-  $composerSpinner.hidden = !locked;
   if (text) $lockText.textContent = text;
   $lockTime.textContent = locked && time ? time : '';
 }
@@ -1802,10 +1798,9 @@ async function runHistoryCommand(text) {
 // "원칙 1 — 채팅은 절대 접히지 않는다, 모드는 캔버스만 바꾼다"). 실제 모드
 // 엔진은 그대로 canvas.js의 graphMode(lib/graph-mode/controller.js) 하나다.
 $dot.addEventListener('click', () => { toggleKiumiMenu(); });
-// 하단 툴바(Paper 44 composer-bar, 2026-09-05) — +는 키우미 메뉴(파일·폴더 첨부)의 두 번째 문,
-// @는 커서에 @를 넣어 플러그인 멘션 메뉴를 연다. 모델·강도 버튼은 아래 모델 팝오버 절에 있다.
-$attachBtn.addEventListener('click', () => { toggleKiumiMenu(); });
-$mentionBtn.addEventListener('click', () => {
+// 옛 툴바 [@] 버튼의 일(2026-09-08, 키우미 메뉴로 이동) — 커서 자리에 @를 넣어 플러그인
+// 멘션 메뉴를 연다. 앞 글자에 붙지 않게 한 칸 띄운다.
+function insertMentionAtCaret() {
   if ($input.disabled) return;
   const start = $input.selectionStart == null ? $input.value.length : $input.selectionStart;
   const end = $input.selectionEnd == null ? start : $input.selectionEnd;
@@ -1816,7 +1811,7 @@ $mentionBtn.addEventListener('click', () => {
   $input.focus();
   $input.setSelectionRange(caret, caret);
   $input.dispatchEvent(new Event('input', { bubbles: true }));
-});
+}
 // 사이드바 계정 메뉴(Paper 보드 16)의 "설정" 항목이 쓰는 다리 — lib/sidebar.js
 // 참고.
 window.AthenaShell.registerOpenSettings(openSettings);
@@ -2606,17 +2601,9 @@ async function refreshModelState() {
 function applyCliState(list) {
   if (!list) return; // 못 읽으면 이전에 읽은 것을 그대로 쓴다 — 추측값을 쓰지 않는다.
   cliStateCache = list;
-  if (!$modelPopover.hidden) renderModelPopover();
-  renderComposerModel();
-}
-
-// 질의가 실제로 도는 공급자. 활성 계정이 Grok이면 grok CLI, 그 밖(Claude·Codex·
-// 미연결)은 claude CLI다 — main.js resolveLiveQueryProviderId·noteLiveQueryProvider와
-// 같은 판정이라 툴바가 실행기와 다른 이름을 말하지 않는다.
-function activeQueryProvider() {
-  const providers = (cliStateCache && cliStateCache.providers) || [];
-  const active = providers.find((p) => ((p && p.accounts) || []).some((a) => a && a.active));
-  return active && active.id === 'grok' ? 'grok' : 'claude';
+  // 활성 계정이 바뀌면 main이 정하는 active(공급자·모델·강도)도 바뀐다 — 툴바 라벨은
+  // 그 값을 말하니 다시 읽는다(model-get은 파일 읽기 하나, cli-list처럼 비싸지 않다).
+  void refreshModelState();
 }
 
 function providerConnected(id) {
@@ -2631,10 +2618,11 @@ function composerChoiceLabel(chips, value, fallback) {
   const label = hit && hit.value !== null ? hit.label : fallback;
   return label.charAt(0).toUpperCase() + label.slice(1);
 }
+// 어느 공급자의 값을 말할지는 main.js resolveActiveModelSelection이 정한다(athena:model-get의
+// active) — 실행기·오브 컨트롤 스트립이 읽는 바로 그 값이라 툴바가 다른 이름을 말하지 않는다.
 function renderComposerModel() {
-  const provider = activeQueryProvider();
-  const grok = provider === 'grok';
-  const s = (modelStateCache && modelStateCache[provider]) || { model: null, effort: null };
+  const s = (modelStateCache && modelStateCache.active) || { provider: 'claude', model: null, effort: null };
+  const grok = s.provider === 'grok';
   $modelBtn.textContent = composerChoiceLabel(
     grok ? PILL_GROK_MODEL_CHIPS : PILL_MODEL_CHIPS, s.model, grok ? 'Grok' : 'Claude');
   $effortBtn.textContent = composerChoiceLabel(
@@ -2870,6 +2858,11 @@ function renderKiumiMenu() {
     }
   };
   $kiumiMenu.appendChild(kiumiSection('플러그인'));
+  // 옛 툴바 [@] 버튼 — 이 메뉴가 이어받았다(2026-09-08).
+  $kiumiMenu.appendChild(kiumiItem('plugin', '@ 플러그인 지정', '커서에 @를 넣어 멘션 메뉴를 연다', () => {
+    closeKiumiMenu();
+    insertMentionAtCaret();
+  }));
   if (mentionState.aliases.length) {
     mentionState.aliases.slice(0, 6).forEach((server) => {
       $kiumiMenu.appendChild(kiumiItem(
@@ -2920,13 +2913,14 @@ function toggleKiumiMenu() {
 
 document.addEventListener('mousedown', (e) => {
   if ($kiumiMenu.hidden) return;
-  if ($kiumiMenu.contains(e.target) || $dot.contains(e.target) || $attachBtn.contains(e.target)) return;
+  if ($kiumiMenu.contains(e.target) || $dot.contains(e.target)) return;
   closeKiumiMenu();
 });
 window.athena.on('athena:model-changed', () => refreshModelState());
-// 계정 전환·로그인이 활성 공급자를 바꾸면 툴바 라벨과 Grok 잠금도 따라가야 한다
-// (설정 모델 카드가 구독하는 그 신호 — settings-cards.js renderModel). 이벤트가
-// 목록을 그대로 싣고 오므로(main.js broadcastCliChanged) 다시 묻지 않는다.
+// 계정 전환·로그인이 활성 공급자를 바꾸면 Grok 잠금이 따라가야 한다(설정 모델 카드가
+// 구독하는 그 신호 — settings-cards.js renderModel). 이벤트가 목록을 그대로 싣고
+// 오므로(main.js broadcastCliChanged) 다시 묻지 않는다. 툴바 라벨은 applyCliState가
+// model-get(active)을 다시 읽어 그린다.
 window.athena.on('athena:cli-changed', (list) => applyCliState(list));
 refreshModelState();
 window.athena.invoke('athena:cli-list').then(applyCliState, () => {});
@@ -3591,6 +3585,40 @@ function renderWatchProgressTurn(r) {
   return line;
 }
 
+// 「폴더 다시 지정」 — 프로젝트 폴더가 사라진 코드 감시를 살린다. 폴더는 main의 대화상자로
+// 사람이 고르고, 백엔드가 같은 project_id의 경로만 바꾼다(새 id 없음). 성공하면 검사를 바로
+// 다시 돌려 새 카드로 답한다 — 사람이 「검사」를 한 번 더 누르게 하지 않는다. 취소는 조용히 끝난다.
+async function relinkWatchProject(r, status, buttons) {
+  const watch = await watchBlockOf(r);
+  if (!watch || !watch.project_id) {
+    status.textContent = '감시 프로젝트를 알 수 없음 — 대화로 다시 만들기';
+    return;
+  }
+  for (const b of buttons) b.disabled = true;
+  status.textContent = '폴더 고르는 중';
+  let res;
+  try { res = await window.athena.invoke('athena:project-relink', { id: watch.project_id }); }
+  catch (e) { res = { ok: false, error: String((e && e.message) || e) }; }
+  if (!res || !res.ok || res.canceled) {
+    for (const b of buttons) b.disabled = false;
+    status.textContent = res && res.canceled ? '' : `폴더 지정 실패: ${(res && res.error) || '알 수 없는 오류'}`;
+    return;
+  }
+  // 카드가 든 차단 사유는 폴더가 없던 때의 것이다 — 백엔드가 지금 보는 사유로 바꾼다.
+  try {
+    const detail = await window.athena.invoke('athena:routine-detail', { id: r.id });
+    if (detail && detail.ok && detail.data && 'activation_blocker' in detail.data) {
+      r.activation_blocker = detail.data.activation_blocker;
+    }
+  } catch { /* 새 검사 카드가 지금의 사실을 말한다 */ }
+  status.textContent = '폴더 다시 지정됨 — 검사 다시 돌림';
+  const progressLine = renderWatchProgressTurn(r);
+  const check = await runWatchCheck(r);
+  progressLine.remove();
+  status.textContent = '';
+  renderWatchCheckCard(r, check || { ok: false, reason: '감시 코드 자리를 못 찾음 — 대화로 다시 만들기' });
+}
+
 function renderWatchCheckCard(r, check) {
   const model = watchCheckCardLib.checkCardModel(check, r);
   const line = document.createElement('div');
@@ -3696,6 +3724,8 @@ function renderWatchCheckCard(r, check) {
           btn.disabled = !!r.activation_blocker;
         }
       });
+    } else if (chip.action === 'relink') {
+      btn.addEventListener('click', () => { void relinkWatchProject(r, status, buttons); });
     } else {
       btn.addEventListener('click', () => {
         const repairContext = model.failed
@@ -4002,8 +4032,16 @@ function renderApprovalCard(r) {
     $input.focus();
   });
 
+  // 초안 카드도 「프로젝트 폴더 없음」이면 폴더를 다시 고르는 길을 낸다(검사 카드와 같은 칩).
+  const relink = isCodeWatch && watchCheckCardLib.isProjectFolderMissing(r.activation_blocker)
+    ? _btn(watchCheckCardLib.CHIP_RELINK, 'routine-btn') : null;
+  if (relink) {
+    relink.addEventListener('click', () => { void relinkWatchProject(r, status, [preview, activate, relink, fix]); });
+  }
+
   row.appendChild(preview);
   row.appendChild(activate);
+  if (relink) row.appendChild(relink);
   row.appendChild(fix);
   row.appendChild(status);
   card.appendChild(row);

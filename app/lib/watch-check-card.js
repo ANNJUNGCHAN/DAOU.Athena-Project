@@ -20,6 +20,13 @@ const TAG_PASS = '검사 통과';
 const TAG_FAIL = '검사 실패';
 const CHIP_CONFIRM = '이 알람 승인';
 const CHIP_REVISE = '고칠 게 있어';
+const CHIP_RELINK = '폴더 다시 지정';
+
+// 백엔드 runtime.code_watch_source_blocker의 「프로젝트 폴더 없음 — 다시 연결」만 참이다.
+// 「프로젝트 없음 — 다시 선택」(등록 자체가 없음)은 폴더를 다시 지정해도 살지 않으니 제외.
+function isProjectFolderMissing(text) {
+  return /프로젝트 폴더 없음/.test(String(text || ''));
+}
 
 // 'YYYY-MM-DD' → '8/26'. 보드 10의 「마지막 8/26」 표기다. 파싱 실패는 원문
 // 그대로 돌려준다 — 날짜를 지어내는 것보다 낫다(P3).
@@ -89,12 +96,17 @@ function checkCardModel(check, draft) {
     ? `${note} — 지난 ${lookbackText}일 ${countText}번${last ? ` · 마지막 ${shortDate(last)}` : ''}`
     : `${note} — 검사 실패`;
 
+  // 실패 사유가 「프로젝트 폴더 없음」이면 고치기 앞에 「폴더 다시 지정」을 놓는다 —
+  // 코드가 아니라 폴더 위치가 문제라, 다음 행동은 채팅이 아니라 폴더 고르기다.
   const chips = ok
     ? [
       { label: CHIP_CONFIRM, action: 'confirm', enabled: true },
       { label: CHIP_REVISE, action: 'revise', enabled: true },
     ]
-    : [{ label: CHIP_REVISE, action: 'revise', enabled: true }];
+    : [
+      ...(isProjectFolderMissing(reason) ? [{ label: CHIP_RELINK, action: 'relink', enabled: true }] : []),
+      { label: CHIP_REVISE, action: 'revise', enabled: true },
+    ];
 
   return {
     tags: [TAG_NEW, ok ? TAG_PASS : TAG_FAIL],
@@ -113,8 +125,8 @@ function checkCardModel(check, draft) {
 }
 
 const __exports = {
-  COUNTED_UNTIL, CHIP_CONFIRM, CHIP_REVISE,
-  shortDate, nodeSummary, checkCardModel,
+  COUNTED_UNTIL, CHIP_CONFIRM, CHIP_REVISE, CHIP_RELINK,
+  shortDate, nodeSummary, checkCardModel, isProjectFolderMissing,
 };
 
 if (typeof module !== 'undefined' && module.exports) {

@@ -170,3 +170,43 @@ test('늦게 끝난 이전 선택은 더 최근에 저장된 서버 alias를 덮
   assert.equal(olderResult.stale, true);
   assert.equal(accounts.list().accounts[0].backendAlias, 'server-b');
 });
+
+test('기동 선발급: 활성 계좌가 없으면 발급하지 않고 no-account로 끝난다', async () => {
+  writeAccounts([], null);
+  let refreshed = 0;
+  const result = await accounts.ensureActiveToken({ refresh: async () => { refreshed += 1; return { ok: true, state: 'ready' }; } });
+  assert.deepEqual(result, { ok: true, skipped: true, reason: 'no-account' });
+  assert.equal(refreshed, 0);
+});
+
+test('기동 선발급: 10분 넘게 남은 토큰은 그대로 두고 발급하지 않는다', async () => {
+  const expires = new Date(Date.now() + 2 * 3600 * 1000).toISOString();
+  writeAccounts([{ id: 'local-a', alias: '표시 A', tokenExpiresAt: expires }]);
+  let refreshed = 0;
+  const result = await accounts.ensureActiveToken({ refresh: async () => { refreshed += 1; return { ok: true, state: 'ready' }; } });
+  assert.equal(result.skipped, true);
+  assert.equal(result.reason, 'still-valid');
+  assert.equal(result.alias, '표시 A');
+  assert.ok(result.expiresInSec > 600);
+  assert.equal(refreshed, 0);
+});
+
+test('기동 선발급: 토큰이 없거나 만료 임박이면 활성 계좌로 재발급한다', async () => {
+  writeAccounts([
+    { id: 'local-a', alias: '표시 A' },
+    { id: 'local-b', alias: '표시 B', tokenExpiresAt: new Date(Date.now() + 5 * 60 * 1000).toISOString() },
+  ], 'local-b');
+  const calls = [];
+  const result = await accounts.ensureActiveToken({
+    refresh: async (id) => { calls.push(id); return { ok: true, state: 'ready' }; },
+  });
+  assert.deepEqual(calls, ['local-b']);
+  assert.equal(result.ok, true);
+  assert.equal(result.skipped, false);
+  assert.equal(result.id, 'local-b');
+  assert.equal(result.alias, '표시 B');
+
+  const failed = await accounts.ensureActiveToken({ refresh: async () => ({ ok: false, state: 'expired' }) });
+  assert.equal(failed.ok, false);
+  assert.equal(failed.state, 'expired');
+});

@@ -392,6 +392,15 @@ function unregisterProject({ backendBase, fetchImpl, project_id }) {
   );
 }
 
+// 폴더 다시 지정 — 같은 project_id의 경로만 새 폴더로 바꾼다(projects.py relink 계약).
+// 코드 감시 카드의 「프로젝트 폴더 없음 — 다시 연결」이 부른다. 새 id를 만들지 않는다.
+function relinkProject({ backendBase, fetchImpl, project_id, ...body }) {
+  return backtestHttp(
+    'POST', `/api/v1/projects/${encodeURIComponent(project_id)}/relink`,
+    body, { backendBase, fetchImpl },
+  );
+}
+
 function fetchProjectTree({ backendBase, fetchImpl, project_id }) {
   return backtestHttp(
     'GET', `/api/v1/projects/${encodeURIComponent(project_id)}/tree`,
@@ -488,6 +497,7 @@ module.exports = {
   listProjects,
   createProject,
   openProject,
+  relinkProject,
   unregisterProject,
   fetchProjectTree,
   readProjectFile,

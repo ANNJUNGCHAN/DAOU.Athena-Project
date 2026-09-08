@@ -164,6 +164,46 @@ def test_delete_unregisters_and_never_removes_files_from_disk(tmp_path: Path) ->
     assert client.delete(f"{BASE}/{project['id']}").status_code == 404
 
 
+def test_relink_points_the_same_project_at_a_new_folder(tmp_path: Path) -> None:
+    """「프로젝트 폴더 없음 — 다시 연결」의 그 다시 연결 — id는 그대로, 경로만 바뀐다."""
+    client = _client(tmp_path)
+    old = tmp_path / "옛자리"
+    old.mkdir()
+    (old / "quant.py").write_text("x = 1\n", encoding="utf-8")
+    project = client.post(f"{BASE}/open", json={"path": str(old), "name": "리서치"}).json()["project"]
+    new = tmp_path / "새자리"
+    old.rename(new)
+    assert client.get(BASE).json()["projects"][0]["exists"] is False
+
+    relinked = client.post(f"{BASE}/{project['id']}/relink", json={"path": str(new)})
+    assert relinked.status_code == 200, relinked.text
+    view = relinked.json()["project"]
+    assert view["id"] == project["id"]
+    assert view["name"] == "리서치"
+    assert view["exists"] is True
+    assert view["py_files"] == 1
+    assert Path(view["path"]) == new.resolve()
+    assert [row["id"] for row in client.get(BASE).json()["projects"]] == [project["id"]]
+    assert client.get(f"{BASE}/{project['id']}/tree").status_code == 200
+    assert sorted(p.name for p in new.iterdir()) == ["quant.py"]
+
+
+def test_relink_reports_every_refusal(tmp_path: Path) -> None:
+    client = _client(tmp_path)
+    project = _create(client, "하나")
+    other = _create(client, "둘")
+    a_file = tmp_path / "메모.txt"
+    a_file.write_text("x", encoding="utf-8")
+
+    assert client.post(f"{BASE}/없는-id/relink", json={"path": str(tmp_path)}).status_code == 404
+    assert client.post(f"{BASE}/{project['id']}/relink", json={"path": str(tmp_path / "없다")}).status_code == 404
+    assert client.post(f"{BASE}/{project['id']}/relink", json={"path": str(a_file)}).status_code == 422
+    assert client.post(f"{BASE}/{project['id']}/relink", json={}).status_code == 422
+    taken = client.post(f"{BASE}/{project['id']}/relink", json={"path": other["path"]})
+    assert taken.status_code == 409
+    assert "다른 프로젝트" in taken.json()["detail"]
+
+
 def test_unknown_project_id_is_404_on_every_file_route(tmp_path: Path) -> None:
     client = _client(tmp_path)
     _create(client)

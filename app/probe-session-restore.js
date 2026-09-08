@@ -202,7 +202,7 @@ async function main() {
     const draftBack = await wc.executeJavaScript(`document.getElementById('input').value`);
     check('초안: 돌아오면 입력창에 그 글이 다시 들어온다', draftBack === '손절 -3%로 바꿔서', draftBack);
 
-    // 9) 실행 상태(39번 보드) — 부팅 정리, 행의 스피너·점, 모드 옆 스피너, 머리 알약, 목록의 runState
+    // 9) 실행 상태(39번 보드) — 부팅 정리, 행의 스피너·점, 모드 옆 스피너, 목록의 runState
     await mainMod.reconcileSessionJobs();
     const staleJob = bridge.store.getJob('turn-stale');
     check('부팅 정리: 지난 프로세스의 답변 턴은 interrupted가 된다', staleJob && staleJob.status === 'interrupted', staleJob && staleJob.status);
@@ -210,10 +210,8 @@ async function main() {
       const rowOf = (id) => document.querySelector('.sidebar-item[data-conversation-id="' + id + '"]');
       const runOf = (id) => { const row = rowOf(id); const run = row && row.querySelector('.sidebar-item-run'); return run ? run.className : null; };
       const nav = document.getElementById('modeNavBacktest');
-      const pill = document.getElementById('sidebarRunSummary');
       return { bt: runOf('conv-bt'), chat: runOf('conv-chat'),
-        navRunning: nav ? nav.classList.contains('has-running') : null,
-        pill: pill && !pill.hidden ? pill.textContent : null };
+        navRunning: nav ? nav.classList.contains('has-running') : null };
     })()`);
     await wc.executeJavaScript(`window.AthenaShell.openConversation({ id: 'conv-bt', title: '추세추종 v3' })`);
     const listedStale = await wc.executeJavaScript(`window.athena.invoke('athena:conversations-list')`);
@@ -223,8 +221,8 @@ async function main() {
     bridge.attachJob({ sessionId: 'conv-bt', job: { id: 'run-probe-1', kind: 'backtest.run', status: 'running' } });
     await new Promise((resolve) => setTimeout(resolve, 300));
     const running = await readSidebarRun();
-    check('실행: 붙는 즉시 그 행에 스피너, 모드 옆에도 스피너, 머리에 "실행 중 1"',
-      /sidebar-item-run-running/.test(running.bt || '') && running.navRunning === true && running.pill === '실행 중 1', running);
+    check('실행: 붙는 즉시 그 행에 스피너, 모드 옆에도 스피너',
+      /sidebar-item-run-running/.test(running.bt || '') && running.navRunning === true, running);
     check('실행: 실패한 대화 행은 빨간 점(failed)', /sidebar-item-run-failed/.test(running.chat || ''), running.chat);
     const listedRunning = await wc.executeJavaScript(`window.athena.invoke('athena:conversations-list')`);
     const btRow = listedRunning.conversations.find((c) => c.id === 'conv-bt');
@@ -256,8 +254,8 @@ async function main() {
     bridge.updateJob({ jobId: 'run-probe-1', patch: { status: 'done' } });
     await new Promise((resolve) => setTimeout(resolve, 300));
     const finished = await readSidebarRun();
-    check('완료: 스피너가 회색 점이 되고 모드 옆 스피너·머리 알약이 사라진다',
-      /sidebar-item-run-done/.test(finished.bt || '') && finished.navRunning === false && finished.pill === null, finished);
+    check('완료: 스피너가 회색 점이 되고 모드 옆 스피너가 사라진다',
+      /sidebar-item-run-done/.test(finished.bt || '') && finished.navRunning === false, finished);
 
     // 10) 2026-09-05 정정 — 모드 클릭은 목록을 거르지 않고 새 대화만 연다(35·40번), 대화 행 앞
     //     모드 아이콘(35번), 설명 카드가 머물고 '프로젝트 수정'이 눌린다(29번). 조용한 복원은

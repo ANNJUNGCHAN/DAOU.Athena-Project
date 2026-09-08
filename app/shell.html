@@ -375,11 +375,15 @@
             <textarea id="input" class="input" rows="1" placeholder="무엇이든 물어보세요" autofocus></textarea>
             <button id="stopBtn" class="composer-stop" type="button" hidden aria-label="중단 (Esc)" title="중단 (Esc)"><span class="composer-stop-square" aria-hidden="true"></span></button>
           </div>
-          <!-- 하단 툴바(Paper 44 composer-bar) — 왼쪽 [키우미][+ 첨부][@ 플러그인], 오른쪽
-               [모델][사고 강도][실행 스피너]. 모델·강도는 모델 팝오버를 연다. -->
+          <!-- 하단 툴바(Paper 44 composer-bar, 2026-09-08 정리) — 오른쪽 [모델][사고 강도][키우미]만 남았다.
+               모델·강도는 모델 팝오버를, 키우미는 옵션 메뉴(첨부·@ 플러그인·설정)를 연다. -->
           <div class="composer-bar">
+            <span class="composer-spacer"></span>
+            <button id="modelBtn" class="composer-text" type="button" title="모델">모델</button>
+            <button id="effortBtn" class="composer-text" type="button" title="사고 강도">강도</button>
             <!-- 키우미(보드 45 v5, 2026-08-27 확정 · Paper 44에서 툴바로 이동) — 클릭=옵션 메뉴
-                 (파일·폴더 첨부, 모델 설정). 전환은 사이드바 모드 네비. -->
+                 (파일·폴더 첨부, @ 플러그인 지정, 모델 설정). 옛 [+][@] 버튼의 일을 이어받아
+                 툴바 오른쪽 끝에 앉는다(2026-09-08). 전환은 사이드바 모드 네비. -->
             <button
               class="dot kiumi"
               id="dot"
@@ -397,12 +401,6 @@
                 </svg>
               </span>
             </button>
-            <button id="attachBtn" class="composer-icon" type="button" aria-label="파일·폴더 첨부" title="첨부"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 2.5v9M2.5 7h9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>
-            <button id="mentionBtn" class="composer-icon composer-icon-at" type="button" aria-label="@ 플러그인 지정" title="@ 플러그인">@</button>
-            <span class="composer-spacer"></span>
-            <button id="modelBtn" class="composer-text" type="button" title="모델">모델</button>
-            <button id="effortBtn" class="composer-text" type="button" title="사고 강도">강도</button>
-            <span id="composerSpinner" class="composer-spinner" hidden aria-hidden="true"></span>
           </div>
           <!-- 모델 팝오버 — 창 안 오버레이. 유리 0.45+blur(카드 단계), 무채색.
                페이드 등장 금지(soul.md §7) — display 토글로 나타난다. -->
@@ -607,6 +605,7 @@
 <script src="lib/sidebar-search.js"></script>
 <script src="lib/sidebar-project-menu.js"></script>
 <script src="lib/project-create-dialog.js"></script>
+<script src="lib/routine-alert-popup.js"></script>
 <script src="lib/sidebar.js"></script>
 <script src="shell.js"></script>
 <script src="provider-first-paint.js"></script>

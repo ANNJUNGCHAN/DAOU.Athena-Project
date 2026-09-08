@@ -176,11 +176,11 @@ async function main() {
   // 등록·승인된 MCP 서버를 최대 6개까지 싣고, 하나도 없으면 "설치된 플러그인
   // 없음" 빈 상태 항목 하나를 대신 세운다. 이 머신에 무엇이 등록돼 있느냐로
   // 달라지므로 가운데를 통째로 못 박으면 검증이 아니라 환경 사진이 된다.
-  // 고정된 계약은 앞 4개·뒤 2개, 그리고 가운데가 1~6개라는 것이다.
-  const KIUMI_HEAD = ['파일 첨부', '폴더 첨부', '목표', '계획 모드'];
+  // 고정된 계약은 앞 5개(추가 4 + 「@ 플러그인 지정」)·뒤 2개, 가운데 1~6개라는 것이다.
+  const KIUMI_HEAD = ['파일 첨부', '폴더 첨부', '목표', '계획 모드', '@ 플러그인 지정'];
   const KIUMI_TAIL = ['모델 설정', '플러그인 관리'];
   const kiumiMiddle = menu.titles.slice(KIUMI_HEAD.length, menu.titles.length - KIUMI_TAIL.length);
-  record('보드 06: 앞 4항목과 뒤 2항목이 Paper 목록과 같다',
+  record('보드 06: 앞 5항목과 뒤 2항목이 계약과 같다',
     JSON.stringify(menu.titles.slice(0, KIUMI_HEAD.length)) === JSON.stringify(KIUMI_HEAD)
       && JSON.stringify(menu.titles.slice(-KIUMI_TAIL.length)) === JSON.stringify(KIUMI_TAIL),
     { titles: menu.titles });

@@ -41,18 +41,28 @@ test('계정 카드를 그리는 공급자 섹션은 모두 출처 문구를 넘
   }
 });
 
-test('작성창 툴바는 활성 계정의 공급자 값을 말한다', () => {
-  const provider = body(chatSource, 'function activeQueryProvider()');
-  assert.match(provider, /a\.active/);
-  assert.match(provider, /'grok'/);
+// 어느 공급자의 값인지는 main.js resolveActiveModelSelection 하나가 정한다 —
+// athena:model-get의 active를 셸 툴바·오브 스트립·실행기가 같이 읽는다. 렌더러가
+// 계정 목록으로 따로 판정하면 오브는 FABLE, 셸은 Grok-4.5를 말한다(2026-09-08 실측).
+test('작성창 툴바는 main이 정한 활성 공급자 값을 말한다', () => {
+  assert.doesNotMatch(chatSource, /function activeQueryProvider\(\)/,
+    '공급자 판정을 렌더러가 다시 하면 main·오브와 어긋날 수 있다');
 
   const render = body(chatSource, 'function renderComposerModel()');
-  assert.match(render, /activeQueryProvider\(\)/);
-  assert.match(render, /modelStateCache\[provider\]/);
+  assert.match(render, /modelStateCache\.active/);
+  assert.match(render, /s\.provider === 'grok'/);
   assert.match(render, /PILL_GROK_MODEL_CHIPS/);
   assert.match(render, /PILL_GROK_EFFORT_CHIPS/);
   assert.doesNotMatch(render, /modelStateCache\.claude/,
     'Grok이 활성인데 Claude 값을 말하면 실행기와 다른 이름이 뜬다');
+
+  const mainSource = fs.readFileSync(path.join(appDir, 'main.js'), 'utf8');
+  assert.match(body(mainSource, 'function handleModelGet()'), /active: resolveActiveModelSelection\(/);
+  const orbSource = fs.readFileSync(path.join(appDir, 'orb.js'), 'utf8');
+  const strip = body(orbSource, 'async function refreshChatControlStrip()');
+  assert.match(strip, /st\.active/);
+  assert.doesNotMatch(strip, /st\.claude/, '오브가 Claude 값을 따로 읽으면 셸과 다른 모델을 말한다');
+  assert.match(orbSource, /window\.athena\.on\('athena:model-changed'/);
 
   assert.match(chatSource, /window\.athena\.on\('athena:cli-changed', \(list\) => applyCliState\(list\)\)/,
     '목록을 실어 오는 이벤트를 버리고 다시 물으면 계정 변경마다 codex 프로브가 한 번 더 돈다');
