@@ -39,6 +39,7 @@ from athena_api.canvas_transform import (
     resolve_fixed_card_title,
     resolve_screen_render_contract,
 )
+from athena_api.hydrate_defaults import fill_missing_arguments
 from athena_api.card_surface_contract import (
     attach_surface_contract,
     bind_surface_values,
@@ -984,12 +985,17 @@ def _hydrate_operation_refs(board: Any, slot_ids: list[str] | None) -> tuple[str
             for slot in board.slots
             if slot.slot_id in requested and slot.binds_a_field
         )
-    needed = {
-        binding.mapping_id
-        for slot in slots
-        for binding in slot.bindings
-    }
-    return tuple(ref for ref in board.operation_refs if ref in needed)
+    needed: list[str] = []
+    for slot in slots:
+        for binding in slot.bindings:
+            if binding.mapping_id not in needed:
+                needed.append(binding.mapping_id)
+    # 선언 순서가 먼저다. 그다음 **슬롯이 실제로 가리키는데 board.operation_refs에는
+    # 없는 op**를 슬롯 순서로 잇는다 — 이 꼬리를 버리면 그 슬롯은 어떤 호출도 받지
+    # 못해 영구히 결측으로 남는다(2026-09-09 실측: 보드 41장 · op 139개).
+    declared = [ref for ref in board.operation_refs if ref in needed]
+    extra = [ref for ref in needed if ref not in board.operation_refs]
+    return tuple(declared + extra)
 
 
 def _same_query_arguments(
@@ -1065,7 +1071,9 @@ def _hydrate_arguments(
         (field_info.alias or name): field_info.is_required()
         for name, field_info in document.request_model.model_fields.items()
     }
-    arguments = {key: value for key, value in target.items() if key in aliases}
+    # 화면이 안 보낸 **필수** 조회 조건은 그 보드의 기본 조건으로 채운다. 안 채우면
+    # op가 호출조차 되지 않아 보드 전체가 결측어가 된다(hydrate_defaults 모듈 주석).
+    arguments = fill_missing_arguments(document.operation_ref, target, aliases)
     try:
         return document.request_model.model_validate(arguments), None
     except ValidationError:

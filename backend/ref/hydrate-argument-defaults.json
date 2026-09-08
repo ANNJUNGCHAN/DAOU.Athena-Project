@@ -1,0 +1,2288 @@
+{
+ "version": "hydrate-argument-defaults.v1",
+ "description": "보드 하이드레이션이 클라이언트가 안 보낸 필수 조회 인자를 채울 때 쓰는 화면 기본값. 값은 각 op 요청 모델의 설명문에서 뽑았다.",
+ "generator": "backend/scripts/build_hydrate_argument_defaults.py",
+ "operations": {
+  "base:ka00198": {
+   "qry_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '1분'"
+   }
+  },
+  "base:ka01690": {
+   "qry_dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   }
+  },
+  "base:ka10011": {
+   "newstk_recvrht_tp": {
+    "value": "00",
+    "why": "열거형 '전체'"
+   }
+  },
+  "base:ka10013": {
+   "dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   },
+   "qry_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '융자'"
+   }
+  },
+  "base:ka10014": {
+   "strt_dt": {
+    "value": "$today-30d",
+    "why": "날짜 토큰"
+   },
+   "end_dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   }
+  },
+  "base:ka10015": {
+   "strt_dt": {
+    "value": "$today-30d",
+    "why": "날짜 토큰"
+   }
+  },
+  "base:ka10016": {
+   "mrkt_tp": {
+    "value": "000",
+    "why": "열거형 '전체'"
+   },
+   "ntl_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '신고가'"
+   },
+   "high_low_close_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '고저기준'"
+   },
+   "stk_cnd": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "trde_qty_tp": {
+    "value": "00000",
+    "why": "열거형 '전체조회'"
+   },
+   "crd_cnd": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "updown_incls": {
+    "value": "1",
+    "why": "열거형 '포함'"
+   },
+   "dt": {
+    "value": "5",
+    "why": "열거형 첫 값 '5일'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka10017": {
+   "mrkt_tp": {
+    "value": "000",
+    "why": "열거형 '전체'"
+   },
+   "updown_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '상한'"
+   },
+   "sort_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '종목코드순'"
+   },
+   "stk_cnd": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "trde_qty_tp": {
+    "value": "00000",
+    "why": "열거형 '전체조회'"
+   },
+   "crd_cnd": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "trde_gold_tp": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka10018": {
+   "high_low_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '고가'"
+   },
+   "alacc_rt": {
+    "value": "05",
+    "why": "열거형 첫 값 '0.5 10:1.0'"
+   },
+   "mrkt_tp": {
+    "value": "000",
+    "why": "열거형 '전체'"
+   },
+   "trde_qty_tp": {
+    "value": "00000",
+    "why": "열거형 '전체조회'"
+   },
+   "stk_cnd": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "crd_cnd": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka10019": {
+   "mrkt_tp": {
+    "value": "000",
+    "why": "열거형 '전체'"
+   },
+   "flu_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '급등'"
+   },
+   "tm_tp": {
+    "value": "2",
+    "why": "실측 교정 — 기본값이 빈 응답"
+   },
+   "tm": {
+    "value": "1",
+    "why": "분 입력 — 최근 1분"
+   },
+   "trde_qty_tp": {
+    "value": "00000",
+    "why": "열거형 '전체조회'"
+   },
+   "stk_cnd": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "crd_cnd": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "pric_cnd": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "updown_incls": {
+    "value": "1",
+    "why": "열거형 '포함'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka10020": {
+   "mrkt_tp": {
+    "value": "001",
+    "why": "열거형 첫 값 '코스피'"
+   },
+   "sort_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '순매수잔량순'"
+   },
+   "trde_qty_tp": {
+    "value": "0000",
+    "why": "열거형 첫 값 '장시작전(0주이상)'"
+   },
+   "stk_cnd": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "crd_cnd": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka10021": {
+   "mrkt_tp": {
+    "value": "001",
+    "why": "열거형 첫 값 '코스피'"
+   },
+   "trde_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '매수잔량'"
+   },
+   "sort_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '급증량'"
+   },
+   "tm_tp": {
+    "value": "1",
+    "why": "분 단위"
+   },
+   "trde_qty_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '천주이상'"
+   },
+   "stk_cnd": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "stex_tp": {
+    "value": "1",
+    "why": "실측 교정 — 기본값이 빈 응답"
+   }
+  },
+  "base:ka10022": {
+   "mrkt_tp": {
+    "value": "001",
+    "why": "열거형 첫 값 '코스피'"
+   },
+   "rt_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '매수'"
+   },
+   "tm_tp": {
+    "value": "1",
+    "why": "분 단위"
+   },
+   "trde_qty_tp": {
+    "value": "5",
+    "why": "열거형 첫 값 '5천주이상'"
+   },
+   "stk_cnd": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "stex_tp": {
+    "value": "1",
+    "why": "실측 교정 — 기본값이 빈 응답"
+   }
+  },
+  "base:ka10023": {
+   "mrkt_tp": {
+    "value": "000",
+    "why": "열거형 '전체'"
+   },
+   "sort_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '급증량'"
+   },
+   "tm_tp": {
+    "value": "1",
+    "why": "분 단위"
+   },
+   "trde_qty_tp": {
+    "value": "5",
+    "why": "열거형 첫 값 '5천주이상'"
+   },
+   "stk_cnd": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "pric_tp": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka10024": {
+   "mrkt_tp": {
+    "value": "000",
+    "why": "열거형 '전체'"
+   },
+   "cycle_tp": {
+    "value": "5",
+    "why": "열거형 첫 값 '5일'"
+   },
+   "trde_qty_tp": {
+    "value": "5",
+    "why": "열거형 첫 값 '5천주이상'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka10025": {
+   "mrkt_tp": {
+    "value": "000",
+    "why": "열거형 '전체'"
+   },
+   "prps_cnctr_rt": {
+    "value": "0",
+    "why": "매물집중비율 하한 0"
+   },
+   "cur_prc_entry": {
+    "value": "0",
+    "why": "열거형 '현재가 매물대 진입 포함안함'"
+   },
+   "prpscnt": {
+    "value": "1",
+    "why": "매물대수 1"
+   },
+   "cycle_tp": {
+    "value": "50",
+    "why": "열거형 첫 값 '50일'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka10026": {
+   "pertp": {
+    "value": "1",
+    "why": "열거형 첫 값 '저PBR'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka10027": {
+   "mrkt_tp": {
+    "value": "000",
+    "why": "열거형 '전체'"
+   },
+   "sort_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '상승률'"
+   },
+   "trde_qty_cnd": {
+    "value": "0000",
+    "why": "열거형 '전체조회'"
+   },
+   "stk_cnd": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "crd_cnd": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "updown_incls": {
+    "value": "0",
+    "why": "열거형 '불 포함'"
+   },
+   "pric_cnd": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "trde_prica_cnd": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka10028": {
+   "sort_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '시가'"
+   },
+   "trde_qty_cnd": {
+    "value": "0000",
+    "why": "열거형 '전체조회'"
+   },
+   "mrkt_tp": {
+    "value": "000",
+    "why": "열거형 '전체'"
+   },
+   "updown_incls": {
+    "value": "0",
+    "why": "열거형 '불 포함'"
+   },
+   "stk_cnd": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "crd_cnd": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "trde_prica_cnd": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "flu_cnd": {
+    "value": "1",
+    "why": "열거형 첫 값 '상위'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka10029": {
+   "mrkt_tp": {
+    "value": "000",
+    "why": "열거형 '전체'"
+   },
+   "sort_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '상승률'"
+   },
+   "trde_qty_cnd": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "stk_cnd": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "crd_cnd": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "pric_cnd": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka10030": {
+   "mrkt_tp": {
+    "value": "000",
+    "why": "열거형 '전체'"
+   },
+   "sort_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '거래량'"
+   },
+   "mang_stk_incls": {
+    "value": "0",
+    "why": "열거형 '관리종목 포함'"
+   },
+   "crd_tp": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "trde_qty_tp": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "pric_tp": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "trde_prica_tp": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "mrkt_open_tp": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka10031": {
+   "mrkt_tp": {
+    "value": "000",
+    "why": "열거형 '전체'"
+   },
+   "qry_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '전일거래량 상위100종목'"
+   },
+   "rank_strt": {
+    "value": "0",
+    "why": "순위 시작 0"
+   },
+   "rank_end": {
+    "value": "100",
+    "why": "순위 끝 100(설명문 상한)"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka10032": {
+   "mrkt_tp": {
+    "value": "000",
+    "why": "열거형 '전체'"
+   },
+   "mang_stk_incls": {
+    "value": "1",
+    "why": "열거형 '관리종목 포함'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka10033": {
+   "mrkt_tp": {
+    "value": "000",
+    "why": "열거형 '전체'"
+   },
+   "trde_qty_tp": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "stk_cnd": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "updown_incls": {
+    "value": "1",
+    "why": "열거형 '상하한포함'"
+   },
+   "crd_cnd": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka10034": {
+   "mrkt_tp": {
+    "value": "000",
+    "why": "열거형 '전체'"
+   },
+   "trde_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '순매도'"
+   },
+   "dt": {
+    "value": "0",
+    "why": "열거형 첫 값 '당일'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka10035": {
+   "mrkt_tp": {
+    "value": "000",
+    "why": "열거형 '전체'"
+   },
+   "trde_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '연속순매도'"
+   },
+   "base_dt_tp": {
+    "value": "0",
+    "why": "열거형 첫 값 '당일기준'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka10036": {
+   "mrkt_tp": {
+    "value": "000",
+    "why": "열거형 '전체'"
+   },
+   "dt": {
+    "value": "0",
+    "why": "열거형 첫 값 '당일'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka10037": {
+   "mrkt_tp": {
+    "value": "000",
+    "why": "열거형 '전체'"
+   },
+   "dt": {
+    "value": "0",
+    "why": "열거형 첫 값 '당일'"
+   },
+   "trde_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '순매수'"
+   },
+   "sort_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '금액'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka10038": {
+   "qry_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '순매도순위정렬'"
+   }
+  },
+  "base:ka10039": {
+   "trde_qty_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "trde_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '순매수'"
+   },
+   "dt": {
+    "value": "0",
+    "why": "열거형 첫 값 '당일'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka10042": {
+   "qry_dt_tp": {
+    "value": "0",
+    "why": "열거형 첫 값 '기간으로 조회'"
+   },
+   "pot_tp": {
+    "value": "0",
+    "why": "열거형 첫 값 '당일'"
+   },
+   "sort_base": {
+    "value": "1",
+    "why": "열거형 첫 값 '종가순'"
+   }
+  },
+  "base:ka10043": {
+   "strt_dt": {
+    "value": "$today-30d",
+    "why": "날짜 토큰"
+   },
+   "end_dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   },
+   "qry_dt_tp": {
+    "value": "0",
+    "why": "열거형 첫 값 '기간으로 조회'"
+   },
+   "pot_tp": {
+    "value": "0",
+    "why": "열거형 첫 값 '당일'"
+   },
+   "dt": {
+    "value": "5",
+    "why": "열거형 첫 값 '5일'"
+   },
+   "sort_base": {
+    "value": "1",
+    "why": "열거형 첫 값 '종가순'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka10044": {
+   "strt_dt": {
+    "value": "$today-30d",
+    "why": "날짜 토큰"
+   },
+   "end_dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   },
+   "trde_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '순매도'"
+   },
+   "mrkt_tp": {
+    "value": "001",
+    "why": "열거형 첫 값 '코스피'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka10045": {
+   "strt_dt": {
+    "value": "$today-30d",
+    "why": "날짜 토큰"
+   },
+   "end_dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   },
+   "orgn_prsm_unp_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '매수단가'"
+   },
+   "for_prsm_unp_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '매수단가'"
+   }
+  },
+  "base:ka10051": {
+   "mrkt_tp": {
+    "value": "0",
+    "why": "열거형 첫 값 '코스피'"
+   },
+   "amt_qty_tp": {
+    "value": "0",
+    "why": "열거형 첫 값 '금액'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka10052": {
+   "mrkt_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "qty_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "pric_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka10054": {
+   "mrkt_tp": {
+    "value": "000",
+    "why": "열거형 '전체'"
+   },
+   "bf_mkrt_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "motn_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "skip_stk": {
+    "value": "000000000",
+    "why": "설명문 '전종목포함 조회시 9개 0'"
+   },
+   "trde_qty_tp": {
+    "value": "0",
+    "why": "열거형 첫 값 '사용안함'"
+   },
+   "min_trde_qty": {
+    "value": "0",
+    "why": "설명문 '0 주 이상'"
+   },
+   "max_trde_qty": {
+    "value": "100000000",
+    "why": "설명문 '100000000 주 이하'"
+   },
+   "trde_prica_tp": {
+    "value": "0",
+    "why": "열거형 첫 값 '사용안함'"
+   },
+   "min_trde_prica": {
+    "value": "0",
+    "why": "설명문 '0 백만원 이상'"
+   },
+   "max_trde_prica": {
+    "value": "100000000",
+    "why": "설명문 '100000000 백만원 이하'"
+   },
+   "motn_drc": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka10055": {
+   "tdy_pred": {
+    "value": "1",
+    "why": "열거형 첫 값 '당일'"
+   }
+  },
+  "base:ka10058": {
+   "strt_dt": {
+    "value": "$today-30d",
+    "why": "날짜 토큰"
+   },
+   "end_dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   },
+   "trde_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '순매도'"
+   },
+   "mrkt_tp": {
+    "value": "001",
+    "why": "열거형 첫 값 '코스피'"
+   },
+   "invsr_tp": {
+    "value": "8000",
+    "why": "열거형 첫 값 '개인'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka10059": {
+   "dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   },
+   "amt_qty_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '금액'"
+   },
+   "trde_tp": {
+    "value": "0",
+    "why": "열거형 첫 값 '순매수'"
+   },
+   "unit_tp": {
+    "value": "1000",
+    "why": "열거형 첫 값 '천주'"
+   }
+  },
+  "base:ka10060": {
+   "dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   },
+   "amt_qty_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '금액'"
+   },
+   "trde_tp": {
+    "value": "0",
+    "why": "열거형 첫 값 '순매수'"
+   },
+   "unit_tp": {
+    "value": "1000",
+    "why": "열거형 첫 값 '천주'"
+   }
+  },
+  "base:ka10061": {
+   "strt_dt": {
+    "value": "$today-30d",
+    "why": "날짜 토큰"
+   },
+   "end_dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   },
+   "amt_qty_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '금액'"
+   },
+   "trde_tp": {
+    "value": "0",
+    "why": "열거형 첫 값 '순매수'"
+   },
+   "unit_tp": {
+    "value": "1000",
+    "why": "열거형 첫 값 '천주'"
+   }
+  },
+  "base:ka10062": {
+   "strt_dt": {
+    "value": "$today-30d",
+    "why": "날짜 토큰"
+   },
+   "mrkt_tp": {
+    "value": "000",
+    "why": "열거형 '전체'"
+   },
+   "trde_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '순매수'"
+   },
+   "sort_cnd": {
+    "value": "1",
+    "why": "열거형 첫 값 '수량'"
+   },
+   "unit_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '단주'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka10063": {
+   "mrkt_tp": {
+    "value": "000",
+    "why": "열거형 '전체'"
+   },
+   "amt_qty_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '금액&수량'"
+   },
+   "invsr": {
+    "value": "6",
+    "why": "열거형 첫 값 '외국인'"
+   },
+   "frgn_all": {
+    "value": "1",
+    "why": "열거형 첫 값 '체크'"
+   },
+   "smtm_netprps_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '체크'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka10064": {
+   "mrkt_tp": {
+    "value": "000",
+    "why": "열거형 '전체'"
+   },
+   "amt_qty_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '금액'"
+   },
+   "trde_tp": {
+    "value": "0",
+    "why": "열거형 첫 값 '순매수'"
+   }
+  },
+  "base:ka10065": {
+   "trde_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '순매수'"
+   },
+   "mrkt_tp": {
+    "value": "000",
+    "why": "열거형 '전체'"
+   },
+   "orgn_tp": {
+    "value": "9000",
+    "why": "열거형 첫 값 '외국인'"
+   }
+  },
+  "base:ka10066": {
+   "mrkt_tp": {
+    "value": "000",
+    "why": "열거형 '전체'"
+   },
+   "amt_qty_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '금액'"
+   },
+   "trde_tp": {
+    "value": "0",
+    "why": "열거형 첫 값 '순매수'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka10068": {
+   "all_tp": {
+    "value": "1",
+    "why": "열거형 '전체표시'"
+   }
+  },
+  "base:ka10069": {
+   "strt_dt": {
+    "value": "$today-30d",
+    "why": "날짜 토큰"
+   },
+   "mrkt_tp": {
+    "value": "001",
+    "why": "열거형 첫 값 '코스피'"
+   }
+  },
+  "base:ka10072": {
+   "strt_dt": {
+    "value": "$today-30d",
+    "why": "날짜 토큰"
+   }
+  },
+  "base:ka10073": {
+   "strt_dt": {
+    "value": "$today-30d",
+    "why": "날짜 토큰"
+   },
+   "end_dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   }
+  },
+  "base:ka10074": {
+   "strt_dt": {
+    "value": "$today-30d",
+    "why": "날짜 토큰"
+   },
+   "end_dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   }
+  },
+  "base:ka10075": {
+   "all_stk_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "trde_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka10076": {
+   "qry_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "sell_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka10078": {
+   "strt_dt": {
+    "value": "$today-30d",
+    "why": "날짜 토큰"
+   },
+   "end_dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   }
+  },
+  "base:ka10079": {
+   "tic_scope": {
+    "value": "1",
+    "why": "열거형 첫 값 '1틱'"
+   },
+   "upd_stkpc_tp": {
+    "value": "1",
+    "why": "수정주가 적용(설명문 '0 or 1')"
+   }
+  },
+  "base:ka10080": {
+   "tic_scope": {
+    "value": "1",
+    "why": "열거형 첫 값 '1분'"
+   },
+   "upd_stkpc_tp": {
+    "value": "1",
+    "why": "수정주가 적용(설명문 '0 or 1')"
+   }
+  },
+  "base:ka10081": {
+   "base_dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   },
+   "upd_stkpc_tp": {
+    "value": "1",
+    "why": "수정주가 적용(설명문 '0 or 1')"
+   }
+  },
+  "base:ka10082": {
+   "base_dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   },
+   "upd_stkpc_tp": {
+    "value": "1",
+    "why": "수정주가 적용(설명문 '0 or 1')"
+   }
+  },
+  "base:ka10083": {
+   "base_dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   },
+   "upd_stkpc_tp": {
+    "value": "1",
+    "why": "수정주가 적용(설명문 '0 or 1')"
+   }
+  },
+  "base:ka10084": {
+   "tdy_pred": {
+    "value": "1",
+    "why": "열거형 첫 값 '당일'"
+   },
+   "tic_min": {
+    "value": "0",
+    "why": "열거형 첫 값 '틱'"
+   }
+  },
+  "base:ka10085": {
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka10086": {
+   "qry_dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   },
+   "indc_tp": {
+    "value": "0",
+    "why": "열거형 첫 값 '수량'"
+   }
+  },
+  "base:ka10094": {
+   "base_dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   },
+   "upd_stkpc_tp": {
+    "value": "1",
+    "why": "수정주가 적용(설명문 '0 or 1')"
+   }
+  },
+  "base:ka10098": {
+   "mrkt_tp": {
+    "value": "000",
+    "why": "열거형 '전체'"
+   },
+   "sort_base": {
+    "value": "1",
+    "why": "열거형 첫 값 '상승률'"
+   },
+   "stk_cnd": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "trde_qty_cnd": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "crd_cnd": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   },
+   "trde_prica": {
+    "value": "0",
+    "why": "열거형 '전체조회'"
+   }
+  },
+  "base:ka10099": {
+   "mrkt_tp": {
+    "value": "0",
+    "why": "열거형 첫 값 '코스피'"
+   }
+  },
+  "base:ka10101": {
+   "mrkt_tp": {
+    "value": "7",
+    "why": "열거형 'KRX100(통합지수)'"
+   }
+  },
+  "base:ka10131": {
+   "dt": {
+    "value": "1",
+    "why": "열거형 첫 값 '최근일'"
+   },
+   "mrkt_tp": {
+    "value": "001",
+    "why": "열거형 첫 값 '코스피'"
+   },
+   "netslmt_tp": {
+    "value": "2",
+    "why": "열거형 첫 값 '순매수(고정값)'"
+   },
+   "stk_inds_tp": {
+    "value": "0",
+    "why": "열거형 첫 값 '종목(주식)'"
+   },
+   "amt_qty_tp": {
+    "value": "0",
+    "why": "열거형 첫 값 '금액'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka10170": {
+   "ottks_tp": {
+    "value": "2",
+    "why": "열거형 '당일매도 전체'"
+   },
+   "ch_crd_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   }
+  },
+  "base:ka20002": {
+   "mrkt_tp": {
+    "value": "0",
+    "why": "열거형 첫 값 '코스피'"
+   },
+   "inds_cd": {
+    "value": "001",
+    "why": "열거형 '종합(KOSPI)'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka20003": {
+   "inds_cd": {
+    "value": "001",
+    "why": "열거형 '종합(KOSPI)'"
+   }
+  },
+  "base:ka20004": {
+   "inds_cd": {
+    "value": "001",
+    "why": "열거형 '종합(KOSPI)'"
+   },
+   "tic_scope": {
+    "value": "1",
+    "why": "열거형 첫 값 '1틱'"
+   }
+  },
+  "base:ka20005": {
+   "inds_cd": {
+    "value": "001",
+    "why": "열거형 '종합(KOSPI)'"
+   },
+   "tic_scope": {
+    "value": "1",
+    "why": "열거형 첫 값 '1분'"
+   }
+  },
+  "base:ka20006": {
+   "inds_cd": {
+    "value": "001",
+    "why": "열거형 '종합(KOSPI)'"
+   },
+   "base_dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   }
+  },
+  "base:ka20007": {
+   "inds_cd": {
+    "value": "001",
+    "why": "열거형 '종합(KOSPI)'"
+   },
+   "base_dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   }
+  },
+  "base:ka20008": {
+   "inds_cd": {
+    "value": "001",
+    "why": "열거형 '종합(KOSPI)'"
+   },
+   "base_dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   }
+  },
+  "base:ka20019": {
+   "inds_cd": {
+    "value": "001",
+    "why": "열거형 '종합(KOSPI)'"
+   },
+   "base_dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   }
+  },
+  "base:ka30001": {
+   "flu_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '급등'"
+   },
+   "tm_tp": {
+    "value": "1",
+    "why": "분 단위"
+   },
+   "tm": {
+    "value": "1",
+    "why": "분 입력 — 최근 1분"
+   },
+   "trde_qty_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "isscomp_cd": {
+    "value": "000000000000",
+    "why": "열거형 '전체'"
+   },
+   "bsis_aset_cd": {
+    "value": "000000000000",
+    "why": "형제 op 설명문의 '전체' 코드"
+   },
+   "rght_tp": {
+    "value": "000",
+    "why": "열거형 '전체'"
+   },
+   "lpcd": {
+    "value": "000000000000",
+    "why": "열거형 '전체'"
+   },
+   "trde_end_elwskip": {
+    "value": "0",
+    "why": "열거형 '포함'"
+   }
+  },
+  "base:ka30002": {
+   "isscomp_cd": {
+    "value": "001",
+    "why": "열거형 첫 값 '영웅문4 0273화면참조 (교보'"
+   },
+   "trde_qty_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "trde_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '순매수'"
+   },
+   "dt": {
+    "value": "1",
+    "why": "열거형 첫 값 '전일'"
+   },
+   "trde_end_elwskip": {
+    "value": "0",
+    "why": "열거형 '포함'"
+   }
+  },
+  "base:ka30003": {
+   "bsis_aset_cd": {
+    "value": "000000000000",
+    "why": "형제 op 설명문의 '전체' 코드"
+   },
+   "base_dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   }
+  },
+  "base:ka30004": {
+   "isscomp_cd": {
+    "value": "000000000000",
+    "why": "열거형 '전체'"
+   },
+   "bsis_aset_cd": {
+    "value": "000000000000",
+    "why": "형제 op 설명문의 '전체' 코드"
+   },
+   "rght_tp": {
+    "value": "000",
+    "why": "열거형 '전체'"
+   },
+   "lpcd": {
+    "value": "000000000000",
+    "why": "열거형 '전체'"
+   },
+   "trde_end_elwskip": {
+    "value": "0",
+    "why": "열거형 '거래종료ELW포함'"
+   }
+  },
+  "base:ka30005": {
+   "isscomp_cd": {
+    "value": "000000000000",
+    "why": "열거형 '12자리입력(전체'"
+   },
+   "bsis_aset_cd": {
+    "value": "000000000000",
+    "why": "형제 op 설명문의 '전체' 코드"
+   },
+   "rght_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "lpcd": {
+    "value": "000000000000",
+    "why": "열거형 '전체일때만 12자리입력(전체'"
+   },
+   "sort_tp": {
+    "value": "0",
+    "why": "열거형 첫 값 '정렬없음'"
+   }
+  },
+  "base:ka30009": {
+   "sort_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '상승률'"
+   },
+   "rght_tp": {
+    "value": "000",
+    "why": "열거형 '전체'"
+   },
+   "trde_end_skip": {
+    "value": "0",
+    "why": "열거형 '거래종료포함'"
+   }
+  },
+  "base:ka30010": {
+   "sort_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '순매수잔량상위'"
+   },
+   "rght_tp": {
+    "value": "000",
+    "why": "열거형 '전체'"
+   },
+   "trde_end_skip": {
+    "value": "0",
+    "why": "열거형 '거래종료포함'"
+   }
+  },
+  "base:ka40001": {
+   "dt": {
+    "value": "0",
+    "why": "열거형 첫 값 '1주'"
+   }
+  },
+  "base:ka40004": {
+   "txon_type": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "navpre": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "mngmcomp": {
+    "value": "0000",
+    "why": "열거형 '전체'"
+   },
+   "txon_yn": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "trace_idex": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka50012": {
+   "base_dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   }
+  },
+  "base:ka50079": {
+   "tic_scope": {
+    "value": "1",
+    "why": "열거형 첫 값 '1틱'"
+   },
+   "upd_stkpc_tp": {
+    "value": "1",
+    "why": "수정주가 적용(설명문 '0 or 1')"
+   }
+  },
+  "base:ka50080": {
+   "tic_scope": {
+    "value": "1",
+    "why": "열거형 첫 값 '1분'"
+   }
+  },
+  "base:ka50081": {
+   "base_dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   },
+   "upd_stkpc_tp": {
+    "value": "1",
+    "why": "수정주가 적용(설명문 '0 or 1')"
+   }
+  },
+  "base:ka50082": {
+   "base_dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   },
+   "upd_stkpc_tp": {
+    "value": "1",
+    "why": "수정주가 적용(설명문 '0 or 1')"
+   }
+  },
+  "base:ka50083": {
+   "base_dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   },
+   "upd_stkpc_tp": {
+    "value": "1",
+    "why": "수정주가 적용(설명문 '0 or 1')"
+   }
+  },
+  "base:ka50091": {
+   "tic_scope": {
+    "value": "1",
+    "why": "열거형 첫 값 '1틱'"
+   }
+  },
+  "base:ka50092": {
+   "tic_scope": {
+    "value": "1",
+    "why": "열거형 첫 값 '1분'"
+   }
+  },
+  "base:ka50101": {
+   "tic_scope": {
+    "value": "1",
+    "why": "열거형 첫 값 '1틱'"
+   }
+  },
+  "base:ka90001": {
+   "qry_tp": {
+    "value": "0",
+    "why": "열거형 '전체검색'"
+   },
+   "date_tp": {
+    "value": "1",
+    "why": "n일전 — 1일"
+   },
+   "flu_pl_amt_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '상위기간수익률'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka90002": {
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka90003": {
+   "trde_upper_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '순매도상위'"
+   },
+   "amt_qty_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '금액'"
+   },
+   "mrkt_tp": {
+    "value": "P00101",
+    "why": "열거형 첫 값 '코스피'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka90004": {
+   "dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   },
+   "mrkt_tp": {
+    "value": "P00101",
+    "why": "열거형 첫 값 '코스피'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka90005": {
+   "date": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   },
+   "amt_qty_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '금액(백만원)'"
+   },
+   "mrkt_tp": {
+    "value": "P00101",
+    "why": "열거형 첫 값 '코스피- 거래소구분값 1일경우'"
+   },
+   "min_tic_tp": {
+    "value": "0",
+    "why": "열거형 첫 값 '틱'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka90006": {
+   "date": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka90007": {
+   "date": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   },
+   "amt_qty_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '금액'"
+   },
+   "mrkt_tp": {
+    "value": "0",
+    "why": "열거형 첫 값 '코스피'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka90008": {
+   "amt_qty_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '금액'"
+   },
+   "date": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   }
+  },
+  "base:ka90009": {
+   "mrkt_tp": {
+    "value": "000",
+    "why": "열거형 '전체'"
+   },
+   "amt_qty_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '금액(천만)'"
+   },
+   "qry_dt_tp": {
+    "value": "1",
+    "why": "열거형 '조회일자 포함'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka90010": {
+   "date": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   },
+   "amt_qty_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '금액(백만원)'"
+   },
+   "mrkt_tp": {
+    "value": "P00101",
+    "why": "열거형 첫 값 '코스피- 거래소구분값 1일경우'"
+   },
+   "min_tic_tp": {
+    "value": "0",
+    "why": "열거형 첫 값 '틱'"
+   },
+   "stex_tp": {
+    "value": "3",
+    "why": "통합(KRX+NXT)"
+   }
+  },
+  "base:ka90012": {
+   "dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   },
+   "mrkt_tp": {
+    "value": "001",
+    "why": "열거형 첫 값 '코스피'"
+   }
+  },
+  "base:kt00002": {
+   "start_dt": {
+    "value": "$today-30d",
+    "why": "날짜 토큰"
+   },
+   "end_dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   }
+  },
+  "base:kt00003": {
+   "qry_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   }
+  },
+  "base:kt00007": {
+   "qry_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '주문순'"
+   },
+   "stk_bond_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "sell_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "dmst_stex_tp": {
+    "value": "KRX",
+    "why": "국내거래소"
+   }
+  },
+  "base:kt00015": {
+   "strt_dt": {
+    "value": "$today-30d",
+    "why": "날짜 토큰"
+   },
+   "end_dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   },
+   "tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "gds_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "dmst_stex_tp": {
+    "value": "KRX",
+    "why": "국내거래소"
+   }
+  },
+  "base:kt20016": {
+   "mrkt_deal_tp": {
+    "value": "%",
+    "why": "열거형 '전체'"
+   }
+  },
+  "base:kt50030": {
+   "ord_dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   },
+   "mrkt_deal_tp": {
+    "value": "5",
+    "why": "열거형 첫 값 'KRX금현물'"
+   },
+   "stk_bond_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "slby_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   }
+  },
+  "base:kt50031": {
+   "qry_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '주문순'"
+   },
+   "stk_bond_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "sell_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "dmst_stex_tp": {
+    "value": "KRX",
+    "why": "국내거래소"
+   }
+  },
+  "base:kt50075": {
+   "ord_dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   },
+   "mrkt_deal_tp": {
+    "value": "5",
+    "why": "열거형 첫 값 'KRW금현물'"
+   },
+   "stk_bond_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "sell_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   }
+  },
+  "detail:ka20001:fifty_two_week_range": {
+   "mrkt_tp": {
+    "value": "0",
+    "why": "열거형 첫 값 '코스피'"
+   },
+   "inds_cd": {
+    "value": "001",
+    "why": "열거형 '종합(KOSPI)'"
+   }
+  },
+  "detail:ka20001:intraday_history": {
+   "mrkt_tp": {
+    "value": "0",
+    "why": "열거형 첫 값 '코스피'"
+   },
+   "inds_cd": {
+    "value": "001",
+    "why": "열거형 '종합(KOSPI)'"
+   }
+  },
+  "detail:ka20001:market_breadth": {
+   "mrkt_tp": {
+    "value": "0",
+    "why": "열거형 첫 값 '코스피'"
+   },
+   "inds_cd": {
+    "value": "001",
+    "why": "열거형 '종합(KOSPI)'"
+   }
+  },
+  "detail:ka20001:market_snapshot": {
+   "mrkt_tp": {
+    "value": "0",
+    "why": "열거형 첫 값 '코스피'"
+   },
+   "inds_cd": {
+    "value": "001",
+    "why": "열거형 '종합(KOSPI)'"
+   }
+  },
+  "detail:ka20001:session_range": {
+   "mrkt_tp": {
+    "value": "0",
+    "why": "열거형 첫 값 '코스피'"
+   },
+   "inds_cd": {
+    "value": "001",
+    "why": "열거형 '종합(KOSPI)'"
+   }
+  },
+  "detail:ka20009:daily_history": {
+   "mrkt_tp": {
+    "value": "0",
+    "why": "열거형 첫 값 '코스피'"
+   },
+   "inds_cd": {
+    "value": "001",
+    "why": "열거형 '종합(KOSPI)'"
+   }
+  },
+  "detail:ka20009:fifty_two_week_range": {
+   "mrkt_tp": {
+    "value": "0",
+    "why": "열거형 첫 값 '코스피'"
+   },
+   "inds_cd": {
+    "value": "001",
+    "why": "열거형 '종합(KOSPI)'"
+   }
+  },
+  "detail:ka20009:market_breadth": {
+   "mrkt_tp": {
+    "value": "0",
+    "why": "열거형 첫 값 '코스피'"
+   },
+   "inds_cd": {
+    "value": "001",
+    "why": "열거형 '종합(KOSPI)'"
+   }
+  },
+  "detail:ka20009:market_snapshot": {
+   "mrkt_tp": {
+    "value": "0",
+    "why": "열거형 첫 값 '코스피'"
+   },
+   "inds_cd": {
+    "value": "001",
+    "why": "열거형 '종합(KOSPI)'"
+   }
+  },
+  "detail:ka20009:session_range": {
+   "mrkt_tp": {
+    "value": "0",
+    "why": "열거형 첫 값 '코스피'"
+   },
+   "inds_cd": {
+    "value": "001",
+    "why": "열거형 '종합(KOSPI)'"
+   }
+  },
+  "detail:kt00001:cash_and_margin": {
+   "qry_tp": {
+    "value": "3",
+    "why": "열거형 첫 값 '추정조회'"
+   }
+  },
+  "detail:kt00001:foreign_currency_deposits": {
+   "qry_tp": {
+    "value": "3",
+    "why": "열거형 첫 값 '추정조회'"
+   }
+  },
+  "detail:kt00001:loans_and_collateral": {
+   "qry_tp": {
+    "value": "3",
+    "why": "열거형 첫 값 '추정조회'"
+   }
+  },
+  "detail:kt00001:receivables_and_arrears": {
+   "qry_tp": {
+    "value": "3",
+    "why": "열거형 첫 값 '추정조회'"
+   }
+  },
+  "detail:kt00001:settlement_forecast": {
+   "qry_tp": {
+    "value": "3",
+    "why": "열거형 첫 값 '추정조회'"
+   }
+  },
+  "detail:kt00001:special_deposits_and_credit": {
+   "qry_tp": {
+    "value": "3",
+    "why": "열거형 첫 값 '추정조회'"
+   }
+  },
+  "detail:kt00001:substitute_collateral": {
+   "qry_tp": {
+    "value": "3",
+    "why": "열거형 첫 값 '추정조회'"
+   }
+  },
+  "detail:kt00001:withdrawal_and_order_capacity": {
+   "qry_tp": {
+    "value": "3",
+    "why": "열거형 첫 값 '추정조회'"
+   }
+  },
+  "detail:kt00004:account_identity": {
+   "qry_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "dmst_stex_tp": {
+    "value": "KRX",
+    "why": "국내거래소"
+   }
+  },
+  "detail:kt00004:cash_and_assets": {
+   "qry_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "dmst_stex_tp": {
+    "value": "KRX",
+    "why": "국내거래소"
+   }
+  },
+  "detail:kt00004:position_valuation": {
+   "qry_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "dmst_stex_tp": {
+    "value": "KRX",
+    "why": "국내거래소"
+   }
+  },
+  "detail:kt00004:profit_and_loss": {
+   "qry_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "dmst_stex_tp": {
+    "value": "KRX",
+    "why": "국내거래소"
+   }
+  },
+  "detail:kt00005:cash_and_capacity": {
+   "dmst_stex_tp": {
+    "value": "KRX",
+    "why": "국내거래소"
+   }
+  },
+  "detail:kt00005:credit_and_collateral": {
+   "dmst_stex_tp": {
+    "value": "KRX",
+    "why": "국내거래소"
+   }
+  },
+  "detail:kt00005:margin_order_capacity": {
+   "dmst_stex_tp": {
+    "value": "KRX",
+    "why": "국내거래소"
+   }
+  },
+  "detail:kt00005:portfolio_summary": {
+   "dmst_stex_tp": {
+    "value": "KRX",
+    "why": "국내거래소"
+   }
+  },
+  "detail:kt00005:receivables_and_margin": {
+   "dmst_stex_tp": {
+    "value": "KRX",
+    "why": "국내거래소"
+   }
+  },
+  "detail:kt00005:settled_positions": {
+   "dmst_stex_tp": {
+    "value": "KRX",
+    "why": "국내거래소"
+   }
+  },
+  "detail:kt00009:contract_amounts": {
+   "stk_bond_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "mrkt_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "sell_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "qry_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "dmst_stex_tp": {
+    "value": "KRX",
+    "why": "국내거래소"
+   }
+  },
+  "detail:kt00009:order_execution_status": {
+   "stk_bond_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "mrkt_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "sell_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "qry_tp": {
+    "value": "0",
+    "why": "열거형 '전체'"
+   },
+   "dmst_stex_tp": {
+    "value": "KRX",
+    "why": "국내거래소"
+   }
+  },
+  "detail:kt00010:cash_and_withdrawal_capacity": {
+   "trde_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '매도'"
+   }
+  },
+  "detail:kt00010:margin_order_capacity": {
+   "trde_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '매도'"
+   }
+  },
+  "detail:kt00010:purchase_settlement": {
+   "trde_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '매도'"
+   }
+  },
+  "detail:kt00016:account_manager": {
+   "fr_dt": {
+    "value": "$today-30d",
+    "why": "날짜 토큰"
+   },
+   "to_dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   }
+  },
+  "detail:kt00016:asset_balance_change": {
+   "fr_dt": {
+    "value": "$today-30d",
+    "why": "날짜 토큰"
+   },
+   "to_dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   }
+  },
+  "detail:kt00016:liability_balance_change": {
+   "fr_dt": {
+    "value": "$today-30d",
+    "why": "날짜 토큰"
+   },
+   "to_dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   }
+  },
+  "detail:kt00016:performance_summary": {
+   "fr_dt": {
+    "value": "$today-30d",
+    "why": "날짜 토큰"
+   },
+   "to_dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   }
+  },
+  "detail:kt00016:period_flows": {
+   "fr_dt": {
+    "value": "$today-30d",
+    "why": "날짜 토큰"
+   },
+   "to_dt": {
+    "value": "$today",
+    "why": "날짜 토큰"
+   }
+  },
+  "detail:kt00018:financing_summary": {
+   "qry_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '합산'"
+   },
+   "dmst_stex_tp": {
+    "value": "KRX",
+    "why": "국내거래소"
+   }
+  },
+  "detail:kt00018:holdings": {
+   "qry_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '합산'"
+   },
+   "dmst_stex_tp": {
+    "value": "KRX",
+    "why": "국내거래소"
+   }
+  },
+  "detail:kt00018:portfolio_summary": {
+   "qry_tp": {
+    "value": "1",
+    "why": "열거형 첫 값 '합산'"
+   },
+   "dmst_stex_tp": {
+    "value": "KRX",
+    "why": "국내거래소"
+   }
+  }
+ },
+ "unresolved": {},
+ "empty_ops": [
+  "base:ka01690",
+  "base:ka10025",
+  "base:ka10048",
+  "base:ka10050",
+  "base:ka10072",
+  "base:ka10075",
+  "base:ka10076",
+  "base:ka30003",
+  "base:ka30011",
+  "base:ka50010",
+  "base:ka50012",
+  "base:ka50079",
+  "base:ka50080",
+  "base:ka50081",
+  "base:ka50082",
+  "base:ka50083",
+  "base:ka90007",
+  "base:ka90012",
+  "base:kt00002",
+  "base:kt00007",
+  "base:kt00008",
+  "base:kt00015",
+  "base:kt20016",
+  "base:kt20017",
+  "base:kt50021",
+  "base:kt50030",
+  "base:kt50031",
+  "base:kt50075",
+  "detail:ka10007:order_counts",
+  "detail:ka10040:broker_departures",
+  "detail:ka30012:evaluation_window",
+  "detail:ka30012:liquidity_providers",
+  "detail:kt00001:foreign_currency_deposits",
+  "detail:kt00004:account_identity",
+  "detail:kt00005:cash_and_capacity",
+  "detail:kt00005:credit_and_collateral",
+  "detail:kt00005:portfolio_summary",
+  "detail:kt00005:receivables_and_margin",
+  "detail:kt00005:settled_positions",
+  "detail:kt00009:contract_amounts",
+  "detail:kt00009:order_execution_status",
+  "detail:kt00012:account_and_receivable_capacity",
+  "detail:kt00012:guarantee_order_capacity",
+  "detail:kt00012:guarantee_rate",
+  "detail:kt00016:account_manager",
+  "detail:kt00016:asset_balance_change",
+  "detail:kt00016:liability_balance_change",
+  "detail:kt00016:performance_summary",
+  "detail:kt00016:period_flows",
+  "detail:kt00017:d2_account_position",
+  "detail:kt00017:daily_cash_and_trading_flows",
+  "detail:kt00017:other_assets_and_income",
+  "detail:kt50020:gold_account_summary",
+  "detail:kt50020:gold_holdings",
+  "detail:kt50032:account_identity",
+  "detail:kt50032:gold_trade_history"
+ ]
+}

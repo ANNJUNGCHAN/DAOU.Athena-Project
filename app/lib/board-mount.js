@@ -29,7 +29,17 @@ function anchorOf(slot) {
 
 // 라벨은 데이터가 아니라 디자인 문구다 — 값이 안 실려도 `미제공`으로 지우지 않고
 // Paper 원문을 그대로 둔다. 값 슬롯은 반대로 값이 없으면 결측어를 쓴다(신념 5).
+//
+// 예외가 하나 더 있다: 저작이 `static`으로 못박은 값 자리(생성기 `_static_mode`).
+//   'text'  — 화면 문구 자체다(`D+1 예상`·단계 번호) → Paper 원문.
+//   'blank' — 응답에 그 필드가 없다고 사유까지 적힌 자리다 → 빈 칸. Paper 원문은
+//             목업 숫자라 그대로 두면 없는 값을 지어내고, 결측어를 찍으면 「이번
+//             응답에 안 왔다」는 거짓말이 된다(그 화면에는 원래 그 값이 없다).
 function staticTextOf(slot) {
+  if (slot.static === 'text' || slot.static === true) {
+    return typeof slot.paper_text === 'string' ? slot.paper_text : '';
+  }
+  if (slot.static === 'blank') return '';
   return slot.kind === 'label' && typeof slot.paper_text === 'string' ? slot.paper_text : null;
 }
 
@@ -93,7 +103,9 @@ function mountPlan(contract, values) {
     const node = anchorOf(slot);
     const override = rollupText.get(slot.slot_id);
     const bound = values ? values[slot.slot_id] : undefined;
-    const staticText = bound === undefined || bound === null ? staticTextOf(slot) : null;
+    // static 자리는 응답이 채우는 자리가 아니다 — 값이 실려 와도 디자인 문구가 이긴다.
+    const staticText = (bound === undefined || bound === null || slot.static)
+      ? staticTextOf(slot) : null;
     const formatted = override
       ? { text: override, tone: null, missing: false }
       : (staticText !== null
@@ -249,6 +261,62 @@ function hasTextContent(el) {
   return typeof el.textContent === 'string' && el.textContent.trim() !== '';
 }
 
+// ---------- 빈 줄 접기 (자료가 한 칸도 없는 되풀이 줄) ----------
+//
+// 응답이 20줄짜리 목록에 3줄만 실어 오면 나머지 17줄은 자료가 없는 줄이다. 칸마다
+// 결측어를 찍으면 보드가 결측어 벽이 된다. 백엔드가 그 줄 목록을 계약에 실어 주고
+// (`surface_contract.empty_rows`), 여기서 **그 줄만 담은 가장 작은 상자**를 찾아
+// 감춘다. 값이 실린 잎을 품는 상자는 감추지 않는다 — 자료를 지우는 접기는 없다.
+
+function slotElementIndex(root) {
+  const index = new Map();
+  for (const el of root.querySelectorAll('[data-slot-id]')) {
+    const slotId = el.dataset ? el.dataset.slotId : el.getAttribute('data-slot-id');
+    if (slotId) index.set(slotId, el);
+  }
+  return index;
+}
+
+function commonAncestor(elements) {
+  let ancestor = elements[0];
+  for (const el of elements.slice(1)) {
+    while (ancestor && !ancestor.contains(el)) ancestor = ancestor.parentElement;
+    if (!ancestor) return null;
+  }
+  return ancestor;
+}
+
+// 이 상자가 값 있는 잎을 품고 있는가. 품고 있으면 접을 수 없다.
+function holdsValue(box, valued) {
+  for (const el of valued) if (box.contains(el)) return true;
+  return false;
+}
+
+function collapseEmptyRows(surface, emptyRows, options = {}) {
+  const rows = Array.isArray(emptyRows) ? emptyRows : [];
+  if (!rows.length || typeof surface.querySelectorAll !== 'function') return [];
+  const bySlot = slotElementIndex(surface);
+  const valued = [];
+  for (const el of bySlot.values()) {
+    const missing = el.dataset ? el.dataset.missing : el.getAttribute('data-missing');
+    if (missing === undefined || missing === null) valued.push(el);
+  }
+  const hidden = [];
+  for (const row of rows) {
+    const slotIds = Array.isArray(row && row.slot_ids) ? row.slot_ids : [];
+    const elements = slotIds.map((slotId) => bySlot.get(slotId)).filter(Boolean);
+    if (!elements.length) continue;
+    const box = commonAncestor(elements);
+    // 값 있는 잎을 품는 상자는 접지 않는다 — 자료를 지우는 접기는 없다. 표면
+    // 자체가 그 상자면 접을 것이 없다(줄이 아니라 보드 전체다).
+    if (!box || box === surface || holdsValue(box, valued)) continue;
+    setHidden(box, true);
+    hidden.push({ row: row.row, node: (box.dataset && box.dataset.node) || '', slots: slotIds.length });
+  }
+  if (typeof options.onCollapse === 'function') options.onCollapse(hidden);
+  return hidden;
+}
+
 // DOM 쓰기 층 — 텍스트 노드만 건드린다. 구조·인라인 스타일 원문은 손대지 않는다(D1).
 function applyPlan(root, plan, options = {}) {
   const index = nodeIndex(root);
@@ -291,14 +359,17 @@ function applyPlan(root, plan, options = {}) {
   // 계약이 모르는 채로 화면에 글자를 내는 노드만 잉여로 센다. 컨테이너 앵커는
   // 그 자체로 글자를 내지 않으므로(자식이 낸다) 잉여가 아니다.
   // 부분 갱신(실시간 프레임)은 계획에 슬롯 몇 개만 들어 있어 이 셈이 뜻을 잃는다.
-  if (options.partial) return { unbound, unmapped: [], containers };
+  const collapsedRows = options.partial
+    ? []
+    : collapseEmptyRows(root, options.emptyRows, options);
+  if (options.partial) return { unbound, unmapped: [], containers, collapsedRows };
   const claimed = new Set(plan.assignments.map((assignment) => assignment.node));
   const unmapped = [];
   for (const [key, el] of index) {
     if (claimed.has(key)) continue;
     if (elementChildCount(el) === 0 && hasTextContent(el)) unmapped.push(key);
   }
-  return { unbound, unmapped, containers };
+  return { unbound, unmapped, containers, collapsedRows };
 }
 
 // ---------- 실시간 슬롯 이음매 (봉투 계약 ↔ 보드 잎) ----------
@@ -878,6 +949,25 @@ function markElasticCells(owner) {
   }
 }
 
+// Paper가 레이어 이름으로 「스크롤」이라고 선언한 상자는 실제로 스크롤해야 한다.
+//
+// 실측 1WOB-1 `1WST-1`(이름: "목록 본문 · 펼침 · 520px 스크롤")은 추출물이
+// `height: 520px; overflow: clip`으로 나와, 실데이터가 실리면 내용 720px의 아래
+// 200px이 **잘려서 안 보인다**(글자 64자리, 폭 4단계 전부). 디자인은 그 자리를
+// 스크롤로 그렸고 추출이 그 뜻을 잃은 것이다. 그래서 세로만 스크롤로 돌린다 —
+// 가로 계약(폭·overflow-x)은 그대로 두고, Paper 문면도 건드리지 않는다.
+function markDeclaredScrollBox(el) {
+  if (!el || !el.dataset || !el.style) return false;
+  const name = el.dataset.name || '';
+  if (!name.includes('스크롤')) return false;
+  const overflowY = el.style.getPropertyValue('overflow-y').trim()
+    || el.style.getPropertyValue('overflow').trim();
+  if (overflowY !== 'clip' && overflowY !== 'hidden') return false;
+  el.style.setProperty('overflow-y', 'auto');
+  el.dataset.bsScrollDeclared = 'true';
+  return true;
+}
+
 // 스크롤 소유자의 인라인 `overflow`는 정책을 이긴다 — 지워야 한다.
 // 실측 133H-2 `14UQ-2`(보유 종목 표)는 Paper 원문에 `overflow: visible`을 싣고 있어
 // `.bs-r-scroll-table { overflow-x: auto }`가 무력화됐다. 그 결과 표가 스크롤하지 않고
@@ -1004,6 +1094,10 @@ function applyResponsiveHooks(surface) {
   // 소유자는 인라인 기하가 없어 hoistRigidBox가 그대로 지나가는 노드일 수 있다.
   for (const owner of surface.querySelectorAll('.bs-r-scroll, .bs-r-scroll-table')) {
     stripScrollOwnerOverflow(owner);
+  }
+  // Paper 이름이 스크롤이라고 적힌 상자를 실제로 스크롤시킨다(위 주석의 1WOB-1).
+  for (const box of surface.querySelectorAll('[data-name]')) {
+    markDeclaredScrollBox(box);
   }
   // 접기 소유자의 탄력 자식에도 바닥을 준다 — flow는 `flex-wrap`만 주고, 칸이
   // 탄력이면 그 wrap이 발동하지 않는다(markElasticCells 주석의 2T63-1 실측).
@@ -1180,7 +1274,8 @@ function nextHydrationSlots(pending, filled, surfaceContract) {
 const __exports = {
   ROLLUP_MARK, RESPONSIVE_REGIONS, HOISTED_PROPERTIES, CARD_SHELL_PROPERTIES, normalizeCardShell,
   isValueSlot, anchorOf, staticTextOf, collapsePlan, mountPlan, pairedGroups,
-  nodeIndex, elementChildCount, setHidden, applyPlan,
+  nodeIndex, elementChildCount, setHidden, applyPlan, collapseEmptyRows,
+  markDeclaredScrollBox,
   hoistLayout, hoistRigidBox, applyResponsiveHooks, surfaceRoot,
   primaryMountPoint, collapsePrimaryMockup, restorePrimaryMockup, mountBoard, mountBoardAsync,
   createLatestBoardLoad, nextHydrationSlots,

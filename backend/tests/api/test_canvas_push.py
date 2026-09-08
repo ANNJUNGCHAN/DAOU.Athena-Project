@@ -578,9 +578,11 @@ def test_board_hydrate_fills_the_slots_from_every_read_operation(surface_templat
     assert statuses["base:kt00003"]["status"] == "bound"
     contract = payload["surface_contract"]
     values = {entry["slot_id"]: entry["value"] for entry in contract["slot_values"]}
-    assert "col_stk_nm" not in values
+    # 한 자리에만 그려진 배열 잎은 첫 원소로 채워지고, 잎 둘이 나눠 쓰는 열은
+    # 행을 못 정해 미제공으로 남는다(card_surface_contract의 첫 원소 규칙).
+    assert values["col_stk_nm"] == "삼성전자"
     assert values["kpi_prsm_dpst_aset_amt"] == "12340000"
-    assert "col_stk_nm" in contract["unbound_slots"]
+    assert "col_cur_prc" in contract["unbound_slots"]
 
 
 def test_board_hydrate_fetches_only_operations_used_by_requested_slots(
@@ -770,16 +772,25 @@ def test_board_hydrate_leaves_only_the_failing_operations_slots_unbound(
     }
     contract = payload["surface_contract"]
     values = {entry["slot_id"]: entry["value"] for entry in contract["slot_values"]}
-    assert "col_stk_nm" not in values
-    assert "col_stk_nm" in contract["unbound_slots"]
+    # 잎 둘이 나눠 쓰는 배열 열은 행을 못 정해 미제공으로 남는다(첫 원소 규칙은
+    # 한 자리에만 그려진 잎에만 적용된다 — card_surface_contract 참고).
+    assert "col_cur_prc" not in values
+    assert "col_cur_prc" in contract["unbound_slots"]
     assert "kpi_prsm_dpst_aset_amt" in contract["unbound_slots"]
 
 
 def test_board_hydrate_reports_an_operation_whose_arguments_are_unmappable(
     surface_templates,
 ):
-    """인자 매핑은 manifest request alias 기준 — 못 채우면 호출하지 않는다."""
+    """인자 매핑은 manifest request alias 기준 — 못 채우면 호출하지 않는다.
 
+    필수 인자 중 **조회 대상**(종목코드 등)은 기본값 표에 없다 — 화면이 지목하는
+    값이라 지어낼 수 없다(:mod:`athena_api.hydrate_defaults`). 그 자리가 비면 op는
+    호출되지 않고 사유가 남는다. 조회 조건(정렬·시장 구분)은 반대로 기본값이 채운다.
+    """
+
+    _add_operation_ref(surface_templates, "2SKU-1", "base:ka10081")
+    _bind_slot(surface_templates, "2SKU-1", "col_stk_nm", "base:ka10081", "cur_prc")
     data = _DataSpy({"ka10085": _KA10085_BODY, "kt00003": _KT00003_BODY})
     client = TestClient(_hydrate_app(data))
 
@@ -787,9 +798,12 @@ def test_board_hydrate_reports_an_operation_whose_arguments_are_unmappable(
 
     assert response.status_code == 200, response.text
     statuses = _statuses(response.json())
+    # 조회 조건(qry_tp)은 기본값이 채워 호출된다.
+    assert statuses["base:kt00003"]["status"] == "bound"
     assert statuses["base:ka10085"]["status"] == "bound"
-    assert statuses["base:kt00003"]["reason"] == "arguments_unmapped:qry_tp"
-    assert data.calls == ["ka10085"]
+    # 조회 대상(stk_cd)은 기본값이 없다 — 그 op만 호출되지 않는다.
+    assert statuses["base:ka10081"]["reason"] == "arguments_unmapped:stk_cd"
+    assert "ka10081" not in data.calls
 
 
 def test_board_hydrate_never_calls_an_order_operation(surface_templates):

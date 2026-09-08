@@ -122,6 +122,20 @@ _MOUNT_FIELDS = (
 )
 
 
+# 저작이 `static: true`로 못박은 값 자리 — 응답이 채우는 자리가 아니다. 런타임은 둘을
+# 갈라야 한다(안 가르면 결측어를 찍는다, 실측 2,320자리):
+#
+#   "text"  — 화면 문구 자체다(`D+1 예상` · 단계 번호). Paper 원문을 그대로 둔다.
+#   "blank" — 응답에 그 필드가 없다고 저작이 사유(`static_reason`)까지 적은 자리다.
+#             Paper 원문은 목업 숫자라 그대로 두면 없는 값을 지어내는 것이 된다.
+#             결측어도 찍지 않는다 — 「이 화면에는 그 값이 없다」는 자리이지
+#             「이번 응답에 안 왔다」가 아니다. 빈 칸으로 둔다.
+def _static_mode(slot: dict) -> str | None:
+    if not slot.get("static"):
+        return None
+    return "blank" if str(slot.get("static_reason") or "").strip() else "text"
+
+
 def _mount_contract(slots_path: Path) -> list[dict]:
     if not slots_path.exists():
         return []
@@ -135,6 +149,9 @@ def _mount_contract(slots_path: Path) -> list[dict]:
                 entry[field] = value
         if slot.get("format"):
             entry["format"] = slot["format"]
+        static_mode = _static_mode(slot)
+        if static_mode:
+            entry["static"] = static_mode
         projected.append(entry)
     return projected
 

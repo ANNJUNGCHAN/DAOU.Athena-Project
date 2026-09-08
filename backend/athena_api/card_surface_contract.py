@@ -11,6 +11,7 @@ canonical과 대조할 때 REST/MCP 양쪽이 같은 ``None``을 만들어 계�
 from __future__ import annotations
 
 import hashlib
+import re
 from collections.abc import Iterable, Mapping
 from typing import Any
 
@@ -89,24 +90,86 @@ def bind_surface_values(operation_ref: str, source: Any) -> dict[str, Any]:
     return bound
 
 
+# 배열 **자체**를 가리키는 잎 — 표시할 수 있는 것은 두 가지뿐이다(실측 604자리).
+#
+#   순번  그 잎이 되풀이의 k번째 줄에 앉아 있으면 「k+1번째 항목」이다. Paper 문면이
+#         `01`·`02`로 그 뜻을 적어 두었고, 자릿수(`01`)도 그대로 지킨다.
+#   건수  줄 밖에 한 번 그려졌고 문면이 「8종목」·「100개 결과」처럼 수량 단위를 달고
+#         있으면 배열의 길이다. 단위는 Paper 문면의 것을 그대로 쓴다.
+#
+# 그 밖의 문면(`30분 누적`·`1위`)은 배열 길이도 순번도 아니다 — 손대지 않는다.
+# 여기서 문자열을 만드는 이유는 문면 자체가 계약(템플릿)에 있기 때문이다.
+# 문면 전체가 「수 + 수량 단위」일 때만 건수로 본다. 뒤에 다른 말이 붙은 문면
+# (`8종목 · 평가액 순 · 09:42 기준`)은 그 말까지 Paper 목업이라 함께 실으면 없는
+# 기준 시각을 지어내게 된다 — 건드리지 않는다.
+_COUNT_TEXT = re.compile(r"^(\d[\d,]*)\s*(개 결과|종목|개|건|종|명)$")
+
+
+def _container_value(slot: SurfaceSlot, occurrence_id: str, rows: list) -> Any:
+    parts = occurrence_id.split("|")
+    if len(parts) < 2 or "[]" in parts[1]:
+        return _UNBOUND
+    paper_text = (slot.paper_text or "").strip()
+    if slot.row_index is not None:
+        if slot.row_index >= len(rows):
+            return _UNBOUND
+        ordinal = str(slot.row_index + 1)
+        if paper_text.isdigit():
+            return ordinal.zfill(len(paper_text))
+        return _UNBOUND
+    match = _COUNT_TEXT.match(paper_text)
+    if match is None:
+        return _UNBOUND
+    return f"{len(rows)}{paper_text[match.end(1):]}"  # 단위는 Paper 문면 그대로
+
+
 def _slot_value(
-    slot: SurfaceSlot, occurrence_id: str | None, bound: Mapping[str, Any]
+    slot: SurfaceSlot,
+    occurrence_id: str | None,
+    bound: Mapping[str, Any],
+    solo_occurrences: frozenset[str] = frozenset(),
 ) -> Any:
     if occurrence_id is None or occurrence_id not in bound:
         return _UNBOUND
     value = bound[occurrence_id]
     if slot.row_index is None:
-        # ``bind_surface_values``는 배열 JSONPath를 열 전체(list)로 보존한다. 행을
-        # 지정하지 않은 Paper 잎은 단일 관찰값만 표시할 수 있으므로, 그 목록을
-        # 넘기면 프론트의 String(array)가 쉼표로 이어진 원문 전체를 한 칸에 쏟는다.
-        # 행이 하나뿐이어도 그 반복 행이 이 scalar 잎의 의미와 같다는 보장은 없다.
-        # 첫/마지막 행을 현재값으로 추정하지 않고 결측으로 닫는다.
+        # ``bind_surface_values``는 배열 JSONPath를 열 전체(list)로 보존한다. 목록을
+        # 그대로 넘기면 프론트의 String(array)가 쉼표로 이어진 원문을 한 칸에 쏟으므로
+        # 반드시 원소 하나를 골라야 한다.
+        #
+        # 되풀이 블록·표 셀의 행 좌표는 템플릿 로더가 이미 되찾아 ``row_index``에
+        # 적는다(``_derive_array_rows``). 그러고도 행이 없는 잎은 **되풀이 밖에 한 번
+        # 그려진 자리**다 — 그 자리는 응답 정렬의 첫 원소를 말한다(조회가 정렬을
+        # 지정하고, 화면이 그 목록의 첫 항목을 주인공으로 그린다). 그래서 첫 원소를
+        # 쓴다. 빈 목록은 값이 아니다.
         if isinstance(value, list):
-            return _UNBOUND
+            if not value:
+                return _UNBOUND
+            # 배열 자체를 가리키는 잎은 원소가 아니라 순번·건수를 말한다.
+            container = _container_value(slot, occurrence_id, value)
+            if container is not _UNBOUND:
+                return container
+            # 같은 배열 자리를 여러 잎이 나눠 그리고 있으면(행 좌표 없는 열) 어느 잎이
+            # 어느 행인지 알 수 없다 — 전부 첫 원소로 채우면 같은 값이 여러 줄에
+            # 반복되는 **틀린 화면**이 된다. 결측으로 닫고 줄 접기에 맡긴다.
+            if occurrence_id not in solo_occurrences:
+                return _UNBOUND
+            first = value[0]
+            if isinstance(first, (dict, list, tuple, set)):
+                return _UNBOUND
+            if first is None or (isinstance(first, str) and not first.strip()):
+                return _UNBOUND
+            return first
         if value is None or (isinstance(value, str) and not value.strip()):
             return _UNBOUND
         return value
-    if not isinstance(value, list) or slot.row_index >= len(value):
+    if not isinstance(value, list):
+        return _UNBOUND
+    # 배열 자체를 가리키는 잎(순번) — 원소를 꺼내는 대상이 아니다.
+    container = _container_value(slot, occurrence_id, value)
+    if container is not _UNBOUND:
+        return container
+    if slot.row_index >= len(value):
         return _UNBOUND
     row_value = value[slot.row_index]
     if row_value is None or (isinstance(row_value, str) and not row_value.strip()):
@@ -115,7 +178,10 @@ def _slot_value(
 
 
 def _resolve_slot(
-    slot: SurfaceSlot, bound: Mapping[str, Any], priority: Mapping[str, int]
+    slot: SurfaceSlot,
+    bound: Mapping[str, Any],
+    priority: Mapping[str, int],
+    solo_occurrences: frozenset[str] = frozenset(),
 ) -> tuple[str | None, Any]:
     """대체 바인딩이 있는 잎에서 **실제로 받은 값** 하나를 고른다.
 
@@ -129,13 +195,17 @@ def _resolve_slot(
         key=lambda item: (priority.get(item[1].mapping_id, len(priority)), item[0]),
     )
     for _, binding in ranked:
-        value = _slot_value(slot, binding.occurrence_id, bound)
+        value = _slot_value(slot, binding.occurrence_id, bound, solo_occurrences)
         if value is not _UNBOUND:
             return binding.occurrence_id, value
     return None, _UNBOUND
 
 
-def _composite_value(slot: SurfaceSlot, bound: Mapping[str, Any]) -> Any:
+def _composite_value(
+    slot: SurfaceSlot,
+    bound: Mapping[str, Any],
+    solo_occurrences: frozenset[str] = frozenset(),
+) -> Any:
     """명시된 모든 part가 원자 값일 때만 wire composite를 만든다."""
 
     composite = slot.composite
@@ -144,7 +214,7 @@ def _composite_value(slot: SurfaceSlot, bound: Mapping[str, Any]) -> Any:
     parts: list[dict[str, Any]] = []
     for part in composite.parts:
         occurrence_id = part.occurrence_id
-        value = _slot_value(slot, occurrence_id, bound)
+        value = _slot_value(slot, occurrence_id, bound, solo_occurrences)
         if value is _UNBOUND:
             return _UNBOUND
         assert occurrence_id is not None
@@ -171,6 +241,74 @@ class _Unbound:
 
 
 _UNBOUND = _Unbound()
+
+
+def _row_key(slot: SurfaceSlot) -> tuple[str, str, int | str] | None:
+    """이 잎이 앉은 되풀이 줄의 이름. 되풀이가 아니면 ``None``."""
+
+    cell = slot.table
+    if cell is not None:
+        return ("table", cell.table_id, cell.row)
+    if slot.row_index is not None:
+        return ("region", slot.region or "", slot.row_index)
+    return None
+
+
+def _empty_rows(
+    board: BoardTemplate, filled: set[str]
+) -> list[dict[str, Any]]:
+    """값이 하나도 안 온 되풀이 줄 — 화면에서 지울 줄의 목록.
+
+    응답이 20행짜리 목록에 3행만 실어 오면 나머지 17줄은 **자료가 없는 줄**이다.
+    그 줄의 칸마다 결측어를 찍으면 보드가 결측어 벽이 된다(2026-09-09 실측: 응답
+    행수를 넘는 칸 642개 · 업무 오류로 빈 칸 401개). 헌장 §3.1의 영값 묶음과 같은
+    처리를 줄 단위로 한다 — 줄을 접고, 값이 오면 그 줄이 다시 선다.
+
+    한 칸이라도 값이 온 줄은 목록에 넣지 않는다. 그 줄은 자료가 있는 줄이고, 빈
+    칸은 그 줄 안에서 정직하게 결측으로 남아야 한다.
+    """
+
+    rows: dict[tuple[str, str, int | str], list[str]] = {}
+    bound_rows: set[tuple[str, str, int | str]] = set()
+    for slot in board.binding_slots:
+        key = _row_key(slot)
+        if key is None:
+            continue
+        rows.setdefault(key, []).append(slot.slot_id)
+        if slot.slot_id in filled:
+            bound_rows.add(key)
+    return [
+        {
+            "row": f"{key[0]}:{key[1]}:{key[2]}",
+            "slot_ids": sorted(slot_ids),
+        }
+        for key, slot_ids in sorted(rows.items(), key=lambda item: str(item[0]))
+        if key not in bound_rows
+    ]
+
+
+def _solo_array_occurrences(board: BoardTemplate) -> frozenset[str]:
+    """행 좌표 없이 **한 자리에만** 그려진 배열 occurrence.
+
+    되풀이 밖에 한 번 그려진 잎은 응답 정렬의 첫 원소를 말한다(조회가 정렬을 정하고,
+    화면이 그 목록의 첫 항목을 주인공으로 그린다). 반대로 같은 배열 자리를 잎 여럿이
+    나눠 그리고 있으면 그것은 행 좌표를 잃은 열이다 — 첫 원소로 다 채우면 같은 값이
+    여러 줄 반복되는 틀린 화면이 되므로 채우지 않는다.
+    """
+
+    seen: dict[str, int] = {}
+    for slot in board.binding_slots:
+        if slot.row_index is not None:
+            continue
+        for binding in slot.bindings:
+            occurrence_id = binding.occurrence_id
+            if occurrence_id is None:
+                continue
+            parts = occurrence_id.split("|")
+            if len(parts) < 2 or "[]" not in parts[1]:
+                continue
+            seen[occurrence_id] = seen.get(occurrence_id, 0) + 1
+    return frozenset(key for key, count in seen.items() if count == 1)
 
 
 def _state_boards(
@@ -249,6 +387,7 @@ def _board_contract(
 ) -> dict[str, Any]:
     bound = bound_values or {}
     priority = _operation_priority(board, active_operation_refs)
+    solo_occurrences = _solo_array_occurrences(board)
     slot_values: list[dict[str, Any]] = []
     unbound_slots: list[str] = []
     for slot in board.slots:
@@ -258,9 +397,11 @@ def _board_contract(
             continue
         if slot.composite is not None:
             occurrence_id = None
-            value = _composite_value(slot, bound)
+            value = _composite_value(slot, bound, solo_occurrences)
         else:
-            occurrence_id, value = _resolve_slot(slot, bound, priority)
+            occurrence_id, value = _resolve_slot(
+                slot, bound, priority, solo_occurrences
+            )
         if value is _UNBOUND:
             unbound_slots.append(slot.slot_id)
             continue
@@ -285,6 +426,10 @@ def _board_contract(
         "surface_version": SURFACE_CONTRACT_VERSION,
         "board_id": board.board_id,
         "card_id": board.card_id,
+        # 자료가 한 칸도 없는 되풀이 줄 — 프론트가 그 줄을 접는다(:func:`_empty_rows`).
+        "empty_rows": _empty_rows(
+            board, {entry["slot_id"] for entry in slot_values}
+        ),
         "state_boards": _state_boards(registry, board),
         # 이 보드를 세운 직후 갈아탈 탭 보드. op로 연 계약에만 실리고, 보드를
         # 직접 지정한 계약(:func:`build_board_surface_contract`)에서는 언제나
