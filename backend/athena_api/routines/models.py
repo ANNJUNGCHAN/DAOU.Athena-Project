@@ -202,10 +202,6 @@ class RoutineSpec:
     created_at: datetime = field(default_factory=_utcnow)
     approved_at: datetime | None = None
     goal: bool = False  # 목표가 도달 의도 — 승인 카드가 노출, 발화 시 FACE.GLAD 배선(CP1a)
-    # 예약 브리핑 실행 설정(R1) — None이면 실행 측(main)의 기본값을 따른다.
-    # 검증은 rules.validate_draft()가 담당한다(app/lib/main/model-prefs.js와 동기화).
-    briefing_model: str | None = None
-    briefing_effort: str | None = None
     # 코드 감시(code.watch) 전용 — 그 밖의 소스에서는 항상 None이다.
     watch: WatchSpec | None = None
     main_card_candidate: MainCardDescriptor | None = None
@@ -246,8 +242,6 @@ class RoutineSpec:
             "mode": self.mode,  # 파생값이지만 읽는 쪽 편의로 함께 저장
             "created_at": self.created_at.isoformat(),
             "approved_at": self.approved_at.isoformat() if self.approved_at else None,
-            "briefing_model": self.briefing_model,
-            "briefing_effort": self.briefing_effort,
         }
         if self.watch is not None:
             data["watch"] = self.watch.to_dict()
@@ -283,9 +277,8 @@ class RoutineSpec:
             created_at=datetime.fromisoformat(raw["created_at"]),
             approved_at=datetime.fromisoformat(approved) if approved else None,
             goal=bool(raw.get("goal", False)),  # 구버전 저장분 하위호환 — 기본 False
-            # 옛 jsonl에는 키 자체가 없다 — .get()으로 하위호환.
-            briefing_model=raw.get("briefing_model"),
-            briefing_effort=raw.get("briefing_effort"),
+            # 옛 jsonl의 briefing_model/briefing_effort 키는 읽지 않는다 — 예약 브리핑은
+            # 앱 모델 설정으로 돈다(app/lib/main/briefing-runner.js selectModel, 2026-09-08).
             watch=(WatchSpec.from_dict(raw["watch"]) if raw.get("watch") else None),
             main_card_candidate=(
                 MainCardDescriptor.from_dict(raw["main_card_candidate"])

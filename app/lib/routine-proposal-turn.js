@@ -33,11 +33,13 @@ const VIEW_STATUS = Object.freeze(['이동함', '· 칩 없음']);
 // 세우지 않는다(437W-1 「상태 표기만」) — 결과 턴 거부 열의 「보류」(436N-1)를 쓴다.
 const DECLINE_STATUS = '보류';
 
-// 편집 제안이 만질 수 있는 다섯 필드(routine_tools.py _UPDATABLE_FIELDS)의 화면 이름.
+// 편집 제안이 만질 수 있는 세 필드(routine_tools.py _UPDATABLE_FIELDS)의 화면 이름.
 // 라벨과 단위는 06 설정 폼이 이미 쓰는 것 그대로다 — 같은 값에 두 표기를 만들지 않는다.
-const FIELD_LABELS = { note: '설명', cooldown_s: '쿨다운', expires_days: '만료', briefing_model: '브리핑 모델', briefing_effort: '노력' };
+// 브리핑 모델·노력은 없다 — 브리핑은 앱 모델 설정을 쓰므로 루틴별 값이 존재하지 않는다
+// (agent-canvas.js 머리 주석, briefing-runner.js selectModel).
+const FIELD_LABELS = { note: '설명', cooldown_s: '쿨다운', expires_days: '만료' };
 const FIELD_UNITS = { cooldown_s: '초', expires_days: '일' };
-const FIELD_ORDER = ['note', 'cooldown_s', 'expires_days', 'briefing_model', 'briefing_effort'];
+const FIELD_ORDER = ['note', 'cooldown_s', 'expires_days'];
 
 // 뷰 이동 봉투의 두 마디 → 화면 이름(agent-canvas.js VIEWS·TABS와 같은 라벨).
 const VIEW_LABELS = { tasks: '작업', alerts: '알람', live: '라이브', proactive: '제안' };
