@@ -2494,10 +2494,11 @@ app.whenReady().then(async () => {
     && near(kiumiMenu.width, 380, 2)
     // 플러그인 구역은 고정 목록이 아니라 실제로 등록·승인된 서버다. 검증
     // 프로필의 레지스트리는 비어 있으므로(상단 ATHENA_MCP_REGISTRY_PATH) 안내
-    // 항목 한 줄만 뜬다 — 추가 4 + 플러그인 1 + 설정 2 = 7.
-    && kiumiMenu.itemCount === 7
+    // 항목 한 줄만 뜬다 — 추가 4 + 플러그인(@ 지정 1 + 안내 1) + 설정 2 = 8.
+    && kiumiMenu.itemCount === 8
     && JSON.stringify(kiumiMenu.sections) === JSON.stringify(['추가', '플러그인', '설정'])
-    && kiumiMenu.itemTitles[4] === '설치된 플러그인 없음'
+    && kiumiMenu.itemTitles[4] === '@ 플러그인 지정'
+    && kiumiMenu.itemTitles[5] === '설치된 플러그인 없음'
     && kiumiMenu.allIconsAreSvg === true
     && kiumiMenu.rowHeights.every((height) => height >= 36)
     && /blur\(3px\)/.test(kiumiMenu.backdropFilter));

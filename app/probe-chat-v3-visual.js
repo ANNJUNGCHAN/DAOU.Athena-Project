@@ -105,7 +105,6 @@ async function main() {
     statusVisible: !document.getElementById('lockHint').hidden,
     statusText: document.getElementById('lockText').textContent,
     stopVisible: !document.getElementById('stopBtn').hidden,
-    spinnerVisible: !document.getElementById('composerSpinner').hidden,
     stepRows: document.querySelectorAll('.progress-tool-step').length,
     agentCards: document.querySelectorAll('.agent-card').length,
     agentCells: document.querySelectorAll('.agent-card-grid .agent-card-cell').length,
