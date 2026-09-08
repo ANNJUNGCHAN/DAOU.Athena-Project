@@ -16,7 +16,7 @@ Frame "29 · 프로젝트·최근·새 채팅" (GCF-0) 1680×900
             SVGVisualElement "Rect" (GI2-0) 13×13
             SVGVisualElement "Path" (GI3-0) 0×12
           Text "ATHENA" (GI4-0) 50×16 "ATHENA"
-          Text "아테나 · 그래프" (GI5-0) 77×14 "아테나 · 그래프"
+          Text "메티스 · 그래프" (GI5-0) 77×14 "메티스 · 그래프"
         Frame "Frame" (GI6-0) 208×14
           Text "파일 편집 보기 도움말" (GI7-0) 132×14 "파일　편집　보기　도움말"
           SVG "SVG" (GI8-0) 58×14
@@ -42,17 +42,17 @@ Frame "29 · 프로젝트·최근·새 채팅" (GCF-0) 1680×900
                 SVGVisualElement "Circle" (GJ2-0) 3×3
                 SVGVisualElement "Circle" (GJ3-0) 3×3
                 SVGVisualElement "Path" (GJ4-0) 5×5
-              Text "그래프" (GJ5-0) 36×16 "그래프"
+              Text "메티스" (GJ5-0) 36×16 "메티스"
             Frame "Frame" (GJ6-0) 228×30
               SVG "SVG" (GJ7-0) 15×15
                 SVGVisualElement "Circle" (GJ8-0) 4×4
                 SVGVisualElement "Path" (GJ9-0) 8×4
-              Text "에이전트" (GJA-0) 48×16 "에이전트"
+              Text "아이기스" (GJA-0) 48×16 "아이기스"
             Frame "Frame" (GJB-0) 228×30
               SVG "SVG" (GJC-0) 15×15
                 SVGVisualElement "Path" (GJD-0) 9×10
                 SVGVisualElement "Path" (GJE-0) 0×1
-              Text "플러그인" (GJF-0) 48×16 "플러그인"
+              Text "에르가네" (GJF-0) 48×16 "에르가네"
           Frame "Project Tree" (GJH-0) 228×129
             Frame "Frame" (GJI-0) 228×16
               Text "프로젝트" (GJJ-0) 43×12 "프로젝트"
@@ -115,7 +115,7 @@ Frame "29 · 프로젝트·최근·새 채팅" (GCF-0) 1680×900
                 SVGVisualElement "Path" (GKO-0) 12×9
               Text "앱 전체 기능 검수" (GKP-0) 105×16 "앱 전체 기능 검수"
             Frame "Frame" (GKQ-0) 45×12
-              Text "그래프" (GKR-0) 30×12 "그래프"
+              Text "메티스 · 그래프" (GKR-0) 30×12 "메티스 · 그래프"
               Rectangle "Rectangle" (GKS-0) 7×7
           Frame "Graph Workspace" (GKU-0) 555×624
             Frame "Frame" (GKV-0) 523×40
@@ -151,7 +151,7 @@ Frame "29 · 프로젝트·최근·새 채팅" (GCF-0) 1680×900
           Frame "Chat Header" (GLP-0) 340×52
             Frame "Frame" (GLQ-0) 70×30
               Text "새 채팅" (GLR-0) 70×16 "새 채팅"
-              Text "아테나 · 그래프" (GLS-0) 70×12 "아테나 · 그래프"
+              Text "메티스 · 그래프" (GLS-0) 70×12 "메티스 · 그래프"
             Frame "Frame" (GLT-0) 48×24
               Frame "Frame" (GLU-0) 24×24
                 SVG "SVG" (GLV-0) 14×14
@@ -243,7 +243,7 @@ Frame "29 · 프로젝트·최근·새 채팅" (GCF-0) 1680×900
         Frame "Frame" (GOK-0) 362×50
           Frame "Frame" (GOL-0) 164×50
             Text "현재" (GOM-0) 144×12 "현재"
-            Text "아테나 · 그래프" (GON-0) 144×14 "아테나 · 그래프"
+            Text "메티스 · 그래프" (GON-0) 144×14 "메티스 · 그래프"
           SVG "SVG" (GOO-0) 20×20
             SVGVisualElement "Path" (GOP-0) 12×8
           Frame "Frame" (GOQ-0) 164×50

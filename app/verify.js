@@ -740,7 +740,6 @@ async function probeOrbCollapsed(win) {
     const orb = document.getElementById('orb');
     const r = orb.getBoundingClientRect();
     const cs = getComputedStyle(orb);
-    const visor = getComputedStyle(document.getElementById('orbVisor'));
     return {
       width: Math.round(r.width),
       height: Math.round(r.height),
@@ -754,30 +753,17 @@ async function probeOrbCollapsed(win) {
       // 담아야 판정의 전제를 사후에 확인할 수 있다(2026-09-06 흔들림 때 리포트에
       // 대기 쪽 표정이 안 남아 원인을 못 짚었다).
       face: document.getElementById('orbRoot').dataset.face,
-      // 유리는 끝까지 무채색이다 — 셸 배경에 색이 섞이면 그건 틴트다(soul.md §7).
       orbBackground: cs.backgroundColor,
-      // 바이저는 **페이드가 아니라** 스케일·블러 변조로 드러난다(soul.md §7).
-      visorTransition: visor.transition,
-      visorTransform: visor.transform,
-      eyeCount: document.querySelectorAll('#orbVisor .orb-eye').length,
-      // 눈 기하 — 대기↔발화의 실제 모양 차이를 잰다(더는 바이저 폭이 아니다).
-      // 같은 쿼리를 두 상태에서 부른다: 위 face가 그 샷의 전제다.
-      //
-      // 레이아웃 박스에서 읽는다(getBoundingClientRect가 아니다). 눈 위에는
-      // 애니메이션 변형이 두 겹 얹혀 있고 둘 다 실측 rect를 흔든다: 깜빡임
-      // (.orb-lid scaleY)은 **높이만** 눌러 종횡비를 순간적으로 뒤집고, 숨
-      // (#orbVisor scale, 4.2초 주기)은 매 프레임 값을 미세하게 바꾼다
-      // (2026-09-06 실측: 80ms 간격 500샷의 rect가 전부 달랐다). 계약이
-      // 말하는 눈 모양은 그 변형 아래의 폭·높이 자체이고, 이 값은 전이가
-      // 끝나면 멈춘다 — 그래서 "두 번 재서 같으면 안정" 판정이 성립한다.
-      eyeWidth: (() => {
-        const e = document.querySelector('#orbVisor .orb-eye');
-        return e ? parseFloat(getComputedStyle(e).width) : null;
-      })(),
-      eyeHeight: (() => {
-        const e = document.querySelector('#orbVisor .orb-eye');
-        return e ? parseFloat(getComputedStyle(e).height) : null;
-      })(),
+      expression: document.querySelector('#orbVisor svg')?.dataset.expression,
+      bodyFill: document.querySelector('#orbVisor .glau-body')?.getAttribute('fill'),
+      faceFill: document.querySelector('#orbVisor .glau-cream-face')?.getAttribute('fill'),
+      wingFill: document.querySelector('#orbVisor .glau-wings')?.getAttribute('fill'),
+      motionReduced: matchMedia('(prefers-reduced-motion: reduce)').matches,
+      gazeTransition: getComputedStyle(document.querySelector('#orbVisor .glau-gaze')).transition,
+      eyeCount: document.querySelectorAll('#orbVisor .glau-eye').length,
+      // Read SVG geometry below gaze/blink transforms, in invariant viewBox units.
+      eyeWidth: Number(document.querySelector('#orbVisor .glau-eye')?.getAttribute('rx')) * 2,
+      eyeHeight: Number(document.querySelector('#orbVisor .glau-eye')?.getAttribute('ry')) * 2,
       // 드래그 손잡이/구멍 계약 — 같은 픽셀에 겹치면 클릭이 영영 안 온다.
       orbRegion: (cs.getPropertyValue('app-region') || cs.getPropertyValue('-webkit-app-region') || '').trim(),
       coreRegion: (() => {
@@ -793,7 +779,7 @@ async function probeOrbCollapsed(win) {
 }
 
 // 눈 기하를 **잴 수 있는 순간**까지 기다린다 — 원하는 표정이고, 그 표정으로
-// 가는 눈 모양 전이(orb.css .orb-eye의 width/height 220ms)가 끝난 때다.
+// 해당 SVG 눈 모양이 두 번 연속 같은 상태로 측정되는 때다.
 // 조건을 만족한 그 샷을 그대로 돌려주므로 "확인한 상태"와 "잰 값"이 어긋날
 // 틈이 없다 — 옛 판은 표정 폴링과 실제 측정 사이에 캡처·픽셀 측정이 끼어
 // 있어서, 그 틈에 표정이 바뀌거나 전이가 걸치면 다른 상태의 눈을 쟀다.
@@ -2333,7 +2319,7 @@ app.whenReady().then(async () => {
   assertOk('pluginMode: 채팅 헤더가 플러그인 문구를 단다',
     pluginHub.chatHeadVisible === true
     && pluginHub.chatHeadMode === 'plugin'
-    && pluginHub.chatHeadTitle === '아테나 · 플러그인 대화'
+    && pluginHub.chatHeadTitle === '에르가네 · 플러그인'
     && pluginHub.chatHeadSub === '설치와 권한을 여기서 정합니다');
   // 유지 7 — 승인 전에 사람이 봐야 하는 정보. 포커스 트랩·"한 번에 하나씩" 부제는
   // 폐기했다(W5-2 폐기 7): 이 시트는 승인 표면이 아니라 승인 카드로 가는 문이다.
@@ -4014,24 +4000,13 @@ app.whenReady().then(async () => {
 
   const orbCollapsedBefore = orbWin.getBounds();
 
-  // 22-A — **알림 0건: 오브에 색이 없다.** 리프 1.3.2의 핵심 계약이다.
+  // 22-A — 알림이 없을 때 글라우의 기본 얼굴을 측정한다.
   // 먼저 상태가 정말 'none'인지 확인한다 — 앞선 검증이 오브에 이벤트를 흘렸다면
   // 이 측정은 무의미해진다(가정을 재지 않고 확인한다).
   const orbAlertBeforeEvent = await orbWin.webContents.executeJavaScript(
     "document.getElementById('orbRoot').dataset.alert"
   );
-  // 눈 기하 측정은 face=idle 전제다 — 대기 눈이 길쭉하다는 것이 발화 눈의
-  // 둥긂을 재는 기준선이라, 다른 표정에서 재면 판정이 통째로 무의미해진다.
-  // 2026-09-06 실측으로 확인한 흔들림의 실체(값은 오브 76px 기준 실측 px):
-  //   - 졸림(장 마감) 눈은 10.5×2.96 → 세로/가로 0.28
-  //   - 찡그림(대화 실패·피드 끊김) 눈은 회전이 붙어 **바운딩 박스**가
-  //     10.6×14.7 → 1.39 (임계 1.5 바로 아래로 조용히 떨어진다)
-  //   - 완료 웃음·윙크도 전부 1.5 아래다 (lib/orb-eye-shape.test.js가 잠근다)
-  //   - 졸림→대기 전이 도중이면 높이가 2.9→15.9로 지나가는 중간값이 잡힌다
-  // 옛 판은 표정 폴링과 실제 측정 사이에 캡처·픽셀 측정이 끼어 있어서, 폴링이
-  // idle을 본 뒤 그 틈에 표정이 바뀌거나 전이가 걸치면 다른 상태의 눈을 쟀다.
-  // 이제는 조건을 만족한 **그 샷**을 그대로 쓴다(waitForMeasurableOrbEye).
-  //
+  // 같은 상태의 SVG 눈 치수를 읽어 깜빡임·숨 변형과 표정을 구분한다.
   // 표정을 idle로 모으는 절차: 장을 열림으로 바꿔치고(probe-orb-drowsy와 같은
   // 기법 — orb.js가 marketHours.isMarketOpen을 매 틱 프로퍼티 조회로 부른다),
   // 실제 사용자 경로와 같은 신호로 깨운다. listen active:true가 orb.js의
@@ -4048,9 +4023,7 @@ app.whenReady().then(async () => {
   const orbQuietEye = await waitForMeasurableOrbEye(
     orbWin, (p) => p.face === 'idle' && p.alert === 'none', 20000,
   );
-  // 눈 기하 — 대기(quiet) 상태의 눈 모양. board-31/32 규범 개정 이후 발화 신호는
-  // 바이저 폭이 아니라 **눈 모양**이 진다(아래 orbWindow.firedEyesAreRounder 주석과
-  // 짝). 값은 실측 px라 %보다 화면 배율에 안 흔들린다.
+  // SVG viewBox 치수를 쓰므로 화면 배율과 깜빡임에 흔들리지 않는다.
   const orbQuietEyeProbe = { width: orbQuietEye.probe.eyeWidth, height: orbQuietEye.probe.eyeHeight };
   await shot(orbWin, '22-orb-collapsed.png');
   const pixelsQuiet = await measurePixels(orbWin);
@@ -4067,14 +4040,12 @@ app.whenReady().then(async () => {
     fired_at: new Date(Date.now() - 3 * 60 * 1000).toISOString(),
   });
 
-  // 발화 눈 모양을 잴 수 있을 때까지 기다린다 — 대기 쪽과 같은 함수·같은
-  // 전제(전이가 끝난 순간)를 쓰고, firedEyesAreRounder 판정과 같은 종횡비
-  // 임계(1.3)로 "발화 얼굴에 도달했다"를 판정한다.
-  const looksFired = (p) => !!(p && p.eyeWidth && (p.eyeHeight / p.eyeWidth) < 1.3);
+  // 실제 루틴 이벤트가 놀람 표정으로 바뀐 뒤에 측정한다.
+  const looksFired = (p) => !!(p && p.face === 'fired' && p.expression === 'surprised' && p.eyeCount === 2);
   const orbFiredEye = await waitForMeasurableOrbEye(orbWin, looksFired, 2000);
   const orbCollapsedProbe = orbFiredEye.probe;
 
-  // 22-B — **알림이 오면 딥블루 바이저가 드러난다.** 같은 창, 같은 크기, 상태만 다르다.
+  // 22-B — 같은 크기의 글라우가 알림에 놀람 표정으로 응답한다.
   await shot(orbWin, '22b-orb-alerted.png');
   const pixelsAlerted = await measurePixels(orbWin);
 
@@ -4148,31 +4119,12 @@ app.whenReady().then(async () => {
     pixelsAlerted,
     // 앞선 검증이 오브에 이벤트를 흘리지 않았다 — 22-A 측정의 전제다.
     quietStateWasClean: orbAlertBeforeEvent === 'none',
-    // 2026-08-26 board-32 규범 개정(사용자 결정) — "대기 34% / 발화 75%"로 상태별
-    // 바이저 폭을 벌리던 축을 걷어냈다. Paper board 32 section C가 잠듦 하나만
-    // 빼고 모든 상태의 바이저를 같은 62×61 프레임으로 못박았기 때문이다: 발화
-    // 신호는 이제 바이저 폭이 아니라 **눈이 동그래지는 것**이 진다("화면당 신호는
-    // 여기 하나" — board-32). 대기 자체도 90%로 올라 파란 프레임이 거의 다
-    // 드러난다(사용자 1순위 지적 "파란 부분이 너무 작다" 대응, orb.css 참조).
-    //
-    // 그래서 아래 픽셀 비율 기반 검사 둘(옛 firedIsVisiblyWider·
-    // stateActuallyChangedPixels)은 새 규범에서 성립하지 않아 폐기했다 — 대기·
-    // 발화가 같은 --orb-open(90%)을 쓰므로 파란 면적이 같아야 정상이다.
-    // quietFaceIsPresent(대기에도 얼굴이 있다)는 여전히 유효하다.
-    quietFaceIsPresent: pixelsQuiet.bluishPixels > 0,
-    //
-    // 2026-08-26 리뷰 결함 수정: 폐기하면서 자리에 `true` 상수를 박아뒀던 게
-    // 스스로 발견됐다 — 늘 통과하는 게이트는 게이트가 아니다. 발화 신호가 진짜
-    // 진 자리(눈 모양)로 옮겨 다시 잰다: 대기 눈은 길쭉한 알약(세로가 가로보다
-    // 한참 크다), 발화 눈은 거의 원이다(orb.css `[data-face="fired"] .orb-eye`
-    // 참조 — 22.6%×23%, 대기 기본 `.orb-eye` 14.5%×34.4%와 대조). 두 상태의
-    // getBoundingClientRect를 실측해 aspect ratio(세로/가로)로 비교한다.
-    firedEyesAreRounder: !!(orbQuietEyeProbe && orbCollapsedProbe.eyeWidth
-      && (orbQuietEyeProbe.height / orbQuietEyeProbe.width) > 1.5
-      && (orbCollapsedProbe.eyeHeight / orbCollapsedProbe.eyeWidth) < 1.3),
-    // 위 판정의 전제를 값으로 남긴다 — 대기 눈을 어느 표정에서 쟀는가.
-    // 2026-09-06 흔들림 때 이 값이 안 남아 있어 리포트만으로는 원인을 못
-    // 짚었다(대기 표정이 idle이 아니었는지 아닌지를 구분할 근거가 없었다).
+    // Approved Glau keeps its silhouette and palette while existing events change eyes.
+    quietFaceIsPresent: orbQuietEye.probe.expression === 'neutral'
+      && orbQuietEye.probe.bodyFill === '#BF9B81' && orbQuietEye.probe.eyeCount === 2,
+    firedEyesAreLarger: !!(orbQuietEyeProbe && orbCollapsedProbe.expression === 'surprised'
+      && orbCollapsedProbe.eyeWidth > orbQuietEyeProbe.width
+      && orbCollapsedProbe.eyeHeight > orbQuietEyeProbe.height),
     quietEye: {
       face: orbQuietEye.probe.face,
       alert: orbQuietEye.probe.alert,
@@ -4187,19 +4139,13 @@ app.whenReady().then(async () => {
     // 두 측정 모두 **전제를 확인한 그 샷**에서 나왔는가. 못 기다렸으면 위 종횡비
     // 비교는 다른 상태의 눈을 섞어 잰 것이라 결과를 믿으면 안 된다.
     eyeShapeMeasuredInDeclaredStates: orbQuietEye.measurable && orbFiredEye.measurable,
-    // **알림이 오면 딥블루가 실제로 화면에 있다.** 참조 실측과 같은 판정 기준을 쓴다.
-    alertedShowsVisor: pixelsAlerted.bluishRatio >= 0.10,
-    // 대기→발화에서 눈 자체의 실측 px(너비 또는 높이)가 눈에 띄게 바뀌었는가 —
-    // 표정이 안 바뀌면 두 probe의 값이 같아 이 단언이 다시 떨어진다(회귀 가드).
+    approvedGlauPalette: orbCollapsedProbe.bodyFill === '#BF9B81'
+      && orbCollapsedProbe.faceFill === '#FFF3E2' && orbCollapsedProbe.wingFill === '#354D70',
     stateActuallyChangedEyeShape: !!(orbQuietEyeProbe && orbCollapsedProbe.eyeWidth
-      && (Math.abs(orbCollapsedProbe.eyeWidth - orbQuietEyeProbe.width) > 2
-        || Math.abs(orbCollapsedProbe.eyeHeight - orbQuietEyeProbe.height) > 2)),
+      && orbCollapsedProbe.eyeHeight > orbQuietEyeProbe.height),
     unreadCountShown: orbCollapsedProbe.alert === 'fired' && orbCollapsedProbe.count === '1',
-    // 유리는 끝까지 무채색 — 셸 배경은 백색 알파여야 한다(틴트 금지).
-    glassStaysAchromatic: /rgba?\(\s*255\s*,\s*255\s*,\s*255\s*[,)]/.test(orbCollapsedProbe.orbBackground),
-    // 페이드로 등장하지 않는다 — 전이가 transform/filter를 타야 한다.
-    visorNotFadeIn: /transform|filter/.test(orbCollapsedProbe.visorTransition)
-      && !/^opacity/.test(orbCollapsedProbe.visorTransition.trim()),
+    mascotBackgroundIsTransparent: orbCollapsedProbe.orbBackground === 'rgba(0, 0, 0, 0)',
+    gazeUsesGeometry: orbCollapsedProbe.motionReduced || /transform/.test(orbCollapsedProbe.gazeTransition),
     hasTwoEyes: orbCollapsedProbe.eyeCount === 2,
     // 마젠타 호는 걷어냈다 — 신호는 화면당 한 곳(이 창에서는 바이저)이다.
     magentaArcRemoved: orbCollapsedProbe.ringHasBrand === false,
@@ -4239,10 +4185,10 @@ app.whenReady().then(async () => {
   console.log('[verify] 검증22(알림 오브):', JSON.stringify(report.orbWindow));
   for (const key of [
     'isCircle76', 'dragHandleContract',
-    'quietStateWasClean', 'quietFaceIsPresent', 'firedEyesAreRounder',
+    'quietStateWasClean', 'quietFaceIsPresent', 'firedEyesAreLarger',
     'eyeShapeMeasuredInDeclaredStates',
-    'alertedShowsVisor', 'stateActuallyChangedEyeShape',
-    'unreadCountShown', 'glassStaysAchromatic', 'visorNotFadeIn', 'hasTwoEyes', 'magentaArcRemoved',
+    'approvedGlauPalette', 'stateActuallyChangedEyeShape',
+    'unreadCountShown', 'mascotBackgroundIsTransparent', 'gazeUsesGeometry', 'hasTwoEyes', 'magentaArcRemoved',
     'expandGrewWindow', 'orbCornerStayed', 'roundTripRestoresPosition',
     'hasFiredBadge', 'hasModeLabel', 'hasRelativeTime', 'hasSourceLabel',
     'statesValueIsAtFireTime', 'representativeCardRendered', 'representativeCardFullyVisible', 'markedReadOnOpen',

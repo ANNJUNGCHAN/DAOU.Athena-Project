@@ -17,12 +17,10 @@
 //
 // 본문은 지어내지 않는다: 발화 배지 · 방식 표기 · 소스 라벨 · 시점 고지는 전부
 // lib/routine-turn.js의 결정론 템플릿이 만든다(LLM 0). 렌더는 전부 textContent —
-// innerHTML 문자열 삽입 0건(함정 ⑪ 저장형 XSS).
+// 동적 본문을 SVG 마스코트의 고정 마크업에 섞지 않는다.
 //
 // 2026-08-27 갭 클로징 Step 0 — CP(체크포인트) 결정 4건.
-// CP0: 바이저 개방 축은 board-32 유지(2026-08-26 사용자 결정·게이트 확정 —
-// check-orb.mjs가 모든 상태 바이저를 항상-블루 62×61 동일 프레임으로 강제).
-// board-30의 옛 개방 축(닫힘·반쯤·열림) 캡션은 Paper에서 정합화함(2026-08-27).
+// 글라우: Paper의 갈색 올빼미 실루엣을 유지하고 기존 상태를 표정 10종에 연결한다.
 // CP1: 즐거움(glad, 목표달성) 표정 — 2026-08-27 사용자 승인, 백로그 해제.
 // PnL/목표추적 신호 배선(FACE.GLAD)은 별도 스텝(CP1a)에서 진행한다.
 // CP1b(수익 갱신 — 계좌 손익 상시 폴러+신고점 추적): 2026-08-27 사용자 결정
@@ -40,6 +38,8 @@
   'use strict';
 
   const routineTurn = window.AthenaLib.RoutineTurn;
+  const glauMascot = window.AthenaLib.GlauMascot;
+  const glauHost = document.getElementById('orbVisor');
   const toolStepTrack = window.AthenaLib.ToolStepTrack;
   const liveQueryLock = window.AthenaLib.LiveQueryLock;
   const marketHours = window.AthenaLib.MarketHours;
@@ -193,8 +193,8 @@
   // 표정 · 대기 루프 (2026-08-25)
   //
   // 표정은 **눈 모양 하나로만** 만든다 — 눈썹도 입도 눈동자도 붙이지 않는다.
-  // 시선은 흰 도형 두 개가 바이저 안에서 통째로 옮겨 앉는 것으로 낸다.
-  // 모양은 전부 orb.css의 [data-face] 규칙이 지고, 여기서는 **언제 어느 얼굴인가**만
+  // 시선은 검은 눈 두 개가 크림색 얼굴 안에서 함께 움직이는 것으로 낸다.
+  // 모양은 공유 GlauMascot 렌더러가 지고, 여기서는 **언제 어느 얼굴인가**만
   // 정한다.
   //
   // **얼굴은 앱에 이미 있는 신호에만 붙인다.** 지금 배선하는 것은 열이다:
@@ -350,6 +350,7 @@
     const prev = face;
     face = next;
     $root.dataset.face = next;
+    glauMascot.render(glauHost, next);
     if (prev === FACE.THINK) stopThinkSweep();
     if (next === FACE.THINK) { startThinkSweep(); return; }
     const g = baseGaze();
@@ -858,7 +859,7 @@
     if (chatModeActive === next) return;
     chatModeActive = next;
     $root.dataset.orbMode = chatModeActive ? 'chat' : 'alert';
-    $headerTitle.textContent = chatModeActive ? '키우미 대화' : '알림';
+    $headerTitle.textContent = chatModeActive ? '글라우 대화' : '알림';
     for (const el of ALERT_ONLY_ELS) el.classList.toggle('orb-mode-hidden', chatModeActive);
     $chatBody.hidden = !chatModeActive;
     $inputStack.hidden = false;
@@ -2365,6 +2366,7 @@
   renderPresence();
   // 초기 얼굴 — setFace()는 같은 값이면 일찍 빠지므로 속성은 여기서 직접 박는다.
   $root.dataset.face = face;
+  glauMascot.render(glauHost, face);
   scheduleBlink();
   scheduleSaccade();
   // updateMarketClosed 최초 호출 — 위 선언부 주석 참조(TDZ 회피로 여기로 미룸).

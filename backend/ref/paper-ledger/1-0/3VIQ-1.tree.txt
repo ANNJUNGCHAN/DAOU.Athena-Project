@@ -16,7 +16,7 @@ Frame "35 · 대화 이력 — 모드 5구역 · 세션 목록" (3VIQ-1) 1680×9
             SVGVisualElement "Rect" (3VJ6-1) 14×12
             SVGVisualElement "Path" (3VJ7-1) 0×12
           Text "ATHENA" (3VJ8-1) 46×16 "ATHENA"
-          Text "아테나 · 백테스트 · 추세추종 v3" (3VJ9-1) 157×14 "아테나 · 백테스트 · 추세추종 v3"
+          Text "팔라스 · 백테스트 · 추세추종 v3" (3VJ9-1) 157×14 "팔라스 · 백테스트 · 추세추종 v3"
         Frame "Frame" (3VJA-1) 204×14
           Text "파일 편집 보기 도움말" (3VJB-1) 132×14 "파일　편집　보기　도움말"
           SVG "SVG" (3VJC-1) 58×14
@@ -46,7 +46,7 @@ Frame "35 · 대화 이력 — 모드 5구역 · 세션 목록" (3VIQ-1) 1680×9
             Frame "Mode 대화" (3VK3-1) 228×28
               SVG "SVG" (3VK4-1) 15×15
                 SVGVisualElement "Path" (3VK5-1) 10×9
-              Text "대화" (3VK6-1) 149×16 "대화"
+              Text "아고라" (3VK6-1) 149×16 "아고라"
               Frame "Frame" (3VK7-1) 30×12
                 Text "3" (3VK8-1) 6×12 "3"
             Frame "Mode 그래프" (3VK9-1) 228×28
@@ -55,14 +55,14 @@ Frame "35 · 대화 이력 — 모드 5구역 · 세션 목록" (3VIQ-1) 1680×9
                 SVGVisualElement "Circle" (3VKC-1) 3×3
                 SVGVisualElement "Circle" (3VKD-1) 3×3
                 SVGVisualElement "Path" (3VKE-1) 5×5
-              Text "그래프" (3VKF-1) 149×16 "그래프"
+              Text "메티스" (3VKF-1) 149×16 "메티스"
               Frame "Frame" (3VKG-1) 30×12
                 Text "1" (3VKH-1) 6×12 "1"
             Frame "Mode 에이전트" (3VKJ-1) 228×28
               SVG "SVG" (3VKK-1) 15×15
                 SVGVisualElement "Circle" (3VKL-1) 4×4
                 SVGVisualElement "Path" (3VKM-1) 8×4
-              Text "에이전트" (3VKN-1) 149×16 "에이전트"
+              Text "아이기스" (3VKN-1) 149×16 "아이기스"
               Frame "Frame" (3VKO-1) 30×12
                 SVG "Spinner" (3XVZ-1) 12×12
                   SVGVisualElement "Circle" (3XW0-1) 9×9
@@ -72,13 +72,13 @@ Frame "35 · 대화 이력 — 모드 5구역 · 세션 목록" (3VIQ-1) 1680×9
               SVG "SVG" (3VKS-1) 15×15
                 SVGVisualElement "Path" (3VKT-1) 9×10
                 SVGVisualElement "Path" (3VKU-1) 0×1
-              Text "플러그인" (3VKV-1) 149×16 "플러그인"
+              Text "에르가네" (3VKV-1) 149×16 "에르가네"
               Frame "Frame" (3VKW-1) 30×12
                 Text "0" (3VKX-1) 6×12 "0"
             Frame "Mode 백테스트 (active)" (3VKY-1) 228×28
               SVG "SVG" (3VKZ-1) 15×15
                 SVGVisualElement "Path" (3VL0-1) 12×8
-              Text "백테스트" (3VL1-1) 147×16 "백테스트"
+              Text "팔라스" (3VL1-1) 147×16 "팔라스"
               Frame "Frame" (3VL2-1) 30×12
                 SVG "Spinner" (3XW3-1) 12×12
                   SVGVisualElement "Circle" (3XW4-1) 9×9
@@ -175,7 +175,7 @@ Frame "35 · 대화 이력 — 모드 5구역 · 세션 목록" (3VIQ-1) 1680×9
                 SVGVisualElement "Path" (3VNN-1) 12×8
               Text "추세추종 v3" (3VNO-1) 71×17 "추세추종 v3"
               Frame "Frame" (3VNP-1) 56×18
-                Text "백테스트" (3VNQ-1) 40×12 "백테스트"
+                Text "팔라스 · 백테스트" (3VNQ-1) 40×12 "팔라스 · 백테스트"
             Frame "Frame" (3VNR-1) 108×14
               SVG "SVG" (3XVU-1) 12×12
                 SVGVisualElement "Circle" (3XVV-1) 9×9
@@ -223,7 +223,7 @@ Frame "35 · 대화 이력 — 모드 5구역 · 세션 목록" (3VIQ-1) 1680×9
           Frame "Chat Header" (3VP0-1) 339×52
             Frame "Frame" (3VP1-1) 103×29
               Text "추세추종 v3" (3VP2-1) 103×16 "추세추종 v3"
-              Text "아테나 · 백테스트 대화" (3VP3-1) 103×12 "아테나 · 백테스트 대화"
+              Text "팔라스 · 백테스트" (3VP3-1) 103×12 "팔라스 · 백테스트"
             Frame "Frame" (3VP4-1) 40×15
               SVG "SVG" (3VP5-1) 15×15
                 SVGVisualElement "Path" (3VP6-1) 9×9
@@ -264,19 +264,19 @@ Frame "35 · 대화 이력 — 모드 5구역 · 세션 목록" (3VIQ-1) 1680×9
           Text "이력의 머리는 모드 다섯" (3VQ4-1) 133×16 "이력의 머리는 모드 다섯"
         Frame "Frame" (3VQ5-1) 370×22
           Frame "Frame" (3VQ6-1) 51×22
-            Text "대화" (3VQ7-1) 20×12 "대화"
+            Text "아고라 · 대화" (3VQ7-1) 20×12 "아고라 · 대화"
             Text "3" (3VQ8-1) 6×12 "3"
           Frame "Frame" (3VQ9-1) 61×22
-            Text "그래프" (3VQA-1) 30×12 "그래프"
+            Text "메티스 · 그래프" (3VQA-1) 30×12 "메티스 · 그래프"
             Text "1" (3VQB-1) 6×12 "1"
           Frame "Frame" (3VQC-1) 71×22
-            Text "에이전트" (3VQD-1) 40×12 "에이전트"
+            Text "아이기스 · 에이전트" (3VQD-1) 40×12 "아이기스 · 에이전트"
             Text "2" (3VQE-1) 6×12 "2"
           Frame "Frame" (3VQF-1) 71×22
-            Text "플러그인" (3VQG-1) 40×12 "플러그인"
+            Text "에르가네 · 플러그인" (3VQG-1) 40×12 "에르가네 · 플러그인"
             Text "0" (3VQH-1) 6×12 "0"
           Frame "Frame" (3VQI-1) 71×22
-            Text "백테스트" (3VQJ-1) 40×12 "백테스트"
+            Text "팔라스 · 백테스트" (3VQJ-1) 40×12 "팔라스 · 백테스트"
             Text "2" (3VQK-1) 6×12 "2"
         Text "모드 행은 그 모드로 가는 문입니다.…" (3VQL-1) 370×30 "모드 행은 그 모드로 가는 문입니다. 목록은 거르지 않고, 행 앞 아이콘이 그 대화의 모드를 말합니다. 숫자"
       Frame "Rule 2" (3VQN-1) 396×168

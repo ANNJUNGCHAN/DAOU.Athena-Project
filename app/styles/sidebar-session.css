@@ -124,6 +124,7 @@
 .sidebar-mode-picker-item:hover,
 .sidebar-mode-picker-item:focus-visible { background: rgb(16 19 26 / 6%); }
 .sidebar-mode-picker-label { font-family: var(--font-strong); flex-shrink: 0; }
+.sidebar-mode-picker-item > .sidebar-item-mode-ic { align-self: center; }
 .sidebar-mode-picker-hint { color: var(--color-k-faint); font-size: var(--text-2xs); overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 .sidebar-mode-picker-count {
   margin-left: auto;

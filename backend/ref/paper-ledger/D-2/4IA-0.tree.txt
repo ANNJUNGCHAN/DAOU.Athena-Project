@@ -145,7 +145,7 @@ Frame "03 · 그래프 — 기본 군집 지도" (4IA-0) 1680×900
           Text "숨은 연관 — 군집을 넘는 연결" (3VCM-1) 0×0 "숨은 연관 — 군집을 넘는 연결"
     Frame "Frame" (4JF-0) 400×0
       Frame "채팅 헤더" (4JG-0) 0×0
-        Text "그래프에게 묻기" (4JH-0) 0×0 "그래프에게 묻기"
+        Text "메티스 · 그래프" (4JH-0) 0×0 "메티스 · 그래프"
         Text "답이 캔버스를 바꿉니다" (4JI-0) 0×0 "답이 캔버스를 바꿉니다"
       Frame "대화 본문" (4JJ-0) 0×0
         Frame "Frame" (4JK-0) 0×0
@@ -171,7 +171,7 @@ Frame "03 · 그래프 — 기본 군집 지도" (4IA-0) 1680×900
             Rectangle "Rectangle" (4K4-0) 3×7
             Rectangle "Rectangle" (4K5-0) 3×7
           Frame "Frame" (4K6-0) 0×0
-            Text "그래프" (4K7-0) 0×0 "그래프"
+            Text "메티스" (4K7-0) 0×0 "메티스"
           Frame "Frame" (4K8-0) 0×0
             Text "CLAUDE" (4K9-0) 0×0 "CLAUDE"
           Frame "Frame" (4KA-0) 0×0

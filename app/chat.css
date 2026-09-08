@@ -929,40 +929,23 @@ html.is-boot-expanding #winControls { opacity: 0; }
   color: #fff;
 }
 .model-popover .mp-sep { height: 1px; background: rgb(16 19 26 / 7%); }
-/* 키우미(2026-08-27, Paper 보드 38 스트립 실측) — 점이 키우미 얼굴이 됐다.
- * 흰 몸체 + 브랜드 테두리 + 바이저색 도형(모드별 얼굴, 바이저 채움 없음). */
+/* 글라우 — Paper 공통 기본형. 모드 이름과 아이콘은 사이드바가 표시한다. */
 .dot {
   width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
-  background: rgba(255, 255, 255, 0.95);
-  border: 2px solid var(--color-brand);
+  background: transparent; border: 0;
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 0 10px 2px rgba(238, 19, 123, 0.18);
-  transition: transform var(--dur-base) var(--ease), box-shadow var(--dur-base) var(--ease);
-  padding: 0;
-  appearance: none;
-  cursor: pointer;
+  box-shadow: none;
+  transition: transform var(--dur-base) var(--ease);
+  padding: 0; appearance: none; cursor: pointer;
 }
-.kiumi-visor {
-  width: 15px; height: 14px;
-  display: flex; align-items: center; justify-content: center;
-  color: #2F3BA8; /* 바이저색 — 보드 38 bg-kiwoome-visor */
-}
-/* 키우미 얼굴 — 하나뿐이다. 모드마다 얼굴을 갈아끼우지 않는다(2026-09-01 사용자 결정).
- * 다섯 모드가 각자 추상 아이콘(막대·별자리·궤도점·소켓·되감기)을 갖던 구조를 걷어냈다.
- * 중립 얼굴 하나라 어느 모드에서도 "지금 대화 중"이라고 잘못 말하지 않는다. */
-.kiumi-face { display: block; }
-/* 키우미는 산다 — 눈 깜빡임. 오브 blinkOnce와 같은 정신을 CSS만으로.
- * 모션 감소 환경에선 끈다 — 모양은 남고 움직임만 멈춘다. */
-.kiumi-face rect {
-  transform-box: fill-box; transform-origin: center;
-  animation: kiumi-blink 4.6s ease-in-out infinite;
-}
-@keyframes kiumi-blink {
+.glau-composer { width: 22px; height: 22px; }
+.glau-composer .glau-lid { animation: glau-blink 4.6s ease-in-out infinite; }
+@keyframes glau-blink {
   0%, 93%, 98%, 100% { transform: scaleY(1); }
   95.5% { transform: scaleY(0.12); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .kiumi-face rect { animation: none; }
+  .glau-composer .glau-lid { animation: none; }
 }
 /* 키우미 메뉴 — Paper 49의 380px 폭과 Paper 57의 승인된 굴절형 재질.
  * 큰 셸이 아니라 입력 위에 뜨는 직접 조작 표면이므로 25% 흰 틴트·3px 환경

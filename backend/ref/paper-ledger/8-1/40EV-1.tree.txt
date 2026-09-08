@@ -21,22 +21,22 @@ Frame "19 · 백테스트 — 기법 목록 · 새 기법" (40EV-1) 1680×1120
             SVGVisualElement "Circle" (40FH-1) 0×0
             SVGVisualElement "Circle" (40FI-1) 0×0
             SVGVisualElement "Path" (40FJ-1) 0×0
-          Text "그래프" (40FK-1) 0×0 "그래프"
+          Text "메티스" (40FK-1) 0×0 "메티스"
         Frame "Frame" (40FL-1) 0×30
           SVG "SVG" (40FM-1) 0×0
             SVGVisualElement "Circle" (40FN-1) 0×0
             SVGVisualElement "Path" (40FO-1) 0×0
-          Text "에이전트" (40FP-1) 0×0 "에이전트"
+          Text "아이기스" (40FP-1) 0×0 "아이기스"
         Frame "Nav 플러그인" (40FQ-1) 0×30
           SVG "SVG" (40FR-1) 0×0
             SVGVisualElement "Path" (40FS-1) 0×0
             SVGVisualElement "Path" (40FT-1) 0×0
-          Text "플러그인" (40FU-1) 0×0 "플러그인"
+          Text "에르가네" (40FU-1) 0×0 "에르가네"
         Frame "Nav 백테스트 (active)" (40FV-1) 0×30
           SVG "SVG" (40FW-1) 0×0
             SVGVisualElement "Path" (40FX-1) 0×0
             SVGVisualElement "Path" (40FY-1) 0×0
-          Text "백테스트" (40FZ-1) 0×0 "백테스트"
+          Text "팔라스" (40FZ-1) 0×0 "팔라스"
       Frame "Project Tree" (40G0-1) 0×0
         Frame "Frame" (40G1-1) 0×0
           Text "프로젝트" (40G2-1) 0×0 "프로젝트"
@@ -78,7 +78,7 @@ Frame "19 · 백테스트 — 기법 목록 · 새 기법" (40EV-1) 1680×1120
     Frame "메인 · 기법 목록" (40H3-1) 0×0
       Frame "헤더" (40H7-1) 0×0
         Frame "Frame" (40H8-1) 0×0
-          Text "백테스트" (40H9-1) 0×0 "백테스트"
+          Text "팔라스 · 백테스트" (40H9-1) 0×0 "팔라스 · 백테스트"
           Text "기법 11개 · 마지막 수정 2분 전" (40HA-1) 0×0 "기법 11개 · 마지막 수정 2분 전"
         Frame "Frame" (40HB-1) 0×0
           Frame "Frame" (40HC-1) 0×0
@@ -113,7 +113,7 @@ Frame "19 · 백테스트 — 기법 목록 · 새 기법" (40EV-1) 1680×1120
           Frame "Frame" (40I9-1) 0×0
             Text "v7 · 08-30 검증 · 거래 4…" (40IA-1) 0×0 "v7 · 08-30 검증 · 거래 41"
             Frame "Frame" (40IB-1) 0×0
-              Text "키우미 적용 중" (40IC-1) 0×0 "키우미 적용 중"
+              Text "글라우 적용 중" (40IC-1) 0×0 "글라우 적용 중"
             Rectangle "Rectangle" (40ID-1) 0×0
             Frame "Frame" (40IE-1) 0×0
               Text "수정" (40IF-1) 0×0 "수정"

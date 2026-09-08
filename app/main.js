@@ -5114,7 +5114,7 @@ ipcMain.handle('athena__render_canvas', async (e, payload = {}) => {
     ? payload.conversationId : historyConversationId();
   // 셸이 오브 대화를 열어 두고 오브가 그 대화에서 답변 중이면 거절한다(죽이지 않는다 — 오브 턴은 오브의 것).
   if (shellConversationId === orbConversationId && liveRuntimes.isBusy(shellConversationId)) {
-    return { ok: false, source: 'live', error: '키우미에서 답변 중 — 잠시 후 다시 시도하세요' };
+    return { ok: false, source: 'live', error: '글라우에서 답변 중 — 잠시 후 다시 시도하세요' };
   }
   return runLiveQuery(query, expand, 'shell', shellConversationId, {
     clientSubmitId: payload.clientSubmitId,
@@ -5160,7 +5160,7 @@ ipcMain.handle('athena:orb-chat-submit', async (e, payload = {}) => {
   // 오브는 말할 수 있고, 판정은 오브 대화 하나다(같은 대화의 재질의만 거절 — 죽이지 않는다).
   const orbId = ensureOrbConversationId();
   if (liveRuntimes.isBusy(orbId)) {
-    return { ok: false, source: 'live', error: '키우미 답변 중 — 잠시 후 다시 시도하라' };
+    return { ok: false, source: 'live', error: '글라우 답변 중 — 잠시 후 다시 시도하라' };
   }
   const result = await runLiveQuery(query, false, 'orb', orbId, {
     clientSubmitId: payload.clientSubmitId,

@@ -22,6 +22,7 @@
 'use strict';
 
 const isNode = typeof module !== 'undefined' && module.exports;
+const GlauMascot = isNode ? require('./glau-mascot') : window.AthenaLib.GlauMascot;
 const FactsCard = isNode ? require('./facts-card') : window.AthenaLib.FactsCard;
 const SpecModel = isNode ? require('./backtest-spec') : window.AthenaLib.BacktestSpec;
 const CodeEditor = isNode ? require('./backtest-code-editor') : window.AthenaLib.BacktestCodeEditor;
@@ -3179,7 +3180,7 @@ function createBacktestCanvas(options) {
   function renderMessagePanel(extraClass, sub, badge) {
     const wrap = el('div', `backtest-canvas-empty${extraClass ? ` ${extraClass}` : ''}`);
     if (badge) wrap.appendChild(el('div', 'backtest-error-badge', badge));
-    wrap.appendChild(el('div', 'backtest-canvas-empty-title', '백테스트'));
+    wrap.appendChild(el('div', 'backtest-canvas-empty-title', '팔라스 · 백테스트'));
     wrap.appendChild(el('div', 'backtest-canvas-empty-sub', sub));
     return wrap;
   }
@@ -3225,7 +3226,7 @@ function createBacktestCanvas(options) {
     if (workspaceActive() && !isSourcing()) return renderWorkspaceHeader();
     const head = el('div', 'backtest-head');
     const title = el('div', 'backtest-head-title');
-    title.appendChild(el('span', 'backtest-head-name', '백테스트'));
+    title.appendChild(el('span', 'backtest-head-name', '팔라스 · 백테스트'));
     // 출처에서 만드는 중에는 아직 이름도 판번호도 없다 — 무엇을 만들고 있는지만 적는다
     // (보드 17 머리 「새 전략 · 출처에서 만드는 중 · 지도 v0」).
     if (isSourcing()) {
@@ -6900,7 +6901,7 @@ function createBacktestCanvas(options) {
     // 클릭 없이 주문이 나간다(보드 23). 화면이 옛 약속을 계속 말하면 그것이 거짓말이다.
     head.appendChild(el(
       'div', 'backtest-card-note',
-      '키우미를 켜면 미리 정한 한도 안에서 주문까지 자동으로 나갑니다 — '
+      '글라우를 켜면 미리 정한 한도 안에서 주문까지 자동으로 나갑니다 — '
       + '그 밖의 배포는 신호까지만 만듭니다',
     ));
     wrap.appendChild(head);
@@ -6952,9 +6953,11 @@ function createBacktestCanvas(options) {
     if (!deps.armDeployment) return null;
     const on = Boolean(dep.armed);
     const box = el('div', `backtest-deploy-arm${on ? ' is-on' : ''}`);
-    box.appendChild(el('div', 'backtest-deploy-arm-mark', '키'));
+    const mascot = el('div', 'backtest-deploy-arm-mark');
+    GlauMascot.render(mascot, 'idle');
+    box.appendChild(mascot);
     const text = el('div', 'backtest-deploy-arm-text');
-    text.appendChild(el('div', 'backtest-deploy-arm-title', '키우미 켜짐 = 자동 매매'));
+    text.appendChild(el('div', 'backtest-deploy-arm-title', '글라우 켜짐 = 자동 매매'));
     text.appendChild(el(
       'div', 'backtest-deploy-arm-detail',
       '신호가 나면 위 한도 안에서 주문까지 자동으로 나갑니다. 한도를 넘거나 '
@@ -6974,7 +6977,7 @@ function createBacktestCanvas(options) {
       }
     });
     toggle.setAttribute('aria-pressed', String(on));
-    toggle.setAttribute('aria-label', '키우미 자동 매매');
+    toggle.setAttribute('aria-label', '글라우 자동 매매');
     toggle.appendChild(el('span', 'backtest-deploy-arm-knob'));
     box.appendChild(toggle);
 

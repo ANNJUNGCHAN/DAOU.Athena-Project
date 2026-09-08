@@ -47,7 +47,7 @@ test('모드 선택은 다섯이고 순서와 view 매핑이 고정이다', () =
   const choices = modeChoices();
   assert.deepEqual(choices.map((c) => c.mode), ['chat', 'graph', 'agent', 'plugin', 'backtest']);
   assert.deepEqual(choices.map((c) => c.view), ['summary', 'graph', 'agent', 'plugin', 'backtest']);
-  assert.deepEqual(choices.map((c) => c.label), ['대화', '그래프', '에이전트', '플러그인', '백테스트']);
+  assert.deepEqual(choices.map((c) => c.label), ['아고라 · 대화', '메티스 · 그래프', '아이기스 · 에이전트', '에르가네 · 플러그인', '팔라스 · 백테스트']);
   assert.ok(choices.every((c) => typeof c.hint === 'string' && c.hint.length > 0));
 });
 
@@ -71,7 +71,7 @@ test('프로젝트 안 모드별 대화 수는 현재 N개 / 없음이다', () =
 test('modeChoices는 매번 새 객체를 준다 — 호출자가 원본을 못 바꾼다', () => {
   const first = modeChoices();
   first[0].label = '망가뜨림';
-  assert.equal(modeChoices()[0].label, '대화');
+  assert.equal(modeChoices()[0].label, '아고라 · 대화');
 });
 
 test('이름이 정확히 같을 때만 영구 삭제가 열린다', () => {

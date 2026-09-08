@@ -306,7 +306,7 @@ async function main() {
     const visible = Object.entries(summary.surfaces).filter(([, h]) => h === false).map(([k]) => k);
     check('캔버스 표면이 정확히 하나만 보인다', visible.length === 1 && visible[0] === 'summaryTable', visible);
     check('그래프 모드 채팅 헤더가 뜬다', summary.chatHeadVisible === true, summary.chatHeadTitle);
-    check('채팅 헤더 문구가 그래프 모드용이다', summary.chatHeadTitle === '그래프에게 묻기', summary.chatHeadTitle);
+    check('채팅 헤더 문구가 그래프 모드용이다', summary.chatHeadTitle === '메티스 · 그래프', summary.chatHeadTitle);
 
     // ── 2. 요약 표면 ───────────────────────────────────────────────────────
     section('2. 요약 표면');

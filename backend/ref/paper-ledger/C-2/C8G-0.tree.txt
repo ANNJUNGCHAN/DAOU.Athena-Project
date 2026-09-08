@@ -1,4 +1,4 @@
-Frame "07 · 키우미 메뉴 — 셸 오버레이" (C8G-0) 1680×760
+Frame "07 · 글라우 메뉴 — 셸 오버레이" (C8G-0) 1680×760
   Frame "Frame" (F22-0) 1680×760
     Frame "Frame" (F23-0) 1520×680
       Frame "49 · Project Recent Sidebar" (H24-0) 260×680
@@ -19,17 +19,17 @@ Frame "07 · 키우미 메뉴 — 셸 오버레이" (C8G-0) 1680×760
               SVGVisualElement "Circle" (H2J-0) 0×0
               SVGVisualElement "Circle" (H2K-0) 0×0
               SVGVisualElement "Path" (H2L-0) 0×0
-            Text "그래프" (H2M-0) 0×0 "그래프"
+            Text "메티스" (H2M-0) 0×0 "메티스"
           Frame "Frame" (H2N-0) 0×30
             SVG "SVG" (H2O-0) 0×0
               SVGVisualElement "Circle" (H2P-0) 0×0
               SVGVisualElement "Path" (H2Q-0) 0×0
-            Text "에이전트" (H2R-0) 0×0 "에이전트"
+            Text "아이기스" (H2R-0) 0×0 "아이기스"
           Frame "Frame" (H2S-0) 0×30
             SVG "SVG" (H2T-0) 0×0
               SVGVisualElement "Path" (H2U-0) 0×0
               SVGVisualElement "Path" (H2V-0) 0×0
-            Text "플러그인" (H2W-0) 0×0 "플러그인"
+            Text "에르가네" (H2W-0) 0×0 "에르가네"
         Frame "Project Tree" (H2X-0) 0×0
           Frame "Frame" (H2Y-0) 0×0
             Text "프로젝트" (H2Z-0) 0×0 "프로젝트"

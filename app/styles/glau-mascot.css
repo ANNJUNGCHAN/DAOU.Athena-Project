@@ -1,0 +1,20 @@
+.glau-mascot {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.glau-gaze {
+  transform: translate(var(--orb-gx, 0px), var(--orb-gy, 0px));
+  transition: transform var(--orb-gaze-dur, 340ms) var(--ease, ease);
+}
+.glau-lid {
+  transform-origin: 64px 63px;
+  transform: scaleY(var(--orb-lid, 1));
+  transition: transform var(--orb-blink-dur, 130ms) var(--ease, ease);
+}
+@media (prefers-reduced-motion: reduce) {
+  .glau-gaze, .glau-lid { transition: none; }
+  .glau-lid { transform: none; }
+}

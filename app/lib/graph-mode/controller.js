@@ -470,9 +470,9 @@ function createGraphModeController(deps) {
     // shell.html의 두 span은 비어 있고 이 표가 유일한 출처다.
     const DEFAULT_INPUT_PLACEHOLDER = '무엇이든 물어보세요';
     const CHAT_HEAD_COPY = {
-      graph: { title: '그래프에게 묻기', sub: '답이 캔버스를 바꿉니다', placeholder: '그래프에 대해 물어보세요' },
+      graph: { title: '메티스 · 그래프', sub: '답이 캔버스를 바꿉니다', placeholder: '그래프에 대해 물어보세요' },
       backtest: { title: '기법에게 묻기', sub: '고른 기법을 다룹니다' },
-      plugin: { title: '아테나 · 플러그인 대화', sub: '설치와 권한을 여기서 정합니다' },
+      plugin: { title: '에르가네 · 플러그인', sub: '설치와 권한을 여기서 정합니다' },
     };
     const chatHeadMode = graphView ? 'graph' : (CHAT_HEAD_COPY[activeSurface] ? activeSurface : null);
     if (elements.chatHead) {

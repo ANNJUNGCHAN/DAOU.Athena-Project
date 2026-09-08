@@ -1,11 +1,11 @@
-Frame "06 · 키우미 메뉴 — 두 진입점과 항목" (CLE-0) 1680×760
+Frame "06 · 글라우 메뉴 — 두 진입점과 항목" (CLE-0) 1680×760
   Frame "Frame" (EYK-0) 1680×760
     Frame "Frame" (EYL-0) 0×64
       Frame "Frame" (EYM-0) 0×0
-        Text "키우미 메뉴 — 추가와 플러그인을 한…" (EYN-0) 0×0 "키우미 메뉴 — 추가와 플러그인을 한 곳에서"
-        Text "키우미를 누르면 현재 대화 위에 빠른…" (EYO-0) 0×0 "키우미를 누르면 현재 대화 위에 빠른 실행 메뉴가 열린다"
+        Text "글라우 메뉴 — 추가와 플러그인을 한…" (EYN-0) 0×0 "글라우 메뉴 — 추가와 플러그인을 한 곳에서"
+        Text "글라우를 누르면 현재 대화 위에 빠른…" (EYO-0) 0×0 "글라우를 누르면 현재 대화 위에 빠른 실행 메뉴가 열린다"
       Frame "Frame" (EYP-0) 0×0
-        Text "키우미 클릭" (EYQ-0) 0×0 "키우미 클릭"
+        Text "글라우 클릭" (EYQ-0) 0×0 "글라우 클릭"
     Frame "Frame" (EYR-0) 0×586
       Frame "Frame" (EYS-0) 360×0
         Text "두 진입점의 역할" (EYT-0) 0×0 "두 진입점의 역할"
@@ -13,7 +13,7 @@ Frame "06 · 키우미 메뉴 — 두 진입점과 항목" (CLE-0) 1680×760
           Text "사이드바 · 플러그인" (EYV-0) 0×0 "사이드바 · 플러그인"
           Text "네 번째 모드. 설치·권한·관리와 전…" (EYW-0) 0×0 "네 번째 모드. 설치·권한·관리와 전체 허브를 연다. (백테스트는 다섯 번째 모드 — 얼굴은 보드 08 참조"
         Frame "Frame" (EYX-0) 0×0
-          Text "입력창 · 키우미" (EYY-0) 0×0 "입력창 · 키우미"
+          Text "입력창 · 글라우" (EYY-0) 0×0 "입력창 · 글라우"
           Text "현재 대화에서 파일·목표·계획과 설치…" (EYZ-0) 0×0 "현재 대화에서 파일·목표·계획과 설치된 플러그인을 바로 실행한다."
         Rectangle "Rectangle" (EZ0-0) 0×1
         Frame "Frame" (EZ1-0) 0×0
@@ -22,7 +22,7 @@ Frame "06 · 키우미 메뉴 — 두 진입점과 항목" (CLE-0) 1680×760
         Frame "Frame" (EZ4-0) 0×0
           Rectangle "Rectangle" (EZ5-0) 7×7
           Text "선택하면 메뉴가 닫히고 선택한 기능이…" (EZ6-0) 0×0 "선택하면 메뉴가 닫히고 선택한 기능이 입력 문맥에 붙는다."
-        Text "SPEC · KIWOOMI ENTRY" (EZ7-0) 0×0 "SPEC · KIWOOMI ENTRY"
+        Text "SPEC · GLAU ENTRY" (EZ7-0) 0×0 "SPEC · GLAU ENTRY"
       Frame "Frame" (EZ8-0) 1246×0
         Frame "Frame" (EZ9-0) 400×0
           Frame "Frame" (EZA-0) 0×26
@@ -96,7 +96,7 @@ Frame "06 · 키우미 메뉴 — 두 진입점과 항목" (CLE-0) 1680×760
               SVGVisualElement "Rect" (F1O-0) 0×0
           Text "무엇이든 물어보세요" (F1P-0) 0×0 "무엇이든 물어보세요"
         Frame "Frame" (F1T-0) 920×0
-          Text "키우미 클릭" (F1U-0) 0×0 "키우미 클릭"
+          Text "글라우 클릭" (F1U-0) 0×0 "글라우 클릭"
           Rectangle "Rectangle" (F1V-0) 24×1
           Text "메뉴 열림" (F1W-0) 0×0 "메뉴 열림"
           Rectangle "Rectangle" (F1X-0) 24×1

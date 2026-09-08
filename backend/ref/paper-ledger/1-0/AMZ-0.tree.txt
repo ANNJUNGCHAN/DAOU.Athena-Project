@@ -3,7 +3,7 @@ Frame "25 · 모드 전환 — 대화 유지·작업공간 교체" (AMZ-0) 1717�
     Frame "Frame" (EVQ-0) 1600×70
       Frame "Frame" (EVR-0) 459×59
         Text "모드 전환 UX · 5모드" (EVS-0) 459×32 "모드 전환 UX · 5모드"
-        Text "사이드바가 유일한 모드 전환 · 키우…" (EVT-0) 459×20 "사이드바가 유일한 모드 전환 · 키우미 메뉴는 빠른 기능과 플러그인 실행"
+        Text "사이드바가 유일한 모드 전환 · 키우…" (EVT-0) 459×20 "사이드바가 유일한 모드 전환 · 글라우 메뉴는 빠른 기능과 플러그인 실행"
       Frame "Frame" (EVU-0) 203×34
         Text "채팅 400px 고정 · 캔버스만 교…" (EVV-0) 177×16 "채팅 400px 고정 · 캔버스만 교체"
     Frame "Frame" (EVW-0) 1600×530
@@ -14,7 +14,7 @@ Frame "25 · 모드 전환 — 대화 유지·작업공간 교체" (AMZ-0) 1717�
               SVGVisualElement "Path" (EW1-0) 13×11
           Text "MODE 01" (EW2-0) 57×14 "MODE 01"
         Frame "Frame" (EW3-0) 271×56
-          Text "대화" (EW4-0) 271×28 "대화"
+          Text "아고라 · 대화" (EW4-0) 271×28 "아고라 · 대화"
           Text "결과 카드가 쌓이는 기본 캔버스" (EW5-0) 271×21 "결과 카드가 쌓이는 기본 캔버스"
         Frame "Frame" (EW6-0) 271×210
           Rectangle "Rectangle" (EW7-0) 128×9
@@ -33,7 +33,7 @@ Frame "25 · 모드 전환 — 대화 유지·작업공간 교체" (AMZ-0) 1717�
               SVGVisualElement "Path" (EWK-0) 8×5
           Text "MODE 02" (EWL-0) 57×14 "MODE 02"
         Frame "Frame" (EWM-0) 271×56
-          Text "그래프" (EWN-0) 271×28 "그래프"
+          Text "메티스 · 그래프" (EWN-0) 271×28 "메티스 · 그래프"
           Text "성향·엔티티·근거 연결을 탐색" (EWO-0) 271×21 "성향·엔티티·근거 연결을 탐색"
         Frame "Frame" (EWP-0) 271×210
           SVG "SVG" (EWQ-0) 250×150
@@ -54,7 +54,7 @@ Frame "25 · 모드 전환 — 대화 유지·작업공간 교체" (AMZ-0) 1717�
               SVGVisualElement "Path" (EX5-0) 13×13
           Text "MODE 03" (EX6-0) 57×14 "MODE 03"
         Frame "Frame" (EX7-0) 271×56
-          Text "에이전트" (EX8-0) 271×28 "에이전트"
+          Text "아이기스 · 에이전트" (EX8-0) 271×28 "아이기스 · 에이전트"
           Text "감시·예약·작업 상태를 관제" (EX9-0) 271×21 "감시·예약·작업 상태를 관제"
         Frame "Frame" (EXA-0) 271×210
           Frame "Frame" (EXB-0) 237×48
@@ -82,7 +82,7 @@ Frame "25 · 모드 전환 — 대화 유지·작업공간 교체" (AMZ-0) 1717�
               SVGVisualElement "Path" (EXX-0) 7×7
           Text "NEW · MODE 04" (EXY-0) 99×14 "NEW · MODE 04"
         Frame "Frame" (EXZ-0) 271×56
-          Text "플러그인" (EY0-0) 271×28 "플러그인"
+          Text "에르가네 · 플러그인" (EY0-0) 271×28 "에르가네 · 플러그인"
           Text "허브·설치·관리·MCP 캔버스" (EY1-0) 271×21 "허브·설치·관리·MCP 캔버스"
         Frame "Frame" (EY2-0) 271×210
           Frame "Frame" (EY3-0) 237×76
@@ -103,7 +103,7 @@ Frame "25 · 모드 전환 — 대화 유지·작업공간 교체" (AMZ-0) 1717�
               SVGVisualElement "Path" (1V9Y-1) 6×3
           Text "NEW · MODE 05" (1V9Z-1) 99×14 "NEW · MODE 05"
         Frame "Frame" (1VA0-1) 271×56
-          Text "백테스트" (1VA1-1) 271×28 "백테스트"
+          Text "팔라스 · 백테스트" (1VA1-1) 271×28 "팔라스 · 백테스트"
           Text "전략 폼·코드·결과 캔버스" (1VA2-1) 271×21 "전략 폼·코드·결과 캔버스"
         Frame "Frame" (1VA3-1) 271×210
           Frame "Frame" (1VA4-1) 237×44
@@ -122,5 +122,5 @@ Frame "25 · 모드 전환 — 대화 유지·작업공간 교체" (AMZ-0) 1717�
       Rectangle "Rectangle" (EYE-0) 1×20
       Text "모드를 바꾸면 새 대화 · 앞 세션은…" (EYF-0) 314×16 "모드를 바꾸면 새 대화 · 앞 세션은 봉인 (40번으로 대체됨)"
       Rectangle "Rectangle" (EYG-0) 5×5
-      Text "키우미는 현재 대화의 도구·플러그인 …" (EYH-0) 252×16 "키우미는 현재 대화의 도구·플러그인 빠른 실행"
+      Text "키우미는 현재 대화의 도구·플러그인 …" (EYH-0) 252×16 "글라우는 현재 대화의 도구·플러그인 빠른 실행"
       Text "ATHENA SHELL SPEC" (EYI-0) 105×14 "ATHENA SHELL SPEC"

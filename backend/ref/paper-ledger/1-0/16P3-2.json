@@ -30,7 +30,7 @@
   },
   {
    "id": "16WO-2",
-   "text": "그래프",
+   "text": "메티스",
    "path": [
     "06 · 부팅 — DIRECT SHELL EXPAND · 1440–1920ms",
     "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
@@ -41,7 +41,7 @@
   },
   {
    "id": "16WJ-2",
-   "text": "에이전트",
+   "text": "아이기스",
    "path": [
     "06 · 부팅 — DIRECT SHELL EXPAND · 1440–1920ms",
     "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
@@ -52,7 +52,7 @@
   },
   {
    "id": "16WE-2",
-   "text": "플러그인",
+   "text": "에르가네",
    "path": [
     "06 · 부팅 — DIRECT SHELL EXPAND · 1440–1920ms",
     "Shell 창 (3영역: 이력 268 · 캔버스 · 대화 400)",
@@ -2918,9 +2918,6 @@
  "text_multiset": {
   "ATHENA": 1,
   "새 채팅": 1,
-  "그래프": 1,
-  "에이전트": 1,
-  "플러그인": 1,
   "프로젝트": 1,
   "아테나": 1,
   "백엔드 API 개수 확인": 1,
@@ -3024,8 +3021,11 @@
   "ESC 중단": 1,
   "CLAUDE": 1,
   "감시 2": 1,
-  "OPUS · HIGH": 1
+  "OPUS · HIGH": 1,
+  "메티스": 1,
+  "아이기스": 1,
+  "에르가네": 1
  },
  "exported_at": "2026-09-05",
- "tree_summary_sha256": "a7f36e3cd7d02c62ee4087e115a86f29e6a4ba3dc48cffe4311cac40bc942e62"
+ "tree_summary_sha256": "a510dd9ca67ad1d8e8905e272e0bf5ac1c1d40c42b447ddf6c02df6bb489222a"
 }

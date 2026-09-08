@@ -564,6 +564,7 @@
       btn.type = 'button';
       btn.setAttribute('role', 'menuitem');
       btn.dataset.view = choice.view;
+      btn.appendChild(makeModeIcon(choice.mode));
       btn.appendChild(el('span', 'sidebar-mode-picker-label', choice.label));
       btn.appendChild(el('span', 'sidebar-mode-picker-hint', choice.hint));
       const count = el('span', 'sidebar-mode-picker-count');
