@@ -289,6 +289,34 @@ test('LIFE-003 main source keeps one shell-to-orb visibility policy from boot th
   assert.match(realtimeManager, /semanticBindingSourceProvider:\s*integratedCardRealtime\.createSemanticBindingSourceProvider\(\{\s*backendBase:\s*BACKEND_HTTP_BASE,\s*token:\s*LOCAL_BEARER_TOKEN,\s*fetchImpl:\s*fetch,\s*\}\)/);
 });
 
+test('routine alerts keep the orb hidden while the shell is visible and still reach both renderers', () => {
+  const source = fs.readFileSync(path.join(__dirname, '..', '..', 'main.js'), 'utf8');
+  const relay = extractFunctionSource(source, 'function sendRoutineEventToRenderers(event)');
+  for (const type of ['routine-fired', 'routine-restore-failed']) {
+    const deliveries = [];
+    const shellWin = {
+      isDestroyed: () => false, isVisible: () => true, isMinimized: () => false,
+      webContents: { send: (...args) => deliveries.push(['shell', ...args]) },
+    };
+    let visible = true;
+    const orbWin = {
+      isDestroyed: () => false, isVisible: () => visible,
+      hide: () => { visible = false; },
+      showInactive: () => { visible = true; },
+      webContents: { send: (...args) => deliveries.push(['orb', ...args]) },
+    };
+    const event = { type };
+    require('node:vm').runInNewContext(`${relay}; sendRoutineEventToRenderers(event);`, {
+      shellWin, orbWin, event, orbWindow: require('./orb-window'),
+    });
+    assert.equal(visible, false, type);
+    assert.deepEqual(deliveries, [
+      ['shell', 'athena:routine-event', event],
+      ['orb', 'athena:routine-event', event],
+    ]);
+  }
+});
+
 test('BOOT-003 production surfaces have no retry UI or retry IPC and retain the real task label', () => {
   const appDir = path.join(__dirname, '..', '..');
   const shell = fs.readFileSync(path.join(appDir, 'shell.html'), 'utf8');

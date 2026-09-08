@@ -1606,9 +1606,25 @@ test('buildAgentModePrefix: 코드 알람 3단계 계약을 준다(propose_watch
   assert.ok(p.includes('같은 path로 propose_watch_code를 다시 불러'));
   assert.ok(p.includes('먼저 잠시 멈춰 달라고 말한 뒤 고친다'));
   assert.ok(p.includes('「함수 N개 만듦」 영수증'));
-  assert.ok(p.includes('「언제 확인할까요?」 질문 카드'));
-  assert.ok(p.includes('poll_interval_s:60을 지어내지 마라'));
-  assert.doesNotMatch(p, /poll_interval_s:60\}/);
+  assert.ok(p.includes('선택 질문을 만들거나 답을 기다리지 마라'));
+  assert.ok(p.includes('poll_interval_s:60, lookback_days:30, cooldown_s:1800, expires_days:7'));
+  assert.ok(p.includes('같은 턴에 action=draft 를 부른다'));
+  assert.ok(p.includes('앱이 코드 초안을 자동 검사해 승인 가능 여부를 카드에 표시한다'));
+  assert.ok(p.includes('검사 실패는 이유를 사실대로 말하고 승인 가능하다고 꾸미지 마라'));
+  assert.doesNotMatch(p, /언제 확인할까요|답이 오면|draft를 미루고/);
+});
+
+test('buildLivePrompt: 루틴 제안은 기본값 선택부터 실제 초안까지 모델이 끝낸다', () => {
+  const p = buildLivePrompt('루틴 제안', [], '20260903');
+  assert.ok(p.includes('대상 식별자와 기준값이 필요하면 실제 사용 가능한 조회 툴로 확인한다'));
+  assert.ok(p.includes('조회할 수 없는 값을 지어내지 말고'));
+  assert.ok(p.includes('합리적인 기본값을 네가 정해'));
+  assert.ok(p.includes('athena_routine action=draft로 실제 초안을 만든다'));
+  assert.ok(p.includes('다시 만들지 물어보거나 기본값을'));
+  assert.ok(p.includes('고르게 하지 마라'));
+  assert.ok(p.includes('관찰·추론 신호를 사용자의 투자 선호라고 단정하지 마라'));
+  assert.ok(p.includes('조건·확인 주기·쿨다운·만료를 모두 제안 설정으로 밝히고'));
+  assert.ok(p.includes('사람이 카드를 누를 때만 일어난다'));
 });
 
 test('buildAgentModePrefix: 프로젝트가 있으면 이름과 id를 싣고, 없으면 만들라고 한다', () => {

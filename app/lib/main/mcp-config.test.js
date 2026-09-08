@@ -34,6 +34,7 @@ test('ensureMcpConfig: userData 아래에 claude -p가 읽을 수 있는 .mcp.js
     assert.match(grokToml, /\[mcp_servers\.athena\]/);
     assert.ok(grokToml.includes(JSON.stringify(PYTHON_EXE)));
     assert.ok(grokToml.includes(JSON.stringify(BACKEND_DIR)));
+    assert.match(grokToml, /ATHENA_MCP_TOOL_NAME_STYLE = "grok"/);
     assert.match(grokToml, /enabled = true/);
   } finally {
     fs.rmSync(tmp, { recursive: true, force: true });

@@ -231,13 +231,25 @@ test('표시 모드: 셸이 없거나 파괴됐으면 알림 전용(B)으로 둔
   assert.equal(orbDisplayMode(fakeShellWindow({ visible: false, destroyed: true })), 'B');
 });
 
-test('알림 전용 패널 요청은 셸이 보이는 동안에도 창을 띄운다', () => {
+test('알림이 와도 보이는 메인창이 있으면 키우미 native 창을 숨긴다', () => {
   const shell = fakeShellWindow({ visible: true });
-  const orb = fakeOrbWindow({ visible: false });
+  const orb = fakeOrbWindow({ visible: true });
 
-  assert.equal(syncOrbVisibility(shell, orb, { alert: true }), true);
-  assert.deepEqual(orb.calls, ['showInactive']);
+  assert.equal(syncOrbVisibility(shell, orb, { alert: true }), false);
+  assert.deepEqual(orb.calls, ['hide']);
   assert.equal(orbDisplayMode(shell), 'B');
+});
+
+test('알림이 오면 숨었거나 최소화된 메인창에서는 키우미를 표시한다', () => {
+  for (const shell of [
+    fakeShellWindow({ visible: false }),
+    fakeShellWindow({ visible: false, minimized: true }),
+  ]) {
+    const orb = fakeOrbWindow({ visible: false });
+
+    assert.equal(syncOrbVisibility(shell, orb, { alert: true }), true);
+    assert.deepEqual(orb.calls, ['showInactive']);
+  }
 });
 
 test('알림 전용 패널 요청도 앱 종료 중(파괴된 셸)에는 창을 띄우지 않는다', () => {

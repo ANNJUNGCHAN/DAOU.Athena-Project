@@ -651,11 +651,9 @@ function sendRoutineEventToRenderers(event) {
   // 행을 각자 렌더할 뿐이고 백엔드 신규 경로는 0건이다 — 설계서 §판단서 요지.
   if (orbWin && !orbWin.isDestroyed()) {
     orbWin.webContents.send('athena:routine-event', event);
-    // 발화·복원 실패는 셸이 보이는 동안에도 알림 전용 패널로 실제 화면에 선다
-    // (Paper 보드 05 5FX-0 「셸이 보이는 동안 오브는 알림 전용이다」). 감시형
-    // 신호는 배경 상태라 창을 띄우지 않는다.
+    // 발화·복원 실패도 셸 가시성 정책을 따른다. 셸이 보이면 키우미는 숨긴다.
     if (event && (event.type === 'routine-fired' || event.type === 'routine-restore-failed')) {
-      orbWindow.syncOrbVisibility(shellWin, orbWin, { alert: true });
+      orbWindow.syncOrbVisibility(shellWin, orbWin);
     }
   }
 }
@@ -4736,7 +4734,16 @@ async function terminateColdLegacyRuntime(reason = 'mcp-security-mutation') {
 }
 
 // Esc 중단 — 렌더러의 abortToken은 UI 반영만 막는다. 프로세스는 여기서 실제로 죽인다.
-ipcMain.on('athena:abort-live-query', () => {
+// 셸과 오브는 이 채널을 공유하므로, 송신자가 현재 질의를 소유한 창일 때만 받는다.
+// 새 대화 이벤트처럼 한 창의 늦은 취소가 다른 창의 새 턴을 죽이면 안 된다.
+ipcMain.on('athena:abort-live-query', (event) => {
+  const sender = event && event.sender;
+  const fromOrb = !!(sender && orbWin && !orbWin.isDestroyed() && sender === orbWin.webContents);
+  const fromShell = !!(sender && shellWin && !shellWin.isDestroyed() && sender === shellWin.webContents);
+  const ownsActiveQuery = fromOrb
+    ? liveOrbQueryBusyDepth > 0
+    : (fromShell && liveQueryBusyDepth > liveOrbQueryBusyDepth);
+  if (!ownsActiveQuery) return;
   abortConversationWork(new Error('사용자가 진행 중인 대화 작업을 취소했다'));
 });
 

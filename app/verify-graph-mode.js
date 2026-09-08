@@ -428,7 +428,6 @@ async function main() {
         kindBadge: t('.panel-kind-badge'),
         sub: t('.panel-header-row2'),
         tabs: [...p.querySelectorAll('.panel-tab')].map((n) => n.textContent),
-        activeTab: t('.panel-tab.is-active'),
         contrastTitle: t('.panel-tier-contrast-title'),
         divider: t('.panel-tier-divider'),
         tierLabels: [...p.querySelectorAll('.panel-tier-label')].map((n) => n.textContent),
@@ -438,9 +437,7 @@ async function main() {
     `, '공통 패널');
     check('행을 고르면 공통 패널이 열린다', !!panel.name, panel.name);
     check('선택한 행이 표에서 강조된다', panel.rowHighlighted === true, panel.rowHighlighted);
-    check('패널 탭이 성향·이력 2종이고 성향이 활성이다',
-      JSON.stringify(panel.tabs) === JSON.stringify(['성향', '이력']) && panel.activeTab === '성향',
-      { tabs: panel.tabs, active: panel.activeTab });
+    check('패널에 성향·이력 탭이 없다', panel.tabs.length === 0, panel.tabs);
     check('선택 헤더 부제가 보강 횟수를 말한다', /보강 \d+회/.test(panel.sub || ''), panel.sub);
     check('티어 카드가 근거 문장을 보여준다', panel.tierBodies > 0, panel.tierBodies);
     if (picked.conflicted) {

@@ -93,12 +93,11 @@
      위에서 중간 회색이 돼 잉크 글씨가 뭉갰다. 애플 레퍼런스가 어떤 배경에서도 읽히는
      이유는 강한 블러로 뒤를 지우기 때문인데 우리는 창 뒤를 블러할 수 없다(Chromium은
      페이지 안쪽만 흐린다). 블러로 못 지우면 막의 밝기로 지운다 — 거의 흰 패널로 올려
-     가독을 바탕화면과 무관하게 만든다. 사용자가 직접 고를 수 있도록 아래 3단
-     (clear/default/opaque)을 함께 둔다. 순서 계약은 세 단계 모두에서 지켜진다. */
-  --glass-window: 0.86;      /* 대화 창 기본(뒤=데스크톱) */
-  --glass-card: 0.90;        /* 카드 — backdrop-filter blur(14px)와 짝 */
-  --glass-canvas: 0.92;      /* 캔버스 창 표면 */
-  --glass-window-max: 0.95;  /* 대화 창 확장(뒤=캔버스) */
+     가독을 바탕화면과 무관하게 만든다. 2026-09-08부터 가장 불투명한 값으로 고정한다. */
+  --glass-window: 0.96;      /* 대화 창 기본(뒤=데스크톱) */
+  --glass-card: 0.97;        /* 카드 — backdrop-filter blur(14px)와 짝 */
+  --glass-canvas: 0.98;      /* 캔버스 창 표면 */
+  --glass-window-max: 0.99;  /* 대화 창 확장(뒤=캔버스) */
 
   --ease: cubic-bezier(.2, 0, 0, 1);
   --dur-fast: 120ms;
@@ -142,44 +141,6 @@
      다수값 28px을 정본으로 세운다(board-surface.css가 유일한 사용처).
      Paper 원본도 이 값으로 맞춘다 — 그때 사다리에 정식으로 올린다. */
   --radius-card: 28px;
-}
-
-/* 유리 투명도 5단 (2026-08-22 사용자 지시 — 애플 Liquid Glass 레퍼런스가 투명도를
- * 사용자 슬라이더로 준다: "가장 투명 / 중간(기본값) / 가장 불투명" — 이후
- * 2026-08-24 리프 1.1.2에서 Paper 보드 07이 sheer·solid 2단을 더해 5단으로 늘렸다).
- * 값의 SSOT는 lib/main/prefs.js(glassLevel: clear/sheer/default/solid/opaque)이고
- * 렌더러가 <html data-glass="...">로 적용한다. default는 :root 기본값이라
- * 셀렉터가 없다. 순서 계약 2축(① 단계 안: window < card < canvas < window-max,
- * ② 단계 간: clear < sheer < default < solid < opaque)은 다섯 단계 모두에서 지켜진다.
- *
- * 정직 기록: 애플처럼 "뒤가 흐려지며 비치는" 상태는 Windows/Electron에서 재현할 수
- * 없다 — Chromium의 backdrop-filter는 페이지 안쪽만 흐리고 창 뒤 데스크톱은 못
- * 건드린다. 그래서 clear 단계는 "블러 없는 맑은 유리"이고, 그 대가로 바탕화면이
- * 복잡하면 글자가 겹쳐 읽힌다. 가독이 깨지면 default·opaque로 올리는 것이 정답이다.
- * 창 안(카드 ↔ 캔버스 표면)의 블러는 진짜로 동작한다. */
-:root[data-glass='clear'] {
-  --glass-window: 0.30;
-  --glass-card: 0.42;
-  --glass-canvas: 0.48;
-  --glass-window-max: 0.55;
-}
-:root[data-glass='sheer'] {
-  --glass-window: 0.58;      /* 보드 07 설계값, 미실측 */
-  --glass-card: 0.66;        /* 보간값 (0.42+0.90)/2 */
-  --glass-canvas: 0.70;      /* 보간값 (0.48+0.92)/2 */
-  --glass-window-max: 0.75;  /* 보간값 (0.55+0.95)/2 */
-}
-:root[data-glass='solid'] {
-  --glass-window: 0.91;      /* 보드 07 설계값, 미실측 */
-  --glass-card: 0.94;        /* 보간값 (0.90+0.97)/2 = 0.935 → 0.94 */
-  --glass-canvas: 0.95;      /* 보간값 (0.92+0.98)/2 */
-  --glass-window-max: 0.97;  /* 보간값 (0.95+0.99)/2 */
-}
-:root[data-glass='opaque'] {
-  --glass-window: 0.96;
-  --glass-card: 0.97;
-  --glass-canvas: 0.98;
-  --glass-window-max: 0.99;
 }
 
 /* 글자 크기 5단계 (2026-08-19 사용자 지시 "글자가 너무 큼") — 설정 › 화면 › 글자

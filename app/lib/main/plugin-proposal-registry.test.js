@@ -41,7 +41,7 @@ function envelope(actions, id = 'p1') {
 test('electron도 main.js도 require하지 않는다', () => {
   const source = fs.readFileSync(path.join(__dirname, 'plugin-proposal-registry.js'), 'utf8');
   const required = [...source.matchAll(/require\(\s*['"]([^'"]+)['"]\s*\)/g)].map((m) => m[1]);
-  assert.deepEqual(required, []);
+  assert.deepEqual(required, ['node:crypto']);
 });
 
 // --- 1회용 소비 -------------------------------------------------------------
@@ -177,6 +177,13 @@ test('설치는 추천 목록 안에서만, 나머지는 이미 설치된 것만
   assert.equal(registry.gate(envelope([{ action: 'install', target: 'fetch' }])).error, '이미 설치돼 있습니다');
 });
 
+test('추천 설치도 기존 별칭의 대소문자만 바꿔 중복 등록할 수 없다', () => {
+  const { registry } = spy(['TIME']);
+  const gated = registry.gate(envelope([{ action: 'install', target: 'time' }]));
+  assert.equal(gated.ok, false);
+  assert.equal(gated.error, '이미 설치돼 있습니다');
+});
+
 test('스니펫은 파싱한 뒤 별칭을 검사한다', () => {
   const { registry } = spy();
   const snippetOf = (raw) => envelope([{ action: 'stage_snippet', target: null, snippet: raw }]);
@@ -190,6 +197,59 @@ test('스니펫은 파싱한 뒤 별칭을 검사한다', () => {
     registry.gate(envelope([{ action: 'stage_snippet', target: 'weather', snippet: '{"mcpServers":{"weather":{}}}' }])).error,
     '직접 등록에는 대상을 보내지 않습니다',
   );
+});
+
+test('스니펫 별칭은 정규화한 결과가 기존 등록과 겹치면 실행 전에 막는다', () => {
+  const { calls, registry } = spy(['dart-mcp', 'opendart-mcp']);
+  const duplicate = registry.gate(envelope([{ action: 'stage_snippet', target: null,
+    snippet: '{"mcpServers":{"DART MCP":{"command":"uvx","args":[]}}}' }]));
+  assert.equal(duplicate.ok, false);
+  assert.match(duplicate.error, /dart-mcp.*이미 등록된 플러그인/);
+  assert.match(duplicate.error, /기존 연결 설정과 권한을 확인/);
+
+  const fallback = registry.gate(envelope([{ action: 'stage_snippet', target: null,
+    snippet: '{"mcpServers":{"공시":{"command":"npx","args":["-y","opendart-mcp"]}}}' }]));
+  assert.equal(fallback.ok, false);
+  assert.match(fallback.error, /opendart-mcp.*이미 등록된 플러그인/);
+  assert.equal(calls.every(([name]) => name === 'list'), true);
+});
+
+test('한 봉투에서 같은 별칭으로 정규화되는 직접 등록은 하나도 실행하지 않는다', async () => {
+  const { calls, registry } = spy([]);
+  const proposal = envelope([
+    { action: 'stage_snippet', target: null, snippet: '{"mcpServers":{"dart mcp":{"command":"uvx","args":[]}}}' },
+    { action: 'stage_snippet', target: null, snippet: '{"mcpServers":{"dart@mcp":{"command":"uvx","args":[]}}}' },
+  ]);
+  const result = await registry.decide(proposal, { revisionNow: 7 });
+  assert.equal(result.kind, 'failed');
+  assert.match(result.reason, /같은 요청에 중복/);
+  assert.equal(calls.some(([name]) => name === 'stageSnippet'), false);
+});
+
+test('추천 설치와 직접 등록이 같은 별칭을 추가하는 혼합 봉투도 실행 전에 막는다', async () => {
+  for (const actions of [
+    [
+      { action: 'install', target: 'time' },
+      { action: 'stage_snippet', target: null, snippet: '{"mcpServers":{"time":{"command":"uvx","args":[]}}}' },
+    ],
+    [
+      { action: 'stage_snippet', target: null, snippet: '{"mcpServers":{"time":{"command":"uvx","args":[]}}}' },
+      { action: 'install', target: 'time' },
+    ],
+  ]) {
+    const { calls, registry } = spy([]);
+    const result = await registry.decide(envelope(actions), { revisionNow: 7 });
+    assert.equal(result.kind, 'failed');
+    assert.match(result.reason, /같은 요청에 중복/);
+    assert.equal(calls.some(([name]) => name === 'stageSnippet'), false);
+  }
+});
+
+test('기존 플러그인의 명시적 변경 액션은 계속 통과한다', () => {
+  const { registry } = spy(['dart-mcp']);
+  assert.equal(registry.gate(envelope([
+    { action: 'set_enabled', target: 'dart-mcp', enabled: true },
+  ])).ok, true);
 });
 
 test('빈 봉투와 enum 밖 액션은 게이트에서 막힌다', () => {
