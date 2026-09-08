@@ -887,8 +887,8 @@ function boardStateOf(host) {
       emptyColumns: [], emptyColumnsByBoard: new Map(),
       // 응답이 빈 값으로 답한 자리(계약의 empty_value_slots).
       emptyValueSlots: [], emptyValueSlotsByBoard: new Map(),
-      // 실시간 프레임만이 채울 잎(계약의 realtime_pending_slots).
-      realtimePending: [], realtimePendingByBoard: new Map(),
+      // 값이 조회 응답 밖에서 오는 잎(계약의 deferred_value_slots).
+      deferredValueSlots: [], deferredValueSlotsByBoard: new Map(),
       // binding_id → [slot_id]. 봉투가 두 표를 같이 실을 때만 채워진다 —
       // 비어 있으면 실시간 프레임은 보드에 아무것도 안 한다(추측하지 않는다).
       realtimeSlots: new Map(), surface: null, mountContract: null,
@@ -935,11 +935,11 @@ function seedBoardState(state, contract, envelope) {
   state.emptyColumnsByBoard.set(
     boardId, Array.isArray(contract.empty_columns) ? contract.empty_columns.slice() : [],
   );
-  // 실시간 프레임만이 채울 잎 — 첫 프레임 전에는 결측어 대신 빈 칸이다.
-  state.realtimePendingByBoard.set(
+  // 값이 조회 응답 밖(실시간 프레임·주문 응답)에서 오는 잎 — 그전에는 빈 칸이다.
+  state.deferredValueSlotsByBoard.set(
     boardId,
-    Array.isArray(contract.realtime_pending_slots)
-      ? contract.realtime_pending_slots.slice() : [],
+    Array.isArray(contract.deferred_value_slots)
+      ? contract.deferred_value_slots.slice() : [],
   );
 }
 
@@ -954,8 +954,8 @@ function activateBoardState(state, boardId) {
   state.realtimeByBoard.set(id, state.realtimeSlots);
   state.emptyRows = state.emptyRowsByBoard.get(id) || [];
   state.emptyRowsByBoard.set(id, state.emptyRows);
-  state.realtimePending = state.realtimePendingByBoard.get(id) || [];
-  state.realtimePendingByBoard.set(id, state.realtimePending);
+  state.deferredValueSlots = state.deferredValueSlotsByBoard.get(id) || [];
+  state.deferredValueSlotsByBoard.set(id, state.deferredValueSlots);
   state.emptyColumns = state.emptyColumnsByBoard.get(id) || [];
   state.emptyColumnsByBoard.set(id, state.emptyColumns);
   state.emptyValueSlots = state.emptyValueSlotsByBoard.get(id) || [];
@@ -968,8 +968,8 @@ function boardMountOptions(host, envelope) {
   return {
     // 백엔드가 「자료가 한 칸도 없다」고 표시한 줄. 마운트가 그 줄만 감춘다.
     emptyRows: boardStateOf(host).emptyRows || [],
-    // 첫 실시간 프레임 전에는 빈 칸으로 두는 잎.
-    realtimePending: boardStateOf(host).realtimePending || [],
+    // 실시간 프레임·주문 응답이 오기 전에는 빈 칸으로 두는 잎.
+    deferredValueSlots: boardStateOf(host).deferredValueSlots || [],
     // 값이 한 줄도 없어 머리글까지 지울 열.
     emptyColumns: boardStateOf(host).emptyColumns || [],
     // 응답이 빈 값으로 답해 빈 칸으로 둘 자리.

@@ -132,11 +132,24 @@ _MOUNT_FIELDS = (
 #             없는 값을 지어내는 것이 되고, 결측어를 찍으면 「이번 응답에 안 왔다」는
 #             거짓말이 된다(그 화면에는 원래 그 값이 없다). 빈 칸으로 둔다.
 _BLANK_REASON_MARKS = ("없다", "없음", "계산값", "파생", "집계한 값", "산출")
+_STATIC_MODES = ("text", "blank")
 
 
 def _static_mode(slot: dict) -> str | None:
+    """이 static 자리를 화면에서 어떻게 다룰지. 저작이 적었으면 그것이 정본이다.
+
+    ``static_mode``를 명시하면 그대로 쓴다 — 사유 문장에서 낱말을 주워 판정하는 것은
+    저작이 문장을 고쳐 쓰는 순간 조용히 뒤집힌다. 옛 저작(사유만 있는 자리)을 위해
+    낱말 판정은 폴백으로 남긴다.
+    """
+
     if not slot.get("static"):
         return None
+    declared = slot.get("static_mode")
+    if declared in _STATIC_MODES:
+        return declared
+    if declared is not None:
+        raise SystemExit(f"알 수 없는 static_mode: {declared!r} ({slot.get('slot_id')})")
     reason = str(slot.get("static_reason") or "")
     if any(mark in reason for mark in _BLANK_REASON_MARKS):
         return "blank"

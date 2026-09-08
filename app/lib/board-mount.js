@@ -91,13 +91,14 @@ function collapsePlan(contract, values) {
 // 순수 계획 — DOM 없이 검증 가능한 층. 텍스트·색·접힘 결정을 전부 여기서 내린다.
 // 결측어를 쓰지 않고 **빈 칸**으로 두는 잎. 두 갈래를 한 집합으로 모은다.
 //
-//   realtimePending  값이 실시간 프레임으로만 온다 — 아직 오지 않은 값이다.
-//   emptyValueSlots  응답이 그 자리를 빈 값으로 답했다 — 그 줄에는 해당 값이 없다.
+//   deferredValueSlots  값이 조회 응답 밖(실시간 프레임·주문 응답)에서 온다 —
+//                       아직 오지 않은 값이다.
+//   emptyValueSlots     응답이 그 자리를 빈 값으로 답했다 — 그 줄에는 해당 값이 없다.
 //
 // 둘 다 「제공되지 않는다」가 아니므로 결측어를 찍으면 거짓말이 된다.
 function pendingSet(options) {
   const blanks = new Set();
-  for (const key of ['realtimePending', 'emptyValueSlots']) {
+  for (const key of ['deferredValueSlots', 'emptyValueSlots']) {
     const list = options && options[key];
     if (!Array.isArray(list)) continue;
     for (const slotId of list) blanks.add(String(slotId));

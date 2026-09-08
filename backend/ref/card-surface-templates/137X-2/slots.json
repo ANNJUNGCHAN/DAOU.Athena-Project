@@ -394,7 +394,10 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "static": true,
+      "static_mode": "text",
+      "static_reason": "장 세션 칩 — 화면 문구. 세션을 싣는 op(0B 장구분)는 실시간이라 이 칩의 출처가 아니다"
     },
     {
       "slot_id": "s004",
@@ -417,7 +420,10 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "static": true,
+      "static_mode": "text",
+      "static_reason": "갱신 방식 칩 — 화면 문구"
     },
     {
       "slot_id": "s005",
@@ -1402,7 +1408,10 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "회전율 일·주·월 세 구간을 한 문장에 합친 파생 표기 — 대응 필드가 없다"
     },
     {
       "slot_id": "s044",
@@ -1425,7 +1434,10 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "차트 y축 눈금 목업 — 축은 차트 렌더러가 그린다"
     },
     {
       "slot_id": "s045",
@@ -1448,7 +1460,10 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "차트 y축 눈금 목업 — 축은 차트 렌더러가 그린다"
     },
     {
       "slot_id": "s046",
@@ -1471,7 +1486,10 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "차트 y축 눈금 목업 — 축은 차트 렌더러가 그린다"
     },
     {
       "slot_id": "s047",
@@ -1494,7 +1512,10 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "차트 y축 눈금 목업 — 축은 차트 렌더러가 그린다"
     },
     {
       "slot_id": "s048",
@@ -1517,7 +1538,10 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "차트 y축 0 눈금 목업 — 축은 차트 렌더러가 그린다"
     },
     {
       "slot_id": "s049",
@@ -1561,7 +1585,10 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "차트 툴팁 목업 — 툴팁은 차트 렌더러가 그린다"
     },
     {
       "slot_id": "s051",
@@ -1605,7 +1632,10 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "static": true,
+      "static_mode": "text",
+      "static_reason": "거래 상태 칩 — 화면 문구"
     },
     {
       "slot_id": "s053",
@@ -1715,16 +1745,20 @@
       "font_size_px": 11.0,
       "anchor": null,
       "table": null,
-      "mapping_id": null,
-      "f": null,
+      "mapping_id": "base:ka10086",
+      "f": "for_qty",
       "alt_mappings": null,
       "kor": "외인수량",
       "format": {
-        "missing_text": "조회값 없음"
+        "unit": "shares",
+        "sign": false,
+        "precision": 0,
+        "tone": "neutral"
       },
       "paired_with": "s056",
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "note": "외인수량 — 일별주가(ka10086) 응답의 for_qty. 되풀이 밖에 한 번 그려진 잎이라 최근 일자(첫 원소)를 쓴다"
     },
     {
       "slot_id": "s058",
@@ -3734,7 +3768,10 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "static": true,
+      "static_mode": "text",
+      "static_reason": "차트 갱신 안내줄 — 화면 문구"
     },
     {
       "slot_id": "s137",
@@ -3757,7 +3794,10 @@
       },
       "paired_with": null,
       "collapse_group": null,
-      "expanded_board": null
+      "expanded_board": null,
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "봉 종류·틱 수·마지막 체결 시각을 합친 목업 문장 — 대응 필드가 없다"
     },
     {
       "slot_id": "s138",

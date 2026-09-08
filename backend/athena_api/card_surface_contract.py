@@ -339,22 +339,31 @@ def _solo_array_occurrences(board: BoardTemplate) -> frozenset[str]:
     return frozenset(key for key, count in seen.items() if count == 1)
 
 
-def _operation_is_realtime(mapping_id: str) -> bool:
-    """이 op가 websocket(실시간) op인가. 생성 레지스트리가 유일한 출처다."""
+# 값이 **조회 응답이 아니라 다른 경로**로 오는 op 종류. 하이드레이션은 이 둘을 부르지
+# 않는다(실시간은 REST 경로가 없고, 주문은 읽기가 아니다).
+_DEFERRED_KINDS = frozenset({"websocket", "order"})
+
+
+def _operation_is_deferred(mapping_id: str) -> bool:
+    """이 op의 값이 조회 응답 밖(실시간 프레임·주문 응답)에서 오는가."""
 
     parts = mapping_id.split(":")
     tr_id = parts[1] if len(parts) >= 2 else mapping_id
     spec = TR_REGISTRY.get(tr_id)
-    return spec is not None and spec.kind == "websocket"
+    return spec is not None and spec.kind in _DEFERRED_KINDS
 
 
-def _realtime_pending_slots(board: BoardTemplate, filled: set[str]) -> list[str]:
-    """값이 **실시간 프레임으로만** 오는 잎 — 아직 안 온 것은 결측이 아니다.
+def _deferred_value_slots(board: BoardTemplate, filled: set[str]) -> list[str]:
+    """값이 **조회 응답 밖**에서 오는 잎 — 아직 안 온 것은 결측이 아니다.
 
-    호가 사다리·체결 흐름처럼 websocket op만 가리키는 잎은 REST 조회로 채울 방법이
-    없다(실측 967자리). 첫 프레임 전에 「미제공」을 찍으면 「이 값은 제공되지 않는다」는
-    거짓말이 된다 — 제공되고, 아직 오지 않았을 뿐이다. 프론트는 그 자리를 빈 칸으로
-    두고 프레임이 오면 채운다(board-mount `realtime_pending`).
+    두 갈래다. 호가 사다리·체결 흐름은 websocket 프레임이 채우고(실측 967자리),
+    정정·취소 주문 화면의 수량·원주문번호는 주문을 낸 뒤 그 응답이 채운다(실측
+    2TAG-1·2TET-1 3자리). 둘 다 첫 값 전에 「미제공」을 찍으면 「이 값은 제공되지
+    않는다」는 거짓말이 된다 — 제공되고, 아직 오지 않았을 뿐이다. 프론트는 그 자리를
+    빈 칸으로 두고 값이 오면 채운다(board-mount `deferredValueSlots`).
+
+    바인딩이 **하나라도** 그런 op면 그 잎의 주 출처는 그 경로다. 조회 대체 바인딩이
+    값을 못 실어 왔더라도 프레임·주문 응답이 오면 채워진다.
     """
 
     pending: list[str] = []
@@ -364,10 +373,7 @@ def _realtime_pending_slots(board: BoardTemplate, filled: set[str]) -> list[str]
         bindings = slot.bindings
         if not bindings:
             continue
-        # 실시간 바인딩이 **하나라도** 있으면 그 잎의 주 출처는 실시간 채널이다.
-        # REST 대체 바인딩이 값을 못 실어 왔더라도 프레임이 오면 채워지므로, 첫
-        # 프레임 전에 「미제공」을 찍는 것은 여전히 거짓말이다.
-        if any(_operation_is_realtime(binding.mapping_id) for binding in bindings):
+        if any(_operation_is_deferred(binding.mapping_id) for binding in bindings):
             pending.append(slot.slot_id)
     return pending
 
@@ -565,8 +571,8 @@ def _board_contract(
         "empty_columns": _empty_columns(
             board, {entry["slot_id"] for entry in slot_values}
         ),
-        # 실시간 프레임만이 채울 수 있는 잎 — 첫 프레임 전에는 빈 칸이다.
-        "realtime_pending_slots": _realtime_pending_slots(
+        # 값이 조회 응답 밖(실시간 프레임·주문 응답)에서 오는 잎 — 그전에는 빈 칸이다.
+        "deferred_value_slots": _deferred_value_slots(
             board, {entry["slot_id"] for entry in slot_values}
         ),
         "state_boards": _state_boards(registry, board),

@@ -101,6 +101,10 @@ const TEXT_CLIP_PROBE = (instanceId) => `(() => {
 })()`;
 
 // 결측어가 화면에 실제로 몇 번 찍혔는지. 결측어 3종을 구분해 센다(헌장 신념 5).
+//
+// **렌더러가 찍은 것만 센다**(`data-missing`). Paper가 디자인으로 그려 둔 「해당 없음」
+// 라벨(실측 2YS8-0 s132 · 2ZTA-0 s112 · 3JT4-0 s095)은 카드가 Paper와 1:1이라는
+// 증거이지 결함이 아니다 — 그 자리는 따로 센다(`authored`).
 const MISSING_TEXT_PROBE = (instanceId) => `(() => {
   const root = document.querySelector(
     '#grid .card[data-integrated-instance-key="view:${instanceId}"]');
@@ -109,6 +113,7 @@ const MISSING_TEXT_PROBE = (instanceId) => `(() => {
   const WORDS = ['미제공', '집계 전', '해당 없음'];
   const counts = { '미제공': 0, '집계 전': 0, '해당 없음': 0 };
   const nodes = [];
+  const authored = [];
   const walker = document.createTreeWalker(surface, NodeFilter.SHOW_TEXT);
   for (let node = walker.nextNode(); node; node = walker.nextNode()) {
     const text = String(node.nodeValue || '').trim();
@@ -119,6 +124,17 @@ const MISSING_TEXT_PROBE = (instanceId) => `(() => {
     if (style.display === 'none' || style.visibility === 'hidden') continue;
     if (owner.closest('[hidden]')) continue;
     if (owner.closest('.bs-paired')) continue;
+    // 렌더러가 결측으로 찍은 자리인가, Paper 문면이 그 낱말인가.
+    const marked = owner.dataset
+      ? owner.dataset.missing !== undefined
+      : owner.getAttribute('data-missing') !== null;
+    if (!marked) {
+      authored.push({
+        text,
+        node: (owner.dataset && (owner.dataset.node || owner.dataset.slotId)) || owner.className,
+      });
+      continue;
+    }
     counts[text] += 1;
     if (nodes.length < 30) {
       nodes.push({
@@ -131,6 +147,8 @@ const MISSING_TEXT_PROBE = (instanceId) => `(() => {
     counts,
     total: Object.values(counts).reduce((a, b) => a + b, 0),
     nodes,
+    authored_total: authored.length,
+    authored_nodes: authored.slice(0, 10),
     // 빈 줄 접기 진단 — 몇 줄을 접었고, 못 접은 줄은 왜인가.
     rows_collapsed: Number(surface.dataset.bsRowsCollapsed || 0),
     rows_skipped: (() => {

@@ -869,7 +869,10 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "unbound_reason": "순매수금액 — 화면 상단 KPI 집계값이며 ka10039은 종목별 행만 제공하므로 정확한 집계 잎이 없다"
+      "unbound_reason": "순매수금액 — 화면 상단 KPI 집계값이며 ka10039은 종목별 행만 제공하므로 정확한 집계 잎이 없다",
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "순매수 금액 — 어느 투자자·기간의 값인지 저작이 정하지 않았다(대응 필드 지정이 없음)"
     },
     {
       "slot_id": "s014",
@@ -4966,7 +4969,10 @@
       "paired_with": "s131",
       "collapse_group": null,
       "expanded_board": null,
-      "unbound_reason": "순매수금액 — 7~48위 숨은 종목 합계이며 지원되는 합산 표현식이 없어 정확히 바인딩할 수 없다"
+      "unbound_reason": "순매수금액 — 7~48위 숨은 종목 합계이며 지원되는 합산 표현식이 없어 정확히 바인딩할 수 없다",
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "순매수 금액 — 어느 투자자·기간의 값인지 저작이 정하지 않았다(대응 필드 지정이 없음)"
     },
     {
       "slot_id": "s133",
@@ -6286,7 +6292,10 @@
       "paired_with": "s168",
       "collapse_group": null,
       "expanded_board": null,
-      "unbound_reason": "매수금액 — 선택 증권사 합계이며 ka10039은 종목별 행만 제공하므로 정확한 집계 잎이 없다"
+      "unbound_reason": "매수금액 — 선택 증권사 합계이며 ka10039은 종목별 행만 제공하므로 정확한 집계 잎이 없다",
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "매수 금액 — 어느 투자자·기간의 값인지 저작이 정하지 않았다(대응 필드 지정이 없음)"
     },
     {
       "slot_id": "s170",
@@ -6361,7 +6370,10 @@
       "paired_with": "s171",
       "collapse_group": null,
       "expanded_board": null,
-      "unbound_reason": "매도금액 — 선택 증권사 합계이며 ka10039은 종목별 행만 제공하므로 정확한 집계 잎이 없다"
+      "unbound_reason": "매도금액 — 선택 증권사 합계이며 ka10039은 종목별 행만 제공하므로 정확한 집계 잎이 없다",
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "매도 금액 — 어느 투자자·기간의 값인지 저작이 정하지 않았다(대응 필드 지정이 없음)"
     },
     {
       "slot_id": "s173",
@@ -6436,7 +6448,10 @@
       "paired_with": "s174",
       "collapse_group": null,
       "expanded_board": null,
-      "unbound_reason": "순매수금액 — 선택 증권사 합계이며 ka10039은 종목별 행만 제공하므로 정확한 집계 잎이 없다"
+      "unbound_reason": "순매수금액 — 선택 증권사 합계이며 ka10039은 종목별 행만 제공하므로 정확한 집계 잎이 없다",
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "순매수 금액 — 어느 투자자·기간의 값인지 저작이 정하지 않았다(대응 필드 지정이 없음)"
     },
     {
       "slot_id": "s176",
@@ -6746,7 +6761,10 @@
       "paired_with": "s185",
       "collapse_group": null,
       "expanded_board": null,
-      "unbound_reason": "순매수금액 — 일별 금액값이지만 ka10078은 일별 수량만 제공하고 ka10039은 다른 종목별 축이므로 정확한 잎이 없다"
+      "unbound_reason": "순매수금액 — 일별 금액값이지만 ka10078은 일별 수량만 제공하고 ka10039은 다른 종목별 축이므로 정확한 잎이 없다",
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "순매수 금액 — 어느 투자자·기간의 값인지 저작이 정하지 않았다(대응 필드 지정이 없음)"
     },
     {
       "slot_id": "s187",
@@ -6836,7 +6854,10 @@
       "paired_with": "s188",
       "collapse_group": null,
       "expanded_board": null,
-      "unbound_reason": "순매수금액 — 일별 금액값이지만 ka10078은 일별 수량만 제공하고 ka10039은 다른 종목별 축이므로 정확한 잎이 없다"
+      "unbound_reason": "순매수금액 — 일별 금액값이지만 ka10078은 일별 수량만 제공하고 ka10039은 다른 종목별 축이므로 정확한 잎이 없다",
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "순매수 금액 — 어느 투자자·기간의 값인지 저작이 정하지 않았다(대응 필드 지정이 없음)"
     },
     {
       "slot_id": "s190",
@@ -6926,7 +6947,10 @@
       "paired_with": "s191",
       "collapse_group": null,
       "expanded_board": null,
-      "unbound_reason": "순매수금액 — 일별 금액값이지만 ka10078은 일별 수량만 제공하고 ka10039은 다른 종목별 축이므로 정확한 잎이 없다"
+      "unbound_reason": "순매수금액 — 일별 금액값이지만 ka10078은 일별 수량만 제공하고 ka10039은 다른 종목별 축이므로 정확한 잎이 없다",
+      "static": true,
+      "static_mode": "blank",
+      "static_reason": "순매수 금액 — 어느 투자자·기간의 값인지 저작이 정하지 않았다(대응 필드 지정이 없음)"
     },
     {
       "slot_id": "s193",
