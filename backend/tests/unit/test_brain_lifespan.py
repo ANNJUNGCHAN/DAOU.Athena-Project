@@ -755,3 +755,119 @@ async def test_a_partial_holdings_cycle_does_not_stop_the_loop(
         task.cancel()
         with pytest.raises(asyncio.CancelledError):
             await task
+
+
+# --- 소스별 스케줄러(2026-09-08) -------------------------------------------------------
+
+
+async def test_scheduler_runs_only_the_due_source_and_reschedules_it() -> None:
+    """주기가 다른 소스는 그 소스만 돈다 — 잡은 그 틱에 하나만 들어간다."""
+    from datetime import UTC, datetime, timedelta
+
+    from athena_api.lifespan import BrainIngestScheduler, BrainSource
+
+    now = datetime(2026, 9, 8, 9, 0, tzinfo=UTC)
+    order: list[str] = []
+    ticks: list[JobTrigger] = []
+
+    class RecordingBackfill:
+        async def run(self):
+            order.append("backfill")
+
+    class RecordingHoldings:
+        async def ingest(self):
+            order.append("holdings")
+
+    class RecordingCoordinator:
+        async def enqueue(self, trigger: JobTrigger) -> None:
+            order.append("enqueue")
+            ticks.append(trigger)
+
+    scheduler = BrainIngestScheduler(
+        RecordingCoordinator(),  # type: ignore[arg-type]
+        3600,
+        backfill=RecordingBackfill(),  # type: ignore[arg-type]
+        holdings=RecordingHoldings(),  # type: ignore[arg-type]
+        clock=lambda: now,
+    )
+    scheduler.set_interval(BrainSource.HOLDINGS, 1800)
+    assert scheduler.schedules[BrainSource.HOLDINGS].next_run_at == now + timedelta(minutes=30)
+    assert scheduler.schedules[BrainSource.FILLS].next_run_at == now + timedelta(hours=1)
+
+    now = now + timedelta(minutes=30)
+    await scheduler._run_sources(  # noqa: SLF001
+        [s for s, sch in scheduler.schedules.items() if sch.next_run_at <= now],
+        JobTrigger.HOURLY,
+    )
+    assert order == ["holdings", "enqueue"], "체결 백필은 아직 만기가 아니다"
+    holdings = scheduler.schedules[BrainSource.HOLDINGS]
+    assert holdings.last_run_at == now
+    assert holdings.next_run_at == now + timedelta(minutes=30)
+    assert holdings.running is False
+    assert holdings.last_error is None
+    assert scheduler.schedules[BrainSource.FILLS].last_run_at is None
+
+
+async def test_scheduler_run_now_uses_manual_trigger_and_records_error_type_only(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    from athena_api.lifespan import BrainIngestScheduler, BrainSource
+
+    triggers: list[JobTrigger] = []
+
+    class FailingBackfill:
+        async def run(self):
+            raise RuntimeError("C:/secret/path token=abc")
+
+    class RecordingCoordinator:
+        async def enqueue(self, trigger: JobTrigger) -> None:
+            triggers.append(trigger)
+
+    scheduler = BrainIngestScheduler(
+        RecordingCoordinator(),  # type: ignore[arg-type]
+        3600,
+        backfill=FailingBackfill(),  # type: ignore[arg-type]
+    )
+    schedule = await scheduler.run_now(BrainSource.FILLS)
+    assert triggers == [JobTrigger.MANUAL]
+    assert schedule.last_error == "RuntimeError"
+    assert schedule.last_run_at is not None
+    assert "token=abc" not in caplog.text
+    assert scheduler.schedules[BrainSource.CHAT].producer_wired is True
+    assert scheduler.schedules[BrainSource.FILLS].producer_wired is True
+    assert scheduler.schedules[BrainSource.HOLDINGS].producer_wired is False
+
+
+async def test_scheduler_loop_wakes_up_when_an_interval_is_shortened() -> None:
+    """긴 주기로 자고 있어도 주기를 줄이면 곧 돈다 — 옛 주기의 남은 시간을 기다리지 않는다."""
+    from athena_api.lifespan import BrainIngestScheduler, BrainSource
+
+    enqueued = asyncio.Event()
+
+    class RecordingCoordinator:
+        async def enqueue(self, trigger: JobTrigger) -> None:
+            enqueued.set()
+
+    scheduler = BrainIngestScheduler(RecordingCoordinator(), 3600)  # type: ignore[arg-type]
+    task = asyncio.create_task(scheduler.run_loop())
+    try:
+        await asyncio.sleep(0.01)
+        assert not enqueued.is_set()
+        scheduler.set_interval(BrainSource.CHAT, 0.001)
+        await asyncio.wait_for(enqueued.wait(), timeout=1)
+    finally:
+        task.cancel()
+        with pytest.raises(asyncio.CancelledError):
+            await task
+
+
+async def test_open_brain_exposes_a_scheduler_even_when_the_schedule_is_external(
+    tmp_path: Path,
+) -> None:
+    settings = _brain_settings(tmp_path, brain_ingest_schedule_owner="external")
+    brain = await _open_brain(settings, hourly_interval_seconds=60)
+    try:
+        assert brain.hourly_task is None
+        assert brain.scheduler is not None, "수동 실행·상태 조회는 주기 소유자와 무관하다"
+    finally:
+        await _teardown_brain(FastAPI(), brain)

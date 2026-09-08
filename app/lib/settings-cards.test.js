@@ -119,9 +119,23 @@ test('exposeToModel이 그래프 탭 배지의 켜짐/꺼짐을 정한다', () =
   assert.equal(settingsCards.readGraphSettings(storage).exposeToModel, false);
 });
 
-test('보유잔고 조회 주기 기본값은 60분', () => {
+test('대화·체결내역·보유잔고 조회 주기 기본값은 각각 60분', () => {
+  assert.equal(settingsCards.GRAPH_SETTINGS_DEFAULTS.chatIntervalMin, 60);
+  assert.equal(settingsCards.GRAPH_SETTINGS_DEFAULTS.fillsIntervalMin, 60);
   assert.equal(settingsCards.GRAPH_SETTINGS_DEFAULTS.holdingsIntervalMin, 60);
   assert.deepEqual([...settingsCards.HOLDINGS_INTERVAL_MINUTES], [30, 60, 120]);
+});
+
+test('소스별 조회 주기는 따로 저장되고 서로를 건드리지 않는다', () => {
+  const storage = fakeStorage();
+  settingsCards.writeGraphSettings({ chatIntervalMin: 30 }, storage);
+  settingsCards.writeGraphSettings({ fillsIntervalMin: 120 }, storage);
+  const read = settingsCards.readGraphSettings(storage);
+  assert.equal(read.chatIntervalMin, 30);
+  assert.equal(read.fillsIntervalMin, 120);
+  assert.equal(read.holdingsIntervalMin, 60);
+  assert.equal(settingsCards.normalizeGraphSettings({ chatIntervalMin: 7, fillsIntervalMin: '60' }).chatIntervalMin, 60);
+  assert.equal(settingsCards.normalizeGraphSettings({ fillsIntervalMin: '60' }).fillsIntervalMin, 60, '문자열은 허용 목록에 없다');
 });
 
 test('조회 주기를 30분·120분으로 바꿔 저장하고 되읽는다', () => {
