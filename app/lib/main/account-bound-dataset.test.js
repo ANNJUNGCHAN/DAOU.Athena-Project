@@ -18,7 +18,7 @@ function loadSelectorStage(dispatch) {
     calls,
     AbortController,
     performance,
-    activeSelectorFastRun: null,
+    runtime: { activeSelectorFastRun: null },
     modePromptRequired: false,
     simpleChartRoute: { handled: false },
     stockEntityIndex: {},

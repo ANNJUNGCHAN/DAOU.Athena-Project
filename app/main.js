@@ -40,6 +40,7 @@ const { todayYyyymmdd } = require('./lib/backtest-spec');
 // 상주 채팅 세션(2026-08-30 속도 작업) — 매 턴 claude -p 콜드 스폰의 고정비를
 // 세션당 1회로 바꾼다(모듈 상단 주석 참고). 기본 경로는 이쪽이다.
 const { createClaudeChatSession } = require('./lib/main/claude-chat-session');
+const { createConversationRuntimes } = require('./lib/main/conversation-runtimes');
 // 벤더 무관 프로바이더 런타임(ATHENA_PROVIDER_RUNTIME=1일 때만 기동) — 위 상주
 // 세션과 별개의 실험 경로다.
 const {
@@ -435,6 +436,8 @@ const createWindows = createOnce(async function createWindows() {
     // 쓴다. verify.js가 이 변수를 명시적으로 세팅한다(quota를 쓰는 실제 claude -p
     // 호출을 자동 검증에서 피하려고). 사람이 쓰는 npm start는 항상 live다.
     canvasSource: process.env.ATHENA_CANVAS_SOURCE === 'fixture' ? 'fixture' : 'live',
+    // 셸이 지금 보고 있는 대화(다중 대화, 2026-09-08) — chat.js가 제출·중단에 이 id를 싣는다.
+    conversationId: historyConversationId(),
   };
   bootWin.webContents.send('athena:init', initPayload);
   shellWin.webContents.send('athena:init', initPayload);
@@ -927,7 +930,7 @@ const integratedRealtimeShutdown = integratedCardRealtime.createBoundedShutdownC
     stockEntityIndexReadiness.stop();
     // 트레이로 숨겨진 동안에는 selector worker를 유지하고 실제 종료에서만 닫는다.
     selectorClaudePool.stop(new Error('Athena 앱 종료'));
-    if (liveChatSession) liveChatSession.stop(new Error('Athena 앱 종료'));
+    liveRuntimes.stopAllChatSessions(new Error('Athena 앱 종료'));
     conversations.flushSync(); // 예약만 된 사이드바 상태를 마저 저장한다
     if (sessionBridge) sessionBridge.flushSync(); // 대기 중인 세션 디바운스·저널을 마저 쓴다
   },
@@ -2535,30 +2538,30 @@ function getLiveMcpConfig() {
 // 재스폰 + --resume 포크 + 규칙 프리앰블 재전송·이력 누적)를 세션당 1회로 바꾼다.
 // 대화형 CLI(Claude Code 인터랙티브)가 빠른 조건과 같아진다.
 // ATHENA_PERSISTENT_CHAT=0 이면 기존 콜드 스폰 경로로 되돌린다(킬 스위치).
-let liveChatSession = null;
+// 상주 세션은 **대화마다 하나**다(2026-09-08 다중 대화 동시 진행) — 한 대화가 답하는 동안
+// 다른 대화는 자기 프로세스로 질의한다. 레지스트리·유휴 상한은 lib/main/conversation-runtimes.js.
 
 function persistentChatEnabled() {
   return process.env.ATHENA_PERSISTENT_CHAT !== '0';
 }
 
-function getLiveChatSession() {
-  if (!liveChatSession) {
-    const { dir, configFile } = getLiveMcpConfig();
-    liveChatSession = createClaudeChatSession({
-      cwd: dir,
-      configFile,
-      // 불변 규칙(live-prompt.js)은 --append-system-prompt로 세션당 1회 —
-      // 턴 페이로드는 buildLiveTurnPrompt(질문만)로 가볍다.
-      appendSystemPrompt: buildLiveSystemPrompt(),
-    });
-  }
-  return liveChatSession;
+function createLiveChatSessionForConversation() {
+  const { dir, configFile } = getLiveMcpConfig();
+  return createClaudeChatSession({
+    cwd: dir,
+    configFile,
+    // 불변 규칙(live-prompt.js)은 --append-system-prompt로 세션당 1회 —
+    // 턴 페이로드는 buildLiveTurnPrompt(질문만)로 가볍다.
+    appendSystemPrompt: buildLiveSystemPrompt(),
+  });
+}
+
+function getLiveChatSession(conversationId = historyConversationId()) {
+  return liveRuntimes.chatSession(conversationId, createLiveChatSessionForConversation);
 }
 
 function stopLiveClaudeChatSession(reason) {
-  if (!liveChatSession) return;
-  try { liveChatSession.stop(new Error(reason || 'provider switch')); } catch { /* already stopping */ }
-  liveChatSession = null;
+  liveRuntimes.stopAllChatSessions(new Error(reason || 'provider switch'));
 }
 
 function resolveLiveQueryProviderId() {
@@ -2569,7 +2572,7 @@ function resolveLiveQueryProviderId() {
 }
 
 function noteLiveQueryProvider(providerId) {
-  if (liveQueryProviderId && liveQueryProviderId !== providerId) liveSessionId = null;
+  if (liveQueryProviderId && liveQueryProviderId !== providerId) liveRuntimes.clearCursors();
   liveQueryProviderId = providerId;
   if (providerId === 'grok') stopLiveClaudeChatSession('grok_active');
 }
@@ -2579,22 +2582,32 @@ function noteLiveQueryProvider(providerId) {
 function sendLiveCanvasResult(result, metadata = null) {
   if (!shellWin || shellWin.isDestroyed()) return;
   const payload = metadata ? { ...result, ...metadata } : result;
-  shellWin.webContents.send('athena:add-canvas-live', payload);
+  const conversationId = metadata && typeof metadata.conversationId === 'string' ? metadata.conversationId : null;
+  if (conversationId && conversationId !== historyConversationId()) {
+    // 화면에 없는 대화의 카드(다중 대화, 2026-09-08) — 지금 보이는 캔버스에 그리지 않고 그
+    // 대화의 세션 카드로 적어 둔다. 돌아오면 athena:session-replay-cards가 같은 채널로 그린다.
+    persistBackgroundCanvasCard(conversationId, result);
+  } else {
+    shellWin.webContents.send('athena:add-canvas-live', payload);
+  }
   // 채팅 영역의 3상태 표시가 실제 진행을 보여줄 수 있도록 카드 하나가 뜰 때마다
   // 알린다 — 43초짜리 왕복 동안 조용히 멈춘 것처럼 보이면 안 된다(오케스트레이터 지시).
   // 두 채널은 같은 렌더러의 서로 다른 영역이 받는다(shell.html — 캔버스 영역은
-  // canvas.js가, 채팅 영역은 chat.js가 구독한다).
-  shellWin.webContents.send('athena:live-canvas-added', { status: result.status });
+  // canvas.js가, 채팅 영역은 chat.js가 구독한다). conversationId로 턴 구독이 자기 것만 센다.
+  shellWin.webContents.send('athena:live-canvas-added', { status: result.status, conversationId });
 }
 
 // 답변 텍스트 조각(claude-runner.js의 onTextDelta) — 채팅 버블에 실시간으로
 // 이어붙일 델타 하나. 셸의 채팅 영역(chat.js)과 오브의 대화 모드(orb.js, board-33)가
 // 같은 채널을 구독한다 — 둘이 동시에 질의를 돌리는 일은 없으므로(board-34 "상태는
 // 둘뿐이다") 무조건 relay해도 엉뚱한 창이 남의 조각을 먹는 사고가 안 난다.
-function sendLiveTextDelta(text, metadata = null) {
+function sendLiveTextDelta(text, metadata = null, origin = null) {
   const payload = metadata ? { text, ...metadata } : { text };
   if (shellWin && !shellWin.isDestroyed()) shellWin.webContents.send('athena:live-text-delta', payload);
-  if (orbWin && !orbWin.isDestroyed()) orbWin.webContents.send('athena:live-text-delta', payload);
+  // 다중 대화(2026-09-08) — 셸이 배경 대화의 턴을 돌리는 동안 오브가 활성 대화에 질의할 수
+  // 있다. 셸 기원(origin:'shell') 조각은 오브에 relay하지 않는다 — 오브의 턴 구독이 남의
+  // 조각을 먹는다. origin을 모르는 호출자(프로바이더 런타임 경로)는 예전대로 둘 다 받는다.
+  if (origin !== 'shell' && orbWin && !orbWin.isDestroyed()) orbWin.webContents.send('athena:live-text-delta', payload);
 }
 
 // 툴 호출 진행 단계(2026-08-26 board-33) — StreamJsonSession이 이미 넘겨주는
@@ -2602,9 +2615,9 @@ function sendLiveTextDelta(text, metadata = null) {
 // 뽑는다. 새 파서 채널을 만들지 않는다 — runLiveQuery의 onEvent 콜백 하나가
 // 판정도 겸한다(아래 trackToolStep). 화면에는 한국어 라벨만 낸다 — 원문 TR/툴
 // id는 절대 새지 않는다(오케스트레이터 지시).
-function sendLiveToolStep(step) {
+function sendLiveToolStep(step, origin = null) {
   if (shellWin && !shellWin.isDestroyed()) shellWin.webContents.send('athena:live-tool-step', step);
-  if (orbWin && !orbWin.isDestroyed()) orbWin.webContents.send('athena:live-tool-step', step);
+  if (origin !== 'shell' && orbWin && !orbWin.isDestroyed()) orbWin.webContents.send('athena:live-tool-step', step);
 }
 
 // 라벨이 없는 도구는 전부 '처리 중'으로 떨어진다(아래 toolStepLabel) — 그래서
@@ -2707,7 +2720,7 @@ function maybeForwardNudgeGuardProposal(step, resultBlock) {
   try { payload = JSON.parse(text); } catch { return; }
   if (!payload || typeof payload !== 'object' || !payload.current || !payload.proposed) return;
   if (shellWin && !shellWin.isDestroyed()) {
-    shellWin.webContents.send('athena:nudge-guard-proposed', {
+    shellForConversation(forwardingConversationId).send('athena:nudge-guard-proposed', {
       current: payload.current, proposed: payload.proposed, notice: payload.notice || null,
     });
   }
@@ -2725,7 +2738,7 @@ function maybeForwardPluginProposal(step, resultBlock) {
   const envelope = pluginProposalForward.extractProposal(step, text);
   if (!envelope) return;
   if (shellWin && !shellWin.isDestroyed()) {
-    shellWin.webContents.send('athena:plugin-proposed', envelope);
+    shellForConversation(forwardingConversationId).send('athena:plugin-proposed', envelope);
   }
 }
 
@@ -2749,7 +2762,7 @@ function maybeForwardRoutineProposal(step, resultBlock) {
   try { payload = JSON.parse(text); } catch { return; }
   if (!payload || typeof payload !== 'object' || typeof payload.control !== 'string') return;
   if (shellWin && !shellWin.isDestroyed()) {
-    shellWin.webContents.send('athena:routine-proposed', {
+    shellForConversation(forwardingConversationId).send('athena:routine-proposed', {
       control: payload.control,
       routineId: payload.routine_id || null,
       current: payload.current || null,
@@ -2770,7 +2783,7 @@ function maybeForwardWatchCreate(step, resultBlock) {
   const extracted = watchCreateForward.extractWatchCreate(step, payload);
   if (!extracted) return;
   if (shellWin && !shellWin.isDestroyed()) {
-    shellWin.webContents.send('athena:watch-create', {
+    shellForConversation(forwardingConversationId).send('athena:watch-create', {
       receipt: watchCreateCard.buildReceipt(extracted.titles),
       poll: watchCreateCard.POLL_QUESTION,
       cooldown: watchCreateCard.COOLDOWN_QUESTION,
@@ -2830,7 +2843,7 @@ function maybeForwardGraphChatAction(step, resultBlock) {
   }
   if (!message) return;
   if (shellWin && !shellWin.isDestroyed()) {
-    shellWin.webContents.send('athena:graph-chat-action', message);
+    shellForConversation(forwardingConversationId).send('athena:graph-chat-action', message);
   }
 }
 
@@ -2851,7 +2864,7 @@ function maybeForwardBrainEntity(step, resultBlock) {
   const detail = brainEntityForward.extractEntityDetail(step, text);
   if (!detail) return '';
   if (shellWin && !shellWin.isDestroyed()) {
-    shellWin.webContents.send('athena:graph-chat-action', { kind: 'entity', detail });
+    shellForConversation(forwardingConversationId).send('athena:graph-chat-action', { kind: 'entity', detail });
   }
   return brainEntityForward.entityStepNote(detail);
 }
@@ -2938,7 +2951,7 @@ function maybeForwardBacktestChatAction(step, resultBlock) {
   }
   if (!message) return;
   if (shellWin && !shellWin.isDestroyed()) {
-    shellWin.webContents.send('athena:backtest-chat-action', message);
+    shellForConversation(forwardingConversationId).send('athena:backtest-chat-action', message);
   }
 }
 
@@ -2972,7 +2985,7 @@ function extractToolResultText(content) {
 // 폼 변경을 허용한다. 다른 모드의 숨은 백테스트 호출이 화면을 바꾸면 안 된다.
 function createToolStepTracker(
   sendFn = sendLiveToolStep,
-  { forwardNudgeGuard = true, forwardBacktestAction = false } = {},
+  { forwardNudgeGuard = true, forwardBacktestAction = false, conversationId = null } = {},
 ) {
   const steps = new Map(); // tool_use_id -> { label, startedAt, name, input, elapsedMs? }
   return function trackToolStep(event) {
@@ -3017,6 +3030,8 @@ function createToolStepTracker(
             const stillConnecting = /still connecting|No such tool available/i.test(errorText || '');
             // 툴 칩 부제(보드 10) — 봉투를 넘기는 김에 같은 결과에서 뽑는다.
             // 이 한 줄이 sendFn보다 앞이어야 부제가 done 이벤트에 함께 실린다.
+            // 이 턴의 대화 id — 아래 전달자들이 배경 대화면 셸 전송을 미룬다(shellForConversation).
+            forwardingConversationId = conversationId;
             const note = forwardNudgeGuard ? maybeForwardBrainEntity(step, block) : '';
             sendFn({
               id: block.tool_use_id,
@@ -3035,6 +3050,7 @@ function createToolStepTracker(
               maybeForwardGraphChatAction(step, block);
               maybeForwardPluginProposal(step, block);
             }
+            forwardingConversationId = null;
           }
         }
       }
@@ -3053,14 +3069,14 @@ function sendLiveSubagentStep(step) {
   // 없다") — 셸에만 보낸다, orbWin.webContents.send 없음.
 }
 
-function createSubagentTracker() {
+function createSubagentTracker(conversationId = null) {
   return function trackSubagent(event) {
     const step = streamJsonParser.classifySubagentEvent(event);
     if (!step) return;
     if (step.subtype === 'task_progress' && step.lastToolName) {
       step.lastToolName = toolStepLabel(step.lastToolName);
     }
-    sendLiveSubagentStep(step);
+    sendLiveSubagentStep(conversationId ? { ...step, conversationId } : step);
   };
 }
 
@@ -3069,27 +3085,40 @@ function createSubagentTracker() {
 // 있으므로(세션 재개 실패 1회 재시도) 카운터로 겹침을 흡수한다 — 두 번째
 // 재귀에서 false로 떨어졌다가 바깥 호출이 끝나기도 전에 다시 열리면 안 된다.
 let liveQueryBusyDepth = 0;
-// 두 창의 입력이 동시에 보일 수 있다. 셸의 기존 재질의 선점은 유지하면서
-// busy 방송이 도착하기 전에도 오브 왕복을 다른 창에서 선점하지 못하게 센다.
-let liveOrbQueryBusyDepth = 0;
+// 대화별 런타임(2026-09-08 다중 대화 동시 진행) — 진행 중 질의 핸들·REST/Selector fast-path
+// 컨트롤러·--resume 커서·상주 claude 세션·busy 카운터가 대화 id마다 따로 산다
+// (lib/main/conversation-runtimes.js). 잠금과 선점은 같은 대화 안에서만 성립하고, 다른
+// 대화의 질의는 동시에 돈다. 위 liveQueryBusyDepth는 "어느 대화든 도는 중"의 총합으로만
+// 남는다(브리핑 양보 isUserBusy).
+const liveRuntimes = createConversationRuntimes();
 
-function broadcastLiveQueryBusy(busy) {
-  if (shellWin && !shellWin.isDestroyed()) shellWin.webContents.send('athena:live-query-state', { busy });
-  if (orbWin && !orbWin.isDestroyed()) orbWin.webContents.send('athena:live-query-state', { busy });
+// 키우미(오브)는 **별도 대화**다(2026-09-08 사용자 확정) — 셸의 활성 대화가 아니라 오브 전용
+// 대화 id에서 돌고, 셸과 병렬로 진행된다. 앱 수명 단위로 하나이며 첫 오브 질의에 생긴다
+// (레코드는 첫 입력 때 touchConversationEntry가 만든다 — Paper 54 "빈 대화는 목록에 없다").
+let orbConversationId = null;
+function ensureOrbConversationId() {
+  if (!orbConversationId) orbConversationId = crypto.randomUUID();
+  return orbConversationId;
 }
 
-// 지금 떠 있는 실배선 claude 프로세스의 kill 핸들. 정확히 하나만 유지한다 —
-// Esc 후 재질의로 프로세스가 쌓이던 갭(README "다중 세션도 없다")의 해소.
-let activeLiveQuery = null;
-let activeLegacyQueryCompletion = null;
-let activeRestRun = null;
-let activeSelectorFastRun = null;
+// 방송 형상 — busy는 **오브 대화**가 도는 중인가(오브의 잠금 기준). conversationId/conversationBusy는
+// 이번에 바뀐 대화, busyConversationIds는 진행 중인 대화 전체(셸은 보고 있는 대화가 그 안에
+// 있을 때만 입력을 잠근다).
+function broadcastLiveQueryBusy(busy, conversationId = historyConversationId()) {
+  const payload = {
+    busy: orbConversationId ? liveRuntimes.isBusy(orbConversationId) : false,
+    conversationId,
+    conversationBusy: !!busy,
+    busyConversationIds: liveRuntimes.busyIds(),
+  };
+  if (shellWin && !shellWin.isDestroyed()) shellWin.webContents.send('athena:live-query-state', payload);
+  if (orbWin && !orbWin.isDestroyed()) orbWin.webContents.send('athena:live-query-state', payload);
+}
 
-// 멀티턴(2026-08-17) — 직전 성공 왕복의 session_id. 다음 질의를 --resume으로
-// 이어 이전 대화 내용(질문·답변·툴 결과)이 반영되게 한다. -p 재개는 세션을
-// 포크해 새 session_id를 발급하므로 매 성공 왕복마다 갱신해야 체인이 이어진다.
-// 앱 재시작 시 null — 대화는 앱 수명 단위다(디스크에 세션 키를 남기지 않는다).
-let liveSessionId = null;
+// 콜드 스폰 경로(ATHENA_PERSISTENT_CHAT=0)의 완료 핸들 — MCP 뮤테이션이 진행 중 콜드 질의를
+// 끊을 때 기다린다. 대화별 핸들(activeLiveQuery·activeRestRun·activeSelectorFastRun)과
+// --resume 커서(liveSessionId)는 liveRuntimes.get(conversationId)에 있다.
+let activeLegacyQueryCompletion = null;
 let liveQueryProviderId = null;
 
 // history-sink conversation_id — **앱 세션 단위로 고정한다. liveSessionId를 쓰지 않는다.**
@@ -3237,6 +3266,85 @@ function historyConversationId() {
   return historyActiveConversationId;
 }
 
+function knownConversation(id) {
+  try { return conversations.list().conversations.some((row) => row.id === id); } catch { return false; }
+}
+
+// 대화의 --resume 커서 — 런타임에 아직 없으면(앱 기동 뒤 첫 턴) 레코드에서 읽는다. 이후엔
+// 런타임 값이 진실이다(성공 턴마다 새 session_id, 재개 실패면 null).
+function liveResumeCursor(conversationId) {
+  const runtime = liveRuntimes.get(conversationId);
+  if (runtime.liveSessionId === undefined) {
+    let record = null;
+    try { record = conversations.list().conversations.find((row) => row.id === conversationId) || null; } catch { record = null; }
+    runtime.liveSessionId = record && record.resumeSessionId ? record.resumeSessionId : null;
+  }
+  return runtime.liveSessionId;
+}
+
+function broadcastConversationActive(conversationId) {
+  if (shellWin && !shellWin.isDestroyed()) shellWin.webContents.send('athena:conversation-active', { conversationId });
+  // 셸의 잠금 집합(busyConversationIds)을 새 활성 대화 기준으로 다시 알린다.
+  broadcastLiveQueryBusy(liveRuntimes.isBusy(conversationId), conversationId);
+}
+
+// 배경 대화(화면에 없는 대화)의 카드 — 그리지 않고 그 대화의 세션 카드 스택에 바로 적는다.
+// 돌아오면 athena:session-replay-cards가 같은 페인트 채널로 다시 그린다. 스택은 메모리에
+// 누적한다 — 브리지 디바운스(200/600ms) 사이에 온 카드가 서로를 덮지 않게.
+const backgroundCanvasCards = new Map();
+function persistBackgroundCanvasCard(conversationId, result) {
+  if (!result || !result.envelope) return;
+  if (result.status !== 'success' && result.status !== 'fallback') return;
+  const bridge = ensureSessionRecord(conversationId);
+  if (!bridge) return;
+  let stack = backgroundCanvasCards.get(conversationId);
+  if (!stack) {
+    const snapshot = bridge.load(conversationId);
+    const stored = snapshot && Array.isArray(snapshot.canvasCards) ? snapshot.canvasCards : [];
+    stack = stored.map((card) => ({
+      cardId: card.cardId, kind: card.kind || null, channel: card.channel, envelope: card.envelope || null, protected: !!card.protected,
+    }));
+    backgroundCanvasCards.set(conversationId, stack);
+  }
+  stack.push({
+    cardId: crypto.randomUUID(),
+    kind: (result.envelope && result.envelope.canvas_type) || null,
+    channel: 'live',
+    envelope: result.envelope,
+    protected: false,
+  });
+  bridge.saveCards({ sessionId: conversationId, cards: stack.slice() });
+}
+
+// 배경 대화의 턴이 만든 채팅 전용 카드·캔버스 액션(말걸기 가드·플러그인 제안·그래프/백테스트
+// 액션 …)은 그 대화로 돌아올 때까지 미룬다 — 지금 보이는 다른 대화의 화면을 건드리면 안 된다.
+// 되돌아오는 자리는 athena:session-replay-cards(chat.js가 대화 복원 직후 부른다).
+const deferredShellEvents = new Map();
+let forwardingConversationId = null;
+// 대화별 셸 전송 — 활성 대화면 바로, 배경 대화면 미룬다. .send(channel, payload) 모양은 렌더러 계약
+// 테스트("main.js가 한 번 쏜다")가 세는 형태를 그대로 지킨다.
+function shellForConversation(conversationId) {
+  return {
+    send(channel, payload) {
+      if (!shellWin || shellWin.isDestroyed()) return;
+      if (!conversationId || conversationId === historyConversationId()) {
+        shellWin.webContents.send(channel, payload);
+        return;
+      }
+      const queue = deferredShellEvents.get(conversationId) || [];
+      queue.push({ channel, payload });
+      deferredShellEvents.set(conversationId, queue);
+    },
+  };
+}
+function flushDeferredShellEvents(conversationId) {
+  const queue = deferredShellEvents.get(conversationId);
+  deferredShellEvents.delete(conversationId);
+  if (!queue || !shellWin || shellWin.isDestroyed()) return 0;
+  for (const { channel, payload } of queue) shellWin.webContents.send(channel, payload);
+  return queue.length;
+}
+
 // 에이전트 모드 코드 알람의 프로젝트(2026-09-03) — 감시 코드가 착지할 폴더 하나다.
 // id는 백엔드 프로젝트 레지스트리의 id다(athena:project-add가 등록 결과 id로 사이드바
 // 레코드를 만든다). 현재 대화의 프로젝트와 실제 폴더가 모두 확인될 때만 쓴다. 다른
@@ -3282,7 +3390,16 @@ function createActiveBackendAccountInvoker(run, requestedAccountId) {
 // athena-conversations.json에 적는다. historyConversationId()는 현재 선택된
 // 대화 하나에 고정되며, 새 대화/기존 대화 선택 경계에서만 교체된다.
 function touchConversationEntry(text, conversationId = historyConversationId()) {
-  try { conversations.touch({ id: conversationId, title: text }); } catch { /* 사이드바 표시는 대화 성공의 필요조건이 아니다 */ }
+  // 다중 대화(2026-09-08) — 활성 대화의 턴만 사이드바 선택(activeId)을 옮긴다. 오브 대화·배경
+  // 대화의 턴은 레코드만 만들거나 갱신한다. 오브 대화는 대화(summary) 모드로 만든다.
+  try {
+    conversations.touch({
+      id: conversationId,
+      title: text,
+      mode: conversationId === orbConversationId ? 'summary' : undefined,
+      activate: conversationId === historyConversationId(),
+    });
+  } catch { /* 사이드바 표시는 대화 성공의 필요조건이 아니다 */ }
 }
 
 // 저장 실패를 렌더러의 "기록 안 됨" 배지로 전달(계획 §2(g), 함정 ⑫ — messageId/role만
@@ -3766,20 +3883,23 @@ const providerConversationRotationQueue = createConversationRotationQueue({
       ensureProviderRuntimeController().blockNewTurns('conversation_rotation');
     }
   },
-  interrupt: () => abortConversationWork(new Error('새 대화가 진행 중인 이전 작업을 대체했다')),
+  // 다중 대화(2026-09-08) — 대화를 만들거나 갈아탄다고 진행 중 턴을 끊지 않는다. 각 턴은
+  // 자기 대화의 런타임에서 계속 돌고 결과는 그 대화의 기록에 적힌다. 단일 턴 슈퍼바이저인
+  // 프로바이더 런타임(ATHENA_PROVIDER_RUNTIME=1, opt-in)만 예전대로 끊는다.
+  interrupt: () => {
+    if (providerRuntimeEnabled) abortAllConversationWork(new Error('새 대화가 진행 중인 이전 작업을 대체했다'));
+  },
   createConversationId: () => crypto.randomUUID(),
   publishConversationId: (conversationId) => {
-    liveSessionId = null;
     historyActiveConversationId = conversationId;
+    backgroundCanvasCards.delete(conversationId);
+    broadcastConversationActive(conversationId);
   },
   beginConversation: ({ id, projectId, mode }) => conversations.begin({ id, projectId, mode }),
-  // 이력 행을 눌러 기존 대화로 돌아갈 때(41번 보드). publishConversationId가 커서를
-  // 비운 뒤에 불리므로, 그 대화에 적어 둔 Claude 커서를 여기서 다시 잇는다 —
-  // 다음 턴이 --resume으로 문맥까지 이어 붙는다. 커서가 없으면 백지에서 시작한다.
+  // 이력 행을 눌러 기존 대화로 돌아갈 때(41번 보드). Claude 커서(--resume)는 대화별 런타임이
+  // 들고 있고(liveResumeCursor) 첫 턴에 레코드에서 읽으므로 여기서 잇지 않는다.
   selectConversation: ({ id }) => {
     const state = conversations.setActive(id);
-    const record = state.conversations.find((row) => row.id === id) || null;
-    liveSessionId = record && record.resumeSessionId ? record.resumeSessionId : null;
     return state;
   },
   rotateProvider: (reason, metadata) => providerRuntimeEnabled
@@ -3827,6 +3947,7 @@ const DIRECT_DATASET_SETTLE_TIMEOUT_MS = 30_000;
 async function runDirectRestDataset(dataset, expand = true, overrides = {}) {
   const startedAt = performance.now();
   const turnConversationId = overrides.conversationId || historyConversationId();
+  const restRuntime = liveRuntimes.get(turnConversationId);
   const retryAccountId = overrides.accountId == null ? activeRestAccountId() : String(overrides.accountId);
   const retryCardId = overrides.allowRetry ? crypto.randomUUID() : null;
   let retryView = null;
@@ -3834,8 +3955,8 @@ async function runDirectRestDataset(dataset, expand = true, overrides = {}) {
     retryView = restRetryRegistry.beginView({ dataset, accountId: retryAccountId });
   }
   const ownController = overrides.signal ? null : new AbortController();
-  if (!overrides.signal && activeRestRun) activeRestRun.abort(new Error('새 REST 데이터셋 요청이 이전 요청을 대체했다'));
-  if (ownController) activeRestRun = ownController;
+  if (!overrides.signal && restRuntime.activeRestRun) restRuntime.activeRestRun.abort(new Error('새 REST 데이터셋 요청이 이전 요청을 대체했다'));
+  if (ownController) restRuntime.activeRestRun = ownController;
   let feedbackObserved = false;
   let watchdogReceipt = null;
   const shouldPaintReceipt = !overrides.emitCanvas;
@@ -3876,7 +3997,7 @@ async function runDirectRestDataset(dataset, expand = true, overrides = {}) {
         hardSignal: overrides.hardSignal,
         onEvent: handleDirectEvent,
         emitCanvas: overrides.emitCanvas || ((payload) => {
-          if (ownController && activeRestRun !== ownController) {
+          if (ownController && restRuntime.activeRestRun !== ownController) {
             throw new Error('교체된 REST 데이터셋의 늦은 카드는 표시하지 않는다');
           }
           return emitRestCanvasForOrigin({ ...payload, retryCardId, accountId: retryAccountId }, {
@@ -3889,7 +4010,7 @@ async function runDirectRestDataset(dataset, expand = true, overrides = {}) {
     });
   } finally {
     if (feedbackWatchdog) clearTimeout(feedbackWatchdog);
-    if (activeRestRun === ownController) activeRestRun = null;
+    if (restRuntime.activeRestRun === ownController) restRuntime.activeRestRun = null;
   }
   const watchdogOutcome = watchdogReceipt ? await watchdogReceipt : null;
   if (watchdogOutcome && watchdogOutcome.paint) {
@@ -4065,17 +4186,20 @@ async function runLiveQuery(query, expand, origin = 'shell', turnConversationId 
   touchConversationEntry(query, turnConversationId);
   const sessionTurnError = beginSessionTurn(turnConversationId, query, historyReceipt && historyReceipt.messageId);
   if (sessionTurnError) return { ok: false, source: 'local', error: sessionTurnError };
+  const runtime = liveRuntimes.get(turnConversationId);
   liveQueryBusyDepth += 1;
-  if (origin === 'orb') liveOrbQueryBusyDepth += 1;
-  if (liveQueryBusyDepth === 1) broadcastLiveQueryBusy(true);
+  runtime.busyDepth += 1;
+  if (origin === 'orb') runtime.orbBusyDepth += 1;
+  if (runtime.busyDepth === 1) broadcastLiveQueryBusy(true, turnConversationId);
   liveSubmitContexts.set(turnConversationId, submit);
   try {
     return await runLiveQueryInner(query, expand, origin, turnConversationId);
   } finally {
     liveSubmitContexts.delete(turnConversationId);
-    if (origin === 'orb') liveOrbQueryBusyDepth -= 1;
+    if (origin === 'orb') runtime.orbBusyDepth -= 1;
+    runtime.busyDepth -= 1;
     liveQueryBusyDepth -= 1;
-    if (liveQueryBusyDepth === 0) broadcastLiveQueryBusy(false);
+    if (runtime.busyDepth === 0) broadcastLiveQueryBusy(false, turnConversationId);
   }
 }
 
@@ -4087,11 +4211,12 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   { const bridge = getSessionBridge(); if (bridge) bridge.beginAssistant({ sessionId: turnConversationId, messageId: sessionAssistantId }); }
   const queryStartedAt = performance.now();
   const submit = liveSubmitContexts.get(turnConversationId) || {};
+  const runtime = liveRuntimes.get(turnConversationId);
   // Selector 단일 dispatch도 새 질의가 선점한다. fetch 구현이 abort를 늦게
   // 관찰하더라도 run identity를 함께 검사해 이전 카드/주문 초안은 표시하지 않는다.
-  if (activeSelectorFastRun) {
-    activeSelectorFastRun.abort(new Error('새 질의가 이전 Selector fast path를 대체했다'));
-    activeSelectorFastRun = null;
+  if (runtime.activeSelectorFastRun) {
+    runtime.activeSelectorFastRun.abort(new Error('새 질의가 이전 Selector fast path를 대체했다'));
+    runtime.activeSelectorFastRun = null;
   }
   // 모드 전용 채팅(백테스트·그래프·에이전트)은 모델 앞의 빠른 경로 4종(차트 후속·단순 차트·
   // REST 직결·Selector)을 전부 건너뛴다 — 넷 다 모델을 안 부르고 카드를 밀어, 모드 규율과
@@ -4180,7 +4305,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   // guarded 초안을 채팅 주문확인 UI에 전달한다.
   const orderDraft = selectorFastPath.buildMarketOrderDraft(query, stockEntityIndex);
   const selectorController = new AbortController();
-  activeSelectorFastRun = selectorController;
+  runtime.activeSelectorFastRun = selectorController;
   try {
     const selectorAccount = modePromptRequired
       ? null
@@ -4214,9 +4339,9 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
       arguments: orderDraft ? orderDraft.arguments : {},
       orderDraft,
       signal: selectorController.signal,
-      isCurrent: () => activeSelectorFastRun === selectorController,
+      isCurrent: () => runtime.activeSelectorFastRun === selectorController,
       emitCanvas: (payload) => {
-        if (activeSelectorFastRun !== selectorController) {
+        if (runtime.activeSelectorFastRun !== selectorController) {
           throw new Error('교체된 Selector fast path의 늦은 카드는 표시하지 않는다');
         }
         return emitRestCanvasForOrigin({ ...payload, accountId: selectorAccount.accountId }, {
@@ -4226,7 +4351,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
         });
       },
       emitOrderDraft: (payload) => {
-        if (activeSelectorFastRun !== selectorController) {
+        if (runtime.activeSelectorFastRun !== selectorController) {
           throw new Error('교체된 Selector fast path의 늦은 주문 초안은 표시하지 않는다');
         }
         if (!shellWin || shellWin.isDestroyed()) throw new Error('셸 창이 준비되지 않았다');
@@ -4268,7 +4393,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
         question: query,
         preflight: selectorResult.preflight,
         signal: selectorController.signal,
-        isCurrent: () => activeSelectorFastRun === selectorController,
+        isCurrent: () => runtime.activeSelectorFastRun === selectorController,
         classify: ({ prompt, signal }) => selectorClaudePool.run({
           prompt,
           timeoutMs: 12_000,
@@ -4285,9 +4410,9 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
           preferredRef: proposal.operation_ref,
           detailGroup: proposal.detail_group,
           signal: selectorController.signal,
-          isCurrent: () => activeSelectorFastRun === selectorController,
+          isCurrent: () => runtime.activeSelectorFastRun === selectorController,
           emitCanvas: (payload) => {
-            if (activeSelectorFastRun !== selectorController) {
+            if (runtime.activeSelectorFastRun !== selectorController) {
               throw new Error('교체된 Selector cold path의 늦은 카드는 표시하지 않는다');
             }
             return emitRestCanvasForOrigin({ ...payload, accountId: selectorAccount.accountId }, {
@@ -4344,7 +4469,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
     // 계약 위반/네트워크 오류는 UI side effect 없이 기존 추론 경로로 복구한다.
     mdlog(`Selector 단일 dispatch 오류 — Claude 폴백: ${String((error && error.message) || error)}`);
   } finally {
-    if (activeSelectorFastRun === selectorController) activeSelectorFastRun = null;
+    if (runtime.activeSelectorFastRun === selectorController) runtime.activeSelectorFastRun = null;
   }
   const { dir, configFile } = getLiveMcpConfig();
 
@@ -4383,9 +4508,9 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   }
 
   // 이전 질의 프로세스가 아직 살아 있으면 먼저 트리째 끊는다 — 새 질의가 항상 선점한다.
-  if (activeLiveQuery) {
-    activeLiveQuery.kill();
-    activeLiveQuery = null;
+  if (runtime.activeLiveQuery) {
+    runtime.activeLiveQuery.kill();
+    runtime.activeLiveQuery = null;
   }
   // 진행 중 브리핑도 같은 원칙으로 끊는다(R1, MAJOR 2) — 사용자가 항상 이긴다
   // (scheduler.py의 "대화가 우선 — 이번 주기 양보"와 대칭, 새 동시성 모델을
@@ -4409,14 +4534,14 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   const replayTurnCapture = new ReplayTurnCapture();
   // 툴 단계는 이벤트라 저장하고, 텍스트 청크는 저널만 한다(명세 4절).
   const trackToolStep = createToolStepTracker((step) => {
-    sendLiveToolStep(step);
+    sendLiveToolStep({ ...step, conversationId: turnConversationId }, origin);
     const bridge = getSessionBridge();
     if (bridge) bridge.recordToolStep({ sessionId: turnConversationId, messageId: sessionAssistantId, step });
-  }, { forwardBacktestAction: submit.canvasMode === 'backtest' });
-  const trackSubagent = createSubagentTracker();
+  }, { forwardBacktestAction: submit.canvasMode === 'backtest', conversationId: turnConversationId });
+  const trackSubagent = createSubagentTracker(turnConversationId);
   const liveProviderId = resolveLiveQueryProviderId();
   noteLiveQueryProvider(liveProviderId);
-  const resumeSessionId = liveSessionId;
+  const resumeSessionId = liveResumeCursor(turnConversationId);
   // 설정 화면 모델 패널(lib/main/model-prefs.js) 값 — null이면 buildArgs가
   // --model/--effort를 안 붙여 CLI 기본값을 쓴다.
   const prefsState = modelPrefs.get();
@@ -4496,11 +4621,11 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   }
   // 두 경로(상주 세션/콜드 스폰)가 같은 콜백을 공유한다 — 스트림 계약이 동일하다.
   const turnCallbacks = {
-    onSpawn: (h) => { myHandle = h; activeLiveQuery = h; },
+    onSpawn: (h) => { myHandle = h; runtime.activeLiveQuery = h; },
     // 성공 resolve 1건과 render 1건의 토큰이 정확히 같은 경우만 캐시한다.
     onEvent: (ev) => { replayTurnCapture.observe(ev); trackToolStep(ev); trackSubagent(ev); },
     onTextDelta: (text, metadata) => {
-      sendLiveTextDelta(text, metadata);
+      sendLiveTextDelta(text, { ...metadata, conversationId: turnConversationId }, origin);
       const bridge = getSessionBridge();
       if (bridge) bridge.journalDelta({ sessionId: turnConversationId, messageId: sessionAssistantId, text });
     },
@@ -4528,7 +4653,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
       // 가기 → 메인 방 그대로 이어진다"(board-34) 계약이 셸·오브가 하나의
       // 캔버스 히스토리를 공유한다는 뜻이라, 오브 기원 질의라고 셸 캔버스
       // 적재를 건너뛰면 셸을 다시 열었을 때 오브에서 나온 카드가 빠진다.
-      sendLiveCanvasResult(r);
+      sendLiveCanvasResult(r, { conversationId: turnConversationId });
       // board-33③④ 선행 — 오브 기원 질의일 때만 같은 엔벌로프를 오브 창에도
       // 추가로 relay한다(오브의 표/차트 축약 카드 렌더러가 구독, Step 9b/9c).
       if (origin === 'orb' && orbWin && !orbWin.isDestroyed()) {
@@ -4555,7 +4680,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
       ...turnCallbacks,
     });
   } else if (persistentChatEnabled()) {
-    result = await getLiveChatSession().run({
+    result = await getLiveChatSession(turnConversationId).run({
       // 규칙은 세션 system prompt로 이미 갔다 — 턴에는 질문(+백테스트 설계 접두)만 보낸다.
       prompt: turnPrompt,
       model,
@@ -4592,19 +4717,19 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
 
   // 내가 등록한 핸들일 때만 지운다 — 이 await 동안 새 질의가 선점해 자기 핸들을
   // 걸어뒀다면 그걸 지우면 안 된다.
-  if (activeLiveQuery === myHandle) activeLiveQuery = null;
+  if (runtime.activeLiveQuery === myHandle) runtime.activeLiveQuery = null;
 
   // 멀티턴 세션 체인 갱신 — 성공 왕복의 새 session_id로 잇는다.
-  if (historyConversationId() === turnConversationId
-      && result.ok && result.finalResult && result.finalResult.session_id) {
-    liveSessionId = result.finalResult.session_id;
+  // 커서는 그 턴의 대화 런타임에 적는다 — 사용자가 다른 대화로 옮겨가 있어도 이 대화의
+  // 다음 턴이 --resume으로 문맥을 잇는다(다중 대화, 2026-09-08).
+  if (result.ok && result.finalResult && result.finalResult.session_id) {
+    runtime.liveSessionId = result.finalResult.session_id;
     // 커서는 대화마다 따로 남긴다 — 이력 행을 다시 눌렀을 때 이 값으로 문맥을 잇는다.
-    try { conversations.setResumeCursor({ id: turnConversationId, resumeSessionId: liveSessionId }); } catch { /* 커서 기록 실패는 턴 성공의 필요조건이 아니다 */ }
-  } else if (historyConversationId() === turnConversationId
-      && !result.ok && resumeSessionId && !result.aborted && !result.timedOut) {
+    try { conversations.setResumeCursor({ id: turnConversationId, resumeSessionId: runtime.liveSessionId }); } catch { /* 커서 기록 실패는 턴 성공의 필요조건이 아니다 */ }
+  } else if (!result.ok && resumeSessionId && !result.aborted && !result.timedOut) {
     // 재개 실패 — 세션 파일이 사라졌거나 CLI가 재개를 거부했을 수 있다. 다음
     // 질의가 계속 같은 이유로 죽지 않게 세션을 버린다(fail-open은 새 대화 시작).
-    liveSessionId = null;
+    runtime.liveSessionId = null;
     if (/session/i.test(String(result.error || ''))) {
       // 세션 문제로 죽은 게 분명하면 이번 질의만은 새 세션으로 1회 재시도한다 —
       // liveSessionId가 이미 null이라 재귀는 한 단계에서 끝난다.
@@ -4673,35 +4798,56 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
   };
 }
 
-function abortConversationWork(reason) {
-  if (activeSelectorFastRun) {
-    activeSelectorFastRun.abort(reason || new Error('대화 작업을 취소했다'));
-    activeSelectorFastRun = null;
+// 한 대화의 진행 중 작업만 끊는다(다중 대화, 2026-09-08) — 다른 대화의 턴은 계속 돈다.
+function abortConversationWork(reason, conversationId = historyConversationId()) {
+  const runtime = liveRuntimes.peek(conversationId);
+  if (runtime) abortRuntimeWork(runtime, reason);
+  interruptProviderRuntime(reason);
+}
+
+function abortRuntimeWork(runtime, reason) {
+  if (runtime.activeSelectorFastRun) {
+    runtime.activeSelectorFastRun.abort(reason || new Error('대화 작업을 취소했다'));
+    runtime.activeSelectorFastRun = null;
   }
-  if (activeRestRun) {
-    activeRestRun.abort(reason || new Error('대화 작업을 취소했다'));
-    activeRestRun = null;
+  if (runtime.activeRestRun) {
+    runtime.activeRestRun.abort(reason || new Error('대화 작업을 취소했다'));
+    runtime.activeRestRun = null;
   }
-  if (activeLiveQuery) {
-    activeLiveQuery.kill();
-    activeLiveQuery = null;
+  if (runtime.activeLiveQuery) {
+    runtime.activeLiveQuery.kill();
+    runtime.activeLiveQuery = null;
   }
+}
+
+function interruptProviderRuntime(reason) {
   if (providerRuntimeController && providerRuntimeEnabled) {
     void providerRuntimeController.interrupt(String((reason && reason.message) || reason || 'user_interrupt'))
       .catch((error) => mdlog(`provider interrupt 실패: ${String((error && error.message) || error)}`));
   }
 }
 
+// 대화를 가리지 않고 전부 끊는다 — MCP 보안 변경처럼 어느 대화의 것이든 계속 돌면 안 되는 경우.
+function abortAllConversationWork(reason) {
+  for (const row of liveRuntimes.snapshot()) {
+    const runtime = liveRuntimes.peek(row.conversationId);
+    if (runtime) abortRuntimeWork(runtime, reason);
+  }
+  interruptProviderRuntime(reason);
+}
+
 async function terminateColdLegacyRuntime(reason = 'mcp-security-mutation') {
   const completion = activeLegacyQueryCompletion;
-  abortConversationWork(new Error(reason));
+  abortAllConversationWork(new Error(reason));
   if (completion) await completion;
   return { ok: true };
 }
 
 // Esc 중단 — 렌더러의 abortToken은 UI 반영만 막는다. 프로세스는 여기서 실제로 죽인다.
-ipcMain.on('athena:abort-live-query', () => {
-  abortConversationWork(new Error('사용자가 진행 중인 대화 작업을 취소했다'));
+ipcMain.on('athena:abort-live-query', (_event, payload = {}) => {
+  const conversationId = payload && typeof payload.conversationId === 'string' && payload.conversationId
+    ? payload.conversationId : historyConversationId();
+  abortConversationWork(new Error('사용자가 진행 중인 대화 작업을 취소했다'), conversationId);
 });
 
 ipcMain.on('athena:provider-paint-ack', (event, payload) => {
@@ -4765,10 +4911,15 @@ ipcMain.handle('athena__render_canvas', async (e, payload = {}) => {
   if (!query || !String(query).trim()) {
     return { ok: false, source: 'live', error: '질의가 비어 있다' };
   }
-  if (liveOrbQueryBusyDepth > 0) {
+  // 렌더러가 보고 있는 대화가 곧 이 턴의 대화다(다중 대화, 2026-09-08). 갈아타는 찰나의
+  // 경합을 막기 위해 제출에 실린 id를 우선하되, 모르는 id는 활성 대화로 떨어진다.
+  const shellConversationId = (typeof payload.conversationId === 'string' && payload.conversationId
+    && payload.conversationId !== historyConversationId() && knownConversation(payload.conversationId))
+    ? payload.conversationId : historyConversationId();
+  if (liveRuntimes.get(shellConversationId).orbBusyDepth > 0) {
     return { ok: false, source: 'live', error: '키우미에서 답변 중 — 잠시 후 다시 시도하세요' };
   }
-  return runLiveQuery(query, expand, 'shell', historyConversationId(), {
+  return runLiveQuery(query, expand, 'shell', shellConversationId, {
     clientSubmitId: payload.clientSubmitId,
     rendererSubmittedAt: payload.rendererSubmittedAt,
     expectedRendererId: e.sender.id,
@@ -4808,19 +4959,20 @@ ipcMain.handle('athena:orb-chat-submit', async (e, payload = {}) => {
   // — 죽이지 않는다). liveQueryBusyDepth로 판정한다 — activeLiveQuery만 보면
   // REST 직결 fast-path(클로드 프로세스 없이 도는 구간이라 activeLiveQuery가
   // null이다)의 레이스를 놓친다.
-  if (liveQueryBusyDepth > 0) {
-    return { ok: false, source: 'live', error: '셸 질의 진행 중 — 잠시 후 다시 시도하라' };
+  // 다중 대화(2026-09-08, 사용자 확정) — 오브는 **자기 대화**에서 돈다. 셸의 어느 대화가 돌고 있어도
+  // 오브는 말할 수 있고, 판정은 오브 대화 하나다(같은 대화의 재질의만 거절 — 죽이지 않는다).
+  const orbId = ensureOrbConversationId();
+  if (liveRuntimes.isBusy(orbId)) {
+    return { ok: false, source: 'live', error: '키우미 답변 중 — 잠시 후 다시 시도하라' };
   }
-  const result = await runLiveQuery(query, false, 'orb', historyConversationId(), {
+  const result = await runLiveQuery(query, false, 'orb', orbId, {
     clientSubmitId: payload.clientSubmitId,
     rendererSubmittedAt: payload.rendererSubmittedAt,
     expectedRendererId: e.sender.id,
   });
-  // 셸이 나중에 다시 열려도 같은 방이 이어져 보이도록, 오브에서 오간 턴을 셸의
-  // 대화 이력에도 커밋한다("대화창으로 가기 → 메인 방 그대로 이어진다", board-34).
-  // 세션·이력 저장 자체는 runLiveQuery가 이미 끝냈다 — 여기서는 셸 DOM 표시만
-  // 뒤늦게 채워 넣는다(셸이 숨어 있는 동안은 chat.js가 그릴 수 없었으므로).
-  if (shellWin && !shellWin.isDestroyed()) {
+  // 오브 대화는 이력에 별도 행으로 남는다(세션·이력 저장은 runLiveQuery가 끝냈다). 셸이 지금 그
+  // 대화를 보고 있을 때만 DOM 표시를 뒤늦게 채운다 — 다른 대화를 보고 있으면 섞지 않는다.
+  if (shellWin && !shellWin.isDestroyed() && historyConversationId() === orbId) {
     shellWin.webContents.send('athena:orb-turn-committed', { query, result });
   }
   return result;
@@ -5275,12 +5427,12 @@ async function handleModelSet(e, payload = {}) {
     // resumeSessionId는 반드시 liveSessionId를 명시한다 — 생략하면 모듈 내부
     // 커서로 폴백하는데, 그 값이 중단된 턴의 포크를 가리킬 수 있다(아키텍트
     // 리뷰 결함 1). 대화 커서의 진실은 이 파일의 liveSessionId 하나다.
-    if (persistentChatEnabled() && liveChatSession) {
-      liveChatSession.warm({
+    if (persistentChatEnabled()) {
+      liveRuntimes.forEachChatSession((session, runtime) => session.warm({
         model: state.claude.model,
         effort: state.claude.effort,
-        resumeSessionId: liveSessionId,
-      });
+        resumeSessionId: liveResumeCursor(runtime.conversationId),
+      }));
     }
   }
   if (shellWin && !shellWin.isDestroyed()) {
@@ -5520,6 +5672,10 @@ ipcMain.handle('athena:session-replay-cards', (_e, payload = {}) => {
     }
     replayed += 1;
   }
+  // 그 대화로 돌아왔다(다중 대화, 2026-09-08) — 배경에서 쌓아 둔 카드 스택은 렌더러가 다시
+  // 보고하므로 비우고, 미뤄 둔 채팅 전용 카드·캔버스 액션을 이제 흘린다.
+  backgroundCanvasCards.delete(id);
+  flushDeferredShellEvents(id);
   return { replayed };
 });
 // 과거 대화 열기(2026-09-02 사용자 지적 "대화 이력을 누르면 그 대화로 이동해야 한다").
@@ -5564,7 +5720,7 @@ ipcMain.handle('athena:conversations-set-active', async (e, { id, verifierCorrel
     providerVerifierTelemetry.authorizeRotation(verifierCorrelationId);
   }
   const state = await providerConversationRotationQueue.switchTo({ id: requestedId, verifierCorrelationId });
-  return { ...state, requestedId, restorable: true, isCurrent: false, resumed: Boolean(liveSessionId) };
+  return { ...state, requestedId, restorable: true, isCurrent: false, resumed: Boolean(liveResumeCursor(requestedId)) };
 });
 // Paper 54: 빈 대화는 첫 입력 전에는 목록에 만들지 않는다. 캔버스 mode는
 // renderer가 그대로 보존하고, main은 새 기록 id와 프로젝트 소속만 원자적으로
@@ -6205,7 +6361,7 @@ function registerLiveBootRunners(createWindowsPromise) {
     // upstream 연결)를 미리 끝내둔다. 첫 턴부터 콜드 스폰 고정비가 없다.
     if (persistentChatEnabled()) {
       const { model: chatModel, effort: chatEffort } = modelPrefs.get().claude;
-      const chatState = getLiveChatSession().warm({ model: chatModel, effort: chatEffort });
+      const chatState = getLiveChatSession(historyConversationId()).warm({ model: chatModel, effort: chatEffort });
       mdlog(`상주 채팅 세션 선기동 — ${JSON.stringify(chatState)}`);
     }
     return { detail: 'Selector pool 시작 · 주기 및 재연결 작업은 백그라운드에서 지속' };
@@ -6365,7 +6521,7 @@ module.exports = {
   // 브리핑 러너 검증 훅(AC3) — claudeRunner 스텁·백엔드 왕복 교체와 세션/카운터
   // 불변 단언용 게터. 프로덕션 경로는 아무도 부르지 않는다.
   setBriefingClaudeRunnerForVerify,
-  getLiveSessionId: () => liveSessionId,
+  getLiveSessionId: () => liveResumeCursor(historyConversationId()),
   getSessionBridge,
   reconcileSessionJobs,
   getBriefingBusyDepth: () => briefingBusyDepth,
