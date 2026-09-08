@@ -2,7 +2,7 @@
 
 import asyncio
 import logging
-from collections.abc import AsyncIterator, Callable, Mapping
+from collections.abc import AsyncIterator, Callable, Iterator, Mapping
 from contextlib import asynccontextmanager, suppress
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
@@ -47,6 +47,38 @@ from athena_api.routines.runtime import (
 from athena_api.selector.instrument_identity import InstrumentIdentityIndex
 
 logger = logging.getLogger(__name__)
+
+
+class _ReadyAccountClients(Mapping[str, KiwoomClient]):
+    """Live read-only view of ready data clients in the mutable account pool."""
+
+    def __init__(self, runtimes: Mapping[str, AccountRuntime]) -> None:
+        self._runtimes = runtimes
+
+    def __getitem__(self, alias: str) -> KiwoomClient:
+        runtime = self._runtimes[alias]
+        if not runtime.ready:
+            raise KeyError(alias)
+        return runtime.data_client
+
+    def __iter__(self) -> Iterator[str]:
+        return (alias for alias, runtime in self._runtimes.items() if runtime.ready)
+
+    def __len__(self) -> int:
+        return sum(runtime.ready for runtime in self._runtimes.values())
+
+
+class _CurrentDefaultClient:
+    """Resolve the app's current default REST client at each adapter call."""
+
+    def __init__(self, app: FastAPI) -> None:
+        self._app = app
+
+    def __getattr__(self, name: str):
+        client = getattr(self._app.state, "kiwoom_client", None)
+        if client is None:
+            raise RuntimeError("현재 기본 키움 계좌가 준비되지 않았습니다")
+        return getattr(client, name)
 
 
 @dataclass(slots=True)
@@ -472,18 +504,20 @@ async def _open_brain(
             # upsert_holding을 부르는 곳이 테스트뿐이었다(위 docstring).
             backfill: TradeBackfill | None = None
             holdings_ingestor: HoldingSnapshotIngestor | None = None
-            if kiwoom_clients:
-                aliases = tuple(kiwoom_clients)
+            if kiwoom_clients is not None:
+                def current_aliases() -> tuple[str, ...]:
+                    return tuple(kiwoom_clients)
+
                 backfill = TradeBackfill(
                     history,
                     KiwoomExecutionSource(kiwoom_clients),
-                    aliases=aliases,
+                    aliases=current_aliases,
                     clock=utc_now,
                 )
                 holdings_ingestor = HoldingSnapshotIngestor(
                     history,
                     KiwoomHoldingSource(kiwoom_clients),
-                    aliases=aliases,
+                    aliases=current_aliases,
                     clock=utc_now,
                 )
                 brain.producer_task = asyncio.create_task(
@@ -706,10 +740,13 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
             if runtime_settings.local_bearer_token is not None
             else None
         )
-        def publish_runtime_ready(runtime: AccountRuntime) -> None:
+        async def publish_runtime_ready(runtime: AccountRuntime) -> None:
             default_alias = getattr(app.state, "kiwoom_default_account", None)
             if runtime.alias == default_alias:
                 _publish_default(app, runtime)
+                current_routines = getattr(app.state, "routines_runtime", None)
+                if current_routines is not None:
+                    await current_routines.rebind_ws_client(runtime.ws_client)
             task: asyncio.Task[None] | None = getattr(
                 app.state, "instrument_identity_task", None
             )
@@ -719,9 +756,12 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
                     name="athena-instrument-identity-refresh",
                 )
 
-        def publish_runtime_removed(alias: str) -> None:
+        async def publish_runtime_removed(alias: str) -> None:
             if getattr(app.state, "kiwoom_default_account", None) is None:
                 _publish_default(app, None)
+                current_routines = getattr(app.state, "routines_runtime", None)
+                if current_routines is not None:
+                    await current_routines.rebind_ws_client(None)
 
         account_registry = RuntimeAccountRegistry(
             app,
@@ -804,11 +844,7 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
                 # 생산하면 매 주기 인증 오류만 쌓인다. 하나도 없으면 생산자 없이 선다.
                 brain = await _open_brain(
                     runtime_settings,
-                    kiwoom_clients={
-                        alias: runtime.data_client
-                        for alias, runtime in runtimes.items()
-                        if runtime.ready
-                    },
+                    kiwoom_clients=_ReadyAccountClients(runtimes),
                 )
                 _publish_brain(app, brain)
             # 백테스트를 루틴보다 먼저 연다 — 코드 감시 알람이 백테스트의 일봉
@@ -824,11 +860,10 @@ def build_lifespan(settings: Settings | None = None, *, ws_connect=None):
                     runtime_settings,
                     ws_client=default_rt.ws_client if default_rt is not None else None,
                     candle_store=app.state.backtest_store,
-                    kiwoom_client=(
-                        default_rt.data_client
-                        if default_rt is not None and default_rt.ready
-                        else None
-                    ),
+                    # Runtime accounts can be registered or selected after startup.
+                    # The watch adapters keep this proxy and resolve the current default
+                    # on every call, including when startup had no account at all.
+                    kiwoom_client=_CurrentDefaultClient(app),
                     # 러너는 부를 때 app.state를 읽는다 — 백테스트는 위에서 이미 열렸다.
                     run_deployments_once=(
                         deploy_runner.make_runner(app)

@@ -134,18 +134,18 @@ class HoldingSnapshotIngestor:
         history: HoldingHistory,
         source: AccountHoldingSource,
         *,
-        aliases: Sequence[str],
+        aliases: Sequence[str] | Callable[[], Sequence[str]],
         clock: Callable[[], datetime],
     ) -> None:
         self._history = history
         self._source = source
-        self._aliases = tuple(aliases)
+        self._aliases = aliases if callable(aliases) else lambda: tuple(aliases)
         self._clock = clock
 
     async def ingest(self) -> tuple[MergedHolding, ...]:
         """한 주기. 계좌 하나라도 실패하면 아무것도 적재하지 않는다."""
         per_account: dict[str, Sequence[AccountHolding] | None] = {}
-        for alias in self._aliases:
+        for alias in self._aliases():
             try:
                 per_account[alias] = await self._source.fetch_holdings(alias)
             except Exception:

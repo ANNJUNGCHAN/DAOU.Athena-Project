@@ -189,3 +189,21 @@ async def test_holdings_refuse_an_unknown_alias() -> None:
     source = KiwoomHoldingSource({"acct-A": StubClient({})})
     with pytest.raises(ValueError):
         await source.fetch_holdings("acct-B")
+
+
+async def test_sources_follow_runtime_account_pool_mutations() -> None:
+    first = StubClient({})
+    second = StubClient({})
+    clients = {"first": first}
+    executions = KiwoomExecutionSource(clients)
+    holdings = KiwoomHoldingSource(clients)
+
+    clients.pop("first")
+    clients["second"] = second
+
+    with pytest.raises(ValueError):
+        await executions.fetch_executions("first", DAY)
+    with pytest.raises(ValueError):
+        await holdings.fetch_holdings("first")
+    assert await executions.fetch_executions("second", DAY) == ()
+    assert await holdings.fetch_holdings("second") == ()
