@@ -79,7 +79,13 @@ function collapsePlan(contract, values) {
 }
 
 // 순수 계획 — DOM 없이 검증 가능한 층. 텍스트·색·접힘 결정을 전부 여기서 내린다.
-function mountPlan(contract, values) {
+function mountPlan(contract, values, identity) {
+  if (identity && (identity.name || identity.code)
+    && slotList(contract).some((slot) => slot.slot_id === 's001' && slot.kind === 'value')) {
+    values = { ...values };
+    if (identity.name) values.s001 = identity.name;
+    if (identity.code) values.s002 = identity.code;
+  }
   const slots = slotList(contract);
   const collapse = collapsePlan(contract, values);
   const rollupText = new Map();
@@ -1085,6 +1091,25 @@ function restorePrimaryMockup(collapsed) {
 
 // 보드 1장을 root 안에 세운다. <template>은 registry가 보드당 1회만 파싱하고
 // 여기서는 cloneNode만 한다 — 같은 보드를 다시 마운트하면 텍스트만 갈아끼운다.
+function boardIdentityFromEnvelope(envelope = {}) {
+  const stringValue = (value) => typeof value === 'string' ? value.trim() : '';
+  const args = envelope.operation_args || envelope.arguments || {};
+  const code = stringValue(envelope.stk_cd || args.stk_cd || envelope.symbol || args.symbol);
+  let name = stringValue(envelope.data && envelope.data.stk_nm);
+  for (const contract of [
+    envelope.surface_contract || envelope.surfaceContract,
+    envelope.initial_surface_contract || envelope.initialSurfaceContract,
+  ]) {
+    if (name || !contract || registry.cardIdFor(contract.board_id) !== 'CC-03'
+      || !slotList(registry.contractFor(contract.board_id))
+        .some((slot) => slot.slot_id === 's001' && slot.kind === 'value')) continue;
+    const raw = contract.slot_values || contract.slotValues || {};
+    name = stringValue(Array.isArray(raw)
+      ? (raw.find((slot) => slot.slot_id === 's001') || {}).value : raw.s001);
+  }
+  return { name, code };
+}
+
 function mountBoard(root, boardId, values, options = {}) {
   const doc = options.doc || (typeof document !== 'undefined' ? document : null);
   if (!root || !doc) return null;
@@ -1095,7 +1120,9 @@ function mountBoard(root, boardId, values, options = {}) {
   const template = registry.templateFor(boardId, doc);
   if (!template) throw new Error(`보드 템플릿이 없다 — ${boardId}`);
 
-  const plan = mountPlan(contract, values);
+  // 탭의 예시 종목이나 누락된 조회 응답이 원래 카드 종목을 바꾸지 않는다.
+  const identity = registry.cardIdFor(boardId) === 'CC-03' ? options.identity : null;
+  const plan = mountPlan(contract, values, identity);
   let surface = root.__bsSurface;
   if (!surface || root.__bsBoardId !== String(boardId) || !root.contains(surface)) {
     root.replaceChildren(template.content.cloneNode(true));
@@ -1183,6 +1210,7 @@ const __exports = {
   nodeIndex, elementChildCount, setHidden, applyPlan,
   hoistLayout, hoistRigidBox, applyResponsiveHooks, surfaceRoot,
   primaryMountPoint, collapsePrimaryMockup, restorePrimaryMockup, mountBoard, mountBoardAsync,
+  boardIdentityFromEnvelope,
   createLatestBoardLoad, nextHydrationSlots,
   RAW_IDENTITY_NAME, scrubRawIdentityNames,
   slotValueEntries, observationIdsOfSlotEntry, realtimeSlotIndex, updateRealtimeValue,

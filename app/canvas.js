@@ -931,6 +931,7 @@ function activateBoardState(state, boardId) {
 // 갖고 있다. 봉투는 값(slot_values)과 상태 보드 목록만 나른다.
 function boardMountOptions(host, envelope) {
   return {
+    identity: boardMount.boardIdentityFromEnvelope(envelope),
     // ▸ 펼침 = 상태 보드 템플릿 교체(D5). 링크에 있는 보드로만 바꾼다 — 없으면
     // 아무것도 하지 않는다(없는 화면을 지어내지 않는다).
     onExpand: (boardId) => switchStateBoard(host, boardId, envelope),

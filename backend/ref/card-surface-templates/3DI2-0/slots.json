@@ -15,6 +15,7 @@
     1080
   ],
   "operation_refs": [
+    "detail:ka10001:identity_and_capital",
     "base:ka10060",
     "base:ka10064"
   ],
@@ -40,9 +41,9 @@
     "text_nodes": 220,
     "slots": 220,
     "anchored_slots": 0,
-    "mapped_slots": 116,
-    "labels": 66,
-    "values": 154,
+    "mapped_slots": 118,
+    "labels": 65,
+    "values": 155,
     "layer_직접": 0,
     "layer_병기": 0,
     "layer_펼침": 220,
@@ -251,16 +252,16 @@
       "node_path": "0/0/0/0",
       "paper_text": "삼성전자",
       "region": "header",
-      "kind": "label",
+      "kind": "value",
       "layer": "펼침",
       "font_size_px": 28.0,
       "anchor": null,
       "table": null,
-      "mapping_id": null,
-      "f": null,
+      "mapping_id": "detail:ka10001:identity_and_capital",
+      "f": "stk_nm",
       "alt_mappings": null,
-      "kor": null,
-      "format": null,
+      "kor": "종목명",
+      "format": {"kind": "text"},
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null
@@ -277,10 +278,10 @@
       "font_size_px": 12.0,
       "anchor": null,
       "table": null,
-      "mapping_id": null,
-      "f": null,
+      "mapping_id": "detail:ka10001:identity_and_capital",
+      "f": "stk_cd",
       "alt_mappings": null,
-      "kor": null,
+      "kor": "종목코드",
       "format": {
         "unit": "text",
         "sign": false,
@@ -290,8 +291,7 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "static": true,
-      "unbound_reason": "종목 식별 문구 재표시 — ka10060·ka10064 응답에 종목코드·시장·거래소 필드가 없다"
+      "static": false
     },
     {
       "slot_id": "s003",
