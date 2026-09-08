@@ -2,9 +2,14 @@
 'use strict';
 
 const RENDER_CANVAS_SUFFIX = '__athena__render_canvas';
+// Grok 경로 — 서버가 ATHENA_MCP_FLAT_TOOL_NAMES로 `__`를 `_`로 접어 노출하므로
+// (server.py FLAT_TOOL_NAMES_ENV 주석) Grok의 qualified 이름은
+// athena__athena_render_canvas가 된다. 이 접미로 판정한다.
+const RENDER_CANVAS_FLAT_SUFFIX = '__athena_render_canvas';
 
 function isRenderCanvasToolName(name) {
-  return typeof name === 'string' && name.endsWith(RENDER_CANVAS_SUFFIX);
+  return typeof name === 'string'
+    && (name.endsWith(RENDER_CANVAS_SUFFIX) || name.endsWith(RENDER_CANVAS_FLAT_SUFFIX));
 }
 
 // Grok의 MCP 호출은 실제 서버 도구를 곧바로 tool_use.name에 싣지 않고 내장
@@ -381,6 +386,7 @@ class StreamJsonSession {
 
 module.exports = {
   RENDER_CANVAS_SUFFIX,
+  RENDER_CANVAS_FLAT_SUFFIX,
   isRenderCanvasToolName,
   normalizeToolUseBlock,
   AGENT_TOOL_NAME,

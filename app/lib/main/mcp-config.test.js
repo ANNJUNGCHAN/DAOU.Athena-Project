@@ -35,6 +35,9 @@ test('ensureMcpConfig: userData 아래에 claude -p가 읽을 수 있는 .mcp.js
     assert.ok(grokToml.includes(JSON.stringify(PYTHON_EXE)));
     assert.ok(grokToml.includes(JSON.stringify(BACKEND_DIR)));
     assert.match(grokToml, /enabled = true/);
+    // Grok은 __가 든 툴 이름을 버리므로 서버 접기 플래그가 Grok 설정에만 실린다
+    assert.match(grokToml, /ATHENA_MCP_FLAT_TOOL_NAMES = "1"/);
+    assert.equal(written.mcpServers.athena.env.ATHENA_MCP_FLAT_TOOL_NAMES, undefined);
   } finally {
     fs.rmSync(tmp, { recursive: true, force: true });
   }
