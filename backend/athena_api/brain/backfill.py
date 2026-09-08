@@ -104,17 +104,17 @@ class TradeBackfill:
         history: TradeHistory,
         source: ExecutionSource,
         *,
-        aliases: Sequence[str],
+        aliases: Sequence[str] | Callable[[], Sequence[str]],
         clock: Callable[[], datetime],
         days: int = DEFAULT_BACKFILL_DAYS,
     ) -> None:
         if not 1 <= days <= MAX_BACKFILL_DAYS:
             raise ValueError(f"days must be between 1 and {MAX_BACKFILL_DAYS}")
-        if not aliases:
+        if not callable(aliases) and not aliases:
             raise ValueError("aliases must not be empty")
         self._history = history
         self._source = source
-        self._aliases = tuple(aliases)
+        self._aliases = aliases if callable(aliases) else lambda: tuple(aliases)
         self._clock = clock
         self._days = days
 
@@ -136,7 +136,7 @@ class TradeBackfill:
 
         ingested = 0
         for index, day in enumerate(days, start=1):
-            for alias in self._aliases:
+            for alias in self._aliases():
                 for trade in await self._source.fetch_executions(alias, day):
                     await self._history.upsert_completed_trade(
                         CompletedTradeRecord(

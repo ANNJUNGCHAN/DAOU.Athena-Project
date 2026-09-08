@@ -57,6 +57,7 @@ function toggleSwitch(initial, onChange, ariaLabel) {
 let unsubscribeScreenZoom = null;
 let unsubscribeModelChanged = null;
 let unsubscribeCliChangedForModel = null;
+let modelRefreshGeneration = 0;
 
 
 // disabledTitle이 있으면(계좌 목록의 "마지막 하나는 삭제 불가", AT-ST-001
@@ -1349,10 +1350,12 @@ function renderModel(grid) {
 }
 
 async function refreshModelCard(card, head, body) {
+  const generation = ++modelRefreshGeneration;
   let modelState;
   try {
     modelState = await window.athena.invoke('athena:model-get');
   } catch (err) {
+    if (generation !== modelRefreshGeneration) return;
     clear(head);
     clear(body);
     missingHandlerCard(head, body, '모델', 'athena:model-get');
@@ -1364,6 +1367,10 @@ async function refreshModelCard(card, head, body) {
     const cliData = await window.athena.invoke('athena:cli-list');
     providers = (cliData && cliData.providers) || [];
   } catch { /* 연결 상태 조회 실패 — 두 섹션 다 미연결로 그린다 */ }
+
+  // 모델·CLI 변경 방송이 겹치면 여러 조회가 동시에 끝날 수 있다. 늦게 끝난
+  // 예전 조회가 최신 계정/모델 상태를 다시 덮지 않도록 마지막 요청만 그린다.
+  if (generation !== modelRefreshGeneration) return;
 
   clear(head);
   clear(body);

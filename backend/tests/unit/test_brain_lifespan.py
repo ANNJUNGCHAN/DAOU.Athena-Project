@@ -679,13 +679,29 @@ async def test_kiwoom_clients_wire_the_trade_and_holding_producers(
         await _teardown_brain(FastAPI(), brain)
 
 
-async def test_no_kiwoom_clients_means_no_producer_task(tmp_path: Path) -> None:
+async def test_no_kiwoom_client_mapping_means_no_producer_task(tmp_path: Path) -> None:
     """시세 자격증명 없는 기동 — 생산자 없이 예전과 똑같이 선다."""
     settings = _brain_settings(tmp_path, brain_ingest_schedule_owner="external")
-    brain = await _open_brain(settings, kiwoom_clients={})
+    brain = await _open_brain(settings, kiwoom_clients=None)
     try:
         assert brain.producer_task is None
         assert brain.ingestion_ready is True
+    finally:
+        await _teardown_brain(FastAPI(), brain)
+
+
+async def test_empty_live_account_mapping_wires_future_brain_accounts(tmp_path: Path) -> None:
+    settings = _brain_settings(tmp_path, brain_ingest_schedule_owner="external")
+    clients: dict[str, _CannedKiwoomClient] = {}
+    brain = await _open_brain(settings, kiwoom_clients=clients)
+    try:
+        assert brain.producer_task is not None
+        await asyncio.wait_for(brain.producer_task, timeout=5)
+        assert brain.scheduler is not None
+        assert brain.scheduler._backfill._aliases() == ()
+        clients["acct-late"] = _CannedKiwoomClient("20260908")
+        assert brain.scheduler._backfill._aliases() == ("acct-late",)
+        assert brain.scheduler._holdings._aliases() == ("acct-late",)
     finally:
         await _teardown_brain(FastAPI(), brain)
 

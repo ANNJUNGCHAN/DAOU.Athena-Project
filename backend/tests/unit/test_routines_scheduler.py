@@ -262,6 +262,7 @@ class FakeWs:
     def __init__(self):
         self.registered: list[tuple[str, tuple[str, ...]]] = []
         self.removed: list[tuple[str, tuple[str, ...]]] = []
+        self.queues: set[asyncio.Queue] = set()
 
     async def register(self, tr_id, items, **kw):
         self.registered.append((tr_id, tuple(items)))
@@ -270,6 +271,14 @@ class FakeWs:
     async def remove(self, tr_id, items, **kw):
         self.removed.append((tr_id, tuple(items)))
         return {}
+
+    def subscribe_events(self):
+        queue = asyncio.Queue()
+        self.queues.add(queue)
+        return queue
+
+    def unsubscribe_events(self, queue):
+        self.queues.discard(queue)
 
 
 def _runtime(tmp_path, ws=None, on_expire=None):
@@ -329,6 +338,108 @@ async def test_pause_resume_round_trip_resubscribes(tmp_path):
     await runtime.ensure_realtime_subscription("005930")  # resume
     assert ws.registered.count(("0B", ("005930",))) == 2
     assert ws.registered.count(("1h", ("005930",))) == 2
+
+
+@pytest.mark.asyncio
+async def test_default_account_rebind_moves_active_realtime_leases(tmp_path):
+    first = FakeWs()
+    second = FakeWs()
+    runtime = _runtime(tmp_path, ws=first)
+    await runtime.ensure_realtime_subscription("005930")
+
+    await runtime.rebind_ws_client(second)
+    try:
+        assert runtime.ws_client is second
+        assert first.removed == [("0B", ("005930",)), ("1h", ("005930",))]
+        assert second.registered == [("0B", ("005930",)), ("1h", ("005930",))]
+        assert runtime.scheduler.subscribe_ticks == second.subscribe_events
+    finally:
+        await runtime.scheduler.stop()
+
+
+@pytest.mark.asyncio
+async def test_default_account_removal_disables_realtime_without_old_fallback(tmp_path):
+    first = FakeWs()
+    runtime = _runtime(tmp_path, ws=first)
+    await runtime.ensure_realtime_subscription("005930")
+
+    await runtime.rebind_ws_client(None)
+    try:
+        assert runtime.ws_client is None
+        assert runtime.scheduler.subscribe_ticks is None
+        assert first.removed == [("0B", ("005930",)), ("1h", ("005930",))]
+        await runtime.release_realtime_subscription("005930")
+        assert runtime._symbol_refcounts == {}
+    finally:
+        await runtime.scheduler.stop()
+
+
+@pytest.mark.asyncio
+async def test_failed_rebind_then_pause_clears_refcount_without_ws(tmp_path):
+    class FailingWs(FakeWs):
+        async def register(self, tr_id, items, **kw):
+            await super().register(tr_id, items, **kw)
+            raise RuntimeError("registration failed")
+
+    first = FakeWs()
+    failing = FailingWs()
+    runtime = _runtime(tmp_path, ws=first)
+    await runtime.ensure_realtime_subscription("005930")
+
+    await runtime.rebind_ws_client(failing)
+    try:
+        assert runtime.ws_client is None
+        await runtime.release_realtime_subscription("005930")
+        assert runtime._symbol_refcounts == {}
+    finally:
+        await runtime.scheduler.stop()
+
+
+@pytest.mark.asyncio
+async def test_rebind_serializes_with_concurrent_initial_subscription(tmp_path):
+    entered = asyncio.Event()
+    proceed = asyncio.Event()
+
+    class BlockingWs(FakeWs):
+        async def register(self, tr_id, items, **kw):
+            if tr_id == "0B":
+                entered.set()
+                await proceed.wait()
+            return await super().register(tr_id, items, **kw)
+
+    first = BlockingWs()
+    second = FakeWs()
+    runtime = _runtime(tmp_path, ws=first)
+    ensure = asyncio.create_task(runtime.ensure_realtime_subscription("005930"))
+    await entered.wait()
+    rebind = asyncio.create_task(runtime.rebind_ws_client(second))
+    await asyncio.sleep(0)
+    assert not rebind.done()
+
+    proceed.set()
+    await ensure
+    await rebind
+    try:
+        assert first.removed == [("0B", ("005930",)), ("1h", ("005930",))]
+        assert second.registered == [("0B", ("005930",)), ("1h", ("005930",))]
+    finally:
+        await runtime.scheduler.stop()
+
+
+@pytest.mark.asyncio
+async def test_initial_subscription_rolls_back_first_tr_when_second_fails(tmp_path):
+    class SecondTrFails(FakeWs):
+        async def register(self, tr_id, items, **kw):
+            if tr_id == "1h":
+                raise RuntimeError("second TR failed")
+            return await super().register(tr_id, items, **kw)
+
+    ws = SecondTrFails()
+    runtime = _runtime(tmp_path, ws=ws)
+    with pytest.raises(RuntimeError, match="second TR failed"):
+        await runtime.ensure_realtime_subscription("005930")
+    assert ws.removed == [("0B", ("005930",))]
+    assert runtime._symbol_refcounts == {}
 
 
 @pytest.mark.asyncio

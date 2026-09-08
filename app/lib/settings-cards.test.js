@@ -53,6 +53,53 @@ function fakeStorage(initial) {
   };
 }
 
+test('모델 카드의 늦은 이전 조회가 최신 제공업체 상태를 덮지 않는다', async (t) => {
+  const priorDocument = global.document;
+  const priorWindow = global.window;
+  const listeners = new Map();
+  const pendingCli = [];
+  global.document = { createElement: sheetNode, createElementNS: (_namespace, tag) => sheetNode(tag) };
+  global.window = { athena: {
+    async invoke(channel) {
+      if (channel === 'athena:model-get') {
+        return { claude: { model: 'sonnet', effort: 'high' }, grok: {}, codex: {} };
+      }
+      if (channel === 'athena:cli-list') {
+        return new Promise((resolve) => pendingCli.push(resolve));
+      }
+      throw new Error(`unexpected channel: ${channel}`);
+    },
+    on(channel, listener) {
+      listeners.set(channel, listener);
+      return () => listeners.delete(channel);
+    },
+  } };
+  t.after(() => {
+    if (priorDocument === undefined) delete global.document; else global.document = priorDocument;
+    if (priorWindow === undefined) delete global.window; else global.window = priorWindow;
+  });
+
+  const grid = sheetNode('div');
+  const firstRender = settingsCards.renderModel(grid);
+  await new Promise((resolve) => setImmediate(resolve));
+  const latestRender = listeners.get('athena:cli-changed')();
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(pendingCli.length, 2);
+
+  pendingCli[1]({ providers: [{
+    id: 'claude', accounts: [{ id: 'latest', label: '최신 계정', active: true, current: true }],
+  }] });
+  await latestRender;
+  assert.match(grid.textContent, /최신 계정/);
+
+  pendingCli[0]({ providers: [{
+    id: 'claude', accounts: [{ id: 'stale', label: '이전 계정', active: true, current: true }],
+  }] });
+  await firstRender;
+  assert.match(grid.textContent, /최신 계정/);
+  assert.equal(grid.textContent.includes('이전 계정'), false);
+});
+
 // ---- 모델 카드 계정 카드 부제 (Paper 화면 18, 2026-09-05) — 순수 문자열 조합만 잰다 ----
 test('accountSubline: 출처 · 추가 시각 · 비활성이면 전환 안내 순으로 잇는다', () => {
   const inactive = settingsCards.accountSubline({ addedAt: '2026-08-08T08:45:00.000Z', active: false }, '이전 CLI 로그인');
