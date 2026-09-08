@@ -1269,7 +1269,7 @@ test('backtest로 전환하면 채팅 헤더가 보이고 data-mode·문구가 �
   await controller.setView('graph');
   assert.equal(elements.chatHead.hidden, false);
   assert.equal(elements.chatHead.dataset.mode, 'graph');
-  assert.equal(elements.chatHeadTitle.textContent, '그래프에게 묻기');
+  assert.equal(elements.chatHeadTitle.textContent, '메티스 · 그래프');
   assert.equal(elements.chatHeadSub.textContent, '답이 캔버스를 바꿉니다');
   assert.equal(elements.chatInput.placeholder, '그래프에 대해 물어보세요');
   await controller.setView('summary');
@@ -1288,10 +1288,10 @@ test('plugin으로 전환하면 채팅 헤더가 플러그인 문구로 바뀌�
   await controller.setView('plugin');
   assert.equal(elements.chatHead.hidden, false);
   assert.equal(elements.chatHead.dataset.mode, 'plugin');
-  assert.equal(elements.chatHeadTitle.textContent, '아테나 · 플러그인 대화');
+  assert.equal(elements.chatHeadTitle.textContent, '에르가네 · 플러그인');
   assert.equal(elements.chatHeadSub.textContent, '설치와 권한을 여기서 정합니다');
   await controller.setView('graph');
-  assert.equal(elements.chatHeadTitle.textContent, '그래프에게 묻기');
+  assert.equal(elements.chatHeadTitle.textContent, '메티스 · 그래프');
   assert.equal(elements.chatHeadSub.textContent, '답이 캔버스를 바꿉니다');
   await controller.setView('agent');
   assert.equal(elements.chatHead.hidden, true, '에이전트 모드엔 헤더가 없다');
@@ -1380,12 +1380,12 @@ test('다섯 모드 대화 크롬은 Paper 계약이다', async () => {
     { view: 'summary', label: '대화', mode: 'chat', headHidden: true },
     {
       view: 'graph', label: '그래프', mode: 'graph', headHidden: false,
-      title: '그래프에게 묻기', sub: '답이 캔버스를 바꿉니다',
+      title: '메티스 · 그래프', sub: '답이 캔버스를 바꿉니다',
     },
     { view: 'agent', label: '에이전트', mode: 'agent', headHidden: true },
     {
       view: 'plugin', label: '플러그인', mode: 'plugin', headHidden: false,
-      title: '아테나 · 플러그인 대화', sub: '설치와 권한을 여기서 정합니다',
+      title: '에르가네 · 플러그인', sub: '설치와 권한을 여기서 정합니다',
     },
     {
       view: 'backtest', label: '백테스트', mode: 'backtest', headHidden: false,

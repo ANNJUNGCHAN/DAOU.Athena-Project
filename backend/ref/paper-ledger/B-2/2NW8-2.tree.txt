@@ -21,17 +21,17 @@ Frame "05 · 플러그인 — 설치 승인 (캔버스 카드)" (2NW8-2) 1680×9
             SVGVisualElement "Circle" (3ZFG-0) 0×0
             SVGVisualElement "Circle" (3ZFH-0) 0×0
             SVGVisualElement "Path" (3ZFI-0) 0×0
-          Text "그래프" (3ZFJ-0) 0×0 "그래프"
+          Text "메티스" (3ZFJ-0) 0×0 "메티스"
         Frame "Frame" (3ZFK-0) 0×30
           SVG "SVG" (3ZFL-0) 0×0
             SVGVisualElement "Circle" (3ZFM-0) 0×0
             SVGVisualElement "Path" (3ZFN-0) 0×0
-          Text "에이전트" (3ZFO-0) 0×0 "에이전트"
+          Text "아이기스" (3ZFO-0) 0×0 "아이기스"
         Frame "Frame" (3ZFP-0) 0×30
           SVG "SVG" (3ZFQ-0) 0×0
             SVGVisualElement "Path" (3ZFR-0) 0×0
             SVGVisualElement "Path" (3ZFS-0) 0×0
-          Text "플러그인" (3ZFT-0) 0×0 "플러그인"
+          Text "에르가네" (3ZFT-0) 0×0 "에르가네"
       Frame "Project Tree" (3ZFU-0) 0×0
         Frame "Frame" (3ZFV-0) 0×0
           Text "프로젝트" (3ZFW-0) 0×0 "프로젝트"
@@ -72,7 +72,7 @@ Frame "05 · 플러그인 — 설치 승인 (캔버스 카드)" (2NW8-2) 1680×9
             SVGVisualElement "Path" (3ZGV-0) 0×0
     Frame "플러그인 캔버스" (3ZGW-0) 0×0
       Frame "canvas-head" (3ZHF-0) 0×0
-        Text "플러그인" (3ZHG-0) 0×0 "플러그인"
+        Text "에르가네 · 플러그인" (3ZHG-0) 0×0 "에르가네 · 플러그인"
         Rectangle "Rectangle" (3ZHH-0) 0×0
         Frame "Frame" (3ZHI-0) 0×0
           Text "설치됨 2" (3ZHJ-0) 0×0 "설치됨 2"
@@ -111,7 +111,7 @@ Frame "05 · 플러그인 — 설치 승인 (캔버스 카드)" (2NW8-2) 1680×9
         Text "허브의 설치 버튼도 이 카드로 들어옵…" (3ZIM-0) 0×0 "허브의 설치 버튼도 이 카드로 들어옵니다"
     Frame "Frame" (3ZGX-0) 400×809
       Frame "Frame" (3ZGY-0) 0×0
-        Text "아테나 · 플러그인 대화" (3ZGZ-0) 0×0 "아테나 · 플러그인 대화"
+        Text "에르가네 · 플러그인" (3ZGZ-0) 0×0 "에르가네 · 플러그인"
         Text "설치와 권한을 여기서 정합니다" (3ZH0-0) 0×0 "설치와 권한을 여기서 정합니다"
       Frame "Frame" (3ZH1-0) 0×0
         Frame "Frame" (3ZH2-0) 0×0

@@ -20,7 +20,7 @@ Frame "40 · 모드 전환 — 조용한 전환 · 새 대화" (3VVU-1) 1680×90
               Frame "Frame" (3VYA-1) 75×22
                 SVG "SVG" (3VYB-1) 12×12
                   SVGVisualElement "Path" (3VYC-1) 10×7
-                Text "백테스트" (3VYD-1) 40×14 "백테스트"
+                Text "팔라스 · 백테스트" (3VYD-1) 40×14 "팔라스 · 백테스트"
               Text "전환 직전" (3VYE-1) 46×14 "전환 직전"
             Text "추세추종 v3" (3VYF-1) 309×18 "추세추종 v3"
             Frame "Mini Screen" (3VYG-1) 309×313
@@ -103,7 +103,7 @@ Frame "40 · 모드 전환 — 조용한 전환 · 새 대화" (3VVU-1) 1680×90
                   SVGVisualElement "Circle" (3W4W-1) 2×2
                   SVGVisualElement "Circle" (3W4X-1) 2×2
                   SVGVisualElement "Path" (3W4Y-1) 4×4
-                Text "그래프" (3W4Z-1) 30×14 "그래프"
+                Text "메티스 · 그래프" (3W4Z-1) 30×14 "메티스 · 그래프"
               Text "전환 후" (3W50-1) 36×14 "전환 후"
             Text "새 그래프 대화" (3W51-1) 309×18 "새 그래프 대화"
             Frame "Empty Canvas" (3W52-1) 309×311

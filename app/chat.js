@@ -145,6 +145,7 @@ function autoGrowInput() {
   $input.style.height = `${Number.isFinite(max) ? Math.min(needed, max) : needed}px`;
 }
 const $dot = document.getElementById('dot');
+window.AthenaLib.GlauMascot.render($dot.querySelector('.glau-composer'), 'idle');
 const $lockHint = document.getElementById('lockHint');
 const $lockText = document.getElementById('lockText');
 const $lockTime = document.getElementById('lockTime');
@@ -847,7 +848,7 @@ function maybeShowCoachmark() {
   mark.className = 'coachmark';
   // 병합 결정(2026-08-27 대화→main) — 대화측 "점=모드 전환" 문구는 셸 v2(전환=
   // 사이드바 네비)·키우미 v5(점=키우미 메뉴) 이후 세계와 안 맞아 main 쪽을 취한다.
-  mark.textContent = '키우미를 누르면 파일 첨부·모델 설정이 열립니다 — 설정은 사이드바 계정 메뉴나 "설정" 입력으로';
+  mark.textContent = '글라우를 누르면 파일 첨부·모델 설정이 열립니다 — 설정은 사이드바 계정 메뉴나 "설정" 입력으로';
   document.body.appendChild(mark);
   const shownAt = Date.now();
   const dismiss = (ev) => {

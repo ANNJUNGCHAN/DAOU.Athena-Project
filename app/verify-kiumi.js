@@ -1,8 +1,8 @@
-// 키우미 전수 검증 (2026-09-01) — Paper `키우미` 페이지 9장이 실앱에서 실제로
+// 글라우 전수 검증 (2026-09-01) — Paper `글라우` 페이지 9장이 실앱에서 실제로
 // 성립하는지 살아 있는 셸·오브 창에서 확인한다.
 //
-// verify.js의 검증3d(Paper 49 키우미 메뉴)가 확인하던 것을 포함하되, 그 앞
-// 단계(플러그인 모드)의 사전 결함에 막히지 않도록 키우미만 따로 세운다.
+// verify.js의 검증3d(Paper 49 글라우 메뉴)가 확인하던 것을 포함하되, 그 앞
+// 단계(플러그인 모드)의 사전 결함에 막히지 않도록 글라우만 따로 세운다.
 // 오브 쪽 미니 카드 렌더는 probe-orb-mini-cards.js가, 얼굴 마크업·CSS 계약은
 // lib/kiumi-face.test.js가 각각 맡는다 — 여기서는 **살아 있는 화면의 실측**만 본다.
 
@@ -37,7 +37,7 @@ async function evalIn(win, js) {
   }
 }
 
-/** 셸 렌더러가 모드 API와 키우미 DOM을 들고 설 때까지 기다린다. */
+/** 셸 렌더러가 모드 API와 글라우 DOM을 들고 설 때까지 기다린다. */
 async function waitForShellReady(win, timeoutMs = 30000) {
   const deadline = Date.now() + timeoutMs;
   while (Date.now() < deadline) {
@@ -76,7 +76,7 @@ async function main() {
   if (!shellReady) throw new Error('셸 렌더러가 30초 안에 준비되지 않았다');
   await wait(400); // 확장 전이가 끝나 레이아웃이 굳을 여유
 
-  // ── 보드 08 · 모드별 키우미 얼굴 ────────────────────────────────────────
+  // ── 보드 08 · 모드별 글라우 얼굴 ────────────────────────────────────────
   // data-mode의 유일한 소유자(applyVisibility)를 통해 다섯 모드를 실제로 돌면서
   // 그때 보이는 얼굴이 하나뿐이고 그 모드의 것인지 본다.
   const MODES = [
@@ -102,15 +102,20 @@ async function main() {
     await wait(260);
     const seen = await evalIn(shellWin, `(() => {
       const dot = document.getElementById('dot');
-      const faces = Array.from(dot.querySelectorAll('.kiumi-face'));
+      const faces = Array.from(dot.querySelectorAll('.glau-mascot'));
       const visible = faces.filter((f) => getComputedStyle(f).display !== 'none');
-      const visor = dot.querySelector('.kiumi-visor');
+      const body = dot.querySelector('.glau-body');
+      const cream = dot.querySelector('.glau-cream-face');
+      const wings = dot.querySelector('.glau-wings');
       return {
         dataMode: dot.dataset.mode || null,
         visibleCount: visible.length,
         // SVG 요소의 className은 문자열이 아니라 SVGAnimatedString이다 — 속성으로 읽는다.
-        visibleClass: visible.map((f) => (f.getAttribute('class') || '').replace('kiumi-face ', '')),
-        visorColor: getComputedStyle(visor).color,
+        visibleClass: visible.map((f) => (f.getAttribute('class') || '').replace('glau-mascot ', '')),
+        bodyColor: getComputedStyle(body).fill,
+        faceColor: getComputedStyle(cream).fill,
+        wingColor: getComputedStyle(wings).fill,
+        expression: dot.querySelector('.glau-composer').dataset.glauExpression,
         dotSize: [Math.round(dot.getBoundingClientRect().width), Math.round(dot.getBoundingClientRect().height)],
         shapeCount: visible.length ? visible[0].querySelectorAll('rect, circle, path, line').length : 0,
       };
@@ -133,19 +138,43 @@ async function main() {
     faceRuns.every((r) => r.seen.visibleCount === 1),
     faceRuns.map((r) => ({ mode: r.mode, visibleCount: r.seen.visibleCount })));
   // 2026-09-01 사용자 결정 — 얼굴은 하나다. 모드마다 얼굴을 갈아끼우지 않으므로
-  // 다섯 모드가 **같은** 키우미 얼굴을 보여야 한다(모드별 전용 얼굴이 남아 있으면 회귀다).
-  record('보드 08: 다섯 모드가 같은 키우미 얼굴 하나를 쓴다 — 모드별 얼굴은 없다',
-    faceRuns.every((r) => r.seen.visibleClass[0] === 'kiumi-face'),
+  // 다섯 모드가 **같은** 글라우 얼굴을 보여야 한다(모드별 전용 얼굴이 남아 있으면 회귀다).
+  record('보드 08: 다섯 모드가 같은 글라우 얼굴 하나를 쓴다 — 모드별 얼굴은 없다',
+    faceRuns.every((r) => r.seen.visibleClass[0] === 'glau-mascot'),
     faceRuns.map((r) => ({ mode: r.mode, face: r.seen.visibleClass[0] })));
   record('보드 08: 얼굴은 도형으로 그려진다(빈 얼굴 없음)',
     faceRuns.every((r) => r.seen.shapeCount >= 2),
     faceRuns.map((r) => ({ mode: r.mode, shapes: r.seen.shapeCount })));
-  record('보드 08: 22px 원 · 바이저색 #2F3BA8',
+  record('보드 08: 22px 글라우 · 갈색 몸/크림 얼굴/네이비 날개',
     faceRuns.every((r) => r.seen.dotSize[0] === 22 && r.seen.dotSize[1] === 22)
-    && faceRuns.every((r) => r.seen.visorColor === 'rgb(47, 59, 168)'),
-    { size: faceRuns[0].seen.dotSize, color: faceRuns[0].seen.visorColor });
+    && faceRuns.every((r) => r.seen.bodyColor === 'rgb(191, 155, 129)'
+      && r.seen.faceColor === 'rgb(255, 243, 226)' && r.seen.wingColor === 'rgb(53, 77, 112)'
+      && r.seen.expression === 'neutral'),
+    { size: faceRuns[0].seen.dotSize, color: faceRuns[0].seen.bodyColor });
 
-  // ── 보드 06·07 · 키우미 메뉴 ───────────────────────────────────────────
+  const modeIdentity = await evalIn(shellWin, `(() => {
+    const rows = Array.from(document.querySelectorAll('#sidebarModeNav .sidebar-mode-item'));
+    document.querySelector('.sidebar-project-new-chat').click();
+    const choices = Array.from(document.querySelectorAll('.sidebar-mode-picker-item'));
+    return {
+      names: rows.map((row) => row.querySelector('.sidebar-mode-item-label').textContent),
+      choices: choices.map((row) => ({
+        label: row.querySelector('.sidebar-mode-picker-label').textContent,
+        matchesNavigation: row.querySelector('svg')?.innerHTML === document.querySelector(
+          '#sidebarModeNav [data-view="' + row.dataset.view + '"] svg').innerHTML,
+      })),
+    };
+  })()`);
+  record('다섯 모드 이름이 승인된 순서로 표시된다',
+    JSON.stringify(modeIdentity?.names) === JSON.stringify(['아고라', '메티스', '아이기스', '에르가네', '팔라스']), modeIdentity);
+  record('모드 선택은 다섯 개이며 내비게이션과 같은 아이콘을 쓴다',
+    modeIdentity?.choices.length === 5 && modeIdentity.choices.every((choice) => choice.matchesNavigation), modeIdentity?.choices);
+  await wait(150); // Wait for the compositor to paint the opened picker before capturing it.
+  const modeShot = await shellWin.webContents.capturePage();
+  fs.writeFileSync(path.join(OUT_DIR, 'glau-mode-picker.png'), modeShot.toPNG());
+  await evalIn(shellWin, 'document.body.click()');
+
+  // ── 보드 06·07 · 글라우 메뉴 ───────────────────────────────────────────
   await evalIn(shellWin, "document.getElementById('dot').click()");
   await wait(150);
   const menu = await evalIn(shellWin, `(() => {
@@ -208,7 +237,7 @@ async function main() {
       headerTitle: document.getElementById('orbHeaderTitle').textContent,
     };
   })()`);
-  record('보드 05 DISPLAY B: 알림을 먼저 보여주되 키우미 대화 입력은 열려 있다',
+  record('보드 05 DISPLAY B: 알림을 먼저 보여주되 글라우 대화 입력은 열려 있다',
     alertOnly.orbMode === 'alert' && alertOnly.inputStackHidden === false
     && alertOnly.chatBodyHidden === true && alertOnly.headerTitle === '알림', alertOnly);
 
@@ -227,7 +256,7 @@ async function main() {
   })()`);
   record('보드 05 DISPLAY A: 셸을 숨기면 같은 패널이 미니 채팅이 된다',
     chatMode.orbMode === 'chat' && chatMode.inputStackHidden === false
-    && chatMode.chatBodyHidden === false && chatMode.headerTitle === '키우미 대화', chatMode);
+    && chatMode.chatBodyHidden === false && chatMode.headerTitle === '글라우 대화', chatMode);
 
   // ── 보드 01 · 접힘 원의 두 채널 ────────────────────────────────────────
   await evalIn(orbWin, "document.getElementById('orbToggle').click()");
@@ -302,15 +331,15 @@ async function main() {
   mainMod.handleRoutineFeedEvent({
     type: 'routine-fired', routine_id: 'vkiumi-alert', symbol: '005930',
     source: 'watch.price', mode: 'realtime-ws', observed: '71,900원',
-    threshold: '70,000원 이상', note: '키우미 알림 모드 검증', fired_at: new Date().toISOString(),
+    threshold: '70,000원 이상', note: '글라우 알림 모드 검증', fired_at: new Date().toISOString(),
   });
   await wait(500);
   const alertPanel = await evalIn(orbWin, `(() => ({
     orbMode: document.getElementById('orbRoot').dataset.orbMode || null,
     inputStackHidden: document.getElementById('orbInputStack').hidden,
   }))()`);
-  record('보드 05 DISPLAY B: 발화가 오면 알림과 키우미 대화 입력이 함께 뜬다',
-    orbWin.isVisible() === true && alertPanel.orbMode === 'alert'
+  record('보드 05 DISPLAY B: 발화가 와도 보이는 셸이 글라우 창을 숨기고 알림 입력 상태를 유지한다',
+    orbWin.isVisible() === false && alertPanel.orbMode === 'alert'
     && alertPanel.inputStackHidden === false, { orbVisible: orbWin.isVisible(), ...alertPanel });
 
   // 5EX-0 「최소화·가려짐은 표시 모드를 바꾸지 않는다」 — 최소화해도 B에 머문다.

@@ -25,29 +25,29 @@ Frame "12 · 에이전트 — 활성 코드 알람 · 상세·발화 이력" (44
         Frame "Frame" (451P-1) 0×0
           SVG "SVG" (451R-1) 0×0
             SVGVisualElement "Path" (451S-1) 0×0
-          Text "대화" (451Q-1) 0×0 "대화"
+          Text "아고라" (451Q-1) 0×0 "아고라"
         Frame "Frame" (451I-1) 0×0
           SVG "SVG" (451K-1) 0×0
             SVGVisualElement "Circle" (451O-1) 0×0
             SVGVisualElement "Circle" (451N-1) 0×0
             SVGVisualElement "Circle" (451M-1) 0×0
             SVGVisualElement "Path" (451L-1) 0×0
-          Text "그래프" (451J-1) 0×0 "그래프"
+          Text "메티스" (451J-1) 0×0 "메티스"
         Frame "Frame" (451C-1) 0×0
           SVG "SVG" (451G-1) 0×0
             SVGVisualElement "Path" (451H-1) 0×0
-          Text "에이전트" (451F-1) 0×0 "에이전트"
+          Text "아이기스" (451F-1) 0×0 "아이기스"
           Frame "Frame" (451D-1) 0×0
             Text "3" (451E-1) 0×0 "3"
         Frame "모드 · 플러그인" (4518-1) 0×0
           SVG "SVG" (451A-1) 0×0
             SVGVisualElement "Path" (451B-1) 0×0
-          Text "플러그인" (4519-1) 0×0 "플러그인"
+          Text "에르가네" (4519-1) 0×0 "에르가네"
         Frame "모드 · 백테스트" (4513-1) 0×0
           SVG "SVG" (4515-1) 0×0
             SVGVisualElement "Path" (4517-1) 0×0
             SVGVisualElement "Path" (4516-1) 0×0
-          Text "백테스트" (4514-1) 0×0 "백테스트"
+          Text "팔라스" (4514-1) 0×0 "팔라스"
       Frame "구분선" (4511-1) 0×1
       Frame "이력 목록" (450D-1) 0×0
         Frame "섹션 · 오늘" (450Z-1) 0×0
@@ -81,7 +81,7 @@ Frame "12 · 에이전트 — 활성 코드 알람 · 상세·발화 이력" (44
     Frame "② 캔버스 영역" (44VL-1) 0×0
       Frame "Frame" (44VM-1) 811×717
         Frame "Frame" (44ZW-1) 0×0
-          Text "에이전트" (4506-1) 0×0 "에이전트"
+          Text "아이기스 · 에이전트" (4506-1) 0×0 "아이기스 · 에이전트"
           Frame "Frame" (44ZX-1) 0×0
             Frame "탭 · 작업 (활성)" (4504-1) 0×0
               Text "작업" (4505-1) 0×0 "작업"
@@ -191,7 +191,7 @@ Frame "12 · 에이전트 — 활성 코드 알람 · 상세·발화 이력" (44
     Frame "③ 대화 영역 400px" (44TG-1) 400×0
       Frame "대화 머리 — 아테나 · 에이전트 대화" (44VG-1) 0×0
         Rectangle "Rectangle" (44VK-1) 6×6
-        Text "아테나 · 에이전트 대화" (44VJ-1) 0×0 "아테나 · 에이전트 대화"
+        Text "아이기스 · 에이전트" (44VJ-1) 0×0 "아이기스 · 에이전트"
         Rectangle "Rectangle" (44VI-1) 0×0
         Text "관제 창 1 · 루틴 · 알람 · 제…" (44VH-1) 0×0 "관제 창 1 · 루틴 · 알람 · 제안"
       Frame "④ 결과물 · 하위 에이전트 · 출처 도크" (44UP-1) 0×0

@@ -30,7 +30,7 @@
   },
   {
    "id": "GRG-0",
-   "text": "그래프",
+   "text": "메티스",
    "path": [
     "10 · 셸 — 답변 중 · Task Canvas",
     "셸 창",
@@ -41,7 +41,7 @@
   },
   {
    "id": "GRL-0",
-   "text": "에이전트",
+   "text": "아이기스",
    "path": [
     "10 · 셸 — 답변 중 · Task Canvas",
     "셸 창",
@@ -52,7 +52,7 @@
   },
   {
    "id": "GRQ-0",
-   "text": "플러그인",
+   "text": "에르가네",
    "path": [
     "10 · 셸 — 답변 중 · Task Canvas",
     "셸 창",
@@ -1039,9 +1039,6 @@
  "text_multiset": {
   "ATHENA": 1,
   "새 채팅": 1,
-  "그래프": 1,
-  "에이전트": 1,
-  "플러그인": 1,
   "프로젝트": 1,
   "아테나": 1,
   "백엔드 API 개수 확인": 1,
@@ -1066,8 +1063,11 @@
   "답변": 1,
   "CLAUDE": 1,
   "감시 2": 1,
-  "OPUS · HIGH": 1
+  "OPUS · HIGH": 1,
+  "메티스": 1,
+  "아이기스": 1,
+  "에르가네": 1
  },
  "exported_at": "2026-09-05",
- "tree_summary_sha256": "ba3b659ece04b8d28cfe95a92a91ff614e0a246277501eb3f9d78f5e424f3a3f"
+ "tree_summary_sha256": "3f1b925deaec1ecd58074ff499941e35161d7ab0bba3ca606d6ecaa834461cf0"
 }

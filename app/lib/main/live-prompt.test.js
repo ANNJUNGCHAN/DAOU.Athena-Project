@@ -329,7 +329,7 @@ test('buildLivePrompt: 주문·자동화 정책 v3f — 모델은 못 내지만 
   assert.ok(p.includes('시작되는 주문은 사용자가 앱의 주문 티켓에서 직접 누른 것뿐이다'));
   // (나) 새 사실 — 사람이 auto로 걸고 무장하면 클릭 없이 주문이 나간다.
   assert.ok(p.includes('사람이 백테스트 화면에서 건 배포는 다르다'));
-  assert.ok(p.includes('주문합니다"(auto)이고 키우미 무장 스위치가 켜져 있고 그 배포가 활성이면'));
+  assert.ok(p.includes('주문합니다"(auto)이고 글라우 무장 스위치가 켜져 있고 그 배포가 활성이면'));
   assert.ok(p.includes('사람 클릭 없이 한도 안에서 주문이 나간다(키움 모의투자 서버)'));
   assert.ok(p.includes('되냐"고 물으면 된다고 답하고 이 조건 셋을 함께 말한다'));
   assert.ok(p.includes('셋 중 하나라도 아니면 신호만'));
@@ -955,7 +955,7 @@ test('buildBacktestModePrefix: 자동 매매는 된다고 답하되 주체가 �
   assert.ok(p.includes('"자동 매매가 되냐"고 물으면 된다고 답한다'), '가능하다는 사실이 없다');
   assert.ok(p.includes('그것을 하는 것은 네가 아니라 사람이 건 배포다'), '주체 구분이 없다');
   // 조건 셋 — 하나라도 빠지면 모델이 무장 안 한 배포를 자동 매매라고 말한다.
-  assert.ok(p.includes('"한도 안에서 자동으로 주문합니다"(auto)이고 키우미 무장 스위치가 켜져 있고 그 배포가 활성이면'));
+  assert.ok(p.includes('"한도 안에서 자동으로 주문합니다"(auto)이고 글라우 무장 스위치가 켜져 있고 그 배포가 활성이면'));
   assert.ok(p.includes('사람 클릭 없이 한도 안에서 주문이 나간다(모의서버)'));
   assert.ok(p.includes('셋 중 하나라도 아니면 신호만 쌓이고 주문은 나가지 않는다'));
   // 두 문장이 같은 뜻으로 뭉개지지 않게 못박는 자리.

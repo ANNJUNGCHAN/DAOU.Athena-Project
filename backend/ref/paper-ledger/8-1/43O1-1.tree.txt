@@ -21,22 +21,22 @@ Frame "21 · 백테스트 — 노드·흐름 창 · 노드를 누르면 @칩이 
             SVGVisualElement "Circle" (43OL-1) 0×0
             SVGVisualElement "Circle" (43OM-1) 0×0
             SVGVisualElement "Path" (43ON-1) 0×0
-          Text "그래프" (43OO-1) 0×0 "그래프"
+          Text "메티스" (43OO-1) 0×0 "메티스"
         Frame "Frame" (43OP-1) 0×30
           SVG "SVG" (43OQ-1) 0×0
             SVGVisualElement "Circle" (43OR-1) 0×0
             SVGVisualElement "Path" (43OS-1) 0×0
-          Text "에이전트" (43OT-1) 0×0 "에이전트"
+          Text "아이기스" (43OT-1) 0×0 "아이기스"
         Frame "Nav 플러그인" (43OU-1) 0×30
           SVG "SVG" (43OV-1) 0×0
             SVGVisualElement "Path" (43OW-1) 0×0
             SVGVisualElement "Path" (43OX-1) 0×0
-          Text "플러그인" (43OY-1) 0×0 "플러그인"
+          Text "에르가네" (43OY-1) 0×0 "에르가네"
         Frame "Nav 백테스트 (active)" (43OZ-1) 0×30
           SVG "SVG" (43P0-1) 0×0
             SVGVisualElement "Path" (43P1-1) 0×0
             SVGVisualElement "Path" (43P2-1) 0×0
-          Text "백테스트" (43P3-1) 0×0 "백테스트"
+          Text "팔라스" (43P3-1) 0×0 "팔라스"
       Frame "Project Tree" (43P4-1) 0×0
         Frame "Frame" (43P5-1) 0×0
           Text "프로젝트" (43P6-1) 0×0 "프로젝트"

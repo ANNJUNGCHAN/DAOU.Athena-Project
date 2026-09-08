@@ -10,18 +10,18 @@ Frame "01 · 플러그인 — 기능 허용 (AT-ST-006)" (FT6-0) 1680×986
       Frame "Frame" (FW5-0) 0×0
       Frame "Frame" (FW2-0) 0×0
         Text "💬" (FW4-0) 14×0 "💬"
-        Text "대화" (FW3-0) 0×0 "대화"
+        Text "아고라" (FW3-0) 0×0 "아고라"
       Frame "Frame" (FVZ-0) 0×0
         Text "🕸" (FW1-0) 14×0 "🕸"
-        Text "그래프" (FW0-0) 0×0 "그래프"
+        Text "메티스" (FW0-0) 0×0 "메티스"
       Frame "Frame" (FVU-0) 0×0
         Text "✦" (FVY-0) 14×0 "✦"
-        Text "에이전트" (FVX-0) 0×0 "에이전트"
+        Text "아이기스" (FVX-0) 0×0 "아이기스"
         Frame "Frame" (FVV-0) 0×16
           Text "3" (FVW-0) 0×0 "3"
       Frame "Frame" (FVR-0) 0×0
         Text "◫" (FVT-0) 14×0 "◫"
-        Text "플러그인" (FVS-0) 0×0 "플러그인"
+        Text "에르가네" (FVS-0) 0×0 "에르가네"
       Rectangle "Rectangle" (FVQ-0) 0×1
       Frame "Frame" (FVO-0) 0×0
         Text "오늘" (FVP-0) 0×0 "오늘"

@@ -529,7 +529,7 @@ function createPluginCanvas(options) {
   function renderHub() {
     const panel = el('section', 'plugin-canvas-panel plugin-canvas-hub');
     const header = el('div', 'plugin-canvas-header');
-    header.appendChild(el('h1', 'plugin-canvas-title', '플러그인'));
+    header.appendChild(el('h1', 'plugin-canvas-title', '에르가네 · 플러그인'));
     const spacer = el('div', 'plugin-canvas-spacer');
     header.appendChild(spacer);
     const searchInput = el('input', 'plugin-canvas-search');

@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="styles/ui-kit.css" />
 <link rel="stylesheet" href="canvas.css" />
 <link rel="stylesheet" href="chat.css" />
+<link rel="stylesheet" href="styles/glau-mascot.css" />
 <link rel="stylesheet" href="styles/settings-cards.css" />
 <link rel="stylesheet" href="styles/card-kinds.css" />
 <link rel="stylesheet" href="styles/integrated-cards.css" />
@@ -107,26 +108,26 @@
         <span id="sidebarModeTotal"></span>
       </div>
       <div class="sidebar-mode-nav" id="sidebarModeNav">
-        <button class="sidebar-mode-item is-active" id="modeNavSummary" type="button" data-view="summary" aria-pressed="true">
+        <button class="sidebar-mode-item is-active" id="modeNavSummary" title="아고라 · 대화" type="button" data-view="summary" aria-pressed="true">
           <svg class="sidebar-mode-item-ic" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 3.5C2 2.7 2.7 2 3.5 2h7c.8 0 1.5.7 1.5 1.5v5c0 .8-.7 1.5-1.5 1.5H6L3.5 12v-2H3.5C2.7 10 2 9.3 2 8.5v-5z" fill="none" stroke="currentColor" stroke-width="1.2" /></svg>
-          <span class="sidebar-mode-item-label">대화</span>
+          <span class="sidebar-mode-item-label">아고라</span>
           <!-- 모드별 대화 수 — 라벨 뒤에 둔다(배지처럼 오른쪽 끝에 붙는 게 아니라
                이름에 딸린 숫자다). 0이면 hidden이라 CSS 없이도 깨지지 않는다. -->
           <span class="sidebar-mode-count" id="modeNavSummaryCount" hidden></span>
         </button>
-        <button class="sidebar-mode-item" id="modeNavGraph" type="button" data-view="graph" aria-pressed="false">
+        <button class="sidebar-mode-item" id="modeNavGraph" title="메티스 · 그래프" type="button" data-view="graph" aria-pressed="false">
           <svg class="sidebar-mode-item-ic" viewBox="0 0 14 14" aria-hidden="true">
             <circle cx="3.5" cy="10.5" r="1.8" fill="none" stroke="currentColor" stroke-width="1.2" />
             <circle cx="7" cy="3.5" r="1.8" fill="none" stroke="currentColor" stroke-width="1.2" />
             <circle cx="10.5" cy="10.5" r="1.8" fill="none" stroke="currentColor" stroke-width="1.2" />
             <path d="M4.4 9.1 6.2 5m1.6 0 1.8 4.1M5.3 10.5h3.4" fill="none" stroke="currentColor" stroke-width="1.2" />
           </svg>
-          <span class="sidebar-mode-item-label">그래프</span>
+          <span class="sidebar-mode-item-label">메티스</span>
           <span class="sidebar-mode-count" id="modeNavGraphCount" hidden></span>
         </button>
-        <button class="sidebar-mode-item" id="modeNavAgent" type="button" data-view="agent" aria-pressed="false">
-          <svg class="sidebar-mode-item-ic" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 1.5 8.3 5.7 12.5 7 8.3 8.3 7 12.5 5.7 8.3 1.5 7 5.7 5.7z" fill="none" stroke="currentColor" stroke-width="1.2" /></svg>
-          <span class="sidebar-mode-item-label">에이전트</span>
+        <button class="sidebar-mode-item" id="modeNavAgent" title="아이기스 · 에이전트" type="button" data-view="agent" aria-pressed="false">
+          <svg class="sidebar-mode-item-ic" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 1.5 11.5 3v3.5c0 2.7-2 4.6-4.5 6-2.5-1.4-4.5-3.3-4.5-6V3z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" /></svg>
+          <span class="sidebar-mode-item-label">아이기스</span>
           <span class="sidebar-mode-count" id="modeNavAgentCount" hidden></span>
           <span class="sidebar-mode-watch" id="modeNavAgentWatch" hidden></span>
           <!-- 배지 — 미확인 알람 수(2단계). 스코프 밖: 이번 단계는 마크업만
@@ -134,17 +135,17 @@
                확장이 맡는다. -->
           <span class="sidebar-mode-badge" id="modeNavAgentBadge" hidden></span>
         </button>
-        <button class="sidebar-mode-item" id="modeNavPlugin" type="button" data-view="plugin" aria-pressed="false">
-          <svg class="sidebar-mode-item-ic" viewBox="0 0 14 14" aria-hidden="true"><path d="M4.5 1.5v2M9.5 1.5v2M3 3.5h8v3A4 4 0 0 1 7 10.5 4 4 0 0 1 3 6.5v-3ZM7 10.5v2" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
-          <span class="sidebar-mode-item-label">플러그인</span>
+        <button class="sidebar-mode-item" id="modeNavPlugin" title="에르가네 · 플러그인" type="button" data-view="plugin" aria-pressed="false">
+          <svg class="sidebar-mode-item-ic" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 3.5h3V3a1.5 1.5 0 0 1 3 0v.5h3v3h.5a1.5 1.5 0 0 1 0 3H11v3H8V12a1.5 1.5 0 0 0-3 0v.5H2v-3h.5a1.5 1.5 0 0 0 0-3H2z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" /></svg>
+          <span class="sidebar-mode-item-label">에르가네</span>
           <span class="sidebar-mode-count" id="modeNavPluginCount" hidden></span>
         </button>
         <!-- 5번째 모드 — 백테스트(P1 모드 골격, backtest-mode-plan.md §3.2). 아이콘은
-             되감기(백테스트=과거로 돌아가 재생) — 다른 세 형제와 같은 15×15
+             전략 보드(팔라스 · 백테스트) — 다른 세 형제와 같은 15×15
              viewBox 0 0 14 14, stroke 1.2. -->
-        <button class="sidebar-mode-item" id="modeNavBacktest" type="button" data-view="backtest" aria-pressed="false">
-          <svg class="sidebar-mode-item-ic" viewBox="0 0 14 14" aria-hidden="true"><path d="M11.5 7A4.5 4.5 0 1 1 7 2.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" /><path d="M7 2.5 4.8 2.2 5.1 4.4" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
-          <span class="sidebar-mode-item-label">백테스트</span>
+        <button class="sidebar-mode-item" id="modeNavBacktest" title="팔라스 · 백테스트" type="button" data-view="backtest" aria-pressed="false">
+          <svg class="sidebar-mode-item-ic" viewBox="0 0 14 14" aria-hidden="true"><rect x="1.5" y="2" width="11" height="8" rx="1" fill="none" stroke="currentColor" stroke-width="1.2" /><path d="m4.5 12 2.5-2 2.5 2M4 7.5 6 5.5 8 7l2-3M8 4h2v2" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          <span class="sidebar-mode-item-label">팔라스</span>
           <span class="sidebar-mode-count" id="modeNavBacktestCount" hidden></span>
         </button>
       </div>
@@ -388,18 +389,11 @@
               class="dot kiumi"
               id="dot"
               type="button"
-              aria-label="옵션 메뉴 — 얼굴은 지금 모드를 보여준다"
-              title="옵션"
+              aria-label="글라우 옵션 메뉴"
+              title="글라우 · 옵션"
               data-mode="chat"
             >
-              <span class="kiumi-visor" aria-hidden="true">
-                <!-- 키우미 얼굴 하나 — 모드별로 얼굴을 갈아끼우지 않는다(2026-09-01 사용자 결정).
-                     오브의 기본 표정과 같은 어휘(둥근 눈 둘)이고, 눈 깜빡임으로 살아 있음을 보인다. -->
-                <svg class="kiumi-face" width="17" height="16" viewBox="0 0 17 16" xmlns="http://www.w3.org/2000/svg">
-                  <rect x="5" y="4.5" width="3" height="7" rx="1.5" fill="currentColor"/>
-                  <rect x="9.5" y="4.5" width="3" height="7" rx="1.5" fill="currentColor"/>
-                </svg>
-              </span>
+              <span class="glau-composer" aria-hidden="true"></span>
             </button>
           </div>
           <!-- 모델 팝오버 — 창 안 오버레이. 유리 0.45+blur(카드 단계), 무채색.
@@ -592,6 +586,7 @@
 <script src="lib/backtest-technique-nodes.js"></script>
 <!-- 작업공간 봉인·복원 판정(41·42번 보드) — backtest-canvas.js가 마운트 때 읽으므로 먼저 온다. -->
 <script src="lib/session-restore.js"></script>
+<script src="lib/glau-mascot.js"></script>
 <script src="lib/backtest-canvas.js"></script>
 <!-- 세션 저장 계약(docs/plans/session-persistence-spec.md) — sidebar.js가 모드별
      대화 수를 세려면 이 둘이 먼저 window.AthenaLib에 올라와 있어야 한다. -->

@@ -85,7 +85,7 @@ Frame "39 · 동시 실행 — 상태 4종 · 스피너" (3W9B-1) 1680×900
               Frame "Frame" (3WDT-1) 75×22
                 SVG "SVG" (3WDU-1) 12×12
                   SVGVisualElement "Path" (3WDV-1) 10×7
-                Text "백테스트" (3WDW-1) 40×14 "백테스트"
+                Text "팔라스 · 백테스트" (3WDW-1) 40×14 "팔라스 · 백테스트"
               Text "추세추종 v3" (3WDX-1) 65×16 "추세추종 v3"
               Frame "Frame" (3WDY-1) 244×14
                 Text "신호 계산 중" (3WDZ-1) 58×14 "신호 계산 중"
@@ -99,7 +99,7 @@ Frame "39 · 동시 실행 — 상태 4종 · 스피너" (3W9B-1) 1680×900
               Frame "Frame" (3WE8-1) 75×22
                 SVG "SVG" (3WE9-1) 12×12
                   SVGVisualElement "Path" (3WEA-1) 10×7
-                Text "백테스트" (3WEB-1) 40×14 "백테스트"
+                Text "팔라스 · 백테스트" (3WEB-1) 40×14 "팔라스 · 백테스트"
               Text "변동성 돌파" (3WEC-1) 65×16 "변동성 돌파"
               Frame "Frame" (3WED-1) 244×14
                 Text "봉 데이터 적재 중" (3WEE-1) 81×14 "봉 데이터 적재 중"
@@ -114,7 +114,7 @@ Frame "39 · 동시 실행 — 상태 4종 · 스피너" (3W9B-1) 1680×900
                 SVG "SVG" (3WFU-1) 12×12
                   SVGVisualElement "Circle" (3WFV-1) 3×3
                   SVGVisualElement "Path" (3WFW-1) 7×3
-                Text "에이전트" (3WFX-1) 40×14 "에이전트"
+                Text "아이기스 · 에이전트" (3WFX-1) 40×14 "아이기스 · 에이전트"
               Text "아침 브리핑 감시" (3WFY-1) 93×16 "아침 브리핑 감시"
               Frame "Frame" (3WFZ-1) 244×14
                 Text "조건이 맞을 때까지" (3WG0-1) 88×14 "조건이 맞을 때까지"

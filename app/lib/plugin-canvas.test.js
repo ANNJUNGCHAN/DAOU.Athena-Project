@@ -73,7 +73,7 @@ test('허브는 설치됨·추천 두 구역과 검색을 Paper 03대로 렌더�
   const canvas = createPluginCanvas({ container });
   canvas.mount();
 
-  assert.equal(findByClass(container, 'plugin-canvas-title')[0].textContent, '플러그인');
+  assert.equal(findByClass(container, 'plugin-canvas-title')[0].textContent, '에르가네 · 플러그인');
   assert.equal(findByClass(container, 'plugin-canvas-search')[0].placeholder, '플러그인 검색');
   assert.deepEqual(texts(container, 'plugin-canvas-section-title'), ['설치됨', '추천']);
   assert.equal(findByClass(container, 'plugin-canvas-installed')[0].children.length, 2);

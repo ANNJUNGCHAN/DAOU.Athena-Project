@@ -18,17 +18,17 @@ Frame "10 · 셸 — 답변 중 · Task Canvas" (3KM-0) 1680×900
             SVGVisualElement "Circle" (GRD-0) 3×3
             SVGVisualElement "Circle" (GRE-0) 3×3
             SVGVisualElement "Path" (GRF-0) 5×5
-          Text "그래프" (GRG-0) 36×16 "그래프"
+          Text "메티스" (GRG-0) 36×16 "메티스"
         Frame "Frame" (GRH-0) 242×30
           SVG "SVG" (GRI-0) 15×15
             SVGVisualElement "Circle" (GRJ-0) 4×4
             SVGVisualElement "Path" (GRK-0) 8×4
-          Text "에이전트" (GRL-0) 48×16 "에이전트"
+          Text "아이기스" (GRL-0) 48×16 "아이기스"
         Frame "Frame" (GRM-0) 242×30
           SVG "SVG" (GRN-0) 15×15
             SVGVisualElement "Path" (GRO-0) 9×10
             SVGVisualElement "Path" (GRP-0) 0×1
-          Text "플러그인" (GRQ-0) 48×16 "플러그인"
+          Text "에르가네" (GRQ-0) 48×16 "에르가네"
       Frame "Project Tree" (GRR-0) 242×129
         Frame "Frame" (GRS-0) 242×16
           Text "프로젝트" (GRT-0) 43×12 "프로젝트"

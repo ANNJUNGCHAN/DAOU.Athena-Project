@@ -40,28 +40,29 @@ test('live-full catalog mode labels match sidebar copy', () => {
   const shell = fs.readFileSync(path.join(appDir, 'shell.html'), 'utf8');
   assert.deepEqual(
     MODES.map((mode) => mode.label),
-    ['대화', '그래프', '에이전트', '플러그인', '백테스트'],
+    ['아고라 · 대화', '메티스 · 그래프', '아이기스 · 에이전트', '에르가네 · 플러그인', '팔라스 · 백테스트'],
   );
   for (const mode of MODES) {
     const button = shell.match(new RegExp(`<button[^>]*id="${mode.navId}"[^>]*>([\\s\\S]*?)</button>`));
     assert.ok(button, `${mode.navId} button`);
     const labels = [...button[1].matchAll(/<span class="sidebar-mode-item-label">([^<]+)<\/span>/g)].map((row) => row[1]);
     assert.equal(labels.length, 1, `${mode.navId} sidebar-mode-item-label`);
-    assert.equal(mode.label, labels[0]);
+    assert.equal(mode.label.split(' · ')[0], labels[0]);
+    assert.ok(button[0].includes(`title="${mode.label}"`));
   }
 });
 
 test('live-full catalog paper chrome matches controller CHAT_HEAD_COPY and chat.css empty copy', () => {
   const controller = fs.readFileSync(path.join(__dirname, 'graph-mode', 'controller.js'), 'utf8');
   const chatCss = fs.readFileSync(path.join(appDir, 'chat.css'), 'utf8');
-  assert.match(controller, /title: '그래프에게 묻기'/);
+  assert.match(controller, /title: '메티스 · 그래프'/);
   assert.match(controller, /sub: '답이 캔버스를 바꿉니다'/);
   assert.match(controller, /title: '기법에게 묻기'/);
-  assert.match(controller, /title: '아테나 · 플러그인 대화'/);
+  assert.match(controller, /title: '에르가네 · 플러그인'/);
   assert.equal(PAPER_CHROME.summary.headerHidden, true);
   assert.equal(PAPER_CHROME.agent.headerHidden, true);
-  assert.equal(PAPER_CHROME.graph.title, '그래프에게 묻기');
-  assert.equal(PAPER_CHROME.plugin.title, '아테나 · 플러그인 대화');
+  assert.equal(PAPER_CHROME.graph.title, '메티스 · 그래프');
+  assert.equal(PAPER_CHROME.plugin.title, '에르가네 · 플러그인');
   assert.equal(PAPER_CHROME.backtest.emptyHistory, '아직 고른 기법이 없습니다');
   assert.match(
     chatCss,

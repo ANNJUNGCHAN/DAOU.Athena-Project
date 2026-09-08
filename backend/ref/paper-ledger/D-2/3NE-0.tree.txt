@@ -213,7 +213,7 @@ Frame "01 · 셸 — 그래프 모드 · 요약 뷰" (3NE-0) 1680×900
             Text "3개 대화에서 나란히 등장 · 인과로…" (3VT-0) 0×0 "3개 대화에서 나란히 등장 · 인과로 말한 적은 없어 불확실로 표시"
     Frame "Frame" (3OJ-0) 400×0
       Frame "채팅 헤더" (3OK-0) 0×0
-        Text "그래프에게 묻기" (3OL-0) 0×0 "그래프에게 묻기"
+        Text "메티스 · 그래프" (3OL-0) 0×0 "메티스 · 그래프"
         Text "답이 캔버스를 바꿉니다" (3OM-0) 0×0 "답이 캔버스를 바꿉니다"
       Frame "대화 본문" (3ON-0) 0×0
         Frame "Frame" (3OO-0) 0×0
@@ -239,7 +239,7 @@ Frame "01 · 셸 — 그래프 모드 · 요약 뷰" (3NE-0) 1680×900
             Rectangle "Rectangle" (3P8-0) 3×7
             Rectangle "Rectangle" (3P9-0) 3×7
           Frame "Frame" (3PA-0) 0×0
-            Text "그래프" (3PB-0) 0×0 "그래프"
+            Text "메티스" (3PB-0) 0×0 "메티스"
           Frame "Frame" (3PC-0) 0×0
             Text "CLAUDE" (3PD-0) 0×0 "CLAUDE"
           Frame "Frame" (3PE-0) 0×0

@@ -18,17 +18,17 @@ Frame "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)" (15J-0)
             SVGVisualElement "Circle" (438I-1) 0×0
             SVGVisualElement "Circle" (438J-1) 0×0
             SVGVisualElement "Path" (438K-1) 0×0
-          Text "그래프" (438L-1) 0×0 "그래프"
+          Text "메티스" (438L-1) 0×0 "메티스"
         Frame "Frame" (438M-1) 0×30
           SVG "SVG" (438N-1) 0×0
             SVGVisualElement "Circle" (438O-1) 0×0
             SVGVisualElement "Path" (438P-1) 0×0
-          Text "에이전트" (438Q-1) 0×0 "에이전트"
+          Text "아이기스" (438Q-1) 0×0 "아이기스"
         Frame "Frame" (438R-1) 0×30
           SVG "SVG" (438S-1) 0×0
             SVGVisualElement "Path" (438T-1) 0×0
             SVGVisualElement "Path" (438U-1) 0×0
-          Text "플러그인" (438V-1) 0×0 "플러그인"
+          Text "에르가네" (438V-1) 0×0 "에르가네"
       Frame "Project Tree" (438W-1) 0×0
         Frame "Frame" (438X-1) 0×0
           Text "프로젝트" (438Y-1) 0×0 "프로젝트"
@@ -142,7 +142,7 @@ Frame "02 · 플러그인 — 직접 등록·감사 로그 (관리 뷰)" (15J-0)
                 Text "실패" (43DD-1) 0×0 "실패"
     Frame "Frame" (43B4-1) 400×0
       Frame "Frame" (43B5-1) 0×0
-        Text "플러그인에게 묻기" (43B6-1) 0×0 "플러그인에게 묻기"
+        Text "에르가네 · 플러그인" (43B6-1) 0×0 "에르가네 · 플러그인"
         Text "설치·설정도 대화로 됩니다" (43B7-1) 0×0 "설치·설정도 대화로 됩니다"
       Frame "Frame" (43B8-1) 0×0
         Frame "Frame" (43B9-1) 0×0

@@ -77,7 +77,7 @@ test('mount(): 헤더(타이틀·부제·탭 3종·검색·CTA)와 통계 카드
   const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
   canvas.mount();
 
-  assert.equal(findByClass(container, 'agent-title')[0].textContent, '에이전트');
+  assert.equal(findByClass(container, 'agent-title')[0].textContent, '아이기스 · 에이전트');
   assert.equal(findByClass(container, 'agent-tab').length, 3);
   assert.deepEqual(findByClass(container, 'agent-tab').map((n) => n.textContent), ['모두', '활성', '일시중지']);
   assert.equal(findByClass(container, 'agent-search-input')[0].placeholder, '작업 검색');

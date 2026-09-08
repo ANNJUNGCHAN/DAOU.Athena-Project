@@ -46,7 +46,7 @@ Frame "26 · 빈 작업공간 — 대화·그래프·백테스트" (COS-0) 1729�
 과거는 미래를 보증하지 않습니다 — 결과에"
           Frame "Frame" (1VQI-1) 261×30
             Frame "Frame" (1VQJ-1) 121×30
-              Text "프리셋에서 시작" (1VQK-1) 89×16 "프리셋에서 시작"
+              Text "팔라스 홈 열기" (1VQK-1) 89×16 "팔라스 홈 열기"
             Frame "Frame" (1VQL-1) 132×30
               Text ".kis.yaml 불러오기" (1VQM-1) 98×16 ".kis.yaml 불러오기"
     Frame "Frame" (CS1-0) 460×281

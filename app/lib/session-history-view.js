@@ -10,11 +10,11 @@
 const MODE_ORDER = Object.freeze(['chat', 'graph', 'agent', 'plugin', 'backtest']);
 
 const MODE_LABELS = Object.freeze({
-  chat: '대화',
-  graph: '그래프',
-  agent: '에이전트',
-  plugin: '플러그인',
-  backtest: '백테스트',
+  chat: '아고라 · 대화',
+  graph: '메티스 · 그래프',
+  agent: '아이기스 · 에이전트',
+  plugin: '에르가네 · 플러그인',
+  backtest: '팔라스 · 백테스트',
 });
 
 // 상태 어휘는 넷뿐이다. 대표 상태를 고를 때 running > waiting > failed > done 순으로

@@ -16,11 +16,11 @@
 // 그 모듈은 chat↔summary 한 쌍만 안다 — 여기서는 고를 다섯을 순서대로 나열할
 // 뿐이라 그 매핑을 다시 계산하지 않고 표로 적는다.
 const MODE_CHOICES = Object.freeze([
-  Object.freeze({ mode: 'chat', view: 'summary', label: '대화', hint: '결과 카드가 쌓이는 기본 창' }),
-  Object.freeze({ mode: 'graph', view: 'graph', label: '그래프', hint: '성향·엔티티·근거를 보는 지도' }),
-  Object.freeze({ mode: 'agent', view: 'agent', label: '에이전트', hint: '감시·예약 작업을 관제' }),
-  Object.freeze({ mode: 'plugin', view: 'plugin', label: '플러그인', hint: '설치·권한·MCP 캔버스' }),
-  Object.freeze({ mode: 'backtest', view: 'backtest', label: '백테스트', hint: '전략 폼·코드·결과 캔버스' }),
+  Object.freeze({ mode: 'chat', view: 'summary', label: '아고라 · 대화', hint: '결과 카드가 쌓이는 기본 창' }),
+  Object.freeze({ mode: 'graph', view: 'graph', label: '메티스 · 그래프', hint: '성향·엔티티·근거를 보는 지도' }),
+  Object.freeze({ mode: 'agent', view: 'agent', label: '아이기스 · 에이전트', hint: '감시·예약 작업을 관제' }),
+  Object.freeze({ mode: 'plugin', view: 'plugin', label: '에르가네 · 플러그인', hint: '설치·권한·MCP 캔버스' }),
+  Object.freeze({ mode: 'backtest', view: 'backtest', label: '팔라스 · 백테스트', hint: '전략 폼·코드·결과 캔버스' }),
 ]);
 
 const DEFAULT_PROJECT_ID = 'default'; // conversations.js DEFAULT_PROJECT_ID와 같은 값.

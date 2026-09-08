@@ -48,6 +48,7 @@ function fakeNode(tag) {
   const node = {
     tag,
     className: '',
+    dataset: {},
     textContent: '',
     type: '',
     placeholder: '',
@@ -3635,7 +3636,7 @@ test('armDeployment 배선이 없으면 무장 토글을 아예 그리지 않는
   });
   assert.equal(findByClass(container, 'backtest-deploy-arm-toggle').length, 0);
   assert.equal(findByClass(container, 'backtest-deploy-arm').length, 0);
-  assert.doesNotMatch(textOf(container), /키우미 켜짐/);
+  assert.doesNotMatch(textOf(container), /글라우 켜짐/);
 });
 
 test('auto_armed가 false면 "자동" 표시가 없다 — armed만으로 자동을 말하지 않는다', async () => {
@@ -3711,7 +3712,7 @@ test('신호를 못 읽으면 오늘 로그를 그리지 않는다 — 빈 로�
 test('배포 카드 머리 문구가 자동 주문 사실을 말한다 — "신호까지만"은 더 이상 참이 아니다', async () => {
   const { container } = await atDeployTab({ deployments: async () => [] });
   const note = textOf(container);
-  assert.match(note, /키우미를 켜면 미리 정한 한도 안에서 주문까지 자동으로 나갑니다/);
+  assert.match(note, /글라우를 켜면 미리 정한 한도 안에서 주문까지 자동으로 나갑니다/);
   assert.doesNotMatch(note, /주문은 주문 게이트를 통과합니다/);
 });
 
@@ -7074,4 +7075,3 @@ test('보드 10: 설계를 마친 뒤 꺼진 것을 만나면 설계로 돌아�
   await click(findByClass(container, 'backtest-error-back')[1]);
   assert.equal(canvas.getContext().view, 'design');
 });
-

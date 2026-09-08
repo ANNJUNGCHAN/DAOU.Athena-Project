@@ -21,22 +21,22 @@ Frame "22 · 백테스트 — 고치기 순환 · 단계 카드를 누르면 dif
             SVGVisualElement "Circle" (452X-1) 0×0
             SVGVisualElement "Circle" (452Y-1) 0×0
             SVGVisualElement "Path" (452Z-1) 0×0
-          Text "그래프" (4530-1) 0×0 "그래프"
+          Text "메티스" (4530-1) 0×0 "메티스"
         Frame "Frame" (4531-1) 0×30
           SVG "SVG" (4532-1) 0×0
             SVGVisualElement "Circle" (4533-1) 0×0
             SVGVisualElement "Path" (4534-1) 0×0
-          Text "에이전트" (4535-1) 0×0 "에이전트"
+          Text "아이기스" (4535-1) 0×0 "아이기스"
         Frame "Nav 플러그인" (4536-1) 0×30
           SVG "SVG" (4537-1) 0×0
             SVGVisualElement "Path" (4538-1) 0×0
             SVGVisualElement "Path" (4539-1) 0×0
-          Text "플러그인" (453A-1) 0×0 "플러그인"
+          Text "에르가네" (453A-1) 0×0 "에르가네"
         Frame "Nav 백테스트 (active)" (453B-1) 0×30
           SVG "SVG" (453C-1) 0×0
             SVGVisualElement "Path" (453D-1) 0×0
             SVGVisualElement "Path" (453E-1) 0×0
-          Text "백테스트" (453F-1) 0×0 "백테스트"
+          Text "팔라스" (453F-1) 0×0 "팔라스"
       Frame "Project Tree" (453G-1) 0×0
         Frame "Frame" (453H-1) 0×0
           Text "프로젝트" (453I-1) 0×0 "프로젝트"

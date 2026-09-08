@@ -1,11 +1,11 @@
 'use strict';
 
 const MODES = Object.freeze([
-  { view: 'summary', navId: 'modeNavSummary', canvasId: 'mosaic', label: '대화' },
-  { view: 'graph', navId: 'modeNavGraph', canvasId: 'graphCanvas', label: '그래프' },
-  { view: 'agent', navId: 'modeNavAgent', canvasId: 'agentCanvas', label: '에이전트' },
-  { view: 'plugin', navId: 'modeNavPlugin', canvasId: 'pluginCanvas', label: '플러그인' },
-  { view: 'backtest', navId: 'modeNavBacktest', canvasId: 'backtestCanvas', label: '백테스트' },
+  { view: 'summary', navId: 'modeNavSummary', canvasId: 'mosaic', label: '아고라 · 대화' },
+  { view: 'graph', navId: 'modeNavGraph', canvasId: 'graphCanvas', label: '메티스 · 그래프' },
+  { view: 'agent', navId: 'modeNavAgent', canvasId: 'agentCanvas', label: '아이기스 · 에이전트' },
+  { view: 'plugin', navId: 'modeNavPlugin', canvasId: 'pluginCanvas', label: '에르가네 · 플러그인' },
+  { view: 'backtest', navId: 'modeNavBacktest', canvasId: 'backtestCanvas', label: '팔라스 · 백테스트' },
 ]);
 
 const SETTINGS_NAV = Object.freeze([
@@ -17,9 +17,9 @@ const SETTINGS_NAV = Object.freeze([
 
 const PAPER_CHROME = Object.freeze({
   summary: { headerHidden: true, emptyHistory: '새 대화' },
-  graph: { headerHidden: false, title: '그래프에게 묻기', sub: '답이 캔버스를 바꿉니다' },
+  graph: { headerHidden: false, title: '메티스 · 그래프', sub: '답이 캔버스를 바꿉니다' },
   agent: { headerHidden: true },
-  plugin: { headerHidden: false, title: '아테나 · 플러그인 대화', sub: '설치와 권한을 여기서 정합니다' },
+  plugin: { headerHidden: false, title: '에르가네 · 플러그인', sub: '설치와 권한을 여기서 정합니다' },
   backtest: {
     headerHidden: false,
     title: '기법에게 묻기',

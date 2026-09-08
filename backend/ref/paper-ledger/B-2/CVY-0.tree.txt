@@ -21,17 +21,17 @@ Frame "04 · 플러그인 — 관리·마켓플레이스" (CVY-0) 1680×983
               SVGVisualElement "Circle" (H0O-0) 0×0
               SVGVisualElement "Circle" (H0P-0) 0×0
               SVGVisualElement "Path" (H0Q-0) 0×0
-            Text "그래프" (H0R-0) 0×0 "그래프"
+            Text "메티스" (H0R-0) 0×0 "메티스"
           Frame "Frame" (H0S-0) 0×30
             SVG "SVG" (H0T-0) 0×0
               SVGVisualElement "Circle" (H0U-0) 0×0
               SVGVisualElement "Path" (H0V-0) 0×0
-            Text "에이전트" (H0W-0) 0×0 "에이전트"
+            Text "아이기스" (H0W-0) 0×0 "아이기스"
           Frame "Frame" (H0X-0) 0×30
             SVG "SVG" (H0Y-0) 0×0
               SVGVisualElement "Path" (H0Z-0) 0×0
               SVGVisualElement "Path" (H10-0) 0×0
-            Text "플러그인" (H11-0) 0×0 "플러그인"
+            Text "에르가네" (H11-0) 0×0 "에르가네"
         Frame "Project Tree" (H12-0) 0×0
           Frame "Frame" (H13-0) 0×0
             Text "프로젝트" (H14-0) 0×0 "프로젝트"
@@ -114,7 +114,7 @@ Frame "04 · 플러그인 — 관리·마켓플레이스" (CVY-0) 1680×983
           Text "+ 마켓플레이스 추가 — GitHub…" (DF8-0) 0×0 "+ 마켓플레이스 추가 — GitHub·Git URL·로컬 폴더. 등록만으로는 아무것도 실행되지 않습니다 — "
       Frame "Frame" (DF9-0) 400×0
         Frame "Frame" (DFA-0) 0×0
-          Text "플러그인에게 묻기" (DFB-0) 0×0 "플러그인에게 묻기"
+          Text "에르가네 · 플러그인" (DFB-0) 0×0 "에르가네 · 플러그인"
           Text "설치·설정도 대화로 됩니다" (DFC-0) 0×0 "설치·설정도 대화로 됩니다"
         Frame "Frame" (DFD-0) 0×0
           Frame "Frame" (DFE-0) 0×0

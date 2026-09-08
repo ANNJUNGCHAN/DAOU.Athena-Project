@@ -16,7 +16,7 @@ Frame "41 · 세션 복원 — 다시 누르면 그대로" (3WBZ-1) 1680×900
           Rectangle "Rectangle" (3WD6-1) 1×12
           Text "아테나" (3WD7-1) 33×16 "아테나"
           Rectangle "Rectangle" (3WD8-1) 1×12
-          Text "백테스트" (3WD9-1) 44×16 "백테스트"
+          Text "팔라스 · 백테스트" (3WD9-1) 44×16 "팔라스 · 백테스트"
         Frame "Frame" (3WDA-1) 59×11
           Rectangle "Rectangle" (3WDB-1) 11×1
           Rectangle "Rectangle" (3WDC-1) 9×9
@@ -76,7 +76,7 @@ Frame "41 · 세션 복원 — 다시 누르면 그대로" (3WBZ-1) 1680×900
               Frame "Frame" (3WGO-1) 75×22
                 SVG "SVG" (3WGP-1) 12×12
                   SVGVisualElement "Path" (3WGQ-1) 10×7
-                Text "백테스트" (3WGR-1) 40×14 "백테스트"
+                Text "팔라스 · 백테스트" (3WGR-1) 40×14 "팔라스 · 백테스트"
             Text "3일 전 · 완료" (3WGS-1) 65×16 "3일 전 · 완료"
           Frame "WS Content" (3WGT-1) 894×622
             Frame "Top Row" (3WMC-1) 870×118

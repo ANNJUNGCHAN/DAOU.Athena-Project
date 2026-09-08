@@ -1,4 +1,4 @@
-Frame "04 · 키우미 — 대화·콘텐츠 전개" (4TY-0) 1900×0
+Frame "04 · 글라우 — 대화·콘텐츠 전개" (4TY-0) 1900×0
   Frame "설명" (4TZ-0) 1100×0
     Text "오브는 접힘 → 전환 중 → 펼침의 …" (4U0-0) 0×0 "오브는 접힘 → 전환 중 → 펼침의 세 크기만 가진다"
     Text "아래 8개는 크기 상태가 아니라 콘텐…" (4U1-0) 0×0 "아래 8개는 크기 상태가 아니라 콘텐츠 전개 예시다. 셸 숨김일 때만 펼치고 640px부터 내부 스크롤한다."
@@ -11,7 +11,7 @@ Frame "04 · 키우미 — 대화·콘텐츠 전개" (4TY-0) 1900×0
               Rectangle "Rectangle" (4UA-0) 7×16
               Rectangle "Rectangle" (4UB-0) 7×16
           Frame "헤더" (4UC-0) 0×0
-            Text "키우미 대화" (4UD-0) 0×0 "키우미 대화"
+            Text "글라우 대화" (4UD-0) 0×0 "글라우 대화"
             Rectangle "Rectangle" (4UE-0) 0×0
             Frame "orb-close" (4UF-0) 22×22
               SVG "SVG" (4UG-0) 0×0
@@ -42,7 +42,7 @@ Frame "04 · 키우미 — 대화·콘텐츠 전개" (4TY-0) 1900×0
               Rectangle "Rectangle" (4VY-0) 7×5
               Rectangle "Rectangle" (4VX-0) 7×5
           Frame "헤더" (4VP-0) 0×0
-            Text "키우미 대화" (4VU-0) 0×0 "키우미 대화"
+            Text "글라우 대화" (4VU-0) 0×0 "글라우 대화"
             Rectangle "Rectangle" (4VT-0) 0×0
             Frame "orb-close" (4VQ-0) 22×22
               SVG "SVG" (4VR-0) 0×0
@@ -98,7 +98,7 @@ Frame "04 · 키우미 — 대화·콘텐츠 전개" (4TY-0) 1900×0
               Rectangle "Rectangle" (4XQ-0) 10×6
               Rectangle "Rectangle" (4XP-0) 10×6
           Frame "헤더" (4XH-0) 0×0
-            Text "키우미 대화" (4XM-0) 0×0 "키우미 대화"
+            Text "글라우 대화" (4XM-0) 0×0 "글라우 대화"
             Rectangle "Rectangle" (4XL-0) 0×0
             Frame "orb-close" (4XI-0) 22×22
               SVG "SVG" (4XJ-0) 0×0
@@ -154,7 +154,7 @@ Frame "04 · 키우미 — 대화·콘텐츠 전개" (4TY-0) 1900×0
               Rectangle "Rectangle" (4ZH-0) 10×6
               Rectangle "Rectangle" (4ZG-0) 10×6
           Frame "헤더" (4Z8-0) 0×0
-            Text "키우미 대화" (4ZD-0) 0×0 "키우미 대화"
+            Text "글라우 대화" (4ZD-0) 0×0 "글라우 대화"
             Rectangle "Rectangle" (4ZC-0) 0×0
             Frame "orb-close" (4Z9-0) 22×22
               SVG "SVG" (4ZA-0) 0×0
@@ -209,7 +209,7 @@ Frame "04 · 키우미 — 대화·콘텐츠 전개" (4TY-0) 1900×0
               Rectangle "Rectangle" (518-0) 7×16
               Rectangle "Rectangle" (517-0) 7×16
           Frame "헤더" (50Z-0) 0×0
-            Text "키우미 대화" (514-0) 0×0 "키우미 대화"
+            Text "글라우 대화" (514-0) 0×0 "글라우 대화"
             Rectangle "Rectangle" (513-0) 0×0
             Frame "orb-close" (510-0) 22×22
               SVG "SVG" (511-0) 0×0
@@ -274,7 +274,7 @@ Frame "04 · 키우미 — 대화·콘텐츠 전개" (4TY-0) 1900×0
               Rectangle "Rectangle" (53A-0) 10×6
               Rectangle "Rectangle" (539-0) 10×6
           Frame "헤더" (531-0) 0×0
-            Text "키우미 대화" (536-0) 0×0 "키우미 대화"
+            Text "글라우 대화" (536-0) 0×0 "글라우 대화"
             Rectangle "Rectangle" (535-0) 0×0
             Frame "orb-close" (532-0) 22×22
               SVG "SVG" (533-0) 0×0
@@ -349,7 +349,7 @@ Frame "04 · 키우미 — 대화·콘텐츠 전개" (4TY-0) 1900×0
               Rectangle "Rectangle" (56O-0) 10×6
               Rectangle "Rectangle" (56N-0) 10×6
           Frame "헤더" (56F-0) 0×0
-            Text "키우미 대화" (56K-0) 0×0 "키우미 대화"
+            Text "글라우 대화" (56K-0) 0×0 "글라우 대화"
             Rectangle "Rectangle" (56J-0) 0×0
             Frame "orb-close" (56G-0) 22×22
               SVG "SVG" (56H-0) 0×0

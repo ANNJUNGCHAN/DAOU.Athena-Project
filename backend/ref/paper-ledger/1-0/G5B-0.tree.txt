@@ -49,17 +49,17 @@ Frame "28 · Windows 반응형 창 · Snap" (G5B-0) 1680×900
                       SVGVisualElement "Circle" (H5D-0) 2×2
                       SVGVisualElement "Circle" (H5E-0) 2×2
                       SVGVisualElement "Path" (H5F-0) 3×3
-                    Text "그래프" (H5G-0) 21×9 "그래프"
+                    Text "메티스" (H5G-0) 21×9 "메티스"
                   Frame "Frame" (H5H-0) 70×16
                     SVG "SVG" (H5I-0) 8×8
                       SVGVisualElement "Circle" (H5J-0) 3×3
                       SVGVisualElement "Path" (H5K-0) 5×2
-                    Text "에이전트" (H5L-0) 28×9 "에이전트"
+                    Text "아이기스" (H5L-0) 28×9 "아이기스"
                   Frame "Frame" (H5M-0) 70×16
                     SVG "SVG" (H5N-0) 8×8
                       SVGVisualElement "Path" (H5O-0) 4×5
                       SVGVisualElement "Path" (H5P-0) 0×1
-                    Text "플러그인" (H5Q-0) 28×9 "플러그인"
+                    Text "에르가네" (H5Q-0) 28×9 "에르가네"
                 Frame "Projects · Active Conversation" (H5S-0) 70×49
                   Text "프로젝트" (H5T-0) 70×8 "프로젝트"
                   Frame "Frame" (H5U-0) 70×14
@@ -113,8 +113,8 @@ Frame "28 · Windows 반응형 창 · Snap" (G5B-0) 1680×900
                     Text "＋ 새 대화" (H8Z-0) 49×8 "＋ 새 대화"
                     Frame "Current Function · Graph" (H90-0) 49×10
                       Text "그래프" (H91-0) 15×7 "그래프"
-                    Text "에이전트" (H92-0) 49×8 "에이전트"
-                    Text "플러그인" (H93-0) 49×8 "플러그인"
+                    Text "아이기스" (H92-0) 49×8 "아이기스"
+                    Text "에르가네" (H93-0) 49×8 "에르가네"
                     Rectangle "Rectangle" (H94-0) 49×1
                     Text "프로젝트 · 아테나" (H95-0) 49×7 "프로젝트 · 아테나"
                     Frame "Current Conversation · Project" (H96-0) 49×11
@@ -148,8 +148,8 @@ Frame "28 · Windows 반응형 창 · Snap" (G5B-0) 1680×900
                     Text "＋ 새 대화" (H9Z-0) 39×8 "＋ 새 대화"
                     Frame "Current Function · Graph" (HA0-0) 39×11
                       Text "그래프" (HA1-0) 15×7 "그래프"
-                    Text "에이전트" (HA2-0) 39×8 "에이전트"
-                    Text "플러그인" (HA3-0) 39×8 "플러그인"
+                    Text "아이기스" (HA2-0) 39×8 "아이기스"
+                    Text "에르가네" (HA3-0) 39×8 "에르가네"
                     Rectangle "Rectangle" (HA4-0) 39×1
                     Text "프로젝트" (HA5-0) 39×7 "프로젝트"
                     Text "아테나" (HA6-0) 39×7 "아테나"

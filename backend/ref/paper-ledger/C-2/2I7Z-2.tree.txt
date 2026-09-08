@@ -1,18 +1,18 @@
-Frame "08 · 키우미 — 입력 스트립 모드별 얼굴" (2I7Z-2) 1660×1080
+Frame "08 · 글라우 — 입력 스트립 모드별 얼굴" (2I7Z-2) 1660×1080
   Frame "설명" (2IBZ-2) 0×0
-    Text "얼굴이 지금 어느 모드인지 말한다" (2IC0-2) 0×0 "얼굴이 지금 어느 모드인지 말한다"
-    Text "입력창 안 왼쪽의 키우미는 22px이…" (2IC1-2) 0×0 "입력창 안 왼쪽의 키우미는 22px이다. 오브와 같은 규칙으로 눈 모양 하나만 바꿔 현재 모드를 표시하고, "
+    Text "같은 글라우, 다섯 모드의 이름과 아이콘" (2IC0-2) 0×0 "같은 글라우, 다섯 모드의 이름과 아이콘"
+    Text "입력창 안 왼쪽의 글라우는 22px이…" (2IC1-2) 0×0 "입력창 안 왼쪽의 키우미는 22px이다. 오브와 같은 규칙으로 눈 모양 하나만 바꿔 현재 모드를 표시하고, "
   Frame "모드 5종" (2ISB-2) 0×0
     Frame "모드 · 대화" (2IUS-2) 280×0
-      Frame "키우미 88" (2IUT-2) 88×88
+      Frame "글라우 88" (2IUT-2) 88×88
         SVG "SVG" (2IUU-2) 0×0
           SVGVisualElement "Rect" (2IUV-2) 0×0
           SVGVisualElement "Rect" (2IUW-2) 0×0
-      Text "대화" (2IUX-2) 0×0 "대화"
+      Text "아고라 · 대화" (2IUX-2) 0×0 "아고라 · 대화"
       Text "data-mode="chat"" (2IUY-2) 0×0 "data-mode="chat""
       Text "기본 얼굴. 세로 막대 두 개가 4.…" (2IUZ-2) 0×0 "기본 얼굴. 세로 막대 두 개가 4.6초마다 한 번 깜빡인다. 그래프 외의 모드는 이 얼굴을 상속하지 않는다"
     Frame "모드 · 그래프" (2IXO-2) 280×0
-      Frame "키우미 88" (2IXP-2) 88×88
+      Frame "글라우 88" (2IXP-2) 88×88
         SVG "SVG" (2IXQ-2) 0×0
           SVGVisualElement "Group" (2IXR-2) 0×0
             SVGVisualElement "Line" (2IXS-2) 0×0
@@ -21,40 +21,40 @@ Frame "08 · 키우미 — 입력 스트립 모드별 얼굴" (2I7Z-2) 1660×108
           SVGVisualElement "Circle" (2IXV-2) 0×0
           SVGVisualElement "Circle" (2IXW-2) 0×0
           SVGVisualElement "Circle" (2IXX-2) 0×0
-      Text "그래프" (2IXY-2) 0×0 "그래프"
+      Text "메티스 · 그래프" (2IXY-2) 0×0 "메티스 · 그래프"
       Text "data-mode="graph"" (2IXZ-2) 0×0 "data-mode="graph""
       Text "온톨로지 별자리. 세 점이 3.8초 …" (2IY0-2) 0×0 "온톨로지 별자리. 세 점이 3.8초 주기로 차례로 반짝인다. 눈이 아니라 노드라서, 지금 보는 것이 대화가 "
     Frame "모드 · 에이전트" (2J0I-2) 280×0
-      Frame "키우미 88" (2J0J-2) 88×88
+      Frame "글라우 88" (2J0J-2) 88×88
         SVG "SVG" (2J0K-2) 0×0
           SVGVisualElement "Circle" (2J0L-2) 0×0
           SVGVisualElement "Circle" (2J0M-2) 0×0
           SVGVisualElement "Circle" (2J0N-2) 0×0
           SVGVisualElement "Rect" (2J0O-2) 0×0
           SVGVisualElement "Rect" (2J0P-2) 0×0
-      Text "에이전트" (2J0Q-2) 0×0 "에이전트"
+      Text "아이기스 · 에이전트" (2J0Q-2) 0×0 "아이기스 · 에이전트"
       Text "data-mode="agent"" (2J0R-2) 0×0 "data-mode="agent""
       Text "눈 위에 감시 궤도 점 세 개. 오브…" (2J0S-2) 0×0 "눈 위에 감시 궤도 점 세 개. 오브의 궤도 링과 같은 어휘이고 같은 뜻이다 — 지금 무언가를 지켜보는 중."
     Frame "모드 · 플러그인" (2J3K-2) 280×0
-      Frame "키우미 88" (2J3L-2) 88×88
+      Frame "글라우 88" (2J3L-2) 88×88
         SVG "SVG" (2J3M-2) 0×0
           SVGVisualElement "Circle" (2J3N-2) 0×0
           SVGVisualElement "Circle" (2J3O-2) 0×0
           SVGVisualElement "Rect" (2J3P-2) 0×0
-      Text "플러그인" (2J3Q-2) 0×0 "플러그인"
+      Text "에르가네 · 플러그인" (2J3Q-2) 0×0 "에르가네 · 플러그인"
       Text "data-mode="plugin"" (2J3R-2) 0×0 "data-mode="plugin""
       Text "소켓 얼굴 — 둥근 구멍 둘과 접지 …" (2J3S-2) 0×0 "소켓 얼굴 — 둥근 구멍 둘과 접지 막대 하나. 얼굴이면서 콘센트다. 무언가를 꽂는 자리라는 뜻이고, 눈이 "
     Frame "모드 · 백테스트" (2J4G-2) 280×0
-      Frame "키우미 88" (2J4H-2) 88×88
+      Frame "글라우 88" (2J4H-2) 88×88
         SVG "SVG" (2J4I-2) 0×0
           SVGVisualElement "Path" (2J4J-2) 0×0
           SVGVisualElement "Path" (2J4K-2) 0×0
-      Text "백테스트" (2J4L-2) 0×0 "백테스트"
+      Text "팔라스 · 백테스트" (2J4L-2) 0×0 "팔라스 · 백테스트"
       Text "data-mode="backtest"" (2J4M-2) 0×0 "data-mode="backtest""
       Text "되감기 화살표 둘. 다섯 번째 모드이…" (2J4N-2) 0×0 "되감기 화살표 둘. 다섯 번째 모드이고, 지금 보는 것이 지나간 시간이라는 뜻이다. 앞으로 감는 얼굴은 만들"
   Frame "실제 크기" (2J8L-2) 0×0
     Text "실제 크기 — 작성창 안에서" (2J8M-2) 0×0 "실제 크기 — 작성창 안에서"
-    Text "키우미는 코덱스의 + 자리를 대신한다…" (2J8N-2) 0×0 "키우미는 코덱스의 + 자리를 대신한다. 22px 원, 2px 핑크 테두리, 바이저색 도형. 첨부 칩은 있을 "
+    Text "글라우는 코덱스의 + 자리를 대신한다…" (2J8N-2) 0×0 "키우미는 코덱스의 + 자리를 대신한다. 22px 원, 2px 핑크 테두리, 바이저색 도형. 첨부 칩은 있을 "
     Frame "작성창 실측" (2JB1-2) 400×0
       Frame "첨부 칩" (2JB2-2) 0×0
         Frame "Frame" (2JB3-2) 0×0
@@ -63,7 +63,7 @@ Frame "08 · 키우미 — 입력 스트립 모드별 얼굴" (2I7Z-2) 1660×108
           Text "canvas_transform.py" (2JB6-2) 0×0 "canvas_transform.py"
           Text "×" (2JB7-2) 0×0 "×"
       Frame "입력행" (2JB8-2) 0×0
-        Frame "키우미 22" (2JB9-2) 22×22
+        Frame "글라우 22" (2JB9-2) 22×22
           SVG "SVG" (2JBA-2) 0×0
             SVGVisualElement "Rect" (2JBB-2) 0×0
             SVGVisualElement "Rect" (2JBC-2) 0×0
@@ -77,13 +77,13 @@ Frame "08 · 키우미 — 입력 스트립 모드별 얼굴" (2I7Z-2) 1660×108
         Text "applyVisibility()가 표…" (2JED-2) 0×0 "applyVisibility()가 표면 hidden과 함께 키우미 얼굴·빈 캔버스·채팅 헤더를 한 번에 정한"
       Frame "CLICK" (2JF0-2) 365×0
         Text "CLICK · 전환 아님" (2JF1-2) 0×0 "CLICK · 전환 아님"
-        Text "얼굴은 표시, 클릭은 실행" (2JF2-2) 0×0 "얼굴은 표시, 클릭은 실행"
-        Text "다섯 모드 어디서든 키우미 클릭은 같…" (2JF3-2) 0×0 "다섯 모드 어디서든 키우미 클릭은 같은 빠른 실행 메뉴를 연다. 얼굴이 바뀐다고 클릭의 뜻이 바뀌면 사용자는"
+        Text "모드 표시는 이름·아이콘, 클릭은 실행" (2JF2-2) 0×0 "모드 표시는 이름·아이콘, 클릭은 실행"
+        Text "다섯 모드 어디서든 글라우 클릭은 같…" (2JF3-2) 0×0 "다섯 모드 어디서든 키우미 클릭은 같은 빠른 실행 메뉴를 연다. 얼굴이 바뀐다고 클릭의 뜻이 바뀌면 사용자는"
       Frame "A11Y" (2JW7-2) 365×0
         Text "A11Y · prefers-reduc…" (2JW8-2) 0×0 "A11Y · prefers-reduced-motion"
         Text "멈춰도 모양은 남는다" (2JW9-2) 0×0 "멈춰도 모양은 남는다"
         Text "깜빡임과 반짝임만 끄고 도형은 그대로…" (2JWA-2) 0×0 "깜빡임과 반짝임만 끄고 도형은 그대로 둔다. 모션이 꺼졌다고 얼굴이 사라지면 모드 표시 자체가 없어진다 — "
       Frame "FALLBACK" (2JY8-2) 365×0
-        Text "FALLBACK · 금지" (2JY9-2) 0×0 "FALLBACK · 금지"
-        Text "기본 얼굴로 떨어지면 거짓말이다" (2JYA-2) 0×0 "기본 얼굴로 떨어지면 거짓말이다"
+        Text "FALLBACK · 이름 유지" (2JY9-2) 0×0 "FALLBACK · 이름 유지"
+        Text "아이콘이 없어도 모드 이름은 남는다" (2JYA-2) 0×0 "아이콘이 없어도 모드 이름은 남는다"
         Text "다섯 모드가 각자 얼굴을 가진다. C…" (2JYB-2) 0×0 "다섯 모드가 각자 얼굴을 가진다. CSS가 없어 에이전트·플러그인·백테스트가 대화 얼굴로 떨어지면 화면은 “"

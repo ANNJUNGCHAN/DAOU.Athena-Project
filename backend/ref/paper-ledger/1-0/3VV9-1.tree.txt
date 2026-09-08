@@ -63,7 +63,7 @@ Frame "38 · 펜 — 새 대화창 모드 선택" (3VV9-1) 1680×900
                 Frame "Frame" (3VZ7-1) 36×36
                   SVG "SVG" (3VZ8-1) 18×18
                     SVGVisualElement "Path" (3VZ9-1) 12×11
-                Text "대화" (3VZA-1) 92×16 "대화"
+                Text "아고라" (3VZA-1) 92×16 "아고라"
                 Text "결과 카드가 쌓이는 기본 창" (3VZB-1) 92×28 "결과 카드가 쌓이는 기본 창"
                 Frame "Frame" (3VZC-1) 58×22
                   Text "현재 2개" (3VZD-1) 40×14 "현재 2개"
@@ -74,7 +74,7 @@ Frame "38 · 펜 — 새 대화창 모드 선택" (3VV9-1) 1680×900
                     SVGVisualElement "Circle" (3W0D-1) 3×3
                     SVGVisualElement "Circle" (3W0E-1) 3×3
                     SVGVisualElement "Path" (3W0F-1) 6×6
-                Text "그래프" (3W0G-1) 92×16 "그래프"
+                Text "메티스" (3W0G-1) 92×16 "메티스"
                 Text "성향·엔티티·근거를 보는 지도" (3W0H-1) 92×28 "성향·엔티티·근거를 보는 지도"
                 Frame "Frame" (3W0I-1) 58×22
                   Text "현재 1개" (3W0J-1) 40×14 "현재 1개"
@@ -83,7 +83,7 @@ Frame "38 · 펜 — 새 대화창 모드 선택" (3VV9-1) 1680×900
                   SVG "SVG" (3W0M-1) 18×18
                     SVGVisualElement "Circle" (3W0N-1) 5×5
                     SVGVisualElement "Path" (3W0O-1) 10×5
-                Text "에이전트" (3W0P-1) 92×16 "에이전트"
+                Text "아이기스" (3W0P-1) 92×16 "아이기스"
                 Text "감시·예약 작업을 관제" (3W0Q-1) 92×28 "감시·예약 작업을 관제"
                 Frame "Frame" (3W0R-1) 38×22
                   Text "없음" (3W0S-1) 20×14 "없음"
@@ -92,7 +92,7 @@ Frame "38 · 펜 — 새 대화창 모드 선택" (3VV9-1) 1680×900
                   SVG "SVG" (3W26-1) 18×18
                     SVGVisualElement "Path" (3W27-1) 11×12
                     SVGVisualElement "Path" (3W28-1) 0×2
-                Text "플러그인" (3W29-1) 92×16 "플러그인"
+                Text "에르가네" (3W29-1) 92×16 "에르가네"
                 Text "설치·권한·MCP 캔버스" (3W2A-1) 92×28 "설치·권한·MCP 캔버스"
                 Frame "Frame" (3W2B-1) 38×22
                   Text "없음" (3W2C-1) 20×14 "없음"
@@ -100,7 +100,7 @@ Frame "38 · 펜 — 새 대화창 모드 선택" (3VV9-1) 1680×900
                 Frame "Frame" (3W2E-1) 36×36
                   SVG "SVG" (3W2F-1) 18×18
                     SVGVisualElement "Path" (3W2G-1) 14×10
-                Text "백테스트" (3W2H-1) 92×16 "백테스트"
+                Text "팔라스" (3W2H-1) 92×16 "팔라스"
                 Text "전략 폼·코드·결과 캔버스" (3W2I-1) 92×28 "전략 폼·코드·결과 캔버스"
                 Frame "Frame" (3W2J-1) 58×22
                   Text "현재 1개" (3W2K-1) 40×14 "현재 1개"
@@ -113,7 +113,7 @@ Frame "38 · 펜 — 새 대화창 모드 선택" (3VV9-1) 1680×900
                 Frame "Frame" (3W2W-1) 52×34
                   Text "취소" (3W2X-1) 22×16 "취소"
                 Frame "Frame" (3W2Y-1) 113×34
-                  Text "백테스트 창 열기" (3W2Z-1) 85×16 "백테스트 창 열기"
+                  Text "팔라스 홈 열기" (3W2Z-1) 85×16 "팔라스 홈 열기"
     Frame "Interaction Rail" (3VVX-1) 426×722
       Frame "Rail Header" (3W58-1) 388×26
         Text "펜과 ⋯ 는 다른 일을 한다" (3W59-1) 153×18 "펜과 ⋯ 는 다른 일을 한다"

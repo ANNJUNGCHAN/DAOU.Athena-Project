@@ -21,22 +21,22 @@ Frame "20 · 백테스트 — 새 기법 만들기 · 폴더·편집기·터미�
             SVGVisualElement "Circle" (43EA-1) 0×0
             SVGVisualElement "Circle" (43EB-1) 0×0
             SVGVisualElement "Path" (43EC-1) 0×0
-          Text "그래프" (43ED-1) 0×0 "그래프"
+          Text "메티스" (43ED-1) 0×0 "메티스"
         Frame "Frame" (43EE-1) 0×30
           SVG "SVG" (43EF-1) 0×0
             SVGVisualElement "Circle" (43EG-1) 0×0
             SVGVisualElement "Path" (43EH-1) 0×0
-          Text "에이전트" (43EI-1) 0×0 "에이전트"
+          Text "아이기스" (43EI-1) 0×0 "아이기스"
         Frame "Nav 플러그인" (43EJ-1) 0×30
           SVG "SVG" (43EK-1) 0×0
             SVGVisualElement "Path" (43EL-1) 0×0
             SVGVisualElement "Path" (43EM-1) 0×0
-          Text "플러그인" (43EN-1) 0×0 "플러그인"
+          Text "에르가네" (43EN-1) 0×0 "에르가네"
         Frame "Nav 백테스트 (active)" (43EO-1) 0×30
           SVG "SVG" (43EP-1) 0×0
             SVGVisualElement "Path" (43EQ-1) 0×0
             SVGVisualElement "Path" (43ER-1) 0×0
-          Text "백테스트" (43ES-1) 0×0 "백테스트"
+          Text "팔라스" (43ES-1) 0×0 "팔라스"
       Frame "Project Tree" (43ET-1) 0×0
         Frame "Frame" (43EU-1) 0×0
           Text "프로젝트" (43EV-1) 0×0 "프로젝트"

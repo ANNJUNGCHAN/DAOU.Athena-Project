@@ -230,7 +230,7 @@ Frame "02 · 셸 — 그래프 요약 · 행 선택" (4AN-0) 1680×900
             Text "채팅에서 답하기" (4GV-0) 0×0 "채팅에서 답하기"
     Frame "Frame" (4BU-0) 400×0
       Frame "채팅 헤더" (4BV-0) 0×0
-        Text "그래프에게 묻기" (4BW-0) 0×0 "그래프에게 묻기"
+        Text "메티스 · 그래프" (4BW-0) 0×0 "메티스 · 그래프"
         Text "답이 캔버스를 바꿉니다" (4BX-0) 0×0 "답이 캔버스를 바꿉니다"
       Frame "대화 본문" (4BY-0) 0×0
         Frame "Frame" (4BZ-0) 0×0
@@ -256,7 +256,7 @@ Frame "02 · 셸 — 그래프 요약 · 행 선택" (4AN-0) 1680×900
             Rectangle "Rectangle" (4CJ-0) 3×7
             Rectangle "Rectangle" (4CK-0) 3×7
           Frame "Frame" (4CL-0) 0×0
-            Text "그래프" (4CM-0) 0×0 "그래프"
+            Text "메티스" (4CM-0) 0×0 "메티스"
           Frame "Frame" (4CN-0) 0×0
             Text "CLAUDE" (4CO-0) 0×0 "CLAUDE"
           Frame "Frame" (4CP-0) 0×0

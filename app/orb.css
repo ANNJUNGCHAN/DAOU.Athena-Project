@@ -23,20 +23,9 @@ html, body {
   height: 76px;
   border-radius: 50%;
   flex-shrink: 0;
-  /* 창 표면 유리 단(tokens.css 사다리) — 셸 창과 같은 값을 읽는다. */
-  background-color: rgba(255, 255, 255, var(--glass-window));
-  background-image:
-    linear-gradient(135deg,
-      rgba(255, 255, 255, 0.08) 0%,
-      rgba(255, 255, 255, 0) 46%,
-      rgba(255, 255, 255, 0.05) 100%);
-  /* 렌징 4요소 — 셸 창 #shell과 같은 문법. 원형이라 인셋이 링처럼 돈다. */
-  box-shadow:
-    inset 0 1px 0 rgba(255, 253, 248, 0.60),
-    inset 0 -1px 0 rgb(16 19 26 / 8%),
-    inset 0 0 24px rgba(255, 240, 214, 0.08),
-    0 10px 26px rgb(16 19 26 / 18%);
-  border: 1px solid rgb(16 19 26 / 7%);
+  background: transparent;
+  box-shadow: none;
+  border: 0;
   /* 2026-08-26 board-32: OS app-region 드래그를 걷어냈다 — app-region:drag는
    * 창을 OS가 직접 옮겨서 렌더러에 이동량이 안 들어온다. board-32는 "끌 때
    * 눈이 반대 방향으로 밀린다(관성)"를 요구하는데, 그 관성을 그리려면 매 이동의
@@ -62,256 +51,19 @@ html, body {
  * 오프셋·번짐을 키운다 — 뜬 만큼 바닥에서 멀어진 그 그림자다. */
 #orbRoot[data-dragging="true"] #orb {
   transform: scale(1.106);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 253, 248, 0.60),
-    inset 0 -1px 0 rgb(16 19 26 / 8%),
-    inset 0 0 24px rgba(255, 240, 214, 0.08),
-    0 20px 34px rgb(16 19 26 / 24%);
+  filter: drop-shadow(0 12px 12px rgb(16 19 26 / 20%));
 }
 
-#orbRoot {
-  --color-kiwoome-visor: #0e20b2;      /* 실측 p50 — 바이저 본색 */
-  --color-kiwoome-visor-deep: #000984; /* 실측 p05 — 가장자리 최심부 */
-  --color-kiwoome-visor-lit: #576af9;  /* 실측 p95 — 상단 스펙큘러 램프 */
-}
-
-/* 바이저는 백색 셸에 뚫린 **별개 표면**이다 — 유리 위에 칠한 틴트가 아니다.
- * 그래서 #orb의 background-color는 끝까지 백색 알파로 남는다(soul.md §7 틴트 금지).
- * 원본 마스코트에서도 바이저는 헬멧에 난 창이지 헬멧의 색이 아니다. */
+/* Approved Glau silhouette; existing gaze/blink variables drive SVG eye layers. */
 #orbVisor {
   position: absolute;
-  /* 인셋 = 백색 셸(헬멧)의 두께. 원본에서 바이저는 헬멧에 난 창이라 테두리가
-   * 분명히 읽혀야 한다 — 꽉 채우면 "눈 달린 파란 공"이 되지 헬멧으로 안 읽힌다.
-   *
-   * 2026-08-26 board-32 실측 정정: "파란 부분이 너무 작다"(사용자 1순위 지적).
-   * Paper board 32가 orb 100px 기준 바이저 62×61(62%)을 못박았다 — 15%
-   * 인셋(70% 프레임)보다 살짝 작은 프레임이지만, 진짜 원인은 프레임이 아니라
-   * 아래 clip-path였다(대기 34%만 열려 그 안의 작은 원만 보였다). 프레임을
-   * 스펙값으로 맞추고, 아래 --orb-open 기본값을 키워 문제를 없앤다. */
-  left: 19%;
-  right: 19%;
-  top: 19.5%;
-  bottom: 19.5%;
-  border-radius: 50% 50% 48% 48% / 54% 54% 46% 46%;
-  background:
-    /* 상단 스펙큘러 — 유광 3D 구체의 핵심. 원본의 밝은 반사 지점 위치를 따른다. */
-    radial-gradient(58% 42% at 34% 20%, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0) 62%),
-    radial-gradient(120% 100% at 32% 24%, var(--color-kiwoome-visor-lit) 0%, var(--color-kiwoome-visor) 46%, var(--color-kiwoome-visor-deep) 100%);
-  box-shadow:
-    inset 0 -2px 6px rgb(0 0 0 / 28%),
-    inset 0 2px 3px rgba(255, 255, 255, 0.30);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  inset: 0;
   pointer-events: none;
-  /* **페이드로 등장하지 않는다**(soul.md §7 — 유리는 opacity가 아니라 굴절 변조로
-   * 나타난다). 백색 셸이 바이저를 덮었다가 열리는 **기하 변조**로 드러낸다.
-   *
-   * 2026-08-24 실측 정정: 처음에는 `scale(0.34) + blur(7px)`로 눌러뒀는데, 그건
-   * 색을 **줄일 뿐 없애지 않았다** — 정지 상태 캡처에서 파란 픽셀 601개, 최대
-   * 채도 145가 나왔다(검증 22-A가 잡았다). clip-path는 잘린 영역을 아예 그리지
-   * 않으므로 개폐가 픽셀 단위로 성립한다.
-   *
-   * 2026-08-26 board-32 규범 개정(사용자 결정) — "대기 34% / 발화 75%"로 상태별
-   * 바이저 폭을 벌리던 축을 걷어낸다. board-32 section C는 잠듦을 뺀 모든 상태의
-   * orb-100 참조 프레임에서 바이저를 **항상 같은 62×61**로 그린다 — 표정은 눈
-   * 모양(section B/C)과 시간 루프(section D)만으로 만든다는 이 파일 상단 원칙을
-   * 바이저 자신도 지금부터 따른다. 그래서:
-   *   - 기본(대기)값을 90%로 올린다 — "말 걸 수 있는 상태"는 파란 프레임이
-   *     거의 다 드러나야 사용자 1순위 지적("파란 부분이 너무 작다")이 없어진다.
-   *   - **잠듦만** 예외로 남아 --orb-open을 따로 눌러 닫는다(옛 '평소' 34%가
-   *     그 자리로 내려간다 — 아래 [data-face="sleep"] 규칙).
-   *   - 발화·경계·미안 등 나머지 상태는 더 이상 --orb-open을 건드리지 않는다
-   *     (전부 기본 90%) — 상태 구분은 .orb-eye 모양이 진다.
-   * 이 개정으로 검증22의 firedIsVisiblyWider/stateActuallyChangedPixels는
-   * 더는 성립하지 않는다 — verify.js에 같은 이유를 남기고 폐기했다. */
-  clip-path: circle(var(--orb-open, 90%) at 50% 50%);
-  transform: scale(var(--orb-scale, 1));
-  transition: clip-path 340ms var(--ease), transform 340ms var(--ease);
-  /* 숨 — 알아채면 실패고 없으면 허전한 정도. transform이 아니라 **독립 scale 속성**에
-   * 태운다: transform에 얹으면 위 전이(상태 변화)를 애니메이션이 덮어써서 개폐가
-   * 뚝뚝 끊긴다. 두 속성은 곱해지므로 상태와 숨이 서로를 안 밟는다. */
   animation: orb-breathe 4200ms ease-in-out infinite;
 }
-
 @keyframes orb-breathe {
   0%, 100% { scale: 1; }
-  50%      { scale: 1.018; }
-}
-
-/* 시선 층 — 두 눈이 **통째로** 옮겨 앉는다. 눈동자를 따로 그리지 않는다:
- * 흰 도형을 늘리는 순간 키우미가 아니게 된다(표정은 눈 모양 하나로만 만든다). */
-.orb-gaze {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* px로 잡는다 — 오브는 언제나 76px이라 %보다 px이 덜 헷갈린다(프로토타입도 px 기준). */
-  transform: translate(var(--orb-gx, 0px), var(--orb-gy, 0px));
-  transition: transform var(--orb-gaze-dur, 340ms) var(--ease);
-}
-
-/* 깜빡임 층 — scaleY만 진다. 시선과 층을 나눠야 서로 안 밟는다. */
-.orb-lid {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 22%;
-  transform: scaleY(var(--orb-lid, 1));
-  transition: transform var(--orb-blink-dur, 130ms) var(--ease);
-}
-
-/* 눈 — 원본의 둥근 세로 막대 두 개. 흰색이라 신호색을 늘리지 않는다.
- * 2026-08-26 board-32 실측: eye 9×21 / visor 62×61 → 바이저 대비 14.5%×34.4%. */
-.orb-eye {
-  width: 14.5%;
-  height: 34.4%;
-  border-radius: 999px;
-  background: #fff;
-  box-shadow: 0 1px 2px rgb(0 0 0 / 18%);
-  flex-shrink: 0;
-  /* 모양이 곧 표정이다 — 폭·높이·테두리가 전이 대상이다. */
-  transition:
-    width 220ms var(--ease),
-    height 220ms var(--ease),
-    border-radius 220ms var(--ease),
-    transform 220ms var(--ease);
-}
-
-/* ---------- 표정 — 흰 도형의 모양 하나로만 만든다 ----------
- * 바이저 색·헬멧·링은 전부 그대로다. 새 기관(눈썹·입·눈동자)을 붙이지 않는다.
- * 각 표정은 앱에 **이미 있는 신호**에 붙는다 — 얼굴이 새 정보를 만들면 거짓말이 된다.
- *
- * 2026-08-26 board-32 실측: 아래 값은 전부 board-32 section C의 orb-100 참조
- * 프레임(바이저 62×61)에서 잰 eye-l/eye-r 치수를 바이저 대비 %로 환산한 것이다
- * (예: 완료 14×8 → 14/62=22.6%, 8/61=13.1%). **바이저 자신은 더 이상 표정마다
- * 안 움직인다** — section C의 orb-100이 잠듦 한 칸만 빼고 전부 같은 62×61
- * 프레임으로 그려져 있다: 표정 축은 눈 모양 하나, 바이저는 잠듦 하나만 예외다
- * (아래 [data-face="sleep"]). 옛 판이 표정마다 --orb-open도 같이 흔든 건
- * 이 파일 자신이 선언한 "눈 모양 하나로만" 원칙과 어긋났었다. */
-
-/* 잠듦 — 오래 아무 일 없음(idle > 5min). 옛 판의 '평소'(34%)가 여기로 내려왔다
- * — 바이저가 거의 닫히는 유일한 표정이다(board-32 section C). */
-#orbRoot[data-face="sleep"] #orbVisor { --orb-open: 34%; --orb-scale: 0.92; }
-#orbRoot[data-face="sleep"] .orb-eye { height: 6.5%; }
-
-/* 졸림 — 장 마감(board-30⑫/31⑨, 2026-08-27 갭 클로징 Step 6). sleep과 달리
- * 바이저는 줄지 않는다(풀사이즈 — 팀 실측: "감시가 쉬는 시간"이지 무활동이
- * 아니다) — #orbVisor 규칙이 없는 이유다. 눈 높이는 sleep과 같은 6.5%(같은
- * "거의 감김" 깊이, 기존 값 재사용)로 처지되, 폭은 mopey와 같은 22.6%(역시
- * 기존 값 재사용 — 리터럴 신설 금지)로 넓혀 감긴 눈이 아니라 무겁게 처진
- * 눈으로 읽히게 한다(board 실측 rx=1.5 납작한 알약형과 같은 결). */
-#orbRoot[data-face="drowsy"] .orb-eye { width: 22.6%; height: 6.5%; border-radius: 999px; }
-
-/* 듣는 중 — input:focus. 눈이 입력줄을 내려다본다. 시선은 orb.js가 --orb-gy로 준다. */
-#orbRoot[data-face="listen"] .orb-eye { height: 29.5%; }
-
-/* 경계 — 임계 근접. 좁아지며 한쪽을 붙박는다. 아직 발화는 아니다. */
-#orbRoot[data-face="watch"] .orb-eye { width: 11.3%; height: 27.9%; }
-
-/* 완료·신남 — 위로 휜 아치. 배경을 지우고 테두리 한쪽만 남긴다(도형 수는 그대로 둘). */
-#orbRoot[data-face="done"] .orb-eye,
-#orbRoot[data-face="glad"] .orb-eye {
-  background: transparent;
-  box-shadow: none;
-  border-radius: 999px 999px 0 0;
-  border-top: 2px solid #fff;
-}
-#orbRoot[data-face="done"] .orb-eye { width: 22.6%; height: 13.1%; }
-#orbRoot[data-face="glad"] .orb-eye { width: 27.4%; height: 16.4%; border-top-width: 2.5px; }
-
-/* ---------- 2026-08-26 확장 — 표정 10종(board-31/32) ----------
- * 기본(idle)·웃음(done)·즐거움(glad)·잠듦(sleep)은 위에 이미 있다. 여기서는
- * 나머지 여섯 — 윙크·놀람·찡그림·우는·시무룩·생각중 — 만 보탠다.
- * 신호는 화면당 바이저 하나뿐이라(check-orb.mjs) 배지·점 같은 둘째 채널은
- * 안 붙인다 — 전부 눈 모양 하나로만 말한다(board-31 표제, orb.js 위 주석과 짝).
- *
- * 실제 신호가 있는 건 idle·sleep·fired·만료(mopey)·복원실패(crying)에 더해
- * 2026-08-26부로 듣는 중(listen)·생각 중(think)·완료(done)가, 2026-08-27
- * 갭 클로징으로 윙크(등록 반영)·찡그림(호출 실패·연결 끊김)·놀람(급변)·
- * 경계(watch, CP3)가, CP1a로 즐거움(glad, 목표가 도달)이 늘었다(orb.js가
- * 각 신호를 받는 지점에서 배선한다). 2026-09-01 전수검사: 배선되지 않은
- * data-face="drift"(옛 '딴생각') 규칙을 삭제했다 — 장 마감은 drowsy가
- * 이미 맡고 있어 같은 신호에 얼굴이 둘이었고, Paper 키우미 보드 02의 표정
- * 10종에도 딴생각은 없다(보드 03 매핑도 졸림으로 정합화). */
-
-/* 윙크 — 승인됨(감시 등록 반영). 한쪽만 접힌다 — 표정 중 유일한 좌우 비대칭. */
-#orbRoot[data-face="wink"] .orb-eye-l { height: 6%; }
-#orbRoot[data-face="wink"] .orb-eye-r {
-  background: transparent;
-  box-shadow: none;
-  border-radius: 999px 999px 0 0;
-  border-top: 2px solid #fff;
-  width: 24%;
-  height: 14%;
-}
-
-/* 찡그림 — 호출 실패·연결 끊김. 사선으로 부딪는 두 막대( >< ). */
-#orbRoot[data-face="frown"] .orb-eye { width: 12%; height: 30%; }
-#orbRoot[data-face="frown"] .orb-eye-l { transform: rotate(-24deg); }
-#orbRoot[data-face="frown"] .orb-eye-r { transform: rotate(24deg); }
-
-/* 생각 중 — 질의 진행(query running). board-32: 눈 모양은 기본과 같은 32×21
- * 그대로다 — 스피너를 대신하는 건 모양이 아니라 **시선**이다. 흰 도형이 위를
- * 훑는다(orb.js startThinkSweep이 --orb-gx/gy를 좌우로 흔든다). */
-
-/* 발화 — 두 도형이 동그래진다. 화면당 신호는 여기 하나다(board-32 section C). */
-#orbRoot[data-alert="fired"] .orb-eye,
-#orbRoot[data-face="fired"] .orb-eye { width: 22.6%; height: 23%; border-radius: 50%; }
-
-/* 시무룩·우는 — 위 발화 규칙 **뒤에** 와야 한다: 미확인 알림이 있으면
- * data-alert="fired"도 함께 서는데, 그 결합 규칙이 .orb-eye를 22.6%/23%로
- * 고정한다 — 같은 특정성이라 소스 순서로 승자가 갈리므로, 시무룩·우는 규칙이
- * 그 뒤에 있어야 각자의 모양(평평한 막대·눈물)으로 이긴다. 기존 결함(af8bb81
- * 이전부터 있던 순서 문제, 실사용에서 100% 발화 모양에 덮였다) — 아래 surprise
- * 규칙과 같은 패턴으로 이 자리로 옮겼다(2026-08-27 갭 클로징, board-30⑨⑪). */
-/* 시무룩 — 루틴이 만료로 끝남. 평평한 가로 막대 — 옛 '미안'의 만료 쪽. */
-#orbRoot[data-face="mopey"] .orb-eye { width: 22.6%; height: 11.5%; border-radius: 999px; }
-
-/* 우는 — 감시 복원 실패(강제 알림). 시무룩과 같은 눈에 눈물 한 방울만 더한다
- * — 옛 '미안'의 복원실패 쪽. 새 기관이 아니라 기존 눈 모양의 부속물이다. */
-#orbRoot[data-face="crying"] .orb-eye {
-  width: 22.6%;
-  height: 11.5%;
-  border-radius: 999px;
-  position: relative;
-}
-#orbRoot[data-face="crying"] .orb-eye-r::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 160%;
-  width: 3px;
-  height: 6px;
-  background: #fff;
-  border-radius: 0 50% 50% 50%;
-  transform: translateX(-50%) rotate(45deg);
-}
-
-/* 놀람 — 발화 중 급변(변동성 급등, board-31⑤ 캡션). 위 발화 규칙 **뒤에**
- * 와야 한다: 미확인 알림이 있으면 data-alert="fired"도 함께 서는데, 그
- * 결합 규칙이 .orb-eye를 22.6%/23%로 고정한다 — 같은 특정성이라 소스 순서로
- * 승자가 갈리므로, 놀람 규칙이 그 뒤에 있어야 26%/26%(더 둥글고 크게)로
- * 이긴다. data-face 값 자체가 fired를 대체하고(orb.js 주석), 배지·카운트는
- * 여전히 data-alert만 본다 — 2026-08-27 갭 클로징 Step 5. */
-#orbRoot[data-face="surprise"] .orb-eye { width: 26%; height: 26%; border-radius: 50%; }
-
-/* 즐거움 — 목표가 도달(사용자가 명시한 goal 플래그, CP1a). 위 발화 규칙
- * **뒤에** 와야 한다: 미확인 알림이 있으면 data-alert="fired"도 함께 서는데,
- * 그 결합 규칙이 .orb-eye를 22.6%/23%로 고정한다 — 같은 특정성이라 소스
- * 순서로 승자가 갈리므로, 즐거움 규칙이 그 뒤에 있어야 위로 휜 아치
- * (27.4%/16.4%, 215행 done/glad 공용 규칙과 같은 모양)로 이긴다. mopey/
- * crying/surprise와 같은 패턴(2026-08-27 갭 클로징) — CP1a로 마저 배선. */
-#orbRoot[data-face="glad"] .orb-eye {
-  background: transparent;
-  box-shadow: none;
-  border-radius: 999px 999px 0 0;
-  border-top: 2.5px solid #fff;
-  width: 27.4%;
-  height: 16.4%;
+  50% { scale: 1.018; }
 }
 
 /* 궤도 링 — 감시 중(활성 루틴 수) 표시(board-30②, 2026-08-27 갭 클로징
@@ -1375,7 +1127,7 @@ html, body {
 .orb-chat-go:focus-visible { outline: 2px solid var(--color-k-text); outline-offset: 2px; }
 
 @media (prefers-reduced-transparency: reduce) {
-  #orb, .orb-panel, .orb-card {
+  .orb-panel, .orb-card {
     background-color: rgb(255 255 255 / 98%);
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
@@ -1383,23 +1135,15 @@ html, body {
 }
 
 @media (prefers-contrast: more) {
-  #orb, .orb-panel { border-color: rgb(16 19 26 / 55%); }
+  .orb-panel { border-color: rgb(16 19 26 / 55%); }
   .orb-mode, .orb-relative, .orb-source, .orb-row-label { color: var(--color-k-text); }
-  /* 바이저 위 눈은 대비를 더 세운다 — 고대비 모드에서 유광 그라디언트가 눈을
-   * 삼키면 얼굴이 뭉개진다. 스펙큘러를 걷고 단색으로 간다. */
-  #orbVisor {
-    background: var(--color-kiwoome-visor-deep);
-    box-shadow: none;
-    border: 1px solid var(--color-k-text);
-  }
-  .orb-eye { box-shadow: none; }
   .orb-count { border: 1px solid var(--color-k-text); }
 }
 
 @media (prefers-reduced-motion: reduce) {
   /* 스케일·블러 변조를 끈다. **상태는 그대로 보여야 한다** — 애니메이션을 끄는 것이지
    * 정보를 끄는 게 아니다. 그래서 전이만 없애고 최종 상태는 유지한다. */
-  #orbVisor, .orb-eye, .orb-gaze, .orb-lid { transition: none; }
+  #orbVisor, .glau-gaze, .glau-lid { transition: none; }
   /* 들림(board-30③)도 같은 원칙 — 커짐·그림자 상태는 유지하고 전이만 없앤다. */
   #orb { transition: none; }
   /* 펼침 성장 전환(Step 11)도 같은 원칙 — orb.js가 이 미디어쿼리에서는 애초에
@@ -1412,5 +1156,5 @@ html, body {
   /* **멈춘 프레임은 반드시 뜬 눈이어야 한다.** 깜빡임이 감은 채로 굳으면 사용자는
    * 그걸 '잠듦'으로 읽는다 — 모션을 끈 대가로 없는 상태를 만들어내는 셈이다.
    * orb.js도 같은 이유로 reduced-motion에서는 깜빡임·두리번 루프를 아예 안 돌린다. */
-  .orb-lid { transform: none; }
+  .glau-lid { transform: none; }
 }

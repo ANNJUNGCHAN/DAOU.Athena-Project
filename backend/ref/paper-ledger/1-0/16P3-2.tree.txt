@@ -27,17 +27,17 @@ Frame "06 · 부팅 — DIRECT SHELL EXPAND · 1440–1920ms" (16P3-2) 1680×900
             SVGVisualElement "Circle" (16WS-2) 3×3
             SVGVisualElement "Circle" (16WR-2) 3×3
             SVGVisualElement "Path" (16WQ-2) 5×5
-          Text "그래프" (16WO-2) 33×16 "그래프"
+          Text "메티스" (16WO-2) 33×16 "메티스"
         Frame "Frame" (16WI-2) 242×30
           SVG "SVG" (16WK-2) 15×15
             SVGVisualElement "Circle" (16WM-2) 4×4
             SVGVisualElement "Path" (16WL-2) 8×4
-          Text "에이전트" (16WJ-2) 44×16 "에이전트"
+          Text "아이기스" (16WJ-2) 44×16 "아이기스"
         Frame "Frame" (16WD-2) 242×30
           SVG "SVG" (16WF-2) 15×15
             SVGVisualElement "Path" (16WH-2) 9×10
             SVGVisualElement "Path" (16WG-2) 0×1
-          Text "플러그인" (16WE-2) 44×16 "플러그인"
+          Text "에르가네" (16WE-2) 44×16 "에르가네"
       Frame "Project Tree" (16VS-2) 242×129
         Frame "Frame" (16WA-2) 242×16
           Text "프로젝트" (16WB-2) 39×12 "프로젝트"

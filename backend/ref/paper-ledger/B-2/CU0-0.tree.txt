@@ -21,17 +21,17 @@ Frame "03 · 플러그인 — 허브·설치" (CU0-0) 1680×972
               SVGVisualElement "Circle" (GYT-0) 0×0
               SVGVisualElement "Circle" (GYU-0) 0×0
               SVGVisualElement "Path" (GYV-0) 0×0
-            Text "그래프" (GYW-0) 0×0 "그래프"
+            Text "메티스" (GYW-0) 0×0 "메티스"
           Frame "Frame" (GYX-0) 0×30
             SVG "SVG" (GYY-0) 0×0
               SVGVisualElement "Circle" (GYZ-0) 0×0
               SVGVisualElement "Path" (GZ0-0) 0×0
-            Text "에이전트" (GZ1-0) 0×0 "에이전트"
+            Text "아이기스" (GZ1-0) 0×0 "아이기스"
           Frame "Frame" (GZ2-0) 0×30
             SVG "SVG" (GZ3-0) 0×0
               SVGVisualElement "Path" (GZ4-0) 0×0
               SVGVisualElement "Path" (GZ5-0) 0×0
-            Text "플러그인" (GZ6-0) 0×0 "플러그인"
+            Text "에르가네" (GZ6-0) 0×0 "에르가네"
         Frame "Project Tree" (GZ7-0) 0×0
           Frame "Frame" (GZ8-0) 0×0
             Text "프로젝트" (GZ9-0) 0×0 "프로젝트"
@@ -73,7 +73,7 @@ Frame "03 · 플러그인 — 허브·설치" (CU0-0) 1680×972
       Frame "Frame" (D9U-0) 0×0
         Frame "Frame" (D9V-0) 0×0
           Frame "Frame" (D9W-0) 0×0
-            Text "플러그인" (D9X-0) 0×0 "플러그인"
+            Text "에르가네 · 플러그인" (D9X-0) 0×0 "에르가네 · 플러그인"
             Rectangle "Rectangle" (D9Y-0) 0×0
             Frame "Frame" (D9Z-0) 260×0
               Text "⌕ 플러그인 검색" (DA0-0) 0×0 "⌕ 플러그인 검색"
@@ -140,7 +140,7 @@ Frame "03 · 플러그인 — 허브·설치" (CU0-0) 1680×972
                 Text "설치" (DBB-0) 0×0 "설치"
       Frame "Frame" (DC0-0) 400×0
         Frame "Frame" (DC1-0) 0×0
-          Text "아테나 · 플러그인 대화" (DC2-0) 0×0 "아테나 · 플러그인 대화"
+          Text "에르가네 · 플러그인" (DC2-0) 0×0 "에르가네 · 플러그인"
           Text "설치와 권한을 여기서 정합니다" (DC3-0) 0×0 "설치와 권한을 여기서 정합니다"
         Frame "Frame" (DC4-0) 0×0
           Frame "Frame" (DC5-0) 0×0
