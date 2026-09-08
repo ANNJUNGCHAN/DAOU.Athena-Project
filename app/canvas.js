@@ -3989,11 +3989,9 @@ const agentCanvas = window.AthenaLib.AgentCanvas.createAgentCanvas({
     if (!res || !res.ok) throw new Error((res && res.error) || '성향 신호를 받지 못했다');
     return Array.isArray(res.entries) ? res.entries : [];
   },
-  // "추가" 클릭 → 시트 없이 채팅으로(43 원칙, shell.js 버스 — chat.js가 등록).
+  // 제안 채택은 완성된 초안 생성을 바로 요청한다. 채팅의 idle 게이트를 함께 쓴다.
   onAddSuggestion: (text) => {
-    if (window.AthenaShell && typeof window.AthenaShell.seedChatInput === 'function') {
-      window.AthenaShell.seedChatInput(text);
-    }
+    document.dispatchEvent(new CustomEvent('athena:chat-submit', { detail: { text } }));
   },
   // 9단계 — 알람 센터. notifyRooms는 sidebar.js가 소유한다(세션 메모리) —
   // window.AthenaNotify 다리로 읽기+"모두 읽음"만 받는다(단일 소유자 원칙).
