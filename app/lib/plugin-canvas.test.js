@@ -961,6 +961,34 @@ test('목록 갱신이 도착해도 열려 있는 권한 초안은 살아남는�
   );
 });
 
+test('토글하지 않은 권한 화면은 늦게 온 probe 허용 상태를 그대로 반영한다', async () => {
+  const container = fakeNode('div');
+  const canvas = createPluginCanvas({ container, onPropose: () => {} });
+  canvas.mount();
+  await findByClass(container, 'is-primary').filter((n) => n.tag === 'button')[1].dispatchEvent({ type: 'click' });
+
+  canvas.setData({
+    installed: [{
+      id: 'time',
+      name: '시간·시간대',
+      enabled: true,
+      featureCount: 2,
+      features: [
+        { id: 'get_current_time', name: 'get_current_time', allowed: true },
+        { id: 'convert_time', name: 'convert_time', allowed: true },
+      ],
+    }],
+    recommended: [],
+    marketplaces: [],
+  });
+
+  assert.deepEqual(
+    findByClass(container, 'plugin-canvas-toggle').map((toggle) => toggle.getAttribute('aria-checked')),
+    ['true', 'true'],
+  );
+  assert.equal(canvas.getState().permissionDraft, null);
+});
+
 test('제안 구역은 카드가 있을 때만 비영속 한 줄을 남긴다', () => {
   // 같은 검수 회신을 두 트랙이 따로 구현해 이름이 갈렸다(proposal-boundary vs
   // proposals-note). main에 먼저 들어온 Paper 09 이름 하나로 합친다(2026-09-04 병합).
