@@ -1,0 +1,840 @@
+{
+ "board_id": "4BAP-1",
+ "page": "A-2",
+ "page_name": "에이전트",
+ "name": "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+ "width": 1680,
+ "height": 900,
+ "texts": [
+  {
+   "id": "4BAR-1",
+   "text": "검사 실패 · 프로젝트 폴더 없음 → 「폴더 다시 지정」 → 자동 재검사",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BAS-1",
+   "text": "폴더를 옮겼거나 드라이브가 빠져 감시 코드 파일을 못 여는 경우. 같은 프로젝트 id의 경로만 새 폴더로 바꾸고(새 프로젝트를 만들지 않음), 지정 직후 검사를 다시 돌려 새 카드로 답한다. 「프로젝트 없음 — 다시 선택」(등록 자체가 없음)이나 파일 없음 사유에는 이 칩이 나오지 않는다.",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BAW-1",
+   "text": "① 검사 실패 카드",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BAX-1",
+   "text": "사유가 「프로젝트 폴더 없음」일 때만 「폴더 다시 지정」이 「고칠 게 있어」 앞에 선다. 승인 칩은 없다.",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BB2-1",
+   "text": "새 알람",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BB4-1",
+   "text": "검사 실패",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BB5-1",
+   "text": "삼성전자 거래량 급증 감시 — 3일 평균의 1.5배 — 검사 실패",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BB6-1",
+   "text": "프로젝트 폴더 없음 — 다시 연결",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BB7-1",
+   "text": "어제까지로 세었음 · 오늘은 진행 중",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BB8-1",
+   "text": "지금은 켤 수 없음: 프로젝트 폴더 없음 — 다시 연결",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BBB-1",
+   "text": "폴더 다시 지정",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BBD-1",
+   "text": "고칠 게 있어",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BBG-1",
+   "text": "② 폴더 고르기",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BBH-1",
+   "text": "칩을 누르면 OS 대화상자. 고르는 동안 칩은 잠기고 상태줄만 말한다. 백엔드는 같은 id의 경로만 바꾼다.",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BBM-1",
+   "text": "새 알람",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BBO-1",
+   "text": "검사 실패",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BBP-1",
+   "text": "삼성전자 거래량 급증 감시 — 3일 평균의 1.5배 — 검사 실패",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BBQ-1",
+   "text": "프로젝트 폴더 없음 — 다시 연결",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BBT-1",
+   "text": "폴더 다시 지정",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BBV-1",
+   "text": "고칠 게 있어",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BBW-1",
+   "text": "폴더 고르는 중",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BBY-1",
+   "text": "OS 폴더 대화상자 — 사람이 고른다",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BBZ-1",
+   "text": "D:\\quant\\samsung-volume-watch",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BC0-1",
+   "text": "취소하면 카드는 그대로, 아무것도 바뀌지 않음",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BC3-1",
+   "text": "③ 자동 재검사 → 새 카드",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BC4-1",
+   "text": "성공 즉시 검사 1/3~3/3이 다시 돈다. 사람이 「검사」를 다시 누르지 않는다. 결과는 새 카드로 온다.",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BC9-1",
+   "text": "새 알람",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BCB-1",
+   "text": "검사 실패",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BCC-1",
+   "text": "삼성전자 거래량 급증 감시 — 3일 평균의 1.5배 — 검사 실패",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BCF-1",
+   "text": "폴더 다시 지정",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BCH-1",
+   "text": "고칠 게 있어",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BCI-1",
+   "text": "폴더 다시 지정됨 — 검사 다시 돌림",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BCK-1",
+   "text": "↓ 검사 다시 돌림 — 지난 30일",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BCO-1",
+   "text": "새 알람",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BCQ-1",
+   "text": "검사 통과",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BCR-1",
+   "text": "삼성전자 거래량 급증 감시 — 지난 30일 4번 · 마지막 8/26",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BCS-1",
+   "text": "노드 4개 · 일봉 불러오기 → 3일 거래량 평균 → 배수 비교 → 알림",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BCT-1",
+   "text": "어제까지로 세었음 · 오늘은 진행 중",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BCW-1",
+   "text": "이 알람 승인",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  },
+  {
+   "id": "4BCY-1",
+   "text": "고칠 게 있어",
+   "path": [
+    "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame",
+    "Frame"
+   ]
+  }
+ ],
+ "frames": [
+  {
+   "id": "4BAP-1",
+   "name": "10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사",
+   "component": "Frame",
+   "w": 1680,
+   "h": 900,
+   "depth": 0
+  },
+  {
+   "id": "4BAQ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "4BAT-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 1
+  },
+  {
+   "id": "4BAU-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 400,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4BAV-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4BAY-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4BAZ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "4BB0-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "4BB1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "4BB3-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "4BB9-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "4BBA-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "4BBC-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "4BBE-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 400,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4BBF-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4BBI-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4BBJ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "4BBK-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "4BBL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "4BBN-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "4BBR-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "4BBS-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "4BBU-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "4BBX-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "4BC1-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 400,
+   "h": 0,
+   "depth": 2
+  },
+  {
+   "id": "4BC2-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4BC5-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 3
+  },
+  {
+   "id": "4BC6-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "4BC7-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "4BC8-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "4BCA-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "4BCD-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "4BCE-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "4BCG-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "4BCJ-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "4BCL-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 4
+  },
+  {
+   "id": "4BCM-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "4BCN-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "4BCP-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "4BCU-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 5
+  },
+  {
+   "id": "4BCV-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  },
+  {
+   "id": "4BCX-1",
+   "name": "Frame",
+   "component": "Frame",
+   "w": 0,
+   "h": 0,
+   "depth": 6
+  }
+ ],
+ "text_multiset": {
+  "검사 실패 · 프로젝트 폴더 없음 → 「폴더 다시 지정」 → 자동 재검사": 1,
+  "폴더를 옮겼거나 드라이브가 빠져 감시 코드 파일을 못 여는 경우. 같은 프로젝트 id의 경로만 새 폴더로 바꾸고(새 프로젝트를 만들지 않음), 지정 직후 검사를 다시 돌려 새 카드로 답한다. 「프로젝트 없음 — 다시 선택」(등록 자체가 없음)이나 파일 없음 사유에는 이 칩이 나오지 않는다.": 1,
+  "① 검사 실패 카드": 1,
+  "사유가 「프로젝트 폴더 없음」일 때만 「폴더 다시 지정」이 「고칠 게 있어」 앞에 선다. 승인 칩은 없다.": 1,
+  "새 알람": 4,
+  "검사 실패": 3,
+  "삼성전자 거래량 급증 감시 — 3일 평균의 1.5배 — 검사 실패": 3,
+  "프로젝트 폴더 없음 — 다시 연결": 2,
+  "어제까지로 세었음 · 오늘은 진행 중": 2,
+  "지금은 켤 수 없음: 프로젝트 폴더 없음 — 다시 연결": 1,
+  "폴더 다시 지정": 3,
+  "고칠 게 있어": 4,
+  "② 폴더 고르기": 1,
+  "칩을 누르면 OS 대화상자. 고르는 동안 칩은 잠기고 상태줄만 말한다. 백엔드는 같은 id의 경로만 바꾼다.": 1,
+  "폴더 고르는 중": 1,
+  "OS 폴더 대화상자 — 사람이 고른다": 1,
+  "D:\\quant\\samsung-volume-watch": 1,
+  "취소하면 카드는 그대로, 아무것도 바뀌지 않음": 1,
+  "③ 자동 재검사 → 새 카드": 1,
+  "성공 즉시 검사 1/3~3/3이 다시 돈다. 사람이 「검사」를 다시 누르지 않는다. 결과는 새 카드로 온다.": 1,
+  "폴더 다시 지정됨 — 검사 다시 돌림": 1,
+  "↓ 검사 다시 돌림 — 지난 30일": 1,
+  "검사 통과": 1,
+  "삼성전자 거래량 급증 감시 — 지난 30일 4번 · 마지막 8/26": 1,
+  "노드 4개 · 일봉 불러오기 → 3일 거래량 평균 → 배수 비교 → 알림": 1,
+  "이 알람 승인": 1
+ },
+ "exported_at": "2026-09-08",
+ "tree_summary_sha256": "222ac4abea3d8424b36b543b563ac24b7738638c12e370ab0cc1040f816d38e8"
+}
