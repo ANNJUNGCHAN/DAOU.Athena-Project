@@ -6059,6 +6059,7 @@ app.on('will-quit', () => {
 // 장기 재연결 루프는 시작 여부만 기록하고 종료를 기다리지 않는다.
 const BOOT_TASKS = [
   { id: 'mcp-env', label: '보안 환경 확인', kind: 'gate' },
+  { id: 'account-token', label: '계좌 인증 토큰 발급', kind: 'gate' },
   { id: 'provider-warm', label: '대화 연결 준비', kind: 'gate' },
   { id: 'backend', label: 'ATHENA 서비스 연결', kind: 'gate' },
   { id: 'stock-index', label: '종목 검색 데이터 준비', kind: 'gate' },
@@ -6318,6 +6319,18 @@ function registerLiveBootRunners(createWindowsPromise) {
     return { detail: result.migrated.length ? `${result.migrated.length}건 이전 완료` : '이전할 평문 환경값 없음' };
   });
   startupReadiness.setRunner('backend', ensureBackendStrict);
+  startupReadiness.setRunner('account-token', async () => {
+    // 활성 계좌의 키움 토큰을 백엔드 기동과 동시에 받아 둔다 — 첫 화면에서 사이드바
+    // 토큰 상태가 바로 ready가 된다. 키움을 직접 호출하므로 backend gate와 무관하게
+    // concurrentTaskIds에 둔다. postKiwoomJson이 10초 타임아웃으로 항상 resolve하므로
+    // 별도 deadline은 두지 않는다(중간에 끊으면 상태 파일이 'refreshing'으로 남는다).
+    const result = await accounts.ensureActiveToken();
+    if (result.skipped && result.reason === 'no-account') return { disabled: true, detail: '등록된 계좌 없음' };
+    const remain = `${Math.floor((result.expiresInSec || 0) / 60)}분 남음`;
+    if (result.skipped) return { detail: `${result.alias} · 유효한 토큰 유지 · ${remain}` };
+    if (!result.ok) throw new Error(`${result.alias} 토큰 발급 실패 — 자격증명·네트워크 확인`);
+    return { detail: `${result.alias} 토큰 발급 완료 · ${remain}` };
+  });
   startupReadiness.setRunner('provider-warm', async () => {
     // 플래그를 먼저 본다 — 뒤에 두면 기능이 꺼져 있어도 매 부팅마다 CLI 계정
     // 조회·MCP 스냅샷·시스템 프롬프트 해시를 계산하고, 이 태스크는 gate라
@@ -6401,7 +6414,7 @@ async function startLiveBoot(createWindowsPromise) {
     // stock-index는 백엔드 프록시를 타므로 backend gate 뒤에 둔다 — 앞에 두면 앱이
     // 백엔드를 직접 띄우는 부팅에서 12초 예산이 백엔드 기동 시간에 잡아먹혀 매번
     // 실패한다(2026-09-07 실측: 종목명 인덱스 12초 안에 미적재 → degraded).
-    concurrentTaskIds: [],
+    concurrentTaskIds: ['account-token'],
     dependencyTaskChains: [['mcp-env', 'provider-warm']],
     dependencyTaskId: 'backend',
     dependentTaskIds: ['stock-index', 'alarm-bootstrap', 'routine-feed', 'canvas-feed'],
