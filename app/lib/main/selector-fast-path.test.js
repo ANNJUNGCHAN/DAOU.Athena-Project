@@ -261,6 +261,7 @@ test('inline error state is painted once and never retried through the model pat
 
 test('aborted or superseded late response is ignored before paint', async () => {
   const controller = new AbortController();
+  const abortReason = new Error('superseded');
   let resolveResponse;
   let painted = 0;
   let current = true;
@@ -277,10 +278,90 @@ test('aborted or superseded late response is ignored before paint', async () => 
     emitCanvas: async () => { painted += 1; },
   });
   current = false;
-  controller.abort(new Error('superseded'));
+  controller.abort(abortReason);
   resolveResponse();
-  await assert.rejects(pending, /superseded/);
+  await assert.rejects(pending, (error) => error === abortReason);
   assert.equal(painted, 0);
+});
+
+test('dispatch deadline aborts a request that hangs before response headers', async () => {
+  let painted = 0;
+  let persisted = 0;
+  await assert.rejects(
+    runSelectorFastPath({
+      question: '삼성전자 현재가 보여줘',
+      backendBase: 'http://backend',
+      deadlineMs: 20,
+      fetchImpl: async (_url, options) => new Promise((_resolve, reject) => {
+        options.signal.addEventListener('abort', () => reject(options.signal.reason), { once: true });
+      }),
+      emitCanvas: async () => { painted += 1; },
+      persistTurn: async () => { persisted += 1; },
+    }),
+    (error) => error instanceof SelectorFastPathError && error.code === 'dispatch_timeout',
+  );
+  assert.equal(painted, 0);
+  assert.equal(persisted, 0);
+});
+
+test('dispatch deadline aborts a response whose JSON body hangs', async () => {
+  const orderDraft = {
+    intent: 'order',
+    expectedOperationRef: 'base:kt10000',
+    arguments: { dmst_stex_tp: 'KRX', stk_cd: '005930', ord_qty: '10', trde_tp: '3' },
+    side: 'buy',
+  };
+  let fetches = 0;
+  let emitted = 0;
+  let persisted = 0;
+  await assert.rejects(
+    runSelectorFastPath({
+      question: '삼성전자 10주 시장가로 매수해줘',
+      backendBase: 'http://backend',
+      intent: orderDraft.intent,
+      arguments: orderDraft.arguments,
+      orderDraft,
+      deadlineMs: 20,
+      fetchImpl: async (_url, options) => {
+        fetches += 1;
+        return {
+          ok: true,
+          status: 200,
+          json: async () => new Promise((_resolve, reject) => {
+            options.signal.addEventListener('abort', () => reject(options.signal.reason), { once: true });
+          }),
+        };
+      },
+      emitOrderDraft: async () => { emitted += 1; },
+      persistTurn: async () => { persisted += 1; },
+    }),
+    (error) => error instanceof SelectorFastPathError && error.code === 'dispatch_timeout',
+  );
+  assert.equal(fetches, 1);
+  assert.equal(emitted, 0);
+  assert.equal(persisted, 0);
+});
+
+test('successful dispatch removes caller abort propagation and its deadline timer', async () => {
+  const controller = new AbortController();
+  let dispatchSignal;
+  const result = await runSelectorFastPath({
+    question: '삼성전자 현재가 보여줘',
+    backendBase: 'http://backend',
+    deadlineMs: 20,
+    signal: controller.signal,
+    idFactory: (() => { const values = ['dataset', 'item']; return () => values.shift(); })(),
+    fetchImpl: async (_url, options) => {
+      dispatchSignal = options.signal;
+      const request = JSON.parse(options.body);
+      return { ok: true, status: 200, json: async () => inlineBody(request) };
+    },
+  });
+
+  assert.equal(result.handled, true);
+  controller.abort(new Error('late caller abort'));
+  await new Promise((resolve) => setTimeout(resolve, 30));
+  assert.equal(dispatchSignal.aborted, false);
 });
 
 test('malformed successful response is rejected before paint', async () => {
