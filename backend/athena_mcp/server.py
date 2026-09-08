@@ -19,7 +19,9 @@ side-channel만 Athena 관리 built-in으로 노출하며, 일반 upstream MCP�
 from __future__ import annotations
 
 import json
+import os
 import re
+from collections import Counter
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
@@ -71,6 +73,8 @@ ProgressCallback = Callable[[float, float | None, str | None], Awaitable[None]]
 
 RENDER_CANVAS_TOOL = "athena__render_canvas"
 SAVE_CANVAS_TOOL = "athena__save_canvas"
+_TOOL_NAME_STYLE_ENV = "ATHENA_MCP_TOOL_NAME_STYLE"
+_GROK_TOOL_NAME_STYLE = "grok"
 
 _KNOWN_CANVAS_TYPES = [*CANVAS_SCHEMAS.keys(), "free"]
 
@@ -789,9 +793,29 @@ def _builtin_tool_defs() -> list[types.Tool]:
     ]
 
 
+def _grok_wire_tool_name(internal_name: str) -> str:
+    """Return a Grok-safe tool part; Grok adds its own ``server__`` prefix.
+
+    Grok drops MCP tools whose tool part contains another ``__`` or a dot.  The
+    returned name is only an external wire ID; calls are resolved through an
+    exact map back to ``internal_name`` before consent and dispatch.
+    """
+    safe = re.sub(r"[^A-Za-z0-9_-]+", "_", internal_name)
+    safe = re.sub(r"_+", "_", safe).strip("_")
+    return safe or "tool"
+
+
+def _unique_grok_wire_names(internal_names: list[str]) -> dict[str, str]:
+    candidates = [(name, _grok_wire_tool_name(name)) for name in internal_names]
+    counts = Counter(wire for _, wire in candidates)
+    return {wire: name for name, wire in candidates if counts[wire] == 1}
+
+
 def build_mcp_server(gateway: AthenaGateway) -> Server:
     """`AthenaGateway`를 실제 `mcp.server.lowlevel.Server`에 연결한다."""
     server: Server = Server("athena", version="0.1.0")
+    grok_wire_names = os.environ.get(_TOOL_NAME_STYLE_ENV) == _GROK_TOOL_NAME_STYLE
+    wire_to_internal: dict[str, str] = {}
 
     @server.list_tools()
     async def _list_tools() -> list[types.Tool]:
@@ -807,10 +831,28 @@ def build_mcp_server(gateway: AthenaGateway) -> Server:
             )
             for t in aggregated
         ]
-        return exposed + _builtin_tool_defs()
+        internal_tools = exposed + _builtin_tool_defs()
+        if not grok_wire_names:
+            return internal_tools
+
+        current = _unique_grok_wire_names([tool.name for tool in internal_tools])
+        wire_to_internal.clear()
+        wire_to_internal.update(current)
+        visible: list[types.Tool] = []
+        for tool in internal_tools:
+            wire_name = _grok_wire_tool_name(tool.name)
+            if current.get(wire_name) != tool.name:
+                continue
+            visible.append(tool.model_copy(update={"name": wire_name}))
+        return visible
 
     @server.call_tool()
     async def _call_tool(name: str, arguments: dict[str, Any]) -> types.CallToolResult:
+        if grok_wire_names:
+            internal_name = wire_to_internal.get(name)
+            if internal_name is None:
+                return _gateway_blocked_result(f"알 수 없는 Grok 툴: {name!r}")
+            name = internal_name
         progress_token: types.ProgressToken | None = None
         on_progress: ProgressCallback | None = None
         try:

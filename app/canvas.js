@@ -493,7 +493,7 @@ function reportSessionCards() {
       protected: node.dataset.protected === 'true',
     });
   }
-  try { window.athena.send('athena:session-cards', { cards }); } catch { /* 채널이 없는 하네스 — 보고는 그림의 필요조건이 아니다 */ }
+  try { window.athena.send('athena:session-cards', { cards, conversationId: canvasConversationId }); } catch { /* 채널이 없는 하네스 — 보고는 그림의 필요조건이 아니다 */ }
 }
 
 window.athena.on('athena:add-canvas', ({ type, sessionCardId }) => {
@@ -525,6 +525,8 @@ window.athena.on('athena:add-rest-canvas', async (payload) => {
   const receivedAt = performance.now();
   const correlation = payload && payload.envelope && payload.envelope.correlation;
   if (!payload || !isValidCorrelation(correlation)) return;
+  // 다중 대화(2026-09-08) — 다른 대화의 REST 카드가 늦게 도착하면 그리지 않는다(main이 그 대화의 세션에 적는다).
+  if (payload.conversationId && canvasConversationId && payload.conversationId !== canvasConversationId) return;
   try {
     const envelope = Object.assign({}, payload.envelope, {
       operation_ref: payload.operationRef,
@@ -689,7 +691,13 @@ window.athena.on('athena:rest-retry-available', (payload = {}) => {
 // main.js가 athena__render_canvas(source:'live')로 claude -p를 실왕복한 뒤 매
 // render_canvas tool_result마다 이걸 보낸다. status는 success/fallback(둘 다
 // canvas_type을 읽어 렌더한다) · rejected/error/unparseable(카드 대신 안내만).
+// 다중 대화(2026-09-08) — 배경 대화의 카드는 main이 그 대화의 세션에 적어 두고 여기로 보내지 않지만,
+// 갈아타는 찰나에 늦게 도착한 카드까지 걸러야 다른 대화의 캔버스에 섞이지 않는다.
+let canvasConversationId = null;
+window.athena.on('athena:init', (payload) => { if (payload && payload.conversationId) canvasConversationId = payload.conversationId; });
+window.athena.on('athena:conversation-active', ({ conversationId } = {}) => { if (conversationId) canvasConversationId = conversationId; });
 window.athena.on('athena:add-canvas-live', async (result) => {
+  if (result && result.conversationId && canvasConversationId && result.conversationId !== canvasConversationId) return;
   const rendererReceivedAt = performance.now();
   const node = await addLiveCard(result);
   if (!node || !result || (result.status !== 'success' && result.status !== 'fallback')) return;
@@ -4331,6 +4339,38 @@ renderFilterChips();
 // settings-cards.js가 이미 갖고 있다. 여기서는 둘을 잇기만 한다(같은 규칙을
 // 두 벌 쓰지 않는다 — 설정 오버레이와 이 탭은 같은 localStorage 키를 본다).
 let graphBrainReady = false;
+// 소스별(대화·체결내역·보유잔고) 조회 주기·실행 시각 — 백엔드 GET /brain/schedule
+// 응답 그대로 든다. 주기 값의 주인은 localStorage(settings-cards.js)라, 브레인이
+// 준비될 때마다 저장값을 PUT으로 밀어 넣는다(백엔드는 기동마다 설정 파일 기본값으로
+// 돌아온다). 못 읽었으면 null — 화면은 시각을 지어내지 않고 실행 버튼을 잠근다.
+let graphBrainSchedule = null;
+function graphScheduleIntervals() {
+  const s = window.AthenaLib.SettingsCards.readGraphSettings();
+  return { chat: s.chatIntervalMin, fills: s.fillsIntervalMin, holdings: s.holdingsIntervalMin };
+}
+function applyGraphBrainSchedule() {
+  const container = document.getElementById('graphSettingsBody');
+  if (container) window.AthenaLib.GraphCollectionSettings.applySchedule(container, graphBrainSchedule);
+}
+// IPC 결과 { ok, schedule_owner, sources } → 성공이면 캐시하고 돌려주고, 실패면 던진다
+// (렌더러가 이유를 적는다 — 조용히 이전 시각을 보여 주면 방금 눌렀는데 안 돈 것처럼 보인다).
+function takeGraphBrainSchedule(result) {
+  if (!result || !result.ok) throw new Error((result && result.error) || '브레인 스케줄을 읽지 못했습니다.');
+  graphBrainSchedule = { schedule_owner: result.schedule_owner, sources: result.sources };
+  applyGraphBrainSchedule();
+  return graphBrainSchedule;
+}
+async function syncGraphBrainSchedule(patch) {
+  return takeGraphBrainSchedule(await window.athena.invoke('athena:brain-schedule-set', patch));
+}
+async function refreshGraphBrainSchedule() {
+  try {
+    return takeGraphBrainSchedule(await window.athena.invoke('athena:brain-schedule'));
+  } catch (err) {
+    console.warn('[graph-mode] brain-schedule 실패 — 이전 값을 둔다', err);
+    return graphBrainSchedule;
+  }
+}
 function renderGraphCollectionSettings() {
   const container = document.getElementById('graphSettingsBody');
   if (!container) return;
@@ -4341,11 +4381,14 @@ function renderGraphCollectionSettings() {
     setCollectChat: (enabled) => settingsCards.setCollectChatPreference(enabled),
     intervalOptions: settingsCards.HOLDINGS_INTERVAL_MINUTES,
     brainReady: graphBrainReady,
-    // 백엔드 기본값(ATHENA_BRAIN_INGEST_INTERVAL_MINUTES)이다 — 이 화면이
-    // 바꾸는 값이 아니라 알려 주기만 하는 값이라 상수로 둔다.
-    defaultIngestIntervalMinutes: 60,
+    schedule: graphBrainSchedule,
+    setSourceInterval: (source, minutes) => syncGraphBrainSchedule({ [source]: minutes }),
+    runSource: async (source) => takeGraphBrainSchedule(
+      await window.athena.invoke('athena:brain-schedule-run', { source })),
     resetBrain: () => window.athena.invoke('athena:brain-reset'),
   });
+  // 탭을 열 때마다 시각을 새로 읽는다 — 마지막 실행은 백엔드 주기가 돌 때마다 바뀐다.
+  if (graphBrainReady) void refreshGraphBrainSchedule();
 }
 
 // "최근 갱신"(보드 01 §4-1) — entries[].observed_at 중 가장 최신값으로만 채운다.
@@ -4537,6 +4580,8 @@ async function refreshConversationGraphSurfaces() {
 if (window.athena && typeof window.athena.on === 'function') {
   window.athena.on('athena:brain-graph-updated', () => {
     void refreshConversationGraphSurfaces();
+    // 잡이 끝났다는 신호 = 어떤 소스든 "마지막 실행"이 바뀌었을 수 있다.
+    if (graphBrainReady) void refreshGraphBrainSchedule();
   });
 }
 
@@ -4549,6 +4594,12 @@ if (window.athena && typeof window.athena.on === 'function') {
     const ready = Boolean(status && status.ok && status.ready);
     graphBrainReady = ready; // 보드 05 "브레인 준비됨" 배지가 읽는 값.
     graphMode.setAvailable(ready);
+    // 저장된 소스별 조회 주기를 백엔드 스케줄러에 밀어 넣고 실행 시각을 받아 온다.
+    if (ready) {
+      syncGraphBrainSchedule(graphScheduleIntervals()).catch((err) => {
+        console.warn('[graph-mode] brain-schedule 동기화 실패 — 백엔드 기본 주기로 돈다', err);
+      });
+    }
     // hidden은 안 건드린다 — graphMode.applyVisibility()가 유일한 소유자다(US-007).
     // 여기서는 데이터를 미리 당겨올지만 결정한다(그래프 모드로 전환했을 때 바로
     // 보이도록 하는 프리페치 — 안 보이는 동안 부르는 낭비는 loadEmptyCanvasExtras와

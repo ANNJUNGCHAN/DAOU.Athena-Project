@@ -3,7 +3,7 @@
   "gate": "verify:paper-screens",
   "blessed_at": "2026-09-07T00:43:33.485Z",
   "blessed_by": "verify:paper-screens --bless",
-  "target_boards": 105,
+  "target_boards": 106,
   "passing": [
     "11D-0",
     "15J-0",
@@ -83,6 +83,7 @@
     "44RV-1",
     "452D-1",
     "4AN-0",
+    "4BAP-1",
     "4IA-0",
     "4TY-0",
     "56X-0",
@@ -109,7 +110,7 @@
     "OJ-0",
     "XI-0"
   ],
-  "passing_count": 103,
+  "passing_count": 104,
   "shrink_log": [
     {
       "at": "2026-09-06T02:19:45.642Z",

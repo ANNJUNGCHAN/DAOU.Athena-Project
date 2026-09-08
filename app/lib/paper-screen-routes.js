@@ -1138,6 +1138,23 @@ const WATCH_CHECK_DONE = Object.freeze({
   },
 });
 
+// 보드 10-b ① — 백엔드 runtime.code_watch_source_blocker가 등록된 프로젝트 폴더를 디스크에서
+// 못 찾을 때의 검사 응답이다. reason 문구 그대로가 카드 모델(watch-check-card.js
+// isProjectFolderMissing)의 「폴더 다시 지정」 칩을 켠다.
+const WATCH_CHECK_FOLDER_MISSING = Object.freeze({
+  ok: true,
+  data: { ok: false, symbol: '005930', reason: '프로젝트 폴더 없음 — 다시 연결', nodes: [] },
+});
+
+// 보드 10-b ② — main.js athena:project-relink가 폴더 대화상자·백엔드 relink·사이드바 갱신을
+// 마친 뒤의 응답. 프로브에는 대화상자가 없어 「사람이 이 폴더를 골랐다」로 친다.
+const PROJECT_RELINK_DONE = Object.freeze({
+  ok: true,
+  path: 'D:\\quant\\samsung-volume-watch',
+  project: { id: 'fx-proj', name: 'samsung-volume-watch', path: 'D:\\quant\\samsung-volume-watch', kind: 'external' },
+  sidebarUpdated: true,
+});
+
 // 제어 제안 봉투 다섯(보드 07의 A~E) — main.js:2497이 athena_routine의 propose
 // 결과에서 만드는 그 모양이다(control·routineId·current·proposed·rationale·view).
 // 모델이 낸 제안은 백엔드에 아무것도 안 남아 클릭으로는 어느 것도 만들 수 없다.
@@ -2756,6 +2773,44 @@ const ROUTES = Object.freeze([
       { what: 'count', selector: '.watch-create-question', equals: 1 },
     ],
   },
+  {
+    board: '4BAP-1', // 10-b · 에이전트 — 검사 실패 · 프로젝트 폴더 없음 → 폴더 다시 지정 · 자동 재검사
+    window: 'shell',
+    // 보드 10-b는 세 순간을 나란히 그렸다 — ① 「프로젝트 폴더 없음」으로 실패한 검사 카드
+    // (「폴더 다시 지정」이 「고칠 게 있어」 앞에 선다) ② 폴더 고르기 ③ 지정 직후 자동 재검사가
+    // 낸 새 카드. 앱에서는 한 이력에 차례로 쌓이므로 끝 화면 하나가 셋을 다 품는다.
+    // 폴더 대화상자는 main의 athena:project-relink 안에 있어 fixture로 「고른 것」으로 친다.
+    // 검사 통로는 한 라우트 안에서 두 번 갈아끼운다 — 처음은 실패, 다시 지정 뒤는 통과.
+    reach: [
+      { do: 'ipc-fixture', channel: 'athena:routines-list', data: CODE_WATCH_DRAFT },
+      { do: 'ipc-fixture', channel: 'athena:routine-detail', data: CODE_DETAIL_FIRST_CHECK },
+      { do: 'ipc-fixture', channel: 'athena:routine-watch-check', data: WATCH_CHECK_FOLDER_MISSING },
+      { do: 'command-bar', text: '삼성전자 시세' },
+      { do: 'wait', ms: 2500 },
+      { do: 'click', selector: '.routine-approval-actions button.routine-btn:not(.routine-btn-approve)' },
+      { do: 'wait', ms: 600 },
+      { do: 'ipc-fixture', channel: 'athena:routine-watch-check', data: WATCH_CHECK_DONE },
+      { do: 'ipc-fixture', channel: 'athena:project-relink', data: PROJECT_RELINK_DONE },
+      { do: 'click', selector: '.routine-btn-relink' },
+      { do: 'wait', ms: 800 },
+      { do: 'settle' },
+    ],
+    root: '#history',
+    // 실패 카드의 사유·칩, 다시 지정 뒤 남는 상태줄, 새 카드의 판정·승인 칩 — 여섯 마디.
+    // 「폴더 고르는 중」은 대화상자가 떠 있는 동안만 사는 문구라 끝 화면에는 없다.
+    // 종목·배수·날짜는 전부 fixture 값이라 한 글자도 넣지 않는다.
+    phrases: [
+      '검사 실패', '프로젝트 폴더 없음 — 다시 연결', '폴더 다시 지정',
+      '폴더 다시 지정됨 — 검사 다시 돌림', '검사 통과', '이 알람 승인',
+    ],
+    // 「폴더 다시 지정」은 실패 카드에만 하나다(초안 카드는 차단 사유가 없어 안 낸다).
+    // 승인 칩은 초안 카드와 새 통과 카드에 하나씩 — 실패 카드에는 없다. 점 띠는 상세
+    // 봉투의 counted_through가 있어야 서는 값이라 이 라우트는 재지 않는다.
+    structure: [
+      { what: 'count', selector: '.routine-btn-relink', equals: 1 },
+      { what: 'count', selector: '.routine-btn-approve', equals: 2 },
+    ],
+  },
 
   // ---------- 화면 4장 (1-0 설정 3 + D-2 그래프 1) ----------
   {
@@ -3272,10 +3327,10 @@ const ROUTES = Object.freeze([
     ],
     // 보드가 그린 것은 셸 전체가 아니라 그래프 패널 하나다.
     root: '#graphSettingsCanvas',
-    // 배치 주기·수동 실행의 설명문 두 줄은 안 적는다 — 앱이 2026-09-03 실사용
-    // 지적을 받아 「무엇을 하는 주기인가 → 지금 값 → 어디서 바꾸나」로 다시 쓴
-    // 자리라 Paper의 문장과 다르다. 「브레인 준비됨」도 안 적는다: 배지 문구가
-    // 백엔드 기동 여부로 갈려 이 검사에서 못 박을 수 없다.
+    // 실행 시각 줄(「마지막 09:05 · 다음 10:05」)은 안 적는다 — 2026-09-08부터 앱과
+    // Paper 모두 배치 주기·수동 실행 행을 지우고 조회 주기·재생 버튼·실행 시각을
+    // 수집원 세 칸 각각에 붙였지만, 시각은 백엔드 스케줄러가 주는 실값이라 못 박을
+    // 수 없다. 「브레인 준비됨」도 같은 이유(배지 문구가 백엔드 기동 여부로 갈린다).
     phrases: [
       '그래프 수집과 노출',
       '무엇을 읽고 누구에게 보일지',

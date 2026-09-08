@@ -1870,3 +1870,81 @@ def test_manual_relation_is_not_exposed_to_the_model() -> None:
     operation = schema["paths"]["/api/v1/brain/relations/manual"]["post"]
     assert operation["x-athena-llm-exposed"] is False
     assert operation["x-athena-side-effect"] == "write"
+
+
+# --- 소스별 수집 주기(2026-09-08) --------------------------------------------------------
+
+SCHEDULE_PATH = "/api/v1/brain/schedule"
+
+
+def test_schedule_requires_bearer_and_503s_while_brain_disabled() -> None:
+    with _disabled_client() as client:
+        assert client.get(SCHEDULE_PATH).status_code == 422
+        headers = {"Authorization": f"Bearer {BEARER}"}
+        assert client.get(SCHEDULE_PATH, headers=headers).status_code == 503
+        assert client.put(SCHEDULE_PATH, headers=headers, json={"chat": 30}).status_code == 503
+        assert client.post(f"{SCHEDULE_PATH}/chat/run", headers=headers).status_code == 503
+
+
+def test_schedule_endpoints_are_not_exposed_to_the_model() -> None:
+    with _disabled_client() as client:
+        schema = client.get("/openapi.json").json()
+    for path, method, effect in (
+        (SCHEDULE_PATH, "get", "none"),
+        (SCHEDULE_PATH, "put", "write"),
+        (f"{SCHEDULE_PATH}/{{source}}/run", "post", "write"),
+    ):
+        operation = schema["paths"][path][method]
+        assert operation["x-athena-llm-exposed"] is False
+        assert operation["x-athena-side-effect"] == effect
+
+
+def test_schedule_reports_three_sources_with_default_interval(tmp_path: Path) -> None:
+    app = create_app(_brain_settings(tmp_path, brain_ingest_interval_minutes=45))
+    headers = {"Authorization": f"Bearer {BEARER}"}
+    with TestClient(app) as client:
+        response = client.get(SCHEDULE_PATH, headers=headers)
+        assert response.status_code == 200
+        body = response.json()
+        assert body["schedule_owner"] == "backend"
+        assert [row["source"] for row in body["sources"]] == ["chat", "fills", "holdings"]
+        for row in body["sources"]:
+            assert row["interval_minutes"] == 45
+            assert row["last_run_at"] is None
+            assert row["next_run_at"] is not None
+            assert row["running"] is False
+            assert row["last_error"] is None
+        # 키움 계정이 없는 테스트 설정 — 체결·잔고 생산자는 결선되지 않았다고 말한다.
+        wired = {row["source"]: row["producer_wired"] for row in body["sources"]}
+        assert wired == {"chat": True, "fills": False, "holdings": False}
+
+
+def test_schedule_update_changes_only_the_named_sources(tmp_path: Path) -> None:
+    app = create_app(_brain_settings(tmp_path))
+    headers = {"Authorization": f"Bearer {BEARER}"}
+    with TestClient(app) as client:
+        response = client.put(SCHEDULE_PATH, headers=headers, json={"holdings": 30, "chat": 120})
+        assert response.status_code == 200
+        minutes = {row["source"]: row["interval_minutes"] for row in response.json()["sources"]}
+        assert minutes == {"chat": 120, "fills": 60, "holdings": 30}
+
+        assert client.put(SCHEDULE_PATH, headers=headers, json={"chat": 0}).status_code == 422
+        assert client.put(SCHEDULE_PATH, headers=headers, json={"other": 5}).status_code == 422
+
+
+def test_schedule_run_records_last_run_and_enqueues_a_manual_job(tmp_path: Path) -> None:
+    app = create_app(_brain_settings(tmp_path))
+    headers = {"Authorization": f"Bearer {BEARER}"}
+    with TestClient(app) as client:
+        response = client.post(f"{SCHEDULE_PATH}/chat/run", headers=headers)
+        assert response.status_code == 200
+        chat = next(row for row in response.json()["sources"] if row["source"] == "chat")
+        assert chat["last_run_at"] is not None
+        assert chat["running"] is False
+        last = datetime.fromisoformat(chat["last_run_at"])
+        nxt = datetime.fromisoformat(chat["next_run_at"])
+        assert nxt - last == timedelta(minutes=60)
+        fills = next(row for row in response.json()["sources"] if row["source"] == "fills")
+        assert fills["last_run_at"] is None, "다른 소스는 건드리지 않는다"
+
+        assert client.post(f"{SCHEDULE_PATH}/bogus/run", headers=headers).status_code == 422
