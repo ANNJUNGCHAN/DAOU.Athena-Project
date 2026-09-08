@@ -77,6 +77,7 @@ const chartReloadAuthority = chartReload.createChartReloadAuthority();
 const ticketCapacity = require('./lib/main/ticket-capacity');
 const orderTicket = require('./lib/order-ticket');
 const protectedCards = require('./lib/protected-cards');
+const { createRoutineMainCardHandlers } = require('./lib/main/routine-main-card');
 
 function isQueryOnlyRetryDataset(dataset) {
   try {
@@ -1291,6 +1292,23 @@ async function routineHttp(method, path, jsonBody, { signal } = {}) {
   return { ok: true, data: body };
 }
 
+const routineMainCardHandlers = createRoutineMainCardHandlers({
+  routineHttp,
+  runDataset: (dataset, options) => runDirectRestDataset(dataset, false, {
+    skipHistory: true,
+    allowRetry: false,
+    conversationId: options.conversationId,
+    signal: options.signal,
+    emitCanvas: options.emitCanvas,
+  }),
+  isShellSender: (sender) => Boolean(shellWin && !shellWin.isDestroyed() && sender === shellWin.webContents),
+  getActiveConversationId: historyConversationId,
+  isEligibleOperationRef: restDatasetRunner.isEligibleOperationRef,
+  registerConversation: ({ conversationId, title }) => touchConversationEntry(title, conversationId),
+  idFactory: () => `routine-main-card-${crypto.randomUUID()}`,
+  now: () => performance.now(),
+});
+
 async function executeOrderRequest(payload, dependencies) {
   const { trId, body, idempotencyKey, conversationId } = payload || {};
   const deps = dependencies || {};
@@ -1428,6 +1446,8 @@ ipcMain.handle('athena:routine-detail', async (_e, { id }) => {
   try { return await routineHttp('GET', `/api/v1/routines/${encodeURIComponent(id)}`); }
   catch (e) { return { ok: false, error: String((e && e.message) || e) }; }
 });
+ipcMain.handle('athena:routine-main-card-confirm', routineMainCardHandlers.confirm);
+ipcMain.handle('athena:routine-main-card-open', routineMainCardHandlers.open);
 // 소스 카탈로그(Step 6, 결정 e-1) — GET /routines/source-catalog. 새 작업
 // 시트는 routine_id가 없어 상세 라우트를 쓸 수 없다. 인자도 body도 없다.
 ipcMain.handle('athena:routine-source-catalog', async () => {

@@ -163,6 +163,7 @@
   // 3단계(리프 1.2.2, Paper 보드 39 보강본) — 순수 포매팅/상태아이콘은
   // agent-sidebar-list.js가 갖고 DOM은 여기서 조립한다(다른 make*Item과 같은 자리).
   const agentSidebarList = window.AthenaLib && window.AthenaLib.AgentSidebarList;
+  const routineMainCardLib = window.AthenaLib && window.AthenaLib.RoutineMainCard;
   // 프로젝트 행이 "무엇을 보일까"(⋯ 셋·모드 다섯·삭제 확인)는 순수 함수 쪽에 있다
   // (36·37·38번 보드, sidebar-project-menu.js) — 여기서는 DOM 조립과 IPC 왕복만.
   const projectMenu = window.AthenaLib && window.AthenaLib.SidebarProjectMenu;
@@ -207,6 +208,11 @@
     }
     agentRoutinesCache = rows;
     renderList();
+  }
+
+  function confirmedMainCardFor(id) {
+    const row = agentRoutinesCache.find((item) => item && String(item.id) === String(id));
+    return row && row.mainCard && row.mainCardConfirmedAt ? row.mainCard : null;
   }
 
   const INITIAL_VISIBLE = 6; // "더 보기" 이전에 보이는 지난 7일 이전 항목 수(Paper 보드 04 실측)
@@ -1116,6 +1122,12 @@
     } catch {
       res = null;
     }
+    if (res) {
+      const nextActiveConversationId = res.activeId ? res.activeId : null;
+      if (window.AthenaLib.RoutineMainCard.conversationScopeChanged(activeConversationId, nextActiveConversationId)) {
+        window.dispatchEvent(new CustomEvent('athena:conversation-scope-changed', { detail: { id: nextActiveConversationId } }));
+      }
+    }
     // 바뀐 게 없으면 손대지 않는다(2026-09-05 리뷰). 폴링마다 목록을 통째로 다시 그리면 사람이
     // 설명 카드 위에 머무는 동안 카드가 사라지고(고치려던 바로 그 결함), 행에 있던 키보드
     // 포커스도 5초마다 떨어진다. 실행 상태·새 대화·프로젝트 변경은 답이 달라지므로 그대로 그린다.
@@ -1150,8 +1162,90 @@
     if (window.AthenaShell && typeof window.AthenaShell.openConversation === 'function') {
       opened = await window.AthenaShell.openConversation({ id, title: conv ? conv.title : null });
     }
-    if (opened) activeConversationId = id;
+    if (opened) {
+      const scopeChanged = window.AthenaLib.RoutineMainCard.conversationScopeChanged(activeConversationId, id);
+      activeConversationId = id;
+      if (scopeChanged) {
+        window.dispatchEvent(new CustomEvent('athena:conversation-scope-changed', { detail: { id } }));
+      }
+    }
     renderList();
+  }
+
+  async function openRoutineInAgent(id) {
+    selectNotifyRoom(id);
+    if (window.AthenaCanvasMode && typeof window.AthenaCanvasMode.setView === 'function') {
+      window.AthenaCanvasMode.setView('agent');
+    }
+    if (window.AthenaModeNav && typeof window.AthenaModeNav.setActive === 'function') {
+      window.AthenaModeNav.setActive('agent');
+    }
+    if (window.AthenaAgentCanvas) {
+      if (typeof window.AthenaAgentCanvas.setActiveView === 'function') {
+        window.AthenaAgentCanvas.setActiveView('tasks');
+      }
+      if (typeof window.AthenaAgentCanvas.setActiveTab === 'function') {
+        window.AthenaAgentCanvas.setActiveTab('all');
+      }
+      if (typeof window.AthenaAgentCanvas.refresh === 'function') {
+        await window.AthenaAgentCanvas.refresh();
+      }
+      if (typeof window.AthenaAgentCanvas.selectRow === 'function') {
+        window.AthenaAgentCanvas.selectRow(id);
+      }
+    }
+  }
+
+  async function openRoutineMainCard(id) {
+    markNotifyRoom(id);
+    const pendingConversation = startNewConversation(currentProjectId, 'summary', { preserveSessionCards: true });
+    if (window.AthenaCanvasMode && typeof window.AthenaCanvasMode.setView === 'function') {
+      window.AthenaCanvasMode.setView('summary');
+    }
+    if (window.AthenaModeNav && typeof window.AthenaModeNav.setActive === 'function') {
+      window.AthenaModeNav.setActive('summary');
+    }
+    const conversationId = await pendingConversation;
+    if (!conversationId) {
+      window.dispatchEvent(new CustomEvent('athena:routine-main-card-open-error', {
+        detail: { message: '카드 대화창을 만들지 못했습니다.' },
+      }));
+      return false;
+    }
+    let res = null;
+    try {
+      res = await window.athena.invoke('athena:routine-main-card-open', {
+        id,
+        conversationId,
+      });
+    } catch { /* 아래 한 줄 안내가 실패를 드러낸다 */ }
+    const openedCard = routineMainCardLib && routineMainCardLib.normalizeOpenResult(res);
+    // 조회 중 사람이 다른 대화로 옮겼다면 늦은 결과를 현재 화면에 그리지 않는다.
+    if (activeConversationId !== conversationId) return false;
+    if (!openedCard || openedCard.routineId !== String(id)
+      || openedCard.conversationId !== conversationId) {
+      window.dispatchEvent(new CustomEvent('athena:routine-main-card-open-error', {
+        detail: { message: (res && res.error) || '이 알람의 카드를 열지 못했습니다.' },
+      }));
+      return false;
+    }
+    if (!window.AthenaRoutineMainCardCanvas
+      || typeof window.AthenaRoutineMainCardCanvas.renderOnly !== 'function') {
+      window.dispatchEvent(new CustomEvent('athena:routine-main-card-open-error', {
+        detail: { message: '카드 대화창을 열지 못했습니다.' },
+      }));
+      return false;
+    }
+    const rendered = await window.AthenaRoutineMainCardCanvas.renderOnly(openedCard.card);
+    if (activeConversationId !== conversationId) return false;
+    if (!rendered) {
+      window.dispatchEvent(new CustomEvent('athena:routine-main-card-open-error', {
+        detail: { message: '이 알람의 카드를 표시하지 못했습니다.' },
+      }));
+      return false;
+    }
+    renderList();
+    return true;
   }
 
   // ---------- 알림 파생 방(Paper 보드 08) ----------
@@ -1165,7 +1259,8 @@
   const routineAlertPopup = (window.AthenaLib && window.AthenaLib.RoutineAlertPopup)
     ? window.AthenaLib.RoutineAlertPopup.createRoutineAlertPopup({
         document,
-        onOpen: (id) => selectNotifyRoom(id),
+        onOpenCard: (id) => { void openRoutineMainCard(id); },
+        onOpenAgent: (id) => { void openRoutineInAgent(id); },
       })
     : null;
 
@@ -1205,6 +1300,7 @@
       existing.title = routineEventTitle(event);
       existing.sub = routineEventSub(event);
       existing.mode = typeof event.mode === 'string' ? event.mode : '';
+      existing.mainCard = event.main_card || confirmedMainCardFor(id);
       existing.read = existing.id === selectedNotifyId;
     } else {
       notifyRooms.unshift({
@@ -1212,20 +1308,25 @@
         // 알람 센터(Paper 보드 02)가 갈래 아이콘을 고르는 유일한 근거다 —
         // 예약 실행(scheduled)과 조건 감시를 실데이터로 가른다.
         mode: typeof event.mode === 'string' ? event.mode : '',
+        mainCard: event.main_card || confirmedMainCardFor(id),
         firedAt: firedAtMs, read: false, event,
       });
     }
     renderList();
     updateAgentBadge();
     if (routineAlertPopup) routineAlertPopup.show(existing || notifyRooms[0]);
+    // 피드 이벤트는 카드 DTO를 싣지 않을 수 있다. 상세의 승인된 main_card만
+    // 받아 같은 팝업을 갱신한다. 실패 시 카드 경로는 계속 비활성이다.
+    void window.athena.invoke('athena:routine-detail', { id }).then((detail) => {
+      const room = notifyRooms.find((item) => String(item.id) === String(id));
+      if (!room || !detail || !detail.ok || !detail.data) return;
+      room.mainCard = detail.data.main_card || null;
+      if (routineAlertPopup) routineAlertPopup.update(id, { mainCard: room.mainCard });
+    }).catch(() => {});
   }
 
   function selectNotifyRoom(id) {
-    const room = notifyRooms.find((r) => r.id === id);
-    if (!room) return;
-    // 알림 방도 대화 경계다. 다른 방으로 옮기거나 다른 모드에서 들어오면 앞 세션을
-    // 먼저 흘리고 에이전트 대화를 새로 연다. clearConversationUi()가 방 배너와
-    // selectedNotifyId를 거두므로, 이 호출은 아래 배너 적용보다 반드시 앞선다.
+    if (!notifyRooms.some((r) => r.id === id)) return;
     const needsConversationBoundary = selectedNotifyId !== id || currentMode() !== 'agent';
     if (needsConversationBoundary) startNewConversation(currentProjectId, 'agent');
     if (window.AthenaCanvasMode && typeof window.AthenaCanvasMode.setView === 'function') {
@@ -1234,6 +1335,12 @@
     if (window.AthenaModeNav && typeof window.AthenaModeNav.setActive === 'function') {
       window.AthenaModeNav.setActive('agent');
     }
+    markNotifyRoom(id);
+  }
+
+  function markNotifyRoom(id) {
+    const room = notifyRooms.find((r) => r.id === id);
+    if (!room) return;
     // F-stage5b-FE — engagement.py의 "opened" 정의(능동 턴이 뜬 방을 사용자가
     // 실제로 선택해 열람한 사건)와 맞추려면 이미 읽은 방을 다시 눌렀을 때는
     // 세지 않는다 — 안 그러면 재클릭마다 opened가 쌓여 발화→열람 비율이
@@ -1294,8 +1401,13 @@
 
   // ---------- 새 대화 ----------
   function clearConversationUi() {
+    const preserveSessionCards = clearConversationUi.preserveSessionCards === true;
+    clearConversationUi.preserveSessionCards = false;
     window.dispatchEvent(new Event('athena:new-conversation'));
     if (window.AthenaShell && typeof window.AthenaShell.clearCanvases === 'function') {
+      if (preserveSessionCards) {
+        window.dispatchEvent(new Event('athena:routine-main-card-preserve-session'));
+      }
       window.AthenaShell.clearCanvases();
     }
     while ($history.firstChild) $history.removeChild($history.firstChild);
@@ -1307,13 +1419,14 @@
 
   // view를 주면 그 모드의 대화창으로 연다(38번 보드 펜 = 새 대화창). 없으면
   // 지금 보고 있는 모드 그대로다(상단 + 버튼의 기존 동작).
-  async function startNewConversation(projectId, view) {
+  async function startNewConversation(projectId, view, options) {
     const selectedProjectId = projectsCache.some((project) => project.id === projectId)
       ? projectId
       : currentProjectId;
     currentProjectId = selectedProjectId;
     // 이벤트가 앞 세션의 작업공간을 flush한다 — main의 활성 id를 바꾸는 IPC보다
     // 먼저 보내야 지연된 폼·코드가 새 대화의 저장본에 들어가지 않는다.
+    clearConversationUi.preserveSessionCards = !!(options && options.preserveSessionCards);
     clearConversationUi();
     let pending = null;
     if (window.athena && typeof window.athena.invoke === 'function') {
@@ -1328,7 +1441,7 @@
     }
     if (!pending || typeof pending.then !== 'function') {
       activeConversationId = null;
-      return;
+      return null;
     }
     try {
       const res = await pending;
@@ -1336,11 +1449,15 @@
       projectsCache = res && Array.isArray(res.projects) ? res.projects : projectsCache;
       currentProjectId = (res && res.currentProjectId) || selectedProjectId;
       activeConversationId = res && res.activeId ? res.activeId : null;
+      if (activeConversationId) {
+        window.dispatchEvent(new CustomEvent('athena:conversation-scope-changed', { detail: { id: activeConversationId } }));
+      }
     } catch {
       activeConversationId = null;
     }
     updateModeCounts();
     renderList();
+    return activeConversationId;
   }
 
   $newChat.addEventListener('click', () => startNewConversation(currentProjectId));

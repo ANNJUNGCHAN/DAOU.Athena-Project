@@ -10,6 +10,12 @@ import pytest
 from athena_mcp import routine_tools
 from athena_mcp.result import ERROR_ORIGIN_META_KEY
 
+CARD_CANDIDATE = {
+    "operation_ref": "base:ka10005",
+    "args": {"stk_cd": "005930"},
+    "title": "시세",
+}
+
 # `_client` 헬퍼는 tests/mcp/conftest.py의 `mock_http_client` 픽스처로 옮겼다.
 # 이 파일은 백엔드 기본값과 다른 base_url(127.0.0.1:8010)을 명시적으로 넘긴다.
 
@@ -21,11 +27,10 @@ def test_tool_schema_allows_draft_list_and_propose():
         "draft",
         "list",
         "propose",
+        "propose_main_card",
         "propose_watch_code",
     ]
-    assert tool.inputSchema["properties"]["propose"]["properties"]["control"][
-        "enum"
-    ] == [
+    assert tool.inputSchema["properties"]["propose"]["properties"]["control"]["enum"] == [
         "confirm",
         "update",
         "pause",
@@ -45,6 +50,8 @@ def test_tool_schema_allows_draft_list_and_propose():
     schema_text = json.dumps(tool.inputSchema, ensure_ascii=False)
     assert "disclosure.title_keyword" not in schema_text
     assert "앱 플러그인" in schema_text
+    assert "main_card_candidate" in tool.inputSchema["properties"]["draft"]["required"]
+    assert "$today" in schema_text
 
 
 def test_tool_schema_goal_field_is_conservative():
@@ -91,11 +98,37 @@ async def test_draft_proxies_post_and_appends_notice(mock_http_client):
 
     async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
         result = await routine_tools.dispatch(
-            {"action": "draft", "draft": {"symbol": "005930"}}, client
+            {
+                "action": "draft",
+                "draft": {"symbol": "005930", "main_card_candidate": CARD_CANDIDATE},
+            },
+            client,
         )
     payload = json.loads(result.content[0].text)
     assert payload["status"] == "draft"
     assert "승인" in payload["notice"]  # 제안일 뿐 등록 아님을 응답이 직접 말한다
+
+
+@pytest.mark.asyncio
+async def test_propose_main_card_replaces_candidate_without_confirming(mock_http_client):
+    async def handler(request):
+        assert request.method == "POST"
+        assert request.url.path == "/api/v1/routines/r1/main-card/candidate"
+        assert json.loads(request.content)["candidate"] == CARD_CANDIDATE
+        return httpx.Response(200, json={"id": "r1", "main_card": None})
+
+    async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
+        result = await routine_tools.dispatch(
+            {
+                "action": "propose_main_card",
+                "id": "r1",
+                "main_card_candidate": CARD_CANDIDATE,
+            },
+            client,
+        )
+    payload = json.loads(result.content[0].text)
+    assert payload["main_card"] is None
+    assert "확인하지 않음" in payload["notice"]
 
 
 @pytest.mark.asyncio
@@ -110,7 +143,7 @@ async def test_validation_error_is_translated_without_retry(mock_http_client):
 
     async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
         result = await routine_tools.dispatch(
-            {"action": "draft", "draft": {}}, client
+            {"action": "draft", "draft": {"main_card_candidate": CARD_CANDIDATE}}, client
         )
     assert calls["n"] == 1  # 무재시도
     assert result.isError
@@ -140,9 +173,7 @@ async def test_propose_only_reads_list(control, mock_http_client):
                 f"제안이 실행 경로를 건드렸다: {request.method} {request.url.path}"
             )
         seen.add((request.method, request.url.path))
-        return httpx.Response(
-            200, json={"routines": [{"id": "r1", "note": "현재 조건"}]}
-        )
+        return httpx.Response(200, json={"routines": [{"id": "r1", "note": "현재 조건"}]})
 
     async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
         result = await routine_tools.dispatch(

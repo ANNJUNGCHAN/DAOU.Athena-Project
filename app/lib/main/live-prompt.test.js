@@ -8,6 +8,16 @@ const {
   buildLiveTurnPrompt, selectActiveAgentProject,
 } = require('./live-prompt');
 
+test('알람 메인 카드는 검증된 조회 후보와 사용자 동의로만 확정한다', () => {
+  const prompt = buildLivePrompt('삼성전자 거래량이 늘면 알람 줘', [], '20260908');
+  assert.match(prompt, /main_card_candidate=\{operation_ref,args,title\}/);
+  assert.match(prompt, /athena_search·athena_describe/);
+  assert.match(prompt, /base_dt는 "\$today"/);
+  assert.match(prompt, /이 알람에 맞는 카드는 「카드 제목」인데 맞나요/);
+  assert.match(prompt, /카드 선택만 확정하며 알람 활성화와 별개/);
+  assert.match(prompt, /새 알람 초안을 중복 생성하지 마라/);
+});
+
 // 구 출처 전략을 실제 캔버스 복원 경계로 읽는다. 외부 왕복과 실제 타이머는 없다.
 async function restoredBacktestPromptContext(presetId, name, yamlOverride = null) {
   const { createBacktestCanvas } = require('../backtest-canvas');

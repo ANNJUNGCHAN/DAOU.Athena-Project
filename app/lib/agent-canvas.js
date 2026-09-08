@@ -2353,6 +2353,13 @@ function createAgentCanvas(deps) {
       const approve = el('div', 'agent-code-approve');
       const hasDetailBlocker = Object.prototype.hasOwnProperty.call(detail, 'activation_blocker');
       const activationBlocker = String(hasDetailBlocker ? (detail.activation_blocker || '') : (raw.activation_blocker || '')).trim();
+      const cardState = Object.prototype.hasOwnProperty.call(detail, 'main_card_candidate') ? detail : raw;
+      const mainCardPending = Boolean(cardState.main_card_candidate && !cardState.main_card);
+      if (mainCardPending) {
+        const cardNotice = el('div', 'agent-code-main-card-pending');
+        cardNotice.textContent = '채팅에서 이 알람의 메인 카드를 먼저 확인해 주세요.';
+        approve.appendChild(cardNotice);
+      }
       if (activationBlocker) {
         const blocker = el('div', 'agent-code-approve-blocker');
         blocker.textContent = `지금은 켤 수 없음: ${activationBlocker}`;
@@ -2386,8 +2393,9 @@ function createAgentCanvas(deps) {
       const approveBtn = el('button', 'agent-code-approve-btn');
       approveBtn.type = 'button';
       approveBtn.textContent = '이 알람 승인';
-      approveBtn.disabled = Boolean(activationBlocker);
+      approveBtn.disabled = Boolean(activationBlocker) || mainCardPending;
       approveBtn.addEventListener('click', async () => {
+        if (activationBlocker || mainCardPending) return;
         approveBtn.disabled = true;
         await runControl(confirmRoutine, '이 알람 승인', item, '감시 시작');
         codeDetailCache = { id: null, data: null };
