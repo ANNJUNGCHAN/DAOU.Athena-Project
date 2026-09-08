@@ -324,28 +324,15 @@ function tablePanelData(overrides) {
   };
 }
 
-test('패널 탭 — "성향"(활성)·"이력"(비활성)이 둘 다 그려진다', () => {
+test('패널 — 성향·이력 탭 없이 상세 내용을 그린다', () => {
   const { controller, elements } = setup({ withPanel: true });
   controller.selectEntity('e:samsung', tablePanelData());
   const tabs = elements.panel.querySelectorAll('.panel-tab');
-  assert.equal(tabs.length, 2);
-  assert.equal(tabs[0].textContent, '성향');
-  assert.equal(tabs[0].classList.contains('is-active'), true);
-  assert.equal(tabs[1].textContent, '이력');
-  assert.equal(tabs[1].classList.contains('is-active'), false);
+  assert.equal(tabs.length, 0);
+  assert.equal(elements.panel.querySelector('.panel-name').textContent, '삼성전자');
 });
 
-test('패널 탭 — "이력" 탭은 클릭해도 전환 없다(Paper에 콘텐츠 스펙 없음, §6 범위 밖)', () => {
-  const { controller, elements } = setup({ withPanel: true });
-  controller.selectEntity('e:samsung', tablePanelData());
-  const historyTab = elements.panel.querySelectorAll('.panel-tab')[1];
-  assert.doesNotThrow(() => historyTab.dispatchEvent({ type: 'click' }));
-  // 클릭 핸들러 자체가 없다 — 활성 탭·패널 내용이 그대로다.
-  const traitTab = elements.panel.querySelectorAll('.panel-tab')[0];
-  assert.equal(traitTab.classList.contains('is-active'), true);
-});
-
-test('패널 탭 — "선택 해제" 클릭 시 clearSelection과 같은 결과(패널이 닫힌다)', () => {
+test('패널 — "선택 해제" 클릭 시 clearSelection과 같은 결과(패널이 닫힌다)', () => {
   const { controller, elements } = setup({ withPanel: true });
   controller.selectEntity('e:samsung', tablePanelData());
   const deselect = elements.panel.querySelector('.panel-deselect');
@@ -390,17 +377,12 @@ test('티어 대조 카드 — 근거가 없으면 조용히 빠지지 않고 �
   assert.equal(elements.panel.querySelector('.panel-tier-label'), null);
 });
 
-test('패널 탭 — 이력은 비활성이고 왜인지 말한다(콘텐츠 스펙이 아직 없다)', () => {
+test('그래프 노드 패널 — 성향·이력 탭 없이 선택 해제를 유지한다', () => {
   const { controller, elements } = setup({ payload: payloadTwoClusters, withPanel: true });
   controller.selectEntity('e:x', { name: '이름만', source: 'node' });
   const tabs = elements.panel.querySelectorAll('.panel-tab');
-  assert.equal(tabs.length, 2, '탭은 성향·이력 2종이다');
-  assert.ok(String(tabs[0].attrs.class).includes('is-active'), '성향이 활성이다');
-  // 예전에는 눌리는 것처럼 생긴 채로 아무 일도 안 했다(2026-09-03 실사용 제보).
-  assert.equal(tabs[1].textContent, '이력');
-  assert.ok(String(tabs[1].attrs.class).includes('is-disabled'));
-  assert.equal(tabs[1].attrs['aria-disabled'], 'true');
-  assert.ok(tabs[1].attrs.title, '왜 못 누르는지 말한다');
+  assert.equal(tabs.length, 0);
+  assert.equal(elements.panel.querySelector('.panel-deselect').textContent, '선택 해제');
 });
 
 test('§10-4 최근 변화 — 데이터가 없어 섹션 자체를 안 그린다(§0 정책)', () => {
