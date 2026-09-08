@@ -45,17 +45,25 @@ const TEXT_CLIP_PROBE = (instanceId) => `(() => {
     if (!rects.length) continue;
     const bottom = Math.max(...rects.map((rect) => rect.bottom));
     const top = Math.min(...rects.map((rect) => rect.top));
+    const right = Math.max(...rects.map((rect) => rect.right));
+    const left = Math.min(...rects.map((rect) => rect.left));
     for (let el = owner; el && el !== document.body; el = el.parentElement) {
       const style = getComputedStyle(el);
-      const clips = CLIP.has(style.overflowY);
-      const scrolls = SCROLLABLE.has(style.overflowY);
-      if (!clips && !scrolls) continue;
+      const clipsY = CLIP.has(style.overflowY);
+      const scrollsY = SCROLLABLE.has(style.overflowY);
+      const clipsX = CLIP.has(style.overflowX);
+      const scrollsX = SCROLLABLE.has(style.overflowX);
+      if (!clipsY && !scrollsY && !clipsX && !scrollsX) continue;
       const box = el.getBoundingClientRect();
       const clipTop = box.top + el.clientTop;
       const clipBottom = clipTop + el.clientHeight;
-      const overBottom = Math.round(bottom - clipBottom);
-      const overTop = Math.round(clipTop - top);
-      const over = Math.max(overBottom, overTop);
+      const clipLeft = box.left + el.clientLeft;
+      const clipRight = clipLeft + el.clientWidth;
+      const overBottom = (clipsY || scrollsY) ? Math.round(bottom - clipBottom) : 0;
+      const overTop = (clipsY || scrollsY) ? Math.round(clipTop - top) : 0;
+      const overRight = (clipsX || scrollsX) ? Math.round(right - clipRight) : 0;
+      const overLeft = (clipsX || scrollsX) ? Math.round(clipLeft - left) : 0;
+      const over = Math.max(overBottom, overTop, overRight, overLeft);
       if (over <= 1) {
         if (el === surface) break;
         continue;
@@ -66,11 +74,20 @@ const TEXT_CLIP_PROBE = (instanceId) => `(() => {
         clip_owner: identity(el),
         over_bottom: overBottom,
         over_top: overTop,
+        over_right: overRight,
+        over_left: overLeft,
         clip_height: el.clientHeight,
         scroll_height: el.scrollHeight,
+        clip_width: el.clientWidth,
+        scroll_width: el.scrollWidth,
       };
       // 스크롤 컨테이너가 자르는 것은 스크롤로 닿는다 — 결함 목록과 분리한다.
-      if (scrolls && el.scrollHeight > el.clientHeight + 1) reachable.push(record);
+      const verticalReach = Math.max(overBottom, overTop) > 1
+        && scrollsY && el.scrollHeight > el.clientHeight + 1;
+      const horizontalReach = Math.max(overRight, overLeft) > 1
+        && scrollsX && el.scrollWidth > el.clientWidth + 1;
+      const worstVertical = Math.max(overBottom, overTop) >= Math.max(overRight, overLeft);
+      if (worstVertical ? verticalReach : horizontalReach) reachable.push(record);
       else clipped.push(record);
       break;
     }
@@ -110,7 +127,16 @@ const MISSING_TEXT_PROBE = (instanceId) => `(() => {
       });
     }
   }
-  return { counts, total: Object.values(counts).reduce((a, b) => a + b, 0), nodes };
+  return {
+    counts,
+    total: Object.values(counts).reduce((a, b) => a + b, 0),
+    nodes,
+    // 빈 줄 접기 진단 — 몇 줄을 접었고, 못 접은 줄은 왜인가.
+    rows_collapsed: Number(surface.dataset.bsRowsCollapsed || 0),
+    rows_skipped: (() => {
+      try { return JSON.parse(surface.dataset.bsRowsSkipped || '[]'); } catch { return []; }
+    })(),
+  };
 })()`;
 
 module.exports = { TEXT_CLIP_PROBE, MISSING_TEXT_PROBE };
