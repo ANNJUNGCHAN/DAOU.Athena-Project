@@ -1,0 +1,22 @@
+✔ computeShellPlacement: left — 왼쪽 절반의 중앙에 셸 창을 놓는다 (2.2053ms)
+✔ computeShellPlacement: right — 오른쪽 절반의 중앙에 셸 창을 놓는다 (0.3484ms)
+✔ computeShellPlacement: dir이 left/right가 아니면 워크에어리어 전체의 중앙이다 (0.2885ms)
+✔ computeShellPlacement: 세로는 창 높이 기준으로 워크에어리어 중앙에 놓는다 (0.2762ms)
+✔ computeShellPlacement: 절반 폭 < 창 폭이면 그 절반 중앙에 겹쳐 배치된다(음수 오프셋 허용) (1.0387ms)
+✔ computeShellPlacement: 멀티 모니터 — workArea.x가 0이 아니어도 그 오프셋 기준으로 계산한다 (0.9454ms)
+✔ computeShellPlacement: 크기는 항상 dims 그대로 — 위치만 바뀐다(불변 계약) (0.2653ms)
+✔ computeShellPlacement: y는 워크에어리어 상단(workArea.y) 아래로 내려가지 않는다 (0.0984ms)
+✔ computeShellPlacement: 반환값에 짝 배치의 잔재가 없다(회귀 가드) (0.766ms)
+✔ clampCenterToWorkArea: 안쪽 이동은 손대지 않는다 (0.3645ms)
+✔ clampCenterToWorkArea: 왼쪽·위로 벗어나면 중심이 경계에 걸리는 자리까지만 간다 (0.1431ms)
+✔ clampCenterToWorkArea: 오른쪽·아래도 같은 규칙이다 (0.0724ms)
+✔ clampCenterToWorkArea: 음수 원점 모니터(왼쪽 보조)의 workArea 오프셋을 그대로 따른다 (0.077ms)
+✔ clampCenterToWorkArea: 펼침 크기(400×640)도 같은 중심 규칙 — 크기만 다르다 (0.0459ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 103.2635

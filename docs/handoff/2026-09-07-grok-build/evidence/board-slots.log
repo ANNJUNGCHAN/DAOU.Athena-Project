@@ -1,0 +1,147 @@
+133H-2: 슬롯 166 · 값 114 · 매핑 130 · 문제 0
+135M-2: 슬롯 74 · 값 23 · 매핑 3 · 문제 0
+137X-2: 슬롯 138 · 값 74 · 매핑 53 · 문제 106 (b13 e93)
+  b mapping 미지정 값 슬롯 13
+  e 미바인딩 필드 93: 종목정보·base:0g·370, 시간·base:ka10003·tm, 현재가·base:ka10003·cur_prc, 전일대비·base:ka10003·pred_pre, 대비율·base:ka10003·pre_rt, sign·base:ka10003·sign, 누적거래량·base:ka10003·acc_trde_qty, 누적거래대금·base:ka10003·acc_trde_prica, 일자·base:ka10015·dt, 종가·base:ka10015·close_pric, 전일대비기호·base:ka10015·pred_pre_sig, 등락율·base:ka10015·flu_rt, 거래량·base:ka10015·trde_qty, 체결강도·base:ka10015·cntr_str, 외인보유·base:ka10015·for_poss, 현재가·base:ka10060·cur_prc, 전일대비·base:ka10060·pred_pre, 누적거래대금·base:ka10060·acc_trde_prica, 종목코드·base:ka10079·stk_cd, 마지막틱갯수·base:ka10079·last_tic_cnt, 주식틱차트조회·base:ka10079·stk_tic_chart_qry, 현재가·base:ka10079·cur_prc, 거래량·base:ka10079·trde_qty, 체결시간·base:ka10079·cntr_tm, 시가·base:ka10079·open_pric, 고가·base:ka10079·high_pric, 저가·base:ka10079·low_pric, 전일대비·base:ka10079·pred_pre, 전일대비 기호·base:ka10079·pred_pre_sig, 종목코드·base:ka10080·stk_cd, 주식분봉차트조회·base:ka10080·stk_min_pole_chart_qry, 현재가(종가)·base:ka10080·cur_prc, 거래량·base:ka10080·trde_qty, 체결시간·base:ka10080·cntr_tm, 시가·base:ka10080·open_pric, 고가·base:ka10080·high_pric, 저가·base:ka10080·low_pric, 전일대비·base:ka10080·pred_pre, 전일대비 기호·base:ka10080·pred_pre_sig, 종목코드·base:ka10081·stk_cd, 주식일봉차트조회·base:ka10081·stk_dt_pole_chart_qry, 현재가·base:ka10081·cur_prc, 거래량·base:ka10081·trde_qty, 거래대금·base:ka10081·trde_prica, 일자·base:ka10081·dt, 시가·base:ka10081·open_pric, 고가·base:ka10081·high_pric, 저가·base:ka10081·low_pric, 전일대비·base:ka10081·pred_pre, 전일대비기호·base:ka10081·pred_pre_sig, 거래회전율·base:ka10081·trde_tern_rt, 종목코드·base:ka10082·stk_cd, 주식주봉차트조회·base:ka10082·stk_stk_pole_chart_qry, 현재가·base:ka10082·cur_prc, 거래량·base:ka10082·trde_qty, 거래대금·base:ka10082·trde_prica, 일자·base:ka10082·dt, 시가·base:ka10082·open_pric, 고가·base:ka10082·high_pric, 저가·base:ka10082·low_pric, 전일대비·base:ka10082·pred_pre, 전일대비기호·base:ka10082·pred_pre_sig, 거래회전율·base:ka10082·trde_tern_rt, 종목코드·base:ka10083·stk_cd, 주식월봉차트조회·base:ka10083·stk_mth_pole_chart_qry, 현재가·base:ka10083·cur_prc, 거래량·base:ka10083·trde_qty, 거래대금·base:ka10083·trde_prica, 일자·base:ka10083·dt, 시가·base:ka10083·open_pric, 고가·base:ka10083·high_pric, 저가·base:ka10083·low_pric, 전일대비·base:ka10083·pred_pre, 전일대비기호·base:ka10083·pred_pre_sig, 거래회전율·base:ka10083·trde_tern_rt, 시간·base:ka10084·tm, 현재가·base:ka10084·cur_prc, 전일대비·base:ka10084·pred_pre, 대비율·base:ka10084·pre_rt, 전일대비기호·base:ka10084·sign, 누적거래량·base:ka10084·acc_trde_qty, 누적거래대금·base:ka10084·acc_trde_prica, 외인수량·base:ka10086·for_qty, 종목코드·base:ka10094·stk_cd, 주식년봉차트조회·base:ka10094·stk_yr_pole_chart_qry, 현재가·base:ka10094·cur_prc, 거래량·base:ka10094·trde_qty, 거래대금·base:ka10094·trde_prica, 일자·base:ka10094·dt, 시가·base:ka10094·open_pric, 고가·base:ka10094·high_pric, 저가·base:ka10094·low_pric, 대비기호·detail:ka10001:current_trading·pre_sig
+13BC-2: 슬롯 167 · 값 129 · 매핑 114 · 문제 3 (e3)
+  e 미바인딩 필드 3: 시간외매수호가총잔량·base:0E·135, 시간외매수잔량·detail:ka10004:after_hours_totals·ovt_buy_req, 시간외매수호가총잔량·detail:ka10087:aggregate_totals·ovt_buy_bid_tot_req
+13K0-2: 슬롯 153 · 값 86 · 매핑 94 · 문제 5 (e2 f3)
+  f 중복 표기(display_dup 없음) 3: base:ka00198|base_comp_sign ×6, base:ka00198|prev_base_sign ×6, base:ka10099|name ×4
+  e 미바인딩 필드 2: NXT가능여부·base:ka10099·nxtEnable, NXT가능여부·base:ka10100·nxtEnable
+15J9-2: 슬롯 83 · 값 61 · 매핑 28 · 문제 3 (e3)
+  e 미바인딩 필드 3: 전일대비기호·base:ka20002·pred_pre_sig, 등락률·base:ka20002·flu_rt, 저가·base:ka20002·low_pric
+15L8-2: 슬롯 115 · 값 72 · 매핑 73 · 문제 1 (e1)
+  e 미바인딩 필드 1: 전일대비기호·base:ka10172·25
+15N5-2: 슬롯 143 · 값 103 · 매핑 93 · 문제 8 (f8)
+  f 중복 표기(display_dup 없음) 8: base:ka40003|pre_rt ×6, base:ka40003|pre_sig ×6, base:ka40006|nav ×6, base:ka40006|trace_idex_pred_pre_sig ×6, base:ka40007|etftisl_cntr_array ×6, base:ka40007|trde_qty ×6 …
+15P5-2: 슬롯 225 · 값 141 · 매핑 147 · 문제 0
+15R0-2: 슬롯 85 · 값 49 · 매핑 53 · 문제 0
+1JPU-0: 슬롯 263 · 값 200 · 매핑 213 · 문제 0
+1JZW-0: 슬롯 278 · 값 206 · 매핑 214 · 문제 0
+1WOB-1: 슬롯 264 · 값 227 · 매핑 234 · 문제 2 (e2)
+  e 미바인딩 필드 2: 종목명·base:ka10035·stk_nm, 조회일자·detail:ka10040:broker_departures·qry_dt
+2QFO-2: 슬롯 178 · 값 120 · 매핑 96 · 문제 6 (d6)
+  d mapping 없는 열 6: 2QH0-2·주체, 2QH0-2·매도, 2QH0-2·매수, 2QH0-2·순매수, 2QH0-2·비중, 2QH0-2·5일 누적
+2QM7-2: 슬롯 189 · 값 135 · 매핑 135 · 문제 4 (e4)
+  e 미바인딩 필드 4: 전일대비·base:0w·11, 거래량합·base:ka10043·trde_qty_sum, 전일대비·base:ka10052·pred_pre, 전일대비·detail:ka10002:market_snapshot·pred_pre
+2QRP-1: 슬롯 109 · 값 72 · 매핑 44 · 문제 0
+2QX1-1: 슬롯 147 · 값 103 · 매핑 79 · 문제 0
+2R3M-1: 슬롯 259 · 값 178 · 매핑 157 · 문제 107 (b23 d1 e83)
+  d mapping 없는 열 1: 3CRW-0·구분
+  b mapping 미지정 값 슬롯 23
+  e 미바인딩 필드 83: 현재가·base:0A·10, 전일대비·base:0A·11, 등락율·base:0A·12, (최우선)매도호가·base:0A·27, (최우선)매수호가·base:0A·28, 누적거래량·base:0A·13, 누적거래대금·base:0A·14, 시가·base:0A·16, 고가·base:0A·17, 저가·base:0A·18, 전일대비기호·base:0A·25, 전일거래량대비(계약,주)·base:0A·26, 전일거래량대비(비율)·base:0A·30, 시가총액(억)·base:0A·311, 상한가발생시간·base:0A·567, 하한가발생시간·base:0A·568, 체결시간·base:0B·20, 현재가·base:0B·10, 전일대비·base:0B·11, 등락율·base:0B·12, (최우선)매도호가·base:0B·27, (최우선)매수호가·base:0B·28, 거래량·base:0B·15, 누적거래량·base:0B·13, 누적거래대금·base:0B·14, 시가·base:0B·16, 고가·base:0B·17, 저가·base:0B·18, 전일대비기호·base:0B·25, 전일거래량대비(계약,주)·base:0B·26, 체결강도·base:0B·228, 시가총액(억)·base:0B·311, 장구분·base:0B·290, 상한가발생시간·base:0B·567, 하한가발생시간·base:0B·568, 시가시간·base:0B·1890, 고가시간·base:0B·1891, 저가시간·base:0B·1892, 매도체결량_단건·base:0B·1315, 매수체결량_단건·base:0B·1316, 상한가·base:0g·305, 하한가·base:0g·306, 기준가·base:0g·307, 체결정보·base:ka10003·cntr_infr, 주식일주월시분·base:ka10005·stk_ddwkmm, 외인보유·base:ka10005·for_poss, 외인비중·base:ka10005·for_wght, 체결강도·base:ka10006·cntr_str, 체결강도시간별·base:ka10046·cntr_str_tm, 체결시간·base:ka10046·cntr_tm, 현재가·base:ka10046·cur_prc, 전일대비·base:ka10046·pred_pre, 전일대비기호·base:ka10046·pred_pre_sig, 등락율·base:ka10046·flu_rt, 거래량·base:ka10046·trde_qty, 누적거래대금·base:ka10046·acc_trde_prica, 누적거래량·base:ka10046·acc_trde_qty, 거래소구분·base:ka10046·stex_tp, 일자·base:ka10047·dt, 현재가·base:ka10047·cur_prc, 전일대비·base:ka10047·pred_pre, 전일대비기호·base:ka10047·pred_pre_sig, 등락율·base:ka10047·flu_rt, 거래량·base:ka10047·trde_qty, 누적거래대금·base:ka10047·acc_trde_prica, 누적거래량·base:ka10047·acc_trde_qty, 우선매도호가단위·base:ka10084·pri_sel_bid_unit, 우선매수호가단위·base:ka10084·pri_buy_bid_unit, 체결거래량·base:ka10084·cntr_trde_qty, 거래소구분·base:ka10084·stex_tp, 날짜·base:ka10086·date, 시가·base:ka10086·open_pric, 고가·base:ka10086·high_pric, 저가·base:ka10086·low_pric, 종가·base:ka10086·close_pric, 전일비·base:ka10086·pred_rt, 등락률·base:ka10086·flu_rt, 거래량·base:ka10086·trde_qty, 금액(백만)·base:ka10086·amt_mn, 외국계·base:ka10086·frgn, 프로그램·base:ka10086·prm, 외인비·base:ka10086·for_rt, 외인보유·base:ka10086·for_poss
+2RBO-1: 슬롯 113 · 값 57 · 매핑 48 · 문제 0
+2RJ7-1: 슬롯 191 · 값 106 · 매핑 113 · 문제 1 (f1)
+  f 중복 표기(display_dup 없음) 1: base:ka52301|acc_netprps_amt ×7
+2ROJ-1: 슬롯 179 · 값 118 · 매핑 103 · 문제 3 (e1 f2)
+  f 중복 표기(display_dup 없음) 2: base:ka90010|cntr_tm ×10, base:ka90013|prm_netprps_amt ×5
+  e 미바인딩 필드 1: 전체누적·base:ka90007·all_acc
+2RWK-1: 슬롯 160 · 값 109 · 매핑 97 · 문제 0
+2S4E-1: 슬롯 174 · 값 112 · 매핑 106 · 문제 0
+2SCE-1: 슬롯 213 · 값 149 · 매핑 157 · 문제 8 (f8)
+  f 중복 표기(display_dup 없음) 8: base:00|10 ×16, base:04|10 ×16, base:ka01690|cur_prc ×16, base:ka10085|cur_prc ×16, detail:kt00004:position_valuation|cur_prc ×16, detail:kt00004:position_valuation|tdy_buyq ×16 …
+2SKU-1: 슬롯 199 · 값 114 · 매핑 134 · 문제 5 (f5)
+  f 중복 표기(display_dup 없음) 5: base:kt00008|qty ×12, base:kt00008|sell_tp ×21, base:kt00015|stk_nm ×12, base:kt00015|trde_qty_jwa_cnt ×12, detail:kt00010:purchase_settlement|pur_exct_amt ×9
+2SRV-1: 슬롯 170 · 값 109 · 매핑 121 · 문제 0
+2SYW-1: 슬롯 189 · 값 93 · 매핑 131 · 문제 0
+2T63-1: 슬롯 74 · 값 23 · 매핑 3 · 문제 0
+2TAG-1: 슬롯 76 · 값 26 · 매핑 5 · 문제 0
+2TET-1: 슬롯 72 · 값 25 · 매핑 4 · 문제 0
+2TJ6-1: 슬롯 76 · 값 24 · 매핑 3 · 문제 0
+2TNJ-1: 슬롯 74 · 값 24 · 매핑 2 · 문제 0
+2TRW-1: 슬롯 148 · 값 106 · 매핑 101 · 문제 0
+2TZN-1: 슬롯 222 · 값 145 · 매핑 154 · 문제 7 (e1 f6)
+  f 중복 표기(display_dup 없음) 6: base:0U|253 ×12, base:0U|254 ×12, base:0U|255 ×12, base:ka20003|fall ×12, base:ka20003|lst ×12, base:ka20003|stdns ×12
+  e 미바인딩 필드 1: 기관계순매수·base:ka10051·orgn_netprps
+2U5L-1: 슬롯 221 · 값 127 · 매핑 142 · 문제 5 (b1 f4)
+  f 중복 표기(display_dup 없음) 4: base:ka01301|bgb_clr ×19, base:ka01301|cod2 ×19, base:ka10095|flu_rt ×16, base:ka10095|pred_pre_sig ×16
+  b mapping 미지정 값 슬롯 1
+2UBO-1: 슬롯 134 · 값 88 · 매핑 88 · 문제 2 (e2)
+  e 미바인딩 필드 2: 등락기호·base:ka90001·flu_sig, 등락기호·base:ka90002·flu_sig
+2UHM-1: 슬롯 121 · 값 57 · 매핑 58 · 문제 1 (e1)
+  e 미바인딩 필드 1: 장전구분·base:1h·9075
+2UN6-1: 슬롯 142 · 값 73 · 매핑 71 · 문제 1 (f1)
+  f 중복 표기(display_dup 없음) 1: base:ka10171|seq ×3
+2V71-0: 슬롯 203 · 값 150 · 매핑 137 · 문제 0
+2VDA-0: 슬롯 319 · 값 199 · 매핑 154 · 문제 1 (f1)
+  f 중복 표기(display_dup 없음) 1: base:ka10016|pred_pre_sig ×40
+2VIN-0: 슬롯 417 · 값 304 · 매핑 298 · 문제 0
+2VO0-0: 슬롯 341 · 값 251 · 매핑 271 · 문제 0
+2WZK-0: 슬롯 239 · 값 201 · 매핑 185 · 문제 8 (d8)
+  d mapping 없는 열 8: 3R2H-0·순위, 3R2H-0·종목, 3R2H-0·현재가, 3R2H-0·등락률, 3R2H-0·1주, 3R2H-0·1달 …
+2X5N-0: 슬롯 144 · 값 73 · 매핑 66 · 문제 0
+2XA5-0: 슬롯 341 · 값 255 · 매핑 274 · 문제 0
+2XG6-0: 슬롯 160 · 값 90 · 매핑 65 · 문제 0
+2XKO-0: 슬롯 165 · 값 89 · 매핑 103 · 문제 1 (e1)
+  e 미바인딩 필드 1: 횟수·base:ka10027·cnt
+2XP6-0: 슬롯 160 · 값 90 · 매핑 106 · 문제 1 (e1)
+  e 미바인딩 필드 1: 전일대비기호·base:ka10029·pred_pre_sig
+2XTO-0: 슬롯 166 · 값 95 · 매핑 103 · 문제 0
+2XY6-0: 슬롯 341 · 값 255 · 매핑 252 · 문제 0
+2Y47-0: 슬롯 341 · 값 256 · 매핑 274 · 문제 0
+2YA8-0: 슬롯 161 · 값 91 · 매핑 86 · 문제 1 (e1)
+  e 미바인딩 필드 1: 현재·base:ka10021·now
+2YEQ-0: 슬롯 161 · 값 90 · 매핑 86 · 문제 1 (e1)
+  e 미바인딩 필드 1: 현재비율·base:ka10022·now_rt
+2YJ8-0: 슬롯 160 · 값 91 · 매핑 101 · 문제 1 (e1)
+  e 미바인딩 필드 1: 현재거래량·base:ka10023·now_trde_qty
+2YNQ-0: 슬롯 159 · 값 90 · 매핑 105 · 문제 2 (e2)
+  e 미바인딩 필드 2: 전일대비기호·base:ka10098·pred_pre_sig, 당일종가등락률·base:ka10098·tdy_close_pric_flu_rt
+2YS8-0: 슬롯 197 · 값 139 · 매핑 121 · 문제 5 (f5)
+  f 중복 표기(display_dup 없음) 5: base:ka10013|cur_prc ×16, base:ka10013|pred_pre ×16, base:ka10013|pred_pre_sig ×16, base:ka10033|flu_rt ×16, base:ka10033|pred_pre_sig ×16
+2YXS-0: 슬롯 377 · 값 266 · 매핑 224 · 문제 0
+2Z49-0: 슬롯 189 · 값 118 · 매핑 121 · 문제 5 (b5)
+  b mapping 미지정 값 슬롯 5
+2ZBB-0: 슬롯 193 · 값 137 · 매핑 129 · 문제 0
+2ZHC-0: 슬롯 378 · 값 276 · 매핑 203 · 문제 0
+2ZN9-0: 슬롯 193 · 값 131 · 매핑 130 · 문제 0
+2ZTA-0: 슬롯 189 · 값 122 · 매핑 118 · 문제 3 (e3)
+  e 미바인딩 필드 3: 거래량·base:ka10008·trde_qty, 취득가능주식수·base:ka10034·gain_pos_stkcnt, 전일대비기호·base:ka10036·pred_pre_sig
+2ZZ7-0: 슬롯 297 · 값 206 · 매핑 152 · 문제 3 (f3)
+  f 중복 표기(display_dup 없음) 3: base:ka10019|flu_rt ×32, base:ka10019|pred_pre_sig ×32, base:ka10019|stk_cls ×32
+3063-0: 슬롯 237 · 값 169 · 매핑 157 · 문제 4 (e4)
+  e 미바인딩 필드 4: 대비기호·base:ka10058·pre_sig, 대비율·base:ka10058·pre_rt, 대비기호·base:ka10063·pre_sig, 등락율·base:ka10063·flu_rt
+30C1-0: 슬롯 362 · 값 257 · 매핑 183 · 문제 0
+30HY-0: 슬롯 189 · 값 133 · 매핑 111 · 문제 10 (d8 e2)
+  d mapping 없는 열 8: 34IW-0·순위, 34IW-0·종목, 34IW-0·현재가, 34IW-0·외국인, 34IW-0·기관, 34IW-0·외국인+기관 …
+  e 미바인딩 필드 2: 외인순매수종목코드·base:ka90009·for_netprps_stk_cd, 기관순매수종목코드·base:ka90009·orgn_netprps_stk_cd
+30O1-0: 슬롯 275 · 값 191 · 매핑 179 · 문제 0
+30TY-0: 슬롯 208 · 값 142 · 매핑 130 · 문제 15 (b8 e2 f5)
+  f 중복 표기(display_dup 없음) 5: base:ka10037|flu_rt ×16, base:ka10037|pred_pre_sig ×16, base:ka10039|netprps ×16, base:ka10039|stk_cd ×16, base:ka10078|acc_trde_qty ×16
+  b mapping 미지정 값 슬롯 8
+  e 미바인딩 필드 2: 증권사별매매상위·base:ka10039·sec_trde_upper, 대비기호·base:ka10078·pre_sig
+30ZW-0: 슬롯 324 · 값 233 · 매핑 197 · 문제 1 (f1)
+  f 중복 표기(display_dup 없음) 1: base:ka10028|pred_pre_sig ×38
+316O-0: 슬롯 334 · 값 232 · 매핑 206 · 문제 0
+31CL-0: 슬롯 189 · 값 133 · 매핑 136 · 문제 2 (e2)
+  e 미바인딩 필드 2: 대비기호·base:ka10062·pre_sig, 등락율·base:ka10062·flu_rt
+31II-0: 슬롯 164 · 값 100 · 매핑 83 · 문제 0
+31OF-0: 슬롯 162 · 값 95 · 매핑 70 · 문제 0
+31UD-0: 슬롯 290 · 값 201 · 매핑 116 · 문제 0
+32S7-0: 슬롯 71 · 값 35 · 매핑 21 · 문제 0
+32XM-0: 슬롯 251 · 값 209 · 매핑 141 · 문제 0
+3BQB-0: 슬롯 74 · 값 36 · 매핑 55 · 문제 0
+3D4I-0: 슬롯 127 · 값 62 · 매핑 44 · 문제 0
+3DI2-0: 슬롯 220 · 값 154 · 매핑 116 · 문제 0
+3DZ1-0: 슬롯 77 · 값 27 · 매핑 33 · 문제 0
+3EWN-0: 슬롯 128 · 값 68 · 매핑 57 · 문제 0
+3FR6-0: 슬롯 213 · 값 160 · 매핑 139 · 문제 0
+3GRO-0: 슬롯 116 · 값 77 · 매핑 60 · 문제 0
+3IGR-0: 슬롯 139 · 값 58 · 매핑 58 · 문제 0
+3JT4-0: 슬롯 123 · 값 85 · 매핑 56 · 문제 0
+3JZ3-0: 슬롯 238 · 값 173 · 매핑 170 · 문제 2 (e2)
+  e 미바인딩 필드 2: KRX중간가대비 기호·base:0D·6111, NXT중간가대비 기호·base:0D·6114
+3K7K-0: 슬롯 148 · 값 84 · 매핑 52 · 문제 0
+3LGC-0: 슬롯 191 · 값 91 · 매핑 116 · 문제 0
+3MTJ-0: 슬롯 119 · 값 69 · 매핑 57 · 문제 0
+3N4O-0: 슬롯 190 · 값 148 · 매핑 117 · 문제 0
+3NVG-0: 슬롯 99 · 값 50 · 매핑 44 · 문제 0
+3ODO-0: 슬롯 136 · 값 63 · 매핑 71 · 문제 1 (e1)
+  e 미바인딩 필드 1: 처리점·detail:kt50032:gold_trade_history·proc_brch_nm
+3OIM-0: 슬롯 120 · 값 50 · 매핑 61 · 문제 1 (e1)
+  e 미바인딩 필드 1: 반대여부·base:kt50031·rsrv_tp
+3TCO-0: 슬롯 240 · 값 169 · 매핑 152 · 문제 0
+3TOM-0: 슬롯 180 · 값 116 · 매핑 125 · 문제 0
+3UTA-0: 슬롯 139 · 값 43 · 매핑 35 · 문제 0
+fixture-quote: 슬롯 56 · 값 0 · 매핑 0 · 문제 0
+합계 문제 346 (b50 d23 e220 f53) · 문제 보드 39

@@ -1,0 +1,149 @@
+{
+  "status": "complete",
+  "command": "backend/.venv/Scripts/python.exe -m pytest -q -ra -p no:randomly --durations=15",
+  "cwd": "C:/Projects/DAOU.Athena/backend",
+  "test_selection": "entire configured backend tests directory; no test filter or exclusion",
+  "randomly": "plugin disabled as requested",
+  "started_utc": "2026-09-07T07:20:23.3911238Z",
+  "baseline": {
+    "head": "171dce86f9b3f328ac27ea30431414d98fa5e79b",
+    "merge_head": "7efe1c48201a072292413858444a844f83597b54",
+    "tracked_backend_files": 2041,
+    "tracked_backend_sha256": "58edece070fc1079a5de046ea310f36498ccd439b8b5b0e3b7f1e861b160b23f"
+  },
+  "log": ".omc/artifacts/full-review/backend-integrated.log",
+  "safety_scope": "Offline test suite only; no live model, broker, or order operation was requested or intentionally invoked. Existing tests use mocks, in-process ASGI clients, and isolated temporary state. Passing tests will not be described as live behavior evidence.",
+  "expected_existing_skips": {
+    "selector_v5": {
+      "count": 5,
+      "reason": "Fresh sealed v5 corpus is not authored. Requires exactly100 new cases, >=10 direct quote cases, zero advisory, no duplicate or approximate copies. Existing derived corpus cannot satisfy the contract; these are explicit incomplete gates, not success evidence.",
+      "file": "backend/tests/unit/test_selector_autonomous_eval.py",
+      "decorator_lines": [
+        1325,
+        1376,
+        1403,
+        1430,
+        1457
+      ]
+    },
+    "symlink": {
+      "count": "conditional1",
+      "file": "backend/tests/unit/test_projects_store.py:233",
+      "reason": "Windows symlink creation may be unavailable without Developer Mode/elevation; the specific outside-project symlink case is skipped on that environment failure."
+    }
+  },
+  "commit_or_push": false,
+  "commit_only_sync": {
+    "head": "53055acb5504b703a02719efb903689d5a49b490",
+    "tree": "b6527564af0641cde714ac320852a6bb7bd8773c",
+    "previous_integrated_tree": "b6527564af0641cde714ac320852a6bb7bd8773c",
+    "changed_backend_files_during_sync": []
+  },
+  "backend_source_edits": false,
+  "concurrent_authorized_ui_edits": [
+    "app/lib/backtest-canvas.js",
+    "app/lib/backtest-canvas.test.js"
+  ],
+  "finished_utc": "2026-09-07T07:43:52.3860391Z",
+  "exit_code": 0,
+  "result": {
+    "passed": 3792,
+    "skipped": 6,
+    "warnings": 1,
+    "failed": 0,
+    "duration_seconds": 1361.01
+  },
+  "slowest_15": [
+    {
+      "seconds": 137.65,
+      "phase": "call",
+      "test": "tests/unit/test_selector_autonomous_eval.py::test_ablation_runtime_restores_baseline_deterministically"
+    },
+    {
+      "seconds": 113.99,
+      "phase": "call",
+      "test": "tests/unit/test_selector_autonomous_eval.py::test_each_ablation_reports_top1_pairs_scope_errors_and_comparison"
+    },
+    {
+      "seconds": 113.13,
+      "phase": "call",
+      "test": "tests/unit/test_selector_autonomous_eval.py::test_semantic_gate_cannot_pass_with_a_hidden_critical_failure"
+    },
+    {
+      "seconds": 87.61,
+      "phase": "call",
+      "test": "tests/unit/test_selector_autonomous_eval.py::test_autonomous_expansion_full_evaluation_gate_covers_every_case"
+    },
+    {
+      "seconds": 86.47,
+      "phase": "call",
+      "test": "tests/unit/test_selector_autonomous_eval.py::test_correct_retrieval_top1_cannot_hide_policy_abstention"
+    },
+    {
+      "seconds": 54.87,
+      "phase": "call",
+      "test": "tests/unit/test_selector_autonomous_eval.py::test_all_critical_semantic_groups_are_green"
+    },
+    {
+      "seconds": 46.37,
+      "phase": "call",
+      "test": "tests/unit/test_selector_autonomous_eval.py::test_evaluator_reruns_ranking_once_per_case"
+    },
+    {
+      "seconds": 37.49,
+      "phase": "call",
+      "test": "tests/unit/test_selector_eval.py::test_golden_retrieval_is_exact"
+    },
+    {
+      "seconds": 29.13,
+      "phase": "call",
+      "test": "tests/unit/test_selector_eval.py::test_ranking_is_deterministic_for_all_golden_questions"
+    },
+    {
+      "seconds": 9.42,
+      "phase": "call",
+      "test": "tests/api/test_projects_api.py::test_env_setup_really_installs_the_base_packages"
+    },
+    {
+      "seconds": 8.89,
+      "phase": "call",
+      "test": "tests/unit/test_selector_autonomous_eval.py::test_sealed_cli_writes_manifest_before_evaluation_failure"
+    },
+    {
+      "seconds": 8.47,
+      "phase": "call",
+      "test": "tests/unit/test_selector_autonomous_eval.py::test_report_and_metrics_record_current_corpus_hash"
+    },
+    {
+      "seconds": 7.83,
+      "phase": "call",
+      "test": "tests/unit/test_selector_autonomous_eval.py::test_report_records_app_pipeline_resolver_mode_and_hash"
+    },
+    {
+      "seconds": 5.68,
+      "phase": "call",
+      "test": "tests/api/test_inventory_api.py::test_oauth_openapi_never_exposes_credentials_or_tokens"
+    },
+    {
+      "seconds": 5.01,
+      "phase": "call",
+      "test": "tests/api/test_brain_api.py::test_relation_retraction_is_not_exposed_to_the_model"
+    }
+  ],
+  "skips_observed": {
+    "selector_v5_missing_new_sealed_corpus": 5,
+    "windows_symlink_privilege_winerror1314": 1
+  },
+  "warning_observed": "StarletteDeprecationWarning: Using httpx with starlette.testclient is deprecated; dependency warning, not a test failure. No dependency changes made.",
+  "source_preservation": {
+    "tracked_backend_files": 2041,
+    "baseline_sha256": "58edece070fc1079a5de046ea310f36498ccd439b8b5b0e3b7f1e861b160b23f",
+    "changed_files": [],
+    "added_tracked_files": [],
+    "identical": true,
+    "final_head": "e9f9c5d0b2df7c673c102cfb632616e9e86df62f"
+  },
+  "log_sha256": "7dec7659d61191e42f78a45071649cfa7f190a611f1148bbb7fd89381f38038c",
+  "result_meaning": "The configured backend regression suite passes for its executed tests. The five v5 sealed-corpus gates remain incomplete and the outside-project symlink case was not executed in this environment. This is not live model, broker, real-order, selector sealed-v5 acceptance, or full UI verification evidence.",
+  "log_encoding_note": "The raw PowerShell/Python output is preserved. The WinError1314 Korean message appears garbled and v5 reasons use escaped Unicode in pytest output; human-readable skip explanations above were independently read from the test source."
+}

@@ -1,0 +1,16 @@
+{
+  "tests": {
+    "gates": 6,
+    "independent_placement": 14,
+    "small_screen_scenarios": 8,
+    "app": 3520,
+    "electron_kiumi": 23
+  },
+  "merge": "ac4938008690a86e19c22e2c2d612db11aa52b03",
+  "base": "e9f9c5d0b2df7c673c102cfb632616e9e86df62f",
+  "source": "aca0f4ddf2c58bacf4d0d2ab56c6f4196c2ec979",
+  "reviewer": "watch_check_panel APPROVE",
+  "conflicts": 0,
+  "pr": 25,
+  "preserved_work_stash": "a550ae6bee851ecb95bb760bda79cbacabde0861"
+}

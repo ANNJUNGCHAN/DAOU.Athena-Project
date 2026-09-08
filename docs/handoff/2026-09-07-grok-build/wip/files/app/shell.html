@@ -1,0 +1,609 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Athena</title>
+<!-- 셸 창 문서 — Codex형 창 모델(2026-08-24 리프 1.2.1). 옛 판은 chat.html과
+     canvas.html 두 문서가 각자의 OS 창에 떴다. 이제 한 문서 안의 두 영역이다.
+     스타일 순서가 계약이다: canvas.css·chat.css는 자기 창을 전제로 `position:fixed;
+     inset:0`을 쓰므로, shell.css가 **그 뒤에서** 영역 스코프로 되돌린다.
+     access.css는 언제나 마지막 — 접근성 3종이 다른 규칙을 이겨야 한다. -->
+<link rel="stylesheet" href="styles/tokens.css" />
+<link rel="stylesheet" href="styles/ui-kit.css" />
+<link rel="stylesheet" href="canvas.css" />
+<link rel="stylesheet" href="chat.css" />
+<link rel="stylesheet" href="styles/settings-cards.css" />
+<link rel="stylesheet" href="styles/card-kinds.css" />
+<link rel="stylesheet" href="styles/integrated-cards.css" />
+<link rel="stylesheet" href="styles/canvas-tabs.css" />
+<link rel="stylesheet" href="styles/board-surface.css" />
+<link rel="stylesheet" href="styles/plugin-canvas.css" />
+<link rel="stylesheet" href="shell.css" />
+<link rel="stylesheet" href="styles/sidebar-session.css" />
+<link rel="stylesheet" href="styles/backtest-technique-cards.css" />
+<link rel="stylesheet" href="styles/access.css" />
+</head>
+<body>
+  <!-- 부팅(BOOT-001 C1) — borderless ATHENA 자리표시자 위를 파란 글자가
+       끝까지 덮어쓴다. 완성된 조판이 Page 1 셸 전체로 직접 펼쳐지고
+       실제 #shell로 원자적으로 바뀐다. 별도 심볼 장면이나 영구 리브랜딩은 없다. -->
+  <div id="boot" class="boot" data-phase="compact">
+    <span id="bootStatus" class="boot-status" role="status" aria-live="polite" aria-atomic="true">ATHENA를 시작합니다.</span>
+    <div class="boot-panel" id="bootPanel">
+      <div class="boot-stage">
+        <!-- 저장소의 공식 CI 참조(.omc/artifacts/kiwoom-logo-reference/
+             kiwoom-combination.svg) 벡터를 그대로 인라인한다. 부팅 전용이며
+             실제 Page 1 셸에는 남지 않는다. -->
+        <svg class="boot-logo" viewBox="0 0 283.5 88.4" role="img" aria-label="키움증권">
+          <g>
+            <g>
+              <polygon fill="#bfbfbf" points="266.9,88.4 243.5,53.6 229,53.6 229,25.9 211.3,25.9 211.3,88.4 229,88.4 229,63.7 245.6,88.4"/>
+              <path fill="#d50982" d="M272.6 58.6 283.5 0 227 18.9s10.8 2.6 20.8 8.7L225 53.8l13.4 11.6 22.8-26.2c7.3 9.1 11.4 19.4 11.4 19.4z"/>
+            </g>
+            <g fill="#001e5a" fill-rule="evenodd" clip-rule="evenodd">
+              <path d="M47.9 14.7v59.1H38V19.5c0-3.2-1.5-4.8-1.5-4.8h11.4z"/>
+              <path d="m16.8 43.1-2.2 3.9C8.3 56.2 0 61.4 0 61.4l7.5 4.9S19.7 59.4 25.4 48c5.7-11.3 5-29.6 5-29.6H2.5v7h17.9s0 4.4-1.1 9.7H2.2v7h15l-.4 1z"/>
+              <path d="M100.3 72.8v-20H86v-5h20.5v-7H53.9v7h20.5v5h-16s1.5 1.6 1.5 4.8v15.2h40.4zm-9.9-7.1H69.8v-5.9h20.6v5.9z"/>
+              <path d="M80 38.6c10.6 0 19.3-5.8 19.3-13s-8.6-13-19.3-13-19.3 5.8-19.3 13S69.4 38.6 80 38.6zm0-18.9c4.4 0 8 2.6 8 5.8s-3.6 5.8-8 5.8-8-2.6-8-5.8 3.6-5.8 8-5.8z"/>
+              <path d="M136.8 49c-10.6 0-19.3 5.8-19.3 13s8.6 13 19.3 13 19.3-5.8 19.3-13-8.7-13-19.3-13zm0 18.8c-4.4 0-8-2.6-8-5.8s3.6-5.8 8-5.8 8 2.6 8 5.8-3.6 5.8-8 5.8z"/>
+              <path d="M111 40.3h51.8v7H111z"/>
+              <path d="M121.8 28.8c-5.8 2.6-10.4 3.6-10.4 3.6l5.3 5.7s5.4-1.3 10.6-3.6c5.2-2.2 9.5-5.3 9.5-5.3s4.3 3 9.5 5.3c5.2 2.2 10.6 3.6 10.6 3.6l5.3-5.7s-4.6-.9-10.4-3.6c-5.8-2.6-8.8-5.8-8.8-5.8h15.3v-7h-43.1v7h15.3s-3 3.1-8.8 5.8z"/>
+              <path d="M186.1 55.4v10.4h29.8v7h-39.6V60.2c0-3.2-1.5-4.8-1.5-4.8h11.3z"/>
+              <path d="M215.9 14.6v43.1H206v-6.6h-13.6v-7H206V19.4c0-3.2-1.5-4.8-1.5-4.8h11.4z"/>
+              <path d="M175.7 51.9h9.7V40.8h18.1v-7h-7.4s.7-3.3 1.4-7.9c.6-4.5.9-9.9.9-9.9h-29v7h19.1s0 2.3-.5 5.7-1.2 5-1.2 5h-20.5v7h9.5v11.1z"/>
+            </g>
+          </g>
+        </svg>
+        <div class="boot-wordline" aria-hidden="true">
+          <span class="boot-base" aria-hidden="true">ATHENA</span>
+          <span class="boot-typed-layer" aria-hidden="true">
+            <span class="boot-name" id="bootName" aria-hidden="true"></span>
+            <span class="boot-cursor" aria-hidden="true">|</span>
+          </span>
+          <span id="bootTask" class="boot-task" aria-hidden="true" hidden></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="appNotification" class="app-notification" role="status" aria-live="polite" aria-atomic="true" hidden>
+    <strong id="appNotificationTitle"></strong>
+    <span id="appNotificationBody"></span>
+  </div>
+
+  <!-- 셸 — 창 표면(유리 사다리의 `--glass-window` 단)이 여기다. 옛 판에서는
+       대화 창의 `.app`이 창 표면이었는데, 이제 `.app`은 셸 위의 한 영역이라
+       표면 역할을 셸이 가져간다(verify.js 검증16이 이 요소를 읽는다). -->
+  <div id="shell" class="shell" hidden>
+    <!-- 좌측 이력 사이드바 268px(리프 1.2.2, Paper 보드 04/05/08/16) — 머리(새
+         대화·검색) · 이력 목록(날짜 섹션 + 알림 파생 방) · 발치(활성 계좌 행).
+         데이터는 lib/sidebar.js가 athena:conversations-list·athena:account-list·
+         athena:routine-event로 채운다 — 하드코딩된 목업 없음. -->
+    <nav id="historyRegion" class="shell-region">
+      <div class="sidebar-head">
+        <button id="sidebarNewChat" class="sidebar-head-btn" type="button">
+          <span class="sidebar-head-ic" aria-hidden="true">+</span>
+          <span>새 대화</span>
+        </button>
+        <button id="sidebarSearchToggle" class="sidebar-head-btn" type="button">
+          <span class="sidebar-head-ic" aria-hidden="true">⌕</span>
+          <span>대화 검색</span>
+        </button>
+        <button id="sidebarCompactToggle" class="sidebar-head-btn sidebar-compact-toggle" type="button" aria-controls="sidebarList" aria-expanded="false" aria-label="프로젝트와 최근 열기">
+          <svg class="sidebar-head-ic" viewBox="0 0 14 14" aria-hidden="true"><path d="M1.8 3.4h4l1.1 1.3h5.3v6.2H1.8z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" /></svg>
+          <span>프로젝트·최근</span>
+        </button>
+        <input id="sidebarSearchInput" class="sidebar-search-input" type="text" placeholder="대화·카드 검색" hidden />
+      </div>
+      <!-- 모드 네비(리프 1.2.2, Paper 보드 37/44/47/48) — #graphPill을 대체한다.
+           대화/그래프/에이전트/플러그인 4항목, 캔버스 4영역(#mosaic/#graphCanvas/
+           #agentCanvas/#pluginCanvas)의 유일한 사람 진입로다(lib/sidebar-mode-nav.js가
+           클릭만 배선하고, 실제 전환은 graph-mode/controller.js의 setView()
+           하나가 소유한다 — P4). 기본 active는 "대화"(VIEW_SUMMARY 초기값과
+           일치) — 부팅 시 별도 JS 호출 없이 정적 마크업으로 맞춘다. -->
+      <!-- 이력의 머리는 다섯 모드다(Paper 보드 35) — 그 구역의 이름과 지금 든 대화 수. -->
+      <div class="sidebar-mode-caption">
+        <span>이력 · 모드</span>
+        <span id="sidebarModeTotal"></span>
+      </div>
+      <div class="sidebar-mode-nav" id="sidebarModeNav">
+        <button class="sidebar-mode-item is-active" id="modeNavSummary" type="button" data-view="summary" aria-pressed="true">
+          <svg class="sidebar-mode-item-ic" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 3.5C2 2.7 2.7 2 3.5 2h7c.8 0 1.5.7 1.5 1.5v5c0 .8-.7 1.5-1.5 1.5H6L3.5 12v-2H3.5C2.7 10 2 9.3 2 8.5v-5z" fill="none" stroke="currentColor" stroke-width="1.2" /></svg>
+          <span class="sidebar-mode-item-label">대화</span>
+          <!-- 모드별 대화 수 — 라벨 뒤에 둔다(배지처럼 오른쪽 끝에 붙는 게 아니라
+               이름에 딸린 숫자다). 0이면 hidden이라 CSS 없이도 깨지지 않는다. -->
+          <span class="sidebar-mode-count" id="modeNavSummaryCount" hidden></span>
+        </button>
+        <button class="sidebar-mode-item" id="modeNavGraph" type="button" data-view="graph" aria-pressed="false">
+          <svg class="sidebar-mode-item-ic" viewBox="0 0 14 14" aria-hidden="true">
+            <circle cx="3.5" cy="10.5" r="1.8" fill="none" stroke="currentColor" stroke-width="1.2" />
+            <circle cx="7" cy="3.5" r="1.8" fill="none" stroke="currentColor" stroke-width="1.2" />
+            <circle cx="10.5" cy="10.5" r="1.8" fill="none" stroke="currentColor" stroke-width="1.2" />
+            <path d="M4.4 9.1 6.2 5m1.6 0 1.8 4.1M5.3 10.5h3.4" fill="none" stroke="currentColor" stroke-width="1.2" />
+          </svg>
+          <span class="sidebar-mode-item-label">그래프</span>
+          <span class="sidebar-mode-count" id="modeNavGraphCount" hidden></span>
+        </button>
+        <button class="sidebar-mode-item" id="modeNavAgent" type="button" data-view="agent" aria-pressed="false">
+          <svg class="sidebar-mode-item-ic" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 1.5 8.3 5.7 12.5 7 8.3 8.3 7 12.5 5.7 8.3 1.5 7 5.7 5.7z" fill="none" stroke="currentColor" stroke-width="1.2" /></svg>
+          <span class="sidebar-mode-item-label">에이전트</span>
+          <span class="sidebar-mode-count" id="modeNavAgentCount" hidden></span>
+          <!-- 배지 — 미확인 알람 수(2단계). 스코프 밖: 이번 단계는 마크업만
+               놓고 hidden으로 둔다, 카운트 배선은 sidebar-mode-nav.js 2단계
+               확장이 맡는다. -->
+          <span class="sidebar-mode-badge" id="modeNavAgentBadge" hidden></span>
+        </button>
+        <button class="sidebar-mode-item" id="modeNavPlugin" type="button" data-view="plugin" aria-pressed="false">
+          <svg class="sidebar-mode-item-ic" viewBox="0 0 14 14" aria-hidden="true"><path d="M4.5 1.5v2M9.5 1.5v2M3 3.5h8v3A4 4 0 0 1 7 10.5 4 4 0 0 1 3 6.5v-3ZM7 10.5v2" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          <span class="sidebar-mode-item-label">플러그인</span>
+          <span class="sidebar-mode-count" id="modeNavPluginCount" hidden></span>
+        </button>
+        <!-- 5번째 모드 — 백테스트(P1 모드 골격, backtest-mode-plan.md §3.2). 아이콘은
+             되감기(백테스트=과거로 돌아가 재생) — 다른 세 형제와 같은 15×15
+             viewBox 0 0 14 14, stroke 1.2. -->
+        <button class="sidebar-mode-item" id="modeNavBacktest" type="button" data-view="backtest" aria-pressed="false">
+          <svg class="sidebar-mode-item-ic" viewBox="0 0 14 14" aria-hidden="true"><path d="M11.5 7A4.5 4.5 0 1 1 7 2.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" /><path d="M7 2.5 4.8 2.2 5.1 4.4" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          <span class="sidebar-mode-item-label">백테스트</span>
+          <span class="sidebar-mode-count" id="modeNavBacktestCount" hidden></span>
+        </button>
+      </div>
+      <div class="sidebar-divider"></div>
+      <div id="sidebarList" class="sidebar-list"></div>
+      <div id="sidebarAccountMenu" class="sidebar-account-menu" hidden></div>
+      <button id="sidebarAccountRow" class="sidebar-account-row" type="button" hidden>
+        <span class="sidebar-account-dot" id="sidebarAccountDot" aria-hidden="true"></span>
+        <span class="sidebar-account-text">
+          <span id="sidebarAccountAlias" class="sidebar-account-alias"></span>
+          <span id="sidebarAccountToken" class="sidebar-account-token"></span>
+        </span>
+        <span class="sidebar-account-caret" aria-hidden="true">⌃</span>
+      </button>
+    </nav>
+
+    <!-- 중앙 캔버스 — 유일한 출력 지점. 늘 떠 있다(옛 판의 확장/수축 연출 없음). -->
+    <main id="canvasRegion" class="shell-region">
+      <div id="mosaic" class="mosaic glass">
+        <div id="grid" class="grid"></div>
+        <!-- 캔버스 빈 상태(보드 05) — #grid의 형제. 카드가 0장일 때만 보인다
+             (canvas.js MutationObserver). 숫자·CTA를 담아야 해서 CSS :empty
+             pseudo-content로는 못 그린다 — 실DOM이다. -->
+        <div id="gridEmpty" class="canvas-empty-wrap" hidden></div>
+      </div>
+      <!-- 보드 07 — 그래프 모드 요약 뷰의 성향 신호 표. #mosaic·#graphCanvas와
+           형제다(예전엔 #mosaic의 자식이라 그래프 모드에서 #mosaic가 hidden되면
+           함께 가려져 화면에 안 뜨는 결함이 있었다 — 2026-08-27 수정). 안쪽은
+           헤더(#graphSummaryHeader, 스텝2가 채운다)·본문(#graphSummaryTableArea+
+           #graphPanel 좌우, 스텝4/스텝8이 채운다) 2단 구조다 — applyVisibility()가
+           이 바깥 카드의 hidden만 소유하면 안쪽은 별도 hidden 로직 없이 함께 숨는다. -->
+      <div id="graphSummaryTable" class="mosaic glass" hidden>
+        <!-- #graphSummaryHeader — 스텝2가 뷰 토글(요약/그래프)·필터 칩·"최근 갱신"을
+             채운다. 이 토글은 그래프 기능 진입(사이드바 모드 네비, graphMode.toggle())과는
+             다른 축이다 — graphMode.setSurface()가 state.surface를 바꾸고,
+             applyVisibility() 하나가 여전히 hidden 전체(elements.graph/summaryTable
+             둘 다)를 소유한다(스텝2-보정, US-007 계약 유지). 요약/지도 두 표면이
+             동시에 hidden=false였던 z-index 임시조치(옛 .graph-surface-back,
+             canvas.js의 옛 focusGraphSurface())는 걷어냈다 — 실측: 두 카드 다
+             92% 불투명이라 완전히 안 가려지고 뒤 레이어 텍스트가 비쳤었다. -->
+        <div id="graphSummaryHeader">
+          <div class="summary-header-left">
+            <div class="view-toggle" role="tablist">
+              <button type="button" id="summaryViewTab" class="view-toggle-tab is-active" role="tab" aria-selected="true">요약</button>
+              <button type="button" id="graphViewTab" class="view-toggle-tab" role="tab" aria-selected="false">그래프</button>
+              <button type="button" id="settingsViewTab" class="view-toggle-tab" role="tab" aria-selected="false">수집·노출</button>
+            </div>
+            <!-- 실데이터(entries[].observed_at 중 최신)로만 채운다 — Paper 목업
+                 "12분 전"을 그대로 박지 않는다. 표를 아직 못 읽었으면(빈 목록) 숨은 채로 둔다. -->
+            <span id="summaryUpdatedAt" class="summary-updated-at" hidden></span>
+          </div>
+          <div class="summary-header-right">
+            <!-- 필터 칩(보드 01) — 옛 판은 정적 <span>이라 "최근 90일"이라 써 놓고
+                 실제로는 백엔드 기본 창을 그대로 쓰고 있었다. 이제 두 칩 다 실제로
+                 건다: 기간은 profile-summary의 window_days로, 정렬은 표 재정렬로.
+                 select를 쓰는 이유 — 팝오버를 새로 만들지 않고도 선택지 전체가
+                 보이고 키보드로 조작된다(수집·노출 탭의 주기 선택기와 같은 관례). -->
+            <select id="summaryWindowFilter" class="filter-chip is-control" aria-label="기간"></select>
+            <select id="summarySortFilter" class="filter-chip is-control" aria-label="정렬"></select>
+          </div>
+        </div>
+        <div id="graphSummaryBody">
+          <div id="graphSummaryMain">
+            <!-- 히어로(보드 06 §5) — 사실/추론/불확실 % 실계산값만. "반도체 대형주
+                 중심..." 같은 자연어 타이틀 문장은 profile-summary 어디에도 없어
+                 짓지 않는다(§0 정책, summary-table.js renderSummaryHero). -->
+            <div id="graphSummaryHero"></div>
+            <!-- 확인 필요 배너(보드 06 §6, 06 전용 — 07엔 없음). 개수는
+                 athena:brain-suggested-questions 실값(summary-table.js). -->
+            <div id="graphConfirmBanner" class="confirm-banner" hidden></div>
+            <!-- 표 렌더 대상. summary-table.js의 renderSummaryTable()이 매 렌더마다
+                 이 컨테이너의 자식만 통째로 비운다(summary-table.js:67) — #graphPanel은
+                 그 바깥 형제라 표 리로드가 패널을 지울 방법이 구조적으로 없다. -->
+            <div id="graphSummaryTableArea"></div>
+            <!-- 테마 군집(보드 06 §8/07 §8-2) — theme-clusters.js. 군집 이름은
+                 백엔드 어디에도 없어(§0 발견1) 전 카드가 "이름 없음"이다. -->
+            <div id="graphThemeClusters"></div>
+            <!-- 숨은 연관(보드 06 §9/07 §9-2) — hidden-links.js. "점수 8.5" 같은
+                 근거 없는 수치는 없다(§0 발견3, SurprisingConnectionOut에 없음). -->
+            <div id="graphHiddenLinks"></div>
+          </div>
+        </div>
+      </div>
+      <!-- 그래프 모드 — 요약(위 모자이크)과 **형제**다. 둘 중 하나만 보인다.
+           canvasRegion 전체를 토글하는 것이 결정(deep-interview Round 5). 기본은
+           요약 서브뷰가 보인다(state.surface 기본값 'summary' — graph-mode-store.js,
+           applyVisibility()가 이 카드의 hidden을 그 값으로 결정한다, 스텝2-보정).
+           안쪽은 헤더(#graphHeader, 스텝9가 채운다)·본문(#graphBody, 렌더·클릭위임·크기측정
+           전용) 2단 구조다. -->
+      <div id="graphCanvas" class="mosaic glass" hidden>
+        <!-- #graphHeader(보드 14/15 §1.2/1.3, 스텝9) — 뷰 토글(step2 헤더와 같은
+             .view-toggle/.filter-chip 클래스 재사용, 클릭은 graphMode.setSurface(),
+             z-index 금지)+메타 텍스트(controller.js가 state.stage로 계산)+필터 칩,
+             그 아래 지도 안내 바(#graphMapGuide, 1단계에서만 보임 —
+             controller.js가 elements.mapGuide.hidden으로 소유). -->
+        <div id="graphHeader">
+          <div class="graph-header-top">
+            <div class="summary-header-left">
+              <div class="view-toggle" role="tablist">
+                <button type="button" id="graphHeaderSummaryTab" class="view-toggle-tab" role="tab" aria-selected="false">요약</button>
+                <button type="button" id="graphHeaderMapTab" class="view-toggle-tab is-active" role="tab" aria-selected="true">그래프</button>
+                <button type="button" id="graphHeaderSettingsTab" class="view-toggle-tab" role="tab" aria-selected="false">수집·노출</button>
+              </div>
+              <span id="graphHeaderMeta" class="summary-updated-at"></span>
+            </div>
+            <div class="summary-header-right">
+              <!-- 필터 칩(보드 03/04) — 기간은 엣지의 observed_at으로, 두 번째
+                   칩은 연결 수로 실제로 건다. Paper의 "보강 2회 이상"을 "연결
+                   N개 이상"으로 바꿔 쓰는 이유는 graph-filters.js 머리말 참고:
+                   보강 횟수는 cluster-map에 없는 값이라 걸 수 없다. -->
+              <select id="graphWindowFilter" class="filter-chip is-control" aria-label="기간"></select>
+              <select id="graphDegreeFilter" class="filter-chip is-control" aria-label="최소 연결 수"></select>
+            </div>
+          </div>
+          <div id="graphMapGuide" class="graph-map-guide">
+            <span class="graph-map-guide-title">테마 지도</span>
+            <span class="graph-map-guide-desc">노드를 끌어 옮길 수 있습니다 · 휠 또는 Ctrl+휠로 확대 · 채팅으로 물어도 같은 곳이 열립니다</span>
+          </div>
+        </div>
+        <div id="graphBody"></div>
+        <!-- 지도 범례(보드 03·04 「범례」 프레임 + 보드 07 채움 세 칸) —
+             #graphBody의 형제다: 본문은 지도를 다시 그릴 때마다 통째로 비워지므로
+             안에 두면 범례가 함께 지워진다. 내용·hidden은 controller.js
+             renderMapLegend() 하나가 소유한다. -->
+        <div id="graphLegend" hidden></div>
+      </div>
+      <!-- 그래프 모드 세 번째 서브뷰(보드 05 수집·노출) — #graphSummaryTable·
+           #graphCanvas와 형제이고 셋 중 하나만 보인다(state.surface).
+           applyVisibility()가 이 카드의 hidden을 소유한다. 안쪽은
+           lib/graph-mode/collection-settings.js가 채운다. -->
+      <div id="graphSettingsCanvas" class="mosaic glass" hidden>
+        <div id="graphSettingsHeader">
+          <div class="summary-header-left">
+            <div class="view-toggle" role="tablist">
+              <button type="button" id="graphSettingsSummaryTab" class="view-toggle-tab" role="tab" aria-selected="false">요약</button>
+              <button type="button" id="graphSettingsMapTab" class="view-toggle-tab" role="tab" aria-selected="false">그래프</button>
+              <button type="button" id="graphSettingsOwnTab" class="view-toggle-tab is-active" role="tab" aria-selected="true">수집·노출</button>
+            </div>
+            <span id="graphSettingsUpdatedAt" class="summary-updated-at" hidden></span>
+          </div>
+        </div>
+        <div id="graphSettingsBody"></div>
+      </div>
+      <!-- 에이전트 모드(리프 1.2.2, Paper 보드 39) — 위 표면들과 형제, 3중
+           배타의 세 번째 자리. 내용은 lib/agent-canvas.js가 채운다. -->
+      <div id="agentCanvas" class="mosaic glass" hidden></div>
+      <!-- 플러그인 모드(Paper 47/48) — 바깥 셸·우측 채팅은 그대로 두고 중앙만
+           허브/관리/승인 상태로 교체한다. -->
+      <div id="pluginCanvas" class="mosaic glass" hidden></div>
+      <!-- 백테스트 모드(P1 모드 골격, backtest-mode-plan.md §3.2) — 위 표면들과
+           형제, 5중 배타의 다섯 번째 자리. 이번 단계는 정직한 빈 상태 하나뿐이다
+           (lib/backtest-canvas.js) — 폼·코드·결과 화면은 Paper 58~64 선행 후 후속. -->
+      <div id="backtestCanvas" class="mosaic glass" hidden></div>
+      <!-- 공통 패널(보드 02/04) — 요약 표·군집 지도 **둘 다**의 오른쪽에 선다.
+           예전엔 #graphSummaryBody 안에 있어서, 지도에서 노드를 골라도 패널이
+           숨겨진 요약 카드 안에 그려져 화면에 아무것도 안 나타났다(실측 결함).
+           지금은 세 그래프 표면의 형제라 어느 표면이 떠 있든 그 옆에 붙는다.
+           hidden 소유자는 controller.js의 renderSelection() 하나 그대로다. -->
+      <div id="graphPanel" class="graph-panel" hidden></div>
+      <div class="glass-sheen" id="sheen" aria-hidden="true"></div>
+    </main>
+
+    <!-- 우측 채팅 400px — 유일한 입력 지점. **어떤 상태에서도 접히지 않는다**
+         (GLOSSARY §1). shell.css의 flex-shrink:0이 그 계약이다. -->
+    <section id="chatRegion" class="shell-region">
+      <div id="app" class="app glass" hidden>
+        <!-- 모드별 채팅 헤더(보드 38, 2026-08-27) — 그래프·백테스트·플러그인 모드.
+             보드 37 실측: 대화 모드에는 헤더가 없다. 문구와 hidden은 둘 다
+             graph-mode controller가 소유한다(여기 고정 문구를 두면 모드가 바뀌어도
+             남는다). -->
+        <div id="chatModeHead" class="chat-mode-head" hidden>
+          <span class="chat-mode-head-title"></span>
+          <span class="chat-mode-head-sub"></span>
+        </div>
+        <!-- 알림 파생 방 머리(Paper 보드 01 · 56X-0) — 사이드바 "알림에서" 항목을
+             선택했을 때만 보인다. 이 방이 관제 창과 별개라는 표기와, 관제 창으로
+             합류하는 문 하나가 계약이다 — lib/sidebar.js가 채우고 잇는다. -->
+        <div id="roomHeadBanner" class="room-head-banner" hidden>
+          <div class="room-head-top">
+            <span class="room-head-dot" aria-hidden="true"></span>
+            <span class="room-head-kicker">알림에서 시작된 방</span>
+            <span id="roomHeadTime" class="room-head-time"></span>
+          </div>
+          <div id="roomHeadTitle" class="room-head-title"></div>
+          <div class="room-head-sub">오브에서 넘어온 예외 창 — 관제 창과 별개</div>
+          <div class="room-head-join">
+            <button type="button" id="roomHeadJoin" class="room-head-join-btn">관제 창으로 →</button>
+          </div>
+        </div>
+        <div class="history" id="history" role="log" aria-label="현재 대화" tabindex="0"></div>
+
+        <!-- 커맨드 카드(보드 45 v5, 2026-08-27) — 스트립 필 줄은 전면 제거됐다.
+             입력부는 첨부 칩(있을 때만) + 입력행(키우미·입력줄·잠금 힌트)뿐이다.
+             모델 진입=키우미 메뉴, 감시 수=사이드바 에이전트 배지(예정). -->
+        <div class="input-stack" id="inputStack">
+          <!-- 실행 상태 줄(Paper 44 turn-status, 2026-09-05) — 옛 잠금 힌트(입력행 안 "답변 중… 29s
+               ESC 중단")를 이력 바로 아래 한 줄로 올렸다. 실행 중에만 보이고, 중단은 입력 상자의
+               ■ 버튼(Esc와 같은 경로)이 맡는다. id 셋은 chat.js setLocked가 그대로 쓴다. -->
+          <div class="turn-status" id="lockHint" hidden>
+            <svg class="turn-status-icon" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M6 1v10M1.7 3.5l8.6 5M1.7 8.5l8.6-5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+            <span id="lockText" class="lock-text">답변 중…</span>
+            <span id="lockTime" class="lock-time"></span>
+          </div>
+          <!-- 첨부 칩(2026-08-27, 코덱스 UI 이식) — 키우미 메뉴로 고른 파일/폴더가
+               경로 텍스트 대신 칩으로 쌓인다. 전송 시 프롬프트에 동봉되고 비워진다. -->
+          <div id="attachChips" class="attach-chips" hidden></div>
+          <!-- 되물을 것들 카드(2026-09-02) — 확인 필요 배너가 약속한 "답하시면 그대로
+               그래프가 갱신됩니다"를 실제로 하는 자리다. 입력창 바로 위에 도킹된다
+               (레퍼런스: 권한 확인 카드). 내용은 chat.js가 채우고, 재료는 백엔드의
+               suggested-questions(AMBIGUOUS로 기록된 관계)다. -->
+          <div id="brainQuestionCard" class="question-card" hidden></div>
+          <!-- 그래프 편집 제안 카드(2026-09-03) — 모델이 athena_graph_view
+               action=propose_edit으로 "이 관계를 이렇게 고칠까요"를 물으면 여기 뜬다.
+               되물을 것들 카드와 **같은 클래스**를 쓴다: 사람이 답해야 하는 일이
+               두 종류인데 모양이 다르면 무엇을 누르는지 매번 새로 배워야 한다.
+               누르면 사람의 답변 문장이 채팅으로 제출되어 추출 경로를 탄다 —
+               모델은 그래프에 직접 쓰지 못한다(graph-edit-proposal.js 참고). -->
+          <div id="graphEditProposalCard" class="question-card" hidden></div>
+          <!-- 입력 상자(Paper 44 input-box, 2026-09-05) — 테두리 있는 흰 상자. 키우미·모델은 아래
+               툴바(.composer-bar)로 내려갔고 상자 안에는 입력과 중단 버튼뿐이다.
+               긴 글은 여러 줄로 자란다(2026-09-02 사용자 지적) — <input>은 한 줄에
+               갇혀 가로로만 스크롤되므로 <textarea>다. 높이는 chat.js가 내용에 맞춰
+               늘리고(최대치는 chat.css의 max-height), Enter는 제출, Shift+Enter가 줄바꿈이다. -->
+          <div class="input-row">
+            <textarea id="input" class="input" rows="1" placeholder="무엇이든 물어보세요" autofocus></textarea>
+            <button id="stopBtn" class="composer-stop" type="button" hidden aria-label="중단 (Esc)" title="중단 (Esc)"><span class="composer-stop-square" aria-hidden="true"></span></button>
+          </div>
+          <!-- 하단 툴바(Paper 44 composer-bar) — 왼쪽 [키우미][+ 첨부][@ 플러그인], 오른쪽
+               [모델][사고 강도][실행 스피너]. 모델·강도는 모델 팝오버를 연다. -->
+          <div class="composer-bar">
+            <!-- 키우미(보드 45 v5, 2026-08-27 확정 · Paper 44에서 툴바로 이동) — 클릭=옵션 메뉴
+                 (파일·폴더 첨부, 모델 설정). 전환은 사이드바 모드 네비. -->
+            <button
+              class="dot kiumi"
+              id="dot"
+              type="button"
+              aria-label="옵션 메뉴 — 얼굴은 지금 모드를 보여준다"
+              title="옵션"
+              data-mode="chat"
+            >
+              <span class="kiumi-visor" aria-hidden="true">
+                <!-- 키우미 얼굴 하나 — 모드별로 얼굴을 갈아끼우지 않는다(2026-09-01 사용자 결정).
+                     오브의 기본 표정과 같은 어휘(둥근 눈 둘)이고, 눈 깜빡임으로 살아 있음을 보인다. -->
+                <svg class="kiumi-face" width="17" height="16" viewBox="0 0 17 16" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="5" y="4.5" width="3" height="7" rx="1.5" fill="currentColor"/>
+                  <rect x="9.5" y="4.5" width="3" height="7" rx="1.5" fill="currentColor"/>
+                </svg>
+              </span>
+            </button>
+            <button id="attachBtn" class="composer-icon" type="button" aria-label="파일·폴더 첨부" title="첨부"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 2.5v9M2.5 7h9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></button>
+            <button id="mentionBtn" class="composer-icon composer-icon-at" type="button" aria-label="@ 플러그인 지정" title="@ 플러그인">@</button>
+            <span class="composer-spacer"></span>
+            <button id="modelBtn" class="composer-text" type="button" title="모델">모델</button>
+            <button id="effortBtn" class="composer-text" type="button" title="사고 강도">강도</button>
+            <span id="composerSpinner" class="composer-spinner" hidden aria-hidden="true"></span>
+          </div>
+          <!-- 모델 팝오버 — 창 안 오버레이. 유리 0.45+blur(카드 단계), 무채색.
+               페이드 등장 금지(soul.md §7) — display 토글로 나타난다. -->
+          <div id="modelPopover" class="model-popover" hidden></div>
+          <!-- 키우미 메뉴(2026-08-27, Paper 보드 45) — 파일·폴더 첨부와 모드 옵션.
+               모델 팝오버와 같은 유리 단계·등장 규칙(soul.md §7, display 토글). -->
+          <div id="kiumiMenu" class="model-popover kiumi-menu" hidden></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="onboard" class="app glass shell-overlay" hidden>
+    <div id="onboardBody" class="onb-root"></div>
+  </div>
+
+  <div id="settings" class="app glass shell-overlay" hidden>
+    <div class="settings-head">
+      <span class="settings-title">설정</span>
+      <span class="settings-hint">↑↓ 이동 · Enter 선택 · Tab 패널 이동 · Esc 닫기</span>
+    </div>
+    <div class="settings-body">
+      <div id="settingsNav" class="settings-nav"></div>
+      <div id="settingsGrid" class="settings-grid"></div>
+    </div>
+  </div>
+
+  <div id="order" class="app glass shell-overlay" hidden>
+    <div class="settings-head">
+      <span class="settings-title">주문 티켓</span>
+      <span class="settings-hint">Esc 닫기 — 실행 전에는 아무 일도 일어나지 않습니다</span>
+    </div>
+    <div id="orderBody" class="settings-grid"></div>
+  </div>
+
+  <!-- 프로젝트 추가(36번 보드) — 폴더를 먼저 고르고, 그 경로·이름·권한 경계를 보여 준
+       뒤에만 프로젝트가 생긴다. 설정·주문과 달리 셸을 감추지 않는다: 뒤의 셸이 흐리게
+       비쳐야 "지금 무엇 위에 서 있는지"가 남는다(보드의 Blurred Shell).
+       붙박이 문구는 여기 하나뿐이다 — 상태(경로·이름·안내)만 sidebar.js가 채운다. -->
+  <div id="projectCreate" class="project-create-backdrop" hidden>
+    <div class="project-create" role="dialog" aria-modal="true" aria-labelledby="projectCreateTitle">
+      <div class="project-create-head">
+        <span id="projectCreateTitle" class="project-create-title">프로젝트 추가</span>
+        <span class="project-create-subtitle">프로젝트는 폴더 하나를 점유합니다</span>
+      </div>
+      <div class="project-create-step">
+        <span class="project-create-label">작업 폴더</span>
+        <div class="project-create-folder">
+          <span id="projectCreatePath" class="project-create-path"></span>
+          <button id="projectCreateRepick" class="project-create-repick" type="button">폴더 바꾸기</button>
+        </div>
+        <span class="project-create-hint">탐색기가 열립니다. 빈 폴더든 기존 폴더든 됩니다.</span>
+      </div>
+      <div class="project-create-step">
+        <label class="project-create-label" for="projectCreateName">프로젝트 이름</label>
+        <input id="projectCreateName" class="project-create-input" type="text" />
+        <span class="project-create-hint">폴더 이름에서 가져왔습니다 · 바꿀 수 있습니다</span>
+      </div>
+      <div class="project-create-step">
+        <span class="project-create-label">이 폴더에서 아테나가 하는 일</span>
+        <span class="project-create-permission">이 폴더 안에서 파일을 만들고 고치고 지웁니다</span>
+        <span class="project-create-permission">백테스트 코드·결과·로그를 이 폴더에 남깁니다</span>
+        <span class="project-create-permission">폴더 밖은 읽지도 쓰지도 않습니다</span>
+      </div>
+      <div id="projectCreateNotice" class="project-create-notice" hidden></div>
+      <div class="project-create-foot">
+        <button id="projectCreateCancel" class="project-create-cancel" type="button">취소</button>
+        <button id="projectCreateSubmit" class="project-create-submit" type="button">이 폴더로 만들기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 창 크롬 — 모드·영역과 무관하게 **창**에 속하므로 #shell 밖 고정 오버레이다.
+       부팅 연출 중에는 숨겼다가 shell.js revealChrome()에서 드러난다.
+       닫기는 종료가 아니다 — 창을 숨기고 프로세스는 백그라운드에 남는다(트레이 복귀). -->
+  <div id="dragStrip" class="titlebar" hidden aria-hidden="true"><span class="titlebar-label">Athena</span></div>
+
+  <div id="winControls" class="win-controls" hidden>
+    <button id="winMin" class="win-btn" type="button" aria-label="최소화" title="최소화 (Ctrl+M)"><span class="win-ic-min"></span></button>
+    <button id="winMax" class="win-btn" type="button" aria-label="최대화" title="최대화 (Win+↑)"><span class="win-ic-max"></span></button>
+    <button id="winClose" class="win-btn" type="button" aria-label="닫기 — 백그라운드 유지" title="닫기 — 백그라운드에 유지"><span class="win-ic-close"></span></button>
+  </div>
+
+<script src="lib/ui-kit.js"></script>
+<script src="lib/edge-glow.js"></script>
+<script src="lib/sanitize.js"></script>
+<script src="lib/markdown.js"></script>
+<script src="lib/rest-canvas-paint.js"></script>
+<script src="lib/canvas-layout.js"></script>
+<script src="lib/empty-canvas.js"></script>
+<script src="lib/column-fold.js"></script>
+<script src="lib/facts-card.js"></script>
+<!-- 카드 v3(.omc/state/card-v3-plan.md §2.3/§3 Wave 0-FE) — 프리미티브·레지스트리는
+     카드종 스텁보다 먼저 로드되어야 한다(스텁이 로드 시점에 register()를 호출한다).
+     card-kinds.js 등록은 이벤트 기반 렌더(canvas.js 후킹 §2.2)보다 항상 먼저 끝나므로
+     여기(다른 lib/*.js와 같은 정적 순서)에 두는 것으로 충분하다 — canvas.js는 문서
+     맨 끝에서 로드된다. -->
+<script src="lib/card-primitives.js"></script>
+<script src="lib/card-kinds.js"></script>
+<script src="lib/semantic-detail-sheet.js"></script>
+<script src="lib/semantic-workspace.js"></script>
+<script src="lib/integrated-card-surface.js"></script>
+<script src="lib/ranking-axis.js"></script>
+<!-- 보드 색인만 동기로 싣는다(수 KB). 원문 HTML은 카드별 청크
+     lib/board-templates.<card_id>.generated.js에 있고, board-template-registry가
+     마운트 직전에 필요한 하나만 script 주입으로 가져온다. -->
+<script src="lib/board-templates.index.generated.js"></script>
+<script src="lib/board-template-registry.js"></script>
+<script src="lib/board-format.js"></script>
+<script src="lib/board-mount.js"></script>
+<script src="lib/canvas-tabs.js"></script>
+<script src="lib/paper-card-routing.js"></script>
+<script src="lib/card-kind-종목발굴.js"></script>
+<script src="lib/card-kind-시세.js"></script>
+<script src="lib/card-kind-차트.js"></script>
+<script src="lib/card-kind-종목정보.js"></script>
+<script src="lib/card-kind-호가.js"></script>
+<script src="lib/card-kind-수급.js"></script>
+<script src="lib/card-kind-프로그램매매.js"></script>
+<script src="lib/card-kind-거래원.js"></script>
+<script src="lib/card-kind-주문.js"></script>
+<script src="lib/card-kind-주문내역.js"></script>
+<script src="lib/card-kind-보유주식.js"></script>
+<script src="lib/card-kind-계좌.js"></script>
+<script src="lib/card-kind-관심종목.js"></script>
+<script src="lib/card-kind-공매도.js"></script>
+<script src="lib/card-kind-신용거래.js"></script>
+<script src="lib/card-kind-대차거래.js"></script>
+<script src="lib/chart-indicator-registry.js"></script>
+<script src="lib/chart-indicators.js"></script>
+<script src="lib/chart-indicator-render.js"></script>
+<script src="lib/chart-volume-profile.js"></script>
+<script src="lib/chart-resample.js"></script>
+<script src="lib/chart-toolbar.js"></script>
+<script src="lib/chart-authoring-store.js"></script>
+<script src="lib/chart-drawings.js"></script>
+<script src="lib/chart-indicator-panel.js"></script>
+<script src="lib/chart-card.js"></script>
+<script src="lib/chart-tick-fold.js"></script>
+<script src="lib/aits-chart-panel.js"></script>
+<script src="lib/quote-realtime-panel.js"></script>
+<script src="lib/onboarding.js"></script>
+<script src="lib/auth-screen.js"></script>
+<script src="lib/routine-turn.js"></script>
+<script src="lib/guard-confirm.js"></script>
+<script src="lib/watch-nodes.js"></script>
+<script src="lib/watch-fix-cycle.js"></script>
+<script src="lib/watch-check-card.js"></script>
+<script src="lib/routine-control-turn.js"></script>
+<script src="lib/routine-proposal-turn.js"></script>
+<script src="lib/watch-progress-card.js"></script>
+<script src="lib/tool-step-track.js"></script>
+<script src="lib/text-release-ladder.js"></script>
+<script src="lib/order-ticket.js"></script>
+<script src="lib/protected-cards.js"></script>
+<script src="lib/graph-mode/cluster-grouping.js"></script>
+<script src="lib/graph-mode/brain-questions.js"></script>
+<script src="lib/graph-mode/graph-edit-proposal.js"></script>
+<script src="lib/graph-mode/graph-mode-store.js"></script>
+<script src="lib/graph-mode/graph-mode-prefs.js"></script>
+<script src="lib/graph-mode/summary-table.js"></script>
+<script src="lib/graph-mode/theme-clusters.js"></script>
+<script src="lib/graph-mode/hidden-links.js"></script>
+<script src="lib/graph-mode/graph-filters.js"></script>
+<script src="lib/graph-mode/collection-settings.js"></script>
+<!-- 라이브 군집 지도(2026-09-02) — vis-network를 CDN이 아니라 node_modules에서
+     직접 싣는다. 이 앱은 오프라인으로 뜨므로 unpkg를 물면 인터넷 없는 자리에서
+     지도가 통째로 죽는다. lib/vendor/로 사본을 두는 길은 .gitignore의 `vendor/`에
+     걸려 새 클론에서 파일이 조용히 사라진다 — lightweight-charts가 쓰는 경로
+     방식(lib/chart-card.js의 ../node_modules/... 해석)을 그대로 따른다. -->
+<script src="node_modules/vis-network/standalone/umd/vis-network.min.js"></script>
+<script src="lib/graph-mode/live-map.js"></script>
+<script src="lib/graph-mode/map-legend.js"></script>
+<script src="lib/graph-mode/controller.js"></script>
+<script src="lib/settings-cards.js"></script>
+<script src="lib/plugin-catalog.js"></script>
+<script src="lib/plugin-mode-adapter.js"></script>
+<script src="lib/plugin-proposal.js"></script>
+<script src="lib/plugin-canvas.js"></script>
+<script src="lib/backtest-spec.js"></script>
+<script src="lib/backtest-code-editor.js"></script>
+<script src="lib/backtest-equity-chart.js"></script>
+<script src="lib/backtest-explain.js"></script>
+<script src="lib/project-ide.js"></script>
+<script src="lib/backtest-visual-editor.js"></script>
+<script src="lib/backtest-technique-nodes.js"></script>
+<!-- 작업공간 봉인·복원 판정(41·42번 보드) — backtest-canvas.js가 마운트 때 읽으므로 먼저 온다. -->
+<script src="lib/session-restore.js"></script>
+<script src="lib/backtest-canvas.js"></script>
+<!-- 세션 저장 계약(docs/plans/session-persistence-spec.md) — sidebar.js가 모드별
+     대화 수를 세려면 이 둘이 먼저 window.AthenaLib에 올라와 있어야 한다. -->
+<script src="lib/session-snapshot.js"></script>
+<script src="lib/session-history-view.js"></script>
+<script src="lib/session-workspace.js"></script>
+<script src="lib/history-badge.js"></script>
+<script src="lib/sidebar-mode-nav.js"></script>
+<script src="lib/agent-sidebar-list.js"></script>
+<script src="lib/agent-canvas.js"></script>
+<script src="lib/sidebar-search.js"></script>
+<script src="lib/sidebar-project-menu.js"></script>
+<script src="lib/project-create-dialog.js"></script>
+<script src="lib/sidebar.js"></script>
+<script src="shell.js"></script>
+<script src="provider-first-paint.js"></script>
+<script src="canvas.js"></script>
+<script src="chat.js"></script>
+</body>
+</html>

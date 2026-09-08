@@ -1,0 +1,107 @@
+✔ parseOnly는 --only가 없으면 전체 실행을 뜻하는 null을 준다 (1.784ms)
+✔ parseOnly는 --only 뒤 값을 그대로 돌려준다 (0.1086ms)
+✔ parseOnly는 --only 뒤 값이 없으면 전체 실행으로 떨어지지 않고 오류를 준다 (0.1635ms)
+✔ parseOnly는 --only 뒤에 다른 플래그가 오면 값 누락으로 본다 (0.0845ms)
+✔ parseSuite는 --suite가 없으면 기본 스위트를 뜻한다 (0.1797ms)
+✔ parseSuite는 --suite paper를 받는다 (0.0746ms)
+✔ parseSuite는 --suite 뒤 값이 없으면 기본 스위트로 떨어지지 않고 오류를 준다 (0.1288ms)
+✔ parseSuite는 --suite 뒤에 다른 플래그가 오면 값 누락으로 본다 (0.069ms)
+✔ parseSuite는 오타난 스위트 이름을 조용히 기본 스위트로 바꾸지 않는다 (0.232ms)
+✔ runOne은 예산을 넘기면 자식 트리를 통째로 죽이고 timedOut을 알린다 (21.5116ms)
+✔ runOne은 예산 초과 뒤 늦게 오는 close로 판정을 뒤집지 않는다 (14.956ms)
+✔ runOne은 정상 종료 시 종료 코드로 판정하고 로그 꼬리를 담는다 (0.4329ms)
+✔ runOne은 청크 경계에 걸린 한글을 깨뜨리지 않는다 (0.1565ms)
+✖ 실행 증거: 완료 전 결과는 running이고 완료 뒤 전체 로그와 출처를 실제 파일에 남긴다 (1.9094ms)
+✖ 실행 증거: failure도 이전 단계 결과와 실제 로그를 잃지 않는다 (0.9183ms)
+✖ 실행 증거: timeout도 이전 단계 결과와 실제 로그를 잃지 않는다 (0.7599ms)
+✖ 실행 증거: throw도 이전 단계 결과와 실제 로그를 잃지 않는다 (0.9339ms)
+✖ 실행 증거: error도 이전 단계 결과와 실제 로그를 잃지 않는다 (0.8299ms)
+✖ 실행 증거: 연속 실행은 서로 덮어쓰지 않고 공유된 옛 리포트·캡처는 미확인으로 둔다 (3.2731ms)
+✖ 실행 증거: 현재 Git commit과 dirty 여부 및 작업 사본 내용 해시를 읽는다 (0.7336ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 13
+ℹ fail 7
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 123.68
+
+✖ failing tests:
+
+test at scripts\run-verify-suite.test.js:185:1
+✖ 실행 증거: 완료 전 결과는 running이고 완료 뒤 전체 로그와 출처를 실제 파일에 남긴다 (1.9094ms)
+  TypeError [Error]: runSuite is not a function
+      at TestContext.<anonymous> (C:\Projects\DAOU.Athena\app\scripts\run-verify-suite.test.js:188:19)
+      at Test.runInAsyncScope (node:async_hooks:211:14)
+      at Test.run (node:internal/test_runner/test:979:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+      at Test.postRun (node:internal/test_runner/test:1090:19)
+      at Test.run (node:internal/test_runner/test:1018:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+
+test at scripts\run-verify-suite.test.js:213:3
+✖ 실행 증거: failure도 이전 단계 결과와 실제 로그를 잃지 않는다 (0.9183ms)
+  TypeError [Error]: runSuite is not a function
+      at TestContext.<anonymous> (C:\Projects\DAOU.Athena\app\scripts\run-verify-suite.test.js:219:26)
+      at Test.runInAsyncScope (node:async_hooks:211:14)
+      at Test.run (node:internal/test_runner/test:979:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+      at Test.postRun (node:internal/test_runner/test:1090:19)
+      at Test.run (node:internal/test_runner/test:1018:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+
+test at scripts\run-verify-suite.test.js:213:3
+✖ 실행 증거: timeout도 이전 단계 결과와 실제 로그를 잃지 않는다 (0.7599ms)
+  TypeError [Error]: runSuite is not a function
+      at TestContext.<anonymous> (C:\Projects\DAOU.Athena\app\scripts\run-verify-suite.test.js:219:26)
+      at Test.runInAsyncScope (node:async_hooks:211:14)
+      at Test.run (node:internal/test_runner/test:979:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+      at Test.postRun (node:internal/test_runner/test:1090:19)
+      at Test.run (node:internal/test_runner/test:1018:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+
+test at scripts\run-verify-suite.test.js:213:3
+✖ 실행 증거: throw도 이전 단계 결과와 실제 로그를 잃지 않는다 (0.9339ms)
+  TypeError [Error]: runSuite is not a function
+      at TestContext.<anonymous> (C:\Projects\DAOU.Athena\app\scripts\run-verify-suite.test.js:219:26)
+      at Test.runInAsyncScope (node:async_hooks:211:14)
+      at Test.run (node:internal/test_runner/test:979:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+      at Test.postRun (node:internal/test_runner/test:1090:19)
+      at Test.run (node:internal/test_runner/test:1018:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+
+test at scripts\run-verify-suite.test.js:213:3
+✖ 실행 증거: error도 이전 단계 결과와 실제 로그를 잃지 않는다 (0.8299ms)
+  TypeError [Error]: runSuite is not a function
+      at TestContext.<anonymous> (C:\Projects\DAOU.Athena\app\scripts\run-verify-suite.test.js:219:26)
+      at Test.runInAsyncScope (node:async_hooks:211:14)
+      at Test.run (node:internal/test_runner/test:979:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+      at Test.postRun (node:internal/test_runner/test:1090:19)
+      at Test.run (node:internal/test_runner/test:1018:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+
+test at scripts\run-verify-suite.test.js:236:1
+✖ 실행 증거: 연속 실행은 서로 덮어쓰지 않고 공유된 옛 리포트·캡처는 미확인으로 둔다 (3.2731ms)
+  TypeError [Error]: runSuite is not a function
+      at TestContext.<anonymous> (C:\Projects\DAOU.Athena\app\scripts\run-verify-suite.test.js:243:23)
+      at Test.runInAsyncScope (node:async_hooks:211:14)
+      at Test.run (node:internal/test_runner/test:979:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+      at Test.postRun (node:internal/test_runner/test:1090:19)
+      at Test.run (node:internal/test_runner/test:1018:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:677:7)
+
+test at scripts\run-verify-suite.test.js:259:1
+✖ 실행 증거: 현재 Git commit과 dirty 여부 및 작업 사본 내용 해시를 읽는다 (0.7336ms)
+  TypeError [Error]: readSourceIdentity is not a function
+      at TestContext.<anonymous> (C:\Projects\DAOU.Athena\app\scripts\run-verify-suite.test.js:260:18)
+      at Test.runInAsyncScope (node:async_hooks:211:14)
+      at Test.run (node:internal/test_runner/test:979:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:677:18)
+      at Test.postRun (node:internal/test_runner/test:1090:19)
+      at Test.run (node:internal/test_runner/test:1018:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:677:7)

@@ -1,0 +1,13 @@
+{
+  "reviewer": "root non-author",
+  "status": "APPROVE",
+  "changed_fields": [
+    "title",
+    "detail",
+    "evidence"
+  ],
+  "tracked_exact_identifier_remaining": 0,
+  "other_json_content_equal": true,
+  "sha256": "8e22eb5202d7a16c225edf0b5a6d9951e545684c6f32695e696ecaa19aeb7737",
+  "history_rewritten": false
+}

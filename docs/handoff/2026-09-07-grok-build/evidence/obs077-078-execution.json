@@ -1,0 +1,89 @@
+{
+  "status": "ready_for_independent_review",
+  "author": "round2_code_review",
+  "independent_approval": false,
+  "head": "ac4938008690a86e19c22e2c2d612db11aa52b03",
+  "recorded_at": "2026-09-07T08:03:07.212144+00:00",
+  "findings": [
+    "OBS-077",
+    "OBS-078"
+  ],
+  "canonical_source": "backend/ref/paper-ledger/A-2/446V-1.tree.txt (45FC-1,45G7-1,45GW-1)",
+  "owned_files": [
+    "app/chat.js",
+    "app/lib/agent-canvas.js",
+    "app/lib/agent-canvas.test.js",
+    "app/lib/watch-check-card.js",
+    "app/lib/watch-check-card.test.js",
+    "app/lib/watch-check-card-render.test.js",
+    "app/shell.html"
+  ],
+  "sha256": {
+    "app/chat.js": "8e8bd8cda6546a5d19e200fef7a24b60371b8f768ed843ce708368cd1a343c47",
+    "app/lib/agent-canvas.js": "362fea084f55af99799ce85558c42211609bedff8decd407f6599fd25c1e7efe",
+    "app/lib/agent-canvas.test.js": "12246f671f892bbcbe5c536ad5c3b388644abf82dfeaa1991b5d7a2068b328c7",
+    "app/lib/watch-check-card.js": "b66bde43f00f41fe2898dfdfa1d49cb4043f1c5354c843eaa962aea330b0ba2d",
+    "app/lib/watch-check-card.test.js": "22245ecd80ebe9e0308e8b7714ff5494a3c3029f0822d90c16d31711116d1697",
+    "app/lib/watch-check-card-render.test.js": "5949dfa0f346c83584c2ccda6659968c79e0ba4027a74a502a295c59ba0dc175",
+    "app/shell.html": "753fc25efa13a5c9d733ed9b2e41bb6d707f48970117f076dc2ac36531609aca"
+  },
+  "red": {
+    "log": ".omc/artifacts/full-review/obs077-078-red-final.log",
+    "tests": 160,
+    "pass": 150,
+    "fail": 10,
+    "exit_code": 1
+  },
+  "green": {
+    "log": ".omc/artifacts/full-review/obs077-078-green-final.log",
+    "tests": 195,
+    "pass": 195,
+    "fail": 0,
+    "exit_code": 0,
+    "duration_ms": 827.8984
+  },
+  "tests_added": 14,
+  "existing_tests_updated": 1,
+  "verification_scope": [
+    "Actual chat runWatchCheck IPC result -> checkCardModel -> renderWatchCheckCard DOM with approval event tested",
+    "Browser UMD modules executed in actual shell.html order",
+    "Actual agent canvas detail renders data row for draft/active/paused code-watch",
+    "Existing helper and fix-cycle/progress tests retained",
+    "Scoped static syntax and whitespace checks passed",
+    "Actual undated check response -> existing routine-detail matching snapshot -> 30-cell DOM; mismatched snapshot, detail failure, failed and already-dated controls"
+  ],
+  "pending_boundary": null,
+  "runtime_data_provenance": [
+    "routines/scheduler.py:448 assemble_frame with actual quote_provider",
+    "watch/data.py:163+ assembles candle cache plus today quote; check.py closed_frame excludes today"
+  ],
+  "no_live_backend_model_broker_order_calls": true,
+  "electron_run_by_this_lane": false,
+  "commit_by_this_lane": false,
+  "limitations": [
+    "No Electron/pixel/geometry run in this lane; existing Paper CSS reused",
+    "Only genuine close values are available; render 종가 explicitly instead of inventing Paper ratio examples",
+    "Data row states configured input types, not current quote arrival or connection status",
+    "Legacy result without matching saved snapshot keeps real fire list but has no invented calendar",
+    "Independent reviewer approval remains pending; no self-approval or commit"
+  ],
+  "payload_boundary_red": {
+    "log": ".omc/artifacts/full-review/obs077-payload-red.log",
+    "tests": 8,
+    "pass": 7,
+    "fail": 1,
+    "exit_code": 1,
+    "scope": "Actual current check response omits counted_through; prior frontend-only renderer produced zero calendar cells"
+  },
+  "payload_boundary_resolution": "No backend change. Existing routine-detail is read once only for a successful undated result with checked_at and routine id. Copy counted_through from last_check only when ok and checked_at match exactly; preserve original response on mismatch/failure. Dated and failed checks perform no extra detail request.",
+  "syntax_and_whitespace": {
+    "node_check": "PASS",
+    "scoped_git_diff_check_cr_at_eol": "PASS",
+    "new_test_skip_only_todo_scan_matches": 0,
+    "chat_existing_mixed_newlines_preserved": true
+  },
+  "foreign_worktree_changes_not_owned": [
+    "app/scripts/run-verify-suite.js",
+    "app/scripts/run-verify-suite.test.js"
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "date": "2026-09-07",
+  "status": "read/design only; product and test writes frozen for user-priority PR integration",
+  "scope_after_resume": ["app/scripts/run-verify-suite.js", "app/scripts/run-verify-suite.test.js"],
+  "observed_baseline": "e9f9c5d; must recheck current HEAD, git status, merged runner changes, and active suite processes before writing",
+  "assigned_findings": ["CODE-039", "CODE-075"],
+  "current_gap": "runOne captures exit/timedOut and only returns stdout/stderr tails. main emits progress and final JSON to stdout but creates no durable per-run result file or unique run identity. Shared reports/captures are not bound to this subprocess execution.",
+  "compatibility_contract": [
+    "Keep --list, --suite, --only parsing and existing exit-code policy.",
+    "Keep existing [suite] start/result lines and final JSON ok/results keys.",
+    "Keep runOne result script/ok/code/timedOut/budgetMs/stdoutTail/stderrTail.",
+    "Keep whole-process-tree termination and late-close timeout protection.",
+    "No live provider/broker calls in tests; inject child processes."
+  ],
+  "proposed_minimal_design": [
+    "Create a unique app/captures/verify-suite/<timestamp-and-random-id> directory for each suite run; never overwrite a previous run.",
+    "Persist result.json at start, after each step, and at completion. In-progress state must not claim success.",
+    "Write each step's complete stdout/stderr to its own actual files as chunks arrive. Preserve bounded tails in JSON for existing consumers.",
+    "Record suite selection, run ID, start/end timestamps, elapsed time, Git commit and honest working-tree identity/availability, step exit code/timeout/spawn error, and log paths.",
+    "The source identity should distinguish dirty snapshots; Git commit alone must not silently imply the working copy is clean. Exact hashing approach remains an implementation choice to keep bounded after merge review.",
+    "Do not infer that existing shared captures/reports belong to the run from their presence or mtime. Without a producer run-ID contract, explicitly mark their ownership unverified. Own result/log files are verifiably scoped by their unique run directory.",
+    "Handle child spawn throw/error as a failed persisted step, retaining any earlier completed steps and logs; preserve timeout cleanup behavior."
+  ],
+  "planned_red_green_tests": [
+    "Success writes real run result, timestamps, source identity, complete stdout/stderr files and existing tails.",
+    "Nonzero exit is persisted as failed; no success upgrade from stale report/capture files.",
+    "Timeout retains actual output and timedOut=true after late close(0).",
+    "Spawn throw/error produces failed evidence and does not lose completed prior steps.",
+    "Two sequential runs have different directories/results and preserve the first run bytes.",
+    "An existing shared successful report/capture remains unverified and is neither overwritten nor treated as proof by the runner.",
+    "In-progress result is written before a deferred child completes.",
+    "Existing CLI/list and runner/catalog regression tests remain green."
+  ],
+  "writes_so_far": "Only this operational design artifact. No runner product or test edits yet.",
+  "prior_completed_evidence": [".omc/artifacts/full-review/backend-integrated-execution.json", ".omc/artifacts/full-review/backtest-completed-state-execution.json"],
+  "approval": "Implementation and non-author final review still pending; this plan is not completion evidence."
+}

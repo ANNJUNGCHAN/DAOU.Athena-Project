@@ -1,0 +1,755 @@
+TAP version 13
+# Subtest: AITS authoritative provenance is pinned without runtime checkout dependency
+ok 1 - AITS authoritative provenance is pinned without runtime checkout dependency
+  ---
+  duration_ms: 4.3067
+  ...
+# Subtest: ChartCandle/ChartCardBody normalization matches the AITS DTO shape
+ok 2 - ChartCandle/ChartCardBody normalization matches the AITS DTO shape
+  ---
+  duration_ms: 1.2818
+  ...
+# Subtest: fixture adapter requires explicit period/target/trId without operation inference
+ok 3 - fixture adapter requires explicit period/target/trId without operation inference
+  ---
+  duration_ms: 0.3398
+  ...
+# Subtest: live envelope accepts only authoritative renderer_id + data.symbol + data.chart
+ok 4 - live envelope accepts only authoritative renderer_id + data.symbol + data.chart
+  ---
+  duration_ms: 0.5853
+  ...
+# Subtest: panelId is stable for REST correlation, live stock, and fixture
+ok 5 - panelId is stable for REST correlation, live stock, and fixture
+  ---
+  duration_ms: 0.4548
+  ...
+# Subtest: tick/min snapshots mount pre-sampled without D fallback or pseudo resample
+ok 6 - tick/min snapshots mount pre-sampled without D fallback or pseudo resample
+  ---
+  duration_ms: 1.0178
+  ...
+# Subtest: same panel period reload reuses one renderer and one session
+ok 7 - same panel period reload reuses one renderer and one session
+  ---
+  duration_ms: 1.2201
+  ...
+# Subtest: renderer receives authoritative UI reload callback without local period inference
+ok 8 - renderer receives authoritative UI reload callback without local period inference
+  ---
+  duration_ms: 0.3971
+  ...
+# Subtest: six-panel cap is isolated per REST dataset/surface
+ok 9 - six-panel cap is isolated per REST dataset/surface
+  ---
+  duration_ms: 1.3247
+  ...
+# Subtest: reload generation rejects a stale late result
+ok 10 - reload generation rejects a stale late result
+  ---
+  duration_ms: 0.6337
+  ...
+# Subtest: MCP/fixture panels do not consume a REST dataset quota
+ok 11 - MCP/fixture panels do not consume a REST dataset quota
+  ---
+  duration_ms: 0.4424
+  ...
+# Subtest: ChartTickDelta updates/rolls over in-place, preserving renderer identity
+ok 12 - ChartTickDelta updates/rolls over in-place, preserving renderer identity
+  ---
+  duration_ms: 0.5038
+  ...
+# Subtest: reload replaces controller authority before a following tick delta
+ok 13 - reload replaces controller authority before a following tick delta
+  ---
+  duration_ms: 0.3666
+  ...
+# Subtest: destroy during async mount disposes the late renderer and leaves no session
+ok 14 - destroy during async mount disposes the late renderer and leaves no session
+  ---
+  duration_ms: 0.5287
+  ...
+# Subtest: 같은 panelId를 다른 컨테이너로 열면 던지고, 닫은 뒤에는 새 컨테이너로 열린다
+ok 15 - 같은 panelId를 다른 컨테이너로 열면 던지고, 닫은 뒤에는 새 컨테이너로 열린다
+  ---
+  duration_ms: 0.3969
+  ...
+# Subtest: concurrent same-panel reload waits for one mount and never creates a duplicate renderer
+ok 16 - concurrent same-panel reload waits for one mount and never creates a duplicate renderer
+  ---
+  duration_ms: 0.3882
+  ...
+# Subtest: 늦게 끝나는 차트 마운트는 pending ack와 살아 있는 카드로 결론난다
+ok 17 - 늦게 끝나는 차트 마운트는 pending ack와 살아 있는 카드로 결론난다
+  ---
+  duration_ms: 2.7787
+  ...
+# Subtest: all Athena chart entry points are statically locked to the AITS adapter
+ok 18 - all Athena chart entry points are statically locked to the AITS adapter
+  ---
+  duration_ms: 7.2185
+  ...
+# Subtest: cold-start chart import is started once and every renderer awaits the same ready result
+ok 19 - cold-start chart import is started once and every renderer awaits the same ready result
+  ---
+  duration_ms: 3.9387
+  ...
+# Subtest: volume-profile toggle renders immediately even when the next animation frame is withheld
+ok 20 - volume-profile toggle renders immediately even when the next animation frame is withheld
+  ---
+  duration_ms: 1.1674
+  ...
+# Subtest: chart-mock-ohlcv.json: 240 일봉, OHLC 정합(low<=open/close<=high)
+ok 21 - chart-mock-ohlcv.json: 240 일봉, OHLC 정합(low<=open/close<=high)
+  ---
+  duration_ms: 0.9937
+  ...
+# Subtest: toCandleSeriesData: time/open/high/low/close만 뽑고 숫자로 강제한다
+ok 22 - toCandleSeriesData: time/open/high/low/close만 뽑고 숫자로 강제한다
+  ---
+  duration_ms: 0.4786
+  ...
+# Subtest: toCandleSeriesData: 결측/비정상 봉은 걸러낸다
+ok 23 - toCandleSeriesData: 결측/비정상 봉은 걸러낸다
+  ---
+  duration_ms: 0.2272
+  ...
+# Subtest: toCandleSeriesData: 빈/비배열 입력은 빈 배열
+ok 24 - toCandleSeriesData: 빈/비배열 입력은 빈 배열
+  ---
+  duration_ms: 0.109
+  ...
+# Subtest: toVolumeSeriesData: 상승봉은 UP_COLOR alpha 0.5, 하락봉은 DOWN_COLOR alpha 0.5
+ok 25 - toVolumeSeriesData: 상승봉은 UP_COLOR alpha 0.5, 하락봉은 DOWN_COLOR alpha 0.5
+  ---
+  duration_ms: 0.4738
+  ...
+# Subtest: withAlpha: HEX를 rgba() 문자열로 정확히 변환한다
+ok 26 - withAlpha: HEX를 rgba() 문자열로 정확히 변환한다
+  ---
+  duration_ms: 0.1543
+  ...
+# Subtest: mock 데이터에 대한 실제 변환도 산술적으로 닫힌다(전량 유지)
+ok 27 - mock 데이터에 대한 실제 변환도 산술적으로 닫힌다(전량 유지)
+  ---
+  duration_ms: 0.7974
+  ...
+# Subtest: resolveInitialPeriod: AITS 주기 D/W/M/Y/MIN/TICK은 그대로 통과시킨다
+ok 28 - resolveInitialPeriod: AITS 주기 D/W/M/Y/MIN/TICK은 그대로 통과시킨다
+  ---
+  duration_ms: 0.5332
+  ...
+# Subtest: resolveInitialPeriod: initial 부재/period 부재는 조용히 D로 폴백(로그 없음)
+ok 29 - resolveInitialPeriod: initial 부재/period 부재는 조용히 D로 폴백(로그 없음)
+  ---
+  duration_ms: 0.2509
+  ...
+# Subtest: resolveInitialPeriod: 미인식 값은 D로 폴백하고 경고를 남긴다
+ok 30 - resolveInitialPeriod: 미인식 값은 D로 폴백하고 경고를 남긴다
+  ---
+  duration_ms: 0.2029
+  ...
+# Subtest: live-full catalog locks five modes to shell.html nav and canvas ids
+ok 31 - live-full catalog locks five modes to shell.html nav and canvas ids
+  ---
+  duration_ms: 2.9352
+  ...
+# Subtest: live-full catalog paper chrome matches controller CHAT_HEAD_COPY and chat.css empty copy
+ok 32 - live-full catalog paper chrome matches controller CHAT_HEAD_COPY and chat.css empty copy
+  ---
+  duration_ms: 2.3257
+  ...
+# Subtest: live-full catalog settings nav fourth item is 성향・이력
+ok 33 - live-full catalog settings nav fourth item is 성향・이력
+  ---
+  duration_ms: 3.674
+  ...
+# Subtest: live-full catalog locked clicks cover real orders and kiumi five faces
+ok 34 - live-full catalog locked clicks cover real orders and kiumi five faces
+  ---
+  duration_ms: 0.5772
+  ...
+# Subtest: order lock does not treat 과매도 or 과매수 technique copy as a live order
+ok 35 - order lock does not treat 과매도 or 과매수 technique copy as a live order
+  ---
+  duration_ms: 0.4663
+  ...
+# Subtest: verify suite lists live-full and the official verify script with budgets
+ok 36 - verify suite lists live-full and the official verify script with budgets
+  ---
+  duration_ms: 3.912
+  ...
+# Subtest: 기본 스위트는 Paper 정적 게이트 3종을 매니페스트부터 순서대로 담는다
+ok 37 - 기본 스위트는 Paper 정적 게이트 3종을 매니페스트부터 순서대로 담는다
+  ---
+  duration_ms: 0.2973
+  ...
+# Subtest: paper 스위트도 예산과 실재하는 npm 스크립트를 단언한다
+ok 38 - paper 스위트도 예산과 실재하는 npm 스크립트를 단언한다
+  ---
+  duration_ms: 1.0858
+  ...
+# Subtest: paper 스위트의 electron 항목은 기본 스위트에 못 들어간다
+ok 39 - paper 스위트의 electron 항목은 기본 스위트에 못 들어간다
+  ---
+  duration_ms: 0.8739
+  ...
+# Subtest: 진행 중 재호출은 같은 promise를 받고 팩토리는 한 번만 돈다
+ok 40 - 진행 중 재호출은 같은 promise를 받고 팩토리는 한 번만 돈다
+  ---
+  duration_ms: 2.0922
+  ...
+# Subtest: 성공 뒤 재호출도 팩토리를 다시 부르지 않는다
+ok 41 - 성공 뒤 재호출도 팩토리를 다시 부르지 않는다
+  ---
+  duration_ms: 0.303
+  ...
+# Subtest: 실패 뒤 재호출은 팩토리를 다시 부른다
+ok 42 - 실패 뒤 재호출은 팩토리를 다시 부른다
+  ---
+  duration_ms: 1.0772
+  ...
+# Subtest: 실패한 promise는 호출자가 잡든 안 잡든 미처리 거부로 새지 않는다
+ok 43 - 실패한 promise는 호출자가 잡든 안 잡든 미처리 거부로 새지 않는다
+  ---
+  duration_ms: 10.7457
+  ...
+# Subtest: 재사용 알림은 재사용일 때만 불린다
+ok 44 - 재사용 알림은 재사용일 때만 불린다
+  ---
+  duration_ms: 0.3987
+  ...
+# Subtest: exact direct lane uses only resolve and inline render-plan, then emits paint ack
+ok 45 - exact direct lane uses only resolve and inline render-plan, then emits paint ack
+  ---
+  duration_ms: 7.3225
+  ...
+# Subtest: visible AITS renderer error is feedback, never a successful data canvas
+ok 46 - visible AITS renderer error is feedback, never a successful data canvas
+  ---
+  duration_ms: 0.9852
+  ...
+# Subtest: 마운트 결과를 못 받은 차트는 timeout으로 집계되고 데이터 카드가 아니다
+ok 47 - 마운트 결과를 못 받은 차트는 timeout으로 집계되고 데이터 카드가 아니다
+  ---
+  duration_ms: 0.6278
+  ...
+# Subtest: render-plan deadline uses the remaining three-second budget with paint reserve
+ok 48 - render-plan deadline uses the remaining three-second budget with paint reserve
+  ---
+  duration_ms: 0.5972
+  ...
+# Subtest: render-plan deadline never drops below the backend minimum
+ok 49 - render-plan deadline never drops below the backend minimum
+  ---
+  duration_ms: 0.6813
+  ...
+# Subtest: primary admission control paints normal data but turns slower work into an authoritative timeout before 3s
+ok 50 - primary admission control paints normal data but turns slower work into an authoritative timeout before 3s
+  ---
+  duration_ms: 42.655
+  ...
+# Subtest: HTTP failures preserve backend status, code and detail for diagnostics
+ok 51 - HTTP failures preserve backend status, code and detail for diagnostics
+  ---
+  duration_ms: 1.3614
+  ...
+# Subtest: generic dataset questions with one through six screens mint every item by exact operation identity
+ok 52 - generic dataset questions with one through six screens mint every item by exact operation identity
+  ---
+  duration_ms: 2.0016
+  ...
+# Subtest: primary paints before secondary pool starts and remaining concurrency never exceeds 3
+ok 53 - primary paints before secondary pool starts and remaining concurrency never exceeds 3
+  ---
+  duration_ms: 43.6864
+  ...
+# Subtest: secondary cards receive independent bounded paint deadlines after first feedback
+ok 54 - secondary cards receive independent bounded paint deadlines after first feedback
+  ---
+  duration_ms: 0.9292
+  ...
+# Subtest: slow primary does not consume secondary render-plan budgets or data results
+ok 55 - slow primary does not consume secondary render-plan budgets or data results
+  ---
+  duration_ms: 0.6884
+  ...
+# Subtest: single-flight reuses one physical Kiwoom call while preserving distinct card correlation
+ok 56 - single-flight reuses one physical Kiwoom call while preserving distinct card correlation
+  ---
+  duration_ms: 0.2685
+  ...
+# Subtest: partial failure is truthful and never uses the success receipt
+ok 57 - partial failure is truthful and never uses the success receipt
+  ---
+  duration_ms: 0.3563
+  ...
+# Subtest: first-canvas deadline exposes an explicit retryable timeout and retry advances dataset generation
+ok 58 - first-canvas deadline exposes an explicit retryable timeout and retry advances dataset generation
+  ---
+  duration_ms: 13.2395
+  ...
+# Subtest: 직접 조회가 선택한 bounded deadline 안에서는 3초가 지난 첫 카드도 성공한다
+ok 59 - 직접 조회가 선택한 bounded deadline 안에서는 3초가 지난 첫 카드도 성공한다
+  ---
+  duration_ms: 0.3692
+  ...
+# Subtest: fetch failure before the first card is an explicit retryable local error
+ok 60 - fetch failure before the first card is an explicit retryable local error
+  ---
+  duration_ms: 0.2838
+  ...
+# Subtest: retry authority is granted only after every query operation receives a signed plan
+ok 61 - retry authority is granted only after every query operation receives a signed plan
+  ---
+  duration_ms: 14.6334
+  ...
+# Subtest: user cancellation falls back to cancelled only when no authoritative response arrives
+ok 62 - user cancellation falls back to cancelled only when no authoritative response arrives
+  ---
+  duration_ms: 0.5714
+  ...
+# Subtest: authoritative timeout state is painted in the same dataset slot and counts as feedback, not data
+ok 63 - authoritative timeout state is painted in the same dataset slot and counts as feedback, not data
+  ---
+  duration_ms: 0.4066
+  ...
+# Subtest: user cancellation keeps the request long enough to preserve authoritative screen identity, then paints cancelled state
+ok 64 - user cancellation keeps the request long enough to preserve authoritative screen identity, then paints cancelled state
+  ---
+  duration_ms: 14.0712
+  ...
+# Subtest: hard abort cancels the in-flight fetch, emits no late card, and the next dataset stays clean
+ok 65 - hard abort cancels the in-flight fetch, emits no late card, and the next dataset stays clean
+  ---
+  duration_ms: 30.7909
+  ...
+# Subtest: validation rejects over-six, caller presentation, order, OAuth, split-original and unknown refs
+ok 66 - validation rejects over-six, caller presentation, order, OAuth, split-original and unknown refs
+  ---
+  duration_ms: 0.7048
+  ...
+# Subtest: six fail-closed dataset shapes return immediate truthful receipts without transport calls
+ok 67 - six fail-closed dataset shapes return immediate truthful receipts without transport calls
+  ---
+  duration_ms: 0.3531
+  ...
+# Subtest: fixture-shaped input is accepted without mutating the fixture contract
+ok 68 - fixture-shaped input is accepted without mutating the fixture contract
+  ---
+  duration_ms: 0.1184
+  ...
+# Subtest: stock entity index consumes the shared Python/JS conformance vector at a stable adapter version
+ok 69 - stock entity index consumes the shared Python/JS conformance vector at a stable adapter version
+  ---
+  duration_ms: 2.0566
+  ...
+# Subtest: resolveQuery 메모는 같은 질의를 재사용하고 replace()로만 무효화된다
+ok 70 - resolveQuery 메모는 같은 질의를 재사용하고 replace()로만 무효화된다
+  ---
+  duration_ms: 0.7588
+  ...
+# Subtest: 카드 v3의 6개 빌더가 같은 질의를 공유해도 resolveQuery 실계산은 한 번만 돈다
+ok 71 - 카드 v3의 6개 빌더가 같은 질의를 공유해도 resolveQuery 실계산은 한 번만 돈다
+  ---
+  duration_ms: 3.3338
+  ...
+# Subtest: quote binder keeps entity resolution separate from quote intent routing
+ok 72 - quote binder keeps entity resolution separate from quote intent routing
+  ---
+  duration_ms: 3.4311
+  ...
+# Subtest: quote binder uses a closed standalone grammar and rejects every residual semantic token
+ok 73 - quote binder uses a closed standalone grammar and rejects every residual semantic token
+  ---
+  duration_ms: 7.1148
+  ...
+# Subtest: chart binder uses a closed standalone grammar and rejects every residual semantic token
+ok 74 - chart binder uses a closed standalone grammar and rejects every residual semantic token
+  ---
+  duration_ms: 22.8995
+  ...
+# Subtest: order book binder uses a closed standalone grammar and rejects every residual semantic token
+ok 75 - order book binder uses a closed standalone grammar and rejects every residual semantic token
+  ---
+  duration_ms: 2.1668
+  ...
+# Subtest: 복합 문장은 단일 화면 문법과 단순 차트 fast path 어디에도 안 걸린다
+ok 76 - 복합 문장은 단일 화면 문법과 단순 차트 fast path 어디에도 안 걸린다
+  ---
+  duration_ms: 4.399
+  ...
+# Subtest: compound binder accepts 시세랑 호가 and rejects comparison or single-screen queries
+ok 77 - compound binder accepts 시세랑 호가 and rejects comparison or single-screen queries
+  ---
+  duration_ms: 0.5243
+  ...
+# Subtest: investor flow binder uses a closed standalone grammar and rejects every residual semantic token
+ok 78 - investor flow binder uses a closed standalone grammar and rejects every residual semantic token
+  ---
+  duration_ms: 2.012
+  ...
+# Subtest: trading source binder uses a closed standalone grammar and rejects every residual semantic token
+ok 79 - trading source binder uses a closed standalone grammar and rejects every residual semantic token
+  ---
+  duration_ms: 1.1813
+  ...
+# Subtest: stock info binder uses a closed standalone grammar and rejects every residual semantic token
+ok 80 - stock info binder uses a closed standalone grammar and rejects every residual semantic token
+  ---
+  duration_ms: 1.0604
+  ...
+# Subtest: program trade binder uses a closed market-wide grammar with no entity resolution
+ok 81 - program trade binder uses a closed market-wide grammar with no entity resolution
+  ---
+  duration_ms: 0.9259
+  ...
+# Subtest: resolved entity code remains exact through quote dataset and resolve control plane
+ok 82 - resolved entity code remains exact through quote dataset and resolve control plane
+  ---
+  duration_ms: 0.7633
+  ...
+# Subtest: unsafe or non-quote resolver vectors mint neither a quote dataset nor a plan
+ok 83 - unsafe or non-quote resolver vectors mint neither a quote dataset nor a plan
+  ---
+  duration_ms: 0.3891
+  ...
+# Subtest: ETF, unknown code, intent uncertainty, and unknown market never bind the stock quote operation
+ok 84 - ETF, unknown code, intent uncertainty, and unknown market never bind the stock quote operation
+  ---
+  duration_ms: 1.5382
+  ...
+# Subtest: stock-master refresh publishes one atomic returned-market snapshot and deduplicates aggregate overlap
+ok 85 - stock-master refresh publishes one atomic returned-market snapshot and deduplicates aggregate overlap
+  ---
+  duration_ms: 2.1548
+  ...
+# Subtest: stock-master refresh excludes conflicting identity metadata instead of choosing a response order
+ok 86 - stock-master refresh excludes conflicting identity metadata instead of choosing a response order
+  ---
+  duration_ms: 0.2934
+  ...
+# Subtest: stock-master fetch or response validation failure preserves the prior snapshot
+ok 87 - stock-master fetch or response validation failure preserves the prior snapshot
+  ---
+  duration_ms: 0.5746
+  ...
+# Subtest: stock-master refresh forwards cancellation to fetch and aborts an inter-market wait
+ok 88 - stock-master refresh forwards cancellation to fetch and aborts an inter-market wait
+  ---
+  duration_ms: 0.4247
+  ...
+# Subtest: recommendations accept only predeclared safe query actions, dedupe, and cap at three
+ok 89 - recommendations accept only predeclared safe query actions, dedupe, and cap at three
+  ---
+  duration_ms: 0.2861
+  ...
+# Subtest: 껍질 paint를 알린 차트는 마운트가 마감을 넘겨 끝나도 답변이 뒤집히지 않는다
+ok 90 - 껍질 paint를 알린 차트는 마운트가 마감을 넘겨 끝나도 답변이 뒤집히지 않는다
+  ---
+  duration_ms: 624.8412
+  ...
+# Subtest: routes a simple named-stock chart through the direct runner after bounded index readiness
+ok 91 - routes a simple named-stock chart through the direct runner after bounded index readiness
+  ---
+  duration_ms: 4.6034
+  ...
+# Subtest: returns a local readiness response instead of falling through when the index misses its deadline
+ok 92 - returns a local readiness response instead of falling through when the index misses its deadline
+  ---
+  duration_ms: 0.8266
+  ...
+# Subtest: keeps a confirmed stock or explicit stock code out of Selector and Claude when binding still fails
+ok 93 - keeps a confirmed stock or explicit stock code out of Selector and Claude when binding still fails
+  ---
+  duration_ms: 0.7655
+  ...
+# Subtest: does not intercept ETF or general chart requests that the stock binder rejects
+ok 94 - does not intercept ETF or general chart requests that the stock binder rejects
+  ---
+  duration_ms: 0.4745
+  ...
+# Subtest: does not claim ETF or general chart requests while the stock index is unavailable
+ok 95 - does not claim ETF or general chart requests while the stock index is unavailable
+  ---
+  duration_ms: 0.558
+  ...
+# Subtest: abstains without waiting for non-simple or analysis-heavy chart questions
+ok 96 - abstains without waiting for non-simple or analysis-heavy chart questions
+  ---
+  duration_ms: 0.3029
+  ...
+# Subtest: recognizes the narrow daily-chart display grammar
+ok 97 - recognizes the narrow daily-chart display grammar
+  ---
+  duration_ms: 0.3356
+  ...
+# Subtest: leaves a compound screen query to the compound binder even when 차트 comes second
+ok 98 - leaves a compound screen query to the compound binder even when 차트 comes second
+  ---
+  duration_ms: 0.3672
+  ...
+# Subtest: snapshot preserves task order and increments revision on transitions
+ok 99 - snapshot preserves task order and increments revision on transitions
+  ---
+  duration_ms: 2.2004
+  ...
+# Subtest: running gate keeps phase running until its promise succeeds
+ok 100 - running gate keeps phase running until its promise succeeds
+  ---
+  duration_ms: 0.7786
+  ...
+# Subtest: an early failure stays running until every later gate is attempted, then becomes degraded
+ok 101 - an early failure stays running until every later gate is attempted, then becomes degraded
+  ---
+  duration_ms: 0.9377
+  ...
+# Subtest: stale attempt result cannot overwrite a newer internal attempt
+ok 102 - stale attempt result cannot overwrite a newer internal attempt
+  ---
+  duration_ms: 0.6701
+  ...
+# Subtest: disabled fixture-style gates satisfy readiness and ready emits exactly once
+ok 103 - disabled fixture-style gates satisfy readiness and ready emits exactly once
+  ---
+  duration_ms: 0.3788
+  ...
+# Subtest: degraded terminal emits the terminal callback exactly once
+ok 104 - degraded terminal emits the terminal callback exactly once
+  ---
+  duration_ms: 0.2272
+  ...
+# Subtest: startup failure notification records only sinks that confirmed display and retries failed sinks
+ok 105 - startup failure notification records only sinks that confirmed display and retries failed sinks
+  ---
+  duration_ms: 0.9159
+  ...
+# Subtest: startup failure notification treats throws and rejected async displays as retryable
+ok 106 - startup failure notification treats throws and rejected async displays as retryable
+  ---
+  duration_ms: 0.6359
+  ...
+# Subtest: OS startup notification completes only on shown and remains retryable on failed or unsupported
+ok 107 - OS startup notification completes only on shown and remains retryable on failed or unsupported
+  ---
+  duration_ms: 0.8547
+  ...
+# Subtest: verify entrypoint is exported, fixture-only, and guarded against duplicate starts
+ok 108 - verify entrypoint is exported, fixture-only, and guarded against duplicate starts
+  ---
+  duration_ms: 2.3635
+  ...
+# Subtest: LIFE-003 main source keeps one shell-to-orb visibility policy from boot through background entry
+ok 109 - LIFE-003 main source keeps one shell-to-orb visibility policy from boot through background entry
+  ---
+  duration_ms: 3.386
+  ...
+# Subtest: BOOT-003 production surfaces have no retry UI or retry IPC and retain the real task label
+ok 110 - BOOT-003 production surfaces have no retry UI or retry IPC and retain the real task label
+  ---
+  duration_ms: 4.4399
+  ...
+# Subtest: live orchestration attempts every dependent gate after backend failure and ignores continuous completion
+ok 111 - live orchestration attempts every dependent gate after backend failure and ignores continuous completion
+  ---
+  duration_ms: 0.8386
+  ...
+# Subtest: graph boot gates run in strict sequence while feed gates connect in parallel
+ok 112 - graph boot gates run in strict sequence while feed gates connect in parallel
+  ---
+  duration_ms: 0.3204
+  ...
+# Subtest: bounded initial readiness fails after its task-specific attempt budget
+ok 113 - bounded initial readiness fails after its task-specific attempt budget
+  ---
+  duration_ms: 0.4935
+  ...
+# Subtest: dependency task chains never start provider warmup before secret migration completes
+ok 114 - dependency task chains never start provider warmup before secret migration completes
+  ---
+  duration_ms: 0.3844
+  ...
+# Subtest: brain startup classification distinguishes deliberate disable from unavailable/degraded failure
+ok 115 - brain startup classification distinguishes deliberate disable from unavailable/degraded failure
+  ---
+  duration_ms: 0.1918
+  ...
+# Subtest: 통합 카드 계약이 붙은 키움 봉투는 CC 카드로 간다
+ok 116 - 통합 카드 계약이 붙은 키움 봉투는 CC 카드로 간다
+  ---
+  duration_ms: 1.1112
+  ...
+# Subtest: card_id 없이 presentation_contract만 있으면 semantic workspace로 간다
+ok 117 - card_id 없이 presentation_contract만 있으면 semantic workspace로 간다
+  ---
+  duration_ms: 0.9416
+  ...
+# Subtest: 계약 없는 키움 봉투는 레거시 범용 카드로 떨어지지 않고 차단된다
+ok 118 - 계약 없는 키움 봉투는 레거시 범용 카드로 떨어지지 않고 차단된다
+  ---
+  duration_ms: 0.2748
+  ...
+# Subtest: 차단 사유는 어떤 operation이 문제인지 드러낸다
+ok 119 - 차단 사유는 어떤 operation이 문제인지 드러낸다
+  ---
+  duration_ms: 0.2049
+  ...
+# Subtest: operation_ref가 없는 비 키움 봉투는 기존 범용 경로를 그대로 쓴다
+ok 120 - operation_ref가 없는 비 키움 봉투는 기존 범용 경로를 그대로 쓴다
+  ---
+  duration_ms: 0.2118
+  ...
+# Subtest: 공백뿐인 operation_ref는 키움 봉투로 보지 않는다
+ok 121 - 공백뿐인 operation_ref는 키움 봉투로 보지 않는다
+  ---
+  duration_ms: 0.0843
+  ...
+# Subtest: AITS 렌더러 봉투는 보드 표면이 가로채지 않는다
+ok 122 - AITS 렌더러 봉투는 보드 표면이 가로채지 않는다
+  ---
+  duration_ms: 0.1986
+  ...
+# Subtest: 차트 op 19종은 renderer_id 없이도 앱 primary로 남는다
+ok 123 - 차트 op 19종은 renderer_id 없이도 앱 primary로 남는다
+  ---
+  duration_ms: 0.1248
+  ...
+# Subtest: 차트 op 목록은 manifest의 AITS 렌더러 전집합과 정확히 같다
+ok 124 - 차트 op 목록은 manifest의 AITS 렌더러 전집합과 정확히 같다
+  ---
+  duration_ms: 6.3354
+  ...
+# Subtest: 차트가 아닌 ka10084·ka10085는 자기 Paper 보드로 간다
+ok 125 - 차트가 아닌 ka10084·ka10085는 자기 Paper 보드로 간다
+  ---
+  duration_ms: 0.3537
+  ...
+# Subtest: 차트 recipe를 빌려 쓴 시세 봉투는 보드로 간다
+ok 126 - 차트 recipe를 빌려 쓴 시세 봉투는 보드로 간다
+  ---
+  duration_ms: 0.1703
+  ...
+# Subtest: 렌더러 신호 없는 recipe는 보드 표면 판정을 막지 않는다
+ok 127 - 렌더러 신호 없는 recipe는 보드 표면 판정을 막지 않는다
+  ---
+  duration_ms: 0.1061
+  ...
+# Subtest: 주문 티켓 op는 보드가 마운트 지점을 갖출 때까지 앱 primary로 남는다
+ok 128 - 주문 티켓 op는 보드가 마운트 지점을 갖출 때까지 앱 primary로 남는다
+  ---
+  duration_ms: 0.0721
+  ...
+# Subtest: 호가 op는 자기 Paper 보드로 간다 — 사다리 자리가 없는 보드도 마찬가지다
+ok 129 - 호가 op는 자기 Paper 보드로 간다 — 사다리 자리가 없는 보드도 마찬가지다
+  ---
+  duration_ms: 0.2047
+  ...
+# Subtest: 주문 예외는 op 목록이지 카드 이름이 아니다
+ok 130 - 주문 예외는 op 목록이지 카드 이름이 아니다
+  ---
+  duration_ms: 0.1762
+  ...
+# Subtest: 주문 op 목록은 capability 배정 원장과 정확히 같다
+ok 131 - 주문 op 목록은 capability 배정 원장과 정확히 같다
+  ---
+  duration_ms: 0.5367
+  ...
+# Subtest: 그 외 recipe·계약 없는 봉투는 보드 표면 판정을 막지 않는다
+ok 132 - 그 외 recipe·계약 없는 봉투는 보드 표면 판정을 막지 않는다
+  ---
+  duration_ms: 0.1042
+  ...
+# Subtest: canvas_type chart는 recipe_id가 없어도 보드가 AITS를 가로채지 않는다
+ok 133 - canvas_type chart는 recipe_id가 없어도 보드가 AITS를 가로채지 않는다
+  ---
+  duration_ms: 0.4471
+  ...
+# Subtest: 보드가 그 앱 렌더러를 얹을 수 있으면 봉투는 보드로 간다
+ok 134 - 보드가 그 앱 렌더러를 얹을 수 있으면 봉투는 보드로 간다
+  ---
+  duration_ms: 0.2241
+  ...
+# Subtest: 보드가 얹을 줄 아는 종류와 봉투가 필요한 종류가 달라도 예외는 그대로다
+ok 135 - 보드가 얹을 줄 아는 종류와 봉투가 필요한 종류가 달라도 예외는 그대로다
+  ---
+  duration_ms: 0.0695
+  ...
+# Subtest: semantic-workspaces 검증기의 preserve 판정은 이 모듈이 든다
+ok 136 - semantic-workspaces 검증기의 preserve 판정은 이 모듈이 든다
+  ---
+  duration_ms: 0.7547
+  ...
+# Subtest: parseOnly는 --only가 없으면 전체 실행을 뜻하는 null을 준다
+ok 137 - parseOnly는 --only가 없으면 전체 실행을 뜻하는 null을 준다
+  ---
+  duration_ms: 1.3413
+  ...
+# Subtest: parseOnly는 --only 뒤 값을 그대로 돌려준다
+ok 138 - parseOnly는 --only 뒤 값을 그대로 돌려준다
+  ---
+  duration_ms: 0.1203
+  ...
+# Subtest: parseOnly는 --only 뒤 값이 없으면 전체 실행으로 떨어지지 않고 오류를 준다
+ok 139 - parseOnly는 --only 뒤 값이 없으면 전체 실행으로 떨어지지 않고 오류를 준다
+  ---
+  duration_ms: 0.8625
+  ...
+# Subtest: parseOnly는 --only 뒤에 다른 플래그가 오면 값 누락으로 본다
+ok 140 - parseOnly는 --only 뒤에 다른 플래그가 오면 값 누락으로 본다
+  ---
+  duration_ms: 0.1093
+  ...
+# Subtest: parseSuite는 --suite가 없으면 기본 스위트를 뜻한다
+ok 141 - parseSuite는 --suite가 없으면 기본 스위트를 뜻한다
+  ---
+  duration_ms: 0.2969
+  ...
+# Subtest: parseSuite는 --suite paper를 받는다
+ok 142 - parseSuite는 --suite paper를 받는다
+  ---
+  duration_ms: 0.1293
+  ...
+# Subtest: parseSuite는 --suite 뒤 값이 없으면 기본 스위트로 떨어지지 않고 오류를 준다
+ok 143 - parseSuite는 --suite 뒤 값이 없으면 기본 스위트로 떨어지지 않고 오류를 준다
+  ---
+  duration_ms: 0.2076
+  ...
+# Subtest: parseSuite는 --suite 뒤에 다른 플래그가 오면 값 누락으로 본다
+ok 144 - parseSuite는 --suite 뒤에 다른 플래그가 오면 값 누락으로 본다
+  ---
+  duration_ms: 0.0895
+  ...
+# Subtest: parseSuite는 오타난 스위트 이름을 조용히 기본 스위트로 바꾸지 않는다
+ok 145 - parseSuite는 오타난 스위트 이름을 조용히 기본 스위트로 바꾸지 않는다
+  ---
+  duration_ms: 0.3026
+  ...
+# Subtest: runOne은 예산을 넘기면 자식 트리를 통째로 죽이고 timedOut을 알린다
+ok 146 - runOne은 예산을 넘기면 자식 트리를 통째로 죽이고 timedOut을 알린다
+  ---
+  duration_ms: 13.8019
+  ...
+# Subtest: runOne은 예산 초과 뒤 늦게 오는 close로 판정을 뒤집지 않는다
+ok 147 - runOne은 예산 초과 뒤 늦게 오는 close로 판정을 뒤집지 않는다
+  ---
+  duration_ms: 15.7822
+  ...
+# Subtest: runOne은 정상 종료 시 종료 코드로 판정하고 로그 꼬리를 담는다
+ok 148 - runOne은 정상 종료 시 종료 코드로 판정하고 로그 꼬리를 담는다
+  ---
+  duration_ms: 0.4534
+  ...
+# Subtest: runOne은 청크 경계에 걸린 한글을 깨뜨리지 않는다
+ok 149 - runOne은 청크 경계에 걸린 한글을 깨뜨리지 않는다
+  ---
+  duration_ms: 0.1643
+  ...
+1..149
+# tests 149
+# suites 0
+# pass 149
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1022.9365

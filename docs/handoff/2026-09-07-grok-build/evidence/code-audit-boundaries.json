@@ -1,0 +1,97 @@
+{
+  "source_sha256": {
+    "canvas": "31a7ffafb29000447a6ac438088b182d61f116f2f3f7180e9ae5b2ef70b6b7a7",
+    "runner": "35362c31c93bc1d14b25312f6b8789b35671bacb598cbc48e86676532fb0c020"
+  },
+  "cases": {
+    "chartFailure": {
+      "initial": "loading",
+      "final": "error",
+      "errorOnLiveRoot": true,
+      "sessionOnLiveRoot": false
+    },
+    "chartSuccess": {
+      "initial": "loading",
+      "final": "data",
+      "errorOnLiveRoot": false,
+      "sessionOnLiveRoot": true
+    },
+    "fastFailure": {
+      "deadlineMs": 30000,
+      "elapsedBeforeSecondMs": 0,
+      "secondResolveMs": 200,
+      "dataCanvasCount": 1,
+      "errors": [
+        {
+          "ordinal": 1,
+          "code": "render-plan_http"
+        }
+      ],
+      "paintBudgets": [
+        {
+          "ordinal": 2,
+          "remaining": 29800
+        }
+      ],
+      "calls": [
+        {
+          "path": "resolve",
+          "ordinal": null
+        },
+        {
+          "path": "render-plan",
+          "ordinal": 1
+        },
+        {
+          "path": "resolve",
+          "ordinal": null
+        },
+        {
+          "path": "render-plan",
+          "ordinal": 2
+        }
+      ]
+    },
+    "slowFailure": {
+      "deadlineMs": 30000,
+      "elapsedBeforeSecondMs": 29900,
+      "secondResolveMs": 200,
+      "dataCanvasCount": 0,
+      "errors": [
+        {
+          "ordinal": 1,
+          "code": "render-plan_http"
+        },
+        {
+          "ordinal": 2,
+          "code": "audit_paint_budget_exhausted"
+        }
+      ],
+      "paintBudgets": [
+        {
+          "ordinal": 2,
+          "remaining": -100
+        }
+      ],
+      "calls": [
+        {
+          "path": "resolve",
+          "ordinal": null
+        },
+        {
+          "path": "render-plan",
+          "ordinal": 1
+        },
+        {
+          "path": "resolve",
+          "ordinal": null
+        },
+        {
+          "path": "render-plan",
+          "ordinal": 2
+        }
+      ]
+    }
+  },
+  "verdict": "4 offline boundary checks passed; CODE-063 remains reproducible; CODE-001/002/010 corrected paths execute as expected"
+}

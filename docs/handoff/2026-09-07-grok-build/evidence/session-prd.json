@@ -1,0 +1,73 @@
+{
+  "userStories": [
+    {
+      "acceptanceCriteria": [
+        "Merged tree preserves main and 97c8b35 changes with no unresolved conflicts",
+        "Relevant unit, gates and Electron checks pass and independent reviewer approves",
+        "Remote main contains source tip before branch deletion; deleted remote ref verified"
+      ],
+      "id": "MERGE",
+      "title": "Merge requested Kiwoomi branch and safely retire it",
+      "passes": true
+    },
+    {
+      "acceptanceCriteria": [
+        "Full pytest suite exits successfully with retained current log",
+        "Every discovered failure is reproduced and resolved or explicitly classified with independent evidence"
+      ],
+      "id": "BACKEND",
+      "title": "Full backend verification",
+      "passes": false
+    },
+    {
+      "acceptanceCriteria": [
+        "Run full screens, card mount and mini checks with retained reports",
+        "Resolve reproducible application regressions and track source/design blockers by board"
+      ],
+      "id": "PAPER",
+      "title": "Full Paper surface verification",
+      "passes": false
+    },
+    {
+      "acceptanceCriteria": [
+        "Map all 81 confirmed code, 52 confirmed Paper and 209 observations to current evidence",
+        "Revalidate 15 pass-but-gap boards without closing by unrelated tests"
+      ],
+      "id": "LEDGER",
+      "title": "Revalidate historical findings",
+      "passes": false
+    },
+    {
+      "acceptanceCriteria": [
+        "Reproduce existing visual state reset candidate and fix or refute",
+        "Complete OBS-077 chat result card and OBS-078 data setting row with actual data",
+        "Diagnose canonical XI-0 flake with preserved repeat evidence"
+      ],
+      "id": "RESIDUAL",
+      "title": "Close takeover residuals",
+      "passes": false
+    },
+    {
+      "acceptanceCriteria": [
+        "Verify Paper editing access and apply previously authorized corrections when available",
+        "Record and resolve outstanding face, empty canvas and concurrency decisions from source/user evidence"
+      ],
+      "id": "SOURCE",
+      "title": "Paper source and decision dependencies",
+      "passes": false
+    },
+    {
+      "acceptanceCriteria": [
+        "Repair report generator paths and stale completion wording",
+        "All findings have justified disposition and no unresolved implementable regressions",
+        "Independent final review, scoped cleanup and fresh regression verification recorded"
+      ],
+      "id": "FINAL",
+      "title": "Final report and independent full-scope verification",
+      "passes": false
+    }
+  ],
+  "description": "Continue interrupted code review to verified closure; merge codex/fix-kiwoomi-conversation first",
+  "project": "DAOU.Athena",
+  "branchName": "main"
+}
