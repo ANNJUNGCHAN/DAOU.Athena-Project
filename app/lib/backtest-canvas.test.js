@@ -266,7 +266,7 @@ test('보드 19: mount 직후는 기법 목록이고 프리셋 0번을 자동으
   assert.equal(ctx.designTab, null, '목록 화면을 폼이라고 말하지 않는다');
 });
 
-test('empty → design: 프리셋 목록·대상·지표·조건·리스크 카드를 모두 그린다', async () => {
+test('empty → design: 폼은 대상·파라미터·리스크 카드뿐이다 — 지표·조건 빌더는 없다', async () => {
   const { container, canvas } = makeCanvas();
   canvas.mount();
   await flush();
@@ -275,8 +275,10 @@ test('empty → design: 프리셋 목록·대상·지표·조건·리스크 카�
   assert.equal(findByClass(container, 'backtest-preset-item').length, 0);
   assert.equal(findByClass(container, 'backtest-head-home').length, 1);
   assert.ok(findByClass(container, 'backtest-symbol-add').length, '종목 입력이 있어야 한다');
-  assert.equal(findByClass(container, 'backtest-indicator-row').length, 2);
-  assert.equal(findByClass(container, 'backtest-condition-card').length, 2);
+  // 신호를 만드는 것은 그 폴더의 파이썬이다 — 빈 조건 빌더를 세워두지 않는다.
+  assert.equal(findByClass(container, 'backtest-indicator-row').length, 0);
+  assert.equal(findByClass(container, 'backtest-condition-card').length, 0);
+  assert.equal(findByClass(container, 'backtest-condition').length, 0);
   assert.match(textOf(container), /리스크 · 비용/);
 });
 
@@ -308,32 +310,6 @@ test('슬라이더를 움직이면 실행 yaml의 값이 바뀐다', async () =>
   await click(findByClass(container, 'backtest-run-button')[0]);
   await flush();
   assert.match(sent.yaml, /fast: \{default: 35,/);
-});
-
-test('AND/OR 뱃지를 누르면 전환된다', async () => {
-  const { container, canvas } = makeCanvas();
-  canvas.mount();
-  await flush();
-  await toForm(container);
-  const badge = findByClass(container, 'backtest-logic-badge')[0];
-  assert.match(badge.textContent, /AND/);
-  await click(badge);
-  assert.match(findByClass(container, 'backtest-logic-badge')[0].textContent, /OR/);
-});
-
-test('조건을 추가·삭제할 수 있다', async () => {
-  const { container, canvas } = makeCanvas();
-  canvas.mount();
-  await flush();
-  await toForm(container);
-  assert.equal(findByClass(container, 'backtest-condition').length, 2);
-  const adder = findByClass(container, 'backtest-condition-add')[0];
-  const target = findByClass(adder, 'backtest-condition-target-input')[0];
-  target.value = '70';
-  await click(findByClass(adder, 'backtest-condition-add-button')[0]);
-  assert.equal(findByClass(container, 'backtest-condition').length, 3);
-  await click(findByClass(container, 'backtest-condition-remove')[0]);
-  assert.equal(findByClass(container, 'backtest-condition').length, 2);
 });
 
 test('비용 기본값이 채워져 있고 "사실 주장이 아니다"를 함께 표기한다', async () => {
@@ -3109,19 +3085,8 @@ test('프리셋을 고르면 앞 기법의 코드도 비운다 — 화면과 도
 
 test('getContext().map: 마지막으로 받아온 칸만 싣는다 — 없으면 빈 목록이다', async () => {
   const empty = await mounted();
-  // 시각 설계(US-007)가 map에 더한 키 — 그래프가 아직 없으면 전부 비어 있다.
-  assert.deepEqual(empty.canvas.getContext().map, {
-    version: 1,
-    nodes: [],
-    graph: null,
-    validation_state: 'unvalidated',
-    // 코드 전용으로 분기했는가(US-010) — 분기 전에는 false다.
-    code_only: false,
-    hashes: null,
-    diagnostics: [],
-    pendingQuestion: null,
-    pendingPatch: null,
-  });
+  // 칸 판정만 싣는다 — 그래프·검증 상태·코드 전용 분기 키는 없어졌다.
+  assert.deepEqual(empty.canvas.getContext().map, { version: 1, nodes: [] });
 
   const made = await mounted({ map: async () => MAP_PAYLOAD });
   await flush();
