@@ -210,364 +210,6 @@ test('기법을 고르기 전에는 빈 채팅 축 data-technique이 없고 고�
   assert.equal(head.getAttribute('data-technique'), 'sma_crossover');
 });
 
-// ── 보드 17 · 출처에서 지도로 ───────────────────────────────────────────────
-//
-// 화면이 소유한 것만 본다: 잡을 띄우는가, 받은 것만 그리는가, [멈추기]가 연쇄를
-// 실제로 끊는가. 다섯 단계의 속내(무엇을 뽑았나·어떻게 옮겼나)는 백엔드 것이고
-// backend/tests/unit/test_backtest_source_to_map.py가 고정한다.
-
-// 3/5 단계에서 멈춰 세운 잡 한 장 — Paper가 그린 프레임 그대로다.
-function sourceJobAt3of5(extra) {
-  return Object.assign({
-    job_id: 'sm-1',
-    status: 'running',
-    step_index: 3,
-    step_total: 5,
-    eta_seconds: 20,
-    target_ko: '코스피 대형주 · 일봉 · 3년',
-    target_confirmed: false,
-    steps: [
-      { id: 'read', state: 'done', title_ko: '출처 읽음', meta_ko: '유튜브 · 14,200자' },
-      { id: 'rules', state: 'done', title_ko: '규칙 뽑음', meta_ko: '진입 2 · 청산 1 · 손절 1' },
-      { id: 'map', state: 'running', title_ko: '지도 그리는 중', meta_ko: '칸 3/4 · 지금 ③ 사고·파는 순간을 찍습니다' },
-      { id: 'code', state: 'todo', title_ko: '코드 만들기', meta_ko: '지도 뒤에서 자동' },
-      { id: 'check', state: 'todo', title_ko: '자체 검사', meta_ko: '가상환경 · 짧은 구간 시험 실행' },
-    ],
-    map_filled: 2,
-    map_total: 4,
-    code_lines: null,
-    map: {
-      version: 0,
-      source_kind: 'spec',
-      target: null,
-      app_before: [{ key: 'load', title: '봉 데이터를 모읍니다', detail: '캐시에 있는 봉을 정리합니다' }],
-      app_after: [
-        { key: 'fill', title: '사고·파는 가격을 정합니다', detail: '신호가 난 다음 봉의 시가' },
-        { key: 'cost', title: '비용을 뗍니다', detail: '수수료·거래세·슬리피지' },
-        { key: 'report', title: '성과를 냅니다', detail: '지표·자산곡선·체결 표' },
-      ],
-      boundary_after_note: 'entry·exit 두 열만 받습니다',
-      nodes: [
-        { id: 'params', numeral: '①', title: '조절할 값을 정합니다', lines: [], facts: [], status: 'ok' },
-        { id: 'indicators', numeral: '②', title: '가격을 지표로 바꿉니다', lines: [], facts: [], status: 'ok' },
-        { id: 'conditions', numeral: '③', title: '사고·파는 순간을 찍습니다', lines: [], facts: [], status: 'ok', drawing: true },
-        { id: 'guard', numeral: '④', title: '', lines: [], facts: [], status: 'ok', skeleton: true },
-      ],
-      free_code: [],
-      unknown: [],
-      error: null,
-      code: null,
-    },
-    error: null,
-  }, extra || {});
-}
-
-function sourceCanvas(overrides) {
-  const calls = { start: [], status: [], cancel: [] };
-  const made = makeCanvas(Object.assign({
-    sourceMapStart: async (body) => { calls.start.push(body); return { job_id: 'sm-1' }; },
-    sourceMapStatus: async (body) => { calls.status.push(body); return sourceJobAt3of5(); },
-    sourceMapCancel: async (body) => { calls.cancel.push(body); },
-  }, overrides || {}));
-  return Object.assign({ calls }, made);
-}
-
-test('보드 17: 채팅이 붙인 주소 하나가 다섯 단계 진행 화면을 연다', async () => {
-  const { container, canvas, calls } = sourceCanvas();
-  canvas.mount();
-  await flush();
-
-  const receipt = canvas.onChatAction({ kind: 'source_url', url: ' https://youtu.be/8kQz ' });
-  await flush();
-
-  // 채팅에는 아무 카드도 안 낸다 — 보드 17의 채팅은 사람 말풍선 다음에 「출처 읽음」
-  // 하나뿐이다(그 카드는 출처를 실제로 읽은 뒤에 나간다).
-  assert.equal(receipt, null);
-  assert.deepEqual(calls.start, [{ url: 'https://youtu.be/8kQz' }]);
-  // 진행 4요소 — 지금 하는 일 · 몇 단계 중 몇 · 남은 시간 · 멈추기(보드 18 F칸).
-  const text = textOf(findByClass(container, 'backtest-source-progress')[0]);
-  assert.match(text, /출처를 지도로 만드는 중/);
-  assert.match(text, /3\/5 단계/);
-  assert.match(text, /약 20초 남음/);
-  assert.equal(findByClass(container, 'backtest-source-stop').length, 1);
-});
-
-test('보드 17: 다섯 줄의 이름·부제·표식은 전부 잡이 준 것이다', async () => {
-  const { container, canvas } = sourceCanvas();
-  canvas.mount();
-  await flush();
-  canvas.onChatAction({ kind: 'source_url', url: 'https://youtu.be/8kQz' });
-  await flush();
-
-  const rows = findByClass(container, 'backtest-source-step');
-  assert.equal(rows.length, 5);
-  assert.equal(textOf(rows[0]), '✓ 출처 읽음 유튜브 · 14,200자');
-  assert.equal(textOf(rows[2]), '● 지도 그리는 중 칸 3/4 · 지금 ③ 사고·파는 순간을 찍습니다');
-  assert.match(textOf(rows[3]), /^○ 코드 만들기/);
-});
-
-test('보드 17: 대상은 출처가 말한 것이고 늘 확인 필요다', async () => {
-  const { container, canvas } = sourceCanvas();
-  canvas.mount();
-  await flush();
-  canvas.onChatAction({ kind: 'source_url', url: 'https://youtu.be/8kQz' });
-  await flush();
-
-  const strip = findByClass(container, 'backtest-source-target')[0];
-  assert.match(textOf(strip), /출처가 말한 대상/);
-  assert.match(textOf(strip), /코스피 대형주 · 일봉 · 3년/);
-  assert.match(textOf(strip), /확인 필요/);
-  assert.match(textOf(strip), /지도가 끝나면 채팅이 대상·기간부터 하나씩 묻습니다/);
-});
-
-test('보드 17: 출처가 대상을 말하지 않았으면 그 자리를 비운다(지어내지 않는다)', async () => {
-  const { container, canvas } = sourceCanvas({
-    sourceMapStatus: async () => sourceJobAt3of5({ target_ko: null }),
-  });
-  canvas.mount();
-  await flush();
-  canvas.onChatAction({ kind: 'source_url', url: 'https://youtu.be/8kQz' });
-  await flush();
-
-  assert.equal(findByClass(container, 'backtest-source-target-text').length, 0);
-  assert.equal(findByClass(container, 'backtest-source-target-badge').length, 1);
-});
-
-test('보드 17: 지도는 그린 칸까지만 서고 나머지는 뼈대다', async () => {
-  const { container, canvas } = sourceCanvas();
-  canvas.mount();
-  await flush();
-  canvas.onChatAction({ kind: 'source_url', url: 'https://youtu.be/8kQz' });
-  await flush();
-
-  assert.match(textOf(container), /칸이 하나씩 채워집니다/);
-  assert.match(textOf(container), /여기부터 내 전략 — 출처에서 뽑은 칸들/);
-  assert.equal(findByClass(container, 'backtest-flow-drawing').length, 1);
-  const skeleton = findByClass(container, 'is-skeleton');
-  assert.equal(skeleton.length, 1);
-  assert.equal(skeleton[0].disabled, true);
-});
-
-test('보드 17: 코드가 아직 없으면 서랍은 「아직 없음」이고 열 버튼이 없다', async () => {
-  const { container, canvas } = sourceCanvas();
-  canvas.mount();
-  await flush();
-  canvas.onChatAction({ kind: 'source_url', url: 'https://youtu.be/8kQz' });
-  await flush();
-
-  const drawer = findByClass(container, 'backtest-map-drawer')[0];
-  assert.match(textOf(drawer), /이 지도 뒤의 코드/);
-  assert.match(textOf(drawer), /아직 없음 — 지도가 끝나면 자동으로 만들어집니다/);
-  assert.match(textOf(drawer), /최후의 보루/);
-  assert.equal(findByClass(container, 'backtest-map-open-code').length, 0);
-});
-
-test('보드 17: 코드 줄 수가 나와도 만드는 중 서랍에는 열 버튼이 서지 않는다', async () => {
-  // 잡은 ④를 끝낸 뒤에도 ⑤ 자체 검사를 도는 중이다 — 그 사이에 [코드 열기]를 세우면
-  // 이 화면에는 그 코드를 여는 자리가 없어 눌러도 아무 일도 안 하는 버튼이 된다.
-  const { container, canvas } = sourceCanvas({
-    sourceMapStatus: async () => sourceJobAt3of5({ code_lines: 20 }),
-  });
-  canvas.mount();
-  await flush();
-  canvas.onChatAction({ kind: 'source_url', url: 'https://youtu.be/8kQz' });
-  await flush();
-
-  assert.equal(findByClass(container, 'backtest-map-open-code').length, 0);
-  assert.match(
-    textOf(findByClass(container, 'backtest-map-drawer')[0]),
-    /아직 없음 — 지도가 끝나면 자동으로 만들어집니다/,
-  );
-});
-
-test('보드 17: 머리는 무엇을 만들고 있는지만 말한다(이름도 판번호도 아직 없다)', async () => {
-  const { container, canvas } = sourceCanvas();
-  canvas.mount();
-  await flush();
-  canvas.onChatAction({ kind: 'source_url', url: 'https://youtu.be/8kQz' });
-  await flush();
-
-  const head = findByClass(container, 'backtest-head-title')[0];
-  assert.match(textOf(head), /새 전략/);
-  assert.match(textOf(head), /출처에서 만드는 중/);
-  assert.match(textOf(head), /지도 v0/);
-  // 고른 기법이 없으니 실행 버튼도 없다 — 돌릴 것이 아직 없다.
-  assert.equal(findByClass(container, 'backtest-run-button').length, 0);
-});
-
-// 앞 전략을 열어 둔 사람이 주소를 붙이면 머리가 그 전략의 판번호를 물려 쓴다 —
-// 「새 전략」이라고 말하면서 「지도 v3」이라 적히는 자리다. 잡이 만드는 지도의 version도
-// 0이라 그 숫자는 어느 쪽과도 맞지 않는 가짜 값이었다.
-test('보드 17: 앞 전략이 몇 판이었든 만드는 중 머리는 지도 v0이다', async () => {
-  const { container, canvas } = sourceCanvas();
-  canvas.mount();
-  await flush();
-  await toForm(container);
-  const patch = { symbols: ['005930'], fromDt: '20240101', toDt: '20240630' };
-  canvas.onChatAction({ kind: 'spec_draft', patch });
-  await flush();
-  assert.equal(canvas.onChatAction({ kind: 'spec_draft', patch }).version.to, 3);
-
-  canvas.onChatAction({ kind: 'source_url', url: 'https://youtu.be/8kQz' });
-  await flush();
-
-  assert.match(textOf(findByClass(container, 'backtest-head-title')[0]), /지도 v0/);
-});
-
-test('보드 17: [멈추기]는 잡을 멈추고 폴링 연쇄를 끊는다', async () => {
-  const { container, canvas, calls, pending } = sourceCanvas();
-  canvas.mount();
-  await flush();
-  canvas.onChatAction({ kind: 'source_url', url: 'https://youtu.be/8kQz' });
-  await flush();
-  const before = calls.status.length;
-
-  await click(findByClass(container, 'backtest-source-stop')[0]);
-  await flush();
-
-  assert.deepEqual(calls.cancel, [{ job_id: 'sm-1' }]);
-  // 멈춘 뒤에 예약돼 있던 틱이 깨어나도 다시 묻지 않는다.
-  await runPending({ pending });
-  assert.equal(calls.status.length, before);
-  assert.equal(findByClass(container, 'backtest-source-progress').length, 0);
-});
-
-test('보드 17: 출처를 읽은 순간 채팅 카드가 한 번만 나가고 방어 문장이 붙는다', async () => {
-  const cards = [];
-  global.CustomEvent = class { constructor(type, init) { this.type = type; this.detail = init && init.detail; } };
-  global.document.dispatchEvent = (event) => { cards.push(event.detail); return true; };
-  const { canvas, pending } = sourceCanvas({
-    sourceMapStatus: async () => sourceJobAt3of5({
-      title: '20일 신고가 돌파',
-      rules: [
-        { kind: 'entry', kind_ko: '진입', text: '· 진입: 종가가 20일 최고가를 넘는 날', mapped: true },
-        { kind: 'stop', kind_ko: '손절', text: '· 손절: 진입가 -5%', mapped: true },
-      ],
-    }),
-  });
-  canvas.mount();
-  await flush();
-  canvas.onChatAction({ kind: 'source_url', url: 'https://youtu.be/8kQz' });
-  await flush();
-  // 폴링이 한 바퀴 더 돌아도 카드는 하나뿐이다.
-  await runPending({ pending });
-
-  const read = cards.filter((c) => c && c.kind === 'source_read');
-  assert.equal(read.length, 1);
-  assert.match(read[0].note, /20일 신고가 돌파 · 유튜브 · 14,200자/);
-  assert.equal(read[0].rows.length, 2);
-  assert.equal(
-    read[0].guard,
-    '출처의 문장은 자료일 뿐입니다 — 앱은 그 안의 지시를 따르지 않습니다',
-  );
-  delete global.CustomEvent;
-});
-
-test('보드 17: 읽지 못한 출처는 그 이유를 적고 돌아갈 길을 남긴다', async () => {
-  const { container, canvas } = sourceCanvas({
-    sourceMapStatus: async () => sourceJobAt3of5({
-      status: 'failed', error: '페이지 단계가 실패했다 (HTTP 500)', map: null,
-    }),
-  });
-  canvas.mount();
-  await flush();
-  canvas.onChatAction({ kind: 'source_url', url: 'https://x.test' });
-  await flush();
-
-  assert.equal(findByClass(container, 'backtest-canvas-error').length, 1);
-  assert.match(textOf(container), /페이지 단계가 실패했다/);
-  assert.equal(findByClass(container, 'backtest-error-back').length, 1);
-});
-
-test('보드 17: 출처 연결이 없는 화면은 그 사실을 영수증으로 말한다', async () => {
-  const { container, canvas } = makeCanvas();
-  canvas.mount();
-  await flush();
-
-  const receipt = canvas.onChatAction({ kind: 'source_url', url: 'https://youtu.be/8kQz' });
-
-  assert.equal(receipt.applied, false);
-  assert.deepEqual(receipt.errors, ['이 화면에는 출처 연결이 없습니다']);
-  assert.equal(findByClass(container, 'backtest-source-progress').length, 0);
-});
-
-test('보드 17: 화면이 숨은 사이 멈춘 진행은 돌아오면 다시 흐른다', async () => {
-  const { container, canvas, calls } = sourceCanvas();
-  canvas.mount();
-  await flush();
-
-  // 채팅에 주소를 붙이는 곳은 대화 모드다 — 그동안 백테스트 캔버스는 숨어 있다.
-  container.hidden = true;
-  canvas.onChatAction({ kind: 'source_url', url: 'https://youtu.be/8kQz' });
-  await flush();
-  assert.equal(calls.status.length, 0, '숨은 화면은 잡을 묻지 않는다');
-
-  container.hidden = false;
-  canvas.refresh();
-  await flush();
-
-  assert.equal(calls.status.length, 1);
-  assert.equal(findByClass(container, 'backtest-source-step').length, 5);
-});
-
-// 다 그린 잡 한 장 — 5/5에 폼이 읽을 스펙 원문(백엔드 spec_to_yaml)이 실려 있다.
-function sourceJobDone(extra) {
-  return sourceJobAt3of5(Object.assign({
-    status: 'done',
-    step_index: 5,
-    eta_seconds: null,
-    steps: [
-      { id: 'read', state: 'done', title_ko: '출처 읽음', meta_ko: '유튜브 · 14,200자' },
-      { id: 'rules', state: 'done', title_ko: '규칙 뽑음', meta_ko: '진입 2 · 청산 1 · 손절 1' },
-      { id: 'map', state: 'done', title_ko: '지도 그림', meta_ko: '칸 4개' },
-      { id: 'code', state: 'done', title_ko: '코드 만듦', meta_ko: '20줄' },
-      { id: 'check', state: 'done', title_ko: '자체 검사 마침', meta_ko: '검사 3/3 통과' },
-    ],
-    map_filled: 4,
-    code_lines: 20,
-    spec_yaml: SMA_YAML,
-  }, extra || {}));
-}
-
-test('보드 17: 다 그린 지도는 설계 화면의 전략이 된다 — 「만드는 중」이 남지 않는다', async () => {
-  const asked = [];
-  const { container, canvas } = sourceCanvas({
-    sourceMapStatus: async () => sourceJobDone(),
-    map: async (body) => { asked.push(body); return MAP_PAYLOAD; },
-  });
-  canvas.mount();
-  await flush();
-
-  canvas.onChatAction({ kind: 'source_url', url: 'https://youtu.be/8kQz' });
-  await flush();
-
-  assert.equal(findByClass(container, 'backtest-source-progress').length, 0);
-  assert.equal(findByClass(container, 'backtest-source-stop').length, 0);
-  // 잡이 만든 스펙이 폼에 들어갔다 — 머리에 그 이름이 서고 지도는 그 스펙으로 다시 그린다.
-  assert.match(textOf(findByClass(container, 'backtest-head-title')[0]), /SMA 골든크로스/);
-  assert.equal(asked.length, 1);
-  assert.match(asked[0].yaml, /SMA 골든크로스/);
-  assert.equal(asked[0].source, undefined, '앞 전략의 코드로 새 지도를 그리지 않는다');
-  assert.equal(findByClass(container, 'backtest-flow-map').length, 1);
-});
-
-test('보드 17: 새 주소가 오면 앞 잡을 멈추고 새로 띄운다', async () => {
-  let started = 0;
-  const { canvas, calls } = sourceCanvas({
-    sourceMapStart: async () => { started += 1; return { job_id: `sm-${started}` }; },
-  });
-  canvas.mount();
-  await flush();
-
-  canvas.onChatAction({ kind: 'source_url', url: 'https://youtu.be/8kQz' });
-  await flush();
-  canvas.onChatAction({ kind: 'source_url', url: 'https://blog.example/2' });
-  await flush();
-
-  assert.deepEqual(calls.cancel, [{ job_id: 'sm-1' }]);
-  assert.equal(started, 2);
-});
-
 
 // ── 기본 상태 ───────────────────────────────────────────────────────────────
 
@@ -624,7 +266,7 @@ test('보드 19: mount 직후는 기법 목록이고 프리셋 0번을 자동으
   assert.equal(ctx.designTab, null, '목록 화면을 폼이라고 말하지 않는다');
 });
 
-test('empty → design: 프리셋 목록·대상·지표·조건·리스크 카드를 모두 그린다', async () => {
+test('empty → design: 폼은 대상·파라미터·리스크 카드뿐이다 — 지표·조건 빌더는 없다', async () => {
   const { container, canvas } = makeCanvas();
   canvas.mount();
   await flush();
@@ -633,8 +275,10 @@ test('empty → design: 프리셋 목록·대상·지표·조건·리스크 카�
   assert.equal(findByClass(container, 'backtest-preset-item').length, 0);
   assert.equal(findByClass(container, 'backtest-head-home').length, 1);
   assert.ok(findByClass(container, 'backtest-symbol-add').length, '종목 입력이 있어야 한다');
-  assert.equal(findByClass(container, 'backtest-indicator-row').length, 2);
-  assert.equal(findByClass(container, 'backtest-condition-card').length, 2);
+  // 신호를 만드는 것은 그 폴더의 파이썬이다 — 빈 조건 빌더를 세워두지 않는다.
+  assert.equal(findByClass(container, 'backtest-indicator-row').length, 0);
+  assert.equal(findByClass(container, 'backtest-condition-card').length, 0);
+  assert.equal(findByClass(container, 'backtest-condition').length, 0);
   assert.match(textOf(container), /리스크 · 비용/);
 });
 
@@ -666,32 +310,6 @@ test('슬라이더를 움직이면 실행 yaml의 값이 바뀐다', async () =>
   await click(findByClass(container, 'backtest-run-button')[0]);
   await flush();
   assert.match(sent.yaml, /fast: \{default: 35,/);
-});
-
-test('AND/OR 뱃지를 누르면 전환된다', async () => {
-  const { container, canvas } = makeCanvas();
-  canvas.mount();
-  await flush();
-  await toForm(container);
-  const badge = findByClass(container, 'backtest-logic-badge')[0];
-  assert.match(badge.textContent, /AND/);
-  await click(badge);
-  assert.match(findByClass(container, 'backtest-logic-badge')[0].textContent, /OR/);
-});
-
-test('조건을 추가·삭제할 수 있다', async () => {
-  const { container, canvas } = makeCanvas();
-  canvas.mount();
-  await flush();
-  await toForm(container);
-  assert.equal(findByClass(container, 'backtest-condition').length, 2);
-  const adder = findByClass(container, 'backtest-condition-add')[0];
-  const target = findByClass(adder, 'backtest-condition-target-input')[0];
-  target.value = '70';
-  await click(findByClass(adder, 'backtest-condition-add-button')[0]);
-  assert.equal(findByClass(container, 'backtest-condition').length, 3);
-  await click(findByClass(container, 'backtest-condition-remove')[0]);
-  assert.equal(findByClass(container, 'backtest-condition').length, 2);
 });
 
 test('비용 기본값이 채워져 있고 "사실 주장이 아니다"를 함께 표기한다', async () => {
@@ -1094,8 +712,8 @@ test('spec_draft: 폼에 바로 들어가고 지도로 돌아온다 — 캔버�
   assert.equal(receipt.suggest_run, false);
   assert.equal(receipt.canUndo, true);
   assert.equal(receipt.tab, 'design');
-  // 반영을 보는 자리는 지도다 — 대화가 고치는 것은 폼 칸이 아니라 흐름이다.
-  assert.equal(receipt.designTab, 'flow');
+  // 반영을 보는 자리는 그 기법의 코드다 — 한 페이지가 한 알고리즘이다.
+  assert.equal(receipt.designTab, 'code');
   // 반영 한 번이 지도 한 판이다(보드 14-B).
   assert.deepEqual(receipt.version, { from: 1, to: 2 });
   assert.deepEqual(receipt.rows, [
@@ -1107,7 +725,7 @@ test('spec_draft: 폼에 바로 들어가고 지도로 돌아온다 — 캔버�
   const ctx = canvas.getContext();
   assert.equal(ctx.view, 'design');
   assert.equal(ctx.tab, 'design');
-  assert.equal(ctx.designTab, 'flow');
+  assert.equal(ctx.designTab, 'code');
   assert.equal(ctx.map.version, 2);
   assert.deepEqual(ctx.spec.symbols, ['005930']);
   assert.equal(ctx.spec.fromDt, '20240101');
@@ -1575,21 +1193,14 @@ test('코드 diff 칸은 버전 쌍과 바뀐 줄 수를 적는다', () => {
   assert.equal(backtestCanvas.codeDiffText(null, { version: 4, source: '' }), '');
 });
 
-test('navigate design/flow: 코드 경로면 지금 코드로 지도를 다시 만든다', async () => {
+test('코드가 들어오면 그 코드로 칸 판정을 다시 읽는다', async () => {
   const asked = [];
   const made = await mounted({
     map: async (body) => { asked.push(body); return { version: body.version, nodes: [] }; },
   });
   await withCode(made);
-  const receipt = made.canvas.onChatAction({
-    kind: 'navigate', tab: 'design', designTab: 'flow',
-  });
   await flush();
-  // 코드가 들어온 순간 이미 한 번 다시 만들었고, 탭을 열 때 또 만든다 — 둘 다 그 코드다.
   assert.deepEqual(asked[asked.length - 1], { version: 2, source: CODE_SOURCE });
-  assert.equal(receipt.designTab, 'flow');
-  assert.equal(made.canvas.getContext().designTab, 'flow');
-  assert.equal(findByClass(made.container, 'backtest-flow-tab').length, 1);
 });
 
 test('폼 경로의 지도는 지금 폼(yaml)으로 만든다 — 같은 라우트, 다른 몸체', async () => {
@@ -1681,7 +1292,7 @@ test('getContext(): lastChange는 마지막 변경만 싣고 되돌리면 사라
 
 // ── 실행경로(폼 · 코드) ─────────────────────────────────────────────────────
 
-test('실행경로 전환은 코드가 있을 때만 뜨고, run 바디의 source를 켜고 끈다', async () => {
+test('헤더에 폼/코드 갈래는 없고, 코드가 들어오면 실행이 그 코드를 싣는다', async () => {
   const bodies = [];
   const made = await mounted({
     run: async (body) => { bodies.push(body); return { run_id: 'r1' }; },
@@ -1690,23 +1301,19 @@ test('실행경로 전환은 코드가 있을 때만 뜨고, run 바디의 sourc
   const { container, canvas } = made;
   await fillForm(container);
   assert.equal(findByClass(container, 'backtest-runpath').length, 0);
+  assert.equal(canvas.getContext().runPath, 'form');
+  assert.equal(bodies.length, 0);
 
   await withCode(made);
-  const items = findByClass(container, 'backtest-runpath-item');
-  assert.deepEqual(items.map((i) => i.textContent), ['폼', '코드']);
-  assert.equal(items[1].getAttribute('aria-pressed'), 'true');
+  // 한 페이지가 한 알고리즘이다 — 무엇으로 도는지를 고르는 줄은 서지 않는다.
+  assert.equal(findByClass(container, 'backtest-runpath').length, 0);
+  assert.equal(findByClass(container, 'backtest-runpath-item').length, 0);
+  assert.equal(canvas.getContext().runPath, 'code');
 
   await click(findByClass(container, 'backtest-run-button')[0]);
   await flush();
   assert.equal(bodies[0].source, CODE_SOURCE);
   assert.ok(bodies[0].yaml);
-
-  await click(findByClass(container, 'backtest-runpath-item')[0]);
-  assert.equal(canvas.getContext().runPath, 'form');
-  await click(findByClass(container, 'backtest-run-button')[0]);
-  await flush();
-  assert.equal(bodies.length, 2);
-  assert.equal(bodies[1].source, undefined);
 });
 
 test('결과에 실행경로 뱃지가 붙는다 — run_path=code면 [코드 경로]', async () => {
@@ -1936,7 +1543,7 @@ test('heatIntensity: 범위 밖 값을 0~1로 자른다', () => {
   assert.equal(backtestCanvas.heatIntensity(null, 0, 1), 0);
 });
 
-test('모드 탭 5개와 설계 하위 탭 4개가 계약으로 고정돼 있다', () => {
+test('모드 탭 5개가 계약으로 고정돼 있고 옛 설계 하위 탭은 없다', () => {
   assert.deepEqual(backtestCanvas.MODE_TABS.map((t) => t[0]),
     ['design', 'result', 'history', 'optimize', 'deploy']);
   // 옛 모드 탭과 기법 화면 하위 탭이 같은 말을 쓴다(규칙 32-04) — 「배포」는 사람이 읽는
@@ -1945,12 +1552,9 @@ test('모드 탭 5개와 설계 하위 탭 4개가 계약으로 고정돼 있다
     ['기법', '결과', '이력', '최적화', '실매매 적용']);
   assert.deepEqual(backtestCanvas.MODE_TABS_LIST.map((t) => t[1]),
     ['기법', '결과', '이력']);
-  // 지도가 첫 탭이다(2026-09-03) — 코드 탭의 이름 자체가 그것이 마지막 수단임을 말한다.
-  // 노드·흐름(2026-09-03 보드 21)은 넷째다 — 기존 기법에도 그 창이 있어야 한다.
-  assert.deepEqual(backtestCanvas.DESIGN_TABS.map((t) => t[0]),
-    ['flow', 'form', 'code', 'nodes']);
-  assert.deepEqual(backtestCanvas.DESIGN_TABS.map((t) => t[1]),
-    ['지도', '폼', '코드 · 최후의 보루', '노드·흐름']);
+  // 옛 스펙 경로의 하위 탭(DESIGN_TABS · 지도 · 코드 · 최후의 보루)은 없다 —
+  // 하위 탭은 기법 하나의 화면 것뿐이다(workspaceTabs).
+  assert.equal(backtestCanvas.DESIGN_TABS, undefined);
 });
 
 test('사용자 문구는 탭 이름 기법에서 파생하고 옛 이름 설계를 쓰지 않는다', () => {
@@ -2049,7 +1653,7 @@ async function openProjectFile(made) {
 
 test('코드 탭: 프로젝트 배선이 없으면 지금까지의 단일 편집기 그대로다', async () => {
   const { container } = await mounted();
-  await click(findByClass(container, 'backtest-subtab')[2]);
+  await click(subtabNamed(container, '코드'));
   assert.equal(findByClass(container, 'project-ide').length, 0);
   assert.equal(findByClass(container, 'backtest-code-textarea').length, 1);
   assert.equal(findByClass(container, 'backtest-code-save').length, 1);
@@ -2057,7 +1661,7 @@ test('코드 탭: 프로젝트 배선이 없으면 지금까지의 단일 편집
 
 test('코드 탭: 프리셋은 단일 편집기, 폴더가 있는 기법은 그 폴더의 편집기 — 폴더를 고르는 줄은 없다', async () => {
   const made = await mounted(projectDeps());
-  await click(findByClass(made.container, 'backtest-subtab')[2]);
+  await click(subtabNamed(made.container, '코드'));
   await flush();
   // 프리셋(yaml)에는 폴더가 없다 — 지금까지의 단일 편집기와 경계 카드다.
   assert.equal(findByClass(made.container, 'project-ide').length, 0);
@@ -2640,13 +2244,13 @@ test('목록 화면이어도 아는 기법 id가 든 설정은 그 기법을 고
   const ctx = made.canvas.getContext();
   assert.equal(ctx.techniqueDraft, false, '새 기법이 아니라 고른 기법이다');
   assert.equal(ctx.spec.presetId, 'sma_crossover');
-  assert.equal(ctx.designTab, 'flow');
+  assert.equal(ctx.designTab, 'code');
 });
 
 test('목록 화면의 navigate는 하위 탭을 반영하지 않고 이유를 돌려준다', async () => {
   const made = await listMounted();
   const receipt = made.canvas.onChatAction({
-    kind: 'navigate', tab: 'design', designTab: 'flow',
+    kind: 'navigate', tab: 'design', designTab: 'code',
   });
   await flush();
   assert.equal(receipt.applied, false);
@@ -3345,47 +2949,6 @@ const MAP_PAYLOAD = {
 };
 
 
-test('지도 탭: 만드는 동안 진행 표시가 뜨고, 오면 사라진다', async () => {
-  let resolveMap;
-  const made = await mounted({
-    map: () => new Promise((resolve) => { resolveMap = resolve; }),
-  });
-  await click(findByClass(made.container, 'backtest-subtab')[0]);
-  await flush();
-  assert.equal(findByClass(made.container, 'backtest-flow-loading').length, 1);
-  assert.equal(findByClass(made.container, 'backtest-flow-spinner').length, 1);
-  assert.match(textOf(made.container), /흐름 지도를 만드는 중…/);
-
-  resolveMap(MAP_PAYLOAD);
-  await flush();
-  assert.equal(findByClass(made.container, 'backtest-flow-loading').length, 0);
-  assert.equal(findByClass(made.container, 'backtest-map-head').length, 1);
-});
-
-test('지도 탭: 못 만들면 그 자리에 적는다 — 화면 전체를 오류로 바꾸지 않는다', async () => {
-  const made = await mounted({
-    map: async () => { throw new Error('지도 서비스가 없다'); },
-  });
-  await click(findByClass(made.container, 'backtest-subtab')[0]);
-  await flush();
-  assert.equal(findByClass(made.container, 'backtest-canvas-error').length, 0);
-  assert.equal(findByClass(made.container, 'backtest-flow-loading').length, 0);
-  assert.match(textOf(made.container), /지도 서비스가 없다/);
-});
-
-test('채팅 navigate(design, flow)도 같은 진행 표시를 거친다', async () => {
-  let resolveMap;
-  const made = await mounted({
-    map: () => new Promise((resolve) => { resolveMap = resolve; }),
-  });
-  made.canvas.onChatAction({ kind: 'navigate', tab: 'design', designTab: 'flow' });
-  await flush();
-  assert.equal(findByClass(made.container, 'backtest-flow-loading').length, 1);
-  resolveMap(MAP_PAYLOAD);
-  await flush();
-  assert.equal(findByClass(made.container, 'backtest-flow-loading').length, 0);
-});
-
 test('내 기법 화면에는 지도 탭이 없다 — 첫 표면은 그 파일의 코드고 지도를 만들지 않는다', async () => {
   let asked = 0;
   const made = await mounted(userStrategyDeps({
@@ -3397,69 +2960,6 @@ test('내 기법 화면에는 지도 탭이 없다 — 첫 표면은 그 파일�
   assert.equal(made.canvas.getContext().designTab, 'code');
   assert.equal(subtabNamed(made.container, '지도'), undefined);
   assert.equal(findByClass(made.container, 'backtest-subtab')[0].className.includes('is-on'), true);
-});
-
-test('지도 탭: 대상 한 줄과 ①~④ 칸, 코드 서랍이 함께 선다', async () => {
-  const made = await mounted({ map: async () => MAP_PAYLOAD });
-  await click(findByClass(made.container, 'backtest-subtab')[0]);
-  await flush();
-  assert.equal(findByClass(made.container, 'backtest-map-target-text').length, 1);
-  assert.equal(findByClass(made.container, 'backtest-flow-node').length, 4);
-  assert.equal(
-    findByClass(made.container, 'backtest-map-drawer-text')[0].textContent,
-    '이 지도 뒤의 코드 · 생성됨 · 23줄 · 지도 v1과 일치',
-  );
-});
-
-test('지도 탭: 방금 바뀐 칸에 알약이 붙는다 — 대화 한 번이 어디를 건드렸는지', async () => {
-  const made = await mounted({ map: async () => MAP_PAYLOAD });
-  made.canvas.onChatAction({ kind: 'spec_draft', patch: { params: { fast: 10 } } });
-  await flush();
-  const pills = findByClass(made.container, 'backtest-map-changed');
-  assert.equal(pills.length, 1);
-  assert.equal(pills[0].textContent, '방금 바뀜');
-});
-
-test('[코드 열기]: 폼 경로에서는 지도 뒤의 코드를 한 번 만들고 실행경로는 그대로 둔다', async () => {
-  const asked = [];
-  const made = await mounted({
-    map: async () => MAP_PAYLOAD,
-    codegen: async (body) => { asked.push(body); return { source: 'import athena_bt as bt\n', lines: 1 }; },
-  });
-  await click(findByClass(made.container, 'backtest-subtab')[0]);
-  await flush();
-  await click(findByClass(made.container, 'backtest-map-open-code')[0]);
-  await flush();
-  const ctx = made.canvas.getContext();
-  assert.equal(asked.length, 1);
-  assert.match(asked[0].yaml, /SMA 골든크로스/);
-  assert.equal(ctx.designTab, 'code');
-  assert.match(ctx.code.source, /import athena_bt as bt/);
-  // 코드를 열어봤다는 이유로 도는 것이 바뀌면 안 된다.
-  assert.equal(ctx.runPath, 'form');
-  assert.match(textOf(made.container), /여기서 고치면 지도와 어긋날 수 있습니다 — 웬만하면 대화로/);
-
-  // 같은 폼이면 다시 만들지 않는다.
-  await click(findByClass(made.container, 'backtest-subtab')[0]);
-  await flush();
-  await click(findByClass(made.container, 'backtest-map-open-code')[0]);
-  await flush();
-  assert.equal(asked.length, 1);
-});
-
-test('[지도로 되돌리기]: 코드 초안을 버리고 폼 경로로 돌아간다', async () => {
-  const made = await mounted({ map: async () => MAP_PAYLOAD });
-  await withCode(made);
-  await click(findByClass(made.container, 'backtest-subtab')[0]);
-  await flush();
-  const badge = findByClass(made.container, 'backtest-map-drawer-badge')[0];
-  assert.equal(badge.textContent, '코드가 지도보다 앞섬');
-  await click(findByClass(made.container, 'backtest-map-back')[0]);
-  await flush();
-  const ctx = made.canvas.getContext();
-  assert.equal(ctx.runPath, 'form');
-  assert.equal(ctx.code.source, '');
-  assert.equal(ctx.designTab, 'flow');
 });
 
 test('지도 탭: 실행이 멈추면 진단이 지도 아래에 붙고 제목이 그 칸 번호로 시작한다', async () => {
@@ -3549,7 +3049,7 @@ test('실행이 끝나도 지도를 다시 만든다 — 오른쪽 사실은 그
   assert.equal(last.error, undefined);
 });
 
-test('지도를 다시 못 만들면 앞 지도를 지운다 — 남의 전략 칸이 서 있으면 안 된다', async () => {
+test('칸 판정을 다시 못 읽으면 앞 판정을 지운다 — 남의 전략 칸이 남으면 안 된다', async () => {
   let broken = false;
   const made = await mounted({
     map: async () => {
@@ -3557,21 +3057,17 @@ test('지도를 다시 못 만들면 앞 지도를 지운다 — 남의 전략 �
       return MAP_PAYLOAD;
     },
   });
-  await click(findByClass(made.container, 'backtest-subtab')[0]);
   await flush();
-  assert.equal(findByClass(made.container, 'backtest-flow-node').length, 4);
+  assert.deepEqual(made.canvas.getContext().map.nodes.map((n) => n.id), ['params', 'conditions']);
 
   broken = true;
-  await click(findByClass(made.container, 'backtest-subtab')[0]);
+  made.canvas.onChatAction({ kind: 'code_draft', source: CODE_SOURCE });
   await flush();
-  assert.equal(findByClass(made.container, 'backtest-flow-node').length, 0);
-  assert.equal(findByClass(made.container, 'backtest-map-drawer-text').length, 0);
-  assert.match(textOf(made.container), /종목이 비어 지도를 만들지 못했습니다/);
   // 다음 턴 컨텍스트도 없는 칸을 말하지 않는다.
   assert.deepEqual(made.canvas.getContext().map.nodes, []);
 });
 
-test('프리셋을 고르면 지도 뒤의 코드도 비운다 — 서랍이 남의 코드를 가리키면 안 된다', async () => {
+test('프리셋을 고르면 앞 기법의 코드도 비운다 — 화면과 도는 것이 갈라지면 안 된다', async () => {
   const made = await mounted({ map: async () => MAP_PAYLOAD });
   await withCode(made);
   assert.equal(made.canvas.getContext().runPath, 'code');
@@ -3583,45 +3079,14 @@ test('프리셋을 고르면 지도 뒤의 코드도 비운다 — 서랍이 남
   // 화면은 프리셋인데 도는 것은 앞 파이썬인 상태를 남기지 않는다.
   assert.equal(ctx.runPath, 'form');
   assert.equal(findByClass(made.container, 'backtest-runpath-item').length, 0);
-  assert.equal(ctx.designTab, 'flow');
+  assert.equal(ctx.designTab, 'form');
   assert.equal(ctx.map.version, 1);
-  assert.equal(
-    findByClass(made.container, 'backtest-map-drawer-text')[0].textContent,
-    '이 지도 뒤의 코드 · 생성됨 · 23줄 · 지도 v1과 일치',
-  );
-});
-
-test('오류 화면에는 [지도에서 보기]가 있다 — 무엇이 멈췄는지는 칸 위에서 읽힌다', async () => {
-  const made = await mounted({
-    map: async () => MAP_PAYLOAD,
-    run: async () => { throw new Error('이 실행 경로는 종목 1개만 지원한다'); },
-  });
-  await fillForm(made.container);
-  await click(findByClass(made.container, 'backtest-run-button')[0]);
-  await flush();
-  assert.equal(findByClass(made.container, 'backtest-canvas-error').length, 1);
-  await click(findByClass(made.container, 'backtest-error-map')[0]);
-  await flush();
-  const ctx = made.canvas.getContext();
-  assert.equal(ctx.view, 'design');
-  assert.equal(ctx.designTab, 'flow');
 });
 
 test('getContext().map: 마지막으로 받아온 칸만 싣는다 — 없으면 빈 목록이다', async () => {
   const empty = await mounted();
-  // 시각 설계(US-007)가 map에 더한 키 — 그래프가 아직 없으면 전부 비어 있다.
-  assert.deepEqual(empty.canvas.getContext().map, {
-    version: 1,
-    nodes: [],
-    graph: null,
-    validation_state: 'unvalidated',
-    // 코드 전용으로 분기했는가(US-010) — 분기 전에는 false다.
-    code_only: false,
-    hashes: null,
-    diagnostics: [],
-    pendingQuestion: null,
-    pendingPatch: null,
-  });
+  // 칸 판정만 싣는다 — 그래프·검증 상태·코드 전용 분기 키는 없어졌다.
+  assert.deepEqual(empty.canvas.getContext().map, { version: 1, nodes: [] });
 
   const made = await mounted({ map: async () => MAP_PAYLOAD });
   await flush();
@@ -3939,32 +3404,6 @@ test('오늘 로그 순수 계산 — 없는 값은 빈 칸이고 단계는 사�
   );
 });
 
-// ── US-007/008/009 · 편집 가능한 지도 탭(시각 전략 편집기) ───────────────────
-//
-// 편집기 자체의 계약(진단 4곳·키보드·목록 보기)은 backtest-visual-editor.test.js가 본다.
-// 여기서 보는 것은 **캔버스가 그 편집기를 어떻게 세우는가**다: 폼 → 그래프 → 검증 → 컴파일
-// → 폼·코드가 따라오는 왕복, 노드에서 코드로 가는 두 갈래(authoritative·preview), 그리고
-// 채팅 카드가 부르는 다섯 자리가 실행·활성화·백필을 절대 부르지 않는다는 것.
-
-const CodeEditorLib = require('./backtest-code-editor');
-
-const VISUAL_GRAPH = {
-  graph_version: '1',
-  nodes: [
-    { id: 'data-ohlcv', kind: 'data.ohlcv', label: '캔들', params: {} },
-    { id: 'ind-ma_fast', kind: 'indicator.SMA', label: 'ma_fast', params: { period: 33 } },
-  ],
-  edges: [
-    {
-      id: 'e-data.close-ind.source',
-      from: { node_id: 'data-ohlcv', port: 'close' },
-      to: { node_id: 'ind-ma_fast', port: 'source' },
-    },
-  ],
-  scenario: { period: 'day', adjusted: true },
-  meta: { spec_version: '1.0', name: '시각 전략', strategy_id: 'visual_strategy' },
-};
-
 // 백엔드 yaml.safe_dump가 쓰는 **블록 스타일** 그대로다 — 프리셋 yaml의 `{...}` 한 줄
 // 스타일이 아니다. 이 차이가 SpecModel.parsePresetYaml을 쓸 수 없는 이유이자
 // parseYamlBlock이 있는 이유다.
@@ -4019,136 +3458,6 @@ const COMPILED_YAML = [
   '    sizing: all_in',
   '',
 ].join('\n');
-
-const VISUAL_SOURCE = [
-  'import pandas as pd',
-  '',
-  '',
-  'def signals(df, params):',
-  "    ma_fast = df['close'].rolling(params['fast']).mean()",
-  "    ma_slow = df['close'].rolling(params['slow']).mean()",
-  '    return ma_fast > ma_slow',
-  '',
-].join('\n');
-
-function visualSourceMap(hash, kind) {
-  const map = {
-    graph_hash: 'gh-1',
-    compiler_version: 'visual-1.0.0',
-    entries: [
-      {
-        node_id: 'ind-ma_fast',
-        role: 'indicator',
-        ast_path: 'body/3/body/0',
-        source_span: {
-          file: 'golden_cross.py',
-          start: { line: 5, column: 4 },
-          end: { line: 5, column: 55 },
-        },
-      },
-    ],
-  };
-  if (kind === 'preview') {
-    return Object.assign(map, { preview_hash: hash, executable: false, preview_only: true });
-  }
-  return Object.assign(map, {
-    spec_hash: 'sh-1', artifact_hash: hash, executable: true, preview_only: false,
-  });
-}
-
-function visualStubs(hash, extra) {
-  const calls = { fromSpec: 0, validate: 0, compile: 0, run: 0, activate: 0, backfill: 0 };
-  const deps = Object.assign({
-    map: async () => MAP_PAYLOAD,
-    visualRegistry: async () => ({ registry_version: '1', graph_version: '1', kinds: [] }),
-    visualFromSpec: async () => {
-      calls.fromSpec += 1;
-      return {
-        graph: JSON.parse(JSON.stringify(VISUAL_GRAPH)),
-        hashes: { graph_hash: 'gh-1', compiler_version: 'visual-1.0.0' },
-      };
-    },
-    visualValidate: async () => {
-      calls.validate += 1;
-      return {
-        valid: true,
-        diagnostics: [],
-        preview: null,
-        source_map: null,
-        exact_code_jump: true,
-        hashes: { graph_hash: 'gh-1', compiler_version: 'visual-1.0.0' },
-      };
-    },
-    visualCompile: async () => {
-      calls.compile += 1;
-      return {
-        spec_yaml: COMPILED_YAML,
-        source: VISUAL_SOURCE,
-        source_map: visualSourceMap(hash, 'authoritative'),
-        hashes: {
-          graph_hash: 'gh-1', spec_hash: 'sh-1', artifact_hash: hash,
-          compiler_version: 'visual-1.0.0',
-        },
-        executable: true,
-        saved: false,
-      };
-    },
-    // 이 셋은 시각 경로가 절대 부르지 않아야 하는 것들이다 — 세기만 한다.
-    run: async () => { calls.run += 1; return { run_id: 'r-never' }; },
-    activate: async () => { calls.activate += 1; return {}; },
-    backfill: async () => { calls.backfill += 1; return { job_id: 'j-never' }; },
-  }, extra || {});
-  return { deps, calls };
-}
-
-async function mountVisual(extra) {
-  const hash = await CodeEditorLib.hashSource(VISUAL_SOURCE);
-  const stub = visualStubs(hash, extra);
-  const made = makeCanvas(stub.deps);
-  made.canvas.mount();
-  // 보드 19: 목록만 선다. 시각 편집기는 기법을 고른 뒤에 지도 탭에서 선다.
-  await flush();
-  await flush();
-  const item = findByClass(made.container, 'backtest-preset-item')[0];
-  if (item) {
-    await click(item);
-    await flush();
-    await flush();
-  }
-  return Object.assign(made, { calls: stub.calls, hash });
-}
-
-async function clickVisualValidate(made) {
-  await click(findByClass(made.container, 'backtest-visual-validate')[0]);
-  await flush();
-  await flush();
-  await flush();
-}
-
-const VISUAL_PATCH = {
-  patch_id: 'patch-1',
-  patch_hash: 'ph-1',
-  base_graph_hash: 'gh-1',
-  base_version_id: 'v1',
-  // visual_repair._ops_to_patch가 내는 모양 그대로 — node_id를 직접 싣지 않는다.
-  graph_patch: [{
-    op: 'add',
-    path: '/edges/-',
-    value: {
-      id: 'e-data.close-ind.source',
-      from: { node_id: 'data-ohlcv', port: 'close' },
-      to: { node_id: 'ind-ma_fast', port: 'source' },
-    },
-  }],
-  graph_after: VISUAL_GRAPH,
-  graph_after_hash: 'gh-2',
-  spec_diff: [{ path: 'strategy.indicators.0.params.period', before: null, after: '$fast' }],
-  spec_diff_basis: 'delta',
-  code_diff: { diff_lines: [{ mark: '+', text: 'ma_fast = ...' }] },
-  diagnostics_after: [],
-  graph_compatible: true,
-  applied: false,
-};
 
 test('parseYamlBlock: safe_dump 블록 스타일을 읽는다(프리셋의 한 줄 스타일이 아니다)', () => {
   const doc = backtestCanvas.parseYamlBlock(COMPILED_YAML);
@@ -4267,378 +3576,6 @@ for (const name of [String.raw`C:\new strategy`, String.raw`value \u0041`, Strin
   });
 }
 
-test('프리셋을 세우면 지도 탭이 from-spec 그래프로 편집기를 띄운다', async () => {
-  const made = await mountVisual();
-  assert.equal(made.calls.fromSpec, 1);
-  assert.equal(findByClass(made.container, 'backtest-vis').length, 1, '편집기가 서야 한다');
-  assert.equal(findByClass(made.container, 'backtest-visual-host').length, 1);
-  assert.match(textOf(made.container), /이 전략은 이렇게 흐릅니다 · 지도 v1/);
-  // 대상 한 줄과 코드 서랍은 편집기가 서도 그대로 남는다.
-  assert.equal(findByClass(made.container, 'backtest-visual-target').length, 1);
-  assert.equal(findByClass(made.container, 'backtest-visual-drawer').length, 1);
-  // 요약 지도(칸 ①~④)는 편집 표면 위에 서지 않는다(2026-09-03) — 같은 흐름을 두 번
-  // 말하지 않는다. 지도의 재료는 컨텍스트에 그대로 남는다(아래 ctx.map).
-  assert.equal(findByClass(made.container, 'backtest-flow-node').length, 0);
-  assert.equal(findByClass(made.container, 'backtest-flow-summary').length, 0);
-  // 같은 폼이면 다시 만들지 않는다 — yaml이 열쇠다.
-  made.canvas.refresh();
-  await flush();
-  assert.equal(made.calls.fromSpec, 1);
-  const ctx = made.canvas.getContext();
-  assert.equal(ctx.map.graph.nodes.length, 2);
-  assert.equal(ctx.map.validation_state, 'unvalidated');
-  assert.equal(ctx.map.hashes.graph_hash, 'gh-1');
-});
-
-test('폭이 900px 아래로 내려가면 편집기에 is-narrow가 붙는다 — 판단은 부르는 쪽 몫', async () => {
-  // shell.css의 계약: <900px은 부르는 쪽이 판단해 narrow:true로 넘긴다. 쇼케이스 프로브
-  // 실측(2026-09-03)에서 이 배선이 없어 860px 창에서도 서랍 UI가 서지 않았다.
-  const observers = [];
-  const prevRO = globalThis.ResizeObserver;
-  globalThis.ResizeObserver = class {
-    constructor(cb) { this.cb = cb; observers.push(this); }
-    observe(target) { this.target = target; }
-  };
-  try {
-    const made = await mountVisual();
-    const host = findByClass(made.container, 'backtest-visual-host')[0];
-    const obs = observers.find((o) => o.target === host);
-    assert.ok(obs, '편집기 host를 관측해야 한다');
-    const vis = () => findByClass(made.container, 'backtest-vis')[0];
-
-    host.getBoundingClientRect = () => ({ width: 860 });
-    obs.cb();
-    assert.match(vis().className, /is-narrow/, '900px 아래면 좁은 모드');
-
-    host.getBoundingClientRect = () => ({ width: 1200 });
-    obs.cb();
-    assert.doesNotMatch(vis().className, /is-narrow/, '다시 넓어지면 풀린다');
-
-    // hidden(모드 이탈)의 0폭은 상태를 뒤집는 근거가 아니다.
-    host.getBoundingClientRect = () => ({ width: 0 });
-    obs.cb();
-    assert.doesNotMatch(vis().className, /is-narrow/);
-  } finally {
-    if (prevRO === undefined) delete globalThis.ResizeObserver;
-    else globalThis.ResizeObserver = prevRO;
-  }
-});
-
-test('검증이 실패하면 실행 버튼이 잠기고 라벨이 [오류 검토]가 된다', async () => {
-  const made = await mountVisual({
-    visualValidate: async () => ({
-      valid: false,
-      diagnostics: [{
-        code: 'E_PORT_REQUIRED', severity: 'error', node_id: 'ind-ma_fast',
-        port: 'source', message_ko: '입력이 비어 있습니다',
-      }],
-      preview: null,
-      source_map: null,
-      exact_code_jump: false,
-      hashes: { graph_hash: 'gh-1' },
-    }),
-  });
-  await clickVisualValidate(made);
-  const run = findByClass(made.container, 'backtest-run-button')[0];
-  assert.equal(run.textContent, '오류 검토');
-  assert.equal(run.disabled, true);
-  assert.equal(run.getAttribute('aria-disabled'), 'true');
-  assert.match(textOf(made.container), /서버 검증 실패/);
-  const ctx = made.canvas.getContext();
-  assert.equal(ctx.map.validation_state, 'invalid');
-  assert.equal(ctx.map.diagnostics[0].code, 'E_PORT_REQUIRED');
-  // 첫 오류는 지도 아래 "실행 전에 채울 것" 줄에도 남는다.
-  assert.match(textOf(made.container), /입력이 비어 있습니다/);
-});
-
-test('검증 통과 → 컴파일이 만든 spec_yaml을 폼이 따라온다(대상은 지킨다)', async () => {
-  const made = await mountVisual();
-  await fillForm(made.container);
-  await flush();
-  await flush();
-  await clickVisualValidate(made);
-  assert.equal(made.calls.compile, 1);
-  const ctx = made.canvas.getContext();
-  assert.equal(ctx.map.validation_state, 'synced');
-  assert.equal(ctx.spec.name, '시각 전략');
-  assert.equal(ctx.spec.params.fast.default, 33);
-  assert.equal(ctx.spec.params.fast.type, 'int');
-  assert.equal(ctx.spec.indicators.length, 2);
-  assert.equal(ctx.spec.indicators[1].alias, 'ma_slow');
-  assert.equal(ctx.spec.entry.conditions[0].operator, 'cross_above');
-  assert.equal(ctx.spec.risk.stop_loss.enabled, true);
-  // 그래프는 종목·기간을 모른다 — 폼이 정한 대상은 그대로 남아야 한다.
-  assert.deepEqual(ctx.spec.symbols, ['005930']);
-  assert.equal(ctx.spec.fromDt, '20160101');
-  assert.match(textOf(made.container), /그래프 · 코드 검증 완료/);
-});
-
-test('노드에서 코드로 — 검증·컴파일을 마친 산출물은 authoritative로 연다', async () => {
-  const made = await mountVisual();
-  await clickVisualValidate(made);
-  await click(findByClass(made.container, 'backtest-visual-open-code')[0]);
-  await flush();
-  await flush();
-  const ctx = made.canvas.getContext();
-  assert.equal(ctx.designTab, 'code');
-  assert.equal(findByClass(made.container, 'backtest-code-ribbon-kind')[0].textContent, '연결됨');
-  assert.match(
-    findByClass(made.container, 'backtest-code-ribbon-loc')[0].textContent,
-    /golden_cross\.py:5/,
-  );
-  assert.match(
-    findByClass(made.container, 'backtest-code-ribbon-label')[0].textContent,
-    /ma_fast/,
-  );
-  assert.equal(findByClass(made.container, 'backtest-code-preview-banner')[0].hidden, true);
-  assert.equal(findByClass(made.container, 'backtest-code-linkstatus')[0].hidden, false);
-  // 편집기에 얹힌 원문은 컴파일이 준 그 코드다.
-  assert.equal(ctx.code.lines, VISUAL_SOURCE.split('\n').length);
-});
-
-test('코드 해시가 어긋나면 줄을 열지 않는다 — 그 자리에 알리고 탭도 안 바꾼다', async () => {
-  const made = await mountVisual({
-    visualCompile: async () => ({
-      spec_yaml: COMPILED_YAML,
-      source: VISUAL_SOURCE,
-      // 다른 코드에서 나온 map이다 — 이 소스의 해시가 아니다.
-      source_map: visualSourceMap('0000deadbeef', 'authoritative'),
-      hashes: { graph_hash: 'gh-1', artifact_hash: '0000deadbeef', compiler_version: 'visual-1.0.0' },
-    }),
-  });
-  await clickVisualValidate(made);
-  await click(findByClass(made.container, 'backtest-visual-open-code')[0]);
-  await flush();
-  await flush();
-  assert.equal(made.canvas.getContext().designTab, 'flow', '탭을 바꾸지 않는다');
-  assert.equal(findByClass(made.container, 'backtest-flow-notice').length, 1);
-  assert.match(textOf(made.container), /다시 검증하거나 코드 전용으로 검토하세요/);
-});
-
-test('검증 실패의 미리보기는 preview로 열리고 편집기가 읽기 전용이 된다', async () => {
-  const previewSource = ['# 미실행 미리보기', 'ma_fast = __MISSING__', ''].join('\n');
-  const previewHash = await CodeEditorLib.hashSource(previewSource);
-  const made = await mountVisual({
-    visualValidate: async () => ({
-      valid: false,
-      diagnostics: [{
-        code: 'E_PORT_REQUIRED', severity: 'error', node_id: 'ind-ma_fast',
-        message_ko: '입력이 비어 있습니다',
-      }],
-      preview: { source: previewSource, preview_hash: previewHash, preview_only: true },
-      source_map: visualSourceMap(previewHash, 'preview'),
-      exact_code_jump: true,
-      hashes: { graph_hash: 'gh-1', preview_hash: previewHash },
-    }),
-  });
-  await clickVisualValidate(made);
-  await click(findByClass(made.container, 'backtest-visual-open-code')[0]);
-  await flush();
-  await flush();
-  assert.equal(made.canvas.getContext().designTab, 'code');
-  assert.equal(
-    findByClass(made.container, 'backtest-code-ribbon-kind')[0].textContent, '미실행 미리보기',
-  );
-  const banner = findByClass(made.container, 'backtest-code-preview-banner')[0];
-  assert.equal(banner.hidden, false);
-  assert.match(banner.textContent, /실행·저장 대상이 아닙니다/);
-  assert.equal(findByClass(made.container, 'backtest-code-textarea')[0].readOnly, true);
-});
-
-test('사람이 고친 코드 초안은 덮지 않는다 — 코드가 지도보다 앞섰다고 말한다', async () => {
-  const made = await mountVisual();
-  await clickVisualValidate(made);
-  await click(findByClass(made.container, 'backtest-visual-open-code')[0]);
-  await flush();
-  await flush();
-  const textarea = findByClass(made.container, 'backtest-code-textarea')[0];
-  textarea.value = `${VISUAL_SOURCE}# 사람이 더한 줄\n`;
-  await textarea.dispatchEvent({ type: 'input' });
-  made.canvas.onChatAction({ kind: 'navigate', tab: 'design', designTab: 'flow' });
-  await flush();
-  await click(findByClass(made.container, 'backtest-visual-open-code')[0]);
-  await flush();
-  await flush();
-  assert.equal(made.canvas.getContext().designTab, 'flow');
-  assert.match(textOf(made.container), /코드가 지도보다 앞섬/);
-});
-
-test('visual_question·visual_patch는 화면을 바꾸지 않고 카드 모양만 돌려준다', async () => {
-  const made = await mountVisual();
-  const before = made.canvas.getContext().designTab;
-  const question = made.canvas.onChatAction({
-    kind: 'visual_question',
-    question: {
-      code: 'E_PORT_REQUIRED',
-      question_ko: '이 지표의 입력을 무엇으로 이을까요?',
-      node_id: 'ind-ma_fast',
-      choices: [{
-        id: 'connect-close', label_ko: '캔들 종가', recommended: true,
-        changes: [{ target: 'edge', id: 'e1', what_ko: '종가 → 입력 연결' }],
-      }],
-    },
-  });
-  assert.equal(question.kind, 'visual_question');
-  assert.equal(question.applied, false);
-  assert.equal(question.question.code, 'E_PORT_REQUIRED');
-  assert.equal(question.question.choices[0].id, 'connect-close');
-
-  const patch = made.canvas.onChatAction({ kind: 'visual_patch', patch: VISUAL_PATCH });
-  assert.equal(patch.kind, 'visual_patch');
-  assert.equal(patch.applied, false);
-  assert.equal(patch.patch.patch_id, 'patch-1');
-  assert.equal(patch.patch.graph_compatible, true);
-  assert.equal(patch.version.to, patch.version.from + 1);
-
-  assert.equal(made.canvas.getContext().designTab, before, '카드는 화면을 바꾸지 않는다');
-  const ctx = made.canvas.getContext();
-  assert.equal(ctx.map.pendingQuestion.code, 'E_PORT_REQUIRED');
-  assert.equal(ctx.map.pendingPatch.patch_id, 'patch-1');
-});
-
-test('[적용]은 새 버전을 저장할 뿐 실행·활성화·백필을 부르지 않는다', async () => {
-  const saved = [];
-  const made = await mountVisual({
-    createStrategy: async () => ({ strategy_id: 's1', version_id: 'v1' }),
-    visualSave: async (body) => {
-      saved.push(body);
-      return {
-        version_id: 'v2', version: 2, active: false, is_active: false,
-        origin: 'visual', active_version_id: 'v1', hashes: {},
-      };
-    },
-  });
-  await clickVisualValidate(made);
-  made.canvas.onChatAction({ kind: 'visual_patch', patch: VISUAL_PATCH });
-  const receipt = await made.canvas.applyVisualPatch('patch-1');
-  await flush();
-
-  assert.equal(receipt.kind, 'visual_synced');
-  assert.deepEqual(receipt.version, { from: 1, to: 2 });
-  assert.equal(receipt.summary_ko, null);
-  assert.equal(saved.length, 1);
-  assert.equal(saved[0].strategy_id, 's1');
-  assert.equal(saved[0].origin, 'visual');
-  assert.equal(saved[0].source, VISUAL_SOURCE);
-  assert.equal(saved[0].bundle.spec_yaml, COMPILED_YAML);
-  assert.equal(saved[0].bundle.compiler_version, 'visual-1.0.0');
-  assert.equal(saved[0].apply_receipt.patch_id, 'patch-1');
-  assert.equal(saved[0].apply_receipt.patch_hash, 'ph-1');
-  assert.equal(saved[0].apply_receipt.base_graph_hash, 'gh-1');
-  assert.equal(saved[0].apply_receipt.base_version_id, 'v1');
-  assert.equal(saved[0].apply_receipt.base_artifact_hash, made.hash);
-  assert.ok(saved[0].apply_receipt.applied_at, 'applied_at은 사람이 누른 시각이다');
-  // 경계: 이 경로는 돈을 쓰거나 도는 것을 바꾸는 어느 것도 부르지 않는다.
-  assert.equal(made.calls.run, 0);
-  assert.equal(made.calls.activate, 0);
-  assert.equal(made.calls.backfill, 0);
-  assert.equal(made.canvas.getContext().map.pendingPatch, null);
-});
-
-test('그 사이 다른 수정이 먼저 저장되면(409) visual_conflict로 돌아온다', async () => {
-  const made = await mountVisual({
-    createStrategy: async () => ({ strategy_id: 's1', version_id: 'v1' }),
-    visualSave: async () => {
-      const error = new Error('그 사이 다른 수정이 먼저 저장됐습니다');
-      error.status = 409;
-      throw error;
-    },
-  });
-  await clickVisualValidate(made);
-  made.canvas.onChatAction({ kind: 'visual_patch', patch: VISUAL_PATCH });
-  const receipt = await made.canvas.applyVisualPatch('patch-1');
-  assert.equal(receipt.kind, 'visual_conflict');
-  assert.match(receipt.errors.join(' '), /먼저 저장/);
-  assert.equal(made.calls.run, 0);
-  assert.equal(made.calls.activate, 0);
-});
-
-test('[버리기]는 대기 중인 수정안만 지운다 · [실행 전 검토]는 지도로 옮길 뿐이다', async () => {
-  const made = await mountVisual();
-  made.canvas.onChatAction({ kind: 'visual_patch', patch: VISUAL_PATCH });
-  assert.equal(made.canvas.discardVisualPatch('patch-1').ok, true);
-  assert.equal(made.canvas.getContext().map.pendingPatch, null);
-
-  await toForm(made.container);
-  assert.equal(made.canvas.reviewBeforeRun().ok, true);
-  assert.equal(made.canvas.getContext().designTab, 'flow');
-  assert.match(textOf(made.container), /실행 전 검토/);
-  assert.equal(made.calls.run, 0);
-});
-
-test('[다시 검토]는 다시 검증하고 막고 있는 오류를 하나 더 묻는다', async () => {
-  let asked = 0;
-  const made = await mountVisual({
-    visualValidate: async () => ({
-      valid: false,
-      diagnostics: [{
-        code: 'E_PORT_REQUIRED', severity: 'error', node_id: 'ind-ma_fast',
-        message_ko: '입력이 비어 있습니다',
-      }],
-      preview: null, source_map: null, exact_code_jump: false, hashes: { graph_hash: 'gh-1' },
-    }),
-    visualQuestion: async () => {
-      asked += 1;
-      return {
-        question: {
-          code: 'E_PORT_REQUIRED', question_ko: '무엇을 이을까요?',
-          choices: [{ id: 'connect-close', label_ko: '캔들 종가', recommended: true, changes: [] }],
-          remaining: 0,
-        },
-      };
-    },
-  });
-  const receipt = await made.canvas.retryVisualPatch();
-  assert.equal(asked, 1);
-  assert.equal(receipt.kind, 'visual_question');
-  assert.equal(receipt.question.code, 'E_PORT_REQUIRED');
-  assert.equal(made.canvas.getContext().map.pendingQuestion.code, 'E_PORT_REQUIRED');
-});
-
-test('선택지를 고르면 비활성 수정안 하나를 만든다 — 아직 아무것도 저장하지 않는다', async () => {
-  const sent = [];
-  const made = await mountVisual({
-    visualPatch: async (body) => { sent.push(body); return VISUAL_PATCH; },
-  });
-  await clickVisualValidate(made);
-  const receipt = await made.canvas.answerVisualQuestion({
-    code: 'E_PORT_REQUIRED', choice_id: 'connect-close',
-  });
-  assert.equal(sent.length, 1);
-  assert.equal(sent[0].base_graph_hash, 'gh-1');
-  assert.deepEqual(sent[0].intent, { code: 'E_PORT_REQUIRED', choice_id: 'connect-close' });
-  assert.equal(receipt.kind, 'visual_patch');
-  assert.equal(receipt.patch.patch_id, 'patch-1');
-  assert.equal(receipt.applied, false);
-  assert.equal(made.canvas.getContext().map.pendingQuestion, null);
-});
-
-test('시각 라우트가 없으면 지도는 읽기 전용으로 물러나고 이유를 한 줄 남긴다', async () => {
-  const made = await mountVisual({
-    visualFromSpec: async () => {
-      throw new Error('백엔드에 백테스트 경로가 없습니다 — 백엔드가 이 브랜치 버전인지 확인하세요 (Not Found)');
-    },
-  });
-  assert.equal(findByClass(made.container, 'backtest-vis').length, 0);
-  assert.equal(findByClass(made.container, 'backtest-flow-notice').length, 1);
-  assert.match(textOf(made.container), /읽기 전용 지도로 돌아갑니다/);
-  // 지금까지의 읽기 전용 지도는 그대로 선다 — 기능이 통째로 사라지지 않는다.
-  assert.ok(findByClass(made.container, 'backtest-flow-map').length >= 1);
-  assert.match(textOf(made.container), /조절할 값을 정합니다/);
-});
-
-test('코드 경로의 지도에는 [코드 전용] 배지가 붙는다 — 그래프로 되돌릴 수 없다', async () => {
-  const made = await mountVisual();
-  made.canvas.onChatAction({
-    kind: 'code_draft', source: 'def signals(df, params):\n    return None\n',
-  });
-  await flush();
-  made.canvas.onChatAction({ kind: 'navigate', tab: 'design', designTab: 'flow' });
-  await flush();
-  assert.equal(findByClass(made.container, 'backtest-flow-codeonly').length, 1);
-  assert.equal(findByClass(made.container, 'backtest-vis').length, 0);
-});
-
 test('모드 워크스페이스에 등록하고 탭이 움직일 때마다 조각을 보고한다', async () => {
   const registered = [];
   const reports = [];
@@ -4649,308 +3586,63 @@ test('모드 워크스페이스에 등록하고 탭이 움직일 때마다 조�
     },
   };
   try {
-    const made = await mountVisual();
+    const made = await mounted();
     assert.equal(registered.length, 1);
     assert.equal(registered[0][0], 'backtest');
     assert.equal(typeof registered[0][1].restore, 'function');
 
     reports.length = 0;
-    await toForm(made.container);
+    await click(subtabNamed(made.container, '코드'));
     assert.ok(reports.length >= 1, '하위 탭이 움직이면 보고한다');
     const last = reports[reports.length - 1];
-    assert.equal(last.designTab, 'form');
+    assert.equal(last.designTab, 'code');
     assert.equal(last.tab, 'design');
     assert.ok(last.form && typeof last.form.yaml === 'string');
-    assert.ok(last.graph && Array.isArray(last.graph.nodes));
 
     registered[0][1].restore({
-      kind: 'backtest', tab: 'design', designTab: 'flow',
-      form: RESTORE_WORKSPACE.form, graph: VISUAL_GRAPH,
+      kind: 'backtest', tab: 'design', designTab: 'form',
+      form: RESTORE_WORKSPACE.form,
     });
     assert.equal(made.canvas.getContext().screen, null);
-    assert.equal(made.canvas.getContext().designTab, 'flow');
+    assert.equal(made.canvas.getContext().designTab, 'form');
   } finally {
     delete global.window;
   }
 });
 
-test('워크스페이스 전역이 없어도 mount·탭 이동이 조용히 넘어간다', async () => {
-  const made = await mountVisual();
-  assert.doesNotThrow(() => { made.canvas.onChatAction({ kind: 'navigate', tab: 'history' }); });
-});
-
-test('[코드 열기]는 패치가 건드린 노드의 줄로 간다 — RFC 6902 path에서 읽는다', async () => {
-  const made = await mountVisual();
-  await clickVisualValidate(made);
-  made.canvas.onChatAction({ kind: 'visual_patch', patch: VISUAL_PATCH });
-  const opened = await made.canvas.openCodeFromChat();
-  await flush();
-  assert.equal(opened, true);
-  assert.equal(made.canvas.getContext().designTab, 'code');
-  assert.match(
-    findByClass(made.container, 'backtest-code-ribbon-label')[0].textContent,
-    /ma_fast/,
-  );
-  assert.equal(made.calls.run, 0);
-});
-
-// ── US-010 · P3 왕복 경계(코드 전용 분기 · 409 보존 · 버전 되열기) ───────────
+// ── 이력 탭의 버전 목록 ─────────────────────────────────────────────────────
 //
-// 여기서 보는 것은 셋이다: ① 그래프로 못 옮기는 코드 수정이 자동 왕복을 가장하지 않고
-// origin=code_only 새 버전으로 갈라지는가, ② 409가 그래프와 대기 수정안을 버리지 않고
-// [다시 검토]가 최신 base를 다시 읽는가, ③ 이력에서 연 버전이 읽기 전용으로 서고
-// [이 버전으로 편집]을 눌러야 편집 표면이 되는가.
+// strategyId는 코드 경로의 [이 코드로 저장]이 만든다 — 그것이 있어야 이력 탭이
+// 버전을 읽는다. 되열기·활성화는 서로 다른 축이고 어느 쪽도 실행이 아니다.
 
-// 이력에서 되열 버전의 그래프 — 지금 그래프와 구분되는 이름표를 하나 심는다.
-const HISTORY_GRAPH = {
-  graph_version: '1',
-  nodes: [
-    { id: 'data-ohlcv', kind: 'data.ohlcv', label: '캔들', params: {} },
-    { id: 'ind-ma_hist', kind: 'indicator.SMA', label: 'ma_hist', params: { period: 77 } },
-  ],
-  edges: [],
-  scenario: { period: 'day', adjusted: true },
-  meta: { spec_version: '1.0', name: '시각 전략', strategy_id: 'visual_strategy' },
-};
-
-// 지도에서 코드를 열고 사람이 한 줄을 손으로 더한다 — 코드가 지도보다 앞서는 유일한 길.
-async function typeAheadOfMap(made) {
-  await clickVisualValidate(made);
-  await click(findByClass(made.container, 'backtest-visual-open-code')[0]);
-  await flush();
-  await flush();
-  const textarea = findByClass(made.container, 'backtest-code-textarea')[0];
-  textarea.value = `${VISUAL_SOURCE}# 그래프로 못 옮기는 수정\n`;
-  await textarea.dispatchEvent({ type: 'input' });
-  made.canvas.refresh();
-  await flush();
-}
-
-test('코드가 지도보다 앞서면 코드 탭이 두 갈래를 명시한다 — 자동 왕복은 없다', async () => {
-  const made = await mountVisual();
-  await typeAheadOfMap(made);
-  assert.equal(findByClass(made.container, 'backtest-code-ahead').length, 1);
-  assert.match(textOf(made.container), /코드가 지도보다 앞섬/);
-  assert.equal(
-    findByClass(made.container, 'backtest-code-ahead-regraph')[0].textContent,
-    '그래프에서 다시 만들기',
-  );
-  assert.equal(
-    findByClass(made.container, 'backtest-code-ahead-fork')[0].textContent,
-    '코드 전용으로 분기',
-  );
-});
-
-test('[그래프에서 다시 만들기]는 코드 초안을 버리고 그래프를 지킨다', async () => {
-  const made = await mountVisual();
-  await typeAheadOfMap(made);
-  await click(findByClass(made.container, 'backtest-code-ahead-regraph')[0]);
-  await flush();
-  const ctx = made.canvas.getContext();
-  assert.equal(ctx.code.source, '');
-  assert.equal(ctx.runPath, 'form');
-  assert.equal(ctx.map.code_only, false);
-  assert.ok(ctx.map.graph && ctx.map.graph.nodes.length, '그래프는 그대로 남는다');
-});
-
-test('[코드 전용으로 분기]: origin=code_only 새 버전을 남기고 지도를 읽기 전용으로 접는다', async () => {
-  const versions = [];
-  const made = await mountVisual({
-    createStrategy: async () => ({ strategy_id: 's1', version_id: 'v1' }),
-    addVersion: async (id, body) => {
-      versions.push([id, body]);
-      return { version_id: 'v2', version: 2, active: false, is_active: false, origin: 'code_only' };
-    },
-  });
-  await typeAheadOfMap(made);
-  await click(findByClass(made.container, 'backtest-code-ahead-fork')[0]);
-  await flush();
-  await flush();
-
-  // 저장된 것: 초안 그대로, origin=code_only, bundle 없음(서버가 422로 거절하는 모양).
-  assert.equal(versions.length, 1);
-  assert.equal(versions[0][0], 's1');
-  assert.equal(versions[0][1].origin, 'code_only');
-  assert.equal(versions[0][1].note, '코드 전용 분기');
-  assert.match(versions[0][1].source, /그래프로 못 옮기는 수정/);
-  assert.equal(versions[0][1].bundle, undefined, 'code_only 버전은 bundle을 가질 수 없다');
-
-  // 지도는 마지막 호환 snapshot이고, 동기화됐다고 말하지 않는다.
-  made.canvas.onChatAction({ kind: 'navigate', tab: 'design', designTab: 'flow' });
-  await flush();
-  assert.equal(
-    findByClass(made.container, 'backtest-snapshot-badge')[0].textContent,
-    '동기화되지 않음 · 코드 전용',
-  );
-  assert.equal(findByClass(made.container, 'backtest-vis').length, 1, 'snapshot 그래프는 선다');
-  assert.equal(findByClass(made.container, 'backtest-vis-undo').length, 0, '읽기 전용이다');
-  assert.doesNotMatch(textOf(made.container), /그래프 · 코드 검증 완료/);
-  assert.doesNotMatch(textOf(made.container), /일치/);
-
-  const ctx = made.canvas.getContext();
-  assert.equal(ctx.runPath, 'code');
-  assert.equal(ctx.map.code_only, true);
-  assert.notEqual(ctx.map.validation_state, 'synced');
-  // 분기는 활성화도 실행도 아니다.
-  assert.equal(made.calls.run, 0);
-  assert.equal(made.calls.activate, 0);
-  assert.equal(made.calls.backfill, 0);
-  // 갈래를 이미 골랐으므로 코드 탭은 더 묻지 않는다.
-  made.canvas.onChatAction({ kind: 'navigate', tab: 'design', designTab: 'code' });
-  await flush();
-  assert.equal(findByClass(made.container, 'backtest-code-ahead').length, 0);
-});
-
-test('409는 그래프도 대기 수정안도 버리지 않고, [다시 검토]가 최신 base를 다시 읽는다', async () => {
-  const sent = [];
-  const detailed = [];
-  const made = await mountVisual({
-    createStrategy: async () => ({ strategy_id: 's1', version_id: 'v1' }),
-    visualSave: async () => {
-      const error = new Error('base 버전이 최신이 아니다 — 최신 버전을 다시 읽어야 한다');
-      error.status = 409;
-      throw error;
-    },
-    versions: async () => ([
-      { id: 'v1', version: 1, origin: 'human', active: true },
-      { id: 'v9', version: 9, origin: 'visual', active: false },
-    ]),
-    versionDetail: async (strategyId, versionId) => {
-      detailed.push([strategyId, versionId]);
-      return {
-        id: versionId, version: 9, origin: 'visual',
-        hashes: { graph_hash: 'gh-9', artifact_hash: 'ah-9' },
-      };
-    },
-    visualQuestion: async () => ({
-      question: { code: 'E_PORT_REQUIRED', question_ko: '무엇을 이을까요?', choices: [] },
-    }),
-    visualPatch: async (body) => { sent.push(body); return VISUAL_PATCH; },
-  });
-  await clickVisualValidate(made);
-  made.canvas.onChatAction({ kind: 'visual_patch', patch: VISUAL_PATCH });
-  const receipt = await made.canvas.applyVisualPatch('patch-1');
-  assert.equal(receipt.kind, 'visual_conflict');
-  assert.equal(receipt.patch.patch_id, 'patch-1', '영수증이 그 수정안을 그대로 들고 온다');
-
-  const kept = made.canvas.getContext();
-  assert.equal(kept.map.pendingPatch.patch_id, 'patch-1', '수정안을 버리지 않는다');
-  assert.ok(kept.map.graph && kept.map.graph.nodes.length, '그래프도 그대로다');
-
-  // [다시 검토] — 서버의 머리(v9)를 다시 읽고, 다음 수정안은 그 base로 서명한다.
-  await made.canvas.retryVisualPatch();
-  assert.deepEqual(detailed, [['s1', 'v9']]);
-  await made.canvas.answerVisualQuestion({ code: 'E_PORT_REQUIRED', choice_id: 'connect-close' });
-  const last = sent[sent.length - 1];
-  assert.equal(last.base_version_id, 'v9');
-  assert.equal(last.base_graph_hash, 'gh-9');
-  assert.equal(made.calls.run, 0);
-  assert.equal(made.calls.activate, 0);
-});
-
-// 이력 되열기의 밑자락 — 먼저 [적용]으로 s1/v2를 만들어 두고 이력 탭으로 간다.
 async function mountWithHistory(extra) {
-  const made = await mountVisual(Object.assign({
+  const calls = { run: 0, activate: 0, backfill: 0 };
+  const made = await mounted(Object.assign({
     createStrategy: async () => ({ strategy_id: 's1', version_id: 'v1' }),
-    visualSave: async () => ({
-      version_id: 'v2', version: 2, active: false, is_active: false,
-      origin: 'visual', active_version_id: 'v1', hashes: {},
-    }),
+    addVersion: async () => ({ version_id: 'v2', version: 2 }),
+    run: async () => { calls.run += 1; return { run_id: 'r1' }; },
+    backfill: async () => { calls.backfill += 1; return { job_id: 'j1' }; },
+    activate: async () => { calls.activate += 1; return {}; },
     versions: async () => ([
       { id: 'v1', version: 1, origin: 'human', active: true, note: null },
-      { id: 'v2', version: 2, origin: 'visual', active: false, note: '입력 연결' },
-      { id: 'v3', version: 3, origin: 'code_only', active: false, note: '코드 전용 분기' },
+      { id: 'v2', version: 2, origin: 'human', active: false, note: '손으로 고침' },
+      { id: 'v3', version: 3, origin: 'human', active: false, note: '한 번 더' },
     ]),
-    versionDetail: async (strategyId, versionId) => {
-      if (versionId === 'v3') {
-        return {
-          id: 'v3', version: 3, origin: 'code_only', source: '# 코드 전용 원문\n',
-          graph: null, spec_yaml: null, hashes: null, compiler_version: null,
-        };
-      }
-      return {
-        id: 'v2', version: 2, origin: 'visual', source: VISUAL_SOURCE,
-        graph: JSON.parse(JSON.stringify(HISTORY_GRAPH)),
-        spec_yaml: COMPILED_YAML,
-        hashes: { graph_hash: 'gh-2', spec_hash: 'sh-2', artifact_hash: 'ah-2' },
-        compiler_version: 'visual-1.0.0',
-      };
-    },
+    versionDetail: async (strategyId, versionId) => ({
+      id: versionId, version: 2, origin: 'human', source: CODE_SOURCE,
+      spec_yaml: null, hashes: null,
+    }),
   }, extra || {}));
-  await clickVisualValidate(made);
-  made.canvas.onChatAction({ kind: 'visual_patch', patch: VISUAL_PATCH });
-  await made.canvas.applyVisualPatch('patch-1');
+  await withCode(made);
+  await click(subtabNamed(made.container, '코드'));
+  await flush();
+  await click(findByClass(made.container, 'backtest-code-save')[0]);
   await flush();
   made.canvas.onChatAction({ kind: 'navigate', tab: 'history' });
   await flush();
   await flush();
-  return made;
+  return Object.assign({ calls }, made);
 }
-
-test('이력에서 origin=visual 버전을 열면 그때의 그래프가 읽기 전용으로 선다', async () => {
-  const made = await mountWithHistory();
-  assert.match(textOf(made.container), /저장된 버전 3개/);
-  const rows = findByClass(made.container, 'backtest-version-row');
-  assert.equal(rows.length, 3);
-  await click(rows[1]);
-  await flush();
-  await flush();
-
-  assert.match(textOf(made.container), /origin=visual · v2 · 해시 gh-2/);
-  assert.equal(
-    findByClass(made.container, 'backtest-snapshot-badge')[0].textContent,
-    '읽기 전용 · 이력에서 연 버전',
-  );
-  // 그때의 그래프다 — 지금 편집 중인 그래프가 아니다.
-  assert.match(textOf(made.container), /ma_hist/);
-  assert.equal(findByClass(made.container, 'backtest-vis-undo').length, 0, '읽기 전용이다');
-  const ctx = made.canvas.getContext();
-  assert.equal(ctx.designTab, 'flow');
-  assert.equal(ctx.code.source, VISUAL_SOURCE, '그 버전의 원문도 함께 돌아온다');
-  assert.equal(made.calls.run, 0);
-  assert.equal(made.calls.activate, 0);
-});
-
-test('[이 버전으로 편집]을 눌러야 편집 표면이 되고, 그때 지도 판이 하나 오른다', async () => {
-  const made = await mountWithHistory();
-  await click(findByClass(made.container, 'backtest-version-row')[1]);
-  await flush();
-  await flush();
-  const before = made.canvas.getContext().map.version;
-
-  await click(findByClass(made.container, 'backtest-version-edit')[0]);
-  await flush();
-  const ctx = made.canvas.getContext();
-  assert.equal(ctx.map.version, before + 1);
-  assert.equal(ctx.runPath, 'form');
-  assert.equal(findByClass(made.container, 'backtest-snapshot-badge').length, 0);
-  assert.equal(findByClass(made.container, 'backtest-vis-undo').length, 1, '이제 편집할 수 있다');
-  assert.ok(
-    ctx.map.graph.nodes.some((n) => n.label === 'ma_hist'),
-    '작업 초안이 그 버전의 그래프가 된다',
-  );
-});
-
-test('origin=code_only 버전은 코드 탭에서 열리고 지도는 읽기 전용 snapshot뿐이다', async () => {
-  const made = await mountWithHistory();
-  await click(findByClass(made.container, 'backtest-version-row')[2]);
-  await flush();
-  await flush();
-  const ctx = made.canvas.getContext();
-  assert.equal(ctx.designTab, 'code');
-  assert.match(ctx.code.source, /코드 전용 원문/);
-  assert.equal(ctx.map.code_only, true);
-  assert.match(textOf(made.container), /origin=code_only · v3/);
-
-  made.canvas.onChatAction({ kind: 'navigate', tab: 'design', designTab: 'flow' });
-  await flush();
-  assert.equal(
-    findByClass(made.container, 'backtest-snapshot-badge')[0].textContent,
-    '동기화되지 않음 · 코드 전용',
-  );
-  assert.equal(findByClass(made.container, 'backtest-vis-undo').length, 0);
-  assert.doesNotMatch(textOf(made.container), /그래프 · 코드 검증 완료/);
-});
 
 test('이력 탭 버전 행에 [이 버전 켜기]가 있고 누르면 activate를 부른다', async () => {
   const activated = [];
@@ -5457,7 +4149,7 @@ test('노드 창 배선이 없으면 그 사실을 적는다 — 빈 화면으�
   assert.match(textOf(made.container), /노드 창을 아직 불러오지 못했습니다/);
 });
 
-test('기존 기법도 노드·흐름 탭을 갖는다 — 스펙 경로는 지도 뒤의 코드를 읽는다', async () => {
+test('기존 기법도 노드·흐름 탭을 갖는다 — 폼으로 세운 기법은 만든 코드를 읽는다', async () => {
   const seen = {};
   const calls = { codegen: [], nodes: [] };
   const made = await mounted({
@@ -5466,8 +4158,8 @@ test('기존 기법도 노드·흐름 탭을 갖는다 — 스펙 경로는 지�
     techniqueNodes: async (body) => { calls.nodes.push(body); return NODES_RESPONSE; },
   });
   const tabs = findByClass(made.container, 'backtest-subtab').map((t) => t.textContent);
-  assert.deepEqual(tabs, ['지도', '폼', '코드 · 최후의 보루', '노드·흐름']);
-  await click(findByClass(made.container, 'backtest-subtab')[3]);
+  assert.deepEqual(tabs, ['코드', '노드·흐름', '폼', '이력', '최적화', '실매매 적용']);
+  await click(subtabNamed(made.container, '노드·흐름'));
   await flush();
   await flush();
   assert.equal(calls.codegen.length, 1);
@@ -5986,86 +4678,9 @@ async function switchWorkspace(made, handler) {
   await handler.restore({
     kind: 'backtest', tab: 'design', designTab: 'form',
     form: { yaml: RESTORE_YAML.replace('005930', '000660').replace('변동성 돌파', '다음 세션') },
-    graph: { ...VISUAL_GRAPH, id: 'next-session-graph' },
   });
   await made.tick();
 }
-
-for (const pending of ['question', 'patch']) {
-  for (const transition of ['same', 'clear', 'restore']) {
-    test(`완료된 세션 상태 경계: 대기 ${pending} (전환=${transition})`, async () => withWorkspaceGlobal(async ({ registered }) => {
-      const made = await mountVisual();
-      const handler = registered[0][1];
-      made.canvas.onChatAction(pending === 'question'
-        ? { kind: 'visual_question', question: { code: 'E_PREVIOUS', choices: [] } }
-        : { kind: 'visual_patch', patch: VISUAL_PATCH });
-      const key = pending === 'question' ? 'pendingQuestion' : 'pendingPatch';
-      const previous = made.canvas.getContext().map[key];
-      assert.ok(previous, '전환 전에 앞 세션의 대기 상태가 실제로 있어야 한다');
-      if (transition === 'clear') handler.clear();
-      if (transition === 'restore') {
-        await handler.restore({ kind: 'backtest', form: RESTORE_WORKSPACE.form, graph: VISUAL_GRAPH });
-      }
-      await flush();
-      assert.deepEqual(made.canvas.getContext().map[key], transition === 'same' ? previous : null,
-        '앞 세션의 질문·수정안은 다음 모델 컨텍스트에 남으면 안 된다');
-    }));
-  }
-}
-
-for (const origin of ['visual', 'code_only']) {
-  for (const transition of ['same', 'clear', 'restore']) {
-    test(`완료된 세션 상태 경계: 열린 ${origin} 버전 (전환=${transition})`, async () => withWorkspaceGlobal(async ({ registered }) => {
-      const made = await mountWithHistory();
-      const handler = registered[0][1];
-      await click(findByClass(made.container, 'backtest-version-row')[origin === 'visual' ? 1 : 2]);
-      await flush();
-      made.canvas.onChatAction({ kind: 'navigate', tab: 'design', designTab: 'flow' });
-      await flush();
-      assert.equal(findByClass(made.container, 'backtest-snapshot-badge').length, 1);
-      assert.equal(made.canvas.getContext().map.code_only, origin === 'code_only');
-      if (transition === 'clear') handler.clear();
-      if (transition === 'restore') {
-        await handler.restore({
-          kind: 'backtest', form: RESTORE_WORKSPACE.form, graph: VISUAL_GRAPH, designTab: 'flow',
-        });
-      }
-      await flush();
-      assert.equal(made.canvas.getContext().map.code_only, transition === 'same' && origin === 'code_only');
-      assert.equal(findByClass(made.container, 'backtest-head-opened').length, transition === 'same' ? 1 : 0,
-        '앞 세션에서 열었던 버전 표시가 남으면 안 된다');
-      assert.equal(findByClass(made.container, 'backtest-snapshot-badge').length, transition === 'same' ? 1 : 0);
-      if (transition === 'restore') {
-        assert.equal(findByClass(made.container, 'backtest-vis-undo').length, 1,
-          '새 세션의 그래프는 이전 버전 snapshot에 가려지지 않고 편집할 수 있어야 한다');
-        assert.doesNotMatch(textOf(made.container), /ma_hist/);
-      }
-    }));
-  }
-}
-
-test('완료된 세션 상태 경계: 다음 코드 전용 버전은 다음 세션의 호환 그래프를 쓴다', async () => withWorkspaceGlobal(async ({ registered }) => {
-  const made = await mountWithHistory();
-  const handler = registered[0][1];
-  await click(findByClass(made.container, 'backtest-version-row')[2]);
-  await flush();
-  const graph = JSON.parse(JSON.stringify(VISUAL_GRAPH));
-  graph.nodes[1].label = 'ma_next_session';
-  await handler.restore({
-    kind: 'backtest', form: RESTORE_WORKSPACE.form, graph,
-    code: { ...RESTORE_WORKSPACE.code, strategyId: 'next-strategy' },
-  });
-  made.canvas.onChatAction({ kind: 'navigate', tab: 'history' });
-  await flush();
-  await flush();
-  await click(findByClass(made.container, 'backtest-version-row')[2]);
-  await flush();
-  made.canvas.onChatAction({ kind: 'navigate', tab: 'design', designTab: 'flow' });
-  await flush();
-  assert.equal(made.canvas.getContext().map.code_only, true);
-  assert.match(textOf(made.container), /ma_next_session/,
-    '읽기 전용 그래프 캐시도 세션 사이에 재사용하면 안 된다');
-}));
 
 for (const pendingStage of ['start', 'status']) {
   for (const switched of [false, true]) {
@@ -6150,7 +4765,7 @@ for (const pendingStage of ['check', 'nodes', 'codegen']) {
       const handler = registered[0][1];
       if (pendingStage === 'codegen') {
         await click(findByClass(made.container, 'backtest-preset-item')[0]);
-        await click(findByClass(made.container, 'backtest-subtab')[3]);
+        await click(subtabNamed(made.container, '노드·흐름'));
       } else {
         made.canvas.onChatAction({ kind: 'code_draft', source: TECHNIQUE_SOURCE });
         await made.tick();
@@ -6271,116 +4886,7 @@ for (const switched of [false, true]) {
   }));
 }
 
-for (const pendingStage of ['validate', 'compile']) {
-  for (const switched of [false, true]) {
-    test(`비동기 세션 경계: 시각 컴파일 ${pendingStage} (전환=${switched})`, async () => withWorkspaceGlobal(async ({ registered, reports }) => {
-      const previous = workspaceDeferred();
-      let requests = 0;
-      const compiled = { spec_yaml: COMPILED_YAML, source: VISUAL_SOURCE, hashes: {} };
-      const made = makeWorkspaceCanvas({
-        visualFromSpec: async () => ({ graph: VISUAL_GRAPH }),
-        visualValidate: () => pendingStage === 'validate'
-          ? (requests += 1, previous.promise) : Promise.resolve({ valid: true, diagnostics: [] }),
-        visualCompile: () => pendingStage === 'compile'
-          ? (requests += 1, previous.promise) : Promise.resolve(compiled),
-      });
-      made.canvas.mount();
-      await flush();
-      const handler = registered[0][1];
-      await handler.restore({ kind: 'backtest', form: RESTORE_WORKSPACE.form, graph: VISUAL_GRAPH, designTab: 'flow' });
-      await click(findByClass(made.container, 'backtest-visual-validate')[0]);
-      await flush();
-      assert.equal(requests, 1);
-      if (switched) await switchWorkspace(made, handler);
-      await made.tick();
-      const before = made.canvas.getContext();
-      const beforeReports = reports.length;
-      previous.resolve(pendingStage === 'validate' ? { valid: true, diagnostics: [] } : compiled);
-      await flush();
-      await made.tick();
-      if (switched) {
-        assert.deepEqual(made.canvas.getContext().spec, before.spec);
-        assert.deepEqual(made.canvas.getContext().map, before.map);
-        assert.equal(reports.length, beforeReports);
-      } else {
-        assert.equal(made.canvas.getContext().spec.name, '시각 전략');
-        assert.match(reports[reports.length - 1].form.yaml, /시각 전략/);
-      }
-    }));
-  }
-}
-
-for (const pendingStage of ['validate', 'compile', 'create', 'save']) {
-  for (const switched of [false, true]) {
-    test(`비동기 세션 경계: 시각 패치 ${pendingStage} (전환=${switched})`, captureCards(async (cards) => withWorkspaceGlobal(async ({ registered, reports }) => {
-      const previous = workspaceDeferred();
-      const creates = [];
-      const saves = [];
-      let requests = 0;
-      const compiled = { spec_yaml: COMPILED_YAML, source: VISUAL_SOURCE, hashes: {} };
-      const made = makeWorkspaceCanvas({
-        visualFromSpec: async () => ({ graph: VISUAL_GRAPH }),
-        visualValidate: () => pendingStage === 'validate'
-          ? (requests += 1, previous.promise) : Promise.resolve({ valid: true, diagnostics: [] }),
-        visualCompile: () => pendingStage === 'compile'
-          ? (requests += 1, previous.promise) : Promise.resolve(compiled),
-        createStrategy: (body) => {
-          creates.push(body);
-          if (pendingStage === 'create') { requests += 1; return previous.promise; }
-          return Promise.resolve({ strategy_id: 'previous-strategy', version_id: 'previous-v1' });
-        },
-        visualSave: (body) => {
-          saves.push(body);
-          if (pendingStage === 'save') { requests += 1; return previous.promise; }
-          return Promise.resolve({ version_id: 'previous-v2', version: 2 });
-        },
-      });
-      made.canvas.mount();
-      await flush();
-      const handler = registered[0][1];
-      await handler.restore({ kind: 'backtest', form: RESTORE_WORKSPACE.form, graph: VISUAL_GRAPH, designTab: 'flow' });
-      made.canvas.onChatAction({ kind: 'visual_patch', patch: VISUAL_PATCH });
-      const applying = made.canvas.applyVisualPatch('patch-1').then((value) => ({ value }), (error) => ({ error }));
-      await flush();
-      assert.equal(requests, 1);
-      if (switched) {
-        await switchWorkspace(made, handler);
-        made.canvas.onChatAction({ kind: 'visual_patch', patch: { ...VISUAL_PATCH, patch_id: 'next-patch' } });
-      }
-      await made.tick();
-      const before = made.canvas.getContext();
-      const beforeReports = reports.length;
-      const beforeCards = cards.length;
-      const beforeCreates = creates.length;
-      const beforeSaves = saves.length;
-      previous.resolve(pendingStage === 'validate' ? { valid: true, diagnostics: [] }
-        : pendingStage === 'compile' ? compiled
-          : pendingStage === 'create' ? { strategy_id: 'previous-strategy', version_id: 'previous-v1' }
-            : { version_id: 'previous-v2', version: 2 });
-      const outcome = await applying;
-      await made.tick();
-      assert.equal(outcome.error, undefined, '세션 전환 뒤 적용 응답이 예외로 끝나면 안 된다');
-      if (switched) {
-        assert.equal(outcome.value, null);
-        assert.deepEqual(made.canvas.getContext().code, before.code);
-        assert.deepEqual(made.canvas.getContext().spec, before.spec);
-        assert.equal(made.canvas.getContext().map.pendingPatch.patch_id, 'next-patch');
-        assert.equal(reports.length, beforeReports);
-        assert.equal(cards.length, beforeCards);
-        assert.equal(creates.length, beforeCreates);
-        assert.equal(saves.length, beforeSaves);
-      } else {
-        assert.equal(outcome.value.kind, 'visual_synced');
-        assert.equal(creates.length, 1);
-        assert.equal(saves.length, 1);
-        assert.equal(saves[0].strategy_id, 'previous-strategy');
-        assert.equal(made.canvas.getContext().code.source, VISUAL_SOURCE);
-      }
-    })));
-  }
-}
-
-for (const pendingKind of ['backfill', 'check', 'auto-run', 'version', 'compile', 'save']) {
+for (const pendingKind of ['backfill', 'check', 'auto-run', 'version']) {
   for (const switched of [false, true]) {
     test(`비동기 세션 경계: 실패 응답 ${pendingKind} (전환=${switched})`, captureCards(async (cards) => withWorkspaceGlobal(async ({ registered, reports }) => {
       const previous = workspaceDeferred();
@@ -6394,21 +4900,15 @@ for (const pendingKind of ['backfill', 'check', 'auto-run', 'version', 'compile'
         coverage: async () => ({ rows: 606, first_dt: '20240307', last_dt: '20260902' }),
         versions: async () => [{ id: 'previous-v1', version: 1, origin: 'human' }],
         versionDetail: waitForFailure,
-        visualFromSpec: async () => ({ graph: VISUAL_GRAPH }),
-        visualValidate: async () => ({ valid: true, diagnostics: [] }),
-        visualCompile: pendingKind === 'compile' ? waitForFailure
-          : async () => ({ spec_yaml: COMPILED_YAML, source: VISUAL_SOURCE, hashes: {} }),
-        createStrategy: async () => ({ strategy_id: 'previous-strategy' }),
-        visualSave: waitForFailure,
       });
       made.canvas.mount();
       await flush();
       const handler = registered[0][1];
-      let applying = Promise.resolve(null);
+      const applying = Promise.resolve(null);
       if (pendingKind === 'check' || pendingKind === 'auto-run') {
         made.canvas.onChatAction({ kind: 'code_draft', source: TECHNIQUE_SOURCE });
         await made.tick();
-      } else if (pendingKind === 'backfill' || pendingKind === 'version') {
+      } else {
         await handler.restore({ ...RESTORE_WORKSPACE, run: null, code: { ...RESTORE_WORKSPACE.code, strategyId: 'previous-strategy' } });
         if (pendingKind === 'backfill') {
           made.canvas.runFromChat();
@@ -6418,13 +4918,6 @@ for (const pendingKind of ['backfill', 'check', 'auto-run', 'version', 'compile'
           made.canvas.onChatAction({ kind: 'navigate', tab: 'history' });
           await flush();
           await click(findByClass(made.container, 'backtest-version-row')[0]);
-        }
-      } else {
-        await handler.restore({ kind: 'backtest', form: RESTORE_WORKSPACE.form, graph: VISUAL_GRAPH, designTab: 'flow' });
-        if (pendingKind === 'compile') await click(findByClass(made.container, 'backtest-visual-validate')[0]);
-        else {
-          made.canvas.onChatAction({ kind: 'visual_patch', patch: VISUAL_PATCH });
-          applying = made.canvas.applyVisualPatch('patch-1');
         }
       }
       await flush();
@@ -6446,10 +4939,6 @@ for (const pendingKind of ['backfill', 'check', 'auto-run', 'version', 'compile'
         assert.equal(receipt, null);
       } else {
         assert.match(JSON.stringify({ text: textOf(made.container), context: made.canvas.getContext(), cards }), /지연된 이전 세션 실패/);
-        if (pendingKind === 'save') {
-          assert.equal(receipt.kind, 'visual_conflict');
-          assert.equal(receipt.canRetry, true);
-        }
       }
     })));
   }
@@ -6501,182 +4990,6 @@ for (const rejected of [false, true]) {
       }
       assert.equal(made.canvas.getContext().view, 'design');
     }));
-  }
-}
-
-for (const pendingStage of ['list', 'hash', 'detail', 'validate', 'question']) {
-  for (const switched of [false, true]) {
-    test(`비동기 세션 경계: 다시 검토 ${pendingStage} (전환=${switched})`, captureCards(async (cards) => withWorkspaceGlobal(async ({ registered, reports }) => {
-      const previous = workspaceDeferred();
-      const calls = { list: [], detail: [], validate: [], question: [] };
-      let requests = 0;
-      const wait = () => { requests += 1; return previous.promise; };
-      const head = { id: 'previous-v9', version: 9, source: pendingStage === 'hash' ? '# previous head\n' : null };
-      const detail = { hashes: { graph_hash: 'previous-gh', artifact_hash: 'previous-ah' } };
-      const question = { question: { code: 'E_PREVIOUS', question_ko: '이전 세션 질문', choices: [] } };
-      const originalHash = CodeEditorLib.hashSource;
-      if (pendingStage === 'hash') CodeEditorLib.hashSource = wait;
-      try {
-        const made = makeWorkspaceCanvas({
-          versions: (id) => { calls.list.push(id); return pendingStage === 'list' ? wait() : Promise.resolve([head]); },
-          versionDetail: (id, version) => { calls.detail.push([id, version]); return pendingStage === 'detail' ? wait() : Promise.resolve(detail); },
-          visualFromSpec: async () => ({ graph: VISUAL_GRAPH }),
-          visualValidate: (body) => { calls.validate.push(body); return pendingStage === 'validate' ? wait() : Promise.resolve({ valid: false, diagnostics: [] }); },
-          visualQuestion: (body) => { calls.question.push(body); return pendingStage === 'question' ? wait() : Promise.resolve(question); },
-        });
-        made.canvas.mount();
-        await flush();
-        const handler = registered[0][1];
-        await handler.restore({
-          kind: 'backtest', form: RESTORE_WORKSPACE.form, graph: VISUAL_GRAPH, designTab: 'flow',
-          code: { source: '# previous strategy\n', strategyId: 'previous-strategy', runPath: 'form' },
-        });
-        const retrying = made.canvas.retryVisualPatch();
-        await flush();
-        assert.equal(requests, 1);
-        if (switched) await switchWorkspace(made, handler);
-        await made.tick();
-        const before = made.canvas.getContext();
-        const beforeCalls = JSON.parse(JSON.stringify(calls));
-        const beforeReports = reports.length;
-        const beforeCards = cards.length;
-        previous.resolve(pendingStage === 'list' ? [head] : pendingStage === 'hash' ? 'previous-ah'
-          : pendingStage === 'detail' ? detail : pendingStage === 'validate' ? { valid: false, diagnostics: [] } : question);
-        const receipt = await retrying;
-        await made.tick();
-        if (switched) {
-          assert.equal(receipt, null);
-          assert.deepEqual(made.canvas.getContext(), before);
-          assert.deepEqual(calls, beforeCalls, '이전 재검토가 다음 세션의 후속 요청을 시작했다');
-          assert.equal(reports.length, beforeReports);
-          assert.equal(cards.length, beforeCards);
-        } else {
-          assert.equal(receipt.kind, 'visual_question');
-          assert.equal(made.canvas.getContext().map.pendingQuestion.code, 'E_PREVIOUS');
-          assert.deepEqual(calls.detail, [['previous-strategy', 'previous-v9']]);
-        }
-      } finally { CodeEditorLib.hashSource = originalHash; }
-    })));
-  }
-}
-
-for (const rejected of [false, true]) {
-  for (const switched of [false, true]) {
-    test(`비동기 세션 경계: 질문 선택 (거절=${rejected}, 전환=${switched})`, captureCards(async (cards) => withWorkspaceGlobal(async ({ registered, reports }) => {
-      const previous = workspaceDeferred();
-      const requests = [];
-      const made = makeWorkspaceCanvas({
-        visualPatch: (body) => { requests.push(body); return previous.promise; },
-      });
-      made.canvas.mount();
-      await flush();
-      const handler = registered[0][1];
-      await handler.restore({
-        kind: 'backtest', form: RESTORE_WORKSPACE.form, graph: VISUAL_GRAPH, designTab: 'flow',
-      });
-      made.canvas.onChatAction({ kind: 'visual_question', question: { code: 'E_PREVIOUS', choices: [] } });
-      const answering = made.canvas.answerVisualQuestion({ code: 'E_PREVIOUS', choice_id: 'connect-close' });
-      await flush();
-      assert.equal(requests.length, 1, '이전 질문의 선택 요청이 실제로 대기해야 한다');
-      assert.deepEqual(requests[0].intent, { code: 'E_PREVIOUS', choice_id: 'connect-close' });
-      if (switched) {
-        await switchWorkspace(made, handler);
-        made.canvas.onChatAction({ kind: 'visual_question', question: { code: 'E_NEXT', choices: [] } });
-      }
-      await made.tick();
-      const before = made.canvas.getContext();
-      const beforeReports = reports.length;
-      const beforeCards = cards.length;
-      if (rejected) previous.reject(new Error('PREVIOUS_SESSION_PATCH_ERROR'));
-      else previous.resolve({ ...VISUAL_PATCH, patch_id: 'PREVIOUS_SESSION_PATCH' });
-      const receipt = await answering;
-      await made.tick();
-      const after = made.canvas.getContext();
-      if (switched) {
-        assert.equal(receipt, null);
-        assert.deepEqual(after, before, '다음 세션의 질문·수정안·지도 판번호를 보존해야 한다');
-        assert.equal(after.map.pendingQuestion.code, 'E_NEXT');
-        assert.equal(reports.length, beforeReports);
-        assert.equal(cards.length, beforeCards);
-      } else if (rejected) {
-        assert.equal(receipt.kind, 'visual_conflict');
-        assert.equal(after.map.pendingQuestion.code, 'E_PREVIOUS');
-        assert.equal(after.map.pendingPatch, null);
-        assert.equal(after.map.version, before.map.version);
-        assert.equal(cards.length, beforeCards + 1);
-      } else {
-        assert.equal(receipt.kind, 'visual_patch');
-        assert.equal(after.map.pendingQuestion, null);
-        assert.equal(after.map.pendingPatch.patch_id, 'PREVIOUS_SESSION_PATCH');
-        assert.deepEqual(receipt.version, { from: before.map.version, to: before.map.version + 1 });
-        assert.equal(cards.length, beforeCards + 1);
-      }
-    })));
-  }
-}
-
-for (const pendingStage of ['create', 'version']) {
-  for (const rejected of [false, true]) {
-    for (const switched of [false, true]) {
-      test(`비동기 세션 경계: 코드 분기 ${pendingStage} (거절=${rejected}, 전환=${switched})`, captureCards(async (cards) => withWorkspaceGlobal(async ({ registered, reports }) => {
-        const previous = workspaceDeferred();
-        const saved = [];
-        let requests = 0;
-        const hash = await CodeEditorLib.hashSource(VISUAL_SOURCE);
-        const stub = visualStubs(hash, {
-          createStrategy: () => {
-            if (pendingStage === 'create') { requests += 1; return previous.promise; }
-            return Promise.resolve({ strategy_id: 'previous-strategy', version_id: 'previous-v1' });
-          },
-          addVersion: (id, body) => {
-            saved.push({ id, body });
-            if (pendingStage === 'version') { requests += 1; return previous.promise; }
-            return Promise.resolve({ version_id: 'previous-v2', version: 2 });
-          },
-        });
-        const made = makeWorkspaceCanvas(stub.deps);
-        made.canvas.mount();
-        await flush();
-        const handler = registered[0][1];
-        await click(findByClass(made.container, 'backtest-preset-item')[0]);
-        await flush();
-        await typeAheadOfMap(made);
-        await click(findByClass(made.container, 'backtest-code-ahead-fork')[0]);
-        await flush();
-        assert.equal(requests, 1);
-        if (switched) {
-          await switchWorkspace(made, handler);
-          made.canvas.onChatAction({ kind: 'code_draft', source: `${VISUAL_SOURCE}# 다음 세션 편집\n` });
-        }
-        await made.tick();
-        const before = made.canvas.getContext();
-        const beforeText = textOf(made.container);
-        const beforeReports = reports.length;
-        const beforeCards = cards.length;
-        const beforeSaves = saved.length;
-        if (rejected) previous.reject(new Error('이전 세션 분기 실패'));
-        else previous.resolve(pendingStage === 'create'
-          ? { strategy_id: 'previous-strategy', version_id: 'previous-v1' }
-          : { version_id: 'previous-v2', version: 2 });
-        await flush();
-        await made.tick();
-        if (switched) {
-          assert.deepEqual(made.canvas.getContext(), before);
-          assert.equal(textOf(made.container), beforeText);
-          assert.equal(reports.length, beforeReports);
-          assert.equal(cards.length, beforeCards);
-          assert.equal(saved.length, beforeSaves);
-        } else if (rejected) {
-          assert.match(textOf(made.container), /이전 세션 분기 실패/);
-        } else {
-          assert.equal(saved.length, 1);
-          assert.equal(saved[0].id, 'previous-strategy');
-          assert.equal(saved[0].body.origin, 'code_only');
-          assert.equal(made.canvas.getContext().designTab, 'flow');
-          assert.equal(cards[cards.length - 1].detail.kind, 'code_only');
-        }
-      })));
-    }
   }
 }
 
@@ -6977,49 +5290,6 @@ test('세션 복원: clear 전 시작한 결과 조회가 다음 복원에 늦�
   assert.equal(findByClass(made.container, 'backtest-restore-notice').length, 0);
 }));
 
-for (const pendingStage of ['start', 'status']) {
-  test(`세션 복원: 앞 세션의 출처 ${pendingStage} 응답은 새 세션 지도를 바꾸지 않는다`, async () => withWorkspaceGlobal(async ({ registered, reports }) => {
-    let finishPrevious;
-    const previous = new Promise((resolve) => { finishPrevious = resolve; });
-    let finishNext;
-    const next = new Promise((resolve) => { finishNext = resolve; });
-    const statusCalls = [];
-    const made = makeWorkspaceCanvas({
-      sourceMapStart: async ({ url }) => url.endsWith('/previous')
-        ? (pendingStage === 'start' ? previous : { job_id: 'previous-source' })
-        : { job_id: 'next-source' },
-      sourceMapStatus: ({ job_id: jobId }) => {
-        statusCalls.push(jobId);
-        return jobId === 'previous-source' ? previous : next;
-      },
-    });
-    made.canvas.mount();
-    await flush();
-    const handler = registered[0][1];
-    made.canvas.onChatAction({ kind: 'source_url', url: 'https://example.com/previous' });
-    await flush();
-    handler.flush();
-    handler.clear();
-    made.canvas.onChatAction({ kind: 'source_url', url: 'https://example.com/next' });
-    await flush();
-    finishPrevious(pendingStage === 'start'
-      ? { job_id: 'previous-source' }
-      : sourceJobAt3of5({ status: 'done', spec_yaml: RESTORE_YAML }));
-    await flush();
-    await made.tick();
-    assert.equal(made.canvas.getContext().view, 'sourcing');
-    assert.deepEqual(statusCalls, pendingStage === 'start'
-      ? ['next-source'] : ['previous-source', 'next-source']);
-    // 새 세션의 응답은 정상 채택·저장한다 — 모든 출처 결과를 버리는 가드는 오답이다.
-    finishNext(sourceJobAt3of5({ status: 'done', spec_yaml: SMA_YAML }));
-    await flush();
-    await made.tick();
-    assert.equal(made.canvas.getContext().view, 'design');
-    assert.match(reports[reports.length - 1].form.yaml, /SMA 골든크로스/);
-    assert.ok(!reports[reports.length - 1].form.yaml.includes('변동성 돌파'));
-  }));
-}
-
 test('세션 복원: 앞 세션의 실행 시작 응답을 새 세션 실행으로 저장하지 않는다', async () => withWorkspaceGlobal(async ({ registered, reports }) => {
   let finishRun;
   const running = new Promise((resolve) => { finishRun = resolve; });
@@ -7093,47 +5363,6 @@ for (const dirty of [false, true]) {
     assert.equal(made.canvas.getContext().project.activeFile, 'strategies/golden.py');
     assert.equal(findByClass(made.container, 'backtest-code-textarea')[0].value, dirty ? draft : GOLDEN_SOURCE);
     assert.equal(made.canvas.getContext().project.dirty, dirty);
-  }));
-}
-
-for (const pendingKind of ['graph', 'code']) {
-  test(`세션 복원: 앞 세션의 ${pendingKind} 생성 응답은 새 세션 설계를 덮지 않는다`, async () => withWorkspaceGlobal(async ({ registered, reports }) => {
-    let finishPrevious;
-    const previous = new Promise((resolve) => { finishPrevious = resolve; });
-    let requests = 0;
-    const made = makeWorkspaceCanvas({
-      visualFromSpec: () => {
-        if (pendingKind === 'graph') { requests += 1; return previous; }
-        return Promise.resolve({ graph: VISUAL_GRAPH });
-      },
-      visualValidate: async () => ({ valid: true, diagnostics: [] }),
-      codegen: () => { requests += 1; return previous; },
-    });
-    made.canvas.mount();
-    await flush();
-    const handler = registered[0][1];
-    await click(findByClass(made.container, 'backtest-preset-item')[0]);
-    await flush();
-    if (pendingKind === 'code') await click(findByClass(made.container, 'backtest-visual-open-code')[0]);
-    await flush();
-    assert.equal(requests, 1, '이전 세션 요청이 실제로 대기해야 한다');
-    handler.flush();
-    handler.clear();
-    await handler.restore({
-      kind: 'backtest', designTab: 'form',
-      form: { yaml: RESTORE_YAML.replace('005930', '000660') },
-    });
-    await made.tick();
-    const before = reports.length;
-    finishPrevious(pendingKind === 'graph'
-      ? { graph: { ...VISUAL_GRAPH, id: 'previous-session-graph' } }
-      : { source: '# previous-session-code\n' });
-    await flush();
-    await made.tick();
-    assert.equal(reports.length, before);
-    assert.equal(reports[reports.length - 1].code, null);
-    assert.notEqual(reports[reports.length - 1].graph?.id, 'previous-session-graph');
-    assert.equal(made.canvas.getContext().designTab, 'form');
   }));
 }
 
