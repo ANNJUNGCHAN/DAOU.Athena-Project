@@ -112,6 +112,20 @@ test('buildAgentSidebarRows: 각 행에 아이콘 명세가 실린다', () => {
   assert.equal(rows[0].icon, STATUS_ICON.paused);
 });
 
+test('buildAgentSidebarRows: 메인 카드 DTO를 해석하지 않고 그대로 전달한다', () => {
+  const descriptor = { operation_ref: 'athena_stock_quote', args: { symbol: '005930' }, title: '시세' };
+  const rows = buildAgentSidebarRows([routine({
+    main_card_candidate: descriptor,
+    main_card: descriptor,
+    main_card_confirmed_at: '2026-09-08T01:02:03Z',
+    main_card_pending: true,
+  })]);
+  assert.equal(rows[0].mainCardCandidate, descriptor);
+  assert.equal(rows[0].mainCard, descriptor);
+  assert.equal(rows[0].mainCardConfirmedAt, '2026-09-08T01:02:03Z');
+  assert.equal(rows[0].mainCardPending, true);
+});
+
 test('buildAgentSidebarRows: 배열이 아니거나 비어 있으면 빈 배열', () => {
   assert.deepEqual(buildAgentSidebarRows(null), []);
   assert.deepEqual(buildAgentSidebarRows(undefined), []);
@@ -179,4 +193,12 @@ test('buildHydratedRooms: mode가 문자열이 아니면 빈 문자열로 정직
     routine({ id: 'a', mode: undefined, last_fired_at: '2026-08-26T07:30:00Z', unread: false }),
   ]);
   assert.equal(rooms[0].mode, '');
+});
+
+test('buildHydratedRooms: 승인된 메인 카드만 알람 팝업 DTO에 전달한다', () => {
+  const descriptor = { operation_ref: 'athena_stock_quote', args: { symbol: '005930' }, title: '시세' };
+  const rooms = buildHydratedRooms([
+    routine({ id: 'a', last_fired_at: '2026-08-26T07:30:00Z', main_card: descriptor }),
+  ]);
+  assert.equal(rooms[0].mainCard, descriptor);
 });

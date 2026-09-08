@@ -18,6 +18,7 @@ from athena_api.projects import store as projects_store
 from athena_api.routines.briefings import BriefingStore
 from athena_api.routines.engagement import EngagementStore
 from athena_api.routines.ledger import RoutineLedger
+from athena_api.routines.main_card import MainCardDescriptor
 from athena_api.routines.models import Condition, derive_mode
 from athena_api.routines.read_marks import ReadMarksStore
 from athena_api.routines.rules import validate_draft
@@ -181,6 +182,11 @@ def test_adapt_real_message_ignores_garbage():
 async def test_realtime_loop_evaluates_and_notifies(tmp_path):
     store = RoutineStore(tmp_path / "r.json")
     spec = _spec()
+    spec.main_card = MainCardDescriptor(
+        operation_ref="base:ka10005",
+        args={"stk_cd": "005930"},
+        title="시세",
+    )
     store.upsert(spec)
     store.transition(spec.id, "active")
     engine = TriggerEngine(ledger=RoutineLedger(tmp_path / "l.jsonl"))
@@ -212,6 +218,7 @@ async def test_realtime_loop_evaluates_and_notifies(tmp_path):
     assert fired[0]["mode"] == "realtime-ws"
     assert fired[0]["routine_id"] == spec.id
     assert fired[0]["goal"] is False  # 기본값 — goal 미지정 루틴
+    assert fired[0]["main_card"] == spec.main_card.to_dict()
 
 
 @pytest.mark.asyncio
@@ -385,9 +392,7 @@ def test_derive_mode_full_regression_after_scheduled_mode_added():
         cond = _spec(source=source, op=op, value=value).condition
         assert derive_mode(cond) == "realtime-ws", source
 
-    legacy = Condition(
-        source="disclosure.title_keyword", op="contains", value="유상증자"
-    )
+    legacy = Condition(source="disclosure.title_keyword", op="contains", value="유상증자")
     assert derive_mode(legacy) == "periodic"
 
     scheduled = _schedule_spec().condition
@@ -405,9 +410,7 @@ async def test_schedule_loop_fires_on_weekday_time_match(tmp_path):
         events.append(ev)
 
     monday_0730 = datetime(2026, 8, 24, 7, 30, tzinfo=_KST)  # 2026-08-24 = 월요일
-    sched = RoutineScheduler(
-        store=store, engine=engine, notify=notify, now_kst=lambda: monday_0730
-    )
+    sched = RoutineScheduler(store=store, engine=engine, notify=notify, now_kst=lambda: monday_0730)
     await sched.run_schedule_once()
 
     assert [e["type"] for e in events] == ["routine-fired"]
@@ -907,9 +910,7 @@ async def test_code_loop_runs_only_active_code_watch_once_per_symbol(tmp_path, m
     _, digest = _watch_project(tmp_path, monkeypatch)
     runner = _StubRunner(observed=True)
     candles = _CountingStore(_bars())
-    sched, store, ledger, events = _code_scheduler(
-        tmp_path, runner=runner, candle_store=candles
-    )
+    sched, store, ledger, events = _code_scheduler(tmp_path, runner=runner, candle_store=candles)
     first = _code_spec(store, digest)
     second = _code_spec(store, digest)  # 같은 종목 두 번째 알람
     _code_spec(store, digest, status="draft")  # 초안 — 돌지 않는다
@@ -1041,9 +1042,7 @@ async def test_code_loop_records_stale_frame_as_suppressed(tmp_path, monkeypatch
     _, digest = _watch_project(tmp_path, monkeypatch)
     runner = _StubRunner()
     candles = _CountingStore(_bars(last="20260814"))
-    sched, store, ledger, _ = _code_scheduler(
-        tmp_path, runner=runner, candle_store=candles
-    )
+    sched, store, ledger, _ = _code_scheduler(tmp_path, runner=runner, candle_store=candles)
     spec = _code_spec(store, digest)
 
     await sched.run_code_once()
