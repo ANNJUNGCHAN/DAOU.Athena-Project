@@ -4687,7 +4687,7 @@ async function runLiveQueryInner(query, expand, origin, turnConversationId) {
         }
         return;
       }
-      if (expand && !expandTriggered) {
+      if (expand && !expandTriggered && turnConversationId === historyConversationId()) {
         expandTriggered = true;
         // 첫 카드가 확정된 시점에 창을 앞으로 한 번만 가져온다 — 카드마다
         // moveTop()을 반복하면 사용자가 다른 앱으로 옮겨간 뒤에도 계속 튀어나온다.
