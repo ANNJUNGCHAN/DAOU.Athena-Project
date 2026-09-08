@@ -88,6 +88,35 @@ function realRequestThrough(options, callback, writtenBody) {
   return req;
 }
 
+// 계좌 동기화는 실제 백엔드를 사용하지 않는다. 같은 IPC가 보내는 인증·등록·삭제를
+// 임시 계좌 목록으로 검증하며, 그 밖의 fetch 경로는 연결 불가로 닫는다.
+process.env.ATHENA_BACKEND_URL = 'http://127.0.0.1:1';
+process.env.ATHENA_LOCAL_BEARER_TOKEN = 'verify-settings-local-token';
+const backendAccounts = new Map();
+globalThis.fetch = async (input, options = {}) => {
+  const url = new URL(String(input));
+  const match = /^\/runtime\/accounts\/([^/]+)$/.exec(url.pathname);
+  if (url.origin !== process.env.ATHENA_BACKEND_URL || !match) {
+    return new Response('{}', { status: 503 });
+  }
+  if (new Headers(options.headers).get('Authorization') !== 'Bearer verify-settings-local-token') {
+    return new Response('{}', { status: 401 });
+  }
+  const id = decodeURIComponent(match[1]);
+  if (options.method === 'PUT') {
+    const body = JSON.parse(options.body);
+    if (body.app_key !== 'VERIFY_OK_KEY' || body.secret_key !== 'VERIFY_OK_SECRET_0123456789') {
+      return new Response('{}', { status: 403 });
+    }
+    backendAccounts.set(id, body);
+    return Response.json({ ok: true, ready: true, backend_alias: 'verify-account' });
+  }
+  if (options.method === 'DELETE' && backendAccounts.delete(id)) {
+    return Response.json({ ok: true });
+  }
+  return new Response('{}', { status: 404 });
+};
+
 const main = require('./main.js');
 const h = main.settingsHandlers;
 
@@ -126,12 +155,15 @@ async function run() {
   const heightRoundTrip = {
     heightBeforeStep3Done,
     heightAfterStep3Done,
-    baseH: layoutBefore.chatBaseH,
-    shrunkBackToBase: Math.abs(heightAfterStep3Done - layoutBefore.chatBaseH) <= 2,
+    shellH: layoutBefore.shellH,
+    completed: advanceStep3.ok && advanceStep3.done && !h.onboardingState().needed,
+    keptShellHeight: Number.isFinite(layoutBefore.shellH)
+      && Math.abs(heightBeforeStep3Done - layoutBefore.shellH) <= 2
+      && Math.abs(heightAfterStep3Done - layoutBefore.shellH) <= 2,
   };
-  log('onboarding.chatHeight.selfReturnedToBase', heightRoundTrip);
-  if (!heightRoundTrip.shrunkBackToBase) {
-    failures.push('온보딩 3단계 후 채팅 높이가 기본으로 안 돌아왔다');
+  log('onboarding.shellHeight.stableOnComplete', heightRoundTrip);
+  if (!heightRoundTrip.completed || !heightRoundTrip.keptShellHeight) {
+    failures.push('온보딩 완료 상태 또는 고정 셸 높이가 올바르지 않다');
   }
 
   // ---------------- CLI 계정 ----------------
@@ -171,11 +203,16 @@ async function run() {
   log('account.list.afterRegister', afterRegister);
   if (!(okReg && okReg.ok)) failures.push('스텁 계좌 등록이 실패했다');
   else if (accountCount(afterRegister) !== 1) failures.push('스텁 계좌 등록 뒤 목록이 1개가 아니다');
+  if (!okReg.backendConnected || !backendAccounts.has(okReg.id)) failures.push('등록 계좌가 스텁 백엔드에 연결되지 않았다');
 
   if (okReg.ok) {
-    log('order-api-set.enable.ok(tokenReady)', h.orderApiSet(null, { id: okReg.id, enabled: true }));
+    const enabled = await h.orderApiSet(null, { id: okReg.id, enabled: true });
+    log('order-api-set.enable.ok(tokenReady)', enabled);
+    if (!enabled.ok || backendAccounts.get(okReg.id)?.order_api !== true) failures.push('주문 허용이 스텁 백엔드에 반영되지 않았다');
     log('account.list.afterOrderApiOn', h.accountList());
-    log('order-api-set.disable', h.orderApiSet(null, { id: okReg.id, enabled: false }));
+    const disabled = await h.orderApiSet(null, { id: okReg.id, enabled: false });
+    log('order-api-set.disable', disabled);
+    if (!disabled.ok || backendAccounts.get(okReg.id)?.order_api !== false) failures.push('주문 차단이 스텁 백엔드에 반영되지 않았다');
     log('auth-token-status', h.authTokenStatus(null, { id: okReg.id }));
     log('auth-token-refresh', await h.authTokenRefresh(null, { id: okReg.id }));
     // "연결 해제" 버튼(auth-screen.js) 결선 — au10002(접근토큰폐기) 계약을 같은
@@ -185,8 +222,10 @@ async function run() {
     // 두 번째 폐기 — 이미 로컬 토큰이 없는 상태(needed)에서는 upstream 호출 없이
     // 바로 ok:true를 돌려줘야 한다(revoke_token()의 "토큰 없으면 즉시 반환"과 동일).
     log('auth-token-revoke.alreadyNeeded(noUpstreamCall)', await h.authTokenRevoke(null, { id: okReg.id }));
-    log('account.setActive.self', h.accountSetActive(null, { id: okReg.id }));
-    log('account.remove', h.accountRemove(null, { id: okReg.id }));
+    log('account.setActive.self', await h.accountSetActive(null, { id: okReg.id }));
+    const removed = await h.accountRemove(null, { id: okReg.id });
+    log('account.remove', removed);
+    if (!removed.ok || backendAccounts.has(okReg.id)) failures.push('스텁 백엔드 계좌 삭제가 완료되지 않았다');
     const afterRemove = h.accountList();
     log('account.list.afterRemove', afterRemove);
     if (accountCount(afterRemove) !== 0) failures.push('계좌 삭제 뒤 목록이 비지 않았다');
