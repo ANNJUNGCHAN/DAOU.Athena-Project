@@ -2253,9 +2253,6 @@ function createBacktestCanvas(options) {
     if (action.kind === 'file_draft') return applyFileAction(action);
     if (action.kind === 'navigate') return navigateAction(action);
     if (action.kind === 'optimize_request') return optimizeAction(action);
-    // 시각 설계 2종(US-009) — 화면을 바꾸지 않는다. 대기 상태로 세워두고 카드만 만든다.
-    if (action.kind === 'visual_question') return visualQuestionAction(action);
-    if (action.kind === 'visual_patch') return visualPatchAction(action);
     // 새 기법 만들기의 질문 카드(보드 20) — 화면도 코드도 바꾸지 않는다. 사람이 고른
     // 선택지가 채팅으로 돌아오는 것이 이 카드의 전부다.
     if (action.kind === 'technique_question') return techniqueQuestionAction(action);
