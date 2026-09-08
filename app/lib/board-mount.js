@@ -1264,6 +1264,10 @@ function overflowingLeaves(surface) {
     if (el.firstElementChild) continue;
     if (!String(el.textContent || '').trim()) continue;
     if (el.closest('[hidden]')) continue;
+    // 스크롤로 닿는 자리는 결함이 아니다(계획 §2). 그 안쪽 글자까지 후보로 잡으면
+    // 스크롤 표가 있는 보드에서 수십 개가 걸려 접기·줄바꿈이 판을 흔든다(실측:
+    // 마운트 게이트가 카드 1종에서 정착 한도에 걸렸다).
+    if (el.closest('.bs-r-scroll, .bs-r-scroll-table, [data-bs-scroll-declared]')) continue;
     if (el.getBoundingClientRect().right > bound + 1) leaves.push(el);
   }
   return leaves;
