@@ -83,6 +83,10 @@ test('허브는 설치됨·추천 두 구역과 검색을 Paper 03대로 렌더�
     findByClass(container, 'plugin-canvas-description')[0].textContent,
     '플러그인은 설치 후 기능별로 허용합니다. Kiwoom·brain은 Athena 내장 API라 이 목록에 표시하지 않습니다.',
   );
+  assert.equal(
+    findByClass(container, 'plugin-canvas-add-guide')[0].textContent,
+    '추천 목록에 없으면 [+ 서버 추가]에서 배포 문서의 Claude Desktop 설정 JSON을 붙여넣습니다.',
+  );
 });
 
 test('설치됨 카드는 권한, 추천 카드는 설치 버튼을 쓴다', () => {
@@ -479,6 +483,8 @@ test('관리 화면의 직접 등록은 허브와 같은 서버 추가 시트를
   assert.equal(findByClass(container, 'plugin-canvas-add-sheet').length, 1);
 
   const field = findByClass(container, 'plugin-canvas-snippet-input')[0];
+  assert.match(field.placeholder, /"mcpServers"/);
+  assert.match(field.placeholder, /"command": "npx"/);
   field.value = '{"mcpServers":{"x":{"command":"npx"}}}';
   await field.dispatchEvent({ type: 'input', target: field });
   await buttonWithClass(container, 'is-sheet-confirm').dispatchEvent({ type: 'click' });
@@ -531,8 +537,19 @@ test('서버 직접 등록은 붙여넣은 스니펫을 그대로 제안으로 �
   const canvas = createPluginCanvas({ container, onPropose: (spec) => proposed.push(spec) });
   canvas.mount();
   await buttonWithClass(container, 'is-add').dispatchEvent({ type: 'click' });
+  assert.deepEqual(texts(container, 'plugin-canvas-add-step'), [
+    '1. 플러그인 배포 문서에서 Claude Desktop용 설정 JSON을 복사합니다.',
+    '2. mcpServers 아래 서버 한 개만 남겨 붙여넣습니다.',
+    '3. [등록 제안]을 승인한 뒤 [관리]에서 해당 플러그인을 켜고 승인합니다.',
+    '4. 설치됨 목록의 [권한]에서 연결을 확인하고 사용할 기능을 허용합니다.',
+  ]);
+  assert.deepEqual(texts(container, 'plugin-canvas-sheet-warning'), [
+    '등록만으로는 실행되지 않습니다',
+    '승인 카드로 확정합니다',
+    '켜기와 권한 변경도 승인 카드에서 확정하며, 적용 시점은 결과 카드에서 확인합니다',
+  ]);
   await buttonWithClass(container, 'is-sheet-confirm').dispatchEvent({ type: 'click' });
-  assert.equal(findByClass(container, 'plugin-canvas-sheet-error')[0].textContent, 'Claude 설정 스니펫을 붙여넣습니다');
+  assert.equal(findByClass(container, 'plugin-canvas-sheet-error')[0].textContent, '설정 JSON을 붙여넣어 주세요');
   assert.deepEqual(proposed, []);
 
   const field = findByClass(container, 'plugin-canvas-snippet-input')[0];
@@ -546,6 +563,36 @@ test('서버 직접 등록은 붙여넣은 스니펫을 그대로 제안으로 �
     snippet: '{"mcpServers":{"x":{"command":"npx"}}}',
   }]);
   assert.equal(findByClass(container, 'plugin-canvas-sheet').length, 0);
+});
+
+test('서버 직접 등록은 잘못된 JSON과 여러 서버를 승인 제안 전에 막는다', async () => {
+  const proposed = [];
+  const container = fakeNode('div');
+  const canvas = createPluginCanvas({ container, onPropose: (spec) => proposed.push(spec) });
+  canvas.mount();
+  await buttonWithClass(container, 'is-add').dispatchEvent({ type: 'click' });
+
+  const field = findByClass(container, 'plugin-canvas-snippet-input')[0];
+  field.value = '{broken';
+  await field.dispatchEvent({ type: 'input', target: field });
+  await buttonWithClass(container, 'is-sheet-confirm').dispatchEvent({ type: 'click' });
+  assert.equal(findByClass(container, 'plugin-canvas-sheet-error')[0].textContent, '설정 JSON 형식을 확인해 주세요');
+
+  field.value = '[]';
+  await field.dispatchEvent({ type: 'input', target: field });
+  await buttonWithClass(container, 'is-sheet-confirm').dispatchEvent({ type: 'click' });
+  assert.equal(findByClass(container, 'plugin-canvas-sheet-error')[0].textContent, 'mcpServers 아래에 서버 한 개를 넣어 주세요');
+
+  field.value = '{"mcpServers":[]}';
+  await field.dispatchEvent({ type: 'input', target: field });
+  await buttonWithClass(container, 'is-sheet-confirm').dispatchEvent({ type: 'click' });
+  assert.equal(findByClass(container, 'plugin-canvas-sheet-error')[0].textContent, 'mcpServers 아래에 서버 한 개를 넣어 주세요');
+
+  field.value = '{"mcpServers":{"a":{},"b":{}}}';
+  await field.dispatchEvent({ type: 'input', target: field });
+  await buttonWithClass(container, 'is-sheet-confirm').dispatchEvent({ type: 'click' });
+  assert.equal(findByClass(container, 'plugin-canvas-sheet-error')[0].textContent, '서버는 한 번에 하나만 추가할 수 있습니다');
+  assert.deepEqual(proposed, []);
 });
 
 // --- 호스트 계약 ---------------------------------------------------------------

@@ -428,9 +428,9 @@
     </div>
   </div>
 
-  <div id="order" class="app glass shell-overlay" hidden>
+  <div id="order" class="app glass shell-overlay" role="dialog" aria-modal="true" aria-labelledby="orderTitle" tabindex="-1" hidden>
     <div class="settings-head">
-      <span class="settings-title">주문 티켓</span>
+      <span id="orderTitle" class="settings-title">주문 티켓</span>
       <span class="settings-hint">Esc 닫기 — 실행 전에는 아무 일도 일어나지 않습니다</span>
     </div>
     <div id="orderBody" class="settings-grid"></div>

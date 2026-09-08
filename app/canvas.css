@@ -369,9 +369,26 @@ html, body { background: transparent; }
  * 뷰포트 미디어쿼리로는 못 잡는다: 좁아지는 원인이 창이 아니라 옆 패널이다. */
 .graph-settings-source {
   flex: 1 1 200px; min-width: 200px;
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  display: flex; flex-direction: column; align-items: stretch; gap: 6px;
   padding: 16px 18px;
 }
+/* 라벨 · [조회 주기 ▾ ▶ 토글] 한 줄, 그 아래 우측에 실행 시각(2026-09-08 소스별 주기). */
+.graph-settings-source-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.graph-settings-source-meta {
+  text-align: right; font-family: var(--font-body); font-size: var(--text-xs); line-height: 14px;
+  color: var(--color-k-hint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+/* 수동 실행 — 재생 삼각형 하나. 토글과 같은 높이의 조용한 외곽선 버튼이다:
+ * 매시 도는 일을 한 번 더 시키는 것이라 시각 무게를 주지 않는다. */
+.graph-settings-run {
+  appearance: none; cursor: pointer; flex-shrink: 0;
+  width: 24px; height: 24px; padding: 0; display: inline-flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-full); border: 1px solid var(--color-k-line);
+  background: var(--color-k-panel2); color: var(--color-k-text);
+}
+.graph-settings-run:hover:not(:disabled) { background: var(--color-k-panel3); }
+.graph-settings-run:disabled { opacity: 0.45; cursor: default; }
+.graph-settings-run.is-running { cursor: progress; }
 .graph-settings-source + .graph-settings-source { border-left: 1px solid var(--color-k-line-soft); }
 .graph-settings-source-label {
   font-family: var(--font-strong); font-size: var(--text-md); color: var(--color-k-text);

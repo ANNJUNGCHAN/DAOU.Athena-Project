@@ -33,7 +33,7 @@ from athena_api.brain import (
 from athena_api.brain.ontology import MAX_RAW_CHAT_TEXT_CHARS, Confidence
 from athena_api.brain.projection import cluster_cohesion, cluster_representative_labels
 from athena_api.errors import BrainNotReadyError
-from athena_api.lifespan import BrainRuntime, _teardown_brain
+from athena_api.lifespan import BrainIngestScheduler, BrainRuntime, BrainSource, _teardown_brain
 from athena_api.security import require_local_bearer
 
 logger = logging.getLogger(__name__)
@@ -150,6 +150,69 @@ class IngestionJobResponse(BaseModel):
     completed_at: datetime | None
     next_retry_at: datetime | None
     error: str | None
+
+
+class SourceScheduleOut(BaseModel):
+    """소스 하나의 조회 주기·실행 시각(보드 05 수집·노출의 세 칸이 그대로 읽는다)."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    source: BrainSource
+    interval_minutes: int
+    # 체결·잔고는 키움 계정이 결선돼 있어야 실제로 새 사실이 생긴다. False면 화면이
+    # "돌긴 돌지만 적재는 없다"를 숨기지 않게 한다(§0 정직성).
+    producer_wired: bool
+    last_run_at: datetime | None
+    next_run_at: datetime | None
+    running: bool
+    # 마지막 실행에서 난 예외의 형 이름만(lifespan.SourceSchedule과 같다).
+    last_error: str | None
+
+
+class BrainScheduleResponse(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    # external이면 자동 주기는 이 프로세스가 돌리지 않는다 — next_run_at은 그때
+    # "돌릴 예정이 없는" 시각이라 화면이 그 사실을 함께 말해야 한다.
+    schedule_owner: Literal["backend", "external"]
+    sources: list[SourceScheduleOut]
+
+
+class BrainScheduleUpdateRequest(BaseModel):
+    """소스별 조회 주기(분). 적은 것만 바꾼다."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    chat: int | None = Field(default=None, ge=1, le=24 * 60)
+    fills: int | None = Field(default=None, ge=1, le=24 * 60)
+    holdings: int | None = Field(default=None, ge=1, le=24 * 60)
+
+
+def _require_scheduler(request: Request) -> BrainIngestScheduler:
+    runtime: BrainRuntime | None = getattr(request.app.state, "brain_runtime", None)
+    scheduler = getattr(runtime, "scheduler", None) if runtime is not None else None
+    if runtime is None or not runtime.ingestion_ready or scheduler is None:
+        raise BrainNotReadyError("investment brain ingestion is not ready")
+    return scheduler
+
+
+def _public_schedule(request: Request, scheduler: BrainIngestScheduler) -> BrainScheduleResponse:
+    settings = getattr(request.app.state, "settings", None)
+    return BrainScheduleResponse(
+        schedule_owner=getattr(settings, "brain_ingest_schedule_owner", "backend"),
+        sources=[
+            SourceScheduleOut(
+                source=source,
+                interval_minutes=max(1, round(schedule.interval_seconds / 60)),
+                producer_wired=schedule.producer_wired,
+                last_run_at=schedule.last_run_at,
+                next_run_at=schedule.next_run_at,
+                running=schedule.running,
+                last_error=schedule.last_error,
+            )
+            for source, schedule in scheduler.schedules.items()
+        ],
+    )
 
 
 def _public_ingestion_job(job: IngestionJob) -> IngestionJobResponse:
@@ -606,6 +669,76 @@ async def enqueue_brain_ingestion(
     if runtime is None or not runtime.ingestion_ready or runtime.coordinator is None:
         raise BrainNotReadyError("investment brain ingestion is not ready")
     return _public_ingestion_job(await runtime.coordinator.enqueue(JobTrigger.MANUAL))
+
+
+@router.get(
+    "/schedule",
+    summary="소스별 수집 주기·실행 시각 조회",
+    operation_id="get_brain_schedule",
+    response_model=BrainScheduleResponse,
+    openapi_extra={
+        **_NOT_LLM_EXPOSED,
+        "x-athena-side-effect": "none",
+    },
+)
+async def get_brain_schedule(
+    request: Request,
+    authorization: Annotated[str, Header(alias="Authorization")],
+) -> BrainScheduleResponse:
+    require_local_bearer(request, authorization)
+    return _public_schedule(request, _require_scheduler(request))
+
+
+@router.put(
+    "/schedule",
+    summary="소스별 수집 주기 변경",
+    operation_id="put_brain_schedule",
+    response_model=BrainScheduleResponse,
+    openapi_extra={
+        **_NOT_LLM_EXPOSED,
+        "x-athena-side-effect": "write",
+    },
+)
+async def put_brain_schedule(
+    payload: BrainScheduleUpdateRequest,
+    request: Request,
+    authorization: Annotated[str, Header(alias="Authorization")],
+) -> BrainScheduleResponse:
+    """값은 화면(localStorage)이 주인이다 — 백엔드는 기동마다 설정 파일 기본값으로
+    돌아오고, 앱이 브레인 준비를 확인한 뒤 저장값을 다시 밀어 넣는다."""
+    require_local_bearer(request, authorization)
+    scheduler = _require_scheduler(request)
+    for source in BrainSource:
+        minutes = getattr(payload, source.value)
+        if minutes is not None:
+            scheduler.set_interval(source, minutes * 60)
+    return _public_schedule(request, scheduler)
+
+
+@router.post(
+    "/schedule/{source}/run",
+    summary="소스 하나 지금 수집",
+    operation_id="run_brain_schedule_source",
+    response_model=BrainScheduleResponse,
+    openapi_extra={
+        **_NOT_LLM_EXPOSED,
+        "x-athena-side-effect": "write",
+    },
+)
+async def run_brain_schedule_source(
+    source: BrainSource,
+    request: Request,
+    authorization: Annotated[str, Header(alias="Authorization")],
+) -> BrainScheduleResponse:
+    """체결·잔고는 적재까지 기다렸다가(분 단위일 수 있다) 잡을 넣고 돌아온다 — 그래야
+    응답의 last_run_at이 "정말 돌았다"를 뜻한다. 잡 자체는 비동기로 이어진다."""
+    require_local_bearer(request, authorization)
+    scheduler = _require_scheduler(request)
+    if scheduler.schedules[source].running:
+        # 같은 소스를 두 번 겹쳐 돌리지 않는다 — 백필 커서가 둘이 되면 한쪽이 헛돈다.
+        return _public_schedule(request, scheduler)
+    await scheduler.run_now(source)
+    return _public_schedule(request, scheduler)
 
 
 @router.get(

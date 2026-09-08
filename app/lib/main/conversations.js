@@ -195,7 +195,7 @@ function begin({ id, projectId, mode } = {}) {
 
 // 첫 사용자 메시지에서 목록에 한 번만 추가한다. begin()을 거치지 않은 기존
 // 호출도 현재 프로젝트로 안전하게 귀속된다.
-function touch({ id, title, projectId, mode } = {}) {
+function touch({ id, title, projectId, mode, activate = true } = {}) {
   const conversationId = validString(id);
   if (!conversationId) return list();
   const state = readState();
@@ -220,9 +220,12 @@ function touch({ id, title, projectId, mode } = {}) {
       resumeSessionId: null,
     });
   }
-  state.activeId = conversationId;
-  state.activeMode = existing ? existing.mode : requestedMode;
-  state.currentProjectId = existing ? existing.projectId : requestedProjectId;
+  // activate:false(다중 대화, 2026-09-08) — 배경·오브 대화의 턴은 행만 만들고 선택은 옮기지 않는다.
+  if (activate) {
+    state.activeId = conversationId;
+    state.activeMode = existing ? existing.mode : requestedMode;
+    state.currentProjectId = existing ? existing.projectId : requestedProjectId;
+  }
   writeState(state);
   return snapshot(state);
 }

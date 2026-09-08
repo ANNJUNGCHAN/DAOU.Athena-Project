@@ -2,9 +2,14 @@
 'use strict';
 
 const RENDER_CANVAS_SUFFIX = '__athena__render_canvas';
+const GROK_RENDER_CANVAS_NAMES = new Set([
+  'athena__athena_render_canvas',
+  'mcp__athena__athena_render_canvas',
+]);
 
 function isRenderCanvasToolName(name) {
-  return typeof name === 'string' && name.endsWith(RENDER_CANVAS_SUFFIX);
+  return typeof name === 'string'
+    && (name.endsWith(RENDER_CANVAS_SUFFIX) || GROK_RENDER_CANVAS_NAMES.has(name));
 }
 
 // Grok의 MCP 호출은 실제 서버 도구를 곧바로 tool_use.name에 싣지 않고 내장
