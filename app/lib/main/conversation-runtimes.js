@@ -23,6 +23,7 @@ function createRuntime(conversationId, now) {
     // null = 명시적 새 대화, 문자열 = 그 세션에서 --resume.
     liveSessionId: undefined,
     chatSession: null,
+    chatSessionProviderId: null,
     lastUsedAt: now(),
   };
 }
@@ -70,6 +71,7 @@ function createConversationRuntimes({
   function stopSession(runtime, reason) {
     const session = runtime.chatSession;
     runtime.chatSession = null;
+    runtime.chatSessionProviderId = null;
     if (!session) return;
     try { session.stop(reason || new Error('conversation runtime evicted')); } catch { /* already stopping */ }
   }
@@ -89,11 +91,15 @@ function createConversationRuntimes({
     }
   }
 
-  function chatSession(conversationId, factory) {
+  function chatSession(conversationId, factory, providerId = 'claude') {
     const runtime = get(conversationId);
+    if (runtime.chatSession && runtime.chatSessionProviderId !== providerId) {
+      stopSession(runtime, new Error('conversation provider changed'));
+    }
     if (!runtime.chatSession) {
       evictIdleSessions(runtime.conversationId);
       runtime.chatSession = factory(runtime.conversationId);
+      runtime.chatSessionProviderId = providerId;
     }
     return runtime.chatSession;
   }

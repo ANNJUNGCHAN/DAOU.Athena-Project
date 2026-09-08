@@ -8,6 +8,12 @@ const {
   buildLiveTurnPrompt, selectActiveAgentProject,
 } = require('./live-prompt');
 
+test('Grok 상주 규칙과 턴을 합치면 기존 콜드 프롬프트와 같다', () => {
+  const input = { userText: '안녕하세요', providerId: 'grok' };
+  assert.equal(buildLivePrompt(input), `${buildLiveSystemPrompt('grok')}\n\n${buildLiveTurnPrompt(input)}`);
+  assert.ok(buildLiveSystemPrompt('grok').includes('[Grok MCP 호출 규칙]'));
+});
+
 test('알람 메인 카드는 검증된 조회 후보와 사용자 동의로만 확정한다', () => {
   const prompt = buildLivePrompt('삼성전자 거래량이 늘면 알람 줘', [], '20260908');
   assert.match(prompt, /main_card_candidate=\{operation_ref,args,title\}/);

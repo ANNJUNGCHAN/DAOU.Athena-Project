@@ -274,8 +274,8 @@ const GROK_MCP_RULES_TEXT = [
   '- propose_spec의 patch는 반드시 propose_spec 객체 안에 넣는다. period는 day·week·month 중 하나만 지원한다. 분봉을 지원한다고 말하거나 period=min을 보내지 않는다.',
 ].join('\n');
 
-function buildLiveSystemPrompt() {
-  return LIVE_RULES_TEXT;
+function buildLiveSystemPrompt(providerId = 'claude') {
+  return providerId === 'grok' ? `${LIVE_RULES_TEXT}\n\n${GROK_MCP_RULES_TEXT}` : LIVE_RULES_TEXT;
 }
 
 // 백테스트 모드 접두(2026-09-02) — 캔버스가 백테스트 모드일 때만 턴 앞에 붙는다.
@@ -793,10 +793,7 @@ function buildLiveTurnPrompt(input) {
 // 동일해야 한다(live-prompt.test.js가 합성 규칙을 고정). query는 문자열이든
 // buildLiveTurnPrompt와 같은 객체든 그대로 통과시킨다.
 function buildLivePrompt(query) {
-  const providerRules = query && typeof query === 'object' && query.providerId === 'grok'
-    ? `\n\n${GROK_MCP_RULES_TEXT}`
-    : '';
-  return `${LIVE_RULES_TEXT}${providerRules}\n\n${buildLiveTurnPrompt(query)}`;
+  return `${buildLiveSystemPrompt(query && query.providerId)}\n\n${buildLiveTurnPrompt(query)}`;
 }
 
 module.exports = {

@@ -16,13 +16,16 @@ const {
 test('ensureMcpConfig: userData 아래에 claude -p가 읽을 수 있는 .mcp.json을 쓴다', () => {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'athena-mcp-config-test-'));
   try {
-    const { dir, configFile, configPath, grokConfigPath } = ensureMcpConfig(tmp);
+    const { dir, configFile, configPath, grokConfigPath, grokProfilePath } = ensureMcpConfig(tmp);
     assert.equal(dir, path.join(tmp, 'mcp-config'));
     assert.equal(configFile, '.mcp.json');
     assert.equal(configPath, path.join(dir, '.mcp.json'));
     assert.equal(grokConfigPath, path.join(dir, '.grok', 'config.toml'));
     assert.ok(fs.existsSync(configPath));
     assert.ok(fs.existsSync(grokConfigPath));
+    const grokProfile = fs.readFileSync(grokProfilePath, 'utf8');
+    assert.match(grokProfile, /^tools: search_tool, use_tool$/m);
+    assert.doesNotMatch(grokProfile, /run_terminal_cmd|search_replace|write_file|web_search|web_fetch/);
 
     const written = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
     assert.ok(written.mcpServers.athena);
