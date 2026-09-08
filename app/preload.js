@@ -201,6 +201,7 @@ const INVOKE_CHANNELS = new Set([
   'athena:project-add',
   'athena:project-pin',
   'athena:project-update',
+  'athena:project-relink',
   'athena:project-reveal',
   'athena:project-remove',
   'athena:project-open',

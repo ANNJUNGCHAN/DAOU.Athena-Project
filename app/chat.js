@@ -3740,6 +3740,41 @@ function renderWatchProgressTurn(r) {
   return line;
 }
 
+// 「폴더 다시 지정」 — 프로젝트 폴더가 사라진 코드 감시를 살린다. 폴더는 main의 대화상자로
+// 사람이 고르고, 백엔드가 같은 project_id의 경로만 바꾼다(새 id 없음). 성공하면 검사를 바로
+// 다시 돌려 새 카드로 답한다 — 사람이 「검사」를 한 번 더 누르게 하지 않는다. 취소는 조용히 끝난다.
+async function relinkWatchProject(r, status, buttons) {
+  const watch = await watchBlockOf(r);
+  if (!watch || !watch.project_id) {
+    status.textContent = '감시 프로젝트를 알 수 없음 — 대화로 다시 만들기';
+    return;
+  }
+  for (const b of buttons) b.disabled = true;
+  status.textContent = '폴더 고르는 중';
+  let res;
+  try { res = await window.athena.invoke('athena:project-relink', { id: watch.project_id }); }
+  catch (e) { res = { ok: false, error: String((e && e.message) || e) }; }
+  if (!res || !res.ok || res.canceled) {
+    for (const b of buttons) b.disabled = false;
+    status.textContent = res && res.canceled ? '' : `폴더 지정 실패: ${(res && res.error) || '알 수 없는 오류'}`;
+    return;
+  }
+  // 카드가 든 차단 사유는 폴더가 없던 때의 것이다 — 백엔드가 지금 보는 사유로 바꾼다.
+  try {
+    const detail = await window.athena.invoke('athena:routine-detail', { id: r.id });
+    if (detail && detail.ok && detail.data && 'activation_blocker' in detail.data) {
+      r.activation_blocker = detail.data.activation_blocker;
+    }
+  } catch { /* 새 검사 카드가 지금의 사실을 말한다 */ }
+  status.textContent = '폴더 다시 지정됨 — 검사 다시 돌림';
+  const progressLine = renderWatchProgressTurn(r);
+  const check = await runWatchCheck(r);
+  progressLine.remove();
+  // 상태줄은 지우지 않는다 — 보드 10-b ③처럼 「폴더 다시 지정됨 — 검사 다시 돌림」이 남아
+  // 무엇이 이 새 카드를 불렀는지 말한다.
+  renderWatchCheckCard(r, check || { ok: false, reason: '감시 코드 자리를 못 찾음 — 대화로 다시 만들기' });
+}
+
 function renderWatchCheckCard(r, check) {
   const model = watchCheckCardLib.checkCardModel(check, r);
   const line = document.createElement('div');
@@ -3831,7 +3866,8 @@ function renderWatchCheckCard(r, check) {
   status.className = 'agent-mode';
   const buttons = [];
   for (const chip of model.chips) {
-    const btn = _btn(chip.label, chip.action === 'confirm' ? 'routine-btn routine-btn-approve' : 'routine-btn');
+    const btn = _btn(chip.label, chip.action === 'confirm' ? 'routine-btn routine-btn-approve'
+      : chip.action === 'relink' ? 'routine-btn routine-btn-relink' : 'routine-btn');
     btn.disabled = !chip.enabled || (chip.action === 'confirm' && !!r.activation_blocker);
     if (chip.action === 'confirm') {
       btn.addEventListener('click', async () => {
@@ -3845,6 +3881,8 @@ function renderWatchCheckCard(r, check) {
           btn.disabled = !!r.activation_blocker;
         }
       });
+    } else if (chip.action === 'relink') {
+      btn.addEventListener('click', () => { void relinkWatchProject(r, status, buttons); });
     } else {
       btn.addEventListener('click', () => {
         const repairContext = model.failed
@@ -4151,8 +4189,16 @@ function renderApprovalCard(r) {
     $input.focus();
   });
 
+  // 초안 카드도 「프로젝트 폴더 없음」이면 폴더를 다시 고르는 길을 낸다(검사 카드와 같은 칩).
+  const relink = isCodeWatch && watchCheckCardLib.isProjectFolderMissing(r.activation_blocker)
+    ? _btn(watchCheckCardLib.CHIP_RELINK, 'routine-btn routine-btn-relink') : null;
+  if (relink) {
+    relink.addEventListener('click', () => { void relinkWatchProject(r, status, [preview, activate, relink, fix]); });
+  }
+
   row.appendChild(preview);
   row.appendChild(activate);
+  if (relink) row.appendChild(relink);
   row.appendChild(fix);
   row.appendChild(status);
   card.appendChild(row);
