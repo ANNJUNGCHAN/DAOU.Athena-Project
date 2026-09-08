@@ -88,11 +88,14 @@ test('build args use the verified agent stdio flag order', () => {
     'agent', '--model', 'grok-4.6', '--reasoning-effort', 'high',
     '--agent-profile', 'profile.json', '--no-leader', 'stdio',
   ]);
+  assert.equal(buildGrokAcpArgs().includes('--trust'), false);
+  assert.deepEqual(buildGrokAcpArgs({ trustProjectFolder: true }).slice(0, 2), ['--trust', 'agent']);
 });
 
 test('two sequential turns share one process and one ACP session', async () => {
   const ctx = harness();
   const first = await startTurn(ctx);
+  assert.deepEqual(request(first.child, 'session/new').params._meta.startupHints, { nonInteractive: true });
   assert.equal(first.prompt.params.sessionId, 's1');
   reply(first.child, first.prompt, { stopReason: 'end_turn' });
   assert.equal((await first.promise).ok, true);
@@ -110,13 +113,15 @@ test('two sequential turns share one process and one ACP session', async () => {
 });
 
 test('session new/load preserve rules, profile, yolo mode, and explicit MCP descriptor', async () => {
-  const ctx = harness();
+  const ctx = harness({ trustProjectFolder: true });
   const turn = await startTurn(ctx, { resumeSessionId: 'existing' });
+  assert.deepEqual(ctx.spawns[0].args.slice(0, 2), ['--trust', 'agent']);
   const loaded = request(turn.child, 'session/load');
   assert.equal(loaded.params.sessionId, 'existing');
   assert.equal(loaded.params._meta.rules, 'Athena rules');
   assert.equal(loaded.params._meta.agentProfile, 'C:\\Athena\\mcp-config\\grok-profile.json');
   assert.equal(loaded.params._meta.yoloMode, true);
+  assert.deepEqual(loaded.params._meta.startupHints, { nonInteractive: true });
   assert.equal(loaded.params.mcpServers[0].name, 'athena');
   reply(turn.child, turn.prompt, { stopReason: 'end_turn' });
   await turn.promise;
@@ -154,6 +159,99 @@ test('text, thought, tool result, and structured canvas stream through parser-co
   assert.deepEqual(events, ['stream_event', 'stream_event', 'assistant', 'user', 'stream_event', 'result']);
   assert.equal(result.finalResult.result, 'hello world');
   assert.equal(typeof result.metrics.firstTextMs, 'number');
+});
+
+test('verified ACP tool wire prefers content text over rawOutput telemetry and emits one terminal result', async () => {
+  const ctx = harness();
+  const canvases = [];
+  const events = [];
+  const turn = await startTurn(ctx, {
+    onCanvasResult: (value) => canvases.push(value),
+    onEvent: (value) => events.push(value),
+  });
+  update(turn.child, {
+    sessionUpdate: 'tool_call',
+    toolCallId: 'canvas-1',
+    title: 'use_tool',
+    rawInput: {
+      tool_name: 'mcp__athena__athena__render_canvas',
+      tool_input: { canvas_type: 'table' },
+    },
+  });
+  const wireUpdate = {
+    sessionUpdate: 'tool_call_update',
+    toolCallId: 'canvas-1',
+    status: 'in_progress',
+    content: [{
+      type: 'content',
+      content: { type: 'text', text: JSON.stringify({ canvas_type: 'table', data: { rows: [] } }) },
+    }],
+    rawOutput: { type: 'SearchTool', result_count: 0, content: '{"telemetry":true}' },
+  };
+  update(turn.child, wireUpdate);
+  update(turn.child, { ...wireUpdate, status: 'completed' });
+  update(turn.child, { ...wireUpdate, status: 'completed' });
+  reply(turn.child, turn.prompt, { stopReason: 'end_turn' });
+  await turn.promise;
+
+  assert.equal(canvases.length, 1);
+  assert.deepEqual(canvases[0].envelope, { canvas_type: 'table', data: { rows: [] } });
+  assert.equal(events.filter((event) => event.type === 'user').length, 1);
+});
+
+test('typed MCP rawOutput unwraps OkayOutput canvas and rejects unknown output variants', async () => {
+  const ctx = harness();
+  const canvases = [];
+  const events = [];
+  const turn = await startTurn(ctx, {
+    onCanvasResult: (value) => canvases.push(value),
+    onEvent: (value) => events.push(value),
+  });
+  update(turn.child, {
+    sessionUpdate: 'tool_call',
+    toolCallId: 'canvas-raw',
+    title: 'athena_render_canvas',
+    rawInput: { canvas_type: 'table' },
+  });
+  update(turn.child, {
+    sessionUpdate: 'tool_call_update',
+    toolCallId: 'canvas-raw',
+    status: 'completed',
+    rawOutput: {
+      type: 'MCP',
+      tool_name: 'athena_render_canvas',
+      server_name: 'athena',
+      output: {
+        OkayOutput: JSON.stringify({
+          canvas_type: 'table', caption: 'ACP protocol fixture', data: { rows: [] },
+        }),
+      },
+    },
+  });
+  update(turn.child, {
+    sessionUpdate: 'tool_call',
+    toolCallId: 'canvas-error',
+    title: 'athena_render_canvas',
+    rawInput: { canvas_type: 'table' },
+  });
+  update(turn.child, {
+    sessionUpdate: 'tool_call_update',
+    toolCallId: 'canvas-error',
+    status: 'completed',
+    rawOutput: {
+      type: 'MCP', tool_name: 'athena_render_canvas', server_name: 'athena',
+      output: { ErrorOutput: 'denied' },
+    },
+  });
+  reply(turn.child, turn.prompt, { stopReason: 'end_turn' });
+  await turn.promise;
+
+  assert.equal(canvases.length, 2);
+  assert.equal(canvases[0].status, 'success');
+  assert.equal(canvases[0].envelope.caption, 'ACP protocol fixture');
+  assert.equal(canvases[1].status, 'error');
+  const toolResults = events.filter((event) => event.type === 'user');
+  assert.equal(toolResults[1].message.content[0].is_error, true);
 });
 
 test('reverse filesystem, terminal, and permission requests are denied', async () => {
@@ -237,6 +335,47 @@ test('identity, security, model, or effort mismatch rotates before submitting th
   await second.promise;
 });
 
+test('security rotation resolves a fresh MCP descriptor for the replacement runtime', async () => {
+  let generation = 1;
+  const ctx = harness({
+    mcpServers: undefined,
+    mcpServersFn: () => [{
+      name: 'athena',
+      command: `python-${generation}`,
+      args: ['-m', `athena_mcp_${generation}`, 'serve'],
+      env: [{ name: 'GENERATION', value: String(generation) }],
+    }],
+  });
+  const first = await startTurn(ctx, { securityKey: 'cfg-1' });
+  const firstOpen = request(first.child, 'session/new');
+  assert.equal(firstOpen.params.mcpServers[0].command, 'python-1');
+  assert.deepEqual(firstOpen.params.mcpServers[0].args, ['-m', 'athena_mcp_1', 'serve']);
+  assert.deepEqual(firstOpen.params.mcpServers[0].env, [{ name: 'GENERATION', value: '1' }]);
+  reply(first.child, first.prompt, { stopReason: 'end_turn' });
+  await first.promise;
+
+  generation = 2;
+  const second = await startTurn(ctx, { securityKey: 'cfg-2' });
+  const secondOpen = request(second.child, 'session/load');
+  assert.equal(secondOpen.params.mcpServers[0].command, 'python-2');
+  assert.deepEqual(secondOpen.params.mcpServers[0].args, ['-m', 'athena_mcp_2', 'serve']);
+  assert.deepEqual(secondOpen.params.mcpServers[0].env, [{ name: 'GENERATION', value: '2' }]);
+  reply(second.child, second.prompt, { stopReason: 'end_turn' });
+  await second.promise;
+});
+
+test('non-completion ACP stop reasons fail closed', async () => {
+  for (const stopReason of ['refusal', 'cancelled', 'max_tokens', 'max_turn_requests']) {
+    const ctx = harness();
+    const turn = await startTurn(ctx);
+    reply(turn.child, turn.prompt, { stopReason });
+    const result = await turn.promise;
+    assert.equal(result.ok, false, stopReason);
+    assert.equal(result.finalResult.is_error, true, stopReason);
+    assert.equal(result.finalResult.stop_reason, stopReason);
+  }
+});
+
 test('startup failure is pre-submit and does not write a prompt', async () => {
   const ctx = harness();
   const promise = ctx.session.run({ prompt: 'hello' });
@@ -247,6 +386,20 @@ test('startup failure is pre-submit and does not write a prompt', async () => {
   assert.equal(result.submitted, false);
   assert.equal(result.ok, false);
   assert.equal(messages(child).some((message) => message.method === 'session/prompt'), false);
+});
+
+test('onSpawn kill can cancel initialize before any prompt is submitted', async () => {
+  const ctx = harness();
+  let handle = null;
+  const promise = ctx.session.run({ prompt: 'hello', onSpawn: (value) => { handle = value; } });
+  await tick();
+  assert.ok(handle, 'child creation must expose the cancellation handle immediately');
+  handle.kill();
+  const result = await promise;
+  assert.equal(result.aborted, true);
+  assert.equal(result.submitted, false);
+  assert.equal(ctx.kills.length, 1);
+  assert.equal(messages(ctx.spawns[0].child).some((message) => message.method === 'session/prompt'), false);
 });
 
 test('turn timeout fails submitted work, kills the runtime, and never replays', async () => {

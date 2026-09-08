@@ -11,8 +11,13 @@ const DEFAULT_MAX_LINE_BYTES = 1_000_000;
 const DEFAULT_MAX_STDOUT_BYTES = 5_000_000;
 const DEFAULT_MAX_ERROR_BYTES = 16_000;
 
-function buildGrokAcpArgs({ model = null, effort = null, profilePath = null } = {}) {
-  const args = ['agent'];
+function buildGrokAcpArgs({
+  model = null,
+  effort = null,
+  profilePath = null,
+  trustProjectFolder = false,
+} = {}) {
+  const args = trustProjectFolder ? ['--trust', 'agent'] : ['agent'];
   if (model) args.push('--model', model);
   if (effort) args.push('--reasoning-effort', effort);
   if (profilePath) args.push('--agent-profile', profilePath);
@@ -38,12 +43,12 @@ function toolId(update) {
 }
 
 function toolName(update) {
-  return update.toolName || update.tool_name || update.name || update.title || 'tool';
+  const name = update.toolName || update.tool_name || update.name || update.title || 'tool';
+  return name === 'athena_render_canvas' ? 'athena__athena_render_canvas' : name;
 }
 
 function toolResultContent(update) {
-  const structured = update.structuredContent ?? update.structured_content
-    ?? update.rawOutput ?? update.raw_output;
+  const structured = update.structuredContent ?? update.structured_content;
   if (structured !== undefined) return JSON.stringify(structured);
   if (typeof update.content === 'string') return update.content;
   if (Array.isArray(update.content)) {
@@ -51,7 +56,22 @@ function toolResultContent(update) {
     const text = blocks.map(contentText).filter(Boolean).join('\n');
     return text || JSON.stringify(blocks);
   }
-  return update.content == null ? '' : JSON.stringify(update.content);
+  if (update.content != null) return JSON.stringify(update.content);
+  const raw = update.rawOutput ?? update.raw_output;
+  if (raw && raw.type === 'MCP' && raw.output && typeof raw.output === 'object') {
+    const okay = raw.output.OkayOutput;
+    if (typeof okay === 'string') return okay;
+    if (okay !== undefined) return JSON.stringify(okay);
+  }
+  if (raw && typeof raw.content === 'string') return raw.content;
+  return raw == null ? '' : JSON.stringify(raw);
+}
+
+function rawOutputIsError(update) {
+  const raw = update.rawOutput ?? update.raw_output;
+  return !!(raw && raw.type === 'MCP'
+    && (!raw.output || typeof raw.output !== 'object'
+      || !Object.prototype.hasOwnProperty.call(raw.output, 'OkayOutput')));
 }
 
 function acpUpdateToEvents(update) {
@@ -81,20 +101,21 @@ function acpUpdateToEvents(update) {
   }
   if (kind === 'tool_call_update') {
     const id = toolId(update);
+    const status = String(update.status || '').toLowerCase();
+    const terminal = status === 'completed' || status === 'failed' || status === 'error';
     const hasResult = update.structuredContent !== undefined
       || update.structured_content !== undefined
       || update.rawOutput !== undefined
       || update.raw_output !== undefined
       || update.content !== undefined;
-    if (!id || !hasResult) return [];
-    const status = String(update.status || '').toLowerCase();
+    if (!id || !terminal || !hasResult) return [];
     return [{
       type: 'user',
       message: { content: [{
         type: 'tool_result',
         tool_use_id: id,
         content: toolResultContent(update),
-        is_error: status === 'failed' || status === 'error',
+        is_error: status === 'failed' || status === 'error' || rawOutputIsError(update),
       }] },
     }];
   }
@@ -110,7 +131,9 @@ class GrokAcpSession {
     cwd,
     rules = null,
     profilePath = null,
+    trustProjectFolder = false,
     mcpServers = [],
+    mcpServersFn = null,
     grokBin = getGrokBin(),
     args = null,
     buildArgs = buildGrokAcpArgs,
@@ -129,7 +152,11 @@ class GrokAcpSession {
     this._cwd = cwd;
     this._rules = rules;
     this._profilePath = profilePath;
+    this._trustProjectFolder = trustProjectFolder === true;
     this._mcpServers = Array.isArray(mcpServers) ? mcpServers : [];
+    this._mcpServersFn = typeof mcpServersFn === 'function'
+      ? mcpServersFn
+      : () => this._mcpServers;
     this._grokBin = grokBin;
     this._args = Array.isArray(args) ? [...args] : null;
     this._buildArgs = buildArgs;
@@ -169,7 +196,9 @@ class GrokAcpSession {
   stop(reason = new Error('Grok ACP 세션이 종료됐다')) {
     this._stopped = true;
     const proc = this._proc;
-    if (proc && !proc.dead) this._failProcess(proc, reason);
+    const error = reason instanceof Error ? reason : new Error(String(reason || 'Grok ACP 세션이 종료됐다'));
+    if (!error.code) error.code = 'ABORTED';
+    if (proc && !proc.dead) this._failProcess(proc, error);
     return this.snapshot();
   }
 
@@ -202,6 +231,18 @@ class GrokAcpSession {
       ? (this._proc && !this._proc.dead ? this._proc.sessionId : null)
       : (resumeSessionId || null);
     const config = { model: model || null, effort: effort || null, identityKey, securityKey };
+    let runProc = null;
+    let cancelled = false;
+    let cancelReason = null;
+    const cancel = (reason = null) => {
+      cancelled = true;
+      cancelReason = reason || signal?.reason || new Error('사용자 중단');
+      if (!(cancelReason instanceof Error)) cancelReason = new Error(String(cancelReason));
+      if (!cancelReason.code) cancelReason.code = 'ABORTED';
+      if (runProc && !runProc.dead) this._failProcess(runProc, cancelReason);
+    };
+    const onAbort = () => cancel(signal && signal.reason);
+    if (signal) signal.addEventListener('abort', onAbort, { once: true });
     let proc = this._proc;
     let spawnedFresh = false;
     if (proc && !proc.dead && !this._compatible(proc, config, requestedLineage)) {
@@ -214,16 +255,28 @@ class GrokAcpSession {
       spawnedFresh = true;
       const initStartedAt = this._now();
       try {
-        proc = await this._start(config, requestedLineage);
+        proc = await this._start(config, requestedLineage, (started) => {
+          runProc = started;
+          if (typeof onSpawn === 'function') onSpawn({ pid: started.child.pid, kill: () => cancel() });
+        });
         initMs = Math.max(0, this._now() - initStartedAt);
       } catch (error) {
+        if (signal) signal.removeEventListener('abort', onAbort);
         if (this._proc && !this._proc.dead) this._failProcess(this._proc, error);
-        return this._failure(error, false, startedAt, { spawnedFresh, initMs: Math.max(0, this._now() - initStartedAt) });
+        return this._failure(cancelReason || error, false, startedAt, {
+          aborted: cancelled || this._stopped || !!(signal && signal.aborted),
+          spawnedFresh,
+          initMs: Math.max(0, this._now() - initStartedAt),
+        });
       }
+    } else {
+      runProc = proc;
+      if (typeof onSpawn === 'function') onSpawn({ pid: proc.child.pid, kill: () => cancel() });
     }
-    if (this._stopped || (signal && signal.aborted)) {
-      if (proc && !proc.dead) this._failProcess(proc, signal?.reason || new Error('사용자 중단'));
-      return this._failure(signal?.reason || '사용자 중단', false, startedAt, { aborted: true, spawnedFresh, initMs });
+    if (cancelled || this._stopped || (signal && signal.aborted)) {
+      if (signal) signal.removeEventListener('abort', onAbort);
+      if (proc && !proc.dead) this._failProcess(proc, cancelReason || signal?.reason || new Error('사용자 중단'));
+      return this._failure(cancelReason || signal?.reason || '사용자 중단', false, startedAt, { aborted: true, spawnedFresh, initMs });
     }
 
     proc.state = 'busy';
@@ -235,13 +288,10 @@ class GrokAcpSession {
       firstEventMs: null,
       firstTextMs: null,
       stdoutBytes: 0,
+      completedToolIds: new Set(),
       callbacks: { onEvent, onTextDelta, onThinkingDelta, onCanvasResult },
     };
     proc.active = active;
-    const abort = () => this._failProcess(proc, signal?.reason || new Error('사용자 중단'));
-    if (signal) signal.addEventListener('abort', abort, { once: true });
-    if (typeof onSpawn === 'function') onSpawn({ pid: proc.child.pid, kill: abort });
-
     let response;
     try {
       response = await this._request(proc, 'session/prompt', {
@@ -260,21 +310,22 @@ class GrokAcpSession {
         diagnostics: parser.diagnostics(),
       });
     } finally {
-      if (signal) signal.removeEventListener('abort', abort);
+      if (signal) signal.removeEventListener('abort', onAbort);
     }
 
     if (!proc.dead) {
       proc.active = null;
       proc.state = 'idle';
     }
-    const isError = response && (response.stopReason === 'error' || response.isError === true);
+    const stopReason = response && (response.stopReason || response.stop_reason) || null;
+    const isError = !response || response.isError === true || response.is_error === true || stopReason !== 'end_turn';
     const finalResult = {
       type: 'result',
       subtype: isError ? 'error' : 'success',
       is_error: !!isError,
       result: active.text || '',
       session_id: proc.sessionId,
-      stop_reason: response && (response.stopReason || response.stop_reason) || null,
+      stop_reason: stopReason,
     };
     this._emitCompat(active, finalResult);
     return {
@@ -284,7 +335,10 @@ class GrokAcpSession {
       timedOut: false,
       aborted: false,
       stdoutCapped: false,
-      error: isError ? boundedText(response.error || response.message || 'Grok ACP 턴이 실패했다', this._maxErrorBytes) : null,
+      error: isError ? boundedText(
+        response && (response.error || response.message) || `Grok ACP 턴이 완료되지 않았다 (${stopReason || 'unknown'})`,
+        this._maxErrorBytes,
+      ) : null,
       finalResult,
       stderr: proc.stderr,
       diagnostics: parser.diagnostics(),
@@ -311,12 +365,13 @@ class GrokAcpSession {
       && proc.sessionId === lineage;
   }
 
-  async _start(config, resumeSessionId) {
+  async _start(config, resumeSessionId, onProcess = null) {
     let child;
     const args = this._args || this._buildArgs({
       model: config.model,
       effort: config.effort,
       profilePath: this._profilePath,
+      trustProjectFolder: this._trustProjectFolder,
     });
     try {
       child = this._spawn(this._grokBin, args, {
@@ -350,8 +405,10 @@ class GrokAcpSession {
     child.on?.('close', (code) => {
       const error = new Error(`grok agent stdio 종료 코드 ${String(code)}`);
       error.exitCode = code;
+      error.code = 'PROCESS_EXIT';
       this._failProcess(proc, error);
     });
+    if (onProcess) onProcess(proc);
 
     const initialized = await this._request(proc, 'initialize', {
       protocolVersion: 1,
@@ -364,8 +421,13 @@ class GrokAcpSession {
       if (!cached) throw new Error('Grok ACP 인증이 필요하지만 cached_token 방식이 제공되지 않았다');
       await this._request(proc, 'authenticate', { methodId: 'cached_token' }, this._rpcTimeoutMs, false);
     }
-    const sessionParams = { cwd: this._cwd, mcpServers: this._mcpServers };
-    sessionParams._meta = { yoloMode: true };
+    const mcpServers = this._mcpServersFn();
+    if (!Array.isArray(mcpServers)) throw new TypeError('mcpServersFn은 ACP 서버 배열을 반환해야 한다');
+    const sessionParams = { cwd: this._cwd, mcpServers };
+    sessionParams._meta = {
+      yoloMode: true,
+      startupHints: { nonInteractive: true },
+    };
     if (this._rules) sessionParams._meta.rules = this._rules;
     if (this._profilePath) sessionParams._meta.agentProfile = this._profilePath;
     if (resumeSessionId) {
@@ -450,7 +512,14 @@ class GrokAcpSession {
         return;
       }
       const update = message.params && (message.params.update || message.params);
-      for (const event of acpUpdateToEvents(update)) this._emitCompat(active, event);
+      const kind = update && (update.sessionUpdate || update.session_update);
+      const id = kind === 'tool_call_update' ? toolId(update) : null;
+      const events = acpUpdateToEvents(update);
+      if (id && events.some((event) => event.type === 'user')) {
+        if (active.completedToolIds.has(id)) return;
+        active.completedToolIds.add(id);
+      }
+      for (const event of events) this._emitCompat(active, event);
       return;
     }
     if (message.method && Object.prototype.hasOwnProperty.call(message, 'id')) {
@@ -488,7 +557,6 @@ class GrokAcpSession {
     if (error.exitCode == null && reason && reason.exitCode != null) error.exitCode = reason.exitCode;
     for (const pending of proc.pending.values()) {
       if (pending.timer) clearTimeout(pending.timer);
-      if (!error.code && pending.submitted) error.code = 'ABORTED';
       pending.reject(error);
     }
     proc.pending.clear();
