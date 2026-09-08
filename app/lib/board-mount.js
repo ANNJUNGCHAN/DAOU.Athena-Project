@@ -1356,6 +1356,38 @@ function wrapOverflowingLabels(leaves) {
   return wrapped > 0;
 }
 
+// 접을 줄도, 접을 라벨도 없을 때의 마지막 처방. 남는 것은 **열 폭이 계약인 표**와
+// 그 안의 칸들이다(실측: 남은 보드 9장의 넘친 상자가 전부 표 안이었다). 열을 줄이면
+// 표의 계약이 깨지므로 대신 **가로로 스크롤해서 닿게** 한다 — 스크롤로 닿는 자리는
+// 결함이 아니고(계획 §2), 잘려서 못 닿는 것보다 낫다. 이미 있는 스크롤 소유자 계약을
+// 그대로 쓰고(`data-bs-scroll-declared`), 표면에 가장 가까운 상자 하나만 소유자로
+// 만든다 — 깊은 칸을 스크롤로 만들면 칸마다 스크롤바가 생긴다.
+function scrollOverflowOwner(surface) {
+  let picked = null;
+  let depth = Infinity;
+  for (const el of surface.querySelectorAll('*')) {
+    if (el.scrollWidth <= el.clientWidth + 1) continue;
+    if (!String(el.textContent || '').trim()) continue;
+    if (el.closest('[hidden]')) continue;
+    if (el.dataset && el.dataset.bsScrollDeclared === 'true') continue;
+    // 이미 스크롤로 닿는 상자 안쪽은 건드리지 않는다.
+    if (reachesByScroll(el, surface)) continue;
+    let steps = 0;
+    for (let up = el.parentElement; up && up !== surface; up = up.parentElement) steps += 1;
+    if (steps < depth) {
+      picked = el;
+      depth = steps;
+    }
+  }
+  if (!picked || !picked.style || !picked.dataset) return null;
+  // 폭은 건드리지 않는다 — `min-width: 0`을 주면 상자 폭이 바뀌고, 폭이 컨테이너
+  // 질의(board-surface.css)의 단계를 바꿔 다른 자리의 접힘까지 흔든다(실측 2SYW-1
+  // 최소 폭에서 결측어 11자리가 되살아났다). 스크롤만 준다.
+  picked.style.setProperty('overflow-x', 'auto');
+  picked.dataset.bsScrollDeclared = 'true';
+  return picked;
+}
+
 function relaxOverflowRows(surface) {
   if (!surface || typeof surface.querySelectorAll !== 'function') return [];
   if (typeof getComputedStyle !== 'function' || typeof document === 'undefined') return [];
@@ -1395,8 +1427,13 @@ function relaxOverflowRows(surface) {
       // 접을 줄이 없다 — 남은 것은 **글자 자체가 상자보다 넓은** 자리다(실측
       // 30ZW-0 「전체 814건 · 19건 표시」 6px · 2V71-0 「장중 투자자 상위」 23px).
       // 값은 절대 접지 않는다(헌장: 원자값은 한 줄) — 문장 라벨만 접는다.
-      if (!wrapOverflowingLabels(leaves)) break;
-      relaxed.push('label-wrap');
+      if (wrapOverflowingLabels(leaves)) {
+        relaxed.push('label-wrap');
+        continue;
+      }
+      const owner = scrollOverflowOwner(surface);
+      if (!owner) break;
+      relaxed.push(`scroll:${(owner.dataset && owner.dataset.node) || ''}`);
       continue;
     }
     picked.dataset.bsWrapRow = 'true';
@@ -1635,6 +1672,7 @@ const __exports = {
   isValueSlot, anchorOf, staticTextOf, collapsePlan, mountPlan, pairedGroups,
   nodeIndex, elementChildCount, setHidden, applyPlan, collapseEmptyRows, collapseEmptyColumns,
   relaxOverflowRows, isRelaxableRow, isRowShape, squeezedRow, reachesByScroll,
+  scrollOverflowOwner,
   watchSurfaceWidth,
   wrapOverflowingLabels,
   markDeclaredScrollBox,
