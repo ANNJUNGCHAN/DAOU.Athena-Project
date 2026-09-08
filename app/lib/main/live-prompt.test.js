@@ -576,6 +576,8 @@ test('buildLivePrompt: Grok은 MCP를 검색한 뒤 qualified 이름과 중첩 �
   assert.ok(p.includes('[Grok MCP 호출 규칙]'));
   assert.ok(p.includes('search_tool'));
   assert.ok(p.includes('athena__athena_backtest'));
+  assert.ok(p.includes('athena__athena_render_canvas'));
+  assert.ok(p.includes('"tool_name":"athena__athena_render_canvas"'));
   assert.ok(p.includes('"action":"propose_spec"'));
   assert.ok(p.includes('"propose_spec":{"patch"'));
   assert.ok(p.includes('period는 day·week·month'));
