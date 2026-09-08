@@ -24,6 +24,7 @@ KST = timezone(timedelta(hours=9))
 
 BACKEND = Path(__file__).resolve().parents[1]
 REF = BACKEND / "ref" / "hydrate-argument-defaults.json"
+CHAINS_REF = BACKEND / "ref" / "hydrate-argument-chains.json"
 
 _TODAY = "$today"
 _TODAY_MINUS = "$today-"
@@ -95,3 +96,48 @@ def fill_missing_arguments(
         if aliases.get(alias) and alias not in arguments:
             arguments[alias] = value
     return arguments
+
+
+@cache
+def _chains() -> Mapping[str, Mapping[str, str]]:
+    try:
+        payload = json.loads(CHAINS_REF.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return MappingProxyType({})
+    chains = payload.get("chains")
+    if not isinstance(chains, dict):
+        return MappingProxyType({})
+    table: dict[str, Mapping[str, str]] = {}
+    for alias, entry in chains.items():
+        if not isinstance(entry, dict):
+            continue
+        operation_ref = entry.get("operation_ref")
+        json_path = entry.get("json_path")
+        if isinstance(operation_ref, str) and isinstance(json_path, str):
+            table[alias] = MappingProxyType(
+                {"operation_ref": operation_ref, "json_path": json_path}
+            )
+    return MappingProxyType(table)
+
+
+def chain_for(alias: str) -> Mapping[str, str] | None:
+    """이 인자의 값을 알려주는 목록 op와 그 안의 경로. 없으면 ``None``.
+
+    코드를 지어내는 대신 **API 자신이 싣는 목록의 첫 항목**을 쓴다(회원사·테마·
+    감시그룹·ETF 대상지수). 목록의 첫 항목은 그 화면이 처음 여는 항목이기도 하다.
+    """
+
+    return _chains().get(alias)
+
+
+def missing_required_aliases(
+    operation_ref: str,
+    target: Mapping[str, Any],
+    aliases: Mapping[str, bool],
+) -> list[str]:
+    """기본값까지 채운 뒤에도 비어 있는 필수 인자."""
+
+    filled = fill_missing_arguments(operation_ref, target, aliases)
+    return sorted(
+        alias for alias, required in aliases.items() if required and alias not in filled
+    )

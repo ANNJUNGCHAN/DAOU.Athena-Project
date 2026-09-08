@@ -89,7 +89,15 @@ function collapsePlan(contract, values) {
 }
 
 // 순수 계획 — DOM 없이 검증 가능한 층. 텍스트·색·접힘 결정을 전부 여기서 내린다.
-function mountPlan(contract, values) {
+// 값이 실시간 프레임으로만 오는 잎(계약의 `realtime_pending_slots`). 첫 프레임 전에는
+// 결측어가 아니라 빈 칸이다 — 제공되지 않는 값이 아니라 아직 오지 않은 값이다.
+function pendingSet(options) {
+  const list = options && options.realtimePending;
+  return new Set(Array.isArray(list) ? list.map(String) : []);
+}
+
+function mountPlan(contract, values, options = {}) {
+  const pending = pendingSet(options);
   const slots = slotList(contract);
   const collapse = collapsePlan(contract, values);
   const rollupText = new Map();
@@ -104,8 +112,10 @@ function mountPlan(contract, values) {
     const override = rollupText.get(slot.slot_id);
     const bound = values ? values[slot.slot_id] : undefined;
     // static 자리는 응답이 채우는 자리가 아니다 — 값이 실려 와도 디자인 문구가 이긴다.
-    const staticText = (bound === undefined || bound === null || slot.static)
-      ? staticTextOf(slot) : null;
+    const missingBound = bound === undefined || bound === null;
+    const staticText = (missingBound || slot.static)
+      ? (missingBound && pending.has(String(slot.slot_id)) ? '' : staticTextOf(slot))
+      : null;
     const formatted = override
       ? { text: override, tone: null, missing: false }
       : (staticText !== null
@@ -117,6 +127,8 @@ function mountPlan(contract, values) {
       text: formatted.text,
       tone: formatted.tone,
       missing: formatted.missing,
+      // 값이 아니라 디자인이 정한 글자(Paper 라벨·static 문면·빈 칸).
+      designText: !override && staticText !== null,
       valueAtomic: slot.static !== true && slot.kind !== 'label'
         && slot.kind !== 'static' && isValueSlot(slot),
       pairedWith: slot.paired_with || null,
@@ -298,8 +310,14 @@ function collapseEmptyRows(surface, emptyRows, options = {}) {
   const bySlot = slotElementIndex(surface);
   const valued = [];
   for (const el of bySlot.values()) {
-    const missing = el.dataset ? el.dataset.missing : el.getAttribute('data-missing');
-    if (missing === undefined || missing === null) valued.push(el);
+    const data = el.dataset || {};
+    const missing = el.dataset ? data.missing : el.getAttribute('data-missing');
+    const design = el.dataset ? data.bsDesignText : el.getAttribute('data-bs-design-text');
+    // 디자인 문구는 자료가 아니다 — 그것만 남은 줄은 여전히 빈 줄이다(실측:
+    // 표 첫 칸의 순번·구분 라벨이 접기를 막아 결측어 벽이 그대로 남았다).
+    if (missing === undefined || missing === null) {
+      if (design === undefined || design === null) valued.push(el);
+    }
   }
   const hidden = [];
   for (const row of rows) {
@@ -335,6 +353,10 @@ function applyPlan(root, plan, options = {}) {
       else delete el.dataset.bsValueAtomic;
       if (assignment.missing) el.dataset.missing = 'true';
       else delete el.dataset.missing;
+      // 디자인 문구(라벨·static)는 값이 아니다 — 빈 줄 접기가 이 표시를 보고
+      // 「이 줄에 자료가 있다」고 오해하지 않게 남긴다.
+      if (assignment.designText) el.dataset.bsDesignText = 'true';
+      else delete el.dataset.bsDesignText;
     }
     syncPairedMirrors(el, mirrors.get(assignment.node));
   }
@@ -1189,7 +1211,7 @@ function mountBoard(root, boardId, values, options = {}) {
   const template = registry.templateFor(boardId, doc);
   if (!template) throw new Error(`보드 템플릿이 없다 — ${boardId}`);
 
-  const plan = mountPlan(contract, values);
+  const plan = mountPlan(contract, values, options);
   let surface = root.__bsSurface;
   if (!surface || root.__bsBoardId !== String(boardId) || !root.contains(surface)) {
     root.replaceChildren(template.content.cloneNode(true));

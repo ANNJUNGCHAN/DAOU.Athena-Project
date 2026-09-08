@@ -15,6 +15,7 @@ import re
 from collections.abc import Iterable, Mapping
 from typing import Any
 
+from athena_api.generated.registry import TR_REGISTRY
 from athena_api.card_surface_templates import (
     BoardTemplate,
     CardSurfaceRegistry,
@@ -311,6 +312,36 @@ def _solo_array_occurrences(board: BoardTemplate) -> frozenset[str]:
     return frozenset(key for key, count in seen.items() if count == 1)
 
 
+def _operation_is_realtime(mapping_id: str) -> bool:
+    """이 op가 websocket(실시간) op인가. 생성 레지스트리가 유일한 출처다."""
+
+    parts = mapping_id.split(":")
+    tr_id = parts[1] if len(parts) >= 2 else mapping_id
+    spec = TR_REGISTRY.get(tr_id)
+    return spec is not None and spec.kind == "websocket"
+
+
+def _realtime_pending_slots(board: BoardTemplate, filled: set[str]) -> list[str]:
+    """값이 **실시간 프레임으로만** 오는 잎 — 아직 안 온 것은 결측이 아니다.
+
+    호가 사다리·체결 흐름처럼 websocket op만 가리키는 잎은 REST 조회로 채울 방법이
+    없다(실측 967자리). 첫 프레임 전에 「미제공」을 찍으면 「이 값은 제공되지 않는다」는
+    거짓말이 된다 — 제공되고, 아직 오지 않았을 뿐이다. 프론트는 그 자리를 빈 칸으로
+    두고 프레임이 오면 채운다(board-mount `realtime_pending`).
+    """
+
+    pending: list[str] = []
+    for slot in board.binding_slots:
+        if slot.slot_id in filled:
+            continue
+        bindings = slot.bindings
+        if not bindings:
+            continue
+        if all(_operation_is_realtime(binding.mapping_id) for binding in bindings):
+            pending.append(slot.slot_id)
+    return pending
+
+
 def _state_boards(
     registry: CardSurfaceRegistry, board: BoardTemplate
 ) -> list[dict[str, Any]]:
@@ -428,6 +459,10 @@ def _board_contract(
         "card_id": board.card_id,
         # 자료가 한 칸도 없는 되풀이 줄 — 프론트가 그 줄을 접는다(:func:`_empty_rows`).
         "empty_rows": _empty_rows(
+            board, {entry["slot_id"] for entry in slot_values}
+        ),
+        # 실시간 프레임만이 채울 수 있는 잎 — 첫 프레임 전에는 빈 칸이다.
+        "realtime_pending_slots": _realtime_pending_slots(
             board, {entry["slot_id"] for entry in slot_values}
         ),
         "state_boards": _state_boards(registry, board),

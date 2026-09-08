@@ -1,0 +1,26 @@
+{
+ "version": "hydrate-argument-chains.v1",
+ "description": "화면이 안 보낸 필수 조회 인자 중, 값을 API 자신이 목록으로 알려주는 자리. 그 목록 op를 먼저 부르고 첫 항목을 쓴다 — 코드를 지어내지 않는다. 목록의 첫 항목은 그 화면이 처음 여는 항목이기도 하다(정렬은 조회가 정한다).",
+ "chains": {
+  "mmcm_cd": {
+   "operation_ref": "base:ka10102",
+   "json_path": "$.list[].code",
+   "why": "회원사코드 — Kiwoom 설명문이 '회원사 코드는 ka10102 조회'라고 적어 둔 자리"
+  },
+  "thema_grp_cd": {
+   "operation_ref": "base:ka90001",
+   "json_path": "$.thema_grp[].thema_grp_cd",
+   "why": "테마그룹코드 — 테마그룹별 목록(ka90001)의 첫 그룹"
+  },
+  "arn_grp_id": {
+   "operation_ref": "base:ka01300",
+   "json_path": "$.nofi[].gcod",
+   "why": "그룹SEQ — Kiwoom 설명문이 'ka01300 응답 결과의 gcod값을 입력'이라고 적어 둔 자리"
+  },
+  "etfobjt_idex_cd": {
+   "operation_ref": "base:ka40004",
+   "json_path": "$.etfall_mrpr[].trace_idex_cd",
+   "why": "ETF대상지수코드 — ETF 전체시세(ka40004) 응답이 싣는 추적지수 코드"
+  }
+ }
+}
