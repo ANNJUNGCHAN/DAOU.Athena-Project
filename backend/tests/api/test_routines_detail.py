@@ -63,8 +63,6 @@ DETAIL_KEYS = {
     "cooldown_s",
     "expires_at",
     "note",
-    "briefing_model",
-    "briefing_effort",
     "activation_blocker",
     "experimental_source",
     "goal",

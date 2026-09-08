@@ -146,8 +146,6 @@ def _view(
         "next_fire_at": _next_fire_at(spec),
         "last_fired_at": last_fired_at,
         "unread": _is_unread(last_fired_at, last_read_at),
-        "briefing_model": spec.briefing_model,
-        "briefing_effort": spec.briefing_effort,
         "main_card_candidate": (
             spec.main_card_candidate.to_dict() if spec.main_card_candidate else None
         ),
@@ -168,7 +166,9 @@ def _view(
 
 # 편집(POST /{id}/update)이 만질 수 있는 필드 — symbol·condition.source는
 # 여기 없다(바꾸면 다른 루틴이다). 조건은 op·value·consecutive_ticks만.
-_UPDATABLE_FIELDS = ("note", "cooldown_s", "expires_days", "briefing_model", "briefing_effort")
+# briefing_model/briefing_effort는 없다 — 예약 브리핑은 앱 모델 설정으로 돈다
+# (app/lib/main/briefing-runner.js selectModel). 루틴에는 모델 설정이 존재하지 않는다.
+_UPDATABLE_FIELDS = ("note", "cooldown_s", "expires_days")
 _UPDATABLE_CONDITION_FIELDS = ("op", "value", "consecutive_ticks")
 
 
@@ -187,8 +187,6 @@ def _detail_view(spec: Any, runtime: RoutinesRuntime) -> dict[str, Any]:
         "cooldown_s": spec.cooldown_s,
         "expires_at": spec.expires_at.isoformat(),
         "note": spec.note,
-        "briefing_model": spec.briefing_model,
-        "briefing_effort": spec.briefing_effort,
         "activation_blocker": runtime.can_activate(spec),
         "experimental_source": source.experimental,
         "goal": spec.goal,

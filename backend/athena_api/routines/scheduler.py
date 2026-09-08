@@ -228,9 +228,6 @@ class RoutineScheduler:
                 "note": spec.note,
                 "goal": spec.goal,
                 "fired_at": fired_at or datetime.now(UTC).isoformat(),
-                # 브리핑 실행 설정(R1) — main이 별도 왕복 없이 즉시 받도록 동봉.
-                "briefing_model": spec.briefing_model,
-                "briefing_effort": spec.briefing_effort,
                 "main_card": spec.main_card.to_dict() if spec.main_card else None,
             }
         )
