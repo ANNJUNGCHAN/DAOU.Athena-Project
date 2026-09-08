@@ -999,6 +999,15 @@ function markSplitRow(el) {
 const WRAP_ROW_ALWAYS = Object.freeze(['bs-header', 'bs-strip']);
 const WRAP_ROW_WHEN_COLUMN = Object.freeze(['bs-primary', 'bs-rail', 'bs-footer']);
 
+// 영역 직계가 아닌 **더 깊은 가로 묶음**에도 같은 처방이 필요한 자리가 있다. 좁은
+// 폭에서 안 줄어드는 줄이 거기 남는다 — flex item 기본 `min-width: auto`가 자식들의
+// min-content를 지키기 때문이다(실측 2VDA-0 `3HKY-0` 459px ↔ 표면 375px: 「금현물」·
+// 「순위」가 표면 밖으로 40·98px 나가 스크롤로도 닿지 않았다).
+//
+// 그렇다고 **구조만 보고 미리** 걸 수는 없다. 모든 깊이의 가로 묶음에 접기를 주면
+// 접힘이 높이를 바꾸고 높이가 다시 폭 계약을 건드려 레이아웃이 정착하지 않는다
+// (실측: 마운트 게이트가 카드 1종 14장에서 정착 한도 10초에 계속 걸려 7분을 넘겼다).
+// 그래서 이 자리는 **재고 나서**만 손댄다 — :func:`relaxOverflowRows`.
 function markWrapRow(el) {
   if (!el || !el.dataset || !el.style || !el.classList) return;
   if (el.style.getPropertyValue('display').trim() !== 'flex') return;
@@ -1007,6 +1016,8 @@ function markWrapRow(el) {
   const parent = el.parentElement;
   if (!parent || !parent.classList) return;
   if (parent.classList.contains('bs-table')) return;
+  if (typeof el.closest === 'function'
+    && el.closest('.bs-table, .bs-r-scroll, .bs-r-scroll-table')) return;
   const always = WRAP_ROW_ALWAYS.some((name) => parent.classList.contains(name));
   const whenColumn = WRAP_ROW_WHEN_COLUMN.some((name) => parent.classList.contains(name));
   if (!always && !whenColumn) return;
@@ -1202,6 +1213,168 @@ function applyResponsiveHooks(surface) {
   return hoisted;
 }
 
+// ---------- 마지막 처방: **재고 나서** 넘친 줄만 접는다 ----------
+//
+// 구조만 보고 미리 접으면 레이아웃이 정착하지 않는다(markWrapRow 위 주석의 실측).
+// 그래서 실제로 넘친 뒤에만, 넘친 글자의 조상 사슬에서 가장 얕은 가로 묶음 하나에
+// 접기 표시를 준다 — 이미 있는 CSS 계약(`[data-bs-wrap-row]`)을 그대로 쓴다. 한 번에
+// 하나씩 주고 다시 재서 넘침이 사라지면 멈춘다.
+//
+// 손대지 않는 것: 표(열 폭이 계약)·스크롤 소유자(스크롤로 닿는다)·세로 묶음(세로 줄에
+// wrap을 주면 넘친 것이 오른쪽 새 열로 간다, markSplitRow와 같은 판단).
+const RELAX_PASSES = 6;
+
+function isRelaxableRow(el, surface, bound) {
+  if (!el || el === surface || !el.classList || !el.dataset) return false;
+  if (el.dataset.bsWrapRow === 'true') return false;
+  if (el.classList.contains('bs-table')) return false;
+  if (typeof el.closest === 'function'
+    && el.closest('.bs-table, .bs-r-scroll, .bs-r-scroll-table')) return false;
+  const style = getComputedStyle(el);
+  if (style.display !== 'flex') return false;
+  if (style.flexDirection === 'column' || style.flexDirection === 'column-reverse') return false;
+  if (style.flexWrap === 'wrap') return false;
+  // **자기 칸보다 넓은가**가 아니라 **부모가 준 폭을 넘는가**를 본다. 안 줄어드는 줄은
+  // 스스로는 딱 맞고(scrollWidth == clientWidth) 부모 밖으로 나가 있다 — 실측 2VDA-0
+  // `3HKY-0`은 459/459인데 표면은 375다. 자기 칸만 보면 원인을 못 짚는다.
+  const parent = el.parentElement;
+  const room = parent ? parent.clientWidth : 0;
+  if (room && el.getBoundingClientRect().width > room + 1) return true;
+  if (el.getBoundingClientRect().right > bound + 1) return true;
+  // 줄 자체는 부모 안에 들어가는데 **칸이 눌려** 그 안의 글자가 새는 자리도 있다
+  // (실측 30ZW-0 `313O-0` 282px 안의 `3R7S-0`이 폭 0으로 눌리고 글자가 6px 넘쳤다).
+  // 그 줄을 접으면 눌린 칸이 자기 줄을 받아 폭이 생긴다.
+  for (const child of elementChildren(el) || []) {
+    if (!child || !child.getBoundingClientRect) continue;
+    if (!String(child.textContent || '').trim()) continue;
+    if (child.clientWidth === 0) return true;
+    if (child.scrollWidth > child.clientWidth + 1) return true;
+  }
+  return false;
+}
+
+// 표면 밖으로 나간 **잎 요소**들. 텍스트 노드를 Range로 재지 않는다 — 보드 하나에
+// 텍스트 노드가 수백 개라 폭 4단계 전수에서 그 비용이 실행 시간을 지배했다(실측).
+// 잎의 사각형만 봐도 어느 줄이 넘치는지 짚는 데 충분하다.
+function overflowingLeaves(surface) {
+  const bound = surface.getBoundingClientRect().left
+    + surface.clientLeft + surface.clientWidth;
+  const leaves = [];
+  for (const el of surface.querySelectorAll('*')) {
+    if (el.firstElementChild) continue;
+    if (!String(el.textContent || '').trim()) continue;
+    if (el.closest('[hidden]')) continue;
+    if (el.getBoundingClientRect().right > bound + 1) leaves.push(el);
+  }
+  return leaves;
+}
+
+// 글자가 자기 상자보다 넓어 표면을 넘는 자리. 값은 접지 않는다 — 원자값이 두 줄이
+// 되면 숫자가 쪼개져 읽힌다(헌장, `.bs-r-atomic`·`data-bs-value-atomic`). 문장 라벨은
+// 접어도 뜻이 그대로다: 「전체 814건 · 19건 표시」가 두 줄이 되는 것이 6px 잘려 보이지
+// 않는 것보다 낫다. 띄어쓰기나 가운뎃점이 있는 글자만 문장으로 본다.
+const SENTENCE_TEXT = /[\s·]/u;
+
+function wrapOverflowingLabels(leaves) {
+  let wrapped = 0;
+  for (const leaf of leaves) {
+    if (!leaf || !leaf.style || !leaf.dataset) continue;
+    if (leaf.dataset.bsLabelWrap === 'true') continue;
+    if (leaf.dataset.bsValueAtomic !== undefined) continue;
+    if (typeof leaf.closest === 'function' && leaf.closest('.bs-r-atomic')) continue;
+    if (leaf.classList && leaf.classList.contains('bs-r-atomic')) continue;
+    if (!SENTENCE_TEXT.test(String(leaf.textContent || ''))) continue;
+    leaf.style.setProperty('white-space', 'normal');
+    leaf.style.setProperty('overflow-wrap', 'anywhere');
+    leaf.dataset.bsLabelWrap = 'true';
+    wrapped += 1;
+  }
+  return wrapped > 0;
+}
+
+function relaxOverflowRows(surface) {
+  if (!surface || typeof surface.querySelectorAll !== 'function') return [];
+  if (typeof getComputedStyle !== 'function' || typeof document === 'undefined') return [];
+  // 같은 폭에서 두 번 재지 않는다. 제품에서는 표면의 관찰자가, 게이트에서는 정착
+  // 판정이 같은 함수를 부르므로 그대로 두면 같은 폭에서 여러 번 돌고, 그때마다
+  // 레이아웃이 조금씩 바뀌어 정착 판정이 한도까지 늘어진다(실측: 마운트 게이트가
+  // 카드 1종 14장에서 8분을 넘겼다).
+  const width = surface.clientWidth;
+  if (surface.__bsRelaxWidth === width) return [];
+  surface.__bsRelaxWidth = width;
+  const relaxed = [];
+  for (let pass = 0; pass < RELAX_PASSES; pass += 1) {
+    if (surface.scrollWidth <= surface.clientWidth + 1) break;
+    const leaves = overflowingLeaves(surface);
+    if (!leaves.length) break;
+    const bound = surface.getBoundingClientRect().left
+      + surface.clientLeft + surface.clientWidth;
+    let picked = null;
+    let depth = -1;
+    for (const leaf of leaves) {
+      let steps = 0;
+      for (let el = leaf; el && el !== surface.parentElement; el = el.parentElement) {
+        // 사슬을 위로 훑으며 **가장 얕은**(표면에 가까운) 후보를 남긴다 — 깊은 칸을
+        // 접으면 그 칸만 아랫줄로 가고 줄은 그대로 넘친다.
+        if (isRelaxableRow(el, surface, bound) && steps > depth) {
+          picked = el;
+          depth = steps;
+        }
+        if (el === surface) break;
+        steps += 1;
+      }
+    }
+    if (!picked) {
+      // 접을 줄이 없다 — 남은 것은 **글자 자체가 상자보다 넓은** 자리다(실측
+      // 30ZW-0 「전체 814건 · 19건 표시」 6px · 2V71-0 「장중 투자자 상위」 23px).
+      // 값은 절대 접지 않는다(헌장: 원자값은 한 줄) — 문장 라벨만 접는다.
+      if (!wrapOverflowingLabels(leaves)) break;
+      relaxed.push('label-wrap');
+      continue;
+    }
+    picked.dataset.bsWrapRow = 'true';
+    markElasticCells(picked);
+    relaxed.push((picked.dataset && picked.dataset.node) || '');
+  }
+  if (relaxed.length && surface.dataset) {
+    surface.dataset.bsRelaxedRows = String(
+      Number(surface.dataset.bsRelaxedRows || 0) + relaxed.length,
+    );
+  }
+  return relaxed;
+}
+
+// 폭이 바뀌면 다시 잰다 — CSS 단계는 폭에 반응하지만 이 처방은 실측이 근거다.
+// 표면 하나에 관찰자 하나만 붙이고, 프레임 하나 뒤에 잰다(리사이즈 직후에는 아직
+// 새 폭으로 배치되지 않은 프레임을 본다).
+function watchSurfaceWidth(surface) {
+  if (!surface || surface.__bsWidthWatch) return null;
+  if (typeof ResizeObserver !== 'function') return null;
+  let last = surface.clientWidth;
+  // 콜백은 배치가 끝난 뒤에 온다 — 여기서 바로 재는 것이 맞다. rAF로 한 프레임
+  // 미루면 오클루전된 창에서 프레임이 눌려 알림이 한 단계씩 늦는다(실측: 전수
+  // 프로브가 폭을 네 번 바꾸는 동안 처방이 늘 한 단계 뒤에 걸렸다).
+  // 콜백 안에서 배치를 바꾸므로 관찰자가 다시 불린다 — 재진입을 막지 않으면
+  // 「ResizeObserver loop completed with undelivered notifications」가 뜬다(실측).
+  // 폭이 실제로 달라졌을 때만, 그리고 한 번에 하나만 돌린다.
+  let running = false;
+  const observer = new ResizeObserver(() => {
+    if (running) return;
+    const width = surface.clientWidth;
+    if (Math.abs(width - last) < 2) return;
+    last = width;
+    running = true;
+    try {
+      relaxOverflowRows(surface);
+    } finally {
+      running = false;
+    }
+  });
+  observer.observe(surface);
+  surface.__bsWidthWatch = observer;
+  return observer;
+}
+
 // Paper 레이어 이름(data-name)에 박힌 원시 식별자 앵커를 걷어낸다. 카드 커버리지
 // 증명 규약(`raw · <mapping_id> · <json path>`, PAPER_CARD_COVERAGE.md)이 추출 HTML에
 // 그대로 남아 제품 DOM으로 흘러든다(2026-09-04 gold-market 실측:
@@ -1295,6 +1468,12 @@ function mountBoard(root, boardId, values, options = {}) {
     root.__bsBoardId = String(boardId);
   }
   const report = applyPlan(surface, plan, options);
+  // 값이 실린 뒤에 잰다 — 목업보다 긴 값이 들어오면 줄이 그때 넘친다. 폭이 바뀌면
+  // 관찰자가 다시 잰다.
+  // 값이 실린 뒤에 잰다 — 목업보다 긴 값이 들어오면 줄이 그때 넘친다. 폭이 바뀌면
+  // 표면의 관찰자가 다시 잰다.
+  relaxOverflowRows(surface);
+  watchSurfaceWidth(surface);
   // 렌더러가 저작된 보드에서만 자리를 딸려 보낸다 — 그 자리에 앱 렌더러를 얹는 것은
   // 호출부(canvas) 몫이고, 여기는 자리를 찾아 주기만 한다.
   const primary = contract.primary && contract.primary.renderer
@@ -1369,6 +1548,7 @@ const __exports = {
   ROLLUP_MARK, RESPONSIVE_REGIONS, HOISTED_PROPERTIES, CARD_SHELL_PROPERTIES, normalizeCardShell,
   isValueSlot, anchorOf, staticTextOf, collapsePlan, mountPlan, pairedGroups,
   nodeIndex, elementChildCount, setHidden, applyPlan, collapseEmptyRows, collapseEmptyColumns,
+  relaxOverflowRows, isRelaxableRow, watchSurfaceWidth, wrapOverflowingLabels,
   markDeclaredScrollBox,
   hoistLayout, hoistRigidBox, applyResponsiveHooks, surfaceRoot,
   primaryMountPoint, collapsePrimaryMockup, restorePrimaryMockup, mountBoard, mountBoardAsync,

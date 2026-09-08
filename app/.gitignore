@@ -18,3 +18,5 @@ captures/
 .probe-chart-authoring-profile/
 .probe-chart-drawing-profile/
 .*-profile/
+# 샤드로 나눠 돌리는 프로브의 프로필(`.probe-…-profile-a`) — 위 패턴이 접미를 못 잡는다.
+.*-profile-*/
