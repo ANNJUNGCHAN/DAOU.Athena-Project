@@ -2782,6 +2782,24 @@ function maybeForwardPluginProposal(step, resultBlock) {
 
 const ROUTINE_TOOL_NAME = 'athena_routine';
 
+// 루틴 초안 승인 카드 — 전역 목록을 다시 읽으면 동시에 만든 다른 대화의 초안까지
+// 먼저 차지할 수 있다. 이 tool_result가 돌려준 정확한 초안만 원래 대화로 보낸다.
+function maybeForwardRoutineDraft(step, resultBlock) {
+  if (resultBlock.is_error === true) return;
+  const base = String(step.name || '').split('__').pop();
+  if (base !== ROUTINE_TOOL_NAME) return;
+  if (!step.input || step.input.action !== 'draft') return;
+  const text = extractToolResultText(resultBlock.content);
+  if (!text) return;
+  let payload;
+  try { payload = JSON.parse(text); } catch { return; }
+  if (!payload || typeof payload !== 'object' || payload.status !== 'draft') return;
+  if (typeof payload.id !== 'string' || !payload.id.trim()) return;
+  if (shellWin && !shellWin.isDestroyed()) {
+    shellForConversation(forwardingConversationId).send('athena:routine-draft-created', payload);
+  }
+}
+
 // 루틴 제어 제안 카드(Step 6) — athena_routine의 propose 호출 결과
 // (routine_tools.py: control·routine_id·current·proposed·rationale·notice)를
 // 채팅 렌더러로 흘려보낸다. 위 말걸기 가드와 같은 이유로 비영속이다 —
@@ -3083,6 +3101,7 @@ function createToolStepTracker(
             });
             if (forwardNudgeGuard) {
               maybeForwardNudgeGuardProposal(step, block);
+              maybeForwardRoutineDraft(step, block);
               maybeForwardRoutineProposal(step, block);
               maybeForwardWatchCreate(step, block);
               if (forwardBacktestAction) maybeForwardBacktestChatAction(step, block);

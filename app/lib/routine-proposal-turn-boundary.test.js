@@ -35,7 +35,7 @@ test('제안 턴은 이벤트가 와야만 그린다 — 부팅 계약(emptyHist
   const start = chatSource.indexOf(`window.athena.on('${CHANNEL}'`);
   assert.ok(start > 0);
   const body = chatSource.slice(start, start + 400);
-  assert.ok(body.includes('renderControlProposalTurn(turn)'));
+  assert.ok(body.includes('renderControlProposalTurn(turn, (meta && meta.conversationId)'));
   // 정의 1 + 구독 안 호출 1 — 모듈 최상위에서 한 번 그리는 코드가 없다.
   assert.equal(occurrences(chatSource, 'renderControlProposalTurn('), 2);
 });
@@ -54,6 +54,7 @@ test('D 뷰 이동은 캔버스 뷰 전환을 실제로 부른다 — 채팅에�
 
 test('결과 턴은 기존 채널을 그대로 탄다 — 마운트 지점을 늘리지 않는다', () => {
   assert.equal(occurrences(chatSource, "CustomEvent('athena:routine-control-result'"), 1);
+  assert.match(chatSource, /detail: \{ turn, retry: retry \|\| null, conversationId \}/);
 });
 
 test('shell.html이 순수 모델을 결과 턴 모델 뒤에 싣는다 — 로드 순서가 계약이다', () => {
