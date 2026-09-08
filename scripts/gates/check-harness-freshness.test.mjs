@@ -5,6 +5,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 import test from "node:test";
+import { unknownIpcChannels } from "./check-harness-freshness.mjs";
 
 const checker = fileURLToPath(new URL("./check-harness-freshness.mjs", import.meta.url));
 const supportingFiles = [
@@ -72,4 +73,22 @@ test("a DOM event does not hide unknown IPC on the same line", () => {
   assert.equal(result.status, 1);
   assert.match(result.stderr, /미등록 IPC 채널 'athena:not-registered'/);
   assert.doesNotMatch(result.stderr, /미등록 IPC 채널 'athena:chat-submit'/);
+});
+
+const knownChannels = new Set(["athena:known-ipc"]);
+
+test("DOM athena events are not classified as IPC channels", () => {
+  assert.deepEqual(
+    unknownIpcChannels("document.addEventListener('athena:chat-submit', listener, true);", knownChannels),
+    [],
+  );
+  assert.deepEqual(
+    unknownIpcChannels("document.removeEventListener('athena:chat-submit', listener, true);", knownChannels),
+    [],
+  );
+});
+
+test("a genuine unknown IPC channel is still rejected beside a DOM event", () => {
+  const line = "document.addEventListener('athena:chat-submit', listener); window.athena.send('athena:unknown-ipc');";
+  assert.deepEqual(unknownIpcChannels(line, knownChannels), ["athena:unknown-ipc"]);
 });
