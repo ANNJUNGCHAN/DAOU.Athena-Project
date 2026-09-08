@@ -28,6 +28,7 @@ const SELECTORS = {
   '[data-paired-source]': (node) => node.dataset.pairedSource !== undefined,
   '[data-slot-id]': (node) => node.dataset.slotId !== undefined,
   '[data-name]': (node) => node.dataset.name !== undefined,
+  '[data-bs-design-text]': (node) => node.dataset.bsDesignText !== undefined,
 };
 function attrSelector(selector) {
   const klass = /^\.([\w-]+)$/.exec(selector);
@@ -1716,4 +1717,23 @@ test('이름에 스크롤이 없거나 이미 스크롤이면 건드리지 않�
   assert.equal(plain.style.getPropertyValue('overflow-y'), '');
   assert.equal(markDeclaredScrollBox(already), false);
   assert.equal(already.style.getPropertyValue('overflow'), 'auto');
+});
+
+
+test('디자인 문구만 남은 줄은 여전히 빈 줄로 접힌다', () => {
+  // 표 첫 칸의 순번·구분 라벨은 값이 아니다 — 그것 때문에 접기가 막히면
+  // 자료 없는 줄에 결측어 벽이 그대로 남는다.
+  const cells = [
+    linked({ slotId: 'r1.rank', bsDesignText: 'true' }),
+    linked({ slotId: 'r1.name', missing: 'true' }),
+  ];
+  const row = linked({ node: 'row1' }, cells);
+  const surface = linked({ node: 'surface' }, [row]);
+
+  const hidden = collapseEmptyRows(surface, [
+    { row: 'table:T:1', slot_ids: ['r1.rank', 'r1.name'] },
+  ]);
+
+  assert.deepEqual(hidden.map((entry) => entry.node), ['row1']);
+  assert.equal(row.hidden, true);
 });
