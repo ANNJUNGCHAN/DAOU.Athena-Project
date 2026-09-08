@@ -8,7 +8,7 @@ const {
   collapsePlan, mountPlan, pairedGroups, nodeIndex, applyPlan, setHidden, isValueSlot,
   hoistLayout, applyResponsiveHooks, RESPONSIVE_REGIONS, HOISTED_PROPERTIES, primaryMountPoint,
   collapsePrimaryMockup, restorePrimaryMockup, collapseEmptyRows, collapseEmptyColumns,
-  markDeclaredScrollBox,
+  markDeclaredScrollBox, isRelaxableRow,
   createLatestBoardLoad, nextHydrationSlots,
   slotValueEntries, realtimeSlotIndex, updateRealtimeValue, pairedClosure, realtimePlan, applyRealtimeSlots,
   stateLinksFromMarks, stateControlActivationOwner, wireStateControlActivation,
@@ -1057,6 +1057,10 @@ test('primary가 세로로 쌓은 가로 툴바 줄은 wrap 표시를 받는다'
     ancestor('bs-primary', { display: 'flex', 'flex-direction': 'column' }),
     { display: 'flex', 'flex-direction': 'column' },
   );
+  // 영역 밖의 깊은 줄은 **구조만 보고** 접지 않는다 — 모든 깊이에 접기를 주면 접힘이
+  // 높이를 바꾸고 높이가 폭 계약을 건드려 레이아웃이 정착하지 않는다(실측: 마운트
+  // 게이트가 카드 1종 14장에서 정착 한도에 계속 걸렸다). 그 자리는 재고 나서
+  // 고친다(relaxOverflowRows).
   const orphan = under(
     ancestor('', { display: 'flex', 'flex-direction': 'column' }),
     { display: 'flex', 'justify-content': 'space-between' },
@@ -1068,7 +1072,8 @@ test('primary가 세로로 쌓은 가로 툴바 줄은 wrap 표시를 받는다'
     '2Z49-0 Chart Toolbar는 primary 세로 칸의 가로 줄이다');
   assert.equal(column.dataset.bsWrapRow, undefined,
     '세로 줄에 wrap을 주면 넘친 것이 오른쪽 새 열로 간다');
-  assert.equal(orphan.dataset.bsWrapRow, undefined, '영역 밖 줄은 표시하지 않는다');
+  assert.equal(orphan.dataset.bsWrapRow, undefined,
+    '영역 밖 줄은 구조만 보고 접지 않는다 — 실측 처방이 맡는다');
 });
 
 test('세로로 쌓는 부모 아래 상자만 세로 축 flex-shrink 표시를 받는다', () => {
@@ -1755,4 +1760,45 @@ test('값이 한 줄도 없는 열은 머리글까지 감춘다', () => {
   assert.equal(head.hidden, true);
   assert.equal(cellTwo.hidden, true);
   assert.equal(keep.hidden, false);
+});
+
+
+// ---------- 넘침 처방의 후보 판정 ----------
+//
+// 안 줄어드는 줄은 **스스로는 딱 맞고**(scrollWidth == clientWidth) 부모 밖으로 나가
+// 있다(실측 2VDA-0 `3HKY-0` 459/459 ↔ 표면 375). 자기 칸만 보면 원인을 못 짚는다.
+
+function relaxStub({ width, room, right, display = 'flex', direction = 'row', wrap = 'nowrap', cls = '' }) {
+  const parent = {
+    clientWidth: room,
+    classList: { contains: () => false },
+    closest: () => null,
+  };
+  return {
+    dataset: {},
+    classList: { contains: (name) => cls.split(' ').includes(name) },
+    closest: () => null,
+    parentElement: parent,
+    getBoundingClientRect: () => ({ width, right }),
+    __style: { display, flexDirection: direction, flexWrap: wrap },
+  };
+}
+
+test('부모가 준 폭을 넘는 가로 줄만 접기 후보다', (t) => {
+  const original = globalThis.getComputedStyle;
+  globalThis.getComputedStyle = (el) => el.__style;
+  t.after(() => { globalThis.getComputedStyle = original; });
+  const surface = { clientWidth: 375 };
+
+  const tooWide = relaxStub({ width: 459, room: 375, right: 900 });
+  const fits = relaxStub({ width: 300, room: 375, right: 300 });
+  const columnRow = relaxStub({ width: 459, room: 375, right: 900, direction: 'column' });
+  const alreadyWrapped = relaxStub({ width: 459, room: 375, right: 900, wrap: 'wrap' });
+  const table = relaxStub({ width: 459, room: 375, right: 900, cls: 'bs-table' });
+
+  assert.equal(isRelaxableRow(tooWide, surface, 500), true);
+  assert.equal(isRelaxableRow(fits, surface, 500), false);
+  assert.equal(isRelaxableRow(columnRow, surface, 500), false, '세로 줄은 접지 않는다');
+  assert.equal(isRelaxableRow(alreadyWrapped, surface, 500), false);
+  assert.equal(isRelaxableRow(table, surface, 500), false, '표는 열 폭이 계약이다');
 });

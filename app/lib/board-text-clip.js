@@ -16,6 +16,14 @@ const TEXT_CLIP_PROBE = (instanceId) => `(() => {
     '#grid .card[data-integrated-instance-key="view:${instanceId}"]');
   const surface = root && root.querySelector('.board-surface');
   if (!surface) return { error: 'board surface not found' };
+  // 넘침 처방을 재기 직전에 한 번 명시로 부른다. 제품에서는 표면의 ResizeObserver가
+  // 부르지만 그 알림은 프레임 끝에 오고, 오클루전된 검증 창에서는 프레임이 눌려 한
+  // 단계씩 늦는다(실측: 폭 4단계 전수에서 처방이 늘 한 단계 뒤에 걸렸다). 제품과
+  // **같은 함수**를 같은 조건으로 부르므로 재는 화면은 제품이 그리는 화면이다.
+  const boardMount = window.AthenaLib && window.AthenaLib.BoardMount;
+  if (boardMount && typeof boardMount.relaxOverflowRows === 'function') {
+    boardMount.relaxOverflowRows(surface);
+  }
 
   const CLIP = new Set(['hidden', 'clip']);
   const SCROLLABLE = new Set(['auto', 'scroll']);
@@ -97,6 +105,12 @@ const TEXT_CLIP_PROBE = (instanceId) => `(() => {
     clipped_nodes: clipped.slice(0, 20),
     reachable_total: reachable.length,
     reachable_nodes: reachable.slice(0, 5),
+    // 접기 진단 — 몇 줄이 접기 표시를 받았고 표면이 아직 넘치는가(markWrapRow).
+    wrap_row_marks: surface.querySelectorAll('[data-bs-wrap-row="true"]').length,
+    relaxed_rows: surface.dataset.bsRelaxedRows || '0',
+    width_watch: Boolean(surface.__bsWidthWatch),
+    surface_client_width: surface.clientWidth,
+    surface_scroll_width: surface.scrollWidth,
   };
 })()`;
 
