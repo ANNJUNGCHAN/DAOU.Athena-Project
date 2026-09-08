@@ -613,8 +613,9 @@ test('보드 19: mount 직후는 기법 목록이고 프리셋 0번을 자동으
   assert.match(textOf(container), /새 기법 만들기/);
   assert.equal(findByClass(container, 'backtest-technique-new-chip')[0].textContent, '대화로 시작');
   assert.equal(findByClass(container, 'backtest-subtab').length, 0);
-  const tabs = findByClass(container, 'backtest-tab').map((t) => t.textContent);
-  assert.deepEqual(tabs, ['기법', '결과', '이력']);
+  // 홈에는 모드 탭이 없다(규칙 32-01/02) — 기법을 여는 문은 목록의 카드뿐이다.
+  assert.deepEqual(findByClass(container, 'backtest-tab').map((t) => t.textContent), []);
+  assert.equal(findByClass(container, 'backtest-head-sub')[0].textContent, '기법 1개');
   assert.equal(findByClass(container, 'backtest-symbol-add').length, 0);
   assert.equal(findByClass(container, 'backtest-run-button').length, 0);
   const ctx = canvas.getContext();
@@ -1018,10 +1019,12 @@ async function mounted(overrides) {
   return made;
 }
 
-// 기법 하나의 화면에서 목록(홈)으로 — 헤더의 [기법 목록]/[그만두기]. 목록이 이미 서 있으면
-// 그대로다. 목록은 홈에만 선다(2026-09-07 사용자 확정: 한 페이지 = 한 알고리즘).
+// 기법 하나의 화면에서 목록(홈)으로. 문은 둘이다: 옛 표면(지도·폼)에는 헤더의
+// [기법 목록]과 초안의 [그만두기]가 남아 있고, 기법 화면에는 빵조각 첫 조각
+// [⌂ 팔라스 홈]뿐이다(규칙 32-04). 목록이 이미 서 있으면 그대로다.
 async function toList(container) {
-  const home = findByClass(container, 'backtest-head-home')[0];
+  const home = findByClass(container, 'backtest-head-home')[0]
+    || findByClass(container, 'backtest-crumb-home')[0];
   if (home) { await click(home); await flush(); }
 }
 
@@ -1936,8 +1939,10 @@ test('heatIntensity: 범위 밖 값을 0~1로 자른다', () => {
 test('모드 탭 5개와 설계 하위 탭 4개가 계약으로 고정돼 있다', () => {
   assert.deepEqual(backtestCanvas.MODE_TABS.map((t) => t[0]),
     ['design', 'result', 'history', 'optimize', 'deploy']);
+  // 옛 모드 탭과 기법 화면 하위 탭이 같은 말을 쓴다(규칙 32-04) — 「배포」는 사람이 읽는
+  // 이름이 「실매매 적용」이다. 열쇠(deploy)는 그대로다.
   assert.deepEqual(backtestCanvas.MODE_TABS.map((t) => t[1]),
-    ['기법', '결과', '이력', '최적화', '배포']);
+    ['기법', '결과', '이력', '최적화', '실매매 적용']);
   assert.deepEqual(backtestCanvas.MODE_TABS_LIST.map((t) => t[1]),
     ['기법', '결과', '이력']);
   // 지도가 첫 탭이다(2026-09-03) — 코드 탭의 이름 자체가 그것이 마지막 수단임을 말한다.
@@ -2070,12 +2075,18 @@ test('코드 탭: 프리셋은 단일 편집기, 폴더가 있는 기법은 그 
   // 헤더는 폴더 이름과 목록으로 돌아가는 문이다 — 모드 탭·폼/코드 갈래는 없다.
   assert.equal(findByClass(made.container, 'backtest-head-folder')[0].textContent, '내 전략/');
   assert.match(findByClass(made.container, 'backtest-head-folder-sub')[0].textContent, /폴더 하나가 기법 하나 · 대화 하나 · 1개 파일/);
-  assert.equal(findByClass(made.container, 'backtest-head-home')[0].textContent, '기법 목록');
+  // 홈으로 가는 문은 빵조각 첫 조각 하나다 — [기법 목록] 버튼은 없앴다(규칙 32-04).
+  assert.equal(findByClass(made.container, 'backtest-head-home').length, 0);
+  assert.equal(findByClass(made.container, 'backtest-crumb-home')[0].textContent, '⌂ 팔라스 홈');
+  assert.deepEqual(
+    findByClass(made.container, 'backtest-crumb').map((t) => t.textContent),
+    ['⌂ 팔라스 홈', '내 전략', '코드'],
+  );
   assert.equal(findByClass(made.container, 'backtest-tab').length, 0);
   assert.equal(findByClass(made.container, 'backtest-runpath').length, 0);
   assert.deepEqual(
     findByClass(made.container, 'backtest-subtab').map((t) => t.textContent),
-    ['코드', '노드·흐름', '폼', '배포'],
+    ['코드', '노드·흐름', '폼', '이력', '최적화', '실매매 적용'],
   );
   // 왼쪽 열 — 기법 폴더 트리와 다짐 한 줄(보드 20).
   assert.equal(findByClass(made.container, 'project-ide-side-title')[0].textContent, '기법 폴더');
@@ -2656,10 +2667,9 @@ test('목록 화면에서도 모드 탭 이동(이력)은 그대로 반영된다
 
 test('기법이 없어도 optimize·deploy에 서면 모드 탭 5종이 선다', async () => {
   const made = await listMounted();
-  assert.deepEqual(
-    findByClass(made.container, 'backtest-tab').map((t) => t.textContent),
-    backtestCanvas.MODE_TABS_LIST.map(([, label]) => label),
-  );
+  // 홈에는 모드 탭이 없다(규칙 32-01/02). 그래도 다른 탭에 서면 나갈 길은 서야 한다 —
+  // 그 자리에서까지 없애면 막다른 길이 된다.
+  assert.deepEqual(findByClass(made.container, 'backtest-tab').map((t) => t.textContent), []);
   for (const tab of ['optimize', 'deploy']) {
     const receipt = made.canvas.onChatAction({ kind: 'navigate', tab });
     await flush();
@@ -2863,20 +2873,25 @@ test('프리셋을 고르면 그 기법의 폴더가 열린다 — 코드는 yam
   assert.equal(ctx.designTab, 'code');
   assert.equal(ctx.code.source, PRESET_SOURCE);
   assert.equal(findByClass(made.container, 'backtest-head-folder')[0].textContent, 'SMA-골든크로스/');
-  assert.equal(findByClass(made.container, 'backtest-head-home')[0].textContent, '기법 목록');
+  assert.equal(findByClass(made.container, 'backtest-head-home').length, 0);
+  assert.deepEqual(
+    findByClass(made.container, 'backtest-crumb').map((t) => t.textContent),
+    ['⌂ 팔라스 홈', 'SMA-골든크로스', '코드'],
+  );
   assert.equal(findByClass(made.container, 'backtest-tab').length, 0);
   assert.deepEqual(
     findByClass(made.container, 'backtest-subtab').map((t) => t.textContent),
-    ['코드', '노드·흐름', '폼', '배포'],
+    ['코드', '노드·흐름', '폼', '이력', '최적화', '실매매 적용'],
   );
   assert.equal(calls.map.length, 0, '지도를 만들지 않는다');
   assert.equal(findByClass(made.container, 'backtest-code-textarea')[0].value, PRESET_SOURCE);
   assert.equal(findByClass(made.container, 'project-ide-side').length, 1);
-  // 다시 고르면 같은 폴더다 — 폴더를 또 만들지도, 파일을 다시 쓰지도 않는다.
+  // 홈을 거쳐 같은 기법을 다시 열면 넣어 둔 자리에서 이어 간다(규칙 32-05) — 코드를
+  // 다시 만들지도, 폴더를 또 찾지도 않는다. 그것이 「나갔다 오면 그대로」의 뜻이다.
   await openPreset(made);
   assert.deepEqual(calls.created, ['SMA-골든크로스']);
   assert.equal(calls.writes.length, 2);
-  assert.equal(calls.codegen.length, 2, '코드는 매번 만들지만 폴더가 있으면 그 파일이 이긴다');
+  assert.equal(calls.codegen.length, 1, '같은 기법을 다시 열 때는 코드를 다시 만들지 않는다');
   assert.equal(made.canvas.getContext().project.activeFile, 'strategy.py');
 });
 
@@ -2959,6 +2974,183 @@ test('프리셋: [기법 목록]으로 나가면 폴더·파일을 내려놓고,
   await openPreset(made);
   assert.equal(made.canvas.getContext().project.activeFile, 'strategy.py');
   assert.deepEqual(calls.created, ['SMA-골든크로스']);
+});
+
+// ── 보드 19·21·22·23 + 규칙 보드 32 · 홈이 유일한 문이고, 나갔다 와도 그대로다 ─────
+//
+// 세 가지를 못 박는다: ① 홈에는 기법을 여는 문(카드) 말고 아무 탭도 없다(32-01/02)
+// ② 기법 화면에서 홈으로 가는 문은 빵조각 첫 조각 하나다(32-04) ③ 그 문으로 나가는
+// 것은 버리는 것이 아니다 — 결과·보던 탭·필터·굴린 자리가 그대로 이어진다(32-05).
+
+test('보드 19: 목록 바닥에 기법을 열면 무슨 일이 일어나는지 적는다', async () => {
+  const made = await mountedList();
+  assert.equal(
+    findByClass(made.container, 'backtest-technique-foot')[0].textContent,
+    '기법을 열면 전용 작업 화면으로 이동합니다. 다른 기법 선택과 새 기법 만들기는 홈에서 시작하세요.',
+  );
+});
+
+test('보드 19: 카드 아래 한 줄은 목록 응답에 실제로 있는 것만 센다', async () => {
+  const made = await mountedList(userStrategyDeps());
+  await flush();
+  // 판번호·마지막 검증 시각·거래 수는 그 응답에 없다 — 셀 수 있는 것만 센다.
+  assert.deepEqual(
+    findByClass(made.container, 'backtest-technique-meta').map((n) => n.textContent),
+    ['파라미터 2개 · 지표 2개', '파라미터 2개'],
+  );
+});
+
+test('규칙 32-04: 기법 화면 맨 위는 빵조각이고 홈으로 가는 문은 그 첫 조각 하나다', async () => {
+  const calls = presetCalls();
+  const made = await mountedList(presetWorkspaceDeps(calls));
+  await openPreset(made);
+  assert.deepEqual(
+    findByClass(made.container, 'backtest-crumb').map((t) => t.textContent),
+    ['⌂ 팔라스 홈', 'SMA-골든크로스', '코드'],
+  );
+  assert.equal(findByClass(made.container, 'backtest-crumb-sep').length, 2);
+  assert.equal(findByClass(made.container, 'backtest-head-home').length, 0, '[기법 목록]은 없앴다');
+  // 마지막 조각은 지금 서 있는 하위 탭이다 — 어디에 있는지를 읽는 자리다.
+  await click(subtabNamed(made.container, '이력'));
+  await flush();
+  assert.deepEqual(
+    findByClass(made.container, 'backtest-crumb').map((t) => t.textContent),
+    ['⌂ 팔라스 홈', 'SMA-골든크로스', '이력'],
+  );
+  // 첫 조각만 누를 수 있고, 누르면 홈이다.
+  await click(findByClass(made.container, 'backtest-crumb-home')[0]);
+  await flush();
+  assert.equal(findByClass(made.container, 'backtest-technique-list').length, 1);
+  assert.equal(findByClass(made.container, 'backtest-crumb').length, 0);
+});
+
+test('규칙 32-04: 이력·최적화·실매매 적용도 그 기법 화면 안의 하위 탭이다', async () => {
+  const calls = presetCalls();
+  const made = await mountedList(presetWorkspaceDeps(calls, {
+    runs: async () => [],
+    deployments: async () => [],
+  }));
+  await openPreset(made);
+  assert.deepEqual(
+    findByClass(made.container, 'backtest-subtab').map((t) => t.textContent),
+    ['코드', '노드·흐름', '폼', '이력', '최적화', '실매매 적용'],
+  );
+  // 모드 탭으로만 닿던 세 판이 하위 탭에서 열린다 — 헤더에는 모드 탭이 여전히 없다.
+  await click(subtabNamed(made.container, '최적화'));
+  await flush();
+  assert.equal(findByClass(made.container, 'backtest-optimize').length, 1);
+  assert.equal(findByClass(made.container, 'backtest-tab').length, 0);
+  await click(subtabNamed(made.container, '실매매 적용'));
+  await flush();
+  assert.equal(findByClass(made.container, 'backtest-tab').length, 0);
+  assert.deepEqual(
+    findByClass(made.container, 'backtest-crumb').map((t) => t.textContent),
+    ['⌂ 팔라스 홈', 'SMA-골든크로스', '실매매 적용'],
+  );
+});
+
+test('규칙 32-04: 오류 화면에도 홈으로 가는 문이 선다 — 막다른 길 금지', async () => {
+  const made = await mountedList({
+    fetchPresets: async () => { throw new Error('백엔드가 없습니다'); },
+  });
+  await flush();
+  assert.match(textOf(made.container), /백엔드가 없습니다/);
+  const home = findByClass(made.container, 'backtest-error-home')[0];
+  assert.ok(home, '오류 화면에 홈으로 가는 문이 있어야 한다');
+  assert.equal(home.textContent, '⌂ 팔라스 홈');
+  await click(home);
+  await flush();
+  assert.equal(findByClass(made.container, 'backtest-technique-list').length, 1);
+});
+
+test('규칙 32-05: 홈으로 나가는 것은 버리는 것이 아니다 — 결과와 보던 탭이 이어진다', async () => {
+  const calls = presetCalls();
+  const made = await mountedList(presetWorkspaceDeps(calls, {
+    run: async () => ({ run_id: 'r1' }),
+    result: async () => DONE_RESULT,
+    trades: async () => [],
+  }));
+  await openPreset(made);
+  await fillForm(made.container);
+  await click(findByClass(made.container, 'backtest-run-button')[0]);
+  for (let i = 0; i < 6; i += 1) await flush();
+  // 결과가 하위 탭으로 서고 그 자리에 서 있다.
+  await click(subtabNamed(made.container, '결과'));
+  await flush();
+  assert.equal(made.canvas.getContext().tab, 'result');
+  assert.ok(findByClass(made.container, 'backtest-metric-tile').length, '결과 카드가 있어야 한다');
+
+  await toList(made.container);
+  assert.equal(findByClass(made.container, 'backtest-technique-list').length, 1);
+  // 홈은 기법을 내려놓은 자리다 — 결과 카드도 여기 서지 않는다.
+  assert.equal(findByClass(made.container, 'backtest-subtab').length, 0);
+
+  await openPreset(made);
+  // 다시 열면 결과도, 보던 탭도, 실행 경로도 그 자리다. 코드를 다시 만들지도 않는다.
+  const ctx = made.canvas.getContext();
+  assert.equal(ctx.tab, 'result');
+  assert.equal(ctx.runPath, 'code');
+  assert.equal(calls.codegen.length, 1, '같은 기법을 다시 열 때는 코드를 다시 만들지 않는다');
+  assert.ok(findByClass(made.container, 'backtest-metric-tile').length, '결과가 그대로 이어진다');
+  assert.deepEqual(
+    findByClass(made.container, 'backtest-crumb').map((t) => t.textContent),
+    ['⌂ 팔라스 홈', 'SMA-골든크로스', '결과'],
+  );
+});
+
+test('규칙 32-05: 홈의 분류·상태 필터와 굴린 자리는 기법을 다녀와도 남는다', async () => {
+  const calls = presetCalls();
+  const made = await mountedList(presetWorkspaceDeps(calls, {
+    fetchPresets: async () => TWO_PRESETS,
+  }));
+  // 분류를 「추세」로 좁히고 목록을 굴려 둔다.
+  await click(findByClass(made.container, 'backtest-technique-filter')[0]);
+  await flush();
+  const filterLabel = findByClass(made.container, 'backtest-technique-filter')[0].textContent;
+  assert.match(filterLabel, /^분류 · /);
+  assert.equal(findByClass(made.container, 'backtest-preset-item').length, 1, '좁혀졌다');
+  const body = findByClass(made.container, 'backtest-body')[0];
+  body.scrollTop = 240;
+  await body.dispatchEvent({ type: 'scroll' });
+
+  await openPreset(made);
+  assert.equal(findByClass(made.container, 'backtest-preset-item').length, 0, '기법 화면이다');
+  await toList(made.container);
+  // 필터도 굴린 자리도 그대로다 — 홈은 사람이 두고 온 자리지 처음 화면이 아니다.
+  assert.equal(findByClass(made.container, 'backtest-technique-filter')[0].textContent, filterLabel);
+  assert.equal(findByClass(made.container, 'backtest-preset-item').length, 1);
+  assert.equal(findByClass(made.container, 'backtest-body')[0].scrollTop, 240);
+});
+
+test('규칙 32-05: 손대다 둔 초안은 홈의 「수정 중」 카드로 돌아오고 [그만두기]가 버린다', async () => {
+  const calls = techniqueCalls();
+  const made = await listMounted(techniqueProjectDeps(calls));
+  await clickNewTechnique(made);
+  for (let i = 0; i < 8; i += 1) await flush();
+  const folder = findByClass(made.container, 'backtest-head-folder')[0].textContent;
+  assert.match(folder, /\/$/, '초안도 폴더 하나다');
+
+  // 빵조각으로 홈에 나오면 초안은 「수정 중」 카드로 목록에 선다.
+  await click(findByClass(made.container, 'backtest-crumb-home')[0]);
+  await flush();
+  const draft = findByClass(made.container, 'backtest-technique-draft')[0];
+  assert.ok(draft, '만들다 둔 초안이 목록에 있어야 한다');
+  assert.equal(
+    findByClass(draft, 'backtest-technique-status')[0].textContent, '수정 중',
+  );
+  // 카드를 누르면 그 초안으로 이어 간다 — 폴더를 또 만들지 않는다.
+  const created = calls.created.length;
+  await click(draft);
+  for (let i = 0; i < 4; i += 1) await flush();
+  assert.equal(calls.created.length, created, '폴더를 다시 만들지 않는다');
+  assert.equal(findByClass(made.container, 'backtest-head-folder')[0].textContent, folder);
+
+  // [그만두기]는 버리는 문이다 — 넣어 둔 자리까지 지운다.
+  const quit = findByClass(made.container, 'backtest-head-home')[0];
+  assert.equal(quit.textContent, '그만두기');
+  await click(quit);
+  await flush();
+  assert.equal(findByClass(made.container, 'backtest-technique-draft').length, 0);
 });
 
 test('대화가 기법을 고르면(spec_draft preset) 그 기법의 화면으로 간다 — 바뀐 파라미터가 코드에 실린다', async () => {
@@ -3471,7 +3663,7 @@ test('파일 실행이 준 전략·버전 id로 배포 탭이 열린다 — [이
   }));
   await openProjectFile(made);
   // 실행 전에는 배포 탭이 "먼저 저장하라"고 막는다. 배포는 기법 화면의 하위 탭이다(보드 23).
-  await click(subtabNamed(made.container, '배포'));
+  await click(subtabNamed(made.container, '실매매 적용'));
   await flush();
   assert.match(textOf(made.container), /먼저 코드를 한 번 실행하거나 코드 탭에서 저장해야/);
 
@@ -3481,7 +3673,7 @@ test('파일 실행이 준 전략·버전 id로 배포 탭이 열린다 — [이
   await flush();
   assert.equal(made.canvas.getContext().code.activeVersionId, 'v9');
 
-  await click(subtabNamed(made.container, '배포'));
+  await click(subtabNamed(made.container, '실매매 적용'));
   await flush();
   assert.equal(findByClass(made.container, 'backtest-deploy-create').length, 1);
 });
@@ -3498,7 +3690,7 @@ async function toDeployForm(extra) {
   await openProjectFile(made);
   await click(findByClass(made.container, 'backtest-run-button')[0]);
   await flush();
-  await click(subtabNamed(made.container, '배포'));
+  await click(subtabNamed(made.container, '실매매 적용'));
   await flush();
   return made;
 }
