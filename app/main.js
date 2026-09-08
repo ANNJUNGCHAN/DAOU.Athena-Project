@@ -5355,6 +5355,9 @@ function reportSafeCliError(error) {
 
 async function broadcastCliChanged({ rotateReason = null, list: suppliedList = null } = {}) {
   const list = suppliedList || await cliAccounts.list();
+  if (rotateReason) {
+    await rotatePersistentProvider(rotateReason, { activeAccount: activeAccountFromCliList(list) });
+  }
   if (shellWin && !shellWin.isDestroyed()) {
     shellWin.webContents.send('athena:cli-changed', list);
   }
@@ -5363,9 +5366,6 @@ async function broadcastCliChanged({ rotateReason = null, list: suppliedList = n
   // athena:cli-list(codex 프로브 최대 5초)를 다시 돌리므로 같은 변경에 두 번이 된다.
   // 셸 툴바는 cli-changed를 받는 chat.js applyCliState가 model-get을 다시 읽는다.
   if (orbWin && !orbWin.isDestroyed()) orbWin.webContents.send('athena:model-changed', handleModelGet());
-  if (rotateReason) {
-    await rotatePersistentProvider(rotateReason, { activeAccount: activeAccountFromCliList(list) });
-  }
   return list;
 }
 
