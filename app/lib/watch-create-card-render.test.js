@@ -91,7 +91,7 @@ test('이름이 없는 영수증은 그리지 않고 질문만 선다', () => {
   assert.equal(byClass(h.history, 'watch-create-question').length, 1);
 });
 
-test('봉투는 main.js가 한 번 쏘고 chat.js가 한 번 받는다', () => {
+test('봉투는 영수증만 자동으로 그리고 확인 주기 질문은 열지 않는다', () => {
   const appDir = path.join(__dirname, '..');
   const chatSource = fs.readFileSync(path.join(appDir, 'chat.js'), 'utf8');
   const mainSource = fs.readFileSync(path.join(appDir, 'main.js'), 'utf8');
@@ -101,7 +101,7 @@ test('봉투는 main.js가 한 번 쏘고 chat.js가 한 번 받는다', () => {
   assert.equal(chatSource.split("window.athena.on('athena:watch-create'").length - 1, 1);
   const body = chatSource.slice(chatSource.indexOf("window.athena.on('athena:watch-create'"));
   assert.match(body, /renderWatchCreateReceipt\(envelope\.receipt\)/);
-  assert.match(body, /renderWatchCreateQuestion\(envelope\.poll\)/);
+  assert.doesNotMatch(body, /renderWatchCreateQuestion\(envelope\.poll\)/);
   assert.match(preload, /'athena:watch-create'/);
   assert.ok(shell.indexOf('lib/watch-create-card.js') < shell.indexOf('<script src="chat.js">'));
 });

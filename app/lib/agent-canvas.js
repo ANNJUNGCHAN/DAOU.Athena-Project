@@ -648,11 +648,17 @@ function createAgentCanvas(deps) {
   suggestSection.appendChild(suggestList);
   listCol.appendChild(suggestSection);
 
-  // 추가 클릭 → 시트 없이 채팅으로(43 원칙). 실제 필드만 조합한다 — 지어낸
-  // 문구 없음(P3).
-  function suggestionSeedText(entry) {
+  // 추가 클릭 → 시트 없이 채팅으로(43 원칙). 실제 필드만 근거로 삼되, 확인 질문이
+  // 아니라 초안·검사까지 끝내라는 완결형 요청을 보낸다. 활성화는 여전히 사람 전용이다.
+  function suggestionRequestText(entry) {
     const name = entry.entity_name || entry.entity_id;
-    return `"${name}"에 대한 ${entry.relation_kind} 성향이 ${entry.reinforcement}회 보강됐어요 — 관련 루틴을 만들어줄까요?`;
+    const groundedRationale = `${entry.relation_kind} 성향 ${entry.reinforcement}회 보강`
+      + (entry.rationale ? ` — ${entry.rationale}` : '');
+    const evidenceLabel = entry.confidence ? `근거 신호(${entry.confidence})` : '근거 신호';
+    return `"${name}" 관련 루틴을 완성해줘. ${evidenceLabel}: ${groundedRationale}. `
+      + '대상 식별자와 기준값은 사용 가능한 조회 도구로 확인하고, 조건·확인 주기·쿨다운·만료는 지원되는 합리적인 기본값으로 네가 정해서 추가 질문이나 제안 확인 없이 실제 초안을 만들어줘. '
+      + '고정 조건으로 표현할 수 없으면 감시 코드를 작성하고 초안을 만든 뒤 자동 검사까지 진행해서 승인 대기 상태로 준비해줘. '
+      + '근거 신호를 내 투자 선호라고 단정하지 말고, 정한 조건·확인 주기·쿨다운·만료를 제안 설정으로 모두 밝혀줘. 실제 활성화는 내가 승인할 때만 해.';
   }
 
   function makeSuggestionRow(entry) {
@@ -673,7 +679,7 @@ function createAgentCanvas(deps) {
     addBtn.type = 'button';
     addBtn.textContent = '추가';
     addBtn.addEventListener('click', () => {
-      if (typeof onAddSuggestion === 'function') onAddSuggestion(suggestionSeedText(entry));
+      if (typeof onAddSuggestion === 'function') onAddSuggestion(suggestionRequestText(entry));
     });
     row.appendChild(addBtn);
     return row;
@@ -722,27 +728,6 @@ function createAgentCanvas(deps) {
   panels.appendChild(listCol);
   panels.appendChild(detailCol);
   body.appendChild(panels);
-
-  // ---------- 이중 제어 규칙(Paper 에이전트 보드 05 하단 C6U-0~C6X-0) ----------
-  // 이 화면이 "새 작업"을 어떻게 다루는지 적어 둔 고정 안내다 — 데이터가 아니라
-  // 화면 자신의 계약이라 fixture/live 구분이 없다(그래서 data-source를 안 붙인다).
-  // 세 줄은 Paper 원문 그대로다(C6V-0/C6W-0/C6X-0). 보드 07 게이트 지도 437L-1
-  // 「두 입구 · 한 게이트」와 같은 계약이라 어느 입구로 들어와도 게이트는 하나다.
-  const ROUTE_RULES = [
-    '① 새 작업 — 채팅 문장으로도, 시트로도.',
-    '② 편집 — "이거 고쳐줘"로도, 폼으로도.',
-    '③ 확정 — 채팅 칩으로도, 버튼으로도. 어느 입구든 같은 게이트.',
-  ];
-  const routeRules = el('div', 'agent-route-rules');
-  const routeRulesCaption = el('div', 'agent-panel-caption');
-  routeRulesCaption.textContent = '이중 제어 규칙';
-  routeRules.appendChild(routeRulesCaption);
-  for (const text of ROUTE_RULES) {
-    const line = el('div', 'agent-route-rule');
-    line.textContent = text;
-    routeRules.appendChild(line);
-  }
-  body.appendChild(routeRules);
 
   // ---------- 알람 센터 · 라이브 관제(9단계, Paper 보드 40) ----------
   // "알람"·"라이브" 뷰가 공유하는 한 화면 — 위 머리말 참고.
@@ -1624,7 +1609,7 @@ function createAgentCanvas(deps) {
     routineBtn.type = 'button';
     routineBtn.textContent = '루틴으로';
     routineBtn.addEventListener('click', () => {
-      if (typeof onAddSuggestion === 'function') onAddSuggestion(suggestionSeedText(entry));
+      if (typeof onAddSuggestion === 'function') onAddSuggestion(suggestionRequestText(entry));
     });
     head2.appendChild(routineBtn);
     const holdBtn = el('button', 'agent-proactive-chip');
@@ -1845,9 +1830,7 @@ function createAgentCanvas(deps) {
   // ---------- 코드 알람 상세(Step 7, Paper 보드 10·11·12) ----------
   //
   // 조건 편집 폼이 없는 것이 이 화면의 계약이다(A-5) — 코드 알람의 조건은 감시
-  // 함수 자체이고, 고치는 길은 「고치기 — 말로」 하나뿐이다(R10). 켜져 있는
-  // 알람은 코드 파일을 덮어쓸 수 없으므로(백엔드가 막는다) 그 버튼이 먼저
-  // 멈춤을 묻는다 — 거절 사유를 그대로 옮기지 않고 다음 행동만 보여준다(A-12).
+  // 함수 자체이고, 고치는 길은 채팅(말로) 하나뿐이다(R10).
   //
   // 노드 카드의 값은 전부 백엔드가 실제로 기록한 값이다(P2·D2) — 없으면 「—」로
   // 남기고 지어내지 않는다. 코드 원문은 v1에서 가져오지 않는다(R7 — 접힌 줄은
@@ -1857,7 +1840,6 @@ function createAgentCanvas(deps) {
   let codeFiresCache = { id: null, rows: [] };
   let selectedNodeFn = null; // 선택된 노드 칸 — 진한 테두리 + 칩 2개
   let codeSourceOpen = false; // 「코드 · 참고 · 펼치기」 토글
-  let editConfirmId = null; // 멈춤 확인(A-12)이 떠 있는 항목
   let fixHistoryOpen = false; // 「지난 고침 N건」 토글
 
   // 제어 결과 한 건을 같은 방(채팅)에 남긴다(Paper 4330-1). 사실행은 원장 행의
@@ -2261,41 +2243,7 @@ function createAgentCanvas(deps) {
       });
       controls.appendChild(cancelBtn);
     }
-    const editBtn = el('button', 'agent-code-edit');
-    editBtn.type = 'button';
-    editBtn.textContent = '고치기 — 말로';
-    editBtn.addEventListener('click', () => {
-      if (item.status === 'active') { editConfirmId = item.id; renderDetail(); return; }
-      seedEdit(item, { kind: 'edit' });
-    });
-    controls.appendChild(editBtn);
-    detailCol.appendChild(controls);
-
-    // A-12 — 켜져 있는 알람은 먼저 멈춤을 묻는다. 거절 사유(코드 번호)는 화면에
-    // 옮기지 않는다 — 사람이 할 수 있는 다음 행동 둘만 보여준다.
-    if (editConfirmId === item.id) {
-      const confirmRow = el('div', 'agent-code-edit-confirm');
-      const text = el('div', 'agent-code-edit-confirm-text');
-      text.textContent = '켜진 채로는 못 고쳐 — 먼저 멈출까?';
-      confirmRow.appendChild(text);
-      const pauseFirst = el('button', 'agent-code-edit-chip');
-      pauseFirst.type = 'button';
-      pauseFirst.textContent = '일시중지하고 고치기';
-      pauseFirst.addEventListener('click', async () => {
-        pauseFirst.disabled = true;
-        await runControl(pauseRoutine, '일시중지', item, '일시중지됨');
-        editConfirmId = null;
-        seedEdit(item, { kind: 'edit' });
-        await refresh();
-      });
-      confirmRow.appendChild(pauseFirst);
-      const keep = el('button', 'agent-code-edit-chip');
-      keep.type = 'button';
-      keep.textContent = '그대로 두기';
-      keep.addEventListener('click', () => { editConfirmId = null; renderDetail(); });
-      confirmRow.appendChild(keep);
-      detailCol.appendChild(confirmRow);
-    }
+    if (item.status !== 'draft') detailCol.appendChild(controls);
 
     // 「오늘 확인 · HH:MM」 — 초안은 아직 돈 적이 없으니 검사 결과의 칸을 본다.
     const shown = item.status === 'draft' ? (lastCheck || lastRun) : (lastRun || lastCheck);
@@ -2518,7 +2466,7 @@ function createAgentCanvas(deps) {
     }
     detailCol.appendChild(fieldsWrap);
     const hint = el('div', 'agent-code-settings-hint');
-    hint.textContent = '말로 바꾸는 건 쿨다운 · 만료 · 설명 — 조건은 「고치기 — 말로」';
+    hint.textContent = '말로 바꾸는 건 쿨다운 · 만료 · 설명';
     detailCol.appendChild(hint);
   }
 
@@ -2690,7 +2638,6 @@ function createAgentCanvas(deps) {
     // (앞 항목에서 고른 칸이 다음 항목에 남아 있으면 거짓말이 된다).
     selectedNodeFn = null;
     codeSourceOpen = false;
-    editConfirmId = null;
     selectedId = id;
     renderPanels();
   }

@@ -346,7 +346,6 @@ function createGraphModeController(deps) {
                     //   다른 선택 elements와 같은 계약으로 조용히 무시된다 }
     fetchClusterMap, // async () => payload
     onError,        // (err) => void (선택)
-    onPanelCta,     // () => void (선택) — 공통 패널 CTA "채팅에서 답하기" 클릭 시(스텝8)
     // 스텝14 — 스텝11(숨은 연관 군집 쌍)·13(숨은 연관 엔티티 쌍)이 캡able로만
     // 만들어 뒀던 옵션을 실제로 채우는 두 소스. 둘 다 선택(없으면 그 기능이
     // 조용히 꺼진다 — §0 정직한 빈 데이터와 같은 논리) — canvas.js가 이미
@@ -1058,8 +1057,7 @@ function createGraphModeController(deps) {
     }
   }
 
-  // 공통 패널 콘텐츠(보드 07 §10, 스텝8). §10-1 탭("이력" 탭은 Paper에 콘텐츠
-  // 스펙이 없어 클릭해도 전환 없음, §6 범위 밖) · §10-2 선택 헤더 · §10-3 티어
+  // 공통 패널 콘텐츠(보드 07 §10, 스텝8). §10-2 선택 헤더 · §10-3 티어
   // 대조(가용 필드가 rationale/confidence/tier뿐이라 두 카드 비교 "어긋남"
   // 대신 단일 카드로 축소, §0 정책) · §10-4 최근 변화(엔티티 타임라인, WP-G —
   // 유일한 비동기 채움 섹션, 아래 주석 참고) · §10-5 CTA를 그린다.
@@ -1067,21 +1065,6 @@ function createGraphModeController(deps) {
     while (panel.firstChild) panel.removeChild(panel.firstChild);
 
     const tabs = elp('div', 'panel-tabs');
-    const traitTab = elp('button', 'panel-tab is-active');
-    traitTab.setAttribute('type', 'button');
-    traitTab.textContent = '성향';
-    tabs.appendChild(traitTab);
-    // 이력 탭은 아직 콘텐츠 스펙이 없다(위 주석 §10-1). 예전에는 눌리는 것처럼
-    // 생긴 채로 아무 일도 안 해서 고장으로 읽혔다(2026-09-03 실사용: "이력은
-    // 클릭해도 안열린다"). 없는 기능을 활성처럼 두지 않는다(P3) — 비활성으로
-    // 표시하고 왜인지 말한다. 아래 §10-4 "최근 변화"가 지금은 그 역할을 한다.
-    const historyTab = elp('button', 'panel-tab is-disabled');
-    historyTab.setAttribute('type', 'button');
-    historyTab.setAttribute('disabled', '');
-    historyTab.setAttribute('aria-disabled', 'true');
-    historyTab.setAttribute('title', '아직 없습니다 — 최근 변화는 아래에 있습니다');
-    historyTab.textContent = '이력';
-    tabs.appendChild(historyTab);
     tabs.appendChild(elp('span', 'panel-tabs-spacer'));
     const deselectBtn = elp('button', 'panel-deselect');
     deselectBtn.setAttribute('type', 'button');
@@ -1255,7 +1238,7 @@ function createGraphModeController(deps) {
     // §10-4 최근 변화(보드 15 §2.5, WP-G) — 유일한 비동기 채움 섹션(2단계
     // 렌더, G-G2). 다른 섹션은 전부 동기 캐시 조회지만 엔티티 타임라인은
     // entity_id별 IPC 왕복이라 첫 렌더 시점엔 데이터가 없다. 섹션 자리를
-    // hidden으로 먼저 선점해 CTA보다 앞 순서를 고정해 두고(fake-dom에
+    // hidden으로 먼저 선점해 순서를 고정해 두고(fake-dom에
     // insertBefore가 없어 자리 선점이 가장 단순하다), 응답이 오면
     // fillTimelineSection()이 채우거나(행 있음) 걷어낸다(행 없음·실패).
     // selectNode()/selectEntity()의 동기 계약은 그대로다 — 이 fetch를
@@ -1278,39 +1261,6 @@ function createGraphModeController(deps) {
         .catch(() => fillTimelineSection(requestedEntityId, []));
     }
 
-    // CTA(보드 02/04 §패널 CTA) — 리드인 문장과 버튼 문구가 무엇을 아직 안
-    // 했는지에 따라 달라진다. 확인할 것이 없으면 리드인 없이 버튼만 둔다.
-    const ctaBlock = elp('div', 'panel-cta-block');
-    let ctaLabel = '채팅에서 답하기';
-    let leadIn = '';
-    if (reason) {
-      leadIn = '이 연결을 확인하지 않으셨습니다.';
-      ctaLabel = '채팅에서 물어보기';
-    } else if (conflicting) {
-      leadIn = '어느 쪽이 실제에 가까운지 아직 답하지 않으셨습니다.';
-    }
-    if (leadIn) {
-      const lead = elp('div', 'panel-cta-lead');
-      lead.textContent = leadIn;
-      ctaBlock.appendChild(lead);
-    }
-    const cta = elp('button', 'panel-cta');
-    cta.setAttribute('type', 'button');
-    cta.textContent = ctaLabel;
-    // 클릭에 **무엇을 물어야 하는지**를 함께 넘긴다(2026-09-02). 옛 판은 인자 없이
-    // 불러서, 받는 쪽(canvas.js)이 입력창에 포커스만 주고 끝났다 — 버튼을 눌러도
-    // 아무 일도 안 일어난다는 제보의 원인이다. 문구는 위 리드인과 같은 축을 쓴다:
-    // 숨은 연관이면 "왜 이어졌나", 어긋나면 "어느 쪽이 실제인가".
-    if (typeof onPanelCta === 'function') {
-      const ask = {
-        kind: reason ? 'hidden' : (conflicting ? 'conflict' : 'plain'),
-        name: data.name || null,
-        entityId: data.entityId || null,
-      };
-      cta.addEventListener('click', () => onPanelCta(ask));
-    }
-    ctaBlock.appendChild(cta);
-    panel.appendChild(ctaBlock);
   }
 
   // 관계 목록의 보강 수 채움(보드 04 우측 숫자) — fillTimelineSection과 같은

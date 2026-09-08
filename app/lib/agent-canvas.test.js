@@ -803,14 +803,14 @@ test('rationale이 없으면(nullable) 근거문에서 그 부분만 빠진다 �
   const container = fakeNode('div');
   const canvas = createAgentCanvas({
     container, fetchRoutines: async () => [],
-    fetchProfileSummary: async () => [profileEntry({ rationale: null })],
+    fetchProfileSummary: async () => [profileEntry({ rationale: null, confidence: 'INFERRED' })],
   });
   canvas.mount();
   await canvas.refresh();
   assert.equal(findByClass(container, 'agent-suggest-rationale')[0].textContent, '단기 회전 성향 21회 보강');
 });
 
-test('"추가" 클릭 시 onAddSuggestion이 실제 필드로 조합한 문장을 받는다(시트를 열지 않는다, 43 원칙)', async () => {
+test('"추가" 클릭은 근거를 보존하고 선택 질문 없이 초안·자동 검사까지 요청한다', async () => {
   const container = fakeNode('div');
   let seeded = null;
   const canvas = createAgentCanvas({
@@ -823,7 +823,30 @@ test('"추가" 클릭 시 onAddSuggestion이 실제 필드로 조합한 문장�
   const addBtn = findByClass(container, 'agent-suggest-add')[0];
   assert.equal(addBtn.textContent, '추가');
   addBtn.dispatchEvent({ type: 'click' });
-  assert.equal(seeded, '"삼성전자"에 대한 단기 회전 성향이 21회 보강됐어요 — 관련 루틴을 만들어줄까요?');
+  assert.match(seeded, /^"삼성전자" 관련 루틴을 완성해줘\. 근거 신호\(EXTRACTED\): 단기 회전 성향 21회 보강 — 매매일마다 정리가 필요해 보여요\./);
+  assert.match(seeded, /대상 식별자와 기준값은 사용 가능한 조회 도구로 확인하고/);
+  assert.match(seeded, /지원되는 합리적인 기본값으로 네가 정해서/);
+  assert.match(seeded, /추가 질문이나 제안 확인 없이 실제 초안을 만들어줘/);
+  assert.match(seeded, /감시 코드를 작성하고 초안을 만든 뒤 자동 검사까지 진행해서 승인 대기 상태로 준비해줘/);
+  assert.match(seeded, /근거 신호를 내 투자 선호라고 단정하지 말고/);
+  assert.match(seeded, /정한 조건·확인 주기·쿨다운·만료를 제안 설정으로 모두 밝혀줘/);
+  assert.match(seeded, /실제 활성화는 내가 승인할 때만 해/);
+  assert.doesNotMatch(seeded, /만들어줄까요|골라|선택해/);
+});
+
+test('"추가" 요청은 rationale이 없어도 실제 relation_kind와 reinforcement만 근거로 쓴다', async () => {
+  const container = fakeNode('div');
+  let submitted = null;
+  const canvas = createAgentCanvas({
+    container, fetchRoutines: async () => [],
+    fetchProfileSummary: async () => [profileEntry({ rationale: null, confidence: 'INFERRED' })],
+    onAddSuggestion: (text) => { submitted = text; },
+  });
+  canvas.mount();
+  await canvas.refresh();
+  findByClass(container, 'agent-suggest-add')[0].dispatchEvent({ type: 'click' });
+  assert.match(submitted, /근거 신호\(INFERRED\): 단기 회전 성향 21회 보강\./);
+  assert.doesNotMatch(submitted, /undefined|null/);
 });
 
 test('fetchProfileSummary가 실패하면 제안 섹션이 숨는다(지어낸 제안을 보여주지 않는다, P3)', async () => {
@@ -1393,7 +1416,7 @@ test('신호가 없으면 스트립이 정직하게 "아직 읽히는 성향이 
   assert.equal(findByClass(container, 'agent-proactive-strip-value')[0].textContent, '아직 읽히는 성향이 없습니다');
 });
 
-test('제안 카드: 칩 "루틴으로"/"보류"가 있고, "루틴으로"는 7단계와 같은 문장을 채팅에 심는다', async () => {
+test('제안 카드: "루틴으로"는 미니 목록과 같은 완결형 요청을 보낸다', async () => {
   const container = fakeNode('div');
   let seeded = null;
   const canvas = createAgentCanvas({
@@ -1409,7 +1432,9 @@ test('제안 카드: 칩 "루틴으로"/"보류"가 있고, "루틴으로"는 7�
   const chips = findByClass(cards[0], 'agent-proactive-chip').map((n) => n.textContent);
   assert.deepEqual(chips, ['루틴으로', '보류']);
   findByClass(cards[0], 'agent-proactive-chip')[0].dispatchEvent({ type: 'click' });
-  assert.equal(seeded, '"삼성전자"에 대한 단기 회전 성향이 21회 보강됐어요 — 관련 루틴을 만들어줄까요?');
+  assert.match(seeded, /^"삼성전자" 관련 루틴을 완성해줘\. 근거 신호\(EXTRACTED\):/);
+  assert.match(seeded, /자동 검사까지 진행해서 승인 대기 상태로 준비해줘/);
+  assert.doesNotMatch(seeded, /만들어줄까요/);
 });
 
 test('"보류" 클릭 시 그 카드는 이번 세션에서만 숨는다(저장 안 됨, P3) — 탭 배지도 줄어든다', async () => {
@@ -1501,64 +1526,6 @@ test('말걸기 가드: fetchNudgeGuard가 실패해도 지어낸 값으로 채�
   const guard = findByClass(container, 'agent-nudge-guard')[0];
   assert.equal(findByClass(guard, 'agent-nudge-guard-tag').length, 0);
   assert.equal(findByClass(guard, 'agent-list-empty')[0].textContent, '가드 설정을 불러오는 중입니다');
-});
-
-// ---------- 이중 제어 규칙(Paper 에이전트 보드 05 하단 C6U-0~C6X-0) ----------
-
-test('이중 제어 규칙: 작업 뷰 하단 캡션은 「이중 제어 규칙」이다', () => {
-  const container = fakeNode('div');
-  const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
-  canvas.mount();
-
-  const panel = findByClass(container, 'agent-route-rules')[0];
-  assert.ok(panel, '규칙 패널이 있어야 한다');
-  assert.equal(findByClass(panel, 'agent-panel-caption')[0].textContent, '이중 제어 규칙');
-});
-
-test('이중 제어 규칙: 3줄이 Paper C6V-0~C6X-0 원문 그대로다', () => {
-  const container = fakeNode('div');
-  const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
-  canvas.mount();
-
-  const panel = findByClass(container, 'agent-route-rules')[0];
-  assert.deepEqual(findByClass(panel, 'agent-route-rule').map((n) => n.textContent), [
-    '① 새 작업 — 채팅 문장으로도, 시트로도.',
-    '② 편집 — "이거 고쳐줘"로도, 폼으로도.',
-    '③ 확정 — 채팅 칩으로도, 버튼으로도. 어느 입구든 같은 게이트.',
-  ]);
-});
-
-test('이중 제어 규칙: 문구가 GUI 입구를 부정하지 않는다', () => {
-  const container = fakeNode('div');
-  const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
-  canvas.mount();
-
-  const lines = findByClass(container, 'agent-route-rule').map((n) => n.textContent).join(' ');
-  assert.ok(!/시트를 열지 않는다/.test(lines), 'Paper는 시트 입구를 요구한다');
-  assert.ok(!/보기 전용/.test(lines), 'Paper는 폼 입구를 요구한다');
-});
-
-test('이중 제어 규칙: 화면 자신의 계약이라 data-source 표기를 달지 않는다', () => {
-  const container = fakeNode('div');
-  const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
-  canvas.mount();
-
-  assert.equal(findByClass(container, 'agent-route-rules')[0].getAttribute('data-source'), null);
-});
-
-test('이중 제어 규칙: 알람·라이브·제안 뷰로 가면 작업 뷰와 함께 숨는다', () => {
-  const container = fakeNode('div');
-  const canvas = createAgentCanvas({ container, fetchRoutines: async () => [] });
-  canvas.mount();
-
-  const body = findByClass(container, 'agent-body')[0];
-  assert.equal(body.hidden, false);
-  for (const view of ['alerts', 'live', 'proactive']) {
-    canvas.setActiveView(view);
-    assert.equal(body.hidden, true, `${view} 뷰에서는 이중 제어 규칙이 든 작업 본문이 숨어야 한다`);
-    canvas.setActiveView('tasks');
-    assert.equal(body.hidden, false);
-  }
 });
 
 // ---------- 드릴인 실행 목록 — 날짜 그룹 · 접기(Paper 보드 03) ----------
@@ -2315,10 +2282,10 @@ test('A-4 상세: 코드는 접혀 있고 라벨이 「코드 · 참고 · 펼�
   assert.equal(findByClass(after, 'agent-code-source-path')[0].textContent, 'watch/volume_spike.py');
 });
 
-test('A-5 상세: 울린 기록·일시중지·취소·고치기·만료가 있고 조건 편집 폼은 없다', async () => {
+test('A-5 상세: 울린 기록·일시중지·취소·만료가 있고 조건 편집 폼은 없다', async () => {
   const { detail } = await mountCode({});
   const text = allText(detail);
-  for (const phrase of ['울린 기록', '일시중지', '취소', '고치기 — 말로', '만료']) {
+  for (const phrase of ['울린 기록', '일시중지', '취소', '만료']) {
     assert.ok(text.includes(phrase), `${phrase}가 상세에 있어야 한다`);
   }
   assert.equal(findByClass(detail, 'agent-history-open')[0].textContent, '전체 이력 보기 →');
@@ -2343,50 +2310,6 @@ test('A-5 상세: 안 불린 함수 칸은 「이번엔 안 쓰임」으로 남�
   const marks = findByClass(detail, 'agent-node-card')
     .map((c) => findByClass(c, 'agent-node-unused').map((n) => n.textContent));
   assert.deepEqual(marks, [[], ['이번엔 안 쓰임'], [], []]);
-});
-
-test('A-12 활성: 「고치기 — 말로」는 먼저 멈춤을 묻는다(거절 사유 문구 없음)', async () => {
-  const calls = [];
-  const { container, detail } = await mountCode({}, {
-    pauseRoutine: async (id) => { calls.push(['pause', id]); },
-    onEditInChat: (id, opts) => { calls.push(['edit', id, opts.kind]); },
-  });
-  findByClass(detail, 'agent-code-edit')[0].dispatchEvent({ type: 'click' });
-  let after = findByClass(container, 'agent-detail-col')[0];
-  const chips = findByClass(after, 'agent-code-edit-chip');
-  assert.deepEqual(chips.map((n) => n.textContent), ['일시중지하고 고치기', '그대로 두기']);
-  assert.equal(calls.length, 0, '묻기 전에는 아무것도 안 부른다');
-  assert.equal(allText(after).includes('409'), false, '거절 사유를 화면에 옮기지 않는다');
-
-  await chips[0].dispatchEvent({ type: 'click' });
-  assert.deepEqual(calls, [['pause', 'cw1'], ['edit', 'cw1', 'edit']]);
-  after = findByClass(container, 'agent-detail-col')[0];
-  assert.equal(findByClass(after, 'agent-code-edit-chip').length, 0, '확인 줄은 사라진다');
-});
-
-test('A-12 활성: 「그대로 두기」를 고르면 아무것도 안 부르고 확인 줄만 닫는다', async () => {
-  const calls = [];
-  const { container, detail } = await mountCode({}, {
-    pauseRoutine: async (id) => { calls.push(['pause', id]); },
-    onEditInChat: (id) => { calls.push(['edit', id]); },
-  });
-  findByClass(detail, 'agent-code-edit')[0].dispatchEvent({ type: 'click' });
-  const after = findByClass(container, 'agent-detail-col')[0];
-  findByClass(after, 'agent-code-edit-chip')[1].dispatchEvent({ type: 'click' });
-  assert.deepEqual(calls, []);
-  assert.equal(findByClass(findByClass(container, 'agent-detail-col')[0], 'agent-code-edit-chip').length, 0);
-});
-
-test('A-12 일시중지: 확인 없이 바로 고치기로 넘어간다', async () => {
-  const calls = [];
-  const { container, detail } = await mountCode({ status: 'paused' }, {
-    pauseRoutine: async (id) => { calls.push(['pause', id]); },
-    onEditInChat: (id, opts) => { calls.push(['edit', id, opts.kind]); },
-  });
-  assert.equal(findByClass(detail, 'agent-pause-btn')[0].textContent, '재개');
-  findByClass(detail, 'agent-code-edit')[0].dispatchEvent({ type: 'click' });
-  assert.deepEqual(calls, [['edit', 'cw1', 'edit']]);
-  assert.equal(findByClass(findByClass(container, 'agent-detail-col')[0], 'agent-code-edit-chip').length, 0);
 });
 
 test('초안: 승인 패널의 「이 알람 승인」은 채팅 칩과 같은 confirmRoutine 게이트를 부른다', async () => {

@@ -3191,33 +3191,6 @@ const graphMode = window.AthenaLib.GraphModeController.createGraphModeController
     return res;
   },
   onError: (err) => console.warn('[graph-mode] cluster-map 실패', err),
-  // 공통 패널 CTA "채팅에서 답하기"(보드 07 §10-5, 스텝8) — 06 확인 필요 배너의
-  // onConfirmCta와 같은 최소 구현(새 기능 발명 없음, 입력창 포커스만).
-  // 공통 패널 CTA(2026-09-02) — 배너 CTA와 같은 이유로 실제 질문을 심는다.
-  // 문구는 패널의 리드인과 같은 축이다: 숨은 연관이면 "왜 이어졌나", 체결·잔고와
-  // 대화가 어긋나면 "어느 쪽이 실제인가".
-  //
-  // 문장은 짧고 사람 말이어야 한다(2026-09-03 사용자 지적 "문장이 너무 길고
-  // 기계적이다"). 두 가지를 걷어냈다:
-  //   ① 모델 지시문 꼬리("사실과 추론을 구분해서", "근거가 약하면 그렇다고 말해줘").
-  //      사람이 자기 입으로 그렇게 쓰지 않는다. 그리고 그 지시는 이미 그래프 접두가
-  //      하고 있다(live-prompt.js) — 여기서 또 쓰면 두 벌이다.
-  //   ② 주격 조사. target은 `"삼성화재"`처럼 따옴표로 싸여 있어서 `${target}이`가
-  //      **"삼성화재"이**로 렌더됐다(받침 판정이 닿는 마지막 글자가 따옴표다).
-  //      이름 뒤에 줄표를 두면 조사가 아예 필요 없고 채팅 말투로도 자연스럽다.
-  onPanelCta: (ask) => {
-    const name = ask && ask.name ? String(ask.name) : null;
-    const target = name ? `"${name}"` : '지금 고른 것';
-    if (ask && ask.kind === 'hidden') {
-      seedGraphChat(`${target} — 왜 다른 군집과 이어졌어?`);
-      return;
-    }
-    if (ask && ask.kind === 'conflict') {
-      seedGraphChat(`${target} — 체결과 대화가 왜 다르게 나와?`);
-      return;
-    }
-    seedGraphChat(`${target} — 그래프가 뭘 알고 있어?`);
-  },
   // 스텝14 — 스텝11(숨은 연관 군집 쌍)·13(숨은 연관 엔티티 쌍)의 실배선. 위
   // lastSurprisingConnections 캐시를 그대로 읽는다(이중 fetch 없음).
   getSurprisingConnections: () => lastSurprisingConnections,
@@ -4024,11 +3997,9 @@ const agentCanvas = window.AthenaLib.AgentCanvas.createAgentCanvas({
     if (!res || !res.ok) throw new Error((res && res.error) || '성향 신호를 받지 못했다');
     return Array.isArray(res.entries) ? res.entries : [];
   },
-  // "추가" 클릭 → 시트 없이 채팅으로(43 원칙, shell.js 버스 — chat.js가 등록).
+  // 제안 채택은 완성된 초안 생성을 바로 요청한다. 채팅의 idle 게이트를 함께 쓴다.
   onAddSuggestion: (text) => {
-    if (window.AthenaShell && typeof window.AthenaShell.seedChatInput === 'function') {
-      window.AthenaShell.seedChatInput(text);
-    }
+    document.dispatchEvent(new CustomEvent('athena:chat-submit', { detail: { text } }));
   },
   // 9단계 — 알람 센터. notifyRooms는 sidebar.js가 소유한다(세션 메모리) —
   // window.AthenaNotify 다리로 읽기+"모두 읽음"만 받는다(단일 소유자 원칙).
