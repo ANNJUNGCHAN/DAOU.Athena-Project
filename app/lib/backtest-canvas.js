@@ -32,11 +32,6 @@ const EquityChart = isNode
 const Explain = isNode ? require('./backtest-explain') : window.AthenaLib.BacktestExplain;
 // 코드 탭의 프로젝트 IDE(결정 D1~D4) — 배선이 있을 때만 켜진다(ensureProjectIde 참고).
 const ProjectIde = isNode ? require('./project-ide') : window.AthenaLib.ProjectIde;
-// 시각 전략 편집기(US-007) — 지도 탭이 편집 가능해지는 자리. 스펙 경로(프리셋·폼)에서만
-// 선다. 코드 경로·내 전략의 지도는 지금까지처럼 Explain.renderFlowMap 읽기 전용이다.
-const VisualEditor = isNode
-  ? require('./backtest-visual-editor')
-  : window.AthenaLib.BacktestVisualEditor;
 // 작업공간 봉인·복원 판정(41·42번 보드) — 무엇을 남기고 무엇이 돌아왔는가는 이 순수
 // 모듈 하나가 정한다. 화면은 그 판정을 그리기만 한다.
 const SessionRestore = isNode ? require('./session-restore') : window.AthenaLib.SessionRestore;
@@ -140,62 +135,8 @@ const NODE_BY_FIELD = {
 // 지도가 그리는 순서 — 대상 한 줄 다음에 ①~④다(mapmodel.NUMERALS와 같은 차례).
 const MAP_NODE_ORDER = ['target', 'params', 'indicators', 'conditions', 'guard'];
 
-// ── 출처에서 지도로(보드 17) ─────────────────────────────────────────────────
-// 문구는 백엔드가 주는 것(단계 이름·부제·칸 문장)과 화면이 가진 것(머리·띠 라벨)으로
-// 갈린다. 여기 있는 것은 뒤쪽뿐이다 — 단계가 무엇을 했는지는 잡이 말한다.
-const SOURCE_HEAD_STATE = '출처에서 만드는 중';
-const SOURCE_HEAD_NAME = '새 전략';
-const SOURCE_PROGRESS_TITLE = '출처를 지도로 만드는 중';
-const SOURCE_STOP_LABEL = '멈추기';
-const SOURCE_TARGET_LABEL = '출처가 말한 대상';
-const SOURCE_TARGET_PENDING = '확인 필요';
-const SOURCE_TARGET_NOTE = '지도가 끝나면 채팅이 대상·기간부터 하나씩 묻습니다';
-const SOURCE_MAP_SUB = '칸이 하나씩 채워집니다 · 다 그려지면 대화로 고칠 수 있습니다';
-const SOURCE_MINE_BOUNDARY = '여기부터 내 전략 — 출처에서 뽑은 칸들';
-const SOURCE_CODE_PENDING = '아직 없음 — 지도가 끝나면 자동으로 만들어집니다';
-// 남이 쓴 글이 화면에 들어오는 자리에는 늘 이 한 줄이 붙는다(보드 17 채팅 카드).
-const SOURCE_DATA_ONLY_NOTE = '출처의 문장은 자료일 뿐입니다 — 앱은 그 안의 지시를 따르지 않습니다';
-// 단계 줄의 표식 — Paper의 ✓/●/○ 그대로다. 상태를 색으로만 말하면 못 읽는 사람이 있다.
-const SOURCE_STEP_MARKS = { done: '✓', running: '●', todo: '○' };
-
-// 시각 편집기의 서버 왕복 간격 — 매 키입력마다 검증을 보내면 서버가 타자를 따라 뛴다.
-const VISUAL_DEBOUNCE_MS = 400;
-
 // 작업공간 보고 간격 — 42번 보드 「폼·코드·필터가 바뀔 때 · 1s 디바운스」 그대로다.
 const WORKSPACE_REPORT_DEBOUNCE_MS = 1000;
-
-// 좁은 폭 판단은 부르는 쪽 몫이다(shell.css .backtest-vis.is-narrow 주석: <900px).
-// 창 폭이 아니라 편집기가 실제로 받은 폭을 잰다 — 사이드바·서랍이 폭을 나눠 가질 수 있다.
-const VISUAL_NARROW_PX = 900;
-
-// 헤더의 상태 점 문구(US-007). 'unvalidated'는 여기 없다 — 아직 아무것도 묻지 않은 것은
-// 상태가 아니라 상태 없음이고, 없는 상태에 점을 찍으면 화면이 사실을 지어낸다.
-const VISUAL_STATUS_TEXT = {
-  validating: '검증 중',
-  valid: '서버 검증 가능',
-  invalid: '서버 검증 실패',
-  synced: '그래프 · 코드 검증 완료',
-};
-
-// 유효하지 않은 그래프에서 [실행]이 서는 자리 — 실행이 아니라 검토가 다음 행동이다.
-const VISUAL_RUN_BLOCKED = '오류 검토';
-
-// 코드 초안이 지도보다 앞설 때 서랍에 적히는 한 줄. 덮어쓰지 않는다는 사실을 말한다.
-const VISUAL_CODE_AHEAD = '코드가 지도보다 앞섬';
-
-// ── US-010 · 코드 전용 분기와 버전 되열기 ───────────────────────────────────
-// 코드에서 한 수정이 그래프로 표현되지 않으면 화면은 자동 왕복을 가장하지 않고 두 갈래를
-// 명시한다(연구 문서 §표현 불가능한 코드 수정). 아래 문구는 그 두 버튼과, 분기한 뒤의
-// 지도가 무엇인지를 말한다 — 마지막 호환 snapshot이고 지금 코드와 **동기화되지 않았다**.
-const CODE_ONLY_REGRAPH = '그래프에서 다시 만들기';
-const CODE_ONLY_FORK = '코드 전용으로 분기';
-const CODE_ONLY_BADGE = '동기화되지 않음 · 코드 전용';
-// 그 분기가 남기는 버전의 메모. 서버는 origin=code_only 버전에 bundle을 허용하지 않는다
-// (그래프를 같이 저장하면 동기화됐다고 표시하는 것과 같다).
-const CODE_ONLY_NOTE = '코드 전용 분기';
-// 이력에서 다시 연 버전의 배지 — 편집 표면이 아니다. 편집은 한 번 더 눌러야 시작된다.
-const VERSION_READONLY_BADGE = '읽기 전용 · 이력에서 연 버전';
-const VERSION_EDIT_LABEL = '이 버전으로 편집';
 
 const OPTIMIZE_METHODS = [['grid', '그리드'], ['random', '랜덤']];
 
@@ -980,12 +921,6 @@ function createBacktestCanvas(options) {
       runFromChat() { return []; },
       validateFromChat() { return Promise.resolve({ ok: false, errors: [] }); },
       startOptimizeFromChat() {},
-      answerVisualQuestion() { return Promise.resolve(null); },
-      applyVisualPatch() { return Promise.resolve(null); },
-      discardVisualPatch() { return { ok: false, reason: '백테스트 화면이 없습니다' }; },
-      reviewBeforeRun() { return { ok: false, reason: '백테스트 화면이 없습니다' }; },
-      openCodeFromChat() { return Promise.resolve(false); },
-      retryVisualPatch() { return Promise.resolve(null); },
       openStep() { return false; },
     };
   }
@@ -1050,11 +985,6 @@ function createBacktestCanvas(options) {
   // 자동 실행 폴링은 사람이 누른 실행(pollTimer)·환경 잡(envTimer)과 별개 타이머다 —
   // 같은 자리를 쓰면 자동 실행이 도는 동안 사람이 누른 실행의 폴링이 끊긴다.
   let techniqueRunTimer = null;
-  // 출처→지도 잡의 폴링 타이머 — 실행·수집(pollTimer)·환경(envTimer)과 별개다.
-  // 같은 자리를 쓰면 지도를 만드는 동안 사람이 누른 실행의 폴링이 끊긴다.
-  let sourceTimer = null;
-  // 「출처 읽음」 카드를 이미 냈는가 — 폴링은 1초마다 도는데 카드는 한 번뿐이다.
-  let sourceReadCardSent = false;
   // 코드 탭 위에 diff 패널이 서 있는가([diff 보기]가 켜고 [코드로]가 끈다).
   let techniqueDiffOpen = false;
   // 명령창을 펼쳐 끝으로 굴렸는가([출력 보기]가 켠다).
@@ -1095,31 +1025,6 @@ function createBacktestCanvas(options) {
   // 폼 경로에서 [코드 열기]가 만든 코드 — 같은 폼이면 다시 만들지 않는다(§7.3: 생성은
   // 저장이 아니다. 이 캐시는 화면 것이고 백엔드에는 아무것도 남지 않는다).
   let codegenCache = null;
-  // ── 시각 설계 상태(US-007/008/009) ────────────────────────────────────────
-  // 편집기는 한 번 만들어 계속 들고 있다 — render()가 매번 DOM을 새로 만들어도 되돌리기
-  // 이력·선택·연결 중인 포트가 살아남아야 한다(projectIde와 같은 이유).
-  let visualEditor = null;
-  let visualHost = null;
-  let visualRegistry = null;
-  let visualRegistryAsked = false;
-  let visualGraph = null;
-  // 이 그래프가 어느 폼 yaml에서 나왔는가 — 폼 → 그래프 왕복의 열쇠이자 루프 차단기다.
-  let visualGraphYaml = null;
-  let visualDiagnostics = [];
-  let visualState = 'unvalidated';
-  let visualSummary = '';
-  let visualHashes = null;
-  let visualCompiled = null;   // {spec_yaml, source, source_map, hashes}
-  let visualPreview = null;    // {source, source_map} — 검증 실패 때의 미실행 미리보기
-  let visualTimer = null;
-  // 그래프 → 폼 갱신 중이라는 깃발. 이것이 없으면 폼이 바뀐 것을 보고 다시 그래프를 만든다.
-  let visualSyncing = false;
-  // 마지막으로 화면에 얹은 생성 코드 — 사람이 손으로 고친 초안과 구분하는 유일한 축이다.
-  let lastGeneratedSource = '';
-  // 코드 탭 안에서 갈래(US-010)가 서는 자리와 지금 거기 서 있는 조각. 다시 그리지 않고
-  // 이 둘로만 붙였다 뗀다(syncCodeAheadChoices).
-  let codeAheadHost = null;
-  let codeAheadNode = null;
   // IDE가 코드 탭을 가져갔는가. 폴더를 고르면 참이 되고, 기법을 새로 고르거나
   // [+ 새 기법 만들기]로 빈 뼈대를 세우면 거짓으로 돌아간다 — 그 둘은 "앞 폴더의
   // 파일이 아니라 이 기법의 코드"를 보는 자리라 IDE가 아니라 단일 편집기가 서야 한다.
@@ -1135,23 +1040,8 @@ function createBacktestCanvas(options) {
   // 폴더를 못 만들어 화면 버퍼로 연 것이다. 셋(초안·내 기법·프리셋) 중 하나가 서 있으면
   // 기법 하나의 화면(workspaceActive)이다.
   let presetProject = null;
-  let pendingQuestion = null;
-  let pendingPatch = null;
-  // ── 코드 전용 분기·버전 되열기(US-010) ────────────────────────────────────
-  // 코드가 정본이 된 전략. 지도 탭은 마지막 호환 그래프 snapshot을 읽기 전용으로만
-  // 그리고, 어디에서도 '동기화됨'을 말하지 않는다(그것이 이 분기의 전부다).
-  let codeOnly = false;
-  let codeOnlyGraph = null;
-  // 이력에서 다시 연 버전 — 읽기 전용이다. [이 버전으로 편집]이 작업 초안으로 옮긴다.
+  // 이력에서 다시 연 버전 — 그 버전의 원문이 코드 탭에 서고 머리에 배지가 붙는다.
   let openedVersion = null;
-  // 읽기 전용 snapshot 전용 편집기. 편집용 편집기와 나누는 이유 둘: readOnly는 생성
-  // 옵션이라 나중에 못 바꾸고, 같은 인스턴스를 재활용하면 되돌리기 이력이 snapshot과
-  // 지금 초안 사이에서 섞인다.
-  let snapshotEditor = null;
-  let snapshotHost = null;
-  let snapshotShown = null;
-  // 서버가 본 최신 머리 — 409로 돌아온 자리에서 [다시 검토]가 다시 읽어 갈아 끼운다.
-  let visualBase = null;
 
   function setState(patch) {
     state = Object.assign({}, state, patch);
@@ -1303,8 +1193,7 @@ function createBacktestCanvas(options) {
     // 것인지 아무도 모르게 된다.
     setState({
       restore: null,
-      formErrors: [], codeErrors: [], codeFromMap: false, designTab: 'form', mapVersion: 1,
-      codeSpan: null, visualCodeAhead: false, diagnosis: null,
+      formErrors: [], codeErrors: [], designTab: 'form', mapVersion: 1, diagnosis: null,
     });
     // 칸 판정(진단 제목·영수증의 ①~④)은 이 페이로드에서 읽는다 — 그리는 지도는
     // 없어졌지만 어느 칸이 멈췄고 무엇이 바뀌었는지는 여전히 백엔드가 안다.
@@ -1338,8 +1227,7 @@ function createBacktestCanvas(options) {
     presetProject = { presetId: preset.id, projectId: null };
     setState({
       view: 'design', tab: 'design', designTab: 'code', restore: null, mapVersion: 1,
-      formErrors: [], codeErrors: [], codeFromMap: false, codeSpan: null,
-      visualCodeAhead: false, diagnosis: null, flowRange: null, fileDraft: null,
+      formErrors: [], codeErrors: [], diagnosis: null, flowRange: null, fileDraft: null,
     });
     const stillMine = () => generation === workspaceGeneration
       && presetProject && presetProject.presetId === preset.id;
@@ -1435,7 +1323,7 @@ function createBacktestCanvas(options) {
     // 기법 하나의 화면(보드 20)이다 — 첫 표면은 그 파일의 코드고 지도는 없다.
     setState({
       view: 'design', tab: 'design', formErrors: [], codeErrors: [], designTab: 'code',
-      mapVersion: 1, codeSpan: null, fileDraft: null,
+      mapVersion: 1, fileDraft: null,
     });
     const opened = await ide.openAt(entry.project_id, entry.path);
     if (generation !== workspaceGeneration) return;
@@ -1478,8 +1366,6 @@ function createBacktestCanvas(options) {
       activeVersionId,
       runPath,
       codeSource,
-      codeOnly,
-      codeOnlyGraph,
       openedVersion,
       ideOwnsCode,
       deploySignals,
@@ -1514,8 +1400,6 @@ function createBacktestCanvas(options) {
     activeVersionId = snap.activeVersionId;
     runPath = snap.runPath;
     codeSource = snap.codeSource;
-    codeOnly = snap.codeOnly;
-    codeOnlyGraph = snap.codeOnlyGraph;
     openedVersion = snap.openedVersion;
     ideOwnsCode = snap.ideOwnsCode;
     deploySignals = snap.deploySignals;
@@ -1581,8 +1465,6 @@ function createBacktestCanvas(options) {
     strategyId = null;
     activeVersionId = null;
     lastError = null;
-    codeOnly = false;
-    codeOnlyGraph = null;
     openedVersion = null;
     codegenCache = null;
     // 폴더도 내려놓는다 — 잠재우면(suspend) 활성 파일과 폴더가 화면·컨텍스트에서 사라지고,
@@ -1596,8 +1478,8 @@ function createBacktestCanvas(options) {
     pendingScrollTop = homeScrollTop || null;
     setState({
       view: 'design', tab: 'design', designTab: 'code', mapVersion: 0, message: null,
-      restore: null, formErrors: [], codeErrors: [], codeFromMap: false, codeSpan: null,
-      visualCodeAhead: false, diagnosis: null, flowRange: null, fileDraft: null, map: null,
+      restore: null, formErrors: [], codeErrors: [], diagnosis: null,
+      flowRange: null, fileDraft: null, map: null,
     });
   }
 
@@ -2216,10 +2098,6 @@ function createBacktestCanvas(options) {
     // 환경 잡은 실행과 무관하게 돈다 — 모드를 나갔다 와도 진행 줄이 다시 흐른다.
     const project = projectIde ? projectIde.currentProject() : null;
     if (envTimer == null && state.envJobId && project) pollEnvJob(project.id);
-    // 출처 잡도 같다 — 채팅에 주소를 붙인 뒤 다른 모드로 갔다 오면 진행 줄이 멈춘 채로
-    // 남는다(폴링은 화면이 숨으면 재예약 없이 끝난다). 잡은 백엔드에서 계속 도는 중이라
-    // 다시 물어보면 그 자리에서 이어진다.
-    if (sourceTimer == null && state.sourceJobId && isSourcing()) pollSourceMap();
     if (pollTimer != null) return;
     if (state.view !== 'running') return;
     if (state.jobId && !state.runId) pollJob();
@@ -2491,235 +2369,6 @@ function createBacktestCanvas(options) {
     // "지도와 일치"가 거짓말이 된다.
     void loadMap();
     return receipt;
-  }
-
-  // ── 보드 17 · 출처에서 지도로 ─────────────────────────────────────────────
-  //
-  // 채팅에 붙인 주소 하나가 지도가 되는 동안 사람은 진행만 본다. 화면이 하는 일은 셋이다:
-  // 잡을 띄우고, 1초마다 그 상태를 읽고, 받은 것만 그린다. 단계 이름·부제·칸 문장은 전부
-  // 잡이 준다 — 화면이 그것을 지어내면 "지도가 3/5"라고 말하면서 실제로는 아무것도 안
-  // 도는 껍데기가 된다.
-
-  function isSourcing() {
-    return state.view === 'sourcing';
-  }
-
-  function sourceJob() {
-    return state.source || null;
-  }
-
-  function stopSourcePolling() {
-    if (sourceTimer != null && clearTimeoutImpl) clearTimeoutImpl(sourceTimer);
-    sourceTimer = null;
-  }
-
-  function abandonSourceJob(jobId) {
-    if (!jobId || !deps.sourceMapCancel) return;
-    try { void Promise.resolve(deps.sourceMapCancel({ job_id: jobId })).catch(() => {}); }
-    catch { /* 이미 끝난 잡 */ }
-  }
-
-  function applySourceAction(envelope) {
-    const url = typeof envelope.url === 'string' ? envelope.url.trim() : '';
-    if (!url) return null;
-    const note = envelopeNote(envelope);
-    if (isBusyView()) return busyReceipt('source_url', note);
-    if (!deps.sourceMapStart) {
-      return remember(makeReceipt('source_url', {
-        note, errors: ['이 화면에는 출처 연결이 없습니다'],
-      }));
-    }
-    // 첫 프레임은 왕복을 기다리지 않는다 — 기다리면 사람이 붙인 주소가 몇 초 동안
-    // 아무 데도 안 보인다. 다섯 줄은 잡이 답하는 순간 채워진다.
-    // mapVersion을 0으로 되돌리는 이유: 이건 **새 전략**이라 앞 전략이 몇 판까지 갔든
-    // 머리는 「지도 v0」이어야 한다(잡이 만드는 지도의 version도 0이다).
-    sourceReadCardSent = false;
-    // 앞 주소의 잡이 아직 돌고 있으면 화면에서 내리기 전에 멈춘다 — 버려둔 잡은 아무도
-    // 안 보는 채로 바깥 페이지를 계속 받아 온다.
-    abandonSourceJob(state.sourceJobId);
-    setState({ view: 'sourcing', source: null, sourceJobId: null, mapVersion: 0 });
-    void startSourceMap(url);
-    // 채팅에는 카드를 내지 않는다 — 보드 17의 채팅은 사람 말풍선 다음에 「출처 읽음」
-    // 하나뿐이다. 그 카드는 출처를 실제로 읽은 뒤 emitSourceReadCard가 낸다.
-    return null;
-  }
-
-  async function startSourceMap(url) {
-    stopSourcePolling();
-    const generation = workspaceGeneration;
-    let res;
-    try { res = await deps.sourceMapStart({ url }); }
-    catch (err) { if (generation === workspaceGeneration) fail(err); return; }
-    if (generation !== workspaceGeneration || !isSourcing()) return;
-    setState({ sourceJobId: res.job_id });
-    pollSourceMap();
-  }
-
-  function pollSourceMap() {
-    stopSourcePolling();
-    const generation = workspaceGeneration;
-    const jobId = state.sourceJobId;
-    const tick = async () => {
-      sourceTimer = null;
-      // [멈추기]는 예약된 타이머만 지운다 — 이미 떠 있던 왕복은 못 막는다. 그 왕복이
-      // 늦게 돌아와 폴링을 되살리면 사람이 멈춘 연쇄가 혼자 이어진다(pollJob과 같은 규율).
-      if (generation !== workspaceGeneration || !jobId || state.sourceJobId !== jobId || !isSourcing() || !isVisible()) return;
-      let job;
-      try {
-        job = deps.sourceMapStatus
-          ? await deps.sourceMapStatus({ job_id: jobId })
-          : null;
-      } catch (err) {
-        if (generation === workspaceGeneration && state.sourceJobId === jobId) fail(err);
-        return;
-      }
-      if (generation !== workspaceGeneration || state.sourceJobId !== jobId || !isSourcing() || !isVisible()) return;
-      if (!job) { schedulePollSource(tick); return; }
-      emitSourceReadCard(job);
-      setState({ source: job });
-      if (job.status === 'failed') {
-        setState({ view: 'error', message: job.error || '출처를 지도로 만들지 못했습니다' });
-        return;
-      }
-      // 멈춘 잡은 오류가 아니다 — 사람이 멈춘 것이라 설계 화면으로 돌려보낸다.
-      if (job.status === 'cancelled') { setState({ view: 'design', tab: 'design' }); return; }
-      if (job.status === 'done') { adoptSourceMap(job); return; }
-      schedulePollSource(tick);
-    };
-    tick();
-  }
-
-  // 다 그린 지도는 이제 **이 화면의 전략**이다 — 화면이 적어 둔 「다 그려지면 대화로 고칠
-  // 수 있습니다」가 가리킨 다음 칸이 여기다. 잡이 만든 스펙을 폼으로 옮기고 설계 화면으로
-  // 넘긴다(지도는 그 스펙으로 다시 그린다 — 같은 지도를 만드는 자리를 둘로 두지 않는다).
-  function adoptSourceMap(job) {
-    stopSourcePolling();
-    // 옮길 스펙이 없으면 이 화면은 끝난 잡 위에 「만드는 중」을 세운 채로 굳는다.
-    if (!job.spec_yaml) {
-      setState({
-        view: 'error', message: '출처를 지도로 만들지 못했습니다', sourceJobId: null,
-      });
-      return;
-    }
-    adoptSpecYaml(job.spec_yaml);
-    // 아래 여섯 줄은 selectPreset이 새 전략을 세울 때 하는 것과 같다 — 앞 전략의 코드
-    // 경로를 남기면 새 지도를 남의 파이썬으로 그리고(mapRequest), 앞 실행의 오류가
-    // 새 전략의 칸에 붙는다(runErrorForMap).
-    runPath = 'form';
-    codeSource = '';
-    userStrategyId = null;
-    if (projectIde && typeof projectIde.closeAll === 'function') projectIde.closeAll();
-    ideOwnsCode = false;
-    techniqueDraft = false;
-    resetTechnique();
-    lastError = null;
-    clearRestoreMarks();
-    setState({
-      view: 'design', tab: 'design', designTab: 'flow',
-      source: null, sourceJobId: null, mapVersion: 1,
-      formErrors: [], codeErrors: [], codeFromMap: false, codeSpan: null, diagnosis: null,
-    });
-    void loadMap();
-  }
-
-  // 이 카드만 `guard` 한 칸을 더 든다(기본 봉투에는 없다) — 남이 쓴 글을 화면에 옮긴
-  // 자리에 붙는 한 줄이라 다른 영수증이 질 이유가 없다.
-  // 출처를 읽은 그 한 번만 채팅에 카드를 낸다(보드 17의 「출처 읽음」). 무엇을 읽었는지와
-  // 무엇을 뽑았는지는 잡이 준 값이고, 방어 문장은 그 카드에 늘 붙는다 — 남이 쓴 글이
-  // 화면에 들어오는 자리에서 그 사실을 한 번은 말해야 한다.
-  function emitSourceReadCard(job) {
-    const read = ((job && job.steps) || []).find((s) => s && s.id === 'read');
-    if (!read || read.state !== 'done' || sourceReadCardSent) return;
-    sourceReadCardSent = true;
-    const rows = (job.rules || []).map((rule) => ({
-      label: rule.kind_ko, before: null, after: rule.text,
-    }));
-    emitChatCard(remember(makeReceipt('source_read', {
-      applied: true, note: [job.title, read.meta_ko].filter(Boolean).join(' · ') || null,
-      rows, guard: SOURCE_DATA_ONLY_NOTE,
-    })));
-  }
-
-  function schedulePollSource(tick) {
-    if (setTimeoutImpl) sourceTimer = setTimeoutImpl(tick, POLL_INTERVAL_MS);
-  }
-
-  async function cancelSourceMap() {
-    const jobId = state.sourceJobId;
-    stopSourcePolling();
-    setState({ sourceJobId: null, view: 'design', tab: 'design' });
-    if (jobId && deps.sourceMapCancel) {
-      try { await deps.sourceMapCancel({ job_id: jobId }); } catch { /* 이미 끝난 잡 */ }
-    }
-  }
-
-  // 진행 띠(보드 18 F칸의 로딩 4요소) — 지금 하는 일 · 몇 단계 중 몇 · 남은 시간 · 멈추기.
-  // 넷 중 하나라도 값이 없으면 그 조각을 빼고 그린다(빈 자리에 0을 채우지 않는다).
-  function renderSourceProgress() {
-    const job = sourceJob();
-    const wrap = el('div', 'backtest-source-progress');
-    const head = el('div', 'backtest-source-progress-head');
-    head.appendChild(el('span', 'backtest-source-spinner', ''));
-    const counted = job && job.step_index != null && job.step_total != null
-      ? `${SOURCE_PROGRESS_TITLE} — ${job.step_index}/${job.step_total} 단계`
-      : SOURCE_PROGRESS_TITLE;
-    const eta = job && job.eta_seconds != null ? ` · 약 ${job.eta_seconds}초 남음` : '';
-    head.appendChild(el('span', 'backtest-source-progress-text', `${counted}${eta}`));
-    head.appendChild(button('backtest-source-stop', SOURCE_STOP_LABEL, () => {
-      void cancelSourceMap();
-    }));
-    wrap.appendChild(head);
-
-    const steps = el('div', 'backtest-source-steps');
-    ((job && job.steps) || []).forEach((step) => {
-      const row = el('div', `backtest-source-step is-${step.state || 'todo'}`);
-      row.appendChild(el(
-        'div', 'backtest-source-step-title',
-        `${SOURCE_STEP_MARKS[step.state] || SOURCE_STEP_MARKS.todo} ${step.title_ko || ''}`.trim(),
-      ));
-      if (step.meta_ko) row.appendChild(el('div', 'backtest-source-step-meta', step.meta_ko));
-      steps.appendChild(row);
-    });
-    wrap.appendChild(steps);
-    return wrap;
-  }
-
-  // 대상 한 줄 — 출처가 말한 것이지 앱이 정한 것이 아니다. 그래서 값 옆에 늘 「확인 필요」가
-  // 서고, 아무것도 못 찾았으면 값 자체를 그리지 않는다(지어내지 않는다).
-  function renderSourceTarget() {
-    const job = sourceJob();
-    const wrap = el('div', 'backtest-source-target');
-    wrap.appendChild(el('span', 'backtest-source-target-label', SOURCE_TARGET_LABEL));
-    if (job && job.target_ko) {
-      wrap.appendChild(el('span', 'backtest-source-target-text', job.target_ko));
-    }
-    wrap.appendChild(el('span', 'backtest-source-target-badge', SOURCE_TARGET_PENDING));
-    wrap.appendChild(el('div', 'backtest-source-target-note', SOURCE_TARGET_NOTE));
-    return wrap;
-  }
-
-  function renderSourcing() {
-    const job = sourceJob();
-    const wrap = el('div', 'backtest-sourcing');
-    wrap.appendChild(renderSourceTarget());
-    wrap.appendChild(renderSourceProgress());
-    const map = el('div', 'backtest-flow-map');
-    if (job && job.map) {
-      Explain.renderFlowMap(map, job.map, {
-        // 만드는 중에는 칸을 눌러도 갈 곳이 없다 — 아직 폼도 코드도 없다.
-        onSelect: null,
-        subText: SOURCE_MAP_SUB,
-        mineBoundary: SOURCE_MINE_BOUNDARY,
-        // 만드는 중에는 서랍에 열 것이 없다 — 코드는 다 그린 지도와 함께 전략으로
-        // 넘어온다(adoptSourceMap). 잡이 ④를 끝낸 뒤라고 여기에 [코드 열기]를 세우면
-        // 이 화면에는 그 코드를 여는 자리가 없어 눌러도 아무 일도 안 하는 버튼이 된다.
-        drawer: { pendingText: SOURCE_CODE_PENDING },
-      });
-    } else {
-      map.appendChild(el('div', 'backtest-card-empty', '아직 그린 칸이 없습니다'));
-    }
-    wrap.appendChild(map);
-    return wrap;
   }
 
   // ── 파일 초안(결정 D4) — 채팅이 낸 파일은 diff로만 선다 ──────────────────────
@@ -3080,47 +2729,6 @@ function createBacktestCanvas(options) {
         // 있는 것은 대화뿐이라 여기 싣는다.
         facts: Array.isArray(node.facts) ? node.facts.slice() : [],
       })),
-      // 시각 설계(US-007) — 대화가 다루는 것은 이제 칸 설명이 아니라 이 그래프다.
-      // 아직 그래프가 없으면 null이고, 화면이 없는 노드를 지어내지 않는다.
-      graph: visualGraphContext(),
-      validation_state: visualState,
-      // 코드 전용으로 분기했는가(US-010) — 그렇다면 그래프는 마지막 호환 snapshot일
-      // 뿐이고, 모델이 "지도와 동기화됐다"고 말하면 그것은 거짓이다.
-      code_only: codeOnly,
-      hashes: visualHashes || null,
-      diagnostics: visualDiagnostics.map((d) => ({
-        code: d.code,
-        node_id: d.node_id || null,
-        port: d.port || null,
-        message_ko: d.message_ko || null,
-      })),
-      pendingQuestion: pendingQuestion
-        ? {
-          code: pendingQuestion.code || null,
-          question_ko: pendingQuestion.question_ko || null,
-          choices: (pendingQuestion.choices || []).map((c) => c.id),
-        }
-        : null,
-      pendingPatch: pendingPatch
-        ? {
-          patch_id: pendingPatch.patch_id || null,
-          graph_compatible: !!pendingPatch.graph_compatible,
-          summary_ko: pendingPatch.summary_ko || null,
-        }
-        : null,
-    };
-  }
-
-  // 그래프는 좌표를 빼고 싣는다 — 모델이 x·y를 읽을 이유가 없고, 컨텍스트만 두 배가 된다.
-  function visualGraphContext() {
-    if (!visualGraph) return null;
-    return {
-      nodes: (visualGraph.nodes || []).map((node) => ({
-        id: node.id, kind: node.kind, label: node.label || null, params: node.params || {},
-      })),
-      edges: (visualGraph.edges || []).map((edge) => ({
-        id: edge.id, from: edge.from, to: edge.to,
-      })),
     };
   }
 
@@ -3225,9 +2833,6 @@ function createBacktestCanvas(options) {
       coverageAsked = wantedCoverage;
       void loadCoverage();
     }
-    // 스펙이 바뀌면 지도 탭의 그래프도 그 스펙의 것이어야 한다 — 열쇠(yaml)가 같으면
-    // 다시 만들지 않는다. 폼 편집이 그래프로 흐르는 유일한 길이다.
-    void ensureVisualGraph();
     clear(container);
     if (state.view === 'empty') {
       container.appendChild(renderMessagePanel('', '기법을 불러오는 중입니다…'));
@@ -3281,8 +2886,7 @@ function createBacktestCanvas(options) {
         if (marks) body.appendChild(marks);
       }
     }
-    if (state.view === 'sourcing') body.appendChild(renderSourcing());
-    else if (state.view === 'approval') body.appendChild(renderApproval());
+    if (state.view === 'approval') body.appendChild(renderApproval());
     else if (state.view === 'running') body.appendChild(renderRunning());
     else if (state.view === 'diagnosis') body.appendChild(renderDiagnosisPanel());
     // 기법 하나의 화면(보드 20)에는 모드 탭이 없다 — 결과·이력·최적화·실매매도 전부
@@ -3388,19 +2992,10 @@ function createBacktestCanvas(options) {
   // 보드 01/03 헤더 — 전략 이름·버전, 모드 탭, 실행 버튼. 폼/코드 갈래와 그래프 검증
   // 상태는 없다 — 한 페이지가 한 알고리즘만 다룬다(2026-09-07 사용자 확정).
   function renderHeader() {
-    if (workspaceActive() && !isSourcing()) return renderWorkspaceHeader();
+    if (workspaceActive()) return renderWorkspaceHeader();
     const head = el('div', 'backtest-head');
     const title = el('div', 'backtest-head-title');
     title.appendChild(el('span', 'backtest-head-name', '팔라스 · 백테스트'));
-    // 출처에서 만드는 중에는 아직 이름도 판번호도 없다 — 무엇을 만들고 있는지만 적는다
-    // (보드 17 머리 「새 전략 · 출처에서 만드는 중 · 지도 v0」).
-    if (isSourcing()) {
-      title.appendChild(el('span', 'backtest-head-strategy', SOURCE_HEAD_NAME));
-      title.appendChild(el('span', 'backtest-head-state', SOURCE_HEAD_STATE));
-      title.appendChild(el('span', 'backtest-head-version', `지도 v${state.mapVersion || 0}`));
-      head.appendChild(title);
-      return head;
-    }
     if (spec) {
       title.appendChild(el('span', 'backtest-head-strategy', spec.name));
       if (activeVersionId) title.appendChild(el('span', 'backtest-head-version', '코드 버전 활성'));
@@ -3499,15 +3094,10 @@ function createBacktestCanvas(options) {
     // 고르게 하면 한 페이지가 여러 알고리즘을 세팅하는 화면이 된다(2026-09-07 사용자 지적).
     if (!spec) return wrap;
     wrap.appendChild(renderTargetCard());
-    // 내 전략은 지표·조건을 쓰지 않는다 — 신호를 만드는 것은 그 파일의 파이썬이다.
+    // 신호를 만드는 것은 그 폴더의 파이썬이다 — 폼에는 지표·조건 빌더가 없다.
     // 빈 조건 빌더를 세워두면 "여기를 채워야 도는가"라고 묻게 된다(실행은 이미 그
     // 칸들을 검사하지 않는다, runErrors 참고).
-    if (userStrategyId || presetProject) {
-      wrap.appendChild(renderUserParamsCard());
-    } else {
-      wrap.appendChild(renderIndicatorCard());
-      wrap.appendChild(renderConditionCards());
-    }
+    wrap.appendChild(renderUserParamsCard());
     wrap.appendChild(renderRiskCard());
     wrap.appendChild(renderFormErrors());
     wrap.appendChild(renderAssumptions());
@@ -3773,8 +3363,8 @@ function createBacktestCanvas(options) {
     ideOwnsCode = false;
     lastError = null;
     setState({
-      formErrors: [], codeErrors: [], codeFromMap: false, designTab: 'code', mapVersion: 1,
-      codeSpan: null, visualCodeAhead: false, diagnosis: null, flowRange: null,
+      formErrors: [], codeErrors: [], designTab: 'code', mapVersion: 1,
+      diagnosis: null, flowRange: null,
       technique: TECHNIQUE_EMPTY,
     });
     // 빈 뼈대는 검사하지 않는다 — 아무 신호도 만들지 않는 코드가 '통과'로 찍히면
@@ -4760,42 +4350,6 @@ function createBacktestCanvas(options) {
     return card;
   }
 
-  function renderIndicatorCard() {
-    const card = el('div', 'backtest-card');
-    const head = el('div', 'backtest-card-head');
-    head.appendChild(el('div', 'backtest-card-title', '지표'));
-    head.appendChild(el(
-      'div', 'backtest-card-note',
-      `${spec.indicators.length}종 사용 · 별칭으로 조건에서 부릅니다`,
-    ));
-    card.appendChild(head);
-
-    if (!spec.indicators.length) {
-      card.appendChild(el('div', 'backtest-card-empty', '이 전략은 지표를 쓰지 않습니다'));
-      return card;
-    }
-
-    spec.indicators.forEach((ind) => {
-      const row = el('div', 'backtest-indicator-row');
-      row.appendChild(el('span', 'backtest-indicator-id', ind.id));
-      row.appendChild(el('span', 'backtest-indicator-alias', ind.alias));
-      // $참조 파라미터만 슬라이더가 된다 — 리터럴은 전략이 고정한 값이라 사용자 축이 아니다.
-      Object.keys(ind.params || {}).forEach((key) => {
-        const raw = ind.params[key];
-        if (typeof raw !== 'string' || raw[0] !== '$') {
-          row.appendChild(el('span', 'backtest-indicator-fixed', `${key} ${raw}`));
-          return;
-        }
-        const name = raw.slice(1);
-        const p = spec.params[name];
-        if (!p) return;
-        row.appendChild(renderParamSlider(name, p));
-      });
-      card.appendChild(row);
-    });
-    return card;
-  }
-
   function renderParamSlider(name, p) {
     const wrap = el('div', 'backtest-param');
     wrap.appendChild(el('span', 'backtest-param-name', name));
@@ -4814,82 +4368,6 @@ function createBacktestCanvas(options) {
     wrap.appendChild(slider);
     wrap.appendChild(value);
     wrap.appendChild(el('span', 'backtest-param-range', `${p.min} – ${p.max}`));
-    return wrap;
-  }
-
-  function renderConditionCards() {
-    const row = el('div', 'backtest-condition-row');
-    [['entry', '진입 조건'], ['exit', '청산 조건']].forEach(([side, label]) => {
-      const card = el('div', 'backtest-card backtest-condition-card');
-      const head = el('div', 'backtest-card-head');
-      head.appendChild(el('div', 'backtest-card-title', label));
-      const group = spec[side];
-      const logicBtn = button(
-        `backtest-logic-badge is-${group.logic.toLowerCase()}`,
-        SpecModel.LOGIC_LABELS[group.logic],
-        () => {
-          spec = SpecModel.setLogic(spec, side, group.logic === 'AND' ? 'OR' : 'AND');
-          render();
-        },
-      );
-      head.appendChild(logicBtn);
-      card.appendChild(head);
-
-      group.conditions.forEach((cond, index) => {
-        const line = el('div', 'backtest-condition');
-        const opLabel = (SpecModel.OPERATORS.find((o) => o[0] === cond.operator) || [])[1]
-          || cond.operator;
-        line.appendChild(el('span', 'backtest-condition-name', cond.indicator));
-        line.appendChild(el('span', 'backtest-condition-op', opLabel));
-        line.appendChild(el('span', 'backtest-condition-target', cond.compare_to));
-        line.appendChild(button('backtest-condition-remove', '×', () => {
-          spec = SpecModel.removeCondition(spec, side, index);
-          render();
-        }));
-        card.appendChild(line);
-      });
-
-      card.appendChild(renderConditionAdder(side));
-      row.appendChild(card);
-    });
-    return row;
-  }
-
-  function renderConditionAdder(side) {
-    const wrap = el('div', 'backtest-condition-add');
-    const names = SpecModel.referenceNames(spec);
-    const left = el('select', 'backtest-condition-select');
-    names.forEach((n) => {
-      const opt = el('option', '', n);
-      opt.value = n;
-      left.appendChild(opt);
-    });
-    const op = el('select', 'backtest-condition-select');
-    SpecModel.OPERATORS.forEach(([value, label]) => {
-      const opt = el('option', '', label);
-      opt.value = value;
-      op.appendChild(opt);
-    });
-    const right = el('input', 'backtest-field-input backtest-condition-target-input');
-    right.type = 'text';
-    right.placeholder = '이름 또는 숫자';
-    left.setAttribute('aria-label', `${side} 조건 왼쪽`);
-    op.setAttribute('aria-label', `${side} 조건 연산자`);
-    right.setAttribute('aria-label', `${side} 조건 오른쪽`);
-
-    wrap.appendChild(left);
-    wrap.appendChild(op);
-    wrap.appendChild(right);
-    wrap.appendChild(button('backtest-condition-add-button', '조건 추가', () => {
-      const raw = String(right.value || '').trim();
-      if (!raw) return;
-      spec = SpecModel.addCondition(spec, side, {
-        indicator: left.value,
-        operator: op.value,
-        compare_to: /^-?\d+(\.\d+)?$/.test(raw) ? Number(raw) : raw,
-      });
-      render();
-    }));
     return wrap;
   }
 
@@ -4947,31 +4425,6 @@ function createBacktestCanvas(options) {
   function renderCodeTab() {
     const wrap = el('div', 'backtest-code-tab');
     const workspace = workspaceActive();
-    if (!workspace) {
-      // 손으로 고친 초안이 마지막 생성 산출물과 다르면 여기서 갈래를 묻는다(US-010) —
-      // 자동 왕복은 없다. 두 버튼은 지도 서랍의 [지도로 되돌리기]와 같은 결정을 두 번
-      // 두지 않기 위해 이 한 자리에만 선다(초안이 있는 곳이 여기다). 기법 하나의 화면에는
-      // 지도가 없으니 갈래도 없다.
-      //
-      // 자리만 먼저 잡고 내용은 onChange가 채운다 — 갈래는 사람이 **고치는 도중에** 서야
-      // 하는데, 한 글자마다 render()를 부르면 편집기가 통째로 새로 만들어져 캐럿과 한글
-      // 조합이 날아간다. 그래서 다시 그리지 않고 이 자리에만 붙였다 뗀다.
-      codeAheadHost = el('div', 'backtest-code-ahead-host');
-      codeAheadNode = null;
-      wrap.appendChild(codeAheadHost);
-      syncCodeAheadChoices();
-      // 지도에서 열고 들어왔으면 그 사실을 먼저 말한다(보드 14-E) — 여기서 손으로 고치면
-      // 지도가 진실이라는 규칙이 깨지는 순간이 시작된다.
-      if (state.codeFromMap) {
-        wrap.appendChild(el(
-          'div', 'backtest-code-frommap',
-          '여기서 고치면 지도와 어긋날 수 있습니다 — 웬만하면 대화로',
-        ));
-      }
-    } else {
-      codeAheadHost = null;
-      codeAheadNode = null;
-    }
     // 기법 폴더 편집기(보드 20)는 기법 하나의 화면에서만 선다 — 목록에서 고른 내 기법의
     // 폴더이거나 [+ 새 기법 만들기]가 만든 폴더다. 프리셋(yaml)은 폴더가 없어 단일 편집기다.
     // 편집기는 자기 루트 노드를 계속 들고 있다 — 여기서는 붙이고 왼쪽 열만 갱신한다.
@@ -4999,19 +4452,13 @@ function createBacktestCanvas(options) {
       value: codeSource,
       onChange: (next) => {
         codeSource = next;
-        syncCodeAheadChoices();
         // 검사는 전부 자동이다(사용자 확정) — 사람이 고친 것도 예외가 아니다.
         scheduleTechniqueCheck();
       },
-      onBackToNode: backToVisualNode,
     });
     if (state.flowRange) {
       editorHandle.highlightLines(state.flowRange.first, state.flowRange.last);
     }
-    // 노드에서 열고 들어온 연결은 매 그리기마다 되건다 — 한 번만 걸면 다음 render()에서
-    // 리본과 표식이 조용히 사라진다(편집기는 매번 새로 만들어진다).
-    applyCodeSpan();
-
     // 기법 하나의 화면에는 버튼이 없다(보드 20) — 검증은 자동이고 저장은 폴더의 일이다.
     if (workspace) {
       wrap.appendChild(renderCodeErrors());
@@ -5121,322 +4568,8 @@ function createBacktestCanvas(options) {
     return bounds;
   }
 
-  // ── 보드 11~14 · 흐름 지도(첫 표면) ───────────────────────────────────────
-  //
-  // 이 탭이 백테스트의 얼굴이다. 폼도 코드도 여기서 파생된다 — 폼은 이 지도의 입력칸이고,
-  // 코드는 아래 서랍 한 줄이다(사용자 확정 2026-09-03).
-
-  function renderFlowTab() {
-    const wrap = el('div', 'backtest-flow-tab');
-    if (!spec && !currentSource()) {
-      wrap.appendChild(el(
-        'div', 'backtest-card-empty',
-        '기법을 고르거나 코드를 쓰면 흐름 지도가 여기 그려집니다',
-      ));
-      return wrap;
-    }
-    // 코드 전용으로 분기했거나 이력에서 버전을 다시 열었으면 지도는 **읽기 전용
-    // snapshot**이다(US-010) — 편집 표면보다 먼저 걸러야 지난 그래프를 고치는 길이
-    // 애초에 생기지 않는다.
-    if (snapshotGraph()) { wrap.appendChild(renderSnapshotDesign()); return wrap; }
-    // 스펙 경로에서는 지도가 편집 표면이다(US-007) — 대상 한 줄과 코드 서랍은 그대로
-    // 편집기 위·아래에 남는다. 편집이 가능해졌다고 그 둘이 사라질 이유는 없다.
-    if (visualActive()) { wrap.appendChild(renderVisualDesign()); return wrap; }
-    // 코드 경로의 지도는 그래프로 되돌릴 수 없다 — 읽기 전용임을 먼저 말한다.
-    if (visualWired() && !isSpecPath()) {
-      wrap.appendChild(el('div', 'backtest-flow-codeonly', '코드 전용'));
-    }
-    if (state.visualNotice) {
-      wrap.appendChild(el('div', 'backtest-flow-notice', state.visualNotice));
-    }
-    wrap.appendChild(renderSummaryMap(true));
-    return wrap;
-  }
-
-  // 요약 지도(보드 15·16) — 칸 ①~④를 사람 말로, 오른쪽엔 지난 실행의 실제 값, 멈춘 칸엔
-  // 오류. 코드 경로에서는 이것이 지도의 전부이고, 스펙 경로에서는 편집기 위에 먼저 선다:
-  // 비개발자가 읽는 단위는 노드·연결이 아니라 "이 전략은 이렇게 흐릅니다"의 네 칸이다.
-  // 서랍(코드 열기)은 한 번만 그린다 — withDrawer=false면 부르는 쪽이 따로 그린다.
-  function renderSummaryMap(withDrawer) {
-    const wrap = el('div', 'backtest-flow-summary');
-    // 만드는 중이라는 사실을 그린다 — 빈 자리는 "기능이 죽었다"로 읽힌다.
-    if (state.mapLoading) {
-      const loading = el('div', 'backtest-flow-loading');
-      loading.appendChild(el('span', 'backtest-flow-spinner', ''));
-      loading.appendChild(el('span', 'backtest-flow-loading-text', '흐름 지도를 만드는 중…'));
-      wrap.appendChild(loading);
-    }
-    if (state.mapError) {
-      wrap.appendChild(el('div', 'backtest-flow-error', state.mapError));
-    }
-    // 만들지도 못했고 만드는 중도 아니면 왜 비었는지 적는다 — 지도가 첫 표면이라
-    // 이 자리가 비면 사용자는 백테스트 전체가 비었다고 읽는다.
-    if (!state.map && !state.mapLoading && !state.mapError) {
-      wrap.appendChild(el(
-        'div', 'backtest-card-empty',
-        deps.map ? '흐름 지도를 아직 만들지 못했습니다' : '이 화면에는 흐름 지도 연결이 없습니다',
-      ));
-    }
-    const map = el('div', 'backtest-flow-map');
-    if (state.map) {
-      Explain.renderFlowMap(map, state.map, {
-        onSelect: selectMapNode,
-        changedIds: new Set((lastChange && lastChange.nodes) || []),
-        target: mapTarget(),
-        // 오른쪽 사실이 어느 실행의 것인지 — 없으면 그 문장 자체를 적지 않는다.
-        lastRunLabel: state.runId ? String(state.runId).slice(0, 8) : null,
-        drawer: withDrawer ? {
-          fileLabel: codeFileLabel(),
-          matchesMap: !!(state.map.code && state.map.code.matches_map),
-          aheadOfMap: runPath === 'code' && !!spec,
-          onOpenCode: () => { void openCodeFromMap(); },
-          onBackToMap: backToMap,
-        } : null,
-      });
-    }
-    wrap.appendChild(map);
-    // 실행 전에 채울 것은 지도에서도 보여야 한다 — 대화가 폼을 채우고 사람은 지도를 본다.
-    wrap.appendChild(renderFormErrors());
-    // 멈춘 실행의 진단은 지도 아래에 붙는다(보드 12) — 고칠 자리가 그 칸이기 때문이다.
-    // lastError를 같이 보는 이유: 진단은 마지막 실패의 것이고, 그 뒤 실행이 성공하면
-    // 이미 지나간 진단이다(성공이 lastError를 지운다).
-    if (state.diagnosis && lastError) wrap.appendChild(renderDiagnosisPanel());
-    return wrap;
-  }
-
-  // 칸을 누르면 그 칸을 다루는 자리로 간다 — 코드 경로의 칸에는 실제 줄이 있어 편집기가
-  // 그 줄을 켜고, 폼 경로의 칸은 아직 코드가 없으므로 그 값을 고치는 폼으로 간다.
-  function selectMapNode(node) {
-    const range = Explain.lineRange(node);
-    if (range) setState({ flowRange: range, designTab: 'code' });
-    else setState({ designTab: 'form' });
-  }
-
-  // 서랍에 적히는 이름 — 파일이면 그 경로, 단일 편집기면 strategy.py, 폼 경로에서는
-  // 아직 파일이 아니라 지도에서 만들어지는 코드다.
-  function codeFileLabel() {
-    const active = activeProjectFile();
-    if (active) return active.path;
-    if (codeSource.trim()) return 'strategy.py';
-    return '생성됨';
-  }
-
-  // [코드 열기](보드 14-E) — 폼 경로에서는 지도 뒤의 코드가 아직 없다. 그때만 백엔드에
-  // 한 번 만들어 편집기에 얹는다(같은 폼이면 다시 만들지 않는다). **실행경로는 건드리지
-  // 않는다** — 코드를 열어봤다는 이유로 도는 것이 바뀌면 사람이 모르는 사이에 코드가 돈다.
-  // 대상 한 줄의 재료 — 코드 경로의 지도는 소스만 보고 그려져 백엔드가 종목·기간을
-  // 모른다. 코드로 돌아도 대상은 폼이 정하므로 그 줄은 여기서 채운다. 종목이 아직
-  // 없으면 null을 주고, 지도는 그 줄을 비운다(지어내지 않는다).
-  function mapTarget() {
-    if (!spec || !Array.isArray(spec.symbols) || !spec.symbols.length) return null;
-    return {
-      symbol: spec.symbols[0], period: spec.period, adjusted: spec.adjusted,
-      from: spec.fromDt || null, to: spec.toDt || null,
-    };
-  }
-
-  async function openCodeFromMap() {
-    const generation = workspaceGeneration;
-    if (runPath === 'code' || activeProjectFile() || !spec || !deps.codegen) {
-      setState({ designTab: 'code', codeFromMap: true });
-      return;
-    }
-    const yaml = currentYaml();
-    if (!codegenCache || codegenCache.yaml !== yaml) {
-      let res;
-      try { res = await deps.codegen({ yaml }); }
-      catch (err) {
-        if (generation === workspaceGeneration) setState({ mapError: String((err && err.message) || err) });
-        return;
-      }
-      if (generation !== workspaceGeneration) return;
-      codegenCache = { yaml, source: String((res && res.source) || '') };
-    }
-    codeSource = codegenCache.source;
-    setState({ designTab: 'code', codeFromMap: true, mapError: null });
-  }
-
-  // [지도로 되돌리기](보드 14-E) — 지도가 진실이므로 앞선 코드 초안을 버리고 폼 경로로
-  // 돌아간다. 코드를 남겨두면 "지도로 돌아왔다"고 말하면서 실행은 계속 그 코드가 돈다.
-  function backToMap() {
-    runPath = 'form';
-    codeSource = '';
-    setState({ designTab: 'flow', codeFromMap: false, codeErrors: [] });
-    void loadMap();
-  }
-
-  // ── US-010 · P3 왕복 경계(코드 전용 분기 · 버전 되열기) ────────────────────
-  //
-  // 지도와 코드가 갈라지는 순간은 하나뿐이다: 사람이 생성된 코드를 손으로 고쳤을 때.
-  // 그때 화면이 하면 안 되는 일이 코드→그래프 자동 왕복이다(연구 문서 §표현 불가능한
-  // 코드 수정 — 지원 subset으로 증명되지 않는 수정을 그래프로 추정하면 보이는 전략과
-  // 도는 전략이 갈라진다). 그래서 여기서는 갈래를 **묻기만** 한다:
-  //   ① [그래프에서 다시 만들기] = backToMap — 코드 초안을 버리고 그래프를 지킨다.
-  //   ② [코드 전용으로 분기]     = forkCodeOnly — 코드를 새 origin=code_only 버전으로
-  //      남기고, 지도는 마지막 호환 snapshot을 읽기 전용으로만 보여준다.
-  // 어느 쪽도 활성화가 아니고 실행이 아니다(그 둘은 여전히 별도의 버튼이다).
-
-  // 코드가 지도보다 앞섰는가 — 마지막으로 화면에 얹은 **생성 코드**와 다르면 사람이
-  // 손으로 고친 것이다. 이미 분기했으면 앞선 것이 아니라 그것이 정본이다.
-  function codeAheadOfMap() {
-    if (codeOnly || openedVersion) return false;
-    if (!codeSource.trim()) return false;
-    return codeSource !== lastGeneratedSource;
-  }
-
-  // 갈래 조각을 그 자리에 붙였다 뗀다 — 다시 그리지 않는 유일한 이유는 캐럿이다
-  // (renderCodeTab 머리말 참고). 상태가 뒤집힐 때만 움직인다.
-  function syncCodeAheadChoices() {
-    if (!codeAheadHost) return;
-    const want = codeAheadOfMap();
-    if (want === !!codeAheadNode) return;
-    if (want) {
-      codeAheadNode = renderCodeAheadChoices();
-      codeAheadHost.appendChild(codeAheadNode);
-      return;
-    }
-    codeAheadHost.removeChild(codeAheadNode);
-    codeAheadNode = null;
-  }
-
-  function renderCodeAheadChoices() {
-    const wrap = el('div', 'backtest-code-ahead');
-    wrap.appendChild(el('div', 'backtest-code-ahead-text', VISUAL_CODE_AHEAD));
-    wrap.appendChild(el(
-      'div', 'backtest-code-ahead-note',
-      '이 수정을 그래프로 옮길 수는 없습니다 — 어느 쪽을 정본으로 삼을지 고르세요',
-    ));
-    wrap.appendChild(button('backtest-code-ahead-regraph', CODE_ONLY_REGRAPH, backToMap));
-    wrap.appendChild(button('backtest-code-ahead-fork', CODE_ONLY_FORK, () => {
-      void forkCodeOnly();
-    }));
-    if (state.codeOnlyError) {
-      wrap.appendChild(el('div', 'backtest-code-ahead-error', state.codeOnlyError));
-    }
-    return wrap;
-  }
-
-  // 지금 초안을 origin=code_only 새 버전으로 남긴다. bundle은 싣지 않는다 — 서버가
-  // 422로 거절하고(api/backtest.py `_add_inactive_version`), 거절이 옳다: 그래프를 같이
-  // 저장하는 것은 동기화됐다고 서명하는 것과 같다. 활성화도 실행도 하지 않는다.
-  async function forkCodeOnly() {
-    const generation = workspaceGeneration;
-    const source = codeSource;
-    if (!source.trim()) return null;
-    if (!deps.addVersion) {
-      setState({ codeOnlyError: '이 화면에는 버전 저장 배선이 없습니다' });
-      return null;
-    }
-    let id;
-    try { id = await ensureStrategyId(source); }
-    catch (err) {
-      if (generation === workspaceGeneration) setState({ codeOnlyError: String((err && err.message) || err) });
-      return null;
-    }
-    if (generation !== workspaceGeneration) return null;
-    if (!id) { setState({ codeOnlyError: '전략을 먼저 저장해야 합니다' }); return null; }
-    let saved;
-    try {
-      saved = await deps.addVersion(id, {
-        source, origin: 'code_only', note: CODE_ONLY_NOTE,
-      });
-    } catch (err) {
-      if (generation !== workspaceGeneration) return null;
-      setState({ codeOnlyError: String((err && err.message) || err) });
-      return null;
-    }
-    if (generation !== workspaceGeneration) return null;
-    const from = state.mapVersion || 0;
-    const generated = lastGeneratedSource;
-    // 마지막 호환 그래프는 그대로 붙잡아 둔다 — 지도 탭이 그것을 읽기 전용으로 보여준다.
-    // 저장된 버전은 비활성이므로 activeVersionId는 건드리지 않는다(배포가 꺼진 버전을
-    // 집는 길을 만들지 않는다).
-    codeOnlyGraph = visualGraph;
-    codeOnly = true;
-    runPath = 'code';
-    lastGeneratedSource = source;
-    visualCompiled = null;
-    // 'synced'는 이 전략에 더는 쓸 수 없는 말이다 — 상태부터 되돌린다.
-    setVisualState('unvalidated', '');
-    setState({
-      codeOnlyError: null, visualCodeAhead: false, designTab: 'flow',
-      view: 'design', tab: 'design',
-      mapVersion: (saved && saved.version != null) ? saved.version : from + 1,
-    });
-    return emitChatCard(remember(makeReceipt('code_only', {
-      applied: true,
-      note: CODE_ONLY_NOTE,
-      rows: [codeRow(generated, source)],
-      version: { from, to: state.mapVersion },
-      version_id: (saved && saved.version_id) || null,
-      tab: state.tab,
-      designTab: state.designTab,
-    })));
-  }
-
-  // 읽기 전용으로 그릴 그래프 — 되연 버전의 그래프가 먼저고(code_only 버전에는 그래프가
-  // 없으므로 마지막 호환 snapshot으로 물러난다), 그 다음이 분기 당시의 snapshot이다.
-  function snapshotGraph() {
-    if (openedVersion) return openedVersion.graph || codeOnlyGraph;
-    if (codeOnly) return codeOnlyGraph;
-    return null;
-  }
-
-  function ensureSnapshotEditor() {
-    const graph = snapshotGraph();
-    if (!graph) return null;
-    if (!snapshotEditor) {
-      snapshotHost = el('div', 'backtest-visual-host is-snapshot');
-      snapshotEditor = VisualEditor.createVisualEditor(snapshotHost, {
-        registry: visualRegistry,
-        graph,
-        readOnly: true,
-        validation: { state: 'unvalidated', summary_ko: '' },
-        setTimeoutImpl,
-        clearTimeoutImpl,
-      });
-    } else if (snapshotShown !== graph) {
-      snapshotEditor.setGraph(graph);
-    }
-    snapshotShown = graph;
-    return snapshotEditor;
-  }
-
-  // 'origin=visual · v3 · 해시 gh-1' — 무엇을 보고 있는지를 지어내지 않고 그대로 적는다.
-  function openedVersionText() {
-    const hash = String((openedVersion.hashes
-      && (openedVersion.hashes.graph_hash || openedVersion.hashes.artifact_hash)) || '');
-    const parts = [`origin=${openedVersion.origin || '알 수 없음'}`, `v${openedVersion.version}`];
-    if (hash) parts.push(`해시 ${hash.slice(0, 12)}`);
-    return parts.join(' · ');
-  }
-
-  function renderSnapshotDesign() {
-    const wrap = el('div', 'backtest-visual is-snapshot');
-    wrap.appendChild(renderVisualTarget());
-    const head = el('div', 'backtest-visual-head');
-    head.appendChild(el('div', 'backtest-card-title', '마지막으로 그래프와 맞았던 지도'));
-    head.appendChild(el(
-      'div', 'backtest-snapshot-badge',
-      openedVersion && !codeOnly ? VERSION_READONLY_BADGE : CODE_ONLY_BADGE,
-    ));
-    wrap.appendChild(head);
-    if (ensureSnapshotEditor()) wrap.appendChild(snapshotHost);
-    else wrap.appendChild(el('div', 'backtest-card-empty', '이 버전에는 저장된 그래프가 없습니다'));
-    if (openedVersion) {
-      wrap.appendChild(button('backtest-version-edit', VERSION_EDIT_LABEL, () => {
-        editOpenedVersion();
-      }));
-    }
-    if (state.visualNotice) {
-      wrap.appendChild(el('div', 'backtest-flow-notice', state.visualNotice));
-    }
-    return wrap;
-  }
-
-  // 이력에서 버전 하나를 다시 연다. 되열기는 **읽기 전용**이다 — 지난 그래프를 그대로
-  // 편집 표면에 얹으면 지금 작업 중인 초안이 조용히 사라진다. 편집은 [이 버전으로
-  // 편집]이 한 번 더 눌려야 시작된다(그때 새 지도 판이 선다).
+  // 이력에서 버전 하나를 다시 연다 — 그 버전의 원문이 코드 탭에 서고, 무엇을 보고
+  // 있는지는 머리의 배지가 말한다. 저장된 spec_yaml이 있으면 폼도 그 버전의 것이다.
   async function openVersion(entry) {
     const generation = workspaceGeneration;
     if (!strategyId || !deps.versionDetail) {
@@ -5451,35 +4584,17 @@ function createBacktestCanvas(options) {
     }
     if (generation !== workspaceGeneration) return null;
     if (!detail) { setState({ historyError: '버전을 읽지 못했습니다' }); return null; }
-    const origin = detail.origin || entry.origin || null;
-    const source = String(detail.source || '');
-    codeSource = source;
-    // 되연 원문은 그때 생성된 것이지 사람이 방금 고친 초안이 아니다 — 앞섬으로 읽히면
-    // 되열기만 해도 분기 두 갈래가 뜬다.
-    lastGeneratedSource = source;
+    codeSource = String(detail.source || '');
     openedVersion = {
       id: entry.id,
       version: detail.version != null ? detail.version : entry.version,
-      origin,
-      graph: (detail.graph && typeof detail.graph === 'object') ? detail.graph : null,
+      origin: detail.origin || entry.origin || null,
       spec_yaml: detail.spec_yaml || null,
       hashes: detail.hashes || null,
     };
-    if (origin === 'code_only') {
-      codeOnly = true;
-      runPath = 'code';
-      // code_only 버전에는 저장된 그래프가 없다(서버가 bundle을 거절한다) — 지도에
-      // 세울 것은 지금 화면이 들고 있는 마지막 호환 그래프뿐이다. 없으면 없는 대로
-      // 지금까지의 읽기 전용 지도로 물러난다(지어내지 않는다).
-      if (!codeOnlyGraph) codeOnlyGraph = visualGraph;
-    } else if (openedVersion.spec_yaml) adoptSpecYaml(openedVersion.spec_yaml);
-    if (openedVersion.hashes) visualHashes = openedVersion.hashes;
-    visualCompiled = null;
-    setVisualState('unvalidated', '');
+    if (openedVersion.spec_yaml) adoptSpecYaml(openedVersion.spec_yaml);
     setState({
-      view: 'design', tab: 'design',
-      designTab: origin === 'code_only' ? 'code' : 'flow',
-      historyError: null, visualNotice: null, codeSpan: null, visualCodeAhead: false,
+      view: 'design', tab: 'design', designTab: 'code', historyError: null,
     });
     return openedVersion;
   }
@@ -5496,258 +4611,6 @@ function createBacktestCanvas(options) {
     catch (err) { setState({ historyError: String((err && err.message) || err) }); return; }
     setState({ historyError: null });
     await loadVersions();
-  }
-
-  // [이 버전으로 편집] — 되연 버전을 지금 작업 초안으로 삼는다. 새 지도 판이 서는
-  // 이유: 편집의 출발점이 바뀌었고, 서랍의 "지도 vN"이 이력의 번호를 계속 가리키면
-  // 그 숫자가 무엇을 센 것인지 아무도 모르게 된다.
-  function editOpenedVersion() {
-    const opened = openedVersion;
-    if (!opened) return { ok: false, reason: '다시 연 버전이 없습니다' };
-    openedVersion = null;
-    if (opened.graph) {
-      visualSyncing = true;
-      visualGraph = opened.graph;
-      visualGraphYaml = currentYaml();
-      if (visualEditor) visualEditor.setGraph(visualGraph);
-      visualSyncing = false;
-      codeOnly = false;
-      runPath = 'form';
-    }
-    visualCompiled = null;
-    setVisualState('unvalidated', '');
-    setState({
-      mapVersion: (state.mapVersion || 0) + 1,
-      designTab: opened.graph ? 'flow' : 'code',
-      view: 'design', tab: 'design',
-    });
-    return { ok: true, version: opened.version };
-  }
-
-  // ── US-007/008/009 · 시각 전략 편집기(지도 탭) ─────────────────────────────
-  //
-  // 지도가 첫 표면이라는 규칙은 그대로다. 바뀐 것은 **스펙 경로에서 그 지도가 읽기 전용이
-  // 아니라는 것**이다: 프리셋·폼으로 세운 전략은 /visual/from-spec으로 그래프가 되고, 그
-  // 그래프를 고치면 서버가 검증·컴파일해 폼과 코드가 따라온다. 코드 경로(내 전략·프로젝트
-  // 파일)는 그래프로 되돌릴 수 없으므로 지금까지의 읽기 전용 지도에 '코드 전용' 배지만
-  // 붙인다 — 편집기를 세워놓고 저장이 안 되는 화면을 만들지 않는다.
-  //
-  // **두 방향 동기화의 루프 차단.** 폼 → 그래프는 yaml 열쇠(visualGraphYaml)로, 그래프 →
-  // 폼은 visualSyncing 깃발로 막는다. 한쪽이 다른 쪽을 갱신하는 순간 그 열쇠를 같이 옮겨
-  // 두어, 되돌아온 변경이 다시 왕복을 시작하지 못하게 한다.
-  //
-  // **이 경로는 실행·백필·활성화·배포를 부르지 않는다.** 저장(POST versions, origin
-  // visual)까지가 끝이고 is_active=false는 서버가 강제한다.
-
-  function visualWired() {
-    return !!(deps.visualFromSpec && deps.visualValidate);
-  }
-
-  // 스펙 경로인가 — 프리셋·폼으로 세운 전략만 그래프로 되돌릴 수 있다.
-  function isSpecPath() {
-    return !!spec && !userStrategyId && !activeProjectFile() && runPath === 'form';
-  }
-
-  function visualActive() {
-    return visualWired() && isSpecPath() && !!visualGraph;
-  }
-
-  function visualNodeById(nodeId) {
-    const nodes = (visualGraph && Array.isArray(visualGraph.nodes)) ? visualGraph.nodes : [];
-    return nodes.find((node) => node.id === nodeId) || null;
-  }
-
-  // 편집기의 요약 바는 네 상태만 안다 — 'validating'은 그 사이의 시간이라 '검증 전'으로
-  // 넘긴다(없는 상태를 편집기에 지어내 보내지 않는다). 헤더의 점만 그 시간을 말한다.
-  function setVisualState(next, summary) {
-    visualState = next;
-    if (summary != null) visualSummary = summary;
-    if (visualEditor) {
-      visualEditor.setValidation({
-        state: next === 'validating' ? 'unvalidated' : next,
-        summary_ko: visualSummary,
-      });
-    }
-  }
-
-  async function ensureVisualRegistry() {
-    if (visualRegistry || visualRegistryAsked || !deps.visualRegistry) return;
-    visualRegistryAsked = true;
-    let payload;
-    // 팔레트가 비는 것이지 편집이 막히는 것이 아니다 — 못 읽었다고 지도를 접지 않는다.
-    try { payload = await deps.visualRegistry(); } catch { return; }
-    visualRegistry = payload || null;
-    if (visualEditor && visualRegistry) visualEditor.setRegistry(visualRegistry);
-    render();
-  }
-
-  // 스펙 한 벌마다 한 번만 그래프를 받는다 — 열쇠는 yaml이다. 같은 폼으로는 두 번
-  // 묻지 않고, 폼이 바뀌면 다시 묻는다.
-  //
-  // **세션 단위로 접는 빗장은 두지 않는다.** 예전에는 실패를 한 번 만나면 그 세션
-  // 내내 지도를 읽기 전용으로 굳혔다("라우트 없는 백엔드를 다시 묻지 않는다"). 그런데
-  // 실패의 대부분은 백엔드가 아니라 **그 폼**의 것이다: 대상이 아직 비었거나(422),
-  // 그 전략이 그래프 v1으로 그려지지 않는 모양이거나(422). 한 번이라도 그런 폼을
-  // 지나가면 그 뒤로는 무엇을 골라도 편집기가 서지 않았다 — 전수 실행에서 앞 섹션
-  // 하나가 뒤 섹션 전체의 지도를 지웠다(2026-09-03 실측 N01·O01). 라우트가 정말 없는
-  // 백엔드가 치르는 값은 폼이 바뀔 때마다 실패 왕복 한 번뿐이고, 그때 화면은 이유를
-  // 그대로 적는다(visualNotice) — 그 편이 조용히 굳는 것보다 낫다.
-  async function ensureVisualGraph() {
-    if (!visualWired() || !isSpecPath()) return;
-    const generation = workspaceGeneration;
-    const yaml = currentYaml();
-    if (visualGraphYaml === yaml) return;
-    visualGraphYaml = yaml;
-    let res;
-    try { res = await deps.visualFromSpec({ yaml }); }
-    catch (err) {
-      if (generation !== workspaceGeneration) return;
-      // 이 실패는 **이 폼**의 것이다(위 머리말 참고) — 다음 폼 편집이 열쇠를 바꿔
-      // 다시 묻는다. 앞 그래프는 버린다: 남겨두면 화면은 새 폼인데 편집기는 앞
-      // 전략의 노드를 그린다.
-      visualGraph = null;
-      setState({
-        visualNotice: '시각 설계를 열 수 없어 읽기 전용 지도로 돌아갑니다'
-          + ` — ${String((err && err.message) || err)}`,
-      });
-      return;
-    }
-    if (generation !== workspaceGeneration) return;
-    visualGraph = (res && res.graph) || null;
-    visualHashes = (res && res.hashes) || null;
-    visualDiagnostics = [];
-    visualCompiled = null;
-    visualPreview = null;
-    visualState = 'unvalidated';
-    visualSummary = '';
-    if (visualEditor && visualGraph) {
-      visualEditor.setGraph(visualGraph);
-      visualEditor.setDiagnostics([]);
-    }
-    void ensureVisualRegistry();
-    setState({ visualNotice: null });
-  }
-
-  function ensureVisualEditor() {
-    if (visualEditor) return visualEditor;
-    if (!visualGraph) return null;
-    visualHost = el('div', 'backtest-visual-host');
-    visualEditor = VisualEditor.createVisualEditor(visualHost, {
-      registry: visualRegistry,
-      graph: visualGraph,
-      diagnostics: visualDiagnostics,
-      validation: { state: visualState === 'validating' ? 'unvalidated' : visualState, summary_ko: visualSummary },
-      setTimeoutImpl,
-      clearTimeoutImpl,
-      onChange: onVisualChange,
-      onOpenCode: (nodeId) => { void openCodeAt(nodeId); },
-      onAskChat: (nodeId) => { void askVisualQuestion(nodeId); },
-      onValidate: () => { void runVisualValidate(); },
-      // "생성될 StrategySpec 보기"는 폼 탭이다 — 같은 값을 두 곳에서 그리지 않는다.
-      onShowSpec: () => { setState({ designTab: 'form' }); },
-    });
-    // 좁은 폭 배선 — 편집기는 setNarrow API만 갖고(자기 폭을 모른다), 여기서 잰다.
-    // 관측 첫 회도 콜백이 오므로(브라우저 계약) 초기 폭도 이 길로 들어온다.
-    if (typeof ResizeObserver !== 'undefined') {
-      let lastNarrow = null;
-      const host = visualHost;
-      const editor = visualEditor;
-      new ResizeObserver(() => {
-        const width = host.getBoundingClientRect().width;
-        if (width <= 0) return; // hidden(모드 이탈) — 0폭으로 서랍 상태를 뒤집지 않는다
-        const narrow = width < VISUAL_NARROW_PX;
-        if (narrow === lastNarrow) return;
-        lastNarrow = narrow;
-        editor.setNarrow(narrow);
-      }).observe(host);
-    }
-    return visualEditor;
-  }
-
-  function onVisualChange(graph) {
-    if (visualSyncing) return;
-    visualGraph = graph;
-    // 앞선 컴파일 산출물은 이 그래프의 것이 아니다 — 두면 코드 열기가 남의 줄을 연다.
-    visualCompiled = null;
-    setVisualState('validating');
-    if (visualTimer != null && clearTimeoutImpl) clearTimeoutImpl(visualTimer);
-    visualTimer = null;
-    if (!setTimeoutImpl) { void runVisualValidate(); return; }
-    visualTimer = setTimeoutImpl(() => {
-      visualTimer = null;
-      void runVisualValidate();
-    }, VISUAL_DEBOUNCE_MS);
-    render();
-  }
-
-  async function runVisualValidate() {
-    if (!deps.visualValidate || !visualGraph) return null;
-    const generation = workspaceGeneration;
-    setVisualState('validating');
-    render();
-    let res;
-    try { res = await deps.visualValidate({ graph: visualGraph }); }
-    catch (err) {
-      if (generation !== workspaceGeneration) return null;
-      const message = String((err && err.message) || err);
-      setVisualState('invalid', message);
-      setState({ visualNotice: message });
-      return null;
-    }
-    if (generation !== workspaceGeneration) return null;
-    visualDiagnostics = (res && Array.isArray(res.diagnostics)) ? res.diagnostics : [];
-    // 검증이 주는 hash에는 artifact_hash가 없다 — 그것은 **컴파일 산출물**의 hash라
-    // /validate가 낼 수 없는 값이다. 통째로 갈아끼우면 그래프가 유효하지 않게 된 순간
-    // base 코드 hash가 사라지고, 그 뒤의 [적용]은 서버에서 "base 코드가 그 사이 바뀌었다"
-    // (409)를 받는다. 수리 왕복이 쓰이는 유일한 상황이 정확히 그 순간이라, 질문→수정안→
-    // 적용은 **늘** 한 번 튕겼다(2026-09-03 실측 O07). 그래서 덮어쓰지 않고 겹쳐 쓴다.
-    if (res && res.hashes) visualHashes = Object.assign({}, visualHashes, res.hashes);
-    if (visualEditor) visualEditor.setDiagnostics(visualDiagnostics);
-    if (res && res.valid) {
-      visualPreview = null;
-      setVisualState('valid');
-      await runVisualCompile();
-      return res;
-    }
-    visualPreview = (res && res.preview)
-      ? { source: String(res.preview.source || ''), source_map: res.source_map || null }
-      : null;
-    visualCompiled = null;
-    setVisualState('invalid');
-    // 첫 오류는 지도 아래 "실행 전에 채울 것" 줄에도 남는다 — 폼만 보는 사람에게도 보여야
-    // 한다(기존 lastError 경로는 그대로다: 그것은 실행이 멈춘 사실이고 이건 설계의 사실이다).
-    const first = visualDiagnostics.find((d) => d.severity === 'error') || visualDiagnostics[0];
-    setState({ formErrors: first ? [first.message_ko || first.code] : [] });
-    return res;
-  }
-
-  async function runVisualCompile() {
-    if (!deps.visualCompile || !visualGraph) return null;
-    const generation = workspaceGeneration;
-    let res;
-    try { res = await deps.visualCompile({ graph: visualGraph }); }
-    catch (err) {
-      if (generation !== workspaceGeneration) return null;
-      setVisualState('invalid', String((err && err.message) || err));
-      render();
-      return null;
-    }
-    if (generation !== workspaceGeneration) return null;
-    visualCompiled = {
-      spec_yaml: String((res && res.spec_yaml) || ''),
-      // 구조화 스펙도 들고 있는다 — 저장할 bundle이 이것을 요구한다(서버가 spec_hash를
-      // 이 모델에서 다시 낸다). yaml을 화면이 다시 파싱해 만들면 파서가 둘이 된다.
-      spec: (res && res.spec) || null,
-      source: String((res && res.source) || ''),
-      source_map: (res && res.source_map) || null,
-      hashes: (res && res.hashes) || null,
-    };
-    if (visualCompiled.hashes) visualHashes = visualCompiled.hashes;
-    // 폼이 지도를 따라온다 — 사람이 폼 탭으로 가면 그래프가 만든 값이 거기 있어야 한다.
-    if (visualCompiled.spec_yaml) adoptSpecYaml(visualCompiled.spec_yaml);
-    setVisualState('synced');
-    setState({ formErrors: [], visualNotice: null });
-    return visualCompiled;
   }
 
   // 컴파일된 spec_yaml을 폼 스펙으로 옮긴다. 대상(종목·기간·수정주가·비용)은 그래프가
@@ -5767,114 +4630,9 @@ function createBacktestCanvas(options) {
     if (overrides.risk) next.risk = overrides.risk;
     else if (spec) next.risk = spec.risk;
     if (spec) { next.adjusted = spec.adjusted; next.costs = spec.costs; }
-    visualSyncing = true;
     spec = SpecModel.createSpec(null, Object.assign(next, kept));
-    // 폼이 그래프를 따라온 것이므로 이 yaml은 이미 그 그래프의 것이다 — 열쇠를 옮겨 두지
-    // 않으면 다음 render()가 같은 그래프를 다시 만들어 사람이 고친 편집을 덮는다.
-    visualGraphYaml = currentYaml();
-    visualSyncing = false;
   }
 
-  // ── 보드 13 · 노드에서 코드로 ─────────────────────────────────────────────
-  //
-  // 무엇을 여는가는 지금 검증 상태가 정한다: valid|synced면 컴파일이 만든 authoritative
-  // 산출물, 아니면 검증이 준 **미실행** preview다. 어느 쪽이든 spanIsValid()로 지금 코드가
-  // 그 map에서 나온 것인지 먼저 확인한다 — 어긋나면 비슷한 줄을 추정하지 않고 그 자리에
-  // 알리고 멈춘다(엉뚱한 줄을 원인이라고 말하는 것이 가장 나쁜 실패다).
-  function noticeOnCode(text) {
-    if (editorHandle && typeof editorHandle.showNotice === 'function') editorHandle.showNotice(text);
-  }
-
-  function refuseCodeJump(text) {
-    setState({ visualNotice: text });
-    noticeOnCode(text);
-    return false;
-  }
-
-  async function openCodeAt(nodeId) {
-    const authoritative = (visualState === 'valid' || visualState === 'synced') && !!visualCompiled;
-    const kind = authoritative ? 'authoritative' : 'preview';
-    const raw = authoritative
-      ? visualCompiled.source_map
-      : (visualPreview && visualPreview.source_map);
-    if (!raw) return refuseCodeJump(CodeEditor.STALE_NOTICE_TEXT);
-    const bundle = Object.assign({}, raw, { kind });
-    const source = authoritative ? visualCompiled.source : String(visualPreview.source || '');
-
-    // 사람이 손으로 고친 초안은 절대 덮지 않는다 — 그때는 코드가 지도보다 앞선 것이고,
-    // 그 사실을 말하는 것이 옳다(덮으면 사람이 친 것이 조용히 사라진다).
-    if (codeSource && codeSource !== lastGeneratedSource) {
-      setState({ visualCodeAhead: true });
-      return refuseCodeJump(CodeEditor.STALE_NOTICE_TEXT);
-    }
-    const check = await CodeEditor.spanIsValid(bundle, source);
-    if (!check.ok) return refuseCodeJump(CodeEditor.STALE_NOTICE_TEXT);
-
-    const entries = Array.isArray(bundle.entries) ? bundle.entries : [];
-    const entry = entries.find((e) => e.node_id === nodeId) || entries[0];
-    if (!entry || !entry.source_span) return refuseCodeJump(CodeEditor.STALE_NOTICE_TEXT);
-
-    const node = visualNodeById(entry.node_id);
-    const diag = visualDiagnostics.find((d) => d.node_id === entry.node_id) || null;
-    codeSource = source;
-    lastGeneratedSource = source;
-    setState({
-      view: 'design',
-      tab: 'design',
-      designTab: 'code',
-      codeFromMap: true,
-      visualCodeAhead: false,
-      visualNotice: null,
-      codeSpan: {
-        span: entry.source_span,
-        kind,
-        nodeId: entry.node_id || null,
-        label: (node && (node.label || node.kind)) || entry.node_id || null,
-        code: diag ? diag.code : null,
-        file: (entry.source_span && entry.source_span.file) || codeFileLabel(),
-        reason_ko: check.reason_ko,
-      },
-    });
-    return true;
-  }
-
-  // 열어둔 노드 연결을 편집기가 다시 만들어질 때마다 되건다 — render()가 편집기를 새로
-  // 만들기 때문에, 한 번만 부르면 다음 그리기에서 리본과 표식이 조용히 사라진다.
-  function applyCodeSpan() {
-    const info = state.codeSpan;
-    if (!info || !editorHandle) return;
-    const preview = info.kind === 'preview';
-    editorHandle.setFileMeta({
-      name: info.file,
-      generatedFromGraph: true,
-      compatMode: preview,
-    });
-    editorHandle.setPreviewOnly(preview, preview ? { reason_ko: info.reason_ko } : null);
-    editorHandle.openSpan(info.span, {
-      kind: info.kind,
-      node: { id: info.nodeId, label: info.label },
-      code: info.code,
-      file: info.file,
-    });
-    editorHandle.setLinkStatus({ linked: !preview });
-  }
-
-  // 코드 리본의 [시각 설계에서 보기] — 온 자리로 정확히 돌아간다.
-  function backToVisualNode(nodeId) {
-    const id = nodeId || (state.codeSpan && state.codeSpan.nodeId);
-    setState({ designTab: 'flow', codeFromMap: false });
-    if (id && visualEditor) {
-      visualEditor.select(id);
-      visualEditor.focusNode(id);
-    }
-  }
-
-  // ── US-009 · 대화형 오류 수정(질문 → 비활성 수정안 → 적용 → 동기화) ────────
-  //
-  // 아래 함수들은 chat.js의 카드 버튼이 부르는 자리다. 어느 것도 실행·백필·활성화·배포를
-  // 부르지 않는다 — 저장(origin visual)까지가 끝이고, 그 버전이 켜지지 않는다는 것은
-  // 서버가 강제한다.
-  //
   // **영수증이 채팅에 닿는 길.** 지금은 하나뿐이다: main이 보낸 액션에 onChatAction이
   // 돌려주는 값(chat.js의 'athena:backtest-chat-action' 구독). 카드 버튼에서 시작한 왕복은
   // 그 길이 없어서 문서 이벤트로 한 번 더 낸다 — chat.js가 'athena:backtest-receipt'를
@@ -5888,318 +4646,6 @@ function createBacktestCanvas(options) {
       }
     } catch { /* CustomEvent가 없는 하네스 */ }
     return receipt;
-  }
-
-  // 모델이 낸 질문·수정안은 화면을 바꾸지 않는다 — 대기 상태로 세워두고 카드만 만든다.
-  function visualQuestionAction(envelope) {
-    const question = envelope.question || envelope.payload || null;
-    if (!question || typeof question !== 'object') return null;
-    pendingQuestion = question;
-    return remember(makeReceipt('visual_question', {
-      note: envelopeNote(envelope), question,
-    }));
-  }
-
-  function visualPatchAction(envelope) {
-    const patch = envelope.patch || envelope.payload || null;
-    if (!patch || typeof patch !== 'object') return null;
-    pendingPatch = patch;
-    return remember(makeReceipt('visual_patch', {
-      note: envelopeNote(envelope), patch, version: bumpMapVersion(),
-    }));
-  }
-
-  // patch가 서명할 base — 409 뒤 [다시 검토]가 서버에서 다시 읽어 갈아 끼운다(US-010).
-  // visualBase가 비어 있으면 지금까지처럼 화면이 들고 있는 값이 base다.
-  function visualBaseHash() {
-    return String((visualBase && visualBase.graph_hash)
-      || (visualHashes && visualHashes.graph_hash) || '');
-  }
-
-  function baseVersionId() {
-    return String((visualBase && visualBase.version_id) || activeVersionId || '');
-  }
-
-  function baseArtifactHash() {
-    return String((visualBase && visualBase.artifact_hash)
-      || (visualCompiled && visualCompiled.hashes && visualCompiled.hashes.artifact_hash)
-      || (visualHashes && visualHashes.artifact_hash) || '');
-  }
-
-  // 409는 "그 사이 세상이 바뀌었다"는 사실이다 — 다시 묻기 전에 서버의 머리를 다시
-  // 읽지 않으면 다음 수정안도 같은 옛 base로 서명돼 같은 409를 다시 받는다(연구 문서
-  // §주요 리스크와 방어선 — base version/hash optimistic concurrency).
-  async function refreshVisualBase() {
-    if (!strategyId || !deps.versions) return null;
-    const generation = workspaceGeneration;
-    const id = strategyId;
-    let list;
-    try { list = await deps.versions(id); } catch { return null; }
-    if (generation !== workspaceGeneration) return null;
-    const head = (Array.isArray(list) ? list : []).reduce(
-      (best, v) => (best && Number(best.version) >= Number(v.version) ? best : v), null,
-    );
-    if (!head || !head.id) return null;
-    const base = { version_id: head.id, graph_hash: null, artifact_hash: null };
-    // 머리 버전에 저장된 bundle이 없으면(사람이 손으로 쓴 버전·code_only 분기) 서버는
-    // 해시를 주지 않는다. 그때 base 코드 해시를 비워 두면 baseArtifactHash()가 화면이
-    // 들고 있는 **시각 산출물**의 해시로 물러나 서명하고, 서버는 다시 "base 코드가 그
-    // 사이 바뀌었다"(409)를 낸다 — [다시 검토]를 몇 번 눌러도 같은 자리를 도는 막다른
-    // 길이었다(2026-09-03 실측: 모델이 코드를 쓴 뒤의 왕복이 영영 적용되지 않았다).
-    // 목록이 그 버전의 원문을 함께 주므로, 재는 것은 여기서 직접 잰다.
-    if (typeof head.source === 'string' && head.source) {
-      try { base.artifact_hash = await CodeEditor.hashSource(head.source); }
-      catch { /* 못 재면 아래 detail의 해시로 간다 */ }
-      if (generation !== workspaceGeneration) return null;
-    }
-    if (deps.versionDetail) {
-      // 해시를 못 읽어도 버전 id는 갱신한다 — 절반이라도 새 base가 옛 base보다 낫다.
-      try {
-        const detail = await deps.versionDetail(id, head.id);
-        if (generation !== workspaceGeneration) return null;
-        const hashes = (detail && detail.hashes) || null;
-        if (hashes) {
-          base.graph_hash = hashes.graph_hash || null;
-          base.artifact_hash = hashes.artifact_hash || null;
-        }
-      } catch { /* 위 주석 그대로 */ }
-    }
-    if (generation !== workspaceGeneration) return null;
-    visualBase = base;
-    return base;
-  }
-
-  // 지금 그래프에서 막고 있는 오류 하나를 서버에 물어 카드로 낸다(검사기의 [대화로 수정]).
-  async function askVisualQuestion() {
-    if (!deps.visualQuestion || !visualGraph) return null;
-    const generation = workspaceGeneration;
-    let data;
-    try { data = await deps.visualQuestion({ graph: visualGraph, diagnostics: visualDiagnostics }); }
-    catch (err) {
-      if (generation === workspaceGeneration) setState({ visualNotice: String((err && err.message) || err) });
-      return null;
-    }
-    if (generation !== workspaceGeneration) return null;
-    const question = data && data.question;
-    if (!question) { pendingQuestion = null; return null; }
-    pendingQuestion = question;
-    return emitChatCard(remember(makeReceipt('visual_question', { question })));
-  }
-
-  // 카드에서 선택지를 고른 순간 — 비활성 수정안 하나를 만든다. 적용은 아직이다.
-  async function answerVisualQuestion(intent) {
-    const payload = intent || {};
-    if (!deps.visualPatch || !visualGraph) return null;
-    const generation = workspaceGeneration;
-    let data;
-    try {
-      data = await deps.visualPatch({
-        graph: visualGraph,
-        base_graph_hash: visualBaseHash(),
-        base_version_id: baseVersionId() || null,
-        intent: { code: payload.code, choice_id: payload.choice_id },
-      });
-    } catch (err) {
-      if (generation !== workspaceGeneration) return null;
-      return emitChatCard(remember(makeReceipt('visual_conflict', {
-        errors: [String((err && err.message) || err)],
-      })));
-    }
-    if (generation !== workspaceGeneration) return null;
-    pendingQuestion = null;
-    pendingPatch = data || null;
-    return emitChatCard(remember(makeReceipt('visual_patch', {
-      patch: data, version: bumpMapVersion(),
-    })));
-  }
-
-  // 저장할 전략이 아직 없으면 먼저 만든다 — 코드 탭의 [이 코드로 저장]과 같은 경로다.
-  async function ensureStrategyId(source) {
-    if (strategyId) return strategyId;
-    if (!deps.createStrategy) return null;
-    const generation = workspaceGeneration;
-    const created = await deps.createStrategy({
-      name: spec ? spec.name : '시각 전략', kind: 'python', source,
-    });
-    if (generation !== workspaceGeneration) return null;
-    strategyId = created && created.strategy_id;
-    if (created && created.version_id) activeVersionId = created.version_id;
-    return strategyId;
-  }
-
-  // 사람이 [적용]을 누른 그 순간 — 그래프에 얹고, 검증·컴파일하고, 새 버전으로 저장한다.
-  // 활성화하지 않는다. 실행하지 않는다. 그 둘은 여전히 별도의 버튼이다.
-  async function applyVisualPatch(patchId) {
-    const generation = workspaceGeneration;
-    const patch = pendingPatch;
-    if (!patch) return null;
-    if (patchId && patch.patch_id && patch.patch_id !== patchId) return null;
-    const baseArtifact = baseArtifactHash();
-    const from = state.mapVersion || 0;
-
-    visualSyncing = true;
-    visualGraph = patch.graph_after || visualGraph;
-    if (visualEditor && visualGraph) visualEditor.setGraph(visualGraph);
-    visualSyncing = false;
-    visualHashes = Object.assign({}, visualHashes, { graph_hash: patch.graph_after_hash });
-    visualCompiled = null;
-
-    await runVisualValidate();
-    if (generation !== workspaceGeneration) return null;
-    if (visualState !== 'synced' || !visualCompiled) {
-      return emitChatCard(remember(makeReceipt('visual_conflict', {
-        errors: ['수정안을 적용한 그래프가 아직 유효하지 않습니다'],
-      })));
-    }
-    if (!deps.visualSave) {
-      return emitChatCard(remember(makeReceipt('visual_conflict', {
-        errors: ['이 화면에는 시각 버전 저장 배선이 없습니다'],
-      })));
-    }
-    let id;
-    try { id = await ensureStrategyId(visualCompiled.source); }
-    catch (err) {
-      if (generation !== workspaceGeneration) return null;
-      return emitChatCard(remember(makeReceipt('visual_conflict', {
-        errors: [String((err && err.message) || err)],
-      })));
-    }
-    if (generation !== workspaceGeneration) return null;
-    if (!id) {
-      return emitChatCard(remember(makeReceipt('visual_conflict', {
-        errors: ['전략을 먼저 저장해야 합니다'],
-      })));
-    }
-    let saved;
-    try {
-      saved = await deps.visualSave({
-        strategy_id: id,
-        origin: 'visual',
-        yaml: visualCompiled.spec_yaml,
-        source: visualCompiled.source,
-        note: patch.summary_ko || null,
-        // 전부 /visual/compile이 낸 값 그대로다 — 화면이 다시 계산하는 것은 하나도 없다.
-        // compiler_version은 모르면 아예 안 싣는다(서버가 자기 것을 적는다) — null을
-        // 실어 보내면 "다른 컴파일러가 냈다"로 읽혀 422다.
-        bundle: Object.assign({
-          graph: visualGraph,
-          spec: visualCompiled.spec,
-          spec_yaml: visualCompiled.spec_yaml,
-          source_map: visualCompiled.source_map,
-          hashes: visualCompiled.hashes,
-        }, (visualCompiled.hashes && visualCompiled.hashes.compiler_version)
-          ? { compiler_version: visualCompiled.hashes.compiler_version } : {}),
-        apply_receipt: {
-          base_version_id: String(patch.base_version_id || baseVersionId()),
-          base_graph_hash: String(patch.base_graph_hash || ''),
-          base_artifact_hash: baseArtifact,
-          patch_id: String(patch.patch_id || ''),
-          patch_hash: String(patch.patch_hash || ''),
-          applied_at: new Date().toISOString(),
-        },
-      });
-    } catch (err) {
-      if (generation !== workspaceGeneration) return null;
-      // 409는 실패가 아니라 "그 사이 다른 수정이 먼저 저장됐다"는 사실이다 — 다시 검토로
-      // 돌려보낸다(retryVisualPatch가 그 자리다).
-      //
-      // **여기서 아무것도 버리지 않는다**(US-010). 얹어둔 그래프도, 대기 중인 수정안도
-      // 그대로 둔다: 저장이 거절된 것이지 사람이 검토한 수정이 틀린 것이 아니고, 버리면
-      // 사용자는 같은 대화를 처음부터 다시 해야 한다. 무엇을 갈아 끼워야 하는지는 base
-      // 하나뿐이고 그것은 [다시 검토]가 서버에서 다시 읽는다(refreshVisualBase).
-      if (err && err.status === 409) {
-        return emitChatCard(remember(makeReceipt('visual_conflict', {
-          errors: [String(err.message || err)],
-          patch,
-          canRetry: true,
-        })));
-      }
-      return emitChatCard(remember(makeReceipt('visual_conflict', {
-        errors: [String((err && err.message) || err)],
-      })));
-    }
-    if (generation !== workspaceGeneration) return null;
-    pendingPatch = null;
-    // 편집기가 들고 있던 것이 앞선 **생성** 산출물(미리보기·직전 컴파일)이면 새 산출물로
-    // 함께 옮긴다 — 옮기지 않으면 사람이 손대지도 않은 코드가 "코드가 지도보다 앞섬"으로
-    // 읽혀 갈래 두 개가 뜨고, 노드에서 코드로 내려가는 길이 막힌다. 사람이 손으로 고친
-    // 초안은 여기서도 절대 덮지 않는다(그때는 앞선 것이 맞다).
-    if (!codeSource || codeSource === lastGeneratedSource) codeSource = visualCompiled.source;
-    lastGeneratedSource = visualCompiled.source;
-    const to = (saved && saved.version != null) ? saved.version : from + 1;
-    // 저장된 버전은 **비활성**이다(서버가 강제한다) — activeVersionId를 여기로 옮기면
-    // 배포 화면이 켜진 적 없는 버전을 집는다(forkCodeOnly가 같은 이유로 안 건드린다).
-    // 다음 수정안이 서명할 base만 이 버전으로 옮긴다.
-    visualBase = {
-      version_id: (saved && saved.version_id) || null,
-      graph_hash: (visualCompiled.hashes && visualCompiled.hashes.graph_hash) || null,
-      artifact_hash: (visualCompiled.hashes && visualCompiled.hashes.artifact_hash) || null,
-    };
-    setState({ mapVersion: to, designTab: 'flow', view: 'design', tab: 'design' });
-    return emitChatCard(remember(makeReceipt('visual_synced', {
-      applied: true,
-      version: { from, to },
-      summary_ko: patch.summary_ko || null,
-      spec_diff: patch.spec_diff || null,
-      tab: state.tab,
-      designTab: state.designTab,
-    })));
-  }
-
-  function discardVisualPatch(patchId) {
-    if (patchId && pendingPatch && pendingPatch.patch_id && pendingPatch.patch_id !== patchId) {
-      return { ok: false, reason: '다른 수정안입니다' };
-    }
-    pendingPatch = null;
-    return { ok: true };
-  }
-
-  // [실행 전 검토] — 실행하지 않는다. 사람이 지도를 다시 보는 자리로 옮길 뿐이다.
-  function reviewBeforeRun() {
-    setState({
-      view: 'design', tab: 'design', designTab: 'flow', visualNotice: '실행 전 검토',
-    });
-    return { ok: true };
-  }
-
-  // 방금 패치가 건드린 첫 노드. graph_patch는 RFC 6902라 node_id를 직접 싣지 않는다
-  // (visual_repair._ops_to_patch는 {op, path, value}만 낸다) — path와 value에서 읽고,
-  // 못 읽으면 질문이 가리킨 노드, 그것도 없으면 지금 고른 노드다. 지어내지 않는다.
-  function patchedNodeId() {
-    const patch = pendingPatch;
-    const ops = (patch && Array.isArray(patch.graph_patch)) ? patch.graph_patch : [];
-    const nodes = (visualGraph && Array.isArray(visualGraph.nodes)) ? visualGraph.nodes : [];
-    for (let i = 0; i < ops.length; i += 1) {
-      const op = ops[i] || {};
-      const value = op.value || {};
-      if (value.to && value.to.node_id) return value.to.node_id;
-      if (value.id && String(op.path) === '/nodes/-') return value.id;
-      // '/nodes/3/params/period' → 3번 노드. 정규식 없이 자른다(경로 문법이 고정이다).
-      const path = String(op.path || '');
-      if (path.indexOf('/nodes/') === 0) {
-        const index = Number(path.slice('/nodes/'.length).split('/')[0]);
-        if (nodes[index]) return nodes[index].id;
-      }
-    }
-    if (pendingQuestion && pendingQuestion.node_id) return pendingQuestion.node_id;
-    return visualEditor ? visualEditor.getSelected() : null;
-  }
-
-  // [코드 열기] — 그 노드의 줄로 간다. 못 찾으면 map의 첫 칸이다(openCodeAt이 정한다).
-  function openCodeFromChat() {
-    return openCodeAt(patchedNodeId());
-  }
-
-  // [다시 검토] — **최신 base를 다시 읽고** 나서 지금 그래프를 다시 검증하고, 막고 있는
-  // 오류를 다시 하나 묻는다. base를 먼저 읽는 이유는 위 refreshVisualBase 머리말 그대로다.
-  async function retryVisualPatch() {
-    const generation = workspaceGeneration;
-    pendingPatch = null;
-    await refreshVisualBase();
-    if (generation !== workspaceGeneration) return null;
-    await runVisualValidate();
-    if (generation !== workspaceGeneration) return null;
-    return askVisualQuestion();
   }
 
   // ── 모드 워크스페이스(session-workspace.js) ───────────────────────────────
@@ -6255,7 +4701,6 @@ function createBacktestCanvas(options) {
       const patch = Object.assign({
         designTab: state.designTab,
         tab: state.tab,
-        graph: visualGraph,
       }, sealed);
       // 바뀐 것이 없으면 보내지 않는다. 실행 폴링·진행률 갱신도 render()를 지나가는데
       // 그때마다 보내면 몇 분짜리 실행이 초당 한 번씩 세션 파일을 다시 쓰고, 탭을 한 번
@@ -6342,7 +4787,6 @@ function createBacktestCanvas(options) {
       // 되살릴 폼이 화면에 없어서 그 자리까지 봉투에서 읽어야 한다.
       if (spec) {
         spec = Object.assign({}, spec, targetFromYaml(form.yaml));
-        visualGraphYaml = currentYaml();
         applied.form = SessionRestore.filledFormFields(spec);
       }
     }
@@ -6356,10 +4800,6 @@ function createBacktestCanvas(options) {
     if (saved.log && typeof saved.log.tail === 'string' && saved.log.tail) {
       restoredLog = saved.log.tail;
       applied.log = true;
-    }
-    if (saved.graph && typeof saved.graph === 'object') {
-      visualGraph = saved.graph;
-      if (visualEditor) visualEditor.setGraph(visualGraph);
     }
     pendingScrollTop = saved.scroll && Number.isFinite(saved.scroll.top) ? saved.scroll.top : null;
     restoreSealed = saved;
@@ -6414,7 +4854,6 @@ function createBacktestCanvas(options) {
     if (workspaceReportTimer != null && clearTimeoutImpl) clearTimeoutImpl(workspaceReportTimer);
     workspaceReportTimer = null;
     stopPolling();
-    stopSourcePolling();
     clearRestoreMarks();
     // 표식만 거두면 render()가 앞 세션의 폼·코드·실행·스크롤을 다시 봉인한다.
     // 같은 모드 인스턴스를 재사용하므로 보고 재료와 그 편집 캐시도 함께 거둔다.
@@ -6424,10 +4863,7 @@ function createBacktestCanvas(options) {
     runPath = 'form';
     lastError = null;
     pendingScrollTop = bodyEl = null;
-    visualGraph = visualGraphYaml = visualCompiled = visualPreview = null;
-    pendingQuestion = pendingPatch = null;
-    codeOnly = false;
-    codeOnlyGraph = openedVersion = null;
+    openedVersion = null;
     codegenCache = null;
     if (projectIde) projectIde.suspend();
     projectFiles = [];
@@ -6472,6 +4908,15 @@ function createBacktestCanvas(options) {
     return marks ? row : null;
   }
 
+  // 복원 표식에 적히는 코드의 이름 — 파일이면 그 경로, 단일 편집기면 strategy.py,
+  // 아직 아무것도 없으면 생성된 코드다.
+  function codeFileLabel() {
+    const active = activeProjectFile();
+    if (active) return active.path;
+    if (codeSource.trim()) return 'strategy.py';
+    return '생성됨';
+  }
+
   // 부분 복원 안내(Rule 3) — 무엇이 빠졌는지 이름을 대고 다시 시도를 단다.
   function renderRestoreNotice() {
     const report = state.restore;
@@ -6482,82 +4927,6 @@ function createBacktestCanvas(options) {
     actions.appendChild(button('backtest-restore-retry', '다시 시도', () => { void retryRestore(); }));
     actions.appendChild(button('backtest-restore-open', '이대로 열기', dismissRestoreNotice));
     wrap.appendChild(actions);
-    return wrap;
-  }
-
-  // ── 시각 설계 그리기 ──────────────────────────────────────────────────────
-
-  function renderVisualStatus() {
-    const box = el('div', 'backtest-visual-status');
-    const text = VISUAL_STATUS_TEXT[visualState];
-    if (text) {
-      box.appendChild(el('span', `backtest-visual-dot is-${visualState}`, ''));
-      box.appendChild(el('span', 'backtest-visual-status-text', text));
-    }
-    return box;
-  }
-
-  // 대상 한 줄 — 무엇을 돌리는지는 그래프가 모른다(종목·기간은 폼이 정한다). 지도가
-  // 편집 가능해져도 이 줄은 그대로 맨 위에 남는다(보드 11 상단).
-  function renderVisualTarget() {
-    const line = el('div', 'backtest-visual-target');
-    const target = mapTarget();
-    if (!target) {
-      line.textContent = '대상 미정 — 폼에서 종목과 기간을 채우세요';
-      return line;
-    }
-    const period = (SpecModel.PERIODS.find(([id]) => id === target.period) || [])[1]
-      || target.period;
-    const span = target.from && target.to ? ` · ${target.from} ~ ${target.to}` : '';
-    line.textContent = `${target.symbol} · ${period}봉 · ${target.adjusted ? '수정주가' : '원주가'}${span}`;
-    return line;
-  }
-
-  // 코드 서랍(보드 14-E) — 지도 뒤의 코드로 가는 한 줄. 지도가 편집 가능해져도 이 줄의
-  // 뜻은 같다: 코드는 최후의 보루이고, 여기서 열면 그 노드의 줄로 간다.
-  function renderVisualDrawer() {
-    const drawer = el('div', 'backtest-visual-drawer');
-    drawer.appendChild(el('span', 'backtest-visual-drawer-file', codeFileLabel()));
-    if (state.visualCodeAhead) {
-      drawer.appendChild(el('span', 'backtest-visual-drawer-ahead', VISUAL_CODE_AHEAD));
-    } else if (visualState === 'synced') {
-      drawer.appendChild(el(
-        'span', 'backtest-visual-drawer-match', `지도 v${state.mapVersion || 0}와 일치`,
-      ));
-    }
-    drawer.appendChild(button('backtest-visual-open-code', '코드 열기', () => {
-      // 아직 한 번도 검증·컴파일하지 않았으면 뛸 줄이 없다 — openCodeAt은 source map이
-      // 없어 알림만 띄우고 아무것도 열지 않는다. 그때는 읽기 전용 지도의 [코드 열기]와
-      // 같은 일을 한다: 지도 뒤의 코드를 그 자리에서 만들어 보여준다(보드 14-E).
-      // 이 갈래가 없으면 프리셋을 고른 직후의 [코드 열기]는 죽은 버튼이다 —
-      // "최후의 보루"라는 이 줄의 뜻이 그때 가장 필요하다(2026-09-03 실측 N04).
-      if (!visualCompiled && !visualPreview) { void openCodeFromMap(); return; }
-      void openCodeAt(visualEditor ? visualEditor.getSelected() : null);
-    }));
-    return drawer;
-  }
-
-  function renderVisualDesign() {
-    const wrap = el('div', 'backtest-visual');
-    wrap.appendChild(renderVisualTarget());
-    const head = el('div', 'backtest-visual-head');
-    head.appendChild(el(
-      'div', 'backtest-card-title', `이 전략은 이렇게 흐릅니다 · 지도 v${state.mapVersion || 0}`,
-    ));
-    head.appendChild(renderVisualStatus());
-    wrap.appendChild(head);
-    // 요약 지도(칸 ①~④)는 여기서 빠졌다(2026-09-03 사용자 확정) — 편집 표면이 선
-    // 자리에서 같은 흐름을 두 번 말할 이유가 없다. 지도의 재료는 그대로 살아 있고
-    // (state.map · getContext().map) 대화가 그것으로 답한다. 읽기 전용 경로의 요약
-    // 지도는 renderFlowTab에 그대로 남는다 — 거기서는 그것이 지도의 전부다.
-    if (ensureVisualEditor()) wrap.appendChild(visualHost);
-    // 실행 전에 채울 것은 요약 지도의 것이 아니라 이 화면의 것이다 — 지도를 뺐다고
-    // "종목을 채우세요"까지 사라지면 사람은 [실행]이 왜 안 도는지 알 길이 없다.
-    wrap.appendChild(renderFormErrors());
-    if (state.visualNotice) {
-      wrap.appendChild(el('div', 'backtest-flow-notice', state.visualNotice));
-    }
-    wrap.appendChild(renderVisualDrawer());
     return wrap;
   }
 
@@ -7301,13 +5670,6 @@ function createBacktestCanvas(options) {
     runFromChat,
     validateFromChat,
     startOptimizeFromChat,
-    // 시각 설계 카드(US-009)가 부르는 자리 — 실행·활성화·배포는 여기 없다.
-    answerVisualQuestion,
-    applyVisualPatch,
-    discardVisualPatch,
-    reviewBeforeRun,
-    openCodeFromChat,
-    retryVisualPatch,
     // 단계 카드의 손잡이(보드 22) — 채팅이 카드를 누르면 여기로 온다.
     openStep,
   };
