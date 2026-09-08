@@ -43,6 +43,16 @@ const preload = read("preload.js");
 const mainJs = read("main.js");
 const HARNESSES = ["verify.js", "verify-settings.js", "verify-settings-cards.js"];
 
+export function unknownIpcChannels(line, known) {
+  const ipcOnly = line.replace(
+    /\.\s*(?:addEventListener|removeEventListener)\s*\(\s*(['"`])athena:[a-z0-9-]+\1/g,
+    "",
+  );
+  return [...ipcOnly.matchAll(/['"`](athena:[a-z0-9-]+)['"`]/g)]
+    .map((match) => match[1])
+    .filter((channel) => !known.has(channel));
+}
+
 if (!shellHtml || !preload || !mainJs) {
   console.error("[harness-freshness] 대조 원본 소스가 없다:");
   for (const f of failures) console.error("  - " + f);
@@ -102,8 +112,8 @@ for (const rel of HARNESSES) {
       if (!knownIds.has(m[1])) failures.push(`${loc}: 사라진 DOM id '#${m[1]}' 참조 — ${line.trim().slice(0, 90)}`);
     }
     if (!/ipc-channels:allow-dead/.test(rawLine) && !(i > 0 && /ipc-channels:allow-dead/.test(lines[i - 1]))) {
-      for (const m of line.matchAll(/['"`](athena:[a-z0-9-]+)['"`]/g)) {
-        if (!knownChannels.has(m[1])) failures.push(`${loc}: 미등록 IPC 채널 '${m[1]}' 참조 — ${line.trim().slice(0, 90)}`);
+      for (const channel of unknownIpcChannels(line, knownChannels)) {
+        failures.push(`${loc}: 미등록 IPC 채널 '${channel}' 참조 — ${line.trim().slice(0, 90)}`);
       }
     }
   });
