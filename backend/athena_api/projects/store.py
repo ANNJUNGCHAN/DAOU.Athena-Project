@@ -20,7 +20,7 @@ from __future__ import annotations
 import json
 import os
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import UTC, datetime
 from pathlib import Path, PurePosixPath
 from typing import Any, Final
@@ -433,6 +433,36 @@ class ProjectStore:
         )
         self.save((*snapshot.entries, entry))
         return entry
+
+    def relink(self, project_id: str, raw_path: str) -> ProjectEntry:
+        """등록된 프로젝트의 폴더 경로만 새 위치로 바꾼다 — id·이름·종류는 그대로.
+
+        폴더를 옮겼거나 드라이브가 빠져 "프로젝트 폴더 없음"이 난 초안을 살리는 길이다.
+        새로 등록(open_external)하면 id가 바뀌어 초안이 여전히 옛 id를 가리키므로,
+        여기서는 같은 줄의 path만 고친다. 디스크에는 아무것도 만들지 않는다.
+        모르는 id는 `KeyError`다(resolve_project_path와 같은 규약).
+        """
+        text = (raw_path or "").strip()
+        if not text:
+            raise ProjectNameError("폴더 경로가 비어 있다")
+        candidate = Path(text).expanduser()
+        if not candidate.exists():
+            raise ProjectMissingError("폴더가 존재하지 않는다")
+        if not candidate.is_dir():
+            raise ProjectNotADirectoryError("폴더가 아니라 파일이다")
+        resolved = candidate.resolve()
+        snapshot = self.load()
+        current = next((entry for entry in snapshot.entries if entry.id == project_id), None)
+        if current is None:
+            raise KeyError(project_id)
+        if any(
+            entry.id != project_id and _normcase(entry.path) == _normcase(resolved)
+            for entry in snapshot.entries
+        ):
+            raise ProjectExistsError("다른 프로젝트가 이미 그 폴더를 쓰고 있다")
+        updated = replace(current, path=resolved)
+        self.save(tuple(updated if entry.id == project_id else entry for entry in snapshot.entries))
+        return updated
 
     def unregister(self, project_id: str) -> ProjectEntry | None:
         """등록만 해제한다. **디스크의 파일은 건드리지 않는다** — 지우는 코드가 여기 없다."""

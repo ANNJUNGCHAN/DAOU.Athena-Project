@@ -307,6 +307,24 @@ function updateProject({ id, label, description } = {}) {
   return { ok: true, project, state: snapshot(state) };
 }
 
+// '폴더 다시 지정' — 옮겨진 폴더를 같은 프로젝트 레코드에 다시 잇는다. 백엔드 relink가
+// 받아 준 경로를 적기만 하며, 이름·설명·고정·id는 건드리지 않는다. 다른 레코드가 이미 쓰는
+// 폴더는 거절한다(addProject의 folder_taken과 같은 규칙).
+function setProjectPath(id, folderPath) {
+  const state = readState();
+  const projectId = validString(id);
+  const project = state.projects.find((row) => row.id === projectId);
+  if (!project) return { ok: false, reason: 'unknown_project' };
+  const target = validString(folderPath);
+  if (!target) return { ok: false, reason: 'invalid_path' };
+  const pathKey = projectPathKey(target);
+  const taken = state.projects.find((row) => row.id !== projectId && projectPathKey(row.path) === pathKey);
+  if (taken) return { ok: false, reason: 'folder_taken', project: taken };
+  project.path = target;
+  writeState(state);
+  return { ok: true, project, state: snapshot(state) };
+}
+
 // 레코드와 그 프로젝트의 대화들만 지운다 — 폴더 자체를 지우는 것은 main의 몫이다.
 function removeProject(id) {
   const projectId = validString(id);
@@ -366,6 +384,7 @@ module.exports = {
   addProject,
   setProjectPinned,
   updateProject,
+  setProjectPath,
   removeProject,
   projectById,
   flush,
