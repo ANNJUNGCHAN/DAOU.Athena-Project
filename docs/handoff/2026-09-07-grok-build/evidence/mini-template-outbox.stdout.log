@@ -1,0 +1,7 @@
+
+[probe-paper-mini-template] envelopes=11
+[layout] 화면(2560x1392)이 설계 치수를 그대로 수용 — 축소 없음
+[probe-paper-mini-template] render-loop-done count=11
+[probe-paper-mini-template] 견본 11장 · 그려짐 11 · 실패 0
+[probe-paper-mini-template] 문법 10/10
+paper mini template verification passed

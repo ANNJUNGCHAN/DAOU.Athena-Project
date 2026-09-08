@@ -1,0 +1,13 @@
+{
+  "file_url": "https://app.paper.design/file/01M0VGPX92K1TER4ZV9PWGQJJZ/1-0",
+  "surface": "Codex in-app browser tab 2",
+  "editing_verified": false,
+  "note": "Tool names being advertised is not proof of edit authorization; no mutation attempted.",
+  "checked_at": "2026-09-07T16:14:41.4226733+09:00",
+  "readable": true,
+  "status": "requires_authenticated_editing_connection",
+  "evidence": [
+    "Visible banner: Welcome to Paper! Create an account to edit, collaborate, and more.",
+    "Visible Log in and Sign up links"
+  ]
+}

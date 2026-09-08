@@ -1,0 +1,6285 @@
+{
+  "schema_version": 1,
+  "gate": "verify:paper-mini",
+  "generated_at": "2026-09-07T07:43:28.614Z",
+  "canonical_decision": {
+    "source": "paper",
+    "note": "사용자 지시 2026-09-05",
+    "conflict": "backend/ref/kiumi/README.md 2026-09-04 실측은 대장 우위로 판단",
+    "rule": "paper_cross_board가 0이 되기 전에는 대장을 고치지 않는다 — 이 게이트는 보고만 한다"
+  },
+  "totals": {
+    "paper_boards": 192,
+    "mini_boards": 96,
+    "note_boards": 96,
+    "ledger_rows": 96,
+    "matched": 19,
+    "divergent": 77,
+    "unmatched_boards": 0,
+    "paper_rows": 432,
+    "divergent_rows": 212,
+    "paper_cross_board": 10,
+    "form_deviation": 17,
+    "ledger_stale": 136,
+    "unbacked_rows": 49,
+    "missing_in_paper": 182,
+    "annotation_drift": 94
+  },
+  "baseline": {
+    "source": "backend/ref/kiumi/evidence/paper-ledger-divergence-20260904.json",
+    "caveat": "증거 파일은 LLM이 JSX를 읽어 센 값이다 — 결정론적 재현 대상이 아니다",
+    "evidence": {
+      "compared": 96,
+      "match": 10,
+      "divergent": 84,
+      "unresolved": 2,
+      "unbacked_rows": 227,
+      "missing_elements": 190
+    },
+    "measured": {
+      "compared": 96,
+      "match": 19,
+      "divergent": 77,
+      "unresolved": 0,
+      "unbacked_rows": 212,
+      "missing_elements": 182
+    },
+    "deltas": {
+      "compared": 0,
+      "match": 9,
+      "divergent": -7,
+      "unresolved": -2,
+      "unbacked_rows": -15,
+      "missing_elements": -8
+    },
+    "reproduced": false
+  },
+  "grammar_coverage": {
+    "ok": true,
+    "covered": [
+      "auth",
+      "chart",
+      "compound",
+      "event",
+      "facts",
+      "order_confirm",
+      "order_ticket",
+      "reader",
+      "stream",
+      "table"
+    ],
+    "uncovered": [],
+    "template_boards": 11,
+    "unresolved": []
+  },
+  "layers": {
+    "static": {
+      "gate": "verify:paper-mini-static",
+      "generated_at": "2026-09-07T07:43:24.746Z",
+      "boards": 192
+    },
+    "template": {
+      "gate": "verify:paper-mini-template",
+      "generated_at": "2026-09-07T07:43:28.614Z",
+      "templates": 11,
+      "rendered": 11,
+      "elapsed_ms": 3134
+    }
+  },
+  "gate_failures": [],
+  "boards": [
+    {
+      "paper_board": "46AX-0",
+      "kind": "mini",
+      "name": "mini/CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+      "ledger_board": "2SCE-1",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "paper_form_deviation",
+          "text": "+4.96%",
+          "found_in": "2SCE-1",
+          "label": "평가손익",
+          "value": "+4.96%",
+          "group": "KPI band",
+          "layer": "static"
+        },
+        {
+          "code": "paper_form_deviation",
+          "text": "8",
+          "found_in": "2SCE-1",
+          "label": "종목",
+          "value": "8",
+          "group": "KPI band",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "41,483,750",
+          "found_in": "2SCE-1",
+          "label": "삼성전자",
+          "value": "005930 · 41,483,750 · +9.04%",
+          "group": "Position 1",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "000660",
+          "found_in": "2SCE-1",
+          "label": "SK하이닉스",
+          "value": "000660 · 21,824,000 · +3.17%",
+          "group": "Position 2",
+          "layer": "static"
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "46BW-0",
+      "kind": "mini",
+      "name": "mini/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+      "ledger_board": "2SKU-1",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "paper_form_deviation",
+          "text": "+4.96%",
+          "found_in": "2SKU-1",
+          "label": "수익률",
+          "value": "+4.96%",
+          "group": "KPI band",
+          "layer": "static"
+        },
+        {
+          "code": "paper_form_deviation",
+          "text": "8",
+          "found_in": "2SKU-1",
+          "label": "종목",
+          "value": "8",
+          "group": "KPI band",
+          "layer": "static"
+        },
+        {
+          "code": "unbacked",
+          "text": "09/02",
+          "label": "D+1 예상",
+          "value": "09/02 · 33,184,400 · -1,635,600",
+          "group": "Position 1",
+          "layer": "static"
+        },
+        {
+          "code": "unbacked",
+          "text": "09/03",
+          "label": "D+2 예상",
+          "value": "09/03 · 42,263,800 · +9,079,400",
+          "group": "Position 2",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "예수금",
+              "paper_text": "34,820,000"
+            },
+            {
+              "label": "랩출금가능금액",
+              "paper_text": "랩 출금가능 0원"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "46CV-0",
+      "kind": "mini",
+      "name": "mini/CC-02 / R11 · 삼성전자 10주 시장가 매수",
+      "ledger_board": "135M-2",
+      "grammar": "order_ticket",
+      "paper_rows": 4,
+      "failures": [
+        {
+          "code": "paper_form_deviation",
+          "text": "005930 / 키움증권 01",
+          "found_in": "135M-2",
+          "label": "삼성전자",
+          "value": "005930 / 키움증권 01",
+          "group": "Order lead",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "매수",
+          "found_in": "135M-2",
+          "label": "주문 구분",
+          "value": "매수",
+          "group": "Order side",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "150,840원",
+          "found_in": "135M-2",
+          "label": "현재 매수 1호가",
+          "value": "150,840원",
+          "group": "Order price",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "주문가능금액",
+              "paper_text": "31,240,000원"
+            },
+            {
+              "label": "금액",
+              "paper_text": "현재가 150,850원"
+            },
+            {
+              "label": "변화",
+              "paper_text": "10%"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "46DE-0",
+      "kind": "mini",
+      "name": "mini/CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도",
+      "ledger_board": "2T63-1",
+      "grammar": "order_confirm",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "unbacked",
+          "text": "주문을 확인했어요",
+          "label": "",
+          "value": "주문을 확인했어요",
+          "group": "Status",
+          "layer": "static"
+        },
+        {
+          "code": "unbacked",
+          "text": "삼성전자 / 005930",
+          "label": "종목",
+          "value": "삼성전자 / 005930",
+          "group": "Confirm facts",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "매도",
+          "found_in": "2T63-1",
+          "label": "유형",
+          "value": "매도",
+          "group": "Confirm facts",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "150,840원",
+          "found_in": "2T63-1",
+          "label": "가격",
+          "value": "150,840원",
+          "group": "Confirm values",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "매매가능수량",
+              "paper_text": "300주"
+            },
+            {
+              "label": "금액",
+              "paper_text": "현재가 150,850원"
+            },
+            {
+              "label": "계좌",
+              "paper_text": "키움증권 01"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "46E2-0",
+      "kind": "mini",
+      "name": "mini/CC-03 / R01 · 삼성전자 3개월 차트",
+      "ledger_board": "137X-2",
+      "grammar": "chart",
+      "paper_rows": 2,
+      "failures": [
+        {
+          "code": "paper_form_deviation",
+          "text": "+1.24%",
+          "found_in": "137X-2",
+          "label": "150,850원",
+          "value": "+1.24%",
+          "group": "Price hero",
+          "layer": "static"
+        },
+        {
+          "code": "unbacked",
+          "text": "09.01",
+          "label": "06.03",
+          "value": "09.01",
+          "group": "Chart range",
+          "layer": "static"
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "46FL-0",
+      "kind": "mini",
+      "name": "mini/CC-04 / R02 · 삼성전자 실시간 호가·체결",
+      "ledger_board": "13BC-2",
+      "grammar": "table",
+      "paper_rows": 3,
+      "failures": [
+        {
+          "code": "unbacked",
+          "text": "매도 1호가",
+          "label": "01",
+          "value": "매도 1호가 · 정규장 · 150,850 · 3,420주",
+          "group": "Rank 1",
+          "layer": "static"
+        },
+        {
+          "code": "unbacked",
+          "text": "매수 1호가",
+          "label": "02",
+          "value": "매수 1호가 · 정규장 · 150,840 · 4,180주",
+          "group": "Rank 2",
+          "layer": "static"
+        },
+        {
+          "code": "paper_cross_board",
+          "text": "총잔량",
+          "found_in": "2U5L-1",
+          "boards": [
+            "2U5L-1",
+            "2XTO-0",
+            "2YNQ-0",
+            "3D4I-0"
+          ],
+          "label": "03",
+          "value": "총잔량 · 09:42:21 · — · 81,160주",
+          "group": "Rank 3",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "매도호가10",
+              "paper_text": "150,940"
+            },
+            {
+              "label": "매도호가수량10",
+              "paper_text": "2,160"
+            },
+            {
+              "label": "매도호가9",
+              "paper_text": "150,930"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "46GK-0",
+      "kind": "mini",
+      "name": "mini/A04-X · 호가 정본 — 단계별 낱값",
+      "ledger_board": "3N4O-0",
+      "grammar": "facts",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "unbacked",
+          "text": "삼성전자 · 005930",
+          "label": "종목",
+          "value": "삼성전자 · 005930",
+          "group": "Fact 1",
+          "layer": "static"
+        },
+        {
+          "code": "unbacked",
+          "text": "2026-09-01 09:42",
+          "label": "기준 시각",
+          "value": "2026-09-01 09:42",
+          "group": "Fact 2",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "시간",
+              "paper_text": "10단 · 정규장 09:42"
+            },
+            {
+              "label": "LP매도10호가잔량",
+              "paper_text": "0"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "46H8-0",
+      "kind": "mini",
+      "name": "mini/A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위",
+      "ledger_board": "1WOB-1",
+      "grammar": "facts",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "paper_form_deviation",
+          "text": "2026-09-01 09:42",
+          "found_in": "1WOB-1",
+          "label": "조회",
+          "value": "2026-09-01 09:42",
+          "group": "Fact 1",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "+1.18조원",
+          "found_in": "1WOB-1",
+          "label": "상위 50건 합계",
+          "value": "+1.18조원",
+          "group": "Fact 2",
+          "layer": "static"
+        },
+        {
+          "code": "unbacked",
+          "text": "20건 · +10,815억원",
+          "label": "표시",
+          "value": "20건 · +10,815억원",
+          "group": "Fact 3",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "+3,214억원",
+          "found_in": "1WOB-1",
+          "label": "순매수 1위",
+          "value": "+3,214억원",
+          "group": "Fact 4",
+          "layer": "static"
+        },
+        {
+          "code": "paper_cross_board",
+          "text": "5일",
+          "found_in": "30C1-0",
+          "boards": [
+            "30C1-0",
+            "30HY-0"
+          ],
+          "label": "연속 매수",
+          "value": "5일",
+          "group": "Fact 5",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "종목코드",
+              "paper_text": "005930"
+            },
+            {
+              "label": "현재가",
+              "paper_text": "150,850"
+            },
+            {
+              "label": "매도호가",
+              "paper_text": "150,900"
+            },
+            {
+              "label": "매수호가",
+              "paper_text": "150,800"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "46IV-0",
+      "kind": "mini",
+      "name": "mini/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+      "ledger_board": "13K0-2",
+      "grammar": "table",
+      "paper_rows": 3,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "삼성전자",
+          "found_in": "13K0-2",
+          "label": "01",
+          "value": "삼성전자 · 005930 · 150,850 · +1.24%",
+          "group": "Rank 1",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "SK하이닉스",
+          "found_in": "13K0-2",
+          "label": "02",
+          "value": "SK하이닉스 · 000660 · 198,400 · +2.05%",
+          "group": "Rank 2",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "현대차",
+          "found_in": "13K0-2",
+          "label": "03",
+          "value": "현대차 · 005380 · 232,500 · -0.52%",
+          "group": "Rank 3",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "전일순위",
+              "paper_text": "전일 3위"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "46JU-0",
+      "kind": "mini",
+      "name": "mini/CC-06 / R09 · 시장 체온·VI",
+      "ledger_board": "15R0-2",
+      "grammar": "facts",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "paper_form_deviation",
+          "text": "2,684.21 · +1.12%",
+          "found_in": "15R0-2",
+          "label": "KOSPI",
+          "value": "2,684.21 · +1.12%",
+          "group": "Fact 1",
+          "layer": "static"
+        },
+        {
+          "code": "paper_form_deviation",
+          "text": "842.15 · +0.84%",
+          "found_in": "15R0-2",
+          "label": "KOSDAQ",
+          "value": "842.15 · +0.84%",
+          "group": "Fact 2",
+          "layer": "static"
+        },
+        {
+          "code": "unbacked",
+          "text": "1,486종목",
+          "label": "상승",
+          "value": "1,486종목",
+          "group": "Fact 3",
+          "layer": "static"
+        },
+        {
+          "code": "unbacked",
+          "text": "183종목",
+          "label": "보합",
+          "value": "183종목",
+          "group": "Fact 4",
+          "layer": "static"
+        },
+        {
+          "code": "unbacked",
+          "text": "621종목",
+          "label": "하락",
+          "value": "621종목",
+          "group": "Fact 5",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "전일대비",
+              "paper_text": "+29.73 · +1.12%"
+            },
+            {
+              "label": "전일대비",
+              "paper_text": "+7.01 · +0.84%"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "46KI-0",
+      "kind": "mini",
+      "name": "mini/CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+      "ledger_board": "133H-2",
+      "grammar": "facts",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "8종목",
+          "found_in": "133H-2",
+          "label": "종목별계좌평가현황",
+          "value": "8종목",
+          "group": "Fact 1",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "+4,240,900원",
+          "found_in": "133H-2",
+          "label": "총 평가손익",
+          "value": "+4,240,900원",
+          "group": "Fact 3",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "28.0%",
+          "found_in": "133H-2",
+          "label": "매수비중",
+          "value": "28.0%",
+          "group": "Fact 4",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "매입 85,519,340원",
+          "found_in": "133H-2",
+          "label": "총 매입가",
+          "value": "매입 85,519,340원",
+          "group": "Fact 5",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "예탁자산평가액",
+              "paper_text": "124,580,240원"
+            },
+            {
+              "label": "수익률",
+              "paper_text": "수익률 +4.96%"
+            },
+            {
+              "label": "총재매수가능금액",
+              "paper_text": "31,240,000원"
+            },
+            {
+              "label": "인출가능금액",
+              "paper_text": "출금가능 28,940,000원"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "46L6-0",
+      "kind": "mini",
+      "name": "mini/CC-06 / R05 · 반도체 업종·AI 테마",
+      "ledger_board": "15J9-2",
+      "grammar": "table",
+      "paper_rows": 3,
+      "failures": [
+        {
+          "code": "unbacked",
+          "text": "변화",
+          "label": "01",
+          "value": "변화 · +2.84%",
+          "group": "Rank 1",
+          "layer": "static"
+        },
+        {
+          "code": "unbacked",
+          "text": "기준 시각",
+          "label": "02",
+          "value": "기준 시각 · 09:42 기준",
+          "group": "Rank 2",
+          "layer": "static"
+        },
+        {
+          "code": "unbacked",
+          "text": "변화",
+          "label": "03",
+          "value": "변화 · 상위 4%",
+          "group": "Rank 3",
+          "layer": "static"
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "46M5-0",
+      "kind": "mini",
+      "name": "mini/CC-06 / R06 · 관심종목·조건 신호",
+      "ledger_board": "15L8-2",
+      "grammar": "facts",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "214,000",
+          "found_in": "15L8-2",
+          "label": "현재가",
+          "value": "214,000",
+          "group": "Fact 1",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "035420",
+          "found_in": "15L8-2",
+          "label": "종목코드",
+          "value": "035420",
+          "group": "Fact 2",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "저 232,000",
+          "found_in": "15L8-2",
+          "label": "저가",
+          "value": "저 232,000",
+          "group": "Fact 3",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "+1,800",
+          "found_in": "15L8-2",
+          "label": "전일대비",
+          "value": "+1,800",
+          "group": "Fact 4",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "고 214,800",
+          "found_in": "15L8-2",
+          "label": "고가",
+          "value": "고 214,800",
+          "group": "Fact 5",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "종목코드",
+              "paper_text": "005930"
+            },
+            {
+              "label": "현재가",
+              "paper_text": "150,850"
+            },
+            {
+              "label": "전일대비",
+              "paper_text": "+1,850"
+            },
+            {
+              "label": "등락율",
+              "paper_text": "+1.24%"
+            },
+            {
+              "label": "시가",
+              "paper_text": "149,500"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "46MT-0",
+      "kind": "mini",
+      "name": "mini/CC-03 / R07 · KODEX 200 ETF",
+      "ledger_board": "15N5-2",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "전일대비 ▲ +398 · +0.83%",
+          "found_in": "15N5-2",
+          "label": "NAV전일대비",
+          "value": "전일대비 ▲ +398 · +0.83%",
+          "group": "KPI band",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "NAV",
+              "paper_text": "48,318"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "46NS-0",
+      "kind": "mini",
+      "name": "mini/CC-03 / R08 · ELW 위험·만기",
+      "ledger_board": "15P5-2",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "5.9억원",
+          "found_in": "15P5-2",
+          "label": "거래대금",
+          "value": "5.9억원",
+          "group": "KPI band",
+          "layer": "static"
+        },
+        {
+          "code": "unbacked",
+          "text": "+77원",
+          "label": "대비기호",
+          "value": "+77원",
+          "group": "Position 1",
+          "layer": "static"
+        },
+        {
+          "code": "unbacked",
+          "text": "+10 (+0.82%)",
+          "label": "전일대비",
+          "value": "+10 (+0.82%)",
+          "group": "Position 2",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "현재가",
+              "paper_text": "1,160원"
+            },
+            {
+              "label": "행사가격",
+              "paper_text": "150,000원"
+            },
+            {
+              "label": "ELW이론가",
+              "paper_text": "1,210원"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "46OR-0",
+      "kind": "mini",
+      "name": "mini/A04 · 호가 정본 — 실시간 통합 호가",
+      "ledger_board": "1JPU-0",
+      "grammar": "table",
+      "paper_rows": 3,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "현재가",
+          "found_in": "1JPU-0",
+          "label": "01",
+          "value": "현재가 · +20",
+          "group": "Rank 1",
+          "layer": "static"
+        },
+        {
+          "code": "unbacked",
+          "text": "매도호가3",
+          "label": "02",
+          "value": "매도호가3 · 150,870",
+          "group": "Rank 2",
+          "layer": "static"
+        },
+        {
+          "code": "unbacked",
+          "text": "매도호가직전대비3",
+          "label": "03",
+          "value": "매도호가직전대비3 · +320",
+          "group": "Rank 3",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "매도10호가잔량",
+              "paper_text": "2,160주"
+            },
+            {
+              "label": "매도호가10",
+              "paper_text": "150,940"
+            },
+            {
+              "label": "현재가",
+              "paper_text": "+90"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "46PQ-0",
+      "kind": "mini",
+      "name": "mini/A02×A04 · 호가 주문 정본 — 시장가 매수",
+      "ledger_board": "1JZW-0",
+      "grammar": "table",
+      "paper_rows": 3,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "현재가",
+          "found_in": "1JZW-0",
+          "label": "01",
+          "value": "현재가 · +20",
+          "group": "Rank 1",
+          "layer": "static"
+        },
+        {
+          "code": "unbacked",
+          "text": "매도호가3",
+          "label": "02",
+          "value": "매도호가3 · 150,870",
+          "group": "Rank 2",
+          "layer": "static"
+        },
+        {
+          "code": "unbacked",
+          "text": "매도호가직전대비3",
+          "label": "03",
+          "value": "매도호가직전대비3 · +320",
+          "group": "Rank 3",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "매도10호가잔량",
+              "paper_text": "2,160주"
+            },
+            {
+              "label": "매도호가10",
+              "paper_text": "150,940"
+            },
+            {
+              "label": "현재가",
+              "paper_text": "+90"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "46QP-0",
+      "kind": "mini",
+      "name": "mini/CC-05 / R03-T1 · 수급 — 투자자별",
+      "ledger_board": "2QFO-2",
+      "grammar": "facts",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "거래량 1,420만주 · 체결강도 108.4",
+          "found_in": "2QFO-2",
+          "label": "누적거래량",
+          "value": "거래량 1,420만주 · 체결강도 108.4",
+          "group": "Fact 5",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "외국인투자자",
+              "paper_text": "+1,842억원"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "46RD-0",
+      "kind": "mini",
+      "name": "mini/CC-05 / R03-T2 · 수급 — 거래원",
+      "ledger_board": "2QM7-2",
+      "grammar": "facts",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "상위 5곳 비중",
+          "found_in": "2QM7-2",
+          "label": "값",
+          "value": "상위 5곳 비중",
+          "group": "Fact 4",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "창구 5곳 합계",
+          "found_in": "2QM7-2",
+          "label": "값",
+          "value": "창구 5곳 합계",
+          "group": "Fact 5",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "금액",
+              "paper_text": "순매수 1위 거래원"
+            },
+            {
+              "label": "기준 시각",
+              "paper_text": "외국계 창구 · 09:22 기준"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "46S1-0",
+      "kind": "mini",
+      "name": "mini/CC-04 / R02-T2 · 호가 — 시간외 단일가",
+      "ledger_board": "2QRP-1",
+      "grammar": "table",
+      "paper_rows": 3,
+      "failures": [
+        {
+          "code": "unbacked",
+          "text": "시간외단일가_매수호가2",
+          "label": "01",
+          "value": "시간외단일가_매수호가2 · 150,800",
+          "group": "Rank 1",
+          "layer": "static"
+        },
+        {
+          "code": "unbacked",
+          "text": "시간외단일가_매수호가3",
+          "label": "02",
+          "value": "시간외단일가_매수호가3 · 150,750",
+          "group": "Rank 2",
+          "layer": "static"
+        },
+        {
+          "code": "unbacked",
+          "text": "시간외단일가_매수호가수량3",
+          "label": "03",
+          "value": "시간외단일가_매수호가수량3 · 15,280",
+          "group": "Rank 3",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "시간외단일가_매도호가5",
+              "paper_text": "151,150"
+            },
+            {
+              "label": "시간외단일가_매도호가수량5",
+              "paper_text": "17,940"
+            },
+            {
+              "label": "시간외단일가_매도호가4",
+              "paper_text": "151,100"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "46T0-0",
+      "kind": "mini",
+      "name": "mini/CC-04 / R02-T3 · 호가 — KRX 금현물",
+      "ledger_board": "2QX1-1",
+      "grammar": "table",
+      "paper_rows": 3,
+      "failures": [
+        {
+          "code": "unbacked",
+          "text": "전일대비기호",
+          "label": "01",
+          "value": "전일대비기호 · 850 · +0.78%",
+          "group": "Rank 1",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "체결가",
+          "found_in": "2QX1-1",
+          "label": "02",
+          "value": "체결가 · 109,750",
+          "group": "Rank 2",
+          "layer": "static"
+        },
+        {
+          "code": "unbacked",
+          "text": "금현물호가",
+          "label": "03",
+          "value": "금현물호가 · 92",
+          "group": "Rank 3",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "금현물호가",
+              "paper_text": "110,000"
+            },
+            {
+              "label": "금현물호가",
+              "paper_text": "369"
+            },
+            {
+              "label": "금현물호가",
+              "paper_text": "109,950"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "46TZ-0",
+      "kind": "mini",
+      "name": "mini/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+      "ledger_board": "2R3M-1",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "2.63배",
+          "found_in": "2R3M-1",
+          "label": "PBR",
+          "value": "2.63배",
+          "group": "KPI band",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "0.24%",
+          "found_in": "2R3M-1",
+          "label": "거래회전율",
+          "value": "0.24%",
+          "group": "Position 2",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "PER",
+              "paper_text": "21.2배"
+            },
+            {
+              "label": "전일대비",
+              "paper_text": "+1,850"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "46UY-0",
+      "kind": "mini",
+      "name": "mini/CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+      "ledger_board": "2RBO-1",
+      "grammar": "facts",
+      "paper_rows": 5,
+      "failures": [],
+      "status": "matched"
+    },
+    {
+      "paper_board": "46VM-0",
+      "kind": "mini",
+      "name": "mini/CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+      "ledger_board": "2RJ7-1",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "전일비 100.74%",
+          "found_in": "2RJ7-1",
+          "label": "전일비",
+          "value": "전일비 100.74%",
+          "group": "KPI band",
+          "layer": "static"
+        },
+        {
+          "code": "paper_form_deviation",
+          "text": "168,420 · +0.74%",
+          "found_in": "2RJ7-1",
+          "label": "전일대비기호",
+          "value": "168,420 · +0.74%",
+          "group": "Position 1",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "금현물일봉차트조회",
+              "paper_text": "09:00~09:42"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "46WL-0",
+      "kind": "mini",
+      "name": "mini/CC-05 / R03-T3 · 수급 — 프로그램",
+      "ledger_board": "2ROJ-1",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "금융투자 -842억원",
+          "found_in": "2ROJ-1",
+          "label": "금융투자",
+          "value": "금융투자 -842억원",
+          "group": "KPI band",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "2.14조원",
+          "found_in": "2ROJ-1",
+          "label": "거래대금",
+          "value": "2.14조원",
+          "group": "KPI band",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "외국인투자자",
+              "paper_text": "+1,842억원"
+            },
+            {
+              "label": "개인투자자",
+              "paper_text": "-638억원"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "46XK-0",
+      "kind": "mini",
+      "name": "mini/CC-05 / R03-T4 · 수급 — 신용·대차",
+      "ledger_board": "2RWK-1",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "금융투자 -842억원",
+          "found_in": "2RWK-1",
+          "label": "금융투자",
+          "value": "금융투자 -842억원",
+          "group": "KPI band",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "2.14조원",
+          "found_in": "2RWK-1",
+          "label": "거래대금",
+          "value": "2.14조원",
+          "group": "KPI band",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "529,470주",
+          "found_in": "2RWK-1",
+          "label": "공매도량",
+          "value": "529,470주",
+          "group": "Position 1",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "781억원 · 누적 2,234만주",
+          "found_in": "2RWK-1",
+          "label": "공매도거래대금",
+          "value": "781억원 · 누적 2,234만주",
+          "group": "Position 2",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "외국인투자자",
+              "paper_text": "+1,842억원"
+            },
+            {
+              "label": "개인투자자",
+              "paper_text": "-638억원"
+            },
+            {
+              "label": "매매비중",
+              "paper_text": "3.42%"
+            },
+            {
+              "label": "잔고주수",
+              "paper_text": "1,284만주"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "46YJ-0",
+      "kind": "mini",
+      "name": "mini/CC-05 / R03-T5 · 수급 — 종목 동향",
+      "ledger_board": "2S4E-1",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "금융투자 -842억원",
+          "found_in": "2S4E-1",
+          "label": "금융투자",
+          "value": "금융투자 -842억원",
+          "group": "KPI band",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "2.14조원",
+          "found_in": "2S4E-1",
+          "label": "누적거래대금",
+          "value": "2.14조원",
+          "group": "KPI band",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "+15.4만주",
+          "found_in": "2S4E-1",
+          "label": "외인일별순매매수량",
+          "value": "+15.4만주",
+          "group": "Position 1",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "-142",
+          "found_in": "2S4E-1",
+          "label": "기관계",
+          "value": "-142",
+          "group": "Position 2",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "외국인투자자",
+              "paper_text": "+1,842억원"
+            },
+            {
+              "label": "기관계",
+              "paper_text": "-1,204억원"
+            },
+            {
+              "label": "외국인투자자",
+              "paper_text": "+3,214억원"
+            },
+            {
+              "label": "기관계",
+              "paper_text": "-1,842억원"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "46ZI-0",
+      "kind": "mini",
+      "name": "mini/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+      "ledger_board": "2SRV-1",
+      "grammar": "compound",
+      "paper_rows": 4,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "28.0%",
+          "found_in": "2SRV-1",
+          "label": "매수비중",
+          "value": "28.0%",
+          "group": "KPI band",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "+1.65%",
+          "found_in": "2SRV-1",
+          "label": "손익율",
+          "value": "+1.65%",
+          "group": "Position 1",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "매도손익 +648,600",
+          "found_in": "2SRV-1",
+          "label": "당일매도손익1",
+          "value": "매도손익 +648,600",
+          "group": "Position 2",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "예탁자산평가액",
+              "paper_text": "124,580,240원"
+            },
+            {
+              "label": "수익률",
+              "paper_text": "수익률 +4.96%"
+            },
+            {
+              "label": "당일투자손익",
+              "paper_text": "+1,082,400"
+            },
+            {
+              "label": "당월투자손익",
+              "paper_text": "+1,082,400"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "470H-0",
+      "kind": "mini",
+      "name": "mini/CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+      "ledger_board": "2SYW-1",
+      "grammar": "compound",
+      "paper_rows": 4,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "28.0%",
+          "found_in": "2SYW-1",
+          "label": "매수비중",
+          "value": "28.0%",
+          "group": "KPI band",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "주문 0021833",
+          "found_in": "2SYW-1",
+          "label": "주문번호",
+          "value": "주문 0021833",
+          "group": "Position 1",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "누계 0원",
+          "found_in": "2SYW-1",
+          "label": "체결누계금액",
+          "value": "누계 0원",
+          "group": "Position 2",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "추정자산",
+              "paper_text": "124,580,240원"
+            },
+            {
+              "label": "수익률",
+              "paper_text": "수익률 +4.96%"
+            },
+            {
+              "label": "계좌별주문체결현황배열",
+              "paper_text": "5건"
+            },
+            {
+              "label": "약정금액",
+              "paper_text": "약정 16,788,000원"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "471G-0",
+      "kind": "mini",
+      "name": "mini/CC-02 / R11-T2 · 정정 — 삼성전자 지정가 정정",
+      "ledger_board": "2TAG-1",
+      "grammar": "order_confirm",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "unbacked",
+          "text": "주문 정보를 확인했어요",
+          "label": "",
+          "value": "주문 정보를 확인했어요",
+          "group": "Status",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "키움증권 01",
+          "found_in": "2TAG-1",
+          "label": "계좌",
+          "value": "키움증권 01",
+          "group": "Confirm values",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "금액",
+              "paper_text": "현재가 150,850원"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "4724-0",
+      "kind": "mini",
+      "name": "mini/CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소",
+      "ledger_board": "2TET-1",
+      "grammar": "order_confirm",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "unbacked",
+          "text": "주문 정보를 확인했어요",
+          "label": "",
+          "value": "주문 정보를 확인했어요",
+          "group": "Status",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "25%",
+          "found_in": "2TET-1",
+          "label": "변화",
+          "value": "25%",
+          "group": "Confirm values",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "금액",
+              "paper_text": "현재가 150,850원"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "472S-0",
+      "kind": "mini",
+      "name": "mini/CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+      "ledger_board": "2TJ6-1",
+      "grammar": "order_confirm",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "unbacked",
+          "text": "주문 정보를 확인했어요",
+          "label": "",
+          "value": "주문 정보를 확인했어요",
+          "group": "Status",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "25%",
+          "found_in": "2TJ6-1",
+          "label": "변화",
+          "value": "25%",
+          "group": "Confirm values",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "금액",
+              "paper_text": "현재가 150,850원"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "473G-0",
+      "kind": "mini",
+      "name": "mini/CC-02 / R11-T5 · 금현물 매수 — 금 99.99K 10g 시장가",
+      "ledger_board": "2TNJ-1",
+      "grammar": "order_confirm",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "unbacked",
+          "text": "주문 정보를 확인했어요",
+          "label": "",
+          "value": "주문 정보를 확인했어요",
+          "group": "Status",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "25%",
+          "found_in": "2TNJ-1",
+          "label": "변화",
+          "value": "25%",
+          "group": "Confirm values",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "금액",
+              "paper_text": "현재가 168,420원"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "4744-0",
+      "kind": "mini",
+      "name": "mini/CC-04 / R02-T4 · 호가 — 정규장 5단",
+      "ledger_board": "2TRW-1",
+      "grammar": "table",
+      "paper_rows": 3,
+      "failures": [
+        {
+          "code": "unbacked",
+          "text": "매수호가수량2",
+          "label": "01",
+          "value": "매수호가수량2 · 5,760",
+          "group": "Rank 1",
+          "layer": "static"
+        },
+        {
+          "code": "unbacked",
+          "text": "매수호가4",
+          "label": "02",
+          "value": "매수호가4 · 150,810",
+          "group": "Rank 2",
+          "layer": "static"
+        },
+        {
+          "code": "unbacked",
+          "text": "매수호가3",
+          "label": "03",
+          "value": "매수호가3 · 150,820",
+          "group": "Rank 3",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "매도호가5",
+              "paper_text": "150,890"
+            },
+            {
+              "label": "매도호가수량5",
+              "paper_text": "2,940"
+            },
+            {
+              "label": "매도호가4",
+              "paper_text": "150,880"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "4753-0",
+      "kind": "mini",
+      "name": "mini/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+      "ledger_board": "2TZN-1",
+      "grammar": "table",
+      "paper_rows": 3,
+      "failures": [
+        {
+          "code": "unbacked",
+          "text": "누적거래량n",
+          "label": "01",
+          "value": "누적거래량n · 누적 3억 4,200만주",
+          "group": "Rank 1",
+          "layer": "static"
+        },
+        {
+          "code": "paper_cross_board",
+          "text": "상승",
+          "found_in": "32XM-0",
+          "boards": [
+            "32XM-0"
+          ],
+          "label": "02",
+          "value": "상승 · 71 · 23",
+          "group": "Rank 2",
+          "layer": "static"
+        },
+        {
+          "code": "unbacked",
+          "text": "시간n",
+          "label": "03",
+          "value": "시간n · 09:30",
+          "group": "Rank 3",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "코드",
+              "paper_text": "G2510 · 제조"
+            },
+            {
+              "label": "현재가",
+              "paper_text": "3,184.52"
+            },
+            {
+              "label": "전일대비",
+              "paper_text": "+87.96"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "4762-0",
+      "kind": "mini",
+      "name": "mini/CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
+      "ledger_board": "2U5L-1",
+      "grammar": "table",
+      "paper_rows": 3,
+      "failures": [
+        {
+          "code": "paper_cross_board",
+          "text": "종목코드",
+          "found_in": "135M-2",
+          "boards": [
+            "135M-2",
+            "2T63-1",
+            "2TAG-1",
+            "2TET-1",
+            "2TJ6-1",
+            "2TNJ-1",
+            "3LGC-0",
+            "3ODO-0"
+          ],
+          "label": "01",
+          "value": "종목코드 · 035420",
+          "group": "Rank 1",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "현재가",
+          "found_in": "2U5L-1",
+          "label": "02",
+          "value": "현재가 · 214,000",
+          "group": "Rank 2",
+          "layer": "static"
+        },
+        {
+          "code": "paper_cross_board",
+          "text": "전일대비",
+          "found_in": "137X-2",
+          "boards": [
+            "137X-2",
+            "13BC-2",
+            "1JPU-0",
+            "1JZW-0",
+            "2QX1-1",
+            "2R3M-1",
+            "2RJ7-1",
+            "2ROJ-1",
+            "2TRW-1",
+            "3EWN-0"
+          ],
+          "label": "03",
+          "value": "전일대비 · +1,800 (+0.85%)",
+          "group": "Rank 3",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "종목코드",
+              "paper_text": "005930"
+            },
+            {
+              "label": "현재가",
+              "paper_text": "150,850"
+            },
+            {
+              "label": "전일대비",
+              "paper_text": "+1,850 · +1.24%"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "4771-0",
+      "kind": "mini",
+      "name": "mini/CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+      "ledger_board": "2UBO-1",
+      "grammar": "table",
+      "paper_rows": 3,
+      "failures": [
+        {
+          "code": "unbacked",
+          "text": "등락율",
+          "label": "01",
+          "value": "등락율 · +0.86%",
+          "group": "Rank 1",
+          "layer": "static"
+        },
+        {
+          "code": "unbacked",
+          "text": "테마그룹코드",
+          "label": "02",
+          "value": "테마그룹코드 · T0119",
+          "group": "Rank 2",
+          "layer": "static"
+        },
+        {
+          "code": "unbacked",
+          "text": "하락종목수",
+          "label": "03",
+          "value": "하락종목수 · 하락 9",
+          "group": "Rank 3",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "등락율",
+              "paper_text": "+3.42%"
+            },
+            {
+              "label": "상승종목수",
+              "paper_text": "18 / 24"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "4780-0",
+      "kind": "mini",
+      "name": "mini/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+      "ledger_board": "2UHM-1",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "842.15",
+          "found_in": "2UHM-1",
+          "label": "핵심",
+          "value": "842.15",
+          "group": "KPI band",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "272억",
+          "found_in": "2UHM-1",
+          "label": "누적거래대금",
+          "value": "272억",
+          "group": "Position 1",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "괴리 -10.1%",
+          "found_in": "2UHM-1",
+          "label": "괴리율 동적",
+          "value": "괴리 -10.1%",
+          "group": "Position 2",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "변화",
+              "paper_text": "2,684.21"
+            },
+            {
+              "label": "VI해제시각",
+              "paper_text": "해제 09:43:08"
+            },
+            {
+              "label": "종목코드",
+              "paper_text": "007660"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "478Z-0",
+      "kind": "mini",
+      "name": "mini/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+      "ledger_board": "2UN6-1",
+      "grammar": "table",
+      "paper_rows": 3,
+      "failures": [
+        {
+          "code": "unbacked",
+          "text": "일련번호",
+          "label": "01",
+          "value": "일련번호 · 오늘 2번째",
+          "group": "Rank 1",
+          "layer": "static"
+        },
+        {
+          "code": "unbacked",
+          "text": "일련번호",
+          "label": "02",
+          "value": "일련번호 · 오늘 5번째",
+          "group": "Rank 2",
+          "layer": "static"
+        },
+        {
+          "code": "paper_cross_board",
+          "text": "종목코드",
+          "found_in": "135M-2",
+          "boards": [
+            "135M-2",
+            "2T63-1",
+            "2TAG-1",
+            "2TET-1",
+            "2TJ6-1",
+            "2TNJ-1",
+            "3LGC-0",
+            "3ODO-0"
+          ],
+          "label": "03",
+          "value": "종목코드 · 005930",
+          "group": "Rank 3",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "조건검색식 명",
+              "paper_text": "20일 신고가"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "479Y-0",
+      "kind": "mini",
+      "name": "mini/CC-05 / R03-T6 · 수급 — 순위",
+      "ledger_board": "2V71-0",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "1,284만주",
+          "found_in": "2V71-0",
+          "label": "잔고주수",
+          "value": "1,284만주",
+          "group": "Position 1",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "전일 +82만주",
+          "found_in": "2V71-0",
+          "label": "대차거래증감",
+          "value": "전일 +82만주",
+          "group": "Position 2",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "프로그램순매수상위50",
+              "paper_text": "프로그램 순매수 상위 50"
+            },
+            {
+              "label": "프로그램순매수금액",
+              "paper_text": "+1,798억원"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "47AX-0",
+      "kind": "mini",
+      "name": "mini/CC-03 / R01-T4 · 순위 — 주식 신호·순위",
+      "ledger_board": "2VDA-0",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [],
+      "status": "matched"
+    },
+    {
+      "paper_board": "47BW-0",
+      "kind": "mini",
+      "name": "mini/CC-03 / R01-T5 · 순위 — ETF 전체시세",
+      "ledger_board": "2VIN-0",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "7 종목",
+          "found_in": "2VIN-0",
+          "label": "수량",
+          "value": "7 종목",
+          "group": "Position 2",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "금액",
+              "paper_text": "3.42조"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "47CV-0",
+      "kind": "mini",
+      "name": "mini/CC-03 / R01-T6 · 순위 — ELW 순위",
+      "ledger_board": "2VO0-0",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [],
+      "status": "matched"
+    },
+    {
+      "paper_board": "47DU-0",
+      "kind": "mini",
+      "name": "mini/CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+      "ledger_board": "2WZK-0",
+      "grammar": "facts",
+      "paper_rows": 5,
+      "failures": [],
+      "status": "matched"
+    },
+    {
+      "paper_board": "47EI-0",
+      "kind": "mini",
+      "name": "mini/CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
+      "ledger_board": "2X5N-0",
+      "grammar": "table",
+      "paper_rows": 3,
+      "failures": [
+        {
+          "code": "paper_cross_board",
+          "text": "거래회전율",
+          "found_in": "137X-2",
+          "boards": [
+            "137X-2",
+            "2R3M-1"
+          ],
+          "label": "01",
+          "value": "거래회전율 · 회전율 1.52%",
+          "group": "Rank 1",
+          "layer": "static"
+        },
+        {
+          "code": "paper_cross_board",
+          "text": "거래금액",
+          "found_in": "3LGC-0",
+          "boards": [
+            "3LGC-0"
+          ],
+          "label": "02",
+          "value": "거래금액 · 7,420억",
+          "group": "Rank 2",
+          "layer": "static"
+        },
+        {
+          "code": "paper_cross_board",
+          "text": "종목코드",
+          "found_in": "135M-2",
+          "boards": [
+            "135M-2",
+            "2T63-1",
+            "2TAG-1",
+            "2TET-1",
+            "2TJ6-1",
+            "2TNJ-1",
+            "3LGC-0",
+            "3ODO-0"
+          ],
+          "label": "03",
+          "value": "종목코드 · 035420",
+          "group": "Rank 3",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "종목코드",
+              "paper_text": "005930"
+            },
+            {
+              "label": "현재가",
+              "paper_text": "150,850"
+            },
+            {
+              "label": "전일대비",
+              "paper_text": "+1,850"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "47FH-0",
+      "kind": "mini",
+      "name": "mini/CC-03 / R01-T6-2 · 순위 — ELW 등락률",
+      "ledger_board": "2XA5-0",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [],
+      "status": "matched"
+    },
+    {
+      "paper_board": "47GG-0",
+      "kind": "mini",
+      "name": "mini/CC-06 / R04-S3 · 종목찾기 — 전일 거래량",
+      "ledger_board": "2XG6-0",
+      "grammar": "facts",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "810,000",
+          "found_in": "2XG6-0",
+          "label": "현재가",
+          "value": "810,000",
+          "group": "Fact 1",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "006400",
+          "found_in": "2XG6-0",
+          "label": "종목코드",
+          "value": "006400",
+          "group": "Fact 2",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "274만주",
+          "found_in": "2XG6-0",
+          "label": "거래량",
+          "value": "274만주",
+          "group": "Fact 3",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "상위 5개 표시 · 전체 100개",
+          "found_in": "2XG6-0",
+          "label": "전일거래량상위",
+          "value": "상위 5개 표시 · 전체 100개",
+          "group": "Fact 4",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "61.2만주",
+          "found_in": "2XG6-0",
+          "label": "거래량",
+          "value": "61.2만주",
+          "group": "Fact 5",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "종목코드",
+              "paper_text": "005930"
+            },
+            {
+              "label": "현재가",
+              "paper_text": "150,850"
+            },
+            {
+              "label": "전일대비",
+              "paper_text": "+1,850"
+            },
+            {
+              "label": "거래량",
+              "paper_text": "1,180만주"
+            },
+            {
+              "label": "종목코드",
+              "paper_text": "000660"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "47H4-0",
+      "kind": "mini",
+      "name": "mini/CC-06 / R04-S4 · 종목찾기 — 등락률",
+      "ledger_board": "2XKO-0",
+      "grammar": "facts",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "매도 8.2만",
+          "found_in": "2XKO-0",
+          "label": "매도잔량",
+          "value": "매도 8.2만",
+          "group": "Fact 1",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "매수 11.4만",
+          "found_in": "2XKO-0",
+          "label": "매수잔량",
+          "value": "매수 11.4만",
+          "group": "Fact 2",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "+1.24%",
+          "found_in": "2XKO-0",
+          "label": "등락률",
+          "value": "+1.24%",
+          "group": "Fact 3",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "1,420만주",
+          "found_in": "2XKO-0",
+          "label": "현재거래량",
+          "value": "1,420만주",
+          "group": "Fact 4",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "108.4%",
+          "found_in": "2XKO-0",
+          "label": "체결강도",
+          "value": "108.4%",
+          "group": "Fact 5",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "전일대비등락률상위",
+              "paper_text": "01"
+            },
+            {
+              "label": "종목코드",
+              "paper_text": "007660"
+            },
+            {
+              "label": "현재가",
+              "paper_text": "64,500"
+            },
+            {
+              "label": "전일대비",
+              "paper_text": "+14,850"
+            },
+            {
+              "label": "등락률",
+              "paper_text": "+29.90%"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "47HS-0",
+      "kind": "mini",
+      "name": "mini/CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
+      "ledger_board": "2XP6-0",
+      "grammar": "facts",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "상위 5개 표시 · 전체 100개",
+          "found_in": "2XP6-0",
+          "label": "예상체결등락률상위",
+          "value": "상위 5개 표시 · 전체 100개",
+          "group": "Fact 1",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "매도 9.8만",
+          "found_in": "2XP6-0",
+          "label": "매도잔량",
+          "value": "매도 9.8만",
+          "group": "Fact 3",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "매수 14.6만",
+          "found_in": "2XP6-0",
+          "label": "매수잔량",
+          "value": "매수 14.6만",
+          "group": "Fact 4",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "예상체결등락률상위",
+              "paper_text": "01"
+            },
+            {
+              "label": "예상체결가",
+              "paper_text": "54,500"
+            },
+            {
+              "label": "기준가",
+              "paper_text": "기준가 49,650"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "47IG-0",
+      "kind": "mini",
+      "name": "mini/CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위",
+      "ledger_board": "2XTO-0",
+      "grammar": "facts",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "+0.7만",
+          "found_in": "2XTO-0",
+          "label": "순매수잔량",
+          "value": "+0.7만",
+          "group": "Fact 1",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "매수비율 61.3%",
+          "found_in": "2XTO-0",
+          "label": "매수비율",
+          "value": "매수비율 61.3%",
+          "group": "Fact 2",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "매도 1.2만",
+          "found_in": "2XTO-0",
+          "label": "총매도잔량",
+          "value": "매도 1.2만",
+          "group": "Fact 3",
+          "layer": "static"
+        },
+        {
+          "code": "paper_form_deviation",
+          "text": "+3.01%",
+          "found_in": "2XTO-0",
+          "label": "전일대비기호",
+          "value": "+3.01%",
+          "group": "Fact 4",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "매수 1.9만",
+          "found_in": "2XTO-0",
+          "label": "총매수잔량",
+          "value": "매수 1.9만",
+          "group": "Fact 5",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "종목코드",
+              "paper_text": "005930"
+            },
+            {
+              "label": "현재가",
+              "paper_text": "150,850"
+            },
+            {
+              "label": "전일대비",
+              "paper_text": "+1,850"
+            },
+            {
+              "label": "전일대비기호",
+              "paper_text": "+1.24%"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "47J4-0",
+      "kind": "mini",
+      "name": "mini/CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+      "ledger_board": "2XY6-0",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [],
+      "status": "matched"
+    },
+    {
+      "paper_board": "47K3-0",
+      "kind": "mini",
+      "name": "mini/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+      "ledger_board": "2Y47-0",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [],
+      "status": "matched"
+    },
+    {
+      "paper_board": "47L2-0",
+      "kind": "mini",
+      "name": "mini/CC-06 / R04-S7 · 종목찾기 — 호가잔량 급증",
+      "ledger_board": "2YA8-0",
+      "grammar": "facts",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "810,000",
+          "found_in": "2YA8-0",
+          "label": "현재가",
+          "value": "810,000",
+          "group": "Fact 1",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "006400",
+          "found_in": "2YA8-0",
+          "label": "종목코드",
+          "value": "006400",
+          "group": "Fact 2",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "총매수 3.2만",
+          "found_in": "2YA8-0",
+          "label": "총매수량",
+          "value": "총매수 3.2만",
+          "group": "Fact 3",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "+23,700",
+          "found_in": "2YA8-0",
+          "label": "전일대비",
+          "value": "+23,700",
+          "group": "Fact 4",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "0.9만 → 1.9만",
+          "found_in": "2YA8-0",
+          "label": "기준량",
+          "value": "0.9만 → 1.9만",
+          "group": "Fact 5",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "종목코드",
+              "paper_text": "005930"
+            },
+            {
+              "label": "현재가",
+              "paper_text": "150,850"
+            },
+            {
+              "label": "전일대비",
+              "paper_text": "+1,850"
+            },
+            {
+              "label": "전일대비기호",
+              "paper_text": "+1.24%"
+            },
+            {
+              "label": "급증률",
+              "paper_text": "+212%"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "47LQ-0",
+      "kind": "mini",
+      "name": "mini/CC-06 / R04-S8 · 종목찾기 — 잔량률 급증",
+      "ledger_board": "2YEQ-0",
+      "grammar": "facts",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "810,000",
+          "found_in": "2YEQ-0",
+          "label": "현재가",
+          "value": "810,000",
+          "group": "Fact 1",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "006400",
+          "found_in": "2YEQ-0",
+          "label": "종목코드",
+          "value": "006400",
+          "group": "Fact 2",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "매도 2.7만",
+          "found_in": "2YEQ-0",
+          "label": "총매도잔량",
+          "value": "매도 2.7만",
+          "group": "Fact 3",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "+23,700",
+          "found_in": "2YEQ-0",
+          "label": "전일대비",
+          "value": "+23,700",
+          "group": "Fact 4",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "146.2% → 158.3%",
+          "found_in": "2YEQ-0",
+          "label": "기준률",
+          "value": "146.2% → 158.3%",
+          "group": "Fact 5",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "종목코드",
+              "paper_text": "005930"
+            },
+            {
+              "label": "현재가",
+              "paper_text": "150,850"
+            },
+            {
+              "label": "전일대비",
+              "paper_text": "+1,850"
+            },
+            {
+              "label": "전일대비기호",
+              "paper_text": "+1.24%"
+            },
+            {
+              "label": "급증률",
+              "paper_text": "+37.6%p"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "47ME-0",
+      "kind": "mini",
+      "name": "mini/CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+      "ledger_board": "2YJ8-0",
+      "grammar": "facts",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "누적 73.8만주",
+          "found_in": "2YJ8-0",
+          "label": "현재거래량",
+          "value": "누적 73.8만주",
+          "group": "Fact 1",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "상위 5개 표시 · 전체 100개",
+          "found_in": "2YJ8-0",
+          "label": "거래량급증",
+          "value": "상위 5개 표시 · 전체 100개",
+          "group": "Fact 2",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "1.5만 → 4.2만",
+          "found_in": "2YJ8-0",
+          "label": "이전거래량",
+          "value": "1.5만 → 4.2만",
+          "group": "Fact 3",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "+2.7만주",
+          "found_in": "2YJ8-0",
+          "label": "급증량",
+          "value": "+2.7만주",
+          "group": "Fact 4",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "전체 100개 중 12개 · 09:42 기준",
+          "found_in": "2YJ8-0",
+          "label": "종목리스트",
+          "value": "전체 100개 중 12개 · 09:42 기준",
+          "group": "Fact 5",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "종목코드",
+              "paper_text": "005930"
+            },
+            {
+              "label": "현재가",
+              "paper_text": "150,850"
+            },
+            {
+              "label": "전일대비",
+              "paper_text": "+1,850"
+            },
+            {
+              "label": "등락률",
+              "paper_text": "+1.24%"
+            },
+            {
+              "label": "급증률",
+              "paper_text": "6.4배"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "47N2-0",
+      "kind": "mini",
+      "name": "mini/CC-06 / R04-S10 · 종목찾기 — 시간외 등락률",
+      "ledger_board": "2YNQ-0",
+      "grammar": "facts",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "매수 0.4만",
+          "found_in": "2YNQ-0",
+          "label": "매수총잔량",
+          "value": "매수 0.4만",
+          "group": "Fact 1",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "매도 0.3만",
+          "found_in": "2YNQ-0",
+          "label": "매도총잔량",
+          "value": "매도 0.3만",
+          "group": "Fact 2",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "0.7만주",
+          "found_in": "2YNQ-0",
+          "label": "누적거래량",
+          "value": "0.7만주",
+          "group": "Fact 3",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "거래대금 56.7억",
+          "found_in": "2YNQ-0",
+          "label": "누적거래대금",
+          "value": "거래대금 56.7억",
+          "group": "Fact 4",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "상위 5개 표시 · 전체 100개",
+          "found_in": "2YNQ-0",
+          "label": "시간외단일가등락율순위",
+          "value": "상위 5개 표시 · 전체 100개",
+          "group": "Fact 5",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "순위",
+              "paper_text": "01"
+            },
+            {
+              "label": "종목코드",
+              "paper_text": "005930"
+            },
+            {
+              "label": "현재가",
+              "paper_text": "151,200"
+            },
+            {
+              "label": "당일종가",
+              "paper_text": "당일 종가 150,850"
+            },
+            {
+              "label": "등락률",
+              "paper_text": "+0.23%"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "47NQ-0",
+      "kind": "mini",
+      "name": "mini/CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+      "ledger_board": "2YS8-0",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "상위 50 기준",
+          "found_in": "2YS8-0",
+          "label": "값",
+          "value": "상위 50 기준",
+          "group": "Position 2",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "변화",
+              "paper_text": "융자잔고 1위"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "47OP-0",
+      "kind": "mini",
+      "name": "mini/CC-03 / R01-T4-2 · 순위 — 상하한가",
+      "ledger_board": "2YXS-0",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [],
+      "status": "matched"
+    },
+    {
+      "paper_board": "47PO-0",
+      "kind": "mini",
+      "name": "mini/CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+      "ledger_board": "2Z49-0",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [],
+      "status": "matched"
+    },
+    {
+      "paper_board": "47QN-0",
+      "kind": "mini",
+      "name": "mini/CC-05 / R03-T6-3 · 순위 — 대차 상위",
+      "ledger_board": "2ZBB-0",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "상위 50 합계",
+          "found_in": "2ZBB-0",
+          "label": "값",
+          "value": "상위 50 합계",
+          "group": "Position 2",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "변화",
+              "paper_text": "대차잔고 1위"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "47RM-0",
+      "kind": "mini",
+      "name": "mini/CC-03 / R01-T4-3 · 순위 — 고저가근접",
+      "ledger_board": "2ZHC-0",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [],
+      "status": "matched"
+    },
+    {
+      "paper_board": "47SL-0",
+      "kind": "mini",
+      "name": "mini/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+      "ledger_board": "2ZN9-0",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "기어링 10배 이상",
+          "found_in": "2ZN9-0",
+          "label": "ELW조건검색",
+          "value": "기어링 10배 이상",
+          "group": "Position 1",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "ELW조건검색",
+              "paper_text": "행사가 ±10%"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "47TK-0",
+      "kind": "mini",
+      "name": "mini/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+      "ledger_board": "2ZTA-0",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [],
+      "status": "matched"
+    },
+    {
+      "paper_board": "47UJ-0",
+      "kind": "mini",
+      "name": "mini/CC-03 / R01-T4-4 · 순위 — 가격급등락",
+      "ledger_board": "2ZZ7-0",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [],
+      "status": "matched"
+    },
+    {
+      "paper_board": "47VI-0",
+      "kind": "mini",
+      "name": "mini/CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
+      "ledger_board": "3063-0",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "30분 집계",
+          "found_in": "3063-0",
+          "label": "값",
+          "value": "30분 집계",
+          "group": "KPI band",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "변화",
+              "paper_text": "-1,186억원"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "47WH-0",
+      "kind": "mini",
+      "name": "mini/CC-03 / R01-T4-5 · 순위 — 거래량갱신",
+      "ledger_board": "30C1-0",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "paper_form_deviation",
+          "text": "매수 412,500",
+          "found_in": "30C1-0",
+          "label": "매수호가",
+          "value": "매수 412,500",
+          "group": "Position 1",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "80만주",
+          "found_in": "30C1-0",
+          "label": "현재거래량",
+          "value": "80만주",
+          "group": "Position 2",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "거래량갱신",
+              "paper_text": "1"
+            },
+            {
+              "label": "종목코드",
+              "paper_text": "007660"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "47XG-0",
+      "kind": "mini",
+      "name": "mini/CC-05 / R03-T6-6 · 순위 — 외국인·기관 상위",
+      "ledger_board": "30HY-0",
+      "grammar": "facts",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "09:42 조회",
+          "found_in": "30HY-0",
+          "label": "기준 시각",
+          "value": "09:42 조회",
+          "group": "Fact 3",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "수량",
+              "paper_text": "6종목"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "47Y4-0",
+      "kind": "mini",
+      "name": "mini/CC-03 / R01-T4-6 · 순위 — 매물대집중",
+      "ledger_board": "30O1-0",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [],
+      "status": "matched"
+    },
+    {
+      "paper_board": "47Z3-0",
+      "kind": "mini",
+      "name": "mini/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+      "ledger_board": "30TY-0",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "09:42 조회",
+          "found_in": "30TY-0",
+          "label": "기준 시각",
+          "value": "09:42 조회",
+          "group": "Position 1",
+          "layer": "static"
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "4802-0",
+      "kind": "mini",
+      "name": "mini/CC-03 / R01-T4-7 · 순위 — 고저 PER",
+      "ledger_board": "30ZW-0",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [],
+      "status": "matched"
+    },
+    {
+      "paper_board": "4811-0",
+      "kind": "mini",
+      "name": "mini/CC-03 / R01-T4-8 · 순위 — 시가대비 등락",
+      "ledger_board": "316O-0",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [],
+      "status": "matched"
+    },
+    {
+      "paper_board": "4820-0",
+      "kind": "mini",
+      "name": "mini/CC-05 / R03-T6-8 · 순위 — 동일순매매",
+      "ledger_board": "31CL-0",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "09:42 조회",
+          "found_in": "31CL-0",
+          "label": "기준 시각",
+          "value": "09:42 조회",
+          "group": "Position 2",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "수량",
+              "paper_text": "18종목"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "482Z-0",
+      "kind": "mini",
+      "name": "mini/CC-03 / R01-T4-9 · 순위 — VI 발동",
+      "ledger_board": "31II-0",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "1건",
+          "found_in": "31II-0",
+          "label": "핵심",
+          "value": "1건",
+          "group": "KPI band",
+          "layer": "static"
+        },
+        {
+          "code": "paper_form_deviation",
+          "text": "09:41~",
+          "found_in": "31II-0",
+          "label": "매매체결처리시각",
+          "value": "09:41~",
+          "group": "Position 1",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "09:43",
+          "found_in": "31II-0",
+          "label": "VI해제시각",
+          "value": "09:43",
+          "group": "Position 2",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "VI적용구분",
+              "paper_text": "8건"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "483Y-0",
+      "kind": "mini",
+      "name": "mini/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+      "ledger_board": "31OF-0",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "09:42 조회",
+          "found_in": "31OF-0",
+          "label": "기준 시각",
+          "value": "09:42 조회",
+          "group": "Position 1",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "수량",
+              "paper_text": "전체 2,056종목"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "484X-0",
+      "kind": "mini",
+      "name": "mini/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+      "ledger_board": "31UD-0",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [],
+      "status": "matched"
+    },
+    {
+      "paper_board": "485W-0",
+      "kind": "mini",
+      "name": "mini/CC-03 / R01-T7 · 차트 — 업종 지수",
+      "ledger_board": "32S7-0",
+      "grammar": "chart",
+      "paper_rows": 2,
+      "failures": [
+        {
+          "code": "unbacked",
+          "text": "+87.96 (+2.84%)",
+          "label": "3,184.52",
+          "value": "+87.96 (+2.84%)",
+          "group": "Price hero",
+          "layer": "static"
+        },
+        {
+          "code": "paper_cross_board",
+          "text": "현재",
+          "found_in": "2UHM-1",
+          "boards": [
+            "2UHM-1"
+          ],
+          "label": "시작",
+          "value": "현재",
+          "group": "Chart range",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "전일대비",
+              "paper_text": "+87.96 · +2.84%"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "486G-0",
+      "kind": "mini",
+      "name": "mini/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+      "ledger_board": "32XM-0",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [],
+      "status": "matched"
+    },
+    {
+      "paper_board": "487F-0",
+      "kind": "mini",
+      "name": "mini/CC-06 / R04-T1-X · 업종 — 업종 목록 펼침",
+      "ledger_board": "3BQB-0",
+      "grammar": "facts",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "4개",
+          "found_in": "3BQB-0",
+          "label": "업종코드리스트",
+          "value": "4개",
+          "group": "Fact 3",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "KOSPI200",
+          "found_in": "3BQB-0",
+          "label": "시장구분코드",
+          "value": "KOSPI200",
+          "group": "Fact 4",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "K200 반도체",
+          "found_in": "3BQB-0",
+          "label": "업종명",
+          "value": "K200 반도체",
+          "group": "Fact 5",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "업종코드리스트",
+              "paper_text": "21개 업종"
+            },
+            {
+              "label": "업종코드리스트",
+              "paper_text": "11개"
+            },
+            {
+              "label": "코드",
+              "paper_text": "G1010"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "4883-0",
+      "kind": "mini",
+      "name": "mini/CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+      "ledger_board": "3D4I-0",
+      "grammar": "table",
+      "paper_rows": 3,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "상한가",
+          "found_in": "3D4I-0",
+          "label": "01",
+          "value": "상한가 · 193,700",
+          "group": "Rank 1",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "하한가",
+          "found_in": "3D4I-0",
+          "label": "02",
+          "value": "하한가 · 104,300",
+          "group": "Rank 2",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "시가",
+          "found_in": "3D4I-0",
+          "label": "03",
+          "value": "시가 · 149,200",
+          "group": "Rank 3",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "종목코드",
+              "paper_text": "005930"
+            },
+            {
+              "label": "현재가",
+              "paper_text": "150,850"
+            },
+            {
+              "label": "전일대비",
+              "paper_text": "+1,850 · +1.24%"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "4892-0",
+      "kind": "mini",
+      "name": "mini/CC-03 / R01-X · 투자자 12주체",
+      "ledger_board": "3DI2-0",
+      "grammar": "facts",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "전년 7.9%",
+          "found_in": "3DI2-0",
+          "label": "변화",
+          "value": "전년 7.9%",
+          "group": "Fact 3",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "업종 1.61배",
+          "found_in": "3DI2-0",
+          "label": "값",
+          "value": "업종 1.61배",
+          "group": "Fact 5",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "수량",
+              "paper_text": "1,420만주"
+            },
+            {
+              "label": "기타",
+              "paper_text": "2.63배"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "489Q-0",
+      "kind": "mini",
+      "name": "mini/CC-03 / R08-X · ELW 바스켓·만기평가",
+      "ledger_board": "3DZ1-0",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "22.4%",
+          "found_in": "3DZ1-0",
+          "label": "ELW투자지표산출",
+          "value": "22.4%",
+          "group": "Position 1",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "기초자산1",
+              "paper_text": "삼성전자 100% · 바스켓 1종"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48AP-0",
+      "kind": "mini",
+      "name": "mini/CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+      "ledger_board": "3EWN-0",
+      "grammar": "table",
+      "paper_rows": 3,
+      "failures": [
+        {
+          "code": "unbacked",
+          "text": "호가시간",
+          "label": "01",
+          "value": "호가시간 · 09:42:18 기준",
+          "group": "Rank 1",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "이론가",
+          "found_in": "3EWN-0",
+          "label": "02",
+          "value": "이론가 · 1,210원",
+          "group": "Rank 2",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "로",
+          "found_in": "3EWN-0",
+          "label": "03",
+          "value": "로 · 0.07",
+          "group": "Rank 3",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "종목코드",
+              "paper_text": "58H215"
+            },
+            {
+              "label": "현재가",
+              "paper_text": "1,245"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48BO-0",
+      "kind": "mini",
+      "name": "mini/CC-03 / R01-T1-X · 분봉 시세",
+      "ledger_board": "3FR6-0",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "업종 1.61배",
+          "found_in": "3FR6-0",
+          "label": "값",
+          "value": "업종 1.61배",
+          "group": "Position 1",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "핵심 지표",
+              "paper_text": "업종 11.2배"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48CN-0",
+      "kind": "mini",
+      "name": "mini/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+      "ledger_board": "3GRO-0",
+      "grammar": "compound",
+      "paper_rows": 4,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "28.0%",
+          "found_in": "3GRO-0",
+          "label": "매수비중",
+          "value": "28.0%",
+          "group": "KPI band",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "89,760,240원",
+          "found_in": "3GRO-0",
+          "label": "유가잔고평가액",
+          "value": "89,760,240원",
+          "group": "Position 1",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "+4,240,900원",
+          "found_in": "3GRO-0",
+          "label": "총 평가손익",
+          "value": "+4,240,900원",
+          "group": "Position 2",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "추정자산",
+              "paper_text": "124,580,240원"
+            },
+            {
+              "label": "수익률",
+              "paper_text": "수익률 +4.96%"
+            },
+            {
+              "label": "d+2출금가능금액",
+              "paper_text": "31,240,000원"
+            },
+            {
+              "label": "출금가능금액",
+              "paper_text": "출금가능 28,940,000원"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48DM-0",
+      "kind": "mini",
+      "name": "mini/CC-01 / R10-T2-X2 · 증거금 재원·담보 상세",
+      "ledger_board": "3IGR-0",
+      "grammar": "compound",
+      "paper_rows": 4,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "28.0%",
+          "found_in": "3IGR-0",
+          "label": "매수비중",
+          "value": "28.0%",
+          "group": "KPI band",
+          "layer": "static"
+        },
+        {
+          "code": "paper_form_deviation",
+          "text": "0원",
+          "found_in": "3IGR-0",
+          "label": "신용대용증거금",
+          "value": "0원",
+          "group": "Position 1",
+          "layer": "static"
+        },
+        {
+          "code": "paper_form_deviation",
+          "text": "0원",
+          "found_in": "3IGR-0",
+          "label": "전일대주상환손실대용증거금",
+          "value": "0원",
+          "group": "Position 2",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "수익률",
+              "paper_text": "수익률 +4.96%"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48EL-0",
+      "kind": "mini",
+      "name": "mini/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+      "ledger_board": "3JT4-0",
+      "grammar": "table",
+      "paper_rows": 3,
+      "failures": [
+        {
+          "code": "unbacked",
+          "text": "매도호가총잔량직전대비",
+          "label": "01",
+          "value": "매도호가총잔량직전대비 · +2,140",
+          "group": "Rank 1",
+          "layer": "static"
+        },
+        {
+          "code": "unbacked",
+          "text": "매수호가총잔량직전대비",
+          "label": "02",
+          "value": "매수호가총잔량직전대비 · −1,380",
+          "group": "Rank 2",
+          "layer": "static"
+        },
+        {
+          "code": "unbacked",
+          "text": "시간외단일가_매도호가총잔량",
+          "label": "03",
+          "value": "시간외단일가_매도호가총잔량 · 113,820 / 79,760",
+          "group": "Rank 3",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "매도호가총잔량",
+              "paper_text": "38,160 / 43,000"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48FK-0",
+      "kind": "mini",
+      "name": "mini/CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+      "ledger_board": "3JZ3-0",
+      "grammar": "table",
+      "paper_rows": 3,
+      "failures": [
+        {
+          "code": "unbacked",
+          "text": "NXT 매수호가잔량2",
+          "label": "01",
+          "value": "NXT 매수호가잔량2 · 1,730",
+          "group": "Rank 1",
+          "layer": "static"
+        },
+        {
+          "code": "unbacked",
+          "text": "매수호가수량3",
+          "label": "02",
+          "value": "매수호가수량3 · 3,230",
+          "group": "Rank 2",
+          "layer": "static"
+        },
+        {
+          "code": "unbacked",
+          "text": "매수호가3",
+          "label": "03",
+          "value": "매수호가3 · 150,820",
+          "group": "Rank 3",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "매도호가10",
+              "paper_text": "150,940"
+            },
+            {
+              "label": "매도호가수량10",
+              "paper_text": "2,160"
+            },
+            {
+              "label": "매도호가직전대비10",
+              "paper_text": "+770"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48GJ-0",
+      "kind": "mini",
+      "name": "mini/CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+      "ledger_board": "3K7K-0",
+      "grammar": "facts",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "+4,240,900원",
+          "found_in": "3K7K-0",
+          "label": "총 평가손익",
+          "value": "+4,240,900원",
+          "group": "Fact 3",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "보유종목 8종",
+          "found_in": "3K7K-0",
+          "label": "종목별계좌평가현황",
+          "value": "보유종목 8종",
+          "group": "Fact 4",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "매입 85,519,340원",
+          "found_in": "3K7K-0",
+          "label": "총 매입가",
+          "value": "매입 85,519,340원",
+          "group": "Fact 5",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "순자산액계_초",
+              "paper_text": "1억 1,975만 → 1억 2,458만"
+            },
+            {
+              "label": "주문가능금액",
+              "paper_text": "31,240,000원"
+            },
+            {
+              "label": "출금가능금액",
+              "paper_text": "출금가능 28,940,000원"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48H7-0",
+      "kind": "mini",
+      "name": "mini/CC-01 / R10-T2-X3 · 거래내역 상세",
+      "ledger_board": "3LGC-0",
+      "grammar": "compound",
+      "paper_rows": 4,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "28.0%",
+          "found_in": "3LGC-0",
+          "label": "매수비중",
+          "value": "28.0%",
+          "group": "KPI band",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "08/26",
+          "found_in": "3LGC-0",
+          "label": "거래일자",
+          "value": "08/26",
+          "group": "Position 1",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "122,364,140",
+          "found_in": "3LGC-0",
+          "label": "유가금잔",
+          "value": "122,364,140",
+          "group": "Position 2",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "추정자산",
+              "paper_text": "124,580,240원"
+            },
+            {
+              "label": "수익률",
+              "paper_text": "수익률 +4.96%"
+            },
+            {
+              "label": "거래일자",
+              "paper_text": "09/01"
+            },
+            {
+              "label": "거래번호",
+              "paper_text": "순번 142"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48I6-0",
+      "kind": "mini",
+      "name": "mini/CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
+      "ledger_board": "3MTJ-0",
+      "grammar": "compound",
+      "paper_rows": 4,
+      "failures": [
+        {
+          "code": "paper_form_deviation",
+          "text": "0원",
+          "found_in": "3MTJ-0",
+          "label": "신용대주평가금D+2",
+          "value": "0원",
+          "group": "Position 1",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "SK하이닉스 20주",
+          "found_in": "3MTJ-0",
+          "label": "종목명",
+          "value": "SK하이닉스 20주",
+          "group": "Position 2",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "출금가능금액",
+              "paper_text": "28,940,000"
+            },
+            {
+              "label": "예수금",
+              "paper_text": "34,820,000"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48J5-0",
+      "kind": "mini",
+      "name": "mini/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+      "ledger_board": "3NVG-0",
+      "grammar": "compound",
+      "paper_rows": 4,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "28.0%",
+          "found_in": "3NVG-0",
+          "label": "매수비중",
+          "value": "28.0%",
+          "group": "KPI band",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "0달러",
+          "found_in": "3NVG-0",
+          "label": "d+3외화예수금",
+          "value": "0달러",
+          "group": "Position 1",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "0달러",
+          "found_in": "3NVG-0",
+          "label": "d+4외화예수금",
+          "value": "0달러",
+          "group": "Position 2",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "예탁자산평가액",
+              "paper_text": "124,580,240원"
+            },
+            {
+              "label": "수익률",
+              "paper_text": "수익률 +4.96%"
+            },
+            {
+              "label": "예수금",
+              "paper_text": "34,820,000원"
+            },
+            {
+              "label": "주문가능금액",
+              "paper_text": "31,240,000원"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48K4-0",
+      "kind": "mini",
+      "name": "mini/CC-01 / R10-B-X1 · 금현물 잔고·거래내역",
+      "ledger_board": "3ODO-0",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "결제잔고 120g",
+          "found_in": "3ODO-0",
+          "label": "결제잔고",
+          "value": "결제잔고 120g",
+          "group": "KPI band",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "15,312,000원",
+          "found_in": "3ODO-0",
+          "label": "총매입금액",
+          "value": "15,312,000원",
+          "group": "Position 1",
+          "layer": "static"
+        },
+        {
+          "code": "ledger_stale",
+          "text": "20,870,000원",
+          "found_in": "3ODO-0",
+          "label": "추정예탁자산",
+          "value": "20,870,000원",
+          "group": "Position 2",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "잔고평가액",
+              "paper_text": "16,050,000원"
+            },
+            {
+              "label": "종목명",
+              "paper_text": "금 99.99K 1g"
+            },
+            {
+              "label": "종목코드",
+              "paper_text": "04020000"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48L3-0",
+      "kind": "mini",
+      "name": "mini/CC-01 / R10-B-X2 · 금현물 주문·체결",
+      "ledger_board": "3OIM-0",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "ledger_stale",
+          "text": "09:21:07",
+          "found_in": "3OIM-0",
+          "label": "확인시간",
+          "value": "09:21:07",
+          "group": "Position 1",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "계좌별주문미체결현황",
+              "paper_text": "3건 · 09/01 · 08/31"
+            },
+            {
+              "label": "주문번호",
+              "paper_text": "0000512"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48M2-0",
+      "kind": "mini",
+      "name": "mini/CC-03 / R01-T4-9-X · VI 발동 전체 12건",
+      "ledger_board": "3TCO-0",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [],
+      "status": "matched"
+    },
+    {
+      "paper_board": "48N1-0",
+      "kind": "mini",
+      "name": "mini/CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
+      "ledger_board": "3TOM-0",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [],
+      "status": "matched"
+    },
+    {
+      "paper_board": "48O0-0",
+      "kind": "mini",
+      "name": "mini/CC-01 / R10-T2-X6 · 부채·미수·연체 상세",
+      "ledger_board": "3UTA-0",
+      "grammar": "compound",
+      "paper_rows": 5,
+      "failures": [
+        {
+          "code": "paper_form_deviation",
+          "text": "89,760,240원",
+          "found_in": "3UTA-0",
+          "label": "금액",
+          "value": "89,760,240원",
+          "group": "Position 2",
+          "layer": "static"
+        },
+        {
+          "code": "missing_in_paper",
+          "layer": "static",
+          "elements": [
+            {
+              "label": "변화",
+              "paper_text": "대출·융자·미수·연체 27항목"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48OZ-0",
+      "kind": "note",
+      "name": "note/CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+      "ledger_board": "133H-2",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "계좌명 · 예탁자산평가액 · 수익률 · 총재매수가능금액 · 인출가능금액",
+              "ledger": "예탁자산평가액 · 수익률 · 총재매수가능금액 · 인출가능금액 · 유가잔고평가액"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48P9-0",
+      "kind": "note",
+      "name": "note/CC-02 / R11 · 삼성전자 10주 시장가 매수",
+      "ledger_board": "135M-2",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "주문가능금액",
+              "ledger": "주문가능금액 · 금액 · 수량 · 계좌 · 변화"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48PJ-0",
+      "kind": "note",
+      "name": "note/CC-03 / R01 · 삼성전자 3개월 차트",
+      "ledger_board": "137X-2",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "종목코드 · 현재가 · 추이",
+              "ledger": "현재가 · 전일대비"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48PT-0",
+      "kind": "note",
+      "name": "note/CC-04 / R02 · 삼성전자 실시간 호가·체결",
+      "ledger_board": "13BC-2",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "종목코드 · 현재가 · 등락률",
+              "ledger": "매도호가10 · 매도호가수량10 · 매도호가9"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48Q3-0",
+      "kind": "note",
+      "name": "note/CC-06 / R04 · 거래대금 상위 저평가 탐색",
+      "ledger_board": "13K0-2",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "거래대금상위 · 현재순위 · 전일순위",
+              "ledger": "현재순위 · 전일순위 · 종목코드"
+            },
+            {
+              "field": "fold",
+              "paper": "행 0개",
+              "ledger": "추가 항목은 원본에서 확인"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48QD-0",
+      "kind": "note",
+      "name": "note/CC-06 / R05 · 반도체 업종·AI 테마",
+      "ledger_board": "15J9-2",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "종목코드 · 전일대비 · 고가",
+              "ledger": "변화 · 기준 시각"
+            },
+            {
+              "field": "fold",
+              "paper": "행 0개",
+              "ledger": "추가 항목은 원본에서 확인"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48QN-0",
+      "kind": "note",
+      "name": "note/CC-06 / R06 · 관심종목·조건 신호",
+      "ledger_board": "15L8-2",
+      "failures": [],
+      "status": "matched"
+    },
+    {
+      "paper_board": "48QX-0",
+      "kind": "note",
+      "name": "note/CC-03 / R07 · KODEX 200 ETF",
+      "ledger_board": "15N5-2",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "종목명 · 종목분류 · 거래소구분 · 현재가 · 전일대비",
+              "ledger": "NAV · NAV/ETF 괴리율 · 추적오차율 · NAV/지수괴리율 · ETF대상지수코드"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48R7-0",
+      "kind": "note",
+      "name": "note/CC-03 / R08 · ELW 위험·만기",
+      "ledger_board": "15P5-2",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "종목명 · 종목코드 · ELW발행기관 · 현재가 · 전일대비",
+              "ledger": "현재가 · 변화 · 거래량 · 행사가격 · ELW이론가"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48RH-0",
+      "kind": "note",
+      "name": "note/CC-06 / R09 · 시장 체온·VI",
+      "ledger_board": "15R0-2",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "KOSPI,K… · 체결시간 · 현재가 · 전일대비 · 상승종목수",
+              "ledger": "현재가 · 전일대비 · 상승종목수"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48RR-0",
+      "kind": "note",
+      "name": "note/A04 · 호가 정본 — 실시간 통합 호가",
+      "ledger_board": "1JPU-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "종목명 · 날짜 · 체결강도",
+              "ledger": "매도10호가잔량 · 매도호가10 · 현재가"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48S1-0",
+      "kind": "note",
+      "name": "note/A02×A04 · 호가 주문 정본 — 시장가 매수",
+      "ledger_board": "1JZW-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "종목명 · 날짜 · 주문가능수량",
+              "ledger": "매도10호가잔량 · 매도호가10 · 현재가"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48SB-0",
+      "kind": "note",
+      "name": "note/A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위",
+      "ledger_board": "1WOB-1",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "조회일자 · 외인기간별매매… · 합계 · 순위 · 순매수량",
+              "ledger": "순위 · 종목코드 · 현재가 · 매도호가 · 매수호가"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48SL-0",
+      "kind": "note",
+      "name": "note/CC-05 / R03-T1 · 수급 — 투자자별",
+      "ledger_board": "2QFO-2",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "종목코드 · 외국인투자자 · 기관계 · 금융투자 · 개인투자자",
+              "ledger": "외국인투자자 · 기관계 · 금융투자 · 개인투자자 · 차익거래당일"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48SV-0",
+      "kind": "note",
+      "name": "note/CC-05 / R03-T2 · 수급 — 거래원",
+      "ledger_board": "2QM7-2",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "종목코드 · 누적순매수 · 외국계순매수추… · 외국계매수추정합 · 매도상위이탈원",
+              "ledger": "누적순매수 · 외국계순매수추정합 · 매도상위이탈원 · 금액 · 기준 시각"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48T5-0",
+      "kind": "note",
+      "name": "note/CC-04 / R02-T2 · 호가 — 시간외 단일가",
+      "ledger_board": "2QRP-1",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "투자자별tic… · 시간외단일가_… · 호가잔량기준시간",
+              "ledger": "시간외단일가_매도호가5 · 시간외단일가_매도호가수량5 · 시간외단일가_매도호가4"
+            },
+            {
+              "field": "fold",
+              "paper": "행 0개",
+              "ledger": "추가 항목은 원본에서 확인"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48TF-0",
+      "kind": "note",
+      "name": "note/CC-04 / R02-T3 · 호가 — KRX 금현물",
+      "ledger_board": "2QX1-1",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "거래소구분 · 체결가 · 등락율",
+              "ledger": "금현물호가"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48TP-0",
+      "kind": "note",
+      "name": "note/CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+      "ledger_board": "2R3M-1",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "거래소구분 · 현재가 · 전일대비 · 체결시간 · 시가",
+              "ledger": "누적거래대금 · ROE · PER · 현재가 · 전일대비"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48TZ-0",
+      "kind": "note",
+      "name": "note/CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+      "ledger_board": "2RBO-1",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "종목코드 · 현재가 · 전일대비 · 시가 · 거래량",
+              "ledger": "거래량 · 거래대금 · PER · PBR · ROE"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48U9-0",
+      "kind": "note",
+      "name": "note/CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+      "ledger_board": "2RJ7-1",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "현재가 · 전일대비 · 체결시간 · 시가 · 누적 거래량",
+              "ledger": "누적 거래량 · 등락율 · 보조 지표 · 금현물일봉차트조회 · 전일대비기호"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48UJ-0",
+      "kind": "note",
+      "name": "note/CC-05 / R03-T3 · 수급 — 프로그램",
+      "ledger_board": "2ROJ-1",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "종목코드 · 외국인투자자 · 기관계 · 금융투자 · 개인투자자",
+              "ledger": "외국인투자자 · 기관계 · 개인투자자 · 체결시간 · 차익거래순매수"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48UT-0",
+      "kind": "note",
+      "name": "note/CC-05 / R03-T4 · 수급 — 신용·대차",
+      "ledger_board": "2RWK-1",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "종목코드 · 외국인투자자 · 기관계 · 금융투자 · 개인투자자",
+              "ledger": "외국인투자자 · 기관계 · 개인투자자 · 매매비중 · 잔고주수"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48V3-0",
+      "kind": "note",
+      "name": "note/CC-05 / R03-T5 · 수급 — 종목 동향",
+      "ledger_board": "2S4E-1",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "종목코드 · 외국인투자자 · 외국인연속순매… · 기관계 · 금융투자",
+              "ledger": "외국인투자자 · 기관계 · 개인투자자"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48VD-0",
+      "kind": "note",
+      "name": "note/CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+      "ledger_board": "2SCE-1",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "계좌번호 · 총 평가금액 · 총수익률(%) · 종목별계좌평가… · 총 평가손익",
+              "ledger": "총 평가금액 · 총수익률(%) · 종목별계좌평가현황 · 계좌평가잔고개별합산 · 종목번호"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48VN-0",
+      "kind": "note",
+      "name": "note/CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+      "ledger_board": "2SKU-1",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "계좌명 · 예탁자산평가액 · 수익률 · 주문가능금액 · 인출가능금액",
+              "ledger": "예탁자산평가액 · 수익률 · 종목별계좌평가현황 · 예수금 · 랩출금가능금액"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48VX-0",
+      "kind": "note",
+      "name": "note/CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+      "ledger_board": "2SRV-1",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "계좌번호 · 예탁자산평가액 · 수익률 · 주문가능금액 · 출금가능금액",
+              "ledger": "예탁자산평가액 · 수익률 · 종목별계좌평가현황 · 당일투자손익 · 당월투자손익"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48W7-0",
+      "kind": "note",
+      "name": "note/CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+      "ledger_board": "2SYW-1",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "계좌번호 · 추정자산 · 수익률 · 주문가능금액 · 출금가능금액",
+              "ledger": "추정자산 · 수익률 · 종목별계좌평가현황 · 계좌별주문체결현황배열 · 약정금액"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48WH-0",
+      "kind": "note",
+      "name": "note/CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도",
+      "ledger_board": "2T63-1",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "매매가능수량",
+              "ledger": "매매가능수량 · 금액 · 수량 · 계좌"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48WR-0",
+      "kind": "note",
+      "name": "note/CC-02 / R11-T2 · 정정 — 삼성전자 지정가 정정",
+      "ledger_board": "2TAG-1",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "주문가능금액 · 정정수량",
+              "ledger": "주문가능금액 · 금액 · 수량"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48X1-0",
+      "kind": "note",
+      "name": "note/CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소",
+      "ledger_board": "2TET-1",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "주문가능금액 · 취소수량 · 모주문번호",
+              "ledger": "주문가능금액 · 금액 · 수량 · 계좌"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48XB-0",
+      "kind": "note",
+      "name": "note/CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+      "ledger_board": "2TJ6-1",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "주문가능금액",
+              "ledger": "주문가능금액 · 금액 · 수량 · 계좌"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48XL-0",
+      "kind": "note",
+      "name": "note/CC-02 / R11-T5 · 금현물 매수 — 금 99.99K 10g 시장가",
+      "ledger_board": "2TNJ-1",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "주문가능금액",
+              "ledger": "주문가능금액 · 금액 · 보조 지표 · 계좌"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48XV-0",
+      "kind": "note",
+      "name": "note/CC-04 / R02-T4 · 호가 — 정규장 5단",
+      "ledger_board": "2TRW-1",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "종목코드 · 현재가 · 등락률",
+              "ledger": "매도호가5 · 매도호가수량5 · 매도호가4"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48Y5-0",
+      "kind": "note",
+      "name": "note/CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+      "ledger_board": "2TZN-1",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "체결시간 · 전업종지수 · 업종코드리스트",
+              "ledger": "코드 · 현재가 · 전일대비"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48YF-0",
+      "kind": "note",
+      "name": "note/CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
+      "ledger_board": "2U5L-1",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "체결시간 · 관심종목정보 · 종목 갯수",
+              "ledger": "종목코드 · 현재가 · 전일대비"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48YP-0",
+      "kind": "note",
+      "name": "note/CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+      "ledger_board": "2UBO-1",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "테마그룹별 · 테마그룹코드 · 등락율",
+              "ledger": "테마그룹코드 · 등락율 · 상승종목수"
+            },
+            {
+              "field": "fold",
+              "paper": "행 0개",
+              "ledger": "추가 항목은 원본에서 확인"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48YZ-0",
+      "kind": "note",
+      "name": "note/CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+      "ledger_board": "2UHM-1",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "장운영구분 · 장시작예상잔여… · VI해제시각 · 종목코드 · VI발동횟수",
+              "ledger": "장시작예상잔여시간 · 변화 · 수량 · VI해제시각 · 종목코드"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48Z9-0",
+      "kind": "note",
+      "name": "note/CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+      "ledger_board": "2UN6-1",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "조건검색식 일… · 조건검색식 명 · 일련번호",
+              "ledger": "조건검색식 일련번호 · 조건검색식 명"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48ZJ-0",
+      "kind": "note",
+      "name": "note/CC-05 / R03-T6 · 수급 — 순위",
+      "ledger_board": "2V71-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "프로그램순매수… · 순매수대금합계 · 잔고주수 · 대차거래증감 · 순위",
+              "ledger": "프로그램순매수상위50 · 변화 · 보조 지표 · 순매수대금합계 · 프로그램순매수금액"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "48ZT-0",
+      "kind": "note",
+      "name": "note/CC-03 / R01-T4 · 순위 — 주식 신호·순위",
+      "ledger_board": "2VDA-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "신고저가 · 종목코드 · 현재가 · 등락률 · 고가",
+              "ledger": "핵심 지표 · 변화 · 보조 지표 · 수량"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "4903-0",
+      "kind": "note",
+      "name": "note/CC-03 / R01-T5 · 순위 — ETF 전체시세",
+      "ledger_board": "2VIN-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "ETF전체시세 · 대비기호 · 종목명 · 배수 · 종목코드",
+              "ledger": "금액 · 변화 · 보조 지표 · 핵심 지표"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "490D-0",
+      "kind": "note",
+      "name": "note/CC-03 / R01-T6 · 순위 — ELW 순위",
+      "ledger_board": "2VO0-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "ELW잔량순위 · 등락률 · 순위 · 종목코드 · 현재가",
+              "ledger": "등락률 · 변화 · 수량 · ELW잔량순위"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "490N-0",
+      "kind": "note",
+      "name": "note/CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+      "ledger_board": "2WZK-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "ETF전체시세 · ETF수익률 · 종목명 · ETF수익율 · 종가",
+              "ledger": "ETF수익률 · 종목명 · ETF전체시세"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "490X-0",
+      "kind": "note",
+      "name": "note/CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
+      "ledger_board": "2X5N-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "당일거래량상위 · 종목코드 · 현재가",
+              "ledger": "종목코드 · 현재가 · 전일대비"
+            },
+            {
+              "field": "fold",
+              "paper": "행 0개",
+              "ledger": "추가 항목은 원본에서 확인"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "4917-0",
+      "kind": "note",
+      "name": "note/CC-03 / R01-T6-2 · 순위 — ELW 등락률",
+      "ledger_board": "2XA5-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "ELW등락율순위 · 등락률 · 근접율 · 종목코드 · 전일대비",
+              "ledger": "등락률 · 근접율 · 수량 · ELW등락율순위"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "491H-0",
+      "kind": "note",
+      "name": "note/CC-06 / R04-S3 · 종목찾기 — 전일 거래량",
+      "ledger_board": "2XG6-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "전일거래량상위 · 종목코드 · 현재가 · 전일대비 · 거래량",
+              "ledger": "종목코드 · 현재가 · 전일대비 · 거래량"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "491R-0",
+      "kind": "note",
+      "name": "note/CC-06 / R04-S4 · 종목찾기 — 등락률",
+      "ledger_board": "2XKO-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "전일대비등락률… · 종목코드 · 현재가 · 전일대비 · 등락률",
+              "ledger": "전일대비등락률상위 · 종목코드 · 현재가 · 전일대비 · 등락률"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "4921-0",
+      "kind": "note",
+      "name": "note/CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
+      "ledger_board": "2XP6-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "예상체결등락률… · 종목코드 · 예상체결가 · 기준가 · 등락률",
+              "ledger": "예상체결등락률상위 · 종목코드 · 예상체결가 · 기준가 · 등락률"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "492B-0",
+      "kind": "note",
+      "name": "note/CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위",
+      "ledger_board": "2XTO-0",
+      "failures": [],
+      "status": "matched"
+    },
+    {
+      "paper_board": "492L-0",
+      "kind": "note",
+      "name": "note/CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+      "ledger_board": "2XY6-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "ELW근접율 · 등락률 · 근접율 · 종목코드 · 전일대비",
+              "ledger": "등락률 · 근접율 · 수량 · ELW근접율"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "492V-0",
+      "kind": "note",
+      "name": "note/CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+      "ledger_board": "2Y47-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "ELW가격급등락 · 등락률 · 근접율 · 종목코드 · 전일대비",
+              "ledger": "등락률 · 근접율 · 수량 · ELW가격급등락"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "4935-0",
+      "kind": "note",
+      "name": "note/CC-06 / R04-S7 · 종목찾기 — 호가잔량 급증",
+      "ledger_board": "2YA8-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "호가잔량급증 · 종목코드 · 현재가 · 전일대비 · 전일대비기호",
+              "ledger": "종목코드 · 현재가 · 전일대비 · 전일대비기호 · 급증률"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "493F-0",
+      "kind": "note",
+      "name": "note/CC-06 / R04-S8 · 종목찾기 — 잔량률 급증",
+      "ledger_board": "2YEQ-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "잔량율급증 · 종목코드 · 현재가 · 전일대비 · 전일대비기호",
+              "ledger": "종목코드 · 현재가 · 전일대비 · 전일대비기호 · 급증률"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "493P-0",
+      "kind": "note",
+      "name": "note/CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+      "ledger_board": "2YJ8-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "거래량급증 · 종목코드 · 현재가 · 전일대비 · 등락률",
+              "ledger": "종목코드 · 현재가 · 전일대비 · 등락률 · 급증률"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "493Z-0",
+      "kind": "note",
+      "name": "note/CC-06 / R04-S10 · 종목찾기 — 시간외 등락률",
+      "ledger_board": "2YNQ-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "시간외단일가등… · 순위 · 종목코드 · 현재가 · 당일종가",
+              "ledger": "순위 · 종목코드 · 현재가 · 당일종가 · 등락률"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "4949-0",
+      "kind": "note",
+      "name": "note/CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+      "ledger_board": "2YS8-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "신용비율 · 금액 · 신용비율상위 · 종목코드 · 종목정보",
+              "ledger": "신용비율 · 변화 · 수량 · 금액"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "494J-0",
+      "kind": "note",
+      "name": "note/CC-03 / R01-T4-2 · 순위 — 상하한가",
+      "ledger_board": "2YXS-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "상하한가 · 종목코드 · 현재가 · 전일대비 · 매도잔량",
+              "ledger": "핵심 지표 · 변화 · 보조 지표 · 기준 시각"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "494T-0",
+      "kind": "note",
+      "name": "note/CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+      "ledger_board": "2Z49-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "순매수 · 거래원별ELW… · 종목코드 · 주가등락 · 등락율",
+              "ledger": "순매수 · 거래원별ELW순매매상위 · 변화"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "4953-0",
+      "kind": "note",
+      "name": "note/CC-05 / R03-T6-3 · 순위 — 대차 상위",
+      "ledger_board": "2ZBB-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "대차거래내역 · 잔고주수 · 대차거래증감 · 종목코드 · 전일대비",
+              "ledger": "잔고주수 · 변화 · 수량 · 대차거래증감"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "495D-0",
+      "kind": "note",
+      "name": "note/CC-03 / R01-T4-3 · 순위 — 고저가근접",
+      "ledger_board": "2ZHC-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "고저가근접 · 종목코드 · 현재가 · 전일대비 · 당일고가",
+              "ledger": "핵심 지표 · 변화 · 보조 지표"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "495N-0",
+      "kind": "note",
+      "name": "note/CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+      "ledger_board": "2ZN9-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "등락율 · ELW조건검색 · 발행사명 · 현재가 · 전일대비",
+              "ledger": "등락율 · 변화 · 수량 · ELW조건검색"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "495X-0",
+      "kind": "note",
+      "name": "note/CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+      "ledger_board": "2ZTA-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "외인한도소진율… · 소진율증가 · 한도소진율 · 종목코드 · 전일대비",
+              "ledger": "소진율증가 · 한도소진율 · 수량 · 핵심 지표 · 기준 시각"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "4967-0",
+      "kind": "note",
+      "name": "note/CC-03 / R01-T4-4 · 순위 — 가격급등락",
+      "ledger_board": "2ZZ7-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "가격급등락 · 종목코드 · 현재가 · 전일대비 · 급등률",
+              "ledger": "핵심 지표 · 변화 · 보조 지표"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "496H-0",
+      "kind": "note",
+      "name": "note/CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
+      "ledger_board": "3063-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "장중투자자별매… · 순매수금액 · 종목코드 · 전일대비 · 순매수금액증감",
+              "ledger": "순매수금액 · 변화 · 보조 지표 · 기준 시각"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "496R-0",
+      "kind": "note",
+      "name": "note/CC-03 / R01-T4-5 · 순위 — 거래량갱신",
+      "ledger_board": "30C1-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "거래량갱신 · 종목코드 · 현재가 · 전일대비 · 이전거래량",
+              "ledger": "핵심 지표 · 변화 · 보조 지표 · 거래량갱신 · 종목코드"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "4971-0",
+      "kind": "note",
+      "name": "note/CC-05 / R03-T6-6 · 순위 — 외국인·기관 상위",
+      "ledger_board": "30HY-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "기관외국인연속… · 외인순매수금액 · 순위 · 종목코드 · 외인순매수수량",
+              "ledger": "외인순매수금액 · 수량 · 추가 지표 · 기타"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "497B-0",
+      "kind": "note",
+      "name": "note/CC-03 / R01-T4-6 · 순위 — 매물대집중",
+      "ledger_board": "30O1-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "매물비 · 매물대집중 · 종목코드 · 현재가 · 전일대비",
+              "ledger": "매물비 · 변화 · 보조 지표 · 핵심 지표 · 수량"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "497L-0",
+      "kind": "note",
+      "name": "note/CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+      "ledger_board": "30TY-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "순매수금액 · 종목코드 · 전일대비 · 순매수거래량 · 매수거래량",
+              "ledger": "순매수금액 · 수량 · 변화 · 기준 시각"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "497V-0",
+      "kind": "note",
+      "name": "note/CC-03 / R01-T4-7 · 순위 — 고저 PER",
+      "ledger_board": "30ZW-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "PER · 시가대비등락률 · 종목코드 · 현재가 · 전일대비",
+              "ledger": "PER · 수량 · 핵심 지표 · 변화"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "4985-0",
+      "kind": "note",
+      "name": "note/CC-03 / R01-T4-8 · 순위 — 시가대비 등락",
+      "ledger_board": "316O-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "시가대비 · 고저PER · 종목코드 · 현재가 · 전일대비",
+              "ledger": "시가대비 · 변화 · 보조 지표 · 수량"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "498F-0",
+      "kind": "note",
+      "name": "note/CC-05 / R03-T6-8 · 순위 — 동일순매매",
+      "ledger_board": "31CL-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "동일순매매순위 · 순매매금액 · 종목코드 · 전일대비 · 외인순매매수량",
+              "ledger": "순매매금액 · 수량 · 핵심 지표 · 변화"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "498P-0",
+      "kind": "note",
+      "name": "note/CC-03 / R01-T4-9 · 순위 — VI 발동",
+      "ledger_board": "31II-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "발동종목 · VI적용구분 · 종목코드 · 발동가격 · 정적기준가격",
+              "ledger": "발동종목 · VI적용구분 · 매매체결처리시각"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "498Z-0",
+      "kind": "note",
+      "name": "note/CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+      "ledger_board": "31OF-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "신용보증금율 · 종목코드 · 현재가 · 전일대비 · 신용한도초과",
+              "ledger": "신용보증금율 · 변화 · 수량"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "4999-0",
+      "kind": "note",
+      "name": "note/CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+      "ledger_board": "31UD-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "당일전일체결량 · 체결가 · 전일대비 · 체결시간 · 체결량",
+              "ledger": "변화 · 보조 지표 · 수량"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "499J-0",
+      "kind": "note",
+      "name": "note/CC-03 / R01-T7 · 차트 — 업종 지수",
+      "ledger_board": "32S7-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "업종코드 · 현재가 · 추이",
+              "ledger": "현재가 · 전일대비"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "499T-0",
+      "kind": "note",
+      "name": "note/CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+      "ledger_board": "32XM-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "신주인수권시세 · 전일대비기호 · 등락율 · 종목명 · 종목코드",
+              "ledger": "전일대비기호 · 등락율 · 종목명 · 금액"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "49A3-0",
+      "kind": "note",
+      "name": "note/CC-06 / R04-T1-X · 업종 — 업종 목록 펼침",
+      "ledger_board": "3BQB-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "체결시간 · 업종코드리스트 · 코드 · 시장구분코드 · 업종명",
+              "ledger": "체결시간 · 업종코드리스트 · 코드"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "49AD-0",
+      "kind": "note",
+      "name": "note/CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+      "ledger_board": "3D4I-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "체결시간 · 종목코드 · 현재가",
+              "ledger": "종목코드 · 현재가 · 전일대비"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "49AN-0",
+      "kind": "note",
+      "name": "note/CC-03 / R01-X · 투자자 12주체",
+      "ledger_board": "3DI2-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "현재가 · 전일대비 · 누적거래대금 · 일자 · 기관계",
+              "ledger": "누적거래대금 · 수량 · 보조 지표 · 추가 지표 · 기타"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "49AX-0",
+      "kind": "note",
+      "name": "note/CC-03 / R08-X · ELW 바스켓·만기평가",
+      "ledger_board": "3DZ1-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "종목명 · 종목코드 · 발행사명 · 현재가 · 전일대비",
+              "ledger": "거래량 · 변화 · 거래대금 · 기초자산1 · 자산코드"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "49B7-0",
+      "kind": "note",
+      "name": "note/CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+      "ledger_board": "3EWN-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "체결시간 · 종목명 · 종목코드",
+              "ledger": "종목명 · 종목코드 · 현재가"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "49BH-0",
+      "kind": "note",
+      "name": "note/CC-03 / R01-T1-X · 분봉 시세",
+      "ledger_board": "3FR6-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "종가 · 대비 · 시가 · 거래대금 · 거래량",
+              "ledger": "거래대금 · 변화 · 보조 지표 · 핵심 지표"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "49BR-0",
+      "kind": "note",
+      "name": "note/CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+      "ledger_board": "3GRO-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "계좌번호 · 추정자산 · 수익률 · d+2출금가능… · 출금가능금액",
+              "ledger": "추정자산 · 수익률 · 종목별계좌평가현황 · d+2출금가능금액 · 출금가능금액"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "49C1-0",
+      "kind": "note",
+      "name": "note/CC-01 / R10-T2-X2 · 증거금 재원·담보 상세",
+      "ledger_board": "3IGR-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "계좌번호 · 추정자산 · 수익률 · d+2출금가능… · 출금가능금액",
+              "ledger": "추정자산 · 수익률 · 종목별계좌평가현황 · 금일재사용대상금액 · 금일재사용사용금액"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "49CB-0",
+      "kind": "note",
+      "name": "note/CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+      "ledger_board": "3JT4-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "투자자별tic… · 시간외단일가_… · 호가잔량기준시간",
+              "ledger": "매도호가총잔량 · 매도호가총잔량직전대비 · 매수호가총잔량직전대비"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "49CL-0",
+      "kind": "note",
+      "name": "note/CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+      "ledger_board": "3JZ3-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "투자자별tic… · 현재가 · 등락률",
+              "ledger": "매도호가10 · 매도호가수량10 · 매도호가직전대비10"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "49CV-0",
+      "kind": "note",
+      "name": "note/CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+      "ledger_board": "3K7K-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "계좌번호 · 순자산액계_초 · 주문가능금액 · 출금가능금액 · 유가잔고평가액",
+              "ledger": "순자산액계_초 · 주문가능금액 · 출금가능금액 · 유가잔고평가액 · 종목별계좌평가현황"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "49D5-0",
+      "kind": "note",
+      "name": "note/CC-01 / R10-T2-X3 · 거래내역 상세",
+      "ledger_board": "3LGC-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "계좌번호 · 추정자산 · 수익률 · d+2출금가능… · 출금가능금액",
+              "ledger": "추정자산 · 수익률 · 종목별계좌평가현황 · 거래일자 · 거래번호"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "49DF-0",
+      "kind": "note",
+      "name": "note/CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
+      "ledger_board": "3MTJ-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "계좌번호 · 주문가능금액 · 출금가능금액 · 유가잔고평가액 · 종목별계좌평가…",
+              "ledger": "주문가능금액 · 매수비중 · 종목별계좌평가현황 · 출금가능금액 · 예수금"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "49DP-0",
+      "kind": "note",
+      "name": "note/A04-X · 호가 정본 — 단계별 낱값",
+      "ledger_board": "3N4O-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "종목명 · 날짜 · 시간 · 매도호가10 · 매도10호가잔량",
+              "ledger": "시간 · 매도호가10 · 매도10호가잔량 · 매도10호가직전대비 · LP매도10호가잔량"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "49DZ-0",
+      "kind": "note",
+      "name": "note/CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+      "ledger_board": "3NVG-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "계좌번호 · 예탁자산평가액 · 수익률 · 주문가능금액 · 출금가능금액",
+              "ledger": "예탁자산평가액 · 수익률 · 종목별계좌평가현황 · 예수금 · 주문가능금액"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "49E9-0",
+      "kind": "note",
+      "name": "note/CC-01 / R10-B-X1 · 금현물 잔고·거래내역",
+      "ledger_board": "3ODO-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "계좌번호 · 잔고평가액 · 총매입금액 · 손익금액 · 손익율",
+              "ledger": "잔고평가액 · 손익율 · 보유수량 · 종목명 · 종목코드"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "49EJ-0",
+      "kind": "note",
+      "name": "note/CC-01 / R10-B-X2 · 금현물 주문·체결",
+      "ledger_board": "3OIM-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "미체결수량 · 주문유형구분 · 체결수량 · 주문구분 · 계좌별주문체결…",
+              "ledger": "미체결수량 · 체결수량 · 계좌별주문체결현황 · 계좌별주문미체결현황 · 주문번호"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "49ET-0",
+      "kind": "note",
+      "name": "note/CC-03 / R01-T4-9-X · VI 발동 전체 12건",
+      "ledger_board": "3TCO-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "발동종목 · VI적용구분 · 종목코드 · 발동가격 · 정적기준가격",
+              "ledger": "발동종목 · VI적용구분 · 수량"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "49F3-0",
+      "kind": "note",
+      "name": "note/CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
+      "ledger_board": "3TOM-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "순매수 · 거래원별ELW… · 종목코드 · 주가등락 · 등락율",
+              "ledger": "순매수 · 거래원별ELW순매매상위 · 변화"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    },
+    {
+      "paper_board": "49FD-0",
+      "kind": "note",
+      "name": "note/CC-01 / R10-T2-X6 · 부채·미수·연체 상세",
+      "ledger_board": "3UTA-0",
+      "failures": [
+        {
+          "code": "annotation_drift",
+          "layer": "static",
+          "drift": [
+            {
+              "field": "elements",
+              "paper": "계좌번호 · 총평가손익금액 · 총수익률 · 매수비중 · 예탁담보대출잔고",
+              "ledger": "총평가손익금액 · 매수비중 · 금액 · 총수익률 · 변화"
+            }
+          ]
+        }
+      ],
+      "status": "divergent"
+    }
+  ],
+  "templates": [
+    {
+      "paper_board": "45S7-0",
+      "name": "template/compound",
+      "grammar": "compound",
+      "status": "pass",
+      "drawn": {
+        "grammar": "compound",
+        "width": 320,
+        "height": 420,
+        "rows": 5
+      },
+      "failures": []
+    },
+    {
+      "paper_board": "45S8-0",
+      "name": "template/table",
+      "grammar": "table",
+      "status": "pass",
+      "drawn": {
+        "grammar": "table",
+        "width": 320,
+        "height": 420,
+        "rows": 3
+      },
+      "failures": []
+    },
+    {
+      "paper_board": "45S9-0",
+      "name": "template/facts",
+      "grammar": "facts",
+      "status": "pass",
+      "drawn": {
+        "grammar": "facts",
+        "width": 320,
+        "height": 420,
+        "rows": 5
+      },
+      "failures": []
+    },
+    {
+      "paper_board": "45SA-0",
+      "name": "template/order_confirm",
+      "grammar": "order_confirm",
+      "status": "pass",
+      "drawn": {
+        "grammar": "order_confirm",
+        "width": 320,
+        "height": 420,
+        "rows": 5
+      },
+      "failures": []
+    },
+    {
+      "paper_board": "45SB-0",
+      "name": "template/order_ticket",
+      "grammar": "order_ticket",
+      "status": "pass",
+      "drawn": {
+        "grammar": "order_ticket",
+        "width": 320,
+        "height": 420,
+        "rows": 0
+      },
+      "failures": []
+    },
+    {
+      "paper_board": "45SC-0",
+      "name": "template/chart",
+      "grammar": "chart",
+      "status": "pass",
+      "drawn": {
+        "grammar": "chart",
+        "width": 320,
+        "height": 420,
+        "rows": 2
+      },
+      "failures": []
+    },
+    {
+      "paper_board": "45SD-0",
+      "name": "template/event",
+      "grammar": "event",
+      "status": "pass",
+      "drawn": {
+        "grammar": "event",
+        "width": 320,
+        "height": 420,
+        "rows": 2
+      },
+      "failures": []
+    },
+    {
+      "paper_board": "45SE-0",
+      "name": "template/auth",
+      "grammar": "auth",
+      "status": "pass",
+      "drawn": {
+        "grammar": "auth",
+        "width": 320,
+        "height": 420,
+        "rows": 4
+      },
+      "failures": []
+    },
+    {
+      "paper_board": "45SF-0",
+      "name": "template/reader",
+      "grammar": "reader",
+      "status": "pass",
+      "drawn": {
+        "grammar": "reader",
+        "width": 320,
+        "height": 420,
+        "rows": 2
+      },
+      "failures": []
+    },
+    {
+      "paper_board": "45SG-0",
+      "name": "template/stream",
+      "grammar": "stream",
+      "status": "pass",
+      "drawn": {
+        "grammar": "stream",
+        "width": 320,
+        "height": 420,
+        "rows": 2
+      },
+      "failures": []
+    },
+    {
+      "paper_board": "45SH-0",
+      "name": "template/2SCE-1",
+      "grammar": "compound",
+      "status": "pass",
+      "drawn": {
+        "grammar": "compound",
+        "width": 320,
+        "height": 420,
+        "rows": 5
+      },
+      "failures": []
+    }
+  ]
+}

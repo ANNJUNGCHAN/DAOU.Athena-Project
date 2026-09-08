@@ -1,0 +1,581 @@
+diff --git a/app/chat.js b/app/chat.js
+index d29508b3..226359b5 100644
+--- a/app/chat.js
++++ b/app/chat.js
+@@ -3413,7 +3413,22 @@ async function runWatchCheck(r) {
+   let res;
+   try { res = await window.athena.invoke('athena:routine-watch-check', { body }); }
+   catch { return { ok: false, reason: '검사 통로가 막혀 있음' }; }
+-  if (res && res.ok && res.data) return res.data;
++  if (res && res.ok && res.data) {
++    const check = res.data;
++    // 검사 응답에 빠진 날짜는 같은 검사의 상세 스냅샷에서만 보충한다.
++    // checked_at은 UTC지만 counted_through는 실제로 센 KST 날짜다.
++    if (check.ok === true && !check.counted_through && check.checked_at && r.id) {
++      try {
++        const detail = await window.athena.invoke('athena:routine-detail', { id: r.id });
++        const saved = detail && detail.ok && detail.data && detail.data.last_check;
++        if (saved && saved.ok === true && saved.checked_at === check.checked_at
++            && typeof saved.counted_through === 'string' && saved.counted_through) {
++          return Object.assign({}, check, { counted_through: saved.counted_through });
++        }
++      } catch { /* 원래 검사 결과는 보존하고 날짜를 추정하지 않는다 */ }
++    }
++    return check;
++  }
+   return { ok: false, reason: (res && res.error) || '검사 통로가 막혀 있음' };
+ }
+ 
+@@ -3516,6 +3531,31 @@ function renderWatchCheckCard(r, check) {
+     card.appendChild(why);
+   }
+ 
++  // 보드 10 — 실제 검사 날짜로 만든 점 띠와 울린 날. 실패 결과에는 둘 다 없다.
++  if (model.fireDots.length) {
++    const strip = document.createElement('div');
++    strip.className = 'agent-fix-dots';
++    for (const dot of model.fireDots) {
++      const cell = document.createElement('span');
++      cell.className = `agent-fix-dot is-${dot.state}`;
++      cell.setAttribute('data-day', dot.date);
++      cell.setAttribute('title', `${dot.date} · ${dot.state === 'fired' ? '울림' : '울림 없음'}`);
++      strip.appendChild(cell);
++    }
++    card.appendChild(strip);
++  }
++  if (model.fireRows.length) {
++    const fires = document.createElement('div');
++    fires.className = 'agent-check-fires';
++    for (const text of model.fireRows) {
++      const fire = document.createElement('span');
++      fire.className = 'agent-check-fire';
++      fire.textContent = text;
++      fires.appendChild(fire);
++    }
++    card.appendChild(fires);
++  }
++
+   // A-10 — 오늘 봉은 아직 안 끝났다는 고지. 검사 카드에서 빠질 수 없다.
+   const counted = document.createElement('div');
+   counted.className = 'agent-source';
+diff --git a/app/lib/agent-canvas.js b/app/lib/agent-canvas.js
+index f33f24e5..2395e36f 100644
+--- a/app/lib/agent-canvas.js
++++ b/app/lib/agent-canvas.js
+@@ -2491,6 +2491,9 @@ function createAgentCanvas(deps) {
+     fieldsWrap.setAttribute('data-source', item.source);
+     const fields = [['확인 주기', `장중 ${WatchNodes.pollMinutes(watch)}분`], ['쿨다운', WatchNodes.cooldownLabel(raw.cooldown_s)]];
+     if (raw.expires_at) fields.push(['만료', WatchNodes.dayLabel(raw.expires_at)]);
++    // code-watch 실행기의 assemble_frame 입력 계약(일봉 캐시 + 오늘 시세).
++    // 현재 수신 여부를 뜻하지 않는다 — 검사만 돌릴 때는 완성 봉까지만 센다.
++    fields.push(['데이터', '일봉 + 오늘 현재가']);
+     for (const [label, value] of fields) {
+       const fieldRow = el('div', 'agent-detail-field');
+       const l = el('span', 'agent-detail-field-label');
+diff --git a/app/lib/agent-canvas.test.js b/app/lib/agent-canvas.test.js
+index 6bdb6859..96a87594 100644
+--- a/app/lib/agent-canvas.test.js
++++ b/app/lib/agent-canvas.test.js
+@@ -2248,7 +2248,7 @@ test('A-5 상세: 울린 기록·일시중지·취소·고치기·만료가 있
+     findByClass(row, 'agent-detail-field-label')[0].textContent,
+     findByClass(row, 'agent-detail-field-value')[0].textContent,
+   ]);
+-  assert.deepEqual(Object.fromEntries(pairs), { '확인 주기': '장중 1분', 쿨다운: '1일', 만료: '2026-10-03' });
++  assert.deepEqual(Object.fromEntries(pairs), { '확인 주기': '장중 1분', 쿨다운: '1일', 만료: '2026-10-03', 데이터: '일봉 + 오늘 현재가' });
+ 
+   const inputs = [];
+   (function walk(n) { if (['input', 'select', 'textarea'].includes(n.tag)) inputs.push(n); (n.children || []).forEach(walk); })(detail);
+@@ -2344,6 +2344,17 @@ test('켜진 알람에는 승인 패널이 없다 — 승인은 초안 한 번
+   assert.equal(findByClass(detail, 'agent-code-approve').length, 0);
+ });
+ 
++for (const status of ['draft', 'active', 'paused']) {
++  test(`446V 데이터 행: ${status} 코드 감시는 실행기의 일봉·현재가 입력 계약을 표시한다`, async () => {
++    const { detail } = await mountCode({ status }, { detail: { last_check: null, last_run: null } });
++    const rows = findByClass(detail, 'agent-detail-field');
++    const data = rows.find((row) => findByClass(row, 'agent-detail-field-label')[0].textContent === '데이터');
++    assert.ok(data, '검사 전에도 실제 감시 실행기가 받을 데이터 종류를 알아야 한다');
++    assert.equal(findByClass(data, 'agent-detail-field-value')[0].textContent, '일봉 + 오늘 현재가');
++    assert.doesNotMatch(allText(data), /수신됨|연결됨|실시간 정상/);
++  });
++}
++
+ test('초안: 검사 요약과 「검사」 버튼이 있고 누르면 검사 1회를 돈다', async () => {
+   const checked = [];
+   const { container, detail } = await mountCode({ status: 'draft' }, {
+diff --git a/app/lib/watch-check-card.js b/app/lib/watch-check-card.js
+index e6f0a36b..ebb23e48 100644
+--- a/app/lib/watch-check-card.js
++++ b/app/lib/watch-check-card.js
+@@ -2,6 +2,10 @@
+ (function () {
+ 'use strict';
+ 
++const isNode = typeof module !== 'undefined' && module.exports;
++const WatchNodes = isNode ? require('./watch-nodes') : window.AthenaLib.WatchNodes;
++const FixCycle = isNode ? require('./watch-fix-cycle') : window.AthenaLib.WatchFixCycle;
++
+ // 검사 결과 카드(Paper 보드 10/446V-1)의 순수 계산 — DOM은 만들지 않는다
+ // (chat.js가 renderWatchCheckCard에서 조립). 백엔드 /routines/watch/check 응답을
+ // 사람이 읽는 문구로 바꾸는 로직만 여기 둔다 — routine-turn.js의 describeMode,
+@@ -57,6 +61,17 @@ function checkCardModel(check, draft) {
+   const count = Number(res.count);
+   const countText = Number.isFinite(count) && count >= 0 ? count : 0;
+   const last = lastFireDate(res);
++  const fires = ok && Array.isArray(res.fires)
++    ? res.fires.filter((fire) => fire && typeof fire.dt === 'string' && fire.dt.trim()) : [];
++  // 캔버스와 같은 날짜 계산. 검사 마지막 날이 없으면 현재 날짜로 메우지 않는다.
++  const fireDots = ok ? FixCycle.dotStrip({
++    lookback_days: res.lookback_days, counted_through: res.counted_through,
++    fires_after_dates: fires.map((fire) => fire.dt),
++  }) : [];
++  const fireRows = fires.map((fire) => `${shortDate(fire.dt)}${
++    typeof fire.close === 'number' && Number.isFinite(fire.close)
++      ? ` · 종가 ${WatchNodes.formatValue(fire.close)}` : ''
++  }`);
+ 
+   const nodes = Array.isArray(res.nodes) ? res.nodes : [];
+   const summary = nodeSummary(nodes);
+@@ -89,6 +104,8 @@ function checkCardModel(check, draft) {
+     chips,
+     failed: !ok,
+     reason,
++    fireDots,
++    fireRows,
+   };
+ }
+ 
+diff --git a/app/lib/watch-check-card.test.js b/app/lib/watch-check-card.test.js
+index 00fa696c..f0b13827 100644
+--- a/app/lib/watch-check-card.test.js
++++ b/app/lib/watch-check-card.test.js
+@@ -46,6 +46,37 @@ test('checkCardModel(통과): 칩 2개 — 승인·고치기 모두 누를 수 
+   ]);
+ });
+ 
++test('검사 결과: 센 마지막 날을 끝으로 30칸과 실제 울린 날짜·종가만 전달한다', () => {
++  const check = { ...OK_CHECK, counted_through: '2026-09-02' };
++  const before = JSON.stringify(check);
++  const model = checkCardModel(check, DRAFT);
++  assert.ok(Array.isArray(model.fireDots), '센 날짜를 점 띠 모델로 전달한다');
++  assert.equal(model.fireDots.length, 30);
++  assert.equal(model.fireDots[0].date, '2026-08-04');
++  assert.equal(model.fireDots.at(-1).date, '2026-09-02');
++  assert.deepEqual(model.fireDots.filter((dot) => dot.state === 'fired').map((dot) => dot.date),
++    ['2026-08-05', '2026-08-12', '2026-08-19', '2026-08-26']);
++  assert.deepEqual(model.fireRows, ['8/5 · 종가 71,000', '8/12 · 종가 72,500', '8/19 · 종가 73,100', '8/26 · 종가 74,200']);
++  assert.equal(JSON.stringify(check), before, '응답 원본을 바꾸지 않는다');
++});
++
++test('검사 결과: 성공한 0회는 조용한 칸만, 실패는 결과 띠·목록 모두 없음', () => {
++  const empty = checkCardModel({ ...OK_CHECK, count: 0, fires: [], last_fire: null, counted_through: '2026-09-02' }, DRAFT);
++  assert.ok(Array.isArray(empty.fireDots), '성공한 0회도 검사 구간을 전달한다');
++  assert.equal(empty.fireDots.length, 30);
++  assert.ok(empty.fireDots.every((dot) => dot.state === 'quiet'));
++  assert.deepEqual(empty.fireRows, []);
++  const failed = checkCardModel({ ...OK_CHECK, ok: false, counted_through: '2026-09-02' }, DRAFT);
++  assert.deepEqual(failed.fireDots, []);
++  assert.deepEqual(failed.fireRows, []);
++});
++
++test('검사 결과: 날짜 구간이나 종가가 없으면 달력·배수를 추정하지 않는다', () => {
++  const model = checkCardModel({ ok: true, count: 1, fires: [{ dt: '2026-08-26' }] }, DRAFT);
++  assert.deepEqual(model.fireDots, []);
++  assert.deepEqual(model.fireRows, ['8/26']);
++});
++
+ test('checkCardModel(실패): 사유를 싣고 승인 칩은 내지 않는다', () => {
+   const m = checkCardModel({ ok: false, reason: '칸 2개의 값을 못 읽음 — 다시 만들어 볼게', nodes: NODES }, DRAFT);
+   assert.deepEqual(m.tags, ['새 알람', '검사 실패']);
+diff --git a/app/scripts/run-verify-suite.js b/app/scripts/run-verify-suite.js
+index 8829150d..ce26d81b 100644
+--- a/app/scripts/run-verify-suite.js
++++ b/app/scripts/run-verify-suite.js
+@@ -1,6 +1,8 @@
+ 'use strict';
+ 
+-const { spawn } = require('node:child_process');
++const { spawn, execFileSync } = require('node:child_process');
++const { createHash } = require('node:crypto');
++const fs = require('node:fs');
+ const path = require('node:path');
+ const { VERIFY_SUITE, PAPER_SUITE } = require('../lib/live-full-catalog');
+ const { terminateTree } = require('../lib/main/proc-utils');
+@@ -39,51 +41,147 @@ function printList(suite) {
+ function runOne(item, deps = {}) {
+   const spawnFn = deps.spawn || spawn;
+   const terminateFn = deps.terminateTree || terminateTree;
++  const started = Date.now();
++  const logPaths = deps.logPaths || {};
++  for (const file of Object.values(logPaths)) fs.writeFileSync(file, '');
+   return new Promise((resolve) => {
+-    const child = spawnFn('npm', ['run', item.script], {
+-      cwd: appDir,
+-      shell: true,
+-      stdio: ['ignore', 'pipe', 'pipe'],
+-    });
++    let stdout = '';
++    let stderr = '';
++    let timedOut = false;
++    let settled = false;
++    let timer;
++    let logError = null;
++    const finish = (code, error = null) => {
++      if (settled) return;
++      settled = true;
++      clearTimeout(timer);
++      const finished = Date.now();
++      const failure = error ? String(error.message || error) : logError;
++      resolve({
++        script: item.script, ok: code === 0 && !timedOut && !failure,
++        code, timedOut, budgetMs: item.budgetMs, error: failure,
++        startedAt: new Date(started).toISOString(), finishedAt: new Date(finished).toISOString(),
++        durationMs: Math.max(0, finished - started),
++        stdoutTail: stdout, stderrTail: stderr,
++        stdoutLog: logPaths.stdout || null, stderrLog: logPaths.stderr || null,
++      });
++    };
++    const append = (stream, chunk) => {
++      if (settled) return;
++      if (stream === 'stdout') stdout = (stdout + chunk).slice(-2000);
++      else stderr = (stderr + chunk).slice(-2000);
++      if (logPaths[stream]) {
++        try { fs.appendFileSync(logPaths[stream], chunk, 'utf8'); }
++        catch (error) { logError = `log write failed: ${error.message}`; }
++      }
++    };
++    let child;
++    try {
++      child = spawnFn('npm', ['run', item.script], {
++        cwd: appDir, shell: true, stdio: ['ignore', 'pipe', 'pipe'],
++      });
++    } catch (error) { finish(null, error); return; }
+     // shell: true라 Windows에서는 cmd.exe → npm.cmd → electron 3단 트리가 뜬다.
+     // child.kill()은 직계 cmd.exe만 죽여 electron 좀비가 프로필 락을 쥔 채 남으므로
+     // 트리째 죽이는 terminateTree(win32에서 taskkill /T /F)를 쓰고 그 종료를 기다린다.
+     child.stdout.setEncoding('utf8');
+     child.stderr.setEncoding('utf8');
+-    let stdout = '';
+-    let stderr = '';
+-    let timedOut = false;
+-    child.stdout.on('data', (chunk) => { stdout += chunk; });
+-    child.stderr.on('data', (chunk) => { stderr += chunk; });
+-    const timer = setTimeout(() => {
++    child.stdout.on('data', (chunk) => append('stdout', chunk));
++    child.stderr.on('data', (chunk) => append('stderr', chunk));
++    timer = setTimeout(() => {
+       timedOut = true;
+-      const settle = () => resolve({
+-        script: item.script,
+-        ok: false,
+-        code: null,
+-        timedOut: true,
+-        budgetMs: item.budgetMs,
+-        stdoutTail: stdout.slice(-2000),
+-        stderrTail: stderr.slice(-2000),
+-      });
+-      Promise.resolve(terminateFn(child)).then(settle, settle);
++      Promise.resolve().then(() => terminateFn(child)).then(
++        () => finish(null), (error) => finish(null, error),
++      );
+     }, item.budgetMs);
++    child.on('error', (error) => { if (!timedOut) finish(null, error); });
+     child.on('close', (code) => {
+-      clearTimeout(timer);
+       if (timedOut) return;
+-      resolve({
+-        script: item.script,
+-        ok: code === 0,
+-        code,
+-        timedOut: false,
+-        budgetMs: item.budgetMs,
+-        stdoutTail: stdout.slice(-2000),
+-        stderrTail: stderr.slice(-2000),
+-      });
++      finish(code);
+     });
+   });
+ }
+ 
++// commit만 적으면 미커밋 수정이 같은 실행 출처로 보인다. ignored 산출물은 빼고
++// Git이 추적하거나 아직 추가하지 않은 파일의 실제 내용도 함께 식별한다.
++function readSourceIdentity() {
++  const root = path.join(appDir, '..');
++  const git = (args) => execFileSync('git', args, { cwd: root, encoding: 'utf8' });
++  const source = { commit: null, dirty: null, worktreeSha256: null };
++  try {
++    source.commit = git(['rev-parse', 'HEAD']).trim();
++    source.dirty = !!git(['status', '--porcelain', '--untracked-files=all']).trim();
++    const files = [...new Set(git(['ls-files', '--cached', '--others', '--exclude-standard', '-z'])
++      .split('\0').filter(Boolean))].sort();
++    const hash = createHash('sha256');
++    for (const file of files) {
++      const fullPath = path.join(root, file);
++      hash.update(`${file}\0`);
++      try {
++        const stat = fs.lstatSync(fullPath);
++        hash.update(stat.isSymbolicLink() ? fs.readlinkSync(fullPath) : fs.readFileSync(fullPath));
++      } catch (error) {
++        if (error.code !== 'ENOENT') throw error;
++        hash.update('\0deleted');
++      }
++      hash.update('\0');
++    }
++    source.worktreeSha256 = hash.digest('hex');
++  } catch (error) { source.error = String(error.message || error); }
++  return source;
++}
++
++async function runSuite(selected, deps = {}) {
++  const write = deps.write || ((text) => process.stdout.write(text));
++  const getSource = deps.getSource || readSourceIdentity;
++  const started = Date.now();
++  const outputRoot = deps.outputRoot || path.join(appDir, 'captures', 'verify-suite');
++  fs.mkdirSync(outputRoot, { recursive: true });
++  const directory = fs.mkdtempSync(path.join(outputRoot, `${new Date(started).toISOString().replace(/[:.]/g, '-')}-`));
++  const report = {
++    ok: null, results: [],
++    schemaVersion: 1, runId: path.basename(directory), suite: deps.suite || 'default',
++    reportPath: path.join(directory, 'result.json'),
++    startedAt: new Date(started).toISOString(), finishedAt: null, durationMs: null,
++    status: 'running', source: getSource(),
++    verificationScope: 'subprocess-exit-status',
++    // 하위 프로브가 공유 captures에 쓰는 파일은 이 run ID를 확인할 계약이 없다.
++    // 존재/mtime만으로 이번 실행의 리포트·캡처라고 승격하지 않는다.
++    sharedArtifacts: { verified: false, reason: 'Shared reports/captures are not bound to this run ID.' },
++  };
++  const persist = () => {
++    fs.writeFileSync(`${report.reportPath}.tmp`, JSON.stringify(report, null, 2) + '\n');
++    fs.renameSync(`${report.reportPath}.tmp`, report.reportPath);
++  };
++  persist();
++  for (const [index, item] of selected.entries()) {
++    report.currentStep = { script: item.script, startedAt: new Date().toISOString() };
++    persist();
++    write(`[suite] start ${item.script} budget=${item.budgetMs}\n`);
++    const prefix = `${String(index + 1).padStart(3, '0')}-${item.script.replace(/[^a-zA-Z0-9_-]/g, '-')}`;
++    const result = await runOne(item, {
++      ...deps, logPaths: {
++        stdout: path.join(directory, `${prefix}.stdout.log`),
++        stderr: path.join(directory, `${prefix}.stderr.log`),
++      },
++    });
++    report.results.push(result);
++    report.currentStep = null;
++    persist();
++    write(`[suite] ${item.script} ok=${result.ok} timedOut=${result.timedOut} code=${result.code}\n`);
++  }
++  report.sourceAtEnd = getSource();
++  report.sourceSnapshotsMatch = !!report.source.worktreeSha256
++    && report.source.worktreeSha256 === report.sourceAtEnd.worktreeSha256
++    && report.source.commit === report.sourceAtEnd.commit;
++  report.finishedAt = new Date().toISOString();
++  report.durationMs = Math.max(0, Date.now() - started);
++  report.status = 'complete';
++  report.ok = report.results.every((result) => result.ok);
++  persist();
++  return report;
++}
++
+ async function main() {
+   const parsedSuite = parseSuite(process.argv);
+   if (parsedSuite.error) {
+@@ -111,16 +209,9 @@ async function main() {
+     process.exitCode = 2;
+     return;
+   }
+-  const results = [];
+-  for (const item of selected) {
+-    process.stdout.write(`[suite] start ${item.script} budget=${item.budgetMs}\n`);
+-    const result = await runOne(item);
+-    results.push(result);
+-    process.stdout.write(`[suite] ${item.script} ok=${result.ok} timedOut=${result.timedOut} code=${result.code}\n`);
+-  }
+-  const failed = results.filter((item) => !item.ok);
+-  process.stdout.write(JSON.stringify({ ok: failed.length === 0, results }, null, 2) + '\n');
+-  if (failed.length) process.exitCode = 1;
++  const report = await runSuite(selected, { suite: parsedSuite.suite });
++  process.stdout.write(JSON.stringify(report, null, 2) + '\n');
++  if (!report.ok) process.exitCode = 1;
+ }
+ 
+ if (require.main === module) {
+@@ -130,4 +221,4 @@ if (require.main === module) {
+   });
+ }
+ 
+-module.exports = { parseOnly, parseSuite, runOne };
++module.exports = { parseOnly, parseSuite, runOne, runSuite, readSourceIdentity };
+diff --git a/app/scripts/run-verify-suite.test.js b/app/scripts/run-verify-suite.test.js
+index d4646c3b..4eba0c68 100644
+--- a/app/scripts/run-verify-suite.test.js
++++ b/app/scripts/run-verify-suite.test.js
+@@ -4,8 +4,11 @@ const test = require('node:test');
+ const assert = require('node:assert/strict');
+ const { EventEmitter } = require('node:events');
+ const { StringDecoder } = require('node:string_decoder');
++const fs = require('node:fs');
++const os = require('node:os');
++const path = require('node:path');
+ 
+-const { parseOnly, parseSuite, runOne } = require('./run-verify-suite');
++const { parseOnly, parseSuite, runOne, runSuite, readSourceIdentity } = require('./run-verify-suite');
+ 
+ // Node의 readable 스트림처럼 setEncoding이 걸리면 청크 경계를 이어 붙여 디코드한다.
+ class FakeStream extends EventEmitter {
+@@ -153,3 +156,140 @@ test('runOne은 청크 경계에 걸린 한글을 깨뜨리지 않는다', async
+   const result = await promise;
+   assert.equal(result.stdoutTail, '리포트 저장 완료');
+ });
++
++function evidenceFixture(t, outcomes) {
++  const outputRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'athena-suite-evidence-'));
++  const children = [];
++  t.after(async () => {
++    children.forEach((child) => child.emit('close', 0));
++    await new Promise(setImmediate);
++    fs.rmSync(outputRoot, { recursive: true, force: true });
++  });
++  const source = { commit: 'a'.repeat(40), dirty: true, worktreeSha256: 'b'.repeat(64) };
++  const deps = {
++    outputRoot, getSource: () => source, write: () => {},
++    spawn: () => {
++      const outcome = outcomes[children.length];
++      if (outcome.throw) throw new Error('fixture spawn failed');
++      const child = fakeChild();
++      children.push(child);
++      setImmediate(() => {
++        child.stdout.push(Buffer.from(outcome.stdout || '', 'utf8'));
++        child.stderr.push(Buffer.from(outcome.stderr || '', 'utf8'));
++        if (outcome.error) child.emit('error', new Error('fixture child error'));
++        else if (!outcome.hold) child.emit('close', outcome.code || 0);
++      });
++      return child;
++    },
++    terminateTree: async (child) => { child.emit('close', 0); return { ok: true }; },
++  };
++  return { outputRoot, children, source, deps };
++}
++
++test('실행 증거: 완료 전 결과는 running이고 완료 뒤 전체 로그와 출처를 실제 파일에 남긴다', async (t) => {
++  const text = `${'한글 전체 로그\n'.repeat(400)}끝\n`;
++  const fixture = evidenceFixture(t, [{ hold: true, stdout: text, stderr: '경고\n' }]);
++  const running = runSuite([{ script: 'verify:fixture', budgetMs: 5000 }], fixture.deps);
++  await new Promise(setImmediate);
++  const directory = path.join(fixture.outputRoot, fs.readdirSync(fixture.outputRoot)[0]);
++  const reportPath = path.join(directory, 'result.json');
++  const before = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
++  assert.equal(before.status, 'running');
++  assert.equal(before.ok, null, '끝나지 않은 실행을 성공으로 읽으면 안 된다');
++  fixture.children[0].emit('close', 0);
++  const result = await running;
++  assert.deepEqual(JSON.parse(fs.readFileSync(result.reportPath, 'utf8')), result);
++  assert.equal(result.ok, true);
++  assert.equal(result.status, 'complete');
++  assert.deepEqual(result.source, fixture.source);
++  assert.ok(Date.parse(result.finishedAt) >= Date.parse(result.startedAt));
++  assert.ok(result.durationMs >= 0);
++  const step = result.results[0];
++  assert.equal(step.stdoutTail, text.slice(-2000));
++  assert.equal(step.stderrTail, '경고\n');
++  assert.equal(fs.readFileSync(step.stdoutLog, 'utf8'), text, '2000자 꼬리 외의 앞부분도 보존한다');
++  assert.equal(fs.readFileSync(step.stderrLog, 'utf8'), '경고\n');
++  assert.ok(Date.parse(step.finishedAt) >= Date.parse(step.startedAt));
++  assert.ok(step.durationMs >= 0);
++});
++
++for (const outcome of ['failure', 'timeout', 'throw', 'error']) {
++  test(`실행 증거: ${outcome}도 이전 단계 결과와 실제 로그를 잃지 않는다`, async (t) => {
++    const fixture = evidenceFixture(t, [
++      { stdout: '앞 단계 성공\n' },
++      { stdout: '실패 전 출력\n', stderr: '진단\n', code: outcome === 'failure' ? 3 : 0,
++        hold: outcome === 'timeout', throw: outcome === 'throw', error: outcome === 'error' },
++    ]);
++    const result = await runSuite([
++      { script: 'verify:first', budgetMs: 5000 },
++      { script: 'verify:second', budgetMs: outcome === 'timeout' ? 20 : 5000 },
++    ], fixture.deps);
++    assert.equal(result.ok, false);
++    assert.equal(result.results[0].ok, true);
++    const failed = result.results[1];
++    assert.equal(failed.ok, false);
++    assert.equal(failed.timedOut, outcome === 'timeout');
++    assert.equal(failed.code, outcome === 'failure' ? 3 : null);
++    if (outcome === 'throw' || outcome === 'error') assert.match(failed.error, /fixture/);
++    assert.equal(fs.existsSync(failed.stdoutLog), true);
++    assert.equal(fs.existsSync(failed.stderrLog), true);
++    assert.deepEqual(JSON.parse(fs.readFileSync(result.reportPath, 'utf8')), result);
++  });
++}
++
++test('실행 증거: 연속 실행은 서로 덮어쓰지 않고 공유된 옛 리포트·캡처는 미확인으로 둔다', async (t) => {
++  const fixture = evidenceFixture(t, [{}, { code: 2 }]);
++  const staleReport = path.join(fixture.outputRoot, 'PAPER-SCREENS.json');
++  const staleCapture = path.join(fixture.outputRoot, 'old.png');
++  fs.writeFileSync(staleReport, '{"ok":true,"from":"old-run"}');
++  fs.writeFileSync(staleCapture, 'old-image');
++  const selected = [{ script: 'verify:fixture', budgetMs: 5000 }];
++  const first = await runSuite(selected, fixture.deps);
++  const firstBytes = fs.readFileSync(first.reportPath);
++  const second = await runSuite(selected, fixture.deps);
++  assert.notEqual(first.runId, second.runId);
++  assert.notEqual(first.reportPath, second.reportPath);
++  assert.deepEqual(fs.readFileSync(first.reportPath), firstBytes);
++  assert.equal(second.ok, false, '옛 성공 리포트가 현재 실패를 뒤집으면 안 된다');
++  for (const report of [first, second]) {
++    assert.equal(report.verificationScope, 'subprocess-exit-status');
++    assert.equal(report.sharedArtifacts.verified, false);
++    assert.match(report.sharedArtifacts.reason, /run|실행/);
++  }
++  assert.equal(fs.readFileSync(staleReport, 'utf8'), '{"ok":true,"from":"old-run"}');
++  assert.equal(fs.readFileSync(staleCapture, 'utf8'), 'old-image');
++});
++
++test('실행 증거: 현재 Git commit과 dirty 여부 및 작업 사본 내용 해시를 읽는다', () => {
++  const source = readSourceIdentity();
++  assert.match(source.commit, /^[0-9a-f]{40}$/);
++  assert.equal(typeof source.dirty, 'boolean');
++  assert.match(source.worktreeSha256, /^[0-9a-f]{64}$/);
++  assert.equal(source.error, undefined);
++});
++
++test('실행 증거: 시작과 종료의 소스가 다르면 동일 기준이라고 표시하지 않는다', async (t) => {
++  const fixture = evidenceFixture(t, [{}]);
++  let reads = 0;
++  fixture.deps.getSource = () => ({ ...fixture.source, worktreeSha256: String(++reads).repeat(64) });
++  const result = await runSuite([{ script: 'verify:fixture', budgetMs: 5000 }], fixture.deps);
++  assert.equal(result.ok, true, 'ok는 기존 프로세스 종료 코드 의미를 유지한다');
++  assert.equal(result.sourceSnapshotsMatch, false);
++  assert.notEqual(result.source.worktreeSha256, result.sourceAtEnd.worktreeSha256);
++  assert.deepEqual(JSON.parse(fs.readFileSync(result.reportPath, 'utf8')), result);
++});
++
++test('실행 증거: 로그 파일을 쓸 수 없으면 자식 exit0도 성공 증거가 아니다', async (t) => {
++  const fixture = evidenceFixture(t, [{ hold: true }]);
++  const running = runSuite([{ script: 'verify:fixture', budgetMs: 5000 }], fixture.deps);
++  const directory = path.join(fixture.outputRoot, fs.readdirSync(fixture.outputRoot)[0]);
++  const stdoutLog = path.join(directory, fs.readdirSync(directory).find((file) => file.endsWith('.stdout.log')));
++  fs.unlinkSync(stdoutLog);
++  fs.mkdirSync(stdoutLog); // appendFileSync가 실패하는 실제 파일시스템 대조군
++  fixture.children[0].stdout.push(Buffer.from('저장되지 못할 출력'));
++  fixture.children[0].emit('close', 0);
++  const result = await running;
++  assert.equal(result.ok, false);
++  assert.equal(result.results[0].code, 0);
++  assert.match(result.results[0].error, /log write failed/);
++});
+diff --git a/app/shell.html b/app/shell.html
+index ab16c97a..fc1b4160 100644
+--- a/app/shell.html
++++ b/app/shell.html
+@@ -544,9 +544,9 @@
+ <script src="lib/auth-screen.js"></script>
+ <script src="lib/routine-turn.js"></script>
+ <script src="lib/guard-confirm.js"></script>
+-<script src="lib/watch-check-card.js"></script>
+ <script src="lib/watch-nodes.js"></script>
+ <script src="lib/watch-fix-cycle.js"></script>
++<script src="lib/watch-check-card.js"></script>
+ <script src="lib/routine-control-turn.js"></script>
+ <script src="lib/routine-proposal-turn.js"></script>
+ <script src="lib/watch-progress-card.js"></script>

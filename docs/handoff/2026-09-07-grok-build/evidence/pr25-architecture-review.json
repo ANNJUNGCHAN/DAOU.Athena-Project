@@ -1,0 +1,21 @@
+{
+  "scope": [
+    "app/main.js",
+    "app/lib/main/window-placement.test.js"
+  ],
+  "pr": 25,
+  "head": "aca0f4dd",
+  "verdict": "APPROVE",
+  "evidence": [
+    "git diff main...origin/claude/default-window-size-fef54b: four additions and two removals; design size plus test-fixture comment only",
+    "actual computeLayout extracted into VM; eight workArea sizes remain inside bounds with nonnegative origin",
+    "14 placement unit tests pass",
+    "expectedBounds is in-memory Map and placeWindows uses current bounds; no persistent startup window-size override found"
+  ],
+  "artifacts": [
+    ".omc/artifacts/full-review/pr25-compute-layout.json",
+    ".omc/artifacts/full-review/pr25-window-placement-review.log"
+  ],
+  "source_edits": false,
+  "electron_run": "none; root independently validated verify-kiumi"
+}

@@ -1,0 +1,37 @@
+{
+  "phase": "CODE-047 redaction authoring after independent audit completion",
+  "authored_by": "round2_code_review (author for this redaction; not its approver)",
+  "requires_independent_review": true,
+  "audit_snapshot_sha256": "ca5271b2d29eb3d38bc02c5811747a946c4e0f505cf1c3a92166a023c88bef58",
+  "recorded_at": "2026-09-07T07:41:26.747419+00:00",
+  "head": "949eefd5781b0522aa95e6011fcbbf738e611cf1",
+  "path": "docs/handoff/2026-09-07-codex-resume/historical-findings.json",
+  "before_occurrences": 4,
+  "after_occurrences": 0,
+  "tracked_remaining_paths": 0,
+  "json_parse_before_after": "PASS",
+  "non_identifier_content_equal": true,
+  "newline_bytes_preserved": true,
+  "byte_length_preserved": true,
+  "changes": [
+    {
+      "json_pointer": "/code/confirmed/46/title",
+      "occurrences_replaced": 1
+    },
+    {
+      "json_pointer": "/code/confirmed/46/detail",
+      "occurrences_replaced": 1
+    },
+    {
+      "json_pointer": "/code/confirmed/46/evidence",
+      "occurrences_replaced": 2
+    }
+  ],
+  "before_sha256": "f1944b85794ab1a5a32775803e9fc819e6e89563287dae6500928553c8111059",
+  "after_sha256": "8e22eb5202d7a16c225edf0b5a6d9951e545684c6f32695e696ecaa19aeb7737",
+  "history_rewritten": false,
+  "product_code_changed_in_phase": false,
+  "committed": false,
+  "identifier_values_recorded": false,
+  "limitation": "Current tracked working-tree exposure only. Existing Git history retains the prior content. The independent audit remains the pre-redaction snapshot and does not self-close CODE-047."
+}

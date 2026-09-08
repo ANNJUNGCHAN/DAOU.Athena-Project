@@ -1,0 +1,147 @@
+card surface soft budget: board '137X-2' density rail_rows_max=7 exceeds soft budget 6
+card surface soft budget: board '13BC-2' density rail_rows_max=11 exceeds soft budget 6
+card surface soft budget: board '15P5-2' density kpi_cells=8 exceeds soft budget 6
+card surface soft budget: board '2QX1-1' density rail_rows_max=11 exceeds soft budget 6
+card surface soft budget: board '2R3M-1' density rail_rows_max=7 exceeds soft budget 6
+card surface soft budget: board '2SKU-1' density rail_rows_max=7 exceeds soft budget 6
+card surface soft budget: board '2TRW-1' density rail_rows_max=11 exceeds soft budget 6
+card surface soft budget: board '2TZN-1' density rail_rows_max=7 exceeds soft budget 6
+card surface soft budget: board '2VO0-0' density rail_rows_max=7 exceeds soft budget 6
+card surface soft budget: board '2XA5-0' density rail_rows_max=7 exceeds soft budget 6
+card surface soft budget: board '2XY6-0' density rail_rows_max=7 exceeds soft budget 6
+card surface soft budget: board '2Y47-0' density rail_rows_max=7 exceeds soft budget 6
+card surface soft budget: board '2Z49-0' density rail_rows_max=7 exceeds soft budget 6
+card surface soft budget: board '2ZBB-0' density rail_rows_max=7 exceeds soft budget 6
+card surface soft budget: board '30HY-0' density rail_rows_max=7 exceeds soft budget 6
+card surface soft budget: board '30TY-0' density rail_rows_max=8 exceeds soft budget 6
+card surface soft budget: board '31CL-0' density rail_rows_max=7 exceeds soft budget 6
+card surface soft budget: board '31OF-0' density rail_rows_max=7 exceeds soft budget 6
+card surface soft budget: board '3DZ1-0' density kpi_cells=8 exceeds soft budget 6
+card surface soft budget: board '3ODO-0' density rail_rows_max=7 exceeds soft budget 6
+card surface soft budget: board '3OIM-0' density rail_rows_max=7 exceeds soft budget 6
+card surface soft budget: board '3TOM-0' density rail_rows_max=7 exceeds soft budget 6
+card surface soft budget: board '133H-2' restates occurrence 'detail:kt00004:position_valuation|$.stk_acnt_evlt_prst|1' in 4 places with no primary slot
+card surface soft budget: board '13BC-2' restates occurrence 'base:0B|$.data[].228|1' in 3 places with no primary slot
+card surface soft budget: board '15L8-2' restates occurrence 'base:ka10171|$.data[].name|1' in 6 places with no primary slot
+card surface soft budget: board '15L8-2' restates occurrence 'base:ka10172|$.data[].10|1' in 8 places with no primary slot
+card surface soft budget: board '15L8-2' restates occurrence 'base:ka10172|$.data[].302|1' in 10 places with no primary slot
+card surface soft budget: board '15L8-2' restates occurrence 'base:ka10172|$.data[].9001|1' in 8 places with no primary slot
+card surface soft budget: board '15R0-2' restates occurrence 'base:0U|$.data[].10|1' in 2 places with no primary slot
+card surface soft budget: board '15R0-2' restates occurrence 'base:0U|$.data[].11|1' in 2 places with no primary slot
+card surface soft budget: board '15R0-2' restates occurrence 'base:1h|$.data[].1221|1' in 4 places with no primary slot
+card surface soft budget: board '15R0-2' restates occurrence 'base:1h|$.data[].1223|1' in 3 places with no primary slot
+card surface soft budget: board '15R0-2' restates occurrence 'base:1h|$.data[].1224|1' in 3 places with no primary slot
+card surface soft budget: board '15R0-2' restates occurrence 'base:1h|$.data[].1225|1' in 3 places with no primary slot
+card surface soft budget: board '15R0-2' restates occurrence 'base:1h|$.data[].302|1' in 3 places with no primary slot
+card surface soft budget: board '15R0-2' restates occurrence 'base:1h|$.data[].9001|1' in 3 places with no primary slot
+card surface soft budget: board '15R0-2' restates occurrence 'base:ka20003|$.all_inds_idex[].cur_prc|1' in 3 places with no primary slot
+card surface soft budget: board '15R0-2' restates occurrence 'base:ka20003|$.all_inds_idex[].pred_pre|1' in 3 places with no primary slot
+card surface soft budget: board '15R0-2' restates occurrence 'base:ka20003|$.all_inds_idex[].stk_cd|1' in 3 places with no primary slot
+card surface soft budget: board '15R0-2' restates occurrence 'base:ka20003|$.all_inds_idex[].stk_nm|1' in 3 places with no primary slot
+card surface soft budget: board '1JPU-0' restates occurrence 'base:0B|$.data[].228|1' in 3 places with no primary slot
+card surface soft budget: board '1JPU-0' restates occurrence 'base:0D|$.data[].215|1' in 2 places with no primary slot
+card surface soft budget: board '1JPU-0' restates occurrence 'detail:ka10007:expected_market|$.cur_prc|1' in 3 places with no primary slot
+card surface soft budget: board '1JZW-0' restates occurrence 'base:0B|$.data[].228|1' in 3 places with no primary slot
+card surface soft budget: board '1JZW-0' restates occurrence 'base:0D|$.data[].215|1' in 2 places with no primary slot
+card surface soft budget: board '1JZW-0' restates occurrence 'base:ka10075|$.oso|1' in 2 places with no primary slot
+card surface soft budget: board '1JZW-0' restates occurrence 'detail:ka10007:expected_market|$.cur_prc|1' in 3 places with no primary slot
+card surface soft budget: board '1WOB-1' restates occurrence 'base:ka10034|$.for_dt_trde_upper[].stk_cd|1' in 20 places with no primary slot
+card surface soft budget: board '2QFO-2' restates occurrence 'base:0w|$.data[].20|1' in 6 places with no primary slot
+card surface soft budget: board '2QFO-2' restates occurrence 'base:ka10052|$.trde_ori_mont_trde_qty[].acc_netprps|1' in 6 places with no primary slot
+card surface soft budget: board '2QFO-2' restates occurrence 'base:ka90007|$.prm_trde_acc_trnsn[].dfrt_trde_tdy|1' in 2 places with no primary slot
+card surface soft budget: board '2QFO-2' restates occurrence 'base:ka90007|$.prm_trde_acc_trnsn[].ndiffpro_trde_tdy|1' in 2 places with no primary slot
+card surface soft budget: board '2ROJ-1' restates occurrence 'base:ka10052|$.trde_ori_mont_trde_qty[].acc_netprps|1' in 6 places with no primary slot
+card surface soft budget: board '2RWK-1' restates occurrence 'base:ka10052|$.trde_ori_mont_trde_qty[].acc_netprps|1' in 6 places with no primary slot
+card surface soft budget: board '2RWK-1' restates occurrence 'base:ka90007|$.prm_trde_acc_trnsn[].dfrt_trde_tdy|1' in 2 places with no primary slot
+card surface soft budget: board '2RWK-1' restates occurrence 'base:ka90007|$.prm_trde_acc_trnsn[].ndiffpro_trde_tdy|1' in 2 places with no primary slot
+card surface soft budget: board '2S4E-1' restates occurrence 'base:ka90005|$.prm_trde_trnsn[].dfrt_trde_netprps|1' in 2 places with no primary slot
+card surface soft budget: board '2S4E-1' restates occurrence 'base:ka90005|$.prm_trde_trnsn[].ndiffpro_trde_netprps|1' in 2 places with no primary slot
+card surface soft budget: board '2SKU-1' restates occurrence 'detail:kt00004:position_valuation|$.stk_acnt_evlt_prst|1' in 2 places with no primary slot
+card surface soft budget: board '2SRV-1' restates occurrence 'detail:kt00004:position_valuation|$.stk_acnt_evlt_prst|1' in 2 places with no primary slot
+card surface soft budget: board '2SYW-1' restates occurrence 'base:00|$.data[].908|1' in 2 places with no primary slot
+card surface soft budget: board '2SYW-1' restates occurrence 'detail:kt00004:position_valuation|$.stk_acnt_evlt_prst|1' in 2 places with no primary slot
+card surface soft budget: board '2TRW-1' restates occurrence 'base:0B|$.data[].228|1' in 3 places with no primary slot
+card surface soft budget: board '2TRW-1' restates occurrence 'base:0C|$.data[].27|1' in 2 places with no primary slot
+card surface soft budget: board '2TRW-1' restates occurrence 'base:0D|$.data[].121|1' in 2 places with no primary slot
+card surface soft budget: board '2TRW-1' restates occurrence 'base:0D|$.data[].125|1' in 2 places with no primary slot
+card surface soft budget: board '2TRW-1' restates occurrence 'base:0D|$.data[].129|1' in 2 places with no primary slot
+card surface soft budget: board '2TRW-1' restates occurrence 'base:0D|$.data[].61|1' in 2 places with no primary slot
+card surface soft budget: board '2TRW-1' restates occurrence 'base:0D|$.data[].71|1' in 2 places with no primary slot
+card surface soft budget: board '2TRW-1' restates occurrence 'base:0E|$.data[].131|1' in 2 places with no primary slot
+card surface soft budget: board '2TRW-1' restates occurrence 'detail:ka10007:expected_market|$.cur_prc|1' in 2 places with no primary slot
+card surface soft budget: board '2UBO-1' restates occurrence 'base:ka90001|$.thema_grp[].thema_grp_cd|1' in 9 places with no primary slot
+card surface soft budget: board '2UHM-1' restates occurrence 'base:1h|$.data[].9001|1' in 3 places with no primary slot
+card surface soft budget: board '2V71-0' restates occurrence 'base:ka10068|$.dbrt_trde_trnsn[].rmnd|1' in 2 places with no primary slot
+card surface soft budget: board '2VDA-0' restates occurrence 'base:ka10016|$.ntl_pric[].stk_cd|1' in 2 places with no primary slot
+card surface soft budget: board '2X5N-0' restates occurrence 'base:ka10030|$.tdy_trde_qty_upper[].stk_cd|1' in 6 places with no primary slot
+card surface soft budget: board '2XA5-0' restates occurrence 'base:ka30009|$.elwflu_rt_rank[].stk_cd|1' in 2 places with no primary slot
+card surface soft budget: board '2XG6-0' restates occurrence 'base:ka10031|$.pred_trde_qty_upper[].stk_cd|1' in 5 places with no primary slot
+card surface soft budget: board '2XG6-0' restates occurrence 'base:ka10099|$.list[].code|1' in 13 places with no primary slot
+card surface soft budget: board '2XG6-0' restates occurrence 'base:ka10099|$.list[].name|1' in 16 places with no primary slot
+card surface soft budget: board '2XP6-0' restates occurrence 'base:ka10029|$.exp_cntr_flu_rt_upper[].stk_cd|1' in 18 places with no primary slot
+card surface soft budget: board '2XTO-0' restates occurrence 'base:ka10020|$.bid_req_upper[].stk_cd|1' in 18 places with no primary slot
+card surface soft budget: board '2Y47-0' restates occurrence 'base:ka30001|$.elwpric_jmpflu[].stk_cd|1' in 2 places with no primary slot
+card surface soft budget: board '2YA8-0' restates occurrence 'base:ka10021|$.bid_req_sdnin[].stk_cd|1' in 5 places with no primary slot
+card surface soft budget: board '2YA8-0' restates occurrence 'base:ka10099|$.list[].code|1' in 12 places with no primary slot
+card surface soft budget: board '2YA8-0' restates occurrence 'base:ka10099|$.list[].name|1' in 15 places with no primary slot
+card surface soft budget: board '2YEQ-0' restates occurrence 'base:ka10022|$.req_rt_sdnin[].stk_cd|1' in 5 places with no primary slot
+card surface soft budget: board '2YEQ-0' restates occurrence 'base:ka10099|$.list[].code|1' in 12 places with no primary slot
+card surface soft budget: board '2YEQ-0' restates occurrence 'base:ka10099|$.list[].name|1' in 15 places with no primary slot
+card surface soft budget: board '2YJ8-0' restates occurrence 'base:ka10023|$.trde_qty_sdnin[].stk_cd|1' in 5 places with no primary slot
+card surface soft budget: board '2YJ8-0' restates occurrence 'base:ka10032|$.trde_prica_upper[].now_trde_qty|1' in 5 places with no primary slot
+card surface soft budget: board '2YJ8-0' restates occurrence 'base:ka10099|$.list[].code|1' in 12 places with no primary slot
+card surface soft budget: board '2YJ8-0' restates occurrence 'base:ka10099|$.list[].name|1' in 15 places with no primary slot
+card surface soft budget: board '2YNQ-0' restates occurrence 'base:ka10098|$.ovt_sigpric_flu_rt_rank[].stk_cd|1' in 18 places with no primary slot
+card surface soft budget: board '2Z49-0' restates occurrence 'base:ka30002|$.trde_ori_elwnettrde_upper[].stk_cd|1' in 2 places with no primary slot
+card surface soft budget: board '30C1-0' restates occurrence 'base:ka10024|$.trde_qty_updt[].buy_bid|1' in 20 places with no primary slot
+card surface soft budget: board '30C1-0' restates occurrence 'base:ka10024|$.trde_qty_updt[].stk_cd|1' in 20 places with no primary slot
+card surface soft budget: board '30ZW-0' restates occurrence 'base:ka10028|$.open_pric_pre_flu_rt[].stk_cd|1' in 2 places with no primary slot
+card surface soft budget: board '32XM-0' restates occurrence 'base:ka10011|$.newstk_recvrht_mrpr[].flu_rt|1' in 2 places with no primary slot
+card surface soft budget: board '3BQB-0' restates occurrence 'base:0J|$.data[].20|1' in 2 places with no primary slot
+card surface soft budget: board '3BQB-0' restates occurrence 'base:ka10101|$.list[].code|1' in 21 places with no primary slot
+card surface soft budget: board '3BQB-0' restates occurrence 'base:ka10101|$.list[].marketCode|1' in 4 places with no primary slot
+card surface soft budget: board '3BQB-0' restates occurrence 'base:ka10101|$.list[].name|1' in 21 places with no primary slot
+card surface soft budget: board '3BQB-0' restates occurrence 'base:ka10101|$.list|1' in 7 places with no primary slot
+card surface soft budget: board '3D4I-0' restates occurrence 'base:ka10095|$.atn_stk_infr[].cntr_tm|1' in 2 places with no primary slot
+card surface soft budget: board '3D4I-0' restates occurrence 'base:ka10095|$.atn_stk_infr[].cur_prc|1' in 2 places with no primary slot
+card surface soft budget: board '3DI2-0' restates occurrence 'base:ka10060|$.stk_invsr_orgn_chart[].frgnr_invsr|1' in 6 places with no primary slot
+card surface soft budget: board '3DI2-0' restates occurrence 'base:ka10060|$.stk_invsr_orgn_chart[].ind_invsr|1' in 6 places with no primary slot
+card surface soft budget: board '3DI2-0' restates occurrence 'base:ka10060|$.stk_invsr_orgn_chart[].orgn|1' in 7 places with no primary slot
+card surface soft budget: board '3DI2-0' restates occurrence 'base:ka10064|$.opmr_invsr_trde_chart[].frgnr_invsr|1' in 3 places with no primary slot
+card surface soft budget: board '3DI2-0' restates occurrence 'base:ka10064|$.opmr_invsr_trde_chart[].orgn|1' in 3 places with no primary slot
+card surface soft budget: board '3DI2-0' restates occurrence 'base:ka10064|$.opmr_invsr_trde_chart[].tm|1' in 3 places with no primary slot
+card surface soft budget: board '3DZ1-0' restates occurrence 'detail:ka30012:evaluation_window|$.evlt_fnsh_yn|1' in 2 places with no primary slot
+card surface soft budget: board '3DZ1-0' restates occurrence 'detail:ka30012:underlying_basket|$.bsis_aset_1|1' in 2 places with no primary slot
+card surface soft budget: board '3EWN-0' restates occurrence 'base:ka10095|$.atn_stk_infr[].cntr_tm|1' in 2 places with no primary slot
+card surface soft budget: board '3EWN-0' restates occurrence 'base:ka10095|$.atn_stk_infr[].cur_prc|1' in 5 places with no primary slot
+card surface soft budget: board '3EWN-0' restates occurrence 'base:ka10095|$.atn_stk_infr[].stk_cd|1' in 4 places with no primary slot
+card surface soft budget: board '3EWN-0' restates occurrence 'base:ka10095|$.atn_stk_infr[].stk_nm|1' in 5 places with no primary slot
+card surface soft budget: board '3JT4-0' restates occurrence 'detail:ka10087:aggregate_totals|$.ovt_buy_bid_tot_req_jub_pre|1' in 2 places with no primary slot
+card surface soft budget: board '3JT4-0' restates occurrence 'detail:ka10087:aggregate_totals|$.ovt_sel_bid_tot_req_jub_pre|1' in 2 places with no primary slot
+card surface soft budget: board '3JT4-0' restates occurrence 'detail:ka10087:aggregate_totals|$.ovt_sigpric_sel_bid_tot_req|1' in 2 places with no primary slot
+card surface soft budget: board '3JT4-0' restates occurrence 'detail:ka10087:buy_bid_prices|$.ovt_sigpric_buy_bid_1|1' in 2 places with no primary slot
+card surface soft budget: board '3JT4-0' restates occurrence 'detail:ka10087:buy_bid_quantities|$.ovt_sigpric_buy_bid_qty_1|1' in 2 places with no primary slot
+card surface soft budget: board '3JT4-0' restates occurrence 'detail:ka10087:sell_bid_prices|$.ovt_sigpric_sel_bid_1|1' in 2 places with no primary slot
+card surface soft budget: board '3JT4-0' restates occurrence 'detail:ka10087:sell_bid_quantities|$.ovt_sigpric_sel_bid_qty_1|1' in 2 places with no primary slot
+card surface soft budget: board '3JT4-0' restates occurrence 'detail:ka10087:trading_summary|$.ovt_sigpric_cur_prc|1' in 2 places with no primary slot
+card surface soft budget: board '3JZ3-0' restates occurrence 'base:0D|$.data[].121|1' in 3 places with no primary slot
+card surface soft budget: board '3JZ3-0' restates occurrence 'base:0D|$.data[].122|1' in 2 places with no primary slot
+card surface soft budget: board '3JZ3-0' restates occurrence 'base:0D|$.data[].125|1' in 3 places with no primary slot
+card surface soft budget: board '3JZ3-0' restates occurrence 'base:0D|$.data[].126|1' in 2 places with no primary slot
+card surface soft budget: board '3JZ3-0' restates occurrence 'base:0D|$.data[].129|1' in 2 places with no primary slot
+card surface soft budget: board '3JZ3-0' restates occurrence 'base:0D|$.data[].41|1' in 2 places with no primary slot
+card surface soft budget: board '3JZ3-0' restates occurrence 'base:0D|$.data[].51|1' in 2 places with no primary slot
+card surface soft budget: board '3JZ3-0' restates occurrence 'base:0D|$.data[].61|1' in 2 places with no primary slot
+card surface soft budget: board '3JZ3-0' restates occurrence 'base:0D|$.data[].71|1' in 2 places with no primary slot
+card surface soft budget: board '3JZ3-0' restates occurrence 'detail:ka10007:expected_market|$.cur_prc|1' in 2 places with no primary slot
+card surface soft budget: board '3N4O-0' restates occurrence 'detail:ka10007:expected_market|$.pred_rt|1' in 2 places with no primary slot
+card surface soft budget: board '3N4O-0' restates occurrence 'detail:ka10007:totals|$.tot_buy_cnt|1' in 2 places with no primary slot
+card surface soft budget: board '3N4O-0' restates occurrence 'detail:ka10007:totals|$.tot_buy_req|1' in 2 places with no primary slot
+card surface soft budget: board '3N4O-0' restates occurrence 'detail:ka10007:totals|$.tot_sel_cnt|1' in 2 places with no primary slot
+card surface soft budget: board '3N4O-0' restates occurrence 'detail:ka10007:totals|$.tot_sel_req|1' in 2 places with no primary slot
+card surface soft budget: board '3TCO-0' restates occurrence 'base:ka10054|$.motn_stk[].viaplc_tp|1' in 4 places with no primary slot
+card surface soft budget: board '3TCO-0' restates occurrence 'base:ka10054|$.motn_stk|1' in 3 places with no primary slot
+card surface soft budget: board '3TOM-0' restates occurrence 'base:ka30002|$.trde_ori_elwnettrde_upper[].buy_trde_qty|1' in 3 places with no primary slot
+card surface soft budget: board '3TOM-0' restates occurrence 'base:ka30002|$.trde_ori_elwnettrde_upper[].netprps|1' in 9 places with no primary slot
+card surface soft budget: board '3TOM-0' restates occurrence 'base:ka30002|$.trde_ori_elwnettrde_upper[].sel_trde_qty|1' in 2 places with no primary slot
+card surface soft budget: board '3TOM-0' restates occurrence 'base:ka30002|$.trde_ori_elwnettrde_upper|1' in 7 places with no primary slot

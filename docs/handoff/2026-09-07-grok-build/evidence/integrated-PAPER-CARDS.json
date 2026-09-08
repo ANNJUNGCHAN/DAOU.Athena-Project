@@ -1,0 +1,2071 @@
+{
+  "schema_version": 1,
+  "gate": "verify:paper-cards-all",
+  "generated_at": "2026-09-07T07:37:25.240Z",
+  "manifest_sha256": "4ef885d88c4bea2c7f769024fb013d0f5de88bb80f70820ab4f93e96da5ee9bb",
+  "totals": {
+    "boards": 96,
+    "pass": 94,
+    "fail": 2,
+    "static_fail": 0,
+    "mount_fail": 2,
+    "mount_measured": 96
+  },
+  "layers": {
+    "static": {
+      "gate": "verify:paper-cards-static",
+      "generated_at": "2026-09-07T07:36:57.533Z",
+      "boards": 96
+    },
+    "mount": {
+      "gate": "verify:paper-cards-mount",
+      "generated_at": "2026-09-07T07:37:25.240Z",
+      "canonical": true,
+      "measured": 96,
+      "board_ids": null,
+      "presets": [
+        "원본",
+        "2분할",
+        "4분할",
+        "최소"
+      ],
+      "chunks": 6,
+      "elapsed_ms": 27027
+    }
+  },
+  "gate_failures": [
+    {
+      "code": "registry_stale",
+      "layer": "static",
+      "exit_code": 1
+    }
+  ],
+  "static": {
+    "S1_manifest": {
+      "ok": true,
+      "failures": []
+    },
+    "S2_text_multiset": {
+      "ok": true,
+      "failed_boards": []
+    },
+    "S3_state_links": {
+      "ok": true,
+      "marks": 82,
+      "targets": 83,
+      "unresolved": []
+    },
+    "S4_paper_tree": {
+      "ok": true,
+      "failed_boards": []
+    },
+    "S5_registry_drift": {
+      "ok": false,
+      "skipped": false,
+      "command": "python scripts/paper_board_extract.py --check",
+      "exit_code": 1,
+      "stderr_tail": "�帮��Ʈ: index.json\r\n"
+    },
+    "S6_index_symmetry": {
+      "ok": true,
+      "generated": 97,
+      "expected": 97,
+      "extra": [],
+      "absent": []
+    }
+  },
+  "boards": [
+    {
+      "board_id": "133H-2",
+      "card_id": "CC-01",
+      "name": "CC-01 / R10 · 내 계좌 — 손익·결제·위험",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 152,
+        "slot_count": 166,
+        "reachable_slot_count": 166,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 5
+      }
+    },
+    {
+      "board_id": "135M-2",
+      "card_id": "CC-02",
+      "name": "CC-02 / R11 · 삼성전자 10주 시장가 매수",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 62,
+        "slot_count": 74,
+        "reachable_slot_count": 74,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 5
+      }
+    },
+    {
+      "board_id": "137X-2",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01 · 삼성전자 3개월 차트",
+      "status": "fail",
+      "failures": [
+        {
+          "code": "state_board_missing_in_dom",
+          "layer": "mount",
+          "preset": "원본",
+          "expected": 7,
+          "in_dom": 6
+        },
+        {
+          "code": "text_multiset_dom_mismatch",
+          "layer": "mount",
+          "preset": "원본",
+          "added": [
+            {
+              "text": "150,850원원",
+              "count": 1
+            },
+            {
+              "text": "2.63배배",
+              "count": 1
+            },
+            {
+              "text": "21.2배배",
+              "count": 1
+            },
+            {
+              "text": "900.4조원",
+              "count": 1
+            },
+            {
+              "text": "거래대금 거래대금 2.14조원원",
+              "count": 1
+            }
+          ],
+          "removed": [
+            {
+              "text": "150,850원",
+              "count": 1
+            },
+            {
+              "text": "2.14조",
+              "count": 1
+            },
+            {
+              "text": "2.63배",
+              "count": 1
+            },
+            {
+              "text": "21.2배",
+              "count": 1
+            },
+            {
+              "text": "900.4조",
+              "count": 1
+            },
+            {
+              "text": "거래대금 2.14조원",
+              "count": 1
+            }
+          ],
+          "count_changed": [
+            {
+              "text": "2.14조원",
+              "slots": 1,
+              "dom": 2
+            }
+          ]
+        },
+        {
+          "code": "state_board_missing_in_dom",
+          "layer": "mount",
+          "preset": "2분할",
+          "expected": 7,
+          "in_dom": 6
+        },
+        {
+          "code": "text_multiset_dom_mismatch",
+          "layer": "mount",
+          "preset": "2분할",
+          "added": [
+            {
+              "text": "150,850원원",
+              "count": 1
+            },
+            {
+              "text": "2.63배배",
+              "count": 1
+            },
+            {
+              "text": "21.2배배",
+              "count": 1
+            },
+            {
+              "text": "900.4조원",
+              "count": 1
+            },
+            {
+              "text": "거래대금 거래대금 2.14조원원",
+              "count": 1
+            }
+          ],
+          "removed": [
+            {
+              "text": "150,850원",
+              "count": 1
+            },
+            {
+              "text": "2.14조",
+              "count": 1
+            },
+            {
+              "text": "2.63배",
+              "count": 1
+            },
+            {
+              "text": "21.2배",
+              "count": 1
+            },
+            {
+              "text": "900.4조",
+              "count": 1
+            },
+            {
+              "text": "거래대금 2.14조원",
+              "count": 1
+            }
+          ],
+          "count_changed": [
+            {
+              "text": "2.14조원",
+              "slots": 1,
+              "dom": 2
+            }
+          ]
+        },
+        {
+          "code": "state_board_missing_in_dom",
+          "layer": "mount",
+          "preset": "4분할",
+          "expected": 7,
+          "in_dom": 6
+        },
+        {
+          "code": "text_multiset_dom_mismatch",
+          "layer": "mount",
+          "preset": "4분할",
+          "added": [
+            {
+              "text": "150,850원원",
+              "count": 1
+            },
+            {
+              "text": "2.63배배",
+              "count": 1
+            },
+            {
+              "text": "21.2배배",
+              "count": 1
+            },
+            {
+              "text": "900.4조원",
+              "count": 1
+            },
+            {
+              "text": "거래대금 거래대금 2.14조원원",
+              "count": 1
+            }
+          ],
+          "removed": [
+            {
+              "text": "150,850원",
+              "count": 1
+            },
+            {
+              "text": "2.14조",
+              "count": 1
+            },
+            {
+              "text": "2.63배",
+              "count": 1
+            },
+            {
+              "text": "21.2배",
+              "count": 1
+            },
+            {
+              "text": "900.4조",
+              "count": 1
+            },
+            {
+              "text": "거래대금 2.14조원",
+              "count": 1
+            }
+          ],
+          "count_changed": [
+            {
+              "text": "2.14조원",
+              "slots": 1,
+              "dom": 2
+            }
+          ]
+        },
+        {
+          "code": "state_board_missing_in_dom",
+          "layer": "mount",
+          "preset": "최소",
+          "expected": 7,
+          "in_dom": 6
+        },
+        {
+          "code": "text_multiset_dom_mismatch",
+          "layer": "mount",
+          "preset": "최소",
+          "added": [
+            {
+              "text": "150,850원원",
+              "count": 1
+            },
+            {
+              "text": "2.63배배",
+              "count": 1
+            },
+            {
+              "text": "21.2배배",
+              "count": 1
+            },
+            {
+              "text": "900.4조원",
+              "count": 1
+            },
+            {
+              "text": "거래대금 거래대금 2.14조원원",
+              "count": 1
+            }
+          ],
+          "removed": [
+            {
+              "text": "150,850원",
+              "count": 1
+            },
+            {
+              "text": "2.14조",
+              "count": 1
+            },
+            {
+              "text": "2.63배",
+              "count": 1
+            },
+            {
+              "text": "21.2배",
+              "count": 1
+            },
+            {
+              "text": "900.4조",
+              "count": 1
+            },
+            {
+              "text": "거래대금 2.14조원",
+              "count": 1
+            }
+          ],
+          "count_changed": [
+            {
+              "text": "2.14조원",
+              "slots": 1,
+              "dom": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "board_id": "13BC-2",
+      "card_id": "CC-04",
+      "name": "CC-04 / R02 · 삼성전자 실시간 호가·체결",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 136,
+        "slot_count": 167,
+        "reachable_slot_count": 167,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 4
+      }
+    },
+    {
+      "board_id": "13K0-2",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04 · 거래대금 상위 저평가 탐색",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 136,
+        "slot_count": 153,
+        "reachable_slot_count": 153,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 14
+      }
+    },
+    {
+      "board_id": "15J9-2",
+      "card_id": "CC-06",
+      "name": "CC-06 / R05 · 반도체 업종·AI 테마",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 81,
+        "slot_count": 83,
+        "reachable_slot_count": 83,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "15L8-2",
+      "card_id": "CC-06",
+      "name": "CC-06 / R06 · 관심종목·조건 신호",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 99,
+        "slot_count": 115,
+        "reachable_slot_count": 115,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "15N5-2",
+      "card_id": "CC-03",
+      "name": "CC-03 / R07 · KODEX 200 ETF",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 124,
+        "slot_count": 143,
+        "reachable_slot_count": 143,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "15P5-2",
+      "card_id": "CC-03",
+      "name": "CC-03 / R08 · ELW 위험·만기",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 199,
+        "slot_count": 225,
+        "reachable_slot_count": 225,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 1
+      }
+    },
+    {
+      "board_id": "15R0-2",
+      "card_id": "CC-06",
+      "name": "CC-06 / R09 · 시장 체온·VI",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 79,
+        "slot_count": 85,
+        "reachable_slot_count": 85,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "1JPU-0",
+      "card_id": "CC-04",
+      "name": "A04 · 호가 정본 — 실시간 통합 호가",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 203,
+        "slot_count": 263,
+        "reachable_slot_count": 263,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 1
+      }
+    },
+    {
+      "board_id": "1JZW-0",
+      "card_id": "CC-04",
+      "name": "A02×A04 · 호가 주문 정본 — 시장가 매수",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 218,
+        "slot_count": 278,
+        "reachable_slot_count": 278,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "1WOB-1",
+      "card_id": "CC-05",
+      "name": "A05 · 목록 펼침 검증 — 외국인 기간별 매매 상위",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 240,
+        "slot_count": 264,
+        "reachable_slot_count": 264,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "2QFO-2",
+      "card_id": "CC-05",
+      "name": "CC-05 / R03-T1 · 수급 — 투자자별",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 161,
+        "slot_count": 178,
+        "reachable_slot_count": 178,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 6
+      }
+    },
+    {
+      "board_id": "2QM7-2",
+      "card_id": "CC-05",
+      "name": "CC-05 / R03-T2 · 수급 — 거래원",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 169,
+        "slot_count": 189,
+        "reachable_slot_count": 189,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 6
+      }
+    },
+    {
+      "board_id": "2QRP-1",
+      "card_id": "CC-04",
+      "name": "CC-04 / R02-T2 · 호가 — 시간외 단일가",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 98,
+        "slot_count": 109,
+        "reachable_slot_count": 109,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 1
+      }
+    },
+    {
+      "board_id": "2QX1-1",
+      "card_id": "CC-04",
+      "name": "CC-04 / R02-T3 · 호가 — KRX 금현물",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 119,
+        "slot_count": 147,
+        "reachable_slot_count": 147,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 1
+      }
+    },
+    {
+      "board_id": "2R3M-1",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T1 · 현재시세 — 체결·호가 문맥",
+      "status": "fail",
+      "failures": [
+        {
+          "code": "text_multiset_dom_mismatch",
+          "layer": "mount",
+          "preset": "원본",
+          "added": [
+            {
+              "text": "1.45조원원",
+              "count": 1
+            },
+            {
+              "text": "1.76조원원",
+              "count": 1
+            },
+            {
+              "text": "150,850원원",
+              "count": 1
+            },
+            {
+              "text": "2.14조원원",
+              "count": 3
+            },
+            {
+              "text": "2.63배배",
+              "count": 1
+            },
+            {
+              "text": "21.2배배",
+              "count": 1
+            },
+            {
+              "text": "52주 최저 52주 최저 67,700",
+              "count": 1
+            },
+            {
+              "text": "5분 5분 111.2%",
+              "count": 1
+            },
+            {
+              "text": "900.4조원원",
+              "count": 1
+            },
+            {
+              "text": "최고 최고 153,400",
+              "count": 1
+            },
+            {
+              "text": "현재가 · 현재가 · 09:42:18 체결 체결",
+              "count": 1
+            }
+          ],
+          "removed": [
+            {
+              "text": "1.45조원",
+              "count": 1
+            },
+            {
+              "text": "1.76조원",
+              "count": 1
+            },
+            {
+              "text": "150,850원",
+              "count": 1
+            },
+            {
+              "text": "2.14조원",
+              "count": 3
+            },
+            {
+              "text": "2.63배",
+              "count": 1
+            },
+            {
+              "text": "21.2배",
+              "count": 1
+            },
+            {
+              "text": "52주 최저 67,700",
+              "count": 1
+            },
+            {
+              "text": "5분 111.2%",
+              "count": 1
+            },
+            {
+              "text": "900.4조원",
+              "count": 1
+            },
+            {
+              "text": "최고 153,400",
+              "count": 1
+            },
+            {
+              "text": "현재가 · 09:42:18 체결",
+              "count": 1
+            }
+          ],
+          "count_changed": []
+        },
+        {
+          "code": "text_multiset_dom_mismatch",
+          "layer": "mount",
+          "preset": "2분할",
+          "added": [
+            {
+              "text": "1.45조원원",
+              "count": 1
+            },
+            {
+              "text": "1.76조원원",
+              "count": 1
+            },
+            {
+              "text": "150,850원원",
+              "count": 1
+            },
+            {
+              "text": "2.14조원원",
+              "count": 3
+            },
+            {
+              "text": "2.63배배",
+              "count": 1
+            },
+            {
+              "text": "21.2배배",
+              "count": 1
+            },
+            {
+              "text": "52주 최저 52주 최저 67,700",
+              "count": 1
+            },
+            {
+              "text": "5분 5분 111.2%",
+              "count": 1
+            },
+            {
+              "text": "900.4조원원",
+              "count": 1
+            },
+            {
+              "text": "최고 최고 153,400",
+              "count": 1
+            },
+            {
+              "text": "현재가 · 현재가 · 09:42:18 체결 체결",
+              "count": 1
+            }
+          ],
+          "removed": [
+            {
+              "text": "1.45조원",
+              "count": 1
+            },
+            {
+              "text": "1.76조원",
+              "count": 1
+            },
+            {
+              "text": "150,850원",
+              "count": 1
+            },
+            {
+              "text": "2.14조원",
+              "count": 3
+            },
+            {
+              "text": "2.63배",
+              "count": 1
+            },
+            {
+              "text": "21.2배",
+              "count": 1
+            },
+            {
+              "text": "52주 최저 67,700",
+              "count": 1
+            },
+            {
+              "text": "5분 111.2%",
+              "count": 1
+            },
+            {
+              "text": "900.4조원",
+              "count": 1
+            },
+            {
+              "text": "최고 153,400",
+              "count": 1
+            },
+            {
+              "text": "현재가 · 09:42:18 체결",
+              "count": 1
+            }
+          ],
+          "count_changed": []
+        },
+        {
+          "code": "text_multiset_dom_mismatch",
+          "layer": "mount",
+          "preset": "4분할",
+          "added": [
+            {
+              "text": "1.45조원원",
+              "count": 1
+            },
+            {
+              "text": "1.76조원원",
+              "count": 1
+            },
+            {
+              "text": "150,850원원",
+              "count": 1
+            },
+            {
+              "text": "2.14조원원",
+              "count": 3
+            },
+            {
+              "text": "2.63배배",
+              "count": 1
+            },
+            {
+              "text": "21.2배배",
+              "count": 1
+            },
+            {
+              "text": "52주 최저 52주 최저 67,700",
+              "count": 1
+            },
+            {
+              "text": "5분 5분 111.2%",
+              "count": 1
+            },
+            {
+              "text": "900.4조원원",
+              "count": 1
+            },
+            {
+              "text": "최고 최고 153,400",
+              "count": 1
+            },
+            {
+              "text": "현재가 · 현재가 · 09:42:18 체결 체결",
+              "count": 1
+            }
+          ],
+          "removed": [
+            {
+              "text": "1.45조원",
+              "count": 1
+            },
+            {
+              "text": "1.76조원",
+              "count": 1
+            },
+            {
+              "text": "150,850원",
+              "count": 1
+            },
+            {
+              "text": "2.14조원",
+              "count": 3
+            },
+            {
+              "text": "2.63배",
+              "count": 1
+            },
+            {
+              "text": "21.2배",
+              "count": 1
+            },
+            {
+              "text": "52주 최저 67,700",
+              "count": 1
+            },
+            {
+              "text": "5분 111.2%",
+              "count": 1
+            },
+            {
+              "text": "900.4조원",
+              "count": 1
+            },
+            {
+              "text": "최고 153,400",
+              "count": 1
+            },
+            {
+              "text": "현재가 · 09:42:18 체결",
+              "count": 1
+            }
+          ],
+          "count_changed": []
+        },
+        {
+          "code": "text_multiset_dom_mismatch",
+          "layer": "mount",
+          "preset": "최소",
+          "added": [
+            {
+              "text": "1.45조원원",
+              "count": 1
+            },
+            {
+              "text": "1.76조원원",
+              "count": 1
+            },
+            {
+              "text": "150,850원원",
+              "count": 1
+            },
+            {
+              "text": "2.14조원원",
+              "count": 3
+            },
+            {
+              "text": "2.63배배",
+              "count": 1
+            },
+            {
+              "text": "21.2배배",
+              "count": 1
+            },
+            {
+              "text": "52주 최저 52주 최저 67,700",
+              "count": 1
+            },
+            {
+              "text": "5분 5분 111.2%",
+              "count": 1
+            },
+            {
+              "text": "900.4조원원",
+              "count": 1
+            },
+            {
+              "text": "최고 최고 153,400",
+              "count": 1
+            },
+            {
+              "text": "현재가 · 현재가 · 09:42:18 체결 체결",
+              "count": 1
+            }
+          ],
+          "removed": [
+            {
+              "text": "1.45조원",
+              "count": 1
+            },
+            {
+              "text": "1.76조원",
+              "count": 1
+            },
+            {
+              "text": "150,850원",
+              "count": 1
+            },
+            {
+              "text": "2.14조원",
+              "count": 3
+            },
+            {
+              "text": "2.63배",
+              "count": 1
+            },
+            {
+              "text": "21.2배",
+              "count": 1
+            },
+            {
+              "text": "52주 최저 67,700",
+              "count": 1
+            },
+            {
+              "text": "5분 111.2%",
+              "count": 1
+            },
+            {
+              "text": "900.4조원",
+              "count": 1
+            },
+            {
+              "text": "최고 153,400",
+              "count": 1
+            },
+            {
+              "text": "현재가 · 09:42:18 체결",
+              "count": 1
+            }
+          ],
+          "count_changed": []
+        }
+      ]
+    },
+    {
+      "board_id": "2RBO-1",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T2 · 기업정보 — 개요·가치·실적",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 107,
+        "slot_count": 113,
+        "reachable_slot_count": 113,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 5
+      }
+    },
+    {
+      "board_id": "2RJ7-1",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T3 · 금현물 — KRX 금시장 차트·시세",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 178,
+        "slot_count": 191,
+        "reachable_slot_count": 191,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 5
+      }
+    },
+    {
+      "board_id": "2ROJ-1",
+      "card_id": "CC-05",
+      "name": "CC-05 / R03-T3 · 수급 — 프로그램",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 168,
+        "slot_count": 179,
+        "reachable_slot_count": 179,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 6
+      }
+    },
+    {
+      "board_id": "2RWK-1",
+      "card_id": "CC-05",
+      "name": "CC-05 / R03-T4 · 수급 — 신용·대차",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 144,
+        "slot_count": 160,
+        "reachable_slot_count": 160,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 6
+      }
+    },
+    {
+      "board_id": "2S4E-1",
+      "card_id": "CC-05",
+      "name": "CC-05 / R03-T5 · 수급 — 종목 동향",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 153,
+        "slot_count": 174,
+        "reachable_slot_count": 174,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 6
+      }
+    },
+    {
+      "board_id": "2SCE-1",
+      "card_id": "CC-01",
+      "name": "CC-01 / R10-T1 · 보유종목 — 종목별 평가·비중",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 189,
+        "slot_count": 213,
+        "reachable_slot_count": 213,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 4
+      }
+    },
+    {
+      "board_id": "2SKU-1",
+      "card_id": "CC-01",
+      "name": "CC-01 / R10-T2 · 예수금·결제 — 현금·결제 예정",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 154,
+        "slot_count": 199,
+        "reachable_slot_count": 199,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 10
+      }
+    },
+    {
+      "board_id": "2SRV-1",
+      "card_id": "CC-01",
+      "name": "CC-01 / R10-T3 · 손익·성과 — 실현손익·수익률",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 150,
+        "slot_count": 170,
+        "reachable_slot_count": 170,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 5
+      }
+    },
+    {
+      "board_id": "2SYW-1",
+      "card_id": "CC-01",
+      "name": "CC-01 / R10-T4 · 주문·체결 — 오늘 주문 현황",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 155,
+        "slot_count": 189,
+        "reachable_slot_count": 189,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "2T63-1",
+      "card_id": "CC-02",
+      "name": "CC-02 / R11-T1 · 현금 매도 — 삼성전자 10주 시장가 매도",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 62,
+        "slot_count": 74,
+        "reachable_slot_count": 74,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "2TAG-1",
+      "card_id": "CC-02",
+      "name": "CC-02 / R11-T2 · 정정 — 삼성전자 지정가 정정",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 66,
+        "slot_count": 76,
+        "reachable_slot_count": 76,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "2TET-1",
+      "card_id": "CC-02",
+      "name": "CC-02 / R11-T3 · 취소 — 삼성전자 원주문 취소",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 64,
+        "slot_count": 72,
+        "reachable_slot_count": 72,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "2TJ6-1",
+      "card_id": "CC-02",
+      "name": "CC-02 / R11-T4 · 신용 매수 — 삼성전자 10주 시장가 신용융자",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 66,
+        "slot_count": 76,
+        "reachable_slot_count": 76,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "2TNJ-1",
+      "card_id": "CC-02",
+      "name": "CC-02 / R11-T5 · 금현물 매수 — 금 99.99K 10g 시장가",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 62,
+        "slot_count": 74,
+        "reachable_slot_count": 74,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "2TRW-1",
+      "card_id": "CC-04",
+      "name": "CC-04 / R02-T4 · 호가 — 정규장 5단",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 117,
+        "slot_count": 148,
+        "reachable_slot_count": 148,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 1
+      }
+    },
+    {
+      "board_id": "2TZN-1",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-T1 · 업종 — 업종 지수·등락 탐색",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 202,
+        "slot_count": 222,
+        "reachable_slot_count": 222,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 2
+      }
+    },
+    {
+      "board_id": "2U5L-1",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-T2 · 관심 — 관심종목 시세 보드",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 161,
+        "slot_count": 221,
+        "reachable_slot_count": 221,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 2
+      }
+    },
+    {
+      "board_id": "2UBO-1",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-T3 · 테마 — 테마 등락·확산 탐색",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 113,
+        "slot_count": 134,
+        "reachable_slot_count": 134,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 1
+      }
+    },
+    {
+      "board_id": "2UHM-1",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-T4 · 시장·VI — 시장 상태와 VI 발동",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 110,
+        "slot_count": 121,
+        "reachable_slot_count": 121,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "2UN6-1",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-T5 · 조건검색 — 저장 조건식과 결과",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 106,
+        "slot_count": 142,
+        "reachable_slot_count": 142,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "2V71-0",
+      "card_id": "CC-05",
+      "name": "CC-05 / R03-T6 · 수급 — 순위",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 186,
+        "slot_count": 203,
+        "reachable_slot_count": 203,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 14
+      }
+    },
+    {
+      "board_id": "2VDA-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T4 · 순위 — 주식 신호·순위",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 266,
+        "slot_count": 319,
+        "reachable_slot_count": 319,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 11
+      }
+    },
+    {
+      "board_id": "2VIN-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T5 · 순위 — ETF 전체시세",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 332,
+        "slot_count": 417,
+        "reachable_slot_count": 417,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 3
+      }
+    },
+    {
+      "board_id": "2VO0-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T6 · 순위 — ELW 순위",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 310,
+        "slot_count": 341,
+        "reachable_slot_count": 341,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 5
+      }
+    },
+    {
+      "board_id": "2WZK-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T5-2 · 순위 — ETF 기간 수익률",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 195,
+        "slot_count": 239,
+        "reachable_slot_count": 239,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "2X5N-0",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-S2 · 종목찾기 — 당일 거래량",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 129,
+        "slot_count": 144,
+        "reachable_slot_count": 144,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 6
+      }
+    },
+    {
+      "board_id": "2XA5-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T6-2 · 순위 — ELW 등락률",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 307,
+        "slot_count": 341,
+        "reachable_slot_count": 341,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "2XG6-0",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-S3 · 종목찾기 — 전일 거래량",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 135,
+        "slot_count": 160,
+        "reachable_slot_count": 160,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 6
+      }
+    },
+    {
+      "board_id": "2XKO-0",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-S4 · 종목찾기 — 등락률",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 138,
+        "slot_count": 165,
+        "reachable_slot_count": 165,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 6
+      }
+    },
+    {
+      "board_id": "2XP6-0",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-S5 · 종목찾기 — 예상체결 등락률",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 134,
+        "slot_count": 160,
+        "reachable_slot_count": 160,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 6
+      }
+    },
+    {
+      "board_id": "2XTO-0",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-S6 · 종목찾기 — 호가잔량 상위",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 142,
+        "slot_count": 166,
+        "reachable_slot_count": 166,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 6
+      }
+    },
+    {
+      "board_id": "2XY6-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T6-3 · 순위 — ELW 근접율",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 291,
+        "slot_count": 341,
+        "reachable_slot_count": 341,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "2Y47-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T6-4 · 순위 — ELW 가격급등락",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 297,
+        "slot_count": 341,
+        "reachable_slot_count": 341,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "2YA8-0",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-S7 · 종목찾기 — 호가잔량 급증",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 137,
+        "slot_count": 161,
+        "reachable_slot_count": 161,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 6
+      }
+    },
+    {
+      "board_id": "2YEQ-0",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-S8 · 종목찾기 — 잔량률 급증",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 136,
+        "slot_count": 161,
+        "reachable_slot_count": 161,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 6
+      }
+    },
+    {
+      "board_id": "2YJ8-0",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-S9 · 종목찾기 — 거래량 급증",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 135,
+        "slot_count": 160,
+        "reachable_slot_count": 160,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 6
+      }
+    },
+    {
+      "board_id": "2YNQ-0",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-S10 · 종목찾기 — 시간외 등락률",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 134,
+        "slot_count": 159,
+        "reachable_slot_count": 159,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 6
+      }
+    },
+    {
+      "board_id": "2YS8-0",
+      "card_id": "CC-05",
+      "name": "CC-05 / R03-T6-2 · 순위 — 신용비율 상위",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 183,
+        "slot_count": 197,
+        "reachable_slot_count": 197,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "2YXS-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T4-2 · 순위 — 상하한가",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 296,
+        "slot_count": 377,
+        "reachable_slot_count": 377,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 10
+      }
+    },
+    {
+      "board_id": "2Z49-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T6-5 · 순위 — ELW 거래원별 순매매",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 148,
+        "slot_count": 189,
+        "reachable_slot_count": 189,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 1
+      }
+    },
+    {
+      "board_id": "2ZBB-0",
+      "card_id": "CC-05",
+      "name": "CC-05 / R03-T6-3 · 순위 — 대차 상위",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 169,
+        "slot_count": 193,
+        "reachable_slot_count": 193,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "2ZHC-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T4-3 · 순위 — 고저가근접",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 346,
+        "slot_count": 378,
+        "reachable_slot_count": 378,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 10
+      }
+    },
+    {
+      "board_id": "2ZN9-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T6-6 · 순위 — ELW 조건검색",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 179,
+        "slot_count": 193,
+        "reachable_slot_count": 193,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "2ZTA-0",
+      "card_id": "CC-05",
+      "name": "CC-05 / R03-T6-4 · 순위 — 한도소진율 증가",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 163,
+        "slot_count": 189,
+        "reachable_slot_count": 189,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "2ZZ7-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T4-4 · 순위 — 가격급등락",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 243,
+        "slot_count": 297,
+        "reachable_slot_count": 297,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 10
+      }
+    },
+    {
+      "board_id": "3063-0",
+      "card_id": "CC-05",
+      "name": "CC-05 / R03-T6-5 · 순위 — 장중 투자자 상위",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 204,
+        "slot_count": 237,
+        "reachable_slot_count": 237,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "30C1-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T4-5 · 순위 — 거래량갱신",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 306,
+        "slot_count": 362,
+        "reachable_slot_count": 362,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 10
+      }
+    },
+    {
+      "board_id": "30HY-0",
+      "card_id": "CC-05",
+      "name": "CC-05 / R03-T6-6 · 순위 — 외국인·기관 상위",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 161,
+        "slot_count": 189,
+        "reachable_slot_count": 189,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "30O1-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T4-6 · 순위 — 매물대집중",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 249,
+        "slot_count": 275,
+        "reachable_slot_count": 275,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "30TY-0",
+      "card_id": "CC-05",
+      "name": "CC-05 / R03-T6-7 · 순위 — 증권사별 상위",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 188,
+        "slot_count": 208,
+        "reachable_slot_count": 208,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "30ZW-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T4-7 · 순위 — 고저 PER",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 288,
+        "slot_count": 324,
+        "reachable_slot_count": 324,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "316O-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T4-8 · 순위 — 시가대비 등락",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 300,
+        "slot_count": 334,
+        "reachable_slot_count": 334,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "31CL-0",
+      "card_id": "CC-05",
+      "name": "CC-05 / R03-T6-8 · 순위 — 동일순매매",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 164,
+        "slot_count": 189,
+        "reachable_slot_count": 189,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "31II-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T4-9 · 순위 — VI 발동",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 140,
+        "slot_count": 164,
+        "reachable_slot_count": 164,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 1
+      }
+    },
+    {
+      "board_id": "31OF-0",
+      "card_id": "CC-05",
+      "name": "CC-05 / R03-T6-9 · 순위 — 신용융자 가능",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 130,
+        "slot_count": 162,
+        "reachable_slot_count": 162,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "31UD-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T4-10 · 순위 — 당일·전일 체결량",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 260,
+        "slot_count": 290,
+        "reachable_slot_count": 290,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 2
+      }
+    },
+    {
+      "board_id": "32S7-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T7 · 차트 — 업종 지수",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 69,
+        "slot_count": 71,
+        "reachable_slot_count": 71,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 5
+      }
+    },
+    {
+      "board_id": "32XM-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T8 · 순위 — 신주인수권 전체",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 242,
+        "slot_count": 251,
+        "reachable_slot_count": 251,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 5
+      }
+    },
+    {
+      "board_id": "3BQB-0",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-T1-X · 업종 — 업종 목록 펼침",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 71,
+        "slot_count": 74,
+        "reachable_slot_count": 74,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "3D4I-0",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-T2-X · 관심 — 삼성전자 행 펼침",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 119,
+        "slot_count": 127,
+        "reachable_slot_count": 127,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "3DI2-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-X · 투자자 12주체",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 146,
+        "slot_count": 220,
+        "reachable_slot_count": 220,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 5
+      }
+    },
+    {
+      "board_id": "3DZ1-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R08-X · ELW 바스켓·만기평가",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 59,
+        "slot_count": 77,
+        "reachable_slot_count": 77,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "3EWN-0",
+      "card_id": "CC-06",
+      "name": "CC-06 / R04-T2-X2 · 관심 — ELW 행 펼침",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 125,
+        "slot_count": 128,
+        "reachable_slot_count": 128,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "3FR6-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T1-X · 분봉 시세",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 149,
+        "slot_count": 213,
+        "reachable_slot_count": 213,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "3GRO-0",
+      "card_id": "CC-01",
+      "name": "CC-01 / R10-T2-X1 · 증거금·보증금 구간별",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 74,
+        "slot_count": 116,
+        "reachable_slot_count": 116,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "3IGR-0",
+      "card_id": "CC-01",
+      "name": "CC-01 / R10-T2-X2 · 증거금 재원·담보 상세",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 86,
+        "slot_count": 139,
+        "reachable_slot_count": 139,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "3JT4-0",
+      "card_id": "CC-04",
+      "name": "CC-04 / R02-T2-X · 호가 — 시간외 단일가 단계별 낱값",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 103,
+        "slot_count": 123,
+        "reachable_slot_count": 123,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "3JZ3-0",
+      "card_id": "CC-04",
+      "name": "CC-04 / R02-X · 호가 — 단계별 낱값·거래소별",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 189,
+        "slot_count": 238,
+        "reachable_slot_count": 238,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 1
+      }
+    },
+    {
+      "board_id": "3K7K-0",
+      "card_id": "CC-01",
+      "name": "CC-01 / R10-T3-X1 · 이달 기초·기말 구성",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 97,
+        "slot_count": 148,
+        "reachable_slot_count": 148,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 1
+      }
+    },
+    {
+      "board_id": "3LGC-0",
+      "card_id": "CC-01",
+      "name": "CC-01 / R10-T2-X3 · 거래내역 상세",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 148,
+        "slot_count": 191,
+        "reachable_slot_count": 191,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "3MTJ-0",
+      "card_id": "CC-01",
+      "name": "CC-01 / R10-T2-X4 · D+2 정산 후 계좌",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 92,
+        "slot_count": 119,
+        "reachable_slot_count": 119,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "3N4O-0",
+      "card_id": "CC-04",
+      "name": "A04-X · 호가 정본 — 단계별 낱값",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 139,
+        "slot_count": 190,
+        "reachable_slot_count": 190,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "3NVG-0",
+      "card_id": "CC-01",
+      "name": "CC-01 / R10-T2-X5 · 예수금 통화별·특수예수금",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 75,
+        "slot_count": 99,
+        "reachable_slot_count": 99,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "3ODO-0",
+      "card_id": "CC-01",
+      "name": "CC-01 / R10-B-X1 · 금현물 잔고·거래내역",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 110,
+        "slot_count": 136,
+        "reachable_slot_count": 136,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 6
+      }
+    },
+    {
+      "board_id": "3OIM-0",
+      "card_id": "CC-01",
+      "name": "CC-01 / R10-B-X2 · 금현물 주문·체결",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 89,
+        "slot_count": 120,
+        "reachable_slot_count": 120,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "3TCO-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T4-9-X · VI 발동 전체 12건",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 191,
+        "slot_count": 240,
+        "reachable_slot_count": 240,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "3TOM-0",
+      "card_id": "CC-03",
+      "name": "CC-03 / R01-T6-5-X · ELW 거래원별 10창구 전체",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 162,
+        "slot_count": 180,
+        "reachable_slot_count": 180,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 0
+      }
+    },
+    {
+      "board_id": "3UTA-0",
+      "card_id": "CC-01",
+      "name": "CC-01 / R10-T2-X6 · 부채·미수·연체 상세",
+      "status": "pass",
+      "failures": [],
+      "mount": {
+        "distinct_text_count": 80,
+        "slot_count": 139,
+        "reachable_slot_count": 139,
+        "max_overflow_x": 0,
+        "state_boards_in_dom": 1
+      }
+    }
+  ]
+}
