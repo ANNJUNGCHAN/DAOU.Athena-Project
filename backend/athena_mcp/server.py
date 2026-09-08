@@ -19,8 +19,10 @@ side-channel만 Athena 관리 built-in으로 노출하며, 일반 upstream MCP�
 from __future__ import annotations
 
 import json
+import os
 import re
-from collections.abc import Awaitable, Callable
+import sys
+from collections.abc import Awaitable, Callable, Mapping
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from pathlib import Path
@@ -71,6 +73,26 @@ ProgressCallback = Callable[[float, float | None, str | None], Awaitable[None]]
 
 RENDER_CANVAS_TOOL = "athena__render_canvas"
 SAVE_CANVAS_TOOL = "athena__save_canvas"
+
+# Grok CLI는 MCP 툴을 `서버__툴`로 네임스페이스하면서, 툴 이름 **자체에** `__`가
+# 든 것은 카탈로그에서 통째로 버린다(2026-09-08 실측: 이 서버의 90개 중
+# `athena__render_canvas`·`athena__save_canvas`와 upstream `별칭__툴` 78개가
+# search_tool/use_tool 어디에도 안 보이고 단일 밑줄 10개만 남았다 —
+# `athena__athena__render_canvas`를 직접 불러도 "Tool not found"). 그래서 Grok이
+# 캔버스를 한 번도 못 띄웠다. 그 클라이언트로 스폰될 때(앱이 .grok/config.toml에
+# 이 환경변수를 심는다)만 `__`를 `_`로 접은 이름을 노출하고, 호출 때 원래
+# 이름으로 되돌린다. 원본 이름은 Claude 경로의 계약(프롬프트·허용 툴·파서)
+# 이므로 건드리지 않는다 — 접기는 노출 표면에서만 일어난다.
+FLAT_TOOL_NAMES_ENV = "ATHENA_MCP_FLAT_TOOL_NAMES"
+
+
+def flat_tool_names_enabled(env: Mapping[str, str] | None = None) -> bool:
+    source = os.environ if env is None else env
+    return source.get(FLAT_TOOL_NAMES_ENV, "").strip().lower() in {"1", "true", "yes"}
+
+
+def flatten_tool_name(name: str) -> str:
+    return name.replace("__", "_")
 
 _KNOWN_CANVAS_TYPES = [*CANVAS_SCHEMAS.keys(), "free"]
 
@@ -789,9 +811,28 @@ def _builtin_tool_defs() -> list[types.Tool]:
     ]
 
 
-def build_mcp_server(gateway: AthenaGateway) -> Server:
-    """`AthenaGateway`를 실제 `mcp.server.lowlevel.Server`에 연결한다."""
+def build_mcp_server(gateway: AthenaGateway, *, flat_tool_names: bool | None = None) -> Server:
+    """`AthenaGateway`를 실제 `mcp.server.lowlevel.Server`에 연결한다.
+
+    `flat_tool_names`가 None이면 `ATHENA_MCP_FLAT_TOOL_NAMES` 환경변수를 따른다
+    (`FLAT_TOOL_NAMES_ENV` 주석 참고). 테스트는 인자로 직접 켠다.
+    """
     server: Server = Server("athena", version="0.1.0")
+    flatten = flat_tool_names_enabled() if flat_tool_names is None else flat_tool_names
+
+    def _real_tool_names() -> list[str]:
+        aggregated = gateway.aggregator.list_tools(allowed=gateway.is_tool_allowed)
+        return [t.qualified_name for t in aggregated] + [t.name for t in _builtin_tool_defs()]
+
+    def _unflatten_tool_name(name: str) -> str:
+        """접힌 이름을 원래 이름으로 되돌린다 — 원래 이름이 그대로 오면 통과."""
+        if not flatten or "__" in name:
+            return name
+        real_names = _real_tool_names()
+        if name in real_names:
+            return name
+        matches = [real for real in real_names if flatten_tool_name(real) == name]
+        return matches[0] if len(matches) == 1 else name
 
     @server.list_tools()
     async def _list_tools() -> list[types.Tool]:
@@ -807,10 +848,29 @@ def build_mcp_server(gateway: AthenaGateway) -> Server:
             )
             for t in aggregated
         ]
-        return exposed + _builtin_tool_defs()
+        tools = exposed + _builtin_tool_defs()
+        if not flatten:
+            return tools
+        # 접힌 이름이 서로 겹치면 뒤의 것을 뺀다 — 겹친 채 노출하면 호출이 어느
+        # 툴로 갈지 정해지지 않으므로, 조용히 잘리는 대신 stderr에 남긴다.
+        seen: dict[str, str] = {}
+        flat_tools: list[types.Tool] = []
+        for tool in tools:
+            flat = flatten_tool_name(tool.name)
+            if flat in seen:
+                print(
+                    f"[athena-mcp] 접힌 툴 이름 충돌: {tool.name!r} -> {flat!r} "
+                    f"(이미 {seen[flat]!r}) — 이 툴은 노출하지 않는다",
+                    file=sys.stderr,
+                )
+                continue
+            seen[flat] = tool.name
+            flat_tools.append(tool.model_copy(update={"name": flat}))
+        return flat_tools
 
     @server.call_tool()
     async def _call_tool(name: str, arguments: dict[str, Any]) -> types.CallToolResult:
+        name = _unflatten_tool_name(name)
         progress_token: types.ProgressToken | None = None
         on_progress: ProgressCallback | None = None
         try:
