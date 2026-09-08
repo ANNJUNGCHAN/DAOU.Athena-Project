@@ -23,6 +23,7 @@
     "verify:plugins": "node verify-plugins.js",
     "verify:kiumi": "electron verify-kiumi.js",
     "verify:orb-conversation": "electron probe-orb-conversation.js",
+    "verify:multi-chat": "electron probe-multi-chat.js",
     "verify:kiumi-cards": "electron probe-orb-kiumi-96.js",
     "verify:chat-v3": "electron probe-chat-v3-visual.js",
     "verify:agent-paper-parity": "electron probe-agent-paper-parity.js",
