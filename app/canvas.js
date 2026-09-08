@@ -881,6 +881,8 @@ function boardStateOf(host) {
       values: {}, links: [], unbound: [], boardId: null,
       valuesByBoard: new Map(), unboundByBoard: new Map(), hydrationByBoard: new Map(),
       realtimeByBoard: new Map(),
+      // 자료가 한 칸도 없는 되풀이 줄(계약의 empty_rows) — 보드별로 격리한다.
+      emptyRows: [], emptyRowsByBoard: new Map(),
       // binding_id → [slot_id]. 봉투가 두 표를 같이 실을 때만 채워진다 —
       // 비어 있으면 실시간 프레임은 보드에 아무것도 안 한다(추측하지 않는다).
       realtimeSlots: new Map(), surface: null, mountContract: null,
@@ -914,6 +916,10 @@ function seedBoardState(state, contract, envelope) {
   state.realtimeByBoard.set(
     boardId, boardMount.realtimeSlotIndex(contract, realtimeBindingsOf(envelope)),
   );
+  // 자료가 한 칸도 없는 되풀이 줄 — 마운트가 그 줄을 접는다(결측어 벽 방지).
+  state.emptyRowsByBoard.set(
+    boardId, Array.isArray(contract.empty_rows) ? contract.empty_rows.slice() : [],
+  );
 }
 
 function activateBoardState(state, boardId) {
@@ -925,12 +931,16 @@ function activateBoardState(state, boardId) {
   state.unboundByBoard.set(id, state.unbound);
   state.realtimeSlots = state.realtimeByBoard.get(id) || boardMount.realtimeSlotIndex(null, []);
   state.realtimeByBoard.set(id, state.realtimeSlots);
+  state.emptyRows = state.emptyRowsByBoard.get(id) || [];
+  state.emptyRowsByBoard.set(id, state.emptyRows);
 }
 
 // 마운트 계약(어느 노드에 어떤 슬롯이 앉는가)은 정적이라 board-template-registry가
 // 갖고 있다. 봉투는 값(slot_values)과 상태 보드 목록만 나른다.
 function boardMountOptions(host, envelope) {
   return {
+    // 백엔드가 「자료가 한 칸도 없다」고 표시한 줄. 마운트가 그 줄만 감춘다.
+    emptyRows: boardStateOf(host).emptyRows || [],
     // ▸ 펼침 = 상태 보드 템플릿 교체(D5). 링크에 있는 보드로만 바꾼다 — 없으면
     // 아무것도 하지 않는다(없는 화면을 지어내지 않는다).
     onExpand: (boardId) => switchStateBoard(host, boardId, envelope),

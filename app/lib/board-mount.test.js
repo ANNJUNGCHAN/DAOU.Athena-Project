@@ -7,7 +7,7 @@ const path = require('node:path');
 const {
   collapsePlan, mountPlan, pairedGroups, nodeIndex, applyPlan, setHidden, isValueSlot,
   hoistLayout, applyResponsiveHooks, RESPONSIVE_REGIONS, HOISTED_PROPERTIES, primaryMountPoint,
-  collapsePrimaryMockup, restorePrimaryMockup,
+  collapsePrimaryMockup, restorePrimaryMockup, collapseEmptyRows, markDeclaredScrollBox,
   createLatestBoardLoad, nextHydrationSlots,
   slotValueEntries, realtimeSlotIndex, updateRealtimeValue, pairedClosure, realtimePlan, applyRealtimeSlots,
   stateLinksFromMarks, stateControlActivationOwner, wireStateControlActivation,
@@ -26,6 +26,8 @@ const SELECTORS = {
   '*': () => true,
   '[data-node]': (node) => node.dataset.node !== undefined,
   '[data-paired-source]': (node) => node.dataset.pairedSource !== undefined,
+  '[data-slot-id]': (node) => node.dataset.slotId !== undefined,
+  '[data-name]': (node) => node.dataset.name !== undefined,
 };
 function attrSelector(selector) {
   const klass = /^\.([\w-]+)$/.exec(selector);
@@ -1618,4 +1620,100 @@ test('꼬리 칩이 하나면 본문에 같은 문구가 있어도 꼬리를 맨
 test('색인의 별칭 표는 실제 보드에서 나온 것이다', () => {
   assert.deepEqual(registry.controlLabels('관심종목 시세 보드'), ['관심']);
   assert.deepEqual(registry.controlLabels('없는 표식'), []);
+});
+
+
+// ---------- 빈 줄 접기 ----------
+//
+// 응답이 못 채운 되풀이 줄은 결측어 벽이 아니라 접힌 줄이어야 한다. 접기는 그 줄만
+// 담은 가장 작은 상자를 감추고, 값 있는 잎을 품는 상자는 절대 감추지 않는다.
+
+function linked(dataset = {}, children = [], className = '') {
+  const node = el(dataset, children, className);
+  node.contains = (other) => {
+    if (other === node) return true;
+    const walk = (current) => current.children.some(
+      (child) => child === other || walk(child),
+    );
+    return walk(node);
+  };
+  for (const child of children) child.parentElement = node;
+  return node;
+}
+
+test('빈 줄은 그 줄만 담은 상자가 감춰진다', () => {
+  const rowOneCells = [
+    linked({ slotId: 'r0.name' }), linked({ slotId: 'r0.price' }),
+  ];
+  const rowTwoCells = [
+    linked({ slotId: 'r1.name', missing: 'true' }),
+    linked({ slotId: 'r1.price', missing: 'true' }),
+  ];
+  const rowOne = linked({ node: 'row0' }, rowOneCells);
+  const rowTwo = linked({ node: 'row1' }, rowTwoCells);
+  const surface = linked({ node: 'surface' }, [rowOne, rowTwo]);
+
+  const hidden = collapseEmptyRows(surface, [
+    { row: 'region:primary:1', slot_ids: ['r1.name', 'r1.price'] },
+  ]);
+
+  assert.deepEqual(hidden.map((entry) => entry.node), ['row1']);
+  assert.equal(rowTwo.hidden, true);
+  assert.equal(rowOne.hidden, false);
+});
+
+test('값 있는 잎을 품는 상자는 접지 않는다', () => {
+  const cells = [
+    linked({ slotId: 'r0.name' }), linked({ slotId: 'r0.price', missing: 'true' }),
+  ];
+  const row = linked({ node: 'row0' }, cells);
+  const surface = linked({ node: 'surface' }, [row]);
+
+  const hidden = collapseEmptyRows(surface, [
+    { row: 'region:primary:0', slot_ids: ['r0.name', 'r0.price'] },
+  ]);
+
+  assert.deepEqual(hidden, []);
+  assert.equal(row.hidden, false);
+});
+
+test('접을 줄이 없으면 아무것도 감추지 않는다', () => {
+  const row = linked({ node: 'row0' }, [linked({ slotId: 'r0.name', missing: 'true' })]);
+  const surface = linked({ node: 'surface' }, [row]);
+
+  assert.deepEqual(collapseEmptyRows(surface, []), []);
+  assert.deepEqual(collapseEmptyRows(surface, [{ row: 'x', slot_ids: ['nope'] }]), []);
+  assert.equal(row.hidden, false);
+});
+
+
+// ---------- Paper가 이름으로 선언한 스크롤 상자 ----------
+
+function styled(style = {}, dataset = {}) {
+  const node = el(dataset);
+  node.style = {
+    values: { ...style },
+    getPropertyValue(key) { return this.values[key] || ''; },
+    setProperty(key, value) { this.values[key] = value; },
+    removeProperty(key) { delete this.values[key]; },
+  };
+  return node;
+}
+
+test('이름이 스크롤인 상자는 세로 스크롤로 돌린다', () => {
+  const box = styled({ overflow: 'clip' }, { name: '목록 본문 · 펼침 · 520px 스크롤' });
+
+  assert.equal(markDeclaredScrollBox(box), true);
+  assert.equal(box.style.getPropertyValue('overflow-y'), 'auto');
+  assert.equal(box.dataset.bsScrollDeclared, 'true');
+});
+
+test('이름에 스크롤이 없거나 이미 스크롤이면 건드리지 않는다', () => {
+  const plain = styled({ overflow: 'clip' }, { name: '목록 본문' });
+  const already = styled({ overflow: 'auto' }, { name: '목록 · 스크롤' });
+
+  assert.equal(markDeclaredScrollBox(plain), false);
+  assert.equal(plain.style.getPropertyValue('overflow-y'), '');
+  assert.equal(markDeclaredScrollBox(already), false);
+  assert.equal(already.style.getPropertyValue('overflow'), 'auto');
 });
