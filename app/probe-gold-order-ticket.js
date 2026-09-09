@@ -76,7 +76,7 @@ async function main() {
       product_name: '금 99.99_1kg',
       side: 'buy',
       ord_qty: '1',
-      unit: '개',
+      unit: 'g',
       requested_order_type: 'market',
       execution_supported: false,
       execution_blocker: '금현물 주문 API에서 시장가 매매구분 코드가 확인되지 않아 실행할 수 없습니다.',
@@ -113,7 +113,7 @@ async function main() {
       && snapshot.visible
       && snapshot.rows.some((row) => row.includes('금 99.99_1kg'))
       && snapshot.qty === '1'
-      && snapshot.unit === '개'
+      && snapshot.unit === 'g'
       && snapshot.priceReadout === '시장가 요청 · 실행 불가'
       && snapshot.executionDisabled === true
       && /시장가 매매구분 코드/.test(snapshot.blocker)
