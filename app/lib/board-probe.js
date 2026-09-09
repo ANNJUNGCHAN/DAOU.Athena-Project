@@ -820,6 +820,21 @@ const boardStepProbe = (instanceId) => `(async () => {
   };
 })()`;
 
+function surfaceFromHydrate(boardId, ordinal, reply) {
+  const contract = reply && reply.surface_contract && typeof reply.surface_contract === 'object'
+    ? reply.surface_contract
+    : {};
+  return {
+    boardId,
+    instanceId: boardInstanceId(boardId),
+    ordinal,
+    cardTitle: `카드 실데이터 · ${boardId}`,
+    operationRef: 'base:board-surface',
+    realtimeBindings: [],
+    contract: { ...contract, card_kind: CARD_KIND[contract.card_id] },
+  };
+}
+
 function loadRealBoardContract(boardId, ordinal, templateRoot) {
   const templateDirectory = path.join(templateRoot, boardId);
   const slots = JSON.parse(fs.readFileSync(path.join(templateDirectory, 'slots.json'), 'utf8'));
@@ -907,6 +922,7 @@ module.exports = {
   classifyBoardPaintReceipt,
   inspectBoardChrome,
   loadRealBoardContract,
+  surfaceFromHydrate,
   BOARD_PROBE_ARGS,
   sendBoardEnvelope,
   settleBoardLayout,

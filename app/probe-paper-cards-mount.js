@@ -1,20 +1,17 @@
 'use strict';
 
-// 카드 템플릿 96장 런타임 마운트 게이트 — `verify:paper-cards-mount` (설계서 §3.3~§3.5).
+// 카드 템플릿 런타임 마운트 게이트 — `verify:paper-cards-mount` (설계서 §3.3~§3.5).
 //
 // 정적 게이트(`verify:paper-cards-static`)가 「Paper 원장과 저장소 템플릿이 같은
 // 카드를 말하는가」를 재고, 이 프로브는 그 다음 구간을 잰다: **그 템플릿이 실앱
-// 셸에서 실제로 서는가.** 보드마다 네 폭에서 셋만 본다.
+// 셸에서 실제 API 값으로 서는가.** 보드마다 네 폭에서 본다.
 //
 //   (a) 마운트 성공        — 봉투 영수증 · 탭 활성화 · `.board-surface` 실재
 //   (d) 4단 폭 overflow 0  — assertSurfaceGeometry (가로 1px 초과는 하드 실패)
-//   (C) 텍스트 다중집합    — DOM 텍스트 == slots.json `text_multiset`
 //   (c') 상태 링크         — `data-state-board`가 DOM에 실제로 찍혔는가
 //
-// 안 재는 것: 글리프 가독성(assertReadability)·PNG·breakpoint 5단 계약·실시간
-// 이음매. 전부 6장 정본 게이트(`verify:integrated-cards`)와 `fixture-quote`의
-// 몫이다 — 96장에 걸면 판정이 「구현됐나」에서 「예쁜가」로 미끄러지고 실행이
-// 10분대로 부푼다(설계서 §3.3).
+// Paper `text_multiset`은 맞대지 않는다. 그 비교는 목업 숫자를 값으로 심어야만
+// 성립하고, 이 게이트는 board-hydrate 응답만 화면에 넣는다.
 //
 // 루프는 뒤집혀 있다(설계서 §3.4). 창 리사이즈는 비동기라 `settleBoardLayout`이
 // 4샘플 안정을 기다리는데, 보드마다 4번 리사이즈하면 96장에 384회다. 그래서
@@ -38,11 +35,13 @@ const {
   assertSurfaceGeometry,
   boardStepProbe,
   inspectBoardChrome,
-  loadRealBoardContract,
   sendBoardEnvelope,
-  BOARD_PROBE_ARGS,
   settleBoardLayout,
+  surfaceFromHydrate,
 } = require('./lib/board-probe');
+const { hydrateBoard } = require('./lib/main/board-hydrate');
+const { kindOfBoard, resolveKindCode } = require('./lib/board-sweep-targets');
+const { readLocalBearerToken } = require('./lib/main/backend-launcher');
 const { resolveBoardSelection } = require('./lib/integrated-card-capture-hygiene');
 const {
   boardMountRecord,
@@ -52,8 +51,6 @@ const {
   uniqueStateControls,
 } = require('./lib/paper-cards-mount-report');
 const { mergeMountLayer } = require('./lib/paper-cards-report');
-const boardRegistry = require('./lib/board-template-registry');
-const boardMount = require('./lib/board-mount');
 const { writeProbeModelPrefs } = require('./lib/probe-model-prefs');
 
 const APP = __dirname;
@@ -77,17 +74,57 @@ app.disableHardwareAcceleration();
 const CARD_BOARDS = JSON.parse(fs.readFileSync(CARD_INDEX, 'utf8')).boards;
 const CARD_ID_OF = new Map(CARD_BOARDS.map((board) => [board.board_id, board.card_id]));
 const BOARD_NAME_OF = new Map(CARD_BOARDS.map((board) => [board.board_id, board.name]));
+const OPERATION_REFS_OF = new Map(
+  CARD_BOARDS.map((board) => [board.board_id, board.operation_refs || []]),
+);
+const BACKEND_BASE = process.env.ATHENA_BACKEND_BASE || 'http://127.0.0.1:8010';
+const TARGET = JSON.parse(process.env.ATHENA_SWEEP_TARGET || '{"stk_cd":"005930"}');
+const BEARER_TOKEN = readLocalBearerToken(path.join(ROOT, 'backend'));
+const KIND_CODES = new Map();
 
-// 셸이 부팅하고 보드가 서는 데 필요한 IPC만 답한다. 백엔드는 띄우지 않는다 —
-// 이 게이트는 봉투가 나르는 Paper 원문만 보고, 실시간 등록은 재지 않는다
-// (실시간 이음매는 fixture-quote가 계속 맡는다, 설계서 §3.3).
+async function targetFor(boardId) {
+  const kind = kindOfBoard(OPERATION_REFS_OF.get(boardId));
+  if (kind === 'stock') return TARGET;
+  if (!KIND_CODES.has(kind)) {
+    KIND_CODES.set(kind, await resolveKindCode(kind, { backendBase: BACKEND_BASE }));
+  }
+  const code = KIND_CODES.get(kind);
+  return code ? { ...TARGET, stk_cd: code } : TARGET;
+}
+
+async function hydrate(boardId) {
+  const reply = await hydrateBoard({
+    backendBase: BACKEND_BASE,
+    token: BEARER_TOKEN,
+    boardId,
+    target: await targetFor(boardId),
+  });
+  if (!reply.ok) {
+    throw new Error(`board-hydrate ${reply.status}: ${reply.error || reply.httpStatus || ''}`);
+  }
+  return reply;
+}
+
+// 셸이 부팅하고 보드가 서는 데 필요한 IPC만 답한다. 값은 실제 board-hydrate다.
+// 실시간 등록은 재지 않는다(실시간 이음매는 fixture-quote가 계속 맡는다).
 function registerShellIpc() {
   const source = fs.readFileSync(path.join(APP, 'preload.js'), 'utf8');
   const block = source.split('const INVOKE_CHANNELS = new Set([')[1]?.split(']);')[0];
   // 상수명이나 형식이 바뀌면 채널 0개짜리 셸로 조용히 넘어가지 않게 여기서 멈춘다.
   if (!block) throw new Error('preload.js에서 INVOKE_CHANNELS 블록을 못 찾았다');
   for (const channel of [...block.matchAll(/'([^']+)'/g)].map((match) => match[1])) {
-    ipcMain.handle(channel, async () => {
+    ipcMain.handle(channel, async (_event, payload) => {
+      if (channel === 'athena:canvas-board-hydrate') {
+        const request = payload && typeof payload === 'object' ? payload : {};
+        return hydrateBoard({
+          backendBase: BACKEND_BASE,
+          token: BEARER_TOKEN,
+          boardId: request.boardId,
+          target: request.target || await targetFor(request.boardId),
+          account: request.account,
+          slotIds: request.slotIds,
+        });
+      }
       if (channel === 'athena:integrated-card-realtime-policy') return publicPolicies();
       // 등록 자체를 재지 않으므로 성공 상태만 돌려준다. 실패를 돌려주면 카드에
       // 실시간 오류 배너가 붙어 보드 밖 DOM이 흔들린다.
@@ -143,61 +180,6 @@ async function bootShell() {
   return win;
 }
 
-// slots.json의 텍스트 다중집합. 없으면 던진다 — `{}`로 넘어가면 DOM 텍스트가 전부
-// added로 잡혀 `text_multiset_dom_mismatch`로 빨개지고, 진짜 원인(「템플릿에 다중집합이
-// 없다」)이 리포트에서 안 읽힌다.
-function readTextMultiset(boardId, surfaceContract) {
-  const slotsPath = path.join(TEMPLATE_ROOT, boardId, 'slots.json');
-  const { text_multiset: multiset } = JSON.parse(fs.readFileSync(slotsPath, 'utf8'));
-  if (!multiset) throw new Error(`slots.json에 text_multiset이 없다: ${boardId}`);
-  // 마운트 계약이 `static: "blank"`로 표시한 자리는 화면에서 빈 칸이다(생성기
-  // `_static_mode`: 응답에 없는 수치라 Paper 목업 숫자를 그대로 둘 수 없다). 화면에
-  // 없는 글자는 기대 다중집합에서도 빠져야 한다 — 판정은 계약 하나에서만 읽는다.
-  const contract = boardRegistry.contractFor(boardId);
-  const expected = { ...multiset };
-  const drop = (text) => {
-    const key = typeof text === 'string' ? text.trim() : '';
-    if (!key || !(key in expected)) return;
-    expected[key] -= 1;
-    if (expected[key] <= 0) delete expected[key];
-  };
-  const add = (text) => {
-    const key = typeof text === 'string' ? text.trim() : '';
-    if (!key) return;
-    expected[key] = (expected[key] || 0) + 1;
-  };
-  const slots = (contract && contract.slots) || [];
-  for (const slot of slots) {
-    if (slot.static === 'blank') drop(slot.paper_text);
-  }
-  // 종목 카드(CC-03)의 첫 두 자리는 **카드 자신의 종목 이름·코드**로 덮인다 — 탭을
-  // 옮겨도 원래 종목을 지키는 계약이다(`mountPlan`의 identity). 그러면 화면 글자가
-  // Paper 문면이 아니므로(예: 「005930 · KOSPI · KRX」 → 「005930」) 기대 쪽도 같이
-  // 바꿔 센다. 안 바꾸면 게이트가 자기 픽스처의 종목코드를 결함으로 신고한다.
-  // 판정 조건을 마운트와 **똑같이** 둔다: 종목 카드(CC-03)만, s001이 값 자리일 때만,
-  // 그리고 덮이는 자리가 값 자리일 때만이다(라벨은 값을 무시한다 — 실측 2QX1-1의
-  // s002는 라벨 「실시간」이라 종목코드로 덮이지 않는다).
-  const identity = boardRegistry.cardIdFor(boardId) === 'CC-03'
-    ? boardMount.boardIdentityFromEnvelope({
-      surface_contract: surfaceContract,
-      operation_args: { ...BOARD_PROBE_ARGS },
-    })
-    : { name: '', code: '' };
-  const byId = new Map(slots.map((slot) => [slot.slot_id, slot]));
-  const overwrites = (slotId) => (byId.get(slotId) || {}).kind === 'value';
-  if (overwrites('s001') && (identity.name || identity.code)) {
-    if (identity.name) {
-      drop(byId.get('s001').paper_text);
-      add(identity.name);
-    }
-    if (identity.code && overwrites('s002')) {
-      drop(byId.get('s002').paper_text);
-      add(identity.code);
-    }
-  }
-  return expected;
-}
-
 // `boardStepProbe`가 안 재는 둘을 한 번에 더 잰다.
 //
 //   state_boards_in_dom — 상태 링크는 마운트 뒤 DOM에 `data-state-board`로 찍힌다
@@ -234,11 +216,8 @@ async function probeChunk(win, chunk) {
   const surfaces = [];
   for (const [index, boardId] of chunk.board_ids.entries()) {
     try {
-      const surface = loadRealBoardContract(boardId, (index % 6) + 1, TEMPLATE_ROOT);
-      surfaces.push({
-        ...surface,
-        expectedTextMultiset: readTextMultiset(boardId, surface.contract),
-      });
+      const reply = await hydrate(boardId);
+      surfaces.push(surfaceFromHydrate(boardId, (index % 6) + 1, reply));
     } catch (error) {
       // 계약을 못 읽는 보드도 그 보드만 빨갛게 남긴다 — 여기서 던지면 청크가 아니라
       // 실행 전체가 죽어 96장 결과와 리포트가 통째로 날아간다.
@@ -280,7 +259,7 @@ async function probeChunk(win, chunk) {
           preset: preset.name,
           probe,
           geometryError,
-          expectedTextMultiset: surface.expectedTextMultiset,
+          expectedTextMultiset: null,
           expectedStateBoards: uniqueStateControls(surface.contract.state_boards),
         }));
         record.steps.push({

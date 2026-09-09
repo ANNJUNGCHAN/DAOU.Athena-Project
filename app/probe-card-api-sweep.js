@@ -20,13 +20,18 @@ const { publicPolicies } = require('./lib/main/integrated-card-realtime');
 const {
   BOARD_WINDOW_PRESETS,
   activateBoardTab,
-  boardInstanceId,
   assertSurfaceGeometry,
   boardStepProbe,
   sendBoardEnvelope,
   settleBoardLayout,
+  surfaceFromHydrate,
 } = require('./lib/board-probe');
-const { TEXT_CLIP_PROBE, MISSING_TEXT_PROBE } = require('./lib/board-text-clip');
+const {
+  TEXT_CLIP_PROBE,
+  MISSING_TEXT_PROBE,
+  LEFTOVER_PAPER_MOCK_PROBE,
+  paperMockCandidates,
+} = require('./lib/board-text-clip');
 const { hydrateBoard } = require('./lib/main/board-hydrate');
 const { kindOfBoard, resolveKindCode } = require('./lib/board-sweep-targets');
 const { readLocalBearerToken } = require('./lib/main/backend-launcher');
@@ -50,10 +55,7 @@ const TARGET = JSON.parse(process.env.ATHENA_SWEEP_TARGET || '{"stk_cd":"005930"
 const CAPTURE = new Set(
   (process.env.ATHENA_SWEEP_CAPTURE || '').split(',').map((value) => value.trim()).filter(Boolean),
 );
-const CARD_KIND = Object.freeze({
-  'CC-01': 'account', 'CC-02': 'order', 'CC-03': 'instrument',
-  'CC-04': 'orderbook', 'CC-05': 'flow', 'CC-06': 'explorer',
-});
+
 
 const PROFILE = path.join(APP, `.probe-card-api-sweep-profile${SHARD_SUFFIX}`);
 fs.rmSync(PROFILE, { recursive: true, force: true });
@@ -211,15 +213,7 @@ async function probeBoard(win, boardId, ordinal, token) {
     filled: reply.filled,
     unbound: Array.isArray(contract.unbound_slots) ? contract.unbound_slots.length : null,
   };
-  const surface = {
-    boardId,
-    instanceId: boardInstanceId(boardId),
-    ordinal,
-    cardTitle: `카드 API 전수 · ${boardId}`,
-    operationRef: 'base:board-surface',
-    realtimeBindings: [],
-    contract: { ...contract, card_kind: CARD_KIND[contract.card_id] },
-  };
+  const surface = surfaceFromHydrate(boardId, ordinal, reply);
   let mounted = false;
   for (const [presetIndex, preset] of BOARD_WINDOW_PRESETS.entries()) {
     win.setContentSize(preset.width, preset.height);
@@ -240,18 +234,48 @@ async function probeBoard(win, boardId, ordinal, token) {
         MISSING_TEXT_PROBE(surface.instanceId),
       );
       if (clip.error || missing.error) throw new Error(clip.error || missing.error);
-      if (CAPTURE.has(boardId) || CAPTURE.has('*')) {
+      if (presetIndex === 0) {
+        const slotsPath = path.join(TEMPLATE_ROOT, boardId, 'slots.json');
+        const slotsPayload = JSON.parse(fs.readFileSync(slotsPath, 'utf8'));
+        const filledIds = Array.isArray(contract.slot_values)
+          ? contract.slot_values.map((entry) => entry && entry.slot_id).filter(Boolean)
+          : Object.keys(contract.slot_values || {});
+        const leftover = await win.webContents.executeJavaScript(
+          LEFTOVER_PAPER_MOCK_PROBE(
+            surface.instanceId,
+            paperMockCandidates(slotsPayload.slots),
+            filledIds,
+          ),
+        );
+        if (leftover && leftover.error) throw new Error(leftover.error);
+        record.api.paper_mock = leftover ? leftover.leftover_total : 0;
+        if (leftover && leftover.leftover_total > 0) {
+          record.failures.push({
+            code: 'paper_mock_visible',
+            count: leftover.leftover_total,
+            nodes: (leftover.leftover || []).slice(0, 5),
+          });
+        }
+      }
+      if ((CAPTURE.has(boardId) || CAPTURE.has('*')) && presetIndex === 0) {
         // 두 프레임을 기다린다 — 바로 찍으면 마운트 전 프레임이 나온다.
         await win.webContents.executeJavaScript(
           'new Promise((done) => requestAnimationFrame('
           + '() => requestAnimationFrame(() => done(true))))',
         );
-        const image = await win.webContents.capturePage();
-        const file = path.join(
-          path.dirname(REPORT_PATH), `${boardId}-${preset.name}.png`,
-        );
+        const rect = geometry && geometry.card_rect;
+        const image = rect && rect.width && rect.height
+          ? await win.webContents.capturePage({
+            x: Math.max(0, rect.x),
+            y: Math.max(0, rect.y),
+            width: Math.max(1, rect.width),
+            height: Math.max(1, rect.height),
+          })
+          : await win.webContents.capturePage();
+        const file = path.join(path.dirname(REPORT_PATH), `${boardId}.png`);
         fs.mkdirSync(path.dirname(file), { recursive: true });
         fs.writeFileSync(file, image.toPNG());
+        record.capture = path.relative(ROOT, file).replace(/\\/g, '/');
       }
       record.steps.push({
         preset: preset.name,
@@ -319,6 +343,49 @@ async function probeBoard(win, boardId, ordinal, token) {
   return record;
 }
 
+function writeCaptureGallery(boards) {
+  const dir = path.dirname(REPORT_PATH);
+  const names = {
+    'CC-01': '계좌', 'CC-02': '주문', 'CC-03': '종목·상품',
+    'CC-04': '호가', 'CC-05': '수급', 'CC-06': '탐색',
+  };
+  const groups = new Map();
+  for (const board of boards) {
+    const cardId = board.card_id || 'other';
+    if (!groups.has(cardId)) groups.set(cardId, []);
+    groups.get(cardId).push(board);
+  }
+  const sections = [];
+  for (const [cardId, group] of groups) {
+    const items = group.map((board) => {
+      const file = `${board.board_id}.png`;
+      const exists = fs.existsSync(path.join(dir, file));
+      const img = exists
+        ? `<p><img src="${file}" alt="${board.board_id}" style="max-width:100%;border:1px solid #d7dde8;border-radius:8px"></p>`
+        : '<p>캡처 없음</p>';
+      const filled = board.api ? board.api.filled : 'x';
+      const mock = board.api ? board.api.paper_mock : null;
+      const fail = (board.failures || []).map((item) => item.code).join(', ') || '통과';
+      return `<article id="${board.board_id}">
+<h3>${board.board_id} · ${board.name || ''}</h3>
+<p>채운 슬롯 ${filled} · Paper 목업 잔여 ${mock == null ? '—' : mock} · ${fail}</p>
+${img}
+</article>`;
+    });
+    sections.push(`<h2>${cardId} ${names[cardId] || ''}</h2>\n${items.join('\n')}`);
+  }
+  const html = `<!doctype html>
+<html lang="ko"><meta charset="utf-8">
+<title>카드 101장 · 실데이터</title>
+<body style="font-family:sans-serif;max-width:1200px;margin:24px auto;padding:0 16px;background:#eef1f6">
+<h1>카드 101장 · 실제 API</h1>
+<p>Paper 목업 숫자를 넣지 않고 board-hydrate 응답만 그렸다.</p>
+${sections.join('\n')}
+</body></html>
+`;
+  fs.writeFileSync(path.join(dir, 'index.html'), html);
+}
+
 async function main() {
   const startedAt = Date.now();
   const selected = (process.env.ATHENA_VERIFY_BOARD_IDS || '')
@@ -363,6 +430,9 @@ async function main() {
     geometry_boards: boards.filter(
       (board) => board.failures.some((failure) => failure.code === 'surface_geometry'),
     ).length,
+    paper_mock_boards: boards.filter(
+      (board) => board.failures.some((failure) => failure.code === 'paper_mock_visible'),
+    ).length,
   };
   const runtime = {
     gate: 'verify:card-api-sweep',
@@ -376,9 +446,10 @@ async function main() {
   };
   fs.mkdirSync(path.dirname(REPORT_PATH), { recursive: true });
   fs.writeFileSync(REPORT_PATH, `${JSON.stringify(runtime, null, 1)}\n`);
+  if (CAPTURE.size) writeCaptureGallery(boards);
   console.log(JSON.stringify(totals));
   const failed = totals.missing_boards + totals.clipped_boards + totals.broken_boards
-    + totals.overlap_boards + totals.geometry_boards;
+    + totals.overlap_boards + totals.geometry_boards + totals.paper_mock_boards;
   console.log(failed ? `card api sweep failed — ${REPORT_PATH}` : 'card api sweep passed');
   app.exit(failed ? 1 : 0);
 }

@@ -120,6 +120,11 @@ test('상태 링크 기대치는 조작 문구 수이지 대상 보드 수가 �
   );
 });
 
+test('실데이터 마운트는 Paper 원문 다중집합을 맞대지 않는다', () => {
+  const failures = mountFailures(step({ expectedTextMultiset: null, probe: probe({ dom_text_primary: [['삼성전자', 1]] }) }));
+  assert.equal(failures.some((item) => item.code === 'text_multiset_dom_mismatch'), false);
+});
+
 test('DOM 텍스트가 slots.json과 다르면 어느 글자가 왜 다른지까지 남는다', () => {
   const failures = mountFailures(step({ probe: probe({ dom_text_primary: [['체결강도', 1]] }) }));
   assert.deepEqual(failures.map((item) => item.code), ['text_multiset_dom_mismatch']);
