@@ -57,6 +57,8 @@ function rankingSurface() {
 test('cardActionFor는 Paper 문구가 정확히 같을 때만 목적지를 준다', () => {
   assert.equal(cardActionFor('호가 열기').board_id, '13BC-2');
   assert.equal(cardActionFor('  종목 상세 열기  ').board_id, '137X-2');
+  assert.equal(cardActionFor('차트 열기').board_id, '137X-2');
+  assert.equal(cardActionFor('차트 열기').title, '종목 차트');
   assert.equal(cardActionFor('호가'), null);
   assert.equal(cardActionFor('호가 열기 버튼'), null);
   assert.equal(cardActionFor(''), null);
