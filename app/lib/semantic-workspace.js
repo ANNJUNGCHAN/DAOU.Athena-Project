@@ -6,6 +6,9 @@ const NON_DATA_STATES = new Set(['loading', 'empty', 'unavailable', 'error']);
 const DISPLAY_TIER_ORDER = Object.freeze({ answer: 0, primary: 1, support: 2, secondary: 2, detail: 3 });
 const DIRECT_DISPLAY_TIERS = new Set(['answer', 'primary', 'support']);
 const MAX_PRIMARY_TABLE_COLUMNS = 8;
+const SOURCE_TABLE_PRIMARY_LABELS = Object.freeze({
+  'base:ka10099': Object.freeze(['종목코드', '종목명']),
+});
 const TAXONOMY_LABELS = Object.freeze({
   fundamentals: '기업 기본 정보와 가치',
 });
@@ -530,6 +533,7 @@ function normalizeSection(raw, envelope, recipePolicy = {}) {
     workflowOnly,
     sectionOrder: Number.isFinite(sectionOrder) ? sectionOrder : Number.MAX_SAFE_INTEGER,
     workflowContent: fields.length > 0 || (columns.length > 0 && rows.length > 0),
+    primaryColumnLabels: SOURCE_TABLE_PRIMARY_LABELS[firstText(envelope.operation_ref, envelope.operationRef)] || [],
   };
 }
 
@@ -781,9 +785,33 @@ function stampCellObservation(cell, section, row, rowIndex, column) {
   }
 }
 
-function renderTable(section, parent) {
+function hasPresentedValue(row, column) {
+  const value = rowValue(row, column);
+  return value !== null && value !== undefined && value !== '';
+}
+
+function primaryTableColumns(section) {
   const preferred = section.columns.filter((column) => DIRECT_DISPLAY_TIERS.has(column.displayTier));
-  const mainColumns = (preferred.length ? preferred : section.columns).slice(0, MAX_PRIMARY_TABLE_COLUMNS);
+  if (!section.primaryColumnLabels.length) {
+    return (preferred.length ? preferred : section.columns).slice(0, MAX_PRIMARY_TABLE_COLUMNS);
+  }
+  const identity = section.primaryColumnLabels
+    .map((label) => section.columns.find((column) => column.label === label))
+    .filter(Boolean);
+  const selected = new Set(identity.map((column) => column.key));
+  const populated = section.columns.filter((column) => (
+    !selected.has(column.key) && section.rows.some((row) => hasPresentedValue(row, column))
+  ));
+  const preferredKeys = new Set(preferred.map((column) => column.key));
+  const orderedPopulated = [
+    ...preferred.filter((column) => !selected.has(column.key)),
+    ...populated.filter((column) => !preferredKeys.has(column.key)),
+  ];
+  return [...identity, ...orderedPopulated].slice(0, MAX_PRIMARY_TABLE_COLUMNS);
+}
+
+function renderTable(section, parent) {
+  const mainColumns = primaryTableColumns(section);
   const mainKeys = new Set(mainColumns.map((column) => column.key));
   const detailColumns = section.columns.filter((column) => !mainKeys.has(column.key));
   const wrap = document.createElement('div');

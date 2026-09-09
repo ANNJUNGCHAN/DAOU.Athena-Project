@@ -313,7 +313,7 @@ test('a marked descendant routes state activation to its native button or tab ow
   ]) {
     const markedLeaf = stateControlStub();
     markedLeaf.closest = (selector) => {
-      assert.equal(selector, 'button, [role="button"], [role="tab"]');
+      assert.equal(selector, 'button, [role="button"], [role="tab"], .bs-r-atomic');
       return owner;
     };
     assert.equal(stateControlActivationOwner(markedLeaf), owner);
@@ -323,11 +323,22 @@ test('a marked descendant routes state activation to its native button or tab ow
   assert.equal(stateControlActivationOwner(plainLeaf), plainLeaf);
 });
 
+test('a state-control leaf activates through the full atomic chip hit target', () => {
+  const chip = stateControlStub();
+  chip.className = 'bs-r-atomic';
+  const markedLeaf = stateControlStub();
+  markedLeaf.closest = (selector) => {
+    assert.match(selector, /\.bs-r-atomic/);
+    return chip;
+  };
+  assert.equal(stateControlActivationOwner(markedLeaf), chip);
+});
+
 test('a marked descendant never creates nested button semantics inside a role=button owner', () => {
   const owner = stateControlStub({ tag: 'div', role: 'button', tabindex: '-1' });
   const markedLeaf = stateControlStub();
   markedLeaf.closest = (selector) => (
-    selector === 'button, [role="button"], [role="tab"]' ? owner : null
+    selector === 'button, [role="button"], [role="tab"], .bs-r-atomic' ? owner : null
   );
 
   const activationOwner = stateControlActivationOwner(markedLeaf);
@@ -460,6 +471,32 @@ test('value-atomic marker intent is exposed only for formatted numeric assignmen
     ],
   }, { static: 12 }).assignments;
   assert.deepEqual(nonValues.map((assignment) => assignment.valueAtomic), [false, false, false]);
+});
+
+test('missing API-mapped label never falls back to authored market data', () => {
+  const contract = {
+    slots: [
+      {
+        slot_id: 'selected.name', node: 'selected.name', kind: 'label', paper_text: '삼성전자',
+        mapping_id: 'base:ka10099', f: 'name', format: null,
+      },
+      {
+        slot_id: 'heading', node: 'heading', kind: 'label', paper_text: '종목 찾기', format: null,
+      },
+    ],
+  };
+  const byId = new Map(mountPlan(contract, {}).assignments
+    .map((assignment) => [assignment.slotId, assignment]));
+
+  assert.equal(byId.get('selected.name').text, '미제공');
+  assert.equal(byId.get('selected.name').designText, false);
+  assert.equal(byId.get('heading').text, '종목 찾기');
+  assert.equal(byId.get('heading').designText, true);
+
+  const supplied = mountPlan(contract, { 'selected.name': '동화약품' }).assignments
+    .find((assignment) => assignment.slotId === 'selected.name');
+  assert.equal(supplied.text, '동화약품');
+  assert.equal(supplied.designText, false);
 });
 
 test('mountPlan은 슬롯마다 텍스트·색 근거를 하나씩 만들고 롤업 텍스트로 갈아끼운다', () => {

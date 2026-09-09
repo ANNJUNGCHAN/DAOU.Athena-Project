@@ -26,6 +26,13 @@ from athena_api.card_surface_templates import (
 
 SURFACE_CONTRACT_VERSION = "card-surface.v1"
 
+# ka10099 is a market/product list. The only authored boards that mention it use
+# the list as supplementary stock metadata inside unrelated ranking views. Making
+# either one the entry surface causes hydration to merge independently ordered
+# ka10099 and ka10032 rows. Keep the source rows in the semantic workspace until
+# a product-list board with its own entry contract exists.
+_SOURCE_ROW_ONLY_OPERATIONS = frozenset({"base:ka10099"})
+
 
 def observation_id_for(wire_occurrence_id: str, array_index: int | None = None) -> str:
     """관찰 식별자 — 표면 슬롯과 의미 관찰이 **같은 문자열**을 써야 한다.
@@ -462,6 +469,8 @@ def build_surface_contract(
 ) -> dict[str, Any] | None:
     """보드 표면 계약을 만든다. 템플릿이 없는 op는 ``None``."""
 
+    if operation_ref in _SOURCE_ROW_ONLY_OPERATIONS:
+        return None
     registry = registry if registry is not None else get_registry()
     board = registry.base_board_for(operation_ref)
     if board is None:

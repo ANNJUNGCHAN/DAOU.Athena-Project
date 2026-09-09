@@ -804,3 +804,22 @@ def test_empty_rows_lists_repeat_rows_with_no_value() -> None:
     # 응답이 1행만 실어 왔다 — 표의 첫 줄은 살고 나머지 줄은 접을 목록에 든다.
     assert not any(row.endswith(":0") for row in rows if row.startswith("table:"))
     assert any(row.startswith("table:") and row.endswith(":2") for row in rows)
+
+
+def test_ka10099_product_rows_do_not_mount_the_mixed_ranking_board() -> None:
+    """종목 목록은 독립 순위 조회와 합치지 않고 받은 행 그대로 작업대에 남긴다."""
+
+    rows = [
+        {"code": "000020", "name": "동화약품"},
+        {"code": "005930", "name": "삼성전자"},
+    ]
+    card_contract = {"data": {"rows": rows}}
+
+    attach_surface_contract(
+        card_contract,
+        "base:ka10099",
+        {"list": rows},
+    )
+
+    assert card_contract["surface_contract"] is None
+    assert card_contract["data"]["rows"] == rows

@@ -84,6 +84,29 @@ function verifiedOperationRefsFor(envelope) {
   return [clean(envelope && (envelope.operation_ref || envelope.operationRef))].filter(Boolean);
 }
 
+const SNAPSHOT_ONLY_OPERATION_REFS = new Set(['base:ka10099']);
+
+function realtimeEligibleFor(envelope = {}) {
+  return !verifiedOperationRefsFor(envelope)
+    .some((operationRef) => SNAPSHOT_ONLY_OPERATION_REFS.has(operationRef));
+}
+
+function visibleTargetsFor(envelope = {}) {
+  if (Array.isArray(envelope.visible_targets)) return envelope.visible_targets;
+  const rows = envelope.data && Array.isArray(envelope.data.rows) ? envelope.data.rows : [];
+  const targets = [];
+  const seen = new Set();
+  for (const row of rows.slice(0, 50)) {
+    if (!row || typeof row !== 'object') continue;
+    const raw = clean(row.stk_cd) || clean(row.code) || clean(row.symbol);
+    const target = raw && /^[AJQ]\d{6}$/.test(raw) ? raw.slice(1) : raw;
+    if (!/^\d{6}$/.test(target || '') || seen.has(target)) continue;
+    seen.add(target);
+    targets.push(target);
+  }
+  return targets;
+}
+
 function panelSessionStore(root) {
   if (!root) return null;
   if (!root.__athenaIntegratedPanelSessions) {
@@ -417,7 +440,8 @@ const api = {
   CARD_DEFINITIONS, integratedDefinition, instanceKeyFor, panelKeyFor,
   prepareExisting, mountOrUpdate, normalizeIdentity, targetIdentity,
   specializedClassNames, copySpecializedDatasets, refreshExisting,
-  matchesRealtimeTick, requireRealtimeSuccess, verifiedOperationRefsFor,
+  matchesRealtimeTick, requireRealtimeSuccess, verifiedOperationRefsFor, realtimeEligibleFor,
+  visibleTargetsFor,
   rememberPanelSession, panelSessionFor, forgetPanelSession, clearPanelSessions,
   detachForDestroy, findReusableRoot, buttonLabel, workflowStateLabel, isBoardSurface,
   buildCancelledState, buildAuthExpiredState,

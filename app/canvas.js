@@ -1917,8 +1917,9 @@ function integratedRealtimePayload(root, envelope) {
     accountId: first(envelope.account_id, envelope.account_no, args.account_id, args.account_no, args.acnt_no),
     conditionId: first(envelope.condition_id, args.condition_id, args.seq),
     sectorId: first(envelope.sector_id, args.sector_id, args.sect_code),
-    visibleTargets: Array.isArray(envelope.visible_targets) ? envelope.visible_targets : undefined,
+    visibleTargets: integratedCardSurface.visibleTargetsFor(envelope),
     verifiedOperationRefs: integratedCardSurface.verifiedOperationRefsFor(envelope),
+    realtimeEligible: integratedCardSurface.realtimeEligibleFor(envelope),
     semanticBindingIds,
   };
 }
@@ -1966,6 +1967,7 @@ function realtimePolicies() {
 }
 
 function hasRealtimePolicy(policies, payload) {
+  if (payload.realtimeEligible === false) return false;
   return policies.some((policy) => Array.isArray(policy.rules) && policy.rules.some((rule) => (
     rule.cardId === payload.cardId
       && Array.isArray(rule.modes)
