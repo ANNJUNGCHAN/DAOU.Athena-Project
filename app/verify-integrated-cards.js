@@ -150,8 +150,18 @@ function sha256(buffer) {
   return crypto.createHash('sha256').update(buffer).digest('hex');
 }
 
+// 실시간 임차는 **계좌 귀속**을 요구한다(`resolveLeaseBindings`의 별칭 검사 — 커밋
+// 1acaba57 「실시간 계좌 귀속을 고정」). 이 프로브는 그 뒤로 별칭을 안 넘겨 첫 틱에서
+// TypeError로 죽어 있었다. 픽스처 계좌 하나를 준다 — 별칭은 임차 키에만 들어가고
+// 이 프로브의 단언(REG/REMOVE 순서·재연결)은 그 값을 보지 않는다.
+const FIXTURE_BACKEND_ACCOUNT_ALIAS = 'fixture-account';
+
+function withFixtureAccount(payload) {
+  return { ...(payload || {}), backendAccountAlias: FIXTURE_BACKEND_ACCOUNT_ALIAS };
+}
+
 function realtimeConfig(cardId, leaseId, target) {
-  const base = { leaseId, cardId };
+  const base = { leaseId, cardId, backendAccountAlias: FIXTURE_BACKEND_ACCOUNT_ALIAS };
   if (cardId === 'CC-01') return { ...base, mode: 'overview', accountId: target };
   if (cardId === 'CC-03') return { ...base, mode: 'quote', symbol: target };
   if (cardId === 'CC-04') return { ...base, mode: 'regular', symbol: target };
@@ -220,11 +230,15 @@ function registerSafeShellIpc(records, realtimeManager) {
     ipcMain.handle(channel, async (_event, payload) => {
       let result = null;
       if (channel === 'athena:integrated-card-realtime-policy') result = publicPolicies();
+      // 제품은 **활성 계좌**에서 별칭을 주입한다(main.js `mountIntegratedCardRealtime`의
+      // `withActiveRealtimeAccount`). 렌더러 payload에는 별칭이 없으므로, 검사기도 같은
+      // 자리에서 픽스처 계좌를 주입해야 임차가 선다 — 안 주면 `resolveLeaseBindings`가
+      // 별칭 검사에서 던지고 임차가 영원히 active가 되지 않는다(커밋 1acaba57).
       if (channel === 'athena:integrated-card-realtime-mount') {
-        result = await realtimeManager.mount(payload);
+        result = await realtimeManager.mount(withFixtureAccount(payload));
       }
       if (channel === 'athena:integrated-card-realtime-update') {
-        result = await realtimeManager.update(payload);
+        result = await realtimeManager.update(withFixtureAccount(payload));
       }
       if (channel === 'athena:integrated-card-realtime-unmount') {
         result = await realtimeManager.unmount(payload && payload.leaseId);
@@ -515,6 +529,12 @@ async function installProductionSemanticSnapshot(win, manager, contracts) {
   }
   const config = realtimeConfig('CC-03', mounted.leaseId, '005930');
   config.semanticBindingIds = contracts.card.realtime_bindings.map((item) => item.binding_id);
+  // 임차는 렌더러가 만들었고 이 관리자는 그 id를 처음 본다 — `update`는 이미 선 임차만
+  // 갈아 준다(`_mountOrUpdate(config, requireExisting: true)`). 먼저 세워야 한다.
+  const seeded = await manager.mount(config);
+  if (!seeded.ok) {
+    throw new Error(`production semantic realtime lease mount failed: ${JSON.stringify(seeded)}`);
+  }
   const state = await manager.update(config);
   if (!state.ok || state.status !== 'active') {
     throw new Error(`production semantic realtime binding update failed: ${JSON.stringify(state)}`);
@@ -1220,17 +1240,37 @@ function boardOrderbookFields() {
 
 // 0D는 카드가 실제로 열려 있을 때만 REG를 쓴다 — acquire/release가 짝이 아니면
 // 리미터가 새거나 남의 카드 피드가 끊긴다. 두 채널을 다 모아서 짝을 센다.
+// 호가 임차는 렌더러가 **invoke**로 부른다(canvas.js `wireOrderbookRealtime` →
+// `athena:orderbook-realtime-acquire`, 응답의 `leaseToken`을 받아 쥔다). 그래서
+// `ipcMain.on`으로 듣던 옛 기록기는 아무것도 잡지 못했고, 그 단언이 늘 빈 배열로
+// 떨어졌다. 프로브의 일반 핸들러가 이미 그 채널을 받고 있으므로 잠시 기록기로 갈아
+// 끼우고, 제품 핸들러와 같은 모양으로 답한다 — 토큰을 줘야 release도 나간다.
 function collectOrderbookLeaseCalls() {
   const calls = [];
-  const onAcquire = (_event, payload) => calls.push({ kind: 'acquire', symbol: payload && payload.symbol });
-  const onRelease = (_event, payload) => calls.push({ kind: 'release', symbol: payload && payload.symbol });
-  ipcMain.on('athena:orderbook-realtime-acquire', onAcquire);
-  ipcMain.on('athena:orderbook-realtime-release', onRelease);
+  let issued = 0;
+  const record = (kind) => async (_event, payload = {}) => {
+    if (kind !== 'acquire') {
+      // 해제는 종목이 아니라 **토큰**을 나른다(main.js `releaseRendererRealtimeLease`).
+      calls.push({ kind, leaseToken: payload.leaseToken });
+      return true;
+    }
+    issued += 1;
+    const leaseToken = `fixture-orderbook-lease-${issued}`;
+    calls.push({ kind, symbol: payload.symbol, leaseToken });
+    return { ok: true, leaseToken };
+  };
+  const swap = (channel, handler) => {
+    ipcMain.removeHandler(channel);
+    ipcMain.handle(channel, handler);
+  };
+  swap('athena:orderbook-realtime-acquire', record('acquire'));
+  swap('athena:orderbook-realtime-release', record('release'));
   return {
     calls,
     stop: () => {
-      ipcMain.removeListener('athena:orderbook-realtime-acquire', onAcquire);
-      ipcMain.removeListener('athena:orderbook-realtime-release', onRelease);
+      // 일반 핸들러가 하던 대로(알 수 없는 채널은 null) 되돌린다.
+      swap('athena:orderbook-realtime-acquire', async () => null);
+      swap('athena:orderbook-realtime-release', async () => null);
     },
   };
 }
@@ -1348,8 +1388,9 @@ async function exerciseBoardOrderbookPrimary(win) {
       throw new Error(`board orderbook primary: 0D acquire가 한 번이 아니다 — ${JSON.stringify(lease.calls)}`);
     }
     await closeBoardCard(win, surface.instanceId);
+    // 짝 판정은 **토큰**으로 한다 — 해제 payload에는 종목이 없다(제품 계약).
     const releases = lease.calls.filter((call) => call.kind === 'release');
-    if (releases.length !== 1 || releases[0].symbol !== BOARD_ORDERBOOK_SYMBOL) {
+    if (releases.length !== 1 || releases[0].leaseToken !== acquires[0].leaseToken) {
       throw new Error(`board orderbook primary: 0D release가 acquire와 짝이 아니다 — ${JSON.stringify(lease.calls)}`);
     }
   } finally {
