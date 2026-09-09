@@ -108,6 +108,35 @@ test('buildSelectorOrderPrefill: 완성된 금현물 시장가 초안을 실행 
   assert.throws(() => ot.buildOrderPayload(ticket), /시장가 코드를 확인할 수 없습니다/);
 });
 
+test('셸 openOrderTicket은 이미 열린 티켓을 후속 초안으로 다시 연다', () => {
+  const source = fs.readFileSync(path.join(__dirname, '..', 'chat.js'), 'utf8');
+  const start = source.indexOf('function openOrderTicket(prefill)');
+  const end = source.indexOf('function closeOrderTicket(expectedOwner');
+  assert.ok(start >= 0 && end > start);
+  const slice = source.slice(start, end);
+  assert.match(slice, /canPresentOrderTicket/);
+  assert.equal(/if \(orderOpen \|\|/.test(slice), false);
+});
+
+test('이미 열린 주문 티켓도 후속 초안을 적용한다', () => {
+  assert.equal(ot.canPresentOrderTicket({
+    displayedConversationId: 'c1', switchingConversation: false,
+    settingsOpen: false, onboardVisible: false, orderOpen: true,
+  }), true);
+  assert.equal(ot.canPresentOrderTicket({
+    displayedConversationId: 'c1', switchingConversation: false,
+    settingsOpen: false, onboardVisible: false, orderOpen: false,
+  }), true);
+  assert.equal(ot.canPresentOrderTicket({
+    displayedConversationId: null, switchingConversation: false,
+    settingsOpen: false, onboardVisible: false,
+  }), false);
+  assert.equal(ot.canPresentOrderTicket({
+    displayedConversationId: 'c1', switchingConversation: true,
+    settingsOpen: false, onboardVisible: false,
+  }), false);
+});
+
 test('세 문장 금 시장가 초안은 1kg/1g 차단 티켓이며 주문 본문을 만들지 않는다', () => {
   const { resolveGoldOrderTurn, MARKET_UNSUPPORTED_REASON } = require('./main/gold-order-intent');
   let turn = resolveGoldOrderTurn('금99.99_1kg 1g 매수 주문 티켓을 열어줘.');

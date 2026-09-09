@@ -5622,8 +5622,12 @@ function closeOrderTicketForConversationChange(nextConversationId) {
 }
 
 function openOrderTicket(prefill) {
-  if (orderOpen || switchingConversation || displayedConversationId === null
-    || settingsOpen || !$onboard.hidden) return;
+  if (!orderTicketLib.canPresentOrderTicket({
+    switchingConversation,
+    displayedConversationId,
+    settingsOpen,
+    onboardVisible: !$onboard.hidden,
+  })) return;
   orderOpen = true;
   orderTicketRevision += 1;
   const owner = {
