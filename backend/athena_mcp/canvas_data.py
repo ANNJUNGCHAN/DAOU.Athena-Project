@@ -122,6 +122,25 @@ def _error(text: str) -> types.CallToolResult:
     )
 
 
+def _order_confirmation_required() -> types.CallToolResult:
+    payload = {
+        "status": "needs_confirmation",
+        "code": "ORDER_TICKET_REQUIRED",
+        "confirmation_required": True,
+        "order_ticket_created": False,
+        "order_submitted": False,
+        "message": (
+            "주문 확인이 필요합니다. 주문 티켓은 생성되지 않았고 주문도 "
+            "접수되지 않았습니다."
+        ),
+    }
+    return types.CallToolResult(
+        content=[types.TextContent(type="text", text=json.dumps(payload, ensure_ascii=False))],
+        structuredContent=payload,
+        isError=False,
+    )
+
+
 _WS_RECEIPTS = {
     "started": "실시간 데이터 수신을 시작했습니다. 캔버스에서 확인하세요.",
     "stopped": "실시간 데이터 수신을 중지했습니다.",
@@ -235,7 +254,7 @@ async def render_with_plan(
     plan_token = arguments["plan_token"]
     try:
         response = await http_client.post(
-            "/api/v1/llm/tools/call",
+            "/api/v1/llm/tools/call-query",
             json={"plan_token": plan_token},
             timeout=call_timeout_seconds,
         )
@@ -244,6 +263,20 @@ async def render_with_plan(
     except httpx.HTTPError as exc:
         return _error(f"plan 실행 중 전송 오류: {exc}")
     if response.status_code >= 400:
+        if response.status_code in {409, 428}:
+            try:
+                error_payload = response.json()
+            except ValueError:
+                error_payload = None
+            if (
+                isinstance(error_payload, dict)
+                and (
+                    error_payload.get("code") == "ORDER_TICKET_REQUIRED"
+                    or error_payload.get("detail")
+                    == "X-Athena-Confirm: true is required"
+                )
+            ):
+                return _order_confirmation_required()
         return _error(f"plan 실행 실패 (HTTP {response.status_code}): {response.text[:300]}")
     try:
         call_payload = response.json()

@@ -730,7 +730,8 @@ async function addLiveCard(result) {
     return renderLiveNotice('이 조회를 실행할 권한이 없습니다 — 설정에서 권한을 확인해 주세요.');
   }
   if (result.status === 'error') {
-    return renderLiveNotice('캔버스 호출이 게이트웨이/upstream 에러로 실패했다.');
+    return renderLiveNotice(result.failure && result.failure.message
+      ? result.failure.message : '조회 도구가 오류를 반환했습니다. 오류 기록을 확인해야 합니다.');
   }
   if (result.status === 'unparseable') {
     console.warn('[canvas] 응답 해석 실패', result.reason || '원인 미상');

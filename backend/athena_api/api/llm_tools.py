@@ -10,6 +10,7 @@ from athena_api.dependencies import (
     AccountAliasDep,
     KiwoomClientDep,
     SelectorServiceDep,
+    get_kiwoom_client,
     get_kiwoom_ws_client,
     get_order_kiwoom_client,
 )
@@ -30,6 +31,7 @@ from athena_api.selector.schemas import (
 # still serve reads, so absence becomes an error at dispatch rather than at injection.
 OptionalOrderClientDep = Annotated[KiwoomClient | None, Depends(get_order_kiwoom_client)]
 OptionalWsClientDep = Annotated[KiwoomWsClient | None, Depends(get_kiwoom_ws_client)]
+OptionalDataClientDep = Annotated[KiwoomClient | None, Depends(get_kiwoom_client)]
 
 router = APIRouter(prefix="/api/v1/llm", tags=["LLM selector"])
 
@@ -178,4 +180,35 @@ async def call_operation(
         authorization=authorization,
         confirmation=confirmation,
         idempotency_key=idempotency_key,
+    )
+
+
+@router.post(
+    "/tools/call-query",
+    response_model=CallResponse,
+    operation_id="llm_call_query_plan",
+    summary="Execute a signed query plan for a read-only display surface",
+    openapi_extra={"x-athena-llm-exposed": False},
+)
+async def call_query_plan(
+    payload: CallRequest,
+    request: Request,
+    response: Response,
+    client: OptionalDataClientDep,
+    selector: SelectorServiceDep,
+    account: AccountAliasDep,
+) -> CallResponse:
+    """Execute only a server-verified query plan.
+
+    Canvas rendering uses this narrower endpoint so an order plan cannot reach
+    order dispatch even if a caller sends a valid signed order token. Rejection
+    happens before the plan nonce is consumed, preserving the confirmed ticket path.
+    """
+    return await selector.call(
+        payload,
+        request,
+        response,
+        client,
+        account=account,
+        query_only=True,
     )

@@ -4,6 +4,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
+const vm = require('node:vm');
 const {
   buildMainMcpRuntimeSnapshot,
   buildProviderToolPolicy,
@@ -534,7 +535,10 @@ test('main account, cold-mutation, shutdown, and history commit boundaries are f
   assert.match(source, /async function terminateColdLegacyRuntime[\s\S]*?if \(completion\) await completion;/);
   assert.match(source, /prepare: \(\) => \{[\s\S]*?isQuitting = true;[\s\S]*?blockNewTurns\('app_shutdown'\)/);
   assert.match(source, /async function runLiveQuery[\s\S]*?if \(isQuitting\)[\s\S]*?APP_SHUTTING_DOWN/);
-  assert.match(source, /commitSuccess: \(result\) => historySink\.saveChatMessageAwaited/);
+  assert.match(source, /commitSuccess: \(result\) => \{[\s\S]*?saveChatMessageAwaited\([\s\S]*?persistentHistoryAnswerText\(result\)/);
+  assert.match(source, /result\.status === 'needs_confirmation'[\s\S]*?persistentTerminalAnswers\.set\(context\.conversationId, result\.message\)[\s\S]*?return;/);
+  assert.match(source, /persistentTerminalAnswers\.delete\(turnConversationId\)/);
+  assert.match(source, /resolveTerminalAnswerText\(persistentResult\.finalText, persistentTurnContext\.terminalAnswerText\)/);
   // 플래그 이름은 providerRuntimeEnabled다 — main이 ATHENA_PERSISTENT_CHAT을
   // claude-chat-session의 킬 스위치로 이미 쓰고 있어 이름을 분리했다.
   const persistentBranchStart = source.indexOf('if (providerRuntimeEnabled && liveProviderId === \'claude\') {', source.indexOf('async function runLiveQuery'));
@@ -542,6 +546,46 @@ test('main account, cold-mutation, shutdown, and history commit boundaries are f
   assert.ok(persistentBranchStart >= 0 && persistentBranchEnd > persistentBranchStart);
   const persistentBranch = source.slice(persistentBranchStart, persistentBranchEnd);
   assert.equal(persistentBranch.includes("role: 'assistant'"), false);
+});
+
+test('주문 티켓 미생성 결과는 persistent 이력과 cold 최종문을 대체하고 다음 턴에는 남지 않는다', () => {
+  const source = fs.readFileSync(path.join(__dirname, '..', '..', 'main.js'), 'utf8');
+  const functionSource = (marker) => {
+    const start = source.indexOf(marker);
+    const bodyStart = source.indexOf('{', start);
+    let depth = 0;
+    for (let index = bodyStart; index < source.length; index += 1) {
+      if (source[index] === '{') depth += 1;
+      if (source[index] === '}') depth -= 1;
+      if (depth === 0) return source.slice(start, index + 1);
+    }
+    throw new Error(`함수 본문을 찾지 못함: ${marker}`);
+  };
+  const contexts = new Map([['submit-a', { conversationId: 'conversation-a', terminalAnswerText: null }]]);
+  const sandbox = vm.createContext({ contexts });
+  vm.runInContext(`
+    const persistentTurnContexts = { get: (id) => contexts.get(id) };
+    const persistentTerminalAnswers = new Map();
+    ${functionSource('function resolveTerminalAnswerText(')}
+    ${functionSource('function persistentHistoryAnswerText(')}
+    ${functionSource('function handlePersistentCanvasResult(')}
+  `, sandbox);
+  const safe = '주문 확인이 필요합니다. 주문 티켓을 만들지 않았으며 주문도 접수하지 않았습니다.';
+
+  sandbox.handlePersistentCanvasResult({
+    clientSubmitId: 'submit-a', status: 'needs_confirmation', message: safe,
+  });
+  assert.equal(contexts.get('submit-a').terminalAnswerText, safe);
+  assert.equal(sandbox.persistentHistoryAnswerText({
+    conversationId: 'conversation-a', finalText: '주문 티켓을 열었습니다.',
+  }), safe);
+  assert.equal(sandbox.resolveTerminalAnswerText('주문 티켓을 열었습니다.', safe), safe);
+
+  vm.runInContext("persistentTerminalAnswers.delete('conversation-a')", sandbox);
+  assert.equal(sandbox.persistentHistoryAnswerText({
+    conversationId: 'conversation-a', finalText: '다음 턴 답변',
+  }), '다음 턴 답변');
+  assert.equal(sandbox.resolveTerminalAnswerText('다음 턴 답변', null), '다음 턴 답변');
 });
 
 test('main MCP list is read-only and conversation rotation uses the shared provider tail', () => {

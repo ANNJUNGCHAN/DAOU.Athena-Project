@@ -186,7 +186,7 @@ async def test_render_with_plan_all_generated_chart_contracts_push_aits_envelope
         call_timeout_seconds=5.0,
     )
     assert result.isError is False
-    assert seen["path"] == "/api/v1/llm/tools/call"
+    assert seen["path"] == "/api/v1/llm/tools/call-query"
     assert seen["call_count"] == 1
     assert seen["body"] == {"plan_token": f"tok-{tr_id}"}
     # 조회 전용 — 주문 확인 헤더를 절대 싣지 않는다(3중 게이트가 주문 plan을 거부).
@@ -485,9 +485,17 @@ async def test_render_with_plan_fails_closed_when_screen_reference_missing(
     assert "screen-gap-secret" not in result.content[0].text
 
 
-async def test_render_with_plan_surfaces_backend_error(mock_http_client):
+@pytest.mark.parametrize(
+    ("status_code", "detail"),
+    [(409, "PLAN_ALREADY_USED"), (428, "different precondition")],
+)
+async def test_render_with_plan_surfaces_backend_error(
+    mock_http_client,
+    status_code: int,
+    detail: str,
+):
     def handler(_request: httpx.Request) -> httpx.Response:
-        return httpx.Response(409, json={"detail": "PLAN_ALREADY_USED"})
+        return httpx.Response(status_code, json={"detail": detail})
 
     result = await render_with_plan(
         {"canvas_type": "table", "plan_token": "tok", "data": {}},
@@ -495,7 +503,47 @@ async def test_render_with_plan_surfaces_backend_error(mock_http_client):
         call_timeout_seconds=5.0,
     )
     assert result.isError is True
-    assert "409" in result.content[0].text
+    assert str(status_code) in result.content[0].text
+
+
+async def test_render_with_plan_returns_truthful_confirmation_state_for_order_plan(
+    mock_http_client,
+):
+    requests: list[httpx.Request] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        requests.append(request)
+        return httpx.Response(
+            409,
+            json={
+                "detail": "Selector request failed",
+                "code": "ORDER_TICKET_REQUIRED",
+                "message": "Order plans must be submitted through the confirmed order ticket",
+                "details": {},
+            },
+        )
+
+    result = await render_with_plan(
+        {"plan_token": "guarded-order-token"},
+        mock_http_client(handler),
+        call_timeout_seconds=5.0,
+    )
+
+    assert [request.url.path for request in requests] == ["/api/v1/llm/tools/call-query"]
+    assert result.isError is False
+    assert result.structuredContent == {
+        "status": "needs_confirmation",
+        "code": "ORDER_TICKET_REQUIRED",
+        "confirmation_required": True,
+        "order_ticket_created": False,
+        "order_submitted": False,
+        "message": (
+            "주문 확인이 필요합니다. 주문 티켓은 생성되지 않았고 주문도 "
+            "접수되지 않았습니다."
+        ),
+    }
+    assert json.loads(result.content[0].text) == result.structuredContent
+    assert "guarded-order-token" not in result.content[0].text
 
 
 async def test_render_with_plan_push_failure_is_truthful_without_inline_data(mock_http_client):

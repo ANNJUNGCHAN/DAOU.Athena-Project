@@ -7,6 +7,7 @@ from fastapi.testclient import TestClient
 
 from athena_api.config import Settings
 from athena_api.dependencies import (
+    get_kiwoom_client,
     get_kiwoom_ws_client,
     get_order_kiwoom_client,
     get_selector_service,
@@ -554,6 +555,93 @@ def test_an_order_plan_never_mints_a_continuation_token() -> None:
     # cont-yn came back "Y", and it is still refused a next plan token.
     assert called.json()["continuation"]["cont_yn"] == "Y"
     assert called.json()["continuation"]["next_plan_token"] is None
+
+
+def test_query_only_call_rejects_order_before_consuming_or_dispatching() -> None:
+    """Canvas execution cannot turn an order plan into an order attempt.
+
+    The rejection must leave the token untouched so the existing confirmed order
+    path can still consume it exactly once from the order ticket.
+    """
+
+    class FakeOrderClient:
+        is_ready = True
+
+        def __init__(self) -> None:
+            self.calls: list[str] = []
+
+        async def post_with_headers(self, tr_id, path, body, options):
+            self.calls.append(tr_id)
+            return ResponseEnvelope(body={"return_code": "0"}, cont_yn="N", next_key=None)
+
+    service = _service()
+    order = FakeOrderClient()
+    client = _client(
+        service,
+        None,
+        Settings(_env_file=None, enable_order_api=True, local_bearer_token="local-test"),
+    )
+    client.app.dependency_overrides[get_order_kiwoom_client] = lambda: order
+    token = client.post(
+        "/api/v1/llm/tools/resolve",
+        json={"question": "base:kt10000", "intent": "order", "arguments": ORDER_ARGS},
+    ).json()["plan_token"]
+
+    rejected = client.post(
+        "/api/v1/llm/tools/call-query",
+        json={"plan_token": token},
+    )
+
+    assert rejected.status_code == 409
+    assert rejected.json() == {
+        "detail": "Selector request failed",
+        "code": "ORDER_TICKET_REQUIRED",
+        "message": "Order plans must be submitted through the confirmed order ticket",
+        "details": {},
+    }
+    assert order.calls == []
+
+    client.app.dependency_overrides[require_kiwoom_client] = lambda: FakeClient()
+    confirmed = client.post(
+        "/api/v1/llm/tools/call",
+        json={"plan_token": token},
+        headers={
+            "Authorization": "Bearer local-test",
+            "X-Athena-Confirm": "true",
+            "Idempotency-Key": "query-only-rejection-keeps-token",
+        },
+    )
+    assert confirmed.status_code == 200, confirmed.text
+    assert order.calls == ["kt10000"]
+
+
+def test_query_only_call_executes_a_server_verified_query_plan() -> None:
+    upstream = FakeClient()
+    client = _client(_service(), upstream)
+    client.app.dependency_overrides[get_kiwoom_client] = lambda: upstream
+    token = _resolve(client).json()["plan_token"]
+
+    called = client.post(
+        "/api/v1/llm/tools/call-query",
+        json={"plan_token": token},
+    )
+
+    assert called.status_code == 200, called.text
+    assert called.json()["operation_ref"] == "detail:ka10001:current_trading"
+    assert [call[0] for call in upstream.calls] == ["ka10001"]
+
+
+def test_query_only_call_still_requires_a_data_client_for_query_dispatch() -> None:
+    client = _client(_service())
+    token = _resolve(client).json()["plan_token"]
+
+    called = client.post(
+        "/api/v1/llm/tools/call-query",
+        json={"plan_token": token},
+    )
+
+    assert called.status_code == 503
+    assert called.json() == {"detail": "Kiwoom data service is not ready"}
 
 
 def test_a_websocket_plan_reports_a_missing_socket_rather_than_using_the_query_client() -> None:
