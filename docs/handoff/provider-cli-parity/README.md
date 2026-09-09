@@ -3,7 +3,7 @@
 ## 목적과 현재 상태
 
 사용자 요구: "Grok도 예열 풀이 필요함. Codex도 Claude 정도로 승격시켜야 함. 3개 모두 Claude 정도로 구현되어야 함."
-구현과 관련 테스트는 완료했고 main에 푸시했다. 남은 일은 실제 앱과 인증된 공급자에서의 검증 및 측정된 결함의 보완이다.
+**구현은 완료**했다(커밋 `38b5466b`, 테스트 `d64d124d`). **세 공급자 실제 검증은 아직 완료가 아니다.** 이 실행(2026-09-09)에서 Grok만 인증된 성공 응답을 다시 확인했고, Claude는 OAuth 만료, Codex는 Athena 전용 로그인 부재로 실제 성공 응답이 없다. `allProvidersLiveVerified`는 false다.
 새 작업자는 구현을 다시 만들지 말고 아래 코드와 증거에서 이어간다.
 
 이 브랜치는 공급자 작업 완료 커밋 `d64d124d`를 기준으로 한다. `38b5466b`(구현)와 `d64d124d`(테스트 보완)를 모두 포함한다.
@@ -69,9 +69,23 @@ main의 `GATEWAY_ALLOWED_TOOLS='mcp__athena,Task,Read,Glob'` 문자열은 기존
 `ATHENA_PERSISTENT_CHAT=0`, `ATHENA_GROK_PERSISTENT_CHAT=0`, `ATHENA_CODEX_PERSISTENT_CHAT=0`은 각 경로의 킬 스위치다.
 `ATHENA_PROVIDER_RUNTIME=1`의 기존 단일 supervisor와 0.147.0/CLAUDE_ONLY 계약 자료는 별도 실험 경로다. 기본 Codex 대화 경로의 성공 여부와 혼동하거나 옛 자료를 임의로 PASS 처리하지 않는다.
 
+## 이 환경의 실제 검증 (2026-09-09, 이 실행)
+
+브랜치 `codex/provider-cli-parity-grok-handoff`, HEAD `c44d6de2`, dirty 없음. 공유 Athena 프로세스는 없었고 종료하지 않았다. 공유 `%APPDATA%/athena-shell`의 mcp-config는 `C:\Projects\DAOU.Athena\backend`를 가리키므로, 이 워크트리의 없는 `backend\.venv`로 덮어쓰지 않기 위해 공유 userData로 `npm --prefix app start`하지 않았다. 이 트리 Electron은 격리 `--user-data-dir`로 8초 생존을 확인했고 GUI는 이 하네스에서 조작하지 못했다. Grok 예열·병렬·후속·취소·설정 회전은 `app/main.js`의 `prepareLiveChatPool` / `runLiveProviderChatTurn` 소스와 실제 `createGrokAcpSession`으로 구동했다.
+
+관련 13개 테스트 파일 138 passed, 0 failed, 0 skipped. `node --check app/main.js` 통과. 제품 코드는 이 실행에서 바꾸지 않았다. 무도구 OK를 금융 질의 성능 증거로 쓰지 않는다. 주문은 실행하지 않았고 캔버스/주문 페이로드를 만들지 않았다.
+
+| 공급자 | 구현 완료 | 이 실행 실제 검증 | 관측 |
+| --- | --- | --- | --- |
+| Grok | 예 | 예 (무도구 OK) | 예열 2개 4.600초, PID 25176/24300 서로 다름. 병렬 첫 턴 5.101/5.421초 `spawnedFresh===false`, 후속 1.483/1.832초 같은 PID·세션 재사용. 예열 중 취소는 submit 없이 abort, 재요청은 취소 세션 객체를 재사용하지 않음. effort max→low 회전 generation 1→2 성공. Grok 계정 1개라 계정 교체는 못 함. 도구 0. 금융 도구 지연은 미검증. live 프로브도 pass |
+| Claude | 예 | 아니오 | 미리 띄운 PID 2개(7000/6164)는 있으나 90초 동안 ready 신호 없음. 턴은 `Failed to authenticate: OAuth session expired and could not be refreshed`. `claude auth status`의 loggedIn=true는 성공 응답이 아니다 |
+| Codex | 예 | 아니오 | Athena private home `%APPDATA%/athena-shell/codex-runtime` 없음. `CODEX_PRIVATE_AUTH_REQUIRED` (`actionNeeded:true`, `retryable:false`). 전역 `~/.codex`는 복사하지 않음. PATH 첫 native exe는 0.147.0, 추가 native는 0.153.4 — 래퍼와 native를 섞지 말 것 |
+
+인증이 막힌 경우 Athena 설정에서 해당 공급자 계정 카드의 로그인을 실행한다. Codex는 앱이 `%APPDATA%\athena-shell\codex-runtime`에서 `codex login`을 띄운다. 전역 `~/.codex`를 그 폴더로 복사하지 않는다. Claude는 같은 설정 화면에서 `claude auth login`을 다시 수행한다.
+
 ## 검증 이력과 한계
 
-이 기록은 2026-09-09의 이전 실행 결과이며 새 PC의 현재 상태를 뜻하지 않는다.
+아래는 2026-09-09의 **이전** 실행 요약이다. 이 실행의 관측은 위 절과 `evidence.json`을 따른다.
 
 - 구현 마지막 통합 실행: 관련 15개 테스트 파일 151 passed, 0 failed, 0 skipped. 독립 리뷰 19개 관련 파일, 남은 코드 결함 0건.
 - 최종 인수인계 기반 `d64d124d`에서 아래 13개 테스트 파일 재실행: 138 passed, 0 failed, 0 skipped.
@@ -100,6 +114,8 @@ main의 `GATEWAY_ALLOWED_TOOLS='mcp__athena,Task,Read,Glob'` 문자열은 기존
 5. Claude 사용량과 Codex 전용 로그인이 확보되면 각각 실제 성공 응답과 앱 캔버스/도구 흐름을 확인한다. 인증이 필요하면 사용자에게 한 가지 구체적인 조작을 안내하고 독립적인 검증은 계속한다.
 6. 측정된 결함만 최소 변경으로 고치고 회귀 테스트와 독립 리뷰를 수행한다. 인증되지 않은 경로를 우회하거나 금융 데이터/성공 화면을 합성하지 않는다.
 7. 세 공급자의 적용된 코드, 실제 성공 응답, 대화 격리, 취소, 종료 후 프로세스 정리, 설정 교체 검증을 각각 증거로 닫는다. 남은 인증 조건이 있다면 전체 완료를 선언하지 않는다.
+
+이 실행 기준으로 남은 실제 검증: Claude OAuth 재로그인 후 성공 응답, Codex Athena 전용 로그인 후 thread/MCP/모델 응답, 실제 앱 GUI와 금융 도구 경로. Grok 무도구 경로는 이 실행에서 다시 확인됐다.
 
 새 기능 개발이나 주문 실행은 이 인수인계 범위가 아니다. 사용자 최신 지시가 범위를 바꾼 경우 그 지시를 따른다.
 
