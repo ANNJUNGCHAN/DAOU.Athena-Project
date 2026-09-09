@@ -197,40 +197,61 @@ function cardActionEnvelope(action, options = {}) {
 // 집안 관례다.
 function applyOrderPreview(surface) {
   if (!surface || typeof surface.querySelectorAll !== 'function') return false;
-  let changed = false;
-  const rewrite = (from, to) => {
-    for (const el of surface.querySelectorAll('*')) {
-      if (el.childElementCount) continue;
-      if (leafText(el) !== from) continue;
-      el.textContent = to;
-      changed = true;
-    }
-  };
-  rewrite('아직 주문되지 않았습니다', '미리보기입니다. 주문은 접수되지 않았습니다.');
-  rewrite('아직 취소되지 않았습니다', '미리보기입니다. 취소는 접수되지 않았습니다.');
-  rewrite(
+  if (surface.dataset == null) surface.dataset = {};
+  const n = (Number(surface.dataset.orderPreviewCount) || 0) + 1;
+  surface.dataset.orderPreviewCount = String(n);
+  surface.dataset.orderPreview = '1';
+  const orderText = n === 1
+    ? '미리보기입니다. 주문은 접수되지 않았습니다.'
+    : `미리보기입니다. 주문은 접수되지 않았습니다. (${n})`;
+  const cancelText = n === 1
+    ? '미리보기입니다. 취소는 접수되지 않았습니다.'
+    : `미리보기입니다. 취소는 접수되지 않았습니다. (${n})`;
+  const detail = n === 1
+    ? '이 화면은 확인 미리보기입니다. 실제 주문은 내지 않습니다.'
+    : `이 화면은 확인 미리보기입니다. 실제 주문은 내지 않습니다. (${n})`;
+  const status = n === 1 ? '확인 미리보기' : `확인 미리보기 (${n})`;
+  const fromOrder = new Set([
+    '아직 주문되지 않았습니다',
+    '미리보기입니다. 주문은 접수되지 않았습니다.',
+  ]);
+  const fromCancel = new Set([
+    '아직 취소되지 않았습니다',
+    '미리보기입니다. 취소는 접수되지 않았습니다.',
+  ]);
+  const fromDetail = new Set([
     '아래 주문 확인을 누른 뒤 한 번 더 확인해야 접수됩니다.',
     '이 화면은 확인 미리보기입니다. 실제 주문은 내지 않습니다.',
-  );
-  rewrite('검토 중', '확인 미리보기');
-  rewrite('검토 필요', '확인 미리보기');
-  if (surface.dataset == null) surface.dataset = {};
-  surface.dataset.orderPreview = '1';
-  return changed || true;
+  ]);
+  const fromStatus = new Set(['검토 중', '검토 필요', '확인 미리보기']);
+  for (const el of surface.querySelectorAll('*')) {
+    if (el.childElementCount) continue;
+    const text = leafText(el);
+    const stripped = text.replace(/ \(\d+\)$/, '');
+    if (fromOrder.has(text) || fromOrder.has(stripped)) el.textContent = orderText;
+    else if (fromCancel.has(text) || fromCancel.has(stripped)) el.textContent = cancelText;
+    else if (fromDetail.has(text) || fromDetail.has(stripped)) el.textContent = detail;
+    else if (fromStatus.has(text) || fromStatus.has(stripped)) el.textContent = status;
+  }
+  return true;
 }
 
 function applyCompareAdd(surface, stock) {
   if (!surface) return false;
   const label = String((stock && (stock.stockName || stock.stkCd)) || '').trim() || '종목';
   if (surface.dataset == null) surface.dataset = {};
+  const n = (Number(surface.dataset.compareCount) || 0) + 1;
+  surface.dataset.compareCount = String(n);
   const prev = surface.dataset.compareAdded || '';
   surface.dataset.compareAdded = prev ? `${prev},${label}` : label;
+  const copy = n === 1 ? '비교에 넣음' : `비교에 넣음 · ${n}`;
   if (typeof surface.querySelectorAll !== 'function') return true;
   for (const el of surface.querySelectorAll('*')) {
     if (el.childElementCount) continue;
-    if (leafText(el) !== '비교에 추가') continue;
-    el.textContent = '비교에 넣음';
-    return true;
+    const text = leafText(el);
+    if (text === '비교에 추가' || text === '비교에 넣음' || text.startsWith('비교에 넣음')) {
+      el.textContent = copy;
+    }
   }
   return true;
 }

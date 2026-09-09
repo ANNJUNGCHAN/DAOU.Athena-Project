@@ -146,15 +146,20 @@ test('주문 확인은 카드를 열지 않고 미리보기 문구만 바꾼다 
   assert.equal(applyOrderPreview(surface), true);
   assert.equal(helper.textContent, '미리보기입니다. 주문은 접수되지 않았습니다.');
   assert.equal(surface.dataset.orderPreview, '1');
+  assert.equal(applyOrderPreview(surface), true);
+  assert.equal(helper.textContent, '미리보기입니다. 주문은 접수되지 않았습니다. (2)');
 });
 
 test('비교에 추가는 같은 카드에서 문구가 바뀐다', () => {
   const button = leaf('비교에 추가');
-  const surface = mount(box([leaf('SK하이닉스'), leaf('000660'), button]));
-  surface.dataset = {};
+  const other = leaf('비교에 추가');
+  const surface = mount(box([leaf('SK하이닉스'), leaf('000660'), button, other]));
   assert.equal(applyCompareAdd(surface, { stkCd: '000660', stockName: 'SK하이닉스' }), true);
   assert.equal(button.textContent, '비교에 넣음');
+  assert.equal(other.textContent, '비교에 넣음');
   assert.equal(surface.dataset.compareAdded, 'SK하이닉스');
+  assert.equal(applyCompareAdd(surface, { stkCd: '000660', stockName: 'SK하이닉스' }), true);
+  assert.equal(button.textContent, '비교에 넣음 · 2');
 });
 
 test('rowStock은 코드가 없으면 지어내지 않는다', () => {
