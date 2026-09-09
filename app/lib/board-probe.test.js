@@ -19,6 +19,7 @@ const {
   boardStepProbe,
   classifyBoardPaintReceipt,
   loadRealBoardContract,
+  surfaceFromHydrate,
 } = require('./board-probe');
 
 // electron 창이 없어도 재는 부분만 본다 — 창 4종·kind 표·인스턴스 id 규칙,
@@ -285,6 +286,22 @@ test('loadRealBoardContract는 Paper 완성 표기를 사전 포맷 값으로 �
   assert.deepEqual(surface.contract.column_priority, ['1', '4']);
   assert.deepEqual(surface.contract.section_titles_ko, { primary: '시세' });
   assert.deepEqual(surface.contract.state_boards, [{ control: '일별', board_id: '2QFO-2' }]);
+});
+
+test('surfaceFromHydrate는 하이드레이션 계약만 싣고 Paper 원문을 값으로 넣지 않는다', () => {
+  const surface = surfaceFromHydrate('133H-2', 2, {
+    surface_contract: {
+      board_id: '133H-2',
+      card_id: 'CC-01',
+      slot_values: [{ slot_id: 's012', value: 128400 }],
+      unbound_slots: ['s013'],
+    },
+  });
+  assert.equal(surface.boardId, '133H-2');
+  assert.equal(surface.instanceId, 'board-133h-2');
+  assert.equal(surface.contract.card_kind, 'account');
+  assert.deepEqual(surface.contract.slot_values, [{ slot_id: 's012', value: 128400 }]);
+  assert.deepEqual(surface.contract.unbound_slots, ['s013']);
 });
 
 test('loadRealBoardContract는 다른 뿌리를 넘기면 그 뿌리를 찾는다', () => {

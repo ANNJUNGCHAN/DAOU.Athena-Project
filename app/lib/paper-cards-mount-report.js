@@ -137,9 +137,13 @@ function mountFailures(step) {
   // 접어 없앤 것은 코드가 만든 표기뿐이고 Paper 텍스트는 하나도 안 버린다(설계서
   // §3.2가 S4에서 같은 판단을 한 자리다). 값이 병기 줄로만 내려가 사라졌는지는
   // `slot_unreachable`이 따로 잡는다.
-  const drift = diffTextMultiset(expectedTextMultiset, domTextMultiset(probe.dom_text_primary));
-  if (drift.added.length || drift.removed.length || drift.count_changed.length) {
-    failures.push({ code: 'text_multiset_dom_mismatch', layer: 'mount', preset, ...drift });
+  // 실데이터 마운트는 Paper 원문 다중집합과 맞대지 않는다 — 그 비교는 목업
+  // 숫자를 화면에 심었을 때만 성립한다. 기대 집합을 안 주면 이 항을 건너뛴다.
+  if (expectedTextMultiset != null) {
+    const drift = diffTextMultiset(expectedTextMultiset, domTextMultiset(probe.dom_text_primary));
+    if (drift.added.length || drift.removed.length || drift.count_changed.length) {
+      failures.push({ code: 'text_multiset_dom_mismatch', layer: 'mount', preset, ...drift });
+    }
   }
   return failures;
 }

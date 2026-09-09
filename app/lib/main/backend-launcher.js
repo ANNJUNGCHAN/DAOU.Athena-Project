@@ -429,6 +429,8 @@ async function restartAfterReset({ mdlog, ensureBackendFn = ensureBackend } = {}
 }
 
 function readLocalBearerToken(backendDir) {
+  const fromEnv = String(process.env.ATHENA_LOCAL_BEARER_TOKEN || '').trim();
+  if (fromEnv) return fromEnv;
   try {
     const envPath = path.join(backendDir || BACKEND_DIR, '.env');
     const text = fs.readFileSync(envPath, 'utf8');

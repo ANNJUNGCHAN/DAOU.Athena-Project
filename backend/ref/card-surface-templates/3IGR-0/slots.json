@@ -27,6 +27,7 @@
     "detail:kt00013:cash_resources",
     "detail:kt00013:credit_and_lending_collateral",
     "detail:kt00013:d2_funding_capacity",
+    "detail:kt00013:margin_order_capacity",
     "detail:kt00013:previous_day_reuse",
     "detail:kt00013:repayment_losses",
     "detail:kt00013:substitute_resources",

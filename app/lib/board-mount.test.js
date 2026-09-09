@@ -825,6 +825,34 @@ test('추출기 출처 필드는 마운트를 바꾸지 않는다 — 값 표의
   );
 });
 
+test('emptyValueSlots 는 미제공이 아니라 빈 칸이다', () => {
+  const contract = { slots: [
+    { slot_id: 'val', node_id: 'n2', kind: 'value', paper_text: '4,182만', format: { kind: 'korean' } },
+  ] };
+  const plan = mountPlan(contract, {}, { emptyValueSlots: ['val'] });
+  assert.equal(plan.assignments[0].text, '');
+  assert.equal(plan.assignments[0].missing, false);
+  assert.equal(plan.assignments[0].designText, true);
+  assert.deepEqual(plan.missing, []);
+});
+
+test('정적 종목코드 칸은 identity 코드로 덮지 않는다', () => {
+  const contract = { slots: [
+    { slot_id: 's001', node_id: 'n1', kind: 'value', paper_text: '금 99.99K', static: true },
+    { slot_id: 's002', node_id: 'n2', kind: 'value', paper_text: '04020000 · KRX 금시장', static: true },
+  ] };
+  const plan = mountPlan(contract, {}, { identity: { name: '삼성전자', code: '005930' } });
+  assert.equal(plan.assignments[0].text, '금 99.99K');
+  assert.equal(plan.assignments[1].text, '04020000 · KRX 금시장');
+  const generated = { slots: [
+    { slot_id: 's001', node_id: 'n1', kind: 'value', paper_text: '금 99.99K', static: 'text' },
+    { slot_id: 's002', node_id: 'n2', kind: 'value', paper_text: '04020000 · KRX 금시장', static: 'text' },
+  ] };
+  const live = mountPlan(generated, {}, { identity: { name: '삼성전자', code: '005930' } });
+  assert.equal(live.assignments[0].text, '금 99.99K');
+  assert.equal(live.assignments[1].text, '04020000 · KRX 금시장');
+});
+
 test('라벨 슬롯은 값이 안 실려도 Paper 원문을 지키고, 값 슬롯만 결측어로 간다', () => {
   const contract = { slots: [
     { slot_id: 'lab', node_id: 'n1', kind: 'label', paper_text: '주문가능금액', format: null },

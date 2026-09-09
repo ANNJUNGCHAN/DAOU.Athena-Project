@@ -171,4 +171,54 @@ const MISSING_TEXT_PROBE = (instanceId) => `(() => {
   };
 })()`;
 
-module.exports = { TEXT_CLIP_PROBE, MISSING_TEXT_PROBE };
+// Paper 목업 숫자가 실데이터 마운트 뒤에 그대로 남아 있는지. 값 슬롯만 본다.
+// 라벨·static 문면·API가 채운 자리·접힌 줄은 빼다. paper_text 에 숫자가 있는
+// 자리만 후보로 삼는다 — 「실시간」 같은 화면 문구는 목업이 아니다.
+function paperMockCandidates(slots) {
+  return (Array.isArray(slots) ? slots : []).flatMap((slot) => {
+    if (!slot || slot.kind !== 'value') return [];
+    if (slot.static === 'text' || slot.static === true) return [];
+    const paper = String(slot.paper_text || '').trim();
+    if (!paper || !/\d/.test(paper)) return [];
+    return [{
+      slot_id: String(slot.slot_id || ''),
+      node: String(slot.node_id || slot.node || ''),
+      paper,
+    }];
+  }).filter((entry) => entry.slot_id && entry.node);
+}
+
+const LEFTOVER_PAPER_MOCK_PROBE = (instanceId, candidates, filledSlotIds) => `(() => {
+  const candidates = ${JSON.stringify(candidates)};
+  const filled = new Set(${JSON.stringify(filledSlotIds || [])});
+  const root = document.querySelector(
+    '#grid .card[data-integrated-instance-key="view:${instanceId}"]');
+  const surface = root && root.querySelector('.board-surface');
+  if (!surface) return { error: 'board surface not found', leftover_total: 0, leftover: [] };
+  const leftover = [];
+  for (const candidate of candidates) {
+    if (filled.has(candidate.slot_id)) continue;
+    const el = surface.querySelector('[data-node="' + candidate.node + '"]');
+    if (!el) continue;
+    if (el.hidden || el.closest('[hidden]')) continue;
+    const style = getComputedStyle(el);
+    if (style.display === 'none' || style.visibility === 'hidden') continue;
+    if (el.dataset && el.dataset.bsDesignText !== undefined) continue;
+    const text = String(el.textContent || '').trim();
+    if (!text || text !== candidate.paper) continue;
+    leftover.push({
+      slot_id: candidate.slot_id,
+      node: candidate.node,
+      paper: candidate.paper.slice(0, 48),
+    });
+    if (leftover.length >= 30) break;
+  }
+  return { leftover_total: leftover.length, leftover };
+})()`;
+
+module.exports = {
+  TEXT_CLIP_PROBE,
+  MISSING_TEXT_PROBE,
+  LEFTOVER_PAPER_MOCK_PROBE,
+  paperMockCandidates,
+};

@@ -34,6 +34,35 @@ test('영문 단위·과학표기를 만들지 않는다 — 표기에 남는 �
   }
 });
 
+test('키움 0패딩·방향 부호 원문은 수량·금액·가격으로 읽힌다', () => {
+  const { kiwoomWireNumber } = require('./board-format');
+  assert.equal(formatSlot({ unit: 'text' }, '000000000001').text, '1');
+  assert.equal(formatSlot({ unit: 'text' }, '000000269500').text, '269,500');
+  const up = formatSlot({ unit: 'text' }, '+88100');
+  assert.equal(up.text, '88,100');
+  assert.equal(up.tone, 'up');
+  assert.equal(formatSlot({ unit: 'text' }, '005930').text, '005930');
+  assert.equal(formatSlot({ unit: 'krw_ko' }, '000537149609').text, '5억 3,714만');
+  assert.equal(formatSlot({ unit: 'date' }, '00000000').text, '');
+  assert.equal(formatSlot({ unit: 'percent', precision: 1 }, '000005938089').text, '');
+  assert.equal(kiwoomWireNumber('000000000001').numeric, 1);
+  assert.equal(kiwoomWireNumber('005930'), null);
+  assert.equal(kiwoomWireNumber('269500').numeric, 269500);
+  assert.equal(formatSlot({ unit: 'text', tone: 'change' }, '269500').text, '269,500');
+  assert.equal(formatSlot({ unit: 'text', f: 'open_pric' }, '269500').text, '269,500');
+  assert.equal(formatSlot({ unit: 'text', f: 'stk_cd' }, '252670').text, '252670');
+  assert.equal(formatSlot({ unit: 'text' }, '005930').text, '005930');
+  assert.equal(formatSlot(boardSlot('13BC-2', 's010').format, '269500').text, '269,500');
+  assert.equal(kiwoomWireNumber('--2860591').numeric, -2860591);
+  const net = formatSlot({ unit: 'krw_ko', sign: true, tone: 'change' }, '--2860591');
+  assert.equal(net.text, '-286만 591');
+  assert.equal(net.tone, 'down');
+  const raw = formatSlot({ unit: 'text' }, '--38');
+  assert.equal(raw.text, '38');
+  assert.equal(raw.tone, 'down');
+  assert.equal(formatSlot(boardSlot('2R3M-1', 's171').format, '--2860591').text, '-286만 591');
+});
+
 test('toNumber는 쉼표 문자열과 숫자를 받고 그 외는 null이다', () => {
   assert.equal(toNumber('12,840,120'), 12840120);
   assert.equal(toNumber(-3), -3);

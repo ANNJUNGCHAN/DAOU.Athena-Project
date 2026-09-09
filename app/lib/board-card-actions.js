@@ -42,6 +42,36 @@ const CARD_ACTIONS = Object.freeze([
     title: '종목 상세',
   }),
   Object.freeze({
+    control: '차트 열기',
+    kind: 'open-card',
+    board_id: '137X-2',
+    card_id: 'CC-03',
+    card_kind: 'instrument',
+    // 레일·풋터 CTA(2U5L-1 s204). 줄 액션이 아니라 이 카드가 보고 있는 종목.
+    stock: 'card',
+    title: '종목 차트',
+  }),
+  Object.freeze({
+    control: '비교에 추가',
+    kind: 'compare-add',
+    stock: 'row',
+  }),
+  Object.freeze({
+    control: '주문 확인',
+    kind: 'order-preview',
+    stock: 'card',
+  }),
+  Object.freeze({
+    control: '정정 확인',
+    kind: 'order-preview',
+    stock: 'card',
+  }),
+  Object.freeze({
+    control: '취소 확인',
+    kind: 'order-preview',
+    stock: 'card',
+  }),
+  Object.freeze({
     control: '알림 설정',
     kind: 'agent-watch',
     stock: 'card',
@@ -65,7 +95,7 @@ const CARD_ACTIONS = Object.freeze([
   }),
 ]);
 
-const STOCK_CODE = /^\d{6}$/;
+const STOCK_CODE = /^\d{6}(?:_AL)?$/;
 
 // 행에서 종목명으로 볼 수 있는 잎 — 코드 옆에 붙는 이름 칸이다. 숫자·기호만인 칸
 // (순위·등락률·금액)은 이름이 아니다.
@@ -109,10 +139,11 @@ function rowStock(node, surface) {
       : [];
     const codeLeaf = leaves.find((el) => STOCK_CODE.test(leafText(el)));
     if (codeLeaf) {
+      const raw = leafText(codeLeaf);
       const name = leaves
         .map((el) => leafText(el))
-        .find((text) => text && text !== leafText(codeLeaf) && STOCK_NAME.test(text) && text.length <= 20);
-      return { stkCd: leafText(codeLeaf), stockName: name || '' };
+        .find((text) => text && text !== raw && STOCK_NAME.test(text) && text.length <= 20);
+      return { stkCd: raw.slice(0, 6), stockName: name || '' };
     }
     if (host === surface) break;
   }
@@ -164,6 +195,67 @@ function cardActionEnvelope(action, options = {}) {
 // 길고 기계적이다」) 조건은 사람이 말한다 — 에이전트가 한 번에 하나씩 되묻는 것이
 // 그 화면의 계약이다(Paper A-2 09 「질문 2/3」). 이름 뒤 줄표는 조사 판정을 피하는
 // 집안 관례다.
+function applyOrderPreview(surface) {
+  if (!surface || typeof surface.querySelectorAll !== 'function') return false;
+  if (surface.dataset == null) surface.dataset = {};
+  const n = (Number(surface.dataset.orderPreviewCount) || 0) + 1;
+  surface.dataset.orderPreviewCount = String(n);
+  surface.dataset.orderPreview = '1';
+  const orderText = n === 1
+    ? '미리보기입니다. 주문은 접수되지 않았습니다.'
+    : `미리보기입니다. 주문은 접수되지 않았습니다. (${n})`;
+  const cancelText = n === 1
+    ? '미리보기입니다. 취소는 접수되지 않았습니다.'
+    : `미리보기입니다. 취소는 접수되지 않았습니다. (${n})`;
+  const detail = n === 1
+    ? '이 화면은 확인 미리보기입니다. 실제 주문은 내지 않습니다.'
+    : `이 화면은 확인 미리보기입니다. 실제 주문은 내지 않습니다. (${n})`;
+  const status = n === 1 ? '확인 미리보기' : `확인 미리보기 (${n})`;
+  const fromOrder = new Set([
+    '아직 주문되지 않았습니다',
+    '미리보기입니다. 주문은 접수되지 않았습니다.',
+  ]);
+  const fromCancel = new Set([
+    '아직 취소되지 않았습니다',
+    '미리보기입니다. 취소는 접수되지 않았습니다.',
+  ]);
+  const fromDetail = new Set([
+    '아래 주문 확인을 누른 뒤 한 번 더 확인해야 접수됩니다.',
+    '이 화면은 확인 미리보기입니다. 실제 주문은 내지 않습니다.',
+  ]);
+  const fromStatus = new Set(['검토 중', '검토 필요', '확인 미리보기']);
+  for (const el of surface.querySelectorAll('*')) {
+    if (el.childElementCount) continue;
+    const text = leafText(el);
+    const stripped = text.replace(/ \(\d+\)$/, '');
+    if (fromOrder.has(text) || fromOrder.has(stripped)) el.textContent = orderText;
+    else if (fromCancel.has(text) || fromCancel.has(stripped)) el.textContent = cancelText;
+    else if (fromDetail.has(text) || fromDetail.has(stripped)) el.textContent = detail;
+    else if (fromStatus.has(text) || fromStatus.has(stripped)) el.textContent = status;
+  }
+  return true;
+}
+
+function applyCompareAdd(surface, stock) {
+  if (!surface) return false;
+  const label = String((stock && (stock.stockName || stock.stkCd)) || '').trim() || '종목';
+  if (surface.dataset == null) surface.dataset = {};
+  const n = (Number(surface.dataset.compareCount) || 0) + 1;
+  surface.dataset.compareCount = String(n);
+  const prev = surface.dataset.compareAdded || '';
+  surface.dataset.compareAdded = prev ? `${prev},${label}` : label;
+  const copy = n === 1 ? '비교에 넣음' : `비교에 넣음 · ${n}`;
+  if (typeof surface.querySelectorAll !== 'function') return true;
+  for (const el of surface.querySelectorAll('*')) {
+    if (el.childElementCount) continue;
+    const text = leafText(el);
+    if (text === '비교에 추가' || text === '비교에 넣음' || text.startsWith('비교에 넣음')) {
+      el.textContent = copy;
+    }
+  }
+  return true;
+}
+
 function cardActionSeed(action, stock) {
   if (!action || action.kind !== 'agent-watch') return '';
   const name = String((stock && stock.stockName) || '').trim();
@@ -177,6 +269,7 @@ function cardActionSeed(action, stock) {
 const __exports = {
   CARD_ACTIONS, STOCK_CODE,
   cardActionFor, actionNodes, rowStock, cardActionEnvelope, cardActionSeed, controlOf,
+  applyOrderPreview, applyCompareAdd,
 };
 
 if (typeof module !== 'undefined' && module.exports) {
