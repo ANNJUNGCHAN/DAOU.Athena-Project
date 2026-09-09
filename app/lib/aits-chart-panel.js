@@ -385,6 +385,7 @@ function createAitsChartPanelAdapter(options) {
         : null,
       oldestCandle: state.body.candles.length ? Object.assign({}, state.body.candles[0]) : null,
       period: state.body.period,
+      interval: state.interval,
       target: state.body.target,
       trId: state.body.trId,
       candleCount: state.body.candles.length,

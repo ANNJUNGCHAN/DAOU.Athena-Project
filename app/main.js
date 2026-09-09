@@ -1234,6 +1234,7 @@ function releaseRealtimeForSymbol(code) {
 const chartRealtimePanelSymbols = new Map(); // panelId -> { code, accountId }
 
 function ensureChartRealtime(authority, panelId) {
+  if (authority && authority.chartBody && authority.chartBody.target === 'gold') return;
   const stock = authority && authority.chartBody && authority.chartBody.stock;
   const code = stock || (authority && authority.operationArgs && authority.operationArgs.stk_cd);
   const trimmed = String(code || '').trim();
@@ -2449,7 +2450,7 @@ ipcMain.handle('athena:canvas-board-hydrate', async (event, payload = {}) => {
   if (process.env.ATHENA_CANVAS_SOURCE === 'fixture') {
     return { ok: false, status: 'unavailable' };
   }
-  return boardHydrate.hydrateBoard({
+  const reply = await boardHydrate.hydrateBoard({
     backendBase: BACKEND_HTTP_BASE,
     fetchImpl: fetch,
     token: LOCAL_BEARER_TOKEN,
@@ -2458,6 +2459,18 @@ ipcMain.handle('athena:canvas-board-hydrate', async (event, payload = {}) => {
     account: payload.account,
     slotIds: payload.slotIds || payload.slot_ids,
   });
+  const primary = reply && reply.primary_envelope;
+  const correlation = payload.correlation && typeof payload.correlation === 'object'
+    ? payload.correlation : {};
+  const key = restCorrelationKey(correlation);
+  const waiter = key && restPaintWaiters.get(key);
+  if (waiter && primary) {
+    const authority = boardHydrate.primaryReloadAuthority(
+      reply, correlation, waiter.reloadAuthority.accountId,
+    );
+    if (authority) waiter.reloadAuthority = authority;
+  }
+  return reply;
 });
 
 function emitRestReceiptAndWaitForPaint(text, {
@@ -4212,6 +4225,25 @@ async function handleChartPanelReload(event, payload) {
 }
 
 ipcMain.handle('athena:reload-chart-panel', handleChartPanelReload);
+
+async function handleChartPanelRefresh(event, payload) {
+  if (!shellWin || shellWin.isDestroyed() || event.sender !== shellWin.webContents) {
+    throw new Error('AITS chart refresh는 셸 창에서만 허용된다');
+  }
+  const request = chartReloadAuthority.buildDataset(payload);
+  const item = request.items[0];
+  const bound = await createActiveBackendAccountInvoker((options) => chartPage.fetchChartPage({
+    backendBase: BACKEND_HTTP_BASE,
+    operationRef: item.operationRef,
+    args: item.args,
+    ...options,
+  }), request.accountId);
+  if (!bound.ok) return { ok: false, error: bound.error, candles: [] };
+  const result = await bound.run();
+  return chartReloadAuthority.acceptPageResult(request, result);
+}
+
+ipcMain.handle('athena:refresh-chart-panel', handleChartPanelRefresh);
 
 // 과거 페이지 조회 — 카드를 갈아치우지 않고 앞쪽에 덧붙일 봉만 돌려준다.
 // emitCanvas를 가로채 사이드 채널 푸시를 막는다(푸시하면 렌더러가 패널을

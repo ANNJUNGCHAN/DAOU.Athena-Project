@@ -609,6 +609,67 @@ def test_board_hydrate_empty_slot_plan_makes_no_upstream_call(surface_templates)
     assert response.json()["operations"] == []
 
 
+@pytest.fixture
+def gold_surface_registry(monkeypatch):
+    from athena_api.api import canvas_push
+    from athena_api.card_surface_templates import load_registry
+
+    registry = load_registry(strict=False)
+    assert "2RJ7-1" in registry.boards
+    monkeypatch.setattr(canvas_push, "get_card_surface_registry", lambda: registry)
+    return registry
+
+
+@pytest.mark.parametrize("slot_ids", [[], ["s052"]])
+def test_gold_hydrate_loads_chart_even_when_quote_slots_are_already_filled(
+    gold_surface_registry, slot_ids
+):
+    data = _DataSpy({
+        "ka50100": {"pred_close_pric": "191170"},
+        "ka50092": {"gds_min_chart_qry": [{
+            "cntr_tm": "20260909134400", "dt": "20260909134400",
+            "cntr_pric": "-188910", "open_pric": "-188900",
+            "high_pric": "-188930", "low_pric": "-188890", "trde_qty": "12",
+        }]},
+    })
+    response = _hydrate(
+        TestClient(_hydrate_app(data)), board_id="2RJ7-1",
+        target={"stk_cd": "M04020000"}, slot_ids=slot_ids,
+    )
+
+    assert response.status_code == 200, response.text
+    primary = response.json()["primary_envelope"]
+    assert data.calls.count("ka50092") == 1
+    assert set(data.calls) <= {"ka50092", "ka50100"}
+    assert primary["operation_ref"] == "base:ka50092"
+    assert primary["operation_args"] == {"stk_cd": "M04020000", "tic_scope": "1"}
+    assert primary["renderer_id"] == "aits-chart-v1"
+    assert primary["data"]["symbol"] == "M04020000"
+    assert primary["data"]["chart"]["target"] == "gold"
+    candles = primary["data"]["chart"]["candles"]
+    assert len(candles) == 1
+    assert candles[0]["close"] == 188910
+    assert candles[0]["volume"] == 12
+    meta = primary["data"]["chart_meta"]
+    assert meta["series_scope"] == "today"
+    assert meta["reload_group"] == "gold-today"
+    assert meta["reload_targets"]["min"]["operation_ref"] == "base:ka50092"
+
+
+def test_gold_hydrate_does_not_invent_candles_when_chart_read_fails(gold_surface_registry):
+    data = _DataSpy({}, failing={"ka50092"})
+    response = _hydrate(
+        TestClient(_hydrate_app(data)), board_id="2RJ7-1",
+        target={"stk_cd": "M04020000"}, slot_ids=[],
+    )
+
+    assert response.status_code == 200, response.text
+    assert data.calls == ["ka50092"]
+    payload = response.json()
+    assert payload["primary_envelope"] is None
+    assert _statuses(payload)["base:ka50092"]["reason"] == "upstream_error"
+
+
 def test_board_hydrate_rejects_unknown_requested_slot(surface_templates):
     client = TestClient(_hydrate_app(_DataSpy({})))
 

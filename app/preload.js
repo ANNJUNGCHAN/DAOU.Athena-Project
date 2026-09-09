@@ -45,6 +45,8 @@ const INVOKE_CHANNELS = new Set([
   'athena:plugin-pending',
   'athena:load-fixture',
   'athena:reload-chart-panel',
+  // 금현물 보드의 읽기 전용 주기 재조회. 패널 권위가 있는 동안만 main이 허용한다.
+  'athena:refresh-chart-panel',
   // 과거 봉 덧붙이기 — 좌측 끝에 닿으면 렌더러가 부른다(화면 교체 아님).
   'athena:chart-history-page',
   // 수급 시계열 — 하단 지표를 켤 때만 부른다.

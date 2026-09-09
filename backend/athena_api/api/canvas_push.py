@@ -1196,6 +1196,7 @@ async def _hydrate_operation(
     fetched: dict[tuple[str, str], tuple[BaseModel | None, str | None]],
     selector: SelectorService | None = None,
     chained: dict[str, str | None] | None = None,
+    hydrated_results: dict[str, tuple[BaseModel, BaseModel]] | None = None,
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     """read op 하나를 호출해 (상태, 바인딩)으로 돌려준다. 실패는 예외로 새지 않는다."""
 
@@ -1260,6 +1261,8 @@ async def _hydrate_operation(
     if result is None:
         assert fetch_error is not None
         return unbound(fetch_error)
+    if hydrated_results is not None:
+        hydrated_results[operation_ref] = (result, arguments)
     bound = bind_surface_values(operation_ref, result.model_dump(by_alias=True))
     return (
         {
@@ -1310,7 +1313,15 @@ async def internal_canvas_board_hydrate(
     fetched: dict[tuple[str, str], tuple[BaseModel | None, str | None]] = {}
     # 연쇄 인자(회원사·테마 등)는 요청 하나에서 한 번만 조회한다.
     chained: dict[str, str | None] = {}
-    for operation_ref in _hydrate_operation_refs(board, payload.slot_ids):
+    hydrated_results: dict[str, tuple[BaseModel, BaseModel]] = {}
+    operation_refs = list(_hydrate_operation_refs(board, payload.slot_ids))
+    primary = board.primary if isinstance(board.primary, Mapping) else {}
+    if primary.get("renderer") == "athena-chart":
+        for source in primary.get("props_from") or ():
+            primary_ref = source.get("mapping_id") if isinstance(source, Mapping) else None
+            if isinstance(primary_ref, str) and primary_ref not in operation_refs:
+                operation_refs.append(primary_ref)
+    for operation_ref in operation_refs:
         status, values = await _hydrate_operation(
             operation_ref,
             selector.catalog.find_exact(operation_ref),
@@ -1320,6 +1331,7 @@ async def internal_canvas_board_hydrate(
             fetched,
             selector,
             chained,
+            hydrated_results,
         )
         operations.append(status)
         bound.update(values)
@@ -1371,12 +1383,48 @@ async def internal_canvas_board_hydrate(
         and any(binding.mapping_id in retryable_refs for binding in slot.bindings)
     ]
 
+    primary_envelope: dict[str, Any] | None = None
+    if primary.get("renderer") == "athena-chart":
+        for source in primary.get("props_from") or ():
+            operation_ref = source.get("mapping_id") if isinstance(source, Mapping) else None
+            hydrated = hydrated_results.get(operation_ref) if isinstance(operation_ref, str) else None
+            if hydrated is None:
+                continue
+            result, arguments = hydrated
+            built = build_aits_chart_envelope_data(
+                operation_ref,
+                {
+                    "data": result.model_dump(by_alias=True),
+                    "canvas_context": {"symbol": payload.target.get("stk_cd")},
+                },
+            )
+            if isinstance(built, str):
+                operations.append(
+                    {
+                        "operation_ref": operation_ref,
+                        "status": "unbound",
+                        "reason": "primary_transform_error",
+                    }
+                )
+                continue
+            chart_envelope, _meta = built
+            primary_envelope = {
+                **chart_envelope,
+                "canvas_type": "chart",
+                "operation_ref": operation_ref,
+                "operation_args": arguments.model_dump(
+                    mode="json", by_alias=True, exclude_none=True
+                ),
+            }
+            break
+
     return JSONResponse(
         content={
             "board_id": board.board_id,
             "card_id": board.card_id,
             "operations": operations,
             "surface_contract": surface_contract,
+            "primary_envelope": primary_envelope,
         }
     )
 

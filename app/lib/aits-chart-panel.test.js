@@ -173,6 +173,16 @@ test('reload generation rejects a stale late result', async () => {
   assert.equal(log.calls.filter((call) => call[0] === 'replaceData').length, 1);
 });
 
+test('snapshot은 사용자가 선택한 분 간격을 자동 재조회에 전달한다', async () => {
+  const log = fakeRendererLog();
+  const adapter = createAitsChartPanelAdapter({ renderChart: log.factory });
+  const session = await adapter.openPanel({}, body({ period: 'min' }), {
+    panelId: 'interval-snapshot', stock: 'M04020000', interval: 1,
+  });
+  await session.reload(body({ period: 'min' }), { generation: 2, interval: 5 });
+  assert.equal(adapter.snapshot()[0].interval, 5);
+});
+
 test('MCP/fixture panels do not consume a REST dataset quota', async () => {
   const log = fakeRendererLog();
   const adapter = createAitsChartPanelAdapter({ renderChart: log.factory });

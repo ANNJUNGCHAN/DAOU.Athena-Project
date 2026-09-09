@@ -119,6 +119,10 @@ function toneColorVar(tone) {
 
 function formatTime(value) {
   const text = String(value);
+  // 금현물 체결시각은 YYYYMMDDHHmmss다. 날짜를 남겨 과거 시세를 오늘로 오인하지 않는다.
+  if (/^\d{14}$/.test(text)) {
+    return `${factsCard.formatDatetime(text.slice(0, 8))} ${formatTime(text.slice(8))}`;
+  }
   return /^\d{6}$/.test(text)
     ? `${text.slice(0, 2)}:${text.slice(2, 4)}:${text.slice(4, 6)}`
     : text;

@@ -92,6 +92,30 @@ test('gold today reload group stays on ka50091/ka50092 and never selects generic
   assert.equal(dataset.expected.reloadGroup, 'gold-today');
 });
 
+test('gold 자동 재조회는 현재 권위의 generation과 정확한 봉만 수용한다', () => {
+  const reload = goldAuthority({
+    panelId: 'gold-refresh', operationRef: 'base:ka50092', seriesScope: 'today', reloadGroup: 'gold-today',
+    reloadTargets: {
+      tick: { operation_ref: 'base:ka50091', request_fields: ['stk_cd', 'tic_scope'] },
+      min: { operation_ref: 'base:ka50092', request_fields: ['stk_cd', 'tic_scope'] },
+    },
+  });
+  const request = reload.buildDataset({ panelId: 'gold-refresh', generation: 1, period: 'MIN', interval: 5 });
+  const result = reload.acceptPageResult(request, { ok: true, candles: [{ time: 1, close: 188910 }] });
+  assert.equal(result.generation, 2);
+  assert.equal(result.candles.length, 1);
+  // renderer 적용 실패면 옛 generation으로 같은 세대를 재조회할 수 있다.
+  assert.equal(
+    reload.buildDataset({ panelId: 'gold-refresh', generation: 1, period: 'MIN', interval: 5 }).expected.generation,
+    2,
+  );
+  // renderer 적용 성공 뒤 새 generation이 오면 pending 권위를 확정하고 다음 세대로 간다.
+  assert.equal(
+    reload.buildDataset({ panelId: 'gold-refresh', generation: 2, period: 'MIN', interval: 5 }).expected.generation,
+    3,
+  );
+});
+
 test('ambiguous or cross-family signed reload metadata fails closed at registration', () => {
   const reload = createChartReloadAuthority();
   assert.equal(reload.registerPaint({

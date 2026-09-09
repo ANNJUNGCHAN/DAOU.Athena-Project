@@ -900,6 +900,7 @@ function boardStateOf(host) {
       // 껍질 단계가 확정한 차트 신원과 그 마운트 결과를 기다리는 자리.
       // primaryMount는 "지금 진행 중인 마운트 시도"다(늦은 거부를 가려낸다).
       primaryDescriptor: null, primarySettle: null, primaryMount: null,
+      primaryEnvelope: null, primaryRefreshTimer: null, primaryRefreshing: false,
       // Paper 값 조회는 마지막 요청만 화면을 소유한다. 상태 전환·카드 닫기 뒤 늦게
       // 끝난 응답이 이전 보드를 되살리지 못하도록 revision gate를 둔다.
       load: boardMount.createLatestBoardLoad(), loadNode: null, loadBody: null,
@@ -1180,6 +1181,15 @@ const BOARD_ORDERBOOK_RENDERER = 'orderbook-ladder';
 // 열려 있는 보드 primary 패널을 닫는다. 상태 보드 전환과 카드 파괴가 같은 문을 쓴다.
 function destroyBoardPrimary(state) {
   if (!state) return false;
+  if (state.primaryRefreshTimer) clearTimeout(state.primaryRefreshTimer);
+  state.primaryRefreshTimer = null;
+  state.primaryRefreshing = false;
+  state.primaryEnvelope = null;
+  // 상태 보드/카드가 바뀐 뒤에는 이전 봉투가 만든 descriptor와 대기 promise도
+  // 더 이상 권위가 없다. 남겨두면 다음 보드가 새 primary_envelope 대신 이전
+  // stock/sector 패널 신원을 재사용할 수 있다.
+  settleBoardChartMount(state, 'error');
+  state.primaryDescriptor = null;
   // 진행 중인 마운트는 이 순간부터 "현재 시도"가 아니다 — 늦게 거부돼도 그 사이
   // 새로 살아난 패널의 신원을 지우지 못한다.
   state.primaryMount = null;
@@ -1204,6 +1214,121 @@ function boardChartDescriptor(envelope) {
   if (!data || !data.chart) return null;
   const descriptor = describeAitsChartPanel(data, envelope, 'live');
   return descriptor.body.candles.length ? descriptor : null;
+}
+
+const BOARD_CHART_REFRESH_MS = 15_000;
+
+function setBoardChartStatus(host, text) {
+  const status = host && host.querySelector('[data-node="3HF1-0"]');
+  if (status) status.textContent = text;
+  const badge = host && host.querySelector('[data-node="2ROB-1"]');
+  if (badge) badge.textContent = text.startsWith('15초마다') ? '15초 조회' : '조회 지연';
+}
+
+function boardChartVisible(host) {
+  return !!(host && host.isConnected && !host.hidden && !host.closest('[hidden]') && !document.hidden);
+}
+
+function boardChartCandleTime(value) {
+  const text = String(value == null ? '' : value);
+  if (/^\d{14}$/.test(text)) return text;
+  const epoch = Number(value);
+  if (!Number.isFinite(epoch)) return null;
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23',
+  }).formatToParts(new Date(epoch * 1000));
+  const byType = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+  return `${byType.year}${byType.month}${byType.day}${byType.hour}${byType.minute}${byType.second}`;
+}
+
+// 금현물 today 분봉은 별도 국내 실시간 종목 피드가 없다. 자동 재조회가 검증해 받은
+// 최신 봉만으로 현재가·체결시각을 맞추고, 전일종가는 최초 quote의 s052를 기준으로
+// 등락을 다시 계산한다. 국제금 환산 0I를 국내 금현물 값으로 섞지 않는다.
+function applyBoardChartSnapshot(state, candles) {
+  const latest = Array.isArray(candles) ? candles[candles.length - 1] : null;
+  const price = latest && Number(latest.close);
+  const at = latest && boardChartCandleTime(latest.time);
+  if (!state || !state.surface || !state.mountContract || !Number.isFinite(price) || !at) return 0;
+  const touched = ['s004', 's006'];
+  state.values.s004 = Math.abs(price);
+  state.values.s006 = at;
+  const previousClose = Math.abs(Number(state.values.s052));
+  const summary = state.values.s005 && state.values.s005.composite;
+  if (previousClose > 0 && summary && Array.isArray(summary.parts)) {
+    const change = Math.abs(price) - previousClose;
+    const rate = (change / previousClose) * 100;
+    state.values.s005 = {
+      ...state.values.s005,
+      composite: {
+        ...summary,
+        parts: summary.parts.map((part) => ({
+          ...part,
+          value: part.f === 'pred_pre' ? change : (part.f === 'flu_rt' ? rate : part.value),
+        })),
+      },
+    };
+    touched.push('s005');
+    const changeNode = state.surface.querySelector('[data-node="2RO7-1"]');
+    if (changeNode) {
+      changeNode.style.color = change > 0 ? 'var(--color-up)'
+        : (change < 0 ? 'var(--color-down)' : '');
+    }
+  }
+  state.valuesByBoard.set(state.boardId, state.values);
+  boardMount.applyRealtimeSlots(state.surface, state.mountContract, state.values, touched);
+  return touched.length;
+}
+
+function startBoardChartRefresh(host, state, descriptor) {
+  if (!state || state.boardId !== '2RJ7-1' || !descriptor || descriptor.body.target !== 'gold') return false;
+  if (state.primaryRefreshTimer) clearTimeout(state.primaryRefreshTimer);
+  setBoardChartStatus(host, '15초마다 조회 · 최신 시세 확인됨');
+  const refresh = async () => {
+    state.primaryRefreshTimer = null;
+    if (!host.isConnected || state.primaryPanelId !== descriptor.panelId) return;
+    if (boardChartVisible(host) && !state.primaryRefreshing) {
+      state.primaryRefreshing = true;
+      try {
+        const active = aitsChartPanels.snapshot().find((entry) => entry.panelId === descriptor.panelId);
+        if (active) {
+          const result = await window.athena.invoke('athena:refresh-chart-panel', {
+            panelId: descriptor.panelId,
+            generation: active.generation,
+            period: PERIOD_TO_ATHENA_UI[active.period] || 'MIN',
+            interval: Number(active.interval) || 1,
+            adjusted: true,
+          });
+          if (!result || result.ok !== true || !Array.isArray(result.candles)) {
+            throw new Error((result && result.error) || '차트 재조회 실패');
+          }
+          await aitsChartPanels.reloadPanel(
+            descriptor.panelId,
+            {
+              period: active.period, target: active.target, trId: active.trId,
+              candles: result.candles,
+            },
+            { generation: result.generation, interval: active.interval },
+          );
+          applyBoardChartSnapshot(state, result.candles);
+          const now = new Date().toLocaleTimeString('ko-KR', {
+            hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false,
+          });
+          setBoardChartStatus(host, `15초마다 조회 · 마지막 갱신 ${now}`);
+        }
+      } catch (error) {
+        if (host.dataset) host.dataset.bsPrimaryError = String((error && error.message) || error);
+        setBoardChartStatus(host, '자동 조회가 지연 중입니다 · 잠시 후 다시 시도합니다');
+      } finally {
+        state.primaryRefreshing = false;
+      }
+    }
+    if (host.isConnected && state.primaryPanelId === descriptor.panelId) {
+      state.primaryRefreshTimer = setTimeout(refresh, BOARD_CHART_REFRESH_MS);
+    }
+  };
+  state.primaryRefreshTimer = setTimeout(refresh, BOARD_CHART_REFRESH_MS);
+  return true;
 }
 
 // 껍질 단계에서 차트 신원을 카드에 찍고 마운트 결과를 기다릴 자리를 연다.
@@ -1308,7 +1433,7 @@ function mountBoardOrderbook(card, state, primary, envelope) {
 // 얹는다. 목업은 지우지 않고 접는다(D1) — 마운트가 실패하면 되돌리고 사유를 얹는다.
 // 실시간은 차트 자리에서는 다시 걸지 않는다: 통합 카드 리스가 이미 그 피드를 나르고
 // (syncIntegratedRealtime → applyBoardRealtimeTick), 진행봉은 aitsChartPanels가 접는다.
-async function mountBoardPrimary(host, envelope, mounted) {
+async function mountBoardPrimary(host, envelope, mounted, retry) {
   const state = boardStateOf(host);
   const primary = mounted && mounted.primary;
   const card = typeof host.closest === 'function' ? host.closest('.card') : null;
@@ -1326,9 +1451,14 @@ async function mountBoardPrimary(host, envelope, mounted) {
     settleBoardChartMount(state, 'error');
     return null;
   }
-  // 껍질 단계가 만든 신원을 그대로 쓴다 — 다시 만들면 paint ack가 실어 보낸
-  // panel_id·generation과 어긋난다.
+  // 껍질 단계가 만든 신원을 그대로 쓰되 현재 primary envelope와 출처가 다르면
+  // 이전 보드가 남긴 descriptor이므로 폐기한다.
   let descriptor = state.primaryDescriptor;
+  if (descriptor && String(descriptor.context && descriptor.context.operationRef)
+    !== String(envelope.operation_ref || envelope.operationRef || '')) {
+    descriptor = null;
+    state.primaryDescriptor = null;
+  }
   if (!descriptor) {
     try {
       descriptor = boardChartDescriptor(envelope);
@@ -1337,7 +1467,19 @@ async function mountBoardPrimary(host, envelope, mounted) {
       primary.mountPoint.prepend(errorNote('차트를 그리지 못했다'));
       return null;
     }
-    if (!descriptor) return null;
+    if (!descriptor) {
+      boardMount.collapsePrimaryMockup(primary.mountPoint);
+      setBoardChartStatus(host, '차트 시세를 불러오지 못했습니다');
+      const unavailable = errorNote('시세 차트를 불러오지 못했습니다.');
+      if (typeof retry === 'function') {
+        unavailable.appendChild(button('text', '다시 시도', { onClick: retry }));
+      }
+      primary.mountPoint.prepend(unavailable);
+      settleBoardChartMount(state, 'error');
+      card.dataset.renderState = 'error';
+      return null;
+    }
+    beginBoardChartMount(card, state, descriptor);
   }
   const collapsed = boardMount.collapsePrimaryMockup(primary.mountPoint);
   const chartBody = document.createElement('div');
@@ -1368,13 +1510,13 @@ async function mountBoardPrimary(host, envelope, mounted) {
       return null;
     }
     settleBoardChartMount(state, session.body.candles.length ? 'data' : 'empty');
+    startBoardChartRefresh(host, state, descriptor);
     return session;
   } catch (error) {
-    // 실패를 감추지 않는다 — 목업을 되돌리고 그 위에 사유를 얹는다. 사용자에게
-    // 보이는 문구에는 내부 용어를 싣지 않는다(원문은 검수용으로 표식에 남긴다).
+    // 실패를 감추지 않는다. 정적 Paper 캔들은 계속 접어 둬서 실제 시세처럼 보이지
+    // 않게 하고, 오류와 재시도만 드러낸다(원문은 검수용 표식에 남긴다).
     chartBody.remove();
     delete primary.mountPoint.dataset.bsPrimaryMounted;
-    boardMount.restorePrimaryMockup(collapsed);
     if (state.primaryMount !== attempt) {
       settleBoardChartMount(state, 'error');
       return null;
@@ -1382,14 +1524,19 @@ async function mountBoardPrimary(host, envelope, mounted) {
     state.primaryMount = null;
     state.primaryPanelId = '';
     primary.mountPoint.dataset.bsPrimaryError = String((error && error.message) || error);
-    primary.mountPoint.prepend(errorNote('차트를 그리지 못했다'));
+    setBoardChartStatus(host, '차트 시세를 불러오지 못했습니다');
+    const failed = errorNote('차트를 그리지 못했습니다.');
+    if (typeof retry === 'function') failed.appendChild(button('text', '다시 시도', { onClick: retry }));
+    primary.mountPoint.prepend(failed);
     clearBoardChartIdentity(card);
     settleBoardChartMount(state, 'error');
     return null;
   }
 }
 
-const RETRYABLE_BOARD_HYDRATE_REASONS = new Set(['upstream_error', 'upstream_business_result']);
+const RETRYABLE_BOARD_HYDRATE_REASONS = new Set([
+  'upstream_error', 'upstream_business_result', 'primary_transform_error',
+]);
 
 // 봉투가 못 채운 슬롯을 마운트 뒤에 한 번 더 채운다. 조회 자체가 실패하면 결측값을
 // 완성 화면처럼 보이지 않고 로딩 오류로 돌려 재시도할 수 있게 한다.
@@ -1411,6 +1558,7 @@ async function hydrateBoardSlots(host, envelope, mounted, isCurrent = () => true
     slotIds: pending,
     target: boardHydrateTarget(envelope),
     account: boardHydrateAccount(envelope),
+    correlation: envelope && envelope.correlation,
   });
   if (!isCurrent() || state.boardId !== boardId) return mounted;
   if (!reply || !reply.ok) {
@@ -1423,6 +1571,7 @@ async function hydrateBoardSlots(host, envelope, mounted, isCurrent = () => true
     throw new Error('요청한 종목 정보를 불러오지 못했습니다. 다시 시도해 주세요.');
   }
   state.hydrationWarnings.push(...failures);
+  state.primaryEnvelope = reply.primary_envelope || null;
   const filled = reply && reply.ok && reply.slot_values ? reply.slot_values : null;
   state.hydrationByBoard.set(
     boardId,
@@ -1491,7 +1640,7 @@ function showBoardLoading(state, host) {
   if (state.loadCard && !state.primaryDescriptor) state.loadCard.dataset.renderState = 'loading';
 }
 
-function showBoardReady(state, host, envelope, mounted, retry) {
+async function showBoardReady(state, host, envelope, mounted, retry) {
   removeBoardLoadNode(state);
   host.hidden = false;
   host.removeAttribute('aria-hidden');
@@ -1505,7 +1654,7 @@ function showBoardReady(state, host, envelope, mounted, retry) {
     boardLoadAnchor(state, host).insertBefore(partial, host);
     state.loadNode = partial;
   }
-  if (mounted) void mountBoardPrimary(host, envelope, mounted);
+  if (mounted) await mountBoardPrimary(host, state.primaryEnvelope || envelope, mounted, retry);
 }
 
 function showBoardLoadError(state, host, error, retry) {
@@ -1833,6 +1982,18 @@ function syncIntegratedRealtime(root, envelope) {
   realtime.status = 'registering';
   const prior = integratedRealtimeTasks.get(root) || Promise.resolve();
   const task = prior.catch(() => {}).then(async () => {
+    const boardId = String((surfaceContractOf(envelope) || {}).board_id || '');
+    // 2RJ7-1의 국내 금현물 시세는 15초 ka50092 조회가 갱신한다. 통합 gold 정책의
+    // 0I는 국제금환산가격이므로 이 보드에 연결하면 pred_pre만 다른 상품 값으로 섞인다.
+    if (boardId === '2RJ7-1') {
+      if (realtime.mounted === true) {
+        await window.athena.invoke('athena:integrated-card-realtime-unmount', { leaseId: payload.leaseId });
+        realtime.mounted = false;
+      }
+      if (root.isConnected) realtime.status = 'snapshot';
+      clearIntegratedRealtimeError(root);
+      return { ok: true, status: 'snapshot' };
+    }
     const policies = await realtimePolicies();
     if (!hasRealtimePolicy(policies, payload)) {
       if (realtime.mounted === true) {

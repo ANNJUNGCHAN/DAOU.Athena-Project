@@ -537,13 +537,16 @@ test('호가 실시간 해제는 두 번 나가지 않는다', () => {
 test('Paper가 준비되어 드러난 뒤 앱 렌더러를 얹는다', () => {
   const ready = CANVAS.slice(CANVAS.indexOf('function showBoardReady'), CANVAS.indexOf('function showBoardLoadError'));
   assert.ok(ready.indexOf("host.hidden = false") < ready.indexOf('mountBoardPrimary'));
-  assert.match(ready, /if \(mounted\) void mountBoardPrimary\(host, envelope, mounted\);/);
+  assert.match(ready, /if \(mounted\) await mountBoardPrimary\(host, state\.primaryEnvelope \|\| envelope, mounted, retry\);/);
 });
 
 test('상태 보드를 갈아타기 전에 열린 primary 패널을 먼저 닫는다', () => {
   const swap = CANVAS.slice(CANVAS.indexOf('function switchStateBoard'), CANVAS.indexOf('function findStateControl'));
   // 표면을 갈면 컨테이너가 바뀐다 — 같은 panelId를 다른 컨테이너로 열면 adapter가 던진다.
   assert.match(swap, /destroyBoardPrimary\(state\);[\s\S]*?runBoardSurfaceLoad\([\s\S]*?mountBoardState\(host, target, envelope, isCurrent\)/);
+  const destroy = CANVAS.slice(CANVAS.indexOf('function destroyBoardPrimary'), CANVAS.indexOf('function boardChartDescriptor'));
+  assert.match(destroy, /settleBoardChartMount\(state, 'error'\);/);
+  assert.match(destroy, /state\.primaryDescriptor = null;/);
 });
 
 test('봉투가 차트를 안 실었거나 봉이 없으면 목업을 걷지 않는다', () => {
@@ -556,7 +559,7 @@ test('봉투가 차트를 안 실었거나 봉이 없으면 목업을 걷지 않
   assert.match(describe, /return descriptor\.body\.candles\.length \? descriptor : null;/);
 });
 
-test('보드 primary는 목업을 접고 얹으며, 실패하면 목업을 되돌린다', () => {
+test('보드 primary는 목업을 접고 얹으며, active 실패에는 정적 캔들을 되살리지 않는다', () => {
   const primary = CANVAS.slice(
     CANVAS.indexOf('async function mountBoardPrimary'),
     CANVAS.indexOf('// 봉투가 못 채운 슬롯을 마운트 뒤에 한 번 더 채운다.'),
@@ -567,9 +570,11 @@ test('보드 primary는 목업을 접고 얹으며, 실패하면 목업을 되�
   assert.match(primary, /\|\| !boardPrimaryAcceptsEnvelope\(primary, envelope\)\) \{\n\s*settleBoardChartMount\(state, 'error'\);\n\s*return null;/);
   // 껍질이 확정한 신원을 그대로 쓴다 — 다시 만들면 paint ack와 어긋난다.
   assert.match(primary, /let descriptor = state\.primaryDescriptor;/);
-  // 목업은 지우지 않고 접는다(D1) — 실패하면 그대로 편다.
+  // 목업은 지우지 않고 접되 active mount 실패에서는 그대로 숨겨 둔다.
   assert.match(primary, /boardMount\.collapsePrimaryMockup\(primary\.mountPoint\)/);
-  assert.match(primary, /boardMount\.restorePrimaryMockup\(collapsed\)/);
+  const activeFailure = primary.slice(primary.lastIndexOf('} catch (error) {'));
+  assert.doesNotMatch(activeFailure, /boardMount\.restorePrimaryMockup\(collapsed\)/);
+  assert.match(activeFailure, /다시 시도/);
   assert.doesNotMatch(primary, /mountPoint\.replaceChildren|mountPoint\.innerHTML/);
   // 마운트 표식 — 검증 스크립트와 CSS가 이걸 본다.
   assert.match(primary, /primary\.mountPoint\.dataset\.bsPrimaryMounted = BOARD_CHART_RENDERER;/);
@@ -599,6 +604,20 @@ test('보드 primary는 목업을 접고 얹으며, 실패하면 목업을 되�
     primary.indexOf('if (state.primaryMount !== attempt) {')
     < primary.lastIndexOf('primary.mountPoint.dataset.bsPrimaryError'),
   );
+});
+
+test('금현물 자동 조회는 차트와 헤더를 함께 갱신하고 국제금 0I lease를 열지 않는다', () => {
+  const refresh = CANVAS.slice(CANVAS.indexOf('function applyBoardChartSnapshot'), CANVAS.indexOf('function beginBoardChartMount'));
+  assert.match(refresh, /state\.values\.s004 = Math\.abs\(price\)/);
+  assert.match(refresh, /state\.values\.s006 = at/);
+  assert.match(refresh, /touched\.push\('s005'\)/);
+  assert.match(refresh, /applyBoardChartSnapshot\(state, result\.candles\)/);
+  assert.match(refresh, /state\.boardId !== '2RJ7-1' \|\| !descriptor \|\| descriptor\.body\.target !== 'gold'/);
+  const status = CANVAS.slice(CANVAS.indexOf('function setBoardChartStatus'), CANVAS.indexOf('function boardChartVisible'));
+  assert.match(status, /badge\.textContent = text\.startsWith\('15초마다'\) \? '15초 조회' : '조회 지연'/);
+  const realtime = CANVAS.slice(CANVAS.indexOf('function syncIntegratedRealtime'), CANVAS.indexOf('function clearIntegratedRealtimeError'));
+  assert.match(realtime, /boardId === '2RJ7-1'/);
+  assert.match(realtime, /status: 'snapshot'/);
 });
 
 test('남의 보드로 갈아타면 그 봉투의 차트를 얹지 않는다', () => {

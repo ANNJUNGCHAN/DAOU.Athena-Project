@@ -114,6 +114,7 @@ const BOARD_PRIMARY = Object.freeze({
   "137X-2": "athena-chart",
   "13BC-2": "orderbook-ladder",
   "1JPU-0": "orderbook-ladder",
+  "2RJ7-1": "athena-chart",
   "32S7-0": "athena-chart",
 });
 
