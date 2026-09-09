@@ -70,6 +70,59 @@ test('buildSelectorOrderPrefill: 실행 부작용 없이 unsupported·invalid �
   assert.equal(executions, 0);
 });
 
+test('buildSelectorOrderPrefill: 금현물 부분 초안도 티켓으로 열고 실행 제한을 보존한다', () => {
+  const prefill = ot.buildSelectorOrderPrefill({
+    status: 'collecting',
+    operation_ref: 'base:kt50000',
+    order_draft: {
+      asset_kind: 'gold', stk_cd: null, product_name: null, side: 'buy', ord_qty: null,
+      unit: 'g', requested_order_type: 'market', execution_supported: false,
+      execution_blocker: '주문 티켓에서 금 상품을 선택해 주세요.',
+    },
+  });
+  assert.deepEqual(prefill, {
+    assetKind: 'gold', symbol: null, productName: null, side: 'buy', qty: null,
+    unit: 'g', orderType: 'market', executionSupported: false,
+    executionBlocker: '주문 티켓에서 금 상품을 선택해 주세요.',
+    reason: '금현물 시장가 매수 주문 초안',
+  });
+});
+
+test('buildSelectorOrderPrefill: 완성된 금현물 시장가 초안을 실행 불가 티켓으로 정규화한다', () => {
+  const prefill = ot.buildSelectorOrderPrefill({
+    status: 'guarded',
+    operation_ref: 'base:kt50001',
+    order_draft: {
+      asset_kind: 'gold', stk_cd: 'M04020100', product_name: '미니금 99.99_100g',
+      side: 'sell', ord_qty: '2', unit: 'g', requested_order_type: 'market',
+      execution_supported: false, execution_blocker: '시장가 코드를 확인할 수 없습니다.',
+    },
+  });
+  const ticket = ot.createTicket(prefill);
+  assert.equal(ticket.assetKind, 'gold');
+  assert.equal(ticket.productName, '미니금 99.99_100g');
+  assert.equal(ticket.unit, 'g');
+  assert.equal(ticket.qty, 2);
+  assert.equal(ticket.executionSupported, false);
+  assert.equal(ticket.executionBlocker, '시장가 코드를 확인할 수 없습니다.');
+  assert.throws(() => ot.buildOrderPayload(ticket), /시장가 코드를 확인할 수 없습니다/);
+});
+
+test('금현물 시장가 초안은 주문 API 필드를 만들지 않고 위조된 상품을 거부한다', () => {
+  assert.equal(ot.buildSelectorOrderPrefill({
+    status: 'guarded', operation_ref: 'base:kt50000',
+    order_draft: {
+      asset_kind: 'gold', stk_cd: 'M04020000', product_name: '다른 상품', side: 'buy',
+      ord_qty: '1', requested_order_type: 'market', execution_supported: false,
+      execution_blocker: '실행 제한', trde_tp: '00', ord_uv: '',
+    },
+  }), null);
+  assert.throws(() => ot.buildOrderPayload({
+    assetKind: 'gold', symbol: 'M04020000', side: 'buy', qty: 1,
+    executionBlocker: '금현물 시장가 주문 실행 제한',
+  }), /실행 제한/);
+});
+
 test('gateBlocker: 주문 API 비활성이면 정직한 사유를 준다', () => {
   assert.ok(ot.gateBlocker(null).includes('백엔드'));
   assert.ok(ot.gateBlocker({ orderApi: false }).includes('주문 API가 OFF'));
@@ -94,6 +147,14 @@ test('buildOrderPayload: kt10000/kt10001 실측 필드·시장가 고정', () =>
   assert.equal(buy.tr_id, 'kt10000');
   assert.deepEqual(buy.body, { dmst_stex_tp: 'KRX', stk_cd: '005930', ord_qty: '20', trde_tp: '3' });
   assert.equal(ot.buildOrderPayload({ symbol: '005930', qty: 1, side: 'sell' }).tr_id, 'kt10001');
+});
+
+test('createTicket 프리필은 UI 실행 경로에서 주문 본문으로 이어진다', () => {
+  const ticket = ot.createTicket({ symbol: '005930', side: 'buy', qty: 1 });
+  assert.deepEqual(ot.buildOrderPayload(ticket), {
+    tr_id: 'kt10000',
+    body: { dmst_stex_tp: 'KRX', stk_cd: '005930', ord_qty: '1', trde_tp: '3' },
+  });
 });
 
 test('buildOrderPayload: 무효 입력 거부', () => {
@@ -189,6 +250,27 @@ test('가격 행은 시장가 고정을 세그먼트와 읽기값으로 드러�
     selected: '시장가',
     readout: '시장가 체결',
     limitEnabled: false,
+  });
+  assert.deepEqual(ot.priceRowModel({ assetKind: 'gold', orderType: 'market' }), {
+    segments: ['지정가', '시장가'],
+    selected: '시장가',
+    readout: '시장가 요청 · 실행 불가',
+    limitEnabled: false,
+  });
+});
+
+test('금현물 보통·미지정 주문은 시장가로 표시하지 않고 실행을 차단한다', () => {
+  assert.deepEqual(ot.priceRowModel({ assetKind: 'gold', orderType: 'regular' }), {
+    segments: ['보통', '시장가'], selected: '보통',
+    readout: '단가 입력 필요 · 실행 불가', limitEnabled: false,
+  });
+  assert.deepEqual(ot.priceRowModel({ assetKind: 'gold', orderType: 'unspecified' }), {
+    segments: ['보통', '시장가'], selected: null,
+    readout: '주문 유형 미지정 · 실행 불가', limitEnabled: false,
+  });
+  assert.deepEqual(ot.priceRowModel({ assetKind: 'gold' }), {
+    segments: ['보통', '시장가'], selected: null,
+    readout: '주문 유형 미지정 · 실행 불가', limitEnabled: false,
   });
 });
 

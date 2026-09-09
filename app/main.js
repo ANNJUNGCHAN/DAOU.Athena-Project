@@ -80,6 +80,8 @@ const chartReload = require('./lib/main/chart-reload');
 const chartReloadAuthority = chartReload.createChartReloadAuthority();
 const ticketCapacity = require('./lib/main/ticket-capacity');
 const orderTicket = require('./lib/order-ticket');
+const goldOrderIntent = require('./lib/main/gold-order-intent');
+const goldQuoteIntent = require('./lib/main/gold-quote-intent');
 const protectedCards = require('./lib/protected-cards');
 const { createRoutineMainCardHandlers } = require('./lib/main/routine-main-card');
 
@@ -4527,6 +4529,49 @@ async function runLiveQueryInnerBody(query, expand, origin, turnConversationId, 
   // 턴 프리픽스(live-prompt.js)가 무력화된다. 그래프 모드는 이유가 하나 더 있다: 그 모드의
   // 모든 질문은 그래프 질문이라(사용자 확정) 시세 경로가 가로채면 접두가 실릴 기회조차 없다.
   const modePromptRequired = ['backtest', 'graph', 'agent'].includes(submit.canvasMode);
+  if (!modePromptRequired) {
+    if (!runtime.goldOrderContextInitialized) {
+      runtime.goldOrderContextInitialized = true;
+      runtime.pendingGoldOrder = null;
+      try {
+        const bridge = getSessionBridge();
+        const snapshot = bridge && bridge.store.getSession(turnConversationId);
+        const previous = (snapshot && snapshot.messages || [])
+          .filter((message) => message.role === 'user').slice(-20);
+        if (previous.length && previous[previous.length - 1].text === query) previous.pop();
+        for (const message of previous) {
+          const recovered = goldOrderIntent.resolveGoldOrderTurn(message.text, runtime.pendingGoldOrder);
+          runtime.pendingGoldOrder = recovered.handled ? recovered.state : null;
+        }
+      } catch { /* a new conversation has no persisted order context */ }
+    }
+    const goldDraft = goldOrderIntent.resolveGoldOrderTurn(query, runtime.pendingGoldOrder);
+    runtime.pendingGoldOrder = goldDraft.handled ? goldDraft.state : null;
+    if (goldDraft.handled) {
+      runtime.pendingGoldQuote = null;
+      if (goldDraft.payload && goldDraft.status === 'ready') {
+        if (!shellWin || shellWin.isDestroyed()) throw new Error('주문 확인창을 열 셸이 준비되지 않았습니다');
+        if (expand && historyConversationId() === turnConversationId) revealShell({ focus: false });
+        shellForConversation(turnConversationId).send('athena:selector-order-draft', goldDraft.payload);
+      }
+      return persistLocalLiveResult(query, {
+        ok: true, source: 'gold-order-draft', error: null,
+        answerText: goldDraft.answerText, canvasTypes: [], modelCalls: 0,
+        durationMs: Math.max(0, performance.now() - queryStartedAt),
+      }, turnConversationId);
+    }
+
+    const goldQuote = goldQuoteIntent.resolveGoldQuoteTurn(query, runtime.pendingGoldQuote);
+    runtime.pendingGoldQuote = goldQuote.handled ? goldQuote.state : null;
+    if (goldQuote.handled) {
+      return persistLocalLiveResult(query, {
+        ok: true, source: 'gold-quote-clarification', error: null,
+        answerText: goldQuote.answerText, canvasTypes: [], modelCalls: 0,
+        durationMs: Math.max(0, performance.now() - queryStartedAt),
+      }, turnConversationId);
+    }
+    if (goldQuote.routeQuery) query = goldQuote.routeQuery;
+  }
   const chartFollowup = modePromptRequired ? null : chartFollowupTracker.answer(query);
   if (chartFollowup) {
     historySink.saveChatMessage(
