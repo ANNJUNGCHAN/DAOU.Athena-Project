@@ -1240,6 +1240,9 @@ function applyResponsiveHooks(surface) {
 // 손대지 않는 것: 표(열 폭이 계약)·스크롤 소유자(스크롤로 닿는다)·세로 묶음(세로 줄에
 // wrap을 주면 넘친 것이 오른쪽 새 열로 간다, markSplitRow와 같은 판단).
 const RELAX_PASSES = 6;
+// 표면 하나가 받는 처방 횟수의 상한 — 폭 단계가 넷이고 그 사이 스크롤바가 오갈 여지를
+// 두 배로 잡았다. 상한에 닿으면 더 손대지 않는다(잘림이 남는 것이 정지보다 낫다).
+const RELAX_RUNS_PER_SURFACE = 8;
 
 // 접기를 줄 수 있는 **모양**인가 — 기하는 보지 않는다.
 function isRowShape(el, surface) {
@@ -1397,6 +1400,14 @@ function relaxOverflowRows(surface) {
   // 카드 1종 14장에서 8분을 넘겼다).
   const width = surface.clientWidth;
   if (surface.__bsRelaxWidth === width) return [];
+  // 폭 하나를 기억하는 것만으로는 **오감**을 막지 못한다. 접기·스크롤이 스크롤바를
+  // 만들거나 없애면 표면의 clientWidth가 두 값 사이를 오가고, 그때마다 기억한 폭과
+  // 달라 처방이 다시 돈다 — 그 사이 렌더러가 붙잡혀 프로브가 멈춘다(실측: 버튼 감사가
+  // 보드 100장을 지난 뒤 출력 없이 33분 정지). 표면 하나가 받는 처방 횟수에 상한을
+  // 둔다. 정상 경로는 폭 4단계에서 네 번이면 끝난다.
+  const runs = Number(surface.__bsRelaxRuns || 0);
+  if (runs >= RELAX_RUNS_PER_SURFACE) return [];
+  surface.__bsRelaxRuns = runs + 1;
   surface.__bsRelaxWidth = width;
   const relaxed = [];
   for (let pass = 0; pass < RELAX_PASSES; pass += 1) {
