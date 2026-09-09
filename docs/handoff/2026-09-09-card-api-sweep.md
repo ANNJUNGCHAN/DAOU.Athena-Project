@@ -231,7 +231,8 @@ ATHENA_VERIFY_BOARD_IDS=4AUX-1 ATHENA_SWEEP_CAPTURE=4AUX-1 npm run verify:card-a
 | `verify` | 단언 4건 실패 | `app/verify.js`가 main과 **바이트가 같다** — 실패는 카드미니 메뉴·에이전트 캔버스 2건·부팅 타이밍이다. |
 | `verify:live-full` | 질의 6건 `계좌를 찾을 수 없다` | **등록된 계좌가 있는 프로필**이 필요하다(§7.2). 온보딩 관문은 이번에 씨앗을 심어 넘겼다. |
 | `verify:integrated-cards` | **통과**(카드 6종 · op 299 · 필드 3,705 · missing 0) | §7.1 — 다섯 층을 닫았다. |
-| `verify:chat-v3` · `verify:semantic-workspaces` | 실패 | main의 `app/` 트리로 갈아 돌려도 **출력이 동일하다**(실측 대조). |
+| `verify:chat-v3` | **통과** | 판정식이 `2df6b103`에서 설계상 제거된 스피너를 계속 봐 `undefined`가 됐다 — 그 항을 뺐다. |
+| `verify:semantic-workspaces` | 단언 1건(44px 터치 목표) | 여섯 층을 닫았고 마지막은 **트랙 간 계약 충돌**이다 — §7.3. |
 
 ### 7.1 `verify:integrated-cards` — 어디까지 닫았나
 
@@ -257,6 +258,26 @@ ATHENA_VERIFY_BOARD_IDS=4AUX-1 ATHENA_SWEEP_CAPTURE=4AUX-1 npm run verify:card-a
 이로써 이 게이트는 **통과**한다(카드 6종 · op 299 · 필드 3,705 · 고유 경로 3,703 ·
 missing 0 · unresolved 0). 제품 계약은 손대지 않았다 — 확인만 했다
 (`resolveLeaseBindings({cardId:'CC-04', mode:'regular'})`가 `0C`·`0D`를 정상으로 내준다).
+
+### 7.3 44px 터치 목표 ↔ Paper 원문 밀도 — 두 계약의 충돌
+
+`verify:semantic-workspaces`의 마지막 단언은 「표면 안 조작 요소는 44px 이상」이다.
+390px(휴대폰) 단계에서 걸리는 것은 **카드 표면의 상태 링크** 둘이다 — 133H-2 `14T4-2`
+「알림 설정」·`14T6-2`「호가 열기」가 51×16px이다. canvas.js가 그 잎에 `role=button`과
+`tabindex`를 찍는 순간 조작 요소가 되지만, 크기는 Paper 원문 글줄 그대로다.
+
+**고쳐 봤고 되돌렸다.** 좁은 단계에서 그 링크에 `min-height: 44px`을 주면 두 계약이
+동시에 깨진다.
+· 「컨테이너 규칙이 Paper 영역 노드의 display를 바꾸지 않는다」 — 카드 트랙의 단위
+  테스트가 이것을 지킨다(`board-parity.test.js`의 5단 검사). 수직 정렬을 위해
+  `display: flex`를 주면 즉시 빨개진다.
+· 세로로 키우면 표면이 넘친다 — 마운트 게이트가 2XTO-0·2YA8-0에서 `surface_geometry`로
+  떨어졌다(실측).
+
+즉 이것은 「누가 틀렸나」가 아니라 **두 트랙의 계약이 만나는 자리**다. 셋 중 하나를
+사람이 골라야 한다: (a) 390px에서 Paper 밀도를 늘려 44px을 허용한다, (b) 그 잎을
+조작 요소로 만들지 않는다(칩·버튼으로 저작한다), (c) 44px 계약을 카드 표면에는
+적용하지 않는다고 명시한다. 카드 트랙 혼자 정할 일이 아니라 그대로 남긴다.
 
 ### 7.2 `verify:live-full` — 어디까지 닫았나
 
