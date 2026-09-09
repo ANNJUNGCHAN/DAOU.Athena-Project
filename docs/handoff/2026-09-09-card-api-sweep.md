@@ -230,8 +230,28 @@ ATHENA_VERIFY_BOARD_IDS=4AUX-1 ATHENA_SWEEP_CAPTURE=4AUX-1 npm run verify:card-a
 | `verify:paper-mini-static` | 어긋난 보드 171장 | 카드미니(kiumi) 트랙의 원장 어긋남이다. 게이트 자신이 「정본 결정 규칙 §5.2에 따라 대장은 고치지 않는다」고 적는다. |
 | `verify` | 단언 4건 실패 | `app/verify.js`가 main과 **바이트가 같다** — 실패는 카드미니 메뉴·에이전트 캔버스 2건·부팅 타이밍이다. |
 | `verify:live-full` | `onboarding still visible` | `app/probe-live-full.js`가 main과 바이트가 같다. 계좌가 등록되지 않은 프로필에서 셸이 온보딩에 머문다. |
-| `verify:integrated-cards` | `invalid backend account alias` | 프로브가 `backendAccountAlias`를 아예 넘기지 않아 라이브러리가 던진다. 두 파일 모두 main과 바이트가 같다. |
+| `verify:integrated-cards` | 단언 1건(0D acquire) | 아래 §7.1에 진단을 적었다 — 세 층을 닫았고 마지막 한 층이 그 트랙 몫이다. |
 | `verify:chat-v3` · `verify:semantic-workspaces` | 실패 | main의 `app/` 트리로 갈아 돌려도 **출력이 동일하다**(실측 대조). |
+
+### 7.1 `verify:integrated-cards` — 어디까지 닫았나
+
+커밋 `1acaba57`(「실시간 계좌 귀속을 고정」)이 라이브러리에 **계좌 별칭**을 필수로 만들었고
+이 프로브는 그 뒤로 갱신되지 않아 첫 틱에서 죽어 있었다. 제품 코드를 그대로 본떠 세 층을
+닫았다.
+
+1. **별칭 주입 자리를 제품과 같게 뒀다.** 제품은 활성 계좌에서 별칭을 주입한다
+   (main.js `mountIntegratedCardRealtime`의 `withActiveRealtimeAccount`). 렌더러 payload에는
+   별칭이 없으므로 검사기도 같은 자리(IPC 핸들러)에서 픽스처 계좌를 주입한다. 단위
+   테스트의 가짜 관리자도 같은 방식이다(`integrated-card-realtime.test.js`).
+2. **`update` 전에 `mount`를 부른다.** `update`는 이미 선 임차만 갈아 준다
+   (`_mountOrUpdate(config, requireExisting: true)`). 제품도 IPC 채널이 둘로 나뉘어 있다.
+3. **프로브 자신의 직접 호출에도 별칭을 준다**(`realtimeConfig`).
+
+남은 한 층은 「호가 보드가 0D를 한 번 acquire해야 한다」는 단언이다(transport 기록이
+비어 있다). **제품 계약은 온전하다** — `resolveLeaseBindings({cardId:'CC-04',
+mode:'regular'})`가 `0C`·`0D`를 정상으로 내준다(실측). 즉 제품 결함이 아니라 그 트랙
+프로브의 배선 문제이며, 어느 관리자 인스턴스의 transport를 보는지가 어긋난 것으로 보인다.
+그 판단은 그 트랙의 몫으로 남긴다.
 
 예산이 모자라 떨어지던 둘은 실측으로 고쳤다 — `verify:card-buttons` 900초 → 2,400초
 (실측 1,607초 · 통과 101/101) · `verify:plugins` 90초 → 300초(실측 125초 · 통과).

@@ -150,8 +150,18 @@ function sha256(buffer) {
   return crypto.createHash('sha256').update(buffer).digest('hex');
 }
 
+// 실시간 임차는 **계좌 귀속**을 요구한다(`resolveLeaseBindings`의 별칭 검사 — 커밋
+// 1acaba57 「실시간 계좌 귀속을 고정」). 이 프로브는 그 뒤로 별칭을 안 넘겨 첫 틱에서
+// TypeError로 죽어 있었다. 픽스처 계좌 하나를 준다 — 별칭은 임차 키에만 들어가고
+// 이 프로브의 단언(REG/REMOVE 순서·재연결)은 그 값을 보지 않는다.
+const FIXTURE_BACKEND_ACCOUNT_ALIAS = 'fixture-account';
+
+function withFixtureAccount(payload) {
+  return { ...(payload || {}), backendAccountAlias: FIXTURE_BACKEND_ACCOUNT_ALIAS };
+}
+
 function realtimeConfig(cardId, leaseId, target) {
-  const base = { leaseId, cardId };
+  const base = { leaseId, cardId, backendAccountAlias: FIXTURE_BACKEND_ACCOUNT_ALIAS };
   if (cardId === 'CC-01') return { ...base, mode: 'overview', accountId: target };
   if (cardId === 'CC-03') return { ...base, mode: 'quote', symbol: target };
   if (cardId === 'CC-04') return { ...base, mode: 'regular', symbol: target };
@@ -220,11 +230,15 @@ function registerSafeShellIpc(records, realtimeManager) {
     ipcMain.handle(channel, async (_event, payload) => {
       let result = null;
       if (channel === 'athena:integrated-card-realtime-policy') result = publicPolicies();
+      // 제품은 **활성 계좌**에서 별칭을 주입한다(main.js `mountIntegratedCardRealtime`의
+      // `withActiveRealtimeAccount`). 렌더러 payload에는 별칭이 없으므로, 검사기도 같은
+      // 자리에서 픽스처 계좌를 주입해야 임차가 선다 — 안 주면 `resolveLeaseBindings`가
+      // 별칭 검사에서 던지고 임차가 영원히 active가 되지 않는다(커밋 1acaba57).
       if (channel === 'athena:integrated-card-realtime-mount') {
-        result = await realtimeManager.mount(payload);
+        result = await realtimeManager.mount(withFixtureAccount(payload));
       }
       if (channel === 'athena:integrated-card-realtime-update') {
-        result = await realtimeManager.update(payload);
+        result = await realtimeManager.update(withFixtureAccount(payload));
       }
       if (channel === 'athena:integrated-card-realtime-unmount') {
         result = await realtimeManager.unmount(payload && payload.leaseId);
@@ -515,6 +529,12 @@ async function installProductionSemanticSnapshot(win, manager, contracts) {
   }
   const config = realtimeConfig('CC-03', mounted.leaseId, '005930');
   config.semanticBindingIds = contracts.card.realtime_bindings.map((item) => item.binding_id);
+  // 임차는 렌더러가 만들었고 이 관리자는 그 id를 처음 본다 — `update`는 이미 선 임차만
+  // 갈아 준다(`_mountOrUpdate(config, requireExisting: true)`). 먼저 세워야 한다.
+  const seeded = await manager.mount(config);
+  if (!seeded.ok) {
+    throw new Error(`production semantic realtime lease mount failed: ${JSON.stringify(seeded)}`);
+  }
   const state = await manager.update(config);
   if (!state.ok || state.status !== 'active') {
     throw new Error(`production semantic realtime binding update failed: ${JSON.stringify(state)}`);
