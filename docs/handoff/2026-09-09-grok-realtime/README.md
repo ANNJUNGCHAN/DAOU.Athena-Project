@@ -128,7 +128,7 @@ VALIDATION.md의 3,955/3,948 숫자와 인계 직전 HTTP 200은 **역사**다. 
 
 시작 시 `git status --short --branch`는 깨끗한 `codex/grok-realtime-handoff-20260909`였다. 제품 변경은 `gold-order-intent.js`와 그 테스트, 이 README, `evidence/` 캡처뿐이다.
 
-환경: Windows, 이 워크스페이스. `app`에 `npm.cmd ci --no-audit --no-fund`(125 packages). `backend`에 Python 3.12 venv + `pip install -e ".[dev]"`. 라이브 실행 전 형제 worktree의 gitignored `.env`를 복사했다(키 이름만 확인, 값은 문서에 없음). `ATHENA_ENABLE_ORDER_API=false`, Kiwoom base는 mock. TCP 8010은 이미 `API-검수` 백엔드가 Listen 중이어서 **종료하지 않고** 이 앱이 붙었다.
+환경: Windows, 이 워크스페이스. `app`에 `npm.cmd ci --no-audit --no-fund`(125 packages). `backend`에 Python 3.12 venv + `pip install -e ".[dev]"`. 사용자 지시로 `C:\Projects\DAOU.Athena\backend\.env`를 이 worktree `backend/.env`로 복사했다(gitignore, 값은 문서에 없음). Kiwoom base는 mock. 이후 이 worktree uvicorn이 8010을 연다(`ATHENA_BACKTEST_ENABLED=true`는 프로세스 환경). 기동 로그에 mock `oauth2/token` HTTP 200이 있었다. 금 주문 실행 버튼은 누르지 않았다.
 
 실행한 명령과 이번 결과:
 
@@ -154,15 +154,16 @@ P1 코드는 처음부터 다시 만들지 않았다. 기존 테스트가 통과
 | 화면 | 관측 |
 |---|---|
 | 에르가네 · 플러그인 | 추천 목록 없음. 「설치한 플러그인이 없습니다 · [+ 서버 추가]에서 직접 등록합니다」. [캡처](evidence/live-plugin.png) |
-| 팔라스 · 백테스트 | 「백테스트 기능이 꺼져 있습니다 — 설정에서 백테스트를 켜야 합니다」. 원인: 기존 :8010(`API-검수`)에 붙음. [캡처](evidence/live-backtest.png) |
+| 팔라스 · 백테스트 | `.env` 적용 후 켜짐. 「기법 — 0개」「아직 기법이 없습니다」(샘플 10개 아님). [캡처](evidence/live-backtest.png) |
+| 새 기법 만들기 | 프로젝트(SMA-골든크로스)·상위 폴더(프로젝트 루트)·이름 입력. 취소로 닫음. [캡처](evidence/live-technique-create.png) |
 | 부엉이 | 채팅 입력 우측 고정 크기. 커졌다 작아지는 효과 없음 |
-| 금현물 시세 | `금현물 시세 알려줘` → 「어느 금현물 시세를 볼까요? 금 99.99_1kg 또는 미니금 99.99_100g」. 상품 선택 후 실카드는 후속 LLM 턴이 다른 질의로 넘어가 이번 세션에서 못 닫음. [캡처](evidence/live-gold-quote.png) |
+| 금현물 시세 | `금현물 시세 알려줘` → 「어느 금현물 시세를 볼까요? 금 99.99_1kg 또는 미니금 99.99_100g」. 1kg 후속 제출은 입력칸/모드 전환에 가로채여 실카드까지는 못 닫음. [캡처](evidence/live-gold-quote.png) |
 | 종목 찾기 | 질의 `종목 찾기`는 순위 보드(13K0-2)를 바로 열지 않고 도구 후보를 물어봄. [캡처](evidence/live-jongmok-find.png) |
 | 급등/순위 조회 | 캔버스 알림 「조회 요청 조건을 처리하지 못했습니다. (HTTP 422)」. [캡처](evidence/live-ranking-422.png) |
-| 금 주문 수집 | 채팅 입력칸이 제안 문구로 자주 덮여 `금현물 시장가 매수` 제출이 반복 실패. P0 `개`/`주` 재질문은 유닛/소비자/티켓 프로브가 담당. 실행은 차단 유지 |
+| 금 주문 수집 | `set-value`로 `금현물 시장가 매수`가 입력칸에 들어가도 제출 시 제안 문구가 대신 전송됨. P0 `개`/`주` 재질문은 유닛/소비자/티켓 프로브. 실행 버튼은 누르지 않음 |
 
 남은 제약:
 
-- 라이브 백엔드가 이 worktree venv가 아니다. 백테스트 켜기·순위 422 재현은 이 앱이 자기 백엔드를 띄운 세션에서 다시 봐야 한다. 기존 :8010은 종료하지 않았다.
-- 금현물 주문 실행 API 계약·실행 권한은 여전히 없다. 초안 팝업 ≠ 주문 전송.
+- 채팅 입력 제안 칩이 금 주문/1kg 후속 제출을 가로챈다. 순위 보드 직접 마운트와 금 시세 실카드는 이 세션에서 미완.
+- 금현물 주문 초안의 실행 차단(`execution_supported: false`)은 유지. 실제 주문은 보내지 않았다.
 - 전체 JS 스위트는 인계 기록상 worker 동시성 이슈가 있어 이번에는 타깃 테스트만 돌렸다. 재실행 시 `--test-concurrency=4`를 권장한다.
