@@ -14,7 +14,12 @@ Kiwoom 모의 API로 Paper 보드 101장을 전수 마운트해, 화면에 찍�
 | `scripts/card-api-sweep/diagnose_slots.py` | 슬롯이 왜 안 채워졌는지 사유별로 센다(op 미호출·업스트림 오류·필드 없음·행 초과 등) |
 | `scripts/card-api-sweep/hydrate_sweep.py` | 보드별 하이드레이션 채움 수만 빠르게 센다 |
 | `scripts/card-api-sweep/explain_missing.py` | UI 리포트의 결측 노드를 슬롯으로 되찾아 사유별로 묶는다(남은 일감 목록) |
+| `scripts/card-api-sweep/probe_mock_support.py` | 조회 op 264개(base·detail 전부)를 하나씩 실제로 불러 **모의투자가 지원하는지**를 요청·응답 본문과 함께 적는다. 주문 op와 websocket op는 부르지 않는다. 산출물 `docs/reference/2026-09-09-mock-unsupported-apis.md` · `app/captures/card-api-sweep/MOCK-SUPPORT.json` |
 | `scripts/card-api-sweep/verify_operations.py` | 보드마다 조회를 실제로 부르고 **모든 op의 상태를 사유별로 판정**한다. 화면 결측어가 0이어도 「값이 정상으로 들어왔다」는 증명이 안 되기 때문이다 — 상류가 정상으로 빈 목록을 답한 자리는 규칙대로 빈 칸이라 화면에 흔적이 없다. 산출물 `app/captures/card-api-sweep/OPERATION-LEDGER.json` |
+
+전수 프로브는 마운트 게이트와 **같은 기하 판정**(`assertSurfaceGeometry`)을 실데이터
+경로에서 한 번 더 돌린다 — Paper 원문 픽스처로만 재면 값이 목업보다 길어질 때 처음
+생기는 결함을 못 본다(§3의 13번). 그 위반은 게이트를 빨갛게 만든다.
 
 글자 잘림 계측은 `app/lib/board-text-clip.js`다. 텍스트 노드의 `Range` 사각형을 조상
 클립 상자와 대조해 **스크롤로 닿을 수 없는** 잘림만 결함으로 센다(세로 스크롤은 계획이
@@ -34,6 +39,8 @@ Kiwoom 모의 API로 Paper 보드 101장을 전수 마운트해, 화면에 찍�
 | 마운트 실패 보드 | 16장 | **0** |
 | `verify:paper-cards-mount` | 통과 67 · 실패 34 | **통과 101 · 실패 0** |
 | op 상태 결함(`verify_operations.py`) | (안 재고 있었다) | **0자리** |
+| 실데이터 기하 위반(`surface_geometry`) | 10건 · 3장 | **0** |
+| `verify:card-buttons` | 시간 초과(예산 900초) | **통과 101/101 · 1,607초** |
 
 op 사유별로는 `bound` 485 · `mock_unsupported` 76 · `not_a_rest_read` 64 ·
 `order_operation_refused` 14 · `arguments_unmapped` 7이다. 하이드레이션이 채운 값 슬롯
@@ -101,6 +108,21 @@ op 사유별로는 `bound` 485 · `mock_unsupported` 76 · `not_a_rest_read` 64 
     프로브와 파이썬 검사기가 같은 파일을 읽는다) 금현물은 op 설명문이 적어 둔
     M04020000을 쓴다 — 2RJ7-1의 값이 0 → 67로 돌아왔다. ELW는 순위 op가 장이 닫히면
     빈 배열이라 조건검색(ka30005)으로 바꿨다.
+13. **실데이터에서만 드러난 기하 결함 셋.** 앱 검수를 Paper 픽스처로만 하면 못 보는
+    자리다. 전수 프로브에 마운트 게이트와 같은 기하 판정을 붙여 드러냈다.
+    · **실제 종목명이 칸보다 높다** — 2XP6-0 `3FCI-0`은 55px 칸에 내용 59px로
+      「1위 이수페타시스」가 목업 이름보다 길어 네 폭 단계 모두에서 칸을 뚫었다.
+      높이 되돌리기는 CSS가 좁은 단계에서 이미 허용하지만 그 규칙이 닿지 않는 상자가
+      남아 있었다 — 재고 나서 그 상자에만 같은 처방을 준다(`relaxOverflowHeights`).
+      Paper 높이는 바닥으로 남기고 자라기만 허용한다.
+    · **크기가 0인 스크롤 상자**를 「스크롤이 안 된다」고 셌다(133H-2 `14UQ-2`: 계좌
+      조회가 모의투자 미지원이라 표가 비어 접혔다). 담긴 것이 없는 상자는 결함이 아니다.
+    · **숨은 컨트롤**을 초점 결함으로 셌다(2SKU-1 `3GLA-0`: 그 줄에 자료가 없어 접혔다).
+14. **넘침 처방이 폭 사이를 오가며 다시 돌았다.** 접기·스크롤이 스크롤바를 만들거나
+    없애면 표면의 clientWidth가 두 값 사이를 오가고, 기억한 폭과 달라 처방이 다시 돈다 —
+    그 사이 렌더러가 붙잡혀 프로브가 멈춘다(실측: 버튼 감사가 보드 100장을 지난 뒤
+    출력 없이 33분 정지, 같은 보드 하나만 돌리면 39초에 통과). 표면 하나가 받는 처방
+    횟수에 상한(8)을 뒀다 — 잘림이 남는 것이 정지보다 낫다.
 
 ## 3.1 결측어를 쓰는 자리 — 확정 규칙 넷
 
@@ -129,6 +151,10 @@ op 사유별로는 `bound` 485 · `mock_unsupported` 76 · `not_a_rest_read` 64 
   · `not_a_rest_read` — 실시간(websocket) 전용 op다.
   · `order_operation_refused` — 주문 op는 검사기가 부르지 않는다(모의 계좌라도).
   · `arguments_unmapped:*` — 화면이 주지 않은 조회 대상(주문번호 등)이 필요하다.
+
+조회 op 264개(base·detail 전부)를 하나씩 부른 목록과 근거는
+`docs/reference/2026-09-09-mock-unsupported-apis.md`에 있다 — 지원 233 · 모의투자
+미지원 27 · 인자 부족 4 · 그 밖의 업무 거부 0. 요청 본문과 응답 본문을 그대로 적었다.
 
 `mock_unsupported` 76자리는 **환경의 한계**다. 업무 오류로 온 op를 한 번 더 불러 응답
 문면을 읽어 가른다 — 「모의투자에서는 해당업무가 제공되지 않습니다」(RC9000) ·
@@ -194,3 +220,11 @@ ATHENA_VERIFY_BOARD_IDS=4AUX-1 ATHENA_SWEEP_CAPTURE=4AUX-1 npm run verify:card-a
 · **`node`가 PATH에 있어야 한다** — 선택기 평가(`test_selector_autonomous_eval.py`)가
   `node`를 하위 프로세스로 부른다. 없으면 32건이 `FileNotFoundError`로 떨어진다.
   이 워크트리에서는 fnm 경로를 얹는다(`~/AppData/Roaming/fnm/node-versions/v22.14.0/installation`).
+  얹고 돌리면 백엔드 3,863건 전부 통과한다(6 skip).
+
+## 7. 이 트랙이 아닌 빨감 — 근거와 함께 남긴다
+
+| 게이트 | 상태 | 이 트랙이 만든 것이 아닌 근거 |
+|---|---|---|
+| `verify:paper-screens` | 통과 83 · 실패 23(래칫 회귀 21) | 이번 변경에서 그 프로브가 심는 모델 선택을 빼고 돌려도 **똑같이 83/23**이다. 실패 코드가 `phrase_missing`·`structure_mismatch`·`reach_failed`로 설정·온보딩 화면 문면이며 카드 표면과 무관하다. |
+| `verify:paper-mini-static` | 어긋난 보드 171장 | 카드미니(kiumi) 트랙의 원장 어긋남이다. 게이트 자신이 「정본 결정 규칙 §5.2에 따라 대장은 고치지 않는다」고 적는다. |
