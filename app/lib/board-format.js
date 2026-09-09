@@ -64,6 +64,9 @@ function toNumber(value) {
   if (typeof value !== 'string') return null;
   const text = value.trim().replace(/,/g, '');
   if (!text) return null;
+  const wire = kiwoomWireNumber(value);
+  if (wire && wire.empty) return 0;
+  if (wire && wire.numeric != null) return wire.numeric;
   const parsed = Number(text);
   return Number.isFinite(parsed) ? parsed : null;
 }
@@ -79,14 +82,19 @@ function kiwoomWireNumber(value) {
   if (!text) return null;
   if (/^\d{6}$/.test(text)) return null;
   if (/^0{6,}$/.test(text)) return { empty: true };
-  const match = /^([+-])?(0*)(\d+)(\.\d+)?$/.exec(text);
+  // 키움 순매수는 `--2860591`처럼 부호를 두 번 붙인다. 한 개의 [+-]만 받으면
+  // 파싱이 실패해 생문자가 화면에 남는다.
+  const match = /^([+-]+)?(0*)(\d+)(\.\d+)?$/.exec(text);
   if (!match) return null;
-  const numeric = Number((match[1] === '-' ? '-' : '') + match[3] + (match[4] || ''));
+  const signs = match[1] || '';
+  const negative = signs.includes('-');
+  const numeric = Number((negative ? '-' : '') + match[3] + (match[4] || ''));
   if (!Number.isFinite(numeric)) return null;
   const padded = Boolean(match[2]);
-  const plus = match[1] === '+';
-  const signed = Boolean(match[1]);
-  return { numeric, signed, plus, padded };
+  const plus = Boolean(signs) && !negative;
+  const signed = Boolean(signs);
+  const repeated = signs.length > 1;
+  return { numeric, signed, plus, padded, repeated };
 }
 
 function groupText(amount) {
@@ -270,7 +278,7 @@ function formatSlot(format, raw) {
   if (wire && wire.empty) {
     return { text: '', tone: null, missing: false };
   }
-  const wireSigned = Boolean(wire && (wire.padded || wire.plus) && wire.signed);
+  const wireSigned = Boolean(wire && (wire.padded || wire.plus || wire.repeated) && wire.signed);
   const toneSource = wireSigned
     ? (wire.plus ? 1 : -Math.abs(wire.numeric))
     : normalized.value;
