@@ -262,7 +262,7 @@ def _seed_tree(root: Path) -> None:
     (root / "data.csv").write_text("a,b\n", encoding="utf-8")
 
 
-def test_build_tree_skips_ignored_directories_and_shows_non_python(tmp_path: Path) -> None:
+def test_build_tree_shows_every_directory_and_non_python_file(tmp_path: Path) -> None:
     root = tmp_path / "proj"
     root.mkdir()
     _seed_tree(root)
@@ -271,7 +271,10 @@ def test_build_tree_skips_ignored_directories_and_shows_non_python(tmp_path: Pat
 
     assert truncated is False
     names = [e["name"] for e in entries]
-    assert names == ["pkg", "data.csv", "strategy.py"]  # 폴더 먼저, 그 다음 파일 이름순
+    assert names == [
+        ".git", ".hidden", ".venv", "__pycache__", "node_modules", "pkg",
+        "data.csv", "strategy.py",
+    ]  # 폴더 먼저, 그 다음 파일 이름순
     by_name = {e["name"]: e for e in entries}
     assert by_name["strategy.py"]["py"] is True
     assert by_name["data.csv"]["py"] is False  # 데이터는 보이되 편집 대상이 아니다(D3)

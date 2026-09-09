@@ -1577,10 +1577,22 @@ async function runQueryLive(text) {
   const unsubscribeLiveTextDelta = window.athena.on('athena:live-text-delta', onLiveTextDelta);
 
   let result;
+  const editorTurnId = window.crypto.randomUUID();
+  let editingCanvas = null;
   // 오브 "생각 중" 실신호(2026-08-26 board-32) — 스피너 대신 오브 시선이 위를
   // 훑는다. 여기 감싸는 구간이 실제 질의 왕복이다(claude -p 또는 캐시 리플레이).
   window.athena.send('athena:orb-signal', { signal: 'think', active: true });
   try {
+    const editor = window.AthenaBacktestCanvas;
+    const canvasView = window.AthenaCanvasMode && window.AthenaCanvasMode.state && window.AthenaCanvasMode.state.view;
+    if (canvasView === 'backtest' && editor && typeof editor.setChatEditing === 'function') {
+      editingCanvas = editor;
+      editingCanvas.setChatEditing(true, editorTurnId);
+    }
+    if (editor && typeof editor.flushEditor === 'function' && !(await editor.flushEditor())) {
+      throw new Error('기법 파일 저장에 실패해 채팅 요청을 보내지 않았습니다. 편집기의 오류를 확인해 주세요.');
+    }
+    if (!onScreen()) throw new Error('대화가 전환되어 이전 편집기의 요청을 보내지 않았습니다.');
     clientSubmitId = window.crypto.randomUUID();
     const rendererSubmittedAt = performance.now();
     window.AthenaProviderFirstPaint.registerSubmit({ clientSubmitId, rendererSubmittedAt, origin: 'shell' });
@@ -1603,6 +1615,7 @@ async function runQueryLive(text) {
     // 잠금·타이머가 얼어붙었다(2026-08-31 실측). 실패 턴으로 정직하게 그린다.
     result = { ok: false, error: String((err && err.message) || err) };
   } finally {
+    if (editingCanvas) editingCanvas.setChatEditing(false, editorTurnId);
     clearInterval(tick);
     unsubscribeLiveCanvasAdded();
     unsubscribeLiveToolStep();
@@ -2444,9 +2457,11 @@ window.AthenaShell.registerOpenConversation(async (conv) => {
   // 이어붙고, 돌아오면 그대로 보인다(conversationPanes). main도 전환 때 턴을 끊지 않는다.
   // 갈아타기 전에 이 세션의 지연 보고를 흘린다 — main은 받은 시점의 세션에 적으므로
   // 전환 뒤에 도착한 보고는 앞 세션의 작업공간을 다음 세션 기록에 적는다.
-  if (window.AthenaSessionWorkspace) window.AthenaSessionWorkspace.flush();
   switchingConversation = true;
   try {
+    const editor = window.AthenaBacktestCanvas;
+    if (editor && typeof editor.flushEditor === 'function' && !(await editor.flushEditor())) return false;
+    if (window.AthenaSessionWorkspace) window.AthenaSessionWorkspace.flush();
     const switched = await window.athena.invoke('athena:conversations-set-active', { id: conv.id })
       .catch(() => null);
     if (!switched || !switched.restorable) return false;
@@ -3167,7 +3182,7 @@ function renderKiumiMenu() {
       ));
     });
   } else {
-    $kiumiMenu.appendChild(kiumiItem('plugin', '설치된 플러그인 없음', '플러그인 모드에서 추천을 설치합니다', () => openPlugin('hub')));
+    $kiumiMenu.appendChild(kiumiItem('plugin', '설치된 플러그인 없음', '플러그인 모드에서 서버를 직접 추가합니다', () => openPlugin('hub')));
   }
   const settingsSep = document.createElement('div');
   settingsSep.className = 'mp-sep';
@@ -3182,7 +3197,7 @@ function renderKiumiMenu() {
     renderModelPopover();
     $modelPopover.hidden = false;
   }));
-  $kiumiMenu.appendChild(kiumiItem('plugin', '플러그인 관리', '설치 · 기능 허용 · 마켓플레이스', () => openPlugin('manage')));
+  $kiumiMenu.appendChild(kiumiItem('plugin', '플러그인 관리', '서버 등록 · 기능 허용', () => openPlugin('manage')));
 }
 
 function toggleKiumiMenu() {
