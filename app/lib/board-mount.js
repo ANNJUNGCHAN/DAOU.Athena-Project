@@ -110,6 +110,25 @@ function pendingSet(options) {
   return blanks;
 }
 
+const FIXTURE_STOCK_NAME = '삼성전자';
+const FIXTURE_STOCK_CODE = '005930';
+
+function identityCardId(contract) {
+  return contract && contract.board_id ? registry.cardIdFor(contract.board_id) : null;
+}
+
+function restampFixtureText(text, identity) {
+  if (typeof text !== 'string' || !identity) return text;
+  let out = text;
+  if (identity.name && identity.name !== FIXTURE_STOCK_NAME && out.includes(FIXTURE_STOCK_NAME)) {
+    out = out.split(FIXTURE_STOCK_NAME).join(identity.name);
+  }
+  if (identity.code && identity.code !== FIXTURE_STOCK_CODE && out.includes(FIXTURE_STOCK_CODE)) {
+    out = out.split(FIXTURE_STOCK_CODE).join(identity.code);
+  }
+  return out;
+}
+
 function mountPlan(contract, values, options = {}) {
   const pending = pendingSet(options);
   const identity = options.identity;
@@ -154,7 +173,7 @@ function mountPlan(contract, values, options = {}) {
     const staticText = (missingBound || (slot.static && !identitySlots.has(slot.slot_id)))
       ? (missingBound && pending.has(String(slot.slot_id)) ? '' : staticTextOf(slot))
       : null;
-    const formatted = override
+    let formatted = override
       ? { text: override, tone: null, missing: false }
       : (staticText !== null
         ? { text: staticText, tone: null, missing: false }
@@ -164,6 +183,9 @@ function mountPlan(contract, values, options = {}) {
             : { f: slot.f, kor: slot.kor },
           bound,
         ));
+    if (identity && identityCardId(contract) === 'CC-04') {
+      formatted = { ...formatted, text: restampFixtureText(formatted.text, identity) };
+    }
     assignments.push({
       slotId: slot.slot_id,
       node,
@@ -1689,7 +1711,10 @@ function mountBoard(root, boardId, values, options = {}) {
   if (!template) throw new Error(`보드 템플릿이 없다 — ${boardId}`);
 
   // 탭의 예시 종목이나 누락된 조회 응답이 원래 카드 종목을 바꾸지 않는다.
-  const identity = registry.cardIdFor(boardId) === 'CC-03' ? options.identity : null;
+  // CC-04 호가는 Paper 픽스처가 「삼성전자 통합 호가」로 박혀 있어, 다른 종목
+  // 조회에서도 그 제목이 남았다. 카드 주제(identity)로만 고친다.
+  const cardId = registry.cardIdFor(boardId);
+  const identity = (cardId === 'CC-03' || cardId === 'CC-04') ? options.identity : null;
   const plan = mountPlan(contract, values, { ...options, identity });
   let surface = root.__bsSurface;
   if (!surface || root.__bsBoardId !== String(boardId) || !root.contains(surface)) {

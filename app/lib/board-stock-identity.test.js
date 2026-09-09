@@ -33,3 +33,18 @@ test('ranking and sector titles remain unchanged when reached from a stock card'
     assert.deepEqual(mountPlan(contract, {}, { identity }), mountPlan(contract, {}));
   }
 });
+
+test('CC-04 hoga titles follow the card stock, not the Paper fixture name', () => {
+  const identity = { name: 'SK하이닉스', code: '000660' };
+  for (const boardId of ['13BC-2', '1JPU-0']) {
+    const plan = mountPlan(registry.contractFor(boardId), {}, { identity });
+    const s001 = plan.assignments.find((slot) => slot.slotId === 's001');
+    assert.equal(s001.text, 'SK하이닉스 통합 호가', boardId);
+    assert.equal(s001.text.includes('삼성전자'), false, boardId);
+    const stamped = plan.assignments.filter((slot) => String(slot.text).includes('000660')
+      || String(slot.text).includes('SK하이닉스'));
+    assert.ok(stamped.length >= 1, boardId);
+    assert.equal(plan.assignments.some((slot) => String(slot.text).includes('삼성전자')), false, boardId);
+    assert.equal(plan.assignments.some((slot) => String(slot.text).includes('005930')), false, boardId);
+  }
+});
