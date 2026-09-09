@@ -13,12 +13,14 @@ API 키·토큰·계좌 원문·암호화된 자격 블롭은 기록하지 않�
 |---|---|
 | 브랜치 | `codex/grok-handoff-20260909` |
 | 모의 키 | 로컬 gitignore `.env`. `ATHENA_ENABLE_ORDER_API=false`. 베이스 URL은 mockapi.kiwoom.com |
-| 8010 | **이 체크아웃** `backend/` uvicorn. 다른 워크스페이스 Electron/uvicorn을 내려 점유함 |
+| 8010 | 조회·카드 전수 당시 이 체크아웃 `backend/`. 이후 `API-검수`와 포트 경합. 버튼 전수는 픽스처라 8010 불필요 |
 | 주문 조회 | 이 백엔드로 조회만. 주문 TR은 호출하지 않음 |
 | 금현물 세 문장 라이브 채팅 | **확인** (티켓 갱신·재표시 포함) |
 | 금현물 시장가 실행 차단 | **유지**. 공식 `kt50000.trde_tp`는 `00` 보통 / `10` IOC / `20` FOK뿐 |
 | 실계좌 주문 | 하지 않음 |
 | 카드 전수 스윕 | 101장 실행. 결측어 15장 236자리 화면에 `미제공`. 잘림·겹침·마운트 실패·기하 0. 「결측 0」은 철회 |
+| 카드 버튼 | 101장 통과. responds 1038 · hit_blocked 0 · inert 5485 · gone 0 · offscreen 0. 상태 링크 미클릭 0 |
+| `.env` 출처 | `C:\Projects\DAOU.Athena\backend\.env`를 이 체크아웃 gitignore `backend/.env`로 복사. `ATHENA_ENABLE_ORDER_API=false` |
 
 ## 2. 금현물 티켓 (세 문장, 라이브 채팅)
 
@@ -72,7 +74,9 @@ HTTP 200이나 모델 완료 문구만으로 접수·체결·화면 표시를 �
 | 실시간 연결 정책 | 단위 51 pass. 카드 전수에서 잘림·겹침·기하 0 |
 | 카드 미제공 | **15장 236자리** 화면에 `미제공`으로 남김. 가짜 값으로 채우지 않음. 게이트는 결측을 실패로 센다 |
 
-전수 시각 `2026-09-09T14:57:37Z`, 경과 121s, `backend_base=http://127.0.0.1:8010`. 결측 보드: `133H-2`(7) `2S4E-1`(1) `2SCE-1`(16) `2SKU-1`(34) `2SRV-1`(13) `2SYW-1`(11) `31OF-0`(1) `3GRO-0`(16) `3IGR-0`(6) `3K7K-0`(37) `3LGC-0`(21) `3MTJ-0`(23) `3NVG-0`(7) `3ODO-0`(39) `3UTA-0`(4). 대부분 CC-01 계좌 상세. `verify:card-buttons`는 이번 실행에 포함하지 않음.
+전수 시각 `2026-09-09T14:57:37Z`, 경과 121s, `backend_base=http://127.0.0.1:8010`. 결측 보드: `133H-2`(7) `2S4E-1`(1) `2SCE-1`(16) `2SKU-1`(34) `2SRV-1`(13) `2SYW-1`(11) `31OF-0`(1) `3GRO-0`(16) `3IGR-0`(6) `3K7K-0`(37) `3LGC-0`(21) `3MTJ-0`(23) `3NVG-0`(7) `3ODO-0`(39) `3UTA-0`(4). 대부분 CC-01 계좌 상세.
+
+`verify:card-buttons` 2026-09-09T23:56:17Z, 1749s, 101장. responds 1038 · hit_blocked 0 · inert 5485 · gone 0 · offscreen 0. 상태 보드 링크 미클릭 0. Paper 픽스처 클릭이라 8010 점유와 무관.
 
 ## 6. 코드 변경
 
@@ -99,5 +103,6 @@ git diff --check
 - 금 시장가 매매구분은 공식 계약에 없다. 차단 유지.
 - ETF 069500 불명은 재전송하지 않는다.
 - 계좌 카드 결측 236자리는 화면의 `미제공`으로 남긴다. 모의 공란과 미전달 인자를 값으로 채우지 않는다.
-- `verify:card-buttons`·semantic-workspaces는 이번 8010 점유 실행에 넣지 않았다.
-- 로컬 `backend/.env`는 커밋하지 않는다. 주문 API는 OFF로 유지한다.
+- `verify:card-buttons`는 101장 통과(2026-09-09T23:56:17Z, 1749s). Paper 픽스처 클릭이라 8010 점유와 무관.
+- semantic-workspaces는 이번 실행에 넣지 않았다.
+- 로컬 `backend/.env`는 `C:\Projects\DAOU.Athena\backend\.env`에서 복사했고 커밋하지 않는다. 주문 API는 OFF.
