@@ -229,9 +229,67 @@ ATHENA_VERIFY_BOARD_IDS=4AUX-1 ATHENA_SWEEP_CAPTURE=4AUX-1 npm run verify:card-a
 | `verify:paper-screens` | 통과 83 · 실패 23(래칫 회귀 21) | 이번 변경에서 그 프로브가 심는 모델 선택을 빼고 돌려도 **똑같이 83/23**이다. 실패 코드가 `phrase_missing`·`structure_mismatch`·`reach_failed`로 설정·온보딩 화면 문면이며 카드 표면과 무관하다. |
 | `verify:paper-mini-static` | 어긋난 보드 171장 | 카드미니(kiumi) 트랙의 원장 어긋남이다. 게이트 자신이 「정본 결정 규칙 §5.2에 따라 대장은 고치지 않는다」고 적는다. |
 | `verify` | 단언 4건 실패 | `app/verify.js`가 main과 **바이트가 같다** — 실패는 카드미니 메뉴·에이전트 캔버스 2건·부팅 타이밍이다. |
-| `verify:live-full` | `onboarding still visible` | `app/probe-live-full.js`가 main과 바이트가 같다. 계좌가 등록되지 않은 프로필에서 셸이 온보딩에 머문다. |
-| `verify:integrated-cards` | `invalid backend account alias` | 프로브가 `backendAccountAlias`를 아예 넘기지 않아 라이브러리가 던진다. 두 파일 모두 main과 바이트가 같다. |
-| `verify:chat-v3` · `verify:semantic-workspaces` | 실패 | main의 `app/` 트리로 갈아 돌려도 **출력이 동일하다**(실측 대조). |
+| `verify:live-full` | 질의 6건 `계좌를 찾을 수 없다` | **등록된 계좌가 있는 프로필**이 필요하다(§7.2). 온보딩 관문은 이번에 씨앗을 심어 넘겼다. |
+| `verify:integrated-cards` | **통과**(카드 6종 · op 299 · 필드 3,705 · missing 0) | §7.1 — 다섯 층을 닫았다. |
+| `verify:chat-v3` | **통과** | 판정식이 `2df6b103`에서 설계상 제거된 스피너를 계속 봐 `undefined`가 됐다 — 그 항을 뺐다. |
+| `verify:semantic-workspaces` | 단언 1건(44px 터치 목표) | 여섯 층을 닫았고 마지막은 **트랙 간 계약 충돌**이다 — §7.3. |
+
+### 7.1 `verify:integrated-cards` — 어디까지 닫았나
+
+커밋 `1acaba57`(「실시간 계좌 귀속을 고정」)이 라이브러리에 **계좌 별칭**을 필수로 만들었고
+이 프로브는 그 뒤로 갱신되지 않아 첫 틱에서 죽어 있었다. 제품 코드를 그대로 본떠 세 층을
+닫았다.
+
+1. **별칭 주입 자리를 제품과 같게 뒀다.** 제품은 활성 계좌에서 별칭을 주입한다
+   (main.js `mountIntegratedCardRealtime`의 `withActiveRealtimeAccount`). 렌더러 payload에는
+   별칭이 없으므로 검사기도 같은 자리(IPC 핸들러)에서 픽스처 계좌를 주입한다. 단위
+   테스트의 가짜 관리자도 같은 방식이다(`integrated-card-realtime.test.js`).
+2. **`update` 전에 `mount`를 부른다.** `update`는 이미 선 임차만 갈아 준다
+   (`_mountOrUpdate(config, requireExisting: true)`). 제품도 IPC 채널이 둘로 나뉘어 있다.
+3. **프로브 자신의 직접 호출에도 별칭을 준다**(`realtimeConfig`).
+
+4. **호가 임차 기록기가 `invoke`를 못 들었다.** 렌더러는 `invoke`로 부르는데
+   (canvas.js `wireOrderbookRealtime` — 응답의 `leaseToken`을 받아 쥔다) 기록기가
+   `ipcMain.on`으로 듣고 있어 늘 빈 배열이었다. 프로브의 일반 핸들러를 잠시 기록기로
+   갈아 끼우고 제품과 같은 모양으로 답한다 — 토큰을 줘야 해제도 나간다.
+5. **짝 판정이 없는 필드를 봤다.** 해제 payload에는 종목이 없다 — 토큰만 있다
+   (main.js `releaseRendererRealtimeLease`). 단언을 토큰 대조로 바꿨다.
+
+이로써 이 게이트는 **통과**한다(카드 6종 · op 299 · 필드 3,705 · 고유 경로 3,703 ·
+missing 0 · unresolved 0). 제품 계약은 손대지 않았다 — 확인만 했다
+(`resolveLeaseBindings({cardId:'CC-04', mode:'regular'})`가 `0C`·`0D`를 정상으로 내준다).
+
+### 7.3 44px 터치 목표 ↔ Paper 원문 밀도 — 두 계약의 충돌
+
+`verify:semantic-workspaces`의 마지막 단언은 「표면 안 조작 요소는 44px 이상」이다.
+390px(휴대폰) 단계에서 걸리는 것은 **카드 표면의 상태 링크** 둘이다 — 133H-2 `14T4-2`
+「알림 설정」·`14T6-2`「호가 열기」가 51×16px이다. canvas.js가 그 잎에 `role=button`과
+`tabindex`를 찍는 순간 조작 요소가 되지만, 크기는 Paper 원문 글줄 그대로다.
+
+**고쳐 봤고 되돌렸다.** 좁은 단계에서 그 링크에 `min-height: 44px`을 주면 두 계약이
+동시에 깨진다.
+· 「컨테이너 규칙이 Paper 영역 노드의 display를 바꾸지 않는다」 — 카드 트랙의 단위
+  테스트가 이것을 지킨다(`board-parity.test.js`의 5단 검사). 수직 정렬을 위해
+  `display: flex`를 주면 즉시 빨개진다.
+· 세로로 키우면 표면이 넘친다 — 마운트 게이트가 2XTO-0·2YA8-0에서 `surface_geometry`로
+  떨어졌다(실측).
+
+즉 이것은 「누가 틀렸나」가 아니라 **두 트랙의 계약이 만나는 자리**다. 셋 중 하나를
+사람이 골라야 한다: (a) 390px에서 Paper 밀도를 늘려 44px을 허용한다, (b) 그 잎을
+조작 요소로 만들지 않는다(칩·버튼으로 저작한다), (c) 44px 계약을 카드 표면에는
+적용하지 않는다고 명시한다. 카드 트랙 혼자 정할 일이 아니라 그대로 남긴다.
+
+### 7.2 `verify:live-full` — 어디까지 닫았나
+
+이 검사기만 온보딩 씨앗을 심지 않아 셸이 온보딩에 머물고 첫 관문에서 떨어졌다. 다른
+프로브 67개가 쓰는 것과 같은 씨앗을 심어 그 관문을 넘겼다. 그 뒤로는 실제로 돈다 —
+모드 5/5 ok · 설정 ok · 종목 색인 준비 완료(3,524개) · 보이는 버튼 71개 · 금지된 주문
+호출 0.
+
+남은 것은 질의 6건이고 전부 상류가 **「계좌를 찾을 수 없다」**로 답한다. 이 검사기는
+등록된 계좌가 있는 프로필을 요구한다 — 던져 버리는 프로필에는 계좌가 없다. 의도된
+실행 방식은 `ATHENA_USERDATA_DIR`로 실제 프로필을 가리키는 것이다(main.js의 QA 하네스
+주석). 자격이 없는 환경에서는 통과할 수 없다.
 
 예산이 모자라 떨어지던 둘은 실측으로 고쳤다 — `verify:card-buttons` 900초 → 2,400초
 (실측 1,607초 · 통과 101/101) · `verify:plugins` 90초 → 300초(실측 125초 · 통과).
