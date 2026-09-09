@@ -128,7 +128,7 @@ VALIDATION.md의 3,955/3,948 숫자와 인계 직전 HTTP 200은 **역사**다. 
 
 시작 시 `git status --short --branch`는 깨끗한 `codex/grok-realtime-handoff-20260909`였다. 제품 변경은 `gold-order-intent.js`와 그 테스트, 이 README, `evidence/` 캡처뿐이다.
 
-환경: Windows, 이 워크스페이스. `app`에 `npm.cmd ci --no-audit --no-fund`(125 packages). `backend`에 Python 3.12 venv + `pip install -e ".[dev]"`. `backend/.env` 없음. TCP 8010 미사용. 사용자 Electron 프로세스를 종료하지 않음.
+환경: Windows, 이 워크스페이스. `app`에 `npm.cmd ci --no-audit --no-fund`(125 packages). `backend`에 Python 3.12 venv + `pip install -e ".[dev]"`. 라이브 실행 전 형제 worktree의 gitignored `.env`를 복사했다(키 이름만 확인, 값은 문서에 없음). `ATHENA_ENABLE_ORDER_API=false`, Kiwoom base는 mock. TCP 8010은 이미 `API-검수` 백엔드가 Listen 중이어서 **종료하지 않고** 이 앱이 붙었다.
 
 실행한 명령과 이번 결과:
 
@@ -142,12 +142,27 @@ VALIDATION.md의 3,955/3,948 숫자와 인계 직전 HTTP 200은 **역사**다. 
 | P1 JS: `ranking-board-controls`, `plugin-canvas`, `technique-create-dialog`, `project-ide`, `session-restore`, `gold-quote-intent`, `backtest-canvas` | 395/395 통과, fail 0 |
 | `backend/.venv/Scripts/python.exe -m pytest tests/api/test_projects_api.py -q` | 40 passed. `parent` `../escape` / 절대경로 400, 프로젝트 밖 파일 없음 |
 | `electron.cmd probe-project-ide-visual.js` | files 6, tabs 1, 터미널 표시, removed 0. [편집기](evidence/project-ide.png) |
-| 전체 `app` `npm test` / 라이브 `npm start` 종목찾기·금시세 대화 | **이번 머신에서 실행하지 않음.** 과거 3,955 숫자를 재사용하지 않음 |
+| 전체 `app` `npm test` | 이번 머신에서 실행하지 않음. 과거 3,955 숫자를 재사용하지 않음 |
+| 라이브 `app npm start` + Orca computer-use | 실행함. 창 제목 Athena, 이 worktree `shell.html`. 아래 §8.1 |
 
 P1 코드는 처음부터 다시 만들지 않았다. 기존 테스트가 통과해 제품 파일을 고치지 않았다. 종목 찾기 시가총액 필터는 계속 미지원 안내다. 플러그인 추천 UI 문자열은 `plugin-canvas.js`에 없다. 부엉이 크기 펄스는 `chat.css`에서 고정 22px + 눈꺼풀 깜빡임만 남는다.
 
+### 8.1 라이브 앱 (computer-use, 2026-09-10)
+
+`orca computer`로 Athena 창을 조작했다. 실제 금 주문 실행 버튼은 누르지 않았다.
+
+| 화면 | 관측 |
+|---|---|
+| 에르가네 · 플러그인 | 추천 목록 없음. 「설치한 플러그인이 없습니다 · [+ 서버 추가]에서 직접 등록합니다」. [캡처](evidence/live-plugin.png) |
+| 팔라스 · 백테스트 | 「백테스트 기능이 꺼져 있습니다 — 설정에서 백테스트를 켜야 합니다」. 원인: 기존 :8010(`API-검수`)에 붙음. [캡처](evidence/live-backtest.png) |
+| 부엉이 | 채팅 입력 우측 고정 크기. 커졌다 작아지는 효과 없음 |
+| 금현물 시세 | `금현물 시세 알려줘` → 「어느 금현물 시세를 볼까요? 금 99.99_1kg 또는 미니금 99.99_100g」. 상품 선택 후 실카드는 후속 LLM 턴이 다른 질의로 넘어가 이번 세션에서 못 닫음. [캡처](evidence/live-gold-quote.png) |
+| 종목 찾기 | 질의 `종목 찾기`는 순위 보드(13K0-2)를 바로 열지 않고 도구 후보를 물어봄. [캡처](evidence/live-jongmok-find.png) |
+| 급등/순위 조회 | 캔버스 알림 「조회 요청 조건을 처리하지 못했습니다. (HTTP 422)」. [캡처](evidence/live-ranking-422.png) |
+| 금 주문 수집 | 채팅 입력칸이 제안 문구로 자주 덮여 `금현물 시장가 매수` 제출이 반복 실패. P0 `개`/`주` 재질문은 유닛/소비자/티켓 프로브가 담당. 실행은 차단 유지 |
+
 남은 제약:
 
-- 워크스페이스에 Kiwoom/gateway `.env`가 없어 `금현물 시세 알려줘` 실카드와 종목 찾기 라이브 보드를 이 세션에서 열지 않았다. `%APPDATA%\athena-shell`은 존재하지만 비밀값을 읽거나 사용자 프로필로 `npm start`하지 않았다.
+- 라이브 백엔드가 이 worktree venv가 아니다. 백테스트 켜기·순위 422 재현은 이 앱이 자기 백엔드를 띄운 세션에서 다시 봐야 한다. 기존 :8010은 종료하지 않았다.
 - 금현물 주문 실행 API 계약·실행 권한은 여전히 없다. 초안 팝업 ≠ 주문 전송.
 - 전체 JS 스위트는 인계 기록상 worker 동시성 이슈가 있어 이번에는 타깃 테스트만 돌렸다. 재실행 시 `--test-concurrency=4`를 권장한다.
