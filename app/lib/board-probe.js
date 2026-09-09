@@ -10,6 +10,7 @@ const path = require('node:path');
 const { ipcMain } = require('electron');
 const { visualRowCounts } = require('./board-layout-geometry');
 const { stateLinksFromMarks } = require('./board-mount');
+const { PENDING_MOUNT_ACK_TIMEOUT_MS } = require('./rest-canvas-paint');
 const {
   assertReadabilityManifest,
   compactAtomicTokenSpans,
@@ -36,6 +37,14 @@ const CARD_KIND = Object.freeze({
 // 쓰는 키도 같은 규칙으로 만든다(대문자 보드 id를 그대로 쓰면 못 찾는다).
 function boardInstanceId(boardId) {
   return `board-${String(boardId).toLowerCase()}`;
+}
+
+function classifyBoardPaintReceipt(painted) {
+  if (!painted) return 'ignore';
+  if (painted.render_state === 'error') return 'error';
+  if (painted.pending === true || painted.render_state === 'loading') return 'pending';
+  if (painted.render_state === 'data' && painted.verified_visible === true) return 'ready';
+  return 'invalid';
 }
 
 // 프로브가 보드마다 쓰는 조회 대상. 카드 자신의 종목 이름·코드(`identity`)가 이 값에서
@@ -103,20 +112,44 @@ async function sendBoardEnvelope(win, surface) {
     ordinal: surface.ordinal || 3,
   };
   const receipt = await new Promise((resolve, reject) => {
-    const timer = setTimeout(() => {
-      ipcMain.removeListener('athena:rest-canvas-painted', onPainted);
-      reject(new Error(`board surface ${surface.boardId}: shell paint receipt timeout`));
-    }, 15000);
+    let pendingDeadlineArmed = false;
+    let timer = null;
+    const armTimeout = (timeoutMs) => {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(() => {
+        ipcMain.removeListener('athena:rest-canvas-painted', onPainted);
+        reject(new Error(`board surface ${surface.boardId}: shell paint receipt timeout`));
+      }, timeoutMs);
+    };
     function onPainted(_event, painted) {
       if (!painted || painted.item_id !== correlation.item_id) return;
+      const state = classifyBoardPaintReceipt(painted);
+      if (state === 'pending') {
+        if (!pendingDeadlineArmed) {
+          pendingDeadlineArmed = true;
+          armTimeout(PENDING_MOUNT_ACK_TIMEOUT_MS);
+        }
+        return;
+      }
       clearTimeout(timer);
       ipcMain.removeListener('athena:rest-canvas-painted', onPainted);
-      if (painted.render_state === 'error') {
+      if (state === 'error') {
         reject(new Error(`board surface ${surface.boardId}: ${painted.error}`));
+        return;
+      }
+      if (state !== 'ready') {
+        reject(new Error(
+          `board surface ${surface.boardId}: final paint was not visible data — ${JSON.stringify({
+            render_state: painted.render_state || null,
+            pending: painted.pending === true,
+            verified_visible: painted.verified_visible === true,
+          })}`,
+        ));
         return;
       }
       resolve(painted);
     }
+    armTimeout(15000);
     ipcMain.on('athena:rest-canvas-painted', onPainted);
     win.webContents.send('athena:add-rest-canvas', {
       operationRef: surface.operationRef,
@@ -166,8 +199,24 @@ async function activateBoardTab(win, instanceId) {
     const check = () => {
       const root = document.querySelector(
         '#grid .card[data-integrated-instance-key="view:${instanceId}"]');
-      if (root && root.querySelector('.board-surface')) return resolve(true);
-      if (Date.now() - started > 10000) return reject(new Error('board surface never mounted'));
+      const panel = root && root.closest('.canvas-tab-panel');
+      const surface = root && root.querySelector('.board-surface');
+      const host = surface && surface.closest('.board-surface-host');
+      const loading = root && root.querySelector('.board-surface-load-state');
+      const rect = surface && surface.getBoundingClientRect();
+      const style = surface && getComputedStyle(surface);
+      const visible = Boolean(
+        panel && panel.hidden !== true && panel.classList.contains('is-active')
+        && host && host.hidden !== true && host.getAttribute('aria-hidden') !== 'true'
+        && surface && surface.getClientRects().length > 0
+        && rect.width > 1 && rect.height > 1
+        && style.visibility !== 'hidden' && style.display !== 'none'
+        && !(loading && loading.getClientRects().length > 0)
+      );
+      if (visible) return resolve(true);
+      if (Date.now() - started > 10000) {
+        return reject(new Error('board surface never became visible after final data paint'));
+      }
       requestAnimationFrame(check);
     };
     check();
@@ -855,6 +904,7 @@ module.exports = {
   assertSurfaceGeometry,
   boardInstanceId,
   boardStepProbe,
+  classifyBoardPaintReceipt,
   inspectBoardChrome,
   loadRealBoardContract,
   BOARD_PROBE_ARGS,
