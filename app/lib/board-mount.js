@@ -120,11 +120,15 @@ function mountPlan(contract, values, options = {}) {
     const byId = new Map(slotList(contract).map((slot) => [slot.slot_id, slot]));
     const nameSlot = byId.get('s001');
     const codeSlot = byId.get('s002');
-    if (identity.name && nameSlot && !nameSlot.static && nameSlot.kind === 'value') {
+    // static blank: ETF 탭처럼 응답에 종목코드가 없어 빈 칸인 헤더 — 카드 주제로 채운다.
+    // static true/text: 금현물처럼 고정 표기 — 주식 identity로 덮지 않는다.
+    const stampIdentity = (slot) => slot && slot.kind === 'value'
+      && (!slot.static || slot.static === 'blank');
+    if (identity.name && stampIdentity(nameSlot)) {
       values.s001 = identity.name;
       identitySlots.add('s001');
     }
-    if (identity.code && codeSlot && !codeSlot.static && codeSlot.kind === 'value') {
+    if (identity.code && stampIdentity(codeSlot)) {
       values.s002 = identity.code;
       identitySlots.add('s002');
     }
