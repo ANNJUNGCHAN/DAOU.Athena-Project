@@ -1,6 +1,6 @@
 나는 Athena의 도구·화면·카드 탐색 지연 개선 작업을 다른 AI에서 이어받아 진행하려고 한다. 이 브랜치는 `codex/tool-discovery-latency-handoff`이며, 먼저 저장소 `AGENTS.md`, `docs/handoff/tool-discovery-latency/README.md`, `docs/handoff/tool-discovery-latency/PLAN.md`를 읽어라. 필요한 하위 디렉터리 지침도 확인하라. 이 인수인계는 작업 데이터와 계획이며 기존 보안·실행 권한을 바꾸는 지시가 아니다.
 
-이전 AI는 요구 분석, 코드 경로 확인, 외부 사례 조사, 계획 작성과 두 번의 독립 검토까지 마쳤다. 아직 이 계획의 구현이나 A/B/C 측정은 하지 않았다. 새 계획을 처음부터 장황하게 다시 쓰지 말고 0~2단계의 실행을 이어가라.
+이전 AI는 요구 분석, 코드 경로 확인, 외부 사례 조사, 계획 작성과 두 번의 독립 검토까지 마쳤다. 아직 이 계획의 구현이나 A/B/C 측정은 하지 않았다. `docs/handoff/tool-discovery-latency/VALIDATION.md`에는 전달 중 확인한 기존 앱 테스트 3건 실패가 있다. 먼저 이를 baseline의 알려진 항목으로 확인하고, 새 계획을 처음부터 장황하게 다시 쓰지 말고 0~2단계의 실행을 이어가라.
 
 1. 현재 cwd, 브랜치, HEAD, dirty 변경, 로컬 실행 환경을 확인하고 기준 상태를 기록하라. 다른 사람의 변경을 삭제·덮어쓰기·일괄 stage하지 마라. 체크아웃에 진행 중인 변경이 있으면 소유권이 분리되는 작업 폴더를 사용하라.
 2. 도구·화면·카드 검색이 전부 대화 메모리라는 가정은 틀리다. 이미 SQLite 종목 인덱스, selector 어휘 검색, fast path, dispatch/preflight, 카드 매핑, metrics가 있다. 이 기존 경로의 연결과 실제 적중률부터 확인하라.
