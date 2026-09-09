@@ -17,11 +17,12 @@
 | 카드 액션 | 호가 열기·종목 상세·알림 설정·알림 받기·조건 수정 반응. **차트 열기**를 종목 차트 보드로 이음 |
 | Paper 목업 잔여 | **0** (`paper_mock_boards=0`) |
 | 잘림·겹침 | **0** |
+| 거절 TR 「미제공」 | 라이브 스윕 **0** (이 워크스페이스 로더 :8010) |
+| 남은 런타임 「미제공」 | 3장 16칸 — `kt00010` `uv` · `ka10088` `ord_no` 미매핑 |
 
-떠 있는 백엔드(8010, 계정 `daeju` 자격 잠금)는 이 워크스페이스의 거절-TR 생략을
-싣지 않는다. 그래서 라이브 스윕에는 거절 TR 칸의 「미제공」이 14장에 남는다.
-워크스페이스 백엔드를 8011에 띄우면 같은 잠금으로 기동이 거절된다. 생략 자체는
-로더·계약 단위 테스트가 게이트다.
+라이브 스윕은 이 워크스페이스 uvicorn :8010에서 돌렸다. 거절 12 TR은 호출하지 않아
+그 칸은 빈 칸이다. 남은 「미제공」은 화면이 안 준 조회 인자(`uv`, `ord_no`) 때문에
+물어보지 못한 자리뿐이다.
 
 ## 모의 거절 12 TR
 
@@ -79,20 +80,39 @@ inert 대다수는 버튼이 아닌 알약 모양 라벨(종목명·코드·「�
 
 ## 라이브 스윕
 
-`npm run verify:card-api-sweep` (실제 `board-hydrate`, Paper 목업 주입 없음).
+`ATHENA_SWEEP_CAPTURE=* npm run verify:card-api-sweep` (실제 `board-hydrate`, Paper 목업 주입 없음).
+캡처 `app/captures/card-api-sweep/*.png` 101장, 2026-09-10 02:30–02:32.
 
 ```
 boards=101 paper_mock_boards=0 clipped=0 overlap=0
-missing_boards=14 missing_sum=199
+missing_boards=3 missing_sum=16
 PNG=101
 ```
 
-missing 14장은 모두 거절 12 TR 또는 `kt00010` `uv` / `ka10088` `ord_no` 미매핑이다.
-8010이 거절 TR을 그대로 물어 「미제공」을 낸다. 워크스페이스 로더는 그 칸을
-`empty_value_slots`로 비운다.
+거절 12 TR `missing_text_visible` **0**.
 
-워크스페이스 uvicorn :8011 기동 실패 원문:
-`another credential-owning Athena backend is already running for account 'daeju'`.
+남은 런타임 「미제공」 3장:
+
+| 보드 | 칸 | hydrate 이유 |
+| --- | ---: | --- |
+| `3GRO-0` | 9 | `detail:kt00010:*` `arguments_unmapped:uv` — 증거금율 구간마다 `uv`를 안 넣음 |
+| `2SKU-1` | 5 | 같은 `kt00010` `uv` (출금가능·예수금 예상) |
+| `2SYW-1` | 2 | `base:ka10088` `arguments_unmapped:ord_no` — 선택된 주문 없음 |
+
+`uv`/`ord_no`는 식별자라 기본값을 만들지 않는다(`hydrate-argument-defaults` `NEVER_DEFAULT`).
+
+저작 결측어(프로브가 세지 않음): `2QRP-1`/`3JT4-0` 직전대비, `2RJ7-1` 52주, `2TET-1` 가격 「해당 없음」, `2XP6-0` 「집계 전」, `3IGR-0` 대용, 풋터 「영업부 · 담당자 미제공」.
+
+## 캡처에서 남은 이상값
+
+거절-TR·0패딩 수량·`+88100`·평가액%·금 `005930` 헤더는 이번 캡처에서 없다.
+
+아직 보이는 것:
+
+1. **순매수 `--N`** — 키움 원문이 `--2860591`. `kiwoomWireNumber`가 부호 한 개만 파싱해 생문자로 남음. `2R3M-1`/`1WOB-1`/`2ROJ-1`/`15N5-2`/`2RBO-1`.
+2. **호가 헤드라인 `269500`** — 사다리 렌더러가 포맷터를 안 탐. `13BC-2`/`2QRP-1`.
+3. **순위 행 이름** — 스윕 타깃 삼성 이름이 다른 종목 행에 붙는 경우 (`2V71-0` 1위 코드 `252670_AL`).
+4. **빈 금현물 잔고 `3ODO-0`** — 거절 TR 값을 뺀 결과. 「미제공」 벽이 아님.
 
 ## 커밋
 
@@ -110,6 +130,6 @@ cd ../backend
 uv run python -m pytest tests/unit/test_mock_unsupported_cards.py -q
 cd ../app
 npm run verify:card-buttons
-# 8010이 이 워크스페이스 코드일 때만 missing=0을 기대한다
+# 8010이 이 워크스페이스 로더일 때 거절 TR missing=0. uv/ord_no 3장은 남는다
 ATHENA_SWEEP_CAPTURE=* npm run verify:card-api-sweep
 ```
