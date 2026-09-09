@@ -138,7 +138,9 @@ const VERIFY_SUITE = Object.freeze([
   { script: 'verify:settings-models', budgetMs: 30000 },
   { script: 'verify:plugin-permissions', budgetMs: 30000 },
   { script: 'verify:settings-cards', budgetMs: 120000 },
-  { script: 'verify:plugins', budgetMs: 90000 },
+  // 실측 125초(2026-09-09, 통과) — 옛 예산 90초로는 늘 시간 초과로 떨어졌다.
+  // 단독으로 돌리면 통과하므로 결함이 아니라 예산이 모자랐던 것이다.
+  { script: 'verify:plugins', budgetMs: 300000 },
   { script: 'verify:kiumi', budgetMs: 90000 },
   { script: 'verify:orb-conversation', budgetMs: 30000 },
   { script: 'verify:orb-visibility', budgetMs: 30000 },

@@ -228,3 +228,11 @@ ATHENA_VERIFY_BOARD_IDS=4AUX-1 ATHENA_SWEEP_CAPTURE=4AUX-1 npm run verify:card-a
 |---|---|---|
 | `verify:paper-screens` | 통과 83 · 실패 23(래칫 회귀 21) | 이번 변경에서 그 프로브가 심는 모델 선택을 빼고 돌려도 **똑같이 83/23**이다. 실패 코드가 `phrase_missing`·`structure_mismatch`·`reach_failed`로 설정·온보딩 화면 문면이며 카드 표면과 무관하다. |
 | `verify:paper-mini-static` | 어긋난 보드 171장 | 카드미니(kiumi) 트랙의 원장 어긋남이다. 게이트 자신이 「정본 결정 규칙 §5.2에 따라 대장은 고치지 않는다」고 적는다. |
+| `verify` | 단언 4건 실패 | `app/verify.js`가 main과 **바이트가 같다** — 실패는 카드미니 메뉴·에이전트 캔버스 2건·부팅 타이밍이다. |
+| `verify:live-full` | `onboarding still visible` | `app/probe-live-full.js`가 main과 바이트가 같다. 계좌가 등록되지 않은 프로필에서 셸이 온보딩에 머문다. |
+| `verify:integrated-cards` | `invalid backend account alias` | 프로브가 `backendAccountAlias`를 아예 넘기지 않아 라이브러리가 던진다. 두 파일 모두 main과 바이트가 같다. |
+| `verify:chat-v3` · `verify:semantic-workspaces` | 실패 | main의 `app/` 트리로 갈아 돌려도 **출력이 동일하다**(실측 대조). |
+
+예산이 모자라 떨어지던 둘은 실측으로 고쳤다 — `verify:card-buttons` 900초 → 2,400초
+(실측 1,607초 · 통과 101/101) · `verify:plugins` 90초 → 300초(실측 125초 · 통과).
+둘 다 단독으로는 통과하므로 결함이 아니라 예산이 옛 보드 수 기준이었던 것이다.
