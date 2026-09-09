@@ -226,7 +226,7 @@ ATHENA_VERIFY_BOARD_IDS=4AUX-1 ATHENA_SWEEP_CAPTURE=4AUX-1 npm run verify:card-a
 
 | 게이트 | 상태 | 이 트랙이 만든 것이 아닌 근거 |
 |---|---|---|
-| `verify:paper-screens` | 통과 83 · 실패 23(래칫 회귀 21) | 이번 변경에서 그 프로브가 심는 모델 선택을 빼고 돌려도 **똑같이 83/23**이다. 실패 코드가 `phrase_missing`·`structure_mismatch`·`reach_failed`로 설정·온보딩 화면 문면이며 카드 표면과 무관하다. |
+| `verify:paper-screens` | 통과 83 · 실패 23 | §7.4 — 가장 큰 덩어리(`reach_failed` 11장)가 main의 백테스트 재작업으로 **사라진 표면**을 누른다. |
 | `verify:paper-mini-static` | 어긋난 보드 171장 | 카드미니(kiumi) 트랙의 원장 어긋남이다. 게이트 자신이 「정본 결정 규칙 §5.2에 따라 대장은 고치지 않는다」고 적는다. |
 | `verify` | 단언 4건 실패 | `app/verify.js`가 main과 **바이트가 같다** — 실패는 카드미니 메뉴·에이전트 캔버스 2건·부팅 타이밍이다. |
 | `verify:live-full` | 질의 6건 `계좌를 찾을 수 없다` | **등록된 계좌가 있는 프로필**이 필요하다(§7.2). 온보딩 관문은 이번에 씨앗을 심어 넘겼다. |
@@ -258,6 +258,24 @@ ATHENA_VERIFY_BOARD_IDS=4AUX-1 ATHENA_SWEEP_CAPTURE=4AUX-1 npm run verify:card-a
 이로써 이 게이트는 **통과**한다(카드 6종 · op 299 · 필드 3,705 · 고유 경로 3,703 ·
 missing 0 · unresolved 0). 제품 계약은 손대지 않았다 — 확인만 했다
 (`resolveLeaseBindings({cardId:'CC-04', mode:'regular'})`가 `0C`·`0D`를 정상으로 내준다).
+
+### 7.4 `verify:paper-screens` — 진단
+
+실패 23장의 코드는 `reach_failed` 11 · `structure_mismatch` 10 · `phrase_missing` 6 ·
+`contract_no_sentence` 2 · `root_not_visible` 1이다. 이 트랙이 만든 것이 아니다 —
+카드 프로브가 심는 모델 선택을 빼고 돌려도 **똑같이 83/23**이다(실측 대조).
+
+가장 큰 덩어리는 **없어진 표면을 누르는 것**이다. main이 백테스트를 크게 걷어냈고
+(`6d7b9f4c` 「옛 스펙 경로의 그리는 표면을 걷어낸다」 · `309c6dba` 「홈을 유일한 문으로
+세우고」) 화면 게이트의 도달 절차는 그 옛 경로를 그대로 누른다.
+
+  · 1WSI-1 — `#backtestCanvas .backtest-tab:nth-child(3)`를 누를 것이 없다
+  · 2FR9-2 — `.backtest-flow-node.is-mine` 4개를 기다리다 시간 초과(실제 0)
+  · 43WD-1 — `.routine-approval-actions button.routine-btn`(에이전트)
+
+**여기서 선택자를 지어내면 안 된다** — 새 동선을 모르는 채로 고치면 게이트가 아무것도
+검사하지 않으면서 초록이 된다. 백테스트·에이전트 트랙이 「새 홈 동선으로 절차를 다시
+쓸지, 그 화면을 폐기할지」를 정해야 한다. 에이전트 화면은 별 워크트리 규칙도 걸린다.
 
 ### 7.3 44px 터치 목표 ↔ Paper 원문 밀도 — 두 계약의 충돌
 
