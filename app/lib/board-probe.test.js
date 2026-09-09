@@ -2,16 +2,22 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const { EventEmitter } = require('node:events');
 const fs = require('node:fs');
+const Module = require('node:module');
 const os = require('node:os');
 const path = require('node:path');
+const vm = require('node:vm');
+const { PENDING_MOUNT_ACK_TIMEOUT_MS } = require('./rest-canvas-paint');
 
 const {
   BOARD_WINDOW_PRESETS,
   CARD_KIND,
+  activateBoardTab,
   assertSurfaceGeometry,
   boardInstanceId,
   boardStepProbe,
+  classifyBoardPaintReceipt,
   loadRealBoardContract,
 } = require('./board-probe');
 
@@ -53,6 +59,106 @@ test('CARD_KIND는 카드 6종을 하나도 빠짐없이 잇는다', () => {
 test('boardInstanceId는 대문자 보드 id를 소문자 키로 만든다', () => {
   assert.equal(boardInstanceId('13BC-2'), 'board-13bc-2');
   assert.equal(boardInstanceId('fixture-quote'), 'board-fixture-quote');
+});
+
+test('보드 paint 영수증은 로딩 중간 상태와 빈 결과를 완료로 승인하지 않는다', () => {
+  assert.equal(classifyBoardPaintReceipt({ render_state: 'loading', pending: true }), 'pending');
+  assert.equal(classifyBoardPaintReceipt({ render_state: 'data', pending: true, verified_visible: true }), 'pending');
+  assert.equal(classifyBoardPaintReceipt({ render_state: 'empty', pending: false, verified_visible: true }), 'invalid');
+  assert.equal(classifyBoardPaintReceipt({ render_state: 'data', pending: false, verified_visible: false }), 'invalid');
+  assert.equal(classifyBoardPaintReceipt({ render_state: 'error', pending: false }), 'error');
+  assert.equal(classifyBoardPaintReceipt({ render_state: 'data', pending: false, verified_visible: true }), 'ready');
+});
+
+test('활성 보드 탭은 숨은 로딩 DOM을 지나 실제 표면이 보인 뒤 완료된다', async () => {
+  let visible = false;
+  let frames = 0;
+  const host = {
+    hidden: true,
+    getAttribute: (name) => (name === 'aria-hidden' && !visible ? 'true' : null),
+  };
+  const surface = {
+    closest: () => host,
+    getClientRects: () => (visible ? [{}] : []),
+    getBoundingClientRect: () => ({ width: visible ? 100 : 0, height: visible ? 80 : 0 }),
+  };
+  const loading = { getClientRects: () => (visible ? [] : [{}]) };
+  const panel = {
+    hidden: false,
+    dataset: { tabKey: 'tab-1' },
+    classList: { contains: (name) => name === 'is-active' },
+  };
+  const root = {
+    closest: () => panel,
+    querySelector: (selector) => (selector === '.board-surface' ? surface : loading),
+  };
+  const win = {
+    webContents: {
+      executeJavaScript: async (source) => {
+        if (!source.startsWith('new Promise')) return true;
+        return vm.runInNewContext(source, {
+          document: { querySelector: () => root },
+          getComputedStyle: () => ({ visibility: 'visible', display: 'block' }),
+          requestAnimationFrame: (callback) => {
+            frames += 1;
+            visible = true;
+            host.hidden = false;
+            callback();
+          },
+          setTimeout,
+          Error,
+          Promise,
+          Date,
+        });
+      },
+    },
+  };
+  await activateBoardTab(win, 'board-133h-2');
+  assert.equal(frames, 1);
+});
+
+function loadBoardProbeWithIpc(ipcMain) {
+  const filename = require.resolve('./board-probe');
+  const originalLoad = Module._load;
+  delete require.cache[filename];
+  Module._load = function load(request, parent, isMain) {
+    if (request === 'electron') return { ipcMain };
+    return originalLoad.call(this, request, parent, isMain);
+  };
+  try {
+    return require('./board-probe');
+  } finally {
+    Module._load = originalLoad;
+    delete require.cache[filename];
+  }
+}
+
+test('첫 pending만 최종 마운트 제한시간을 시작하고 반복 pending은 연장하지 않는다', async (t) => {
+  t.mock.timers.enable({ apis: ['setTimeout'], now: 0 });
+  const ipcMain = new EventEmitter();
+  const { sendBoardEnvelope: send } = loadBoardProbeWithIpc(ipcMain);
+  const win = { webContents: { send() {} } };
+  const surface = {
+    boardId: '133H-2', instanceId: 'board-133h-2', ordinal: 1,
+    operationRef: 'base:board-surface', contract: { card_id: 'CC-01' },
+  };
+  const result = send(win, surface).then(
+    () => ({ ok: true }),
+    (error) => ({ ok: false, error }),
+  );
+  t.mock.timers.tick(14_999);
+  ipcMain.emit('athena:rest-canvas-painted', {}, {
+    item_id: surface.instanceId, render_state: 'loading', pending: true, verified_visible: true,
+  });
+  t.mock.timers.tick(PENDING_MOUNT_ACK_TIMEOUT_MS - 1);
+  ipcMain.emit('athena:rest-canvas-painted', {}, {
+    item_id: surface.instanceId, render_state: 'loading', pending: true, verified_visible: true,
+  });
+  t.mock.timers.tick(1);
+  const settled = await result;
+  assert.equal(settled.ok, false);
+  assert.match(settled.error.message, /shell paint receipt timeout/);
+  assert.equal(ipcMain.listenerCount('athena:rest-canvas-painted'), 0);
 });
 
 test('가로 넘침은 1px까지 봐주고 그 위는 실패한다', () => {
@@ -104,6 +210,31 @@ test('좁은 두 단계에서는 스크롤 표가 실제로 넘쳐야 한다', (
       /scroll_not_scrollable/,
     );
   }
+});
+
+test('접힌 표의 숨은 컨트롤은 제외하되 보이는 컨트롤의 초점 결함은 유지한다', () => {
+  const control = { node: 'collapsed-link', visible: false, focusable: false };
+  const hidden = probe({ scroll_tables: [scrollTable({ scroll_state_controls: [control] })] });
+  assert.doesNotThrow(() => assertSurfaceGeometry('13K0-2', preset('최소'), hidden));
+  control.visible = true;
+  assert.throws(
+    () => assertSurfaceGeometry('13K0-2', preset('최소'), hidden),
+    /scroll_control_not_focusable/,
+  );
+});
+
+test('폭이 없는 접힌 표는 스크롤 검사를 제외하고 다시 보인 표는 검사한다', () => {
+  const table = scrollTable({ scroll_width: 0, client_width: 0 });
+  const empty = probe({ scroll_tables: [table] });
+  for (const name of ['4분할', '최소']) {
+    assert.doesNotThrow(() => assertSurfaceGeometry('13K0-2', preset(name), empty));
+  }
+  table.client_width = 400;
+  table.scroll_width = 400;
+  assert.throws(
+    () => assertSurfaceGeometry('13K0-2', preset('최소'), empty),
+    /scroll_not_scrollable/,
+  );
 });
 
 test('boardStepProbe는 인스턴스 키를 박은 실행 가능한 식을 만든다', () => {
