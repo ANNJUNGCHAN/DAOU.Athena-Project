@@ -18,7 +18,47 @@ function buildPrefill(event) {
 // Selector one-shot 응답 → 사람 확인용 주문 티켓 프리필.
 // 현금 주식 시장가 매수/매도만 1차 범위로 허용하며 실행 능력은 전혀 없다.
 function buildSelectorOrderPrefill(payload) {
-  if (!payload || payload.status !== 'guarded') return null;
+  if (!payload) return null;
+  const goldOperation = payload.operation_ref === 'base:kt50000' ? 'buy'
+    : payload.operation_ref === 'base:kt50001' ? 'sell' : null;
+  if (goldOperation) {
+    if (payload.status !== 'collecting' && payload.status !== 'guarded') return null;
+    const draft = payload.order_draft;
+    if (!draft || typeof draft !== 'object' || Array.isArray(draft)) return null;
+    if (draft.asset_kind !== 'gold' || draft.side !== goldOperation) return null;
+    if (!['market', 'regular', 'unspecified'].includes(draft.requested_order_type)
+        || draft.execution_supported !== false) return null;
+    if (draft.unit !== 'g') return null;
+    if (typeof draft.execution_blocker !== 'string' || !draft.execution_blocker.trim()) return null;
+
+    const products = {
+      M04020000: '금 99.99_1kg',
+      M04020100: '미니금 99.99_100g',
+    };
+    const symbol = draft.stk_cd == null ? null : String(draft.stk_cd);
+    if (symbol != null && !Object.hasOwn(products, symbol)) return null;
+    if (symbol != null && draft.product_name != null && draft.product_name !== products[symbol]) return null;
+
+    const qtyText = typeof draft.ord_qty === 'number' ? String(draft.ord_qty) : draft.ord_qty;
+    if (qtyText != null && (typeof qtyText !== 'string' || !/^[1-9]\d*$/.test(qtyText))) return null;
+    const qty = qtyText == null ? null : Number(qtyText);
+    if (qty != null && (!Number.isSafeInteger(qty) || qty > 100000)) return null;
+
+    return {
+      assetKind: 'gold',
+      symbol,
+      productName: symbol == null ? null : products[symbol],
+      side: goldOperation,
+      qty,
+      unit: 'g',
+      orderType: draft.requested_order_type,
+      executionSupported: false,
+      executionBlocker: draft.execution_blocker.trim(),
+      reason: `금현물 ${draft.requested_order_type === 'market' ? '시장가' : draft.requested_order_type === 'regular' ? '보통' : '유형 미지정'} ${goldOperation === 'buy' ? '매수' : '매도'} 주문 초안`,
+    };
+  }
+
+  if (payload.status !== 'guarded') return null;
   const side = payload.operation_ref === 'base:kt10000' ? 'buy'
     : payload.operation_ref === 'base:kt10001' ? 'sell' : null;
   if (!side) return null;
@@ -65,6 +105,9 @@ function gateLockModel(blocker) {
 
 // 매수 kt10000 / 매도 kt10001 — generated/models.py 실측 필드만 쓴다.
 function buildOrderPayload(ticket) {
+  if (ticket && ticket.assetKind === 'gold') {
+    throw new Error(ticket.executionBlocker || '금현물 시장가 주문은 실행할 수 없다');
+  }
   if (!/^\d{6}$/.test(ticket.symbol || '')) throw new Error('종목코드가 유효하지 않다');
   const qty = Number(ticket.qty);
   if (!Number.isInteger(qty) || qty <= 0 || qty > 100000) {
@@ -102,7 +145,31 @@ function estimateOrderTotal(input) {
 
 // 가격 행 — 실행되는 것이 시장가 고정임을 각주가 아니라 값으로 드러낸다.
 // 지정가는 P4 1차 범위 밖이라 눌리지 않는 세그먼트다(UI가 약속하면 거짓이 된다).
-function priceRowModel() {
+function priceRowModel(input) {
+  if (input && input.assetKind === 'gold') {
+    if (input.orderType === 'regular') {
+      return {
+        segments: ['보통', '시장가'],
+        selected: '보통',
+        readout: '단가 입력 필요 · 실행 불가',
+        limitEnabled: false,
+      };
+    }
+    if (input.orderType !== 'market') {
+      return {
+        segments: ['보통', '시장가'],
+        selected: null,
+        readout: '주문 유형 미지정 · 실행 불가',
+        limitEnabled: false,
+      };
+    }
+    return {
+      segments: ['지정가', '시장가'],
+      selected: '시장가',
+      readout: '시장가 요청 · 실행 불가',
+      limitEnabled: false,
+    };
+  }
   return {
     segments: ['지정가', '시장가'],
     selected: '시장가',
@@ -197,11 +264,28 @@ function interpretExecuteStatus(status) {
 // in_doubt/done은 종결 — 같은 티켓으로 재실행 불가(1회용, 중복 주문 방지).
 // 428 확인 요청은 실패가 아니다 — 게이트로 돌아가 다시 누른다(OBS-030, Paper FY7-0).
 function createTicket(prefill) {
+  const symbol = prefill && typeof prefill.symbol === 'string'
+    ? prefill.symbol : null;
   const side = prefill && (prefill.side === 'buy' || prefill.side === 'sell')
     ? prefill.side : null;
   const qty = prefill && Number.isInteger(prefill.qty)
     && prefill.qty > 0 && prefill.qty <= 100000 ? prefill.qty : null;
-  return { state: 'review', prefill, side, qty, result: null };
+  return {
+    state: 'review',
+    prefill,
+    assetKind: prefill && prefill.assetKind === 'gold' ? 'gold' : 'stock',
+    productName: prefill && typeof prefill.productName === 'string' ? prefill.productName : null,
+    unit: prefill && prefill.assetKind === 'gold' ? 'g' : '주',
+    orderType: prefill && ['market', 'regular', 'unspecified'].includes(prefill.orderType)
+      ? prefill.orderType : null,
+    executionSupported: !(prefill && prefill.executionSupported === false),
+    executionBlocker: prefill && typeof prefill.executionBlocker === 'string'
+      ? prefill.executionBlocker : null,
+    symbol,
+    side,
+    qty,
+    result: null,
+  };
 }
 
 const _TRANSITIONS = {

@@ -5654,7 +5654,7 @@ async function renderOrderTicket(prefill, owner) {
   const card = document.createElement('div');
   card.className = 'ticket-card';
   if (prefill) {
-    card.appendChild(_ticketRow('종목', prefill.symbol));
+    card.appendChild(_ticketRow('종목', prefill.productName || prefill.symbol || '상품 선택 필요'));
     card.appendChild(_ticketRow('사유', prefill.reason || '-'));
     if (prefill.observed != null) {
       // 시점 정직성 — 프리필 값은 발화 시점 값임을 라벨로 드러낸다.
@@ -5677,7 +5677,7 @@ async function renderOrderTicket(prefill, owner) {
 
   // 가격 행 — 무엇이 실행되는지를 수량 라벨의 각주가 아니라 값으로 드러낸다.
   // 지정가는 P4 1차 범위 밖이라 비활성 세그먼트다(buildOrderPayload는 trde_tp 3 고정).
-  const priceModel = orderTicketLib.priceRowModel();
+  const priceModel = orderTicketLib.priceRowModel(prefill);
   const priceRow = document.createElement('div');
   priceRow.className = 'ticket-row';
   const priceLabel = document.createElement('span');
@@ -5709,7 +5709,7 @@ async function renderOrderTicket(prefill, owner) {
   if (ticket.qty) qtyInput.value = String(ticket.qty);
   const qtyUnit = document.createElement('span');
   qtyUnit.className = 'ticket-unit';
-  qtyUnit.textContent = '주';
+  qtyUnit.textContent = prefill && prefill.unit || '주';
   const qtyChips = document.createElement('div');
   qtyChips.className = 'ticket-qty-chips';
   qtyRow.append(qtyLabel, qtyInput, qtyUnit, qtyChips);
@@ -5743,15 +5743,20 @@ async function renderOrderTicket(prefill, owner) {
   card.appendChild(gateLine);
   let gateBlocked = '계좌 확인 중…';
   gateLine.textContent = gateBlocked;
+  $orderBody.appendChild(card);
   try {
-    const res = await window.athena.invoke('athena:account-list');
-    if (!isCurrentOrderTicket(owner)) return;
-    const accounts = (res && res.accounts) || [];
-    const active = accounts.find((a) => a.active) || accounts[0] || null;
-    gateBlocked = orderTicketLib.gateBlocker(active);
+    if (prefill && prefill.executionBlocker) {
+      gateBlocked = prefill.executionBlocker;
+    } else {
+      const res = await window.athena.invoke('athena:account-list');
+      if (!isCurrentOrderTicket(owner)) return;
+      const accounts = (res && res.accounts) || [];
+      const active = accounts.find((a) => a.active) || accounts[0] || null;
+      gateBlocked = orderTicketLib.gateBlocker(active);
+    }
   } catch {
     if (!isCurrentOrderTicket(owner)) return;
-    gateBlocked = orderTicketLib.gateBlocker(null);
+    gateBlocked = (prefill && prefill.executionBlocker) || orderTicketLib.gateBlocker(null);
   }
   const lock = orderTicketLib.gateLockModel(gateBlocked);
   if (lock.locked) {
@@ -5829,7 +5834,7 @@ async function renderOrderTicket(prefill, owner) {
   };
   if (ticket.side === 'buy') buyBtn.classList.add('routine-btn-approve');
   if (ticket.side === 'sell') sellBtn.classList.add('routine-btn-approve');
-  try {
+  if (!(prefill && prefill.executionBlocker)) try {
     const cap = await window.athena.invoke('athena:ticket-capacity', {
       symbol: prefill && prefill.symbol,
     });
