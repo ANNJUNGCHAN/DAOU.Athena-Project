@@ -1102,10 +1102,16 @@ function wireStateControls(host, envelope, mounted) {
 // 카드 액션 — Paper가 목적지를 다른 card_id로 그린 조작(호가 열기 · 종목 상세 열기).
 // 상태 보드 전환과 달리 카드가 새로 선다. 판정(문구 → 보드 · 누른 줄의 종목 ·
 // 봉투 형상)은 lib/board-card-actions.js가 갖고, 여기서는 클릭을 그 판정에 잇는다.
-function cardActionStock(node, surface, envelope, action) {
-  if (action.stock === 'row') return boardCardActions.rowStock(node, surface);
+function cardStockFromCard(envelope, surface) {
   const stkCd = cardStkCd(envelope) || boardHydrateTarget(envelope).stk_cd || '';
   return stkCd ? { stkCd, stockName: cardStockName(surface) } : null;
+}
+
+function cardActionStock(node, surface, envelope, action) {
+  if (action.stock === 'row') {
+    return boardCardActions.rowStock(node, surface) || cardStockFromCard(envelope, surface);
+  }
+  return cardStockFromCard(envelope, surface);
 }
 
 // 카드가 보고 있는 종목의 이름 — 헤더 첫 잎이다. 없으면 제목에서 뺀다(지어내지 않는다).
@@ -1141,6 +1147,13 @@ async function runCardAction(node, surface, envelope, action) {
   if (action.kind === 'agent-watch') {
     // 관심종목·조건 보드(15L8-2)처럼 카드 종목이 없는 문도 에이전트로 간다.
     return openAgentWatch(boardCardActions.cardActionSeed(action, stock || {}));
+  }
+  if (action.kind === 'order-preview') {
+    // 확인 미리보기만. 주문 REST는 부르지 않는다.
+    return boardCardActions.applyOrderPreview(surface);
+  }
+  if (action.kind === 'compare-add') {
+    return boardCardActions.applyCompareAdd(surface, stock || {});
   }
   // 종목을 못 읽으면 아무 것도 하지 않는다 — 엉뚱한 종목으로 카드를 열거나 알람을
   // 시작하는 것보다 아무 일도 안 하는 것이 낫다(사유는 콘솔에만 남긴다).
