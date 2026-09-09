@@ -18,6 +18,7 @@ const { spawn, spawnSync } = require('node:child_process');
 const { publicPolicies: publicRealtimePolicies } = require('./lib/main/integrated-card-realtime');
 const paperCardRouting = require('./lib/paper-card-routing');
 const boardTemplateRegistry = require('./lib/board-template-registry');
+const { isFinalChartPrimary } = require('./lib/semantic-chart-readiness');
 
 const APP = __dirname;
 const ROOT = path.resolve(APP, '..');
@@ -459,6 +460,7 @@ async function inspectAndStage(win, recipe) {
   return waitFor(
     () => win.webContents.executeJavaScript(`(() => {
       const NEEDS_CHART = ${needsChart};
+      const isFinalChartPrimary = ${isFinalChartPrimary.toString()};
       const grid = document.getElementById('grid');
       const card = grid && [...grid.querySelectorAll('.card')].find(
         (item) => item.dataset.taskCanvas === 'true' || item.dataset.boardSurface === 'true');
@@ -469,7 +471,7 @@ async function inspectAndStage(win, recipe) {
       const boardSurface = card.dataset.boardSurface === 'true';
       const boardHost = card.querySelector('.board-surface-host');
       if (boardSurface ? !(boardHost && boardHost.children.length) : !card.querySelector('.semantic-workspace')) return null;
-      if (NEEDS_CHART && !card.querySelector('.chart-card-body, canvas')) return null;
+      if (NEEDS_CHART && !isFinalChartPrimary(card)) return null;
       const shell = document.getElementById('shell');
       if (shell) {
         shell.hidden = false;
@@ -541,9 +543,8 @@ async function inspectAndStage(win, recipe) {
         // chart-card.js가 그 안에 lightweight-charts를 세운다). 옛 선택자
         // .chart-stage / .chart-host 는 지금 앱에 아예 없어 이 단언이 늘 거짓이었다.
         // (주석에 백틱을 쓰면 이 템플릿 문자열이 끊긴다 — 쓰지 않는다.)
-        hasChartPrimary: Boolean(card.querySelector('.chart-card-body, canvas, [data-chart-panel-id]')),
-        hasProfessionalChartPanel: card.dataset.chartAuthority === 'AITS'
-          && Boolean(card.querySelector('.chart-card-body')),
+        hasChartPrimary: isFinalChartPrimary(card),
+        hasProfessionalChartPanel: isFinalChartPrimary(card),
         hasOrderbookPrimary: Boolean(card.classList.contains('hoga') || card.querySelector('.hoga, .orderbook, .card-kit-hoga-live, [data-orderbook]')),
         populatedAskRows: populatedOrderbookRows('.card-kit-hoga-live-row--ask'),
         populatedBidRows: populatedOrderbookRows('.card-kit-hoga-live-row--bid'),

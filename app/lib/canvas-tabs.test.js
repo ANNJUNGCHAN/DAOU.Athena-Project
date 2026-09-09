@@ -368,7 +368,7 @@ test('상태 보드 전환은 계약 링크 안에서만 일어나고 보드별 
   assert.match(mount, /if \(!state\.links\.some\(\(link\) => link\.board_id === target\)\) return null;/);
   // ▸ 펼침·스트립 칩·탭이 모두 같은 전환 함수로 들어간다.
   assert.match(mount, /onExpand: \(boardId\) => switchStateBoard\(host, boardId, envelope\)/);
-  assert.match(mount, /boardMount\.wireStateControlActivation\([\s\S]*?switchStateBoard\(host, link\.board_id, envelope\)/);
+  assert.match(mount, /boardMount\.wireStateControlActivation\([\s\S]*?switchStateBoard\(host, link\.board_id, envelope, control\)/);
   assert.match(mount, /keyboard: isResponsiveStateControl\(node\)/);
   // 값 표는 board_id별 캐시에 보존되고 전환 때 해당 보드 표만 꺼낸다.
   assert.match(mount, /function mountBoardState\(host, boardId, envelope,[\s\S]*?state\.values/);
@@ -413,7 +413,7 @@ test('계약이 지정한 초기 상태 보드를 보드별 값으로 같은 로
   assert.doesNotMatch(hostRule, /min-height/, '전역 CSS에 두면 마운트를 끝낸 보드까지 건드린다');
 });
 
-test('상태 보드 키보드 의미는 flow/scroll/scroll-table 안의 plain leaf에만 보강한다', () => {
+test('상태 보드 키보드 의미는 flow/scroll/scroll-table 안의 전체 칩에 보강한다', () => {
   const controls = CANVAS.slice(
     CANVAS.indexOf('const RESPONSIVE_STATE_CONTROL_OWNER'),
     CANVAS.indexOf('async function hydrateBoardSlots'),
@@ -421,7 +421,6 @@ test('상태 보드 키보드 의미는 flow/scroll/scroll-table 안의 plain le
   assert.match(controls,
     /RESPONSIVE_STATE_CONTROL_OWNER = '\.bs-r-flow, \.bs-r-scroll, \.bs-r-scroll-table'/);
   assert.match(controls, /function isResponsiveStateControl\(node\)/);
-  assert.match(controls, /node\.childElementCount === 0/);
   assert.match(controls, /node\.closest\(RESPONSIVE_STATE_CONTROL_OWNER\)/);
   // 칩 찾기(표식·같은 문구·별칭 문구)는 board-mount가 갖는다 — 단위 테스트가 걸린
   // 자리다(board-mount.test.js). canvas는 그 판정에 링크 목록을 넘기고 클릭만 잇는다.
@@ -439,8 +438,10 @@ test('미결 슬롯이 있으면 하이드레이션을 기다리고 실패는 �
   assert.match(hydrate, /window\.athena\.invoke\('athena:canvas-board-hydrate', \{/);
   assert.match(hydrate, /boardId,/);
   assert.match(hydrate, /slotIds: pending/);
-  assert.match(hydrate, /target: boardHydrateTarget\(envelope\)/);
+  assert.match(hydrate, /target: boardHydrateTarget\(envelope, host\)/);
   assert.match(hydrate, /account: boardHydrateAccount\(envelope\)/);
+  assert.match(hydrate, /rememberMountedBoard\(state, remounted\);[\s\S]*?wireMountedBoardControls\(host, envelope, remounted\);/,
+    'hydrate가 DOM을 갈아끼운 뒤에도 정렬·필터·세션 조작을 다시 연결해야 한다');
   // 미결 슬롯이 없으면 아예 부르지 않는다.
   assert.match(hydrate, /if \(!pending\.length\) return mounted;/);
   assert.match(hydrate, /throw new Error\('카드 데이터 조회 연결을 사용할 수 없습니다\.'/);

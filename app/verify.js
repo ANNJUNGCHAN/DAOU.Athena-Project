@@ -2060,12 +2060,11 @@ app.whenReady().then(async () => {
       && providerSurface.grokRows.every((row) => row.length > 0 && row.every((c) => c.disabled === !g)));
   }
 
-  // ---------- 검증 3c: Paper 플러그인 01~04 (기능 허용·설치 승인·허브·관리) ----------
+  // ---------- 검증 3c: 플러그인 (기능 허용·직접 등록·허브·관리) ----------
   // 레지스트리를 검증 프로필로 격리했으므로(상단 ATHENA_MCP_REGISTRY_PATH) 이
-  // 시점의 설치 목록은 항상 비어 있다 — 추천은 내장 카탈로그 5종 전부다.
+  // 시점의 설치 목록은 항상 비어 있다.
   await shellWin.webContents.executeJavaScript(`document.getElementById('modeNavPlugin').click()`);
   await wait(180);
-  const CATALOG_SIZE = require('./lib/plugin-catalog').CATALOG.length;
   const pluginHub = await shellWin.webContents.executeJavaScript(`(() => ({
     pluginVisible: !document.getElementById('pluginCanvas').hidden,
     summaryHidden: document.getElementById('mosaic').hidden,
@@ -2078,7 +2077,7 @@ app.whenReady().then(async () => {
     sections: Array.from(document.querySelectorAll('.plugin-canvas-section-title')).map((n) => n.textContent),
     emptyCopy: Array.from(document.querySelectorAll('.plugin-canvas-empty')).map((n) => n.textContent),
     installedAction: document.querySelector('.plugin-canvas-installed .plugin-canvas-action')?.textContent || null,
-    recommendedAction: document.querySelector('.plugin-canvas-recommended .plugin-canvas-action')?.textContent || '',
+    addAction: document.querySelector('.plugin-canvas-action.is-add')?.textContent || '',
     description: document.querySelector('.plugin-canvas-description')?.textContent || '',
     // 채팅 헤더는 그래프 전용이 아니라 모드별 공용이다(W3-6). 그래프 3종 회귀는
     // verify-graph-mode.js가 잡고, 여기서는 플러그인 문구가 실제로 붙는지를 잰다.
@@ -2088,30 +2087,27 @@ app.whenReady().then(async () => {
     chatHeadSub: document.querySelector('#chatModeHead .chat-mode-head-sub')?.textContent || '',
   }))()`);
   await shot(shellWin, '03f-plugin-hub.png');
-  await shellWin.webContents.executeJavaScript(`document.querySelector('.plugin-canvas-recommended .plugin-canvas-action').click()`);
+  await shellWin.webContents.executeJavaScript(`document.querySelector('.plugin-canvas-action.is-add').click()`);
   await wait(80);
-  // 설치 시트는 **승인 표면이 아니다** — 무엇을 설치하는지 보여주고 승인 카드로
-  // 넘길 뿐이다(US-004). 그래서 여기서는 포커스 트랩 5종·"한 번에 하나씩" 부제를
-  // 재지 않는다(W5-2 폐기 7). 재는 것은 사람이 승인 전에 봐야 하는 정보 7가지다.
+  await shellWin.webContents.executeJavaScript(`(() => {
+    const field = document.querySelector('.plugin-canvas-snippet-input');
+    field.value = '{"mcpServers":{"fetch":{"command":"uvx","args":["mcp-server-fetch"]}}}';
+    field.dispatchEvent(new Event('input', { bubbles: true }));
+  })()`);
   const pluginInstallSheet = await shellWin.webContents.executeJavaScript(`(() => {
-    const dialog = document.querySelector('.plugin-canvas-install-sheet');
+    const dialog = document.querySelector('.plugin-canvas-add-sheet');
     return {
       title: dialog?.querySelector('.plugin-canvas-sheet-title')?.textContent || '',
       confirmLabel: dialog?.querySelector('.is-sheet-confirm')?.textContent || '',
       cancelLabel: dialog?.querySelector('.is-sheet-cancel')?.textContent || '',
-      provider: dialog?.querySelector('.plugin-canvas-sheet-source')?.textContent || '',
-      command: dialog?.querySelector('.plugin-canvas-sheet-command')?.textContent || '',
-      location: dialog?.querySelector('.plugin-canvas-sheet-location')?.textContent || '',
-      badges: Array.from(dialog?.querySelectorAll('.plugin-canvas-sheet-badges .plugin-canvas-count') || []).map((n) => n.textContent),
+      snippet: dialog?.querySelector('.plugin-canvas-snippet-input')?.value || '',
       historyPluginTurns: document.querySelectorAll('#history .plugin-turn').length,
     };
   })()`);
-  await shot(shellWin, '03f2-plugin-install-approval.png');
+  await shot(shellWin, '03f2-plugin-direct-register.png');
 
-  // GUI [설치] → [승인]은 설치하지 않는다. 봉투를 만들어 승인 카드로 합류시킨다
-  // (신설 ⑸). 실행은 그 카드의 [승인] 하나뿐이고, 그건 네트워크가 필요하므로
-  // 여기서 누르지 않는다 — 실왕복은 `npm run verify:plugins`가 잰다.
-  await shellWin.webContents.executeJavaScript(`document.querySelector('.plugin-canvas-install-sheet .is-sheet-confirm').click()`);
+  // 직접 등록 시트도 설치하지 않고 봉투를 만들어 승인 카드로 합류시킨다.
+  await shellWin.webContents.executeJavaScript(`document.querySelector('.plugin-canvas-add-sheet .is-sheet-confirm').click()`);
   await wait(160);
   const pluginProposalCard = await shellWin.webContents.executeJavaScript(`(() => {
     const card = document.querySelector('#pluginCanvas .plugin-canvas-proposals .plugin-canvas-proposal');
@@ -2295,7 +2291,6 @@ app.whenReady().then(async () => {
     manage: pluginManage,
     permission: pluginPermission,
     probeFailure: pluginProbeFailure,
-    catalogSize: CATALOG_SIZE,
   };
   console.log('[verify] 검증3c(Paper 플러그인 01~04):', JSON.stringify(report.pluginMode));
   assertOk('pluginMode: fourth mode is exclusive while chat persists',
@@ -2305,16 +2300,16 @@ app.whenReady().then(async () => {
     && pluginHub.agentHidden === true
     && pluginHub.chatVisible === true
     && pluginHub.activeMode === 'plugin');
-  assertOk('pluginMode: Paper 03 hub shows 설치됨/추천 sections with catalog recommendations',
-    JSON.stringify(pluginHub.sections) === JSON.stringify(['설치됨', '추천'])
+  assertOk('pluginMode: hub shows registered plugins and direct registration only',
+    JSON.stringify(pluginHub.sections) === JSON.stringify([])
     && pluginHub.installed === 0
-    && pluginHub.recommended === CATALOG_SIZE
-    && pluginHub.recommendedAction === '설치'
+    && pluginHub.recommended === 0
+    && pluginHub.addAction === '+ 서버 추가'
     && pluginHub.installedAction === null
-    && pluginHub.description === '플러그인은 설치 후 기능별로 허용합니다. Kiwoom·brain은 Athena 내장 API라 이 목록에 표시하지 않습니다.');
+    && pluginHub.description === '');
   assertOk('pluginMode: empty installed list says nothing installed, not "no search match"',
     pluginHub.emptyCopy.length === 1
-    && pluginHub.emptyCopy[0] === '설치한 플러그인이 없습니다 · 아래 추천에서 설치합니다');
+    && pluginHub.emptyCopy[0] === '설치한 플러그인이 없습니다 · [+ 서버 추가]에서 직접 등록합니다');
   // A10 — 채팅 헤더는 모드별 공용이다. 그래프 문구 회귀는 verify-graph-mode.js가 잡는다.
   assertOk('pluginMode: 채팅 헤더가 플러그인 문구를 단다',
     pluginHub.chatHeadVisible === true
@@ -2323,31 +2318,22 @@ app.whenReady().then(async () => {
     && pluginHub.chatHeadSub === '설치와 권한을 여기서 정합니다');
   // 유지 7 — 승인 전에 사람이 봐야 하는 정보. 포커스 트랩·"한 번에 하나씩" 부제는
   // 폐기했다(W5-2 폐기 7): 이 시트는 승인 표면이 아니라 승인 카드로 가는 문이다.
-  assertOk('pluginMode: Paper 05 install sheet shows provider/command/location before the approval card',
-    pluginInstallSheet.title === '웹 문서 읽기 설치'
-    && pluginInstallSheet.confirmLabel === '승인'
-    && pluginInstallSheet.cancelLabel === '거부'
-    && /^제공: /.test(pluginInstallSheet.provider)
-    && pluginInstallSheet.command === '실행 명령: uvx mcp-server-fetch'
-    && pluginInstallSheet.location === '설치 위치 · 플러그인 모드 > 웹 문서 읽기'
-    && JSON.stringify(pluginInstallSheet.badges) === JSON.stringify(['권한 1개 요청', '설치형 플러그인']));
-  // 신설 ⑴⑸ — GUI [설치]는 실행하지 않는다. 같은 승인 카드로 합류한다.
-  assertOk('pluginMode: GUI 설치 클릭이 #pluginCanvas 안의 승인 카드로 합류한다',
+  assertOk('pluginMode: direct registration sheet accepts one Claude settings snippet',
+    pluginInstallSheet.title === '서버 추가'
+    && pluginInstallSheet.confirmLabel === '등록 제안'
+    && pluginInstallSheet.cancelLabel === '닫기'
+    && /"mcpServers"/.test(pluginInstallSheet.snippet));
+  assertOk('pluginMode: direct registration joins the approval card',
     pluginProposalCard.inPluginCanvas === true
     && pluginProposalCard.sheetClosed === true
-    && pluginProposalCard.title === '웹 문서 읽기 설치'
+    && pluginProposalCard.title === '직접 등록'
     && pluginProposalCard.state === 'pending'
     && pluginProposalCard.status === '제안 대기'
     && pluginProposalCard.source === '내 요청'
-    && pluginProposalCard.reason === '허브에서 [설치]를 눌렀습니다'
-    // Paper 05 install-card — 승인 카드가 제공·용도·실행 명령·설치 위치를 직접 싣는다.
-    // 모달 시트는 GUI 경로에만 열리므로 모델 제안 경로는 카드가 유일한 표면이다.
+    && pluginProposalCard.reason === '[+ 서버 추가]에서 [등록 제안]을 눌렀습니다'
     && JSON.stringify(pluginProposalCard.lines) === JSON.stringify([
-      '제공: Model Context Protocol · mcp-server-fetch',
-      '용도: 웹 페이지 원문 조회 · HTML→마크다운 변환',
       '실행 명령: uvx mcp-server-fetch',
-      '설치 위치 · 플러그인 모드 > 웹 문서 읽기',
-      '권한 1개 요청',
+      '등록만으로는 실행되지 않습니다',
     ]), { lines: pluginProposalCard.lines });
   // 신설 ⑵ — GUI 경로는 채팅 턴을 만들지 않는다(§2.3 축 2).
   assertOk('pluginMode: GUI 클릭은 채팅 제안 턴을 만들지 않는다',
@@ -2389,9 +2375,9 @@ app.whenReady().then(async () => {
     pluginResultTurn);
   assertOk('pluginMode: Paper 04 management counts follow the live registry',
     pluginManage.title === '플러그인 관리'
-    && JSON.stringify(pluginManage.counts) === JSON.stringify(['플러그인 0', '기능 0', '마켓플레이스 1'])
-    && JSON.stringify(pluginManage.toggles) === JSON.stringify(['true'])
-    && /등록만으로는 아무것도 실행되지 않습니다/.test(pluginManage.marketplaceNote));
+    && JSON.stringify(pluginManage.counts) === JSON.stringify(['플러그인 0', '기능 0'])
+    && JSON.stringify(pluginManage.toggles) === JSON.stringify([])
+    && pluginManage.marketplaceNote === '');
   // 설정 플러그인 탭이 흡수된 자리(2026-09-03) — 직접 등록 진입과 감사 로그가
   // 관리 뷰에 있다. 감사 로그는 검증 프로필이라 비어 있어도 구역 자체는 뜬다.
   assertOk('pluginMode: 관리 뷰가 직접 등록 진입과 감사 로그 구역을 가진다',

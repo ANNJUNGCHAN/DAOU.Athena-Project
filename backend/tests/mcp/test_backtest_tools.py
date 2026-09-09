@@ -29,7 +29,7 @@ def test_tool_schema_lists_allowed_actions_only():
         "list_strategies", "read_code", "propose_code", "flow", "diagnose",
         "map", "codegen", "optimize",
         "propose_spec", "navigate", "propose_optimize", "list_runs",
-        "list_files", "read_file", "propose_file", "youtube_brief",
+        "list_files", "read_file", "propose_file", "write_file", "terminal", "youtube_brief",
         "source_brief", "register_strategy",
         "technique_nodes", "technique_check", "technique_question",
     ]
@@ -580,6 +580,24 @@ async def test_list_files_proxies_project_tree(mock_http_client):
 
 
 @pytest.mark.asyncio
+async def test_list_files_forwards_optional_technique_folder(mock_http_client):
+    async def handler(request):
+        assert request.url.path == "/api/v1/projects/p1/tree"
+        assert request.url.params["path"] == "techniques/alpha"
+        return httpx.Response(200, json={"entries": [], "truncated": False})
+
+    async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
+        result = await backtest_tools.dispatch(
+            {
+                "action": "list_files",
+                "list_files": {"project_id": "p1", "path": "techniques/alpha"},
+            },
+            client,
+        )
+    assert not result.isError
+
+
+@pytest.mark.asyncio
 async def test_read_file_proxies_project_file_with_path_query(mock_http_client):
     async def handler(request):
         assert request.method == "GET"
@@ -612,15 +630,13 @@ async def test_read_file_proxies_project_file_with_path_query(mock_http_client):
         ("read_file", {"path": "a.py"}, "project_id"),
         ("read_file", {"project_id": "p1"}, "path"),
         ("read_file", {"project_id": "p1", "path": "  "}, "path"),
-        ("read_file", {"project_id": "p1", "path": "notes.txt"}, "파이썬(.py)"),
         ("propose_file", {"path": "a.py", "source": "x = 1"}, "project_id"),
         ("propose_file", {"project_id": "p1", "source": "x = 1"}, "path"),
-        (
-            "propose_file",
-            {"project_id": "p1", "path": "data.csv", "source": "x = 1"},
-            "파이썬(.py)",
-        ),
         ("propose_file", {"project_id": "p1", "path": "a.py"}, "source"),
+        ("write_file", {"project_id": "p1", "path": "a.py", "source": ""}, "root_path"),
+        ("write_file", {"project_id": "p1", "path": "a.py", "root_path": "."}, "source"),
+        ("terminal", {"argv": ["python", "-V"]}, "project_id"),
+        ("terminal", {"project_id": "p1", "argv": []}, "argv"),
     ],
 )
 async def test_project_actions_block_missing_fields_and_non_python(
@@ -672,6 +688,117 @@ async def test_propose_file_makes_no_http_call_and_says_nothing_was_written(
     assert "아직 파일에 쓰지 않았다" in payload["notice"]
     assert "사람이 적용을 누른" in payload["notice"]
     assert "말하지 마라" in payload["notice"]
+
+
+@pytest.mark.asyncio
+async def test_write_file_waits_for_scoped_backend_save_without_echoing_source(mock_http_client):
+    source = "x = 1\n" * 1000
+
+    async def handler(request):
+        assert request.method == "PUT"
+        assert request.url.path == "/api/v1/projects/p1/file"
+        assert json.loads(request.content) == {
+            "path": "techniques/alpha/strategy.py",
+            "text": source,
+            "root_path": "techniques/alpha",
+        }
+        return httpx.Response(
+            200,
+            json={"path": "techniques/alpha/strategy.py", "size": len(source), "mtime": 3.0},
+        )
+
+    async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
+        result = await backtest_tools.dispatch(
+            {
+                "action": "write_file",
+                "write_file": {
+                    "project_id": "p1",
+                    "path": "techniques/alpha/strategy.py",
+                    "source": source,
+                    "root_path": "techniques/alpha",
+                },
+            },
+            client,
+        )
+
+    assert not result.isError
+    payload = json.loads(result.content[0].text)
+    assert payload == {
+        "kind": "file_written",
+        "status": "written",
+        "project_id": "p1",
+        "path": "techniques/alpha/strategy.py",
+        "root_path": "techniques/alpha",
+        "size": len(source),
+        "mtime": 3.0,
+    }
+    assert source not in result.content[0].text
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "path, root_path",
+    [
+        ("../outside.py", "."),
+        ("C:/outside.py", "."),
+        ("techniques/other/strategy.py", "techniques/alpha"),
+        ("techniques/alpha/strategy.py", "../alpha"),
+    ],
+)
+async def test_write_file_blocks_paths_outside_current_technique(
+    path, root_path, mock_http_client
+):
+    async def handler(request):
+        raise AssertionError("범위를 벗어난 쓰기가 백엔드에 도달했다")
+
+    async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
+        result = await backtest_tools.dispatch(
+            {
+                "action": "write_file",
+                "write_file": {
+                    "project_id": "p1", "path": path, "source": "x = 1\n",
+                    "root_path": root_path,
+                },
+            },
+            client,
+        )
+    assert result.isError
+    assert result.meta[ERROR_ORIGIN_META_KEY] == "gateway-blocked"
+
+
+@pytest.mark.asyncio
+async def test_terminal_proxies_argv_without_shell_string(mock_http_client):
+    async def handler(request):
+        assert request.method == "POST"
+        assert request.url.path == "/api/v1/projects/p1/terminal"
+        assert json.loads(request.content) == {
+            "cwd": "techniques/alpha",
+            "argv": ["python", "-m", "pytest", "-q"],
+            "timeout_ms": 20000,
+        }
+        return httpx.Response(
+            200,
+            json={
+                "exit_code": 0, "stdout": "1 passed", "stderr": "", "timed_out": False,
+                "stdout_truncated": False, "stderr_truncated": False,
+            },
+        )
+
+    async with mock_http_client(handler, base_url="http://127.0.0.1:8010") as client:
+        result = await backtest_tools.dispatch(
+            {
+                "action": "terminal",
+                "terminal": {
+                    "project_id": "p1",
+                    "cwd": "techniques/alpha",
+                    "argv": ["python", "-m", "pytest", "-q"],
+                    "timeout_ms": 20000,
+                },
+            },
+            client,
+        )
+    assert not result.isError
+    assert json.loads(result.content[0].text)["exit_code"] == 0
 
 
 @pytest.mark.asyncio

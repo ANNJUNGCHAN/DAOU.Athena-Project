@@ -1,9 +1,9 @@
-"""프로젝트 = 내 컴퓨터의 폴더 하나 — 코드 탭 IDE의 저장층(계약 D1·D2·D3).
+"""프로젝트 = 내 컴퓨터의 폴더 하나 — 코드 탭 IDE의 저장층.
 
 **진실은 디스크의 파일이다.** sqlite 전략 버전은 실행 재현용 기록으로만 남고, 편집·저장은
-전부 이 모듈을 지나 실제 파일에 닿는다. 그래서 지켜야 할 불변식은 둘뿐이다 —
-① 프로젝트 폴더 밖은 절대 건드리지 않는다(`resolve_in_project`), ② 파이썬(.py)만 만들고
-쓰고 이름 바꾼다(D3). 그 밖의 파일은 목록에 보이되 이 기능이 고치지 않는다.
+전부 이 모듈을 지나 실제 파일에 닿는다. 지켜야 할 불변식은 하나다 — 프로젝트 폴더
+밖은 절대 건드리지 않는다(`resolve_in_project`). 탐색기는 모든 항목을 보여주고 텍스트
+파일은 확장자와 무관하게 편집한다.
 
 **레지스트리.** `<projects_root>/registry.json` 하나에 {id, name, path, kind, created_at}를
 담는다. 쓰기는 tmp→replace 원자 교체고, 손상 파일은 `registry.corrupt.json`으로 보존한 뒤
@@ -29,7 +29,7 @@ from uuid import uuid4
 REGISTRY_FILENAME: Final = "registry.json"
 SEED_STRATEGY_FILENAME: Final = "strategy.py"
 
-# 트리에서 통째로 건너뛰는 폴더. 점(.)으로 시작하는 폴더는 이름과 무관하게 전부 건너뛴다.
+# 파이썬 파일 수 집계와 가상환경 패키지 탐색에서만 건너뛰는 폴더.
 IGNORED_DIRS: Final[frozenset[str]] = frozenset({".git", ".venv", "__pycache__", "node_modules"})
 
 # 트리 응답이 무한정 커지지 않게 하는 상한. 넘으면 잘랐다고 정직하게 표시한다.
@@ -108,7 +108,7 @@ class ProjectNotADirectoryError(ProjectStoreError):
 def is_safe_project_name(name: str) -> bool:
     """관리형 프로젝트 이름이 경로 '한 조각'인지 — 폴더를 실제로 만들기 전의 유일한 관문.
 
-    구분자·상대 참조·점으로 시작(트리가 건너뛰는 숨김 폴더가 된다)·양끝 공백·끝점·
+    구분자·상대 참조·점으로 시작·양끝 공백·끝점·
     윈도우 예약 장치 이름을 전부 막는다. 한글 이름은 허용한다 — 막을 이유가 없다.
     """
     if not name or len(name) > 64 or name != name.strip():
@@ -176,14 +176,17 @@ def _file_size(path: Path) -> int:
         return 0
 
 
-def build_tree(root: Path, *, limit: int = MAX_TREE_ENTRIES) -> tuple[list[dict[str, Any]], bool]:
+def build_tree(
+    root: Path, *, limit: int = MAX_TREE_ENTRIES, path_root: Path | None = None
+) -> tuple[list[dict[str, Any]], bool]:
     """루트 아래를 중첩 목록으로 만든다. 폴더 항목은 `children`을 갖는다.
 
-    파이썬이 아닌 파일도 **보여준다**(D3: 사용자가 자기 데이터를 봐야 한다) — 다만 `py`
-    플래그로 편집 가능 여부가 드러난다. 심볼릭 링크 폴더는 목록에만 남기고 들어가지
+    확장자와 숨김 여부에 상관없이 모든 항목을 보여준다. `py` 플래그는 전략 파일 표시용으로
+    남긴다. 심볼릭 링크 폴더는 목록에만 남기고 들어가지
     않는다 — 순환과 프로젝트 밖 탐색을 둘 다 여기서 끊는다.
     """
     state = {"count": 0, "truncated": False}
+    relative_root = path_root or root
 
     def walk(directory: Path) -> list[dict[str, Any]]:
         try:
@@ -193,15 +196,13 @@ def build_tree(root: Path, *, limit: int = MAX_TREE_ENTRIES) -> tuple[list[dict[
         items: list[dict[str, Any]] = []
         for child in children:
             is_dir = child.is_dir()
-            if is_dir and (child.name in IGNORED_DIRS or child.name.startswith(".")):
-                continue
             if state["count"] >= limit:
                 state["truncated"] = True
                 break
             state["count"] += 1
             entry: dict[str, Any] = {
                 "name": child.name,
-                "path": child.relative_to(root).as_posix(),
+                "path": child.relative_to(relative_root).as_posix(),
                 "is_dir": is_dir,
                 "py": not is_dir and child.suffix.lower() == ".py",
                 "size": 0 if is_dir else _file_size(child),
