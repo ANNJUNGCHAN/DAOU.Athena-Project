@@ -1192,6 +1192,27 @@ function markPairedHost(surface) {
   return marked;
 }
 
+// 한 가로줄 안에 일반 섹션과 primary를 나란히 둔 Paper 보드가 있다(3GRO-0
+// `3I8P-0`: 주문 한도 재원 + 구간별 재사용). M 단계의 일반 `.bs-primary` 규칙은
+// 뒤 섹션에 폭 100%를 주므로, 부모가 nowrap이면 그 섹션이 0px까지 눌리고 끝 정렬
+// 문구가 카드 왼쪽으로 샌다. 최상위 workspace는 이미 M에서 자체 wrap 계약을 가지므로
+// 제외하고, 중첩 primary에 실제 형제가 있는 부모만 표시해 M 이하에서 섹션을 쌓는다.
+function markPrimaryRows(surface) {
+  let marked = 0;
+  for (const primary of surface.querySelectorAll('.bs-primary')) {
+    const row = primary.parentElement;
+    if (!row || !row.dataset || !row.style) continue;
+    if (row.classList && row.classList.contains('bs-workspace')) continue;
+    if (row.style.getPropertyValue('display').trim() !== 'flex') continue;
+    const direction = row.style.getPropertyValue('flex-direction').trim();
+    if (direction === 'column' || direction === 'column-reverse') continue;
+    if (elementChildren(row).length < 2 || row.dataset.bsPrimaryRow === 'true') continue;
+    row.dataset.bsPrimaryRow = 'true';
+    marked += 1;
+  }
+  return marked;
+}
+
 function applyResponsiveHooks(surface) {
   stripCharacterWrap(surface);
   hoistLayout(surface);
@@ -1227,6 +1248,7 @@ function applyResponsiveHooks(surface) {
     markElasticCells(owner);
   }
   markPairedHost(surface);
+  markPrimaryRows(surface);
   return hoisted;
 }
 
@@ -1718,6 +1740,7 @@ const __exports = {
   markDeclaredScrollBox,
   hoistLayout, hoistRigidBox, applyResponsiveHooks, surfaceRoot,
   primaryMountPoint, collapsePrimaryMockup, restorePrimaryMockup, mountBoard, mountBoardAsync,
+  markPrimaryRows,
   boardIdentityFromEnvelope,
   createLatestBoardLoad, nextHydrationSlots,
   RAW_IDENTITY_NAME, scrubRawIdentityNames,
