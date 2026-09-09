@@ -574,11 +574,18 @@ test('readLocalBearerToken: backend/.env에서 토큰을 읽는다 (따옴표 �
   const os = require('node:os');
   const fsm = require('node:fs');
   const pathm = require('node:path');
+  const prev = process.env.ATHENA_LOCAL_BEARER_TOKEN;
+  delete process.env.ATHENA_LOCAL_BEARER_TOKEN;
   const dir = fsm.mkdtempSync(pathm.join(os.tmpdir(), 'athena-env-'));
   fsm.writeFileSync(pathm.join(dir, '.env'), ['FOO=1', 'ATHENA_LOCAL_BEARER_TOKEN="tok-abc"', ''].join('\n'));
   const { readLocalBearerToken } = require('./backend-launcher');
-  assert.equal(readLocalBearerToken(dir), 'tok-abc');
-  fsm.rmSync(dir, { recursive: true, force: true });
+  try {
+    assert.equal(readLocalBearerToken(dir), 'tok-abc');
+  } finally {
+    if (prev == null) delete process.env.ATHENA_LOCAL_BEARER_TOKEN;
+    else process.env.ATHENA_LOCAL_BEARER_TOKEN = prev;
+    fsm.rmSync(dir, { recursive: true, force: true });
+  }
 });
 
 test('readLocalBearerToken: .env 없음/키 없음이면 null — 루프백 게이트 배포', () => {
@@ -586,11 +593,30 @@ test('readLocalBearerToken: .env 없음/키 없음이면 null — 루프백 게�
   const fsm = require('node:fs');
   const pathm = require('node:path');
   const { readLocalBearerToken } = require('./backend-launcher');
+  const prev = process.env.ATHENA_LOCAL_BEARER_TOKEN;
+  delete process.env.ATHENA_LOCAL_BEARER_TOKEN;
   const empty = fsm.mkdtempSync(pathm.join(os.tmpdir(), 'athena-noenv-'));
-  assert.equal(readLocalBearerToken(empty), null);
-  fsm.writeFileSync(pathm.join(empty, '.env'), 'OTHER=1' + '\n');
-  assert.equal(readLocalBearerToken(empty), null);
-  fsm.rmSync(empty, { recursive: true, force: true });
+  try {
+    assert.equal(readLocalBearerToken(empty), null);
+    fsm.writeFileSync(pathm.join(empty, '.env'), 'OTHER=1' + '\n');
+    assert.equal(readLocalBearerToken(empty), null);
+  } finally {
+    if (prev == null) delete process.env.ATHENA_LOCAL_BEARER_TOKEN;
+    else process.env.ATHENA_LOCAL_BEARER_TOKEN = prev;
+    fsm.rmSync(empty, { recursive: true, force: true });
+  }
+});
+
+test('readLocalBearerToken: 환경변수가 .env보다 앞선다', () => {
+  const prev = process.env.ATHENA_LOCAL_BEARER_TOKEN;
+  process.env.ATHENA_LOCAL_BEARER_TOKEN = 'from-env';
+  const { readLocalBearerToken } = require('./backend-launcher');
+  try {
+    assert.equal(readLocalBearerToken('/no/such'), 'from-env');
+  } finally {
+    if (prev == null) delete process.env.ATHENA_LOCAL_BEARER_TOKEN;
+    else process.env.ATHENA_LOCAL_BEARER_TOKEN = prev;
+  }
 });
 
 // ---------- 기동 단계 실패의 이유 보존 + 잠금 충돌 시 재스폰 억제 (2026-09-07) ----------
