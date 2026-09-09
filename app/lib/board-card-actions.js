@@ -42,6 +42,15 @@ const CARD_ACTIONS = Object.freeze([
     title: '종목 상세',
   }),
   Object.freeze({
+    control: '차트 열기',
+    kind: 'open-card',
+    board_id: '137X-2',
+    card_id: 'CC-03',
+    card_kind: 'instrument',
+    stock: 'row',
+    title: '종목 차트',
+  }),
+  Object.freeze({
     control: '알림 설정',
     kind: 'agent-watch',
     stock: 'card',
