@@ -1,0 +1,55 @@
+{
+  "recordedDate": "2026-09-09",
+  "kind": "portable-summary-of-prior-observations-not-a-new-live-run",
+  "baseCommit": "d64d124d",
+  "newerMain6352c851NotIncluded": "three unrelated full-suite contract/test failures; preserve verified provider completion baseline",
+  "implementationCommits": ["38b5466b", "d64d124d"],
+  "branch": "codex/provider-cli-parity-grok-handoff",
+  "selectedProviderSpareSessions": 2,
+  "allProvidersLiveVerified": false,
+  "tests": {
+    "handoffBaseFocused": {"base": "d64d124d", "files": 13, "passed": 138, "failed": 0, "skipped": 0},
+    "implementationIntegrated": {"passed": 151, "failed": 0, "skipped": 0},
+    "isolatedCommitSnapshot": {"passed": 137, "failed": 0, "skipped": 0},
+    "firstFullSuite": {"total": 3872, "passed": 3870, "failed": 2},
+    "fullSuiteFailureReasons": ["missing prepareLiveChatPool test mock, fixed in d64d124d", "graph PowerShell snapshot timeout; separate rerun passed"],
+    "focusedFollowup": {"passed": 14, "failed": 0},
+    "finalPrePush": {"exitCode": 0, "gatesPassed": 4, "appUnitSuitePassed": true, "finalTotalNotCaptured": true}
+  },
+  "grok": {
+    "noToolProbePassed": true,
+    "readyMs": 15220,
+    "firstTurnMs": [8209, 8608],
+    "followupMs": 3831,
+    "distinctSessionPids": true,
+    "firstAndFollowupReusedPid": true,
+    "spawnedFreshOnTurns": false,
+    "toolCalls": 0,
+    "financialToolLatencyVerified": false
+  },
+  "claude": {
+    "preSpawnedPidReuseObserved": true,
+    "successfulResponseVerified": false,
+    "blockerAtObservation": "usage credits exhausted",
+    "readySignalBeforeFirstInputObserved": false
+  },
+  "codex": {
+    "nativeVersionObserved": "0.153.4",
+    "transport": "stdio://",
+    "initializeAndConfigReadPassed": true,
+    "mcpServers": ["athena"],
+    "gatewayCommandArgsEnvRequiredMatched": true,
+    "requestedBuiltinFeaturesDisabled": true,
+    "mcpToolsSchemaShape": "object-map",
+    "privateAuthPresentAtObservation": false,
+    "authenticatedThreadInventoryAndTurnVerified": false,
+    "latestAuthFailureContract": {"code": "CODEX_PRIVATE_AUTH_REQUIRED", "actionNeeded": true, "retryable": false},
+    "oldRawProbeRetryScheduledTrueIsSuperseded": true
+  },
+  "sourceArtifactsOnOriginalMachine": [
+    ".omc/artifacts/chat-prewarm-live.json",
+    ".omc/artifacts/codex-runtime-live-probe-report.json"
+  ],
+  "rawCredentialsIncluded": false,
+  "originalRunningAppRestartedByThisWork": false
+}
