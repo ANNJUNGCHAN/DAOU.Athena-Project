@@ -1240,17 +1240,37 @@ function boardOrderbookFields() {
 
 // 0D는 카드가 실제로 열려 있을 때만 REG를 쓴다 — acquire/release가 짝이 아니면
 // 리미터가 새거나 남의 카드 피드가 끊긴다. 두 채널을 다 모아서 짝을 센다.
+// 호가 임차는 렌더러가 **invoke**로 부른다(canvas.js `wireOrderbookRealtime` →
+// `athena:orderbook-realtime-acquire`, 응답의 `leaseToken`을 받아 쥔다). 그래서
+// `ipcMain.on`으로 듣던 옛 기록기는 아무것도 잡지 못했고, 그 단언이 늘 빈 배열로
+// 떨어졌다. 프로브의 일반 핸들러가 이미 그 채널을 받고 있으므로 잠시 기록기로 갈아
+// 끼우고, 제품 핸들러와 같은 모양으로 답한다 — 토큰을 줘야 release도 나간다.
 function collectOrderbookLeaseCalls() {
   const calls = [];
-  const onAcquire = (_event, payload) => calls.push({ kind: 'acquire', symbol: payload && payload.symbol });
-  const onRelease = (_event, payload) => calls.push({ kind: 'release', symbol: payload && payload.symbol });
-  ipcMain.on('athena:orderbook-realtime-acquire', onAcquire);
-  ipcMain.on('athena:orderbook-realtime-release', onRelease);
+  let issued = 0;
+  const record = (kind) => async (_event, payload = {}) => {
+    if (kind !== 'acquire') {
+      // 해제는 종목이 아니라 **토큰**을 나른다(main.js `releaseRendererRealtimeLease`).
+      calls.push({ kind, leaseToken: payload.leaseToken });
+      return true;
+    }
+    issued += 1;
+    const leaseToken = `fixture-orderbook-lease-${issued}`;
+    calls.push({ kind, symbol: payload.symbol, leaseToken });
+    return { ok: true, leaseToken };
+  };
+  const swap = (channel, handler) => {
+    ipcMain.removeHandler(channel);
+    ipcMain.handle(channel, handler);
+  };
+  swap('athena:orderbook-realtime-acquire', record('acquire'));
+  swap('athena:orderbook-realtime-release', record('release'));
   return {
     calls,
     stop: () => {
-      ipcMain.removeListener('athena:orderbook-realtime-acquire', onAcquire);
-      ipcMain.removeListener('athena:orderbook-realtime-release', onRelease);
+      // 일반 핸들러가 하던 대로(알 수 없는 채널은 null) 되돌린다.
+      swap('athena:orderbook-realtime-acquire', async () => null);
+      swap('athena:orderbook-realtime-release', async () => null);
     },
   };
 }
@@ -1368,8 +1388,9 @@ async function exerciseBoardOrderbookPrimary(win) {
       throw new Error(`board orderbook primary: 0D acquire가 한 번이 아니다 — ${JSON.stringify(lease.calls)}`);
     }
     await closeBoardCard(win, surface.instanceId);
+    // 짝 판정은 **토큰**으로 한다 — 해제 payload에는 종목이 없다(제품 계약).
     const releases = lease.calls.filter((call) => call.kind === 'release');
-    if (releases.length !== 1 || releases[0].symbol !== BOARD_ORDERBOOK_SYMBOL) {
+    if (releases.length !== 1 || releases[0].leaseToken !== acquires[0].leaseToken) {
       throw new Error(`board orderbook primary: 0D release가 acquire와 짝이 아니다 — ${JSON.stringify(lease.calls)}`);
     }
   } finally {
