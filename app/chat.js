@@ -2647,7 +2647,8 @@ $input.addEventListener('keydown', (e) => {
   if (e.key !== 'Enter' || state !== 'idle' || remoteQueryBusy) return;
   e.preventDefault();
   // 첨부 칩이 있으면 전송 직전에 경로를 동봉한다(코덱스 UI 이식, 2026-08-27).
-  const text = consumeAttachments($input.value);
+  // 참조 칩(보드 21)도 같은 자리에서 접힌다 — 둘 다 눈에 보이는 질문은 건드리지 않는다.
+  const text = consumeReferences(consumeAttachments($input.value));
   $input.value = '';
   autoGrowInput();
   dispatchUserQuery(text);
@@ -2982,6 +2983,121 @@ function consumeAttachments(text) {
   renderAttachChips();
   const head = String(text || '').trim() || '첨부한 파일을 읽고 내용을 설명해줘';
   return `${head}\n\n[첨부 — 아래 경로를 Read(파일)/Glob(폴더)으로 직접 읽어라]\n${paths.join('\n')}`;
+}
+
+// 참조 칩(보드 21, 2026-09-08 개정) — 노드·흐름을 눌러도 말은 나가지 않는다. 무엇을 두고
+// 이야기할지만 칩으로 붙고, 하고 싶은 말은 사람이 자기 말로 쓴다. 그래서 여기가 하는 일은
+// 셋뿐이다: 칩을 쌓고, ×로 내리고, 전송 직전에 기계가 읽는 꼬리로 접는다.
+//
+// 첨부 칩(위)과 같은 규율을 따르되 자리는 그 위다 — 참조는 "무엇에 대한 질문인가"라서
+// 질문보다 먼저 읽혀야 한다. 그릇은 shell.html이 아니라 여기서 만든다(첨부 칩과 달리 이
+// 칩은 백테스트 노드 창에서만 생긴다 — 마크업에 늘 빈 <div>를 눕혀 둘 이유가 없다).
+const $refChips = document.createElement('div');
+$refChips.className = 'chat-ref-chips';
+$refChips.hidden = true;
+$attachChips.parentNode.insertBefore($refChips, $attachChips);
+let chatRefs = []; // { kind, label, name, lines, path }
+
+function renderRefChips() {
+  $refChips.textContent = '';
+  $refChips.hidden = chatRefs.length === 0;
+  chatRefs.forEach((ref, i) => {
+    const wrap = document.createElement('span');
+    wrap.className = 'chat-ref';
+    const chip = document.createElement('span');
+    chip.className = 'chat-ref-chip';
+    const name = document.createElement('span');
+    name.className = 'chat-ref-chip-name';
+    name.textContent = `@${ref.name}`;
+    const rm = document.createElement('button');
+    rm.type = 'button';
+    rm.className = 'chat-ref-chip-rm';
+    rm.setAttribute('aria-label', `참조 제거 @${ref.name}`);
+    rm.textContent = '×';
+    rm.addEventListener('click', () => {
+      chatRefs.splice(i, 1);
+      renderRefChips();
+      $input.focus();
+    });
+    chip.appendChild(name);
+    chip.appendChild(rm);
+    wrap.appendChild(chip);
+    // 줄 범위는 알약 밖 모노다 — 파일의 어디를 가리키는지는 함수 이름과 다른 종류의
+    // 사실이라서, 같은 알약 안에 넣으면 이름의 일부처럼 읽힌다.
+    if (ref.lines) {
+      const meta = document.createElement('span');
+      meta.className = 'chat-ref-chip-meta';
+      meta.textContent = `L${ref.lines[0]}-${ref.lines[1]}`;
+      if (ref.path) meta.title = ref.path;
+      wrap.appendChild(meta);
+    }
+    $refChips.appendChild(wrap);
+  });
+  // 줄 범위가 실린 칩이 있을 때만 그 약속을 한다 — @전체·@진입 흐름에는 읽을 줄 범위가
+  // 없고, 없는 약속을 적으면 사람은 그것을 코드의 사실로 읽는다.
+  if (chatRefs.some((r) => r.lines)) {
+    const hint = document.createElement('span');
+    hint.className = 'chat-ref-hint';
+    hint.textContent = '보내면 AI가 그 함수의 줄 범위를 읽고 답합니다';
+    $refChips.appendChild(hint);
+  }
+}
+
+// 같은 이름을 두 번 붙이지 않는다 — 사람이 카드를 두 번 누르는 것은 "하나 더"가 아니라
+// "이것 맞나"를 확인하는 동작이다(쌓이면 꼬리에 같은 참조가 두 번 실린다).
+function addChatReference(ref) {
+  const name = String((ref && ref.name) || '').trim();
+  if (!name || !$input) return;
+  if (!chatRefs.some((r) => r.name === name)) {
+    chatRefs.push({
+      kind: String(ref.kind || 'node'),
+      label: String(ref.label || `@${name}`),
+      name: name,
+      lines: Array.isArray(ref.lines) && ref.lines.length === 2 ? [ref.lines[0], ref.lines[1]] : null,
+      path: ref.path ? String(ref.path) : '',
+    });
+    renderRefChips();
+  }
+  // 붙인 다음 할 일은 사람이 자기 말을 쓰는 것이다 — 초점을 입력창에 둔다.
+  $input.focus();
+}
+
+// 전송 직전 병합(augmentMentions·consumeAttachments와 같은 자리) — 사용자 버블에는 타이핑
+// 원문이 남고, 모델에게만 기계가 읽는 참조 꼬리가 함께 간다.
+function refSuffix(ref) {
+  const parts = [`@${ref.name}`];
+  if (ref.path) parts.push(ref.path);
+  if (ref.lines) parts.push(`L${ref.lines[0]}-${ref.lines[1]}`);
+  return `[참조 ${parts.join(' ')}]`;
+}
+
+function consumeReferences(text) {
+  if (!chatRefs.length) return text;
+  const tail = chatRefs.map(refSuffix).join(' ');
+  chatRefs = [];
+  renderRefChips();
+  const head = String(text || '').trim();
+  return head ? `${head}\n\n${tail}` : tail;
+}
+
+document.addEventListener('athena:chat-reference', (event) => {
+  addChatReference(event && event.detail);
+});
+
+// 기법이 갈리면 칩을 내린다 — @should_exit가 다른 기법의 함수를 가리키면 모델은 없는 줄을
+// 읽으려 든다. 갈림은 캔버스가 #chatModeHead의 data-technique로 이미 말하고 있다
+// (lib/backtest-canvas.js syncChatTechniqueAttr).
+const $chatModeHeadForRefs = document.getElementById('chatModeHead');
+if ($chatModeHeadForRefs && typeof MutationObserver === 'function') {
+  let seenTechnique = $chatModeHeadForRefs.getAttribute('data-technique');
+  new MutationObserver(() => {
+    const now = $chatModeHeadForRefs.getAttribute('data-technique');
+    if (now === seenTechnique) return;
+    seenTechnique = now;
+    if (!chatRefs.length) return;
+    chatRefs = [];
+    renderRefChips();
+  }).observe($chatModeHeadForRefs, { attributes: true, attributeFilter: ['data-technique'] });
 }
 
 function kiumiSection(title) {
@@ -4914,20 +5030,11 @@ window.addEventListener('athena:plugin-out-of-mode', (event) => {
 // 구독은 이 파일 하나뿐이다(canvas.js에서 같은 채널을 또 들으면 액션이 두 번
 // 적용된다). 캔버스 API는 canvas.js가 window.AthenaBacktestCanvas로 올려둔다.
 const BACKTEST_CHANGE_TITLES = {
-  spec_draft: '지도 반영',
+  spec_draft: '설정 반영',
   code_draft: '코드 반영',
   file_draft: '파일 반영',
   navigate: '탭 이동',
-  // 출처에서 지도로(보드 17) — 붙인 주소가 접수된 것과, 읽고 규칙을 뽑은 것.
-  source_url: '출처 접수',
-  source_read: '출처 읽음',
   optimize_request: '최적화 준비',
-  // 시각 설계 ↔ 코드 왕복(보드 12·13·14, 2026-09-03) — 묻고, 비활성 수정안을 보이고,
-  // 동기화된 초안을 알리고, 그 사이 다른 수정이 먼저 저장됐음을 알린다.
-  visual_question: '한 가지만 확인할게요',
-  visual_patch: '그래프 + 코드 패치',
-  visual_synced: '동기화 완료',
-  visual_conflict: '다시 검토',
   // 새 기법 만들기(보드 20·21, 2026-09-03) — AI가 하나씩 묻고, 검사는 자동으로 돈다.
   technique_question: '하나만 정해요',
   technique_check: '자동 검사',
@@ -4938,242 +5045,6 @@ function backtestChangeRowText(row) {
   const before = (row && row.before) ? String(row.before) : '';
   const after = (row && row.after) != null ? String(row.after) : '';
   return before ? `${label} · ${before} → ${after}` : `${label} · ${after}`;
-}
-
-// ---------- 시각 설계 오류 수정 카드 (보드 12·13·14, 2026-09-03) ----------
-// backtest-visual-code-roundtrip-implementation-evaluation.md §"대화형 오류 수정 계약"의
-// 채팅 표면이다. 상태는 넷뿐이다: 하나만 묻는다(visual_question) → 비활성 수정안을
-// 보여준다(visual_patch) → 동기화된 초안이 생겼다(visual_synced) → 그 사이 다른 수정이
-// 먼저 저장됐다(visual_conflict).
-//
-// 이 카드는 아무것도 적용하지 않는다. 버튼이 캔버스 API를 부르고, 저장·활성화·실행의
-// 경계는 캔버스와 백엔드가 진다(계약: 수정안 생성만으로 활성 graph·저장된 버전·실행
-// 설정은 바뀌지 않는다). 캔버스 API는 나중에 붙으므로 전부 typeof로 막는다.
-const BACKTEST_VISUAL_KINDS = new Set([
-  'visual_question', 'visual_patch', 'visual_synced', 'visual_conflict',
-]);
-
-function backtestVisualCanvasCall(name, ...args) {
-  const api = window.AthenaBacktestCanvas;
-  if (!api || typeof api[name] !== 'function') return null;
-  return api[name](...args);
-}
-
-// 예상 StrategySpec diff — 배열이 정본이고 {rows:[…]}로 와도 같은 줄로 읽는다.
-function backtestVisualSpecRows(specDiff) {
-  if (Array.isArray(specDiff)) return specDiff;
-  return (specDiff && Array.isArray(specDiff.rows)) ? specDiff.rows : [];
-}
-
-// 코드 diff는 진단 카드의 줄 문법을 그대로 쓴다(backtest-explain.js와 같은 클래스).
-function backtestVisualDiff(diffLines) {
-  const diff = document.createElement('div');
-  diff.className = 'backtest-diff';
-  (Array.isArray(diffLines) ? diffLines : []).forEach((row) => {
-    const cls = row.mark === '+' ? 'is-add' : (row.mark === '-' ? 'is-del' : 'is-same');
-    const el = document.createElement('div');
-    el.className = `backtest-diff-row ${cls}`;
-    const mark = document.createElement('span');
-    mark.className = 'backtest-diff-mark';
-    mark.textContent = row.mark === ' ' ? '' : (row.mark || '');
-    const text = document.createElement('span');
-    text.className = 'backtest-diff-text';
-    text.textContent = row.text || '';
-    el.appendChild(mark);
-    el.appendChild(text);
-    diff.appendChild(el);
-  });
-  return diff;
-}
-
-// [차이 보기]는 예상 설계 diff를 접었다 편다 — 수정안 카드와 동기화 카드가 같이 쓴다.
-function backtestVisualSpecToggle(card, actions, specDiff, label) {
-  const host = document.createElement('div');
-  host.hidden = true;
-  const rows = backtestVisualSpecRows(specDiff);
-  if (rows.length) {
-    rows.forEach((row) => {
-      const el = document.createElement('div');
-      el.className = 'backtest-change-row';
-      el.textContent = backtestChangeRowText(row);
-      host.appendChild(el);
-    });
-  } else {
-    const el = document.createElement('div');
-    el.className = 'backtest-change-row';
-    el.textContent = '설계 차이 내역이 없습니다';
-    host.appendChild(el);
-  }
-  card.appendChild(host);
-  const btn = _btn(label, 'routine-btn');
-  btn.addEventListener('click', () => {
-    host.hidden = !host.hidden;
-    btn.textContent = host.hidden ? label : '차이 접기';
-  });
-  actions.appendChild(btn);
-}
-
-function renderBacktestVisualCard(receipt) {
-  const line = document.createElement('div');
-  line.className = 'turn';
-  const card = document.createElement('div');
-  card.className = 'turn-agent backtest-change backtest-visual';
-
-  const head = document.createElement('div');
-  head.className = 'agent-head';
-  const headPill = (text, filled) => {
-    const el = document.createElement('span');
-    el.className = filled ? 'routine-draft-pill is-filled' : 'routine-draft-pill';
-    el.textContent = text;
-    head.appendChild(el);
-  };
-  headPill(BACKTEST_CHANGE_TITLES[receipt.kind] || '백테스트', true);
-  card.appendChild(head);
-
-  const bodyLine = (text, className) => {
-    const el = document.createElement('div');
-    el.className = className || 'agent-body';
-    el.textContent = text;
-    card.appendChild(el);
-  };
-
-  const actions = document.createElement('div');
-  actions.className = 'routine-approval-actions backtest-change-actions';
-  const status = document.createElement('span');
-  status.className = 'agent-mode';
-  let noteText = '';
-
-  if (receipt.kind === 'visual_question') {
-    // 한 번에 질문 하나 — 고르기 전에는 [수정안 만들기]가 열리지 않는다.
-    const q = receipt.question || {};
-    bodyLine(q.question_ko || '');
-
-    const make = _btn('수정안 만들기', 'routine-btn routine-btn-approve');
-    make.disabled = true;
-    let chosen = null;
-
-    const list = document.createElement('div');
-    list.className = 'backtest-visual-choices';
-    list.setAttribute('role', 'radiogroup');
-    if (q.question_ko) list.setAttribute('aria-label', q.question_ko);
-    const picks = [];
-    (Array.isArray(q.choices) ? q.choices : []).forEach((choice) => {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'backtest-visual-choice';
-      btn.setAttribute('role', 'radio');
-      btn.setAttribute('aria-checked', 'false');
-      const label = document.createElement('span');
-      label.className = 'backtest-visual-choice-label';
-      label.textContent = choice.label_ko || '';
-      btn.appendChild(label);
-      if (choice.recommended) {
-        const rec = document.createElement('span');
-        rec.className = 'routine-draft-pill is-filled';
-        rec.textContent = '권장';
-        btn.appendChild(rec);
-      }
-      // 이 선택이 무엇을 바꾸는지 — 계약이 요구하는 "각 선택이 바꾸는 node/edge/parameter".
-      const what = (Array.isArray(choice.changes) ? choice.changes : [])
-        .map((c) => c && c.what_ko).filter(Boolean).join(' · ');
-      if (what) {
-        const el = document.createElement('span');
-        el.className = 'backtest-visual-choice-changes';
-        el.textContent = what;
-        btn.appendChild(el);
-      }
-      btn.addEventListener('click', () => {
-        chosen = choice.id;
-        picks.forEach((b) => {
-          const on = b === btn;
-          b.classList.toggle('is-picked', on);
-          b.setAttribute('aria-checked', on ? 'true' : 'false');
-        });
-        make.disabled = false;
-      });
-      picks.push(btn);
-      list.appendChild(btn);
-    });
-    card.appendChild(list);
-
-    make.addEventListener('click', () => {
-      if (!chosen) return;
-      make.disabled = true;
-      status.textContent = '수정안을 만드는 중…';
-      backtestVisualCanvasCall('answerVisualQuestion', { code: q.code, choice_id: chosen });
-    });
-    actions.appendChild(make);
-    noteText = 'AI는 바로 고치지 않고, 필요한 선택을 한 번에 하나씩 묻습니다 · 실행·활성화 없음';
-  }
-
-  if (receipt.kind === 'visual_patch') {
-    const patch = receipt.patch || {};
-    headPill(patch.graph_compatible ? '그래프 호환' : '그래프 비호환');
-    card.appendChild(backtestVisualDiff(patch.code_diff && patch.code_diff.diff_lines));
-    if (patch.summary_ko) bodyLine(patch.summary_ko, 'backtest-change-row');
-
-    const apply = _btn('적용하고 시각 설계로 돌아가기', 'routine-btn routine-btn-approve');
-    apply.addEventListener('click', () => {
-      apply.disabled = true;
-      status.textContent = '적용하는 중…';
-      backtestVisualCanvasCall('applyVisualPatch', patch.patch_id);
-    });
-    actions.appendChild(apply);
-
-    backtestVisualSpecToggle(card, actions, patch.spec_diff, '차이 자세히 보기');
-
-    const drop = _btn('버리기', 'routine-btn');
-    drop.addEventListener('click', () => {
-      backtestVisualCanvasCall('discardVisualPatch', patch.patch_id);
-      actions.textContent = '버렸습니다 — 지도와 코드는 그대로입니다';
-    });
-    actions.appendChild(drop);
-
-    const next = patch.next_version != null
-      ? patch.next_version
-      : (receipt.version && receipt.version.to);
-    noteText = next != null
-      ? `적용하면 새 v${next} 초안이 생깁니다. 활성화와 백테스트 실행은 별도 확인입니다.`
-      : '적용하면 새 초안이 생깁니다. 활성화와 백테스트 실행은 별도 확인입니다.';
-  }
-
-  if (receipt.kind === 'visual_synced') {
-    const from = receipt.version ? receipt.version.from : null;
-    const to = receipt.version ? receipt.version.to : null;
-    if (from != null && to != null) headPill(`v${from} → v${to}`);
-    if (receipt.summary_ko) bodyLine(receipt.summary_ko);
-
-    const review = _btn('실행 전 검토', 'routine-btn routine-btn-approve');
-    review.addEventListener('click', () => { backtestVisualCanvasCall('reviewBeforeRun'); });
-    actions.appendChild(review);
-
-    backtestVisualSpecToggle(card, actions, receipt.spec_diff, '차이 보기');
-
-    const open = _btn('코드 열기', 'routine-btn');
-    open.addEventListener('click', () => { backtestVisualCanvasCall('openCodeFromChat'); });
-    actions.appendChild(open);
-
-    noteText = from != null
-      ? `활성화하거나 실행하기 전까지 현재 v${from}에는 영향이 없습니다.`
-      : '활성화하거나 실행하기 전까지 현재 버전에는 영향이 없습니다.';
-  }
-
-  if (receipt.kind === 'visual_conflict') {
-    bodyLine('다른 수정이 먼저 저장됐습니다 — 다시 검토');
-    const retry = _btn('다시 검토', 'routine-btn routine-btn-approve');
-    retry.addEventListener('click', () => {
-      retry.disabled = true;
-      status.textContent = '다시 검토하는 중…';
-      backtestVisualCanvasCall('retryVisualPatch');
-    });
-    actions.appendChild(retry);
-  }
-
-  actions.appendChild(status);
-  card.appendChild(actions);
-  if (noteText) bodyLine(noteText, 'agent-source');
-
-  _mountTurn(line, card);
 }
 
 // ---------- 새 기법 만들기 카드 (보드 20·21, 2026-09-03) ----------
@@ -5416,9 +5287,6 @@ function renderBacktestStepCard(receipt) {
 
 function renderBacktestChangeCard(receipt) {
   if (!receipt || typeof receipt !== 'object') return;
-  // 시각 설계 4종은 머리 태그와 상태 문구가 다르다 — 질문 카드에 "반영 안 됨"을 적으면
-  // 사람이 실패로 읽는다. 기존 spec/code/file 초안 렌더에 분기를 섞지 않고 나눈다.
-  if (BACKTEST_VISUAL_KINDS.has(receipt.kind)) { renderBacktestVisualCard(receipt); return; }
   // 새 기법 만들기 2종도 머리 태그와 버튼이 다르다 — 검사 카드에는 누를 것이 없고,
   // 질문 카드의 버튼은 적용이 아니라 **대답을 보내는** 자리다.
   if (BACKTEST_TECHNIQUE_KINDS.has(receipt.kind)) { renderBacktestTechniqueCard(receipt); return; }
@@ -5470,15 +5338,6 @@ function renderBacktestChangeCard(receipt) {
     nodeEl.textContent = `${node.numeral} ${node.title} — ${node.text}`;
     card.appendChild(nodeEl);
   });
-
-  // 출처 카드에는 방어 문장이 붙는다 — 남이 쓴 글을 화면에 옮긴 자리에서 그 글이
-  // 자료일 뿐이라는 사실을 한 번은 말해야 한다(backtest-canvas.js emitSourceReadCard).
-  if (receipt.kind === 'source_read' && receipt.guard) {
-    const guard = document.createElement('div');
-    guard.className = 'backtest-change-guard';
-    guard.textContent = receipt.guard;
-    card.appendChild(guard);
-  }
 
   (Array.isArray(receipt.rows) ? receipt.rows : []).forEach((row) => {
     const rowEl = document.createElement('div');

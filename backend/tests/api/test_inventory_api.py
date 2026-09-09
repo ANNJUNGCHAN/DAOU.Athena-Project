@@ -199,7 +199,10 @@ def test_inventory_partition_and_static_openapi_coverage() -> None:
     # 421 = 414 + 7: 수집 주기 조회·수동 실행 2개(e17897f2; PUT은 제외),
     # 프로젝트 경로 재연결 1개(ebb7786e), 알람 메인 카드 확인·후보 교체 2개(e7fbfd70),
     # 종목 마스터 해석·상태 조회 2개(3645e5a6). 아래에서 각 경로와 이름도 고정한다.
-    assert len(operation_ids) == 421
+    # 415 = 421 - 6: 옛 스펙 경로를 걷어내며(PR #40) 시각 설계 라우트 6개가
+    # 사라졌다 — api/backtest_visual.py 파일째 지워 registry·validate·compile·
+    # question·patch·from-spec이 함께 없어졌다. 위 399줄의 설명은 그 시절 기록이다.
+    assert len(operation_ids) == 415
     for method, path, operation_id in (
         ("get", "/api/v1/brain/schedule", "get_brain_schedule"),
         ("post", "/api/v1/brain/schedule/{source}/run", "run_brain_schedule_source"),

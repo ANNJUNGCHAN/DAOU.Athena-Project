@@ -4,7 +4,6 @@ from fastapi import APIRouter
 
 from athena_api.api.backtest import router as backtest_router
 from athena_api.api.backtest_technique import router as backtest_technique_router
-from athena_api.api.backtest_visual import router as backtest_visual_router
 from athena_api.api.batch import router as batch_router
 from athena_api.api.brain import router as brain_router
 from athena_api.api.canvas_push import router as canvas_push_router
@@ -28,7 +27,6 @@ router = APIRouter()
 router.include_router(generated_router)
 router.include_router(backtest_router)
 router.include_router(backtest_technique_router)
-router.include_router(backtest_visual_router)
 router.include_router(batch_router)
 router.include_router(brain_router)
 router.include_router(canvas_push_router)
