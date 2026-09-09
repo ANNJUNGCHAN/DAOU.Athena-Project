@@ -18,6 +18,13 @@ def _client() -> tuple[TestClient, SelectorService]:
             "0": [{"code": "005930", "name": "삼성전자", "marketCode": "0"}],
             "10": [{"code": "035720", "name": "카카오", "marketCode": "10"}],
             "8": [{"code": "069500", "name": "KODEX 200", "marketCode": "8"}],
+            "3": [
+                {
+                    "code": "52M504",
+                    "name": "미래M504삼성전자콜",
+                    "marketCode": "3",
+                }
+            ],
         }
     )
     service = SelectorService(
@@ -157,6 +164,13 @@ def test_instrument_resolve_and_status_read_persisted_sqlite_master(tmp_path: Pa
             "0": [{"code": "005930", "name": "삼성전자", "marketCode": "0"}],
             "10": [{"code": "035720", "name": "카카오", "marketCode": "10"}],
             "8": [{"code": "069500", "name": "KODEX 200", "marketCode": "8"}],
+            "3": [
+                {
+                    "code": "52M504",
+                    "name": "미래M504삼성전자콜",
+                    "marketCode": "3",
+                }
+            ],
         }
     )
     app = create_app(Settings(_env_file=None, instrument_db_path=db_path))
@@ -164,6 +178,10 @@ def test_instrument_resolve_and_status_read_persisted_sqlite_master(tmp_path: Pa
     with TestClient(app) as client:
         resolved = client.post(
             "/api/v1/instruments/resolve", json={"question": "삼성전자 현재가"}
+        )
+        resolved_elw = client.post(
+            "/api/v1/instruments/resolve",
+            json={"question": "미래M504삼성전자콜 ELW 시세"},
         )
         missing = client.post(
             "/api/v1/instruments/resolve", json={"question": "없는 종목 현재가"}
@@ -181,9 +199,19 @@ def test_instrument_resolve_and_status_read_persisted_sqlite_master(tmp_path: Pa
         },
     }
     assert missing.json() == {"ready": True, "instrument": None}
+    assert resolved_elw.status_code == 200
+    assert resolved_elw.json() == {
+        "ready": True,
+        "instrument": {
+            "code": "52M504",
+            "name": "미래M504삼성전자콜",
+            "marketCode": "3",
+            "kind": "elw",
+        },
+    }
     assert status.status_code == 200
     assert status.json()["ready"] is True
-    assert status.json()["size"] == 3
+    assert status.json()["size"] == 4
     assert status.json()["refreshedAt"] is not None
 
 

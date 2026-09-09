@@ -238,6 +238,44 @@ def test_render_plan_http_roundtrip_facts_reaches_route_body_without_422():
         assert "1234567890" not in json.dumps(body["receipt"])
 
 
+def test_gold_quote_transport_metadata_is_not_projected_as_business_data() -> None:
+    upstream_body = {
+        "return_code": 0,
+        "return_msg": "정상적으로 처리되었습니다",
+        "pred_pre_sig": "2",
+        "pred_pre": "+1370",
+        "flu_rt": "+0.72",
+        "trde_qty": "4312",
+        "open_pric": "+190200",
+        "high_pric": "+192500",
+        "low_pric": "+189800",
+        "pred_rt": "+0.72",
+        "upl_pric": "+248400",
+        "lst_pric": "+133800",
+        "pred_close_pric": "191170",
+    }
+    with _client(_service(), FakeClient(upstream_body)) as client:
+        token = _resolve(client, "base:ka50100", {"stk_cd": "M04020000"})
+        response = client.post(
+            "/api/v1/canvas/render-plan",
+            json={"plan_token": token, "delivery": "inline"},
+        )
+
+        assert response.status_code == 200, response.text
+        envelope = response.json()["envelope"]
+        projected = {field["key"]: field for field in envelope["data"]["fields"]}
+        assert "return_code" not in projected
+        assert "return_msg" not in projected
+        assert projected["pred_close_pric"] == {
+            "key": "pred_close_pric",
+            "label": "전일종가",
+            "value": "191170",
+        }
+        assert all(field["label"] != field["key"] for field in projected.values())
+        # 원본은 진단·출처 검증용 lossless 경계에만 남고 표시 투영에는 들어오지 않는다.
+        assert envelope["raw_data"] == upstream_body
+
+
 def test_render_plan_public_label_authority_gap_returns_coverage_422():
     upstream = FakeClient({"acctNo": "1234567890"})
     with _client(_service(), upstream) as client:

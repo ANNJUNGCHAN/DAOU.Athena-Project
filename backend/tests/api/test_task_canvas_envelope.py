@@ -282,6 +282,36 @@ def test_authoritative_labels_cover_fields_columns_and_compound_headers() -> Non
     }
 
 
+def test_ka10099_undocumented_kind_is_hidden_without_dropping_identity() -> None:
+    data = {
+        "columns": [
+            {"key": "code", "label": "code"},
+            {"key": "name", "label": "name"},
+            {"key": "kind", "label": "kind"},
+        ],
+        "rows": [
+            {"code": "000020", "name": "동화약품", "kind": "stock"},
+            {"code": "005930", "name": "삼성전자", "kind": "stock"},
+        ],
+    }
+
+    dropped = _apply_authoritative_public_labels("base:ka10099", data)
+
+    assert dropped == (
+        {"location": "columns", "key": "kind", "reason": "undocumented-extra"},
+    )
+    assert data == {
+        "columns": [
+            {"key": "code", "label": "종목코드"},
+            {"key": "name", "label": "종목명"},
+        ],
+        "rows": [
+            {"code": "000020", "name": "동화약품"},
+            {"code": "005930", "name": "삼성전자"},
+        ],
+    }
+
+
 def test_recipe_and_view_identity_are_deterministic_and_server_derived() -> None:
     first = _integrated_card_contract(
         "detail:ka10001:current_trading",
