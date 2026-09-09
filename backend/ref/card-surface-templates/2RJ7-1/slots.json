@@ -462,10 +462,17 @@
     "3HF0-0": "차트 상태"
   },
   "primary": {
-    "renderer": null,
-    "mount_slot": null,
+    "renderer": "athena-chart",
+    "mount_slot": "2RKJ-1",
     "module": null,
-    "props_from": null
+    "props_from": [
+      {
+        "mapping_id": "base:ka50092",
+        "f": "gds_min_chart_qry",
+        "kor": "금현물당일분봉차트조회",
+        "control": "주기 분"
+      }
+    ]
   },
   "slots": [
     {
@@ -559,38 +566,19 @@
       "table": null,
       "mapping_id": "base:ka50080",
       "f": "cur_prc",
-      "alt_mappings": [
-        {
-          "mapping_id": "base:ka50082",
-          "f": "cur_prc"
-        },
-        {
-          "mapping_id": "base:ka50083",
-          "f": "cur_prc"
-        }
-      ],
+      "alt_mappings": null,
       "kor": "현재가",
       "format": {
         "unit": "krw_ko",
         "sign": false,
         "precision": 0,
-        "tone": "neutral"
+        "tone": "neutral",
+        "absolute": true
       },
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "extra_fields": [
-        {
-          "mapping_id": "base:ka50082",
-          "f": "cur_prc",
-          "kor": "현재가"
-        },
-        {
-          "mapping_id": "base:ka50083",
-          "f": "cur_prc",
-          "kor": "현재가"
-        }
-      ]
+      "extra_fields": null
     },
     {
       "slot_id": "s005",
@@ -604,26 +592,9 @@
       "font_size_px": 13.0,
       "anchor": null,
       "table": null,
-      "mapping_id": "base:ka50079",
-      "f": "pred_pre",
-      "alt_mappings": [
-        {
-          "mapping_id": "base:ka50012",
-          "f": "pred_pre"
-        },
-        {
-          "mapping_id": "base:ka50080",
-          "f": "pred_pre"
-        },
-        {
-          "mapping_id": "base:ka50091",
-          "f": "pred_pre"
-        },
-        {
-          "mapping_id": "base:ka50092",
-          "f": "pred_pre"
-        }
-      ],
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
       "kor": "전일대비",
       "format": {
         "unit": "percent",
@@ -634,34 +605,32 @@
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "extra_fields": [
-        {
-          "mapping_id": "base:ka50100",
-          "f": "flu_rt",
-          "kor": "등락율",
-          "sep": " · "
-        },
-        {
-          "mapping_id": "base:ka50080",
-          "f": "pred_pre",
-          "kor": "전일대비"
-        },
-        {
-          "mapping_id": "base:ka50091",
-          "f": "pred_pre",
-          "kor": "전일 대비(원)"
-        },
-        {
-          "mapping_id": "base:ka50092",
-          "f": "pred_pre",
-          "kor": "전일 대비(원)"
-        },
-        {
-          "mapping_id": "base:ka50012",
-          "f": "pred_pre",
-          "kor": "전일 대비"
-        }
-      ]
+      "extra_fields": null,
+      "composite": {
+        "separator": " · ",
+        "parts": [
+          {
+            "mapping_id": "base:ka50100",
+            "f": "pred_pre",
+            "format": {
+              "kind": "number",
+              "sign": true,
+              "precision": 0,
+              "tone": "change"
+            }
+          },
+          {
+            "mapping_id": "base:ka50100",
+            "f": "flu_rt",
+            "format": {
+              "kind": "percent",
+              "sign": true,
+              "precision": 2,
+              "tone": "change"
+            }
+          }
+        ]
+      }
     },
     {
       "slot_id": "s006",
@@ -890,9 +859,10 @@
       "font_size_px": 18.0,
       "anchor": null,
       "table": null,
-      "mapping_id": "base:ka50100",
-      "f": "open_pric",
-      "alt_mappings": [
+      "mapping_id": null,
+      "f": null,
+      "alt_mappings": null,
+      "legacy_alt_mappings": [
         {
           "mapping_id": "base:ka50012",
           "f": "open_pric"
@@ -1141,7 +1111,27 @@
           "f": "low_pric",
           "kor": "저가"
         }
-      ]
+      ],
+      "composite": {
+        "separator": " · ",
+        "parts": [
+          {
+            "mapping_id": "base:ka50100",
+            "f": "open_pric",
+            "format": { "kind": "number", "absolute": true, "precision": 0 }
+          },
+          {
+            "mapping_id": "base:ka50100",
+            "f": "high_pric",
+            "format": { "kind": "number", "absolute": true, "precision": 0 }
+          },
+          {
+            "mapping_id": "base:ka50100",
+            "f": "low_pric",
+            "format": { "kind": "number", "absolute": true, "precision": 0 }
+          }
+        ]
+      }
     },
     {
       "slot_id": "s016",
@@ -2162,29 +2152,20 @@
       "table": null,
       "mapping_id": "base:ka50100",
       "f": "pred_close_pric",
-      "alt_mappings": [
-        {
-          "mapping_id": "base:ka50012",
-          "f": "cur_prc"
-        }
-      ],
+      "alt_mappings": null,
       "kor": "전일종가",
       "format": {
         "unit": "text",
+        "kind": "number",
         "sign": false,
         "precision": 0,
-        "tone": "neutral"
+        "tone": "neutral",
+        "absolute": true
       },
       "paired_with": null,
       "collapse_group": null,
       "expanded_board": null,
-      "extra_fields": [
-        {
-          "mapping_id": "base:ka50012",
-          "f": "cur_prc",
-          "kor": "종가"
-        }
-      ]
+      "extra_fields": null
     },
     {
       "slot_id": "s053",
@@ -2294,9 +2275,9 @@
     {
       "slot_id": "s058",
       "node_id": "2RK4-1",
-      "node_name": "52주 최저 128,540",
+      "node_name": "52주 최저 미제공",
       "node_path": "2/1/1/1/1/0",
-      "paper_text": "52주 최저 128,540",
+      "paper_text": "52주 최저 미제공",
       "region": "rail",
       "kind": "value",
       "layer": "직접",
@@ -2322,9 +2303,9 @@
     {
       "slot_id": "s059",
       "node_id": "2RK3-1",
-      "node_name": "최고 172,850",
+      "node_name": "최고 미제공",
       "node_path": "2/1/1/1/1/1",
-      "paper_text": "최고 172,850",
+      "paper_text": "최고 미제공",
       "region": "rail",
       "kind": "value",
       "layer": "직접",
@@ -2454,9 +2435,11 @@
       "kor": "하한가",
       "format": {
         "unit": "text",
+        "kind": "number",
         "sign": false,
         "precision": 0,
-        "tone": "change"
+        "tone": "change",
+        "absolute": true
       },
       "paired_with": null,
       "collapse_group": null,
@@ -2501,9 +2484,11 @@
       "kor": "상한가",
       "format": {
         "unit": "text",
+        "kind": "number",
         "sign": false,
         "precision": 0,
-        "tone": "change"
+        "tone": "change",
+        "absolute": true
       },
       "paired_with": null,
       "collapse_group": null,
@@ -2903,9 +2888,9 @@
     {
       "slot_id": "s080",
       "node_id": "33E5-0",
-      "node_name": "+0.4%",
+      "node_name": "미제공",
       "node_path": "2/1/2/0/1/2/1",
-      "paper_text": "+0.4%",
+      "paper_text": "미제공",
       "region": "rail",
       "kind": "value",
       "layer": "직접",
@@ -3154,9 +3139,11 @@
       "kor": "체결가",
       "format": {
         "unit": "text",
+        "kind": "number",
         "sign": false,
         "precision": 0,
-        "tone": "change"
+        "tone": "change",
+        "absolute": true
       },
       "paired_with": null,
       "collapse_group": null,
@@ -3313,9 +3300,11 @@
       "kor": "체결가",
       "format": {
         "unit": "text",
+        "kind": "number",
         "sign": false,
         "precision": 0,
-        "tone": "change"
+        "tone": "change",
+        "absolute": true
       },
       "paired_with": null,
       "collapse_group": null,
@@ -3442,9 +3431,11 @@
       "kor": "체결가",
       "format": {
         "unit": "text",
+        "kind": "number",
         "sign": false,
         "precision": 0,
-        "tone": "change"
+        "tone": "change",
+        "absolute": true
       },
       "paired_with": null,
       "collapse_group": null,
@@ -3565,9 +3556,11 @@
       "kor": "매도호가",
       "format": {
         "unit": "text",
+        "kind": "number",
         "sign": false,
         "precision": 0,
-        "tone": "change"
+        "tone": "change",
+        "absolute": true
       },
       "paired_with": null,
       "collapse_group": null,
@@ -3612,9 +3605,11 @@
       "kor": "매수호가",
       "format": {
         "unit": "text",
+        "kind": "number",
         "sign": false,
         "precision": 0,
-        "tone": "change"
+        "tone": "change",
+        "absolute": true
       },
       "paired_with": null,
       "collapse_group": null,
@@ -3738,9 +3733,9 @@
     {
       "slot_id": "s113",
       "node_id": "39ZQ-0",
-      "node_name": "08:50 기준",
+      "node_name": "기준 시각 미제공",
       "node_path": "2/1/2/2/0/1",
-      "paper_text": "08:50 기준",
+      "paper_text": "기준 시각 미제공",
       "region": "rail",
       "kind": "value",
       "layer": "직접",
@@ -3802,9 +3797,11 @@
       "kor": "예상 체결가",
       "format": {
         "unit": "krw_ko",
+        "kind": "korean",
         "sign": false,
         "precision": 0,
-        "tone": "neutral"
+        "tone": "neutral",
+        "absolute": true
       },
       "paired_with": null,
       "collapse_group": null,
@@ -3988,9 +3985,9 @@
     {
       "slot_id": "s122",
       "node_id": "3HCD-0",
-      "node_name": "08-31",
+      "node_name": "기준일 미제공",
       "node_path": "3/0/1/0",
-      "paper_text": "08-31",
+      "paper_text": "기준일 미제공",
       "region": "other",
       "kind": "value",
       "layer": "직접",
@@ -4621,9 +4618,11 @@
       "kor": "투자자별 매도 단가",
       "format": {
         "unit": "text",
+        "kind": "number",
         "sign": false,
         "precision": 0,
-        "tone": "neutral"
+        "tone": "neutral",
+        "absolute": true
       },
       "paired_with": null,
       "collapse_group": null,
@@ -4651,9 +4650,11 @@
       "kor": "투자자별 매수 단가",
       "format": {
         "unit": "text",
+        "kind": "number",
         "sign": false,
         "precision": 0,
-        "tone": "neutral"
+        "tone": "neutral",
+        "absolute": true
       },
       "paired_with": "s144",
       "collapse_group": null,
@@ -5122,9 +5123,11 @@
       "kor": "투자자별 매도 단가",
       "format": {
         "unit": "text",
+        "kind": "number",
         "sign": false,
         "precision": 0,
-        "tone": "neutral"
+        "tone": "neutral",
+        "absolute": true
       },
       "paired_with": null,
       "collapse_group": null,
@@ -5153,9 +5156,11 @@
       "kor": "투자자별 매수 단가",
       "format": {
         "unit": "text",
+        "kind": "number",
         "sign": false,
         "precision": 0,
-        "tone": "neutral"
+        "tone": "neutral",
+        "absolute": true
       },
       "paired_with": "s160",
       "collapse_group": null,
@@ -5628,9 +5633,11 @@
       "kor": "투자자별 매도 단가",
       "format": {
         "unit": "text",
+        "kind": "number",
         "sign": false,
         "precision": 0,
-        "tone": "neutral"
+        "tone": "neutral",
+        "absolute": true
       },
       "paired_with": null,
       "collapse_group": null,
@@ -5659,9 +5666,11 @@
       "kor": "투자자별 매수 단가",
       "format": {
         "unit": "text",
+        "kind": "number",
         "sign": false,
         "precision": 0,
-        "tone": "neutral"
+        "tone": "neutral",
+        "absolute": true
       },
       "paired_with": "s176",
       "collapse_group": null,
@@ -5828,9 +5837,9 @@
     {
       "slot_id": "s183",
       "node_id": "3HET-0",
-      "node_name": "08-26~08-31",
+      "node_name": "집계 기간 미제공",
       "node_path": "3/5/1",
-      "paper_text": "08-26~08-31",
+      "paper_text": "집계 기간 미제공",
       "region": "other",
       "kind": "value",
       "layer": "직접",

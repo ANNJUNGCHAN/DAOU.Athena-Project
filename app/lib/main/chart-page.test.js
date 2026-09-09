@@ -41,9 +41,10 @@ function loadMainAccountBoundDataCalls({ activeId, bindings, historyAccountId = 
     backendAccountAuthorization: () => 'Bearer fixture',
     shellWin: { isDestroyed: () => false, webContents: shellContents },
     chartReloadAuthority: {
-      buildDataset: () => ({ accountId: historyAccountId, items: [] }),
+      buildDataset: () => ({ accountId: historyAccountId, items: [{ operationRef: 'base:ka50092', args: { stk_cd: 'M04020000', tic_scope: '5' } }] }),
       buildHistoryDataset: () => ({ accountId: historyAccountId, items: [{ operationRef: 'base:ka10081', args: { stk_cd: '005930' } }] }),
       acceptResult: (_request, result) => result,
+      acceptPageResult: (_request, result) => result,
     },
     runDirectRestDataset: async (_request, _expand, options) => { calls.reload.push(options); return { ok: true }; },
     chartPage: { fetchChartPage: async (options) => { calls.chart.push(options); return { ok: true, candles: [{}] }; } },
@@ -52,6 +53,7 @@ function loadMainAccountBoundDataCalls({ activeId, bindings, historyAccountId = 
   vm.runInContext([
     functionSource(source, 'function createActiveBackendAccountInvoker('),
     functionSource(source, 'async function handleChartPanelReload('),
+    functionSource(source, 'async function handleChartPanelRefresh('),
     functionSource(source, 'async function handleChartHistoryPage('),
     functionSource(source, 'async function handleChartSeries('),
   ].join('\n'), context);
@@ -60,6 +62,7 @@ function loadMainAccountBoundDataCalls({ activeId, bindings, historyAccountId = 
     event: { sender: shellContents },
     chart: context.handleChartHistoryPage,
     reload: context.handleChartPanelReload,
+    refresh: context.handleChartPanelRefresh,
     series: context.handleChartSeries,
   };
 }
@@ -119,6 +122,14 @@ test('실제 main chart/series 경계는 활성 local ID를 같은 검증 alias�
     assert.equal(runtime.calls.chart[0].backendAccountAlias, backendAccountAlias);
     assert.equal(runtime.calls.series[0].backendAccountAlias, backendAccountAlias);
   }
+});
+
+test('자동 차트 갱신은 dataset runner 대신 읽기 전용 chart-page를 사용한다', async () => {
+  const runtime = loadMainAccountBoundDataCalls({ activeId: 'local-a', bindings: { 'local-a': 'server-a' } });
+  runtime.calls.chart.length = 0;
+  await runtime.refresh(runtime.event, {});
+  assert.equal(runtime.calls.chart.length, 1);
+  assert.equal(runtime.calls.reload.length, 0);
 });
 
 test('실제 main mapping 실패는 chart/series 데이터 호출 전에 차단한다', async () => {

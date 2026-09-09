@@ -77,6 +77,8 @@ test('정밀도·퍼센트·일자 포맷', () => {
   assert.equal(formatSlot({ unit: 'time' }, '150218').text, '15:02:18');
   assert.equal(formatTime('93000'), '93000');
   assert.equal(formatTime('20260902'), '20260902');
+  assert.equal(formatSlot({ unit: 'time' }, '20260909134427').text, '2026-09-09 13:44:27');
+  assert.equal(formatSlot({ unit: 'time' }, '20260908153000').text, '2026-09-08 15:30:00');
   assert.equal(formatSlot({ kind: 'korean', scale: '천' }, 1284).text, '128만 4,000');
 });
 

@@ -124,6 +124,28 @@ function normalizeOperations(raw) {
   });
 }
 
+function normalizePrimaryEnvelope(raw) {
+  if (!raw || typeof raw !== 'object' || raw.renderer_id !== 'aits-chart-v1') return null;
+  const data = raw.data && typeof raw.data === 'object' ? raw.data : null;
+  const chart = data && data.chart && typeof data.chart === 'object' ? data.chart : null;
+  if (!data || !chart || !Array.isArray(chart.candles) || !chart.candles.length) return null;
+  if (!String(data.symbol || '').trim() || !String(raw.operation_ref || '').trim()) return null;
+  return raw;
+}
+
+function primaryReloadAuthority(reply, correlation, accountId) {
+  const primary = reply && normalizePrimaryEnvelope(reply.primary_envelope || reply.primaryEnvelope);
+  if (!primary || !correlation || typeof correlation !== 'object' || !String(accountId || '').trim()) return null;
+  return {
+    correlation,
+    operationRef: primary.operation_ref,
+    operationArgs: primary.operation_args,
+    accountId: String(accountId),
+    chartBody: primary.data.chart,
+    chartMeta: primary.data.chart_meta,
+  };
+}
+
 async function hydrateBoard({ backendBase, fetchImpl, token, boardId, target, account, slotIds } = {}) {
   let body;
   try {
@@ -176,6 +198,7 @@ async function hydrateBoard({ backendBase, fetchImpl, token, boardId, target, ac
     (contract && contract.slot_values) || payload.slot_values || payload.slotValues,
   );
   const operations = normalizeOperations(payload.operations);
+  const primaryEnvelope = normalizePrimaryEnvelope(payload.primary_envelope || payload.primaryEnvelope);
   return {
     ok: true,
     status: 'hydrated',
@@ -183,6 +206,7 @@ async function hydrateBoard({ backendBase, fetchImpl, token, boardId, target, ac
     slot_values: slotValues,
     filled: Object.keys(slotValues).length,
     operations,
+    primary_envelope: primaryEnvelope,
     // 하이드레이션으로 채워진 슬롯도 실시간 갱신을 받으려면 observation_id가 붙은
     // 원본 계약이 필요하다(렌더러가 realtimeSlotIndex를 다시 만든다).
     surface_contract: contract,
@@ -195,5 +219,7 @@ module.exports = {
   buildHydrateBody,
   normalizeSlotValues,
   normalizeOperations,
+  normalizePrimaryEnvelope,
+  primaryReloadAuthority,
   hydrateBoard,
 };

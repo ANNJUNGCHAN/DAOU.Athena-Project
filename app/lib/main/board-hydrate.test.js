@@ -4,7 +4,8 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const {
-  HYDRATE_PATH, buildHydrateBody, normalizeSlotValues, normalizeOperations, hydrateBoard,
+  HYDRATE_PATH, buildHydrateBody, normalizeSlotValues, normalizeOperations,
+  normalizePrimaryEnvelope, primaryReloadAuthority, hydrateBoard,
 } = require('./board-hydrate');
 
 function makeFetch(reply) {
@@ -117,6 +118,38 @@ test('operation 상태는 로딩 완료와 부분 실패를 판단할 최소 필
     { operation_ref: 'base:ka10001', status: 'bound', bound_count: 6 },
     { operation_ref: 'base:ka10003', status: 'unbound', reason: 'upstream_error' },
   ]);
+});
+
+test('금현물 primary는 봉이 든 AITS 차트 envelope만 통과시킨다', () => {
+  const envelope = {
+    renderer_id: 'aits-chart-v1', operation_ref: 'base:ka50092',
+    data: { symbol: 'M04020000', chart: { candles: [{ time: 1, close: 188910 }] } },
+  };
+  assert.equal(normalizePrimaryEnvelope(envelope), envelope);
+  assert.equal(normalizePrimaryEnvelope({ ...envelope, renderer_id: 'legacy' }), null);
+  assert.equal(normalizePrimaryEnvelope({ ...envelope, data: { ...envelope.data, chart: { candles: [] } } }), null);
+});
+
+test('ka50100 원 요청의 paint 권위는 hydrated ka50092 primary 계약으로 교체한다', () => {
+  const correlation = { dataset_id: 'd1', item_id: 'i1', ordinal: 0 };
+  const primary = {
+    renderer_id: 'aits-chart-v1', operation_ref: 'base:ka50092',
+    operation_args: { stk_cd: 'M04020000', tic_scope: '5' },
+    data: {
+      symbol: 'M04020000',
+      chart: { period: 'min', target: 'gold', trId: 'ka50092', candles: [{ time: 1, close: 188910 }] },
+      chart_meta: { series_scope: 'today', reload_group: 'gold-today', reload_targets: {} },
+    },
+  };
+  assert.deepEqual(primaryReloadAuthority({ primary_envelope: primary }, correlation, 'acct-1'), {
+    correlation,
+    operationRef: 'base:ka50092',
+    operationArgs: { stk_cd: 'M04020000', tic_scope: '5' },
+    accountId: 'acct-1',
+    chartBody: primary.data.chart,
+    chartMeta: primary.data.chart_meta,
+  });
+  assert.equal(primaryReloadAuthority({ primary_envelope: primary }, correlation, ''), null);
 });
 
 test('하이드레이션 POST의 stk_cd는 배열이 아니라 첫 종목 문자열이다', async () => {

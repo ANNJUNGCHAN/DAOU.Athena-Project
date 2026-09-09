@@ -60,6 +60,15 @@ function createChartReloadAuthority(options) {
     const input = request && typeof request === 'object' ? request : {};
     const authority = panels.get(String(input.panelId || ''));
     if (!authority) throw new Error('AITS chart reload 권위가 없는 패널이다');
+    // 페이지 결과를 renderer가 실제로 적용한 다음 요청은 새 generation을 싣는다.
+    // 그때만 pending 권위를 확정한다. renderer가 실패해 옛 generation으로 재시도하면
+    // main 권위도 그대로라 같은 세대를 다시 받을 수 있다.
+    if (authority.pending && Number(input.generation) === authority.pending.generation) {
+      authority.generation = authority.pending.generation;
+      authority.operationRef = authority.pending.operationRef;
+      authority.operationArgs = authority.pending.operationArgs;
+      authority.pending = null;
+    }
     if (!Number.isInteger(Number(input.generation)) || Number(input.generation) !== authority.generation) {
       throw new Error('AITS chart reload generation이 현재 세션과 다르다');
     }
@@ -150,6 +159,26 @@ function createChartReloadAuthority(options) {
     return { ok: true, panelId: canvas.panelId, generation: canvas.generation };
   }
 
+  function acceptPageResult(request, result) {
+    const expected = request && request.expected;
+    const authority = expected && panels.get(String(expected.panelId || ''));
+    if (!authority || !result || result.ok !== true || !Array.isArray(result.candles)
+      || !result.candles.length || expected.generation !== authority.generation + 1) {
+      throw new Error('AITS chart 자동 재조회 결과가 현재 패널과 다르다');
+    }
+    authority.pending = {
+      generation: expected.generation,
+      operationRef: expected.operationRef,
+      operationArgs: Object.assign({}, request.items[0].args),
+    };
+    return {
+      ok: true,
+      panelId: expected.panelId,
+      generation: expected.generation,
+      candles: result.candles,
+    };
+  }
+
   function unregister(panelId) {
     return panels.delete(String(panelId || ''));
   }
@@ -163,6 +192,7 @@ function createChartReloadAuthority(options) {
     buildDataset,
     buildHistoryDataset,
     acceptResult,
+    acceptPageResult,
     unregister,
     clear,
     has: (panelId) => panels.has(panelId),

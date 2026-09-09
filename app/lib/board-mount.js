@@ -1707,7 +1707,7 @@ function createLatestBoardLoad() {
     try {
       const value = await task(isCurrent);
       if (!isCurrent()) return { status: 'stale' };
-      if (typeof handlers.onReady === 'function') handlers.onReady(value);
+      if (typeof handlers.onReady === 'function') await handlers.onReady(value);
       return { status: 'ready', value };
     } catch (error) {
       if (!isCurrent()) return { status: 'stale' };
