@@ -1,10 +1,10 @@
 // 기법 노드·흐름 창 — Paper 보드 21.
 //
-// **왜 시각 편집기(backtest-visual-editor.js) 옆에 또 하나의 그래프 표면인가.** 그쪽은
-// registry가 정한 노드 종류를 팔레트에서 끌어다 붙이는 **편집** 표면이다. 여기는 반대다 —
-// 노드가 기법 파이썬의 함수 한 단위라서 기법마다 노드가 다르고, 범용 팔레트라는 것이
-// 아예 없다. 팔레트도 연결 편집도 만들지 않고 읽기·선택·질문만 낸다. 두 규율을 한 파일에
-// 섞으면 "여기서는 손으로 못 고친다"는 이 창의 계약이 가장 먼저 무너진다.
+// **여기는 편집 표면이 아니다.** 한때 옆에 있던 시각 편집기(2026-09-08 폐기)는 registry가
+// 정한 노드 종류를 팔레트에서 끌어다 붙이는 편집 표면이었다. 이 창은 반대다 — 노드가 기법
+// 파이썬의 함수 한 단위라서 기법마다 노드가 다르고, 범용 팔레트라는 것이 아예 없다.
+// 팔레트도 연결 편집도 만들지 않고 읽기·선택·참조만 낸다. 그 규율이 흔들리면 "여기서는
+// 손으로 못 고친다"는 이 창의 계약이 가장 먼저 무너진다.
 //
 // **문구의 출처.** 노드 이름은 서버가 준 label(=`함수명()`), 한 줄 설명은 summary_ko,
 // 타입은 returns_hint에서 온다. 이 파일이 직접 갖는 한국어는 화면 구조 라벨(흐름 이름·
@@ -33,14 +33,21 @@ const RAIL_COUNT = (n) => `이 기법의 노드 ${n}개`;
 const RAIL_NOTE = '다른 기법에는 다른 노드가 생깁니다';
 const FLOW_TITLES = { entry: '진입 흐름', exit: '청산 흐름', stage: '단계 흐름' };
 const FLOW_EXPLAIN = '이 흐름 설명';
+const FLOW_EXPLAIN_HINT = (title) => `누르면 @${title}`;
 const CARD_OPEN_CODE = '코드 보기';
 const EXPLAIN_ALL = '이 기법 전체를 설명해줘';
+const REF_ALL_NAME = '전체';
+const REF_ALL_HINT = '누르면 @전체';
 const GHOST_LABEL = '재사용';
 const GHOST_TITLE = '앞 흐름에서 만든 값을 그대로 다시 씁니다';
 const PILL_ENTRY = (n) => `진입 주문 후보 ${n}건`;
 const PILL_EXIT = (n) => `청산 주문 후보 ${n}건`;
 
-const STATUS_IDLE = '노드를 고르면 설명을 들을 수 있습니다';
+// 보드 21(2026-09-08 개정)의 발밑 문장. 여기서 누른 것은 메시지가 아니라 참조라는 계약을
+// 아무것도 고르지 않은 상태의 안내가 직접 말한다 — "설명을 들을 수 있습니다"는 누르면 말이
+// 나간다는 뜻으로 읽혔다.
+const STATUS_IDLE = "'이상해요' 같은 버튼은 없습니다. 무엇이 이상한지는 사람이 자기 말로 씁니다.";
+const STATUS_ATTACHED = (name) => `선택됨 — 오른쪽 입력창에 @${name} 가 붙었습니다`;
 const STATUS_EMPTY = '아직 노드가 없습니다 — 검사를 통과하면 함수 단위 노드가 생깁니다';
 const STATUS_SELECT = '선택';
 const STATUS_OFF_FLOW = '진입·청산 흐름에 들어가지 않습니다';
@@ -109,6 +116,9 @@ function normalizePayload(payload) {
     },
     granularity: base.granularity === 'stage' ? 'stage' : 'function',
     unknown: (base.unknown || []).map(String),
+    // 참조 칩이 "어느 파일의 몇째 줄"인지 말할 수 있어야 하므로 소스 경로도 그대로 나른다.
+    // 서버가 안 주면 빈 문자열이고, 그때 칩은 줄 범위만 말한다 — 경로를 지어내지 않는다.
+    path: base.path ? String(base.path) : '',
     error: base.error || null,
   };
 }
@@ -277,6 +287,7 @@ function createTechniqueNodes(container, options) {
     payload: normalizePayload(opts.payload),
     stats: opts.stats || null,
     selectedId: opts.selected || null,
+    attached: null, // 마지막으로 입력창에 붙인 참조의 이름 — 상태 한 줄이 그것만 말한다
   };
 
   let destroyed = false;
@@ -303,12 +314,54 @@ function createTechniqueNodes(container, options) {
     const next = nodeId && nodeById(nodeId) ? nodeId : null;
     if (state.selectedId === next) return;
     state.selectedId = next;
+    state.attached = null; // 다른 노드로 옮기면 앞 참조의 안내는 더 이상 사실이 아니다
     if (!silent && opts.onSelect) opts.onSelect(next);
   }
 
   function select(nodeId) {
     setSelected(nodeId);
     render();
+  }
+
+  // ---------- 참조 ----------
+  //
+  // 보드 21(2026-09-08 개정) 확정: **노드를 눌러도 메시지는 나가지 않는다.** 무엇을 두고
+  // 이야기할지만 정해지고(=참조 칩이 입력창에 붙고), 하고 싶은 말은 사람이 자기 말로 쓴다.
+  // 그래서 이 창이 내는 것은 문장이 아니라 참조 하나다.
+  //
+  // onExplain*는 지운 게 아니라 뒤로 물렸다 — 그 서명으로 이미 배선한 호스트(옛 캔버스·
+  // 하네스)가 있고, 그쪽에서 화면이 조용히 죽으면 원인을 아무도 못 찾는다. onReference가
+  // 있으면 그것이 이기고 메시지는 한 건도 나가지 않는다.
+
+  function nodeLines(node) {
+    if (node.first_line == null) return null;
+    return [node.first_line, node.last_line == null ? node.first_line : node.last_line];
+  }
+
+  function nodeRef(node) {
+    return {
+      kind: 'node',
+      label: `@${node.id}`,
+      name: node.id,
+      lines: nodeLines(node),
+      path: state.payload.path,
+    };
+  }
+
+  function plainRef(kind, name) {
+    return { kind: kind, label: `@${name}`, name: name, lines: null, path: state.payload.path };
+  }
+
+  // 참조를 붙인다. onReference가 있으면 상태 한 줄이 바뀌므로 true를 돌려주고, 부르는 쪽이
+  // 한 번만 다시 그린다(여기서 render를 부르면 선택 갱신과 겹쳐 두 번 그린다).
+  function attach(ref, legacy) {
+    if (opts.onReference) {
+      state.attached = ref.name;
+      opts.onReference(ref);
+      return true;
+    }
+    if (legacy) legacy();
+    return false;
   }
 
   function focusNode(nodeId) {
@@ -352,9 +405,10 @@ function createTechniqueNodes(container, options) {
     // 함께 나간다.
     if (key === 'Enter' && !ctrl) {
       if (tagOf(ev.target) === 'button') return;
-      if (!state.selectedId) return;
+      const node = nodeById(state.selectedId);
+      if (!node) return;
       stop();
-      if (opts.onExplainNode) opts.onExplainNode(state.selectedId);
+      if (attach(nodeRef(node), () => { if (opts.onExplainNode) opts.onExplainNode(node.id); })) render();
       return;
     }
     if ((key === 'o' || key === 'O') && !ctrl) {
@@ -376,8 +430,12 @@ function createTechniqueNodes(container, options) {
     state.payload.nodes.forEach((node) => {
       const picked = state.selectedId === node.id;
       const item = button(`backtest-tnodes-rail-item${picked ? ' is-selected' : ''}`, null, () => {
-        select(node.id);
-        focusEl(refs.cards[node.id] || refs.rail[node.id]);
+        setSelected(node.id);
+        // 레일에서 고른 것도 참조다(보드 21). 붙었으면 초점은 대화 입력창의 것이므로
+        // 여기서 되가져오지 않는다 — 뺏으면 이어서 타자할 수 없다(카드 클릭의 짝 주석).
+        const attached = attach(nodeRef(node));
+        render();
+        if (!attached) focusEl(refs.cards[node.id] || refs.rail[node.id]);
       });
       attr(item, 'data-node-id', node.id);
       attr(item, 'aria-pressed', state.selectedId === node.id ? 'true' : 'false');
@@ -405,6 +463,12 @@ function createTechniqueNodes(container, options) {
     const canvas = el('div', 'backtest-tnodes-canvas');
     const head = el('div', 'backtest-tnodes-canvas-head');
     head.appendChild(el('span', 'backtest-tnodes-canvas-title', CANVAS_TITLE));
+    // 캔버스 머리 오른쪽 [전체](보드 21) — 노드도 흐름도 아닌 "이 기법 전체"를 참조로 붙인다.
+    const all = button('backtest-tnodes-canvas-all', REF_ALL_NAME, () => {
+      if (attachAll()) render();
+    });
+    attr(all, 'title', REF_ALL_HINT);
+    head.appendChild(all);
     canvas.appendChild(head);
     canvas.appendChild(renderSurface(lanes));
     canvas.appendChild(renderFoot());
@@ -459,10 +523,16 @@ function createTechniqueNodes(container, options) {
     attr(head, 'style', `left:${box.x}px;top:${box.y}px;width:${box.w}px`);
     head.appendChild(el('span', 'backtest-tnodes-lane-title', (lane && lane.title) || FLOW_TITLES[box.kind] || box.kind));
     if (lane && lane.explainable) {
+      // 흐름 손잡이도 참조다 — @진입 흐름 / @청산 흐름. 무엇이 붙는지 버튼이 직접 말한다
+      // (문구는 보드 21 캔버스 머리의 [전체]와 같은 '누르면 @…' 관례).
       const ask = button('backtest-tnodes-lane-explain', FLOW_EXPLAIN, () => {
-        if (opts.onExplainFlow) opts.onExplainFlow(lane.kind);
+        const title = FLOW_TITLES[lane.kind] || lane.kind;
+        if (attach(plainRef('flow', title), () => {
+          if (opts.onExplainFlow) opts.onExplainFlow(lane.kind);
+        })) render();
       });
       attr(ask, 'data-flow', lane.kind);
+      attr(ask, 'title', FLOW_EXPLAIN_HINT(FLOW_TITLES[lane.kind] || lane.kind));
       head.appendChild(ask);
     }
     return head;
@@ -483,8 +553,9 @@ function createTechniqueNodes(container, options) {
     // 클릭 = 이 노드를 참조한다. 초점을 카드로 되가져오지 않는다 — 부르는 쪽이 대화 입력창에
     // @참조를 넣고 포커스를 주는데, 여기서 다시 뺏으면 이어서 타자할 수 없다(실측).
     card.addEventListener('click', () => {
-      select(node.id);
-      if (opts.onExplainNode) opts.onExplainNode(node.id);
+      setSelected(node.id);
+      attach(nodeRef(node), () => { if (opts.onExplainNode) opts.onExplainNode(node.id); });
+      render();
     });
 
     const head = el('div', 'backtest-tnodes-card-head');
@@ -536,11 +607,18 @@ function createTechniqueNodes(container, options) {
       if (s.entry != null) foot.appendChild(el('span', 'backtest-tnodes-pill is-entry', PILL_ENTRY(s.entry)));
       if (s.exit != null) foot.appendChild(el('span', 'backtest-tnodes-pill is-exit', PILL_EXIT(s.exit)));
     }
+    // 발밑 버튼도 같은 손잡이다 — onReference가 있으면 여기서도 말이 나가지 않는다.
     const all = button('backtest-tnodes-explain-all', EXPLAIN_ALL, () => {
-      if (opts.onExplainAll) opts.onExplainAll();
+      if (attachAll()) render();
     });
     foot.appendChild(all);
     return foot;
+  }
+
+  function attachAll() {
+    return attach(plainRef('all', REF_ALL_NAME), () => {
+      if (opts.onExplainAll) opts.onExplainAll();
+    });
   }
 
   // ---------- 상태 한 줄 ----------
@@ -553,6 +631,9 @@ function createTechniqueNodes(container, options) {
       return msg ? `${STATUS_ERROR} · ${msg}` : STATUS_ERROR;
     }
     if (!state.payload.nodes.length) return STATUS_EMPTY;
+    // 참조를 붙인 직후에는 그 사실만 말한다 — 사람이 다음에 할 일은 입력창에 자기 말을
+    // 쓰는 것이고, 그 자리를 상태 줄이 짚어 준다(보드 21).
+    if (state.attached) return STATUS_ATTACHED(state.attached);
     const node = nodeById(state.selectedId);
     if (!node) return STATUS_IDLE;
     const kinds = lanesOf(node.id);
@@ -600,6 +681,7 @@ function createTechniqueNodes(container, options) {
     element: root,
     setPayload(payload) {
       state.payload = normalizePayload(payload);
+      state.attached = null; // 판이 갈리면 앞 참조는 다른 기법의 함수를 가리킨다
       if (state.selectedId && !nodeById(state.selectedId)) setSelected(null, true);
       render();
     },
@@ -633,7 +715,7 @@ const __exports = {
   STAGE_ORDER,
 };
 
-// UMD 각주(2026-08-18 렌더러 격리) — backtest-visual-editor.js와 같은 패턴.
+// UMD 각주(2026-08-18 렌더러 격리) — lib의 다른 렌더러 모듈과 같은 패턴.
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = __exports;
 } else {
