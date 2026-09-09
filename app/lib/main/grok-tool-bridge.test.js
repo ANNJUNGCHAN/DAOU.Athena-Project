@@ -2,6 +2,7 @@
 
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
+const { createRequire } = require('node:module');
 const path = require('node:path');
 const test = require('node:test');
 const vm = require('node:vm');
@@ -32,6 +33,7 @@ function createHarness({ forwardBacktestAction = false } = {}) {
   const sent = [];
   const steps = [];
   const context = {
+    require: createRequire(path.join(__dirname, '..', '..', 'main.js')),
     streamJsonParser,
     shellWin: {
       isDestroyed: () => false,
