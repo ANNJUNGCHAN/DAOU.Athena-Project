@@ -1391,6 +1391,37 @@ function scrollOverflowOwner(surface) {
   return picked;
 }
 
+// 세로로 뚫린 상자를 **재고 나서** 자라게 한다.
+//
+// 높이 되돌리기는 CSS가 좁은 단계에서 이미 허용한다(board-surface.css:
+// `height: auto; min-height: var(--bs-height)`) — 「높이 hoist가 허용하는 것은
+// 성장뿐」이라는 계약이다. 그런데 그 단계 규칙이 닿지 않는 상자가 남아, 실데이터가
+// 목업보다 길면 내용이 칸을 그대로 뚫는다(실측 2XP6-0 `3FCI-0`: 55px 칸에 내용
+// 59px — 「1위 이수페타시스」가 Paper 목업 이름보다 길다). 그 상자에만 같은 처방을
+// 준다: Paper 높이는 **바닥**으로 남기고(min-height) 자라기만 허용한다.
+function relaxOverflowHeights(surface) {
+  const grown = [];
+  for (const el of surface.querySelectorAll('[data-bs-hoisted]')) {
+    if (!el.style || !el.dataset) continue;
+    if (el.dataset.bsGrowBox === 'true') continue;
+    const paperHeight = el.style.getPropertyValue('--bs-height');
+    if (!paperHeight) continue;
+    if (!String(el.textContent || '').trim()) continue;
+    if (getComputedStyle(el).overflowY !== 'visible') continue;
+    if (el.scrollHeight <= el.clientHeight + 1) continue;
+    el.style.setProperty('height', 'auto');
+    el.style.setProperty('min-height', paperHeight);
+    el.dataset.bsGrowBox = 'true';
+    grown.push(el.dataset.node || '');
+  }
+  if (grown.length && surface.dataset) {
+    surface.dataset.bsGrownBoxes = String(
+      Number(surface.dataset.bsGrownBoxes || 0) + grown.length,
+    );
+  }
+  return grown;
+}
+
 function relaxOverflowRows(surface) {
   if (!surface || typeof surface.querySelectorAll !== 'function') return [];
   if (typeof getComputedStyle !== 'function' || typeof document === 'undefined') return [];
@@ -1480,6 +1511,7 @@ function watchSurfaceWidth(surface) {
     last = width;
     running = true;
     try {
+      relaxOverflowHeights(surface);
       relaxOverflowRows(surface);
     } finally {
       running = false;
@@ -1606,6 +1638,7 @@ function mountBoard(root, boardId, values, options = {}) {
   const report = applyPlan(surface, plan, options);
   // 값이 실린 뒤에 잰다 — 목업보다 긴 값이 들어오면 줄이 그때 넘친다. 폭이 바뀌면
   // 표면의 관찰자가 다시 잰다.
+  relaxOverflowHeights(surface);
   relaxOverflowRows(surface);
   watchSurfaceWidth(surface);
   // 렌더러가 저작된 보드에서만 자리를 딸려 보낸다 — 그 자리에 앱 렌더러를 얹는 것은
@@ -1682,7 +1715,8 @@ const __exports = {
   ROLLUP_MARK, RESPONSIVE_REGIONS, HOISTED_PROPERTIES, CARD_SHELL_PROPERTIES, normalizeCardShell,
   isValueSlot, anchorOf, staticTextOf, collapsePlan, mountPlan, pairedGroups,
   nodeIndex, elementChildCount, setHidden, applyPlan, collapseEmptyRows, collapseEmptyColumns,
-  relaxOverflowRows, isRelaxableRow, isRowShape, squeezedRow, reachesByScroll,
+  relaxOverflowRows, relaxOverflowHeights, isRelaxableRow, isRowShape, squeezedRow,
+  reachesByScroll,
   scrollOverflowOwner,
   watchSurfaceWidth,
   wrapOverflowingLabels,

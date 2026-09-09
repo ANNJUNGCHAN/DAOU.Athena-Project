@@ -358,6 +358,11 @@ async function main() {
     broken_boards: boards.filter(
       (board) => board.failures.some((failure) => failure.code.endsWith('failed')),
     ).length,
+    // 실데이터 경로의 기하 계약 위반 — 마운트 게이트가 Paper 픽스처로 재는 것과
+    // 같은 판정이다. 세어 두기만 하면 게이트가 통과로 지나가므로 실패에 넣는다.
+    geometry_boards: boards.filter(
+      (board) => board.failures.some((failure) => failure.code === 'surface_geometry'),
+    ).length,
   };
   const runtime = {
     gate: 'verify:card-api-sweep',
@@ -373,7 +378,7 @@ async function main() {
   fs.writeFileSync(REPORT_PATH, `${JSON.stringify(runtime, null, 1)}\n`);
   console.log(JSON.stringify(totals));
   const failed = totals.missing_boards + totals.clipped_boards + totals.broken_boards
-    + totals.overlap_boards;
+    + totals.overlap_boards + totals.geometry_boards;
   console.log(failed ? `card api sweep failed — ${REPORT_PATH}` : 'card api sweep passed');
   app.exit(failed ? 1 : 0);
 }
