@@ -84,7 +84,8 @@ function buildOrderActionCard({ trId, body, outcome, response }) {
     status: 'success',
     envelope: _baseEnvelope('action', caption, {
       lifecycle,
-      state_label: lifecycle === 'done' ? '체결 완료'
+      // 주문 API의 2xx와 주문번호는 접수 증거이며 체결 확인은 별도 조회가 필요하다.
+      state_label: lifecycle === 'done' ? '주문 접수됨'
         : lifecycle === 'in_doubt' ? '확인 필요'
         : lifecycle === 'needs_confirm' ? '확인 요청'
         : '실패',

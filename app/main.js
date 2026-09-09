@@ -1348,9 +1348,39 @@ async function executeOrderRequest(payload, dependencies) {
       body: JSON.stringify(body || {}),
     });
     const data = await res.json().catch(() => ({}));
-    result = res.ok
-      ? { ok: true, status: res.status, data }
-      : { ok: false, status: res.status, error: data.detail || `HTTP ${res.status}` };
+    if (!res.ok) {
+      result = { ok: false, status: res.status, error: data.detail || `HTTP ${res.status}` };
+    } else {
+      const brokerCode = data && data.return_code != null
+        ? String(data.return_code).trim().replace(/[\u0000-\u001f\u007f]/g, '').slice(0, 64)
+        : '';
+      const brokerMessage = data && data.return_msg != null
+        ? String(data.return_msg).trim().replace(/[\u0000-\u001f\u007f]/g, ' ').slice(0, 300)
+        : '';
+      const brokerRejected = brokerCode !== '' && !/^[+-]?0+$/.test(brokerCode);
+      const orderNo = data && data.ord_no != null ? String(data.ord_no).trim() : '';
+      if (brokerRejected) {
+        const log = deps.log || mdlog;
+        log(`주문 broker 거절 — tr=${trId} code=${brokerCode} message=${brokerMessage || '없음'}`);
+        result = {
+          ok: false,
+          status: 422,
+          upstreamStatus: res.status,
+          code: brokerCode,
+          error: brokerMessage || `주문이 거절되었습니다. (code ${brokerCode})`,
+        };
+      } else if (!orderNo) {
+        result = {
+          ok: false,
+          status: 409,
+          upstreamStatus: res.status,
+          code: 'ORDER_RESULT_UNKNOWN',
+          error: '주문번호가 없어 접수 여부를 확인할 수 없습니다.',
+        };
+      } else {
+        result = { ok: true, status: res.status, data };
+      }
+    }
   } catch (e) {
     result = { ok: false, status: 0, error: String((e && e.message) || e) };
   }
