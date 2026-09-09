@@ -25,6 +25,7 @@ const FORM_FIELDS = Object.freeze([
 const ITEMS = Object.freeze([
   ['form', '폼'],
   ['code', '코드'],
+  ['technique', '기법 작업공간', '기법 폴더·편집기'],
   ['result', '결과 데이터셋', '결과 데이터셋 1장'],
   ['log', '로그'],
 ]);
@@ -85,6 +86,42 @@ function tail(text, limit) {
   return clean.length > limit ? clean.slice(clean.length - limit) : clean;
 }
 
+function cleanText(value) {
+  if (typeof value !== 'string') return null;
+  const clean = value.trim();
+  return clean && !/[\u0000-\u001f\u007f]/.test(clean) ? clean : null;
+}
+
+function cleanRelativePath(value) {
+  const clean = cleanText(value);
+  if (!clean) return null;
+  const normalized = clean.replace(/\\/g, '/').replace(/\/+$/g, '');
+  if (!normalized || normalized.startsWith('/') || /^[A-Za-z]:/.test(normalized)) return null;
+  const parts = normalized.split('/');
+  if (parts.some((part) => !part || part === '.' || part === '..')) return null;
+  return normalized;
+}
+
+function cleanRootPath(value) {
+  if (value === '' || value === '.') return '';
+  return cleanRelativePath(value);
+}
+
+// 기법 폴더는 대화 복원 때 새로 찾거나 만들 대상이 아니다. 생성 시 확정된 프로젝트와
+// 하위 경로만 봉인하며, 절대경로·상위 참조·서로 다른 root/path 조합은 되살리지 않는다.
+function sealTechniqueBinding(input) {
+  const src = isPlainObject(input) ? input : {};
+  const projectId = cleanText(src.projectId);
+  const rootPath = cleanRootPath(src.rootPath);
+  const path = cleanRelativePath(src.path);
+  const name = cleanText(src.name);
+  const userStrategyId = src.userStrategyId == null ? null : cleanText(src.userStrategyId);
+  if (!projectId || rootPath == null || !path || !name) return null;
+  if (rootPath && !path.startsWith(`${rootPath}/`)) return null;
+  if (src.userStrategyId != null && !userStrategyId) return null;
+  return { projectId, rootPath, path, name, draft: src.draft === true, userStrategyId };
+}
+
 /**
  * 백테스트 작업공간 봉인. 값이 없는 조각은 null로 남긴다 — 빈 껍데기를 봉인하면
  * 복원이 그것을 "돌아온 것"으로 세어 카운트가 부풀려진다.
@@ -108,6 +145,7 @@ function sealBacktest(input) {
         runPath: src.runPath === 'code' ? 'code' : 'form',
       }
       : null,
+    technique: sealTechniqueBinding(src.technique),
     run: runId ? { runId } : null,
     log: stdout.trim() ? { tail: tail(stdout, LOG_TAIL_CHARS) } : null,
     scroll: scrollTop === null ? null : { top: scrollTop },
@@ -165,6 +203,7 @@ const __exports = {
   labelOf,
   missingLabelOf,
   hasJongseong,
+  sealTechniqueBinding,
   sealBacktest,
   restoreReport,
 };

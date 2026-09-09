@@ -401,9 +401,20 @@ function relinkProject({ backendBase, fetchImpl, project_id, ...body }) {
   );
 }
 
-function fetchProjectTree({ backendBase, fetchImpl, project_id }) {
+function createTechnique({ backendBase, fetchImpl, project_id, ...body }) {
+  return backtestHttp('POST', `/api/v1/projects/${encodeURIComponent(project_id)}/techniques`,
+    body, { backendBase, fetchImpl });
+}
+
+function runProjectTerminal({ backendBase, fetchImpl, project_id, ...body }) {
+  return backtestHttp('POST', `/api/v1/projects/${encodeURIComponent(project_id)}/terminal`,
+    body, { backendBase, fetchImpl });
+}
+
+function fetchProjectTree({ backendBase, fetchImpl, project_id, path: treePath }) {
+  const query = treePath ? `?${new URLSearchParams({ path: treePath })}` : '';
   return backtestHttp(
-    'GET', `/api/v1/projects/${encodeURIComponent(project_id)}/tree`,
+    'GET', `/api/v1/projects/${encodeURIComponent(project_id)}/tree${query}`,
     undefined, { backendBase, fetchImpl },
   );
 }
@@ -496,6 +507,8 @@ module.exports = {
   createProjectEnv,
   listProjects,
   createProject,
+  createTechnique,
+  runProjectTerminal,
   openProject,
   relinkProject,
   unregisterProject,

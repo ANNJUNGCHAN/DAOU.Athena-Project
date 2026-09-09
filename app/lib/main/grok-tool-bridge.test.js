@@ -33,6 +33,7 @@ function createHarness({ forwardBacktestAction = false } = {}) {
   const steps = [];
   const context = {
     streamJsonParser,
+    require: require('node:module').createRequire(path.join(__dirname, '..', '..', 'main.js')),
     shellWin: {
       isDestroyed: () => false,
       webContents: { send: (...args) => sent.push(args) },
@@ -141,6 +142,21 @@ test('Grok use_tool 실패는 backtest 폼 액션을 전달하지 않는다', ()
   for (const event of grokBacktestEvents({ isError: true })) track(event);
   assert.equal(steps.at(-1).error, true);
   assert.deepEqual(sent, []);
+});
+
+test('write_file sends the saved source only after a matching successful acknowledgement', () => {
+  const input = { project_id: 'p', root_path: 'algo', path: 'algo/strategy.py', source: '' };
+  const result = { kind: 'file_written', status: 'written', project_id: 'p', root_path: 'algo', path: input.path };
+  for (const isError of [false, true]) {
+    const { track, sent } = createHarness({ forwardBacktestAction: true });
+    track({ type: 'assistant', message: { content: [{ type: 'tool_use', id: 'saved-1',
+      name: 'athena_backtest', input: { action: 'write_file', write_file: input } }] } });
+    assert.equal(sent.length, 0);
+    track({ type: 'user', message: { content: [{ type: 'tool_result', tool_use_id: 'saved-1',
+      is_error: isError, content: JSON.stringify(result) }] } });
+    assert.deepEqual(JSON.parse(JSON.stringify(sent)), isError ? []
+      : [['athena:backtest-chat-action', { ...result, source: '' }]]);
+  }
 });
 
 test('Grok use_tool 성공도 일반·그래프 턴에서는 backtest 폼 액션을 전달하지 않는다', () => {

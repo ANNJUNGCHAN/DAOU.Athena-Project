@@ -9,6 +9,7 @@ const { classifyCell, changeTone, formatNumeric, formatDatetime, groupFactsField
 const { isValidCorrelation, waitForVisiblePaint } = window.AthenaLib.RestCanvasPaint;
 const integratedCardSurface = window.AthenaLib.IntegratedCardSurface;
 const rankingAxis = window.AthenaLib.RankingAxis;
+const rankingBoardControls = window.AthenaLib.RankingBoardControls;
 const semanticDetailSheet = window.AthenaLib.SemanticDetailSheet;
 const semanticWorkspace = window.AthenaLib.SemanticWorkspace;
 const paperCardRouting = window.AthenaLib.PaperCardRouting;
@@ -860,11 +861,15 @@ function stateLinksOf(contract) {
 // 하이드레이션 대상 — 백엔드는 op의 manifest request alias로 적은 인자 가방을 받는다
 // (BoardHydrateRequest.target은 dict다). 봉투가 실어온 인자를 그대로 넘기고 종목코드만
 // 봉투 머리에서 보강한다 — 백엔드가 op마다 자기 alias만 골라 쓴다.
-function boardHydrateTarget(envelope) {
+function boardHydrateTarget(envelope, host) {
   const args = (envelope && (envelope.operation_args || envelope.arguments)) || {};
   const target = args && typeof args === 'object' && !Array.isArray(args) ? { ...args } : {};
   const stkCd = cardStkCd(envelope) || args.stk_cd || (envelope && envelope.symbol) || args.symbol;
   if (stkCd) target.stk_cd = stkCd;
+  const state = host && host.__athenaBoard;
+  if (rankingBoardControls && state && rankingBoardControls.isFamilyBoard(state.boardId)) {
+    return rankingBoardControls.targetFor(target, state.rankingCriteria, state.boardId);
+  }
   return target;
 }
 
@@ -991,6 +996,12 @@ async function openBoardSurface(host, contract, envelope, isCurrent) {
   const initialContract = initialSurfaceContractOf(envelope);
   if (initialContract) seedBoardState(state, initialContract, envelope);
   state.hydrationWarnings = [];
+  if (rankingBoardControls && rankingBoardControls.isFamilyBoard(contract.board_id)) {
+    state.rankingCriteria = rankingBoardControls.initialCriteria(
+      boardHydrateTarget(envelope), contract.board_id,
+    );
+    state.rankingReturnBoard = String(contract.board_id || rankingBoardControls.ROOT_BOARD);
+  }
   const initial = String(contract.initial_state_board || '');
   const hasInitial = initial && initial !== String(contract.board_id)
     && state.links.some((link) => link.board_id === initial);
@@ -1038,6 +1049,7 @@ function mountBoardState(host, boardId, envelope, isCurrent = () => true) {
   // 에서만 봉투가 실어온 목록을 그대로 쓴다.
   const links = boardTemplateRegistry.stateLinksFor(state.boardId);
   if (links.length) state.links = links;
+  if (rankingBoardControls) state.links = rankingBoardControls.linksFor(state.boardId, state.links);
   const targetBoardId = state.boardId;
   const ready = boardTemplateRegistry.isLoaded(targetBoardId)
     ? Promise.resolve()
@@ -1049,17 +1061,24 @@ function mountBoardState(host, boardId, envelope, isCurrent = () => true) {
         host, targetBoardId, state.values, boardMountOptions(host, envelope),
       );
       rememberMountedBoard(state, mounted);
-      wireStateControls(host, envelope, mounted);
-      wireCardActions(host, envelope, mounted);
+      wireMountedBoardControls(host, envelope, mounted);
       return hydrateBoardSlots(host, envelope, mounted, isCurrent);
     });
 }
 
-function switchStateBoard(host, boardId, envelope) {
+function switchStateBoard(host, boardId, envelope, control = '') {
   const state = boardStateOf(host);
-  const target = String(boardId || '');
+  const transition = rankingBoardControls && rankingBoardControls.isFamilyBoard(state.boardId)
+    ? rankingBoardControls.transitionFor(
+      control, boardId, state.boardId, state.rankingReturnBoard,
+    ) : { boardId };
+  const target = String(transition.boardId || '');
   if (!target || target === state.boardId) return null;
   if (!state.links.some((link) => link.board_id === target)) return null;
+  if (transition.criteria) {
+    state.rankingCriteria = { ...(state.rankingCriteria || {}), ...transition.criteria };
+  }
+  if (transition.returnBoard) state.rankingReturnBoard = transition.returnBoard;
   // 표면을 통째로 갈면 컨테이너가 바뀐다 — 같은 panelId를 다른 컨테이너로 열면
   // AITS adapter가 던지므로(aits-chart-panel openPanel) 먼저 닫는다.
   destroyBoardPrimary(state);
@@ -1071,7 +1090,7 @@ function switchStateBoard(host, boardId, envelope) {
 const RESPONSIVE_STATE_CONTROL_OWNER = '.bs-r-flow, .bs-r-scroll, .bs-r-scroll-table';
 
 function isResponsiveStateControl(node) {
-  return !!(node && node.childElementCount === 0 && typeof node.closest === 'function'
+  return !!(node && typeof node.closest === 'function'
     && node.closest(RESPONSIVE_STATE_CONTROL_OWNER));
 }
 
@@ -1088,7 +1107,7 @@ function wireStateControls(host, envelope, mounted) {
     if (!node) continue;
     const didWire = boardMount.wireStateControlActivation(
       node,
-      () => switchStateBoard(host, link.board_id, envelope),
+      () => switchStateBoard(host, link.board_id, envelope, control),
       { keyboard: isResponsiveStateControl(node) },
     );
     if (!didWire) continue;
@@ -1097,6 +1116,83 @@ function wireStateControls(host, envelope, mounted) {
     wired += 1;
   }
   return wired;
+}
+
+function clearRankingBoardCache(state) {
+  for (const cache of [
+    state.valuesByBoard, state.unboundByBoard, state.hydrationByBoard, state.realtimeByBoard,
+    state.emptyRowsByBoard, state.emptyColumnsByBoard, state.emptyValueSlotsByBoard,
+    state.deferredValueSlotsByBoard,
+  ]) {
+    if (!cache || typeof cache.keys !== 'function') continue;
+    for (const boardId of cache.keys()) {
+      if (rankingBoardControls.isFamilyBoard(boardId)) cache.delete(boardId);
+    }
+  }
+}
+
+function selectRankingFilter(host, envelope, selection) {
+  const state = boardStateOf(host);
+  if (selection.unavailable) {
+    if (state.rankingNoticeNode) state.rankingNoticeNode.remove();
+    const note = errorNote(selection.unavailable);
+    note.classList.add('board-ranking-filter-note');
+    note.setAttribute('role', 'status');
+    boardLoadAnchor(state, host).insertBefore(note, host);
+    state.rankingNoticeNode = note;
+    return null;
+  }
+  if (state.rankingNoticeNode) {
+    state.rankingNoticeNode.remove();
+    state.rankingNoticeNode = null;
+  }
+  state.rankingCriteria = rankingBoardControls.criteriaAfter(state.rankingCriteria, selection);
+  const target = String(selection.boardId || state.rankingReturnBoard || rankingBoardControls.ROOT_BOARD);
+  clearRankingBoardCache(state);
+  destroyBoardPrimary(state);
+  return runBoardSurfaceLoad(host, envelope, (isCurrent) => (
+    mountBoardState(host, target, envelope, isCurrent)
+  ));
+}
+
+function applyRankingCriteriaLabels(surface, criteria) {
+  if (!surface || !criteria) return;
+  const labels = {
+    KOSPI: criteria.market === '101' ? 'KOSDAQ' : (criteria.market === '000' ? 'KRX 전체' : 'KOSPI'),
+    '등락 전체': criteria.direction === 'up' ? '상승만' : (criteria.direction === 'down' ? '하락만' : '등락 전체'),
+    '유동성 정상': criteria.liquidity === 'all' ? '전체 포함' : '유동성 정상',
+  };
+  for (const node of surface.querySelectorAll('[data-state-control]')) {
+    const control = String(node.dataset.stateControl || '');
+    if (labels[control]) node.textContent = labels[control];
+  }
+}
+
+function wireRankingFilterSelections(host, envelope, mounted) {
+  const state = boardStateOf(host);
+  const surface = mounted && mounted.surface;
+  if (!rankingBoardControls || !surface || !rankingBoardControls.isFamilyBoard(state.boardId)) return 0;
+  applyRankingCriteriaLabels(surface, state.rankingCriteria);
+  let wired = 0;
+  for (const label of rankingBoardControls.selectionLabels(state.boardId)) {
+    const selection = rankingBoardControls.selectionFor(state.boardId, label);
+    const owner = rankingBoardControls.selectionOwner(surface, label);
+    if (!selection || !owner) continue;
+    if (selection.unavailable) {
+      owner.setAttribute('aria-disabled', 'true');
+      owner.setAttribute('title', selection.unavailable);
+    }
+    if (boardMount.wireStateControlActivation(
+      owner, () => selectRankingFilter(host, envelope, selection), { keyboard: true },
+    )) wired += 1;
+  }
+  return wired;
+}
+
+function wireMountedBoardControls(host, envelope, mounted) {
+  wireStateControls(host, envelope, mounted);
+  wireRankingFilterSelections(host, envelope, mounted);
+  wireCardActions(host, envelope, mounted);
 }
 
 // 카드 액션 — Paper가 목적지를 다른 card_id로 그린 조작(호가 열기 · 종목 상세 열기).
@@ -1557,7 +1653,7 @@ async function hydrateBoardSlots(host, envelope, mounted, isCurrent = () => true
   const reply = await window.athena.invoke('athena:canvas-board-hydrate', {
     boardId,
     slotIds: pending,
-    target: boardHydrateTarget(envelope),
+    target: boardHydrateTarget(envelope, host),
     account: boardHydrateAccount(envelope),
     correlation: envelope && envelope.correlation,
   });
@@ -1602,7 +1698,9 @@ async function hydrateBoardSlots(host, envelope, mounted, isCurrent = () => true
   const remounted = boardMount.mountBoard(
     host, boardId, state.values, boardMountOptions(host, envelope),
   );
-  return rememberMountedBoard(state, remounted);
+  rememberMountedBoard(state, remounted);
+  wireMountedBoardControls(host, envelope, remounted);
+  return remounted;
 }
 
 // 마운트 결과에서 실시간 갱신이 쓸 것만 남긴다: 표면 노드와 그 보드의 정적 슬롯 계약.
@@ -3526,42 +3624,6 @@ graphMode.applyVisibility();
 // 가려진다(BETA-017 실측 — dart-mcp가 등록돼 있는데 가짜 "DART 전자공시"만 떴다).
 const pluginCatalog = window.AthenaLib.PluginCatalog;
 
-// 마켓플레이스 on/off는 "추천에 이 카탈로그를 보여줄까"만 정한다 — 레지스트리를
-// 건드리지 않으므로 앱 로컬 설정으로 충분하다. 끄면 추천이 비고, 이미 설치한
-// 서버는 그대로 남는다(끄기가 삭제로 읽히면 안 된다).
-const PLUGIN_MARKETPLACE_PREFS_KEY = 'athena.plugin.marketplaces';
-
-function readMarketplacePrefs() {
-  try {
-    const raw = window.localStorage.getItem(PLUGIN_MARKETPLACE_PREFS_KEY);
-    const parsed = raw ? JSON.parse(raw) : null;
-    return (parsed && typeof parsed === 'object') ? parsed : {};
-  } catch {
-    return {};
-  }
-}
-
-function writeMarketplacePref(id, enabled) {
-  try {
-    const prefs = readMarketplacePrefs();
-    prefs[id] = !!enabled;
-    window.localStorage.setItem(PLUGIN_MARKETPLACE_PREFS_KEY, JSON.stringify(prefs));
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-function pluginMarketplaceRows() {
-  const prefs = readMarketplacePrefs();
-  return pluginCatalog.MARKETPLACES.map((marketplace) => ({
-    id: marketplace.id,
-    name: marketplace.name,
-    description: marketplace.description,
-    enabled: prefs[marketplace.id] !== false,
-  }));
-}
-
 // 제안 봉투의 조립·모드 판정은 순수 모듈이 한다. 이 파일은 IPC만 잇는다.
 const pluginProposal = window.AthenaLib.PluginProposal;
 const pluginModeAdapter = window.AthenaLib.PluginModeAdapter;
@@ -3575,12 +3637,9 @@ const pluginCanvas = window.AthenaLib.PluginCanvas.createPluginCanvas({
   container: document.getElementById('pluginCanvas'),
   // 실제 목록이 도착하기 전에도 샘플 폴백을 타지 않도록 항상 명시적으로 넘긴다.
   installed: [],
-  recommended: [],
-  marketplaces: [],
   onPermission: (plugin) => { void pluginProbe(plugin && plugin.id); },
   onManage: () => { void pluginRefresh(); },
-  onToggleMarketplace: (marketplace, enabled) => pluginSetMarketplaceEnabled(marketplace && marketplace.id, enabled),
-  // GUI 진입 6종(설치·허용·철회·켜기끄기·삭제·직접 등록)이 전부 여기로 합류한다.
+  // GUI 진입 5종(허용·철회·켜기끄기·삭제·직접 등록)이 전부 여기로 합류한다.
   // 버튼은 봉투를 만들 뿐이고, athena:mcp-*를 부르는 실행은 승인 하나뿐이다.
   onPropose: (spec, reason) => { mountPluginProposal(buildGuiProposal(spec, reason)); },
   onApproveProposal: (envelope) => pluginDecide('athena:plugin-approve', envelope, { fromCard: true }),
@@ -3758,12 +3817,8 @@ async function pluginRefresh() {
     const servers = (res && Array.isArray(res.servers)) ? res.servers : [];
     // 목록과 함께 오는 판번호가 GUI 제안의 만료 기준이다(R-4).
     if (res && typeof res.revision === 'number') pluginRevision = res.revision;
-    const marketplaces = pluginMarketplaceRows();
-    const enabledMarketplaceIds = marketplaces.filter((m) => m.enabled).map((m) => m.id);
     pluginCanvas.setData({
       installed: servers.map(pluginRowFromServer),
-      recommended: pluginCatalog.recommendedFor(servers.map((s) => s.alias), enabledMarketplaceIds),
-      marketplaces,
       restartRequired: pluginRegistryChangedThisSession,
     });
     // 채팅의 @멘션 목록과 키우미 메뉴가 같은 레지스트리를 본다 — 여기서만
@@ -3797,15 +3852,6 @@ async function pluginProbe(alias) {
     pluginProbeErrors.set(alias, String((err && err.message) || err));
     await pluginRefresh();
   }
-}
-
-async function pluginSetMarketplaceEnabled(id, enabled) {
-  if (!id) return { ok: false, error: '대상 마켓플레이스를 찾지 못했습니다' };
-  if (!writeMarketplacePref(id, enabled)) {
-    return { ok: false, error: '설정을 저장하지 못했습니다' };
-  }
-  await pluginRefresh();
-  return { ok: true };
 }
 
 void pluginRefresh();
@@ -4155,8 +4201,34 @@ const backtestCanvas = window.AthenaLib.BacktestCanvas.createBacktestCanvas({
     if (!res || !res.ok) throw new Error(projectError(res, '프로젝트를 만들지 못했습니다'));
     return res.data;
   },
-  projectTree: async (projectId) => {
-    const res = await window.athena.invoke('athena:project-tree', { project_id: projectId });
+  currentProjectId: () => window.AthenaConversations && window.AthenaConversations.currentProjectId(),
+  pickTechniqueFolder: async (projectId) => {
+    const res = await window.athena.invoke('athena:technique-pick-folder', { project_id: projectId });
+    if (!res || !res.ok) throw new Error(projectError(res, '폴더를 선택하지 못했습니다'));
+    return res.data;
+  },
+  createTechnique: async (projectId, body) => {
+    const res = await window.athena.invoke('athena:project-technique-create', { project_id: projectId, ...body });
+    if (!res || !res.ok) throw new Error(projectError(res, '기법 폴더를 만들지 못했습니다'));
+    return res.data;
+  },
+  startTechniqueConversation: async (projectId) => {
+    if (!window.AthenaConversations) throw new Error('새 대화 기능을 준비하지 못했습니다');
+    const prepared = await window.athena.invoke('athena:technique-conversation-prepare', { project_id: projectId });
+    if (!prepared || !prepared.ok) throw new Error(projectError(prepared, '기법의 프로젝트를 연결하지 못했습니다'));
+    const id = await window.AthenaConversations.startNew(prepared.projectId, 'backtest');
+    if (!id) throw new Error('새 기법 대화를 열지 못했습니다');
+    if (window.AthenaCanvasMode) window.AthenaCanvasMode.setView('backtest');
+    if (window.AthenaModeNav) window.AthenaModeNav.setActive('backtest');
+    return id;
+  },
+  runProjectTerminal: async (projectId, body) => {
+    const res = await window.athena.invoke('athena:project-terminal', { project_id: projectId, ...body });
+    if (!res || !res.ok) throw new Error(projectError(res, '명령을 실행하지 못했습니다'));
+    return res.data;
+  },
+  projectTree: async (projectId, treePath) => {
+    const res = await window.athena.invoke('athena:project-tree', { project_id: projectId, ...(treePath ? { path: treePath } : {}) });
     if (!res || !res.ok) throw new Error(projectError(res, '파일 목록을 불러오지 못했습니다'));
     return res.data;
   },

@@ -1,7 +1,7 @@
-// Paper 플러그인 페이지 01~04 — 기능 허용 · 설치 승인 · 허브 · 관리.
+// Paper 플러그인 페이지 — 기능 허용 · 허브 · 관리.
 //
 // 이 파일은 설치 파이프라인이나 저장소를 가정하지 않는다. 화면은 전달받은
-// 목록만 그리고, 권한·설치·활성화 의도는 콜백으로 상위 셸에 돌려준다.
+// 목록만 그리고, 권한·활성화 의도는 콜백으로 상위 셸에 돌려준다.
 //
 // 화면의 버튼은 아무것도 실행하지 않는다 — 제안을 만들어 deps.onPropose로
 // 돌려주고, 실행은 승인 카드의 [승인] 하나뿐이다(모델이 낸 제안과 같은 자리).
@@ -56,57 +56,6 @@ const SAMPLE_INSTALLED = Object.freeze([
   }),
 ]);
 
-const SAMPLE_RECOMMENDED = Object.freeze([
-  Object.freeze({
-    id: 'sequential-thinking',
-    name: '단계적 사고',
-    description: '복잡한 판단을 단계로 쪼개 이어 붙입니다',
-    provider: 'Model Context Protocol · server-sequential-thinking',
-    purpose: '다단계 추론 보조',
-    source: 'marketplace · athena-official',
-    command: 'npx',
-    args: ['-y', '@modelcontextprotocol/server-sequential-thinking'],
-    requestedFeatures: ['sequentialthinking — 생각 단계를 기록·수정하고 되돌립니다'],
-  }),
-  Object.freeze({
-    id: 'memory',
-    name: '지식 그래프 메모리',
-    description: '관심 종목·성향을 그래프로 기억합니다',
-    provider: 'Model Context Protocol · server-memory',
-    purpose: '지식 그래프 기반 장기 기억',
-    source: 'marketplace · athena-official',
-    command: 'npx',
-    args: ['-y', '@modelcontextprotocol/server-memory'],
-    requestedFeatures: [
-      'create_entities · create_relations · add_observations — 그래프에 쓰기',
-      'read_graph · search_nodes · open_nodes — 그래프 읽기·검색',
-    ],
-  }),
-  Object.freeze({
-    id: 'korea-stock',
-    name: '한국 주식 시세',
-    description: '국내 종목 시세·재무를 대화에서 조회합니다',
-    provider: 'drfirst · @drfirst/korea-stock-mcp',
-    purpose: '국내 주식 시장 데이터 조회',
-    source: 'marketplace · athena-official',
-    command: 'npx',
-    args: ['-y', '@drfirst/korea-stock-mcp'],
-    requestedFeatures: [
-      'search_stock_code · get_stock_price_by_code — 종목 검색과 시세',
-      'get_market_cap_stocks · get_dividend_yield_stocks — 시총·배당 상위',
-    ],
-  }),
-]);
-
-const SAMPLE_MARKETPLACES = Object.freeze([
-  Object.freeze({
-    id: 'athena-official',
-    name: 'athena-official',
-    description: '앱 내장 카탈로그 · 키가 필요 없는 5종',
-    enabled: true,
-  }),
-]);
-
 function el(tag, className, text) {
   const node = document.createElement(tag);
   if (className) node.className = className;
@@ -118,7 +67,6 @@ function cloneRows(rows) {
   return (Array.isArray(rows) ? rows : []).map((row) => ({
     ...row,
     features: Array.isArray(row.features) ? row.features.map((feature) => ({ ...feature })) : row.features,
-    requestedFeatures: Array.isArray(row.requestedFeatures) ? [...row.requestedFeatures] : row.requestedFeatures,
   }));
 }
 
@@ -158,8 +106,6 @@ function createPluginCanvas(options) {
   }
 
   const installed = cloneRows(deps.installed || SAMPLE_INSTALLED);
-  const recommended = cloneRows(deps.recommended || SAMPLE_RECOMMENDED);
-  const marketplaces = cloneRows(deps.marketplaces || SAMPLE_MARKETPLACES);
   let view = deps.initialView === 'manage' ? 'manage' : 'hub';
   // 게이트웨이(athena_mcp serve)는 기동 시점에 레지스트리를 읽는다. 앱이 떠 있는
   // 동안 서버를 설치·승인·삭제해도 이미 실행 중인 대화 세션은 그 서버를 모른다 —
@@ -202,10 +148,10 @@ function createPluginCanvas(options) {
     return button;
   }
 
-  function pluginCard(plugin, kind) {
+  function pluginCard(plugin) {
     const card = el('article', 'plugin-canvas-card');
     card.setAttribute('data-plugin-id', plugin.id || plugin.name);
-    card.setAttribute('data-plugin-kind', kind);
+    card.setAttribute('data-plugin-kind', 'installed');
 
     const icon = el('div', 'plugin-canvas-icon');
     icon.appendChild(plugIcon());
@@ -221,36 +167,14 @@ function createPluginCanvas(options) {
     }
     card.appendChild(copy);
 
-    if (kind === 'installed') {
-      card.appendChild(actionButton('권한', 'is-primary', () => {
-        if (typeof deps.onPermission === 'function') deps.onPermission(plugin);
-        openPermissionSheet(plugin);
-      }));
-    } else {
-      card.appendChild(actionButton('설치', 'is-secondary', () => {
-        openInstallSheet(plugin);
-      }));
-    }
+    card.appendChild(actionButton('권한', 'is-primary', () => {
+      if (typeof deps.onPermission === 'function') deps.onPermission(plugin);
+      openPermissionSheet(plugin);
+    }));
     return card;
   }
 
-  function featureRowsFor(plugin, requestedOnly) {
-    if (requestedOnly) {
-      const requested = Array.isArray(plugin.requestedFeatures) && plugin.requestedFeatures.length
-        ? plugin.requestedFeatures
-        : [plugin.description || '플러그인 기능'];
-      return requested.map((feature, index) => {
-        if (feature && typeof feature === 'object') {
-          return {
-            id: feature.id || `feature-${index + 1}`,
-            name: feature.name || feature.label || `기능 ${index + 1}`,
-            description: feature.description || '',
-            allowed: feature.allowed !== false,
-          };
-        }
-        return { id: `feature-${index + 1}`, name: String(feature), description: '', allowed: true };
-      });
-    }
+  function featureRowsFor(plugin) {
     // probe 전에는 노출 도구를 모른다. 설명 한 줄을 가짜 기능 행으로 만들어
     // 채우지 않는다 — 그 이름으로 allow를 부르면 존재하지 않는 도구가 허용
     // 목록에 들어가고(허용 저장이 probe 결과만 쓰는 이유다), 화면에는
@@ -312,18 +236,8 @@ function createPluginCanvas(options) {
     closeSheet();
   }
 
-  function openInstallSheet(plugin) {
-    activeSheet = {
-      kind: 'install',
-      plugin,
-      features: featureRowsFor(plugin, true),
-      returnFocusPluginId: plugin.id || plugin.name,
-    };
-    render();
-  }
-
   function openPermissionSheet(plugin) {
-    const features = featureRowsFor(plugin, false);
+    const features = featureRowsFor(plugin);
     const base = {};
     features.forEach((feature) => { base[feature.name] = feature.allowed; });
     const sheet = { kind: 'permissions', plugin, features, base, divergence: [], dirty: false };
@@ -510,20 +424,14 @@ function createPluginCanvas(options) {
   function renderHubLists() {
     if (!hubLists) return;
     const installedRows = installed.filter(matches);
-    const recommendedRows = recommended.filter(matches);
     clear(hubLists.installedGrid);
-    clear(hubLists.recommendedGrid);
     // 빈 이유를 뭉뚱그리지 않는다. 하나도 설치하지 않은 첫 화면에 "검색과
     // 일치하는 …이 없습니다"가 뜨면 검색어를 지우면 나올 것처럼 읽힌다.
     const searching = !!search.trim();
-    if (installedRows.length) installedRows.forEach((plugin) => hubLists.installedGrid.appendChild(pluginCard(plugin, 'installed')));
+    if (installedRows.length) installedRows.forEach((plugin) => hubLists.installedGrid.appendChild(pluginCard(plugin)));
     else hubLists.installedGrid.appendChild(emptyMessage(searching
       ? '검색과 일치하는 설치 플러그인이 없습니다'
-      : '설치한 플러그인이 없습니다 · 아래 추천에서 설치합니다'));
-    if (recommendedRows.length) recommendedRows.forEach((plugin) => hubLists.recommendedGrid.appendChild(pluginCard(plugin, 'recommended')));
-    else hubLists.recommendedGrid.appendChild(emptyMessage(searching
-      ? '검색과 일치하는 추천 플러그인이 없습니다'
-      : '추천할 플러그인이 없습니다 · 마켓플레이스를 켜거나 서버를 직접 추가합니다'));
+      : '설치한 플러그인이 없습니다 · [+ 서버 추가]에서 직접 등록합니다'));
   }
 
   function renderHub() {
@@ -548,17 +456,6 @@ function createPluginCanvas(options) {
       setView('manage');
     }));
     panel.appendChild(header);
-    panel.appendChild(el(
-      'p',
-      'plugin-canvas-description',
-      '플러그인은 설치 후 기능별로 허용합니다. Kiwoom·brain은 Athena 내장 API라 이 목록에 표시하지 않습니다.',
-    ));
-    panel.appendChild(el(
-      'p',
-      'plugin-canvas-add-guide',
-      '추천 목록에 없으면 [+ 서버 추가]에서 배포 문서의 Claude Desktop 설정 JSON을 붙여넣습니다.',
-    ));
-
     if (restartRequired) {
       panel.appendChild(el(
         'div',
@@ -566,13 +463,9 @@ function createPluginCanvas(options) {
         '이번에 바꾼 서버는 Athena를 다시 시작한 뒤의 대화부터 적용됩니다. 진행 중인 대화에는 아직 반영되지 않았습니다.',
       ));
     }
-    panel.appendChild(el('h2', 'plugin-canvas-section-title', '설치됨'));
     const installedGrid = el('div', 'plugin-canvas-grid plugin-canvas-installed');
     panel.appendChild(installedGrid);
-    panel.appendChild(el('h2', 'plugin-canvas-section-title', '추천'));
-    const recommendedGrid = el('div', 'plugin-canvas-grid plugin-canvas-recommended');
-    panel.appendChild(recommendedGrid);
-    hubLists = { installedGrid, recommendedGrid };
+    hubLists = { installedGrid };
     renderHubLists();
     return panel;
   }
@@ -582,10 +475,9 @@ function createPluginCanvas(options) {
   }
 
   // 토글은 화면 상태가 아니라 실제 승인 상태다. 그래서 누른 즉시 켜 두지 않는다 —
-  // 플러그인은 승인 카드가 확정할 때까지 행이 움직이지 않고, 마켓플레이스(추천
-  // 노출 여부, 앱 로컬 설정)는 호스트가 성공을 돌려준 뒤에 움직인다. 낙관적으로
+  // 플러그인은 승인 카드가 확정할 때까지 행이 움직이지 않는다. 낙관적으로
   // 켜 두면 "켰는데 대화에서 안 쓰인다"가 화면상으로는 켜져 보인다.
-  function toggleButton(item, kind, row) {
+  function toggleButton(item) {
     const label = (on) => `${item.name} ${on ? '끄기' : '켜기'}`;
     const button = el('button', `plugin-canvas-toggle ${item.enabled ? 'is-on' : 'is-off'}`);
     button.type = 'button';
@@ -594,69 +486,27 @@ function createPluginCanvas(options) {
     button.setAttribute('aria-checked', String(Boolean(item.enabled)));
     button.appendChild(el('span', 'plugin-canvas-toggle-knob'));
 
-    function paint() {
-      button.className = `plugin-canvas-toggle ${item.enabled ? 'is-on' : 'is-off'}`;
-      button.setAttribute('aria-checked', String(Boolean(item.enabled)));
-      button.setAttribute('aria-label', label(item.enabled));
-    }
-
     button.addEventListener('click', async () => {
       if (button.disabled) return;
       const next = !item.enabled;
-      setRowError(row, null);
-      if (kind !== 'marketplace') {
-        propose({ action: 'set_enabled', target: item.id || item.name, enabled: next });
-        return;
-      }
-      if (typeof deps.onToggleMarketplace !== 'function') return;
-      button.disabled = true;
-      let result;
-      try {
-        result = await deps.onToggleMarketplace(item, next);
-      } catch (err) {
-        result = { ok: false, error: String((err && err.message) || err) };
-      }
-      button.disabled = false;
-      if (result && result.ok === false) {
-        setRowError(row, result.error || (next ? '켜지 못했습니다' : '끄지 못했습니다'));
-        return;
-      }
-      // 콜백이 아무것도 안 돌려주면(구형 호스트) 성공으로 본다.
-      item.enabled = next;
-      paint();
+      propose({ action: 'set_enabled', target: item.id || item.name, enabled: next });
     });
     return button;
   }
 
-  function setRowError(row, message) {
-    if (!row) return;
-    const existing = row.__errorNode;
-    if (existing && existing.parentNode) existing.parentNode.removeChild(existing);
-    row.__errorNode = null;
-    if (!message) return;
-    const note = el('div', 'plugin-canvas-manage-error', message);
-    note.setAttribute('role', 'status');
-    row.appendChild(note);
-    row.__errorNode = note;
-  }
-
-  function manageRow(item, kind) {
+  function manageRow(item) {
     const row = el('div', 'plugin-canvas-manage-row');
-    row.setAttribute(kind === 'marketplace' ? 'data-marketplace-id' : 'data-plugin-id', item.id || item.name);
+    row.setAttribute('data-plugin-id', item.id || item.name);
     row.appendChild(el('div', 'plugin-canvas-manage-name', item.name));
     row.appendChild(el('div', 'plugin-canvas-manage-source', item.source || item.description || ''));
     row.appendChild(el('div', 'plugin-canvas-spacer'));
-    // 삭제는 플러그인 행에만 있다. 마켓플레이스는 끄기로 충분하고, 내장 카탈로그를
-    // 지우면 되돌릴 화면이 없다.
     // 안내가 컨트롤보다 앞에 온다(Paper 04의 행 차례).
-    if (kind !== 'marketplace' && typeof deps.onPropose === 'function') {
+    if (typeof deps.onPropose === 'function') {
       row.appendChild(el('span', 'plugin-canvas-manage-hint', '승인 후 지웁니다'));
       row.appendChild(actionButton('삭제', 'is-danger', () => openRemoveSheet(item)));
     }
-    if (kind !== 'marketplace') {
-      row.appendChild(el('span', 'plugin-canvas-manage-hint', '승인 후 반영됩니다'));
-    }
-    row.appendChild(toggleButton(item, kind, row));
+    row.appendChild(el('span', 'plugin-canvas-manage-hint', '승인 후 반영됩니다'));
+    row.appendChild(toggleButton(item));
     return row;
   }
 
@@ -669,11 +519,9 @@ function createPluginCanvas(options) {
     const counts = deps.counts || {};
     const pluginCount = countValue(deps.pluginCount, countValue(counts.plugins, installed.length));
     const featureCount = countValue(deps.featureCount, countValue(counts.features, featureFallback));
-    const marketplaceCount = countValue(deps.marketplaceCount, countValue(counts.marketplaces, marketplaces.length));
     const countLabels = [
       ['플러그인', pluginCount, 'is-primary'],
       ['기능', featureCount, ''],
-      ['마켓플레이스', marketplaceCount, ''],
     ];
     countLabels.forEach(([label, value, className]) => {
       header.appendChild(el('span', `plugin-canvas-count ${className}`.trim(), `${label} ${value}`));
@@ -689,17 +537,8 @@ function createPluginCanvas(options) {
     ));
 
     const installedList = el('div', 'plugin-canvas-manage-list plugin-canvas-manage-plugins');
-    installed.forEach((plugin) => installedList.appendChild(manageRow(plugin, 'plugin')));
+    installed.forEach((plugin) => installedList.appendChild(manageRow(plugin)));
     panel.appendChild(installedList);
-    panel.appendChild(el('h2', 'plugin-canvas-section-title', '마켓플레이스'));
-    const marketplaceList = el('div', 'plugin-canvas-manage-list plugin-canvas-marketplaces');
-    marketplaces.forEach((marketplace) => marketplaceList.appendChild(manageRow(marketplace, 'marketplace')));
-    panel.appendChild(marketplaceList);
-    panel.appendChild(el(
-      'p',
-      'plugin-canvas-marketplace-note',
-      '+ 마켓플레이스 추가 — GitHub·Git URL·로컬 폴더. 등록만으로는 아무것도 실행되지 않습니다 — 설치·활성은 항목별 승인 시트를 거칩니다.',
-    ));
     panel.appendChild(renderAudit());
     return panel;
   }
@@ -760,17 +599,6 @@ function createPluginCanvas(options) {
     if (footer) footer.textContent = `허용 ${allowed} / ${activeSheet.features.length}`;
     const badge = findByClassName('is-allowed-count');
     if (badge) badge.textContent = `허용 ${allowed}`;
-  }
-
-  // 승인 시트의 [승인]은 설치하지 않는다 — 승인 카드를 만든다. 목록은 승인이
-  // 끝난 뒤 호스트의 setData가 갈아끼운다(가짜 행을 만들지 않는다).
-  function approveInstall(sheet) {
-    propose({
-      action: 'install',
-      target: sheet.plugin.id || sheet.plugin.name,
-      features: sheet.features.map((feature) => feature.name),
-    });
-    closeSheet();
   }
 
   function confirmRemove(sheet) {
@@ -916,54 +744,6 @@ function createPluginCanvas(options) {
     return body;
   }
 
-  // Paper 플러그인 02 — 설치 승인. "미리보기"가 아니라 승인 시점에 실제 등록·
-  // 승인·probe가 일어난다. 그래서 무엇을 실행하는지(실행 명령)와 어디에 생기는지
-  // (설치 위치)를 승인 전에 전부 보여준다.
-  function renderInstallSheetBody(sheet) {
-    const plugin = sheet.plugin;
-    const body = el('div', 'plugin-canvas-sheet-body');
-
-    body.appendChild(el('h3', 'plugin-canvas-sheet-section-title', '플러그인 정보'));
-    const info = el('div', 'plugin-canvas-sheet-info');
-    info.appendChild(el('div', 'plugin-canvas-sheet-plugin-name', plugin.name));
-    info.appendChild(el('div', 'plugin-canvas-sheet-source', `제공: ${plugin.provider || plugin.source || '출처 미상'}`));
-    info.appendChild(el('div', 'plugin-canvas-sheet-plugin-description', `용도: ${plugin.purpose || plugin.description || '-'}`));
-    body.appendChild(info);
-    body.appendChild(el(
-      'div',
-      'plugin-canvas-sheet-boundary',
-      '설치 후 사용할 기능만 허용되며 Athena 내장 API와 분리됩니다.',
-    ));
-
-    body.appendChild(el('h3', 'plugin-canvas-sheet-section-title', '요청 기능'));
-    const featureList = el('div', 'plugin-canvas-sheet-features');
-    sheet.features.forEach((feature) => featureList.appendChild(sheetFeatureRow(feature, false)));
-    body.appendChild(featureList);
-
-    // 실행 명령을 감추면 사람이 승인하는 대상이 이름뿐이 된다. 스니펫 경로와
-    // 같은 정보를 카탈로그 설치에서도 보여준다.
-    const command = [plugin.command, (Array.isArray(plugin.args) ? plugin.args.join(' ') : '')]
-      .filter(Boolean).join(' ');
-    if (command) {
-      body.appendChild(el('div', 'plugin-canvas-sheet-command', `실행 명령: ${command}`));
-    }
-    body.appendChild(el('div', 'plugin-canvas-sheet-location', `설치 위치 · 플러그인 모드 > ${plugin.name}`));
-    body.appendChild(el('div', 'plugin-canvas-sheet-warning', '승인 카드로 확정합니다'));
-
-    const badges = el('div', 'plugin-canvas-sheet-badges');
-    badges.appendChild(el('span', 'plugin-canvas-count', `권한 ${sheet.features.length}개 요청`));
-    badges.appendChild(el('span', 'plugin-canvas-count', '설치형 플러그인'));
-    body.appendChild(badges);
-
-    if (sheet.error) body.appendChild(el('div', 'plugin-canvas-sheet-error', sheet.error));
-
-    const actions = el('div', 'plugin-canvas-sheet-actions');
-    actions.appendChild(actionButton('거부', 'is-sheet-cancel', closeSheet));
-    actions.appendChild(actionButton('승인', 'is-sheet-confirm', () => approveInstall(sheet)));
-    body.appendChild(actions);
-    return body;
-  }
-
   function renderRemoveSheetBody(sheet) {
     const plugin = sheet.plugin;
     const body = el('div', 'plugin-canvas-sheet-body');
@@ -987,16 +767,13 @@ function createPluginCanvas(options) {
 
   // 배경을 막는 시트는 이 셋뿐이다. 권한(permissions)은 시트가 아니라 캔버스를
   // 통째로 바꾸는 상세 화면이므로 여기 없다(Paper 01).
-  const MODAL_SHEET_KINDS = new Set(['install', 'add', 'remove']);
+  const MODAL_SHEET_KINDS = new Set(['add', 'remove']);
 
   const SHEET_TITLES = {
     add: () => '서버 추가',
-    install: (sheet) => `${sheet.plugin.name} 설치`,
     remove: (sheet) => `${sheet.plugin.name} 삭제`,
   };
 
-  // install에는 부제가 없다 — "한 번에 하나씩 승인합니다"는 묶음 승인이 가능한
-  // 지금 사실과 어긋난다(2026-09-03 검수 확정).
   const SHEET_SUBTITLES = {
     add: () => 'Claude 설정 형식의 스니펫을 붙여넣습니다',
     remove: () => '등록과 승인 기록을 함께 지웁니다',
@@ -1004,7 +781,6 @@ function createPluginCanvas(options) {
 
   const SHEET_BODIES = {
     add: renderAddSheetBody,
-    install: renderInstallSheetBody,
     remove: renderRemoveSheetBody,
   };
 
@@ -1239,14 +1015,11 @@ function createPluginCanvas(options) {
     if (!next) return;
     if (typeof next.restartRequired === 'boolean') restartRequired = next.restartRequired;
     replaceRows(installed, next.installed);
-    replaceRows(recommended, next.recommended);
-    replaceRows(marketplaces, next.marketplaces);
     // 'add' 시트에는 plugin이 없다 — 스니펫을 붙여넣는 중에 목록 갱신이
     // 도착하면 여기서 터졌다(activeSheet.plugin.id).
     if (activeSheet && activeSheet.plugin) {
       const openId = activeSheet.plugin.id || activeSheet.plugin.name;
-      const fresh = installed.concat(recommended)
-        .find((row) => (row.id || row.name) === openId);
+      const fresh = installed.find((row) => (row.id || row.name) === openId);
       if (fresh && activeSheet.kind === 'permissions') {
         // 새 목록 위에 사람이 만든 초안을 다시 얹는다 — 갱신이 도착했다고 해서
         // 저장 전 토글을 지우지 않는다(그 사이 갈린 기능은 발산으로 알린다).
@@ -1258,7 +1031,7 @@ function createPluginCanvas(options) {
         activeSheet = {
           ...activeSheet,
           plugin: fresh,
-          features: featureRowsFor(fresh, activeSheet.kind === 'install'),
+          features: featureRowsFor(fresh),
         };
       }
     }
@@ -1289,8 +1062,6 @@ function createPluginCanvas(options) {
       view,
       search,
       installed: cloneRows(installed),
-      recommended: cloneRows(recommended),
-      marketplaces: cloneRows(marketplaces),
       activeSheet: activeSheet ? activeSheet.kind : null,
       revision: proposalRevision,
       proposals: proposals.map((entry) => ({
@@ -1312,8 +1083,6 @@ function createPluginCanvas(options) {
 const __exports = {
   createPluginCanvas,
   SAMPLE_INSTALLED,
-  SAMPLE_RECOMMENDED,
-  SAMPLE_MARKETPLACES,
 };
 
 if (typeof module !== 'undefined' && module.exports) {
