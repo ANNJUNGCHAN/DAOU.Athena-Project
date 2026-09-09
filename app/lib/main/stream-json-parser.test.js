@@ -225,6 +225,27 @@ test('classifyCanvasBlock: render_canvas 결과가 배열 content로 오면 unpa
   assert.equal(r.reason, 'not-a-string-content');
 });
 
+test('classifyCanvasBlock: 티켓 미생성 주문 확인 결과만 전용 종결 상태로 분류한다', () => {
+  const message = '주문 확인이 필요합니다. athena__render_canvas는 주문 티켓을 만들지 않았으며 주문도 접수하지 않았습니다.';
+  const result = classifyCanvasBlock({
+    toolUseId: 'gold-order', isError: false, meta: null,
+    content: JSON.stringify({
+      status: 'needs_confirmation', confirmation_required: true,
+      order_ticket_created: false, order_submitted: false, message,
+    }),
+  });
+  assert.deepEqual(result, { toolUseId: 'gold-order', status: 'needs_confirmation', message });
+
+  const created = classifyCanvasBlock({
+    toolUseId: 'created-ticket', isError: false, meta: null,
+    content: JSON.stringify({
+      status: 'needs_confirmation', confirmation_required: true,
+      order_ticket_created: true, order_submitted: false, message,
+    }),
+  });
+  assert.equal(created.status, 'unparseable');
+});
+
 // ---------------------------------------------------------------------------
 // 4b. 텍스트 델타 추출 — --include-partial-messages (2026-08-26 S2)
 // ---------------------------------------------------------------------------

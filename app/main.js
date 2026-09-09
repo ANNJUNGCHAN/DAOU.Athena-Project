@@ -3316,6 +3316,7 @@ function createToolStepTracker(
             // 알았다 — 실제로 그렇게 읽었다는 제보로 이 결함을 찾았다. 숨기지는
             // 않는다(무슨 일이 있었는지는 말한다): 실패가 아니라 대기로 분류한다.
             const errorText = block.is_error ? extractToolResultText(block.content) : '';
+            const failure = block.is_error ? require('./lib/main/tool-failure').describeToolFailure(block.content) : null;
             const stillConnecting = /still connecting|No such tool available/i.test(errorText || '');
             // 툴 칩 부제(보드 10) — 봉투를 넘기는 김에 같은 결과에서 뽑는다.
             // 이 한 줄이 sendFn보다 앞이어야 부제가 done 이벤트에 함께 실린다.
@@ -3330,7 +3331,8 @@ function createToolStepTracker(
               elapsedMs,
               error: !!block.is_error && !stillConnecting,
               retrying: stillConnecting,
-              note,
+              note: failure && !stillConnecting ? failure.message : note,
+              ...(failure ? { failure } : {}),
             });
             if (forwardNudgeGuard) {
               maybeForwardNudgeGuardProposal(step, block);
@@ -3727,6 +3729,18 @@ let currentProviderSelection = Object.freeze({
   activeAccount: null, desiredState: null, disabled: null,
 });
 const persistentTurnContexts = createProviderTurnContextRegistry();
+const persistentTerminalAnswers = new Map();
+
+function resolveTerminalAnswerText(modelText, terminalAnswerText) {
+  return terminalAnswerText || modelText || null;
+}
+
+function persistentHistoryAnswerText(result) {
+  return resolveTerminalAnswerText(
+    result && result.finalText,
+    result && persistentTerminalAnswers.get(result.conversationId),
+  );
+}
 let currentPersistentRuntimeGeneration = 0;
 
 function verifierSourceHash(filePath) {
@@ -3756,6 +3770,11 @@ function markProviderFirstVisible(metadata) {
 function handlePersistentCanvasResult(result) {
   const context = persistentTurnContexts.get(result.clientSubmitId);
   if (!context) return;
+  if (result.status === 'needs_confirmation') {
+    context.terminalAnswerText = result.message;
+    persistentTerminalAnswers.set(context.conversationId, result.message);
+    return;
+  }
   const metadata = {
     clientSubmitId: result.clientSubmitId,
     turnId: result.turnId,
@@ -3793,10 +3812,12 @@ function createProviderRuntimeControllerInstance(stateDir) {
     stateDir,
     epochStore: providerEpochStore,
     metrics: providerRuntimeMetrics,
-    commitSuccess: (result) => historySink.saveChatMessageAwaited(
-      { conversationId: result.conversationId, text: result.finalText, role: 'assistant' },
-      { onSaveFailed: emitHistorySaveFailed, mdlog },
-    ),
+    commitSuccess: (result) => {
+      return historySink.saveChatMessageAwaited(
+        { conversationId: result.conversationId, text: persistentHistoryAnswerText(result), role: 'assistant' },
+        { onSaveFailed: emitHistorySaveFailed, mdlog },
+      );
+    },
     capabilityEnv: () => mcpEnv.buildEnvOverrides(),
     callbacks: {
       onTurnBound(event, binding) {
@@ -4959,6 +4980,8 @@ async function runLiveQueryInnerBody(query, expand, origin, turnConversationId, 
       expandTriggered: false,
       origin,
       canvasMode: submit.canvasMode,
+      conversationId: turnConversationId,
+      terminalAnswerText: null,
     };
     persistentTurnContexts.set(clientSubmitId, persistentTurnContext);
     let persistentResult;
@@ -4975,8 +4998,11 @@ async function runLiveQueryInnerBody(query, expand, origin, turnConversationId, 
       });
     } finally {
       persistentTurnContexts.deleteIfSame(clientSubmitId, persistentTurnContext);
+      persistentTerminalAnswers.delete(turnConversationId);
     }
-    const answerText = persistentResult.ok ? persistentResult.finalText : null;
+    const answerText = persistentResult.ok
+      ? resolveTerminalAnswerText(persistentResult.finalText, persistentTurnContext.terminalAnswerText)
+      : null;
     const replayJudgment = persistentResult.ok
       ? replayTurnCapture.buildJudgment(canvasTypesSeen)
       : null;
@@ -4997,6 +5023,7 @@ async function runLiveQueryInnerBody(query, expand, origin, turnConversationId, 
   }
   // 두 경로(상주 세션/콜드 스폰)가 같은 콜백을 공유한다 — 스트림 계약이 동일하다.
   let firstVisibleTextAt = null;
+  let terminalAnswerText = null;
   const providerStartedAt = performance.now();
   const turnCallbacks = {
     onSpawn: (h) => { myHandle = h; runtime.activeLiveQuery = h; },
@@ -5013,6 +5040,10 @@ async function runLiveQueryInnerBody(query, expand, origin, turnConversationId, 
       if (bridge) bridge.journalDelta({ sessionId: turnConversationId, messageId: sessionAssistantId, text });
     },
     onCanvasResult: (r) => {
+      if (r.status === 'needs_confirmation') {
+        terminalAnswerText = r.message;
+        return;
+      }
       const label = r.envelope && (r.envelope.card_title || r.envelope.caption);
       // 카드가 실제로 마운트된 뒤 renderer가 opaque lease를 요청하므로 여기서는
       // envelope 전달만 한다. 계좌 전환 뒤 남은 카드가 새 registrar를 건드릴 수 없다.
@@ -5166,9 +5197,10 @@ async function runLiveQueryInnerBody(query, expand, origin, turnConversationId, 
     : null;
   if (replayJudgment) liveQueryCache.set(query, replayJudgment);
 
-  const answerText = result.finalResult && typeof result.finalResult.result === 'string'
-    ? result.finalResult.result
-    : null;
+  const answerText = resolveTerminalAnswerText(
+    result.finalResult && typeof result.finalResult.result === 'string' ? result.finalResult.result : null,
+    terminalAnswerText,
+  );
   {
     const bridge = getSessionBridge();
     if (bridge) {

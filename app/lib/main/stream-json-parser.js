@@ -233,6 +233,22 @@ function isUserRejected(block) {
   return block.isError === true && !!block.meta && block.meta.non_execution_kind === 'user-rejected';
 }
 
+function extractOrderConfirmationNotice(content) {
+  const normalized = normalizeToolResultContent(content);
+  if (normalized.kind !== 'string') return null;
+  let parsed;
+  try { parsed = JSON.parse(normalized.text); } catch { return null; }
+  if (!parsed || parsed.status !== 'needs_confirmation'
+      || parsed.confirmation_required !== true
+      || parsed.order_ticket_created !== false
+      || parsed.order_submitted !== false) return null;
+  return {
+    message: typeof parsed.message === 'string' && parsed.message.trim()
+      ? parsed.message.trim()
+      : '주문 확인이 필요합니다. 주문 티켓은 만들어지지 않았으며 주문도 접수되지 않았습니다.',
+  };
+}
+
 // ---------------------------------------------------------------------------
 // 8. tool_result 블록 하나 → 캔버스 결과로 분류 (성공/폴백/거부/에러/해석불가)
 // ---------------------------------------------------------------------------
@@ -241,7 +257,12 @@ function classifyCanvasBlock(block) {
     return { toolUseId: block.toolUseId, status: 'rejected', raw: block };
   }
   if (block.isError) {
-    return { toolUseId: block.toolUseId, status: 'error', raw: block };
+    const failure = require('./tool-failure').describeToolFailure(block.content);
+    return { toolUseId: block.toolUseId, status: 'error', raw: block, failure };
+  }
+  const confirmation = extractOrderConfirmationNotice(block.content);
+  if (confirmation) {
+    return { toolUseId: block.toolUseId, status: 'needs_confirmation', ...confirmation };
   }
   const normalized = normalizeToolResultContent(block.content);
   const envelopeResult = extractCanvasEnvelope(normalized);
@@ -401,6 +422,7 @@ module.exports = {
   normalizeToolResultContent,
   extractCanvasEnvelope,
   isUserRejected,
+  extractOrderConfirmationNotice,
   classifyCanvasBlock,
   collectCanvasResults,
   extractTextDelta,
