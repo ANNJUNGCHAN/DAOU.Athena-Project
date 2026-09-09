@@ -836,6 +836,16 @@ test('emptyValueSlots 는 미제공이 아니라 빈 칸이다', () => {
   assert.deepEqual(plan.missing, []);
 });
 
+test('정적 빈 칸 종목코드는 identity 코드로 채운다', () => {
+  const contract = { slots: [
+    { slot_id: 's001', node_id: 'n1', kind: 'value', paper_text: 'KODEX 200 ETF' },
+    { slot_id: 's002', node_id: 'n2', kind: 'value', paper_text: '069500', static: 'blank' },
+  ] };
+  const plan = mountPlan(contract, { s002: '069500' }, { identity: { name: 'LG전자', code: '066570' } });
+  assert.equal(plan.assignments[0].text, 'LG전자');
+  assert.equal(plan.assignments[1].text, '066570');
+});
+
 test('정적 종목코드 칸은 identity 코드로 덮지 않는다', () => {
   const contract = { slots: [
     { slot_id: 's001', node_id: 'n1', kind: 'value', paper_text: '금 99.99K', static: true },
