@@ -112,6 +112,94 @@ test('two sequential turns share one process and one ACP session', async () => {
   assert.equal(messages(first.child).filter((message) => message.method === 'initialize').length, 1);
 });
 
+test('warm starts ACP without prompt and first null-lineage run reuses it', async () => {
+  const ctx = harness();
+  const warmPromise = ctx.session.warm({ model: 'grok-4.6', effort: 'high' });
+  await tick();
+  const child = ctx.spawns[0].child;
+  const initialize = request(child, 'initialize');
+  reply(child, initialize, { protocolVersion: 1, authRequired: false });
+  await tick();
+  const open = request(child, 'session/new');
+  reply(child, open, { sessionId: 's1' });
+  const snap = await warmPromise;
+  assert.equal(snap.state, 'idle');
+  assert.equal(request(child, 'session/prompt'), undefined);
+  const turn = ctx.session.run({ prompt: 'hello', model: 'grok-4.6', effort: 'high', resumeSessionId: null });
+  await tick();
+  const prompt = request(child, 'session/prompt');
+  assert.ok(prompt);
+  reply(child, prompt, { stopReason: 'end_turn' });
+  const result = await turn;
+  assert.equal(result.spawnedFresh, false);
+  assert.equal(ctx.spawns.length, 1);
+});
+
+test('stop during warm initialization rejects and does not leak the child', async () => {
+  const ctx = harness();
+  const warming = ctx.session.warm({ model: 'grok-4.6', effort: 'high' });
+  await tick();
+  ctx.session.stop('cancel warm');
+  await assert.rejects(warming);
+  assert.equal(ctx.session.snapshot().stopped, true);
+  assert.equal(ctx.kills.length, 1);
+});
+
+test('blank warm never bypasses changed model, account or security on warm or run', async () => {
+  for (const method of ['warm', 'run']) {
+    for (const changed of [{ model: 'other-model' }, { identityKey: 'other-account' }, { securityKey: 'new-consent' }]) {
+      const ctx = harness();
+      const original = { model: 'grok-4.6', effort: 'high', identityKey: 'account', securityKey: 'consent', resumeSessionId: null };
+      const firstWarm = ctx.session.warm(original);
+      await tick();
+      const first = ctx.spawns[0].child;
+      reply(first, request(first, 'initialize'), { authRequired: false });
+      await tick();
+      reply(first, request(first, 'session/new'), { sessionId: 'blank-one' });
+      await firstWarm;
+      const next = ctx.session[method]({ ...original, ...changed, prompt: 'hello' });
+      await tick();
+      assert.equal(ctx.spawns.length, 2, `${method} must rotate ${Object.keys(changed)[0]}`);
+      assert.equal(ctx.kills.length, 1);
+      const second = ctx.spawns[1].child;
+      reply(second, request(second, 'initialize'), { authRequired: false });
+      await tick();
+      reply(second, request(second, 'session/new'), { sessionId: 'blank-two' });
+      await tick();
+      if (method === 'run') reply(second, request(second, 'session/prompt'), { stopReason: 'end_turn' });
+      await next;
+      await ctx.session.stop();
+    }
+  }
+});
+
+test('stop waits for an owned process tree termination', async () => {
+  let finish;
+  const ctx = harness({ killFn: () => new Promise((resolve) => { finish = resolve; }) });
+  const warming = ctx.session.warm({});
+  await tick();
+  const stopped = ctx.session.stop();
+  await assert.rejects(warming);
+  let settled = false;
+  stopped.then(() => { settled = true; });
+  await tick();
+  assert.equal(settled, false);
+  finish();
+  await stopped;
+  assert.equal(settled, true);
+});
+
+test('stop reports synchronous and unsuccessful process termination instead of success', async () => {
+  for (const killFn of [() => { throw new Error('kill failed'); }, () => Promise.resolve({ exited: false })]) {
+    const ctx = harness({ killFn });
+    const warming = ctx.session.warm({});
+    await tick();
+    const stopped = ctx.session.stop();
+    await assert.rejects(warming);
+    await assert.rejects(stopped, AggregateError);
+  }
+});
+
 test('session new/load preserve rules, profile, yolo mode, and explicit MCP descriptor', async () => {
   const ctx = harness({ trustProjectFolder: true });
   const turn = await startTurn(ctx, { resumeSessionId: 'existing' });

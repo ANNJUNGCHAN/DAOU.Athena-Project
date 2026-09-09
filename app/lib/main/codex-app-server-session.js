@@ -1,10 +1,13 @@
 'use strict';
 
+const { assertSessionStopsSucceeded } = require('./provider-session-shutdown');
+
 const {
   CodexJsonlRpcClient,
   CodexProtocolError,
   DEFAULT_LIMITS,
 } = require('./codex-jsonl-rpc-client');
+const { classifyCanvasBlock, isRenderCanvasToolName } = require('./stream-json-parser');
 
 const OVERLOAD_RPC_CODE = -32001;
 const OVERLOAD_MESSAGE = 'Server overloaded; retry later.';
@@ -16,6 +19,10 @@ class CodexSessionError extends Error {
     this.name = 'CodexSessionError';
     this.code = code;
     if (options.providerStatus !== undefined) this.providerStatus = options.providerStatus;
+    const source = options.cause;
+    if (source?.actionNeeded !== undefined) this.actionNeeded = source.actionNeeded === true;
+    if (source?.retryable !== undefined) this.retryable = source.retryable === true;
+    if (source?.runtimeHome !== undefined) this.runtimeHome = source.runtimeHome;
   }
 }
 
@@ -96,6 +103,78 @@ function normalizeMcpPage(result) {
   };
 }
 
+function mcpToolNames(server) {
+  const tools = server?.tools;
+  if (Array.isArray(tools)) {
+    return new Set(tools
+      .map((tool) => typeof tool === 'string' ? tool : tool?.name)
+      .filter((name) => typeof name === 'string' && name));
+  }
+  if (tools && typeof tools === 'object') {
+    const names = [];
+    for (const [key, tool] of Object.entries(tools)) {
+      if (key) names.push(key);
+      if (typeof tool?.name === 'string' && tool.name) names.push(tool.name);
+    }
+    return new Set(names);
+  }
+  return new Set();
+}
+
+function unqualifiedMcpToolName(name) {
+  const parts = String(name || '').split('__');
+  return parts[0] === 'mcp' && parts.length > 2 ? parts.slice(2).join('__') : String(name || '');
+}
+
+function assertRequiredMcpServer(actual, requirement) {
+  if (!requirement || typeof requirement !== 'object' || Array.isArray(requirement)) {
+    throw new TypeError('desired.requiredMcpServer must be an object');
+  }
+  const name = requireNonEmptyString(requirement.name, 'desired.requiredMcpServer.name');
+  const server = actual.find((entry) => entry?.name === name);
+  if (!server) {
+    throw new CodexSessionError('CODEX_MCP_REQUIRED_SERVER_MISSING', `Required Codex MCP server is missing: ${name}`);
+  }
+  const runtimeStatus = String(server.runtimeStatus ?? server.status ?? '').toLowerCase();
+  if (server.enabled === false
+    || ['authenticationrequired', 'cancelled', 'disabled', 'failed', 'error'].includes(runtimeStatus)) {
+    throw new CodexSessionError('CODEX_MCP_REQUIRED_SERVER_DISABLED', `Required Codex MCP server is disabled: ${name}`);
+  }
+  const requiredTools = requirement.requiredTools ?? [];
+  if (!Array.isArray(requiredTools) || requiredTools.some((tool) => typeof tool !== 'string' || !tool)) {
+    throw new TypeError('desired.requiredMcpServer.requiredTools must be an array of non-empty strings');
+  }
+  const tools = mcpToolNames(server);
+  const normalizedTools = new Set([...tools].map(unqualifiedMcpToolName));
+  const missing = requiredTools.filter((tool) => !tools.has(tool)
+    && !normalizedTools.has(unqualifiedMcpToolName(tool)));
+  if (missing.length) {
+    throw new CodexSessionError(
+      'CODEX_MCP_REQUIRED_TOOL_MISSING',
+      `Required Codex MCP tools are missing: ${missing.join(', ')}`,
+    );
+  }
+}
+
+function toolResultContent(item) {
+  const result = item?.result ?? item?.content ?? null;
+  if (typeof result === 'string') return result;
+  if (result && typeof result === 'object') {
+    if (typeof result.content === 'string') return result.content;
+    if (Array.isArray(result.content)) {
+      const text = result.content
+        .map((block) => typeof block === 'string' ? block : block?.text)
+        .filter((value) => typeof value === 'string' && value)
+        .join('\n');
+      if (text) return text;
+    }
+    if (result.structuredContent && typeof result.structuredContent === 'object') {
+      return JSON.stringify(result.structuredContent);
+    }
+  }
+  return result == null ? '' : JSON.stringify(result);
+}
+
 function isProtocolOverload(error) {
   return error instanceof CodexProtocolError
     && error.code === 'CODEX_REQUEST_REJECTED'
@@ -105,13 +184,13 @@ function isProtocolOverload(error) {
 
 function buildThreadStartParams(desired) {
   const params = {
-    model: requireNonEmptyString(desired.model, 'desired.model'),
     cwd: requireNonEmptyString(desired.cwd, 'desired.cwd'),
     approvalPolicy: 'never',
     sandbox: 'read-only',
     developerInstructions: String(desired.systemPrompt ?? desired.developerInstructions ?? ''),
     serviceName: 'athena',
   };
+  if (desired.model) params.model = requireNonEmptyString(desired.model, 'desired.model');
   if (desired.threadStartConfigSupported !== false && desired.effort) {
     params.config = { model_reasoning_effort: desired.effort };
   }
@@ -125,10 +204,8 @@ function buildTurnStartParams(turn, threadId, desired, includeOverrides) {
     input: [{ type: 'text', text: String(turn.userText ?? '') }],
   };
   if (!includeOverrides) return base;
-  return {
+  const params = {
     ...base,
-    model: requireNonEmptyString(desired.model, 'desired.model'),
-    effort: requireNonEmptyString(desired.effort, 'desired.effort'),
     cwd: requireNonEmptyString(desired.cwd, 'desired.cwd'),
     approvalPolicy: 'never',
     sandboxPolicy: {
@@ -136,6 +213,9 @@ function buildTurnStartParams(turn, threadId, desired, includeOverrides) {
       networkAccess: false,
     },
   };
+  if (desired.model) params.model = requireNonEmptyString(desired.model, 'desired.model');
+  if (desired.effort) params.effort = requireNonEmptyString(desired.effort, 'desired.effort');
+  return params;
 }
 
 class CodexAppServerSession {
@@ -203,6 +283,7 @@ class CodexAppServerSession {
       spawned = this._runtime.spawnGenerationAppServer(generationContext);
     } catch (cause) {
       this._state = 'failed';
+      if (cause?.actionNeeded === true) throw cause;
       throw new CodexSessionError('CODEX_SPAWN_FAILED', 'Unable to start Codex app-server', { cause });
     }
     if (!spawned?.child?.stdin || !spawned?.child?.stdout || !spawned?.child?.stderr) {
@@ -289,6 +370,15 @@ class CodexAppServerSession {
     return task;
   }
 
+  async warmConversation(conversationId = '__warm__') {
+    requireNonEmptyString(conversationId, 'conversationId');
+    await this.ready();
+    const conversation = await this._ensureConversation(conversationId);
+    await this._verifyMcpInventory(conversation);
+    this._assertCurrent();
+    return { threadId: conversation.threadId };
+  }
+
   async interrupt(athenaTurnId, reason = 'user') {
     const active = this._activeByAthenaTurn.get(athenaTurnId);
     if (!active) return null;
@@ -334,6 +424,7 @@ class CodexAppServerSession {
   snapshot() {
     return {
       state: this._state,
+      pid: this._child?.pid ?? null,
       runtimeGeneration: this._generationContext?.runtimeGeneration ?? null,
       pendingRequestCount: this._protocol?.pendingRequestCount ?? 0,
       conversationThreads: Object.fromEntries(
@@ -489,8 +580,13 @@ class CodexAppServerSession {
     const expected = this._desired.expectedMcpServers
       ?? this._desired.mcpSnapshot?.codexServers
       ?? this._desired.mcpSnapshot?.expectedCodexServers;
-    if (expected === undefined || entry.mcpVerified) return;
-    if (!Array.isArray(expected)) {
+    const required = this._desired.requiredMcpServer;
+    const audit = this._desired.mcpAudit;
+    if ((expected === undefined && required === undefined && !audit) || entry.mcpVerified) return;
+    if (audit && typeof audit.validate !== 'function') {
+      throw new TypeError('desired.mcpAudit.validate must be a function');
+    }
+    if (expected !== undefined && !Array.isArray(expected)) {
       throw new TypeError('desired.expectedMcpServers must be an array');
     }
     const actual = [];
@@ -514,12 +610,14 @@ class CodexAppServerSession {
       cursor = page.nextCursor || null;
     } while (cursor !== null);
 
-    if (!stableEqual(actual, expected)) {
+    if (expected !== undefined && !stableEqual(actual, expected)) {
       throw new CodexSessionError(
         'CODEX_MCP_INVENTORY_MISMATCH',
         'Codex effective MCP inventory did not match the Athena snapshot',
       );
     }
+    if (required !== undefined) assertRequiredMcpServer(actual, required);
+    if (audit) await audit.validate({ configAudit, servers: actual });
     entry.mcpVerified = true;
   }
 
@@ -626,12 +724,17 @@ class CodexAppServerSession {
       const providerToolName = String(item.name ?? item.toolName ?? '');
       if (!toolUseId || !providerToolName) return;
       if (completed) {
+        const content = toolResultContent(item);
         this._emitActive(active, 'tool_completed', {
           toolUseId,
           canonicalToolName: canonicalToolName(providerToolName),
           isError: Boolean(item.error),
-          content: item.result ?? item.content ?? null,
+          content,
         }, providerTurnId);
+        if (!item.error && isRenderCanvasToolName(providerToolName)) {
+          const canvas = classifyCanvasBlock({ toolUseId, content, isError: false, meta: null });
+          if (canvas.envelope) this._emitActive(active, 'canvas_result', canvas, providerTurnId);
+        }
       } else {
         this._emitActive(active, 'tool_started', {
           toolUseId,
@@ -799,8 +902,8 @@ class CodexAppServerSession {
     const handle = this._terminationHandle;
     this._terminationHandle = null;
     if (!handle) return;
-    if (typeof handle.terminate === 'function') await handle.terminate();
-    else if (typeof handle.stop === 'function') await handle.stop();
+    if (typeof handle.terminate === 'function') assertSessionStopsSucceeded(await handle.terminate());
+    else if (typeof handle.stop === 'function') assertSessionStopsSucceeded(await handle.stop());
   }
 }
 
@@ -812,4 +915,6 @@ module.exports = {
   buildThreadStartParams,
   buildTurnStartParams,
   stableNormalize,
+  assertRequiredMcpServer,
+  toolResultContent,
 };
