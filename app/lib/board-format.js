@@ -68,6 +68,27 @@ function toNumber(value) {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
+// 키움 REST 는 수량·금액을 `000000000001` 처럼 앞 0을 채워 보내고, 가격은
+// 방향 부호를 값에 붙인다(`+88100`). 종목코드 6자리는 앞 0이 의미이므로 그대로 둔다.
+function kiwoomWireNumber(value) {
+  if (typeof value === 'number') {
+    return Number.isFinite(value) ? { numeric: value, signed: value < 0, plus: false } : null;
+  }
+  if (typeof value !== 'string') return null;
+  const text = value.trim().replace(/,/g, '');
+  if (!text) return null;
+  if (/^\d{6}$/.test(text)) return null;
+  if (/^0{6,}$/.test(text)) return { empty: true };
+  const match = /^([+-])?(0*)(\d+)(\.\d+)?$/.exec(text);
+  if (!match) return null;
+  const numeric = Number((match[1] === '-' ? '-' : '') + match[3] + (match[4] || ''));
+  if (!Number.isFinite(numeric)) return null;
+  const padded = Boolean(match[2]);
+  const plus = match[1] === '+';
+  const signed = Boolean(match[1]);
+  return { numeric, signed, plus, padded };
+}
+
 function groupText(amount) {
   return Math.abs(amount).toLocaleString('ko-KR');
 }
@@ -245,13 +266,30 @@ function formatSlot(format, raw) {
 
   const kind = kindOf(spec);
   const scale = SCALE_FACTOR[spec.scale] || 1;
-  const tone = toneFor(spec, normalized.value);
+  const wire = kiwoomWireNumber(normalized.value);
+  if (wire && wire.empty) {
+    return { text: '', tone: null, missing: false };
+  }
+  const wireSigned = Boolean(wire && (wire.padded || wire.plus) && wire.signed);
+  const toneSource = wireSigned
+    ? (wire.plus ? 1 : -Math.abs(wire.numeric))
+    : normalized.value;
+  const tone = wireSigned ? toneOf(toneSource) : toneFor(spec, toneSource);
 
   if (kind === 'text' || kind === 'rollup') {
+    if (wire && wire.numeric != null) {
+      const display = wire.signed ? Math.abs(wire.numeric) : wire.numeric;
+      return applyAffixes(spec, {
+        text: display.toLocaleString('ko-KR'),
+        tone,
+        missing: false,
+      });
+    }
     return applyAffixes(spec, { text: String(normalized.value), tone, missing: false });
   }
   if (kind === 'date') {
     const rawDate = String(normalized.value);
+    if (/^0+$/.test(rawDate)) return { text: '', tone: null, missing: false };
     const text = spec.date_style === 'month-day' && /^\d{8}$/.test(rawDate)
       ? `${rawDate.slice(4, 6)}-${rawDate.slice(6, 8)}`
       : factsCard.formatDatetime(normalized.value);
@@ -261,13 +299,16 @@ function formatSlot(format, raw) {
     return applyAffixes(spec, { text: formatTime(normalized.value), tone, missing: false });
   }
 
-  const numeric = toNumber(normalized.value);
+  const numeric = (wire && wire.numeric != null) ? wire.numeric : toNumber(normalized.value);
   // Paper 원문·이미 단위가 붙은 표기는 숫자가 아니다. 접두·접미를 얹으면
   // 「900.4조」가 「900.4조원」이 된다.
   if (numeric === null) return { text: String(normalized.value), tone, missing: false };
   // Kiwoom 가격 필드는 방향 부호를 값에 싣는다. 가격으로 저작된 슬롯만 magnitude를
   // 표시하고, 상승·하락 tone은 위에서 원본 부호로 이미 계산한 값을 유지한다.
-  const displayNumeric = spec.absolute === true ? Math.abs(numeric) : numeric;
+  const displayNumeric = spec.absolute === true
+    || (kind === 'text' && wire && (wire.padded || wire.plus))
+    ? Math.abs(numeric)
+    : numeric;
   const scaled = displayNumeric * scale;
 
   if (kind === 'korean') {
@@ -276,6 +317,10 @@ function formatSlot(format, raw) {
     });
   }
   if (kind === 'percent') {
+    // 보유비중에 평가액 원문이 섞이면 수백만 % 가 된다. 비중 칸이 아니다.
+    if (Math.abs(scaled) > 10000) {
+      return { text: '', tone: null, missing: false };
+    }
     const precision = Number.isFinite(spec.precision) ? spec.precision : 2;
     return applyAffixes(spec, {
       text: `${signPrefix(scaled, spec.sign)}${withPrecision(scaled, precision)}%`, tone, missing: false,
@@ -302,7 +347,7 @@ function isZeroLike(format, raw) {
 const __exports = {
   MISSING_TEXT, MYRIAD_LADDER, SCALE_FACTOR, MYRIAD_GROUPS, ZERO_COLLAPSE_MIN,
   UNIT_KIND, UNIT_SUFFIX, RENDER_KIND, DERIVED_TONE,
-  toNumber, formatKoreanUnit, formatTime, formatSlot, normalizeSlotValue, isScalarSlotValue, compositeSpecOf,
+  toNumber, kiwoomWireNumber, formatKoreanUnit, formatTime, formatSlot, normalizeSlotValue, isScalarSlotValue, compositeSpecOf,
   kindOf, toneFor, applyAffixes, missingResult,
   toneOf, toneColorVar, missingText, isZeroLike,
 };

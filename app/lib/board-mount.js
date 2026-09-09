@@ -117,11 +117,14 @@ function mountPlan(contract, values, options = {}) {
   if (identity && (identity.name || identity.code)
     && slotList(contract).some((slot) => slot.slot_id === 's001' && slot.kind === 'value')) {
     values = { ...values };
-    if (identity.name) {
+    const byId = new Map(slotList(contract).map((slot) => [slot.slot_id, slot]));
+    const nameSlot = byId.get('s001');
+    const codeSlot = byId.get('s002');
+    if (identity.name && nameSlot && !nameSlot.static && nameSlot.kind === 'value') {
       values.s001 = identity.name;
       identitySlots.add('s001');
     }
-    if (identity.code) {
+    if (identity.code && codeSlot && !codeSlot.static && codeSlot.kind === 'value') {
       values.s002 = identity.code;
       identitySlots.add('s002');
     }
@@ -423,6 +426,34 @@ function collapseEmptyRows(surface, emptyRows, options = {}) {
   return hidden;
 }
 
+function hideEmptyValueUnits(surface, plan) {
+  const emptyIds = new Set(
+    (plan.assignments || [])
+      .filter((assignment) => assignment.designText && assignment.text === '')
+      .map((assignment) => assignment.slotId),
+  );
+  if (!emptyIds.size || typeof surface.querySelectorAll !== 'function') return;
+  const bySlot = slotElementIndex(surface);
+  for (const slotId of emptyIds) {
+    const el = bySlot.get(slotId);
+    if (!el) continue;
+    let box = el.parentElement;
+    while (box && box !== surface && box.children && box.children.length < 2) {
+      box = box.parentElement;
+    }
+    if (!box || box === surface) continue;
+    const slots = [...box.querySelectorAll('[data-slot-id]')];
+    const live = slots.some((node) => {
+      const id = node.dataset ? node.dataset.slotId : '';
+      if (!id || emptyIds.has(id)) return false;
+      if (node.dataset && node.dataset.missing) return false;
+      if (node.dataset && node.dataset.bsDesignText) return false;
+      return String(node.textContent || '').trim() !== '';
+    });
+    if (!live) setHidden(box, true);
+  }
+}
+
 // DOM 쓰기 층 — 텍스트 노드만 건드린다. 구조·인라인 스타일 원문은 손대지 않는다(D1).
 function applyPlan(root, plan, options = {}) {
   const index = nodeIndex(root);
@@ -475,6 +506,9 @@ function applyPlan(root, plan, options = {}) {
   const collapsedColumns = options.partial
     ? []
     : collapseEmptyColumns(root, options.emptyColumns);
+  if (!options.partial) {
+    hideEmptyValueUnits(root, plan);
+  }
   if (options.partial) {
     return { unbound, unmapped: [], containers, collapsedRows, collapsedColumns };
   }
