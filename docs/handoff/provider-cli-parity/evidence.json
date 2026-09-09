@@ -1,0 +1,142 @@
+{
+  "recordedDate": "2026-09-09",
+  "recordedAt": "2026-09-09T12:00:46.611Z",
+  "kind": "this-run-live-verification",
+  "priorPortableSummaryKind": "portable-summary-of-prior-observations-not-a-new-live-run",
+  "baseCommit": "c44d6de2",
+  "implementationCommits": ["38b5466b", "d64d124d"],
+  "handoffDocsCommit": "c44d6de2",
+  "branch": "codex/provider-cli-parity-grok-handoff",
+  "dirtyAtInventory": false,
+  "selectedProviderSpareSessions": 2,
+  "allProvidersLiveVerified": false,
+  "koreanStatus": {
+    "구현완료": true,
+    "실제검증완료": false,
+    "실제검증완료조건": "Claude·Grok·Codex 모두 이 실행에서 인증된 성공 응답",
+    "이실행실제검증": {
+      "grok": true,
+      "claude": false,
+      "codex": false
+    }
+  },
+  "environment": {
+    "node": "v22.14.0",
+    "npm": "10.9.2",
+    "os": "windows",
+    "userData": "C:\\Users\\ajc22\\AppData\\Roaming\\athena-shell",
+    "sharedAthenaProcessRunning": false,
+    "appNodeModulesAtInventory": false,
+    "thisTreeBackendVenv": false,
+    "sharedUserDataMcpConfigLeftUnchanged": true,
+    "sharedUserDataMcpBackend": "C:\\Projects\\DAOU.Athena\\backend"
+  },
+  "clis": {
+    "grok": {
+      "path": "C:\\Users\\ajc22\\.grok\\bin\\grok.exe",
+      "version": "grok 1.0.24 (68e414c661e3) [stable]",
+      "kind": "native-exe"
+    },
+    "claude": {
+      "nativeExe": "C:\\Users\\ajc22\\.local\\bin\\claude.exe",
+      "fnmWrapper": "fnm_multishells\\...\\claude.ps1",
+      "version": "2.1.228 (Claude Code)"
+    },
+    "codex": {
+      "fnmNodeWrapperVersion": "codex-cli 0.147.0",
+      "pathFirstNativeExe": {
+        "path": "C:\\Users\\ajc22\\AppData\\Local\\Programs\\OpenAI\\Codex\\bin\\codex.exe",
+        "version": "codex-cli 0.147.0"
+      },
+      "additionalNativeExe": {
+        "path": "C:\\Users\\ajc22\\AppData\\Local\\OpenAI\\Codex\\bin\\8e5b6932251c2c1c\\codex.exe",
+        "version": "codex-cli 0.153.4"
+      },
+      "note": "PowerShell/node wrapper and native exe are not the same binary. Athena resolveCodexExecutable on this PATH would pick the first .exe (0.147.0) unless ATHENA_CODEX_BIN is set."
+    }
+  },
+  "tests": {
+    "thisRunFocused": {
+      "files": 13,
+      "passed": 138,
+      "failed": 0,
+      "skipped": 0,
+      "nodeCheckMainJs": 0
+    },
+    "handoffBaseFocused": {"base": "d64d124d", "files": 13, "passed": 138, "failed": 0, "skipped": 0},
+    "implementationIntegrated": {"passed": 151, "failed": 0, "skipped": 0},
+    "isolatedCommitSnapshot": {"passed": 137, "failed": 0, "skipped": 0},
+    "firstFullSuite": {"total": 3872, "passed": 3870, "failed": 2},
+    "fullSuiteFailureReasons": ["missing prepareLiveChatPool test mock, fixed in d64d124d", "graph PowerShell snapshot timeout; separate rerun passed"],
+    "focusedFollowup": {"passed": 14, "failed": 0},
+    "finalPrePush": {"exitCode": 0, "gatesPassed": 4, "appUnitSuitePassed": true, "finalTotalNotCaptured": true}
+  },
+  "productCodeChangedThisRun": false,
+  "electron": {
+    "sharedUserDataLaunch": "skipped-would-rewrite-mcp-config-to-missing-venv",
+    "isolatedUserDataLaunchAliveAfter8s": true,
+    "guiDrivableInThisHarness": false,
+    "sharedAthenaNotKilled": true
+  },
+  "grok": {
+    "noToolProbePassed": true,
+    "noToolShippedMainPathPassed": true,
+    "readyMs": 4600,
+    "probeReadyMs": 867,
+    "selectedProviderSpareSize": 2,
+    "firstTurnMs": [5101, 5421],
+    "followupMs": [1483, 1832],
+    "timingsThisRun": {
+      "A-first": {"준비": 4600, "큐": 74, "최초응답": 944, "모델": 5027, "도구": 0, "firstTextMs": 4778, "totalMs": 5101, "spawnedFresh": false, "pid": 25176},
+      "B-first": {"준비": 4600, "큐": 73, "최초응답": 1030, "모델": 5348, "도구": 0, "firstTextMs": 5189, "totalMs": 5421, "spawnedFresh": false, "pid": 24300},
+      "A-followup": {"준비": 0, "큐": 0, "최초응답": 108, "모델": 1483, "도구": 0, "firstTextMs": 1299, "totalMs": 1483, "spawnedFresh": false, "samePidAsFirst": true},
+      "B-followup": {"준비": 0, "큐": 1, "최초응답": 93, "모델": 1831, "도구": 0, "firstTextMs": 1651, "totalMs": 1832, "spawnedFresh": false, "samePidAsFirst": true}
+    },
+    "distinctSessionPids": true,
+    "firstAndFollowupReusedPid": true,
+    "spawnedFreshOnTurns": false,
+    "toolCalls": 0,
+    "cancelDuringPrewarm": {
+      "handlePresent": true,
+      "turnAborted": true,
+      "submitted": false,
+      "reusedCancelledSessionObject": false,
+      "replacementOk": true
+    },
+    "settingsRotation": {
+      "accountRotationPerformed": false,
+      "accountRotationLimitation": "Athena CLI 계정에 Grok 계정 1개만 있음",
+      "effortRotation": {"from": "max", "to": "low", "generationBefore": 1, "generationAfter": 2, "rotatedTurnOk": true}
+    },
+    "financialToolLatencyVerified": false,
+    "financialToolLatencyUnverifiedReason": "이 실행에서 실제 MCP/백엔드 금융 도구 질의를 보내지 않았다. 무도구 OK는 금융 질의 성능 증거가 아니다."
+  },
+  "claude": {
+    "preSpawnedPidReuseObserved": true,
+    "successfulResponseVerified": false,
+    "blockerAtObservation": "Failed to authenticate: OAuth session expired and could not be refreshed",
+    "readySignalBeforeFirstInputObserved": false,
+    "livePreSpawnedAfterWait": true,
+    "distinctPids": true,
+    "authStatusLoggedIn": true,
+    "authStatusIsNotASuccessfulTurn": true
+  },
+  "codex": {
+    "pathNativeVersionObserved": "0.147.0",
+    "additionalNativeVersionObserved": "0.153.4",
+    "transport": "stdio://",
+    "privateAuthPresentAtObservation": false,
+    "authenticatedThreadInventoryAndTurnVerified": false,
+    "didNotCopyGlobalCodexHome": true,
+    "latestAuthFailureContract": {"code": "CODEX_PRIVATE_AUTH_REQUIRED", "actionNeeded": true, "retryable": false},
+    "probeErrorMessage": "Athena 계정 설정에서 Codex 로그인을 완료해 주세요.",
+    "oldRawProbeRetryScheduledTrueIsSuperseded": true
+  },
+  "sourceArtifactsOnThisMachine": [
+    ".omc/artifacts/chat-prewarm-live.json"
+  ],
+  "rawCredentialsIncluded": false,
+  "ordersExecuted": false,
+  "fabricatedCanvasOrOrderPayloads": false,
+  "originalRunningAppRestartedByThisWork": false
+}
