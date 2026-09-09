@@ -64,9 +64,12 @@ function assertSurfaceGeometry(boardId, preset, probe) {
     );
   }
   const scrollTables = probe.scroll_tables || [];
+  // 숨은 컨트롤은 초점 결함이 아니다 — 그 줄에 자료가 한 칸도 없어 접힌 자리이고
+  // (계약 `empty_rows`), 화면에 없는 것을 눌러 보라고 요구할 수 없다. 실측 2SKU-1
+  // `3GLA-0`: 계좌 조회가 모의투자 미지원이라 그 줄이 통째로 접혔다.
   const unfocusable = scrollTables.flatMap((record) => (
     record.scroll_state_controls || []
-  )).filter((control) => !control.focusable);
+  )).filter((control) => control.visible !== false && !control.focusable);
   if (unfocusable.length) {
     throw new Error(
       `board ${boardId} ${preset.name}: scroll_control_not_focusable — ${
@@ -74,8 +77,12 @@ function assertSurfaceGeometry(boardId, preset, probe) {
     );
   }
   if (preset.name === '4분할' || preset.name === '최소') {
+    // 크기가 0인 스크롤 상자는 「스크롤이 안 된다」가 아니라 **담긴 것이 없다**는
+    // 뜻이다(실측 133H-2 `14UQ-2`: 계좌 조회가 모의투자 미지원이라 표가 비어 접혔다).
+    // 스크롤할 내용이 없는 상자를 결함으로 세면 빈 표가 있는 보드가 전부 빨개진다.
     const fixedTables = scrollTables.filter((record) => (
-      record.scroll_width <= record.client_width + 1
+      record.client_width > 0
+      && record.scroll_width <= record.client_width + 1
     ));
     if (fixedTables.length) {
       throw new Error(

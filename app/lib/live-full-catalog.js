@@ -178,7 +178,10 @@ const PAPER_SUITE = Object.freeze([
   { script: 'verify:paper-manifest', budgetMs: 30000 },
   { script: 'verify:paper-cards-static', budgetMs: 30000 },
   { script: 'verify:paper-cards-mount', budgetMs: 900000 },
-  { script: 'verify:card-buttons', budgetMs: 900000 },
+  // 버튼 감사는 보드 101장의 후보 6,518개를 **진짜 마우스 입력**으로 하나씩 누르고,
+  // 보드를 갈아탄 클릭 뒤에는 보드를 다시 세운다 — 실측 1,607초(2026-09-09, 통과
+  // 101/101). 옛 예산 900초는 보드 수가 늘기 전 값이라 늘 시간 초과로 떨어졌다.
+  { script: 'verify:card-buttons', budgetMs: 2400000 },
   { script: 'verify:paper-screens', budgetMs: 420000 },
   { script: 'verify:paper-mini-static', budgetMs: 30000 },
   { script: 'verify:paper-mini-template', budgetMs: 120000 },
