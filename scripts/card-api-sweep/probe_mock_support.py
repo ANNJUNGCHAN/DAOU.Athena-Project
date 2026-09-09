@@ -44,6 +44,9 @@ TARGETS = ROOT / "backend" / "ref" / "probe-instrument-targets.json"
 # 모의투자 한계를 말하는 문면. 상류가 코드와 함께 한국어로 적어 준다.
 MOCK_MARKERS = ("모의투자에서는 해당업무가 제공되지 않습니다", "모의투자에서 지원하지 않는 API")
 RATE_LIMIT_SLEEP = 0.35
+INCOMPLETE_VERDICTS = {
+    "chain_source_error", "route_missing", "target_unavailable", "upstream_error",
+}
 
 
 def call(path: str, body: dict) -> tuple[int, dict | None, str]:
@@ -84,34 +87,67 @@ def value_count(payload: dict) -> int:
     return total
 
 
-def kind_of(tr_id: str, kinds: list[dict]) -> str:
-    for entry in kinds:
-        if any(tr_id.startswith(prefix) for prefix in entry["tr_prefixes"]):
-            return entry["kind"]
+def kind_of(document, kinds: list[dict]) -> str:
+    target_kinds = {entry["kind"] for entry in kinds}
+    for entity_kind in document.routing.entity_kinds:
+        if entity_kind.value in target_kinds:
+            return entity_kind.value
     return "stock"
 
 
-def resolve_targets(kinds: list[dict]) -> dict[str, str]:
+def target_for(document, kinds: list[dict], targets: dict[str, str]) -> tuple[str, str | None]:
+    kind = kind_of(document, kinds)
+    return kind, targets.get(kind)
+
+
+def audit_exit_code(records: list[dict], expected_count: int) -> int:
+    if len(records) != expected_count:
+        return 1
+    return int(any(record["verdict"] in INCOMPLETE_VERDICTS for record in records))
+
+
+def write_text_lf(path: Path, contents: str) -> None:
+    path.write_text(contents, encoding="utf-8", newline="\n")
+
+
+def resolve_targets(kinds: list[dict]) -> tuple[dict[str, str], list[dict]]:
     resolved = {"stock": "005930"}
+    failures: list[dict] = []
     for entry in kinds:
         if entry.get("code"):
             resolved[entry["kind"]] = entry["code"]
             continue
         source = entry.get("list") or {}
-        _, payload, _ = call(source.get("path", ""), source.get("body") or {})
+        status, payload, error = call(source.get("path", ""), source.get("body") or {})
+        verdict, message = classify(status, payload, error)
+        if verdict != "supported":
+            failures.append({
+                "kind": entry["kind"], "status": status,
+                "verdict": verdict, "message": message,
+            })
+            if status in {401, 403}:
+                break
+            continue
         rows = (payload or {}).get(source.get("list_field")) or []
         for row in rows:
             code = str((row or {}).get(source.get("code_field")) or "").strip()
             if code:
                 resolved[entry["kind"]] = code
                 break
-    return resolved
+        if entry["kind"] not in resolved:
+            failures.append({
+                "kind": entry["kind"], "status": status,
+                "verdict": "target_unavailable", "message": "목록 응답에 종목코드가 없다",
+            })
+    return resolved, failures
 
 
-_CHAIN_CACHE: dict[tuple[str, str], str] = {}
+_CHAIN_CACHE: dict[tuple[str, str], tuple[str, str, int]] = {}
 
 
-def resolve_chain(chain, target_code: str, registry, catalog, defaults_for) -> str:
+def resolve_chain(
+    chain, target_code: str, registry, catalog, defaults_for,
+) -> tuple[str, str, int]:
     """연쇄 인자 하나를 값으로 바꾼다 — 목록 op를 부르고 첫 항목을 쓴다."""
 
     operation_ref = str(chain.get("operation_ref") or "")
@@ -121,10 +157,10 @@ def resolve_chain(chain, target_code: str, registry, catalog, defaults_for) -> s
         return _CHAIN_CACHE[key]
     document = catalog.find_exact(operation_ref)
     if document is None:
-        return ""
+        return "", f"연쇄 조회를 찾지 못했다: {operation_ref}", 0
     spec = registry.get(document.tr_id)
     if spec is None:
-        return ""
+        return "", f"연쇄 조회 registry를 찾지 못했다: {operation_ref}", 0
     parts = operation_ref.split(":")
     route = (
         f"/api/v1/tr/{spec.domain}/{document.tr_id}/detail/{parts[2]}"
@@ -138,7 +174,12 @@ def resolve_chain(chain, target_code: str, registry, catalog, defaults_for) -> s
     }
     if "stk_cd" in aliases:
         body.setdefault("stk_cd", target_code)
-    _, payload, _ = call(route, body)
+    status, payload, error = call(route, body)
+    verdict, message = classify(status, payload, error)
+    if verdict != "supported":
+        result = "", f"{operation_ref}: {verdict} — {message}", status
+        _CHAIN_CACHE[key] = result
+        return result
     value = ""
     if payload:
         # `$.list[].code` 또는 `$.field` 두 꼴만 쓴다(ref가 그 둘만 적는다).
@@ -154,8 +195,10 @@ def resolve_chain(chain, target_code: str, registry, catalog, defaults_for) -> s
                 break
         if isinstance(cursor, str):
             value = cursor.strip()
-    _CHAIN_CACHE[key] = value
-    return value
+    failure = "" if value else f"{operation_ref}: 연쇄 응답에 {json_path} 값이 없다"
+    result = value, failure, status
+    _CHAIN_CACHE[key] = result
+    return result
 
 
 def classify(status: int, payload: dict | None, error: str) -> tuple[str, str]:
@@ -165,15 +208,43 @@ def classify(status: int, payload: dict | None, error: str) -> tuple[str, str]:
     if status == 404:
         # 그 경로가 없다 — 부르는 목록이 틀린 것이고 상류 판정이 아니다.
         return "route_missing", json.dumps(payload, ensure_ascii=False)[:200]
-    if status == 422 or "detail" in payload and "return_code" not in payload:
+    if status == 422:
         missing = payload.get("detail")
         return "needs_arguments", json.dumps(missing, ensure_ascii=False)[:300]
-    code = str(payload.get("return_code", ""))
-    if code in {"0", "None", ""}:
+    if not 200 <= status < 300:
+        return "upstream_error", message or json.dumps(payload, ensure_ascii=False)[:200]
+    raw_code = payload.get("return_code")
+    if isinstance(raw_code, bool) or raw_code is None:
+        return "upstream_error", "return_code 누락: " + json.dumps(
+            payload, ensure_ascii=False,
+        )[:200]
+    code = str(raw_code).strip()
+    try:
+        numeric_code = int(code)
+    except ValueError:
+        return "upstream_error", "return_code 형식 오류: " + json.dumps(
+            payload, ensure_ascii=False,
+        )[:200]
+    if numeric_code == 0:
         return "supported", message
     if any(marker in message for marker in MOCK_MARKERS):
         return "mock_unsupported", message
     return "business_error", message
+
+
+def execute_probe(
+    route: str, body: dict, blocked: tuple[str, str, int] | None = None,
+) -> tuple[int, dict | None, str, str, str]:
+    if blocked is not None:
+        verdict, message, status = blocked
+        return status, None, "", verdict, message
+    status, payload, error = call(route, body)
+    # 속도 제한은 결함이 아니다 — 한 번 쉬고 다시 묻는다.
+    if payload and "429" in str(payload.get("return_msg") or ""):
+        time.sleep(2)
+        status, payload, error = call(route, body)
+    verdict, message = classify(status, payload, error)
+    return status, payload, error, verdict, message
 
 
 def main() -> int:
@@ -191,8 +262,16 @@ def main() -> int:
     catalog = build_operation_catalog()
 
     kinds = json.loads(TARGETS.read_text(encoding="utf-8"))["kinds"]
-    targets = resolve_targets(kinds)
+    targets, target_failures = resolve_targets(kinds)
     print(f"종류별 조회 대상: {targets}", flush=True)
+    for failure in target_failures:
+        print(
+            f"대상 조회 실패: {failure['kind']} {failure['verdict']} — {failure['message']}",
+            flush=True,
+        )
+    if any(failure["status"] in {401, 403} for failure in target_failures):
+        print("인증 거부로 조회 감사를 중단한다.", flush=True)
+        return 1
 
     board_ops: dict[str, set[str]] = collections.defaultdict(set)
     for board_id, board in get_registry().boards.items():
@@ -233,31 +312,34 @@ def main() -> int:
             for name, field in document.request_model.model_fields.items()
         }
         body = dict(defaults_for(document.operation_ref))
-        kind = kind_of(tr_id, kinds)
+        kind, target_code = target_for(document, kinds, targets)
+        blocked: tuple[str, str, int] | None = None
         if "stk_cd" in aliases:
-            body.setdefault("stk_cd", targets.get(kind, "005930"))
+            if not target_code:
+                blocked = "target_unavailable", f"{kind} 조회 대상을 확인하지 못했다", 0
+            else:
+                body.setdefault("stk_cd", target_code)
         # 연쇄 인자 — 값을 API 자신이 목록으로 알려주는 자리(회원사·테마·감시그룹·ETF
         # 대상지수). 하이드레이션이 쓰는 것과 같은 표를 쓴다. 이걸 안 쓰면 부를 수 있는
         # 조회가 「인자 부족」으로 잘못 적힌다(실측 8자리).
         chained: dict[str, str] = {}
-        for alias, field in aliases.items():
-            if not field.is_required() or alias in body:
-                continue
-            chain = chain_for(alias)
-            if chain is None:
-                continue
-            value = resolve_chain(
-                chain, targets.get(kind, "005930"), TR_REGISTRY, catalog, defaults_for,
-            )
-            if value:
-                body[alias] = value
-                chained[alias] = value
-        status, payload, error = call(route, body)
-        # 속도 제한은 결함이 아니다 — 한 번 쉬고 다시 묻는다.
-        if payload and "429" in str(payload.get("return_msg") or ""):
-            time.sleep(2)
-            status, payload, error = call(route, body)
-        verdict, message = classify(status, payload, error)
+        if blocked is None:
+            for alias, field in aliases.items():
+                if not field.is_required() or alias in body:
+                    continue
+                chain = chain_for(alias)
+                if chain is None:
+                    continue
+                value, failure, source_status = resolve_chain(
+                    chain, target_code or "", TR_REGISTRY, catalog, defaults_for,
+                )
+                if failure:
+                    blocked = "chain_source_error", failure, source_status
+                    break
+                if value:
+                    body[alias] = value
+                    chained[alias] = value
+        status, payload, _error, verdict, message = execute_probe(route, body, blocked)
         record = {
             "operation_ref": document.operation_ref,
             "tr_id": tr_id,
@@ -283,11 +365,15 @@ def main() -> int:
             f"{' — ' + message[:60] if message and verdict != 'supported' else ''}",
             flush=True,
         )
+        if verdict in {"chain_source_error", "upstream_error"} and status in {401, 403}:
+            print("인증 거부로 남은 조회를 중단한다.", flush=True)
+            break
         time.sleep(RATE_LIMIT_SLEEP)
 
     counts = collections.Counter(record["verdict"] for record in records)
     OUT_JSON.parent.mkdir(parents=True, exist_ok=True)
-    OUT_JSON.write_text(
+    write_text_lf(
+        OUT_JSON,
         json.dumps(
             {
                 "generated_at": time.strftime("%Y-%m-%dT%H:%M:%S"),
@@ -301,12 +387,11 @@ def main() -> int:
             indent=1,
         )
         + "\n",
-        encoding="utf-8",
     )
     write_doc(records, counts, targets)
     print(f"\n판정별: {dict(sorted(counts.items()))}")
     print(f"→ {OUT_JSON}\n→ {OUT_DOC}")
-    return 0
+    return audit_exit_code(records, len(documents))
 
 
 def write_doc(records: list[dict], counts: collections.Counter, targets: dict) -> None:
@@ -373,7 +458,7 @@ def write_doc(records: list[dict], counts: collections.Counter, targets: dict) -
         )
     lines.append("")
     OUT_DOC.parent.mkdir(parents=True, exist_ok=True)
-    OUT_DOC.write_text("\n".join(lines), encoding="utf-8")
+    write_text_lf(OUT_DOC, "\n".join(lines))
 
 
 if __name__ == "__main__":
