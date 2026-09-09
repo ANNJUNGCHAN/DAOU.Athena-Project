@@ -1421,6 +1421,8 @@
   // view를 주면 그 모드의 대화창으로 연다(38번 보드 펜 = 새 대화창). 없으면
   // 지금 보고 있는 모드 그대로다(상단 + 버튼의 기존 동작).
   async function startNewConversation(projectId, view, options) {
+    const editor = window.AthenaBacktestCanvas;
+    if (editor && typeof editor.flushEditor === 'function' && !(await editor.flushEditor())) return null;
     const selectedProjectId = projectsCache.some((project) => project.id === projectId)
       ? projectId
       : currentProjectId;
@@ -1462,6 +1464,17 @@
   }
 
   $newChat.addEventListener('click', () => startNewConversation(currentProjectId));
+
+  window.AthenaConversations = {
+    startNew: async (projectId, view) => {
+      await loadConversations();
+      if (!projectsCache.some((project) => project.id === projectId)) {
+        throw new Error('새 대화를 연결할 프로젝트를 찾지 못했습니다');
+      }
+      return startNewConversation(projectId, view);
+    },
+    currentProjectId: () => currentProjectId,
+  };
 
   if ($compactToggle && $historyRegion) {
     const closeCompactPanel = () => {

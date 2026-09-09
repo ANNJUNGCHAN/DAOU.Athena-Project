@@ -1,0 +1,105 @@
+.technique-create-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgb(15 18 24 / 42%);
+}
+
+.technique-create-dialog {
+  width: min(520px, 100%);
+  border: 1px solid var(--border, #d9dce3);
+  border-radius: 18px;
+  padding: 24px;
+  background: var(--surface, #fff);
+  box-shadow: 0 24px 72px rgb(15 18 24 / 24%);
+}
+
+.technique-create-title {
+  margin: 0;
+  font-size: 20px;
+}
+
+.technique-create-note {
+  margin: 8px 0 20px;
+  color: var(--text-subtle, #666b76);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.technique-create-form,
+.technique-create-label {
+  display: grid;
+  gap: 8px;
+}
+
+.technique-create-form {
+  gap: 16px;
+}
+
+.technique-create-label {
+  color: var(--text, #20232a);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.technique-create-select,
+.technique-create-input {
+  min-width: 0;
+  height: 42px;
+  border: 1px solid var(--border, #d9dce3);
+  border-radius: 10px;
+  padding: 0 12px;
+  background: var(--surface, #fff);
+  color: var(--text, #20232a);
+  font: inherit;
+  font-weight: 400;
+}
+
+.technique-create-folder-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+}
+
+.technique-create-folder-button,
+.technique-create-cancel,
+.technique-create-submit {
+  min-height: 42px;
+  border: 1px solid var(--border, #d9dce3);
+  border-radius: 10px;
+  padding: 0 16px;
+  background: var(--surface, #fff);
+  color: var(--text, #20232a);
+  cursor: pointer;
+}
+
+.technique-create-submit {
+  border-color: var(--accent, #ee137b);
+  background: var(--accent, #ee137b);
+  color: #fff;
+}
+
+.technique-create-error {
+  color: var(--danger, #c62828);
+  font-size: 13px;
+}
+
+.technique-create-error:empty {
+  display: none;
+}
+
+.technique-create-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.technique-create-dialog button:disabled,
+.technique-create-dialog input:disabled,
+.technique-create-dialog select:disabled {
+  cursor: default;
+  opacity: 0.55;
+}

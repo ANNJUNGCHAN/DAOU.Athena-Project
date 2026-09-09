@@ -44,7 +44,8 @@ test('답변은 자리표시자로 먼저 적히고, 델타는 저널되며, 툴
 });
 
 test('턴이 끝나면 최종 텍스트·usage·오류를 한 번에 적는다', () => {
-  const tail = slice("const answerText = result.finalResult && typeof result.finalResult.result === 'string'", 'return {');
+  const tail = slice('const answerText = resolveTerminalAnswerText(', 'return {');
+  assert.match(tail, /resolveTerminalAnswerText\(\s*result\.finalResult && typeof result\.finalResult\.result === 'string' \? result\.finalResult\.result : null,\s*terminalAnswerText,\s*\)/);
   assert.match(tail, /bridge\.finishAssistant\(\{[\s\S]*?text: answerText === null \? undefined : answerText,[\s\S]*?interrupted: !result\.ok,/);
 });
 
