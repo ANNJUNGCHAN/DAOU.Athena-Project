@@ -470,17 +470,31 @@ function gateFindings(boards) {
       continue;
     }
     for (const control of board.controls || []) {
-      if (control.why !== 'state-control' || control.verdict === 'responds') continue;
+      if (control.why !== 'state-control') continue;
       // 자기 보드를 가리키는 칩은 「지금 열린 탭」이다 — 눌러도 안 바뀌는 것이 맞다
       // (실측 2QFO-2 「투자자별」 → 2QFO-2).
       if (control.state_board === board.board_id) continue;
-      findings.push({
-        board_id: board.board_id,
-        reason: `state_control_${control.verdict}`,
-        control: control.text,
-        node: control.node,
-        state_board: control.state_board,
-      });
+      if (control.verdict !== 'responds') {
+        findings.push({
+          board_id: board.board_id,
+          reason: `state_control_${control.verdict}`,
+          control: control.text,
+          node: control.node,
+          state_board: control.state_board,
+        });
+        continue;
+      }
+      if (control.board_after && control.state_board
+        && control.board_after !== control.state_board) {
+        findings.push({
+          board_id: board.board_id,
+          reason: 'state_control_wrong_destination',
+          control: control.text,
+          node: control.node,
+          state_board: control.state_board,
+          board_after: control.board_after,
+        });
+      }
     }
   }
   return findings;

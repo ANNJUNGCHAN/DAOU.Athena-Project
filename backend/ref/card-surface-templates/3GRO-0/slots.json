@@ -25,6 +25,7 @@
     "detail:kt00005:cash_and_capacity",
     "detail:kt00010:cash_and_withdrawal_capacity",
     "detail:kt00010:margin_order_capacity",
+    "detail:kt00013:margin_order_capacity",
     "detail:kt00011:margin_capacity_20_to_50",
     "detail:kt00011:margin_capacity_60_to_cash_only",
     "detail:kt00012:account_and_receivable_capacity",
@@ -1497,7 +1498,13 @@
       "table": null,
       "mapping_id": "detail:kt00010:margin_order_capacity",
       "f": "profa_rdex_60ord_alow_amt",
-      "alt_mappings": null,
+      "alt_mappings": [
+        {
+          "mapping_id": "detail:kt00013:margin_order_capacity",
+          "f": "60ord_alow_amt",
+          "kor": "60%주문가능금액"
+        }
+      ],
       "kor": "증거금감면60%주문가능금",
       "format": {
         "unit": "krw_ko",

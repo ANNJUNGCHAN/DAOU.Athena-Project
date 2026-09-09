@@ -190,14 +190,24 @@ def _resolve_slot(
     bound: Mapping[str, Any],
     priority: Mapping[str, int],
     solo_occurrences: frozenset[str] = frozenset(),
+    peer_name_occurrence: str | None = None,
 ) -> tuple[str | None, Any]:
     """대체 바인딩이 있는 잎에서 **실제로 받은 값** 하나를 고른다.
 
     고르는 순서는 활성 op(요청 op가 먼저, 그다음 보드가 선언한 순서), 같은 op면
     주 바인딩이 먼저다. 값이 안 온 매핑은 후보가 아니다 — 그래야 한 op만 답한
     보드에서도 그 잎이 답한 op의 값을 그린다.
+
+    표 행은 예외: 같은 줄 종목명이 가리키는 목록에 이 필드가 있으면 그 값을 먼저
+    쓴다. 서로 다른 순위 TR을 한 행에 섞지 않기 위해서다.
     """
 
+    if peer_name_occurrence and slot.f and slot.f != "stk_nm":
+        aligned = _list_field_occurrence(peer_name_occurrence, slot.f)
+        if aligned:
+            value = _slot_value(slot, aligned, bound, solo_occurrences)
+            if value is not _UNBOUND and value is not _EMPTY:
+                return aligned, value
     ranked = sorted(
         enumerate(slot.bindings),
         key=lambda item: (priority.get(item[1].mapping_id, len(priority)), item[0]),
@@ -289,6 +299,35 @@ def _row_key(slot: SurfaceSlot) -> tuple[str, str, int | str] | None:
     return None
 
 
+def _row_name_occurrences(board: BoardTemplate) -> dict[tuple[str, str, int | str], str]:
+    """같은 되풀이 줄의 종목명 occurrence. 이름·코드·가격이 서로 다른 순위 TR을
+    물고 한 행에 섞이는 것을 막는다(실측 2V71-0: ka90003 이름 + ka10034 코드)."""
+
+    mapping: dict[tuple[str, str, int | str], str] = {}
+    for slot in board.slots:
+        if slot.f != "stk_nm" or not slot.occurrence_id:
+            continue
+        key = _row_key(slot)
+        if key is None:
+            continue
+        mapping.setdefault(key, slot.occurrence_id)
+    return mapping
+
+
+def _list_field_occurrence(occurrence_id: str, field: str) -> str | None:
+    """``mapping|$.rows[].stk_nm|1`` 의 필드만 ``field`` 로 바꾼다."""
+
+    parts = occurrence_id.split("|")
+    if len(parts) < 3:
+        return None
+    path = parts[1]
+    needle = "[]."
+    idx = path.rfind(needle)
+    if idx < 0:
+        return None
+    return "|".join((parts[0], f"{path[: idx + len(needle)]}{field}", *parts[2:]))
+
+
 def _empty_rows(
     board: BoardTemplate, filled: set[str]
 ) -> list[dict[str, Any]]:
@@ -305,7 +344,9 @@ def _empty_rows(
 
     rows: dict[tuple[str, str, int | str], list[str]] = {}
     bound_rows: set[tuple[str, str, int | str]] = set()
-    for slot in board.binding_slots:
+    for slot in board.slots:
+        if slot.kind != "value" and not slot.omitted_unsupported:
+            continue
         key = _row_key(slot)
         if key is None:
             continue
@@ -526,10 +567,15 @@ def _board_contract(
     bound = bound_values or {}
     priority = _operation_priority(board, active_operation_refs)
     solo_occurrences = _solo_array_occurrences(board)
+    row_names = _row_name_occurrences(board)
     slot_values: list[dict[str, Any]] = []
     unbound_slots: list[str] = []
     empty_value_slots: list[str] = []
     for slot in board.slots:
+        if slot.omitted_unsupported and not slot.binds_a_field:
+            # 모의투자가 거절하는 TR 만 가리키던 값. 빈 칸이고 결측어가 아니다.
+            empty_value_slots.append(slot.slot_id)
+            continue
         if not slot.binds_a_field:
             # 보드 HTML이 이미 갖고 있는 고정 문구(라벨)다 — 채울 값이 없다.
             unbound_slots.append(slot.slot_id)
@@ -538,8 +584,13 @@ def _board_contract(
             occurrence_id = None
             value = _composite_value(slot, bound, solo_occurrences)
         else:
+            row = _row_key(slot)
             occurrence_id, value = _resolve_slot(
-                slot, bound, priority, solo_occurrences
+                slot,
+                bound,
+                priority,
+                solo_occurrences,
+                row_names.get(row) if row is not None else None,
             )
         if value is _EMPTY:
             # 응답이 빈 값으로 답한 자리 — 결측어가 아니라 빈 칸이다.

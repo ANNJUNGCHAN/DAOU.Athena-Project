@@ -85,6 +85,35 @@ def test_stock_state_boards_keep_the_requested_instrument_name(board_id: str) ->
     assert values.get("s002", {}).get("value") == "066570"
 
 
+def test_ranking_row_code_and_price_follow_the_row_name_list() -> None:
+    """한 순위 행의 이름·코드·현재가는 같은 목록 원소여야 한다.
+
+    2V71-0 실측: 종목명은 ka90003 프로그램 순매수 1위(삼성전자)인데 코드·현재가는
+    ka10034 외국인 매매 1위(252670_AL, -70)를 물었다.
+    """
+
+    registry = load_registry(TEMPLATE_ROOT)
+    bound = {
+        "base:ka90003|$.prm_netprps_upper_50[].stk_nm|1": ["삼성전자", "SK하이닉스"],
+        "base:ka90003|$.prm_netprps_upper_50[].stk_cd|1": ["005930", "000660"],
+        "base:ka90003|$.prm_netprps_upper_50[].cur_prc|1": ["269500", "1832000"],
+        "base:ka10034|$.for_dt_trde_upper[].stk_cd|1": ["252670_AL", "114800_AL"],
+        "base:ka10034|$.for_dt_trde_upper[].cur_prc|1": ["-70", "978"],
+    }
+    contract = build_board_surface_contract(
+        "2V71-0",
+        bound,
+        registry,
+        active_operation_refs=("base:ka90003", "base:ka10034"),
+    )
+    values = _by_slot(contract)
+    assert values["s042"]["value"] == "삼성전자"
+    assert values["s043"]["value"] == "005930"
+    assert values["s043"]["occurrence_id"].startswith("base:ka90003|")
+    assert values["s044"]["value"] == "269500"
+    assert values["s044"]["occurrence_id"].startswith("base:ka90003|")
+
+
 def _registry_with_composite(tmp_path: Path, parts: list[dict]):
     root = tmp_path / "card-surface"
     shutil.copytree(FIXTURE_ROOT, root)

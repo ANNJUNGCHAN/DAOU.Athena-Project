@@ -4,6 +4,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const {
   CARD_ACTIONS, cardActionFor, actionNodes, rowStock, cardActionEnvelope, cardActionSeed,
+  applyOrderPreview, applyCompareAdd,
 } = require('./board-card-actions');
 
 // jsdom 없이 검증한다 — board-mount.test.js와 같은 관행(DOM 스텁 주입).
@@ -24,6 +25,10 @@ function mount(node, parent = null) {
       return node.children.length
         ? node.children.map((child) => child.textContent).join('')
         : node.text;
+    },
+    set(value) {
+      if (node.children.length) return;
+      node.text = String(value);
     },
     configurable: true,
   });
@@ -57,6 +62,11 @@ function rankingSurface() {
 test('cardActionFor는 Paper 문구가 정확히 같을 때만 목적지를 준다', () => {
   assert.equal(cardActionFor('호가 열기').board_id, '13BC-2');
   assert.equal(cardActionFor('  종목 상세 열기  ').board_id, '137X-2');
+  assert.equal(cardActionFor('차트 열기').board_id, '137X-2');
+  assert.equal(cardActionFor('차트 열기').title, '종목 차트');
+  assert.equal(cardActionFor('차트 열기').stock, 'card');
+  assert.equal(cardActionFor('주문 확인').kind, 'order-preview');
+  assert.equal(cardActionFor('비교에 추가').kind, 'compare-add');
   assert.equal(cardActionFor('호가'), null);
   assert.equal(cardActionFor('호가 열기 버튼'), null);
   assert.equal(cardActionFor(''), null);
@@ -110,16 +120,46 @@ test('actionNodes는 문구가 같은 잎만 집는다 — 상위 상자는 안 
   const found = actionNodes(surface);
   assert.deepEqual(
     found.map((entry) => entry.action.control),
-    ['호가 열기', '종목 상세 열기', '종목 상세 열기'],
+    ['호가 열기', '종목 상세 열기', '비교에 추가', '종목 상세 열기', '비교에 추가'],
   );
   for (const entry of found) assert.equal(entry.node.childElementCount, 0);
 });
 
 test('rowStock은 누른 줄의 종목만 집는다 — 다른 줄·카드 머리로 새지 않는다', () => {
   const surface = rankingSurface();
-  const [, first, second] = actionNodes(surface);
-  assert.deepEqual(rowStock(first.node, surface), { stkCd: '000660', stockName: 'SK하이닉스' });
-  assert.deepEqual(rowStock(second.node, surface), { stkCd: '005380', stockName: '현대차' });
+  const details = actionNodes(surface).filter((entry) => entry.action.control === '종목 상세 열기');
+  assert.deepEqual(rowStock(details[0].node, surface), { stkCd: '000660', stockName: 'SK하이닉스' });
+  assert.deepEqual(rowStock(details[1].node, surface), { stkCd: '005380', stockName: '현대차' });
+});
+
+test('시간외 코드 _AL 은 여섯 자리만 종목코드로 쓴다', () => {
+  const surface = mount(box([box([leaf('서울식품우'), leaf('004415_AL'), leaf('종목 상세 열기')])]));
+  const [entry] = actionNodes(surface);
+  assert.deepEqual(rowStock(entry.node, surface), { stkCd: '004415', stockName: '서울식품우' });
+});
+
+test('주문 확인은 카드를 열지 않고 미리보기 문구만 바꾼다 — 주문 REST는 없다', () => {
+  const action = cardActionFor('주문 확인');
+  assert.equal(cardActionEnvelope(action, { stkCd: '005930' }), null);
+  const helper = leaf('아직 주문되지 않았습니다');
+  const surface = mount(box([helper, leaf('주문 확인')]));
+  assert.equal(applyOrderPreview(surface), true);
+  assert.equal(helper.textContent, '미리보기입니다. 주문은 접수되지 않았습니다.');
+  assert.equal(surface.dataset.orderPreview, '1');
+  assert.equal(applyOrderPreview(surface), true);
+  assert.equal(helper.textContent, '미리보기입니다. 주문은 접수되지 않았습니다. (2)');
+});
+
+test('비교에 추가는 같은 카드에서 문구가 바뀐다', () => {
+  const button = leaf('비교에 추가');
+  const other = leaf('비교에 추가');
+  const surface = mount(box([leaf('SK하이닉스'), leaf('000660'), button, other]));
+  assert.equal(applyCompareAdd(surface, { stkCd: '000660', stockName: 'SK하이닉스' }), true);
+  assert.equal(button.textContent, '비교에 넣음');
+  assert.equal(other.textContent, '비교에 넣음');
+  assert.equal(surface.dataset.compareAdded, 'SK하이닉스');
+  assert.equal(applyCompareAdd(surface, { stkCd: '000660', stockName: 'SK하이닉스' }), true);
+  assert.equal(button.textContent, '비교에 넣음 · 2');
 });
 
 test('rowStock은 코드가 없으면 지어내지 않는다', () => {
