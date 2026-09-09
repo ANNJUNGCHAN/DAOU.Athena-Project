@@ -259,6 +259,17 @@ test('visibleTargets is bounded and all target kinds fail closed on invalid iden
   assert.throws(() => resolveLeaseBindings({ cardId: 'CC-04', mode: 'regular', symbol: '../bad' }), /invalid symbol/);
 });
 
+test('explicit ELW policies accept alphanumeric security codes without widening stock row targets', () => {
+  assert.deepEqual(
+    resolveLeaseBindings({ cardId: 'CC-03', mode: 'elw', symbol: '52M504' })
+      .map((binding) => `${binding.operationId}:${binding.target}`),
+    ['0B:52M504', '0m:52M504', '0u:52M504'],
+  );
+  assert.throws(() => resolveLeaseBindings({
+    cardId: 'CC-06', mode: 'watchlist', visibleTargets: ['52M504'],
+  }), /invalid visibleTargets/);
+});
+
 test('shared visible-row feeds resolve once per unique visible target', () => {
   const bindings = resolveLeaseBindings({
     leaseId: 'watch', cardId: 'CC-06', mode: 'watchlist', visibleTargets: ['005930', '005930', '000660'],

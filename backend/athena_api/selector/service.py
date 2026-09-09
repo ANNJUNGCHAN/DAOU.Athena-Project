@@ -29,8 +29,10 @@ from .errors import (
     InvalidArgumentsError,
     NoConfidentMatchError,
     OperationNotFoundError,
+    OrderTicketRequiredError,
     PlanAlreadyUsedError,
     PreferredOperationError,
+    QueryPlanRequiredError,
     ReplayStateCapacityError,
     UnknownDetailGroupError,
     UnsupportedOperationError,
@@ -673,7 +675,9 @@ class SelectorService:
                 # INSTRUMENT_CODE 바인딩)를 그대로 재사용하되, 여기서는 그 단언이
                 # 이미 typed로 compatible한 후보 중 한 family에 속할 때만 구제한다
                 # — 무관한 family를 게이트 밖에서 강제로 통과시키지 않는다(다른
-                # 도메인의 안전 반문은 그대로 보존).
+                # 도메인의 안전 반문은 그대로 보존). 종목 바인딩이 없는 시장 전체
+                # query는 trusted_code를 만들 수 없으므로, compatible family 안의
+                # callable base preferred_ref만 검증된 단언으로 사용한다.
                 compatible_family_refs = {
                     self.catalog.by_ref[ref].family_ref
                     for ref in decision.compatible_operation_refs
@@ -702,6 +706,15 @@ class SelectorService:
                         # asserted family is real, it just still needs a projection.
                         self._validated_arguments(preferred, request.arguments)
                         raise self._detail_required(preferred.family_ref)
+                elif (
+                    preferred is not None
+                    and preferred.kind == "query"
+                    and BindingRole.INSTRUMENT_CODE not in preferred.routing.bindings
+                    and preferred.family_ref in compatible_family_refs
+                    and preferred.group_id is None
+                    and detail_group is None
+                ):
+                    fallback_document = preferred
                 if fallback_document is None:
                     public_reasons = _public_reason_codes(decision)
                     raise AmbiguousOperationError(
@@ -839,13 +852,20 @@ class SelectorService:
         authorization: str | None = None,
         confirmation: str | None = None,
         idempotency_key: str | None = None,
+        query_only: bool = False,
         full_response_sink: Callable[[BaseModel], None] | None = None,
     ) -> CallResponse:
         plan = self.signer.verify(call.plan_token, self.catalog, expected_account=account)
-        self._consume_nonce(plan)
         document = self.catalog.find_exact(plan.operation_ref)
         if document is None or not document.generic_callable:
             raise UnsupportedOperationError("Operation cannot be called by the generic selector")
+        if query_only and document.kind == "order":
+            raise OrderTicketRequiredError(
+                "Order plans must be submitted through the confirmed order ticket"
+            )
+        if query_only and document.kind != "query":
+            raise QueryPlanRequiredError("This execution surface accepts query plans only")
+        self._consume_nonce(plan)
         try:
             payload = document.request_model.model_validate(plan.arguments)
         except ValidationError as exc:

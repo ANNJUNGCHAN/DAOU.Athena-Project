@@ -4633,6 +4633,9 @@ async function runLiveQueryInnerBody(query, expand, origin, turnConversationId, 
       intent: orderDraft ? orderDraft.intent : 'auto',
       arguments: orderDraft ? orderDraft.arguments : {},
       orderDraft,
+      deadlineMs: orderDraft
+        ? selectorFastPath.DEFAULT_GUARDED_ORDER_DEADLINE_MS
+        : selectorFastPath.DEFAULT_DEADLINE_MS,
       signal: selectorController.signal,
       isCurrent: () => runtime.activeSelectorFastRun === selectorController,
       emitCanvas: (payload) => {

@@ -7,7 +7,7 @@ const path = require('node:path');
 const vm = require('node:vm');
 const { createAccountBoundInvoker, runAccountBoundDataset } = require('./account-bound-dataset');
 
-function loadSelectorStage(dispatch) {
+function loadSelectorStage(dispatch, buildMarketOrderDraft = () => ({ intent: 'order', arguments: { symbol: '005930' } })) {
   const mainSource = fs.readFileSync(path.join(__dirname, '..', '..', 'main.js'), 'utf8');
   const start = mainSource.indexOf('  const orderDraft = selectorFastPath.buildMarketOrderDraft(');
   const end = mainSource.indexOf('  const { dir, configFile } = getLiveMcpConfig();', start);
@@ -25,7 +25,9 @@ function loadSelectorStage(dispatch) {
     simpleChartRoute: { handled: false },
     queryStockEntityIndex: {},
     selectorFastPath: {
-      buildMarketOrderDraft: () => ({ intent: 'order', arguments: { symbol: '005930' } }),
+      DEFAULT_DEADLINE_MS: 2700,
+      DEFAULT_GUARDED_ORDER_DEADLINE_MS: 10_000,
+      buildMarketOrderDraft,
       runSelectorFastPath: dispatch,
     },
     accountBoundDataset: {
@@ -67,6 +69,24 @@ function loadSelectorStage(dispatch) {
   ].join('\n'), context);
   return { run: context.exerciseSelectorStage, calls };
 }
+
+test('guarded 주문만 실측 cold dispatch 한도 10초를 쓰고 일반 조회 한도는 유지한다', async () => {
+  let orderOptions;
+  const orderStage = loadSelectorStage(async (options) => {
+    orderOptions = options;
+    return { handled: false, reason: 'fixture' };
+  });
+  await orderStage.run();
+  assert.equal(orderOptions.deadlineMs, 10_000);
+
+  let queryOptions;
+  const queryStage = loadSelectorStage(async (options) => {
+    queryOptions = options;
+    return { handled: true, ok: true, source: 'selector-fast' };
+  }, () => null);
+  await queryStage.run('삼성전자 현재가');
+  assert.equal(queryOptions.deadlineMs, 2700);
+});
 
 for (const fixture of [
   { name: 'HTTP 401', value: { handled: false, reason: 'http_401' } },

@@ -161,7 +161,7 @@ function validateTarget(source, value) {
     condition: /^\d{1,10}$/,
     market: /^[A-Za-z0-9_-]{1,16}$/,
     sector: /^[A-Za-z0-9_-]{1,16}$/,
-    symbol: /^\d{6}$/,
+    symbol: /^[0-9A-Z]{6}$/,
     visibleTargets: /^\d{6}$/,
   };
   if (!patterns[source] || !patterns[source].test(target)) {

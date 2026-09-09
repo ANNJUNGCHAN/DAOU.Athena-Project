@@ -2,6 +2,8 @@ const crypto = require('node:crypto');
 const { performance } = require('node:perf_hooks');
 
 const DEFAULT_DEADLINE_MS = 2700;
+const DEFAULT_GUARDED_ORDER_DEADLINE_MS = 10_000;
+const MAX_SERVER_DEADLINE_MS = 3000;
 const EXPECTED_ORDER_REFS = Object.freeze({ buy: 'base:kt10000', sell: 'base:kt10001' });
 const FALLTHROUGH_STATUSES = new Set([
   'needs_inference',
@@ -33,7 +35,10 @@ function ensureCurrent(signal, isCurrent) {
 }
 
 function normalizeText(value) {
-  return String(value || '').normalize('NFKC').toLocaleLowerCase('ko-KR').trim();
+  return String(value || '')
+    .normalize('NFKC')
+    .toLocaleLowerCase('ko-KR')
+    .replace(/[^0-9a-z가-힣]+/g, '');
 }
 
 function buildMarketOrderDraft(question, stockEntityIndex) {
@@ -44,7 +49,7 @@ function buildMarketOrderDraft(question, stockEntityIndex) {
 
   const entityText = match[1].trim();
   const entity = stockEntityIndex.resolveQuery(entityText);
-  if (!entity || entity.kind !== 'stock') return null;
+  if (!entity || !['stock', 'etf'].includes(entity.kind)) return null;
   if (typeof stockEntityIndex.aliasesForEntity === 'function') {
     const normalizedEntityText = normalizeText(entityText);
     const exactAlias = stockEntityIndex.aliasesForEntity(entity)
@@ -191,6 +196,7 @@ async function runSelectorFastPath({
   ensureCurrent(signal, isCurrent);
 
   const dispatchDeadlineMs = Math.max(1, Number(deadlineMs) || DEFAULT_DEADLINE_MS);
+  const serverDeadlineMs = Math.min(MAX_SERVER_DEADLINE_MS, Math.max(100, dispatchDeadlineMs));
   const dispatchController = new AbortController();
   const timeoutError = new SelectorFastPathError(
     'dispatch_timeout',
@@ -224,7 +230,7 @@ async function runSelectorFastPath({
         response_mode: 'auto',
         continuation: { cont_yn: 'N', next_key: null },
         ...correlation,
-        deadline_ms: dispatchDeadlineMs,
+        deadline_ms: serverDeadlineMs,
       }),
     });
     ensureCurrent(signal, isCurrent);
@@ -382,6 +388,7 @@ async function runSelectorFastPath({
 
 module.exports = {
   DEFAULT_DEADLINE_MS,
+  DEFAULT_GUARDED_ORDER_DEADLINE_MS,
   SelectorFastPathError,
   buildMarketOrderDraft,
   runSelectorFastPath,

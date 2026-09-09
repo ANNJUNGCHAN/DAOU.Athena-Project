@@ -11,6 +11,11 @@ ROUTING_CONTRACT_VERSION = "selector-routing-v5"
 ROUTING_SOURCE_VERSION = 2
 QUERY_FRAME_VERSION = "query-frame-v7"
 
+# kt10000/kt10001 accept a KRX instrument code and share quantity, and there is
+# no ETF-specific order endpoint. Treat ETF as a broker-validated candidate;
+# no other product or order family inherits this reviewed classification.
+_ETF_CASH_ORDER_TR_IDS = frozenset({"kt10000", "kt10001"})
+
 
 class RoutingSubject(StrEnum):
     INSTRUMENT = "instrument"
@@ -839,6 +844,8 @@ def derive_base_routing(operation: Mapping[str, Any], *, shape: str) -> Operatio
     subject = _subject(kind, subcategory, name)
     bindings = _bindings(kind, subject, request_aliases)
     entity_kinds = _entities(subject, subcategory, name)
+    if str(operation["id"]) in _ETF_CASH_ORDER_TR_IDS:
+        entity_kinds = (*entity_kinds, EntityKind.ETF)
     if (
         subject is RoutingSubject.ACCOUNT
         and BindingRole.INSTRUMENT_CODE in bindings

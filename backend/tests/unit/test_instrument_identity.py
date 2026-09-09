@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import sqlite3
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -31,6 +32,19 @@ def _market_records() -> dict[str, list[dict[str, str]]]:
         "0": [{"code": "005930", "name": "삼성전자", "marketCode": "0"}],
         "10": [{"code": "035720", "name": "카카오", "marketCode": "10"}],
         "8": [{"code": "069500", "name": "KODEX 200", "marketCode": "8"}],
+    }
+
+
+def _market_records_with_elw() -> dict[str, list[dict[str, str]]]:
+    return {
+        **_market_records(),
+        "3": [
+            {
+                "code": "52M504",
+                "name": "미래M504삼성전자콜",
+                "marketCode": "3",
+            }
+        ],
     }
 
 
@@ -137,12 +151,17 @@ async def test_refresh_never_publishes_a_partial_market_snapshot() -> None:
     release_last_market = asyncio.Event()
 
     async def fetch(market: str):
-        if market == "8":
+        if market == "3":
             reached_last_market.set()
             await release_last_market.wait()
         return [
             {
-                "code": {"0": "111111", "10": "222222", "8": "333333"}[market],
+                "code": {
+                    "0": "111111",
+                    "10": "222222",
+                    "8": "333333",
+                    "3": "33M333",
+                }[market],
                 "name": f"신규{market}",
                 "marketCode": market,
             }
@@ -153,7 +172,7 @@ async def test_refresh_never_publishes_a_partial_market_snapshot() -> None:
     assert index.resolve("삼성전자 현재가").code == "005930"
     assert index.resolve("신규0 현재가") is None
     release_last_market.set()
-    assert await refresh == 3
+    assert await refresh == 4
     assert index.resolve("삼성전자 현재가") is None
     assert index.resolve("신규0 현재가").code == "111111"
 
@@ -172,6 +191,64 @@ def test_sqlite_master_persists_across_index_instances(tmp_path: Path) -> None:
     assert restarted.refreshed_at is not None
 
 
+def test_legacy_sqlite_schema_migrates_without_losing_existing_instruments(
+    tmp_path: Path,
+) -> None:
+    db_path = tmp_path / "instruments.sqlite3"
+    with sqlite3.connect(db_path) as connection:
+        connection.executescript(
+            """
+            CREATE TABLE instruments (
+                code TEXT PRIMARY KEY,
+                name TEXT NOT NULL,
+                normalized_name TEXT NOT NULL,
+                market_code TEXT NOT NULL,
+                kind TEXT NOT NULL CHECK (kind IN ('stock', 'etf'))
+            );
+            CREATE TABLE instrument_metadata (
+                key TEXT PRIMARY KEY,
+                value TEXT NOT NULL
+            );
+            INSERT INTO instruments VALUES ('005930', '삼성전자', '삼성전자', '0', 'stock');
+            """
+        )
+
+    index = InstrumentIdentityIndex(db_path=db_path)
+    assert index.resolve("삼성전자 현재가").code == "005930"
+
+    index.replace(_market_records_with_elw())
+    resolved = index.resolve("미래M504삼성전자콜 ELW 시세 요약")
+    assert resolved is not None
+    assert (resolved.code, resolved.target.entity_kind.value) == ("52M504", "elw")
+
+
+def test_elw_identity_from_market_three_enables_guarded_detail_resolution() -> None:
+    index = InstrumentIdentityIndex()
+    index.replace(_market_records_with_elw())
+    service = _service(index)
+
+    operation_ref, arguments = _verified_arguments(
+        service,
+        ResolveRequest(
+            question="미래M504삼성전자콜 ELW 시세 요약",
+            intent=DiscoveryIntent.QUERY,
+            preferred_ref="detail:ka30012:market_snapshot",
+            detail_group="market_snapshot",
+            arguments={"stk_cd": "52M504"},
+        ),
+    )
+
+    assert operation_ref == "detail:ka30012:market_snapshot"
+    assert arguments == {"stk_cd": "52M504"}
+
+
+def test_unknown_alphanumeric_code_never_becomes_identity_authority() -> None:
+    index = InstrumentIdentityIndex()
+    index.replace(_market_records_with_elw())
+
+    assert index.resolve("ZZZ999 ELW 시세 요약") is None
+
+
 async def test_sqlite_refresh_keeps_previous_commit_visible_until_full_replace(
     tmp_path: Path,
 ) -> None:
@@ -183,10 +260,12 @@ async def test_sqlite_refresh_keeps_previous_commit_visible_until_full_replace(
     release_last_market = asyncio.Event()
 
     async def fetch(market: str):
-        if market == "8":
+        if market == "3":
             reached_last_market.set()
             await release_last_market.wait()
-        return [{"code": {"0": "111111", "10": "222222", "8": "333333"}[market],
+        return [{"code": {
+                    "0": "111111", "10": "222222", "8": "333333", "3": "33M333"
+                }[market],
                  "name": f"신규{market}", "marketCode": market}]
 
     task = asyncio.create_task(writer.refresh_from(fetch))
@@ -194,7 +273,7 @@ async def test_sqlite_refresh_keeps_previous_commit_visible_until_full_replace(
     assert reader.resolve("삼성전자 현재가").code == "005930"
     assert reader.resolve("신규0 현재가") is None
     release_last_market.set()
-    assert await task == 3
+    assert await task == 4
     assert reader.resolve("삼성전자 현재가") is None
     assert reader.resolve("신규0 현재가").code == "111111"
 
@@ -294,9 +373,12 @@ async def test_generated_ka10099_refresh_uses_only_reviewed_markets() -> None:
                 body={
                     "list": [
                         {
-                            "code": {"0": "111111", "10": "222222", "8": "333333"}[
-                                market
-                            ],
+                        "code": {
+                            "0": "111111",
+                            "10": "222222",
+                            "8": "333333",
+                            "3": "33M333",
+                        }[market],
                             "name": f"시장{market}종목",
                             "marketCode": market,
                         }
@@ -309,12 +391,13 @@ async def test_generated_ka10099_refresh_uses_only_reviewed_markets() -> None:
     client = Client()
     index = InstrumentIdentityIndex()
 
-    assert await index.refresh(client) == 3
-    assert [call[0] for call in client.calls] == ["ka10099"] * 3
+    assert await index.refresh(client) == 4
+    assert [call[0] for call in client.calls] == ["ka10099"] * 4
     assert [call[2] for call in client.calls] == [
         {"mrkt_tp": "0"},
         {"mrkt_tp": "10"},
         {"mrkt_tp": "8"},
+        {"mrkt_tp": "3"},
     ]
 
 
@@ -343,11 +426,12 @@ async def test_ka10099_continuation_is_fully_collected_before_commit(tmp_path: P
             )
 
     index = InstrumentIdentityIndex(db_path=tmp_path / "instruments.sqlite3")
-    assert await index.refresh(Client()) == 6
+    assert await index.refresh(Client()) == 8
     assert Client.calls == [
         ("0", None), ("0", "next-0"),
         ("10", None), ("10", "next-10"),
         ("8", None), ("8", "next-8"),
+        ("3", None), ("3", "next-3"),
     ]
 
 
