@@ -1,6 +1,6 @@
 # 이어받기 — `main` 하나로 시작하는 법 (2026-09-01)
 
-> **2026-09-09 전체 작업을 Grok으로 재개:** `codex/grok-handoff-20260909` 브랜치의 [현재 인수인계](./2026-09-09-grok-resume.md)와 [Grok 시작 프롬프트](./GROK_RESUME_PROMPT.md)를 먼저 읽는다. 아래 main 전용 안내는 이전 시점의 이력이다.
+> **2026-09-09 전체 작업을 Grok으로 재개:** `codex/grok-handoff-20260909` 브랜치의 [현재 인수인계](./2026-09-09-grok-resume.md)와 [Grok 시작 프롬프트](./GROK_RESUME_PROMPT.md)를 먼저 읽는다. 이 환경의 상품별 주문 QA는 [2026-09-09-grok-product-order-qa.md](./2026-09-09-grok-product-order-qa.md). 아래 main 전용 안내는 이전 시점의 이력이다.
 
 > **2026-09-07 Claude 「코드 검수」를 이어받는 경우:** [검증된 Codex 인수인계](./2026-09-07-codex-resume.md)를 먼저 읽는다. 원대화 중단 지점·승인 사항·기존 판정의 정정·복구된 발견 원장·현재 재개 결과가 연결되어 있다. 아래 내용은 이전 날짜의 트랙별 이력이다.
 
