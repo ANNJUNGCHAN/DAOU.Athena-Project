@@ -77,7 +77,7 @@ function normalizeState(raw) {
     const projectId = seenProjectIds.has(rowProjectId) ? rowProjectId : currentProjectId;
     const createdAt = validString(row.createdAt) || validString(row.updatedAt) || new Date(0).toISOString();
     const updatedAt = validString(row.updatedAt) || createdAt;
-    conversations.push({
+    const conversation = {
       id,
       title: validString(row.title) || '(제목 없음)',
       createdAt,
@@ -86,11 +86,14 @@ function normalizeState(raw) {
       // 대화는 만들어진 모드에 묶인다(35·40번 보드). 옛 레코드에는 이 필드가
       // 없으므로 viewToMode가 'chat'으로 떨어뜨린다 — 마이그레이션 없이 읽힌다.
       mode: viewToMode(row.mode),
-      // 마지막으로 관측한 Claude session_id(--resume 커서). 이력 행을 다시 눌렀을 때
+      // 마지막으로 관측한 공급자 세션 id(--resume 커서). 이력 행을 다시 눌렀을 때
       // 모델 문맥까지 이어 붙이는 열쇠다 — 이것이 없으면 메시지만 다시 보이고
       // 대화는 백지에서 시작한다(41번 보드 "다시 누르면 그대로").
       resumeSessionId: validString(row.resumeSessionId),
-    });
+    };
+    const resumeOwnerKey = validString(row.resumeOwnerKey);
+    if (resumeOwnerKey) conversation.resumeOwnerKey = resumeOwnerKey;
+    conversations.push(conversation);
   }
 
   return {
@@ -243,17 +246,25 @@ function setActive(id) {
   return snapshot(state);
 }
 
-// 턴이 끝날 때마다 main이 관측한 Claude session_id를 그 대화에 적어 둔다.
+// 턴이 끝날 때마다 main이 관측한 공급자 세션 id를 그 대화에 적어 둔다.
 // 커서는 대화마다 따로 산다 — 한 대화의 커서로 다른 대화를 이으면 문맥이 섞인다.
-function setResumeCursor({ id, resumeSessionId } = {}) {
+function setResumeCursor(options = {}) {
+  const { id, resumeSessionId } = options;
   const conversationId = validString(id);
   if (!conversationId) return false;
   const state = readState();
   const conversation = state.conversations.find((row) => row.id === conversationId);
   if (!conversation) return false;
   const next = validString(resumeSessionId);
-  if (conversation.resumeSessionId === next) return true;
+  const ownerSupplied = Object.prototype.hasOwnProperty.call(options, 'resumeOwnerKey');
+  const nextOwner = ownerSupplied ? validString(options.resumeOwnerKey) : null;
+  const ownerUnchanged = !ownerSupplied || conversation.resumeOwnerKey === nextOwner;
+  if (conversation.resumeSessionId === next && ownerUnchanged) return true;
   conversation.resumeSessionId = next;
+  if (ownerSupplied) {
+    if (nextOwner) conversation.resumeOwnerKey = nextOwner;
+    else delete conversation.resumeOwnerKey;
+  }
   writeState(state);
   return true;
 }

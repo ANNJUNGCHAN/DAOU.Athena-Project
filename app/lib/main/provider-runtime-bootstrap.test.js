@@ -537,7 +537,7 @@ test('main account, cold-mutation, shutdown, and history commit boundaries are f
   assert.match(source, /commitSuccess: \(result\) => historySink\.saveChatMessageAwaited/);
   // 플래그 이름은 providerRuntimeEnabled다 — main이 ATHENA_PERSISTENT_CHAT을
   // claude-chat-session의 킬 스위치로 이미 쓰고 있어 이름을 분리했다.
-  const persistentBranchStart = source.indexOf('if (providerRuntimeEnabled && liveProviderId !== \'grok\') {', source.indexOf('async function runLiveQuery'));
+  const persistentBranchStart = source.indexOf('if (providerRuntimeEnabled && liveProviderId === \'claude\') {', source.indexOf('async function runLiveQuery'));
   const persistentBranchEnd = source.indexOf('const legacyQueryOperation = runClaudeQuery');
   assert.ok(persistentBranchStart >= 0 && persistentBranchEnd > persistentBranchStart);
   const persistentBranch = source.slice(persistentBranchStart, persistentBranchEnd);

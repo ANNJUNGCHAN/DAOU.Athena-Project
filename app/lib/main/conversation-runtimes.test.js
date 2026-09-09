@@ -19,6 +19,20 @@ test('공급자가 같으면 연결을 재사용하고 바뀌면 이전 연결�
   assert.equal(rt.get('A').chatSessionProviderId, null);
 });
 
+test('공급자가 같아도 모델·계정·보안 키가 바뀌면 다음 사용에서 세션을 교체한다', () => {
+  const rt = createConversationRuntimes();
+  const first = rt.chatSession('A', () => fakeSession(), 'claude', 'key-v1');
+  assert.equal(rt.chatSession('A', () => { throw new Error('must reuse'); }, 'claude', 'key-v1'), first);
+
+  const second = rt.chatSession('A', () => fakeSession(), 'claude', 'key-v2');
+  assert.notEqual(second, first);
+  assert.ok(first.stopped instanceof Error);
+  assert.equal(rt.get('A').chatSessionKey, 'key-v2');
+
+  rt.stopAllChatSessions();
+  assert.equal(rt.get('A').chatSessionKey, null);
+});
+
 function fakeSession(state = 'idle') {
   const session = {
     state,
@@ -109,4 +123,85 @@ test('stopIdleChatSessions·clearIdleCursors는 답변 중인 대화를 건드�
   assert.ok(b.stopped instanceof Error, '유휴 B의 세션은 닫힌다');
   assert.equal(rt.get('A').liveSessionId, 'sess-a');
   assert.equal(rt.get('B').liveSessionId, null);
+});
+
+test('재개 커서는 저장된 공급자·계정 소유자가 현재 요청과 같을 때만 복원한다', () => {
+  const rt = createConversationRuntimes();
+  const records = {
+    same: { resumeSessionId: 'sess-same', resumeOwnerKey: 'claude:account-1' },
+    providerMismatch: { resumeSessionId: 'sess-grok', resumeOwnerKey: 'grok:account-1' },
+    accountMismatch: { resumeSessionId: 'sess-other', resumeOwnerKey: 'claude:account-2' },
+    legacy: { resumeSessionId: 'sess-legacy' },
+    untouched: { resumeSessionId: 'sess-untouched', resumeOwnerKey: 'codex:account-1' },
+  };
+  const load = (id) => records[id];
+
+  assert.equal(rt.resolveResumeCursor('same', 'claude:account-1', load), 'sess-same');
+  assert.equal(rt.resolveResumeCursor('providerMismatch', 'claude:account-1', load), null);
+  assert.equal(rt.resolveResumeCursor('accountMismatch', 'claude:account-1', load), null);
+  assert.equal(rt.resolveResumeCursor('legacy', 'claude:account-1', load), null);
+  assert.equal(rt.peek('untouched'), null, '다른 대화는 읽거나 지우지 않는다');
+});
+
+test('이전 공급자의 늦은 완료 커서는 다음 소유자의 요청에서 거절한다', () => {
+  const rt = createConversationRuntimes();
+  const runtime = rt.get('A');
+  runtime.liveSessionId = 'late-grok-cursor';
+  runtime.liveSessionOwnerKey = 'grok:account-1';
+
+  assert.equal(rt.resolveResumeCursor('A', 'codex:account-1', () => {
+    throw new Error('이미 메모리에 있는 커서는 디스크에서 다시 읽지 않는다');
+  }), null);
+  assert.equal(runtime.liveSessionOwnerKey, 'codex:account-1');
+  assert.equal(rt.resolveResumeCursor('A', 'codex:account-1'), null);
+});
+
+test('소유자 키를 생략한 기존 호출은 ownerless 저장 커서를 그대로 복원한다', () => {
+  const rt = createConversationRuntimes();
+  assert.equal(rt.resolveResumeCursor('legacy', undefined, () => ({
+    resumeSessionId: 'sess-legacy',
+  })), 'sess-legacy');
+});
+
+test('stopAllChatSessions는 교체 중 시작된 비동기 stop까지 기다리고 실패를 결과로 남긴다', async () => {
+  const rt = createConversationRuntimes();
+  let finishOldStop;
+  const oldStop = new Promise((resolve, reject) => { finishOldStop = { resolve, reject }; });
+  const old = fakeSession();
+  old.stop = (reason) => {
+    old.stopped = reason;
+    return oldStop;
+  };
+
+  rt.chatSession('A', () => old, 'grok', 'account-1');
+  const current = rt.chatSession('A', () => fakeSession(), 'grok', 'account-2');
+  assert.ok(old.stopped instanceof Error, '계정 교체는 이전 참조를 즉시 닫기 시작한다');
+  assert.equal(rt.get('A').chatSession, current, '비동기 종료 중에도 새 세션 참조는 즉시 설치된다');
+
+  let drained = false;
+  const shutdown = rt.stopAllChatSessions(new Error('앱 종료')).then((results) => {
+    drained = true;
+    return results;
+  });
+  await Promise.resolve();
+  assert.equal(drained, false, '이전에 시작된 stop이 끝나기 전에는 종료 완료가 아니다');
+
+  finishOldStop.reject(new Error('old stop failed'));
+  const results = await shutdown;
+  assert.equal(drained, true);
+  assert.equal(results.some((result) => result.status === 'rejected'
+    && result.reason.message === 'old stop failed'), true);
+});
+
+test('동기 stop 예외도 stopAllChatSessions의 rejected 결과로 보존한다', async () => {
+  const rt = createConversationRuntimes();
+  const session = fakeSession();
+  session.stop = () => { throw new Error('sync runtime stop failed'); };
+  rt.chatSession('A', () => session);
+
+  const results = await rt.stopAllChatSessions(new Error('앱 종료'));
+  assert.equal(results.length, 1);
+  assert.equal(results[0].status, 'rejected');
+  assert.equal(results[0].reason.message, 'sync runtime stop failed');
+  assert.equal(rt.get('A').chatSession, null, '종료 실패와 별개로 참조는 즉시 비운다');
 });

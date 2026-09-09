@@ -192,6 +192,31 @@ test('setResumeCursor는 대화마다 Claude 커서를 따로 적고, setActive�
   });
 });
 
+test('재개 커서 소유자 키는 전달한 경우에만 저장되고 다시 읽힌다', async () => {
+  await withTempState({
+    projects: [{ id: 'p1', label: '프로젝트 1' }],
+    currentProjectId: 'p1',
+    conversations: [
+      { id: 'a', title: '소유자 있음', projectId: 'p1' },
+      { id: 'b', title: '옛 호출', projectId: 'p1' },
+    ],
+  }, async (file) => {
+    assert.equal(conversations.setResumeCursor({
+      id: 'a', resumeSessionId: 'sess-A', resumeOwnerKey: 'grok:account-1',
+    }), true);
+    assert.equal(conversations.setResumeCursor({ id: 'b', resumeSessionId: 'sess-B' }), true);
+    await conversations.flush();
+
+    const saved = JSON.parse(fs.readFileSync(file, 'utf-8')).conversations;
+    assert.equal(saved.find((row) => row.id === 'a').resumeOwnerKey, 'grok:account-1');
+    assert.equal('resumeOwnerKey' in saved.find((row) => row.id === 'b'), false);
+
+    const loaded = conversations.normalizeState(JSON.parse(fs.readFileSync(file, 'utf-8'))).conversations;
+    assert.equal(loaded.find((row) => row.id === 'a').resumeOwnerKey, 'grok:account-1');
+    assert.equal('resumeOwnerKey' in loaded.find((row) => row.id === 'b'), false);
+  });
+});
+
 test('addProject는 폴더 이름을 프로젝트 이름으로 삼고 현재 프로젝트를 그리로 옮긴다', async () => {
   await withTempState(undefined, async (file) => {
     const folder = path.join(path.dirname(file), '추세추종 v3');

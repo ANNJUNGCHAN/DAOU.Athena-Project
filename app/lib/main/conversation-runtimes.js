@@ -22,8 +22,12 @@ function createRuntime(conversationId, now) {
     // undefined = 아직 레코드(athena-conversations.json)의 커서를 읽지 않았다.
     // null = 명시적 새 대화, 문자열 = 그 세션에서 --resume.
     liveSessionId: undefined,
+    // liveSessionId를 만든 공급자·계정 키. undefined는 아직 영속 레코드를
+    // 읽지 않은 상태이며, 소유자가 다른 커서는 같은 대화에서도 재사용하지 않는다.
+    liveSessionOwnerKey: undefined,
     chatSession: null,
     chatSessionProviderId: null,
+    chatSessionKey: null,
     lastUsedAt: now(),
   };
 }
@@ -33,7 +37,17 @@ function createConversationRuntimes({
   now = () => Date.now(),
 } = {}) {
   const runtimes = new Map();
+  const pendingStops = new Set();
   const idleCap = Math.max(0, Number(maxIdleChatSessions) || 0);
+
+  function trackStop(result) {
+    if (!result || typeof result.then !== 'function') return null;
+    const pending = Promise.resolve(result);
+    pendingStops.add(pending);
+    // drain() 전에도 거부가 미처리 상태로 프로세스에 새지 않게 관측한다.
+    pending.catch(() => {});
+    return pending;
+  }
 
   function get(conversationId) {
     const id = String(conversationId || '');
@@ -72,8 +86,13 @@ function createConversationRuntimes({
     const session = runtime.chatSession;
     runtime.chatSession = null;
     runtime.chatSessionProviderId = null;
-    if (!session) return;
-    try { session.stop(reason || new Error('conversation runtime evicted')); } catch { /* already stopping */ }
+    runtime.chatSessionKey = null;
+    if (!session) return null;
+    try {
+      return trackStop(session.stop(reason || new Error('conversation runtime evicted')));
+    } catch (error) {
+      return trackStop(Promise.reject(error));
+    }
   }
 
   // 유휴 세션 상한 — 새 세션을 만들 자리를 비운다. 지금 만들려는 대화는 제외한다.
@@ -91,15 +110,17 @@ function createConversationRuntimes({
     }
   }
 
-  function chatSession(conversationId, factory, providerId = 'claude') {
+  function chatSession(conversationId, factory, providerId = 'claude', sessionKey = null) {
     const runtime = get(conversationId);
-    if (runtime.chatSession && runtime.chatSessionProviderId !== providerId) {
+    if (runtime.chatSession && (runtime.chatSessionProviderId !== providerId
+      || runtime.chatSessionKey !== sessionKey)) {
       stopSession(runtime, new Error('conversation provider changed'));
     }
     if (!runtime.chatSession) {
       evictIdleSessions(runtime.conversationId);
       runtime.chatSession = factory(runtime.conversationId);
       runtime.chatSessionProviderId = providerId;
+      runtime.chatSessionKey = sessionKey;
     }
     return runtime.chatSession;
   }
@@ -112,6 +133,23 @@ function createConversationRuntimes({
 
   function stopAllChatSessions(reason) {
     for (const runtime of runtimes.values()) stopSession(runtime, reason);
+    return drain();
+  }
+
+  function stopChatSession(conversationId, expectedSession, reason) {
+    const runtime = peek(conversationId);
+    if (!runtime || runtime.chatSession !== expectedSession) return Promise.resolve();
+    return stopSession(runtime, reason);
+  }
+
+  async function drain() {
+    const results = [];
+    while (pendingStops.size > 0) {
+      const batch = [...pendingStops];
+      for (const pending of batch) pendingStops.delete(pending);
+      results.push(...await Promise.allSettled(batch));
+    }
+    return results;
   }
 
   // 프로바이더 전환처럼 "지금부터 새 세션"이 필요한 경우 — 답변 중인 대화의 세션은 건드리지 않는다.
@@ -125,12 +163,42 @@ function createConversationRuntimes({
 
   // 프로바이더가 바뀌면 이전 프로바이더의 세션 커서는 전부 무효다(main.js noteLiveQueryProvider).
   function clearCursors() {
-    for (const runtime of runtimes.values()) runtime.liveSessionId = null;
+    for (const runtime of runtimes.values()) {
+      runtime.liveSessionId = null;
+      runtime.liveSessionOwnerKey = null;
+    }
   }
 
   // 답변 중인 대화의 커서는 그 턴이 끝나며 다시 적히므로 여기서 지우지 않는다.
   function clearIdleCursors() {
-    for (const runtime of runtimes.values()) if (runtime.busyDepth === 0) runtime.liveSessionId = null;
+    for (const runtime of runtimes.values()) {
+      if (runtime.busyDepth !== 0) continue;
+      runtime.liveSessionId = null;
+      runtime.liveSessionOwnerKey = null;
+    }
+  }
+
+  function resolveResumeCursor(conversationId, ownerKey, loadRecord) {
+    const runtime = get(conversationId);
+    const requestedOwnerKey = typeof ownerKey === 'string' && ownerKey.trim()
+      ? ownerKey.trim()
+      : null;
+    if (runtime.liveSessionId === undefined) {
+      const record = typeof loadRecord === 'function' ? loadRecord(runtime.conversationId) : null;
+      runtime.liveSessionId = record && typeof record.resumeSessionId === 'string'
+        && record.resumeSessionId.trim()
+        ? record.resumeSessionId.trim()
+        : null;
+      runtime.liveSessionOwnerKey = record && typeof record.resumeOwnerKey === 'string'
+        && record.resumeOwnerKey.trim()
+        ? record.resumeOwnerKey.trim()
+        : null;
+    }
+    if (requestedOwnerKey && runtime.liveSessionOwnerKey !== requestedOwnerKey) {
+      runtime.liveSessionId = null;
+      runtime.liveSessionOwnerKey = requestedOwnerKey;
+    }
+    return runtime.liveSessionId;
   }
 
   function dispose(conversationId, reason) {
@@ -149,14 +217,17 @@ function createConversationRuntimes({
         busyDepth: runtime.busyDepth,
         hasChatSession: !!runtime.chatSession,
         liveSessionId: runtime.liveSessionId === undefined ? undefined : runtime.liveSessionId,
+        liveSessionOwnerKey: runtime.liveSessionOwnerKey === undefined
+          ? undefined
+          : runtime.liveSessionOwnerKey,
       });
     }
     return rows;
   }
 
   return Object.freeze({
-    get, peek, isBusy, busyIds, chatSession, forEachChatSession, stopAllChatSessions, stopIdleChatSessions,
-    clearCursors, clearIdleCursors, dispose, snapshot,
+    get, peek, isBusy, busyIds, chatSession, forEachChatSession, stopChatSession, stopAllChatSessions, stopIdleChatSessions,
+    clearCursors, clearIdleCursors, resolveResumeCursor, dispose, snapshot, drain,
     size: () => runtimes.size,
   });
 }

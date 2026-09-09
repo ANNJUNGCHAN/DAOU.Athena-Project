@@ -29,6 +29,11 @@ const { CATALOG: PLUGIN_CATALOG } = require('./lib/plugin-catalog');
 const { runClaudeQuery } = require('./lib/main/claude-runner');
 const { runGrokQuery } = require('./lib/main/grok-runner');
 const { createGrokAcpSession } = require('./lib/main/grok-acp-session');
+const { createCodexChatSession } = require('./lib/main/codex-chat-session');
+const { createCodexChatRuntime } = require('./lib/main/codex-chat-runtime');
+const { createConversationSessionPool } = require('./lib/main/conversation-session-pool');
+const { runConversationSessionTurn } = require('./lib/main/conversation-session-turn');
+const { assertSessionStopsSucceeded } = require('./lib/main/provider-session-shutdown');
 // 툴 호출 진행 단계(board-33) 라벨링에 render_canvas 판정 하나만 빌려 쓴다 —
 // 파서 자체는 손대지 않는다(sendLiveToolStep 근처 주석 참고).
 const streamJsonParser = require('./lib/main/stream-json-parser');
@@ -919,6 +924,7 @@ let realtimeAccountGeneration = 1;
 let realtimeFeedInstanceGeneration = 0;
 let realtimeFeedEpoch = 1;
 const realtimeCleanupBarriers = new Map();
+let liveChatShutdown = Promise.resolve([]);
 
 const integratedRealtimeShutdown = integratedCardRealtime.createBoundedShutdownCoordinator({
   prepare: () => {
@@ -933,7 +939,10 @@ const integratedRealtimeShutdown = integratedCardRealtime.createBoundedShutdownC
     stockMasterAbortController.abort(new Error('Athena 앱 종료'));
     // 트레이로 숨겨진 동안에는 selector worker를 유지하고 실제 종료에서만 닫는다.
     selectorClaudePool.stop(new Error('Athena 앱 종료'));
-    liveRuntimes.stopAllChatSessions(new Error('Athena 앱 종료'));
+    liveChatShutdown = Promise.all([
+      stopLiveChatPools(new Error('Athena 앱 종료')),
+      liveRuntimes.stopAllChatSessions(new Error('Athena 앱 종료')),
+    ]);
     conversations.flushSync(); // 예약만 된 사이드바 상태를 마저 저장한다
     if (sessionBridge) sessionBridge.flushSync(); // 대기 중인 세션 디바운스·저널을 마저 쓴다
   },
@@ -948,7 +957,8 @@ const integratedRealtimeShutdown = integratedCardRealtime.createBoundedShutdownC
     const providerStop = shutdownRuntime
       ? shutdownRuntime.stop('app_shutdown')
       : Promise.resolve();
-    const [result] = await Promise.all([realtimeRelease, providerStop]);
+    const [result, , chatStops] = await Promise.all([realtimeRelease, providerStop, liveChatShutdown]);
+    assertSessionStopsSucceeded(chatStops);
     providerRuntimeReady = false;
     if (shutdownRuntime) {
       providerVerifierTelemetry.recordShutdownCompletion({
@@ -2638,11 +2648,14 @@ function createLiveChatSessionForConversation() {
 }
 
 function getLiveChatSession(conversationId = historyConversationId()) {
-  return liveRuntimes.chatSession(conversationId, createLiveChatSessionForConversation, 'claude');
+  return getLiveProviderChatSession(conversationId, 'claude');
 }
 
 function getLiveGrokSession(conversationId) {
-  return liveRuntimes.chatSession(conversationId, () => {
+  return getLiveProviderChatSession(conversationId, 'grok');
+}
+
+function createLiveGrokChatSession() {
     const { dir, grokProfilePath, configPath } = getLiveMcpConfig();
     return createGrokAcpSession({
       cwd: dir,
@@ -2665,7 +2678,106 @@ function getLiveGrokSession(conversationId) {
         GROK_CURSOR_MCPS_ENABLED: '0',
       }),
     });
-  }, 'grok');
+}
+
+function createLiveCodexChatSession() {
+  const { dir, configPath } = getLiveMcpConfig();
+  const gateway = JSON.parse(fs.readFileSync(configPath, 'utf8')).mcpServers.athena;
+  const built = createCodexChatRuntime({
+    userDataPath: app.getPath('userData'), cwd: dir, gateway,
+    allowedTools: GATEWAY_ALLOWED_TOOLS,
+    envOverridesFn: () => mcpEnv.buildEnvOverrides(),
+    securityKeyFn: liveGrokSecurityKey,
+    identityKeyFn: () => {
+      const account = currentProviderSelection.activeAccount || cliAccounts.peekActiveAccount() || {};
+      return account.accountId || account.id || null;
+    },
+  });
+  return createCodexChatSession({
+    ...built.sessionOptions, developerInstructions: buildLiveSystemPrompt('codex'),
+  });
+}
+
+const liveChatPools = new Map();
+const liveChatPoolStops = new Set();
+
+function retireLiveChatPool(pool, reason) {
+  pool.stop(reason);
+  const completion = pool.drain().then(assertSessionStopsSucceeded);
+  liveChatPoolStops.add(completion);
+  // 실패는 다음 보안 변경·종료 검증까지 남긴다. 실패한 정리를 조용히
+  // 잊으면 이전 자격증명을 가진 자식이 살아 있는데도 성공으로 진행한다.
+  completion.then(() => liveChatPoolStops.delete(completion), () => {});
+  return completion;
+}
+
+function liveProviderWarmOptions(providerId) {
+  const account = currentProviderSelection.activeAccount || cliAccounts.peekActiveAccount() || {};
+  const selection = providerId === 'codex' ? codexConfig.readModelSettings() : modelPrefs.get()[providerId];
+  return {
+    model: selection.model, effort: selection.effort,
+    identityKey: account.accountId || account.id || null,
+    securityKey: liveGrokSecurityKey(), resumeSessionId: null,
+  };
+}
+
+function createLiveProviderChatSession(providerId) {
+  if (providerId === 'claude') return createLiveChatSessionForConversation();
+  if (providerId === 'grok') return createLiveGrokChatSession();
+  if (providerId === 'codex') return createLiveCodexChatSession();
+  throw new Error(`지원하지 않는 대화 공급자: ${providerId}`);
+}
+
+function stopLiveChatPools(reason) {
+  for (const pool of liveChatPools.values()) retireLiveChatPool(pool, reason);
+  liveChatPools.clear();
+  return Promise.allSettled([...liveChatPoolStops]);
+}
+
+function prepareLiveChatPool(providerId = resolveLiveQueryProviderId()) {
+  if (isQuitting) return null;
+  const account = currentProviderSelection.activeAccount || cliAccounts.peekActiveAccount();
+  if (!account || account.providerId !== providerId) {
+    stopLiveChatPools(new Error('대화 계정 연결이 필요합니다'));
+    return null;
+  }
+  const enabled = providerId === 'grok' ? process.env.ATHENA_GROK_PERSISTENT_CHAT !== '0'
+    : providerId === 'codex' ? process.env.ATHENA_CODEX_PERSISTENT_CHAT !== '0' : persistentChatEnabled();
+  for (const [id, pool] of liveChatPools) {
+    if (id !== providerId || !enabled) {
+      retireLiveChatPool(pool, new Error('대화 공급자 설정 변경'));
+      liveChatPools.delete(id);
+    }
+  }
+  if (!enabled) return null;
+  const options = liveProviderWarmOptions(providerId);
+  let pool = liveChatPools.get(providerId);
+  if (!pool) {
+    pool = createConversationSessionPool({
+      createSession: () => createLiveProviderChatSession(providerId),
+      warmOptions: options, desiredSize: 2,
+      onError: (error) => mdlog(`${providerId} 대화 예열 실패: ${String(error.message || error)}`),
+    });
+    liveChatPools.set(providerId, pool);
+  } else pool.configure(options);
+  pool.start();
+  return pool;
+}
+
+function getLiveProviderChatSession(conversationId, providerId) {
+  const pool = prepareLiveChatPool(providerId);
+  const options = liveProviderWarmOptions(providerId);
+  return liveRuntimes.chatSession(conversationId,
+    () => (pool && pool.claim()) || createLiveProviderChatSession(providerId),
+    providerId, canonicalHash(options));
+}
+
+function runLiveProviderChatTurn(providerId, conversationId, options) {
+  const session = getLiveProviderChatSession(conversationId, providerId);
+  return runConversationSessionTurn(session, {
+    ...options,
+    stopSession: (reason) => liveRuntimes.stopChatSession(conversationId, session, reason),
+  });
 }
 
 function liveGrokSecurityKey() {
@@ -2679,6 +2791,7 @@ function liveGrokSecurityKey() {
     registry: fileRevision(registry),
     consent: fileRevision(path.join(path.dirname(registry), 'consent.json')),
     secrets: fileRevision(path.join(app.getPath('userData'), 'athena-secrets.json')),
+    credentials: cliAccounts.credentialsSignature(),
   });
 }
 
@@ -2699,10 +2812,10 @@ function resolveLiveQueryProviderId() {
 // (chat.js renderComposerModel)·오브 컨트롤 스트립(orb.js refreshChatControlStrip)이
 // 전부 이 한 값을 읽는다. 어디서 쓰든 모델 종류가 같아야 한다 — 판정을 렌더러마다
 // 따로 두면 오브는 FABLE, 셸은 Grok-4.5를 말하는 사고가 난다(2026-09-08 실측).
-// Grok 계정이 활성이면 grok 값, 그 밖(Claude·Codex·미연결)은 claude 값이다.
+// 선택된 공급자의 모델과 사고 강도를 실제 실행과 UI에 함께 사용한다.
 function resolveActiveModelSelection(prefsState = modelPrefs.get()) {
-  const provider = resolveLiveQueryProviderId() === 'grok' ? 'grok' : 'claude';
-  const { model, effort } = prefsState[provider];
+  const provider = resolveLiveQueryProviderId();
+  const { model, effort } = provider === 'codex' ? codexConfig.readModelSettings() : prefsState[provider];
   return { provider, model, effort };
 }
 
@@ -3420,14 +3533,11 @@ function knownConversation(id) {
 
 // 대화의 --resume 커서 — 런타임에 아직 없으면(앱 기동 뒤 첫 턴) 레코드에서 읽는다. 이후엔
 // 런타임 값이 진실이다(성공 턴마다 새 session_id, 재개 실패면 null).
-function liveResumeCursor(conversationId) {
-  const runtime = liveRuntimes.get(conversationId);
-  if (runtime.liveSessionId === undefined) {
-    let record = null;
-    try { record = conversations.list().conversations.find((row) => row.id === conversationId) || null; } catch { record = null; }
-    runtime.liveSessionId = record && record.resumeSessionId ? record.resumeSessionId : null;
-  }
-  return runtime.liveSessionId;
+function liveResumeCursor(conversationId, ownerKey) {
+  return liveRuntimes.resolveResumeCursor(conversationId, ownerKey, (id) => {
+    try { return conversations.list().conversations.find((row) => row.id === id) || null; }
+    catch { return null; }
+  });
 }
 
 function broadcastConversationActive(conversationId) {
@@ -3849,6 +3959,14 @@ async function resolveProviderDesiredState(options = {}) {
     currentProviderSelection = Object.freeze({ activeAccount: null, desiredState: null, disabled });
     return currentProviderSelection;
   }
+  // 대화별 Codex/Grok 세션은 자체 시작·권한 검증을 수행한다. 기존 단일
+  // supervisor의 과거 계약 판정은 이 경로의 연결 가능 여부가 아니다.
+  if (resolvedAccount.providerId === 'grok' || resolvedAccount.providerId === 'codex') {
+    currentProviderSelection = Object.freeze({
+      activeAccount: resolvedAccount, desiredState: null, disabled: null,
+    });
+    return currentProviderSelection;
+  }
   const disabled = resolveCodexDisabledSelection({
     activeAccount: resolvedAccount,
     contractDecision: providerContractDecision.decision,
@@ -3942,12 +4060,12 @@ async function rotatePersistentProviderInner(reason, options = {}) {
     }
     return disabledSelection;
   }
-  if (activeAccount.providerId === 'grok') {
+  if (activeAccount.providerId === 'grok' || activeAccount.providerId === 'codex') {
     const grokSelection = await awaitProviderLifecycle(
       resolveProviderDesiredState({ ...options, activeAccount }),
     );
     if (providerRuntimeController) {
-      providerRuntimeController.blockNewTurns('grok_cold_path');
+      providerRuntimeController.blockNewTurns('conversation_session_path');
       providerEpochStore.invalidate(providerSecurityGeneration);
       const stoppedRuntime = providerRuntimeController;
       await awaitProviderLifecycle(providerControllerLifecycle.stopAndDiscard(reason, stoppedRuntime));
@@ -4032,7 +4150,7 @@ const providerConversationRotationQueue = createConversationRotationQueue({
   shutdownError: providerShutdownError,
   enqueue: enqueueProviderRotation,
   blockAdmission: () => {
-    if (providerRuntimeEnabled) {
+    if (providerRuntimeEnabled && resolveLiveQueryProviderId() === 'claude') {
       ensureProviderRuntimeController().blockNewTurns('conversation_rotation');
     }
   },
@@ -4040,7 +4158,9 @@ const providerConversationRotationQueue = createConversationRotationQueue({
   // 자기 대화의 런타임에서 계속 돌고 결과는 그 대화의 기록에 적힌다. 단일 턴 슈퍼바이저인
   // 프로바이더 런타임(ATHENA_PROVIDER_RUNTIME=1, opt-in)만 예전대로 끊는다.
   interrupt: () => {
-    if (providerRuntimeEnabled) abortAllConversationWork(new Error('새 대화가 진행 중인 이전 작업을 대체했다'));
+    if (providerRuntimeEnabled && resolveLiveQueryProviderId() === 'claude') {
+      abortAllConversationWork(new Error('새 대화가 진행 중인 이전 작업을 대체했다'));
+    }
   },
   createConversationId: () => crypto.randomUUID(),
   publishConversationId: (conversationId) => {
@@ -4717,7 +4837,10 @@ async function runLiveQueryInnerBody(query, expand, origin, turnConversationId, 
   const trackSubagent = createSubagentTracker(turnConversationId);
   const liveProviderId = resolveLiveQueryProviderId();
   noteLiveQueryProvider(liveProviderId);
-  const resumeSessionId = liveResumeCursor(turnConversationId);
+  const liveAccount = currentProviderSelection.activeAccount || cliAccounts.peekActiveAccount() || {};
+  const resumeOwnerKey = canonicalHash({ providerId: liveProviderId,
+    accountId: liveAccount.accountId || liveAccount.id || null });
+  const resumeSessionId = liveResumeCursor(turnConversationId, resumeOwnerKey);
   // 설정 화면 모델 패널(lib/main/model-prefs.js) 값 — null이면 buildArgs가
   // --model/--effort를 안 붙여 CLI 기본값을 쓴다.
   const { model, effort } = resolveActiveModelSelection();
@@ -4745,7 +4868,7 @@ async function runLiveQueryInnerBody(query, expand, origin, turnConversationId, 
       canvasCaptions: [],
     };
   }
-  if (providerRuntimeEnabled && liveProviderId !== 'grok') {
+  if (providerRuntimeEnabled && liveProviderId === 'claude') {
     const runtime = ensureProviderRuntimeController();
     const clientSubmitId = String(submit.clientSubmitId || '');
     const rendererSubmittedAt = Number(submit.rendererSubmittedAt);
@@ -4849,8 +4972,16 @@ async function runLiveQueryInnerBody(query, expand, origin, turnConversationId, 
   // 아래 세션 체인·캐시·저장 로직은 분기를 모른다. ATHENA_PERSISTENT_CHAT=0
   // 이면 기존 왕복(runClaudeQuery)으로 폴백한다(킬 스위치).
   let result;
-  if (liveProviderId === 'grok' && process.env.ATHENA_GROK_PERSISTENT_CHAT !== '0') {
-    result = await getLiveGrokSession(turnConversationId).run({
+  if (liveProviderId === 'codex') {
+    if (process.env.ATHENA_CODEX_PERSISTENT_CHAT === '0') {
+      return { ok: false, source: 'live', error: 'Codex 대화 연결이 꺼져 있습니다.', answerText: null,
+        code: 'CODEX_LIVE_DISABLED_BY_KILL_SWITCH', canvasTypes: [], canvasCaptions: [] };
+    }
+    result = await runLiveProviderChatTurn('codex', turnConversationId, {
+      ...liveProviderWarmOptions('codex'), prompt: turnPrompt, resumeSessionId, ...turnCallbacks,
+    });
+  } else if (liveProviderId === 'grok' && process.env.ATHENA_GROK_PERSISTENT_CHAT !== '0') {
+    result = await runLiveProviderChatTurn('grok', turnConversationId, {
       prompt: turnPrompt,
       resumeSessionId,
       model,
@@ -4872,7 +5003,7 @@ async function runLiveQueryInnerBody(query, expand, origin, turnConversationId, 
       ...turnCallbacks,
     });
   } else if (persistentChatEnabled()) {
-    result = await getLiveChatSession(turnConversationId).run({
+    result = await runLiveProviderChatTurn('claude', turnConversationId, {
       // 규칙은 세션 system prompt로 이미 갔다 — 턴에는 질문(+백테스트 설계 접두)만 보낸다.
       prompt: turnPrompt,
       model,
@@ -4920,8 +5051,10 @@ async function runLiveQueryInnerBody(query, expand, origin, turnConversationId, 
   // 다음 턴이 --resume으로 문맥을 잇는다(다중 대화, 2026-09-08).
   if (result.ok && result.finalResult && result.finalResult.session_id) {
     runtime.liveSessionId = result.finalResult.session_id;
+    runtime.liveSessionOwnerKey = resumeOwnerKey;
     // 커서는 대화마다 따로 남긴다 — 이력 행을 다시 눌렀을 때 이 값으로 문맥을 잇는다.
-    try { conversations.setResumeCursor({ id: turnConversationId, resumeSessionId: runtime.liveSessionId }); } catch { /* 커서 기록 실패는 턴 성공의 필요조건이 아니다 */ }
+    try { conversations.setResumeCursor({ id: turnConversationId,
+      resumeSessionId: runtime.liveSessionId, resumeOwnerKey }); } catch { /* 커서 기록 실패는 턴 성공의 필요조건이 아니다 */ }
   } else if (!result.ok && resumeSessionId && !result.aborted && !result.timedOut) {
     // 재개 실패 — 세션 파일이 사라졌거나 CLI가 재개를 거부했을 수 있다. 다음
     // 질의가 계속 같은 이유로 죽지 않게 세션을 버린다(fail-open은 새 대화 시작).
@@ -4984,7 +5117,9 @@ async function runLiveQueryInnerBody(query, expand, origin, turnConversationId, 
   return {
     ok: !!result.ok,
     source: 'live',
-    error: result.ok ? null : (result.error || `claude 종료 코드 ${result.exitCode}`),
+    error: result.ok ? null : (result.error || `${liveProviderId} 종료 코드 ${result.exitCode}`),
+    code: result.code || null,
+    type: result.actionNeeded ? 'action-needed' : undefined,
     answerText,
     canvasTypes: [...new Set(canvasTypesSeen)],
     canvasCaptions: canvasCaptionsSeen,
@@ -5038,7 +5173,10 @@ function abortAllConversationWork(reason) {
 
 async function terminateColdLegacyRuntime(reason = 'mcp-security-mutation') {
   const completion = activeLegacyQueryCompletion;
+  const poolStops = stopLiveChatPools(new Error(reason));
   abortAllConversationWork(new Error(reason));
+  const sessionStops = liveRuntimes.stopAllChatSessions(new Error(reason));
+  assertSessionStopsSucceeded(await Promise.all([poolStops, sessionStops]));
   if (completion) await completion;
   return { ok: true };
 }
@@ -5679,23 +5817,11 @@ async function handleModelSet(e, payload = {}) {
       desiredWorkers: poolState.desiredSize,
     };
     mdlog(`Selector Claude worker pool 모델 전환 — ${JSON.stringify(selectorActivation)}`);
-    // 상주 채팅 세션도 새 모델로 백그라운드 재예열한다 — 진행 중 턴이 있으면
-    // warm()이 건드리지 않고, 다음 run()이 config 불일치로 --resume 재활용한다.
-    // resumeSessionId는 반드시 liveSessionId를 명시한다 — 생략하면 모듈 내부
-    // 커서로 폴백하는데, 그 값이 중단된 턴의 포크를 가리킬 수 있다(아키텍트
-    // 리뷰 결함 1). 대화 커서의 진실은 이 파일의 liveSessionId 하나다.
-    if (persistentChatEnabled()) {
-      liveRuntimes.forEachChatSession((session, runtime) => {
-        if (runtime.chatSessionProviderId === 'grok') return;
-        session.warm({
-        model: state.claude.model,
-        effort: state.claude.effort,
-        resumeSessionId: liveResumeCursor(runtime.conversationId),
-        });
-      });
-    }
+    // 새 모델의 빈 세션은 아래 공통 풀에서 예열한다. 기존 대화는 다음
+    // 요청에서 저장된 커서를 사용하므로 답변 중인 다른 대화를 끊지 않는다.
   }
   broadcastModelChanged(state);
+  prepareLiveChatPool();
   if (providerRuntimeEnabled) await rotatePersistentProvider('model_settings_changed');
   return selectorActivation ? { ok: true, state, selectorActivation } : { ok: true, state };
 }
@@ -5732,6 +5858,7 @@ async function broadcastCliChanged({ rotateReason = null, list: suppliedList = n
   const list = suppliedList || await cliAccounts.list();
   if (rotateReason) {
     await rotatePersistentProvider(rotateReason, { activeAccount: activeAccountFromCliList(list) });
+    prepareLiveChatPool();
   }
   if (shellWin && !shellWin.isDestroyed()) {
     shellWin.webContents.send('athena:cli-changed', list);
@@ -6725,11 +6852,8 @@ function registerLiveBootRunners(createWindowsPromise) {
     mdlog(`Selector Claude worker pool 선기동 — ${JSON.stringify(selectorClaudePool.snapshot())}`);
     // 상주 채팅 세션 예열 — 첫 질문이 오기 전에 CLI + MCP 게이트웨이(및
     // upstream 연결)를 미리 끝내둔다. 첫 턴부터 콜드 스폰 고정비가 없다.
-    if (persistentChatEnabled()) {
-      const { model: chatModel, effort: chatEffort } = modelPrefs.get().claude;
-      const chatState = getLiveChatSession(historyConversationId()).warm({ model: chatModel, effort: chatEffort });
-      mdlog(`상주 채팅 세션 선기동 — ${JSON.stringify(chatState)}`);
-    }
+    const chatPool = prepareLiveChatPool();
+    if (chatPool) mdlog(`대화 예열 풀 시작 — ${JSON.stringify(chatPool.snapshot())}`);
     return { detail: 'Selector pool 시작 · 주기 및 재연결 작업은 백그라운드에서 지속' };
   });
   startupReadiness.disable('fixture-readiness', '실사용 모드에서는 합성 작업을 사용하지 않음');

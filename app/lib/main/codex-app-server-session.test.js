@@ -6,6 +6,9 @@ const { EventEmitter } = require('node:events');
 const { PassThrough } = require('node:stream');
 const {
   CodexAppServerSession,
+  assertRequiredMcpServer,
+  buildThreadStartParams,
+  buildTurnStartParams,
 } = require('./codex-app-server-session');
 const { validateEventPayload } = require('./provider-session-contract');
 
@@ -91,6 +94,56 @@ function createHarness({ desired = {}, generation = 7, random = () => 0.5 } = {}
 function respond(child, envelope, { newline = true } = {}) {
   child.stdout.write(JSON.stringify(envelope) + (newline ? '\n' : ''));
 }
+
+test('native Codex model defaults remain available when model and effort are null', () => {
+  const desired = { model: null, effort: null, cwd: 'C:\\workspace', developerInstructions: 'rules' };
+  const thread = buildThreadStartParams(desired);
+  const turn = buildTurnStartParams({ turnId: 't1', userText: 'hello' }, 'thread-1', desired, true);
+  assert.equal('model' in thread, false);
+  assert.equal('config' in thread, false);
+  assert.equal('model' in turn, false);
+  assert.equal('effort' in turn, false);
+});
+
+test('action-needed private auth spawn failure keeps its actionable code and retry policy', async () => {
+  const authError = Object.assign(new Error('Athena 계정 설정에서 Codex 로그인을 완료해 주세요.'), {
+    code: 'CODEX_PRIVATE_AUTH_REQUIRED', actionNeeded: true, retryable: false,
+  });
+  const session = new CodexAppServerSession({
+    runtime: { spawnGenerationAppServer() { throw authError; } },
+  });
+  const generationContext = {
+    runtimeGeneration: 1,
+    spawnContext: { assertCurrent() {} },
+  };
+  await assert.rejects(
+    session.start({ model: null, effort: null, cwd: 'C:\\workspace' }, generationContext),
+    (error) => error === authError
+      && error.code === 'CODEX_PRIVATE_AUTH_REQUIRED'
+      && error.actionNeeded === true
+      && error.retryable === false,
+  );
+});
+
+test('required MCP audit accepts 0.153.4 tool maps and canonical gateway names', () => {
+  assert.doesNotThrow(() => assertRequiredMcpServer([{
+    name: 'athena', runtimeStatus: 'connected',
+    tools: { athena_search: { description: 'search' } },
+  }], {
+    name: 'athena', requiredTools: ['mcp__athena__athena_search'],
+  }));
+  assert.throws(() => assertRequiredMcpServer([{
+    name: 'athena', runtimeStatus: 'connected',
+    tools: { athena_resolve: { name: 'athena_resolve' } },
+  }], {
+    name: 'athena', requiredTools: ['mcp__athena__athena_search'],
+  }), (error) => error.code === 'CODEX_MCP_REQUIRED_TOOL_MISSING');
+  assert.throws(() => assertRequiredMcpServer([{
+    name: 'athena', runtimeStatus: 'authenticationRequired', tools: {},
+  }], {
+    name: 'athena', requiredTools: [],
+  }), (error) => error.code === 'CODEX_MCP_REQUIRED_SERVER_DISABLED');
+});
 
 async function tick() {
   await new Promise((resolve) => setImmediate(resolve));
@@ -192,6 +245,87 @@ test('existing cursor resumes with stable {threadId} params only', async () => {
   respond(harness.child, { id: resume.id, result: { thread: { id: 'thread-existing' } } });
   await completeTurn(harness, 'provider-a1');
   await turn;
+});
+
+test('warmConversation starts a blank thread and fails closed unless required Athena MCP tools are present', async () => {
+  const audits = [];
+  const harness = createHarness({
+    desired: {
+      requiredMcpServer: { name: 'athena', requiredTools: ['mcp__athena__athena_search'] },
+      mcpAudit: { validate(value) { audits.push(value); } },
+    },
+  });
+  await startReady(harness);
+  const warm = harness.session.warmConversation('c1');
+  await completeThreadStart(harness, 'thread-warm');
+  await tick();
+  const config = harness.requests.findLast((entry) => entry.method === 'config/read');
+  respond(harness.child, { id: config.id, result: { config: {}, origins: {}, layers: [] } });
+  await tick();
+  const inventory = harness.requests.findLast((entry) => entry.method === 'mcpServerStatus/list');
+  respond(harness.child, {
+    id: inventory.id,
+    result: {
+      data: [{ name: 'athena', tools: [{ name: 'mcp__athena__athena_search' }] }],
+      nextCursor: null,
+    },
+  });
+  assert.deepEqual(await warm, { threadId: 'thread-warm' });
+  assert.equal(audits.length, 1);
+  assert.deepEqual(audits[0].servers.map((server) => server.name), ['athena']);
+
+  const missingHarness = createHarness({
+    desired: { requiredMcpServer: { name: 'athena', requiredTools: ['mcp__athena__athena_search'] } },
+  });
+  await startReady(missingHarness);
+  const missing = missingHarness.session.warmConversation('c1');
+  await completeThreadStart(missingHarness, 'thread-missing');
+  await tick();
+  const missingConfig = missingHarness.requests.findLast((entry) => entry.method === 'config/read');
+  respond(missingHarness.child, { id: missingConfig.id, result: { config: {}, origins: {}, layers: [] } });
+  await tick();
+  const missingInventory = missingHarness.requests.findLast((entry) => entry.method === 'mcpServerStatus/list');
+  respond(missingHarness.child, { id: missingInventory.id, result: { data: [], nextCursor: null } });
+  await assert.rejects(missing, (error) => error.code === 'CODEX_MCP_REQUIRED_SERVER_MISSING');
+});
+
+test('completed render_canvas MCP item emits normalized tool content and canvas result', async () => {
+  const harness = createHarness();
+  await startReady(harness);
+  const turn = harness.session.sendTurn({ conversationId: 'c1', turnId: 'a1', userText: 'chart' }, harness.turnContext());
+  await completeThreadStart(harness, 'thread-c1');
+  await tick();
+  const request = harness.requests.findLast((entry) => entry.method === 'turn/start');
+  respond(harness.child, { id: request.id, result: { turn: { id: 'provider-a1' } } });
+  respond(harness.child, {
+    method: 'item/started',
+    params: {
+      threadId: 'thread-c1', turnId: 'provider-a1',
+      item: { type: 'mcpToolCall', id: 'tool-1', name: 'mcp__athena__athena__render_canvas', arguments: {} },
+    },
+  });
+  respond(harness.child, {
+    method: 'item/completed',
+    params: {
+      threadId: 'thread-c1', turnId: 'provider-a1',
+      item: {
+        type: 'mcpToolCall', id: 'tool-1', name: 'mcp__athena__athena__render_canvas',
+        result: { content: [{ type: 'text', text: '{"canvas_type":"table","caption":"결과"}' }] },
+      },
+    },
+  });
+  respond(harness.child, {
+    method: 'turn/completed',
+    params: { turn: { id: 'provider-a1', threadId: 'thread-c1', status: 'completed' }, summary: '완료' },
+  });
+  await turn;
+  const completed = harness.events.find((event) => event.type === 'tool_completed');
+  assert.equal(completed.payload.content, '{"canvas_type":"table","caption":"결과"}');
+  const canvas = harness.events.find((event) => event.type === 'canvas_result');
+  assert.deepEqual(canvas.payload, {
+    toolUseId: 'tool-1', status: 'success',
+    envelope: { canvas_type: 'table', caption: '결과' },
+  });
 });
 
 test('failed turn recovers by forking at the last successful provider turn before next write', async () => {

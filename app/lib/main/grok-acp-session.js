@@ -4,6 +4,7 @@ const { spawn } = require('child_process');
 const { StreamJsonSession } = require('./stream-json-parser');
 const { terminateTree } = require('./proc-utils');
 const { getGrokBin } = require('./grok-bin');
+const { assertSessionStopsSucceeded } = require('./provider-session-shutdown');
 
 const DEFAULT_TIMEOUT_MS = 180_000;
 const DEFAULT_RPC_TIMEOUT_MS = 30_000;
@@ -174,6 +175,7 @@ class GrokAcpSession {
     this._stopped = false;
     this._nextId = 1;
     this._tail = Promise.resolve();
+    this._terminations = new Set();
   }
 
   snapshot() {
@@ -193,13 +195,40 @@ class GrokAcpSession {
     return result;
   }
 
+  async warm({ model = null, effort = null, identityKey = null, securityKey = null, resumeSessionId = null } = {}) {
+    const execute = async () => {
+      if (this._stopped) throw new Error('Grok ACP 세션이 종료됐다');
+      const config = { model: model || null, effort: effort || null, identityKey, securityKey };
+      let proc = this._proc;
+      if (proc && !proc.dead) {
+        if (this._compatible(proc, config, resumeSessionId)
+          || (resumeSessionId === null && proc.blankWarm && this._compatible(proc, config, proc.sessionId))) {
+          return this.snapshot();
+        }
+        if (proc.state !== 'idle') return this.snapshot();
+        this._failProcess(proc, new Error('Grok ACP 런타임 구성이 변경됐다'));
+      }
+      proc = await this._start(config, resumeSessionId, null);
+      proc.blankWarm = resumeSessionId === null;
+      return this.snapshot();
+    };
+    const result = this._tail.then(execute, execute);
+    this._tail = result.catch(() => {});
+    return result;
+  }
+
   stop(reason = new Error('Grok ACP 세션이 종료됐다')) {
     this._stopped = true;
     const proc = this._proc;
     const error = reason instanceof Error ? reason : new Error(String(reason || 'Grok ACP 세션이 종료됐다'));
     if (!error.code) error.code = 'ABORTED';
     if (proc && !proc.dead) this._failProcess(proc, error);
-    return this.snapshot();
+    const terminations = [...this._terminations];
+    return Promise.allSettled(terminations).then((results) => {
+      for (const pending of terminations) this._terminations.delete(pending);
+      assertSessionStopsSucceeded(results);
+      return this.snapshot();
+    });
   }
 
   close(reason) { return this.stop(reason); }
@@ -245,7 +274,9 @@ class GrokAcpSession {
     if (signal) signal.addEventListener('abort', onAbort, { once: true });
     let proc = this._proc;
     let spawnedFresh = false;
-    if (proc && !proc.dead && !this._compatible(proc, config, requestedLineage)) {
+    const reusableBlank = proc && requestedLineage === null && proc.blankWarm
+      && this._compatible(proc, config, proc.sessionId);
+    if (proc && !proc.dead && !reusableBlank && !this._compatible(proc, config, requestedLineage)) {
       this._failProcess(proc, new Error('Grok ACP 런타임 구성이 변경됐다'));
       proc = null;
     }
@@ -280,6 +311,7 @@ class GrokAcpSession {
     }
 
     proc.state = 'busy';
+    proc.blankWarm = false;
     const parser = new StreamJsonSession();
     const submittedAt = this._now();
     const active = {
@@ -564,8 +596,16 @@ class GrokAcpSession {
     if (this._proc === proc) this._proc = null;
     try {
       const operation = this._kill(proc.child);
-      if (operation && typeof operation.catch === 'function') operation.catch(() => {});
-    } catch { /* process already exited */ }
+      if (operation && typeof operation.then === 'function') {
+        const pending = Promise.resolve(operation);
+        this._terminations.add(pending);
+        pending.catch(() => {});
+      }
+    } catch (error) {
+      const pending = Promise.reject(error);
+      this._terminations.add(pending);
+      pending.catch(() => {});
+    }
   }
 
   _failure(reason, submitted, startedAt, extra = {}) {
