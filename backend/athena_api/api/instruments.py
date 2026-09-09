@@ -22,7 +22,7 @@ class ResolvedInstrument(BaseModel):
     code: str
     name: str
     market_code: str = Field(alias="marketCode")
-    kind: Literal["stock", "etf"]
+    kind: Literal["stock", "etf", "elw"]
 
 
 class InstrumentResolveResponse(BaseModel):

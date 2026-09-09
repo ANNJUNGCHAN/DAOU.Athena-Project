@@ -38,6 +38,7 @@ from athena_api.canvas_transform import (
     describe_unsupported_render_plan_kind,
     resolve_fixed_card_title,
     resolve_screen_render_contract,
+    screen_definition_for,
 )
 from athena_api.hydrate_defaults import (
     chain_for,
@@ -144,6 +145,13 @@ _LEGACY_PROJECTION_PUBLIC_LABELS = {
             for level in range(1, 11)
         },
     }
+}
+
+# ka10099 sometimes returns this undocumented extra alongside its reviewed
+# marketCode/marketName fields. Keep it in raw/source data, but do not invent a
+# product label for the generic table projection.
+_OPERATION_HIDDEN_PROJECTION_FIELDS = {
+    "base:ka10099": frozenset({"kind"}),
 }
 
 _INTEGRATED_CARD_FIELDS = frozenset(
@@ -332,6 +340,20 @@ def _apply_authoritative_public_labels(
     contracts_by_alias: dict[str, list[Any]] = {}
     for contract in get_semantic_presentation_registry().for_operation(operation_ref):
         contracts_by_alias.setdefault(contract.alias, []).append(contract)
+    definition = screen_definition_for(operation_ref) or {}
+    definition_data = definition.get("data")
+    excluded_aliases = (
+        definition_data.get("excluded_aliases", ())
+        if isinstance(definition_data, dict)
+        else ()
+    )
+    contract_excluded_fields = frozenset(
+        alias for alias in excluded_aliases if isinstance(alias, str)
+    )
+    hidden_projection_fields = (
+        _OPERATION_HIDDEN_PROJECTION_FIELDS.get(operation_ref, frozenset())
+        | contract_excluded_fields
+    )
     dropped: list[dict[str, str]] = []
 
     def relabel(items: Any, *, location: str, rows: Any = None) -> None:
@@ -344,6 +366,17 @@ def _apply_authoritative_public_labels(
                 continue
             key = item.get("key")
             if not isinstance(key, str):
+                continue
+            if key in hidden_projection_fields:
+                reason = (
+                    "screen-definition-excluded"
+                    if key in contract_excluded_fields
+                    else "undocumented-extra"
+                )
+                dropped.append(
+                    {"location": location, "key": key, "reason": reason}
+                )
+                dropped_keys.add(key)
                 continue
             label = labels.get(key)
             if label is None:
