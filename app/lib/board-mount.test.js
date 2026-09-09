@@ -8,7 +8,7 @@ const {
   collapsePlan, mountPlan, pairedGroups, nodeIndex, applyPlan, setHidden, isValueSlot,
   hoistLayout, applyResponsiveHooks, RESPONSIVE_REGIONS, HOISTED_PROPERTIES, primaryMountPoint,
   collapsePrimaryMockup, restorePrimaryMockup, collapseEmptyRows, collapseEmptyColumns,
-  markDeclaredScrollBox, isRelaxableRow, squeezedRow, watchSurfaceWidth,
+  markDeclaredScrollBox, isRelaxableRow, squeezedRow, watchSurfaceWidth, markPrimaryRows,
   createLatestBoardLoad, nextHydrationSlots,
   slotValueEntries, realtimeSlotIndex, updateRealtimeValue, pairedClosure, realtimePlan, applyRealtimeSlots,
   stateLinksFromMarks, stateControlActivationOwner, wireStateControlActivation,
@@ -1173,6 +1173,32 @@ test('폭 관찰자는 내부 clientWidth 진동을 무시하고 8회를 넘는 
     global.document = previous.document;
     global.getComputedStyle = previous.getComputedStyle;
   }
+});
+
+test('형제와 나란히 놓인 중첩 primary만 M 이하에서 쌓을 구조로 표시한다', () => {
+  const row = regionStub('', { display: 'flex' });
+  const first = regionStub('', { width: '540px' });
+  const second = regionStub('bs-primary', { width: '540px' });
+  first.parentElement = row;
+  second.parentElement = row;
+  row.children = [first, second];
+  const singleRow = regionStub('', { display: 'flex' });
+  const single = regionStub('bs-primary', { width: '540px' });
+  single.parentElement = singleRow;
+  singleRow.children = [single];
+  const surface = regionStub('board-surface', {});
+  row.parentElement = surface;
+  singleRow.parentElement = surface;
+  surface.children = [row, singleRow];
+
+  assert.equal(markPrimaryRows(surface), 1);
+  assert.equal(row.dataset.bsPrimaryRow, 'true');
+  assert.equal(singleRow.dataset.bsPrimaryRow, undefined);
+  assert.equal(markPrimaryRows(surface), 0, '두 번 표시하지 않는다');
+
+  const css = fs.readFileSync(path.join(__dirname, '..', 'styles', 'board-surface.css'), 'utf8');
+  assert.match(css, /@container board \(max-width: 959px\)[\s\S]*?\[data-bs-primary-row="true"\]\s*\{\s*flex-wrap:\s*wrap;/,
+    'M 이하에서 두 primary가 0px로 눌리지 않고 아래 줄로 쌓인다');
 });
 
 test('applyResponsiveHooks는 보드 루트·반응형 영역·영역 밖 고정 상자를 모두 훑는다', () => {

@@ -355,6 +355,10 @@
 @container board (max-width: 959px) {
   .bs-workspace { flex-wrap: wrap; }
   .bs-primary { width: 100%; flex-basis: 100%; flex-grow: 1; order: 1; }
+  /* 한 행 안의 중첩 primary도 위 100% 규칙을 받는다. 부모가 nowrap이면 뒤 섹션이
+   * 0px까지 눌려 끝 정렬 문구가 카드 왼쪽으로 샌다(3GRO-0 2분할). 형제와 나란히
+   * 놓인 중첩 primary 구조만 아래 줄로 쌓아 각 섹션의 Paper 의미와 전 항목을 보존한다. */
+  [data-bs-primary-row="true"] { flex-wrap: wrap; }
   /* 레일이 primary 아래로 내려가 한 줄을 통째로 쓰므로 L의 min-content 바닥은
    * 여기서 놓는다 — 안 놓으면 레일이 Paper 폭(실측 480·538px)으로 되살아나
    * 좁은 창에서 오히려 더 넘친다. */
