@@ -16,11 +16,21 @@ const {
   isLockedClick,
 } = require('./lib/live-full-catalog');
 const { captureRoot } = require('./lib/probe-captures');
+const { writeProbeModelPrefs } = require('./lib/probe-model-prefs');
 
 const PROFILE = process.env.ATHENA_USERDATA_DIR || path.join(__dirname, '.probe-live-full-profile');
 if (!process.env.ATHENA_USERDATA_DIR) {
   fs.rmSync(PROFILE, { recursive: true, force: true });
   fs.mkdirSync(PROFILE, { recursive: true });
+  // 프로필이 매번 새로 나므로 온보딩이 끝나 있지 않다 — 그러면 셸이 온보딩에 머물고
+  // 이 검사기는 첫 관문에서 「onboarding still visible」로 떨어진다(실측). 다른 프로브
+  // 67개가 쓰는 것과 같은 씨앗을 심는다. 이 검사기가 보려는 것은 온보딩이 아니라
+  // 그 뒤의 앱 화면·모드·질의다.
+  fs.writeFileSync(
+    path.join(PROFILE, 'athena-onboarding.json'),
+    JSON.stringify({ cliDone: true, accountDone: true }),
+  );
+  writeProbeModelPrefs(PROFILE);
 }
 app.setPath('userData', PROFILE);
 
