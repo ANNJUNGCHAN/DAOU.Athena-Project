@@ -6,6 +6,7 @@ const {
   buildMarketOrderDraft,
   runSelectorFastPath: runSelectorFastPathWithAccount,
 } = require('./selector-fast-path');
+const { StockEntityIndex } = require('./rest-dataset-runner');
 
 function runSelectorFastPath(options) {
   return runSelectorFastPathWithAccount({ backendAccountAlias: 'server-a', ...options });
@@ -404,10 +405,12 @@ test('closed market-order grammar dispatches guarded draft without execution', a
     intent: draft.intent,
     arguments: draft.arguments,
     orderDraft: draft,
+    deadlineMs: 10_000,
     fetchImpl: async (_url, options) => {
       const request = JSON.parse(options.body);
       assert.equal(request.intent, 'order');
       assert.deepEqual(request.arguments, draft.arguments);
+      assert.equal(request.deadline_ms, 3000);
       assert.equal(options.headers['X-Athena-Account'], 'server-a');
       assert.equal(options.redirect, 'error');
       return {
@@ -436,6 +439,32 @@ test('closed market-order grammar dispatches guarded draft without execution', a
   assert.equal(buildMarketOrderDraft('삼성전자 10주 매수해줘', index), null);
   assert.equal(buildMarketOrderDraft('삼성전자 10만원어치 매수해줘', index), null);
   assert.equal(buildMarketOrderDraft('삼성전자 100001주 매수해줘', index), null);
+});
+
+test('ETF 시장 종목은 현금 시장가 guarded draft로 만들고 다른 상품은 거부한다', () => {
+  const index = new StockEntityIndex();
+  index.replace([{ code: '069500', name: 'KODEX 200', market: '8' }]);
+
+  assert.deepEqual(buildMarketOrderDraft('KODEX 200 1주 시장가로 매수해줘', index), {
+    intent: 'order',
+    expectedOperationRef: 'base:kt10000',
+    arguments: { dmst_stex_tp: 'KRX', stk_cd: '069500', ord_qty: '1', trde_tp: '3' },
+    side: 'buy',
+  });
+  assert.equal(buildMarketOrderDraft('KODEX 1주 시장가로 매수해줘', index), null);
+
+  const ineligibleEntities = {
+    '금현물': { code: '000001', kind: 'gold', market: '80' },
+    'ELW 샘플': { code: '123456', kind: 'elw', market: '3' },
+  };
+  const ineligibleIndex = {
+    resolveQuery: (text) => ineligibleEntities[text] || null,
+    aliasesForEntity: (entity) => Object.entries(ineligibleEntities)
+      .filter(([, candidate]) => candidate === entity)
+      .map(([alias]) => alias),
+  };
+  assert.equal(buildMarketOrderDraft('금현물 1주 시장가로 매수해줘', ineligibleIndex), null);
+  assert.equal(buildMarketOrderDraft('ELW 샘플 1주 시장가로 매수해줘', ineligibleIndex), null);
 });
 
 test('explicit websocket acknowledgement paints the mapped family event card once', async () => {

@@ -463,6 +463,50 @@ def test_ambiguous_orderbook_question_without_an_assertion_still_asks(
         )
 
 
+def test_ambiguous_targetless_query_resolves_with_compatible_asserted_operation(
+    service: SelectorService,
+) -> None:
+    resolved = service.resolve(
+        ResolveRequest(
+            question="ELW등락율순위요청",
+            intent=DiscoveryIntent.QUERY,
+            preferred_ref="base:ka30009",
+            arguments={
+                "sort_tp": "1",
+                "rght_tp": "000",
+                "trde_end_skip": "1",
+            },
+        )
+    )
+
+    assert resolved.operation_ref == "base:ka30009"
+    assert resolved.selection_reasons == [ReasonCode.PREFERRED_STRUCTURED_ASSERTION]
+
+
+def test_ambiguous_targetless_query_without_or_with_incompatible_assertion_still_asks(
+    service: SelectorService,
+) -> None:
+    request = {
+        "question": "ELW등락율순위요청",
+        "intent": DiscoveryIntent.QUERY,
+        "arguments": {
+            "sort_tp": "1",
+            "rght_tp": "000",
+            "trde_end_skip": "1",
+        },
+    }
+
+    with pytest.raises(AmbiguousOperationError):
+        service.resolve(ResolveRequest(**request))
+    with pytest.raises(AmbiguousOperationError):
+        service.resolve(
+            ResolveRequest(
+                **request,
+                preferred_ref="base:ka10081",
+            )
+        )
+
+
 @pytest.mark.parametrize(
     "case",
     tuple(case for case in RESOLVE_CASES if case["id"] in SEMANTIC_AMBIGUITY_CASE_IDS),

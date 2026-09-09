@@ -21,9 +21,15 @@ from athena_api.kiwoom import RequestOptions
 from athena_api.kiwoom.return_codes import normalize_return_code
 from athena_api.routing_contract import EntityKind
 
-IDENTITY_MARKETS: tuple[str, ...] = ("0", "10", "8")
+IDENTITY_MARKETS: tuple[str, ...] = ("0", "10", "8", "3")
+_LEGACY_IDENTITY_MARKETS = frozenset({"0", "10", "8"})
 IDENTITY_MARKET_KINDS: Mapping[str, EntityKind] = MappingProxyType(
-    {"0": EntityKind.STOCK, "10": EntityKind.STOCK, "8": EntityKind.ETF}
+    {
+        "0": EntityKind.STOCK,
+        "10": EntityKind.STOCK,
+        "8": EntityKind.ETF,
+        "3": EntityKind.ELW,
+    }
 )
 
 _AMBIGUOUS_CONTEXT = re.compile(
@@ -31,7 +37,10 @@ _AMBIGUOUS_CONTEXT = re.compile(
     r"(?=$|[^0-9a-z]))",
     re.IGNORECASE,
 )
-_EXPLICIT_CODE = re.compile(r"(?<!\d)(\d{6})(?!\d)")
+_EXPLICIT_CODE = re.compile(
+    r"(?<![0-9A-Z])(?=[0-9A-Z]{0,5}\d)([0-9A-Z]{6})(?![0-9A-Z])",
+    re.IGNORECASE,
+)
 _IDENTITY_CHAR = re.compile(r"[0-9a-z가-힣]", re.IGNORECASE)
 _PARTICLE = r"(?:'s|의|가|이|은|는|을|를|와|과|에서|으로|에|로)?"
 
@@ -94,17 +103,27 @@ def build_identity_snapshot(
     market_records: Mapping[str, Iterable[Mapping[str, Any]]],
 ) -> InstrumentIdentitySnapshot:
     """Validate all reviewed markets and build one complete candidate set."""
-    if set(market_records) != set(IDENTITY_MARKETS):
-        raise ValueError("instrument identity refresh requires markets 0, 10, and 8")
+    provided_markets = set(market_records)
+    if (
+        provided_markets != set(IDENTITY_MARKETS)
+        and provided_markets != set(_LEGACY_IDENTITY_MARKETS)
+    ):
+        raise ValueError("instrument identity refresh has an invalid reviewed market set")
     candidates: defaultdict[str, set[_IdentityRecord]] = defaultdict(set)
     aliases: defaultdict[str, set[str]] = defaultdict(set)
-    for requested_market in IDENTITY_MARKETS:
+    for requested_market in market_records:
         for item in market_records[requested_market]:
-            code = str(item.get("code") or "").strip()
+            code = str(item.get("code") or "").strip().upper()
             name = str(item.get("name") or "").strip()
             market = str(item.get("marketCode") or item.get("market_code") or "").strip()
             kind = IDENTITY_MARKET_KINDS.get(market)
-            if kind is None or not re.fullmatch(r"\d{6}", code) or not name:
+            valid_code = (
+                re.fullmatch(r"[0-9A-Z]{6}", code) is not None
+                and any(character.isdigit() for character in code)
+                if market == "3"
+                else re.fullmatch(r"\d{6}", code) is not None
+            )
+            if kind is None or not valid_code or not name:
                 continue
             candidates[code].add(_IdentityRecord(code, name, market, kind))
 
@@ -176,23 +195,53 @@ class InstrumentIdentityIndex:
     def _initialize_connection(self, connection: sqlite3.Connection) -> None:
         if self._memory_connection is None:
             connection.execute("PRAGMA journal_mode=WAL")
-        connection.executescript(
-            """
+        connection.execute("BEGIN IMMEDIATE")
+        with connection:
+            existing = connection.execute(
+                "SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'instruments'"
+            ).fetchone()
+            if existing is None:
+                connection.execute(
+                    """
                 CREATE TABLE IF NOT EXISTS instruments (
                     code TEXT PRIMARY KEY,
                     name TEXT NOT NULL,
                     normalized_name TEXT NOT NULL,
                     market_code TEXT NOT NULL,
-                    kind TEXT NOT NULL CHECK (kind IN ('stock', 'etf'))
-                );
-                CREATE INDEX IF NOT EXISTS instruments_normalized_name_idx
-                    ON instruments(normalized_name);
+                    kind TEXT NOT NULL CHECK (kind IN ('stock', 'etf', 'elw'))
+                )
+                    """
+                )
+            elif "'elw'" not in str(existing[0]).casefold():
+                connection.execute(
+                    """
+                    CREATE TABLE instruments_with_elw (
+                        code TEXT PRIMARY KEY,
+                        name TEXT NOT NULL,
+                        normalized_name TEXT NOT NULL,
+                        market_code TEXT NOT NULL,
+                        kind TEXT NOT NULL CHECK (kind IN ('stock', 'etf', 'elw'))
+                    )
+                    """
+                )
+                connection.execute(
+                    "INSERT INTO instruments_with_elw "
+                    "SELECT code, name, normalized_name, market_code, kind FROM instruments"
+                )
+                connection.execute("DROP TABLE instruments")
+                connection.execute("ALTER TABLE instruments_with_elw RENAME TO instruments")
+            connection.execute(
+                "CREATE INDEX IF NOT EXISTS instruments_normalized_name_idx "
+                "ON instruments(normalized_name)"
+            )
+            connection.execute(
+                """
                 CREATE TABLE IF NOT EXISTS instrument_metadata (
                     key TEXT PRIMARY KEY,
                     value TEXT NOT NULL
-                );
-            """
-        )
+                )
+                """
+            )
 
     @property
     def snapshot(self) -> InstrumentIdentitySnapshot:
@@ -322,7 +371,7 @@ class InstrumentIdentityIndex:
         text = unicodedata.normalize("NFKC", str(question)).casefold()
         if not text or _AMBIGUOUS_CONTEXT.search(text):
             return None
-        explicit_codes = set(_EXPLICIT_CODE.findall(text))
+        explicit_codes = {code.upper() for code in _EXPLICIT_CODE.findall(text)}
         if len(explicit_codes) > 1:
             return None
         normalized_question = _normalize_identity(text)

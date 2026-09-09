@@ -67,7 +67,7 @@ def _service() -> SelectorService:
         {
             "0": [{"code": "005930", "name": "삼성전자", "marketCode": "0"}],
             "10": [],
-            "8": [],
+            "8": [{"code": "069500", "name": "KODEX 200", "marketCode": "8"}],
         }
     )
     return SelectorService(
@@ -136,6 +136,47 @@ def test_query_resolves_once_and_returns_the_inline_card_in_one_request() -> Non
     _assert_no_plan_token(body)
 
 
+def test_gold_quote_dispatch_excludes_transport_metadata_from_facts() -> None:
+    data = DataSpy(
+        {
+            "return_code": 0,
+            "return_msg": "정상적으로 처리되었습니다",
+            "pred_pre_sig": "2",
+            "pred_pre": "+1370",
+            "flu_rt": "+0.72",
+            "trde_qty": "4312",
+            "open_pric": "+190200",
+            "high_pric": "+192500",
+            "low_pric": "+189800",
+            "pred_rt": "+0.72",
+            "upl_pric": "+248400",
+            "lst_pric": "+133800",
+            "pred_close_pric": "191170",
+        }
+    )
+    with _client(_service(), data) as client:
+        response = client.post(
+            "/api/v1/selector/dispatch",
+            json={
+                "question": "금 99.99 1kg 현재가 알려줘",
+                "intent": "query",
+                "preferred_ref": "base:ka50100",
+                "arguments": {"stk_cd": "M04020000"},
+                "deadline_ms": 3000,
+            },
+        )
+
+    assert response.status_code == 200, response.text
+    body = response.json()
+    assert body["status"] == "rendered"
+    assert body["operation_ref"] == "base:ka50100"
+    fields = {field["key"]: field for field in body["envelope"]["data"]["fields"]}
+    assert "return_code" not in fields
+    assert "return_msg" not in fields
+    assert fields["pred_close_pric"]["label"] == "전일종가"
+    assert fields["pred_close_pric"]["value"] == "191170"
+
+
 def test_order_returns_only_a_burned_sanitized_draft_without_execution() -> None:
     service = _service()
     data = DataSpy()
@@ -183,6 +224,40 @@ def test_order_returns_only_a_burned_sanitized_draft_without_execution() -> None
     assert data.calls == []
     assert order.calls == []
     _assert_no_plan_token(response.json())
+
+
+def test_etf_cash_order_resolves_to_guarded_stock_buy_without_execution() -> None:
+    service = _service()
+    data = DataSpy()
+    order = OrderSpy()
+    with _client(service, data, order=order) as client:
+        response = client.post(
+            "/api/v1/selector/dispatch",
+            json={
+                "question": "KODEX 200 1주 시장가로 매수해줘",
+                "intent": "order",
+                "arguments": {
+                    "dmst_stex_tp": "KRX",
+                    "stk_cd": "069500",
+                    "ord_qty": "1",
+                    "trde_tp": "3",
+                },
+            },
+        )
+
+    assert response.status_code == 200, response.text
+    body = response.json()
+    assert body["status"] == "guarded"
+    assert body["operation_ref"] == "base:kt10000"
+    assert body["order_draft"] == {
+        "dmst_stex_tp": "KRX",
+        "stk_cd": "069500",
+        "ord_qty": "1",
+        "trde_tp": "3",
+    }
+    assert data.calls == []
+    assert order.calls == []
+    _assert_no_plan_token(body)
 
 
 def test_websocket_executes_only_with_explicit_intent_and_uses_only_ws_client() -> None:

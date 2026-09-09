@@ -214,6 +214,26 @@ def test_gold_orders_preserve_gold_product_entity() -> None:
         )
 
 
+def test_cash_stock_orders_allow_etf_without_widening_credit_gold_or_elw() -> None:
+    for tr_id in ("kt10000", "kt10001"):
+        routing = ROUTING_REGISTRY[f"base:{tr_id}"]
+        assert routing.entity_kinds == (
+            EntityKind.ORDER,
+            EntityKind.ACCOUNT,
+            EntityKind.STOCK,
+            EntityKind.ETF,
+        )
+        assert EntityKind.ELW not in routing.entity_kinds
+        assert EntityKind.GOLD not in routing.entity_kinds
+
+    assert EntityKind.ETF not in ROUTING_REGISTRY["base:kt10006"].entity_kinds
+    assert ROUTING_REGISTRY["base:kt50000"].entity_kinds == (
+        EntityKind.ORDER,
+        EntityKind.ACCOUNT,
+        EntityKind.GOLD,
+    )
+
+
 def test_stock_fill_routing_keeps_stream_identity_without_rest_quote_intent() -> None:
     routing = ROUTING_REGISTRY["base:0B"]
     assert routing.subject is RoutingSubject.INSTRUMENT

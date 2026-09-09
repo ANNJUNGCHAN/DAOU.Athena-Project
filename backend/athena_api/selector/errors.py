@@ -77,6 +77,18 @@ class PlanAlreadyUsedError(InvalidPlanError):
     code = "PLAN_ALREADY_USED"
 
 
+class QueryPlanRequiredError(SelectorError):
+    """A query-only execution surface received a non-query signed plan."""
+
+    code = "QUERY_PLAN_REQUIRED"
+
+
+class OrderTicketRequiredError(QueryPlanRequiredError):
+    """An order plan must return to the human-confirmed order-ticket path."""
+
+    code = "ORDER_TICKET_REQUIRED"
+
+
 class ReplayStateCapacityError(SelectorError):
     """Replay protection is full of unexpired nonces, so dispatch must stop."""
 
