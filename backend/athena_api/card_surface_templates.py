@@ -24,6 +24,8 @@ from pathlib import Path
 from types import MappingProxyType
 from typing import Any
 
+from athena_api.mock_unsupported import is_mock_unsupported
+
 BACKEND = Path(__file__).resolve().parents[1]
 TEMPLATE_ROOT = BACKEND / "ref" / "card-surface-templates"
 
@@ -164,6 +166,9 @@ class SurfaceSlot:
     # 이 값은 그 확장이 어느 열에서 나왔는지를 잃지 않으려고 그대로 보존한다.
     f_pattern: str | None
     table: TableCell | None
+    # 모의투자가 거절하는 TR 만 가리키던 값 자리. 바인딩을 걷어낸 뒤 빈 칸으로
+    # 두고, 그 줄·칸은 접는다 — 「미제공」으로 남기지 않는다.
+    omitted_unsupported: bool
 
     @property
     def binds_a_field(self) -> bool:
@@ -611,7 +616,10 @@ class CardSurfaceRegistry:
         ]
 
     def _operation_coverage_problems(self, universe: SurfaceUniverse) -> list[str]:
-        missing = sorted(universe.operation_refs - self.by_operation.keys())
+        required = {
+            ref for ref in universe.operation_refs if not is_mock_unsupported(ref)
+        }
+        missing = sorted(required - self.by_operation.keys())
         if missing:
             return [
                 f"{len(missing)} operations have no board (first: {missing[0]!r})"
@@ -837,6 +845,69 @@ def _parse_slot(
         raise CardSurfaceTemplateError(
             f"board {board_id!r} slot {slot_id!r} f_pattern must be a string"
         )
+    omitted_unsupported = False
+    if composite is not None:
+        kept_parts = tuple(
+            part for part in composite.parts if not is_mock_unsupported(part.mapping_id)
+        )
+        if len(kept_parts) == 0:
+            composite = None
+            omitted_unsupported = kind == "value"
+        elif len(kept_parts) == 1:
+            part = kept_parts[0]
+            mapping_id = part.mapping_id
+            alias = part.f
+            slot_format = dict(part.format)
+            json_path = part.json_path
+            declared_occurrence_id = part.declared_occurrence_id
+            composite = None
+        else:
+            composite = SlotComposite(separator=composite.separator, parts=kept_parts)
+    if mapping_id and is_mock_unsupported(mapping_id):
+        supported_alts = tuple(
+            alt for alt in alt_mappings if not is_mock_unsupported(alt.mapping_id)
+        )
+        if supported_alts:
+            promoted = supported_alts[0]
+            mapping_id = promoted.mapping_id
+            alias = promoted.f
+            json_path = promoted.json_path
+            declared_occurrence_id = promoted.declared_occurrence_id
+            alt_mappings = supported_alts[1:]
+        else:
+            mapping_id = None
+            alias = None
+            json_path = None
+            declared_occurrence_id = None
+            alt_mappings = ()
+            omitted_unsupported = omitted_unsupported or kind == "value"
+    else:
+        alt_mappings = tuple(
+            alt for alt in alt_mappings if not is_mock_unsupported(alt.mapping_id)
+        )
+    # 비중·수익률 칸이 평가액 같은 금액 필드로 떨어지면 수백만 % 가 된다.
+    if _percent_format(slot_format):
+        alt_mappings = tuple(
+            alt for alt in alt_mappings if not _amount_like_field(alt.f)
+        )
+        if mapping_id and _amount_like_field(alias):
+            compatible = tuple(
+                alt for alt in alt_mappings if not _amount_like_field(alt.f)
+            )
+            if compatible:
+                promoted = compatible[0]
+                mapping_id = promoted.mapping_id
+                alias = promoted.f
+                json_path = promoted.json_path
+                declared_occurrence_id = promoted.declared_occurrence_id
+                alt_mappings = compatible[1:]
+            else:
+                mapping_id = None
+                alias = None
+                json_path = None
+                declared_occurrence_id = None
+                alt_mappings = ()
+                omitted_unsupported = omitted_unsupported or kind == "value"
     if f_pattern is None and alias and index_patterns:
         # 지시 열은 패턴을 열에 적고 셀에는 편 이름만 남긴다 — 여기서 다시 잇는다.
         # 열의 mapping과 다른 op를 무는 셀(한 열에 이름·코드를 같이 그린 자리)은
@@ -888,7 +959,20 @@ def _parse_slot(
         composite=composite,
         f_pattern=f_pattern,
         table=_parse_table_cell(slot.get("table"), board_id, slot_id),
+        omitted_unsupported=omitted_unsupported,
     )
+
+
+def _percent_format(slot_format: Mapping[str, Any] | None) -> bool:
+    if not slot_format:
+        return False
+    return slot_format.get("unit") == "percent" or slot_format.get("kind") == "percent"
+
+
+def _amount_like_field(alias: str | None) -> bool:
+    if not alias:
+        return False
+    return alias.endswith("_amt")
 
 
 def _occurrence_json_path(occurrence_id: str | None) -> str:
@@ -1240,6 +1324,7 @@ def _parse_board(board_dir: Path, declared_board_id: str) -> BoardTemplate:
         raise CardSurfaceTemplateError(
             f"board {board_id!r} operation_refs must be non-empty strings"
         )
+    operation_refs = [ref for ref in operation_refs if not is_mock_unsupported(ref)]
     raw_state = payload.get("state") or {"kind": "default"}
     state_map = _require_mapping(raw_state, f"board {board_id!r} state")
     kind = state_map.get("kind", "default")

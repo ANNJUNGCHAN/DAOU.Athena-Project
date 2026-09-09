@@ -1,0 +1,18 @@
+{
+  "version": "mock-unsupported-trs.v1",
+  "description": "키움 모의투자가 거절하는 조회 TR. 이 제품은 모의 계좌만 쓰므로 이 TR이 제공하는 값은 카드에 바인딩하지 않는다. 실측: docs/reference/2026-09-09-mock-unsupported-apis.md",
+  "trs": [
+    "ka01690",
+    "kt00002",
+    "kt00005",
+    "kt00012",
+    "kt00015",
+    "kt00016",
+    "kt00017",
+    "kt20016",
+    "kt20017",
+    "kt50020",
+    "kt50021",
+    "kt50032"
+  ]
+}

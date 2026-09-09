@@ -305,7 +305,9 @@ def _empty_rows(
 
     rows: dict[tuple[str, str, int | str], list[str]] = {}
     bound_rows: set[tuple[str, str, int | str]] = set()
-    for slot in board.binding_slots:
+    for slot in board.slots:
+        if slot.kind != "value" and not slot.omitted_unsupported:
+            continue
         key = _row_key(slot)
         if key is None:
             continue
@@ -530,6 +532,10 @@ def _board_contract(
     unbound_slots: list[str] = []
     empty_value_slots: list[str] = []
     for slot in board.slots:
+        if slot.omitted_unsupported and not slot.binds_a_field:
+            # 모의투자가 거절하는 TR 만 가리키던 값. 빈 칸이고 결측어가 아니다.
+            empty_value_slots.append(slot.slot_id)
+            continue
         if not slot.binds_a_field:
             # 보드 HTML이 이미 갖고 있는 고정 문구(라벨)다 — 채울 값이 없다.
             unbound_slots.append(slot.slot_id)
