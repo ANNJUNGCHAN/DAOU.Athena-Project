@@ -80,7 +80,8 @@ function kiwoomWireNumber(value) {
   if (typeof value !== 'string') return null;
   const text = value.trim().replace(/,/g, '');
   if (!text) return null;
-  if (/^\d{6}$/.test(text)) return null;
+  // 앞 0이 있는 6자리는 종목코드(005930). 앞 0이 없는 6자리(269500)는 가격이다.
+  if (/^0\d{5}$/.test(text)) return null;
   if (/^0{6,}$/.test(text)) return { empty: true };
   // 키움 순매수는 `--2860591`처럼 부호를 두 번 붙인다. 한 개의 [+-]만 받으면
   // 파싱이 실패해 생문자가 화면에 남는다.
@@ -196,6 +197,21 @@ function kindOf(spec) {
   return RENDER_KIND.includes(token) ? token : 'text';
 }
 
+function keepAsStockCode(text, spec) {
+  if (typeof text !== 'string') return false;
+  const trimmed = text.trim();
+  if (!/^\d{6}$/.test(trimmed)) return false;
+  const field = spec && (spec.f || spec.field);
+  if (typeof field === 'string' && /(_cd|_code)$/.test(field)) return true;
+  const kor = spec && spec.kor;
+  if (typeof kor === 'string' && kor.includes('코드')) return true;
+  if (trimmed.startsWith('0')) return true;
+  const kind = spec ? kindOf(spec) : 'text';
+  if (kind === 'number' || kind === 'korean' || kind === 'percent') return false;
+  if (spec && (DERIVED_TONE.includes(spec.tone) || spec.sign)) return false;
+  return typeof field === 'string' && !/(prc|pric|qty|amt|bid|ask)$/.test(field);
+}
+
 // 수량 접미(주·건)는 숫자로 읽힌 값에만 붙인다. '상한가'처럼 숫자가 아닌 원문에
 // 붙이면 없는 단위를 지어내는 것이 된다.
 function suffixOf(spec) {
@@ -274,6 +290,13 @@ function formatSlot(format, raw) {
 
   const kind = kindOf(spec);
   const scale = SCALE_FACTOR[spec.scale] || 1;
+  if (typeof normalized.value === 'string' && keepAsStockCode(normalized.value, spec)) {
+    return applyAffixes(spec, {
+      text: String(normalized.value).trim(),
+      tone: toneFor(spec, normalized.value),
+      missing: false,
+    });
+  }
   const wire = kiwoomWireNumber(normalized.value);
   if (wire && wire.empty) {
     return { text: '', tone: null, missing: false };

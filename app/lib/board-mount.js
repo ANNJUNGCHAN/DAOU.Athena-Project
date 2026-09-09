@@ -154,7 +154,12 @@ function mountPlan(contract, values, options = {}) {
       ? { text: override, tone: null, missing: false }
       : (staticText !== null
         ? { text: staticText, tone: null, missing: false }
-        : boardFormat.formatSlot(slot.format, bound));
+        : boardFormat.formatSlot(
+          slot.format
+            ? { ...slot.format, f: slot.f, kor: slot.kor }
+            : { f: slot.f, kor: slot.kor },
+          bound,
+        ));
     assignments.push({
       slotId: slot.slot_id,
       node,
