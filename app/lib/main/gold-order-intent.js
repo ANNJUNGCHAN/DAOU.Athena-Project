@@ -56,14 +56,10 @@ function productFrom(text) {
 }
 
 function quantityFrom(text) {
-  const match = text.match(/(?:^|\s)(\d{1,9})\s*(?:개|주)(?:로|으로)?(?:\s|$|[.!?])/u);
-  let raw = match && match[1];
-  if (!raw) {
-    const gramMatches = [...text.matchAll(/(?:^|\s)(\d{1,9})\s*g(?:로|으로)?(?:\s|$|[.!?])/gu)];
-    const gramMatch = gramMatches[gramMatches.length - 1];
-    raw = gramMatch && gramMatch[1];
-    if (raw === '100' && /미니\s*금/u.test(text) && gramMatches.length === 1) raw = null;
-  }
+  const gramMatches = [...text.matchAll(/(?:^|\s)(\d{1,9})\s*(?:g|그램)(?:로|으로)?(?:\s|$|[.!?])/gu)];
+  const gramMatch = gramMatches[gramMatches.length - 1];
+  let raw = gramMatch && gramMatch[1];
+  if (raw === '100' && /미니\s*금/u.test(text) && gramMatches.length === 1) raw = null;
   if (!raw) return null;
   const quantity = Number(raw);
   return Number.isSafeInteger(quantity) && quantity >= 1 && quantity <= 100000
@@ -93,7 +89,7 @@ function isProductSelection(text) {
 }
 
 function isQuantitySelection(text) {
-  return /^(?:수량(?:은|을)?\s*)?\d{1,9}\s*(?:g|개|주)(?:\s*(?:로|으로)?\s*(?:선택|변경)?(?:해\s*줘)?)?[.!?]?$/u.test(text);
+  return /^(?:수량(?:은|을)?\s*)?\d{1,9}\s*(?:g|그램|개|주)(?:\s*(?:로|으로)?\s*(?:선택|변경)?(?:해\s*줘)?)?[.!?]?$/u.test(text);
 }
 
 function isOrderTypeCorrection(text) {
