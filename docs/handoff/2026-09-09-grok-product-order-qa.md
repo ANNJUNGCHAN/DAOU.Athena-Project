@@ -1,29 +1,27 @@
 # 모의 상품별 주문 QA 원장 — 2026-09-09 Grok 재개
 
-이 문서는 `codex/grok-handoff-20260909`를 **이 PC·이 체크아웃**에서 재개한 검증 원장이다.
+이 문서는 `codex/grok-handoff-20260909`를 **이 PC**에서 재개한 검증 원장이다.
 이전 PC의 접수 시각·스크린샷·`CARD-API-SWEEP.json`은 여기의 성공 증거가 아니다.
 API 키·토큰·계좌 원문·암호화된 자격 블롭은 기록하지 않는다.
 
-기준 HEAD(작업 시작): `b8dbce1a` (`chore(handoff): 현재 작업 전체를 Grok 인수인계 스냅샷으로 보존한다`).
-앱 단위 테스트 보강만 이 세션에서 추가했다. 편집기·백테스트·카드 작업 파일은 되돌리지 않았다.
+앱 단위 테스트·티켓 재표시 수정·라이브 채팅 프로브를 이 세션에서 추가했다.
+편집기·백테스트·카드 작업 파일은 되돌리지 않았다. `backend/.env`는 gitignore이며 커밋하지 않는다.
 
 ## 1. 이 환경에서 확인한 것 / 확인하지 않은 것
 
 | 범위 | 이 환경 |
 |---|---|
 | 브랜치 | `codex/grok-handoff-20260909` |
-| 이 체크아웃 `backend/.env` | 없음. example은 `ATHENA_ENABLE_ORDER_API=false`, cash-only 예시 |
-| 모의 주문 조회·접수·체결 | **불가** (인증 없음). 기존 005930/069500을 재전송하지 않음 |
-| 금현물 세 문장 → 차단 티켓 | **확인** (단위 테스트 + Electron 프로브 2회) |
-| 금현물 시장가 실행 차단 | **유지**. 빈 단가를 시장가로 보내지 않음. 매매구분 코드를 만들지 않음 |
+| 모의 키 | 로컬 gitignore `.env`로 조회만. `ATHENA_ENABLE_ORDER_API=false`. 베이스 URL은 mockapi.kiwoom.com |
+| 이 체크아웃 백엔드 8011 | 자격 잠금 충돌로 기동 실패. 다른 로컬 Athena 백엔드가 같은 모의 계정을 점유 |
+| 주문 조회 | 점유 중인 8010으로 조회만. 주문 TR은 호출하지 않음 |
+| 금현물 세 문장 라이브 채팅 | **확인** (첫 문장 티켓 → 단가 시장가 갱신 → 숨긴 뒤 `티켓이 안보여` 재표시) |
+| 금현물 시장가 실행 차단 | **유지**. 공식 `kt50000.trde_tp`는 `00` 보통 / `10` IOC / `20` FOK뿐. 시장가 코드 없음 |
 | 실계좌 주문 | 하지 않음 |
 | 금/ELW 접수·체결 | 완료로 주장하지 않음 |
-| 카드 전수·실시간 스윕 | 모의 백엔드 없음. 실행하지 않음. 이전 「결측 0」은 철회된 기록 |
-| 라이브 채팅 세 문장 | 실행 중인 앱 없음. 금 주문 경로는 모델 호출 0의 로컬 가로채기 |
+| 카드 전수 스윕 | 이 체크아웃 소스가 8010을 못 잡음. 이전 「결측 0」은 철회된 기록 |
 
-남은 외부 제한: 이 체크아웃용 모의 `backend/.env`(키·계좌 권한), 금현물 주문 스코프, 공식 시장가 매매구분 계약, 장중 여부, 라이브 Electron 채팅 세션.
-
-## 2. 금현물 티켓 (세 문장)
+## 2. 금현물 티켓 (세 문장, 라이브 채팅)
 
 입력:
 
@@ -33,73 +31,71 @@ API 키·토큰·계좌 원문·암호화된 자격 블롭은 기록하지 않�
 
 | 항목 | 결과 |
 |---|---|
-| 상품 | `금 99.99_1kg` (1kg, 100g 아님). 코드 `M04020000` |
-| 수량 | `1`, 단위 `g` |
-| 주문 유형 | 시장가 요청 |
-| 모달 | 실제 표시 `visible=true` |
-| 실행 | `execution_supported=false`, 구매 버튼 disabled |
-| 제한 사유 | 금현물 주문 API에서 시장가 매매구분 코드가 확인되지 않아 실행할 수 없습니다 |
-| 주문 본문 | `trde_tp` 없음. 빈 `ord_uv`를 시장가로 전송하지 않음. `buildOrderPayload` 예외 |
-| 계좌/수량/실행 호출 | 각 0 |
+| 1문장 | 모달 visible. 상품 `금 99.99_1kg`, qty `1`, unit `g`. 유형 미지정 · 실행 불가 |
+| 2문장 | 같은 모달이 시장가 요청 · 실행 불가로 갱신. 차단 사유는 시장가 매매구분 코드 미확인 |
+| 3문장 | 모달을 숨긴 뒤 같은 차단 초안으로 다시 표시 |
+| 실행 | 구매 버튼 disabled. 계좌/수량/실행 호출 0 |
+| 주문 본문 | `trde_tp` 없음. 빈 `ord_uv`를 시장가로 전송하지 않음 |
 
-근거:
+근거: `app/probe-gold-chat-ticket.js` Electron 실행 exit 0 · `ok: true`. 단위 테스트 52 pass. 공식 계약은 `backend/athena_api/generated/models.py` `Kt50000Request.trde_tp`.
 
-- `node --test lib/main/gold-order-intent.test.js lib/order-ticket.test.js` → 49 pass / 0 fail. 세 문장은 `resolveGoldOrderTurn` → `buildSelectorOrderPrefill` → `createTicket` → `buildOrderPayload` 거절까지 같은 초안을 유지한다. `main.js` 금 주문 분기는 `athena:selector-order-draft`만 보내고 계좌·수량·실행 IPC를 부르지 않는다.
-- Electron 프로브 2회 (`app/node_modules/electron/dist/electron.exe app/probe-gold-order-ticket.js`), 둘 다 exit 0 · `ok: true`. 타임스탬프(로컬) 2026-09-09 20:51:29, 20:51:42. 상품 행에 `금 99.99_1kg`, qty `1`, unit `g`, 읽기값 `시장가 요청 · 실행 불가`, 차단 문구에 시장가 매매구분, `accountList`/`ticketCapacity`/`orderExecute` = 0.
-- `app/main.js`의 라이브 질의는 금 주문 초안을 모델보다 먼저 처리하고 `athena:selector-order-draft`만 보낸다 (`modelCalls: 0`). 계정 조회·주문 실행 IPC를 이 분기에서 부르지 않는다.
+차단을 해제하지 않았다. 시장가 매매구분 코드를 만들지 않았다.
 
-차단을 해제하지 않았다. 시장가 매매구분 코드를 추정하지 않았다.
+## 3. 재현한 코드 버그 — 후속 초안이 열린 티켓을 갱신하지 않음
 
-## 3. 상품별 QA
+증상: 라이브 채팅 1문장에서 티켓이 열린 뒤 `단가 시장가`와 `티켓이 안보여`는 대화 답변만 나오고 모달이 그대로이거나 숨긴 채 다시 안 떴다. IPC 단발 프로브는 닫힌 상태에서 초안을 한 번만 보내 이 경로를 놓쳤다.
+
+원인: `openOrderTicket`이 `orderOpen`이면 즉시 return.
+
+수정: `orderTicket.canPresentOrderTicket`은 이미 열린 티켓을 막지 않는다. 후속 초안은 다시 그리고 `hidden=false`로 표시한다.
+
+회귀: `app/lib/order-ticket.test.js`, `app/probe-gold-chat-ticket.js`.
+
+## 4. 상품별 QA
 
 분류 값: 접수 / 체결 / 불명 / 미지원.
 원인 값: API 미지원 / 인증 / 휴장 / 공란 / 코드 버그.
-HTTP 200이나 모델 완료 문구만으로 접수·체결·화면 표시를 확정하지 않는다.
+HTTP 200이나 모델 완료 문구만으로 접수·체결·화면 표시를 확정하지 않는다. 빈 목록은 접수가 아니다.
 
-| 상품 | 이번 환경 | 이전 세션 주장 (재검증 아님) | 원인 |
-|---|---|---|---|
-| 주식 005930 | 조회 안 함. 재전송 안 함 | 2026-09-09 14:29:53 모의 1주 접수번호. 체결 미확인 | **인증** (이 체크아웃에 모의 키 없음) |
-| ETF 069500 | 조회 안 함. 재전송 안 함 | 15:30:55 1주 시도는 접수 미확정·불명. 자동 재시도 금지 | **인증** + 이전 결과 **불명** |
-| 금현물 | 티켓 표시·실행 차단 확인. 접수/체결 없음 | 동일 | **API 미지원** (시장가 매매구분 미확정). 장중·공란은 실행을 시도하지 않아 미판정 |
-| ELW | 조회 안 함. 주문 안 함 | 종목 식별·조회만 이전 세션. 접수/체결 없음 | **인증**. 모의 주문 지원 여부는 이번 환경에서 미확인 |
+| 상품 | 이번 환경 | 원인 |
+|---|---|---|
+| 주식 005930 | 미체결·체결·당일 주문내역 조회 HTTP 200 / `return_code` 0. 행 0. `kt00007` 메시지 `모의투자 해당조회내역이 없습니다.` 재전송 안 함. 이전 PC 접수번호는 재확인되지 않음 | **공란** |
+| ETF 069500 | 동일. 종목 지정 조회도 행 0. 재전송 안 함 | **공란**. 이전 결과 **불명**은 그대로 두고 재시도하지 않음 |
+| 금현물 | 라이브 티켓 표시·실행 차단 확인. 접수/체결 없음. 공식 매매구분은 보통/IOC/FOK | **API 미지원** (시장가 매매구분 없음) |
+| ELW | 식별 단위 테스트는 기존. 점유 8010에서 `ka30012` HTTP 404 (이 체크아웃 라우트가 아님). 주문 안 함 | **미지원/미확인** (점유 백엔드 경로). 접수 없음 |
 
-주식 접수를 이번 환경의 접수로 승격하지 않는다. ETF 불명을 재전송으로 지우지 않는다.
-
-## 4. API 실패 · 실시간 정책 · 카드 미제공 · 티켓 미표시
-
-이번 세션에서 **새로 재현한 코드 버그는 없다.** 금 티켓 미표시는 이미 브랜치의 `45823f91` 등으로 고쳐져 있었고, 이 환경에서 회귀하지 않았다.
+## 5. API 실패 · 실시간 정책 · 카드 미제공 · 티켓 미표시
 
 | 증상 | 이번 환경 |
 |---|---|
-| 주문 티켓 미표시 | 재현되지 않음. 프로브 모달 visible |
-| API 실패 | 모의 호출을 하지 않음. 키 부재를 성공으로 바꾸지 않음 |
-| 실시간 연결 정책 | 스윕 미실행. 이전 수치를 현재 성공으로 읽지 않음 |
-| 카드 미제공 | 스윕 미실행. 공란·모의 미지원을 가짜 값으로 채우지 않음 |
+| 주문 티켓 미표시 | 라이브 후속 초안에서 재현 → §3 수정 후 프로브 통과 |
+| API 실패 | 조회는 mock 완료 메시지. 주문 API는 OFF. 값을 채워 넣지 않음 |
+| 실시간 연결 정책 | `integrated-card-realtime` / `realtime-account-boundary` 단위 51 pass. 전수 스윕 미실행 |
+| 카드 미제공 | 전수 스윕 미실행. 이 체크아웃이 8010을 점유하지 못함 |
 
-카드/실시간 프로브(`verify:card-api-sweep`, `verify:semantic-workspaces`, `verify:card-buttons`)는 이 체크아웃 백엔드와 모의 인증이 없어 건너뛰었다. 장시간 스윕 생략은 이 목표의 실패 조건이 아니다.
+## 6. 코드 변경
 
-## 5. 코드 변경
+- `app/chat.js` — 이미 열린 주문 티켓도 후속 초안을 다시 연다
+- `app/lib/order-ticket.js` — `canPresentOrderTicket` (`orderOpen`은 거절 사유가 아님)
+- `app/lib/order-ticket.test.js` · `app/lib/main/gold-order-intent.test.js` — 세 문장·공식 계약·재표시 회귀
+- `app/probe-gold-chat-ticket.js` — 라이브 채팅 세 문장 프로브
 
-- `app/lib/main/gold-order-intent.test.js` — 세 문장이 1kg / 1g / 시장가 / `execution_supported=false` / `trde_tp`·`ord_uv` 없음을 단언. `main.js` 금 분기가 계좌·수량·실행 IPC를 부르지 않음을 소스에서 단언
-- `app/lib/order-ticket.test.js` — 같은 세 문장을 티켓 프리필·생성·`buildOrderPayload` 거절까지 연결
+금 실행 차단은 그대로다.
 
-동작 코드는 바꾸지 않았다. 금 실행 차단은 그대로다.
-
-## 6. 검증 명령 (재실행)
+## 7. 검증 명령
 
 ```powershell
 Push-Location app
 node --test lib/main/gold-order-intent.test.js lib/order-ticket.test.js
+& ./node_modules/electron/dist/electron.exe ./probe-gold-chat-ticket.js
 & ./node_modules/electron/dist/electron.exe ./probe-gold-order-ticket.js
 Pop-Location
 git diff --check
 ```
 
-`npm ci`만으로는 Electron 바이너리가 빠질 수 있다. 빠지면 `node node_modules/electron/install.js`.
+## 8. 남은 외부 제한
 
-## 7. 다음에 필요한 자원
-
-이 체크아웃에만 넣는 모의 `backend/.env`(주문 API 키는 저장소에 쓰지 말 것). 금 주문 스코프는 example의 cash-only를 임의로 넓히지 말고, 운영자가 의도한 계정만 연결한다.
-기존 005930/069500은 **조회만**. 불명 ETF는 재전송하지 않는다.
-금 시장가 매매구분은 공식 계약이 이 환경에서 관측되기 전에는 차단을 유지한다.
-라이브 채팅 재현은 실행 중인 셸에서 새 대화로 세 문장만 입력하면 된다(모델 설정 변경 불필요, 금 경로는 로컬 가로채기).
+- 이 체크아웃 백엔드는 같은 모의 자격의 프로세스 잠금 때문에 8010/8011을 못 잡는다. 조회는 이미 떠 있던 다른 체크아웃 8010으로만 했다.
+- 카드 전수·semantic-workspaces·card-buttons는 현재 소스+모의 백엔드가 같은 8010을 쓸 때 다시 실행한다.
+- 금 시장가 매매구분은 공식 계약에 없다. 차단 유지.
+- 기존 005930/069500은 조회만. 빈 내역을 재전송으로 채우지 않는다.

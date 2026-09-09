@@ -94,6 +94,20 @@ test('상품·1g·방향·티켓 요청은 주문 유형을 추정하지 않고 
   assert.equal(Object.hasOwn(ready.payload.order_draft, 'ord_uv'), false);
 });
 
+test('공식 kt50000 매매구분은 보통/IOC/FOK뿐이라 시장가 코드를 만들지 않는다', () => {
+  const models = fs.readFileSync(
+    path.join(__dirname, '..', '..', '..', 'backend', 'athena_api', 'generated', 'models.py'),
+    'utf8',
+  );
+  const start = models.indexOf('class Kt50000Request');
+  const end = models.indexOf('class Kt50000Response');
+  assert.ok(start >= 0 && end > start);
+  const slice = models.slice(start, end);
+  assert.match(slice, /00:보통, 10:보통\(IOC\), 20:보통\(FOK\)/);
+  assert.equal(/시장가/.test(slice), false);
+  assert.match(MARKET_UNSUPPORTED_REASON, /시장가 매매구분 코드가 확인되지 않아/);
+});
+
 test('main 금 주문 분기는 티켓 IPC만 보내고 계좌·수량·실행을 부르지 않는다', () => {
   const source = fs.readFileSync(path.join(__dirname, '..', '..', 'main.js'), 'utf8');
   const start = source.indexOf('const goldDraft = goldOrderIntent.resolveGoldOrderTurn(query');
