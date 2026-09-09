@@ -23,6 +23,7 @@ function loadBroadcastCliChanged() {
       activeProvider = activeAccount.providerId;
     },
     handleModelGet,
+    prepareLiveChatPool: () => observed.push(['warm', handleModelGet().active.provider]),
     shellWin: {
       isDestroyed: () => false,
       webContents: {
@@ -50,5 +51,5 @@ test('CLI 활성 계정 전환은 새 공급자를 반영한 뒤 셸과 오브�
 
   await broadcast({ rotateReason: 'active_provider_changed', list });
 
-  assert.deepEqual(observed, [['shell', 'grok'], ['orb', 'grok']]);
+  assert.deepEqual(observed, [['warm', 'grok'], ['shell', 'grok'], ['orb', 'grok']]);
 });
