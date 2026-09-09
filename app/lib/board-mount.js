@@ -1239,11 +1239,6 @@ function applyResponsiveHooks(surface) {
 //
 // 손대지 않는 것: 표(열 폭이 계약)·스크롤 소유자(스크롤로 닿는다)·세로 묶음(세로 줄에
 // wrap을 주면 넘친 것이 오른쪽 새 열로 간다, markSplitRow와 같은 판단).
-const RELAX_PASSES = 6;
-// 표면 하나가 받는 처방 횟수의 상한 — 폭 단계가 넷이고 그 사이 스크롤바가 오갈 여지를
-// 두 배로 잡았다. 상한에 닿으면 더 손대지 않는다(잘림이 남는 것이 정지보다 낫다).
-const RELAX_RUNS_PER_SURFACE = 8;
-
 // 접기를 줄 수 있는 **모양**인가 — 기하는 보지 않는다.
 function isRowShape(el, surface) {
   if (!el || el === surface || !el.classList || !el.dataset) return false;
@@ -1431,17 +1426,13 @@ function relaxOverflowRows(surface) {
   // 카드 1종 14장에서 8분을 넘겼다).
   const width = surface.clientWidth;
   if (surface.__bsRelaxWidth === width) return [];
-  // 폭 하나를 기억하는 것만으로는 **오감**을 막지 못한다. 접기·스크롤이 스크롤바를
-  // 만들거나 없애면 표면의 clientWidth가 두 값 사이를 오가고, 그때마다 기억한 폭과
-  // 달라 처방이 다시 돈다 — 그 사이 렌더러가 붙잡혀 프로브가 멈춘다(실측: 버튼 감사가
-  // 보드 100장을 지난 뒤 출력 없이 33분 정지). 표면 하나가 받는 처방 횟수에 상한을
-  // 둔다. 정상 경로는 폭 4단계에서 네 번이면 끝난다.
-  const runs = Number(surface.__bsRelaxRuns || 0);
-  if (runs >= RELAX_RUNS_PER_SURFACE) return [];
-  surface.__bsRelaxRuns = runs + 1;
   surface.__bsRelaxWidth = width;
   const relaxed = [];
-  for (let pass = 0; pass < RELAX_PASSES; pass += 1) {
+  // 각 회차는 아직 표시되지 않은 줄·라벨·스크롤 소유자 하나 이상을 표시한다.
+  // DOM 노드 수가 유한하고 같은 처방을 두 번 고르지 않으므로, 임의 횟수에서 끊지
+  // 않아도 새 처방이 없을 때 반드시 끝난다. 여섯 회 뒤에 잘림이 남았던 31OF-0도
+  // 이 수렴 조건으로 마지막 줄까지 처리한다.
+  while (true) {
     if (surface.scrollWidth <= surface.clientWidth + 1) break;
     // 표면 밖으로 **나간 잎이 없어도** 표면은 넘칠 수 있다 — 눌린 칸의 내용이 자기
     // 상자 밖으로만 새는 자리다(실측 137X-2 `14T8-2`: 535px 칸에 내용 547px, 표면
@@ -1496,7 +1487,11 @@ function relaxOverflowRows(surface) {
 function watchSurfaceWidth(surface) {
   if (!surface || surface.__bsWidthWatch) return null;
   if (typeof ResizeObserver !== 'function') return null;
-  let last = surface.clientWidth;
+  // clientWidth는 안쪽 세로 스크롤바가 생기고 사라질 때도 바뀐다. 그 값을 관찰하면
+  // 이 함수가 준 접기 처방이 다시 자신을 깨워 두 폭 사이를 오간다. 외부가 실제로
+  // 배정한 border-box 폭만 리사이즈로 본다.
+  const borderWidth = () => surface.getBoundingClientRect().width;
+  let last = borderWidth();
   // 콜백은 배치가 끝난 뒤에 온다 — 여기서 바로 재는 것이 맞다. rAF로 한 프레임
   // 미루면 오클루전된 창에서 프레임이 눌려 알림이 한 단계씩 늦는다(실측: 전수
   // 프로브가 폭을 네 번 바꾸는 동안 처방이 늘 한 단계 뒤에 걸렸다).
@@ -1506,7 +1501,7 @@ function watchSurfaceWidth(surface) {
   let running = false;
   const observer = new ResizeObserver(() => {
     if (running) return;
-    const width = surface.clientWidth;
+    const width = borderWidth();
     if (Math.abs(width - last) < 2) return;
     last = width;
     running = true;
@@ -1517,7 +1512,7 @@ function watchSurfaceWidth(surface) {
       running = false;
     }
   });
-  observer.observe(surface);
+  observer.observe(surface, { box: 'border-box' });
   surface.__bsWidthWatch = observer;
   return observer;
 }

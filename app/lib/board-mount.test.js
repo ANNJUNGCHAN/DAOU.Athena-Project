@@ -8,7 +8,7 @@ const {
   collapsePlan, mountPlan, pairedGroups, nodeIndex, applyPlan, setHidden, isValueSlot,
   hoistLayout, applyResponsiveHooks, RESPONSIVE_REGIONS, HOISTED_PROPERTIES, primaryMountPoint,
   collapsePrimaryMockup, restorePrimaryMockup, collapseEmptyRows, collapseEmptyColumns,
-  markDeclaredScrollBox, isRelaxableRow, squeezedRow,
+  markDeclaredScrollBox, isRelaxableRow, squeezedRow, watchSurfaceWidth,
   createLatestBoardLoad, nextHydrationSlots,
   slotValueEntries, realtimeSlotIndex, updateRealtimeValue, pairedClosure, realtimePlan, applyRealtimeSlots,
   stateLinksFromMarks, stateControlActivationOwner, wireStateControlActivation,
@@ -1119,6 +1119,60 @@ test('가로 칸에 붙은 병기 줄만 접기 숙주로 표시한다', () => {
     '가로 칸에서는 병기 사본이 옆으로 늘어서서 칸을 밀어낸다');
   assert.equal(columnCell.dataset.bsPairedHost, undefined, '세로 칸은 이미 아랫줄이다');
   assert.equal(blockCell.dataset.bsPairedHost, undefined);
+});
+
+test('폭 관찰자는 내부 clientWidth 진동을 무시하고 8회를 넘는 실제 리사이즈도 계속 처방한다', () => {
+  const previous = {
+    ResizeObserver: global.ResizeObserver,
+    document: global.document,
+    getComputedStyle: global.getComputedStyle,
+  };
+  let observer;
+  class ResizeObserverStub {
+    constructor(callback) {
+      this.callback = callback;
+      observer = this;
+    }
+    observe(target, options) {
+      this.target = target;
+      this.options = options;
+    }
+  }
+  let borderWidth = 400;
+  const surface = {
+    clientWidth: 385,
+    clientLeft: 0,
+    scrollWidth: 385,
+    dataset: {},
+    querySelectorAll: () => [],
+    getBoundingClientRect: () => ({ left: 0, right: borderWidth, width: borderWidth }),
+  };
+  try {
+    global.ResizeObserver = ResizeObserverStub;
+    global.document = {};
+    global.getComputedStyle = () => ({});
+    assert.equal(watchSurfaceWidth(surface), observer);
+    assert.deepEqual(observer.options, { box: 'border-box' });
+
+    // 안쪽 스크롤바만 오가면 border-box는 그대로다. 이 콜백은 처방을 다시 돌리지 않는다.
+    surface.clientWidth = 370;
+    surface.scrollWidth = 370;
+    observer.callback();
+    assert.equal(surface.__bsRelaxWidth, undefined);
+
+    // 제품 수명 동안 실제 창 폭은 8번보다 많이 바뀔 수 있다. 마지막 폭에서도 처방이 산다.
+    for (let index = 1; index <= 12; index += 1) {
+      borderWidth = 400 + (index * 10);
+      surface.clientWidth = borderWidth - 15;
+      surface.scrollWidth = surface.clientWidth;
+      observer.callback();
+    }
+    assert.equal(surface.__bsRelaxWidth, 505);
+  } finally {
+    global.ResizeObserver = previous.ResizeObserver;
+    global.document = previous.document;
+    global.getComputedStyle = previous.getComputedStyle;
+  }
 });
 
 test('applyResponsiveHooks는 보드 루트·반응형 영역·영역 밖 고정 상자를 모두 훑는다', () => {
