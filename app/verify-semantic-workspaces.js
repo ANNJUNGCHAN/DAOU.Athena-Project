@@ -373,6 +373,20 @@ function installFixtureIpc() {
   ipcMain.handle('athena:integrated-card-realtime-mount', fixtureDisabled);
   ipcMain.handle('athena:integrated-card-realtime-update', fixtureDisabled);
   ipcMain.handle('athena:integrated-card-realtime-unmount', fixtureDisabled);
+  // 보드 표면은 값이 빈 자리를 만나면 하이드레이션을 부른다(canvas.js
+  // `athena:canvas-board-hydrate`, 카드 표면 트랙이 넣은 채널). 이 검사기는 픽스처라
+  // 백엔드가 없으므로 「채울 값이 없다」로 정상 응답한다 — 핸들러가 아예 없으면
+  // 렌더러가 「카드 정보를 불러오지 못했습니다」로 던지고, 그 보드에 얹힌 기존 차트
+  // 렌더러 보존 검사까지 함께 떨어진다(실측: instrument-chart).
+  ipcMain.handle('athena:canvas-board-hydrate', async (_event, payload = {}) => ({
+    ok: true,
+    status: 'hydrated',
+    board_id: String(payload.boardId || ''),
+    slot_values: {},
+    filled: 0,
+    operations: [],
+    surface_contract: null,
+  }));
 }
 
 async function waitFor(fn, message, timeoutMs = 10000) {
