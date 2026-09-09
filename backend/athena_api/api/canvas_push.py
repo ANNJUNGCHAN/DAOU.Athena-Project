@@ -45,6 +45,7 @@ from athena_api.hydrate_defaults import (
     fill_missing_arguments,
     missing_required_aliases,
 )
+from athena_api.mock_unsupported import is_mock_unsupported
 from athena_api.card_surface_contract import (
     attach_surface_contract,
     bind_surface_values,
@@ -1025,6 +1026,8 @@ def _hydrate_operation_refs(board: Any, slot_ids: list[str] | None) -> tuple[str
     needed: list[str] = []
     for slot in slots:
         for binding in slot.bindings:
+            if is_mock_unsupported(binding.mapping_id):
+                continue
             if binding.mapping_id not in needed:
                 needed.append(binding.mapping_id)
     # 선언 순서가 먼저다. 그다음 **슬롯이 실제로 가리키는데 board.operation_refs에는
