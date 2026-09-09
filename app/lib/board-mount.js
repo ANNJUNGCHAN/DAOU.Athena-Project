@@ -40,7 +40,11 @@ function staticTextOf(slot) {
     return typeof slot.paper_text === 'string' ? slot.paper_text : '';
   }
   if (slot.static === 'blank') return '';
-  return slot.kind === 'label' && typeof slot.paper_text === 'string' ? slot.paper_text : null;
+  const mapped = (typeof slot.mapping_id === 'string' && slot.mapping_id
+    && typeof slot.f === 'string' && slot.f) || slot.composite;
+  return slot.kind === 'label' && !mapped && typeof slot.paper_text === 'string'
+    ? slot.paper_text
+    : null;
 }
 
 // H1 영값 묶음(헌장 §3.1) — 그룹 안 0·결측 항목이 3개 이상일 때만 접는다.
@@ -719,7 +723,9 @@ function findStateControlNode(surface, control, options = {}) {
 
 function stateControlActivationOwner(node) {
   if (!node || typeof node.closest !== 'function') return node || null;
-  return node.closest('button, [role="button"], [role="tab"]') || node;
+  // Paper 칩은 클릭 표식이 글자 잎에 있고 패딩·배경은 bs-r-atomic 부모가 가진다.
+  // 잎만 연결하면 글자 몇 px만 눌려 사용자가 버튼이 고장 났다고 느낀다.
+  return node.closest('button, [role="button"], [role="tab"], .bs-r-atomic') || node;
 }
 
 function wireStateControlActivation(node, activate, options = {}) {

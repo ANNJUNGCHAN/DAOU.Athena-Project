@@ -8,6 +8,7 @@ const {
   CARD_DEFINITIONS, integratedDefinition, instanceKeyFor, panelKeyFor, normalizeIdentity,
   specializedClassNames, copySpecializedDatasets,
   matchesRealtimeTick, requireRealtimeSuccess, verifiedOperationRefsFor,
+  visibleTargetsFor, realtimeEligibleFor,
   rememberPanelSession, panelSessionFor, forgetPanelSession,
   detachForDestroy, findReusableRoot, buttonLabel, workflowStateLabel, isBoardSurface,
   buildCancelledState, buildAuthExpiredState,
@@ -104,6 +105,28 @@ test('renderer passes the production verifiedOperationRefs key without suppressi
   assert.deepEqual(verifiedOperationRefsFor({ card_id: 'CC-02', operation_refs: ['00', '04'] }), ['00', '04']);
   assert.deepEqual(verifiedOperationRefsFor({ card_id: 'CC-02', operation_ref: 'base:0E' }), ['base:0E']);
   assert.deepEqual(verifiedOperationRefsFor({ card_id: 'CC-03', operation_ref: 'base:ka10081' }), ['base:ka10081']);
+});
+
+test('watchlist realtime targets come from the actual projected rows when the envelope omits visible_targets', () => {
+  const rows = [
+    { code: '000020', name: '동화약품' },
+    { stk_cd: '005930', stk_nm: '삼성전자' },
+    { symbol: 'A000660', name: 'SK하이닉스' },
+    { code: '000020', name: '동화약품 중복' },
+    { code: 'not-a-security', name: '잘못된 행' },
+  ];
+  assert.deepEqual(visibleTargetsFor({ data: { rows } }), ['000020', '005930', '000660']);
+  assert.deepEqual(
+    visibleTargetsFor({ visible_targets: ['Q035420'], data: { rows } }),
+    ['Q035420'],
+  );
+});
+
+test('ka10099 source rows stay snapshot-only while explicit ELW cards remain realtime eligible', () => {
+  assert.equal(realtimeEligibleFor({ operation_ref: 'base:ka10099' }), false);
+  assert.equal(realtimeEligibleFor({
+    operation_ref: 'base:ka30012', card_id: 'CC-03', mode: 'elw', stk_cd: '52M504',
+  }), true);
 });
 
 test('integrated chart root keeps independent A then B sessions and returns A without duplication', () => {
@@ -208,6 +231,8 @@ test('canvas routes canonical envelopes through one integrated root and semantic
   assert.match(canvas, /integratedRealtimePoliciesPromise = null/);
   assert.match(canvas, /athena:integrated-card-realtime-release-all/);
   assert.match(canvas, /verifiedOperationRefs/);
+  assert.match(canvas, /integratedCardSurface\.visibleTargetsFor\(envelope\)/);
+  assert.match(canvas, /integratedCardSurface\.realtimeEligibleFor\(envelope\)/);
   assert.match(canvas, /semanticBindingIds/);
   assert.match(canvas, /envelope\.realtime_bindings/);
   assert.match(canvas, /requireRealtimeSuccess\(state\)/);

@@ -1277,6 +1277,55 @@ test('wide semantic tables keep eight main columns and every remaining cell in r
   }
 });
 
+test('ka10099 source table keeps identity columns primary and moves all-empty optional columns to row detail', () => {
+  const root = new FakeElement('div');
+  global.document = { createElement: (tagName) => new FakeElement(tagName) };
+  try {
+    const columns = [
+      ['market', '시장명'],
+      ['warning', '투자유의종목여부'],
+      ['name', '종목명'],
+      ['audit', '감리구분'],
+      ['shares', '상장주식수'],
+      ['close', '전일종가'],
+      ['nxt', 'NXT가능여부'],
+      ['companyClass', '회사분류'],
+      ['status', '종목상태'],
+      ['code', '종목코드'],
+    ].map(([key, label_ko], index) => ({
+      key: `col_${key}`, label_ko, display_tier: 'detail', display_order: 320 + index,
+    }));
+    const rows = [{
+      col_market: '거래소', col_warning: '0', col_name: '동화약품', col_audit: '정상',
+      col_shares: '27931470', col_close: '5220', col_nxt: 'N', col_companyClass: '',
+      col_status: '증거금40%|담보대출|신용가능', col_code: '000020',
+    }, {
+      col_market: '거래소', col_warning: '0', col_name: '', col_audit: '정상',
+      col_shares: '1', col_close: '1', col_nxt: 'N', col_companyClass: '',
+      col_status: '정상', col_code: '',
+    }];
+    const workspace = upsert(root, taskEnvelope({
+      operation_ref: 'base:ka10099',
+      presentation_contract: {
+        sections: [{ section_id: 'matching-instruments', title_ko: '조건에 맞는 종목', columns, rows }],
+      },
+    }));
+    const summaryLabels = findTags(workspace, 'th').map((node) => node.textContent);
+    assert.deepEqual(summaryLabels.slice(0, 2), ['종목코드', '종목명']);
+    assert.equal(summaryLabels.includes('회사분류'), false);
+    assert.match(visibleText(workspace), /회사분류[\s\S]*미제공/);
+    assert.deepEqual(
+      findTags(workspace, 'td')
+        .filter((cell) => cell.dataset.semanticLabel === '종목코드')
+        .map((cell) => cell.textContent),
+      ['000020', '미제공'],
+    );
+    assert.equal(rows[0].col_companyClass, '');
+  } finally {
+    delete global.document;
+  }
+});
+
 test('an all-state presentation collapses section placeholders into one atomic workspace state', () => {
   const presentation = normalizePresentation({
     canvas_type: 'task-canvas',
