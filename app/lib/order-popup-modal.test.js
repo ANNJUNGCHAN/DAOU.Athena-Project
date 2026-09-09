@@ -233,3 +233,52 @@ test('A 주문 응답이 지연돼 B로 전환돼도 결과는 실행 당시 A �
   assert.equal(published[0].result.envelope.response.data.ord_no, 'A-1');
   assert.doesNotMatch(chatSource, /addLiveCard\(protectedCardsLib\.buildOrderActionCard/);
 });
+
+test('HTTP 200 주문 응답은 주문번호가 있을 때만 접수 성공이며 broker 거절과 불명 응답은 종결 상태를 보존한다', async () => {
+  const published = [];
+  const logs = [];
+  const responses = [
+    { return_code: '17\n', return_msg: '  주문 불가\r\n상세  ' },
+    { return_code: '0', return_msg: '정상 처리', ord_no: 'A-2' },
+    { return_code: '0', return_msg: '정상 처리' },
+  ];
+  const context = vm.createContext({
+    BACKEND_HTTP_BASE: 'http://backend.test',
+    process: { env: {} },
+    orderTicket: {
+      interpretExecuteStatus: (status) => status === 200 ? 'done'
+        : status === 409 ? 'in_doubt' : 'failed',
+    },
+    protectedCards: { buildOrderActionCard: (value) => ({ envelope: value }) },
+  });
+  vm.runInContext(functionSource(mainSource, 'async function executeOrderRequest('), context);
+  const dependencies = {
+    fetchImpl: async () => ({ ok: true, status: 200, json: async () => responses.shift() }),
+    activeConversationId: () => 'conversation-a',
+    publishResult: (result) => published.push(result),
+    log: (message) => logs.push(message),
+  };
+  const payload = {
+    trId: 'kt10000', body: { stk_cd: '069500', ord_qty: '1' },
+    idempotencyKey: 'ticket-etf', conversationId: 'conversation-a',
+  };
+
+  const rejected = await context.executeOrderRequest(payload, dependencies);
+  assert.deepEqual(JSON.parse(JSON.stringify(rejected)), {
+    ok: false, status: 422, upstreamStatus: 200, code: '17', error: '주문 불가  상세',
+  });
+  assert.equal(published[0].envelope.outcome, 'failed');
+  assert.equal(logs[0], '주문 broker 거절 — tr=kt10000 code=17 message=주문 불가  상세');
+
+  const accepted = await context.executeOrderRequest(payload, dependencies);
+  assert.equal(accepted.ok, true);
+  assert.equal(accepted.data.ord_no, 'A-2');
+  assert.equal(published[1].envelope.outcome, 'done');
+
+  const unknown = await context.executeOrderRequest(payload, dependencies);
+  assert.equal(unknown.ok, false);
+  assert.equal(unknown.status, 409);
+  assert.equal(unknown.upstreamStatus, 200);
+  assert.equal(unknown.code, 'ORDER_RESULT_UNKNOWN');
+  assert.equal(published[2].envelope.outcome, 'in_doubt');
+});

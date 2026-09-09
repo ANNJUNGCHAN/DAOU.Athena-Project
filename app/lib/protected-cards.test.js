@@ -62,7 +62,7 @@ test('buildAuthTokenStatusCard: payload 없으면 needed로 물러선다', () =>
 
 const BUY_KT10000 = { trId: 'kt10000', body: { dmst_stex_tp: 'KRX', stk_cd: '005930', ord_qty: '20', trde_tp: '3' } };
 
-test('buildOrderActionCard: done — 실측 kt10000/kt10001 응답 필드만 영수증에 싣는다', () => {
+test('buildOrderActionCard: 주문번호가 반환된 성공 응답은 체결 완료가 아니라 접수로 표시한다', () => {
   const built = pc.buildOrderActionCard({
     ...BUY_KT10000,
     outcome: 'done',
@@ -71,7 +71,7 @@ test('buildOrderActionCard: done — 실측 kt10000/kt10001 응답 필드만 영
   assert.equal(built.envelope.canvas_type, 'action');
   assert.equal(built.envelope.card_title, '주문');
   assert.equal(built.envelope.data.lifecycle, 'done');
-  assert.equal(built.envelope.data.state_label, '체결 완료');
+  assert.equal(built.envelope.data.state_label, '주문 접수됨');
   assert.deepEqual(built.envelope.data.order, {
     stk_cd: '005930', ord_qty: '20', side: '매수',
   });
