@@ -169,7 +169,10 @@ async function main() {
   await captureChat(shellWin, 'narrow');
   shellWin.setBounds(bounds);
 
-  const ok = running.statusVisible && running.stopVisible && running.spinnerVisible
+  // 스피너 항은 빼 둔다 — 툴바의 [+][@][스피너]는 `2df6b103`에서 **설계상 제거**됐고
+  // 그 커밋이 프로브의 수집도 같이 지웠다. 그런데 판정식에만 남아 `undefined`가 되어
+  // 이 게이트는 그 뒤로 늘 떨어졌다(다른 항은 전부 참인데도).
+  const ok = running.statusVisible && running.stopVisible
     && running.stepRows === 4 && running.agentCards === 1 && running.agentCells === 3 && running.agentDone === 1
     && running.agentCount === '3개' && running.dockVisible && running.dockCount === '+2 카드'
     && aborted.folded === true && aborted.agentCardsKept === 1 && aborted.statusHidden && aborted.stopHidden

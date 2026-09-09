@@ -452,8 +452,13 @@ async function clearStage(win) {
 }
 
 async function inspectAndStage(win, recipe) {
+  // 차트 카드는 **비동기**로 선다(chart-card.js가 lightweight-charts를 먼저 싣는다).
+  // 그래서 대기 조건에 차트 본문을 넣지 않으면 마운트 전 프레임을 읽고 「차트 렌더러가
+  // 보존되지 않았다」로 떨어진다 — 실측으로 두 번에 한 번 실패했다.
+  const needsChart = recipe && recipe.recipe_id === 'instrument-chart';
   return waitFor(
     () => win.webContents.executeJavaScript(`(() => {
+      const NEEDS_CHART = ${needsChart};
       const grid = document.getElementById('grid');
       const card = grid && [...grid.querySelectorAll('.card')].find(
         (item) => item.dataset.taskCanvas === 'true' || item.dataset.boardSurface === 'true');
@@ -464,6 +469,7 @@ async function inspectAndStage(win, recipe) {
       const boardSurface = card.dataset.boardSurface === 'true';
       const boardHost = card.querySelector('.board-surface-host');
       if (boardSurface ? !(boardHost && boardHost.children.length) : !card.querySelector('.semantic-workspace')) return null;
+      if (NEEDS_CHART && !card.querySelector('.chart-card-body, canvas')) return null;
       const shell = document.getElementById('shell');
       if (shell) {
         shell.hidden = false;
@@ -531,7 +537,11 @@ async function inspectAndStage(win, recipe) {
           className: forbiddenDomAttribute.node.className,
         },
         forbiddenText: forbiddenText && forbiddenText[0],
-        hasChartPrimary: Boolean(card.querySelector('.chart-stage, .chart-host, canvas, [data-chart-panel-id]')),
+        // 차트 카드 본문은 .chart-card-body다 (canvas.js가 그 클래스를 붙이고
+        // chart-card.js가 그 안에 lightweight-charts를 세운다). 옛 선택자
+        // .chart-stage / .chart-host 는 지금 앱에 아예 없어 이 단언이 늘 거짓이었다.
+        // (주석에 백틱을 쓰면 이 템플릿 문자열이 끊긴다 — 쓰지 않는다.)
+        hasChartPrimary: Boolean(card.querySelector('.chart-card-body, canvas, [data-chart-panel-id]')),
         hasProfessionalChartPanel: card.dataset.chartAuthority === 'AITS'
           && Boolean(card.querySelector('.chart-card-body')),
         hasOrderbookPrimary: Boolean(card.classList.contains('hoga') || card.querySelector('.hoga, .orderbook, .card-kit-hoga-live, [data-orderbook]')),
@@ -652,7 +662,17 @@ async function verifyNarrowWindow(win, representative) {
       .filter((node) => !node.hidden)
       .map((node) => {
         const rect = node.getBoundingClientRect();
-        return { width: rect.width, height: rect.height, tag: node.tagName };
+        // 어느 요소가 작은지 이름 없이 적으면 다음 사람이 같은 진단을 다시 해야 한다.
+        return {
+          width: rect.width,
+          height: rect.height,
+          tag: node.tagName,
+          cls: String(node.className || '').trim().slice(0, 60),
+          node: (node.dataset && (node.dataset.node || node.dataset.slotId)) || '',
+          role: node.getAttribute('role') || '',
+          tabindex: node.getAttribute('tabindex') || '',
+          text: String(node.textContent || '').trim().slice(0, 24),
+        };
       });
     const value = root.querySelector('.semantic-workspace-value');
     const motion = value ? getComputedStyle(value) : null;
