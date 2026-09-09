@@ -21,6 +21,7 @@ const {
   BOARD_WINDOW_PRESETS,
   activateBoardTab,
   boardInstanceId,
+  assertSurfaceGeometry,
   boardStepProbe,
   sendBoardEnvelope,
   settleBoardLayout,
@@ -274,6 +275,18 @@ async function probeBoard(win, boardId, ordinal, token) {
         overlap_nodes: (geometry && geometry.text_overlap_nodes) || [],
         wrap_total: geometry && geometry.atomic_wrap_total,
       });
+      // 실제 API 값으로도 **기하 계약**을 잰다 — 마운트 게이트가 Paper 원문 픽스처로
+      // 재는 것과 같은 판정(표면 넘침·세로 넘침·세로 겹침·스크롤 초점)을 실데이터
+      // 경로에서 한 번 더 본다. 값이 목업보다 길면 그때 처음 넘치는 자리가 있다.
+      try {
+        assertSurfaceGeometry(boardId, preset, geometry);
+      } catch (error) {
+        record.failures.push({
+          code: 'surface_geometry',
+          preset: preset.name,
+          error: String(error.message || error),
+        });
+      }
       if (geometry && geometry.text_overlap_total > 0) {
         record.failures.push({
           code: 'text_overlap',
