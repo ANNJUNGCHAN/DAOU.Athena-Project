@@ -11,7 +11,7 @@ const {
   createGoldOrderIntentTracker,
 } = require('./gold-order-intent');
 
-test('금현물 주문 후속 대화에서 방향·상품·수량을 보존해 티켓 초안을 만든다', () => {
+test('금현물 주문 후속 대화에서 방향·상품·명시 g 수량을 보존해 티켓 초안을 만든다', () => {
   const tracker = createGoldOrderIntentTracker();
 
   const start = tracker.advance('conversation-a', '금현물 시장가 매수');
@@ -26,7 +26,7 @@ test('금현물 주문 후속 대화에서 방향·상품·수량을 보존해 �
   assert.deepEqual(product.missing, ['quantity']);
   assert.equal(product.state.productCode, 'M04020000');
 
-  const ready = tracker.advance('conversation-a', '1개');
+  const ready = tracker.advance('conversation-a', '1g');
   assert.equal(ready.status, 'ready');
   assert.equal(ready.draft.operation_ref, 'base:kt50000');
   assert.deepEqual(ready.draft.next_actions, ['open_order_ticket']);
@@ -46,6 +46,21 @@ test('금현물 주문 후속 대화에서 방향·상품·수량을 보존해 �
   });
 });
 
+test('개·주 수량은 g로 환산하지 않고 g 단위를 다시 묻는다', () => {
+  for (const qty of ['1개', '1주', '2개', '4개']) {
+    const start = resolveGoldOrderTurn('금현물 시장가 매수');
+    const product = resolveGoldOrderTurn('금99.99 1kg', start.state);
+    const result = resolveGoldOrderTurn(qty, product.state);
+    assert.equal(result.handled, true, qty);
+    assert.equal(result.status, 'collecting', qty);
+    assert.deepEqual(result.missing, ['quantity'], qty);
+    assert.equal(result.state.quantity, null, qty);
+    assert.equal(result.payload, null, qty);
+    assert.equal(result.state.productCode, 'M04020000', qty);
+    assert.match(result.answerText, /g 단위/, qty);
+  }
+});
+
 test('대화별 주문 상태를 섞지 않는다', () => {
   const tracker = createGoldOrderIntentTracker();
   tracker.advance('a', '금현물 시장가 매수');
@@ -53,32 +68,66 @@ test('대화별 주문 상태를 섞지 않는다', () => {
   tracker.advance('a', '미니금 100g');
   tracker.advance('b', '금 99.99 1kg');
 
-  const a = tracker.advance('a', '2개');
-  const b = tracker.advance('b', '3개');
+  const aRejected = tracker.advance('a', '2개');
+  const bRejected = tracker.advance('b', '3개');
+  assert.equal(aRejected.status, 'collecting');
+  assert.equal(aRejected.state.quantity, null);
+  assert.equal(bRejected.status, 'collecting');
+  assert.equal(bRejected.state.quantity, null);
+
+  const a = tracker.advance('a', '2g');
+  const b = tracker.advance('b', '3g');
   assert.equal(a.draft.operation_ref, 'base:kt50000');
   assert.equal(a.draft.order_draft.stk_cd, 'M04020100');
   assert.equal(a.draft.order_draft.ord_qty, '2');
+  assert.equal(a.draft.order_draft.unit, 'g');
   assert.equal(b.draft.operation_ref, 'base:kt50001');
   assert.equal(b.draft.order_draft.stk_cd, 'M04020000');
   assert.equal(b.draft.order_draft.ord_qty, '3');
+  assert.equal(tracker.peek('a').quantity, 2);
+  assert.equal(tracker.peek('b').quantity, 3);
 });
 
 test('대화 맥락 없는 수량·상품 단독 발화는 주문으로 취급하지 않는다', () => {
   const tracker = createGoldOrderIntentTracker();
   assert.deepEqual(tracker.advance('a', '1개'), { handled: false, reason: 'not_gold_order' });
+  assert.deepEqual(tracker.advance('a', '1주'), { handled: false, reason: 'not_gold_order' });
+  assert.deepEqual(tracker.advance('a', '1g'), { handled: false, reason: 'not_gold_order' });
   assert.deepEqual(
     tracker.advance('a', '금 99.99 1kg'),
     { handled: false, reason: 'not_gold_order' },
   );
 });
 
-test('한 문장에 모든 값이 있으면 바로 초안을 열 수 있다', () => {
-  const tracker = createGoldOrderIntentTracker();
-  const ready = tracker.advance('a', '미니금 99.99 100g 4개 시장가로 매도해줘');
-  assert.equal(ready.status, 'ready');
-  assert.equal(ready.draft.operation_ref, 'base:kt50001');
-  assert.equal(ready.draft.order_draft.stk_cd, 'M04020100');
-  assert.equal(ready.draft.order_draft.ord_qty, '4');
+test('한 문장에 개 수량이 있어도 gram으로 채우지 않는다', () => {
+  const result = resolveGoldOrderTurn('미니금 99.99 100g 4개 시장가로 매도해줘');
+  assert.equal(result.status, 'collecting');
+  assert.equal(result.state.productCode, 'M04020100');
+  assert.equal(result.state.quantity, null);
+  assert.deepEqual(result.missing, ['quantity']);
+  assert.equal(result.payload, null);
+  assert.match(result.answerText, /g 단위/);
+});
+
+test('명시 g·그램 수량은 미니금 상품 표기가 아닐 때 수용한다', () => {
+  const oneG = resolveGoldOrderTurn('금99.99_1kg 1g 매수 주문 티켓을 열어줘.');
+  assert.equal(oneG.status, 'ready');
+  assert.equal(oneG.state.quantity, 1);
+  assert.equal(oneG.payload.order_draft.ord_qty, '1');
+  assert.equal(oneG.payload.order_draft.unit, 'g');
+
+  const hundredG = resolveGoldOrderTurn('금 99.99_1kg 100g 보통 매수');
+  assert.equal(hundredG.status, 'ready');
+  assert.equal(hundredG.state.quantity, 100);
+  assert.equal(hundredG.payload.order_draft.ord_qty, '100');
+
+  const grams = resolveGoldOrderTurn('금현물 시장가 매수');
+  const picked = resolveGoldOrderTurn('금99.99 1kg', grams.state);
+  const filled = resolveGoldOrderTurn('5그램', picked.state);
+  assert.equal(filled.status, 'ready');
+  assert.equal(filled.state.quantity, 5);
+  assert.equal(filled.payload.order_draft.ord_qty, '5');
+  assert.equal(filled.payload.order_draft.unit, 'g');
 });
 
 test('상품·1g·방향·티켓 요청은 주문 유형을 추정하지 않고 차단 초안을 연다', () => {
@@ -90,6 +139,7 @@ test('상품·1g·방향·티켓 요청은 주문 유형을 추정하지 않고 
   assert.equal(ready.payload.order_draft.unit, 'g');
   assert.equal(ready.payload.order_draft.requested_order_type, 'unspecified');
   assert.equal(ready.payload.order_draft.execution_supported, false);
+  assert.ok(ready.payload.order_draft.execution_blocker);
   assert.equal(Object.hasOwn(ready.payload.order_draft, 'trde_tp'), false);
   assert.equal(Object.hasOwn(ready.payload.order_draft, 'ord_uv'), false);
 });
@@ -162,6 +212,7 @@ test('미니금 상품 표기의 100g를 주문 수량으로 오인하지 않는
   const result = resolveGoldOrderTurn('미니금 100g 보통 매수');
   assert.equal(result.status, 'collecting');
   assert.deepEqual(result.missing, ['quantity']);
+  assert.equal(result.state.quantity, null);
 });
 
 test('1kg 상품명과 g 주문 수량을 분리하고 bare 100g는 상품을 확정하지 않는다', () => {
@@ -186,7 +237,7 @@ test('정보 질문과 일반 화면 실패 문구는 금 주문으로 가로채
 
 test('시장가 요청을 보통 주문 코드로 암묵적 변환하지 않는다', () => {
   const tracker = createGoldOrderIntentTracker();
-  const ready = tracker.advance('a', '금 99.99 1kg 1개 시장가 매수');
+  const ready = tracker.advance('a', '금 99.99 1kg 1g 시장가 매수');
   const draft = ready.draft.order_draft;
   assert.equal(draft.requested_order_type, 'market');
   assert.equal(draft.execution_supported, false);
@@ -206,17 +257,18 @@ test('정보가 덜 찬 요청은 질문으로 수집하고 비어 있는 티켓
 test('완성 상태는 명시적인 주문 화면 다시 열기에서 재사용된다', () => {
   let result = resolveGoldOrderTurn('금현물 시장가 매수');
   result = resolveGoldOrderTurn('금99.99 1kg', result.state);
-  result = resolveGoldOrderTurn('1개', result.state);
+  result = resolveGoldOrderTurn('1g', result.state);
   const reopened = resolveGoldOrderTurn('주문 화면 다시 열어줘', result.state);
   assert.equal(reopened.status, 'ready');
   assert.equal(reopened.payload.order_draft.stk_cd, 'M04020000');
   assert.equal(reopened.payload.order_draft.ord_qty, '1');
+  assert.equal(reopened.payload.order_draft.execution_supported, false);
 });
 
 test('팝업이 열리지 않았다는 실제 실패 문구도 완성된 주문 티켓을 다시 연다', () => {
   let ready = resolveGoldOrderTurn('금현물 시장가 매수');
   ready = resolveGoldOrderTurn('금99.99 1kg', ready.state);
-  ready = resolveGoldOrderTurn('1개', ready.state);
+  ready = resolveGoldOrderTurn('1g', ready.state);
 
   for (const query of ['주문 화면이 안열려', '주문 팝업이 안뜬다', '주문창 안떠']) {
     const reopened = resolveGoldOrderTurn(query, ready.state);
@@ -225,13 +277,21 @@ test('팝업이 열리지 않았다는 실제 실패 문구도 완성된 주문 
     assert.equal(reopened.payload.operation_ref, 'base:kt50000', query);
     assert.equal(reopened.payload.order_draft.stk_cd, 'M04020000', query);
     assert.equal(reopened.payload.order_draft.ord_qty, '1', query);
+    assert.equal(reopened.payload.order_draft.unit, 'g', query);
+    assert.equal(reopened.payload.order_draft.execution_supported, false, query);
   }
 });
 
-test('수량 변경 후속 문법과 파서가 개로 suffix를 같이 처리한다', () => {
-  let result = resolveGoldOrderTurn('금 99.99 1kg 1개 시장가 매수');
+test('개·주로 수량 변경을 시도해도 gram 수량을 덮어쓰지 않는다', () => {
+  let result = resolveGoldOrderTurn('금 99.99 1kg 1g 시장가 매수');
+  assert.equal(result.status, 'ready');
+  assert.equal(result.state.quantity, 1);
   result = resolveGoldOrderTurn('수량은 2개로 변경해줘', result.state);
   assert.equal(result.handled, true);
+  assert.equal(result.status, 'ready');
+  assert.equal(result.state.quantity, 1);
+  assert.equal(result.payload.order_draft.ord_qty, '1');
+  result = resolveGoldOrderTurn('수량은 2g로 변경해줘', result.state);
   assert.equal(result.status, 'ready');
   assert.equal(result.state.quantity, 2);
   assert.equal(result.payload.order_draft.ord_qty, '2');
@@ -256,7 +316,7 @@ test('취소·방향 변경만 닫힌 후속 주문 문법으로 처리한다', 
   assert.equal(result.state.side, 'sell');
   assert.equal(result.payload, null);
   result = resolveGoldOrderTurn('금99.99 1kg', result.state);
-  result = resolveGoldOrderTurn('1개', result.state);
+  result = resolveGoldOrderTurn('1g', result.state);
   assert.equal(result.payload.operation_ref, 'base:kt50001');
   const cancelled = resolveGoldOrderTurn('주문 취소해줘', result.state);
   assert.equal(cancelled.status, 'cancelled');

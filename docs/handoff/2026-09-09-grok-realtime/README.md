@@ -55,11 +55,9 @@ git rev-parse HEAD
 
 ## 4. 이어서 할 일과 완료 기준
 
-### P0 — 금 수량 단위 불일치: 확인된 오류
+### P0 — 금 수량 단위 불일치: 이번 작업에서 수정
 
-최신 부모 코드의 금 티켓 단위는 `g`다. 하지만 `gold-order-intent.js`의 수량 파서는 `1개`, `1주`도 숫자 1로 받아 `1g` 초안으로 바꾼다. 테스트에도 이 잘못된 기대가 남아 있다. 앞선 대화의 `1개` 캡처/보고는 **이전 코드의 역사적 증거**이며 최신 상품 단위가 맞다는 증거가 아니다.
-
-수정 방향: `g`/그램처럼 명시된 단위만 수용하거나, 개/주 입력에는 g 단위 재입력을 요구해 수집 상태를 유지한다. 제품명 1kg/100g은 수량으로 오인하지 않는다. 임의의 개→g 환산을 하지 않는다. 테스트에 개/주 거절 또는 재질문, g 수용, kg 제품명 무시, 재열기/대화 격리를 추가한다. 금 주문 실행 차단은 유지한다.
+`app/lib/main/gold-order-intent.js`는 이제 명시 `g`/`그램`만 `ord_qty`로 넣는다. `1개`/`1주`/`2개`/`4개`는 그램으로 바꾸지 않고 수집을 유지한 채 `주문 수량을 g 단위로 알려 주세요`를 다시 묻는다. `금 99.99_1kg` / `미니금 99.99_100g` 상품명의 `1kg`/`100g`는 주문 수량이 아니다. 개→g·주→g 환산표는 없다. 완성 초안의 `execution_supported`는 계속 `false`이고 차단 사유가 있다. 실제 금 주문 실행은 하지 않는다.
 
 ### P1 — 새 컴퓨터/사용자 앱에서 실행 검증
 
@@ -116,10 +114,58 @@ Set-Location ../app
 .\node_modules\.bin\electron.cmd probe-project-ide-visual.js
 ```
 
-프로브는 실제 Electron 렌더러에 제어된 데이터를 주입한 검증이다. 라이브 사용자 대화 전체 E2E 또는 실제 백테스트/주문 성과를 증명하지 않는다. 이번 사본에서 재실행한 캡처는 이 디렉터리의 `evidence/`에 포함했다. 과거 문서의 다른 원본 로컬 이미지까지 원격에 있다고 가정하지 않는다. 금 티켓 프로브는 현재 g 표시만 확인하므로 P0 의미 오류는 별도 테스트가 필요하다.
+프로브는 실제 Electron 렌더러에 제어된 데이터를 주입한 검증이다. 라이브 사용자 대화 전체 E2E 또는 실제 백테스트/주문 성과를 증명하지 않는다. 이번 사본에서 재실행한 캡처는 이 디렉터리의 `evidence/`에 포함했다. 과거 문서의 다른 원본 로컬 이미지까지 원격에 있다고 가정하지 않는다. 금 티켓 프로브는 g 표시·실행 비활성·`orderExecute` 0을 확인한다. `개`/`주`→g 의미는 `gold-order-intent.test.js`와 아래 소비자 실행이 담당한다.
 
-인계 직전 세션의 마지막 전체 JS 검증은 3,948/3,948, MCP/프로젝트 API 136/136이었다. 이후 다른 작업의 부모 커밋이 반영되었으므로 **이 인계 사본의 재검증 결과는 VALIDATION.md를 기준으로 한다**.
+VALIDATION.md의 3,955/3,948 숫자와 인계 직전 HTTP 200은 **역사**다. 이번 머신 결과로 재사용하지 않는다.
 
 ## 7. 전달 범위와 보안
 
 소스, 테스트, 문서, 재현 프로브는 커밋에 포함한다. 원본 전체 대화 로그·개인 데이터·비밀값·캐시·가상환경·설치 패키지·실행 중 프로세스는 전달하지 않는다. 사용자 요청과 결정·실패·검증 공백은 이 문서와 START-HERE에 보존했다. 새 컴퓨터에서 과거 Codex 하위 에이전트나 .omc 상태가 필요하지 않다.
+
+## 8. 이번 작업(2026-09-09 Grok)에서 실제로 확인한 것
+
+기준 브랜치: `codex/grok-realtime-handoff-20260909`. 작업 시작 HEAD: `fc1e9023e3023c18182ee4b1525e8c1a321e38ac` (`docs(handoff): Grok 이어받기 지침과 검증 증거를 묶는다`). 최종 HEAD는 `git rev-parse HEAD`로 확인한다. 이 절에 자체 커밋 해시를 순환 기록하지 않는다.
+
+시작 시 `git status --short --branch`는 깨끗한 `codex/grok-realtime-handoff-20260909`였다. 제품 변경은 `gold-order-intent.js`와 그 테스트, 이 README, `evidence/` 캡처뿐이다.
+
+환경: Windows, 이 워크스페이스. `app`에 `npm.cmd ci --no-audit --no-fund`(125 packages). `backend`에 Python 3.12 venv + `pip install -e ".[dev]"`. 사용자 지시로 `C:\Projects\DAOU.Athena\backend\.env`를 이 worktree `backend/.env`로 복사했다(gitignore, 값은 문서에 없음). Kiwoom base는 mock. 이후 이 worktree uvicorn이 8010을 연다(`ATHENA_BACKTEST_ENABLED=true`는 프로세스 환경). 기동 로그에 mock `oauth2/token` HTTP 200이 있었다. 금 주문 실행 버튼은 누르지 않았다.
+
+실행한 명령과 이번 결과:
+
+| 검사 | 이번 결과 |
+|---|---|
+| `node --check app/lib/main/gold-order-intent.js` | 통과 |
+| `git diff --check` | 통과 |
+| `app`: `node --test lib/main/gold-order-intent.test.js` 연속 2회 | 각 19/19 통과, fail 0. `1개`/`1주`는 quantity 없음·재질문, `1g`/`100g`는 수량 수용, 미니금 `100g` 상품명 무시, 재열기·대화 격리 유지 |
+| 새 Node 소비자로 shipped `resolveGoldOrderTurn` 2회 | 두 회 동일. `1개`/`1주` → collecting, `ord_qty` 없음. `1g`/`100g` → ready, `execution_supported: false`, blocker 비어 있지 않음 |
+| `electron.cmd probe-gold-order-ticket.js` | `ok: true`. qty `1`, unit `g`, 실행 버튼 disabled, blocker 시장가 매매구분, `orderExecute` 0. 캡처: [금 주문 팝업](evidence/gold-order-ticket.png), [JSON](evidence/gold-order-ticket.json) |
+| P1 JS: `ranking-board-controls`, `plugin-canvas`, `technique-create-dialog`, `project-ide`, `session-restore`, `gold-quote-intent`, `backtest-canvas` | 395/395 통과, fail 0 |
+| `backend/.venv/Scripts/python.exe -m pytest tests/api/test_projects_api.py -q` | 40 passed. `parent` `../escape` / 절대경로 400, 프로젝트 밖 파일 없음 |
+| `electron.cmd probe-project-ide-visual.js` | files 6, tabs 1, 터미널 표시, removed 0. [편집기](evidence/project-ide.png) |
+| 전체 `app` `npm test` | 이번 머신에서 실행하지 않음. 과거 3,955 숫자를 재사용하지 않음 |
+| 라이브 `app npm start` + Orca computer-use | 실행함. 창 제목 Athena, 이 worktree `shell.html`. 아래 §8.1 |
+
+P1 코드는 처음부터 다시 만들지 않았다. 기존 테스트가 통과해 제품 파일을 고치지 않았다. 종목 찾기 시가총액 필터는 계속 미지원 안내다. 플러그인 추천 UI 문자열은 `plugin-canvas.js`에 없다. 부엉이 크기 펄스는 `chat.css`에서 고정 22px + 눈꺼풀 깜빡임만 남는다.
+
+### 8.1 라이브 앱 (computer-use, 2026-09-10)
+
+`orca computer`로 Athena 창을 조작했다. 실제 금 주문 실행 버튼은 누르지 않았다.
+
+| 화면 | 관측 |
+|---|---|
+| 에르가네 · 플러그인 | 추천 목록 없음. 「설치한 플러그인이 없습니다 · [+ 서버 추가]에서 직접 등록합니다」. [캡처](evidence/live-plugin.png) |
+| 팔라스 · 백테스트 | `.env` 적용 후 켜짐. 「기법 — 0개」「아직 기법이 없습니다」(샘플 10개 아님). [캡처](evidence/live-backtest.png) |
+| 새 기법 만들기 | 프로젝트(SMA-골든크로스)·상위 폴더(프로젝트 루트)·이름 입력. 취소로 닫음. [캡처](evidence/live-technique-create.png) |
+| 부엉이 | 채팅 입력 우측 고정 크기. 커졌다 작아지는 효과 없음 |
+| 금현물 시세 | `금현물 시세 알려줘` → 「어느 금현물 시세를 볼까요? 금 99.99_1kg 또는 미니금 99.99_100g」. 1kg 후속 제출은 입력칸/모드 전환에 가로채여 실카드까지는 못 닫음. [캡처](evidence/live-gold-quote.png) |
+| 종목 찾기 | 질의 `종목 찾기`는 순위 보드(13K0-2)를 바로 열지 않고 도구 후보(시장별 목록·조회순위·종목 기본정보·관심종목)를 물어봄. [캡처](evidence/live-jongmok-find.png), [재확인](evidence/live-jongmok-find-llm-fork.png) |
+| 급등/순위 조회 | 캔버스 알림 「조회 요청 조건을 처리하지 못했습니다. (HTTP 422)」. [캡처](evidence/live-ranking-422.png) |
+| 금 주문 수집 (라이브, 아고라) | `금현물 시장가 매수` → 「금 상품을 골라 주세요…」 [캡처](evidence/live-gold-order-product.png). `1kg` → 「주문 수량을 g 단위로 알려 주세요」. `1개` → 그램으로 바꾸지 않고 같은 재질문 [캡처](evidence/live-gold-order-1gae-reask.png). `1g` → 주문 티켓. 종목 `금 99.99_1kg`, 수량 `1` `g`, 「시장가 요청 · 실행 불가」, 차단 사유는 시장가 매매구분 코드. `구매하기`는 누르지 않고 `닫기`로 닫음 [캡처](evidence/live-gold-order-ticket-live.png), [닫은 뒤](evidence/live-gold-order-closed.png) |
+
+라이브 제출 레시피(아고라): 입력칸이 `편집 무엇이든 물어보세요`인지 확인 → `set-value` 검증 → `click --x 1780 --y 1088 --no-screenshot` → 바로 `press-key Return --no-screenshot`. 스크린샷을 끼우면 포커스가 빠져 Enter가 제출되지 않았다. `작업 검색`·메티스 그래프·아이기스 에이전트에서는 금 주문 인터셉터가 돌지 않는다.
+
+남은 제약:
+
+- 순위 보드(13K0-2) 직접 마운트와 금 시세 실카드는 이 세션에서 미완. 이 worktree uvicorn은 8010에 기동하려다 계정 `daeju` 자격 잠금에 막혔다(다른 워크스페이스가 8011에서 같은 키움 계정을 점유). 금 주문 수집은 클라이언트 인터셉터라 8010 없이도 티켓까지 닫았다.
+- 금현물 주문 초안의 실행 차단은 유지. 실제 주문은 보내지 않았다.
+- 전체 JS 스위트는 인계 기록상 worker 동시성 이슈가 있어 이번에는 타깃 테스트만 돌렸다. 재실행 시 `--test-concurrency=4`를 권장한다.
