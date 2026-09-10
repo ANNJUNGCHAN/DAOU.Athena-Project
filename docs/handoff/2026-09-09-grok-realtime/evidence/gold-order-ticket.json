@@ -1,0 +1,24 @@
+{
+  "ok": true,
+  "snapshot": {
+    "visible": true,
+    "rows": [
+      "종목금 99.99_1kg",
+      "사유금현물 시장가 매수 주문 초안",
+      "방향구매판매",
+      "가격지정가시장가시장가 요청 · 실행 불가",
+      "수량g10%25%50%최대"
+    ],
+    "qty": "1",
+    "unit": "g",
+    "priceReadout": "시장가 요청 · 실행 불가",
+    "executionDisabled": true,
+    "blocker": "금현물 주문 API에서 시장가 매매구분 코드가 확인되지 않아 실행할 수 없습니다."
+  },
+  "calls": {
+    "accountList": 0,
+    "ticketCapacity": 0,
+    "orderExecute": 0
+  },
+  "screenshot": "C:\\Projects\\DAOU.Athena-grok-handoff-20260909\\app\\captures\\probe-gold-order-ticket.png"
+}
