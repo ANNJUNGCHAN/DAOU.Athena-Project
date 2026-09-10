@@ -2,6 +2,8 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
 
 const {
   MARKET_UNSUPPORTED_REASON,
@@ -92,17 +94,58 @@ test('상품·1g·방향·티켓 요청은 주문 유형을 추정하지 않고 
   assert.equal(Object.hasOwn(ready.payload.order_draft, 'ord_uv'), false);
 });
 
+test('공식 kt50000 매매구분은 보통/IOC/FOK뿐이라 시장가 코드를 만들지 않는다', () => {
+  const models = fs.readFileSync(
+    path.join(__dirname, '..', '..', '..', 'backend', 'athena_api', 'generated', 'models.py'),
+    'utf8',
+  );
+  const start = models.indexOf('class Kt50000Request');
+  const end = models.indexOf('class Kt50000Response');
+  assert.ok(start >= 0 && end > start);
+  const slice = models.slice(start, end);
+  assert.match(slice, /00:보통, 10:보통\(IOC\), 20:보통\(FOK\)/);
+  assert.equal(/시장가/.test(slice), false);
+  assert.match(MARKET_UNSUPPORTED_REASON, /시장가 매매구분 코드가 확인되지 않아/);
+});
+
+test('main 금 주문 분기는 티켓 IPC만 보내고 계좌·수량·실행을 부르지 않는다', () => {
+  const source = fs.readFileSync(path.join(__dirname, '..', '..', 'main.js'), 'utf8');
+  const start = source.indexOf('const goldDraft = goldOrderIntent.resolveGoldOrderTurn(query');
+  const end = source.indexOf('const goldQuote = goldQuoteIntent.resolveGoldQuoteTurn(query');
+  assert.ok(start >= 0 && end > start);
+  const slice = source.slice(start, end);
+  assert.match(slice, /athena:selector-order-draft/);
+  assert.match(slice, /modelCalls: 0/);
+  assert.equal(/athena:account-list|athena:ticket-capacity|athena:order-execute/.test(slice), false);
+});
+
 test('사용자 이력의 단가 시장가와 티켓이 안보여를 같은 차단 초안으로 복구한다', () => {
   let ready = resolveGoldOrderTurn('금99.99_1kg 1g 매수 주문 티켓을 열어줘.');
   ready = resolveGoldOrderTurn('단가 시장가', ready.state);
   assert.equal(ready.status, 'ready');
   assert.equal(ready.state.orderType, 'market');
-  assert.equal(ready.payload.order_draft.requested_order_type, 'market');
+  const marketDraft = ready.payload.order_draft;
+  assert.equal(marketDraft.stk_cd, 'M04020000');
+  assert.equal(marketDraft.product_name, '금 99.99_1kg');
+  assert.equal(marketDraft.ord_qty, '1');
+  assert.equal(marketDraft.unit, 'g');
+  assert.equal(marketDraft.requested_order_type, 'market');
+  assert.equal(marketDraft.execution_supported, false);
+  assert.equal(marketDraft.execution_blocker, MARKET_UNSUPPORTED_REASON);
+  assert.equal(Object.hasOwn(marketDraft, 'trde_tp'), false);
+  assert.equal(Object.hasOwn(marketDraft, 'ord_uv'), false);
   const reopened = resolveGoldOrderTurn('티켓이 안보여', ready.state);
   assert.equal(reopened.status, 'ready');
-  assert.equal(reopened.payload.order_draft.stk_cd, 'M04020000');
-  assert.equal(reopened.payload.order_draft.ord_qty, '1');
-  assert.equal(reopened.payload.order_draft.unit, 'g');
+  const reopenedDraft = reopened.payload.order_draft;
+  assert.equal(reopenedDraft.stk_cd, 'M04020000');
+  assert.equal(reopenedDraft.product_name, '금 99.99_1kg');
+  assert.equal(reopenedDraft.ord_qty, '1');
+  assert.equal(reopenedDraft.unit, 'g');
+  assert.equal(reopenedDraft.requested_order_type, 'market');
+  assert.equal(reopenedDraft.execution_supported, false);
+  assert.equal(reopenedDraft.execution_blocker, MARKET_UNSUPPORTED_REASON);
+  assert.equal(Object.hasOwn(reopenedDraft, 'trde_tp'), false);
+  assert.equal(Object.hasOwn(reopenedDraft, 'ord_uv'), false);
 });
 
 test('명시한 보통 주문은 단가를 시장가로 추정하지 않고 차단 초안을 연다', () => {
