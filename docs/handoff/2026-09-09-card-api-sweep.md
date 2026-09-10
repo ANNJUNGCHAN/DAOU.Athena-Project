@@ -1,5 +1,13 @@
 # 카드 표면 API 전수 검사 — 결측어와 글자 잘림 (2026-09-09)
 
+> **병합 검수 정정:** 아래의 이전 UI 검사에서 기록한 「결측어 0」은 최종 화면의
+> 증거로 사용할 수 없다. 검사기가 `pending/loading` 페인트 알림을 완료로 받아들여
+> 숨은 보드 DOM을 계측했다. 공용 검사기를 수정해 최종 `data + verified_visible`
+> 알림과 실제 활성 패널·호스트·표면 가시성을 요구한다. 수정 후 전수 검사에서는
+> 101장 중 15장에 결측어 228자리가 관측됐다. 값이 없는 자리를 지우거나 지어내지
+> 않으며 엄격한 결측어 0 게이트도 완화하지 않는다. 최신 판정과 환경 제약은
+> [대화 정리 검수 기록](2026-09-09-main-conversation-closure.md)에 별도로 남긴다.
+
 브랜치 `claude/card-api-integration-ui-check-86682c`. 실제 백엔드(FastAPI 8010)와 실제
 Kiwoom 모의 API로 Paper 보드 101장을 전수 마운트해, 화면에 찍힌 결측어와 잘린 글자를
 세고 그 원인을 코드로 닫은 기록이다.
@@ -28,7 +36,7 @@ Kiwoom 모의 API로 Paper 보드 101장을 전수 마운트해, 화면에 찍�
 준비: `backend/.env`(모의 API 자격)와 `app/node_modules`·`backend/.venv`. 워크트리에서는
 주 체크아웃을 정션으로 잇는다. 백엔드는 `python -m uvicorn athena_api.main:app --port 8010`.
 
-## 2. 실측 (보드 101장 · 폭 4단계)
+## 2. 이전 검사 기록 (보드 101장 · 폭 4단계, 가시성 검증 수정 전)
 
 | 항목 | 처음 | 지금 |
 |---|---:|---:|
@@ -121,8 +129,12 @@ op 사유별로는 `bound` 485 · `mock_unsupported` 76 · `not_a_rest_read` 64 
 14. **넘침 처방이 폭 사이를 오가며 다시 돌았다.** 접기·스크롤이 스크롤바를 만들거나
     없애면 표면의 clientWidth가 두 값 사이를 오가고, 기억한 폭과 달라 처방이 다시 돈다 —
     그 사이 렌더러가 붙잡혀 프로브가 멈춘다(실측: 버튼 감사가 보드 100장을 지난 뒤
-    출력 없이 33분 정지, 같은 보드 하나만 돌리면 39초에 통과). 표면 하나가 받는 처방
-    횟수에 상한(8)을 뒀다 — 잘림이 남는 것이 정지보다 낫다.
+    출력 없이 33분 정지, 같은 보드 하나만 돌리면 39초에 통과). 처음 둔 표면당 8회
+    제한은 이후 실제 리사이즈도 영구 중단시켜 병합 검수에서 제거했다. 관찰 기준을
+    스크롤바에 흔들리는 clientWidth에서 외부 배정 폭인 border-box로 바꾸었다.
+    한 번의 보정도 고정 6회에서 끊지 않고 새 줄·라벨·스크롤 표시가 더 없을 때 종료한다.
+    표시는 중복 적용하지 않아 유한한 노드 수 안에서 수렴한다. 내부 폭 진동을 무시하고
+    실제 폭 변경 12회를 계속 처리하는 회귀 테스트와 전수 마운트 101/101을 확인했다.
 
 ## 3.1 결측어를 쓰는 자리 — 확정 규칙 넷
 
@@ -139,12 +151,13 @@ op 사유별로는 `bound` 485 · `mock_unsupported` 76 · `not_a_rest_read` 64 
 셋째·넷째가 없으면 카드가 결측어 벽이 된다. 그 벽은 「제공되지 않는다」는 말을 스무 번
 반복하는 것이고, 실제로는 「이 조회에는 그 값이 없다」였다.
 
-## 4. 남은 결측어 0자리 — 침묵의 정체
+## 4. 결측어 계측과 op 응답 판정을 구분한다
 
-전수 프로브가 화면에서 세는 결측어는 **0**이다. 다만 그것만으로는 「값이 정상으로
-들어왔다」가 증명되지 않는다: 상류가 정상으로 빈 목록을 답한 자리는 규칙대로 빈 칸이
-되므로 화면에 흔적이 없다. 그 침묵을 가르는 것이 op 원장(`verify_operations.py`)이고,
-지금 **결함 0자리**다. 받아들이는 상태는 넷이다.
+이전 프로브의 결측어 **0**은 로딩 상태를 계측한 결과였으므로 폐기했다. 가시성 검증을
+고친 뒤에는 결측어 **228**이 관측된다. 별개로, 상류가 정상으로 빈 목록을 답한 자리는
+규칙대로 빈 칸이 되므로 화면에 흔적이 없다. 정상 빈 응답과 호출 실패를 가르는 것이
+op 원장(`verify_operations.py`)이다. 최신 101장 조회에서도 분류되지 않은 결함은 0이며,
+모의투자 미지원과 사용자 인자 부족은 별도 사유로 보존했다. 기본 상태는 넷이다.
 
   · `bound` — 조회가 `return_code 0`으로 답했다. 값 수가 0이어도 정상 응답이다
     (업무 오류는 `bound`가 되지 않는다, `canvas_push._hydrate_operation`).
@@ -195,24 +208,45 @@ Paper가 **디자인으로 그려 둔** 결측어 라벨은 결함이 아니다(
 
 ## 6. 이어받는 법
 
-```bash
-# 1) 백엔드
-cd backend && ./.venv/Scripts/python.exe -m uvicorn athena_api.main:app --host 127.0.0.1 --port 8010
+PowerShell 터미널 1에서 백엔드를 실행하고 그대로 둔다. 이미 8010 포트에서 실행 중이면
+이 단계는 생략한다.
 
-# 2) 전수 검사 (실제 API · 폭 4단계 · 약 12분)
-cd app && npm run verify:card-api-sweep
-
-# 3) op 상태 전수 판정 (실제 API · 약 6분)
-python scripts/card-api-sweep/verify_operations.py
-
-# 4) 남은 결측어 사유
-python scripts/card-api-sweep/explain_missing.py
-
-# 한 보드만 · 스크린샷까지
-ATHENA_VERIFY_BOARD_IDS=4AUX-1 ATHENA_SWEEP_CAPTURE=4AUX-1 npm run verify:card-api-sweep
+```powershell
+Set-Location C:/Projects/DAOU.Athena/backend
+./.venv/Scripts/python.exe -m uvicorn athena_api.main:app --host 127.0.0.1 --port 8010
 ```
 
-게이트는 결측어가 남아 있으면 실패한다(`card api sweep failed`). 지금은 초록이다.
+별도 PowerShell 터미널 2에서 저장소 루트를 기준으로 실행한다.
+
+```powershell
+Set-Location C:/Projects/DAOU.Athena
+# 전수 검사 (실제 API · 폭 4단계 · 약 12분)
+npm --prefix app run verify:card-api-sweep
+# op 상태 전수 판정 (실제 API · 약 6분)
+./backend/.venv/Scripts/python.exe scripts/card-api-sweep/verify_operations.py
+# 남은 결측어 사유
+./backend/.venv/Scripts/python.exe scripts/card-api-sweep/explain_missing.py
+```
+
+한 보드와 스크린샷만 검사하려면 터미널 2에서 다음을 실행한다. 환경변수는 검사 후
+원래 값으로 복원하므로 뒤의 전수 검사에 보드 선택이 남지 않는다.
+
+```powershell
+$previousBoards = $env:ATHENA_VERIFY_BOARD_IDS
+$previousCapture = $env:ATHENA_SWEEP_CAPTURE
+try {
+    $env:ATHENA_VERIFY_BOARD_IDS = '4AUX-1'
+    $env:ATHENA_SWEEP_CAPTURE = '4AUX-1'
+    npm --prefix app run verify:card-api-sweep
+} finally {
+    $env:ATHENA_VERIFY_BOARD_IDS = $previousBoards
+    $env:ATHENA_SWEEP_CAPTURE = $previousCapture
+}
+```
+
+게이트는 결측어가 남아 있으면 실패한다(`card api sweep failed`). 모의투자 미지원이나
+조회 인자 부족도 이 엄격한 화면 게이트를 자동 통과시키지 않는다. 이전 초록 결과는
+가시성 결함 수정으로 무효화했으며 최신 실패 사유를 위 검수 기록에서 확인한다.
 
 주의 둘.
 · **백엔드 테스트는 `backend/`에서 돌린다** — `pyproject.toml`이 거기 있어 워크트리

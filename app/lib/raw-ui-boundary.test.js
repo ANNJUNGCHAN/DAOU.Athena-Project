@@ -152,10 +152,11 @@ test('integrated task metadata stays in JS state instead of technical product DO
 
 test('semantic workspace module has no raw response traversal surface', () => {
   const source = fs.readFileSync(path.join(__dirname, 'semantic-workspace.js'), 'utf8');
-  const allowedOperationMetadata = /SOURCE_TABLE_PRIMARY_LABELS\[firstText\(envelope\.operation_ref, envelope\.operationRef\)\]/g;
-  assert.equal((source.match(allowedOperationMetadata) || []).length, 1);
-  const traversalSurface = source.replace(allowedOperationMetadata, '');
-  assert.doesNotMatch(traversalSurface, /source_data|raw_data|json_path|operation_ref|field_occurrence_id/i);
+  assert.doesNotMatch(source, /source_data|raw_data|json_path|field_occurrence_id/i);
+  const operationRefs = source.match(/\boperation_ref\b/gi) || [];
+  assert.equal(operationRefs.length, 1, 'operation_ref는 내부 기본 열 라벨 선택 한 곳에서만 쓴다');
+  assert.match(source, /primaryColumnLabels: SOURCE_TABLE_PRIMARY_LABELS\[firstText\(envelope\.operation_ref, envelope\.operationRef\)\] \|\| \[\]/);
+  assert.doesNotMatch(source, /dataset\.(?:operationRef|operation_ref)\s*=|data-operation-ref/i);
 });
 
 test('chart and orderbook product copy excludes transport and TR implementation terms', () => {

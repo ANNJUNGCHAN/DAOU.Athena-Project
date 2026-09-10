@@ -4135,10 +4135,15 @@ button.backtest-crumb-home:hover { color: var(--color-k-text); text-decoration: 
   font-size: 12px;
 }
 
-/* ---------- 기법 폴더 편집기(보드 20 · 폴더 하나 = 기법 하나) ----------
-   왼쪽 기법 폴더 트리(+ 자동 검사·환경) · 오른쪽 편집기. 편집기 자체는 .backtest-code-*를
-   그대로 쓴다(같은 편집기 하나다) — 여기서는 그 둘레만 그린다. 폴더를 고르는 줄은 없다. */
-.project-ide { margin-bottom: 12px; }
+/* ---------- 기법 코드 작업공간 ---------- */
+.project-ide {
+  min-height: 560px;
+  margin-bottom: 12px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 10px;
+  background: var(--color-k-panel2);
+  overflow: hidden;
+}
 
 .project-ide-confirm-discard,
 .project-ide-confirm-cancel {
@@ -4152,7 +4157,8 @@ button.backtest-crumb-home:hover { color: var(--color-k-text); text-decoration: 
   cursor: pointer;
 }
 .project-ide-message {
-  margin-bottom: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--color-k-line-soft);
   font-family: var(--font-body);
   font-size: var(--text-xs);
   color: var(--color-k-soft);
@@ -4162,31 +4168,34 @@ button.backtest-crumb-home:hover { color: var(--color-k-text); text-decoration: 
 
 .project-ide-body {
   display: flex;
-  gap: 10px;
+  min-height: 560px;
   align-items: stretch;
 }
 
 /* 왼쪽 — 파일 트리 */
 .project-ide-side {
-  flex: 0 0 200px;
+  flex: 0 0 230px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
   min-width: 0;
-  padding: 8px;
-  background: var(--color-k-panel2);
-  border: 1px solid var(--color-k-line);
-  border-radius: 10px;
+  padding: 10px 6px;
+  background: var(--color-k-panel3);
+  border-right: 1px solid var(--color-k-line);
 }
 /* 「기법 폴더」 머리와 폴더 이름 한 줄 — 트리는 그 아래 한 단 들어간다. */
 .project-ide-side-title {
-  padding-bottom: 4px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 6px 8px;
   border-bottom: 1px solid var(--color-k-line-soft);
   color: var(--color-k-faint);
   font-family: var(--font-body);
   font-size: var(--text-2xs);
   letter-spacing: 0.1em;
 }
+.project-ide-side-count { letter-spacing: 0; white-space: nowrap; }
 .project-ide-folder {
   padding: 3px 4px;
   color: var(--color-k-text);
@@ -4198,14 +4207,15 @@ button.backtest-crumb-home:hover { color: var(--color-k-text); text-decoration: 
 }
 .project-ide-tree {
   flex: 1 1 auto;
-  max-height: 320px;
+  max-height: 520px;
   overflow: auto;
 }
 .project-ide-row { display: flex; }
 .project-ide-dir,
 .project-ide-file {
   width: 100%;
-  padding: 3px 4px;
+  min-height: 26px;
+  padding: 4px 6px;
   border: 0;
   border-radius: 6px;
   background: transparent;
@@ -4219,9 +4229,10 @@ button.backtest-crumb-home:hover { color: var(--color-k-text); text-decoration: 
   text-overflow: ellipsis;
 }
 .project-ide-dir { color: var(--color-k-soft); }
-/* .py는 이 기능이 실제로 여는 파일이다 — 나머지는 보이기만 한다(D3). */
 .project-ide-file.is-py { color: var(--color-k-text); }
-.project-ide-file.is-other { color: var(--color-k-ghost); cursor: not-allowed; }
+.project-ide-file.is-other { color: var(--color-k-soft); }
+.project-ide-dir:hover,
+.project-ide-file:hover { background: color-mix(in srgb, var(--color-k-panel) 75%, transparent); }
 .project-ide-file.is-on { background: var(--color-k-panel3); color: var(--color-brand); }
 .project-ide-truncated {
   font-family: var(--font-body);
@@ -4229,25 +4240,39 @@ button.backtest-crumb-home:hover { color: var(--color-k-text); text-decoration: 
   color: var(--color-k-ghost);
 }
 
-/* 오른쪽 — 탭 스트립 + 머리줄 + 편집기 */
+/* 오른쪽 — 탭 스트립 + 편집기 + 실제 명령 결과 터미널 */
+.project-ide-workbench {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: grid;
+  grid-template-rows: minmax(340px, 1fr) auto;
+  background: var(--color-k-panel);
+}
 .project-ide-main {
   flex: 1 1 auto;
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0;
 }
-.project-ide-tabstrip { display: flex; flex-wrap: wrap; gap: 4px; }
+.project-ide-tabstrip {
+  display: flex;
+  min-height: 34px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--color-k-line);
+  background: var(--color-k-panel3);
+}
 .project-ide-tab {
   display: flex;
   align-items: center;
   gap: 2px;
-  padding: 2px 4px 2px 8px;
-  border: 1px solid var(--color-k-line);
-  border-radius: 8px;
+  min-width: 120px;
+  padding: 5px 5px 5px 10px;
+  border: 0;
+  border-right: 1px solid var(--color-k-line);
   background: var(--color-k-panel2);
 }
-.project-ide-tab.is-on { border-color: var(--color-brand); }
+.project-ide-tab.is-on { background: var(--color-k-panel); box-shadow: inset 0 2px var(--color-brand); }
 .project-ide-tab-name,
 .project-ide-tab-close {
   border: 0;
@@ -4270,7 +4295,9 @@ button.backtest-crumb-home:hover { color: var(--color-k-text); text-decoration: 
   display: flex;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
+  min-height: 34px;
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--color-k-line-soft);
 }
 /* 편집기 머리(보드 20) — 파일 이름 · 저장 상태 · 이 코드가 쓰는 것. */
 .project-ide-head-path {
@@ -4318,7 +4345,92 @@ button.backtest-crumb-home:hover { color: var(--color-k-text); text-decoration: 
   color: var(--color-k-text);
 }
 
-.project-ide-editor { min-width: 0; }
+.project-ide-editor { min-width: 0; flex: 1 1 auto; }
+.project-ide-editor .backtest-code-root,
+.project-ide-editor .backtest-code-editor { height: 100%; max-height: none; }
+.project-ide-editor .backtest-code-pre { min-height: 320px; max-height: none; }
+
+.project-ide-binary {
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--color-k-faint);
+  font-family: var(--font-body);
+  text-align: center;
+}
+.project-ide-binary-icon {
+  padding: 10px;
+  border: 1px solid var(--color-k-line);
+  border-radius: 8px;
+  font-family: var(--font-mono);
+}
+.project-ide-binary-title { color: var(--color-k-text); font-family: var(--font-mono); }
+.project-ide-binary-copy { max-width: 420px; font-size: var(--text-xs); }
+
+.project-ide-terminal { border-top: 1px solid var(--color-k-line); background: var(--color-k-panel2); }
+.project-ide-terminal-head {
+  display: flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 10px;
+  border-bottom: 1px solid var(--color-k-line-soft);
+}
+.project-ide-terminal-toggle,
+.project-ide-terminal-clear {
+  border: 0;
+  background: transparent;
+  color: var(--color-k-text);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+.project-ide-terminal-cwd {
+  flex: 1 1 auto;
+  margin-left: 10px;
+  color: var(--color-k-faint);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+.project-ide-terminal-log {
+  height: 130px;
+  padding: 8px 12px;
+  overflow: auto;
+  color: var(--color-k-text);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 18px;
+  white-space: pre-wrap;
+}
+.project-ide-terminal-empty { color: var(--color-k-ghost); }
+.project-ide-terminal-line.is-command { color: var(--color-brand); }
+.project-ide-terminal-line.is-stderr { color: var(--color-down); }
+.project-ide-terminal-line.is-status { color: var(--color-ok); }
+.project-ide-terminal-form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-top: 1px solid var(--color-k-line-soft);
+}
+.project-ide-terminal-prompt { color: var(--color-brand); font-family: var(--font-mono); }
+.project-ide-terminal-input {
+  flex: 1 1 auto;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--color-k-text);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+@media (max-width: 900px) {
+  .project-ide-body { flex-direction: column; }
+  .project-ide-side { flex-basis: auto; max-height: 210px; border-right: 0; border-bottom: 1px solid var(--color-k-line); }
+  .project-ide-tree { max-height: 150px; }
+}
 
 /* 왼쪽 열 바닥(보드 20) — 자동 검사 목록, 환경, 「이 폴더 밖은 AI가 건드리지 않습니다.」 */
 .backtest-ws-side-footer {

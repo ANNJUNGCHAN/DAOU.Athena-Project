@@ -32,6 +32,9 @@ const EquityChart = isNode
 const Explain = isNode ? require('./backtest-explain') : window.AthenaLib.BacktestExplain;
 // 코드 탭의 프로젝트 IDE(결정 D1~D4) — 배선이 있을 때만 켜진다(ensureProjectIde 참고).
 const ProjectIde = isNode ? require('./project-ide') : window.AthenaLib.ProjectIde;
+const TechniqueCreateDialog = isNode
+  ? require('./technique-create-dialog')
+  : window.AthenaLib.TechniqueCreateDialog;
 // 작업공간 봉인·복원 판정(41·42번 보드) — 무엇을 남기고 무엇이 돌아왔는가는 이 순수
 // 모듈 하나가 정한다. 화면은 그 판정을 그리기만 한다.
 const SessionRestore = isNode ? require('./session-restore') : window.AthenaLib.SessionRestore;
@@ -226,23 +229,6 @@ const TECHNIQUE_TEST_PATH = 'tests/test_strategy.py';
 // 구간**을 그대로 쓰고, 그 사실을 카드에 적는다(모름을 숫자로 덮지 않는다).
 const TECHNIQUE_AUTORUN_SYMBOL = '005930';
 const TECHNIQUE_AUTORUN_PERIOD = 'day';
-// 사람이 누르는 것은 둘뿐이다 — 이 버튼과 실매매 적용. 폴더 안의 편집·검사·실행은 묻지 않는다.
-const TECHNIQUE_APPROVE_LABEL = '이 기법 승인';
-// 명령창을 끝으로 굴릴 때 쓰는 값 — 진짜 DOM은 scrollHeight로 잘라 준다.
-const TERMINAL_SCROLL_END = 999999;
-// 코드창 위의 띠 — 누가 이 코드를 쥐고 있는가. 사용자 확정: 코드창은 편집 가능하지만
-// AI가 제어한다. 그래서 기본은 왼쪽 문장이고, [직접 편집]을 켜야 오른쪽이 된다.
-const TECHNIQUE_BAND_AI = 'AI가 제어하는 중 · 자동 수락';
-const TECHNIQUE_BAND_HAND = '직접 편집 중 · 자동 저장';
-// 띠의 뒷말 — 어느 쪽이든 폴더 안의 일은 묻지 않는다는 사실은 같다(보드 20).
-const TECHNIQUE_BAND_NOTE = '— 폴더 안 편집·검사·백테스트 실행은 묻지 않습니다';
-// 승인 바(보드 22) — 순환이 끝나는 자리. 버튼이 서기 전에는 무엇을 기다리는지 적는다.
-const TECHNIQUE_APPROVE_TITLE = '이 순환은 사용자가 만족할 때까지 반복됩니다';
-const TECHNIQUE_APPROVE_SUB = '코드는 AI가, 판단은 사람이 — 승인 전까지 목록에도 실매매에도 올라가지 않습니다';
-const TECHNIQUE_APPROVE_WAIT = '검사를 넘고 자동 백테스트가 끝나면 승인할 수 있습니다';
-// 왼쪽 열 바닥의 한 줄(보드 20) — 이 화면이 다루는 폴더가 하나뿐이라는 다짐이다.
-const WORKSPACE_FOLDER_NOTE = '이 폴더 밖은 AI가 건드리지 않습니다.';
-const TERMINAL_SUB = 'AI가 실행합니다 — 이 폴더 안에서는 묻지 않습니다';
 // 검사는 전부 자동이다(사용자 확정). 한 자 칠 때마다 백엔드를 부르지 않도록 묶는 시간 —
 // 시각 편집기의 검증 디바운스와 같은 규칙이다.
 const TECHNIQUE_CHECK_DEBOUNCE_MS = 700;
@@ -253,7 +239,7 @@ const TECHNIQUE_CHECK_TOTAL = 5;
 // log만 화면 것이라 컨텍스트에 실리지 않는다(명령창 출력으로 컨텍스트가 부풀지 않게).
 const TECHNIQUE_EMPTY = Object.freeze({
   // 이 기법의 폴더와 파일(보드 20) — 폴더를 못 만들면 둘 다 null이고 코드는 화면 버퍼에만 산다.
-  projectId: null, path: TECHNIQUE_STRATEGY_PATH, name: null,
+  projectId: null, rootPath: null, path: TECHNIQUE_STRATEGY_PATH, name: null,
   checks: [], passed: false, stats: null, log: [],
   nodes: [], flows: null, granularity: null, selectedNode: null, lastCheckAt: null,
   // AI가 한 일이 쌓이는 자리(보드 22). steps는 카드 그대로고, lastDiff는 [diff 보기]가
@@ -503,19 +489,6 @@ function changedNodeIds(diffKeys) {
 // 코드 영수증의 "몇 줄" — 빈 편집기는 1줄이 아니라 0줄이다(getContext().code.lines와 같은 규칙).
 function countLines(source) {
   return source ? String(source).split('\n').length : 0;
-}
-
-// 설치를 요청할 수 있는 이름인가 — 백엔드 store.py `_PACKAGE_SPEC`과 같은 규칙이다.
-// 화면에서 막는 것은 설명이고(왜 안 되는지를 그 자리에서 말한다), 백엔드의 422가 보장이다.
-const PACKAGE_SPEC_RE = /^[A-Za-z0-9][A-Za-z0-9._-]*(==[A-Za-z0-9][A-Za-z0-9._+!-]*)?$/;
-
-function isValidPackageSpec(text) {
-  return String(text).length <= 128 && PACKAGE_SPEC_RE.test(String(text));
-}
-
-// "pandas, scipy==1.14" → ['pandas', 'scipy==1.14']. 쉼표·공백·줄바꿈 아무거나 받는다.
-function parsePackageList(text) {
-  return String(text == null ? '' : text).split(/[\s,]+/).filter((t) => t);
 }
 
 // 등록부가 주는 파라미터는 파일의 `PARAMS` 기본값뿐이다(백엔드 flow.params_defaults) —
@@ -929,6 +902,11 @@ function createBacktestCanvas(options) {
     || (typeof setTimeout !== 'undefined' ? setTimeout : null);
   const clearTimeoutImpl = deps.clearTimeoutImpl
     || (typeof clearTimeout !== 'undefined' ? clearTimeout : null);
+  // 프리셋은 대화에서 기법 초안을 세우거나 이전 세션을 복원할 때 쓰는 내부 재료다.
+  // 사용자의 기법 목록에는 실제로 만들어 등록한 폴더만 세운다. 옛 화면을 검증하는
+  // 하네스만 명시적으로 켤 수 있고 제품 기본값은 꺼져 있다.
+  const showBuiltInTechniques = deps.showBuiltInTechniques === true;
+  const showUnregisteredDrafts = deps.showUnregisteredDrafts === true;
 
   // 배포 계약에 자동 매매가 붙으며 늘어난 두 손잡이(2026-09-04, 보드 23).
   //   armDeployment(id, armed) → {armed}  · 사람 클릭 전용. 없으면 토글을 아예 안 그린다.
@@ -967,8 +945,6 @@ function createBacktestCanvas(options) {
   // 노드 창이 자동으로 열린 적이 있는가 — 자동 전환은 처음 한 번뿐이다(그 뒤에는 코드가
   // 바뀌어도 보고 있던 탭을 뺏지 않는다).
   let techniqueNodesShown = false;
-  // [직접 편집] 토글 — 띠의 문장을 바꾼다. 코드는 어느 쪽이든 편집 가능하다.
-  let techniqueHandEdit = false;
   // 마지막으로 노드를 읽은 원문 — 같은 코드를 두 번 읽지 않는다.
   let techniqueNodesSource = null;
   // 마지막으로 카드를 낸 통과 여부 — 통과/실패가 뒤집힌 순간에만 영수증을 낸다.
@@ -982,13 +958,11 @@ function createBacktestCanvas(options) {
   // 자동 백테스트를 이미 돌린 원문 — 같은 코드로 두 번 돌지 않는다(검사는 코드가 바뀔
   // 때마다 도는데, 같은 코드로 실행까지 매번 돌면 백엔드가 같은 잡을 계속 받는다).
   let techniqueAutoRunSource = null;
-  // 자동 실행 폴링은 사람이 누른 실행(pollTimer)·환경 잡(envTimer)과 별개 타이머다 —
-  // 같은 자리를 쓰면 자동 실행이 도는 동안 사람이 누른 실행의 폴링이 끊긴다.
+  // 자동 실행 폴링은 사람이 누른 실행(pollTimer)과 별개 타이머다 — 같은 자리를 쓰면
+  // 자동 실행이 도는 동안 사람이 누른 실행의 폴링이 끊긴다.
   let techniqueRunTimer = null;
   // 코드 탭 위에 diff 패널이 서 있는가([diff 보기]가 켜고 [코드로]가 끈다).
   let techniqueDiffOpen = false;
-  // 명령창을 펼쳐 끝으로 굴렸는가([출력 보기]가 켠다).
-  let techniqueTerminalOpen = false;
   let state = {
     view: 'empty', tab: 'design', designTab: 'code', mapVersion: 0, technique: TECHNIQUE_EMPTY,
   };
@@ -1010,15 +984,13 @@ function createBacktestCanvas(options) {
   let workspaceGeneration = 0;
   let workspaceCleared = false;
   let pollTimer = null;
-  // 환경 구성 잡의 폴링은 실행·수집 폴링과 별개 타이머다 — 같은 자리를 쓰면 pip이 도는
-  // 동안 실행 폴링이 끊기거나 그 반대가 된다(둘은 서로를 모른다).
-  let envTimer = null;
   let loadRequestId = 0;
   let mounted = false;
   let editorHandle = null;
   // 프로젝트 IDE는 한 번 만들어 계속 들고 있다 — render()가 매번 DOM을 새로 만들어도
   // 열린 탭·저장 안 한 버퍼가 살아남아야 한다.
   let projectIde = null;
+  const chatEditingOwners = new Set();
   // 지금 프로젝트의 .py 목록 — 화면에는 안 쓰고 다음 턴 컨텍스트에만 실린다. 모델이
   // 폴더 안을 모르면 없는 경로를 지어내 propose_file을 낸다.
   let projectFiles = [];
@@ -1033,6 +1005,8 @@ function createBacktestCanvas(options) {
   let ideOwnsCode = false;
   // 새 기법을 대화로 만드는 중인가(US-011) — live-prompt가 다음 단계에서 읽을 신호다.
   let techniqueDraft = false;
+  // 빠르게 두 번 눌러도 위치 창·폴더·새 대화는 하나만 만든다.
+  let techniqueCreationPromise = null;
   // 보드 19 목록 필터. 빈 문자열은 Paper의 「전체」다 — 값이 없으면 지어내지 않는다.
   let techniqueCategoryFilter = '';
   let techniqueStatusFilter = '';
@@ -1080,8 +1054,13 @@ function createBacktestCanvas(options) {
       list = deps.fetchPresets ? await deps.fetchPresets() : [];
     } catch (err) {
       if (rid !== loadRequestId) return;
-      fail(err);
-      return;
+      // 제품 목록의 진실은 등록부다. 내장 프리셋 조회가 깨져도 사용자가 만든 기법까지
+      // 가리면 안 된다. 옛 프리셋 카탈로그를 명시적으로 연 화면에서만 그 오류를 막는다.
+      if (showBuiltInTechniques) {
+        fail(err);
+        return;
+      }
+      list = [];
     }
     if (rid !== loadRequestId) return;
     presets = Array.isArray(list) ? list : [];
@@ -1092,7 +1071,7 @@ function createBacktestCanvas(options) {
     // 복원보다 늦게 끝날 수 있고, 그때 봉인해 둔 탭이 폼으로 튀면 "그대로"가 거짓이 된다.
     if (state.restore) setState({ view: 'design' });
     else setState({ view: 'design', tab: 'design', designTab: 'form', mapVersion: 0 });
-    // 등록부는 부수 정보다 — 못 읽었다고 프리셋 화면까지 실패로 만들지 않는다.
+    // 등록부가 목록의 진실이다. 못 읽으면 없는 기법을 지어내지 않고 빈 목록으로 남긴다.
     await loadUserStrategies();
   }
 
@@ -1102,7 +1081,10 @@ function createBacktestCanvas(options) {
     if (!deps.userStrategies) return;
     let list;
     try { list = await deps.userStrategies(); }
-    catch { return; }
+    catch (err) {
+      if (!showBuiltInTechniques) fail(err);
+      return;
+    }
     userStrategies = Array.isArray(list) ? list : [];
     render();
   }
@@ -1330,7 +1312,11 @@ function createBacktestCanvas(options) {
     // 못 열었으면 이유는 IDE가 자기 자리에 적었다 — 폼에도 한 줄 남긴다. 폼만 보고 있는
     // 사람에게는 코드 탭의 문장이 보이지 않는다.
     if (!opened) setState({ formErrors: [`${entry.path}를 열지 못했습니다 — 코드 탭을 보세요`] });
-    else render();
+    else {
+      const active = activeProjectFile();
+      if (active && typeof active.text === 'string') codeSource = active.text;
+      render();
+    }
   }
 
   // 홈으로 나가는 것은 버리는 것이 아니다(규칙 32-05) — 기법 하나가 들고 있던 것을
@@ -1357,6 +1343,7 @@ function createBacktestCanvas(options) {
       // 홈의 「수정 중」 카드가 읽을 이름 — 잠재운 뒤에는 폴더를 물어볼 수 없어 지금 적는다.
       name: (project && project.name) || (spec && spec.name) || TECHNIQUE_NEW_NAME,
       projectId: t.projectId || null,
+      rootPath: t.rootPath || null,
       path: t.path || TECHNIQUE_STRATEGY_PATH,
       spec,
       userStrategyId,
@@ -1369,10 +1356,8 @@ function createBacktestCanvas(options) {
       openedVersion,
       ideOwnsCode,
       deploySignals,
-      techniqueTerminalOpen,
       techniqueNodesShown,
       techniqueNodesSource,
-      techniqueHandEdit,
       techniqueDiffOpen,
       technique: t,
       result: state.result,
@@ -1403,10 +1388,8 @@ function createBacktestCanvas(options) {
     openedVersion = snap.openedVersion;
     ideOwnsCode = snap.ideOwnsCode;
     deploySignals = snap.deploySignals;
-    techniqueTerminalOpen = snap.techniqueTerminalOpen;
     techniqueNodesShown = snap.techniqueNodesShown;
     techniqueNodesSource = snap.techniqueNodesSource;
-    techniqueHandEdit = snap.techniqueHandEdit;
     techniqueDiffOpen = snap.techniqueDiffOpen;
     lastError = null;
     setState({
@@ -1418,7 +1401,11 @@ function createBacktestCanvas(options) {
     });
     const ide = snap.projectId ? ensureProjectIde() : null;
     if (ide) {
-      const opened = await ide.openAt(snap.projectId, snap.path);
+      const opened = await ide.openAt(
+        snap.projectId,
+        snap.path,
+        snap.rootPath ? { rootPath: snap.rootPath } : undefined,
+      );
       if (generation !== workspaceGeneration) return true;
       ideOwnsCode = !!opened;
       render();
@@ -1517,10 +1504,9 @@ function createBacktestCanvas(options) {
         tree: deps.projectTree,
         readFile: deps.readProjectFile,
         writeFile: deps.writeProjectFile,
+        runTerminal: deps.runProjectTerminal,
         setTimeout: setTimeoutImpl,
         clearTimeout: clearTimeoutImpl,
-        // 왼쪽 열 바닥 — 자동 검사·환경·다짐 한 줄(보드 20). 편집기는 이 열의 상태를 모른다.
-        sideFooter: () => (workspaceActive() ? renderWorkspaceSideFooter() : null),
         onSaved: onIdeSaved,
         // 프로젝트가 정해지면 코드 탭의 구성이 바뀐다 — 캔버스를 다시 그린다.
         // 폴더가 바뀌면 앞 폴더의 파일 목록·파일 초안은 더 이상 이 화면의 것이 아니다.
@@ -1530,29 +1516,33 @@ function createBacktestCanvas(options) {
           // 채팅이 낸 파일 초안·환경 패널이 서는 자리가 거기다. 아래 setState가 곧바로
           // 다시 그리므로 그 전에 정해둔다.
           ideOwnsCode = !!project;
-          if (project) void loadProjectFiles(project.id);
-          // 앞 폴더의 환경 잡도 여기서 끊는다 — 안 끊으면 대기 중인 틱이 앞 폴더의
-          // 진행 줄을 이 폴더의 패널에 적고, 끝나면 앞 폴더의 venv를 이 폴더의
-          // "준비됨 · N개 패키지"로 읽는다.
-          if (envTimer != null && clearTimeoutImpl) clearTimeoutImpl(envTimer);
-          envTimer = null;
-          setState({
-            fileDraft: null, env: null, envError: null, envProgress: null, envJobId: null,
-          });
-          if (project) void loadProjectEnv(project.id);
+          if (project) void loadProjectFiles(
+            project.id,
+            projectIde && typeof projectIde.currentRootPath === 'function'
+              ? projectIde.currentRootPath() : '',
+          );
+          setState({ fileDraft: null });
         },
       },
     });
     projectIde.mount();
+    projectIde.setReadOnly(chatEditingOwners.size > 0);
     return projectIde;
   }
 
   // 컨텍스트에 실을 .py 경로 — 트리를 한 번 더 읽는다(IDE는 자기 트리를 내주지 않는다).
   // 못 읽으면 조용히 빈 목록이다. 부수 정보라 화면을 실패로 만들지 않는다.
-  async function loadProjectFiles(projectId) {
-    if (!deps.projectTree || !projectId) { projectFiles = []; return; }
+  async function loadProjectFiles(projectId, rootPath, generation) {
+    if (!deps.projectTree || !projectId) {
+      if (generation == null || generation === workspaceGeneration) projectFiles = [];
+      return false;
+    }
     let res;
-    try { res = await deps.projectTree(projectId); } catch { projectFiles = []; return; }
+    try { res = await deps.projectTree(projectId, rootPath || ''); } catch {
+      if (generation == null || generation === workspaceGeneration) projectFiles = [];
+      return false;
+    }
+    if (generation != null && generation !== workspaceGeneration) return false;
     const out = [];
     const walk = (list) => {
       (Array.isArray(list) ? list : []).forEach((entry) => {
@@ -1563,12 +1553,14 @@ function createBacktestCanvas(options) {
     };
     walk(res && res.entries);
     projectFiles = out;
+    return true;
   }
 
-  // 프로젝트에서 실행할 때의 원문 — 디스크의 그 파일이다(D2). 열린 파일이 없으면
-  // null을 돌려주고, 그때는 지금까지의 단일 버퍼(codeSource)가 그대로 쓰인다.
+  // 프로젝트에서 실행할 때의 원문 — 디스크의 UTF-8 파이썬 파일이다(D2). 탐색기는
+  // 모든 파일을 열지만 README·데이터·바이너리를 실행 코드로 넘기지는 않는다.
   function activeProjectFile() {
-    return projectIde ? projectIde.activeFile() : null;
+    const active = projectIde ? projectIde.activeFile() : null;
+    return active && active.kind === 'text' && /\.py$/i.test(active.path) ? active : null;
   }
 
   // 실행 직전 그 파일의 디스크 내용. 못 읽으면 편집기 버퍼로 물러난다 — 못 읽었다고
@@ -1580,77 +1572,6 @@ function createBacktestCanvas(options) {
       const res = await deps.readProjectFile(project.id, activeFile.path);
       return res && typeof res.text === 'string' ? res.text : activeFile.text;
     } catch { return activeFile.text; }
-  }
-
-  // ---------- 프로젝트 가상환경(폴더 안의 .venv 하나) ----------
-  //
-  // 환경을 만드는 것은 돈도 할당량도 지나지 않는 준비 작업이다(WAVE-3 계약) — 그래도
-  // 버튼은 사람이 누른다. 여기서 사람 손이 필요한 이유는 승인이 아니라 시간이다: pip이
-  // 수십 초를 쓰고 그 동안 이 폴더의 실행이 무엇을 쓸 수 있는지가 바뀐다.
-
-  async function loadProjectEnv(projectId) {
-    if (!deps.projectEnv || !projectId) return;
-    try { setState({ env: await deps.projectEnv(projectId), envError: null }); }
-    catch (err) { setState({ env: null, envError: String((err && err.message) || err) }); }
-  }
-
-  async function startProjectEnv() {
-    const project = projectIde ? projectIde.currentProject() : null;
-    if (!project || !deps.createProjectEnv) return;
-    const packages = parsePackageList(state.envPackages);
-    const bad = packages.filter((name) => !isValidPackageSpec(name));
-    if (bad.length) {
-      setState({ envError: `설치할 수 있는 이름이 아닙니다: ${bad.join(', ')} (예: pandas, pandas==2.2.3)` });
-      return;
-    }
-    setState({ envError: null, envProgress: '환경을 만드는 중입니다…' });
-    let res;
-    try { res = await deps.createProjectEnv(project.id, packages); }
-    catch (err) {
-      setState({ envProgress: null, envError: String((err && err.message) || err) });
-      return;
-    }
-    const jobId = res && res.job_id;
-    if (!jobId) { setState({ envProgress: null, envError: 'job_id를 받지 못했습니다' }); return; }
-    setState({ envJobId: jobId });
-    pollEnvJob(project.id);
-  }
-
-  // 진행은 기존 잡 라우트를 그대로 쓴다(deps.status = athena:backtest-status) — 잡 표면을
-  // 둘로 만들지 않는다. 끝나면 상태를 다시 읽어 "몇 개 패키지"가 실제 디스크와 맞게 한다.
-  function pollEnvJob(projectId) {
-    if (envTimer != null && clearTimeoutImpl) clearTimeoutImpl(envTimer);
-    envTimer = null;
-    const tick = async () => {
-      envTimer = null;
-      if (!isVisible()) return;
-      let job;
-      try { job = deps.status ? await deps.status({ job_id: state.envJobId }) : null; }
-      catch (err) {
-        setState({ envProgress: null, envJobId: null, envError: String((err && err.message) || err) });
-        return;
-      }
-      if (!isVisible()) return;
-      if (job && job.status === 'done') {
-        setState({ envProgress: null, envJobId: null });
-        await loadProjectEnv(projectId);
-        return;
-      }
-      if (job && (job.status === 'failed' || job.status === 'cancelled')) {
-        setState({
-          envProgress: null, envJobId: null, envError: job.error || '환경 구성에 실패했습니다',
-        });
-        return;
-      }
-      const progress = job && job.progress;
-      setState({
-        envProgress: progress
-          ? `${progress.step} · ${progress.line || ''}`.trim()
-          : '환경을 만드는 중입니다…',
-      });
-      if (setTimeoutImpl) envTimer = setTimeoutImpl(tick, POLL_INTERVAL_MS);
-    };
-    tick();
   }
 
   // 등록만 지운다 — 파일은 사용자 폴더의 것이라 우리가 지울 물건이 아니다(백엔드도 그렇다).
@@ -2095,9 +2016,6 @@ function createBacktestCanvas(options) {
   }
 
   function resumePollingIfNeeded() {
-    // 환경 잡은 실행과 무관하게 돈다 — 모드를 나갔다 와도 진행 줄이 다시 흐른다.
-    const project = projectIde ? projectIde.currentProject() : null;
-    if (envTimer == null && state.envJobId && project) pollEnvJob(project.id);
     if (pollTimer != null) return;
     if (state.view !== 'running') return;
     if (state.jobId && !state.runId) pollJob();
@@ -2250,6 +2168,18 @@ function createBacktestCanvas(options) {
     if (action.kind === 'spec_draft') return applySpecAction(action);
     if (action.kind === 'code_draft') return applyCodeAction(action);
     // 파일만 비동기다 — diff의 왼쪽(지금 파일)을 디스크에서 읽어야 하기 때문이다.
+    if (action.kind === 'terminal_result') {
+      const ide = projectIde;
+      const project = ide && ide.currentProject();
+      const root = ide && typeof ide.currentRootPath === 'function' ? ide.currentRootPath() : '';
+      if (project && String(action.project_id || '') === String(project.id)
+        && String(action.cwd || '') === String(root || '')
+        && typeof ide.recordTerminalResult === 'function') {
+        ide.recordTerminalResult(action);
+      }
+      return null;
+    }
+    if (action.kind === 'file_written') return adoptWrittenFile(action);
     if (action.kind === 'file_draft') return applyFileAction(action);
     if (action.kind === 'navigate') return navigateAction(action);
     if (action.kind === 'optimize_request') return optimizeAction(action);
@@ -2257,6 +2187,62 @@ function createBacktestCanvas(options) {
     // 선택지가 채팅으로 돌아오는 것이 이 카드의 전부다.
     if (action.kind === 'technique_question') return techniqueQuestionAction(action);
     return null;
+  }
+
+  // 채팅 도구가 이미 디스크에 쓴 파일을 화면에 반영한다. 여기서는 PUT을 다시 보내지
+  // 않는다. 현재 프로젝트와 기법 루트가 일치하는 완료 영수증만 받아 다른 대화의 파일이
+  // 열린 편집기에 섞이지 않게 한다.
+  async function adoptWrittenFile(envelope) {
+    const ide = projectIde;
+    const project = ide && ide.currentProject();
+    const generation = workspaceGeneration;
+    const path = typeof envelope.path === 'string'
+      ? envelope.path.trim().replace(/\\/g, '/') : '';
+    const root = ide && typeof ide.currentRootPath === 'function'
+      ? String(ide.currentRootPath() || '').replace(/\\/g, '/').replace(/^\/+|\/+$/g, '') : '';
+    const receiptRoot = String(envelope.root_path || '')
+      .replace(/\\/g, '/').replace(/^\/+|\/+$/g, '');
+    if (!project || envelope.status !== 'written' || typeof envelope.source !== 'string'
+      || String(envelope.project_id || '') !== String(project.id)
+      || receiptRoot !== root || !path || /^(?:[A-Za-z]:|\/)/.test(path)
+      || path.split('/').includes('..') || (root && !path.startsWith(`${root}/`))) {
+      return { applied: false, path: path || null };
+    }
+
+    const before = codeSource;
+    if (typeof ide.hasDirtyFile === 'function' && ide.hasDirtyFile(path)) {
+      setState({ codeErrors: [`${path}의 디스크 내용이 바뀌었지만 저장하지 않은 편집은 덮지 않았습니다`] });
+      return { applied: false, path };
+    }
+    const open = ide.activeFile();
+    const adopted = typeof ide.adoptExternalWrite === 'function'
+      ? ide.adoptExternalWrite(path, envelope.source) : false;
+    if (open && open.path === path && open.dirty && !adopted) {
+      setState({ codeErrors: [`${path}의 디스크 내용이 바뀌었지만 저장하지 않은 편집은 덮지 않았습니다`] });
+      return { applied: false, path };
+    }
+
+    if (typeof ide.refreshTree === 'function') await ide.refreshTree();
+    const stillCurrent = () => generation === workspaceGeneration
+      && ide.currentProject() && String(ide.currentProject().id) === String(project.id)
+      && String(ide.currentRootPath() || '') === root;
+    if (!stillCurrent()) return { applied: false, path };
+    await loadProjectFiles(project.id, root);
+    if (!stillCurrent()) return { applied: false, path };
+    const entry = userStrategyId ? userStrategies.find((item) => item.id === userStrategyId) : null;
+    const strategyPath = (entry && entry.path) || techniqueState().path || TECHNIQUE_STRATEGY_PATH;
+    if (path === strategyPath) {
+      codeSource = envelope.source;
+      runPath = 'code';
+      const version = bumpMapVersion();
+      setTechnique({ lastDiff: { path, before, after: envelope.source } });
+      setState({
+        codeErrors: [], view: 'design', tab: 'design', designTab: 'code', mapVersion: version.to,
+      });
+      scheduleTechniqueCheck();
+      void loadMap();
+    } else render();
+    return { applied: true, path };
   }
 
   function envelopeNote(envelope) {
@@ -2273,7 +2259,15 @@ function createBacktestCanvas(options) {
     // 얹을 스펙이 없다고 되돌리지 않고 [+ 새 기법 만들기]와 같은 뼈대를 세워 그 위에
     // 얹는다. 기법 id가 온 경우는 이 길이 아니다: 아는 id면 그 기법을 고르고, 모르는
     // id면 mergeBlockers가 막는다 — 막을 것 때문에 폴더를 만들어 두면 안 된다.
-    if (listFirst() && typeof patch.preset !== 'string') startTechniqueFromChat();
+    if (listFirst() && typeof patch.preset !== 'string') {
+      return startTechniqueFromChat().then((ready) => {
+        if (ready) return applySpecAction(envelope);
+        return remember(makeReceipt('spec_draft', {
+          note, errors: ['저장 위치와 이름을 정하지 않아 새 기법을 만들지 않았습니다'],
+          suggest_run: suggestRun,
+        }));
+      });
+    }
 
     const base = spec || SpecModel.createSpec(null);
     const merged = mergePatch(patch);
@@ -2325,7 +2319,14 @@ function createBacktestCanvas(options) {
     if (isBusyView()) return busyReceipt('code_draft', note);
     // 목록 화면에서 온 코드도 새 기법의 것이다 — 뼈대 없이 얹으면 「반영됨」이라 해놓고
     // 화면에는 목록만 남는다(코드창도 하위 탭도 서지 않는다).
-    if (listFirst()) startTechniqueFromChat();
+    if (listFirst()) {
+      return startTechniqueFromChat().then((ready) => {
+        if (ready) return applyCodeAction(envelope);
+        return remember(makeReceipt('code_draft', {
+          note, errors: ['저장 위치와 이름을 정하지 않아 새 기법을 만들지 않았습니다'],
+        }));
+      });
+    }
 
     const before = snapshot();
     const beforeSource = codeSource;
@@ -2380,6 +2381,13 @@ function createBacktestCanvas(options) {
   async function writeTechniqueFile(path, source) {
     const projectId = techniqueState().projectId;
     if (!projectId || !deps.writeProjectFile) return false;
+    const root = String(techniqueState().rootPath || '').replace(/\\/g, '/').replace(/\/$/, '');
+    const relative = String(path || '').replace(/\\/g, '/');
+    if (!relative || relative.startsWith('/') || /^[A-Za-z]:/.test(relative)
+      || relative.split('/').includes('..') || (root && !relative.startsWith(`${root}/`))) {
+      setState({ codeErrors: ['현재 기법 폴더 안의 파일만 수정할 수 있습니다'] });
+      return false;
+    }
     try { await deps.writeProjectFile(projectId, path, source); }
     catch (err) {
       setState({ codeErrors: [String((err && err.message) || err)] });
@@ -2395,14 +2403,14 @@ function createBacktestCanvas(options) {
   async function applyFileAction(envelope) {
     const path = typeof envelope.path === 'string' ? envelope.path.trim() : '';
     const source = envelope.source;
-    if (!path || typeof source !== 'string' || !source) return null;
+    if (!path || typeof source !== 'string') return null;
     const note = envelopeNote(envelope);
     const suggestRun = envelope.suggest_run === true;
     if (isBusyView()) return busyReceipt('file_draft', note);
 
     // 새 기법 폴더 안이면 묻지 않는다 — 그 폴더는 이 대화가 만든 것이고, 되돌리기 카드
     // 대신 단계 카드가 남는다(보드 22). 다른 폴더의 파일이면 지금까지의 초안 경로 그대로다.
-    if (techniqueDraft && techniqueState().projectId
+    if (workspaceActive() && techniqueState().projectId
       && (!envelope.project_id || envelope.project_id === techniqueState().projectId)) {
       return autoAcceptTechniqueFile(envelope, path, source, note, suggestRun);
     }
@@ -2483,7 +2491,9 @@ function createBacktestCanvas(options) {
     if (typeof envelope.project_id === 'string' && envelope.project_id !== project.id) {
       return ['지금 열어둔 프로젝트의 파일이 아닙니다'];
     }
-    if (!/\.py$/i.test(path)) return ['파이썬(.py) 파일만 쓸 수 있습니다'];
+    if (/^(?:[A-Za-z]:|[\\/])/.test(path) || path.split(/[\\/]/).includes('..')) {
+      return ['프로젝트 안의 상대 경로를 지정하세요'];
+    }
     if (!deps.writeProjectFile) return ['프로젝트 저장 연결이 없습니다'];
     return [];
   }
@@ -2967,7 +2977,11 @@ function createBacktestCanvas(options) {
     const head = el('div', 'backtest-head is-workspace');
     const title = el('div', 'backtest-head-title');
     const project = projectIde ? projectIde.currentProject() : null;
-    const name = project ? project.name : ((spec && spec.name) || TECHNIQUE_NEW_NAME);
+    const nestedTechnique = techniqueState().rootPath;
+    const name = (nestedTechnique && spec && spec.name)
+      || (project && project.name)
+      || (spec && spec.name)
+      || TECHNIQUE_NEW_NAME;
     head.appendChild(renderWorkspaceCrumbs(name));
     title.appendChild(el('span', 'backtest-head-folder', project ? `${name}/` : name));
     const parts = [WORKSPACE_SUB];
@@ -3002,8 +3016,10 @@ function createBacktestCanvas(options) {
     // path·exists·params뿐이다) 붙이지 않는다: 없는 사실을 지어내지 않는다.
     const homeScreen = listFirst() && state.tab === 'design';
     if (homeScreen) {
+      const visibleTechniqueCount = userStrategies.length
+        + (showBuiltInTechniques ? presets.length : 0);
       title.appendChild(el(
-        'span', 'backtest-head-sub', `기법 ${presets.length + userStrategies.length}개`,
+        'span', 'backtest-head-sub', `기법 ${visibleTechniqueCount}개`,
       ));
     }
     head.appendChild(title);
@@ -3065,10 +3081,7 @@ function createBacktestCanvas(options) {
     });
     wrap.appendChild(subtabs);
 
-    // 승인 바(보드 22)는 초안의 어느 탭에서도 바닥에 선다 — 검사가 통과하면 화면이 노드 탭으로
-    // 스스로 넘어가는데(loadTechniqueNodes), 거기서 노드를 살펴본 사람이 승인하러 코드 탭으로
-    // 되돌아와야 한다면 순환이 끝나는 자리가 숨은 것이다.
-    const closeDraft = () => { if (techniqueDraft) wrap.appendChild(renderTechniqueApproveBar()); return wrap; };
+    const closeDraft = () => wrap;
     if (designTab === 'result') { wrap.appendChild(renderResult()); return closeDraft(); }
     if (designTab === 'deploy') { wrap.appendChild(renderDeploy()); return wrap; }
     // 이력·최적화도 그 기법 화면 안이다(규칙 32-04) — 모드 탭으로만 닿던 두 판이 여기 선다.
@@ -3076,15 +3089,12 @@ function createBacktestCanvas(options) {
     if (designTab === 'optimize') { wrap.appendChild(renderOptimize()); return wrap; }
     if (designTab === 'nodes') { wrap.appendChild(renderNodesTab()); return closeDraft(); }
     if (designTab === 'code') {
-      // 띠는 코드 위, 명령창은 코드 아래다(보드 20) — 코드 탭 자체는 건드리지 않는다.
-      if (techniqueDraft) wrap.appendChild(renderTechniqueBand());
       // [diff 보기]로 들어왔으면 코드 대신 그 변경을 먼저 보여준다 — 카드가 말한 것을
       // 그 자리에서 확인하는 것이 이 손잡이의 전부다([코드로]가 닫는다).
       if (techniqueDiffOpen && techniqueState().lastDiff) {
         wrap.appendChild(renderTechniqueDiff());
       }
       wrap.appendChild(renderCodeTab());
-      if (techniqueDraft) wrap.appendChild(renderTechniqueTerminal());
       return closeDraft();
     }
     // 폼 — 목록은 여기 서지 않는다. 목록은 홈이고, 기법 하나의 화면 안에서 다른 기법을
@@ -3160,6 +3170,7 @@ function createBacktestCanvas(options) {
 
   function techniqueCategoryOptions() {
     const seen = [];
+    if (!showBuiltInTechniques) return seen;
     presets.forEach((preset) => {
       const label = techniqueCategoryKo(preset.category);
       if (label && seen.indexOf(label) === -1) seen.push(label);
@@ -3193,16 +3204,18 @@ function createBacktestCanvas(options) {
 
   function renderTechniqueFilters() {
     const row = el('div', 'backtest-technique-filters');
-    const catLabel = techniqueCategoryFilter
-      ? `분류 · ${techniqueCategoryFilter}`
-      : '분류 전체';
     const stLabel = techniqueStatusFilter === 'verified' ? '상태 · 검증됨' : '상태 전체';
-    const cat = button('backtest-technique-filter', catLabel, () => cycleTechniqueFilter('category'));
-    cat.setAttribute('aria-label', '분류 필터');
     const st = button('backtest-technique-filter', stLabel, () => cycleTechniqueFilter('status'));
     st.setAttribute('aria-label', '상태 필터');
-    row.appendChild(cat);
-    row.appendChild(el('span', 'backtest-technique-filter-sep', ' · '));
+    if (showBuiltInTechniques) {
+      const catLabel = techniqueCategoryFilter
+        ? `분류 · ${techniqueCategoryFilter}`
+        : '분류 전체';
+      const cat = button('backtest-technique-filter', catLabel, () => cycleTechniqueFilter('category'));
+      cat.setAttribute('aria-label', '분류 필터');
+      row.appendChild(cat);
+      row.appendChild(el('span', 'backtest-technique-filter-sep', ' · '));
+    }
     row.appendChild(st);
     return row;
   }
@@ -3213,15 +3226,17 @@ function createBacktestCanvas(options) {
   // 다르기 때문이지(고르면 그래프 vs 그 파일의 파이썬), 사람에게 다른 묶음이라서가 아니다.
   function renderTechniqueList() {
     const wrap = el('div', 'backtest-technique-wrap');
-    const total = presets.length + userStrategies.length;
+    const total = userStrategies.length + (showBuiltInTechniques ? presets.length : 0);
     wrap.appendChild(renderNewTechniqueCard());
     const head = el('div', 'backtest-technique-head');
     const titles = el('div', 'backtest-technique-head-copy');
     titles.appendChild(el('div', 'backtest-card-title', `기법 — ${total}개`));
-    titles.appendChild(el(
-      'div', 'backtest-technique-note',
-      `처음 있던 ${presets.length}개와 내가 만든 ${userStrategies.length}개를 구분하지 않습니다`,
-    ));
+    if (showBuiltInTechniques) {
+      titles.appendChild(el(
+        'div', 'backtest-technique-note',
+        `처음 있던 ${presets.length}개와 내가 만든 ${userStrategies.length}개를 구분하지 않습니다`,
+      ));
+    }
     head.appendChild(titles);
     head.appendChild(renderTechniqueFilters());
     wrap.appendChild(head);
@@ -3229,7 +3244,7 @@ function createBacktestCanvas(options) {
     // 손대다 홈으로 나온 초안(규칙 32-05) — 홈에서 닿지 못하면 넣어 둔 것이 아니라 잃은
     // 것이다. 등록 전이라 분류도 검증도 없으니 필터가 걸린 자리에서는 서지 않는다.
     const draftPark = parked.get('draft');
-    if (draftPark && !techniqueCategoryFilter && techniqueStatusFilter !== 'verified') {
+    if (showUnregisteredDrafts && draftPark && !techniqueCategoryFilter && techniqueStatusFilter !== 'verified') {
       const row = el('div', 'backtest-technique-row');
       const item = button('backtest-technique-draft backtest-technique-card', null, () => {
         void resumeParked('draft');
@@ -3242,7 +3257,7 @@ function createBacktestCanvas(options) {
       row.appendChild(item);
       list.appendChild(row);
     }
-    presets.forEach((preset) => {
+    if (showBuiltInTechniques) presets.forEach((preset) => {
       if (!techniquePassesFilters('preset', preset)) return;
       const isSelected = spec && !userStrategyId && preset.id === spec.presetId;
       const row = el('div', 'backtest-technique-row');
@@ -3324,29 +3339,25 @@ function createBacktestCanvas(options) {
     return card;
   }
 
-  // [+ 새 기법 만들기] — 코드창을 빈 뼈대로 세우고 **대화를 시작한다**. 편집기가 열리는
-  // 것이 목적이 아니다(고칠 수는 있지만 그것이 의도는 아니다): 여기서부터 AI가 코드창을
-  // 제어하며 질문 하나씩으로 사람이 원하는 알고리즘을 만든다. 그래서 이 함수가 하는 마지막
-  // 일은 화면 전환이 아니라 첫 문장을 채팅에 보내는 것이다.
-  function startNewTechnique() {
-    beginTechniqueDraft();
-    emitChatSubmit(TECHNIQUE_NEW_PROMPT);
-    // 폴더는 뒤에서 만든다 — 첫 문장이 나가는 것이 먼저다(사람은 대화를 기다린다).
-    void createTechniqueProject();
+  // [+ 새 기법 만들기] — 위치와 수동 이름을 먼저 정하고, 폴더 생성과 새 대화 전환을 모두
+  // 기다린 뒤 그 폴더의 편집기를 연다. 첫 질문도 이 순서가 끝난 뒤에만 보낸다.
+  async function startNewTechnique() {
+    if (techniqueCreationPromise) return;
+    const ready = await createTechniqueProject(true);
+    if (ready) emitChatSubmit(TECHNIQUE_NEW_PROMPT);
   }
 
-  // 목록 화면에서 대화가 먼저 시작된 경우(모델이 낸 설정·코드) — 같은 뼈대를 세우되 첫
-  // 문장은 보내지 않는다. 대화는 이미 시작됐고, 여기서 또 던지면 모델이 자기 말에 답한다.
+  // 목록 화면에서 대화가 먼저 시작된 경우에도 위치·이름 선택을 건너뛰지 않는다. 첫 문장은
+  // 이미 시작된 대화에 있으므로 다시 보내지 않는다.
   function startTechniqueFromChat() {
-    beginTechniqueDraft();
-    void createTechniqueProject();
+    return createTechniqueProject(false);
   }
 
   // 위 두 길이 함께 쓰는 뼈대 세우기 — 화면이 한 가지여야 대화도 한 가지다.
-  function beginTechniqueDraft() {
+  function beginTechniqueDraft(name) {
     keepHomeScroll();
     spec = Object.assign(
-      SpecModel.createSpec(null, { name: TECHNIQUE_NEW_NAME, params: {} }), keptTarget(),
+      SpecModel.createSpec(null, { name: name || TECHNIQUE_NEW_NAME, params: {} }), keptTarget(),
     );
     userStrategyId = null;
     presetProject = null;
@@ -3369,77 +3380,65 @@ function createBacktestCanvas(options) {
     // 실제로 바뀐 뒤다(사람이 치거나 AI가 code_draft를 냈을 때).
   }
 
-  // 기법 하나 = 폴더 하나 = 대화 하나(사용자 확정, 보드 19~23). 폴더를 만들고 뼈대 두
-  // 파일을 쓴 뒤 그 strategy.py를 IDE로 연다 — 이 다음부터 AI의 편집은 화면 버퍼가
-  // 아니라 **디스크의 그 파일**로 간다(D2: 진실은 디스크에 있다).
-  //
-  // 폴더를 못 만들면(백엔드 없음·이름 충돌) 지금까지처럼 메모리 버퍼로 물러난다. 조용히
-  // 물러나지 않는 것이 중요하다 — 그 사실을 단계 카드로 적어야 사람도 모델도 "파일이
-  // 생긴 줄"로 착각하지 않는다.
-  async function createTechniqueProject() {
-    if (!deps.createProject || !deps.writeProjectFile) {
-      emitTechniqueStep({
-        icon: 'file',
-        title_ko: '폴더 없이 시작합니다',
-        meta_ko: '프로젝트 연결이 없어 코드는 이 화면에만 남습니다',
-        tone: 'warn',
-        action: { label_ko: '코드 보기', open: 'code', ref: null },
-      });
-      return;
-    }
-    // 같은 분에 두 번 누르면 이름이 겹쳐 409가 난다(프로브 실측) — 접미사 -2·-3으로 세 번까지
-    // 다시 시도한다. 폴더 하나 = 기법 하나라는 약속을 이름 충돌로 깨지 않는다.
-    const base = techniqueProjectName(new Date());
-    let name = base;
-    let created = null;
-    let lastErr = null;
-    for (const candidate of [base, `${base}-2`, `${base}-3`]) {
-      name = candidate;
-      try { created = await deps.createProject(name); lastErr = null; break; }
-      catch (err) { lastErr = err; created = null; }
-    }
-    if (lastErr) { failTechniqueProject(String((lastErr && lastErr.message) || lastErr)); return; }
-    const project = created && created.project;
-    if (!project || !project.id) { failTechniqueProject('폴더를 만들지 못했습니다'); return; }
-    // 이름은 여기서 굳히지 않는다 — 대화가 정한 이름(spec.name)이 나중에 오고, 여기서
-    // '새 기법'을 박아두면 그것이 영영 이겨 등록부에 '새 기법'만 쌓인다.
-    setTechnique({ projectId: project.id, path: TECHNIQUE_STRATEGY_PATH });
-    try {
-      // 뼈대가 먼저다 — 관리형 폴더는 씨앗 strategy.py(SMA 골든크로스)를 갖고 태어난다.
-      // 그것을 남기면 "아직 아무 신호도 없다"는 화면의 말과 파일이 어긋난다.
-      // 덮어쓸 원문은 상수가 아니라 **지금 화면의 코드**다. 폴더를 만드는 동안(첫 await)
-      // 대화가 낸 코드가 들어올 수 있다 — 목록 화면에서 시작한 길이 그렇다. 거기서 상수를
-      // 쓰면 방금 반영한 코드를 빈 뼈대가 덮어 「반영됨」이 거짓말이 된다.
-      const seed = codeSource || TECHNIQUE_NEW_SOURCE;
-      await deps.writeProjectFile(project.id, TECHNIQUE_STRATEGY_PATH, seed);
-      await deps.writeProjectFile(project.id, TECHNIQUE_TEST_PATH, TECHNIQUE_TEST_SOURCE);
-    } catch (err) { failTechniqueProject(String((err && err.message) || err)); return; }
-    await loadProjectFiles(project.id);
-    const ide = ensureProjectIde();
-    if (ide) {
-      const opened = await ide.openAt(project.id, TECHNIQUE_STRATEGY_PATH);
-      // 못 열었어도 폴더는 만들어졌다 — 그때는 코드 탭이 단일 버퍼로 남는다(거짓말은 없다).
-      ideOwnsCode = !!opened;
-    }
-    emitTechniqueStep({
-      icon: 'file',
-      title_ko: `폴더 만듦 · ${name}`,
-      meta_ko: `${TECHNIQUE_STRATEGY_PATH} · ${TECHNIQUE_TEST_PATH}`,
-      action: { label_ko: '코드 보기', open: 'code', ref: null },
-    });
-    render();
+  // 기법 하나 = 폴더 하나 = 대화 하나. 제품에서는 사람이 상위 프로젝트·폴더·이름을 먼저
+  // 정하고, 백엔드가 뼈대 파일을 만든 뒤 새 대화 전환까지 끝나야 편집기를 연다. 어느 연결이
+  // 빠져도 화면 버퍼로 물러나지 않는다.
+  async function createTechniqueProject(sendPrompt) {
+    if (techniqueCreationPromise) return techniqueCreationPromise;
+    techniqueCreationPromise = createLocatedTechniqueProject();
+    try { return await techniqueCreationPromise; }
+    finally { techniqueCreationPromise = null; }
   }
 
-  function failTechniqueProject(reason) {
-    setTechnique({ projectId: null, path: TECHNIQUE_STRATEGY_PATH });
+  async function createLocatedTechniqueProject() {
+    const request = deps.requestTechniqueCreation
+      || (TechniqueCreateDialog && TechniqueCreateDialog.createTechniqueCreateDialog);
+    if (typeof request !== 'function') return false;
+    const preferredProjectId = typeof deps.currentProjectId === 'function'
+      ? deps.currentProjectId() : null;
+    const result = await request({
+      listProjects: deps.listProjects,
+      pickTechniqueFolder: deps.pickTechniqueFolder,
+      createTechnique: deps.createTechnique,
+      registerUserStrategy: deps.registerUserStrategy,
+      startTechniqueConversation: deps.startTechniqueConversation,
+      preferredProjectId,
+    });
+    if (!result) return false;
+    const technique = result.technique || {};
+    const projectId = result.project_id;
+    if (result.registration && result.registration.id) {
+      userStrategies = userStrategies
+        .filter((entry) => entry.id !== result.registration.id)
+        .concat([Object.assign({ exists: true, params: {} }, result.registration)]);
+    }
+    beginTechniqueDraft(technique.name);
+    setTechnique({
+      projectId,
+      rootPath: technique.path,
+      path: technique.strategy_path,
+      name: technique.name,
+    });
+    await loadProjectFiles(projectId, technique.path);
     emitTechniqueStep({
       icon: 'file',
-      title_ko: '폴더를 만들지 못해 화면 버퍼로 시작합니다',
-      meta_ko: reason,
-      tone: 'warn',
+      title_ko: `폴더 만듦 · ${technique.name}`,
+      meta_ko: `${technique.strategy_path} · ${technique.test_path}`,
       action: { label_ko: '코드 보기', open: 'code', ref: null },
     });
+    const ide = ensureProjectIde();
+    if (!ide) {
+      setState({ codeErrors: ['기법 폴더 편집기 연결이 준비되지 않았습니다'] });
+      return true;
+    }
+    const opened = await ide.openAt(projectId, technique.strategy_path, {
+      rootPath: technique.path,
+    });
+    ideOwnsCode = !!opened;
+    if (opened) codeSource = ide.activeText() || TECHNIQUE_NEW_SOURCE;
+    else setState({ codeErrors: [`${technique.strategy_path}를 열지 못했습니다`] });
     render();
+    return true;
   }
 
   // 채팅 입력창과 제출은 chat.js에만 있다 — 캔버스는 문장만 던지고, 보내는 길은 사람이
@@ -3471,7 +3470,6 @@ function createBacktestCanvas(options) {
     if (techniqueCheckTimer != null && clearTimeoutImpl) clearTimeoutImpl(techniqueCheckTimer);
     techniqueCheckTimer = null;
     techniqueNodesShown = false;
-    techniqueHandEdit = false;
     techniqueNodesSource = null;
     techniqueLastCardPassed = null;
     // 자동 실행도 앞 기법의 것이다 — 안 끊으면 대기 중인 틱이 앞 기법의 결과를 이 기법의
@@ -3480,7 +3478,6 @@ function createBacktestCanvas(options) {
     techniqueRunTimer = null;
     techniqueAutoRunSource = null;
     techniqueDiffOpen = false;
-    techniqueTerminalOpen = false;
     dropTechniqueNodesView();
     state = Object.assign({}, state, { technique: TECHNIQUE_EMPTY });
   }
@@ -3535,6 +3532,7 @@ function createBacktestCanvas(options) {
     const t = techniqueState();
     return {
       projectId: t.projectId || null,
+      rootPath: t.rootPath || null,
       name: t.name || (spec && spec.name) || null,
       path: t.path || null,
       checks: (t.checks || []).map((c) => Object.assign({}, c)),
@@ -3586,8 +3584,8 @@ function createBacktestCanvas(options) {
     }
     if (open === 'terminal') {
       techniqueDiffOpen = false;
-      techniqueTerminalOpen = true;
       setState({ view: 'design', tab: 'design', designTab: 'code' });
+      if (projectIde && typeof projectIde.openTerminal === 'function') projectIde.openTerminal();
       return true;
     }
     if (open === 'nodes') {
@@ -3641,12 +3639,17 @@ function createBacktestCanvas(options) {
     try { data = await deps.techniqueCheck(Object.assign({ source }, techniqueCheckTarget())); }
     catch (err) {
       if (generation !== workspaceGeneration) return null;
+      const reason = String((err && err.message) || err);
       // 못 돌린 것과 실패한 것은 다르다 — 검사 줄을 지어내지 않고 명령창에만 적는다.
       setTechnique({
         checks: [], passed: false, stats: null,
-        log: [`$ 검사를 돌리지 못했습니다 — ${String((err && err.message) || err)}`],
+        log: [`$ 검사를 돌리지 못했습니다 — ${reason}`],
         lastCheckAt: new Date().toISOString(),
       });
+      setState({ codeErrors: [`검사를 돌리지 못했습니다 — ${reason}`] });
+      if (projectIde && typeof projectIde.recordTerminalResult === 'function') {
+        projectIde.recordTerminalResult({ stderr: reason });
+      }
       return null;
     }
     if (generation !== workspaceGeneration) return null;
@@ -3661,6 +3664,14 @@ function createBacktestCanvas(options) {
       log: Array.isArray(data && data.log) ? data.log.map(String) : [],
       lastCheckAt: new Date().toISOString(),
     });
+    setState({
+      codeErrors: passed ? [] : checks
+        .filter((check) => check && !check.ok && check.severity !== 'warn')
+        .map((check) => String(check.detail_ko || check.label_ko || check.id || '검사 실패')),
+    });
+    if (projectIde && typeof projectIde.recordTerminalResult === 'function') {
+      projectIde.recordTerminalResult({ stdout: Array.isArray(data && data.log) ? data.log.join('\n') : '' });
+    }
     // 통과 여부가 뒤집힌 순간에만 카드를 낸다 — 한 글자마다 카드를 내면 대화가 검사
     // 로그로 덮인다. remember()는 하지 않는다: 검사는 아무것도 바꾸지 않았고, 여기서
     // lastChange를 덮으면 모델이 방금 자기가 낸 코드 변경을 잃는다.
@@ -3907,37 +3918,6 @@ function createBacktestCanvas(options) {
     });
   }
 
-  // ── 보드 23 · [이 기법 승인] ─────────────────────────────────────────────
-  //
-  // 폴더 안에서 사람이 누르는 것은 이 버튼과 실매매 적용뿐이다. 누르면 등록부에 오르고
-  // 초안이 아니게 된다 — 그 뒤로는 목록에서 눌러 언제든 이어서 고친다.
-  async function approveTechnique() {
-    const t = techniqueState();
-    if (!deps.registerUserStrategy || !t.projectId) {
-      setState({ codeErrors: ['등록 연결이 없어 이 기법을 목록에 올릴 수 없습니다'] });
-      return;
-    }
-    const name = t.name || (spec && spec.name) || TECHNIQUE_NEW_NAME;
-    let registered;
-    try {
-      registered = await deps.registerUserStrategy({
-        project_id: t.projectId, path: t.path || TECHNIQUE_STRATEGY_PATH, name,
-      });
-    } catch (err) {
-      setState({ codeErrors: [String((err && err.message) || err)] });
-      return;
-    }
-    techniqueDraft = false;
-    // 이제 목록의 내 기법이다 — 화면은 같은 폴더에 머문다(언제든 이어서 고친다, 보드 23).
-    // 등록부가 id를 안 주면 기법 화면을 유지할 근거가 없어 목록으로 돌아간다.
-    userStrategyId = (registered && registered.id != null) ? String(registered.id) : null;
-    setState({ codeErrors: [] });
-    emitTechniqueStep({
-      icon: 'check', title_ko: `기법 목록에 추가됨 · ${name}`, meta_ko: null, action: null,
-    });
-    await loadUserStrategies();
-  }
-
   // ── 보드 20 · 화면 조각 ───────────────────────────────────────────────────
 
   // 헤더의 진행 배지(보드 22 「검사 5/5」「경고 0」) — 몇 번 고쳤고 검사 몇 개를 넘었는가.
@@ -3966,68 +3946,6 @@ function createBacktestCanvas(options) {
     return bar;
   }
 
-  // 승인 바(보드 22) — 명령창 아래, 순환이 끝나는 자리. 사람이 누르는 두 버튼 중 하나다
-  // (보드 23, 나머지는 실매매 적용). 검사를 넘고 자동 백테스트가 끝난 뒤에만 버튼이 선다 —
-  // 돌려보지도 않은 기법을 목록에 올릴 이유가 없다. 그 전에는 무엇을 기다리는지 적는다.
-  function renderTechniqueApproveBar() {
-    const t = techniqueState();
-    const bar = el('div', 'backtest-technique-approve-bar');
-    const copy = el('div', 'backtest-technique-approve-copy');
-    copy.appendChild(el('div', 'backtest-technique-approve-title', TECHNIQUE_APPROVE_TITLE));
-    copy.appendChild(el('div', 'backtest-technique-approve-sub', TECHNIQUE_APPROVE_SUB));
-    bar.appendChild(copy);
-    const ran = !!(t.autoRun && t.autoRun.status === 'done');
-    if (t.passed && ran) {
-      bar.appendChild(button('backtest-technique-approve', TECHNIQUE_APPROVE_LABEL, () => {
-        void approveTechnique();
-      }));
-    } else {
-      bar.appendChild(el('div', 'backtest-technique-approve-wait', TECHNIQUE_APPROVE_WAIT));
-    }
-    return bar;
-  }
-
-  // 왼쪽 열 바닥(보드 20) — 트리 아래에 자동 검사 목록, 환경, 다짐 한 줄. 편집기(project-ide)가
-  // 왼쪽 열을 그릴 때 불러 붙이고, 검사가 바뀌면 캔버스가 refreshSide()로 이 조각만 갈아 끼운다
-  // (편집기를 다시 만들지 않는다 — 타자 중인 포커스가 날아간다).
-  function renderWorkspaceSideFooter() {
-    const wrap = el('div', 'backtest-ws-side-footer');
-    if (techniqueDraft) wrap.appendChild(renderWorkspaceChecks());
-    wrap.appendChild(renderVenvPanel());
-    wrap.appendChild(el('div', 'backtest-ws-note', WORKSPACE_FOLDER_NOTE));
-    return wrap;
-  }
-
-  // 자동 검사 목록(보드 20 「자동 검사 7 · 5/5」) — 항목 이름은 백엔드 label_ko 그대로고,
-  // 화면이 아는 것은 severity 하나뿐이다(경고/차단). 아직 안 잰 상태는 그렇다고 적는다.
-  function renderWorkspaceChecks() {
-    const t = techniqueState();
-    const list = t.checks || [];
-    const wrap = el('div', 'backtest-ws-checks');
-    const head = el('div', 'backtest-ws-checks-head');
-    head.appendChild(el(
-      'span', 'backtest-ws-checks-title', list.length ? `자동 검사 ${list.length}` : '자동 검사',
-    ));
-    const counts = techniqueCheckCounts(list);
-    head.appendChild(el(
-      'span', 'backtest-ws-checks-count',
-      list.length ? `${counts.blockDone}/${counts.blockTotal}` : '아직 안 돌았습니다',
-    ));
-    wrap.appendChild(head);
-    list.forEach((check) => {
-      const warn = isWarnCheck(check);
-      const ok = !!(check && check.ok);
-      const row = el('div', `backtest-ws-check${ok ? ' is-ok' : (warn ? ' is-warn' : ' is-fail')}`);
-      row.appendChild(el('span', 'backtest-ws-check-dot'));
-      row.appendChild(el(
-        'span', 'backtest-ws-check-label', (check && (check.label_ko || check.id)) || '',
-      ));
-      row.appendChild(el('span', 'backtest-ws-check-kind', warn ? '경고' : '차단'));
-      wrap.appendChild(row);
-    });
-    return wrap;
-  }
-
   // [diff 보기]가 여는 패널 — 코드 탭 위에 선다. 줄 색은 채팅 카드·파일 초안과 같은
   // 문법이다(backtest-diff-row) — 같은 변경을 두 곳에서 다르게 그리지 않는다.
   function renderTechniqueDiff() {
@@ -4048,105 +3966,6 @@ function createBacktestCanvas(options) {
     CodeEditor.renderDiff(host, diff.before, diff.after, {});
     wrap.appendChild(host);
     return wrap;
-  }
-
-  function renderTechniqueBand() {
-    const band = el('div', `backtest-technique-band${techniqueHandEdit ? ' is-hand' : ''}`);
-    band.appendChild(el(
-      'span', 'backtest-technique-band-text',
-      techniqueHandEdit ? TECHNIQUE_BAND_HAND : TECHNIQUE_BAND_AI,
-    ));
-    band.appendChild(el('span', 'backtest-technique-band-note', TECHNIQUE_BAND_NOTE));
-    // 켜도 코드가 잠기지 않는다 — 바뀌는 것은 사람이 무엇을 알고 있느냐다. AI가 코드를
-    // 새로 써도 그 반영은 지금까지의 code_draft 경로 그대로라 카드에서 되돌릴 수 있다.
-    band.appendChild(button(
-      'backtest-technique-hand-toggle',
-      techniqueHandEdit ? 'AI에 맡기기' : '직접 편집',
-      () => { techniqueHandEdit = !techniqueHandEdit; render(); },
-    ));
-    return band;
-  }
-
-  // 명령창 — 검사가 무엇을 했는지 그대로 찍는다. 화면이 요약하지 않는다.
-  // 제목은 Paper 보드 20·21·22가 적은 그대로 「터미널」이다 — 무엇을 찍는지는 아래
-  // 로그가 말하므로 제목이 그것을 다시 요약할 이유가 없다.
-  function renderTechniqueTerminal() {
-    const panel = el('div', `backtest-terminal${techniqueTerminalOpen ? ' is-open' : ''}`);
-    const t = techniqueState();
-    const head = el('div', 'backtest-terminal-head');
-    head.appendChild(el('div', 'backtest-terminal-title', '터미널'));
-    head.appendChild(el('span', 'backtest-terminal-sub', TERMINAL_SUB));
-    const checkList = t.checks || [];
-    if (checkList.length) {
-      const counts = techniqueCheckCounts(checkList);
-      if (counts.warnOpen) {
-        head.appendChild(el('span', 'backtest-terminal-badge is-warn', `경고 ${counts.warnOpen}`));
-      }
-      head.appendChild(el(
-        'span', `backtest-terminal-badge ${t.passed ? 'is-ok' : 'is-fail'}`,
-        `검사 ${counts.blockDone}/${counts.blockTotal} ${t.passed ? '통과' : '실패'}`,
-      ));
-    }
-    panel.appendChild(head);
-    const log = el('div', 'backtest-terminal-log');
-    const lines = t.log || [];
-    if (!lines.length) {
-      log.appendChild(el('div', 'backtest-terminal-line', '아직 검사하지 않았습니다'));
-    }
-    lines.forEach((line) => log.appendChild(el('div', 'backtest-terminal-line', String(line))));
-    // [출력 보기]로 들어왔으면 마지막 줄이 보여야 한다 — 카드가 가리킨 것은 방금 찍힌
-    // 출력이지 30줄 위의 첫 줄이 아니다. 진짜 DOM에서는 큰 값이 곧 끝이다.
-    if (techniqueTerminalOpen) log.scrollTop = TERMINAL_SCROLL_END;
-    panel.appendChild(log);
-    // 항목 수를 모르는 채로 그린다 — 백엔드가 검사를 더 보내면 줄이 더 설 뿐이다.
-    const list = t.checks || [];
-    const checks = el('div', 'backtest-terminal-checks');
-    if (list.length) {
-      checks.appendChild(el('div', 'backtest-terminal-summary', techniqueCheckSummary(list)));
-    }
-    list.forEach((check) => { checks.appendChild(renderTechniqueCheckRow(check)); });
-    panel.appendChild(checks);
-    if (t.stats) {
-      panel.appendChild(el('div', 'backtest-terminal-stats', techniqueStatsLine(t.stats)));
-    }
-    return panel;
-  }
-
-  // 검사 한 줄 — 점 색으로 갈래를 보이고(통과·노랑 경고·빨강 차단), 무엇을 해야 하는지는
-  // 말로 적는다. 경고에는 '고치면 좋음'을 붙여 통과를 막지 않는다는 사실을 화면에서 못 박는다.
-  function renderTechniqueCheckRow(check) {
-    const warn = isWarnCheck(check);
-    const ok = !!(check && check.ok);
-    const tone = ok ? ' is-ok' : (warn ? ' is-warn' : ' is-fail');
-    const row = el('div', `backtest-terminal-check${tone}`);
-    row.appendChild(el('span', 'backtest-terminal-check-dot'));
-    row.appendChild(el('span', 'backtest-terminal-check-mark', techniqueCheckMark(check)));
-    row.appendChild(el(
-      'span', 'backtest-terminal-check-label', (check && (check.label_ko || check.id)) || '',
-    ));
-    if (check && check.detail_ko) {
-      row.appendChild(el('span', 'backtest-terminal-check-detail', check.detail_ko));
-    }
-    if (warn && !ok) {
-      row.appendChild(el('span', 'backtest-terminal-check-note', '고치면 좋음'));
-    }
-    // 사유에 줄 번호가 있으면 그 줄로 가는 작은 링크. 없으면 만들지 않는다.
-    const line = techniqueCheckLine(check);
-    if (line > 0) {
-      row.appendChild(button(
-        'backtest-terminal-check-jump', `${line}번째 줄`, () => openTechniqueCheckLine(line),
-      ));
-    }
-    return row;
-  }
-
-  // 검사에서 코드로 — 노드에서 갈 때와 같은 길이다(flowRange에 남겨야 다시 그린 편집기가
-  // 그 표식을 되살린다).
-  function openTechniqueCheckLine(line) {
-    const n = Math.floor(Number(line));
-    if (!(n > 0)) return;
-    setState({ designTab: 'code', flowRange: { first: n, last: n } });
-    if (editorHandle) editorHandle.highlightLines(n, n);
   }
 
   // 통계 한 줄 — 받은 값만 적는다(없는 값은 줄에서 빠진다).
@@ -4487,37 +4306,6 @@ function createBacktestCanvas(options) {
     return wrap;
   }
 
-  // 환경 패널 — 지금 이 폴더의 .venv가 어떤 상태인가, 그리고 만들기. 상태는 백엔드가
-  // 지금 디스크를 본 결과다(캐시가 아니다).
-  function renderVenvPanel() {
-    const panel = el('div', 'backtest-venv-panel');
-    panel.appendChild(el('span', 'backtest-venv-title', '환경'));
-    const env = state.env;
-    const status = env && env.exists
-      ? `준비됨 · ${(env.packages || []).length}개 패키지`
-      : '없음';
-    panel.appendChild(el('span', 'backtest-venv-status', status));
-
-    const box = el('input', 'backtest-venv-packages');
-    box.type = 'text';
-    box.placeholder = '더 깔 패키지 (예: scipy, ta==0.11.0)';
-    box.value = state.envPackages == null ? '' : String(state.envPackages);
-    // 매 키입력마다 다시 그리면 커서가 날아간다 — 값만 담는다(폼 입력들과 같은 규칙).
-    box.addEventListener('input', () => { state.envPackages = box.value; });
-    panel.appendChild(box);
-
-    panel.appendChild(button('backtest-venv-create', '환경 만들기', () => {
-      void startProjectEnv();
-    }));
-    if (state.envProgress) {
-      panel.appendChild(el('div', 'backtest-venv-progress', state.envProgress));
-    }
-    if (state.envError) {
-      panel.appendChild(el('div', 'backtest-venv-error', state.envError));
-    }
-    return panel;
-  }
-
   // 채팅이 낸 파일 초안 — 지금 파일과의 diff만 보여준다. 누르는 자리는 채팅 카드
   // 하나뿐이다(같은 결정을 두 곳에 두면 어느 쪽이 진짜인지 알 수 없다).
   function renderFileDraft() {
@@ -4675,6 +4463,15 @@ function createBacktestCanvas(options) {
       // 사라진다(다음에 열면 있었던 실행이 없었던 일이 된다).
       const heldRun = restoreSealed && restoreApplied && !restoreApplied.result
         ? restoreSealed.run : null;
+      const technique = techniqueState();
+      const project = projectIde ? projectIde.currentProject() : null;
+      const activeFile = activeProjectFile();
+      const registeredEntry = userStrategyId
+        ? userStrategies.find((entry) => entry.id === userStrategyId) : null;
+      const rootPath = technique.rootPath || (
+        projectIde && typeof projectIde.currentRootPath === 'function'
+          ? projectIde.currentRootPath() : null
+      );
       // 봉인 항목표는 42번 보드가 정한 것 하나뿐이다 — 여기서 다시 고르지 않는다.
       const sealed = SessionRestore.sealBacktest({
         spec,
@@ -4684,6 +4481,17 @@ function createBacktestCanvas(options) {
         versionId: activeVersionId,
         strategyId,
         runPath,
+        technique: {
+          projectId: (registeredEntry && registeredEntry.project_id)
+            || technique.projectId || (project && project.id) || null,
+          rootPath,
+          path: (registeredEntry && registeredEntry.path)
+            || technique.path || (activeFile && activeFile.path) || null,
+          name: (registeredEntry && registeredEntry.name)
+            || technique.name || (project && project.name) || (spec && spec.name) || null,
+          draft: techniqueDraft,
+          userStrategyId: registeredEntry ? registeredEntry.id : null,
+        },
         runId: state.runId || (heldRun && heldRun.runId) || null,
         // 되살린 로그는 결과 없이도 화면에 남아 있다(결과 탭이 그리는 그 문자열이다) —
         // 지금 이 세션의 로그라 다시 봉인한다.
@@ -4773,10 +4581,35 @@ function createBacktestCanvas(options) {
     clearWorkspace();
     workspaceCleared = false;
     const generation = workspaceGeneration;
-    const saved = workspace || {};
+    const incoming = workspace || {};
+    const saved = Object.assign({}, incoming, {
+      technique: SessionRestore.sealTechniqueBinding(incoming.technique),
+    });
     const form = saved.form || null;
     const code = saved.code || null;
-    const applied = { form: [], code: false, result: false, log: false };
+    const binding = saved.technique;
+    const applied = { form: [], code: false, technique: false, result: false, log: false };
+    let restoredUserStrategyId = null;
+
+    if (binding && binding.userStrategyId) {
+      let registry = userStrategies;
+      if (deps.userStrategies) {
+        try {
+          const current = await deps.userStrategies();
+          if (generation !== workspaceGeneration) return false;
+          registry = Array.isArray(current) ? current : [];
+          userStrategies = registry;
+        } catch {
+          if (generation !== workspaceGeneration) return false;
+          registry = [];
+        }
+      }
+      const entry = registry.find((item) => item
+        && String(item.id) === binding.userStrategyId
+        && String(item.project_id) === binding.projectId
+        && String(item.path) === binding.path);
+      if (entry) restoredUserStrategyId = entry.id;
+    }
 
     if (form && typeof form.yaml === 'string' && form.yaml.trim()) {
       adoptSpecYaml(form.yaml);
@@ -4794,6 +4627,18 @@ function createBacktestCanvas(options) {
       runPath = code.runPath === 'code' ? 'code' : runPath;
       applied.code = true;
     }
+    if (binding) {
+      techniqueDraft = binding.draft;
+      userStrategyId = restoredUserStrategyId;
+      state = Object.assign({}, state, {
+        technique: Object.assign({}, TECHNIQUE_EMPTY, {
+          projectId: binding.projectId,
+          rootPath: binding.rootPath,
+          path: binding.path,
+          name: binding.name,
+        }),
+      });
+    }
     if (saved.log && typeof saved.log.tail === 'string' && saved.log.tail) {
       restoredLog = saved.log.tail;
       applied.log = true;
@@ -4810,6 +4655,25 @@ function createBacktestCanvas(options) {
     if (workspaceTabs().some(([key]) => key === saved.designTab)) patch.designTab = saved.designTab;
     patch.restore = SessionRestore.restoreReport(saved, applied);
     setState(patch);
+
+    if (binding && (!binding.userStrategyId || restoredUserStrategyId)) {
+      const ide = ensureProjectIde();
+      if (ide) {
+        await loadProjectFiles(binding.projectId, binding.rootPath, generation);
+        if (generation !== workspaceGeneration) return false;
+        const opened = await ide.openAt(binding.projectId, binding.path, {
+          rootPath: binding.rootPath,
+        });
+        if (generation !== workspaceGeneration) return false;
+        ideOwnsCode = !!opened;
+        applied.technique = !!opened;
+        const active = opened ? activeProjectFile() : null;
+        if (active && typeof active.text === 'string') codeSource = active.text;
+        setState({ restore: SessionRestore.restoreReport(saved, applied) });
+      } else {
+        setState({ restore: SessionRestore.restoreReport(saved, applied) });
+      }
+    }
 
     if (saved.run && saved.run.runId) {
       applied.result = await restoreRunResult(saved.run.runId, generation);
@@ -5656,9 +5520,25 @@ function createBacktestCanvas(options) {
     resumePollingIfNeeded();
   }
 
+  async function flushEditor() {
+    if (!projectIde || typeof projectIde.flushAll !== 'function') return true;
+    return projectIde.flushAll();
+  }
+
+  function setChatEditing(value, ownerId) {
+    const owner = ownerId == null ? '__default__' : String(ownerId);
+    if (value) chatEditingOwners.add(owner);
+    else chatEditingOwners.delete(owner);
+    if (projectIde && typeof projectIde.setReadOnly === 'function') {
+      projectIde.setReadOnly(chatEditingOwners.size > 0);
+    }
+  }
+
   return {
     mount,
     refresh,
+    flushEditor,
+    setChatEditing,
     getContext,
     onChatAction,
     undoChatAction,

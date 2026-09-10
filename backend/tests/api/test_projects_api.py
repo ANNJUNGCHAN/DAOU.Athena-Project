@@ -4,7 +4,7 @@
 본다 — 응답이 200이라고 말하면 실제로 tmp_path 아래에 그 파일이 있어야 한다.
 
 두 가지를 특히 못 박는다. ① `DELETE /{id}`는 등록만 해제하고 폴더는 그대로 둔다.
-② 파이썬이 아닌 파일은 트리에 보이되 열거나 쓰면 415다.
+② 확장자가 무엇이든 텍스트는 열고 저장하며, 바이너리는 메타데이터만 돌려준다.
 """
 
 from __future__ import annotations
@@ -246,7 +246,7 @@ def test_corrupt_registry_is_surfaced_in_the_list_response(tmp_path: Path) -> No
 # ── 트리 ─────────────────────────────────────────────────────────────────────
 
 
-def test_tree_nests_folders_and_skips_the_ignore_list(tmp_path: Path) -> None:
+def test_tree_nests_folders_and_shows_every_entry(tmp_path: Path) -> None:
     client = _client(tmp_path)
     project = _create(client, "트리")
     root = Path(project["path"])
@@ -263,8 +263,8 @@ def test_tree_nests_folders_and_skips_the_ignore_list(tmp_path: Path) -> None:
     assert body["truncated"] is False
     assert body["root"] == str(root)
     names = [e["name"] for e in body["entries"]]
-    assert names == ["pkg", "returns.csv", "strategy.py"]
-    folder = body["entries"][0]
+    assert names == [".git", ".venv", "__pycache__", "node_modules", "pkg", "returns.csv", "strategy.py"]
+    folder = body["entries"][4]
     assert folder["is_dir"] is True
     inner = folder["children"][0]
     assert len(folder["children"]) == 1
@@ -272,7 +272,23 @@ def test_tree_nests_folders_and_skips_the_ignore_list(tmp_path: Path) -> None:
     assert inner["path"] == "pkg/inner.py"
     assert inner["is_dir"] is False and inner["py"] is True
     assert inner["size"] == (root / "pkg" / "inner.py").stat().st_size
-    assert [e["py"] for e in body["entries"][1:]] == [False, True]
+    assert [e["py"] for e in body["entries"][5:]] == [False, True]
+
+
+def test_tree_can_be_scoped_to_a_technique_folder(tmp_path: Path) -> None:
+    client = _client(tmp_path)
+    project = _create(client, "범위")
+    root = Path(project["path"])
+    (root / "techniques" / "alpha").mkdir(parents=True)
+    (root / "techniques" / "alpha" / "notes.md").write_text("# alpha\n", encoding="utf-8")
+
+    response = client.get(f"{BASE}/{project['id']}/tree", params={"path": "techniques/alpha"})
+
+    assert response.status_code == 200, response.text
+    assert response.json()["path"] == "techniques/alpha"
+    assert [entry["name"] for entry in response.json()["entries"]] == ["notes.md"]
+    assert response.json()["entries"][0]["path"] == "techniques/alpha/notes.md"
+    assert client.get(f"{BASE}/{project['id']}/tree", params={"path": "../outside"}).status_code == 400
 
 
 # ── 파일 읽기 ─────────────────────────────────────────────────────────────────
@@ -291,7 +307,7 @@ def test_read_file_returns_text_size_and_mtime(tmp_path: Path) -> None:
     assert body["mtime"] > 0
 
 
-def test_read_file_rejects_non_python_missing_oversized_and_escapes(tmp_path: Path) -> None:
+def test_read_file_opens_all_text_and_returns_metadata_for_large_files(tmp_path: Path) -> None:
     client = _client(tmp_path)
     project = _create(client, "거부")
     root = Path(project["path"])
@@ -303,26 +319,30 @@ def test_read_file_rejects_non_python_missing_oversized_and_escapes(tmp_path: Pa
         return client.get(f"{BASE}/{project['id']}/file", params={"path": path})
 
     non_python = _get("returns.csv")
-    assert non_python.status_code == 415
-    assert "파이썬" in non_python.json()["detail"]
+    assert non_python.status_code == 200
+    assert non_python.json()["kind"] == "text"
+    assert non_python.json()["text"].replace("\r\n", "\n") == "a,b\n"
     assert _get("없는파일.py").status_code == 404
     too_big = _get("huge.py")
-    assert too_big.status_code == 413
-    assert "1MB" in too_big.json()["detail"]
+    assert too_big.status_code == 200
+    assert too_big.json()["kind"] == "binary"
+    assert too_big.json()["reason"] == "too_large"
     for escape in ("../secret.py", "/etc/passwd", "C:/Windows/evil.py", "pkg/../../secret.py"):
         assert _get(escape).status_code == 400, escape
     assert _get("").status_code == 400
 
 
-def test_read_file_rejects_non_utf8_bytes(tmp_path: Path) -> None:
+def test_read_file_returns_binary_metadata_for_non_utf8_bytes(tmp_path: Path) -> None:
     client = _client(tmp_path)
     project = _create(client, "인코딩")
     (Path(project["path"]) / "cp949.py").write_bytes("주석\n".encode("cp949"))
 
     response = client.get(f"{BASE}/{project['id']}/file", params={"path": "cp949.py"})
 
-    assert response.status_code == 415
-    assert "UTF-8" in response.json()["detail"]
+    assert response.status_code == 200
+    assert response.json()["kind"] == "binary"
+    assert response.json()["reason"] == "non_utf8"
+    assert response.json()["editable"] is False
 
 
 # ── 파일 쓰기 ─────────────────────────────────────────────────────────────────
@@ -358,7 +378,7 @@ def test_write_file_round_trips_exactly_including_crlf(tmp_path: Path) -> None:
     assert (Path(project["path"]) / "crlf.py").read_bytes() == text.encode("utf-8")
 
 
-def test_write_file_is_python_only_and_stays_inside_the_project(tmp_path: Path) -> None:
+def test_write_file_accepts_text_extensions_and_stays_inside_the_project(tmp_path: Path) -> None:
     client = _client(tmp_path)
     project = _create(client, "쓰기거부")
 
@@ -366,12 +386,66 @@ def test_write_file_is_python_only_and_stays_inside_the_project(tmp_path: Path) 
         return client.put(f"{BASE}/{project['id']}/file", json={"path": path, "text": text})
 
     non_python = _put("메모.txt")
-    assert non_python.status_code == 415
-    assert "파이썬" in non_python.json()["detail"]
+    assert non_python.status_code == 200
     assert _put("../탈출.py").status_code == 400
     assert _put("C:/Windows/evil.py").status_code == 400
     assert client.put(f"{BASE}/{project['id']}/file", json={"path": "a.py"}).status_code == 422
     assert not (tmp_path / "탈출.py").exists()
+
+
+def test_write_file_can_be_confined_to_current_technique_root(tmp_path: Path) -> None:
+    client = _client(tmp_path)
+    project = _create(client, "기법범위")
+    root = Path(project["path"])
+    (root / "techniques" / "alpha").mkdir(parents=True)
+    (root / "techniques" / "other").mkdir()
+
+    allowed = client.put(
+        f"{BASE}/{project['id']}/file",
+        json={
+            "path": "techniques/alpha/strategy.py", "text": "x = 1\n",
+            "root_path": "techniques/alpha",
+        },
+    )
+    blocked = client.put(
+        f"{BASE}/{project['id']}/file",
+        json={
+            "path": "techniques/other/strategy.py", "text": "x = 2\n",
+            "root_path": "techniques/alpha",
+        },
+    )
+
+    assert allowed.status_code == 200
+    assert blocked.status_code == 400
+    assert blocked.json()["detail"] == "파일 경로가 기법 root_path 밖이다"
+    assert not (root / "techniques" / "other" / "strategy.py").exists()
+
+
+def test_write_file_scope_rejects_symlink_escape(tmp_path: Path) -> None:
+    client = _client(tmp_path)
+    project = _create(client, "기법링크범위")
+    root = Path(project["path"])
+    scope = root / "techniques" / "alpha"
+    outside_scope = root / "outside-scope"
+    scope.mkdir(parents=True)
+    outside_scope.mkdir()
+    link = scope / "linked"
+    try:
+        link.symlink_to(outside_scope, target_is_directory=True)
+    except OSError:
+        return
+
+    response = client.put(
+        f"{BASE}/{project['id']}/file",
+        json={
+            "path": "techniques/alpha/linked/escape.py", "text": "x = 1\n",
+            "root_path": "techniques/alpha",
+        },
+    )
+
+    assert response.status_code == 400
+    assert response.json()["detail"] == "파일 경로가 기법 root_path 밖이다"
+    assert not (outside_scope / "escape.py").exists()
 
 
 def test_write_file_reports_an_unwritable_path_without_a_traceback(tmp_path: Path) -> None:
@@ -410,7 +484,7 @@ def test_create_empty_python_file_and_directory(tmp_path: Path) -> None:
     assert (root / "pkg" / "new.py").read_text(encoding="utf-8") == ""
 
 
-def test_create_rejects_existing_path_non_python_and_bad_kind(tmp_path: Path) -> None:
+def test_create_rejects_existing_path_and_bad_kind(tmp_path: Path) -> None:
     client = _client(tmp_path)
     project = _create(client, "만들기거부")
 
@@ -419,8 +493,7 @@ def test_create_rejects_existing_path_non_python_and_bad_kind(tmp_path: Path) ->
 
     assert _post("strategy.py").status_code == 409
     non_python = _post("메모.txt")
-    assert non_python.status_code == 415
-    assert "파이썬" in non_python.json()["detail"]
+    assert non_python.status_code == 200
     bad_kind = _post("a.py", "socket")
     assert bad_kind.status_code == 422
     assert "file 또는 dir" in bad_kind.json()["detail"]
@@ -442,7 +515,7 @@ def test_rename_moves_within_the_project(tmp_path: Path) -> None:
     assert (root / "pkg" / "모멘텀.py").is_file()
 
 
-def test_rename_is_python_only_and_refuses_missing_or_occupied_targets(tmp_path: Path) -> None:
+def test_rename_allows_extension_change_and_refuses_missing_or_occupied_targets(tmp_path: Path) -> None:
     client = _client(tmp_path)
     project = _create(client, "이름거부")
     root = Path(project["path"])
@@ -452,12 +525,11 @@ def test_rename_is_python_only_and_refuses_missing_or_occupied_targets(tmp_path:
         return client.post(f"{BASE}/{project['id']}/rename", json={"path": path, "to": to})
 
     non_python = _rename("strategy.py", "strategy.txt")
-    assert non_python.status_code == 415
-    assert "파이썬" in non_python.json()["detail"]
+    assert non_python.status_code == 200
     assert _rename("없다.py", "새것.py").status_code == 404
-    assert _rename("strategy.py", "other.py").status_code == 409
-    assert _rename("strategy.py", "../밖.py").status_code == 400
-    assert (root / "strategy.py").is_file()
+    assert _rename("strategy.txt", "other.py").status_code == 409
+    assert _rename("strategy.txt", "../밖.py").status_code == 400
+    assert (root / "strategy.txt").is_file()
 
 
 def test_rename_moves_a_directory_without_the_python_rule(tmp_path: Path) -> None:
@@ -512,6 +584,178 @@ def test_registry_file_stays_valid_json_after_a_full_session(tmp_path: Path) -> 
 
     assert [row["name"] for row in payload["projects"]] == ["둘"]
     assert list((tmp_path / "projects").glob("*.tmp")) == []
+
+
+# ── 새 기법 폴더 ───────────────────────────────────────────────────────────────
+
+
+def test_create_technique_makes_requested_folder_and_starts_project_env(
+    tmp_path: Path, monkeypatch
+) -> None:
+    with _env_client(tmp_path) as client:
+        project = _create(client, "부모")
+        root = Path(project["path"])
+        (root / "strategies").mkdir()
+        started: dict = {}
+        runner = client.app.state.backtest_runner
+        monkeypatch.setattr(runner, "env_job_for", lambda _path: None)
+
+        def fake_start(job_id, *, project_path, packages):
+            started.update(job_id=job_id, project_path=project_path, packages=packages)
+
+        monkeypatch.setattr(runner, "start_env", fake_start)
+
+        response = client.post(
+            f"{BASE}/{project['id']}/techniques",
+            json={"name": "momentum-v2", "parent": "strategies"},
+        )
+
+        assert response.status_code == 202, response.text
+        body = response.json()
+        assert body["project_id"] == project["id"]
+        assert body["technique"] == {
+            "name": "momentum-v2",
+            "path": "strategies/momentum-v2",
+            "strategy_path": "strategies/momentum-v2/strategy.py",
+            "test_path": "strategies/momentum-v2/tests/test_strategy.py",
+        }
+        assert body["env"]["status"] == "running"
+        assert body["env"]["job_id"] == started["job_id"]
+        assert started["project_path"] == root.resolve()
+        assert started["packages"] == []
+        assert (root / "strategies" / "momentum-v2" / "strategy.py").is_file()
+        assert (root / "strategies" / "momentum-v2" / "tests" / "test_strategy.py").is_file()
+
+
+def test_create_technique_rejects_escape_absolute_symlink_and_duplicate(
+    tmp_path: Path, monkeypatch
+) -> None:
+    with _env_client(tmp_path) as client:
+        project = _create(client, "보안")
+        root = Path(project["path"])
+        runner = client.app.state.backtest_runner
+        monkeypatch.setattr(runner, "env_job_for", lambda _path: None)
+        monkeypatch.setattr(runner, "start_env", lambda *args, **kwargs: None)
+
+        for parent in ("../escape", str(tmp_path / "absolute"), "C:/outside"):
+            response = client.post(
+                f"{BASE}/{project['id']}/techniques",
+                json={"name": "새 기법", "parent": parent},
+            )
+            assert response.status_code == 400, (parent, response.text)
+        assert not (tmp_path / "escape").exists()
+
+        made = client.post(
+            f"{BASE}/{project['id']}/techniques",
+            json={"name": "alpha", "parent": "."},
+        )
+        assert made.status_code == 202
+        assert client.post(
+            f"{BASE}/{project['id']}/techniques",
+            json={"name": "alpha", "parent": "."},
+        ).status_code == 409
+        assert client.post(
+            f"{BASE}/{project['id']}/techniques",
+            json={"name": "../bad", "parent": "."},
+        ).status_code == 422
+
+        outside = tmp_path / "outside-dir"
+        outside.mkdir()
+        link = root / "linked"
+        try:
+            link.symlink_to(outside, target_is_directory=True)
+        except OSError:
+            return  # Windows developer mode/권한이 없는 머신
+        escaped = client.post(
+            f"{BASE}/{project['id']}/techniques",
+            json={"name": "child", "parent": "linked"},
+        )
+        assert escaped.status_code == 400
+        assert not (outside / "child").exists()
+
+
+def test_create_technique_rolls_back_folder_when_env_start_fails(
+    tmp_path: Path, monkeypatch
+) -> None:
+    with _env_client(tmp_path) as client:
+        project = _create(client, "환경시작실패")
+        root = Path(project["path"])
+        runner = client.app.state.backtest_runner
+        monkeypatch.setattr(runner, "env_job_for", lambda _path: None)
+
+        def fail_start(*_args, **_kwargs):
+            raise RuntimeError("runner unavailable")
+
+        monkeypatch.setattr(runner, "start_env", fail_start)
+        failed = client.post(
+            f"{BASE}/{project['id']}/techniques",
+            json={"name": "retryable", "parent": "."},
+        )
+
+        assert failed.status_code == 500
+        assert "환경 구성" in failed.json()["detail"]
+        assert not (root / "retryable").exists()
+
+        monkeypatch.setattr(runner, "start_env", lambda *args, **kwargs: None)
+        retried = client.post(
+            f"{BASE}/{project['id']}/techniques",
+            json={"name": "retryable", "parent": "."},
+        )
+        assert retried.status_code == 202, retried.text
+
+
+# ── 프로젝트 터미널 ─────────────────────────────────────────────────────────────
+
+
+def test_terminal_runs_argv_in_requested_project_folder(tmp_path: Path) -> None:
+    client = _client(tmp_path)
+    project = _create(client, "터미널")
+    root = Path(project["path"])
+    (root / "alpha").mkdir()
+
+    response = client.post(
+        f"{BASE}/{project['id']}/terminal",
+        json={
+            "cwd": "alpha",
+            "argv": [sys.executable, "-c", "import os; print(os.path.basename(os.getcwd()))"],
+        },
+    )
+
+    assert response.status_code == 200, response.text
+    body = response.json()
+    assert body["cwd"] == "alpha"
+    assert body["exit_code"] == 0
+    assert body["stdout"].strip() == "alpha"
+    assert body["stderr"] == ""
+    assert body["timed_out"] is False
+
+
+def test_terminal_rejects_escape_and_times_out_with_bounded_output(tmp_path: Path) -> None:
+    client = _client(tmp_path)
+    project = _create(client, "터미널제한")
+
+    escaped = client.post(
+        f"{BASE}/{project['id']}/terminal",
+        json={"cwd": "../outside", "argv": [sys.executable, "-V"]},
+    )
+    assert escaped.status_code == 400
+
+    timed = client.post(
+        f"{BASE}/{project['id']}/terminal",
+        json={
+            "argv": [sys.executable, "-c", "import time; print('start', flush=True); time.sleep(2)"],
+            "timeout_ms": 100,
+        },
+    )
+    assert timed.status_code == 200, timed.text
+    assert timed.json()["timed_out"] is True
+
+    huge = client.post(
+        f"{BASE}/{project['id']}/terminal",
+        json={"argv": [sys.executable, "-c", "print('x' * 600000)"]},
+    ).json()
+    assert huge["stdout_truncated"] is True
+    assert len(huge["stdout"].encode("utf-8")) <= 512 * 1024
 
 
 # ── 프로젝트 환경(.venv) ─────────────────────────────────────────────────────

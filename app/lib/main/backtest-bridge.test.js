@@ -17,6 +17,23 @@ function fakeFetch(status, body) {
   });
 }
 
+test('technique creation, scoped tree and terminal preserve project paths and command arguments', async () => {
+  const calls = [];
+  const fetchImpl = async (url, options) => {
+    calls.push({ url, method: options.method, body: options.body && JSON.parse(options.body) });
+    return { ok: true, status: 200, json: async () => ({ exit_code: 0 }) };
+  };
+  const deps = { backendBase: 'http://x', fetchImpl, project_id: 'p 1' };
+  await backtestBridge.createTechnique({ ...deps, parent: 'strategies', name: '추세 기법' });
+  await backtestBridge.fetchProjectTree({ ...deps, path: 'strategies/추세 기법' });
+  await backtestBridge.runProjectTerminal({ ...deps, cwd: 'strategies/추세 기법', argv: ['python', '-c', 'print("ok")'] });
+  assert.equal(calls[0].url, 'http://x/api/v1/projects/p%201/techniques');
+  assert.deepEqual(calls[0].body, { parent: 'strategies', name: '추세 기법' });
+  assert.equal(new URL(calls[1].url).searchParams.get('path'), 'strategies/추세 기법');
+  assert.equal(calls[2].url, 'http://x/api/v1/projects/p%201/terminal');
+  assert.deepEqual(calls[2].body, { cwd: 'strategies/추세 기법', argv: ['python', '-c', 'print("ok")'] });
+});
+
 test('fetchPresets: 200 → {ok:true, data}', async () => {
   const res = await backtestBridge.fetchPresets({
     backendBase: 'http://x',
