@@ -133,6 +133,15 @@ function restampFixtureText(text, identity) {
   return out;
 }
 
+function shouldBlankFixtureMarketStat(slot, text, identity) {
+  if (!identity || !identity.code || identity.code === FIXTURE_STOCK_CODE) return false;
+  if (!slot || slot.kind === 'label' || slot.static === 'text' || slot.static === true) return false;
+  const paper = slot.paper_text;
+  if (typeof paper !== 'string' || !/\d/.test(paper)) return false;
+  const shown = String(text || '');
+  return shown === paper || shown.includes(paper);
+}
+
 function mountPlan(contract, values, options = {}) {
   const pending = pendingSet(options);
   const identity = options.identity;
@@ -189,6 +198,9 @@ function mountPlan(contract, values, options = {}) {
         ));
     if (identity && identityCardId(contract) === 'CC-04') {
       formatted = { ...formatted, text: restampFixtureText(formatted.text, identity) };
+      if (shouldBlankFixtureMarketStat(slot, formatted.text, identity)) {
+        formatted = { text: '미제공', tone: null, missing: true };
+      }
     }
     assignments.push({
       slotId: slot.slot_id,

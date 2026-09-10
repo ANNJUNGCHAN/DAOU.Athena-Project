@@ -830,6 +830,7 @@ async function runRestDataset({
   const dataCanvasCount = canvases.filter((canvas) => canvas.isDataCanvas).length;
   const stateCanvasCount = canvases.length - dataCanvasCount;
   const stateErrorCode = canvases.find((canvas) => canvas.state)?.receipt?.error_code || null;
+  const producedCanvas = canvases.length > 0;
   const retryAction = !dataCanvasCount && state
     ? buildRetryAction(dataset, state, retryIdFactory)
     : null;
@@ -852,8 +853,10 @@ async function runRestDataset({
         : (localState === 'cancelled' ? 'LOCAL_REQUEST_CANCELLED' : 'LOCAL_REQUEST_FAILED'),
       retryable: true,
     } : null,
-    error: dataCanvasCount ? null : (stateErrorCode || (errors[0] && errors[0].message) || '렌더할 데이터 카드가 없다'),
-    errorCode: dataCanvasCount ? null : (stateErrorCode || (errors[0] && errors[0].code) || 'no_data_canvas'),
+    error: dataCanvasCount ? null : (stateErrorCode || (errors[0] && errors[0].message)
+      || (producedCanvas ? null : '렌더할 데이터 카드가 없다')),
+    errorCode: dataCanvasCount ? null : (stateErrorCode || (errors[0] && errors[0].code)
+      || (producedCanvas ? null : 'no_data_canvas')),
     answerText,
     answer: {
       delivery: 'separate',
