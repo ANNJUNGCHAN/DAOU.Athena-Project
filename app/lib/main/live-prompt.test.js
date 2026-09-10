@@ -14,6 +14,16 @@ test('Grok 상주 규칙과 턴을 합치면 기존 콜드 프롬프트와 같�
   assert.ok(buildLiveSystemPrompt('grok').includes('[Grok MCP 호출 규칙]'));
 });
 
+test('주문 계획을 조회 카드로 실행하거나 실패한 티켓을 성공으로 안내하지 않는다', () => {
+  for (const provider of ['grok', 'claude', 'codex']) {
+    const prompt = buildLiveSystemPrompt(provider);
+    assert.match(prompt, /주문 종류\(kind=order\)의 plan_token을/);
+    assert.match(prompt, /athena__render_canvas나 athena_call에 넘기지 마라/);
+    assert.match(prompt, /확인 헤더를 추가하거나 다른 도구로 주문을 재시도하지 마라/);
+    assert.match(prompt, /order_ticket_created=false이면 티켓을 열었다고 말하지 말고/);
+  }
+});
+
 test('알람 메인 카드는 검증된 조회 후보와 사용자 동의로만 확정한다', () => {
   const prompt = buildLivePrompt('삼성전자 거래량이 늘면 알람 줘', [], '20260908');
   assert.match(prompt, /main_card_candidate=\{operation_ref,args,title\}/);
