@@ -88,6 +88,7 @@ test('지연된 A→B 전환 중에는 이전 A 화면에서 주문 티켓을 �
       order: { hidden: true, focus() {} },
     },
     renders: 0,
+    orderTicketLib: require('./order-ticket'),
   };
 
   vm.runInNewContext(`
