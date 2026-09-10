@@ -973,7 +973,7 @@ function activateBoardState(state, boardId) {
 // 갖고 있다. 봉투는 값(slot_values)과 상태 보드 목록만 나른다.
 function boardMountOptions(host, envelope) {
   return {
-    identity: boardMount.boardIdentityFromEnvelope(envelope),
+    identity: boardMount.boardIdentityFromEnvelope(envelope, boardStateOf(host).values),
     // 백엔드가 「자료가 한 칸도 없다」고 표시한 줄. 마운트가 그 줄만 감춘다.
     emptyRows: boardStateOf(host).emptyRows || [],
     // 실시간 프레임·주문 응답이 오기 전에는 빈 칸으로 두는 잎.
