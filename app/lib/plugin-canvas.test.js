@@ -215,6 +215,79 @@ test('권한 화면은 목록을 권한 초안이라 부르고 확정 지점을 
   assert.equal(findByClass(container, 'plugin-canvas-draft-note')[0].textContent, '승인 카드로 확정합니다');
 });
 
+test('모두 승인 버튼은 혼합 상태를 전부 켠 뒤 전부 끄고 저장 차이만 제안한다', async () => {
+  const proposed = [];
+  const container = fakeNode('div');
+  const canvas = createPluginCanvas({ container, onPropose: (spec) => proposed.push(spec) });
+  canvas.mount();
+  await findByClass(container, 'is-primary').filter((n) => n.tag === 'button')[1].dispatchEvent({ type: 'click' });
+
+  let toggleAll = buttonWithClass(container, 'is-permission-toggle-all');
+  assert.equal(toggleAll.textContent, '모두 승인');
+  assert.equal(toggleAll.getAttribute('aria-pressed'), 'false');
+  await toggleAll.dispatchEvent({ type: 'click' });
+
+  assert.deepEqual(
+    findByClass(container, 'plugin-canvas-toggle').map((toggle) => toggle.getAttribute('aria-checked')),
+    ['true', 'true'],
+  );
+  toggleAll = buttonWithClass(container, 'is-permission-toggle-all');
+  assert.equal(toggleAll.textContent, '모두 해제');
+  assert.equal(findByClass(container, 'plugin-canvas-sheet-count')[0].textContent, '허용 2 / 2');
+  await toggleAll.dispatchEvent({ type: 'click' });
+
+  assert.deepEqual(
+    findByClass(container, 'plugin-canvas-toggle').map((toggle) => toggle.getAttribute('aria-checked')),
+    ['false', 'false'],
+  );
+  assert.equal(buttonWithClass(container, 'is-permission-toggle-all').textContent, '모두 승인');
+  await buttonWithClass(container, 'is-sheet-confirm').dispatchEvent({ type: 'click' });
+  assert.deepEqual(proposed, [{ action: 'revoke_tools', target: 'time', features: ['get_current_time'] }]);
+});
+
+test('개별 권한 토글도 모두 승인 버튼 문구를 즉시 동기화한다', async () => {
+  const container = fakeNode('div');
+  const canvas = createPluginCanvas({ container, onPropose: () => {} });
+  canvas.mount();
+  await findByClass(container, 'is-primary').filter((n) => n.tag === 'button')[1].dispatchEvent({ type: 'click' });
+
+  await findByClass(container, 'plugin-canvas-toggle')[1].dispatchEvent({ type: 'click' });
+  assert.equal(buttonWithClass(container, 'is-permission-toggle-all').textContent, '모두 해제');
+  await findByClass(container, 'plugin-canvas-toggle')[0].dispatchEvent({ type: 'click' });
+  assert.equal(buttonWithClass(container, 'is-permission-toggle-all').textContent, '모두 승인');
+});
+
+test('모두 승인으로 만든 초안은 목록 재렌더 뒤에도 유지된다', async () => {
+  const container = fakeNode('div');
+  const canvas = createPluginCanvas({ container, onPropose: () => {} });
+  canvas.mount();
+  await findByClass(container, 'is-primary').filter((n) => n.tag === 'button')[1].dispatchEvent({ type: 'click' });
+  await buttonWithClass(container, 'is-permission-toggle-all').dispatchEvent({ type: 'click' });
+
+  canvas.setData({
+    installed: [{
+      id: 'time',
+      name: '시간·시간대',
+      enabled: true,
+      featureCount: 2,
+      features: [
+        { id: 'get_current_time', name: 'get_current_time', allowed: true },
+        { id: 'convert_time', name: 'convert_time', allowed: false },
+      ],
+    }],
+  });
+
+  assert.deepEqual(
+    findByClass(container, 'plugin-canvas-toggle').map((toggle) => toggle.getAttribute('aria-checked')),
+    ['true', 'true'],
+  );
+  assert.equal(buttonWithClass(container, 'is-permission-toggle-all').textContent, '모두 해제');
+  assert.deepEqual(canvas.getState().permissionDraft, {
+    pluginId: 'time',
+    draft: { get_current_time: true, convert_time: true },
+  });
+});
+
 test('probe 실패는 기능 허용 화면에 이유와 다시 확인을 띄운다', async () => {
   const retries = [];
   const container = fakeNode('div');
@@ -228,6 +301,8 @@ test('probe 실패는 기능 허용 화면에 이유와 다시 확인을 띄운�
 
   assert.equal(findByClass(container, 'plugin-canvas-error-text')[0].textContent, '연결 실패 — spawn ENOENT');
   assert.deepEqual(texts(container, 'plugin-canvas-empty'), ['노출 기능을 아직 확인하지 못했습니다 · 다시 확인을 누릅니다']);
+  assert.equal(buttonWithClass(container, 'is-permission-toggle-all').disabled, true);
+  assert.equal(buttonWithClass(container, 'is-permission-toggle-all').textContent, '모두 승인');
   await buttonWithClass(container, 'is-retry').dispatchEvent({ type: 'click' });
   assert.deepEqual(retries, ['broken', 'broken']);
 });

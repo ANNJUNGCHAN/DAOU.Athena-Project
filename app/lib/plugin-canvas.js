@@ -315,6 +315,14 @@ function createPluginCanvas(options) {
     return sheet.features.filter((feature) => feature.allowed).map((feature) => ({ ...feature }));
   }
 
+  function allPermissionsAllowed(sheet) {
+    return sheet.features.length > 0 && sheet.features.every((feature) => feature.allowed);
+  }
+
+  function permissionToggleAllLabel(sheet) {
+    return allPermissionsAllowed(sheet) ? '모두 해제' : '모두 승인';
+  }
+
   function emptyMessage(text) {
     return el('div', 'plugin-canvas-empty', text);
   }
@@ -564,6 +572,7 @@ function createPluginCanvas(options) {
         toggle.setAttribute('aria-checked', String(feature.allowed));
         toggle.setAttribute('aria-label', `${feature.name} ${feature.allowed ? '허용 끄기' : '허용 켜기'}`);
         refreshAllowedCounts();
+        refreshPermissionToggleAll();
       });
       row.appendChild(toggle);
     } else {
@@ -599,6 +608,23 @@ function createPluginCanvas(options) {
     if (footer) footer.textContent = `허용 ${allowed} / ${activeSheet.features.length}`;
     const badge = findByClassName('is-allowed-count');
     if (badge) badge.textContent = `허용 ${allowed}`;
+  }
+
+  function refreshPermissionToggleAll() {
+    if (!activeSheet || activeSheet.kind !== 'permissions') return;
+    const button = findByClassName('is-permission-toggle-all');
+    if (!button) return;
+    const allAllowed = allPermissionsAllowed(activeSheet);
+    button.textContent = permissionToggleAllLabel(activeSheet);
+    button.setAttribute('aria-pressed', String(allAllowed));
+  }
+
+  function toggleAllPermissions(sheet) {
+    if (!sheet.features.length) return;
+    const allowed = !allPermissionsAllowed(sheet);
+    sheet.features.forEach((feature) => { feature.allowed = allowed; });
+    sheet.dirty = true;
+    render();
   }
 
   function confirmRemove(sheet) {
@@ -678,8 +704,22 @@ function createPluginCanvas(options) {
       panel.appendChild(notice);
     }
 
-    panel.appendChild(el('h2', 'plugin-canvas-section-title', '권한 초안'));
-    panel.appendChild(el('p', 'plugin-canvas-draft-note', '승인 카드로 확정합니다'));
+    const permissionTools = el('div', 'plugin-canvas-permission-tools');
+    const permissionTitle = el('div', 'plugin-canvas-permission-title');
+    permissionTitle.appendChild(el('h2', 'plugin-canvas-section-title', '권한 초안'));
+    permissionTitle.appendChild(el('p', 'plugin-canvas-draft-note', '승인 카드로 확정합니다'));
+    permissionTools.appendChild(permissionTitle);
+    permissionTools.appendChild(el('div', 'plugin-canvas-spacer'));
+    const toggleAll = actionButton(
+      permissionToggleAllLabel(sheet),
+      'is-permission-toggle-all',
+      () => toggleAllPermissions(sheet),
+    );
+    toggleAll.disabled = sheet.features.length === 0;
+    toggleAll.setAttribute('aria-disabled', String(toggleAll.disabled));
+    toggleAll.setAttribute('aria-pressed', String(allPermissionsAllowed(sheet)));
+    permissionTools.appendChild(toggleAll);
+    panel.appendChild(permissionTools);
     const featureList = el('div', 'plugin-canvas-sheet-features plugin-canvas-permission-features');
     if (sheet.features.length) {
       sheet.features.forEach((feature) => featureList.appendChild(sheetFeatureRow(feature, true)));
