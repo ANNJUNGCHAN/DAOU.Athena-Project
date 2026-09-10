@@ -120,10 +120,14 @@ function identityCardId(contract) {
 function restampFixtureText(text, identity) {
   if (typeof text !== 'string' || !identity) return text;
   let out = text;
-  if (identity.name && identity.name !== FIXTURE_STOCK_NAME && out.includes(FIXTURE_STOCK_NAME)) {
+  const rename = identity.name && identity.name !== FIXTURE_STOCK_NAME;
+  const recode = identity.code && identity.code !== FIXTURE_STOCK_CODE;
+  if (rename && out.includes(FIXTURE_STOCK_NAME)) {
     out = out.split(FIXTURE_STOCK_NAME).join(identity.name);
+  } else if (recode && out.includes(FIXTURE_STOCK_NAME)) {
+    out = out.split(FIXTURE_STOCK_NAME).join('').replace(/^ · | · $/g, '').replace(/ {2,}/g, ' ').trim();
   }
-  if (identity.code && identity.code !== FIXTURE_STOCK_CODE && out.includes(FIXTURE_STOCK_CODE)) {
+  if (recode && out.includes(FIXTURE_STOCK_CODE)) {
     out = out.split(FIXTURE_STOCK_CODE).join(identity.code);
   }
   return out;
@@ -1681,11 +1685,35 @@ function restorePrimaryMockup(collapsed) {
 
 // 보드 1장을 root 안에 세운다. <template>은 registry가 보드당 1회만 파싱하고
 // 여기서는 cloneNode만 한다 — 같은 보드를 다시 마운트하면 텍스트만 갈아끼운다.
-function boardIdentityFromEnvelope(envelope = {}) {
+function slotTextValue(value) {
+  if (typeof value === 'string') return value.trim();
+  if (value && typeof value === 'object') {
+    if (typeof value.value === 'string') return value.value.trim();
+    if (typeof value.text === 'string') return value.text.trim();
+  }
+  return '';
+}
+
+function nameFromBoundValues(values) {
+  if (!values || typeof values !== 'object') return '';
+  for (const slotId of ['s001', 's002']) {
+    const text = slotTextValue(values[slotId]);
+    if (!text || text.includes(FIXTURE_STOCK_NAME) || text.includes('통합 호가')) continue;
+    const short = text.split('·')[0].trim();
+    if (short && short.length <= 32) return short;
+  }
+  return '';
+}
+
+function boardIdentityFromEnvelope(envelope = {}, values = null) {
   const stringValue = (value) => typeof value === 'string' ? value.trim() : '';
   const args = envelope.operation_args || envelope.arguments || {};
   const code = stringValue(envelope.stk_cd || args.stk_cd || envelope.symbol || args.symbol);
-  let name = stringValue(envelope.data && envelope.data.stk_nm);
+  let name = stringValue(
+    (envelope.data && envelope.data.stk_nm)
+    || envelope.stk_nm
+    || args.stk_nm,
+  );
   for (const contract of [
     envelope.surface_contract || envelope.surfaceContract,
     envelope.initial_surface_contract || envelope.initialSurfaceContract,
@@ -1697,6 +1725,7 @@ function boardIdentityFromEnvelope(envelope = {}) {
     name = stringValue(Array.isArray(raw)
       ? (raw.find((slot) => slot.slot_id === 's001') || {}).value : raw.s001);
   }
+  if (!name) name = nameFromBoundValues(values);
   return { name, code };
 }
 

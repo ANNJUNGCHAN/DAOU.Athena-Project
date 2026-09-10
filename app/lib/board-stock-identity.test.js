@@ -34,6 +34,28 @@ test('ranking and sector titles remain unchanged when reached from a stock card'
   }
 });
 
+test('CC-04 identity reads hydrated slot names when the envelope has no stk_nm', () => {
+  const identity = boardIdentityFromEnvelope(
+    { stk_cd: '000660' },
+    { s002: 'SK하이닉스' },
+  );
+  assert.deepEqual(identity, { name: 'SK하이닉스', code: '000660' });
+  assert.deepEqual(boardIdentityFromEnvelope({ stk_cd: '373220', stk_nm: 'LG에너지솔루션' }), {
+    name: 'LG에너지솔루션', code: '373220',
+  });
+});
+
+test('CC-04 hoga titles never keep 삼성전자 when the card stock is another code', () => {
+  for (const boardId of ['13BC-2', '1JPU-0']) {
+    const plan = mountPlan(registry.contractFor(boardId), { s002: 'SK하이닉스' }, {
+      identity: boardIdentityFromEnvelope({ stk_cd: '000660' }, { s002: 'SK하이닉스' }),
+    });
+    assert.equal(plan.assignments.some((slot) => String(slot.text).includes('삼성전자')), false, boardId);
+    const s001 = plan.assignments.find((slot) => slot.slotId === 's001');
+    assert.equal(s001.text, 'SK하이닉스 통합 호가', boardId);
+  }
+});
+
 test('CC-04 hoga titles follow the card stock, not the Paper fixture name', () => {
   const identity = { name: 'SK하이닉스', code: '000660' };
   for (const boardId of ['13BC-2', '1JPU-0']) {
