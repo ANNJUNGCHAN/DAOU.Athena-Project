@@ -334,6 +334,14 @@ function newIdempotencyKey(randomFn) {
   return `ticket-${Date.now().toString(36)}-${Math.floor(rand() * 1e9).toString(36)}`;
 }
 
+function canPresentOrderTicket(state) {
+  if (!state || state.switchingConversation || !state.displayedConversationId
+      || state.settingsOpen || state.onboardVisible) {
+    return false;
+  }
+  return true;
+}
+
 const __exports = {
   buildPrefill,
   buildSelectorOrderPrefill,
@@ -352,6 +360,7 @@ const __exports = {
   createTicket,
   transition,
   newIdempotencyKey,
+  canPresentOrderTicket,
 };
 
 if (typeof module !== 'undefined' && module.exports) {
