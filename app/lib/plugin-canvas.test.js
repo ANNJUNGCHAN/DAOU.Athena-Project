@@ -7,7 +7,10 @@
 
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { createPluginCanvas } = require('./plugin-canvas');
+const fs = require('node:fs');
+const path = require('node:path');
+const vm = require('node:vm');
+const { createPluginCanvas, pluginPermissionOverridesSettings } = require('./plugin-canvas');
 
 function fakeNode(tag) {
   return {
@@ -121,6 +124,53 @@ test('빈 상태 문구는 검색 결과 없음과 아직 없음을 구분한다
 });
 
 // --- 01 기능 허용 -------------------------------------------------------------
+
+test('에르가네 권한 설정 문구는 셸 설정 오버레이를 열지 않는다', () => {
+  assert.equal(pluginPermissionOverridesSettings('권한 설정 보여줘', 'plugin'), true);
+  assert.equal(pluginPermissionOverridesSettings('권한 설정', 'plugin'), true);
+  assert.equal(pluginPermissionOverridesSettings('설정 보여줘', 'plugin'), false);
+  assert.equal(pluginPermissionOverridesSettings('권한 설정 보여줘', 'summary'), false);
+});
+
+test('openPermissions는 설정 오버레이 없이 기능 허용 화면을 연다', () => {
+  const container = fakeNode('div');
+  const canvas = createPluginCanvas({ container });
+  canvas.mount();
+  canvas.openPermissions();
+  assert.equal(canvas.getState().activeSheet, 'permissions');
+  assert.equal(findByClass(container, 'plugin-canvas-permissions-view').length, 1);
+  assert.equal(findByClass(container, 'plugin-canvas-sheet').length, 0);
+});
+
+test('chat dispatch in plugin mode opens plugin permissions and not the settings overlay', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'chat.js'), 'utf8');
+  const start = src.indexOf('function dispatchUserQuery(text) {');
+  const end = src.indexOf('\n// 사람이 타이핑하는 동안에도 자란다', start);
+  assert.ok(start >= 0 && end > start, 'dispatchUserQuery source exists');
+  let settingsOpened = 0;
+  let permissionsOpened = 0;
+  let queried = 0;
+  vm.runInNewContext(`${src.slice(start, end)}\ndispatchUserQuery('권한 설정 보여줘');`, {
+    window: {
+      AthenaCanvasMode: { state: { view: 'plugin' } },
+      AthenaLib: { PluginCanvas: { pluginPermissionOverridesSettings } },
+      AthenaPluginCanvas: { openPermissions() { permissionsOpened += 1; } },
+    },
+    currentCanvasMode: () => 'plugin',
+    isSettingsCommand(text) {
+      return pluginPermissionOverridesSettings(text, 'plugin') ? false : /설정/.test(text);
+    },
+    routineMainCardLib: { affirmative: () => false },
+    routineMainCardConfirmations: { invalidateCurrent() {} },
+    invalidateTypedMainCardViews() {},
+    openSettings() { settingsOpened += 1; },
+    isHistoryCommand: () => false,
+    runQuery() { queried += 1; },
+  });
+  assert.equal(settingsOpened, 0);
+  assert.equal(permissionsOpened, 1);
+  assert.equal(queried, 0);
+});
 
 test('권한 버튼은 의도 콜백을 알리고 Paper 01 기능 허용 화면을 연다', async () => {
   const calls = [];

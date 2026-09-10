@@ -1863,8 +1863,18 @@ function closeSettings() {
 const SETTINGS_COMMAND =
   /^(설정|환경설정|셋팅|세팅|settings?|config)\s*[?!.]*$|설정\s*(창|화면|모드)?\s*(을|를)?\s*(열어|보여|띄워|줘|줄래)|모델\s*(바꿔|변경|설정)|계좌\s*(연결|설정|관리)/i;
 
+function currentCanvasMode() {
+  return (window.AthenaCanvasMode && window.AthenaCanvasMode.state && window.AthenaCanvasMode.state.view) || '';
+}
+
 function isSettingsCommand(text) {
-  return SETTINGS_COMMAND.test(text.trim());
+  const trimmed = String(text || '').trim();
+  const pluginLib = window.AthenaLib && window.AthenaLib.PluginCanvas;
+  if (pluginLib && typeof pluginLib.pluginPermissionOverridesSettings === 'function'
+    && pluginLib.pluginPermissionOverridesSettings(trimmed, currentCanvasMode())) {
+    return false;
+  }
+  return SETTINGS_COMMAND.test(trimmed);
 }
 
 // ---------- 대화 모드 HISTORY_COMMAND — 채팅→그래프 파이프라인 단계 5 ----------
@@ -2615,6 +2625,15 @@ function dispatchUserQuery(text) {
   if (routineMainCardLib && !routineMainCardLib.affirmative(normalized)) {
     routineMainCardConfirmations.invalidateCurrent();
     invalidateTypedMainCardViews();
+  }
+  if (currentCanvasMode() === 'plugin'
+    && window.AthenaLib && window.AthenaLib.PluginCanvas
+    && typeof window.AthenaLib.PluginCanvas.pluginPermissionOverridesSettings === 'function'
+    && window.AthenaLib.PluginCanvas.pluginPermissionOverridesSettings(normalized, 'plugin')) {
+    if (window.AthenaPluginCanvas && typeof window.AthenaPluginCanvas.openPermissions === 'function') {
+      window.AthenaPluginCanvas.openPermissions();
+    }
+    return;
   }
   if (isSettingsCommand(normalized)) {
     openSettings();

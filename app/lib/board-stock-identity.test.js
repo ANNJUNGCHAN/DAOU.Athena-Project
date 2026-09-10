@@ -56,6 +56,31 @@ test('CC-04 hoga titles never keep 삼성전자 when the card stock is another c
   }
 });
 
+test('CC-04 다른 종목 호가는 Paper 픽스처 시가·고가·저가·52주 숫자를 쓰지 않는다', () => {
+  const identity = { name: 'SK하이닉스', code: '000660' };
+  const fixtures = {
+    '1JPU-0': {
+      s223: '105,600 — 196,100',
+      s246: '149,200원',
+      s248: '152,400원',
+      s250: '148,100원',
+    },
+    '13BC-2': {
+      s010: '150,850',
+    },
+  };
+  for (const boardId of Object.keys(fixtures)) {
+    const plan = mountPlan(registry.contractFor(boardId), fixtures[boardId], { identity });
+    assert.equal(plan.assignments.some((slot) => String(slot.text).includes('삼성전자')), false, boardId);
+    for (const [slotId, paper] of Object.entries(fixtures[boardId])) {
+      const slot = plan.assignments.find((row) => row.slotId === slotId);
+      assert.ok(slot, `${boardId} ${slotId}`);
+      assert.equal(String(slot.text).includes(paper), false, `${boardId} ${slotId} kept ${paper}`);
+      assert.equal(slot.text, '미제공', `${boardId} ${slotId}`);
+    }
+  }
+});
+
 test('CC-04 hoga titles follow the card stock, not the Paper fixture name', () => {
   const identity = { name: 'SK하이닉스', code: '000660' };
   for (const boardId of ['13BC-2', '1JPU-0']) {

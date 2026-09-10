@@ -283,6 +283,23 @@ test('마운트 결과를 못 받은 차트는 timeout으로 집계되고 데이
   assert.equal(result.canvases[0].isDataCanvas, false);
   assert.equal(result.dataCanvasCount, 0);
   assert.equal(result.ok, false);
+  assert.notEqual(result.error, '렌더할 데이터 카드가 없다');
+});
+
+test('차트 데이터 캔버스가 있으면 렌더할 데이터 카드가 없다는 영수증을 쓰지 않는다', async () => {
+  const result = await runRestDataset({
+    dataset: dataset(),
+    backendBase: 'http://backend',
+    fetchImpl: successfulFetch(),
+    emitCanvas: async (payload) => ({
+      verifiedVisible: true,
+      visiblePaintAt: payload.requestStartedAt + 20,
+      renderState: 'data',
+    }),
+  });
+  assert.ok(result.dataCanvasCount >= 1);
+  assert.equal(result.error, null);
+  assert.notEqual(result.error, '렌더할 데이터 카드가 없다');
 });
 
 test('render-plan deadline uses the remaining three-second budget with paint reserve', async () => {

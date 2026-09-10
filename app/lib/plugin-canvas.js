@@ -101,6 +101,7 @@ function createPluginCanvas(options) {
   if (!container) {
     return {
       mount() {}, setView() {}, setSearch() {}, setData() {}, setProposals() {},
+      openPermissions() {},
       getState: () => ({ view: 'hub', search: '' }),
     };
   }
@@ -234,6 +235,16 @@ function createPluginCanvas(options) {
     }
     propose({ action: 'stage_snippet', target: null, snippet: sheet.snippet });
     closeSheet();
+  }
+
+  function openPermissions() {
+    const plugin = installed[0];
+    if (!plugin) {
+      view = 'hub';
+      render();
+      return;
+    }
+    openPermissionSheet(plugin);
   }
 
   function openPermissionSheet(plugin) {
@@ -1117,12 +1128,17 @@ function createPluginCanvas(options) {
     };
   }
 
-  return { mount, setView, setSearch, setData, setProposals, getState };
+  return { mount, setView, setSearch, setData, setProposals, openPermissions, getState };
+}
+
+function pluginPermissionOverridesSettings(text, canvasMode) {
+  return canvasMode === 'plugin' && /권한\s*설정/.test(String(text || '').trim());
 }
 
 const __exports = {
   createPluginCanvas,
   SAMPLE_INSTALLED,
+  pluginPermissionOverridesSettings,
 };
 
 if (typeof module !== 'undefined' && module.exports) {
