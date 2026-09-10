@@ -499,6 +499,17 @@
   border-radius: 12px;
 }
 
+.plugin-canvas-permission-tools {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.plugin-canvas-permission-title {
+  display: grid;
+  gap: 4px;
+}
+
 .plugin-canvas-permission-features .plugin-canvas-sheet-feature {
   min-height: 58px;
   padding: 12px 14px;
