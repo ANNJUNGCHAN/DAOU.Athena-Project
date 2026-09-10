@@ -511,7 +511,7 @@ test('buildLiveTurnPrompt: canvasMode backtest — 접두 규율 + 현재 폼 JS
   assert.ok(p.includes('한 턴에 한 항목'));
   assert.ok(p.includes('run·optimize·backfill 액션을 직접 부르지 않는다'));
   assert.ok(p.includes('athena__render_canvas를 호출하지 않는다'));
-  assert.ok(p.includes('실행·검증·수집·저장·활성화·배포·탐색 시작은 사람이 카드 버튼을 누른다'));
+  assert.ok(p.includes('실행·검증·수집·일반 파일 저장·활성화·배포·탐색 시작은 사람이 카드 버튼을 누른다'));
   assert.ok(p.includes('suggest_run:true'));
   assert.ok(p.includes(`현재 폼(JSON): ${JSON.stringify(BT_CONTEXT.spec)}`));
   assert.ok(p.includes('실행 전 확인: 없음'));
@@ -710,7 +710,7 @@ test('buildBacktestModePrefix: 실행은 suggest_run으로 채팅 [실행] 버�
   const p = buildBacktestModePrefix(BT_FULL_CONTEXT, '20260902');
   assert.ok(p.includes('실행은 propose_spec/propose_code에 suggest_run:true를 넣으면 채팅에 [실행] 버튼이 뜬다 — 사람이 누른다.'));
   assert.ok(p.includes('run·optimize·backfill 액션을 직접 부르지 않는다'));
-  assert.ok(p.includes('실행·검증·수집·저장·활성화·배포·탐색 시작은 사람이 카드 버튼을 누른다'));
+  assert.ok(p.includes('실행·검증·수집·일반 파일 저장·활성화·배포·탐색 시작은 사람이 카드 버튼을 누른다'));
 });
 
 test('buildBacktestModePrefix: 알아서·한 번에 요청이면 한 턴에 다 채우고, 답은 변경 한 줄 + 질문 한 줄', () => {
@@ -877,8 +877,9 @@ test('buildBacktestModePrefix: 프로젝트가 없으면 없음으로 내려앉�
 
 test('buildBacktestModePrefix: 파일 규율 — propose_file로 가고, 누르기 전에는 썼다고 하지 않는다', () => {
   const p = buildBacktestModePrefix(BT_PROJECT_CONTEXT, '20260902');
-  assert.ok(p.includes('코드 작업(작성·수정·오류 고치기)은 전부 propose_file로 한다'));
-  assert.ok(p.includes('만들거나 고칠 수 있는 것은 .py뿐이다'));
+  assert.ok(p.includes('파일 작업은 propose_file로 한다'));
+  assert.ok(p.includes('설정·문서 등 텍스트 파일도 편집할 수 있다'));
+  assert.ok(!p.includes('만들거나 고칠 수 있는 것은 .py뿐이다'));
   assert.ok(p.includes('list_files·read_file'));
   assert.ok(p.includes('propose_file은 파일을 쓰지 않는다'));
   assert.ok(p.includes('사람이 적용을 누른 뒤에야 디스크에 쓰인다'));
@@ -907,18 +908,20 @@ test('buildBacktestModePrefix: 주소는 종류를 가리지 않고 source_brief
 test('buildBacktestModePrefix: 등록은 register_strategy로 가고 실행·활성화·배포가 아니다', () => {
   const p = buildBacktestModePrefix(BT_PROJECT_CONTEXT, '20260902');
   assert.ok(p.includes('register_strategy(project_id·path·name)'));
-  assert.ok(p.includes('기법 탭의 목록에 프리셋과 같은 자리로 뜬다'));
+  assert.ok(p.includes('기존 프로젝트의 일반 전략 파일을 목록에 등록할 때만 register_strategy'));
   assert.equal(p.includes('설계 폼'), false);
-  assert.ok(p.includes('등록은 실행도 활성화도 배포도 아니다'));
+  assert.ok(p.includes('등록은 실행·활성화·배포가 아니다'));
 });
 
 // 환경은 대화가 몰아도 되는 준비 작업이지만 버튼은 사람이 누른다 — 모델이 "깔아뒀다"고
 // 말하면 다음 실행이 ImportError로 죽고 사용자는 이유를 모른다.
-test('buildBacktestModePrefix: 패키지는 사람에게 [환경 만들기]를 눌러 달라고 하되 이름을 댄다', () => {
+test('buildBacktestModePrefix: 환경은 자동 준비하고 실제 터미널 결과를 확인한다', () => {
   const p = buildBacktestModePrefix(BT_PROJECT_CONTEXT, '20260902');
-  assert.ok(p.includes('네가 깔 수 없다'));
-  assert.ok(p.includes('[환경 만들기]'));
-  assert.ok(p.includes('어떤 패키지가 왜 필요한지 이름을 대라'));
+  assert.ok(p.includes('환경은 자동 준비된다'));
+  assert.ok(!p.includes('[환경 만들기]'));
+  assert.ok(p.includes('action=terminal'));
+  assert.ok(p.includes('종료 코드·stdout·stderr를 확인'));
+  assert.ok(p.includes('주문·배포·무장 승인 우회에 사용하지 않는다'));
 });
 
 // 실매매를 물었을 때의 답 — 이 저장소는 키움 모의투자에 잠겨 있다(config.py가 다른
@@ -1203,7 +1206,7 @@ test('buildBacktestModePrefix: 기법 초안 규칙 — 설명은 줄 범위 근
   assert.ok(p.includes('코드 ↔ 노드 ↔ 백테스트를 오간다'));
 });
 
-test('buildBacktestModePrefix: 기법 초안 규칙도 실행·활성화·저장을 모델에게 시키지 않는다', () => {
+test('buildBacktestModePrefix: 폴더 없는 기법 초안은 실행·활성화·저장을 모델에게 시키지 않는다', () => {
   const p = buildBacktestModePrefix(BT_TECHNIQUE_CONTEXT, '20260903');
   // 규칙 줄은 '현재 화면:' 앞까지다 — 그 뒤의 '- ' 줄은 검사·노드 목록이다.
   const rules = p.split('현재 화면:')[0].split('\n').filter((line) => line.startsWith('- '));
@@ -1211,14 +1214,14 @@ test('buildBacktestModePrefix: 기법 초안 규칙도 실행·활성화·저장
   for (const line of rules) {
     assert.ok(!/action=(run|activate|backfill|deploy)\b/.test(line), line);
   }
-  assert.ok(p.includes('백테스트 실행은 그대로 사람이 [실행]을 누르고, 이 기법을 목록에 넣는 승인도 사람이 누른다'));
-  assert.ok(p.includes('실행·검증·수집·저장·활성화·배포·탐색 시작은 사람이 카드 버튼을 누른다'));
+  assert.ok(p.includes('백테스트 실행은 그대로 사람이 [실행]을 누른다'));
+  assert.ok(p.includes('실행·검증·수집·일반 파일 저장·활성화·배포·탐색 시작은 사람이 카드 버튼을 누른다'));
 });
 
 test('buildBacktestModePrefix: 기법 초안이 아니면 블록도 규칙도 서지 않는다(기존 턴 그대로)', () => {
   for (const ctx of [null, BT_CONTEXT, BT_FULL_CONTEXT, BT_MAP_CONTEXT]) {
     const p = buildBacktestModePrefix(ctx, '20260903');
-    assert.ok(!p.includes('새 기법 만들기'));
+    assert.ok(!p.includes('새 기법 만들기 — 이 화면은 기법 초안이다'));
     assert.ok(!p.includes('technique_question'));
     assert.ok(!p.includes('technique_nodes'));
     assert.ok(!p.includes('검사: 아직 돌지 않았다'));
@@ -1321,11 +1324,11 @@ test('buildBacktestModePrefix: severity=warn이면 id를 몰라도 경고로 찍
 });
 
 // ---- 기법 폴더 하나 = 대화 하나(사용자 확정 2026-09-03) ----
-// 폴더가 생긴 뒤의 세계다. 여기서 고정하는 것은 넷이다. (1) 코드는 propose_file로 그 폴더의
-// strategy.py에 쓰고, 폴더 안 편집은 자동 반영이라 [되돌리기]가 아니라 단계 카드가 뜬다 —
-// 이 문장이 없으면 모델이 이미 디스크에 쓰인 코드를 두고 "적용을 눌러 달라"고 말한다.
+// 폴더가 생긴 뒤의 세계다. 여기서 고정하는 것은 넷이다. (1) 코드는 write_file로 그 폴더의
+// strategy.py에 저장 완료까지 기다리고, 그 성공 뒤에만 터미널을 실행한다.
 // (2) 백테스트도 앱이 돌리니 모델은 run·backfill을 부르지 않고 autoRun 수치만 요약한다.
-// (3) @참조는 노드의 줄 범위를 근거로 답한다. (4) 승인은 사람이 누르는 [이 기법 승인]뿐이다.
+// (3) @참조는 노드의 줄 범위를 근거로 답한다. (4) 생성 메타데이터 등록은 자동이고
+// 실행·활성화·배포는 계속 사람이 한다.
 // 폴더가 없는 초안(옛 단일 편집기)에서는 이 문장들이 서지 않아야 그 턴이 이전과 같다.
 
 const BT_TECHNIQUE_FOLDER_CONTEXT = {
@@ -1341,23 +1344,36 @@ const BT_TECHNIQUE_FOLDER_CONTEXT = {
   }),
 };
 
-test('buildBacktestModePrefix: 기법 폴더가 있으면 폴더·파일을 싣고 코드는 propose_file로 쓴다', () => {
+test('buildBacktestModePrefix: 기법 폴더가 있으면 write_file 저장을 기다린 뒤 터미널을 실행한다', () => {
   const p = buildBacktestModePrefix(BT_TECHNIQUE_FOLDER_CONTEXT, '20260903');
-  assert.ok(p.includes('기법 폴더: project_id=prj_9 · 파일 strategy.py — 이 폴더 안 편집은 자동으로 반영된다'));
-  assert.ok(p.includes('답이 오면 propose_file로 코드를 바로 쓴다'));
-  assert.ok(p.includes('project_id=prj_9 · path=strategy.py'));
-  assert.ok(p.includes('편집은 묻지 않고 자동으로 반영되고, 채팅에는 [되돌리기]가 아니라 단계 카드가 쌓인다'));
-  // 자동으로 쓰였어도 말은 "썼다"다 — "적용했다"는 사람이 버튼을 누른 것처럼 들린다.
-  assert.ok(p.includes('그래도 "적용했다"가 아니라 "썼다"고 말한다'));
-  // 검사 실패도 같은 도구로 다시 쓴다 — propose_code로 되돌아가면 파일이 폴더 밖에 생긴다.
-  assert.ok(p.includes('원인을 고쳐 propose_file로 다시 쓴다'));
+  assert.ok(p.includes('기법 폴더: project_id=prj_9 · 파일 strategy.py · 작업 폴더 . — 이 폴더 안 편집은 자동으로 반영된다'));
+  assert.ok(p.includes('action=write_file, write_file:{project_id:"prj_9",path:"strategy.py",root_path:".",source:"파일 전체"}'));
+  assert.ok(!p.includes('action=write_file, file:{'));
+  assert.ok(p.includes('저장하고 성공 응답을 기다린다'));
+  assert.ok(p.includes('성공 응답 전에는 저장했다고 말하거나 terminal을 실행하지 말고'));
+  assert.ok(p.includes('write_file 성공을 받은 뒤에만 terminal을 실행한다'));
+  // 검사 실패도 같은 도구로 다시 저장한다 — propose_code로 되돌아가면 파일이 폴더 밖에 생긴다.
+  assert.ok(p.includes('원인을 고쳐 write_file로 다시 쓴다'));
   assert.ok(!p.includes('원인을 고쳐 propose_code로 다시 쓴다'));
+  assert.ok(!p.includes('답이 오면 propose_file로'));
+  assert.ok(!p.includes('propose_file은 파일을 쓰지 않는다'));
 });
 
-test('buildBacktestModePrefix: 폴더가 없는 초안에는 폴더 줄도 propose_file 문구도 서지 않는다', () => {
+test('buildBacktestModePrefix: 생성 뒤 편집 화면도 기법 루트가 있으면 write_file을 사용한다', () => {
+  const p = buildBacktestModePrefix({
+    techniqueDraft: false,
+    technique: { projectId: 'prj_live', path: 'techniques/alpha/strategy.py', rootPath: 'techniques/alpha' },
+  }, '20260903');
+  assert.ok(p.includes('현재 기법 파일 작업은 action=write_file, write_file:{project_id,path,root_path,source}로 한다'));
+  assert.ok(p.includes('project_id=prj_live, root_path=techniques/alpha 안의 실제 파일만 읽고 저장하며'));
+  assert.ok(p.includes('write_file 성공을 받은 뒤에만 terminal을 실행한다'));
+  assert.ok(!p.includes('propose_file은 파일을 쓰지 않는다'));
+});
+
+test('buildBacktestModePrefix: 폴더가 없는 초안에는 폴더 줄도 write_file 문구도 서지 않는다', () => {
   const p = buildBacktestModePrefix(BT_TECHNIQUE_CONTEXT, '20260903');
   assert.ok(!p.includes('기법 폴더:'));
-  assert.ok(!p.includes('답이 오면 propose_file로'));
+  assert.ok(!p.includes('action=write_file'));
   assert.ok(!p.includes('자동 백테스트'));
   assert.ok(p.includes('답이 오면 propose_code로 코드를 바로 쓴다'));
 });
@@ -1387,7 +1403,7 @@ test('buildBacktestModePrefix: @참조는 노드 줄 범위를 근거로 답하�
   assert.ok(p.includes('@함수명은 아래 노드 목록에서 그 이름을 찾아 줄 범위(예: 26–33줄) 코드를 읽고 답하고'));
   assert.ok(p.includes('@진입 흐름·@청산 흐름은 그 흐름의 함수를 순서대로, @전체는 노드 전부를 훑는다'));
   assert.ok(p.includes('이름이 목록에 없으면 지어내지 말고 없다고 말한다'));
-  assert.ok(p.includes('고쳐 달라는 말이면 propose_file로 고친 뒤 노드가 다시 그려졌다고 한 줄로 알린다'));
+  assert.ok(p.includes('고쳐 달라는 말이면 write_file로 고친 뒤 노드가 다시 그려졌다고 한 줄로 알린다'));
   // 참조가 가리키는 줄 범위는 같은 접두의 노드 목록에서 찾을 수 있어야 한다 — 없으면 지어낸다.
   assert.ok(p.includes('- should_exit (exit) 35–41줄'));
   assert.ok(p.includes('흐름 진입: compute_atr → should_enter'));
@@ -1396,12 +1412,12 @@ test('buildBacktestModePrefix: @참조는 노드 줄 범위를 근거로 답하�
   assert.ok(solo.includes('고쳐 달라는 말이면 propose_code로 고친 뒤 노드가 다시 그려졌다고 한 줄로 알린다'));
 });
 
-test('buildBacktestModePrefix: 승인은 사람 버튼이라 모델이 등록·활성화·배포를 부르지 않는다', () => {
+test('buildBacktestModePrefix: 생성 등록은 자동이고 실행·활성화·배포는 사람이 한다', () => {
   const p = buildBacktestModePrefix(BT_TECHNIQUE_FOLDER_CONTEXT, '20260903');
-  assert.ok(p.includes('승인은 사람이 누르는 [이 기법 승인] 버튼이다'));
-  assert.ok(p.includes('위의 register_strategy 규칙은 기법 초안에 서지 않는다'));
-  assert.ok(p.includes('"목록에 넣었다·등록했다·배포했다"고 말하지 말고'));
-  assert.ok(p.includes('사람이 누르는 것은 [이 기법 승인]과 실매매 적용뿐이다'));
+  assert.ok(p.includes('기법 생성 시 폴더와 등록 메타데이터가 함께 만들어지고, 목록은 실제 파일을 보여준다'));
+  assert.ok(p.includes('별도 승인 버튼을 안내하거나 register_strategy를 부르지 마라'));
+  assert.ok(p.includes('활성화·배포와 실행 버튼은 계속 사람이 누른다'));
+  assert.ok(!p.includes('[이 기법 승인]'));
   // 폴더 세계에서도 모델이 부를 수 있는 액션 목록에 실행·활성화·배포는 없다.
   const rules = p.split('현재 화면:')[0].split('\n').filter((line) => line.startsWith('- '));
   for (const line of rules) {

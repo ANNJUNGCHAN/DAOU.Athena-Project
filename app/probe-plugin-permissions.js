@@ -108,7 +108,6 @@ async function main() {
 
   await shellWin.webContents.executeJavaScript(`
     document.getElementById('modeNavPlugin').click();
-    document.querySelector('.plugin-canvas-action.is-manage').click();
   `);
   await waitUntil(() => shellWin.webContents.executeJavaScript(
     "document.querySelectorAll('.plugin-canvas-card[data-plugin-id=\"korea-stock\"]').length === 1",
@@ -135,6 +134,20 @@ async function main() {
   });
 
   if (result) {
+    result.bulk = await shellWin.webContents.executeJavaScript(`(() => {
+      const snapshots = [];
+      for (let i = 0; i < 3; i += 1) {
+        document.querySelector('.is-permission-toggle-all').click();
+        snapshots.push({
+          label: document.querySelector('.is-permission-toggle-all').textContent,
+          allowed: document.querySelector('.plugin-canvas-sheet-count').textContent,
+          enabled: Array.from(document.querySelectorAll('.plugin-canvas-permission-features .plugin-canvas-toggle'))
+            .filter((node) => node.getAttribute('aria-checked') === 'true').length,
+        });
+      }
+      return snapshots;
+    })()`);
+    result.approveCallsBeforeSave = approveCalls;
     await shellWin.webContents.executeJavaScript(`
       document.querySelectorAll('.plugin-canvas-toggle')[4].click();
     `);
@@ -188,7 +201,14 @@ async function main() {
     result && result.features === 6 && result.allowed === '허용 4 / 6'
       && result.toggles.filter((value) => value === 'true').length === 4);
   check('권한은 모달이 아닌 상세 화면이다', result && result.dialogCount === 0 && result.overlayCount === 0);
-  check('토글은 저장 전 초안에서만 4개에서 5개로 바뀐다', result && result.afterToggle === '허용 5 / 6');
+  check('모두 승인과 모두 해제는 여섯 토글과 버튼 문구를 함께 바꾼다',
+    result && JSON.stringify(result.bulk) === JSON.stringify([
+      { label: '모두 해제', allowed: '허용 6 / 6', enabled: 6 },
+      { label: '모두 승인', allowed: '허용 0 / 6', enabled: 0 },
+      { label: '모두 해제', allowed: '허용 6 / 6', enabled: 6 },
+    ]));
+  check('일괄 변경은 승인 전 초안만 바꾸고 개별 토글도 유지된다',
+    result && result.approveCallsBeforeSave === 0 && result.afterToggle === '허용 5 / 6');
   check('선택 저장은 허용 제안 한 건을 만들고 승인 경로로 보낸다',
     result && result.proposal && result.proposal.state === 'pending'
       && result.proposal.title === '한국 주식 시세 · 기능 허용' && approveCalls === 1);

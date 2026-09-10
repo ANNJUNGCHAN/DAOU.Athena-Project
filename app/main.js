@@ -1675,6 +1675,8 @@ Object.keys(BACKTEST_EXTRA_CHANNELS).forEach((channel) => {
 const PROJECT_CHANNELS = {
   'athena:project-list': backtestBridge.listProjects,
   'athena:project-create': backtestBridge.createProject,
+  'athena:project-technique-create': backtestBridge.createTechnique,
+  'athena:project-terminal': backtestBridge.runProjectTerminal,
   'athena:project-open': backtestBridge.openProject,
   'athena:project-tree': backtestBridge.fetchProjectTree,
   'athena:project-file-read': backtestBridge.readProjectFile,
@@ -1696,6 +1698,38 @@ Object.keys(PROJECT_CHANNELS).forEach((channel) => {
 });
 
 // 폴더는 사람이 고른다 — 렌더러가 경로를 지어내 여는 길은 없다(handlePickFiles와 같은 원칙).
+ipcMain.handle('athena:technique-pick-folder', async (_event, { project_id } = {}) => {
+  try {
+    const response = await backtestBridge.listProjects({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch });
+    const project = response && response.ok && response.data && Array.isArray(response.data.projects)
+      ? response.data.projects.find((entry) => entry.id === project_id) : null;
+    if (!project || !project.path) return { ok: false, error: '프로젝트를 먼저 선택하세요' };
+    const root = await fs.promises.realpath(project.path);
+    const chosen = await dialog.showOpenDialog(shellWin, {
+      title: '기법 폴더를 만들 위치', defaultPath: root, properties: ['openDirectory'],
+    });
+    if (chosen.canceled || !chosen.filePaths.length) return { ok: true, data: { canceled: true } };
+    const directory = await fs.promises.realpath(chosen.filePaths[0]);
+    const relative = path.relative(root, directory);
+    if (path.isAbsolute(relative) || relative === '..' || relative.startsWith(`..${path.sep}`)) {
+      return { ok: false, error: '선택한 프로젝트 안의 폴더를 지정하세요' };
+    }
+    return { ok: true, data: { parent: relative.split(path.sep).join('/'), path: directory } };
+  } catch (error) { return { ok: false, error: String(error.message || error) }; }
+});
+
+ipcMain.handle('athena:technique-conversation-prepare', async (_event, { project_id } = {}) => {
+  const response = await backtestBridge.listProjects({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch });
+  const project = response && response.ok && response.data && Array.isArray(response.data.projects)
+    ? response.data.projects.find((entry) => entry.id === project_id) : null;
+  if (!project || !project.path) return { ok: false, error: '기법의 프로젝트를 찾지 못했습니다' };
+  const existing = conversations.list().projects.find((entry) => entry.id === project.id
+    || (entry.path && path.resolve(entry.path).toLowerCase() === path.resolve(project.path).toLowerCase()));
+  if (existing) return { ok: true, projectId: existing.id };
+  const added = conversations.addProject({ id: project.id, path: project.path, label: project.name });
+  return added.ok ? { ok: true, projectId: added.project.id } : { ok: false, error: '대화의 프로젝트를 연결하지 못했습니다' };
+});
+
 ipcMain.handle('athena:project-open-dialog', async () => {
   try {
     const res = await dialog.showOpenDialog(shellWin, { properties: ['openDirectory'] });
@@ -3199,6 +3233,16 @@ function maybeForwardBacktestChatAction(step, resultBlock) {
       kind: 'code_draft', source, note: input.note == null ? null : input.note,
       suggest_run: input.suggest_run === true, suggest_validate: input.suggest_validate === true,
     };
+  } else if (action === 'write_file') {
+    let payload;
+    try { payload = JSON.parse(extractToolResultText(resultBlock.content)); } catch { return; }
+    message = require('./lib/main/backtest-file-written').savedFileMessage(step.input.write_file, payload);
+  } else if (action === 'terminal') {
+    const text = extractToolResultText(resultBlock.content);
+    let payload;
+    try { payload = JSON.parse(text); } catch { return; }
+    if (!payload || typeof payload !== 'object' || !Array.isArray(payload.argv)) return;
+    message = { ...payload, kind: 'terminal_result' };
   } else if (action === 'propose_file') {
     // 새 파일은 백엔드에 없으므로 결과가 아니라 호출 입력에서 읽는다(propose_code와 같은 이유).
     // 캔버스는 이걸로 지금 파일과의 diff만 세운다 — 디스크에 쓰는 건 사람이 [적용]을 누른 뒤다.
@@ -3206,7 +3250,7 @@ function maybeForwardBacktestChatAction(step, resultBlock) {
     if (!input || typeof input !== 'object') return;
     const source = input.source;
     const filePath = input.path;
-    if (typeof source !== 'string' || !source.trim()) return;
+    if (typeof source !== 'string') return;
     if (typeof filePath !== 'string' || !filePath.trim()) return;
     message = {
       kind: 'file_draft', project_id: input.project_id, path: filePath, source,

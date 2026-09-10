@@ -10,8 +10,8 @@
 1. **경로는 전부 `resolve_in_project()`를 지난다.** 절대 경로·`..`·드라이브 상대 경로·
    프로젝트 밖을 가리키는 심볼릭 링크는 400이다. 예외 없이 한 함수로 모은 이유는,
    경로 검사가 라우트마다 조금씩 다른 순간 그 틈이 바로 구멍이 되기 때문이다.
-2. **파이썬만 만들고 쓰고 이름 바꾼다(D3).** 그 밖의 파일은 트리에 보이되(사용자가 자기
-   데이터를 봐야 한다) 열거나 쓰려 하면 415다.
+2. **확장자를 가리지 않는다.** 트리는 모든 항목을 보여주고 UTF-8 텍스트는 열고
+   저장한다. 바이너리와 대용량 파일은 메타데이터만 돌려준다.
 
 `DELETE /{project_id}`는 등록 해제일 뿐이다 — 디스크의 폴더를 지우지 않고, 응답이 그
 사실을 말한다.
@@ -19,6 +19,10 @@
 
 from __future__ import annotations
 
+import asyncio
+import os
+import shutil
+import tempfile
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -43,6 +47,7 @@ from athena_api.projects.store import (
     build_tree,
     count_py_files,
     is_valid_package_spec,
+    is_safe_project_name,
     relative_path,
     resolve_in_project,
     venv_packages,
@@ -50,6 +55,30 @@ from athena_api.projects.store import (
 )
 
 router = APIRouter(prefix="/api/v1/projects", tags=["projects"])
+
+MAX_TERMINAL_OUTPUT_BYTES = 512 * 1024
+MAX_TERMINAL_ARGS = 128
+MAX_TERMINAL_ARG_BYTES = 16 * 1024
+DEFAULT_TERMINAL_TIMEOUT_MS = 30_000
+MAX_TERMINAL_TIMEOUT_MS = 120_000
+
+TECHNIQUE_TEST_SOURCE = '''from pathlib import Path
+
+
+def test_strategy_file_exists():
+    assert (Path(__file__).parents[1] / "strategy.py").is_file()
+'''
+
+TECHNIQUE_SEED_SOURCE = '''# athena technique workspace
+PARAMS = {}
+
+
+def signals(df, p):
+    result = df.copy()
+    result["entry"] = False
+    result["exit"] = False
+    return result[["entry", "exit"]]
+'''
 
 
 def _store(request: Request) -> ProjectStore:
@@ -94,11 +123,6 @@ def _resolve(root: Path, candidate: str) -> Path:
         return resolve_in_project(root, candidate)
     except ProjectPathError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
-
-
-def _require_py(target: Path, detail: str) -> None:
-    if target.suffix.lower() != ".py":
-        raise HTTPException(status_code=415, detail=detail)
 
 
 def _text_field(body: dict[str, Any], key: str, *, allow_empty: bool = False) -> str:
@@ -203,15 +227,101 @@ async def unregister_project(request: Request, project_id: str) -> dict[str, Any
     }
 
 
+@router.post("/{project_id}/techniques")
+async def create_technique_workspace(
+    request: Request, project_id: str, body: dict[str, Any]
+) -> JSONResponse:
+    """기존 프로젝트 안에 새 기법 폴더를 만들고 프로젝트 환경 구성을 시작한다.
+
+    `parent`는 프로젝트 기준 상대 경로인 기존 폴더이고, `name`은 기법 이름이자
+    그 아래에 새로 만들 폴더명이다. 프로젝트 루트는 `parent="."`로 지정한다.
+    """
+    entry = _entry(request, project_id)
+    project_root = _root(entry)
+    name = _text_field(body, "name").strip()
+    if not is_safe_project_name(name):
+        raise HTTPException(status_code=422, detail="기법 이름은 경로 구분자·상위 참조 없는 한 조각이어야 한다")
+    parent_text = _text_field(body, "parent").strip()
+    parent = project_root if parent_text in {".", "./"} else _resolve(project_root, parent_text)
+    if not parent.exists():
+        raise HTTPException(status_code=404, detail="기법을 만들 상위 폴더가 존재하지 않는다")
+    if not parent.is_dir():
+        raise HTTPException(status_code=422, detail="기법을 만들 상위 경로가 폴더가 아니다")
+    target_path = name if parent == project_root else f"{relative_path(project_root, parent)}/{name}"
+    target = _resolve(project_root, target_path)
+    if target.exists():
+        raise HTTPException(status_code=409, detail="같은 기법 폴더가 이미 있다")
+
+    # 환경 러너 없이 폴더만 만들어 놓는 부분 성공은 피한다.
+    runner = _env_runner(request)
+    try:
+        target.mkdir()
+        (target / "tests").mkdir()
+        (target / SEED_STRATEGY_FILENAME).write_text(
+            TECHNIQUE_SEED_SOURCE, encoding="utf-8", newline="\n"
+        )
+        (target / "tests" / "test_strategy.py").write_text(
+            TECHNIQUE_TEST_SOURCE, encoding="utf-8", newline="\n"
+        )
+    except OSError as exc:
+        shutil.rmtree(target, ignore_errors=True)
+        raise HTTPException(status_code=400, detail="기법 폴더를 만들지 못했다") from exc
+
+    packages = venv_packages(project_root) if venv_python(project_root) is not None else []
+    base_ok = all(package in packages for package in BASE_ENV_PACKAGES)
+    environment_job_id: str | None = None
+    environment_status = "ready" if base_ok else "running"
+    if not base_ok:
+        busy = runner.env_job_for(project_root)
+        if busy is not None:
+            environment_job_id = busy.id
+        else:
+            environment_job_id = str(uuid4())
+            try:
+                runner.start_env(environment_job_id, project_path=project_root, packages=[])
+            except Exception as exc:
+                shutil.rmtree(target, ignore_errors=True)
+                raise HTTPException(
+                    status_code=500, detail="프로젝트 환경 구성을 시작하지 못했다"
+                ) from exc
+
+    relative = relative_path(project_root, target)
+    return JSONResponse(
+        status_code=202 if environment_job_id else 200,
+        content={
+            "project_id": project_id,
+            "technique": {
+                "name": name,
+                "path": relative,
+                "strategy_path": f"{relative}/{SEED_STRATEGY_FILENAME}",
+                "test_path": f"{relative}/tests/test_strategy.py",
+            },
+            "env": {
+                "status": environment_status,
+                "job_id": environment_job_id,
+                "scope": "project",
+            },
+        },
+    )
+
+
 @router.get("/{project_id}/tree")
-async def project_tree(request: Request, project_id: str) -> dict[str, Any]:
+async def project_tree(
+    request: Request, project_id: str, path: str | None = None
+) -> dict[str, Any]:
     """폴더/파일 중첩 목록. 폴더 항목은 `children`을 갖는다."""
     entry = _entry(request, project_id)
-    root = _root(entry)
-    entries, truncated = build_tree(root)
+    project_root = _root(entry)
+    tree_root = _resolve(project_root, path) if path else project_root
+    if not tree_root.exists():
+        raise HTTPException(status_code=404, detail="폴더가 존재하지 않는다")
+    if not tree_root.is_dir():
+        raise HTTPException(status_code=400, detail="트리 기준 경로가 폴더가 아니다")
+    entries, truncated = build_tree(tree_root, path_root=project_root)
     return {
         "project_id": entry.id,
-        "root": str(root),
+        "root": str(tree_root),
+        "path": relative_path(project_root, tree_root) if path else "",
         "entries": entries,
         "truncated": truncated,
     }
@@ -219,31 +329,45 @@ async def project_tree(request: Request, project_id: str) -> dict[str, Any]:
 
 @router.get("/{project_id}/file")
 async def read_file(request: Request, project_id: str, path: str) -> dict[str, Any]:
-    """파일 하나를 연다 — 파이썬만, 1MB까지."""
+    """텍스트 파일은 열고, 바이너리와 대용량 파일은 메타데이터만 돌려준다."""
     root = _root(_entry(request, project_id))
     target = _resolve(root, path)
-    _require_py(target, "이 기능은 파이썬(.py) 파일만 연다")
     if target.is_dir():
         raise HTTPException(status_code=400, detail="폴더는 열 수 없다")
     if not target.is_file():
         raise HTTPException(status_code=404, detail="파일이 존재하지 않는다")
     stat = target.stat()
     if stat.st_size > MAX_FILE_BYTES:
-        raise HTTPException(status_code=413, detail="파일이 너무 크다 — 1MB 이하만 연다")
+        return {
+            "path": relative_path(root, target), "kind": "binary", "binary": True,
+            "editable": False, "reason": "too_large", "size": stat.st_size,
+            "mtime": stat.st_mtime,
+        }
     try:
         # newline=""로 읽어야 CRLF 파일을 열었다 저장하는 것만으로 줄바꿈이 바뀌지 않는다.
         with target.open("r", encoding="utf-8", newline="") as handle:
             text = handle.read()
     except UnicodeDecodeError as exc:
-        raise HTTPException(
-            status_code=415, detail="UTF-8 텍스트가 아닌 파일은 열지 않는다"
-        ) from exc
+        return {
+            "path": relative_path(root, target), "kind": "binary", "binary": True,
+            "editable": False, "reason": "non_utf8", "size": stat.st_size,
+            "mtime": stat.st_mtime,
+        }
+    if "\x00" in text:
+        return {
+            "path": relative_path(root, target), "kind": "binary", "binary": True,
+            "editable": False, "reason": "binary", "size": stat.st_size,
+            "mtime": stat.st_mtime,
+        }
     return {
         "path": relative_path(root, target),
+        "kind": "text",
         "text": text,
         "size": stat.st_size,
         "mtime": stat.st_mtime,
-        "py": True,
+        "encoding": "utf-8",
+        "editable": True,
+        "py": target.suffix.lower() == ".py",
     }
 
 
@@ -253,9 +377,29 @@ async def write_file(request: Request, project_id: str, body: dict[str, Any]) ->
     root = _root(_entry(request, project_id))
     target = _resolve(root, _text_field(body, "path"))
     text = _text_field(body, "text", allow_empty=True)
-    _require_py(target, "파이썬(.py) 파일만 저장할 수 있다")
+    root_path = body.get("root_path")
+    if root_path is not None:
+        if not isinstance(root_path, str) or not root_path.strip():
+            raise HTTPException(
+                status_code=422, detail="'root_path'는 비어 있지 않은 문자열이어야 한다"
+            )
+        scope = (
+            root
+            if root_path.strip().replace("\\", "/") in {".", "./"}
+            else _resolve(root, root_path)
+        )
+        if not scope.is_dir():
+            raise HTTPException(status_code=400, detail="기법 root_path가 존재하는 폴더가 아니다")
+        try:
+            target.relative_to(scope)
+        except ValueError as exc:
+            raise HTTPException(
+                status_code=400, detail="파일 경로가 기법 root_path 밖이다"
+            ) from exc
     if target.is_dir():
         raise HTTPException(status_code=400, detail="폴더에는 쓸 수 없다")
+    if len(text.encode("utf-8")) > MAX_FILE_BYTES:
+        raise HTTPException(status_code=413, detail="텍스트 파일은 1MB 이하만 저장할 수 있다")
     try:
         target.parent.mkdir(parents=True, exist_ok=True)
         # newline=""는 사용자가 보낸 줄바꿈을 그대로 쓴다 — 윈도우에서 임의로 CRLF로
@@ -277,8 +421,6 @@ async def create_file(request: Request, project_id: str, body: dict[str, Any]) -
         raise HTTPException(status_code=422, detail="'kind'는 file 또는 dir여야 한다")
     if target.exists():
         raise HTTPException(status_code=409, detail="같은 경로가 이미 있다")
-    if kind == "file":
-        _require_py(target, "파이썬(.py) 파일만 만들 수 있다")
     try:
         if kind == "dir":
             target.mkdir(parents=True)
@@ -296,7 +438,7 @@ async def create_file(request: Request, project_id: str, body: dict[str, Any]) -
 
 @router.post("/{project_id}/rename")
 async def rename_path(request: Request, project_id: str, body: dict[str, Any]) -> dict[str, Any]:
-    """프로젝트 안에서의 이름 변경·이동. 파일이면 대상도 파이썬이어야 한다(D3)."""
+    """프로젝트 안에서의 파일·폴더 이름 변경과 이동."""
     root = _root(_entry(request, project_id))
     source = _resolve(root, _text_field(body, "path"))
     destination = _resolve(root, _text_field(body, "to"))
@@ -304,8 +446,6 @@ async def rename_path(request: Request, project_id: str, body: dict[str, Any]) -
         raise HTTPException(status_code=404, detail="원본 경로가 존재하지 않는다")
     if destination.exists():
         raise HTTPException(status_code=409, detail="같은 경로가 이미 있다")
-    if source.is_file():
-        _require_py(destination, "파일은 파이썬(.py)으로만 이름을 바꿀 수 있다")
     try:
         destination.parent.mkdir(parents=True, exist_ok=True)
         source.rename(destination)
@@ -334,6 +474,108 @@ async def delete_path(request: Request, project_id: str, path: str) -> dict[str,
     except OSError as exc:
         raise HTTPException(status_code=400, detail="지우지 못했다") from exc
     return {"deleted": relative, "is_dir": is_dir}
+
+
+def _terminal_argv(body: dict[str, Any]) -> list[str]:
+    raw = body.get("argv")
+    if not isinstance(raw, list) or not raw or len(raw) > MAX_TERMINAL_ARGS:
+        raise HTTPException(
+            status_code=422, detail=f"'argv'는 1~{MAX_TERMINAL_ARGS}개 문자열 배열이어야 한다"
+        )
+    argv: list[str] = []
+    for item in raw:
+        if not isinstance(item, str) or not item or "\x00" in item:
+            raise HTTPException(status_code=422, detail="'argv'의 각 항목은 비어 있지 않은 문자열이어야 한다")
+        if len(item.encode("utf-8")) > MAX_TERMINAL_ARG_BYTES:
+            raise HTTPException(status_code=422, detail="터미널 인자가 너무 길다")
+        argv.append(item)
+    return argv
+
+
+def _terminal_timeout(body: dict[str, Any]) -> int:
+    raw = body.get("timeout_ms", DEFAULT_TERMINAL_TIMEOUT_MS)
+    if isinstance(raw, bool) or not isinstance(raw, int):
+        raise HTTPException(status_code=422, detail="'timeout_ms'는 정수여야 한다")
+    if raw < 100 or raw > MAX_TERMINAL_TIMEOUT_MS:
+        raise HTTPException(
+            status_code=422,
+            detail=f"'timeout_ms'는 100~{MAX_TERMINAL_TIMEOUT_MS} 밀리초여야 한다",
+        )
+    return raw
+
+
+def _read_terminal_capture(handle: Any) -> tuple[str, bool]:
+    handle.seek(0)
+    data = handle.read(MAX_TERMINAL_OUTPUT_BYTES + 1)
+    truncated = len(data) > MAX_TERMINAL_OUTPUT_BYTES
+    return data[:MAX_TERMINAL_OUTPUT_BYTES].decode("utf-8", errors="replace"), truncated
+
+
+@router.post("/{project_id}/terminal")
+async def run_project_terminal(
+    request: Request, project_id: str, body: dict[str, Any]
+) -> dict[str, Any]:
+    """`shell=False`로 argv 하나를 프로젝트 안 cwd에서 실행한다.
+
+    cwd 검사는 시작 위치를 프로젝트 안으로 고정한다. 다만 실행된 프로그램 자체가
+    절대경로로 다른 파일을 읽는 것까지 OS 샌드박스처럼 막지는 않는다.
+    """
+    project_root = _root(_entry(request, project_id))
+    cwd_input = body.get("cwd", ".")
+    if not isinstance(cwd_input, str):
+        raise HTTPException(status_code=422, detail="'cwd'는 문자열이어야 한다")
+    cwd = project_root if cwd_input.strip() in {"", ".", "./"} else _resolve(project_root, cwd_input)
+    if not cwd.exists():
+        raise HTTPException(status_code=404, detail="터미널 작업 폴더가 존재하지 않는다")
+    if not cwd.is_dir():
+        raise HTTPException(status_code=422, detail="터미널 cwd가 폴더가 아니다")
+    argv = _terminal_argv(body)
+    timeout_ms = _terminal_timeout(body)
+
+    environment = os.environ.copy()
+    python = venv_python(project_root)
+    if python is not None:
+        scripts = str(python.parent)
+        environment["VIRTUAL_ENV"] = str(python.parent.parent)
+        environment["PATH"] = scripts + os.pathsep + environment.get("PATH", "")
+    environment["ATHENA_PROJECT_ROOT"] = str(project_root)
+
+    with tempfile.TemporaryFile() as stdout_capture, tempfile.TemporaryFile() as stderr_capture:
+        try:
+            process = await asyncio.create_subprocess_exec(
+                *argv,
+                cwd=str(cwd),
+                env=environment,
+                stdin=asyncio.subprocess.DEVNULL,
+                stdout=stdout_capture,
+                stderr=stderr_capture,
+            )
+        except FileNotFoundError as exc:
+            raise HTTPException(status_code=422, detail=f"명령을 찾을 수 없다: {argv[0]}") from exc
+        except OSError as exc:
+            raise HTTPException(status_code=400, detail="터미널 명령을 시작하지 못했다") from exc
+
+        timed_out = False
+        try:
+            await asyncio.wait_for(process.wait(), timeout=timeout_ms / 1000)
+        except TimeoutError:
+            timed_out = True
+            process.kill()
+            await process.wait()
+        stdout, stdout_truncated = _read_terminal_capture(stdout_capture)
+        stderr, stderr_truncated = _read_terminal_capture(stderr_capture)
+
+    return {
+        "project_id": project_id,
+        "cwd": relative_path(project_root, cwd) if cwd != project_root else "",
+        "argv": argv,
+        "exit_code": process.returncode,
+        "stdout": stdout,
+        "stderr": stderr,
+        "timed_out": timed_out,
+        "stdout_truncated": stdout_truncated,
+        "stderr_truncated": stderr_truncated,
+    }
 
 
 # ── 프로젝트 환경 ─────────────────────────────────────────────────────────────

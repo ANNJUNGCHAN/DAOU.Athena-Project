@@ -19,11 +19,16 @@ function loadBroadcastCliChanged() {
     cliAccounts: { list: async () => { throw new Error('supplied list should be reused'); } },
     activeAccountFromCliList: (list) => list.accounts.find((account) => account.active),
     rotatePersistentProvider: async (_reason, { activeAccount }) => {
+      observed.push(['rotate-start', activeAccount.providerId]);
       await Promise.resolve();
       activeProvider = activeAccount.providerId;
+      observed.push(['rotate-done', activeProvider]);
+    },
+    prepareLiveChatPool: () => {
+      observed.push(['prewarm', handleModelGet().active.provider]);
+      return { provider: activeProvider };
     },
     handleModelGet,
-    prepareLiveChatPool: () => observed.push(['warm', handleModelGet().active.provider]),
     shellWin: {
       isDestroyed: () => false,
       webContents: {
@@ -45,11 +50,17 @@ function loadBroadcastCliChanged() {
   return { broadcast: context.broadcastCliChanged, observed };
 }
 
-test('CLI 활성 계정 전환은 새 공급자를 반영한 뒤 셸과 오브에 알린다', async () => {
+test('CLI 활성 계정 전환은 회전 후 새 공급자를 예열하고 셸과 오브에 알린다', async () => {
   const { broadcast, observed } = loadBroadcastCliChanged();
   const list = { accounts: [{ id: 'grok-current', providerId: 'grok', active: true }] };
 
   await broadcast({ rotateReason: 'active_provider_changed', list });
 
-  assert.deepEqual(observed, [['warm', 'grok'], ['shell', 'grok'], ['orb', 'grok']]);
+  assert.deepEqual(observed, [
+    ['rotate-start', 'grok'],
+    ['rotate-done', 'grok'],
+    ['prewarm', 'grok'],
+    ['shell', 'grok'],
+    ['orb', 'grok'],
+  ]);
 });

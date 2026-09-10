@@ -33,6 +33,11 @@ test('봉인 — 값이 없는 조각은 null이고 로그는 꼬리만 남는�
     strategyId: 's1',
     runPath: 'code',
     runId: 'run-1',
+    technique: {
+      projectId: 'p-1', rootPath: 'techniques/내-기법',
+      path: 'techniques/내-기법/strategy.py', name: '내 기법', draft: true,
+      userStrategyId: null,
+    },
     stdout: `${'x'.repeat(Restore.LOG_TAIL_CHARS)}끝`,
     scrollTop: 412.6,
   });
@@ -40,6 +45,11 @@ test('봉인 — 값이 없는 조각은 null이고 로그는 꼬리만 남는�
   assert.equal(sealed.code.versionId, 'v7');
   assert.equal(sealed.code.runPath, 'code');
   assert.equal(sealed.run.runId, 'run-1');
+  assert.deepEqual(sealed.technique, {
+    projectId: 'p-1', rootPath: 'techniques/내-기법',
+    path: 'techniques/내-기법/strategy.py', name: '내 기법', draft: true,
+    userStrategyId: null,
+  });
   assert.equal(sealed.log.tail.length, Restore.LOG_TAIL_CHARS);
   assert.ok(sealed.log.tail.endsWith('끝'));
   assert.deepEqual(sealed.scroll, { top: 413 });
@@ -47,9 +57,37 @@ test('봉인 — 값이 없는 조각은 null이고 로그는 꼬리만 남는�
   const empty = Restore.sealBacktest({ spec: SPEC, yaml: '   ' });
   assert.equal(empty.form, null);
   assert.equal(empty.code, null);
+  assert.equal(empty.technique, null);
   assert.equal(empty.run, null);
   assert.equal(empty.log, null);
   assert.equal(empty.scroll, null);
+});
+
+test('기법 작업공간 봉인은 같은 상대 폴더 안의 파일만 허용한다', () => {
+  assert.deepEqual(Restore.sealTechniqueBinding({
+    projectId: ' p-1 ', rootPath: 'techniques\\내-기법\\',
+    path: 'techniques\\내-기법\\strategy.py', name: ' 내 기법 ', draft: true,
+  }), {
+    projectId: 'p-1', rootPath: 'techniques/내-기법',
+    path: 'techniques/내-기법/strategy.py', name: '내 기법', draft: true,
+    userStrategyId: null,
+  });
+  assert.deepEqual(Restore.sealTechniqueBinding({
+    projectId: 'p-1', rootPath: '', path: 'strategies/a.py', name: 'a',
+    userStrategyId: 'u1',
+  }), {
+    projectId: 'p-1', rootPath: '', path: 'strategies/a.py', name: 'a',
+    draft: false, userStrategyId: 'u1',
+  });
+  assert.equal(Restore.sealTechniqueBinding({
+    projectId: 'p-1', rootPath: 'techniques/a', path: '../strategy.py', name: 'a',
+  }), null);
+  assert.equal(Restore.sealTechniqueBinding({
+    projectId: 'p-1', rootPath: 'techniques/a', path: 'techniques/b/strategy.py', name: 'a',
+  }), null);
+  assert.equal(Restore.sealTechniqueBinding({
+    projectId: 'p-1', rootPath: 'C:/techniques/a', path: 'C:/techniques/a/strategy.py', name: 'a',
+  }), null);
 });
 
 test('전부 돌아오면 안내 문장을 만들지 않는다(Rule 1 — 조용한 복원)', () => {

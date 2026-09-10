@@ -2,7 +2,7 @@
 // (backtest-canvas.test.js가 세운 관례를 그대로 쓴다).
 //
 // 이 파일이 지키는 계약: 폴더는 부르는 쪽이 정한다(고르기 줄이 없다 — 기법 하나의 화면,
-// 보드 20), 트리는 접힌다, .py만 편집기로 들어온다(D3), 저장은 자동으로 디스크로 나간다(D2),
+// 보드 20), 트리는 접힌다, 모든 UTF-8 텍스트가 편집기로 들어온다, 저장은 자동으로 디스크로 나간다(D2),
 // 저장 안 한 버퍼는 탭을 옮겨도 살아 있다, 파일 탭 줄은 둘 이상 열렸을 때만 선다.
 'use strict';
 
@@ -184,6 +184,17 @@ test('countFiles: 폴더는 세지 않고 파일만 센다', () => {
   assert.equal(countFiles(null), 0);
 });
 
+test('formatBytes/parseCommand: 크기와 argv 입력을 셸 해석 없이 정규화한다', () => {
+  assert.equal(projectIde.formatBytes(512), '512 B');
+  assert.equal(projectIde.formatBytes(1536), '1.5 KB');
+  assert.deepEqual(
+    projectIde.parseCommand('python "tests/my strategy.py" --name "내 기법"'),
+    ['python', 'tests/my strategy.py', '--name', '내 기법'],
+  );
+  assert.deepEqual(projectIde.parseCommand('python scripts\\check.py'), ['python', 'scripts\\check.py']);
+  assert.throws(() => projectIde.parseCommand('python "닫히지 않음'), /따옴표/);
+});
+
 test('filterEntries: 파일 이름으로 거르고, 걸린 것이 있는 폴더만 남긴다', () => {
   const all = filterEntries(TREE, '');
   assert.equal(all.length, 3);
@@ -215,8 +226,8 @@ test('폴더를 고르는 줄은 없다 — 폴더는 부르는 쪽이 openFolde
   assert.equal(made.ide.currentProject().id, 'p1');
   assert.equal(findByClass(made.root, 'project-ide-body').length, 1);
   assert.equal(made.ide.fileCount(), 3);
-  // 왼쪽 열은 「기법 폴더」 머리와 폴더 이름으로 시작한다(보드 20).
-  assert.equal(findByClass(made.root, 'project-ide-side-title')[0].textContent, '기법 폴더');
+  assert.equal(findByClass(made.root, 'project-ide-side-label')[0].textContent, '탐색기');
+  assert.equal(findByClass(made.root, 'project-ide-side-count')[0].textContent, '3개 파일');
   assert.match(findByClass(made.root, 'project-ide-folder')[0].textContent, /내 전략\//);
 });
 
@@ -288,33 +299,32 @@ test('.py는 강조되고 다른 파일은 흐리게 표시된다', async () => 
 
 // ── 여닫기와 편집 ───────────────────────────────────────────────────────────
 
-test('.py를 누르면 편집기에 본문이 들어온다 — 파일이 하나뿐이면 파일 탭 줄은 서지 않는다', async () => {
+test('.py를 누르면 편집기에 본문과 파일 탭이 들어온다', async () => {
   const made = makeIde();
   await mountWithProject(made);
   await openFileNamed(made, 'strategy.py');
-  // 탭 줄은 파일이 둘 이상일 때만이다(보드 20의 탭 줄은 코드·노드·흐름이지 파일 탭이 아니다).
-  assert.equal(findByClass(made.root, 'project-ide-tabstrip').length, 0);
+  // 일반 코드 편집기처럼 파일 하나부터 탭이 선다.
+  assert.equal(findByClass(made.root, 'project-ide-tabstrip').length, 1);
   assert.equal(findByClass(made.root, 'backtest-code-textarea')[0].value, 'PARAMS = {"fast": 5}\n');
   assert.equal(made.ide.activeFile().path, 'strategy.py');
   assert.equal(made.ide.activeText(), 'PARAMS = {"fast": 5}\n');
-  // 편집기 머리줄 — 파일 경로 · 저장 상태 · 이 코드가 쓰는 것.
+  // 편집기 머리줄 — 파일 경로 · 저장 상태 · 인코딩/편집 가능 여부.
   assert.equal(findByClass(made.root, 'project-ide-head-path')[0].textContent, 'strategy.py');
   assert.equal(findByClass(made.root, 'project-ide-save-state')[0].textContent, '자동 저장');
-  assert.match(findByClass(made.root, 'project-ide-head-note')[0].textContent, /athena_bt/);
+  assert.equal(findByClass(made.root, 'project-ide-head-note')[0].textContent, '편집 가능 · UTF-8');
   assert.equal(findByClass(made.root, 'project-ide-file').find((f) => f.textContent === 'strategy.py').className.includes('is-on'), true);
 });
 
-test('.py가 아닌 파일은 한 줄로 거절한다 — 편집기에 들어오지 않는다(D3)', async () => {
+test('.py가 아닌 UTF-8 파일도 읽고 편집기에 연다', async () => {
   let read = 0;
-  const made = makeIde({ readFile: async () => { read += 1; return { text: '' }; } });
+  const made = makeIde({ readFile: async () => { read += 1; return { kind: 'text', text: 'date,close\n', editable: true }; } });
   await mountWithProject(made);
   await click(findByClass(made.root, 'is-other')[0]);
   await flush();
-  assert.equal(read, 0);
-  assert.equal(made.ide.activeFile(), null);
-  const notice = findByClass(made.root, 'project-ide-message')[0];
-  assert.match(notice.textContent, /파이썬\(\.py\) 파일만 엽니다/);
-  assert.match(notice.className, /is-bad/);
+  assert.equal(read, 1);
+  assert.equal(made.ide.activeFile().path, 'data/prices.csv');
+  assert.equal(made.ide.activeText(), 'date,close\n');
+  assert.equal(findByClass(made.root, 'backtest-code-textarea')[0].readOnly, false);
 });
 
 test('편집하면 저장 상태가 「저장 대기」가 된다 — 편집기는 다시 만들지 않는다', async () => {
@@ -337,6 +347,28 @@ test('편집하면 저장 상태가 「저장 대기」가 된다 — 편집기�
   assert.ok(dot, '저장 안 한 strategy.py 탭에 점이 붙는다');
 });
 
+test('setReadOnly: 채팅 반영 중에는 새 입력을 거부하고 기존 버퍼는 그대로 둔다', async () => {
+  const made = makeIde();
+  await mountWithProject(made);
+  await openFileNamed(made, 'strategy.py');
+  const before = made.ide.activeText();
+
+  made.ide.setReadOnly(true);
+  const locked = findByClass(made.root, 'backtest-code-textarea')[0];
+  assert.equal(locked.readOnly, true);
+  locked.value = '# 잠금 중 입력\n';
+  await locked.dispatchEvent({ type: 'input' });
+  assert.equal(made.ide.activeText(), before);
+  assert.equal(made.pending.length, 0);
+
+  made.ide.setReadOnly(false);
+  const unlocked = findByClass(made.root, 'backtest-code-textarea')[0];
+  assert.equal(unlocked.readOnly, false);
+  unlocked.value = '# 잠금 해제 뒤 입력\n';
+  await unlocked.dispatchEvent({ type: 'input' });
+  assert.equal(made.ide.activeText(), '# 잠금 해제 뒤 입력\n');
+});
+
 test('자동 저장: 타자를 멈추면 버퍼를 그대로 디스크로 보내고 더러움을 지운다 — 편집기는 다시 만들지 않는다', async () => {
   const made = makeIde();
   await mountWithProject(made);
@@ -351,6 +383,22 @@ test('자동 저장: 타자를 멈추면 버퍼를 그대로 디스크로 보내
   assert.equal(made.ide.isDirty(), false);
   assert.equal(findByClass(made.root, 'project-ide-save-state')[0].textContent, '자동 저장');
   assert.equal(findByClass(made.root, 'backtest-code-textarea')[0], area, '저장이 편집기를 새로 만들면 안 된다');
+});
+
+test('자동 저장: 타자 뒤 다른 탭을 열어도 고친 원래 탭을 저장한다', async () => {
+  const made = makeIde();
+  await mountWithProject(made);
+  await openFileNamed(made, 'strategy.py');
+  const area = findByClass(made.root, 'backtest-code-textarea')[0];
+  area.value = '# 첫 탭에서 고침\n';
+  await area.dispatchEvent({ type: 'input' });
+  await openFileNamed(made, 'golden.py');
+
+  await runPending(made);
+  assert.deepEqual(made.written, [
+    { id: 'p1', path: 'strategy.py', text: '# 첫 탭에서 고침\n' },
+  ]);
+  assert.equal(made.ide.activeFile().path, 'strategies/golden.py');
 });
 
 test('자동 저장: 쓰는 동안 더 친 것은 저장된 것이 아니다 — 다시 예약한다', async () => {
@@ -503,8 +551,7 @@ test('더러운 탭을 닫으면 인라인으로 되묻고, 버리면 그때 닫
 
   await click(closeButtonOf(made, 'strategy.py'));
   await click(findByClass(made.root, 'project-ide-confirm-discard')[0]);
-  // 하나 남으면 탭 줄이 사라지고 남은 파일이 활성이다.
-  assert.equal(findByClass(made.root, 'project-ide-tab').length, 0);
+  assert.equal(findByClass(made.root, 'project-ide-tab').length, 1);
   assert.equal(made.ide.activeFile().path, 'strategies/golden.py');
   assert.equal(made.ide.isDirty(), false);
 });
@@ -516,7 +563,7 @@ test('깨끗한 탭은 되묻지 않고 바로 닫힌다', async () => {
   await openFileNamed(made, 'golden.py');
   await click(closeButtonOf(made, 'golden.py'));
   assert.equal(findByClass(made.root, 'project-ide-confirm').length, 0);
-  assert.equal(findByClass(made.root, 'project-ide-tab').length, 0);
+  assert.equal(findByClass(made.root, 'project-ide-tab').length, 1);
   assert.equal(made.ide.activeFile().path, 'strategy.py');
 });
 
@@ -556,6 +603,43 @@ test('openAt: 이미 그 폴더를 열어 뒀으면 폴더를 다시 고르지 �
   assert.equal(made.ide.activeFile().path, 'strategies/golden.py');
 });
 
+test('openFolder: 다른 프로젝트로 옮기기 전에 모든 편집을 저장한다', async () => {
+  const other = Object.assign({}, PROJECT, { id: 'p2', name: '다른 기법', path: 'D:/quant/other' });
+  const made = makeIde({
+    listProjects: async () => ({ projects: [PROJECT, other], notice: null }),
+  });
+  await mountWithProject(made);
+  await openFileNamed(made, 'strategy.py');
+  const area = findByClass(made.root, 'backtest-code-textarea')[0];
+  area.value = '# 옮기기 전 저장\n';
+  await area.dispatchEvent({ type: 'input' });
+
+  assert.equal(await made.ide.openFolder('p2'), true);
+  assert.deepEqual(made.written, [
+    { id: 'p1', path: 'strategy.py', text: '# 옮기기 전 저장\n' },
+  ]);
+  assert.equal(made.ide.currentProject().id, 'p2');
+});
+
+test('openFolder: 저장이 실패하면 현재 프로젝트와 편집을 그대로 둔다', async () => {
+  const other = Object.assign({}, PROJECT, { id: 'p2', name: '다른 기법', path: 'D:/quant/other' });
+  const made = makeIde({
+    listProjects: async () => ({ projects: [PROJECT, other], notice: null }),
+    writeFile: async () => { throw new Error('전환 전 저장 실패'); },
+  });
+  await mountWithProject(made);
+  await openFileNamed(made, 'strategy.py');
+  const area = findByClass(made.root, 'backtest-code-textarea')[0];
+  area.value = '# 남겨야 하는 편집\n';
+  await area.dispatchEvent({ type: 'input' });
+
+  assert.equal(await made.ide.openFolder('p2'), false);
+  assert.equal(made.ide.currentProject().id, 'p1');
+  assert.equal(made.ide.activeText(), '# 남겨야 하는 편집\n');
+  assert.equal(made.ide.isDirty(), true);
+  assert.match(textOf(made.root), /전환 전 저장 실패/);
+});
+
 test('openAt: 처음 읽은 목록에 없던 폴더(이 세션에서 만든 프로젝트)는 목록을 다시 읽어 연다', async () => {
   // 전수 프로브 M10~M13 실측: 코드 탭이 먼저 목록을 읽어 두면 그 뒤 등록한 프로젝트는
   // 영영 "목록에 없습니다"였다. 찾는 id가 없으면 한 번 다시 읽어야 한다.
@@ -575,6 +659,37 @@ test('openAt: 처음 읽은 목록에 없던 폴더(이 세션에서 만든 프�
   assert.equal(opened, true);
   assert.equal(calls, 2, '없는 id면 목록을 한 번 다시 읽는다');
   assert.equal(made.ide.currentProject().id, 'p2');
+});
+
+test('openAt: 앞 폴더의 늦은 트리 응답이 뒤에 연 폴더를 덮지 않는다', async () => {
+  const other = Object.assign({}, PROJECT, { id: 'p2', name: '다른 기법', path: 'D:/quant/other' });
+  let releaseFirst;
+  const firstTree = new Promise((resolve) => { releaseFirst = resolve; });
+  const made = makeIde({
+    listProjects: async () => ({ projects: [PROJECT, other], notice: null }),
+    tree: async (id) => {
+      if (id === 'p1') return firstTree;
+      return {
+        project_id: 'p2', root: other.path,
+        entries: [{ name: 'other.py', path: 'other.py', is_dir: false, py: true, size: 1 }],
+        truncated: false,
+      };
+    },
+    readFile: async (_id, path) => ({ path, kind: 'text', text: '# other\n', editable: true }),
+  });
+  made.ide.mount();
+  await flush();
+
+  const first = made.ide.openAt('p1', 'strategy.py');
+  await flush();
+  const second = made.ide.openAt('p2', 'other.py');
+  assert.equal(await second, true);
+  releaseFirst({ project_id: 'p1', root: PROJECT.path, entries: TREE, truncated: false });
+  assert.equal(await first, false);
+
+  assert.equal(made.ide.currentProject().id, 'p2');
+  assert.equal(made.ide.activeFile().path, 'other.py');
+  assert.deepEqual(findByClass(made.root, 'project-ide-file').map((node) => node.textContent), ['other.py']);
 });
 
 test('closeAll: 열린 파일을 전부 닫고 폴더 선택은 남긴다', async () => {
@@ -599,9 +714,76 @@ test('openAt: 모르는 폴더·없는 파일은 false를 돌려주고 이유를
   assert.match(textOf(made.root), /파일이 존재하지 않는다/);
 });
 
-test('openAt: .py가 아니면 열지 않는다(D3 — 화면이 막는 것은 설명이고 백엔드가 보장이다)', async () => {
+test('openAt: .py가 아닌 파일도 연다', async () => {
   const made = makeIde();
-  assert.equal(await made.ide.openAt('p1', 'data/prices.csv'), false);
-  assert.equal(made.ide.activeFile(), null);
-  assert.match(textOf(made.root), /파이썬\(\.py\) 파일만 엽니다/);
+  assert.equal(await made.ide.openAt('p1', 'data/prices.csv'), true);
+  assert.equal(made.ide.activeFile().path, 'data/prices.csv');
+});
+
+test('바이너리 파일은 내용을 싣지 않고 크기만 안전하게 미리보기한다', async () => {
+  const made = makeIde({
+    readFile: async (_id, path) => ({ path, kind: 'binary', binary: true, size: 1536, editable: false }),
+  });
+  assert.equal(await made.ide.openAt('p1', 'data/prices.csv'), true);
+  assert.equal(made.ide.activeFile().kind, 'binary');
+  assert.equal(made.ide.activeFile().editable, false);
+  assert.equal(findByClass(made.root, 'backtest-code-textarea').length, 0);
+  assert.match(textOf(findByClass(made.root, 'project-ide-binary')[0]), /1.5 KB/);
+  assert.match(textOf(findByClass(made.root, 'project-ide-binary')[0]), /내용 미리보기를 열지 않았습니다/);
+});
+
+test('openAt rootPath는 트리와 터미널 cwd에 같은 프로젝트 내부 경로를 쓴다', async () => {
+  const treeCalls = [];
+  const terminalCalls = [];
+  const made = makeIde({
+    tree: async (id, rootPath) => {
+      treeCalls.push([id, rootPath]);
+      return { entries: TREE };
+    },
+    runTerminal: async (id, body) => {
+      terminalCalls.push([id, body]);
+      return { exit_code: 0, stdout: '3 passed\n', stderr: '', timed_out: false };
+    },
+  });
+  assert.equal(await made.ide.openAt('p1', 'strategies/golden.py', { rootPath: 'strategies' }), true);
+  assert.deepEqual(treeCalls, [['p1', 'strategies']]);
+  assert.equal(made.ide.currentRootPath(), 'strategies');
+  const result = await made.ide.runTerminal(['python', '-m', 'pytest']);
+  assert.equal(result.exit_code, 0);
+  assert.deepEqual(terminalCalls, [['p1', { argv: ['python', '-m', 'pytest'], cwd: 'strategies' }]]);
+  assert.match(made.ide.terminalEntries().map((row) => row.text).join(' '), /3 passed/);
+  assert.match(textOf(findByClass(made.root, 'project-ide-terminal-log')[0]), /프로세스 종료 코드 0/);
+});
+
+test('setReadOnly: 채팅 반영 중에는 수동 터미널 실행을 막고 도구 결과 기록은 허용한다', async () => {
+  const terminalCalls = [];
+  const made = makeIde({
+    runTerminal: async (id, body) => {
+      terminalCalls.push([id, body]);
+      return { exit_code: 0, stdout: 'manual', stderr: '', timed_out: false };
+    },
+  });
+  await mountWithProject(made);
+  made.ide.setReadOnly(true);
+
+  const input = findByClass(made.root, 'project-ide-terminal-input')[0];
+  assert.equal(input.disabled, true);
+  assert.match(input.placeholder, /채팅 반영이 끝나면/);
+  assert.equal(await made.ide.runTerminal(['python', '-V']), null);
+  assert.deepEqual(terminalCalls, []);
+
+  assert.equal(made.ide.recordTerminalResult({
+    project_id: 'p1', cwd: '', argv: ['python', '-V'], exit_code: 0, stdout: 'Python 3.12',
+  }), true);
+  assert.match(textOf(findByClass(made.root, 'project-ide-terminal-log')[0]), /Python 3\.12/);
+});
+
+test('채팅이 받은 실제 터미널 결과를 작업공간에 추가할 수 있다', async () => {
+  const made = makeIde();
+  await mountWithProject(made);
+  made.ide.recordTerminalResult({ exit_code: 2, stderr: '검사 실패' }, 'python -m pytest');
+  const text = textOf(findByClass(made.root, 'project-ide-terminal-log')[0]);
+  assert.match(text, /\$ python -m pytest/);
+  assert.match(text, /검사 실패/);
+  assert.match(text, /프로세스 종료 코드 2/);
 });
