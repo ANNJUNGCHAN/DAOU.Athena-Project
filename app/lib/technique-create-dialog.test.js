@@ -8,6 +8,9 @@ const {
   createTechniqueCreateDialog,
   projectList,
   techniqueNameError,
+  folderNameOf,
+  looksAbsolutePath,
+  openedProjectId,
 } = require('./technique-create-dialog');
 
 function fakeNode(tag) {
@@ -26,6 +29,13 @@ function fakeNode(tag) {
     parentNode: null,
     get firstChild() { return this.children[0] || null; },
     appendChild(child) { child.parentNode = this; this.children.push(child); return child; },
+    insertBefore(child, ref) {
+      child.parentNode = this;
+      const index = this.children.indexOf(ref);
+      if (index < 0) this.children.push(child);
+      else this.children.splice(index, 0, child);
+      return child;
+    },
     removeChild(child) {
       this.children = this.children.filter((entry) => entry !== child);
       child.parentNode = null;
@@ -129,7 +139,7 @@ test('선택한 프로젝트·상위 폴더·이름으로 만든 뒤 새 대화�
     ],
     pickTechniqueFolder: async (id) => {
       calls.push(['pick', id]);
-      return { parent: 'alpha', path: 'C:/project/alpha' };
+      return { parent: 'alpha', path: 'C:/project/alpha', project_id: 'p2' };
     },
     createTechnique: async (id, body) => {
       calls.push(['create', id, body]);
@@ -250,4 +260,118 @@ test('새 대화만 실패하면 같은 폴더를 다시 만들지 않고 대화
   assert.equal((await pending).conversation, 'conversation-2');
   assert.equal(creates, 1);
   assert.equal(conversations, 2);
+});
+
+test('폴더 이름은 경로의 마지막 조각이고 절대 경로를 알아본다', () => {
+  assert.equal(folderNameOf('C:\\\\quant\\\\mean-reversion'), 'mean-reversion');
+  assert.equal(folderNameOf('/home/me/strats'), 'strats');
+  assert.equal(looksAbsolutePath('C:\\\\quant'), true);
+  assert.equal(looksAbsolutePath('alpha/inner'), false);
+  assert.equal(openedProjectId({ project: { id: 'p9' } }), 'p9');
+});
+
+test('프로젝트가 없어도 아무 폴더나 고르면 그곳을 프로젝트로 연다', async () => {
+  const doc = fakeDocument();
+  const calls = [];
+  const pending = createTechniqueCreateDialog({
+    document: doc,
+    listProjects: async () => [],
+    pickTechniqueFolder: async (id) => {
+      calls.push(['pick', id]);
+      return { path: 'D:\\\\strats', project_id: null, parent: '', project_name: 'strats' };
+    },
+    openProject: async (folderPath) => {
+      calls.push(['open', folderPath]);
+      return { ok: true, project: { id: 'ext-1', path: folderPath, label: 'strats' } };
+    },
+    createTechnique: async (id, body) => {
+      calls.push(['create', id, body]);
+      return {
+        project_id: id,
+        technique: {
+          name: body.name, path: body.name, strategy_path: `${body.name}/strategy.py`,
+          test_path: `${body.name}/tests/test_strategy.py`,
+        },
+      };
+    },
+    registerUserStrategy: async (body) => {
+      calls.push(['register', body]);
+      return { id: 'us-ext', ...body };
+    },
+    startTechniqueConversation: async (id) => {
+      calls.push(['conversation', id]);
+      return 'conversation-ext';
+    },
+  });
+  await flush();
+  const error = findByClass(doc.body, 'technique-create-error')[0];
+  assert.equal(error.textContent, '');
+  await findByClass(doc.body, 'technique-create-folder-button')[0].dispatchEvent({ type: 'click' });
+  findByClass(doc.body, 'technique-create-input')[1].value = '추세';
+  await findByClass(doc.body, 'technique-create-submit')[0].dispatchEvent({ type: 'click' });
+  const result = await pending;
+  assert.equal(result.project_id, 'ext-1');
+  assert.deepEqual(calls, [
+    ['pick', undefined],
+    ['open', 'D:\\\\strats'],
+    ['create', 'ext-1', { parent: '.', name: '추세' }],
+    ['register', {
+      project_id: 'ext-1', path: '추세/strategy.py', name: '추세',
+    }],
+    ['conversation', 'ext-1'],
+  ]);
+});
+
+test('고른 폴더가 다른 프로젝트 안이면 그 프로젝트로 바꿔 만든다', async () => {
+  const doc = fakeDocument();
+  const calls = [];
+  const pending = createTechniqueCreateDialog({
+    document: doc,
+    preferredProjectId: 'p1',
+    listProjects: async () => [
+      { id: 'p1', name: '첫째' },
+      { id: 'p2', name: '둘째' },
+    ],
+    pickTechniqueFolder: async (id) => {
+      calls.push(['pick', id]);
+      return { parent: 'live', path: 'C:/p2/live', project_id: 'p2' };
+    },
+    createTechnique: async (id, body) => {
+      calls.push(['create', id, body]);
+      return {
+        project_id: id,
+        technique: {
+          name: body.name, path: `${body.parent}/${body.name}`,
+          strategy_path: `${body.parent}/${body.name}/strategy.py`,
+          test_path: `${body.parent}/${body.name}/test_strategy.py`,
+        },
+      };
+    },
+    registerUserStrategy: async (body) => ({ id: 'us2', ...body }),
+    startTechniqueConversation: async (id) => id,
+  });
+  await flush();
+  await findByClass(doc.body, 'technique-create-folder-button')[0].dispatchEvent({ type: 'click' });
+  findByClass(doc.body, 'technique-create-input')[1].value = '돌파';
+  await findByClass(doc.body, 'technique-create-submit')[0].dispatchEvent({ type: 'click' });
+  await pending;
+  assert.deepEqual(calls, [
+    ['pick', 'p1'],
+    ['create', 'p2', { parent: 'live', name: '돌파' }],
+  ]);
+});
+
+test('기법 폴더 고르기는 프로젝트 밖 경로를 거절하지 않는다', () => {
+  const main = fs.readFileSync(path.join(__dirname, '..', 'main.js'), 'utf8');
+  const handler = main.slice(
+    main.indexOf("ipcMain.handle('athena:technique-pick-folder'"),
+    main.indexOf("ipcMain.handle('athena:technique-conversation-prepare'"),
+  );
+  assert.doesNotMatch(handler, /선택한 프로젝트 안의 폴더를 지정하세요/);
+  assert.doesNotMatch(handler, /프로젝트를 먼저 선택하세요/);
+  assert.match(handler, /properties: \['openDirectory'\]/);
+  assert.match(handler, /project_id: match\.project\.id/);
+  const canvas = fs.readFileSync(path.join(__dirname, '..', 'canvas.js'), 'utf8');
+  assert.match(canvas, /athena:project-add/);
+  assert.match(canvas, /reason === 'folder_taken'/);
 });

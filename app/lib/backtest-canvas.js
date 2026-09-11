@@ -3399,6 +3399,7 @@ function createBacktestCanvas(options) {
     const result = await request({
       listProjects: deps.listProjects,
       pickTechniqueFolder: deps.pickTechniqueFolder,
+      openProject: deps.openProject,
       createTechnique: deps.createTechnique,
       registerUserStrategy: deps.registerUserStrategy,
       startTechniqueConversation: deps.startTechniqueConversation,
