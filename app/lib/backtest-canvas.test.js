@@ -2326,6 +2326,7 @@ test('[+ 새 기법 만들기] 제품 경로: 위치 대화상자와 새 대화�
   const writes = [];
   const made = makeCanvas(projectDeps({
     currentProjectId: () => 'p1',
+    openProject: async () => ({ ok: true, project: { id: 'p1' } }),
     requestTechniqueCreation: async (options) => {
       dialogOptions = options;
       return {
@@ -2361,6 +2362,7 @@ test('[+ 새 기법 만들기] 제품 경로: 위치 대화상자와 새 대화�
   const ctx = made.canvas.getContext();
   assert.equal(dialogOptions.preferredProjectId, 'p1');
   assert.equal(typeof dialogOptions.registerUserStrategy, 'function');
+  assert.equal(typeof dialogOptions.openProject, 'function');
   assert.equal(ctx.techniqueDraft, true);
   assert.equal(ctx.spec.name, '거래량 돌파');
   assert.equal(ctx.technique.projectId, 'p1');

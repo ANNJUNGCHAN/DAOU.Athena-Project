@@ -4295,6 +4295,12 @@ const backtestCanvas = window.AthenaLib.BacktestCanvas.createBacktestCanvas({
     if (!res || !res.ok) throw new Error(projectError(res, '폴더를 선택하지 못했습니다'));
     return res.data;
   },
+  openProject: async (folderPath) => {
+    const res = await window.athena.invoke('athena:project-add', { path: folderPath });
+    if (res && res.reason === 'folder_taken' && res.project) return res;
+    if (!res || !res.ok) throw new Error(projectError(res, '폴더를 프로젝트로 열지 못했습니다'));
+    return res;
+  },
   createTechnique: async (projectId, body) => {
     const res = await window.athena.invoke('athena:project-technique-create', { project_id: projectId, ...body });
     if (!res || !res.ok) throw new Error(projectError(res, '기법 폴더를 만들지 못했습니다'));

@@ -1697,24 +1697,72 @@ Object.keys(PROJECT_CHANNELS).forEach((channel) => {
   });
 });
 
-// 폴더는 사람이 고른다 — 렌더러가 경로를 지어내 여는 길은 없다(handlePickFiles와 같은 원칙).
+// 팔라스 기법의 저장 위치 — 사람이 고른 폴더 그대로다. 등록된 프로젝트 안으로
+// 가두지 않는다. 고른 곳이 이미 등록된 프로젝트(또는 그 안)면 그 id를 돌려주고,
+// 아니면 절대 경로만 돌려 대화상자가 프로젝트로 연다.
+function techniqueFolderInsideProject(root, directory) {
+  const relative = path.relative(root, directory);
+  if (path.isAbsolute(relative) || relative === '..' || relative.startsWith(`..${path.sep}`)) {
+    return null;
+  }
+  return relative.split(path.sep).join('/');
+}
+
+async function resolvedProjectPath(folderPath) {
+  if (!folderPath) return null;
+  try { return await fs.promises.realpath(folderPath); }
+  catch { return path.resolve(folderPath); }
+}
+
 ipcMain.handle('athena:technique-pick-folder', async (_event, { project_id } = {}) => {
   try {
     const response = await backtestBridge.listProjects({ backendBase: BACKEND_HTTP_BASE, fetchImpl: fetch });
-    const project = response && response.ok && response.data && Array.isArray(response.data.projects)
-      ? response.data.projects.find((entry) => entry.id === project_id) : null;
-    if (!project || !project.path) return { ok: false, error: '프로젝트를 먼저 선택하세요' };
-    const root = await fs.promises.realpath(project.path);
+    const projects = response && response.ok && response.data && Array.isArray(response.data.projects)
+      ? response.data.projects.filter((entry) => entry && entry.path && entry.exists !== false)
+      : [];
+    const current = project_id
+      ? projects.find((entry) => String(entry.id) === String(project_id)) : null;
+    const startAt = current
+      ? await resolvedProjectPath(current.path)
+      : app.getPath('documents');
     const chosen = await dialog.showOpenDialog(shellWin, {
-      title: '기법 폴더를 만들 위치', defaultPath: root, properties: ['openDirectory'],
+      title: '기법을 저장할 폴더', defaultPath: startAt || undefined, properties: ['openDirectory'],
     });
     if (chosen.canceled || !chosen.filePaths.length) return { ok: true, data: { canceled: true } };
-    const directory = await fs.promises.realpath(chosen.filePaths[0]);
-    const relative = path.relative(root, directory);
-    if (path.isAbsolute(relative) || relative === '..' || relative.startsWith(`..${path.sep}`)) {
-      return { ok: false, error: '선택한 프로젝트 안의 폴더를 지정하세요' };
+    const directory = await resolvedProjectPath(chosen.filePaths[0]);
+    let match = null;
+    let matchLen = -1;
+    for (const project of projects) {
+      const root = await resolvedProjectPath(project.path);
+      const parent = techniqueFolderInsideProject(root, directory);
+      if (parent == null) continue;
+      if (root.length > matchLen) {
+        match = { project, parent };
+        matchLen = root.length;
+      }
     }
-    return { ok: true, data: { parent: relative.split(path.sep).join('/'), path: directory } };
+    if (match) {
+      return {
+        ok: true,
+        data: {
+          canceled: false,
+          path: directory,
+          project_id: match.project.id,
+          parent: match.parent,
+          project_name: match.project.name || match.project.id,
+        },
+      };
+    }
+    return {
+      ok: true,
+      data: {
+        canceled: false,
+        path: directory,
+        project_id: null,
+        parent: '',
+        project_name: path.basename(directory),
+      },
+    };
   } catch (error) { return { ok: false, error: String(error.message || error) }; }
 });
 
