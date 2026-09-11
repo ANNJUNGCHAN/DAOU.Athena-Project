@@ -4983,11 +4983,23 @@ async function refreshConversationGraphSurfaces() {
   ]);
 }
 
+function markGraphBrainReady() {
+  const first = !graphBrainReady;
+  graphBrainReady = true;
+  graphMode.setAvailable(true);
+  if (!first) return;
+  syncGraphBrainSchedule(graphScheduleIntervals()).catch((err) => {
+    console.warn('[graph-mode] brain-schedule 동기화 실패 — 백엔드 기본 주기로 돈다', err);
+  });
+  void refreshConversationGraphSurfaces();
+  loadHiddenLinks();
+}
+
 if (window.athena && typeof window.athena.on === 'function') {
   window.athena.on('athena:brain-graph-updated', () => {
+    markGraphBrainReady();
     void refreshConversationGraphSurfaces();
-    // 잡이 끝났다는 신호 = 어떤 소스든 "마지막 실행"이 바뀌었을 수 있다.
-    if (graphBrainReady) void refreshGraphBrainSchedule();
+    void refreshGraphBrainSchedule();
   });
 }
 
@@ -4996,31 +5008,18 @@ if (window.athena && typeof window.athena.on === 'function') {
 // 사람이 그래프 모드로 들어와도 renderUnavailable()의 정직한 안내가 뜨지, 막히지 않는다.
 (async () => {
   try {
-    const status = await window.athena.invoke('athena:brain-status');
-    const ready = Boolean(status && status.ok && status.ready);
-    graphBrainReady = ready; // 보드 05 "브레인 준비됨" 배지가 읽는 값.
-    graphMode.setAvailable(ready);
-    // 저장된 소스별 조회 주기를 백엔드 스케줄러에 밀어 넣고 실행 시각을 받아 온다.
-    if (ready) {
-      syncGraphBrainSchedule(graphScheduleIntervals()).catch((err) => {
-        console.warn('[graph-mode] brain-schedule 동기화 실패 — 백엔드 기본 주기로 돈다', err);
-      });
+    let ready = false;
+    for (let i = 0; i < 12 && !ready; i += 1) {
+      try {
+        const status = await window.athena.invoke('athena:brain-status');
+        ready = Boolean(status && status.ok && status.ready);
+      } catch (err) {
+        console.warn('[graph-mode] brain-status 실패 — 못 씀으로 둔다', err);
+      }
+      if (!ready) await new Promise((resolve) => setTimeout(resolve, 1000));
     }
-    // hidden은 안 건드린다 — graphMode.applyVisibility()가 유일한 소유자다(US-007).
-    // 여기서는 데이터를 미리 당겨올지만 결정한다(그래프 모드로 전환했을 때 바로
-    // 보이도록 하는 프리페치 — 안 보이는 동안 부르는 낭비는 loadEmptyCanvasExtras와
-    // 같은 기존 관례).
-    // 프리페치도 같은 순서를 지킨다 — 캐시 둘을 먼저 채우고 그 위에 렌더를 얹는다.
-    // 빈 상태(보드 05) 숫자·힌트도 이 캐시 단계에 든다 — 0건 히어로가 읽는 입력이다.
-    if (ready) {
-      void Promise.allSettled([
-        loadProfileSignals(), loadThemeClusters(), loadEmptyCanvasExtras(),
-      ]).then(() => {
-        void graphMode.refreshFiltered();
-        void graphSummaryTable.load().then(renderSummaryUpdatedAt);
-      });
-    }
-    if (ready) loadHiddenLinks();
+    if (ready) markGraphBrainReady();
+    else graphMode.setAvailable(false);
   } catch (err) {
     console.warn('[graph-mode] brain-status 실패 — 못 씀으로 둔다', err);
     graphMode.setAvailable(false);

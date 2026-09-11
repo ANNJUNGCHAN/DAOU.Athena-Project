@@ -28,9 +28,12 @@ from __future__ import annotations
 import asyncio
 import hashlib
 import json
+import os
 import re
+import shutil
 from collections.abc import Callable
 from datetime import UTC, datetime
+from pathlib import Path
 from typing import Annotated, Any, Literal, Protocol, Self
 
 from pydantic import (
@@ -483,6 +486,35 @@ class LocalCommandStructuredLlm:
         )
 
 
+def resolve_claude_executable(name: str = "claude") -> str:
+    """실제 실행 파일을 찾는다. Windows `create_subprocess_exec`는 .cmd 래퍼를 못 켠다.
+
+    앱 `claude-bin.js`와 같은 순서다: `ATHENA_CLAUDE_BIN` → PATH의 `.exe` →
+    `~/.local/bin`. 바로가기·WMI로 켠 백엔드는 PATH가 얕아 `claude`만으로는 ENOENT다.
+    """
+    explicit = (os.environ.get("ATHENA_CLAUDE_BIN") or "").strip()
+    if explicit:
+        return explicit
+    if os.path.dirname(name):
+        return name
+    if os.name == "nt":
+        wanted = name if name.lower().endswith(".exe") else "claude.exe"
+        found = shutil.which(wanted)
+        if found and found.lower().endswith(".exe"):
+            return found
+        native = Path.home() / ".local" / "bin" / "claude.exe"
+        if native.is_file():
+            return str(native)
+        return name
+    found = shutil.which(name)
+    if found:
+        return found
+    native = Path.home() / ".local" / "bin" / name
+    if native.is_file():
+        return str(native)
+    return name
+
+
 class ClaudeCliStructuredLlm:
     """사용자의 로컬 `claude` CLI를 태워 구조화 출력을 받는다.
 
@@ -503,7 +535,8 @@ class ClaudeCliStructuredLlm:
     ) -> None:
         if not claude_argv or any(not part for part in claude_argv):
             raise ValueError("claude_argv must be a non-empty tuple of non-empty strings")
-        self._claude_argv = tuple(claude_argv)
+        resolved = resolve_claude_executable(claude_argv[0])
+        self._claude_argv = (resolved, *claude_argv[1:])
         self._timeout_seconds = timeout_seconds
         self._max_response_bytes = max_response_bytes
         self._json_schema_supported: bool | None = None
@@ -630,8 +663,26 @@ async def _run_capturing(
         raise
     returncode = await process.wait()
     if returncode != 0:
-        raise RuntimeError("structured extraction command failed")
+        hint = _cli_failure_hint(stdout)
+        raise RuntimeError(
+            "structured extraction command failed" + (f": {hint}" if hint else "")
+        )
     return stdout
+
+
+def _cli_failure_hint(stdout: bytes) -> str:
+    """CLI가 비정상 종료했을 때 원문 프롬프트 없이 짧은 사유만 남긴다."""
+    try:
+        raw = json.loads(stdout.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError, TypeError):
+        return ""
+    if not isinstance(raw, dict):
+        return ""
+    for key in ("result", "error", "message"):
+        value = raw.get(key)
+        if isinstance(value, str) and value.strip():
+            return value.strip()[:200]
+    return ""
 
 
 async def _reap_cancelled_process(process: asyncio.subprocess.Process) -> None:
@@ -710,7 +761,8 @@ class ExtractionService:
         except asyncio.CancelledError:
             raise
         except Exception as exc:
-            raise ExtractionError("structured extraction request failed") from exc
+            detail = str(exc).strip() or type(exc).__name__
+            raise ExtractionError(f"structured extraction request failed: {detail}") from exc
         try:
             envelope = parse_extraction_response(
                 response,

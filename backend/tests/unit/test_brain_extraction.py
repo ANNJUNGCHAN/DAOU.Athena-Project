@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import os
 import sys
 from datetime import UTC, datetime
 from pathlib import Path
@@ -45,7 +46,7 @@ from athena_api.brain import (
     prompt_fingerprint,
 )
 from athena_api.brain import extraction as extraction_module
-from athena_api.brain.extraction import INVESTOR_NAME, INVESTOR_REF
+from athena_api.brain.extraction import INVESTOR_NAME, INVESTOR_REF, resolve_claude_executable
 from athena_api.brain.store import INVESTOR_PROFILE_ENTITY_ID
 
 NOW = datetime(2026, 8, 25, 3, 0, tzinfo=UTC)
@@ -753,6 +754,20 @@ async def test_claude_cli_envelope_unwrapping(
         FakeRunner(help_text=b"", response=raw),
     )
     assert await ClaudeCliStructuredLlm().complete("prompt") == expected
+
+
+def test_resolve_claude_executable_prefers_env_then_native_bin(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    monkeypatch.delenv("ATHENA_CLAUDE_BIN", raising=False)
+    native = tmp_path / ".local" / "bin" / ("claude.exe" if os.name == "nt" else "claude")
+    native.parent.mkdir(parents=True)
+    native.write_bytes(b"")
+    monkeypatch.setattr(extraction_module.Path, "home", staticmethod(lambda: tmp_path))
+    monkeypatch.setattr(extraction_module.shutil, "which", lambda name: None)
+    assert resolve_claude_executable("claude") == str(native)
+    monkeypatch.setenv("ATHENA_CLAUDE_BIN", r"C:\override\claude.exe")
+    assert resolve_claude_executable("claude") == r"C:\override\claude.exe"
 
 
 def test_claude_cli_rejects_an_empty_argv() -> None:

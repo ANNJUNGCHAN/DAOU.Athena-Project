@@ -85,14 +85,14 @@ test('buildUvicornArgs: 매 호출 새 배열 — 호출자가 변형해도 다�
 });
 
 test('buildBackendEnv: Electron이 스폰한 제품 백엔드는 brain/routines를 기본 활성화한다', () => {
-  assert.deepEqual(buildBackendEnv({ PATH: 'bin' }), {
-    PATH: 'bin',
-    ATHENA_BRAIN_ENABLED: 'true',
-    ATHENA_ROUTINES_ENABLED: 'true',
-    ATHENA_BACKTEST_ENABLED: 'true',
-    ATHENA_BRAIN_INGEST_SCHEDULE_OWNER: 'external',
-    ATHENA_BRAIN_USE_CLAUDE_CLI_EXTRACTION: 'true',
-  });
+  const env = buildBackendEnv({ PATH: 'bin' });
+  assert.equal(env.PATH, 'bin');
+  assert.equal(env.ATHENA_BRAIN_ENABLED, 'true');
+  assert.equal(env.ATHENA_ROUTINES_ENABLED, 'true');
+  assert.equal(env.ATHENA_BACKTEST_ENABLED, 'true');
+  assert.equal(env.ATHENA_BRAIN_INGEST_SCHEDULE_OWNER, 'external');
+  assert.equal(env.ATHENA_BRAIN_USE_CLAUDE_CLI_EXTRACTION, 'true');
+  assert.ok(env.ATHENA_CLAUDE_BIN);
 });
 
 test('buildBackendEnv: 명시적인 프로세스 override는 true/false 모두 그대로 보존한다', () => {
@@ -101,6 +101,7 @@ test('buildBackendEnv: 명시적인 프로세스 override는 true/false 모두 �
     ATHENA_ROUTINES_ENABLED: 'true',
     ATHENA_BRAIN_USE_CLAUDE_CLI_EXTRACTION: 'false',
     ATHENA_BRAIN_INGEST_SCHEDULE_OWNER: 'backend',
+    ATHENA_CLAUDE_BIN: 'C:\\override\\claude.exe',
     OTHER: 'value',
   });
   assert.equal(env.ATHENA_BRAIN_ENABLED, 'false');
@@ -108,6 +109,7 @@ test('buildBackendEnv: 명시적인 프로세스 override는 true/false 모두 �
   assert.equal(env.ATHENA_BACKTEST_ENABLED, 'true');
   assert.equal(env.ATHENA_BRAIN_USE_CLAUDE_CLI_EXTRACTION, 'false');
   assert.equal(env.ATHENA_BRAIN_INGEST_SCHEDULE_OWNER, 'backend');
+  assert.equal(env.ATHENA_CLAUDE_BIN, 'C:\\override\\claude.exe');
   assert.equal(env.OTHER, 'value');
 });
 
