@@ -22,6 +22,7 @@ function spy(installed = ['fetch'], overrides = {}) {
       return { ok: true, staged: [{ alias }] };
     },
     async register(staged) { calls.push(['register', staged.alias]); return { ok: true }; },
+    async updateSnippet(alias, snippet) { calls.push(['updateSnippet', alias, snippet]); return { ok: true }; },
     async approve(alias) { calls.push(['approve', alias]); return { ok: true }; },
     async revoke(alias) { calls.push(['revoke', alias]); return { ok: true }; },
     async remove(alias) { calls.push(['remove', alias]); return { ok: true }; },
@@ -100,6 +101,57 @@ test('직접 등록은 연결 확인 대상에 들어가지 않는다', async ()
   assert.deepEqual(calls.map(([name]) => name), ['stageSnippet']);
   assert.equal(result.results[0].ok, true);
   assert.deepEqual(result.probeAliases, []);
+});
+
+test('스니펫 수정은 기존 서버에만 적용하고 승인된 서버만 다시 확인한다', async () => {
+  const snippet = JSON.stringify({ mcpServers: { fetch: { command: 'uvx', args: ['mcp-server-fetch@latest'] } } });
+  for (const approved of [false, true]) {
+    const { calls, registry } = spy(['fetch'], {
+      list: () => ({ servers: [{ alias: 'fetch', approved }], revision: 7 }),
+    });
+    const proposal = envelope([{ action: 'update_snippet', target: 'fetch', snippet }]);
+    assert.equal(registry.gate(proposal).ok, true);
+    const result = await registry.decide(proposal, { revisionNow: 7 });
+    assert.equal(result.kind, 'success');
+    assert.deepEqual(calls.map(([name]) => name), approved ? ['updateSnippet', 'probe'] : ['updateSnippet']);
+    assert.equal(result.results[0].target, 'fetch');
+  }
+});
+
+test('스니펫 수정은 이름 변경, 다중 서버, 잘못된 설정과 낡은 제안을 실행하지 않는다', async () => {
+  const cases = [
+    'not json',
+    JSON.stringify({ mcpServers: { another: { command: 'uvx' } } }),
+    JSON.stringify({ mcpServers: { fetch: { command: 'uvx' }, another: { command: 'uvx' } } }),
+    JSON.stringify({ mcpServers: { fetch: { command: 'uvx', args: 'wrong' } } }),
+    JSON.stringify({ mcpServers: { fetch: { command: 'uvx', env: { TOKEN: 123 } } } }),
+    JSON.stringify({ mcpServers: { fetch: { command: 'uvx', url: 'https://example.test' } } }),
+  ];
+  for (const snippet of cases) {
+    const { calls, registry } = spy();
+    const result = await registry.decide(envelope([{ action: 'update_snippet', target: 'fetch', snippet }]));
+    assert.equal(result.kind, 'failed');
+    assert.equal(calls.some(([name]) => name === 'updateSnippet'), false);
+  }
+  const { calls, registry } = spy();
+  const snippet = JSON.stringify({ mcpServers: { fetch: { command: 'uvx' } } });
+  const result = await registry.decide(envelope([{ action: 'update_snippet', target: 'fetch', snippet }]), { revisionNow: 8 });
+  assert.equal(result.kind, 'stale');
+  assert.equal(calls.some(([name]) => name === 'updateSnippet'), false);
+});
+
+test('스니펫 수정 실패는 재시도할 수 있고 삭제나 승인 변경을 하지 않는다', async () => {
+  const { calls, registry } = spy(['fetch'], {
+    async updateSnippet() { calls.push(['updateSnippet']); return { ok: false, error: '저장 실패' }; },
+  });
+  const snippet = JSON.stringify({ mcpServers: { fetch: { command: 'uvx' } } });
+  const proposal = envelope([{ action: 'update_snippet', target: 'fetch', snippet }]);
+  for (let i = 0; i < 2; i += 1) {
+    const result = await registry.decide(proposal, { revisionNow: 7 });
+    assert.equal(result.kind, 'failed');
+    assert.equal(result.results[0].error, '스니펫을 수정하지 못했습니다');
+  }
+  assert.deepEqual(calls.filter(([name]) => name !== 'list'), [['updateSnippet'], ['updateSnippet']]);
 });
 
 test('묶음은 배열 순서대로 돌고 첫 실패에서 멈춘다', async () => {
@@ -335,4 +387,17 @@ test('decide: revision이 null이면 만료로 몰지 않는다', async () => {
   const { registry } = spy();
   const proposal = { ...envelope([{ action: 'remove', target: 'fetch' }]), revision: null };
   assert.equal((await registry.decide(proposal, { revisionNow: 9 })).kind, 'success');
+});
+
+test('세션 정리 실패로 실행 전 중단되면 설정을 저장했다고 표시하지 않는다', async () => {
+  const { calls, registry } = spy();
+  const proposal = envelope([{ action: 'update_snippet', target: 'fetch', snippet: '{"mcpServers":{"fetch":{"command":"uvx"}}}' }]);
+  const blocked = await registry.decide(proposal, {
+    revisionNow: 7,
+    runMutation: async () => ({ ok: false, persisted: false, error: 'legacy child termination failed' }),
+  });
+  assert.equal(blocked.kind, 'failed');
+  assert.match(blocked.reason, /설정을 저장하지 않았습니다/);
+  assert.ok(!calls.some(([name]) => name === 'updateSnippet'));
+  assert.equal((await registry.decide(proposal, { revisionNow: 7 })).kind, 'success');
 });

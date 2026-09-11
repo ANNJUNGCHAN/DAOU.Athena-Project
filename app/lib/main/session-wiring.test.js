@@ -9,6 +9,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
+const vm = require('node:vm');
 
 const source = fs.readFileSync(path.join(__dirname, '..', '..', 'main.js'), 'utf8');
 
@@ -123,7 +124,8 @@ test('플러그인 승인은 레지스트리 decide 한 번에 판번호와 조�
   assert.match(approve, /revisionNow: revision/);
   // 묶음은 정확히 한 번만 조정자를 탄다 — 동작마다 부르면 재기동이 그만큼 반복된다.
   assert.equal((approve.match(/runMcpMutation\(/g) || []).length, 1);
-  assert.match(approve, /runMutation: providerRuntimeEnabled \? \(\(run\) => runMcpMutation\('plugin-batch', run\)\) : null/);
+  assert.match(approve, /actions\.some\(\(action\) => action && action\.action === 'update_snippet'\)/);
+  assert.match(approve, /runMutation: requiresMutationCoordinator \? \(\(run\) => runMcpMutation\('plugin-batch', run\)\) : null/);
   // 순서를 main이 다시 적으면 검증 스크립트와 갈라진다.
   for (const dead of ['pluginProposalRegistry.gate(', 'pluginProposalRegistry.consume(', 'pluginProposalRegistry.probe(', 'pluginProposalRegistry.release(']) {
     assert.ok(!approve.includes(dead), `${dead}가 main에 남아 있다`);
@@ -131,6 +133,108 @@ test('플러그인 승인은 레지스트리 decide 한 번에 판번호와 조�
   // 판번호는 한 번만 읽어 게이트 실패 반환에도 그대로 싣는다(pluginResult가 다시 읽지 않는다).
   assert.equal((approve.match(/mcpCli\.list\(\)/g) || []).length, 1);
   assert.match(approve, /revision,/);
+});
+
+function loadPluginApprove(providerRuntimeEnabled, { coordinatorFails = false } = {}) {
+  const calls = [];
+  const block = slice('function pluginResult', 'function handlePluginReject');
+  const context = {
+    providerRuntimeEnabled,
+    mcpCli: { list: () => ({ revision: 7 }) },
+    pluginProposalRegistry: {
+      async decide(envelope, { revisionNow, runMutation }) {
+        calls.push(['decide', revisionNow, typeof runMutation]);
+        const apply = async () => {
+          calls.push(['applyAndPersist', envelope.actions[0].action, envelope.actions[0].target]);
+          return {
+            kind: 'success', reason: null,
+            results: [{ action: envelope.actions[0].action, target: envelope.actions[0].target, ok: true }],
+            probes: [],
+          };
+        };
+        if (!runMutation) return apply();
+        const coordinated = await runMutation(apply);
+        if (coordinated && coordinated.ok === false) {
+          return {
+            kind: 'failed',
+            reason: '기존 연결을 정리하지 못해 설정을 저장하지 않았습니다. 다시 시도해 주세요',
+            results: [],
+            probes: [],
+            mutationError: coordinated.error,
+          };
+        }
+        return coordinated;
+      },
+    },
+    async runMcpMutation(kind, run) {
+      calls.push(['runMcpMutation', kind]);
+      calls.push([providerRuntimeEnabled ? 'fencePersistentRuntime' : 'terminateColdRuntime']);
+      if (coordinatorFails) {
+        return { ok: false, persisted: false, error: 'cold session termination failed' };
+      }
+      return run();
+    },
+    mdlog: () => {},
+  };
+  return {
+    calls,
+    approve: vm.runInNewContext(`${block}\nhandlePluginApprove`, context),
+  };
+}
+
+test('기본 모드의 스니펫 수정은 cold 세션 종료 실패 시 적용·저장하지 않는다', async () => {
+  const { calls, approve } = loadPluginApprove(false, { coordinatorFails: true });
+  const result = await approve(null, {
+    actions: [{ action: 'update_snippet', target: 'discord', snippet: '{}' }],
+  });
+  assert.equal(result.ok, false);
+  assert.equal(result.kind, 'failed');
+  assert.match(result.reason, /설정을 저장하지 않았습니다/);
+  assert.deepEqual(calls, [
+    ['decide', 7, 'function'],
+    ['runMcpMutation', 'plugin-batch'],
+    ['terminateColdRuntime'],
+  ]);
+});
+
+test('기본 모드의 스니펫 수정은 cold 세션 종료 후 적용·저장한다', async () => {
+  const { calls, approve } = loadPluginApprove(false);
+  const result = await approve(null, {
+    actions: [{ action: 'update_snippet', target: 'discord', snippet: '{}' }],
+  });
+  assert.equal(result.ok, true);
+  assert.deepEqual(calls, [
+    ['decide', 7, 'function'],
+    ['runMcpMutation', 'plugin-batch'],
+    ['terminateColdRuntime'],
+    ['applyAndPersist', 'update_snippet', 'discord'],
+  ]);
+});
+
+test('기본 모드의 다른 플러그인 동작은 기존 범위대로 조정자를 우회한다', async () => {
+  const { calls, approve } = loadPluginApprove(false);
+  const result = await approve(null, {
+    actions: [{ action: 'set_enabled', target: 'discord', enabled: false }],
+  });
+  assert.equal(result.ok, true);
+  assert.deepEqual(calls, [
+    ['decide', 7, 'object'],
+    ['applyAndPersist', 'set_enabled', 'discord'],
+  ]);
+});
+
+test('상주 런타임 모드의 스니펫 수정은 계속 plugin-batch 조정자를 탄다', async () => {
+  const { calls, approve } = loadPluginApprove(true);
+  const result = await approve(null, {
+    actions: [{ action: 'update_snippet', target: 'discord', snippet: '{}' }],
+  });
+  assert.equal(result.ok, true);
+  assert.deepEqual(calls, [
+    ['decide', 7, 'function'],
+    ['runMcpMutation', 'plugin-batch'],
+    ['fencePersistentRuntime'],
+    ['applyAndPersist', 'update_snippet', 'discord'],
+  ]);
 });
 
 test('플러그인 거부는 아무 CLI도 부르지 않는다', () => {

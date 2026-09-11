@@ -616,6 +616,120 @@ test('서버 직접 등록은 잘못된 JSON과 여러 서버를 승인 제안 �
   assert.deepEqual(proposed, []);
 });
 
+test('권한 화면에서 기존 스니펫을 불러와 수정 제안으로 보낸다', async () => {
+  const original = JSON.stringify({
+    mcpServers: {
+      discord: {
+        command: 'npx',
+        args: ['-y', '@pasympa/discord-mcp'],
+        env: { DISCORD_TOKEN: '__ATHENA_KEEP_ENV__:DISCORD_BOT_TOKEN' },
+      },
+    },
+  }, null, 2);
+  const updated = JSON.stringify({
+    mcpServers: {
+      discord: {
+        command: 'npx',
+        args: ['-y', '@pasympa/discord-mcp'],
+        env: { DISCORD_TOKEN: '__ATHENA_KEEP_ENV__:DISCORD_BOT_TOKEN' },
+      },
+    },
+  });
+  const proposed = [];
+  const container = fakeNode('div');
+  const canvas = createPluginCanvas({
+    container,
+    installed: [{
+      id: 'discord', name: 'Discord', source: '연결 미확인', features: [],
+      configSnippet: original,
+    }],
+    onPropose: (spec) => proposed.push(spec),
+  });
+  canvas.mount();
+  await buttonWithClass(container, 'is-primary').dispatchEvent({ type: 'click' });
+  assert.equal(buttonWithClass(container, 'is-edit-snippet').textContent, '스니펫 수정');
+  await buttonWithClass(container, 'is-edit-snippet').dispatchEvent({ type: 'click' });
+
+  assert.equal(texts(container, 'plugin-canvas-sheet-title')[0], '스니펫 수정');
+  assert.equal(findByClass(container, 'plugin-canvas-snippet-input')[0].value, original);
+  assert.ok(texts(container, 'plugin-canvas-sheet-warning')[0].includes('__ATHENA_KEEP_ENV__'));
+
+  const field = findByClass(container, 'plugin-canvas-snippet-input')[0];
+  field.value = updated;
+  await field.dispatchEvent({ type: 'input', target: field });
+  await findByClass(container, 'is-sheet-confirm').at(-1).dispatchEvent({ type: 'click' });
+
+  assert.deepEqual(proposed, [{ action: 'update_snippet', target: 'discord', snippet: updated }]);
+  assert.equal(findByClass(container, 'plugin-canvas-sheet').length, 0);
+  assert.equal(findByClass(container, 'plugin-canvas-permissions-view').length, 1);
+  const persisted = updated.replace('__ATHENA_KEEP_ENV__:DISCORD_BOT_TOKEN', '__ATHENA_KEEP_ENV__:DISCORD_TOKEN');
+  canvas.discardAppliedSnippetDraft('discord', updated);
+  canvas.setData({ installed: [{ id: 'discord', name: 'Discord', features: [], configSnippet: persisted }] });
+  await buttonWithClass(container, 'is-edit-snippet').dispatchEvent({ type: 'click' });
+  assert.equal(findByClass(container, 'plugin-canvas-snippet-input')[0].value, persisted,
+    '적용 후 다시 열면 이름이 바뀐 토큰의 최신 참조를 읽는다');
+});
+
+test('스니펫 수정은 잘못된 JSON과 별칭 변경을 막고 입력을 유지한다', async () => {
+  const proposed = [];
+  const container = fakeNode('div');
+  const canvas = createPluginCanvas({
+    container,
+    installed: [{
+      id: 'discord', name: 'Discord', features: [],
+      configSnippet: '{"mcpServers":{"discord":{"command":"npx"}}}',
+    }],
+    onPropose: (spec) => proposed.push(spec),
+  });
+  canvas.mount();
+  await buttonWithClass(container, 'is-primary').dispatchEvent({ type: 'click' });
+  await buttonWithClass(container, 'is-edit-snippet').dispatchEvent({ type: 'click' });
+
+  let field = findByClass(container, 'plugin-canvas-snippet-input')[0];
+  field.value = '{broken';
+  await field.dispatchEvent({ type: 'input', target: field });
+  await findByClass(container, 'is-sheet-confirm').at(-1).dispatchEvent({ type: 'click' });
+  assert.equal(texts(container, 'plugin-canvas-sheet-error')[0], '설정 JSON 형식을 확인해 주세요');
+  assert.equal(findByClass(container, 'plugin-canvas-snippet-input')[0].value, '{broken');
+
+  const renamed = '{"mcpServers":{"discord-new":{"command":"npx"}}}';
+  field = findByClass(container, 'plugin-canvas-snippet-input')[0];
+  field.value = renamed;
+  await field.dispatchEvent({ type: 'input', target: field });
+  await findByClass(container, 'is-sheet-confirm').at(-1).dispatchEvent({ type: 'click' });
+  assert.equal(texts(container, 'plugin-canvas-sheet-error')[0], '서버 이름은 discord 그대로 유지해 주세요');
+  assert.equal(findByClass(container, 'plugin-canvas-snippet-input')[0].value, renamed);
+  assert.deepEqual(proposed, []);
+});
+
+test('스니펫 수정 초안은 목록 갱신과 취소 뒤 재진입에도 유지된다', async () => {
+  const original = '{"mcpServers":{"discord":{"command":"npx"}}}';
+  const draft = '{"mcpServers":{"discord":{"command":"uvx"}}}';
+  const container = fakeNode('div');
+  const canvas = createPluginCanvas({
+    container,
+    installed: [{ id: 'discord', name: 'Discord', features: [], configSnippet: original }],
+    onPropose: () => {},
+  });
+  canvas.mount();
+  await buttonWithClass(container, 'is-primary').dispatchEvent({ type: 'click' });
+  await buttonWithClass(container, 'is-edit-snippet').dispatchEvent({ type: 'click' });
+  const field = findByClass(container, 'plugin-canvas-snippet-input')[0];
+  field.value = draft;
+  await field.dispatchEvent({ type: 'input', target: field });
+
+  canvas.setData({
+    installed: [{
+      id: 'discord', name: 'Discord 최신', source: '연결 확인됨', features: [],
+      configSnippet: original,
+    }],
+  });
+  assert.equal(findByClass(container, 'plugin-canvas-snippet-input')[0].value, draft);
+  await buttonWithClass(container, 'is-sheet-cancel').dispatchEvent({ type: 'click' });
+  await buttonWithClass(container, 'is-edit-snippet').dispatchEvent({ type: 'click' });
+  assert.equal(findByClass(container, 'plugin-canvas-snippet-input')[0].value, draft);
+});
+
 // --- 호스트 계약 ---------------------------------------------------------------
 
 test('호출자가 전달한 목록과 집계값을 그대로 사용하며 원본 객체는 변경하지 않는다', async () => {

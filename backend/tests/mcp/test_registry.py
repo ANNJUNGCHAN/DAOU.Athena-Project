@@ -400,3 +400,32 @@ def test_registry_snapshot_redacts_plaintext_env_and_preserves_sentinel_metadata
         "PLAIN": "__ATHENA_REDACTED__",
         "SAFE": reg.SECRET_SENTINEL,
     }
+
+
+def test_update_replaces_config_in_place_and_clears_probe_metadata(store):
+    entry = store.add("discord", "npx", ["old"], {"TOKEN": reg.SECRET_SENTINEL})
+    store.record_self_reported_info("discord", "reported", "1", "2025-03-26")
+    store.record_encoding_smoke_test("discord", True)
+
+    updated = store.update("discord", "uvx", ["new"], {"AUTH": reg.SECRET_SENTINEL})
+
+    assert updated.alias == "discord"
+    assert updated.created_at == entry.created_at
+    assert updated.command == "uvx"
+    assert updated.args == ["new"]
+    assert updated.env == {"AUTH": reg.SECRET_SENTINEL}
+    assert updated.self_reported_server_info is None
+    assert updated.encoding_smoke_test_warning is False
+
+
+def test_parse_update_snippet_requires_exact_existing_alias_shape():
+    parsed = reg.parse_update_snippet(
+        json.dumps({"mcpServers": {"discord": {"command": "npx", "args": ["pkg"], "env": {}}}}),
+        "discord",
+    )
+    assert parsed.suggested_alias == "discord"
+    with pytest.raises(reg.SnippetParseError):
+        reg.parse_update_snippet(
+            json.dumps({"mcpServers": {"renamed": {"command": "npx"}}}),
+            "discord",
+        )

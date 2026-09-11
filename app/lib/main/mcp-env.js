@@ -10,6 +10,7 @@ const { BACKEND_DIR, PYTHON_EXE } = require('./mcp-config');
 // backend/athena_mcp/registry.py의 SECRET_SENTINEL과 문자 그대로 일치해야 한다.
 const SENTINEL = '__ATHENA_SAFESTORAGE__';
 const SECRET_NAMESPACE_PREFIX = 'mcp-env:';
+const KEEP_ENV_PREFIX = '__ATHENA_KEEP_ENV__:';
 
 function registryPath() {
   return process.env.ATHENA_MCP_REGISTRY_PATH || path.join(os.homedir(), '.athena', 'mcp_servers.json');
@@ -144,11 +145,142 @@ function buildEnvOverrides(filterAlias) {
   return overrides;
 }
 
+function parseEditableSnippet(alias, rawSnippet) {
+  let parsed;
+  try {
+    parsed = JSON.parse(String(rawSnippet || ''));
+  } catch {
+    throw new TypeError('스니펫이 유효한 JSON이 아니다');
+  }
+  if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)
+    || Object.keys(parsed).length !== 1 || !Object.prototype.hasOwnProperty.call(parsed, 'mcpServers')) {
+    throw new TypeError('스니펫의 최상위 키는 mcpServers 하나여야 한다');
+  }
+  const servers = parsed && parsed.mcpServers;
+  if (!servers || typeof servers !== 'object' || Array.isArray(servers)
+    || Object.keys(servers).length !== 1 || !Object.prototype.hasOwnProperty.call(servers, alias)) {
+    throw new TypeError(`mcpServers에는 기존 별칭 ${alias} 항목 하나만 있어야 한다`);
+  }
+  const config = servers[alias];
+  if (!config || typeof config !== 'object' || Array.isArray(config)) {
+    throw new TypeError('서버 설정은 객체여야 한다');
+  }
+  const unsupported = Object.keys(config).filter((key) => !['command', 'args', 'env'].includes(key));
+  if (unsupported.length) throw new TypeError(`지원하지 않는 서버 설정 키가 있다: ${unsupported.join(', ')}`);
+  if (typeof config.command !== 'string' || !config.command.trim()) throw new TypeError('command가 필요하다');
+  const args = config.args == null ? [] : config.args;
+  const env = config.env == null ? {} : config.env;
+  if (!Array.isArray(args) || args.some((value) => typeof value !== 'string')) throw new TypeError('args는 문자열 배열이어야 한다');
+  if (!env || typeof env !== 'object' || Array.isArray(env)
+    || Object.entries(env).some(([key, value]) => typeof key !== 'string' || typeof value !== 'string')) {
+    throw new TypeError('env는 문자열 값 객체여야 한다');
+  }
+  return { command: config.command, args, env };
+}
+
+// 편집 스니펫의 평문은 먼저 safeStorage에 암호화하고 Python에는 센티널만 넘긴다.
+// 적용 실패 시 이번 호출이 건드린 암호값을 이전 상태로 되돌린다.
+async function updateSnippet(alias, rawSnippet, applyUpdate, secretStore = secrets, registryReader = readRegistryStrict) {
+  if (typeof applyUpdate !== 'function') return { ok: false, error: 'MCP 수정 실행기가 없다' };
+  let config;
+  let registry;
+  try {
+    config = parseEditableSnippet(alias, rawSnippet);
+    registry = registryReader();
+  } catch (err) {
+    return { ok: false, error: String((err && err.message) || err) };
+  }
+  const oldEntry = Object.prototype.hasOwnProperty.call(registry.servers, alias)
+    ? registry.servers[alias] : null;
+  if (!oldEntry) return { ok: false, error: '등록되지 않은 MCP 별칭이다' };
+  const namespace = SECRET_NAMESPACE_PREFIX + alias;
+  const planned = [];
+  for (const [newKey, supplied] of Object.entries(config.env)) {
+    let value = supplied;
+    if (supplied.startsWith(KEEP_ENV_PREFIX)) {
+      const oldKey = supplied.slice(KEEP_ENV_PREFIX.length);
+      if (!oldKey) return { ok: false, error: `${newKey}의 기존 값 참조가 비어 있다` };
+      const oldEnv = oldEntry.env || {};
+      if (!Object.prototype.hasOwnProperty.call(oldEnv, oldKey)) {
+        return { ok: false, error: `${oldKey}의 기존 비밀값을 찾지 못했다` };
+      }
+      const oldStored = oldEnv[oldKey];
+      try {
+        value = oldStored === SENTINEL ? secretStore.getValue(namespace, oldKey) : oldStored;
+      } catch {
+        return { ok: false, error: `${oldKey}의 기존 비밀값을 안전하게 읽지 못했다` };
+      }
+      if (value == null) return { ok: false, error: `${oldKey}의 기존 비밀값을 찾지 못했다` };
+    }
+    planned.push({ key: newKey, value });
+  }
+
+  const backups = new Map();
+  function rollback() {
+    let ok = true;
+    for (const [key, previous] of backups) {
+      try {
+        if (previous == null) secretStore.deleteValue(namespace, key);
+        else if (!secretStore.setValue(namespace, key, previous).ok) ok = false;
+      } catch {
+        ok = false;
+      }
+    }
+    return ok;
+  }
+  for (const item of planned) {
+    let saved;
+    try {
+      backups.set(item.key, secretStore.getValue(namespace, item.key));
+      saved = secretStore.setValue(namespace, item.key, item.value);
+    } catch {
+      saved = { ok: false };
+    }
+    if (!saved.ok) {
+      const restored = rollback();
+      return { ok: false, error: restored
+        ? '비밀값을 안전하게 암호화하지 못했다'
+        : '비밀값 암호화와 이전 값 복구에 실패했다' };
+    }
+  }
+  const internal = JSON.stringify({
+    mcpServers: {
+      [alias]: {
+        command: config.command,
+        args: config.args,
+        env: Object.fromEntries(planned.map(({ key }) => [key, SENTINEL])),
+      },
+    },
+  });
+  let result;
+  try {
+    result = await applyUpdate(alias, internal);
+  } catch {
+    result = { ok: false, error: 'MCP 스니펫 적용 중 오류가 발생했다' };
+  }
+  if (!result || !result.ok) {
+    const restored = rollback();
+    if (!restored) return { ok: false, error: 'MCP 반영 실패 후 비밀값 복구에도 실패했다' };
+    return result || { ok: false, error: 'MCP 스니펫을 반영하지 못했다' };
+  }
+  const retained = new Set(planned.map(({ key }) => key));
+  for (const oldKey of Object.keys(oldEntry.env || {})) {
+    if (!retained.has(oldKey)) {
+      // 레지스트리 반영은 이미 성공했다. 오래된 암호 항목 정리에 실패해도
+      // 적용 실패로 거짓 보고하거나 새 설정을 깨뜨리지 않는다.
+      try { secretStore.deleteValue(namespace, oldKey); } catch { /* encrypted orphan */ }
+    }
+  }
+  return { ok: true, alias };
+}
+
 module.exports = {
   SENTINEL,
   envVarName,
   migratePlaintextEnv,
   buildEnvOverrides,
+  updateSnippet,
   registryPath,
   unredactedMigrationKeys,
+  KEEP_ENV_PREFIX,
 };

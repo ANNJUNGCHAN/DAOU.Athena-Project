@@ -21,6 +21,7 @@ const { spawn } = require('child_process');
 
 const BACKEND_DIR = path.join(__dirname, '..', '..', '..', 'backend');
 const PYTHON_EXE = path.join(BACKEND_DIR, '.venv', 'Scripts', 'python.exe');
+const KEEP_ENV_PREFIX = '__ATHENA_KEEP_ENV__:';
 
 function registryPath() {
   return process.env.ATHENA_MCP_REGISTRY_PATH || path.join(os.homedir(), '.athena', 'mcp_servers.json');
@@ -128,6 +129,15 @@ function list() {
       alias: entry.alias,
       command: entry.command,
       argsPreview: Array.isArray(entry.args) ? entry.args.join(' ') : '',
+      configSnippet: JSON.stringify({
+        mcpServers: {
+          [entry.alias]: {
+            command: entry.command,
+            args: Array.isArray(entry.args) ? entry.args : [],
+            env: Object.fromEntries(Object.keys(entry.env || {}).map((key) => [key, `${KEEP_ENV_PREFIX}${key}`])),
+          },
+        },
+      }, null, 2),
       approved,
       toolCount,
       health,
@@ -225,6 +235,16 @@ async function approve(alias) {
     return { ok: false, error: firstErrorLine(result.stderr || result.stdout) };
   }
   return { ok: true };
+}
+
+async function updateSnippet(alias, rawSnippet) {
+  const raw = String(rawSnippet || '');
+  if (!raw.trim()) return { ok: false, error: '스니펫이 비어 있다' };
+  const result = await runCli(['update', alias, '--snippet-file', '-'], { input: raw });
+  if (result.code !== 0) {
+    return { ok: false, error: firstErrorLine(result.stderr || result.stdout) };
+  }
+  return { ok: true, alias };
 }
 
 // athena:mcp-probe — `probe --json`은 실제 --json 플래그가 있는 유일한
@@ -382,6 +402,7 @@ module.exports = {
   list,
   auditLog,
   stageSnippet,
+  updateSnippet,
   register,
   approve,
   revoke,

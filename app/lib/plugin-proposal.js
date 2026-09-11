@@ -19,7 +19,7 @@ const { displayNameFor, findEntry } = PluginCatalog;
 
 // 확정 2 — 사람이 보는 5동작을 감사에서 구분 가능한 6종으로 편다.
 const ACTIONS = Object.freeze([
-  'install', 'allow_tools', 'revoke_tools', 'set_enabled', 'remove', 'stage_snippet',
+  'install', 'allow_tools', 'revoke_tools', 'set_enabled', 'remove', 'stage_snippet', 'update_snippet',
 ]);
 
 const SOURCES = Object.freeze(['model', 'gui']);
@@ -66,6 +66,10 @@ function validateAction(action, index, errors) {
   } else if (typeof action.target !== 'string' || !action.target) {
     errors.push(`${at}.target이 없습니다`);
   }
+  if (action.action === 'update_snippet'
+      && (typeof action.snippet !== 'string' || !action.snippet)) {
+    errors.push(`${at}.snippet이 없습니다`);
+  }
   if (action.features !== undefined
       && (!Array.isArray(action.features) || action.features.some((f) => typeof f !== 'string'))) {
     errors.push(`${at}.features는 문자열 배열이어야 합니다`);
@@ -110,6 +114,7 @@ function titleFor(action) {
     case 'set_enabled': return action.enabled ? `${name} 켜기` : `${name} 끄기`;
     case 'remove': return `${name} 삭제`;
     case 'stage_snippet': return '직접 등록';
+    case 'update_snippet': return `${name} 스니펫 수정`;
     default: return name;
   }
 }
@@ -166,6 +171,11 @@ function linesFor(action) {
       const tail = '등록만으로는 실행되지 않습니다';
       return command ? [command, tail] : [tail];
     }
+    case 'update_snippet': {
+      const command = snippetCommandLine(action.snippet);
+      const tail = '승인 후 설정을 다시 반영합니다';
+      return command ? [command, tail] : [tail];
+    }
     default: return [];
   }
 }
@@ -180,6 +190,7 @@ function guiReasonFor(action) {
     case 'set_enabled': return action.enabled ? '관리에서 [켜기]를 눌렀습니다' : '관리에서 [끄기]를 눌렀습니다';
     case 'remove': return '관리에서 [삭제]를 눌렀습니다';
     case 'stage_snippet': return '[+ 서버 추가]에서 [등록 제안]을 눌렀습니다';
+    case 'update_snippet': return '권한 화면에서 [수정 제안]을 눌렀습니다';
     default: return '';
   }
 }
@@ -205,6 +216,14 @@ function resultTurnCopy(kind, ctx) {
   const context = ctx || {};
   if (kind === 'success') {
     const found = Number(context.toolCount || 0);
+    if (context.action === 'update_snippet') {
+      const probes = Array.isArray(context.probes) ? context.probes : [];
+      if (!probes.length) return { lines: ['설정을 수정했습니다', '연결은 아직 확인하지 않았습니다'], chip: null };
+      if (probes.some((probe) => !probe.ok)) {
+        return { lines: ['설정을 수정했습니다', '연결을 확인하지 못했습니다. 권한 화면에서 다시 확인해 주세요'], chip: null };
+      }
+      return { lines: ['설정을 수정했습니다', '연결을 확인했습니다', `기능 ${found}개를 찾았습니다`], chip: null };
+    }
     return { lines: ['등록했습니다', '연결을 확인했습니다', `기능 ${found}개를 찾았습니다`], chip: null };
   }
   if (kind === 'rejected') return { lines: ['그대로 뒀습니다'], chip: null };
@@ -242,6 +261,8 @@ function resultTurnModel(kind, result) {
     toolCount: probeToolCount(res.probes),
     reason: res.reason,
     results: res.results,
+    probes: res.probes,
+    action: res.action || (Array.isArray(res.results) && res.results[0] && res.results[0].action),
   });
   const lines = [...copy.lines];
   if (kind === 'success') {
@@ -283,8 +304,8 @@ function snippetHash(text) {
 function proposalSignature(envelope) {
   const actions = envelope && Array.isArray(envelope.actions) ? envelope.actions : [];
   return actions
-    .map((action) => (action.action === 'stage_snippet'
-      ? `${action.action}:${snippetHash(action.snippet)}`
+    .map((action) => (action.action === 'stage_snippet' || action.action === 'update_snippet'
+      ? `${action.action}:${action.target || ''}:${snippetHash(action.snippet)}`
       : `${action.action}:${action.target}`))
     .join('|');
 }

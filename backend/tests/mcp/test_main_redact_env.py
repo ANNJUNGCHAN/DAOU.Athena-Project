@@ -4,6 +4,7 @@ from __future__ import annotations
 import pytest
 
 from athena_mcp.__main__ import build_parser
+from athena_mcp.consent import ConsentStore
 from athena_mcp.registry import SECRET_SENTINEL, ServerRegistry, UnknownAliasError
 
 
@@ -80,3 +81,84 @@ def test_redact_env_is_idempotent(tmp_path):
     assert args2.func(args2) == 0  # 두 번째 호출도 정상 — 이미 센티널이어도 거부하지 않는다
 
     assert ServerRegistry(path=registry_path).get("dart").env["DART_API_KEY"] == SECRET_SENTINEL
+
+
+def test_update_command_preserves_approval_and_tools_and_updates_metadata(tmp_path):
+    registry_path = tmp_path / "mcp_servers.json"
+    state_dir = tmp_path / "state"
+    registry = ServerRegistry(registry_path)
+    registry.add("discord", "npx", ["old"], {"TOKEN": SECRET_SENTINEL})
+    consent = ConsentStore(state_dir / "consent.json")
+    consent.request_consent("discord", "npx", ["old"], {"TOKEN": SECRET_SENTINEL})
+    consent.approve("discord", approved_tools={"list_guilds"})
+    snippet = tmp_path / "update.json"
+    snippet.write_text(
+        '{"mcpServers":{"discord":{"command":"npx","args":["new"],'
+        '"env":{"DISCORD_TOKEN":"__ATHENA_SAFESTORAGE__"}}}}',
+        encoding="utf-8",
+    )
+
+    args = _parse(tmp_path, "update", "discord", "--snippet-file", str(snippet))
+    assert args.func(args) == 0
+
+    entry = ServerRegistry(registry_path).get("discord")
+    record = ConsentStore(state_dir / "consent.json").get("discord")
+    assert entry.args == ["new"]
+    assert entry.env == {"DISCORD_TOKEN": SECRET_SENTINEL}
+    assert record is not None and record.approved is True
+    assert record.approved_tools == {"list_guilds"}
+    assert record.full_command_text == "npx new"
+
+
+def test_update_command_restores_entire_registry_entry_when_consent_write_fails(
+    tmp_path, monkeypatch
+):
+    registry_path = tmp_path / "mcp_servers.json"
+    state_dir = tmp_path / "state"
+    registry = ServerRegistry(registry_path)
+    registry.add("discord", "npx", ["old"], {"TOKEN": SECRET_SENTINEL})
+    registry.record_self_reported_info("discord", "discord", "1", "2025-03-26")
+    registry.record_encoding_smoke_test("discord", True)
+    consent = ConsentStore(state_dir / "consent.json")
+    consent.request_consent("discord", "npx", ["old"], {"TOKEN": SECRET_SENTINEL})
+    snippet = tmp_path / "update.json"
+    snippet.write_text(
+        '{"mcpServers":{"discord":{"command":"uvx","args":["new"],"env":{}}}}',
+        encoding="utf-8",
+    )
+    def fail_metadata_write(*_args, **_kwargs):
+        raise OSError("disk full")
+
+    monkeypatch.setattr(ConsentStore, "refresh_server_metadata", fail_metadata_write)
+
+    args = _parse(tmp_path, "update", "discord", "--snippet-file", str(snippet))
+    with pytest.raises(OSError, match="disk full"):
+        args.func(args)
+
+    restored = ServerRegistry(registry_path).get("discord")
+    assert restored.command == "npx"
+    assert restored.args == ["old"]
+    assert restored.env == {"TOKEN": SECRET_SENTINEL}
+    assert restored.self_reported_server_info is not None
+    assert restored.encoding_smoke_test_warning is True
+
+
+def test_update_command_restores_registry_when_consent_record_is_missing(tmp_path):
+    registry_path = tmp_path / "mcp_servers.json"
+    registry = ServerRegistry(registry_path)
+    registry.add("discord", "npx", ["old"], {"TOKEN": SECRET_SENTINEL})
+    registry.record_self_reported_info("discord", "discord", "1", "2025-03-26")
+    registry.record_encoding_smoke_test("discord", True)
+    before = registry.get("discord")
+    snippet = tmp_path / "update.json"
+    snippet.write_text(
+        '{"mcpServers":{"discord":{"command":"uvx","args":["new"],"env":{}}}}',
+        encoding="utf-8",
+    )
+
+    args = _parse(tmp_path, "update", "discord", "--snippet-file", str(snippet))
+    with pytest.raises(KeyError, match="승인 요청이 먼저 필요하다"):
+        args.func(args)
+
+    assert ServerRegistry(registry_path).get("discord") == before
+    assert ConsentStore(tmp_path / "state" / "consent.json").get("discord") is None

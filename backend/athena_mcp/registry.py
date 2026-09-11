@@ -325,6 +325,46 @@ class ServerRegistry:
             del entries[alias]
         self._mutate(mutation)
 
+    def update(
+        self,
+        alias: str,
+        command: str,
+        args: list[str] | None = None,
+        env: dict[str, str] | None = None,
+    ) -> ServerEntry:
+        """기존 별칭의 실행 설정만 원자적으로 교체한다.
+
+        등록 출처/시각/메모와 별칭은 보존한다. 실행 대상이 달라졌으므로 이전
+        probe에서 받은 자가보고 정보는 더 이상 유효하지 않아 제거한다.
+        """
+        next_args = list(args or [])
+        next_env = dict(env or {})
+        validate_server_spec(command, next_args, next_env)
+
+        def mutation(entries: dict[str, ServerEntry]) -> ServerEntry:
+            if alias not in entries:
+                raise UnknownAliasError(alias)
+            entry = entries[alias]
+            entry.command = command
+            entry.args = next_args
+            entry.env = next_env
+            entry.self_reported_server_info = None
+            entry.encoding_smoke_test_warning = False
+            return entry
+
+        return self._mutate(mutation)
+
+    def restore_entry(self, entry: ServerEntry) -> None:
+        """교차 저장소 갱신 실패를 보상하기 위해 이전 항목 전체를 되돌린다."""
+        restored = deepcopy(entry)
+
+        def mutation(entries: dict[str, ServerEntry]) -> None:
+            if restored.alias not in entries:
+                raise UnknownAliasError(restored.alias)
+            entries[restored.alias] = deepcopy(restored)
+
+        self._mutate(mutation)
+
     def list(self) -> list[ServerEntry]:
         return list(self._entries.values())
 
@@ -451,3 +491,42 @@ def parse_claude_desktop_snippet(raw: str) -> list[ParsedSnippetServer]:
             )
         )
     return results
+
+
+def parse_update_snippet(raw: str, alias: str) -> ParsedSnippetServer:
+    """기존 서버 수정용 단일 스니펫을 손실 없이 엄격하게 검증한다."""
+    try:
+        data = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise SnippetParseError(f"스니펫이 유효한 JSON이 아니다: {exc}") from exc
+
+    if not isinstance(data, dict) or set(data) != {"mcpServers"}:
+        raise SnippetParseError('수정 스니펫의 최상위 키는 "mcpServers" 하나여야 한다')
+    servers = data["mcpServers"]
+    if not isinstance(servers, dict) or list(servers) != [alias]:
+        raise SnippetParseError(
+            f'"mcpServers"에는 기존 별칭 {alias!r} 항목 하나만 있어야 한다'
+        )
+    cfg = servers[alias]
+    if not isinstance(cfg, dict):
+        raise SnippetParseError(f"서버 {alias!r} 설정은 객체여야 한다")
+    unsupported = sorted(set(cfg) - {"command", "args", "env"})
+    if unsupported:
+        raise SnippetParseError(
+            "지원하지 않는 서버 설정 키가 있다: " + ", ".join(unsupported)
+        )
+    if "command" not in cfg:
+        raise SnippetParseError(f'서버 {alias!r} 항목에 "command"가 없다')
+    args = cfg.get("args", [])
+    env = cfg.get("env", {})
+    if not isinstance(args, list):
+        raise SnippetParseError(f'서버 {alias!r}의 "args"는 배열이어야 한다')
+    if not isinstance(env, dict):
+        raise SnippetParseError(f'서버 {alias!r}의 "env"는 객체여야 한다')
+    validate_server_spec(cfg["command"], args, env)
+    return ParsedSnippetServer(
+        suggested_alias=alias,
+        command=cfg["command"],
+        args=list(args),
+        env=dict(env),
+    )

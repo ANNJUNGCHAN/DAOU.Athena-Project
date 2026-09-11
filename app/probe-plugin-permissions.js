@@ -35,6 +35,7 @@ const server = {
   toolCount: 4,
   health: 'ok',
   warnings: [],
+  configSnippet: JSON.stringify({ mcpServers: { 'korea-stock': { command: 'npx', args: ['-y', '@drfirst/korea-stock-mcp'], env: { OLD_TOKEN: '__ATHENA_KEEP_ENV__:OLD_TOKEN' } } } }, null, 2),
 };
 const tools = [
   ['search_stock_code', '종목명으로 종목 코드를 찾습니다'],
@@ -60,6 +61,7 @@ async function main() {
   let listCalls = 0;
   let probeCalls = 0;
   let approveCalls = 0;
+  let snippetUpdates = 0;
   let revision = 12;
   ipcMain.removeHandler('athena:mcp-list');
   ipcMain.handle('athena:mcp-list', async () => {
@@ -81,6 +83,15 @@ async function main() {
     const actions = envelope && Array.isArray(envelope.actions) ? envelope.actions : [];
     for (const action of actions) {
       if (action.target !== server.alias) return { ok: false, kind: 'failed', reason: 'unexpected target' };
+      if (action.action === 'update_snippet') {
+        const config = JSON.parse(action.snippet).mcpServers[server.alias];
+        server.command = config.command;
+        server.argsPreview = config.args.join(' ');
+        config.env = Object.fromEntries(Object.keys(config.env || {}).map((key) => [key, '__ATHENA_KEEP_ENV__:' + key]));
+        server.configSnippet = JSON.stringify({ mcpServers: { [server.alias]: config } }, null, 2);
+        snippetUpdates += 1;
+        continue;
+      }
       const nextAllowed = action.action === 'allow_tools';
       if (action.action !== 'allow_tools' && action.action !== 'revoke_tools') {
         return { ok: false, kind: 'failed', reason: 'unexpected action' };
@@ -101,6 +112,9 @@ async function main() {
 
   await mainModule.createWindows();
   const { shellWin } = mainModule.getWins();
+  shellWin.webContents.on('console-message', (details) => {
+    if (details.level === 'error') console.error('[renderer]', details.message);
+  });
 
   await waitUntil(() => shellWin.webContents.executeJavaScript(
     "document.getElementById('app').hidden === false",
@@ -186,6 +200,37 @@ async function main() {
     await wait(150);
     const image = await shellWin.webContents.capturePage();
     fs.writeFileSync(path.join(CAPTURES, 'plugin-permissions-probe.png'), image.toPNG());
+
+    result.snippetEdit = await shellWin.webContents.executeJavaScript(`(() => {
+      document.querySelector('.is-edit-snippet').click();
+      const field = document.querySelector('.plugin-canvas-snippet-input');
+      const initial = JSON.parse(field.value);
+      const config = initial.mcpServers['korea-stock'];
+      const retained = config.env.OLD_TOKEN;
+      config.args = ['-y', '@drfirst/korea-stock-mcp@latest'];
+      config.env = { NEW_TOKEN: retained };
+      field.value = JSON.stringify(initial, null, 2);
+      field.dispatchEvent(new Event('input', { bubbles: true }));
+      return { retained, expected: field.value };
+    })()`);
+    const editorImage = await shellWin.webContents.capturePage();
+    fs.writeFileSync(path.join(CAPTURES, 'plugin-snippet-edit-probe.png'), editorImage.toPNG());
+    await shellWin.webContents.executeJavaScript("document.querySelector('.plugin-canvas-sheet .is-sheet-confirm').click()");
+    result.snippetEdit.beforeApproval = snippetUpdates;
+    result.snippetEdit.proposal = await waitUntil(() => shellWin.webContents.executeJavaScript(`(() => {
+      const card = document.querySelector('.plugin-canvas-proposal[data-proposal-state="pending"]');
+      return card ? card.querySelector('.plugin-canvas-proposal-title')?.textContent : null;
+    })()`));
+    await shellWin.webContents.executeJavaScript("document.querySelector('.plugin-canvas-proposal[data-proposal-state=\"pending\"] .is-proposal-approve').click()");
+    await waitUntil(() => snippetUpdates === 1);
+    await shellWin.webContents.executeJavaScript(`
+      window.AthenaPluginCanvas.setView('hub');
+      document.querySelector('.plugin-canvas-card[data-plugin-id="korea-stock"] .plugin-canvas-action').click();
+    `);
+    await waitUntil(() => shellWin.webContents.executeJavaScript("document.querySelectorAll('.plugin-canvas-permission-features .plugin-canvas-toggle').length === 6"));
+    result.snippetEdit.allowedAfter = tools.filter((tool) => tool.allowed).length;
+    await shellWin.webContents.executeJavaScript("document.querySelector('.is-edit-snippet').click()");
+    result.snippetEdit.persisted = await shellWin.webContents.executeJavaScript("document.querySelector('.plugin-canvas-snippet-input').value");
   }
 
   const failures = [];
@@ -194,7 +239,7 @@ async function main() {
     if (!pass) failures.push(label);
   };
   check('등록 목록을 실제 IPC로 다시 읽었다', listCalls >= 2);
-  check('두 번 연 권한 화면이 선택한 서버만 각각 probe했다', probeCalls === 2);
+  check('세 번 연 권한 화면이 선택한 서버만 각각 probe했다', probeCalls === 3);
   check('권한 화면은 설치됨/기능 6/허용 4/연결 확인됨 배지를 보인다',
     result && JSON.stringify(result.badges) === JSON.stringify(['설치됨', '기능 6', '허용 4', '연결 확인됨']));
   check('probe가 돌려준 기능 6개와 허용 4개를 그린다',
@@ -211,10 +256,16 @@ async function main() {
     result && result.approveCallsBeforeSave === 0 && result.afterToggle === '허용 5 / 6');
   check('선택 저장은 허용 제안 한 건을 만들고 승인 경로로 보낸다',
     result && result.proposal && result.proposal.state === 'pending'
-      && result.proposal.title === '한국 주식 시세 · 기능 허용' && approveCalls === 1);
+      && result.proposal.title === '한국 주식 시세 · 기능 허용' && approveCalls === 2);
   check('승인한 권한은 다시 probe한 화면에도 5/6으로 유지된다',
     result && result.persisted && result.persisted.allowed === '허용 5 / 6'
       && result.persisted.toggles.filter((value) => value === 'true').length === 5);
+  check('스니펫 수정은 보관된 토큰 참조를 유지하고 승인 뒤에만 같은 서버에 적용한다',
+    result && result.snippetEdit && result.snippetEdit.retained === '__ATHENA_KEEP_ENV__:OLD_TOKEN'
+      && result.snippetEdit.beforeApproval === 0 && snippetUpdates === 1
+      && result.snippetEdit.allowedAfter === 5
+      && result.snippetEdit.persisted === server.configSnippet
+      && JSON.parse(result.snippetEdit.persisted).mcpServers[server.alias].env.NEW_TOKEN === '__ATHENA_KEEP_ENV__:NEW_TOKEN');
 
   const report = { profile: PROFILE, registry: process.env.ATHENA_MCP_REGISTRY_PATH, listCalls, probeCalls, approveCalls, result, failures, ok: failures.length === 0 };
   fs.writeFileSync(path.join(CAPTURES, 'probe-plugin-permissions.json'), JSON.stringify(report, null, 2));
