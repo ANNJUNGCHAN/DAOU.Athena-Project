@@ -1312,11 +1312,13 @@ table.fin-table { width: 100%; border-collapse: collapse; font-variant-numeric: 
 .chart-ind-vp-row.is-on .chart-ind-check { background: var(--color-k-text); border-color: var(--color-k-text); }
 
 .grid.has-expanded > .card:not(.is-expanded) { display: none; }
-.card.chart.is-expanded {
+.card.is-expanded {
   grid-column: 1 / -1;
   min-height: calc(100vh - 40px);
   max-height: none;
 }
+.canvas-tab-deck:has(.card.is-expanded) .canvas-tab-strip { display: none; }
+.canvas-tab-panel:has(.card.is-expanded) { height: 100%; }
 
 .facts-grid { display: grid; grid-template-columns: 1fr; gap: 10px 20px; }
 .facts-grid-2col { grid-template-columns: 1fr 1fr; }

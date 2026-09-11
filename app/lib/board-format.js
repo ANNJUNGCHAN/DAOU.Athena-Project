@@ -336,7 +336,9 @@ function formatSlot(format, raw) {
   if (numeric === null) return { text: String(normalized.value), tone, missing: false };
   // Kiwoom 가격 필드는 방향 부호를 값에 싣는다. 가격으로 저작된 슬롯만 magnitude를
   // 표시하고, 상승·하락 tone은 위에서 원본 부호로 이미 계산한 값을 유지한다.
+  // sign:false 헤더 현재가에 부호가 남으면 「-25만 8,000」이 된다(기업정보 실측).
   const displayNumeric = spec.absolute === true
+    || (kind === 'korean' && spec.sign !== true && wire && wire.signed)
     || (kind === 'text' && wire && (wire.padded || wire.plus))
     ? Math.abs(numeric)
     : numeric;

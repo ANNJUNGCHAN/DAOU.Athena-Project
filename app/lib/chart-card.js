@@ -892,6 +892,14 @@ async function createChartCard(container, opts) {
 
   let isFullscreen = false;
 
+  function onFullscreenKey(event) {
+    if (event.key !== 'Escape' || !isFullscreen) return;
+    event.preventDefault();
+    event.stopPropagation();
+    toggleFullscreen();
+  }
+  document.addEventListener('keydown', onFullscreenKey, true);
+
   function measureAndResize() {
     requestAnimationFrame(() => {
       const rect = priceWrap.getBoundingClientRect();
@@ -946,6 +954,7 @@ async function createChartCard(container, opts) {
   }
 
   function destroy() {
+    document.removeEventListener('keydown', onFullscreenKey, true);
     if (autoFitObserver) { autoFitObserver.disconnect(); autoFitObserver = null; }
     priceWrap.removeEventListener('wheel', pinViewport);
     priceWrap.removeEventListener('pointerdown', pinViewport);

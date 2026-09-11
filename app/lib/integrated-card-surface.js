@@ -395,7 +395,12 @@ function refreshExisting(root, envelope) {
   const definition = integratedDefinition(envelope);
   if (!root || !definition) return null;
   stampRoot(root, envelope, definition);
-  activatePanel(root, panelKeyFor(envelope));
+  const panelKey = panelKeyFor(envelope);
+  const panels = root.querySelectorAll('.integrated-card-panel');
+  // 주기 전환 봉투는 operation_ref가 달라 새 panelKey가 된다. 그 키의 패널이
+  // 없는데 activate하면 살아 있는 일봉 패널이 숨고 빈 화면만 남는다(년·틱 실측).
+  const hasMatchingPanel = Array.from(panels).some((panel) => panel.__athenaPanelKey === panelKey);
+  if (hasMatchingPanel || panels.length === 0) activatePanel(root, panelKey);
   return root;
 }
 

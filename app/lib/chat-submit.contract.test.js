@@ -117,6 +117,13 @@ test('the composer folds references at the same place it folds attachments', () 
   assert.match(src.slice(observed, observed + 900), /data-technique/);
 });
 
+test('크게 보기 중 Esc는 카드를 지우지 않고 복귀한다', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'chat.js'), 'utf8');
+  assert.match(src, /크게 보기 중 Esc는 카드를 지우지 않고 복귀한다/);
+  assert.match(src, /card\.is-expanded \.chart-toolbar-fullscreen/);
+  assert.match(src, /fullscreenBtn\.click\(\)/);
+});
+
 test('데이터 캔버스가 선 차트는 질의 실패 카드로 덮지 않는다', () => {
   const src = fs.readFileSync(path.join(__dirname, '..', 'chat.js'), 'utf8');
   assert.match(
