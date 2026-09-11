@@ -18,8 +18,8 @@ const {
 
 const INSTALL = { action: 'install', target: 'fetch', features: ['fetch — 지정한 URL의 본문'] };
 
-test('액션은 6종으로 고정한다', () => {
-  assert.deepEqual([...ACTIONS], ['install', 'allow_tools', 'revoke_tools', 'set_enabled', 'remove', 'stage_snippet']);
+test('액션은 7종으로 고정한다', () => {
+  assert.deepEqual([...ACTIONS], ['install', 'allow_tools', 'revoke_tools', 'set_enabled', 'remove', 'stage_snippet', 'update_snippet']);
 });
 
 // --- A3⑴ 두 입구, 한 빌더 ------------------------------------------------------
@@ -104,6 +104,16 @@ test('validateProposal: stage_snippet에 snippet 문자열이 없으면 거부�
   assert.equal(validateProposal(envelope).ok, false);
 });
 
+test('validateProposal: update_snippet은 대상과 snippet 문자열을 요구한다', () => {
+  assert.equal(validateProposal(buildProposal(
+    { action: 'update_snippet', target: 'discord', snippet: '{"mcpServers":{"discord":{}}}' },
+    '이유', 1, 'gui',
+  )).ok, true);
+  assert.equal(validateProposal(buildProposal(
+    { action: 'update_snippet', target: 'discord' }, '이유', 1, 'gui',
+  )).ok, false);
+});
+
 test('validateProposal: actions가 비면 거부한다', () => {
   const envelope = buildBatchProposal([], '이유', 1, 'model');
   assert.equal(validateProposal(envelope).ok, false);
@@ -161,6 +171,7 @@ test('cardCopy: GUI 근거 줄은 동작마다 다르다', () => {
   assert.equal(reason({ action: 'set_enabled', target: 'time', enabled: true }), '관리에서 [켜기]를 눌렀습니다');
   assert.equal(reason({ action: 'remove', target: 'time' }), '관리에서 [삭제]를 눌렀습니다');
   assert.equal(reason({ action: 'stage_snippet', target: null, snippet: '{}' }), '[+ 서버 추가]에서 [등록 제안]을 눌렀습니다');
+  assert.equal(reason({ action: 'update_snippet', target: 'discord', snippet: '{}' }), '권한 화면에서 [수정 제안]을 눌렀습니다');
 });
 
 test('cardCopy: 카드 제목은 별칭이 아니라 사람이 읽는 이름을 쓴다', () => {
@@ -171,6 +182,7 @@ test('cardCopy: 카드 제목은 별칭이 아니라 사람이 읽는 이름을 
   assert.equal(title({ action: 'set_enabled', target: 'fetch', enabled: true }), '웹 문서 읽기 켜기');
   assert.equal(title({ action: 'remove', target: 'time' }), '시간·시간대 삭제');
   assert.equal(title({ action: 'stage_snippet', target: null, snippet: '{}' }), '직접 등록');
+  assert.equal(title({ action: 'update_snippet', target: 'discord', snippet: '{}' }), 'discord 스니펫 수정');
 });
 
 test('cardCopy: 카탈로그에 없는 별칭은 이름을 지어내지 않고 그대로 쓴다', () => {
@@ -215,6 +227,26 @@ test('cardCopy: stage_snippet은 스니펫의 command·args로 실행 명령을 
   )).lines, ['등록만으로는 실행되지 않습니다']);
 });
 
+test('cardCopy: update_snippet은 비밀 env 값을 요약하지 않는다', () => {
+  const snippet = JSON.stringify({
+    mcpServers: {
+      discord: {
+        command: 'npx', args: ['-y', '@pasympa/discord-mcp'],
+        env: { DISCORD_TOKEN: 'actual-secret', RENAMED: '__ATHENA_KEEP_ENV__:OLD_KEY' },
+      },
+    },
+  });
+  const copy = cardCopy(buildProposal(
+    { action: 'update_snippet', target: 'discord', snippet }, '이유', 1, 'gui',
+  ));
+  assert.deepEqual(copy.lines, [
+    '실행 명령: npx -y @pasympa/discord-mcp',
+    '승인 후 설정을 다시 반영합니다',
+  ]);
+  assert.equal(JSON.stringify(copy).includes('actual-secret'), false);
+  assert.equal(JSON.stringify(copy).includes('__ATHENA_KEEP_ENV__'), false);
+});
+
 test('cardCopy: 모델 제안과 GUI 제안이 같은 4필드를 낸다', () => {
   const fromModel = cardCopy(buildProposal(INSTALL, '웹 문서를 읽으려면 필요합니다', 1, 'model'));
   const fromGui = cardCopy(buildProposal(INSTALL, '', 1, 'gui'));
@@ -226,6 +258,21 @@ test('cardCopy: 모델 제안과 GUI 제안이 같은 4필드를 낸다', () => 
 
 test('resultTurnCopy: 성공은 3줄이고 기능 수가 실제 값으로 들어간다', () => {
   assert.deepEqual(resultTurnCopy('success', { toolCount: 6 }).lines, ['등록했습니다', '연결을 확인했습니다', '기능 6개를 찾았습니다']);
+});
+
+test('resultTurnCopy: 스니펫 수정 성공은 등록으로 표시하지 않는다', () => {
+  assert.deepEqual(
+    resultTurnCopy('success', { action: 'update_snippet', toolCount: 3, probes: [{ ok: true }] }).lines,
+    ['설정을 수정했습니다', '연결을 확인했습니다', '기능 3개를 찾았습니다'],
+  );
+});
+
+test('스니펫 수정 결과는 연결 미확인과 실패를 성공으로 표시하지 않는다', () => {
+  for (const probes of [[], [{ ok: false }]]) {
+    const model = resultTurnModel('success', { results: [{ action: 'update_snippet', ok: true }], probes });
+    assert.equal(model.lines[0], '설정을 수정했습니다');
+    assert.ok(!model.lines.includes('연결을 확인했습니다'));
+  }
 });
 
 test('resultTurnCopy: 거부는 한 줄이다', () => {
@@ -337,6 +384,15 @@ test('createOutOfModeNotifier: 스니펫은 내용으로 구분한다', () => {
   assert.equal(notifier.shouldAnnounce(one), true);
   assert.equal(notifier.shouldAnnounce(same), false, '같은 내용은 한 번만 알린다');
   assert.equal(notifier.shouldAnnounce(other), true, '다른 내용은 따로 알린다');
+});
+
+test('createOutOfModeNotifier: 스니펫 수정은 대상과 내용으로 구분한다', () => {
+  const notifier = createOutOfModeNotifier();
+  const make = (target, snippet) => buildProposal({ action: 'update_snippet', target, snippet }, '이유', 1, 'gui');
+  assert.equal(notifier.shouldAnnounce(make('discord', '{"a":1}')), true);
+  assert.equal(notifier.shouldAnnounce(make('discord', '{"a":1}')), false);
+  assert.equal(notifier.shouldAnnounce(make('discord', '{"a":2}')), true);
+  assert.equal(notifier.shouldAnnounce(make('other', '{"a":1}')), true);
 });
 
 // --- 교차 언어 계약 -------------------------------------------------------------

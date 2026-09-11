@@ -30,6 +30,7 @@ import argparse
 import asyncio
 import json
 import sys
+from copy import deepcopy
 from pathlib import Path
 
 from athena_mcp.consent import AuditLog, ConsentNotGrantedError, ConsentStore
@@ -49,6 +50,7 @@ from athena_mcp.registry import (
     SnippetParseError,
     UnknownAliasError,
     default_registry_path,
+    parse_update_snippet,
 )
 from athena_mcp.runner import GatewayRunner, default_state_dir
 
@@ -100,6 +102,30 @@ def cmd_register(args: argparse.Namespace) -> int:
         for w in p.risk_warnings:
             print(f"  [경고] {w}")
         print(f"  아직 승인되지 않았다 — spawn 금지 상태다. `athena-mcp approve {p.alias}`")
+    return 0
+
+
+def cmd_update(args: argparse.Namespace) -> int:
+    """기존 별칭의 설정을 제자리에서 교체해 승인/툴 허용 결정을 보존한다."""
+    registry, consent, _ = _stores(args)
+    raw = (
+        sys.stdin.read()
+        if args.snippet_file == "-"
+        else Path(args.snippet_file).read_text(encoding="utf-8")
+    )
+    parsed = parse_update_snippet(raw, args.alias)
+    previous = deepcopy(registry.get(args.alias))
+    entry = registry.update(args.alias, parsed.command, parsed.args, parsed.env)
+    try:
+        consent.refresh_server_metadata(
+            args.alias, entry.command, list(entry.args), dict(entry.env)
+        )
+    except Exception:
+        # registry와 consent는 별도 원자 파일이다. 두 번째 파일 쓰기가 실패하면
+        # 첫 번째를 이전 항목 전체(probe 메타데이터 포함)로 보상 복구한다.
+        registry.restore_entry(previous)
+        raise
+    print(f"수정됨: {args.alias}")
     return 0
 
 
@@ -328,6 +354,11 @@ def build_parser() -> argparse.ArgumentParser:
     reg.add_argument("--env", action="append", help="KEY=VALUE. 반복 지정 가능")
     reg.add_argument("--snippet-file", help="클로드 데스크탑 스니펫 JSON 파일 ('-'는 stdin)")
     reg.set_defaults(func=cmd_register)
+
+    upd = sub.add_parser("update", help="기존 서버 스니펫 수정 (승인·툴 허용 유지)")
+    upd.add_argument("alias")
+    upd.add_argument("--snippet-file", required=True, help="단일 서버 스니펫 JSON ('-'는 stdin)")
+    upd.set_defaults(func=cmd_update)
 
     lst = sub.add_parser("list", help="등록된 서버 목록")
     lst.set_defaults(func=cmd_list)

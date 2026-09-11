@@ -3833,6 +3833,13 @@ async function pluginDecide(channel, envelope, options) {
   if (result && typeof result.revision === 'number') pluginRevision = result.revision;
   if (kind === 'success') {
     pluginRegistryChangedThisSession = true;
+    for (const action of (envelope && envelope.actions) || []) {
+      if (action.action === 'update_snippet') {
+        pluginCanvas.discardAppliedSnippetDraft(action.target, action.snippet);
+        pluginToolCache.delete(action.target);
+        pluginProbeErrors.delete(action.target);
+      }
+    }
     await pluginRefresh();
   }
   // 남은 카드의 만료 판정이 새 판번호를 쓰게 한다 — 방금 승인이 목록을
@@ -3891,6 +3898,7 @@ function pluginRowFromServer(server) {
     features: tools || [],
     error: pluginProbeErrors.get(server.alias) || null,
     warnings: Array.isArray(server.warnings) ? server.warnings : [],
+    configSnippet: server.configSnippet || null,
   };
 }
 

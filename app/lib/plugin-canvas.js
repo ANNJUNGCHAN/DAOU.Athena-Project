@@ -126,6 +126,9 @@ function createPluginCanvas(options) {
   const handled = new Set();
   // 저장 전 권한 토글은 사람이 만든 값이다 — 모드를 나갔다 와도 버리지 않는다.
   let permissionDraft = null; // { pluginId, base: {name:bool}, draft: {name:bool} }
+  // 스니펫 수정은 취소해도 입력을 버리지 않는다. 플러그인별 초안을 두어 목록
+  // 갱신이나 권한 화면 재진입 뒤에도 사람이 쓴 JSON을 그대로 되살린다.
+  const snippetDrafts = new Map();
   // 감사 로그는 호스트가 읽어다 준다. null = 아직 못 읽음(읽는 중 문구를 띄운다).
   let auditEntries = null;
   let auditError = false;
@@ -247,6 +250,59 @@ function createPluginCanvas(options) {
     openPermissionSheet(plugin);
   }
 
+  function openSnippetEditSheet(plugin) {
+    const permissionSheet = activeSheet && activeSheet.kind === 'permissions' ? activeSheet : null;
+    keepDraft();
+    const pluginId = plugin.id || plugin.name;
+    const snippet = snippetDrafts.has(pluginId)
+      ? snippetDrafts.get(pluginId)
+      : String(plugin.configSnippet || '');
+    activeSheet = { kind: 'edit_snippet', plugin, snippet, error: null, permissionSheet };
+    render();
+  }
+
+  function proposeSnippetUpdate(sheet) {
+    const snippet = String(sheet.snippet || '').trim();
+    if (!snippet) {
+      sheet.error = '설정 JSON을 붙여넣어 주세요';
+      render();
+      return;
+    }
+    let config;
+    try {
+      config = JSON.parse(snippet);
+    } catch {
+      sheet.error = '설정 JSON 형식을 확인해 주세요';
+      render();
+      return;
+    }
+    const servers = config && typeof config === 'object' && !Array.isArray(config)
+      ? config.mcpServers
+      : null;
+    const aliases = servers && typeof servers === 'object' && !Array.isArray(servers)
+      ? Object.keys(servers)
+      : [];
+    if (!aliases.length) {
+      sheet.error = 'mcpServers 아래에 서버 한 개를 넣어 주세요';
+      render();
+      return;
+    }
+    if (aliases.length > 1) {
+      sheet.error = '서버는 한 번에 하나만 수정할 수 있습니다';
+      render();
+      return;
+    }
+    const target = sheet.plugin.id || sheet.plugin.name;
+    if (aliases[0] !== target) {
+      sheet.error = `서버 이름은 ${target} 그대로 유지해 주세요`;
+      render();
+      return;
+    }
+    snippetDrafts.set(target, sheet.snippet);
+    propose({ action: 'update_snippet', target, snippet: sheet.snippet });
+    closeSheet();
+  }
+
   function openPermissionSheet(plugin) {
     const features = featureRowsFor(plugin);
     const base = {};
@@ -308,6 +364,12 @@ function createPluginCanvas(options) {
   // 사람이 명시적으로 화면을 닫으면 초안도 함께 끝난다 — 되돌아왔을 때 저장한
   // 적 없는 값이 떠 있으면 그것이 실제 허용으로 읽힌다.
   function closeSheet() {
+    if (activeSheet && activeSheet.kind === 'edit_snippet') {
+      const plugin = activeSheet.plugin;
+      snippetDrafts.set(plugin.id || plugin.name, activeSheet.snippet);
+      openPermissionSheet(plugin);
+      return;
+    }
     const returnFocusPluginId = activeSheet && activeSheet.returnFocusPluginId;
     if (activeSheet && activeSheet.kind === 'permissions') permissionDraft = null;
     activeSheet = null;
@@ -664,8 +726,8 @@ function createPluginCanvas(options) {
   // Paper 플러그인 01 — 기능 허용. 배지 넷은 설치 상태 · 기능 수 · 허용 수 ·
   // 연결 상태다. 마지막 자리에 고정 문구를 넣지 않는 이유: 이 화면에서 사람이
   // 실제로 알아야 하는 건 "지금 이 서버가 붙었는가"이고, 그건 probe만 안다.
-  function renderPermissionView() {
-    const sheet = activeSheet;
+  function renderPermissionView(permissionSheet) {
+    const sheet = permissionSheet || activeSheet;
     const plugin = sheet.plugin;
     const panel = el('section', 'plugin-canvas-panel plugin-canvas-permissions-view');
     const header = el('div', 'plugin-canvas-header plugin-canvas-permissions-header');
@@ -730,6 +792,13 @@ function createPluginCanvas(options) {
     toggleAll.setAttribute('aria-disabled', String(toggleAll.disabled));
     toggleAll.setAttribute('aria-pressed', String(allPermissionsAllowed(sheet)));
     permissionTools.appendChild(toggleAll);
+    if (typeof plugin.configSnippet === 'string' && plugin.configSnippet) {
+      permissionTools.appendChild(actionButton(
+        '스니펫 수정',
+        'is-edit-snippet',
+        () => openSnippetEditSheet(plugin),
+      ));
+    }
     panel.appendChild(permissionTools);
     const featureList = el('div', 'plugin-canvas-sheet-features plugin-canvas-permission-features');
     if (sheet.features.length) {
@@ -816,23 +885,52 @@ function createPluginCanvas(options) {
     return body;
   }
 
+  function renderEditSnippetSheetBody(sheet) {
+    const body = el('div', 'plugin-canvas-sheet-body');
+    const field = el('textarea', 'plugin-canvas-snippet-input');
+    field.value = sheet.snippet || '';
+    field.setAttribute('rows', '10');
+    field.setAttribute('spellcheck', 'false');
+    field.setAttribute('aria-label', '수정할 서버 스니펫');
+    field.addEventListener('input', (event) => {
+      sheet.snippet = String(event && event.target ? event.target.value : '');
+      snippetDrafts.set(sheet.plugin.id || sheet.plugin.name, sheet.snippet);
+    });
+    body.appendChild(field);
+    body.appendChild(el(
+      'div',
+      'plugin-canvas-sheet-warning',
+      '저장된 비밀값은 __ATHENA_KEEP_ENV__:기존키 자리표시자로 유지됩니다. env 키 이름은 바꿀 수 있습니다.',
+    ));
+    body.appendChild(el('div', 'plugin-canvas-sheet-warning', '승인 카드로 확정한 뒤 설정을 다시 반영합니다'));
+    if (sheet.error) body.appendChild(el('div', 'plugin-canvas-sheet-error', sheet.error));
+    const actions = el('div', 'plugin-canvas-sheet-actions');
+    actions.appendChild(actionButton('취소', 'is-sheet-cancel', closeSheet));
+    actions.appendChild(actionButton('수정 제안', 'is-sheet-confirm', () => proposeSnippetUpdate(sheet)));
+    body.appendChild(actions);
+    return body;
+  }
+
   // 배경을 막는 시트는 이 셋뿐이다. 권한(permissions)은 시트가 아니라 캔버스를
   // 통째로 바꾸는 상세 화면이므로 여기 없다(Paper 01).
-  const MODAL_SHEET_KINDS = new Set(['add', 'remove']);
+  const MODAL_SHEET_KINDS = new Set(['add', 'remove', 'edit_snippet']);
 
   const SHEET_TITLES = {
     add: () => '서버 추가',
     remove: (sheet) => `${sheet.plugin.name} 삭제`,
+    edit_snippet: () => '스니펫 수정',
   };
 
   const SHEET_SUBTITLES = {
     add: () => 'Claude 설정 형식의 스니펫을 붙여넣습니다',
     remove: () => '등록과 승인 기록을 함께 지웁니다',
+    edit_snippet: (sheet) => `${sheet.plugin.name} 설정을 검토하고 수정합니다`,
   };
 
   const SHEET_BODIES = {
     add: renderAddSheetBody,
     remove: renderRemoveSheetBody,
+    edit_snippet: renderEditSnippetSheetBody,
   };
 
   function renderSheet() {
@@ -997,8 +1095,8 @@ function createPluginCanvas(options) {
       }
       root.appendChild(cards);
     }
-    const panel = activeSheet && activeSheet.kind === 'permissions'
-      ? renderPermissionView()
+    const panel = activeSheet && (activeSheet.kind === 'permissions' || activeSheet.kind === 'edit_snippet')
+      ? renderPermissionView(activeSheet.kind === 'edit_snippet' ? activeSheet.permissionSheet : activeSheet)
       : (view === 'manage' ? renderManage() : renderHub());
     if (activeSheet && MODAL_SHEET_KINDS.has(activeSheet.kind)) {
       panel.setAttribute('aria-hidden', 'true');
@@ -1078,6 +1176,17 @@ function createPluginCanvas(options) {
         openPermissionSheet(fresh);
         return;
       }
+      if (fresh && activeSheet.kind === 'edit_snippet') {
+        activeSheet = {
+          ...activeSheet,
+          plugin: fresh,
+          permissionSheet: activeSheet.permissionSheet
+            ? { ...activeSheet.permissionSheet, plugin: fresh }
+            : activeSheet.permissionSheet,
+        };
+        render();
+        return;
+      }
       if (fresh) {
         activeSheet = {
           ...activeSheet,
@@ -1128,7 +1237,20 @@ function createPluginCanvas(options) {
     };
   }
 
-  return { mount, setView, setSearch, setData, setProposals, openPermissions, getState };
+  function discardAppliedSnippetDraft(target, snippet) {
+    if (snippetDrafts.get(target) === snippet) snippetDrafts.delete(target);
+  }
+
+  return {
+    mount,
+    setView,
+    setSearch,
+    setData,
+    setProposals,
+    openPermissions,
+    getState,
+    discardAppliedSnippetDraft,
+  };
 }
 
 function pluginPermissionOverridesSettings(text, canvasMode) {

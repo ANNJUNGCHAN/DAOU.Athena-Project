@@ -6463,6 +6463,7 @@ const pluginProposalRegistry = createPluginProposalRegistry({
   executor: {
     list: () => mcpCli.list(),
     stageSnippet: (snippet) => mcpCli.stageSnippet(snippet),
+    updateSnippet: (alias, snippet) => mcpEnv.updateSnippet(alias, snippet, mcpCli.updateSnippet),
     register: (staged) => mcpCli.register(staged),
     approve: (alias) => mcpCli.approve(alias),
     revoke: (alias) => mcpCli.revoke(alias),
@@ -6500,9 +6501,15 @@ function pluginResult(kind, reason, extra = {}) {
 async function handlePluginApprove(e, envelope) {
   // 판번호는 한 번만 읽는다 — 게이트에서 막힌 반환도 이 값을 그대로 싣는다.
   const revision = mcpCli.list().revision;
+  // 스니펫 수정은 비밀값·레지스트리를 함께 바꾸므로 단발 대화 모드에서도
+  // 기존 자식 프로세스 종료가 확인된 뒤에만 실행한다. 나머지 동작은 기존처럼
+  // 상주 런타임이 켜진 경우에만 조정자를 탄다.
+  const actions = envelope && Array.isArray(envelope.actions) ? envelope.actions : [];
+  const requiresMutationCoordinator = providerRuntimeEnabled
+    || actions.some((action) => action && action.action === 'update_snippet');
   const decided = await pluginProposalRegistry.decide(envelope, {
     revisionNow: revision,
-    runMutation: providerRuntimeEnabled ? ((run) => runMcpMutation('plugin-batch', run)) : null,
+    runMutation: requiresMutationCoordinator ? ((run) => runMcpMutation('plugin-batch', run)) : null,
   });
   for (const row of decided.results) {
     const outcome = row.ok ? '완료' : `실패: ${row.error}${row.detail ? ` (${row.detail})` : ''}`;

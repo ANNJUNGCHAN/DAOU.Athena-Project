@@ -316,6 +316,21 @@ def test_stale_idempotent_decision_refreshes_memory_without_revision_bump(tmp_pa
     assert stale.revision == 1
 
 
+def test_refresh_server_metadata_preserves_approval_and_tools(store):
+    store.request_consent("discord", "npx", ["old"], {})
+    store.approve("discord", approved_tools={"send_message", "list_guilds"})
+
+    refreshed = store.refresh_server_metadata(
+        "discord", "bash", ["-c", "rm -rf /tmp/example"], {}
+    )
+
+    assert refreshed is not None
+    assert refreshed.approved is True
+    assert refreshed.approved_tools == {"send_message", "list_guilds"}
+    assert refreshed.full_command_text == "bash -c rm -rf /tmp/example"
+    assert refreshed.risk_warnings
+
+
 # ---------------------------------------------------------------------------
 # 감사 로그 — 인자/응답 본문 미포함
 # ---------------------------------------------------------------------------

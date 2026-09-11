@@ -20,7 +20,7 @@ const crypto = require('node:crypto');
 // 호출자가 로그에만 쓴다.
 
 const ACTIONS = Object.freeze([
-  'install', 'allow_tools', 'revoke_tools', 'set_enabled', 'remove', 'stage_snippet',
+  'install', 'allow_tools', 'revoke_tools', 'set_enabled', 'remove', 'stage_snippet', 'update_snippet',
 ]);
 
 // 플러그인이 **아닌** 내장 기능의 별칭. 키움 시세·주문·계좌와 투자의 뇌는
@@ -160,6 +160,26 @@ function createPluginProposalRegistry({ executor, catalog = [] } = {}) {
       } else if (!installedNow().has(target)) {
         return { ok: false, error: '설치돼 있지 않습니다' };
       }
+      if (kind === 'update_snippet') {
+        let data;
+        try { data = JSON.parse(action.snippet); } catch {
+          return { ok: false, error: '설정을 읽을 수 없습니다 — 형식을 확인해 주세요' };
+        }
+        const servers = data && data.mcpServers;
+        if (!servers || typeof servers !== 'object' || Array.isArray(servers)
+            || Object.keys(servers).length !== 1 || !Object.prototype.hasOwnProperty.call(servers, target)) {
+          return { ok: false, error: '수정할 서버 하나만 포함하고 기존 이름을 유지해 주세요' };
+        }
+        const config = servers[target];
+        if (!config || typeof config !== 'object' || Array.isArray(config)
+            || typeof config.command !== 'string' || !config.command.trim()
+            || (config.args !== undefined && (!Array.isArray(config.args) || config.args.some((arg) => typeof arg !== 'string')))
+            || (config.env !== undefined && (!config.env || typeof config.env !== 'object' || Array.isArray(config.env)
+              || Object.values(config.env).some((value) => typeof value !== 'string')))
+            || Object.keys(config).some((key) => !['command', 'args', 'env'].includes(key))) {
+          return { ok: false, error: 'command, args, env 설정 형식을 확인해 주세요' };
+        }
+      }
     }
     return { ok: true, error: null };
   }
@@ -236,6 +256,12 @@ function createPluginProposalRegistry({ executor, catalog = [] } = {}) {
 
   async function runAction(action) {
     switch (action.action) {
+      case 'update_snippet': {
+        const outcome = await executor.updateSnippet(action.target, action.snippet);
+        if (!outcome || !outcome.ok) return fail(outcome, '스니펫을 수정하지 못했습니다');
+        const server = ((executor.list() || {}).servers || []).find((row) => row.alias === action.target);
+        return { ok: true, error: null, detail: null, alias: server && server.approved ? action.target : null };
+      }
       case 'install':
         return runInstall(action);
       case 'allow_tools':
@@ -343,7 +369,9 @@ function createPluginProposalRegistry({ executor, catalog = [] } = {}) {
     const mutationError = applied.ok === true ? null : (applied.error || '사유 없음');
     const reason = failed
       ? failed.error
-      : (applied.ok === true ? null : '설정을 바꿨지만 대화에 반영하지 못했습니다');
+      : (applied.ok === true ? null : (applied.persisted === false
+        ? '기존 연결을 정리하지 못해 설정을 저장하지 않았습니다. 다시 시도해 주세요'
+        : '설정을 바꿨지만 대화에 반영하지 못했습니다'));
     if (reason) release(envelope);
     return { kind: reason ? 'failed' : 'success', reason, results, probes, mutationError };
   }

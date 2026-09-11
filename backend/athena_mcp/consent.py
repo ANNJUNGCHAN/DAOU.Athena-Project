@@ -251,6 +251,23 @@ class ConsentStore:
             return record
         return self._mutate(mutation)
 
+    def refresh_server_metadata(
+        self, alias: str, command: str, args: list[str], env: dict[str, str]
+    ) -> ConsentRecord:
+        """수정된 실행 설정의 표시 정보만 갱신하고 승인 상태는 보존한다."""
+        full_text = " ".join([command, *args])
+        warnings = scan_risk_patterns(command, args, env)
+
+        def mutation(records: dict[str, ConsentRecord]) -> ConsentRecord:
+            record = records.get(alias)
+            if record is None:
+                raise KeyError(f"승인 요청이 먼저 필요하다: {alias!r}")
+            record.full_command_text = full_text
+            record.risk_warnings = warnings
+            return record
+
+        return self._mutate(mutation)
+
     def approve(self, alias: str, approved_tools: set[str] | None = None) -> ConsentRecord:
         """사용자의 명시 승인. `approved_tools`가 None이면 "서버 시작"만 승인하고
         툴 allowlist는 비워둔다(별도로 `allow_tool()`을 호출해야 aggregator가
