@@ -44,23 +44,52 @@ function finiteOrNull(value) {
   return value !== null && value !== '' && Number.isFinite(Number(value)) ? Number(value) : null;
 }
 
+// 키움 OHLCV의 +/-는 등락 표기다. JSON 숫자로 오면 부호가 가격에 남고
+// 년봉 축이 0 아래로 내려간다(실측: 저가 -25,000 · 마지막 봉이 0에서 현재가까지).
+function absPrice(value) {
+  const n = finiteOrNull(value);
+  return n == null ? null : Math.abs(n);
+}
+
+function repairOhlc(open, high, low, close) {
+  if (close == null || !(close > 0)) return { open, high, low, close };
+  const nextOpen = open == null || !(open > 0) ? close : open;
+  let nextHigh = high == null || !(high > 0) ? Math.max(nextOpen, close) : high;
+  let nextLow = low == null || !(low > 0) ? Math.min(nextOpen, close) : low;
+  nextHigh = Math.max(nextHigh, nextOpen, close);
+  nextLow = Math.min(nextLow, nextOpen, close);
+  return { open: nextOpen, high: nextHigh, low: nextLow, close };
+}
+
 function normalizeChartTime(value, period) {
   if (value == null) return null;
   if ((period === 'tick' || period === 'min') && typeof value === 'number' && Number.isFinite(value)) {
     return value;
   }
-  return String(value);
+  const text = String(value).trim();
+  if (period !== 'tick' && period !== 'min') {
+    if (period === 'year' && /^\d{4}$/.test(text)) return `${text}-01-01`;
+    if (/^\d{8}$/.test(text)) return `${text.slice(0, 4)}-${text.slice(4, 6)}-${text.slice(6, 8)}`;
+  }
+  return text;
 }
 
 function normalizeChartCandle(value, period) {
   const candle = value && typeof value === 'object' ? value : {};
+  const prices = repairOhlc(
+    absPrice(candle.open),
+    absPrice(candle.high),
+    absPrice(candle.low),
+    absPrice(candle.close),
+  );
+  const volume = absPrice(candle.volume);
   const normalized = {
     time: normalizeChartTime(candle.time, period),
-    open: finiteOrNull(candle.open),
-    high: finiteOrNull(candle.high),
-    low: finiteOrNull(candle.low),
-    close: finiteOrNull(candle.close),
-    volume: finiteOrNull(candle.volume),
+    open: prices.open,
+    high: prices.high,
+    low: prices.low,
+    close: prices.close,
+    volume,
   };
   if (Object.prototype.hasOwnProperty.call(candle, 'turnoverAmount')) {
     normalized.turnoverAmount = finiteOrNull(candle.turnoverAmount);

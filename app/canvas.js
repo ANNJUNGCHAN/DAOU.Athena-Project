@@ -271,7 +271,8 @@ function ensureCanvasTabDeck() {
 // 통합 카드 root를 자기 탭으로 옮긴다. 같은 인스턴스 키면 탭이 늘지 않고 갱신된다.
 function adoptIntoCanvasTab(root, envelope) {
   if (!root || !canvasTabs) return null;
-  const key = integratedCardSurface.instanceKeyFor(envelope);
+  const key = (root.dataset && root.dataset.integratedInstanceKey)
+    || integratedCardSurface.instanceKeyFor(envelope);
   if (!key) return null;
   const definition = integratedCardSurface.integratedDefinition(envelope);
   const deck = ensureCanvasTabDeck();
@@ -796,7 +797,23 @@ window.AthenaRoutineMainCardCanvas = {
   },
 };
 
-function renderPrimaryEnvelope(envelope, options = {}) {
+async function reloadExistingChartFromEnvelope(envelope, integratedRoot) {
+  const data = envelope && envelope.data && typeof envelope.data === 'object' ? envelope.data : {};
+  if (!envelope || !(data.chart || envelope.renderer_id === AITS_CHART_RENDERER_ID
+    || envelope.canvas_type === 'chart')) return null;
+  try {
+    const descriptor = describeAitsChartPanel(data, envelope, 'live');
+    return await reloadExistingAitsChartPanel(descriptor, envelope, integratedRoot);
+  } catch {
+    return null;
+  }
+}
+
+async function renderPrimaryEnvelope(envelope, options = {}) {
+  // 주기 전환은 이미 선 차트 패널을 같은 자리에서 다시 깐다. 보드 카드를 새로
+  // 만들면 캔버스 탭이 `차트 · 000660`로 늘어나고(실측), 년·틱도 빈 카드로 샌다.
+  const reloaded = await reloadExistingChartFromEnvelope(envelope, options.integratedRoot);
+  if (reloaded) return reloaded;
   // 표면 계약이 실려 오면 Paper 보드 원문을 그대로 마운트한다(D1) — 런타임 레이아웃
   // 재조립 없이 텍스트 노드만 바뀐다. 계약이 없으면 기존 경로 그대로.
   // 단, D1의 예외 — 앱 렌더러(AITS 차트·호가 래더·주문 초안)가 primary인 봉투는
@@ -1902,11 +1919,26 @@ function replaceUnsafeTaskPrimary(rendered, envelope) {
   return createSemanticWorkspaceCard(envelope);
 }
 
+function findExistingChartRoot(envelope) {
+  const data = envelope && envelope.data && typeof envelope.data === 'object' ? envelope.data : {};
+  if (!envelope || !(data.chart || envelope.renderer_id === AITS_CHART_RENDERER_ID
+    || envelope.canvas_type === 'chart')) return null;
+  try {
+    const descriptor = describeAitsChartPanel(data, envelope, 'live');
+    return Array.from(grid.querySelectorAll('.card')).find(
+      (candidate) => candidate.dataset.chartPanelId === descriptor.panelId
+        && candidate.dataset.destroying !== 'true'
+    ) || null;
+  } catch {
+    return null;
+  }
+}
+
 async function renderIntegratedCard(envelope) {
   const instanceKey = integratedCardSurface.instanceKeyFor(envelope);
   const existing = integratedCardSurface.findReusableRoot(
     grid.querySelectorAll('.card[data-integrated-instance-key]'), instanceKey,
-  );
+  ) || findExistingChartRoot(envelope);
   // makeCard의 구형 type/dataset 교체 규칙이 같은 통합 root를 먼저 지우지 못하게
   // 잠시 중립화한다. 실제 renderer는 별도 임시 root에 완전한 primary UI를 만든다.
   integratedCardSurface.prepareExisting(existing);
@@ -1920,8 +1952,8 @@ async function renderIntegratedCard(envelope) {
     rendered = replaceUnsafeTaskPrimary(rendered, envelope);
   }
   if (!rendered) return existing;
-  // AITS는 같은 panel_id를 기존 `.card.chart`에서 직접 reload하고 같은 root를
-  // 돌려준다. 이 경우 scaffold를 다시 만들거나 lifecycle ownership을 옮기지 않는다.
+  // AITS는 같은 panel_id를 기존 카드(보드 표면 포함)에서 직접 reload하고 같은
+  // root를 돌려준다. 이 경우 scaffold를 다시 만들거나 lifecycle ownership을 옮기지 않는다.
   if (rendered === existing) {
     integratedCardSurface.refreshExisting(existing, envelope);
     if (semanticWorkspace && !integratedCardSurface.isBoardSurface(existing)) semanticWorkspace.upsert(existing, envelope);
@@ -2333,9 +2365,11 @@ async function reloadExistingAitsChartPanel(descriptor, envelope, integratedRoot
     descriptor.generation = active ? active.generation + 1 : integratedSession.generation + 1;
     descriptor.context.generation = descriptor.generation;
   }
-  const card = integratedSession ? integratedRoot : Array.from(grid.querySelectorAll('.card.chart')).find(
-    (candidate) => candidate.dataset.chartPanelId === descriptor.panelId
-  );
+  const card = (integratedSession && integratedRoot)
+    || Array.from(grid.querySelectorAll('.card')).find(
+      (candidate) => candidate.dataset.chartPanelId === descriptor.panelId
+    )
+    || null;
   if (!card || !aitsChartPanels.has(descriptor.panelId)) return null;
   // 세분(분·틱)은 서버가 실제로 쓴 tic_scope를 따른다. 이걸 안 넘기면 재조회
   // 후 툴바가 1로 되돌아가 "10분을 눌렀는데 1분으로 돌아간다"가 된다(실측).
