@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" role="img" aria-labelledby="title desc">
+  <title id="title">Figure 2. 지연을 숨기는 병렬 분류</title>
+  <desc id="desc">최대 세 후보를 동일 프롬프트의 두 작업자가 검증하고 첫 유효 응답 하나만 전달하는 실제 구조도</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#007d79"/></marker><style>.bg{fill:#f6f8fa}.box{fill:#fff;stroke:#cad4dd;stroke-width:2}.act{fill:#e8f5f3;stroke:#007d79;stroke-width:2}.t{font-family:'Malgun Gothic',sans-serif;fill:#152a42}.h{font-size:28px;font-weight:700}.l{font-size:23px;font-weight:700}.s{font-size:17px}.line{fill:none;stroke:#007d79;stroke-width:3;marker-end:url(#a)}</style></defs>
+  <rect class="bg" width="1200" height="600" rx="24"/><text class="t h" x="64" y="60">Figure 2 · 지연을 숨기는 병렬 분류</text><text class="t s" x="64" y="92">다수결이 아니라, 계약을 만족한 첫 응답을 채택한다.</text>
+  <g transform="translate(65 220)"><rect class="act" width="220" height="120" rx="18"/><text class="t l" x="24" y="45">후보 최대 3</text><text class="t s" x="24" y="80">글로벌 동시 4</text></g>
+  <path class="line" d="M285 280H360V190H430"/><path class="line" d="M360 280V390H430"/>
+  <g transform="translate(430 130)"><rect class="box" width="250" height="120" rx="18"/><text class="t l" x="24" y="44">Worker A</text><text class="t s" x="24" y="78">동일 prompt</text><rect x="24" y="94" width="170" height="8" rx="4" fill="#84c4be"/></g>
+  <g transform="translate(430 330)"><rect class="box" width="250" height="120" rx="18"/><text class="t l" x="24" y="44">Worker B</text><text class="t s" x="24" y="78">동일 prompt</text><rect x="24" y="94" width="205" height="8" rx="4" fill="#b9dcd8"/></g>
+  <path class="line" d="M680 190H760"/><path class="line" d="M680 390H720V250H760"/>
+  <g transform="translate(760 170)"><rect class="act" width="190" height="160" rx="18"/><text class="t l" x="22" y="46">계약 검증</text><text class="t s" x="22" y="83">각 응답 검사</text><text class="t s" x="22" y="116">첫 유효안 선택</text></g>
+  <path class="line" d="M950 250H1000"/>
+  <g transform="translate(1000 190)"><rect class="act" width="150" height="120" rx="18"/><text class="t l" x="20" y="44">Dispatch</text><text class="t s" x="20" y="79">최대 1회</text></g>
+  <rect x="64" y="500" width="1072" height="58" rx="14" fill="#fff" stroke="#d8e0e7"/><text class="t s" x="88" y="536">Loser는 취소하지 않고 정상 완료해 연결을 warm 상태로 유지 · 막대는 실제 시간값이 아닌 구조 표현</text>
+</svg>

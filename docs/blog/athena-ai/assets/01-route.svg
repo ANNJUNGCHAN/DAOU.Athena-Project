@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" role="img" aria-labelledby="title desc">
+  <title id="title">Figure 1. 어디서 모델을 호출할까?</title>
+  <desc id="desc">요청을 단순 차트부터 일반 모델까지 단계적으로 처리하는 실제 라우팅 구조도</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10Z" fill="#007d79"/></marker>
+    <style>.bg{fill:#f6f8fa}.card{fill:#fff;stroke:#cad4dd;stroke-width:2}.actual{fill:#e8f5f3;stroke:#007d79;stroke-width:2}.t{font-family:'Malgun Gothic',sans-serif;fill:#152a42}.h{font-size:28px;font-weight:700}.label{font-size:23px;font-weight:700}.sub{font-size:17px}.tiny{font-size:16px}.route{fill:none;stroke:#007d79;stroke-width:3;marker-end:url(#arrow)}</style>
+  </defs>
+  <rect class="bg" width="1200" height="600" rx="24"/>
+  <text class="t h" x="64" y="60">Figure 1 · 어디서 모델을 호출할까?</text>
+  <text class="t sub" x="64" y="92">앞 단계가 처리하지 못한 요청만 다음 단계로 이동한다.</text>
+  <g transform="translate(70 130)"><rect class="actual" width="290" height="130" rx="18"/><text class="t label" x="24" y="44">1. 단순 차트</text><text class="t sub" x="24" y="78">추가 모델 호출 0</text><text class="t tiny" x="24" y="108">성공 → 바로 조회</text></g>
+  <g transform="translate(455 130)"><rect class="actual" width="290" height="130" rx="18"/><text class="t label" x="24" y="44">2. REST 화면</text><text class="t sub" x="24" y="78">추가 모델 호출 0</text><text class="t tiny" x="24" y="108">성공 → 바로 표시</text></g>
+  <g transform="translate(840 130)"><rect class="actual" width="290" height="130" rx="18"/><text class="t label" x="24" y="44">3. Selector</text><text class="t sub" x="24" y="78">추가 모델 호출 0</text><text class="t tiny" x="24" y="108">규칙 기반 선택</text></g>
+  <g transform="translate(840 330)"><rect class="actual" width="290" height="130" rx="18"/><text class="t label" x="24" y="44">4. 병렬 분류</text><text class="t sub" x="24" y="78">추가 모델 호출 2</text><text class="t tiny" x="24" y="108">계약을 만족한 첫 응답</text></g>
+  <g transform="translate(455 330)"><rect class="actual" width="290" height="130" rx="18"/><text class="t label" x="24" y="44">5. 판단 캐시</text><text class="t sub" x="24" y="78">캐시 적중 시 호출 0</text><text class="t tiny" x="24" y="108">같은 판단 재사용</text></g>
+  <g transform="translate(70 330)"><rect class="actual" width="290" height="130" rx="18"/><text class="t label" x="24" y="44">6. 일반 모델</text><text class="t sub" x="24" y="78">추가 호출 수 가변</text><text class="t tiny" x="24" y="108">남은 요청 처리</text></g>
+  <path class="route" d="M360 195H455"/><text class="t tiny" x="382" y="184">미처리</text>
+  <path class="route" d="M745 195H840"/><text class="t tiny" x="767" y="184">미처리</text>
+  <path class="route" d="M985 260V330"/><text class="t tiny" x="1001" y="303">미처리</text>
+  <path class="route" d="M840 395H745"/><text class="t tiny" x="765" y="384">미처리</text>
+  <path class="route" d="M455 395H360"/><text class="t tiny" x="380" y="384">미처리</text>
+  <rect x="64" y="505" width="1072" height="56" rx="14" fill="#fff" stroke="#d8e0e7"/><text class="t tiny" x="88" y="540">호출 수는 해당 단계의 추가 호출 · 모든 요청이 모든 단계를 거치지는 않음</text>
+</svg>

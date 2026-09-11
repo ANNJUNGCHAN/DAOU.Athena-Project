@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" role="img" aria-labelledby="title desc">
+  <title id="title">A-MEM의 새 기억 연결과 기존 기억 진화 과정</title><desc id="desc">새 노트를 임베딩 질의로 검색해 코사인 유사도 상위 기억을 찾고 LLM으로 링크를 만들며 관련 기존 기억의 문맥 키워드 태그를 갱신한다</desc>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#007d79"/></marker><style>.bg{fill:#f6f8fa}.box{fill:#fff;stroke:#cad4dd;stroke-width:2}.hi{fill:#e8f5f3;stroke:#007d79;stroke-width:2}.t{font-family:'Malgun Gothic',sans-serif;fill:#152a42}.h{font-size:28px;font-weight:700}.l{font-size:20px;font-weight:700}.s{font-size:17px}.line{stroke:#007d79;stroke-width:3;marker-end:url(#arrow)}</style></defs>
+  <rect class="bg" width="1200" height="600" rx="24"/><text class="t h" x="64" y="62">A-MEM · 연결하고, 연결된 기억을 다시 쓴다</text>
+  <g transform="translate(55 165)"><rect class="box" width="170" height="125" rx="18"/><text class="t l" x="85" y="52" text-anchor="middle">새 노트</text><text class="t s" x="85" y="88" text-anchor="middle">질의 임베딩</text></g>
+  <g transform="translate(275 145)"><rect class="hi" width="205" height="165" rx="18"/><text class="t l" x="102" y="48" text-anchor="middle">유사 기억 검색</text><text class="t s" x="102" y="87" text-anchor="middle">cosine Top-k</text><text class="t s" x="102" y="123" text-anchor="middle">retrieval</text></g>
+  <g transform="translate(530 165)"><rect class="box" width="170" height="125" rx="18"/><text class="t l" x="85" y="52" text-anchor="middle">LLM 연결</text><text class="t s" x="85" y="88" text-anchor="middle">링크 L 생성</text></g>
+  <g transform="translate(750 145)"><rect class="hi" width="205" height="165" rx="18"/><text class="t l" x="102" y="48" text-anchor="middle">기존 기억 진화</text><text class="t s" x="102" y="87" text-anchor="middle">문맥 · 키워드</text><text class="t s" x="102" y="123" text-anchor="middle">태그 갱신</text></g>
+  <g transform="translate(1005 165)"><rect class="box" width="140" height="125" rx="18"/><text class="t l" x="70" y="52" text-anchor="middle">메모리</text><text class="t s" x="70" y="88" text-anchor="middle">저장</text></g>
+  <path class="line" d="M225 228H275"/><path class="line" d="M480 228H530"/><path class="line" d="M700 228H750"/><path class="line" d="M955 228H1005"/>
+  <rect x="64" y="395" width="1072" height="86" rx="16" fill="#fff" stroke="#d8e0e7"/><text class="t s" x="90" y="430">검색은 새 노트의 임베딩을 질의로 사용한다.</text><text class="t s" x="90" y="460">연결 결과가 기존 노트의 표현까지 바꾼다.</text>
+  <text class="t s" x="64" y="552">Xu et al. · A-MEM · arXiv:2502.12110</text>
+</svg>

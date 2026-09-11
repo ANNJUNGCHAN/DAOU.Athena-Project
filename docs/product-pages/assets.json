@@ -1,0 +1,178 @@
+{
+  "agora": [
+    {
+      "path": "artifacts/live-probes/output/chat-day-chart.png",
+      "crop": [
+        285,
+        35,
+        1220,
+        690
+      ],
+      "alt": "질문 옆에 종목 차트를 불러온 아고라 화면"
+    },
+    {
+      "path": "app/captures/21-facts-compound-cards.png",
+      "crop": [
+        285,
+        35,
+        1060,
+        620
+      ],
+      "alt": "자료 카드와 관련 대화를 함께 살펴보는 아고라 화면"
+    },
+    {
+      "path": "artifacts/task-adaptive-cards/R11 · 삼성전자 10주 시장가 매수.png",
+      "alt": "종목과 수량, 예상 비용을 확인하는 주문 티켓"
+    }
+  ],
+  "metis": [
+    {
+      "path": "artifacts/graph-mode/09-past-conversation.png",
+      "crop": [
+        385,
+        45,
+        1860,
+        1050
+      ],
+      "alt": "활동 근거와 클러스터를 함께 보여주는 메티스 요약 화면"
+    },
+    {
+      "path": "artifacts/graph-mode/10b-chat-entity.png",
+      "crop": [
+        285,
+        30,
+        1060,
+        620
+      ],
+      "alt": "그래프 노드와 관련 대화의 근거를 살펴보는 메티스 화면"
+    },
+    {
+      "path": "artifacts/graph-mode/01-summary.png",
+      "crop": [
+        285,
+        30,
+        1060,
+        620
+      ],
+      "alt": "추천의 바탕이 되는 관심사와 활동 근거를 보여주는 메티스 요약"
+    }
+  ],
+  "aegis": [
+    {
+      "path": "docs/handoff/2026-09-07-codex-resume/round2/watch-446V-1.png",
+      "crop": [
+        285,
+        40,
+        805,
+        690
+      ],
+      "alt": "감시 작업의 새 알람과 실행 흐름을 확인하는 아이기스 화면"
+    },
+    {
+      "path": "docs/handoff/2026-09-07-codex-resume/round2/watch-44RV-1.png",
+      "crop": [
+        285,
+        40,
+        805,
+        690
+      ],
+      "alt": "예약 작업과 진행 중인 감시를 관리하는 아이기스 작업 화면"
+    },
+    {
+      "path": "docs/handoff/2026-09-07-codex-resume/round2/watch-446V-1-result.png",
+      "crop": [
+        285,
+        40,
+        805,
+        690
+      ],
+      "alt": "감시 작업의 조건과 실행 결과를 살펴보는 아이기스 화면"
+    }
+  ],
+  "ergane": [
+    {
+      "path": "app/captures/live-full-mode-plugin.png",
+      "crop": [
+        285,
+        35,
+        1360,
+        1000
+      ],
+      "alt": "시세, 공시, 뉴스, 경제지표 MCP가 연결된 에르가네 허브"
+    },
+    {
+      "path": "artifacts/beta-test-3day/captures/2026-08-31/05-plugin-telegram-preview.png",
+      "crop": [
+        590,
+        175,
+        935,
+        650
+      ],
+      "alt": "텔레그램으로 감시와 체결 알림을 전달하는 서비스 연결 화면"
+    },
+    {
+      "path": "artifacts/beta-test-3day/captures/2026-08-31/30-h14-mention-fx-live-rate-markdown.png",
+      "crop": [
+        1125,
+        55,
+        380,
+        650
+      ],
+      "alt": "입력한 @ 도구를 이용해 질문하고 답변을 받는 대화 화면"
+    }
+  ],
+  "pallas": [
+    {
+      "path": "artifacts/backtest-showcase/paper/b22-1x.png",
+      "crop": [
+        40,
+        135,
+        1590,
+        850
+      ],
+      "alt": "채팅 요청에 따라 코드가 수정되고 검사가 완료된 팔라스 Paper 화면"
+    },
+    {
+      "path": "artifacts/backtest-showcase/paper/board-21-v2.png",
+      "crop": [
+        20,
+        70,
+        800,
+        460
+      ],
+      "alt": "전략 노드를 선택하고 관련 코드를 질의하는 팔라스 Paper 화면"
+    },
+    {
+      "path": "artifacts/backtest-showcase/paper/b23-1x.png",
+      "crop": [
+        40,
+        135,
+        1590,
+        850
+      ],
+      "alt": "전략의 수익률과 거래 횟수를 확인하는 팔라스 Paper 결과 화면"
+    }
+  ],
+  "glow": [
+    {
+      "path": "app/captures/kiumi-02-orb-chat.png",
+      "compact": true,
+      "alt": "질문 입력창과 작은 AI 동반자가 함께 있는 글로우 미니 대화"
+    },
+    {
+      "path": "app/captures/03d-responsive-900-chat-tray.png",
+      "crop": [
+        295,
+        35,
+        575,
+        630
+      ],
+      "alt": "자료 카드와 작은 대화창을 함께 표시한 화면"
+    },
+    {
+      "path": "app/captures/23-orb-expanded.png",
+      "compact": true,
+      "alt": "조건 도달 소식과 다음 확인 내용을 전하는 글로우 알림"
+    }
+  ]
+}

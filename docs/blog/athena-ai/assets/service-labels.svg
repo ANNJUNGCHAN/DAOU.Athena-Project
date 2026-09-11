@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" role="img" aria-labelledby="title desc">
+  <title id="title">ATHENA의 분석 그래프 클러스터 라벨 생성 흐름</title>
+  <desc id="desc">분석 그래프를 그리디 모듈러리티로 클러스터화하고 차수 상위 노드 이름과 종류를 사용해 캐시 또는 언어 모델에서 짧은 한국어 라벨을 얻는 현재 구현</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#007d79"/></marker>
+    <style>.bg{fill:#f6f8fa}.box{fill:#fff;stroke:#cad4dd;stroke-width:2}.hi{fill:#e8f5f3;stroke:#007d79;stroke-width:2}.t{font-family:'Malgun Gothic',sans-serif;fill:#152a42}.h{font-size:28px;font-weight:700}.l{font-size:19px;font-weight:700}.s{font-size:16px}.line{fill:none;stroke:#007d79;stroke-width:3;marker-end:url(#arrow)}.soft{fill:#fff;stroke:#d8e0e7;stroke-width:2}</style>
+  </defs>
+  <rect class="bg" width="1200" height="600" rx="24"/>
+  <text class="t h" x="58" y="58">ATHENA · 클러스터의 의미를 짧은 라벨로 만든다</text>
+
+  <g transform="translate(50 145)"><rect class="box" width="150" height="110" rx="17"/><text class="t l" x="75" y="47" text-anchor="middle">분석 그래프</text><text class="t s" x="75" y="78" text-anchor="middle">노드 · 관계</text></g>
+  <g transform="translate(245 135)"><rect class="hi" width="180" height="130" rx="17"/><text class="t l" x="90" y="44" text-anchor="middle">greedy</text><text class="t l" x="90" y="70" text-anchor="middle">modularity</text><text class="t s" x="90" y="103" text-anchor="middle">클러스터 탐색</text></g>
+  <g transform="translate(470 125)"><rect class="box" width="220" height="150" rx="17"/><text class="t l" x="110" y="43" text-anchor="middle">차수 상위 12개</text><text class="t s" x="110" y="78" text-anchor="middle">이름 · kind</text><text class="t s" x="110" y="108" text-anchor="middle">라벨 입력 구성</text></g>
+  <g transform="translate(735 125)"><rect class="hi" width="210" height="150" rx="17"/><text class="t l" x="105" y="43" text-anchor="middle">공동 캐시 조회</text><text class="t s" x="105" y="78" text-anchor="middle">멤버 집합</text><text class="t s" x="105" y="108" text-anchor="middle">+ 프롬프트</text></g>
+
+  <path class="line" d="M200 200H245"/><path class="line" d="M425 200H470"/><path class="line" d="M690 200H735"/>
+
+  <g transform="translate(990 105)"><rect class="box" width="160" height="100" rx="17"/><text class="t l" x="80" y="43" text-anchor="middle">캐시 적중</text><text class="t s" x="80" y="72" text-anchor="middle">기존 라벨</text></g>
+  <g transform="translate(990 255)"><rect class="hi" width="160" height="110" rx="17"/><text class="t l" x="80" y="42" text-anchor="middle">캐시 미적중</text><text class="t s" x="80" y="72" text-anchor="middle">LLM의 짧은</text><text class="t s" x="80" y="96" text-anchor="middle">한국어 라벨</text></g>
+  <path class="line" d="M945 175H990"/><text class="t s" x="953" y="162">hit</text>
+  <path class="line" d="M945 235C970 235 965 310 990 310"/><text class="t s" x="951" y="280">miss</text>
+
+  <g transform="translate(735 380)"><rect class="hi" width="210" height="90" rx="17"/><text class="t l" x="105" y="39" text-anchor="middle">클러스터 표시</text><text class="t s" x="105" y="67" text-anchor="middle">라벨 적용</text></g>
+  <path class="line" d="M1070 205V410H945"/><path class="line" d="M990 325C965 325 970 425 945 425"/>
+
+  <rect class="soft" x="50" y="505" width="1100" height="58" rx="14"/>
+  <text class="t s" x="75" y="540">비동기 라벨링 · LLM 실패 시 규칙 라벨 · 공동 캐시는 같은 클러스터의 재호출을 줄이지만 지연 개선값은 아직 측정하지 않음</text>
+</svg>

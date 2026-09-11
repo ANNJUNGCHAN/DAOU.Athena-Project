@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" role="img" aria-labelledby="title desc">
+  <title id="title">Figure 3. 모델의 계획과 데이터 렌더링 분리</title>
+  <desc id="desc">모델이 계획 토큰을 선택하고 백엔드가 실제 데이터를 조회해 차트로 전달하는 실제 구현 구조도</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#007d79"/></marker><style>.bg{fill:#f6f8fa}.box{fill:#fff;stroke:#cad4dd;stroke-width:2}.act{fill:#e8f5f3;stroke:#007d79;stroke-width:2}.t{font-family:'Malgun Gothic',sans-serif;fill:#152a42}.h{font-size:28px;font-weight:700}.l{font-size:22px;font-weight:700}.s{font-size:17px}.line{fill:none;stroke:#007d79;stroke-width:3;marker-end:url(#a)}</style></defs>
+  <rect class="bg" width="1200" height="600" rx="24"/><text class="t h" x="64" y="60">Figure 3 · 계획은 모델이, 가격은 백엔드가</text><text class="t s" x="64" y="92">실제 구현: raw 가격 배열을 모델이 다시 쓰지 않는다.</text>
+  <g transform="translate(55 205)"><rect class="act" width="200" height="130" rx="18"/><text class="t l" x="22" y="45">모델 resolve</text><text class="t s" x="22" y="82">plan_token</text></g><path class="line" d="M255 270H320"/>
+  <g transform="translate(320 145)"><rect class="box" width="420" height="250" rx="20"/><text class="t l" x="26" y="42">Backend</text><rect x="26" y="70" width="368" height="45" rx="12" fill="#e8f5f3"/><text class="t s" x="44" y="99">1 · 계획 검증</text><rect x="26" y="130" width="368" height="45" rx="12" fill="#e8f5f3"/><text class="t s" x="44" y="159">2 · 실데이터 조회</text><rect x="26" y="190" width="368" height="45" rx="12" fill="#e8f5f3"/><text class="t s" x="44" y="219">3 · manifest 필드 변환</text></g>
+  <path class="line" d="M740 270H800"/><g transform="translate(800 205)"><rect class="act" width="185" height="130" rx="18"/><text class="t l" x="20" y="45">Envelope</text><text class="t s" x="20" y="81">대화 ID 결합</text></g><path class="line" d="M985 270H1030"/>
+  <g transform="translate(1030 205)"><rect class="act" width="130" height="130" rx="18"/><text class="t l" x="25" y="48">차트</text><path d="M24 97L50 77L72 86L105 57" fill="none" stroke="#007d79" stroke-width="4"/></g>
+  <rect x="64" y="465" width="1072" height="72" rx="14" fill="#fff" stroke="#d8e0e7"/><text class="t s" x="88" y="497">모델 출력: 무엇을 조회할지 정한 계획 토큰</text><text class="t s" x="88" y="523">백엔드 출력: 검증된 원천 데이터와 렌더링 필드</text>
+</svg>
