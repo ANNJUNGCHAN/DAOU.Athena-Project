@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" role="img" aria-labelledby="title desc">
+  <title id="title">Figure 8. 그래프에서 세 가지 카드를 만드는 법</title>
+  <desc id="desc">중심 노드, 숨은 연결, 성향 요약을 계산하고 클러스터 이름에만 LLM을 사용하는 실제 구조도</desc>
+  <style>.bg{fill:#f6f8fa}.box{fill:#fff;stroke:#cad4dd;stroke-width:2}.act{fill:#e8f5f3;stroke:#007d79;stroke-width:2}.t{font-family:'Malgun Gothic',sans-serif;fill:#152a42}.h{font-size:28px;font-weight:700}.l{font-size:23px;font-weight:700}.s{font-size:17px}.tiny{font-size:16px}</style>
+  <rect class="bg" width="1200" height="600" rx="24"/><text class="t h" x="64" y="60">Figure 8 · 그래프를 세 가지 관점으로 읽는다</text><text class="t s" x="64" y="92">실제 출력 카드의 계산 규칙</text>
+  <g transform="translate(55 145)"><rect class="act" width="330" height="240" rx="20"/><text class="t l" x="26" y="48">중심 노드</text><circle cx="165" cy="128" r="25" fill="#007d79"/><circle cx="87" cy="103" r="13" fill="#84c4be"/><circle cx="244" cy="93" r="13" fill="#84c4be"/><circle cx="238" cy="174" r="13" fill="#84c4be"/><path d="M108 110L141 121M189 117L224 101M188 141L225 168" stroke="#007d79" stroke-width="3"/><text class="t s" x="26" y="216">degree 순위</text></g>
+  <g transform="translate(435 145)"><rect class="act" width="330" height="240" rx="20"/><text class="t l" x="26" y="48">숨은 연결</text><text class="t s" x="26" y="91">다른 클러스터를 잇는 edge</text><text class="t s" x="26" y="130">raw = 1 / (dᵤ × dᵥ)</text><text class="t s" x="26" y="169">이후 min-max 정규화</text><text class="t tiny" x="26" y="208">희소한 연결을 우선 노출</text></g>
+  <g transform="translate(815 145)"><rect class="act" width="330" height="240" rx="20"/><text class="t l" x="26" y="48">성향 요약</text><text class="t s" x="26" y="91">최근 90일</text><text class="t s" x="26" y="130">동일 관계 event 수</text><text class="t tiny" x="26" y="178">event 수 ≠ 독립 긍정 근거 수</text></g>
+  <rect x="125" y="430" width="950" height="105" rx="18" fill="#fff" stroke="#d8e0e7"/><text class="t l" x="154" y="469">AI 클러스터 라벨</text><text class="t s" x="154" y="505">차수 상위 12개 멤버의 이름·kind → LLM 요약 이름 (8자 권장)</text>
+</svg>

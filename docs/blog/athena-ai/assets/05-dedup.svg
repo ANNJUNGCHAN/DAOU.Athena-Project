@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" role="img" aria-labelledby="title desc">
+  <title id="title">Figure 5. 중복 엔터티 병합</title>
+  <desc id="desc">별칭, 이름 토큰, 이웃 유사도를 단계적으로 비교한 뒤 Union-Find로 대표 엔터티를 정하는 실제 구조도</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#007d79"/></marker><style>.bg{fill:#f6f8fa}.box{fill:#fff;stroke:#cad4dd;stroke-width:2}.act{fill:#e8f5f3;stroke:#007d79;stroke-width:2}.t{font-family:'Malgun Gothic',sans-serif;fill:#152a42}.h{font-size:28px;font-weight:700}.l{font-size:21px;font-weight:700}.s{font-size:17px}.line{fill:none;stroke:#007d79;stroke-width:3;marker-end:url(#a)}</style></defs>
+  <rect class="bg" width="1200" height="600" rx="24"/><text class="t h" x="64" y="60">Figure 5 · 세 단계로 같은 엔터티를 찾는다</text><text class="t s" x="64" y="92">security와 investor_profile은 병합 대상에서 제외한다.</text>
+  <g transform="translate(55 155)"><rect class="act" width="235" height="145" rx="18"/><text class="t l" x="22" y="42">1 · 별칭 정확 일치</text><text class="t s" x="22" y="80">동일 문자열 연결</text></g><path class="line" d="M290 228H330"/>
+  <g transform="translate(330 155)"><rect class="act" width="250" height="145" rx="18"/><text class="t l" x="22" y="42">2 · 이름 토큰</text><text class="t s" x="22" y="80">Jaccard ≥ 0.6</text><text class="t s" x="22" y="111">|A∩B| / |A∪B|</text></g><path class="line" d="M580 228H620"/>
+  <g transform="translate(620 155)"><rect class="act" width="260" height="145" rx="18"/><text class="t l" x="22" y="42">3 · 이웃 유사도</text><text class="t s" x="22" y="80">Jaccard ≥ 0.8</text><text class="t s" x="22" y="111">양쪽 차수 ≥ 2</text></g><path class="line" d="M880 228H920"/>
+  <g transform="translate(920 155)"><rect class="act" width="220" height="145" rx="18"/><text class="t l" x="22" y="42">Union-Find</text><text class="t s" x="22" y="80">연결 성분 병합</text><text class="t s" x="22" y="111">대표 entity</text></g>
+  <rect x="190" y="370" width="820" height="130" rx="18" fill="#fff" stroke="#d8e0e7"/><text class="t l" x="222" y="410">대표 엔터티 우선순위</text><text class="t s" x="222" y="447">차수 ↓  →  별칭 수 ↓  →  생성 시각 ↑  →  ID ↑</text><text class="t s" x="222" y="478">앞 조건이 같을 때만 다음 조건으로 비교</text>
+</svg>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" role="img" aria-labelledby="title desc">
+  <title id="title">Figure 9. 그래프 추천의 확장 제안</title>
+  <desc id="desc">질문 의도를 분류하고 시간 필터, PPR 경로, 클러스터 근거를 결합해 후보를 순위화하는 미구현 확장 제안</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#a65d12"/></marker><style>.bg{fill:#fbf8f3}.box{fill:#fff;stroke:#dec8ac;stroke-width:2}.prop{fill:#fff1df;stroke:#a65d12;stroke-width:2}.t{font-family:'Malgun Gothic',sans-serif;fill:#152a42}.amber{fill:#a65d12}.h{font-size:28px;font-weight:700}.l{font-size:20px;font-weight:700}.s{font-size:16px}.line{fill:none;stroke:#a65d12;stroke-width:3;marker-end:url(#a)}</style></defs>
+  <rect class="bg" width="1200" height="600" rx="24"/><rect x="64" y="32" width="210" height="42" rx="21" fill="#fff1df" stroke="#a65d12"/><text class="t amber s" x="88" y="59">Figure 9 · 확장 제안 · 미구현</text><text class="t h" x="64" y="112">질문마다 다른 그래프 탐색 범위를 쓴다면?</text>
+  <g transform="translate(45 205)"><rect class="prop" width="205" height="155" rx="18"/><text class="t l" x="22" y="44">질문 의도</text><text class="t s" x="22" y="80">local · bridge</text><text class="t s" x="22" y="108">global</text></g><path class="line" d="M250 282H300"/>
+  <g transform="translate(300 175)"><rect class="box" width="250" height="215" rx="18"/><text class="t l" x="22" y="43">탐색 근거</text><text class="t s" x="22" y="79">원문 · 시간 필터</text><text class="t s" x="22" y="111">seed PPR 경로</text><text class="t s" x="22" y="143">클러스터 근거 요약</text></g><path class="line" d="M550 282H600"/>
+  <g transform="translate(600 205)"><rect class="prop" width="260" height="155" rx="18"/><text class="t l" x="22" y="43">후보 순위</text><text class="t s" x="22" y="81">관련성 + 근거 + 시간</text><text class="t s" x="22" y="113">점수 결합</text></g><path class="line" d="M860 282H910"/>
+  <g transform="translate(910 205)"><rect class="prop" width="245" height="155" rx="18"/><text class="t l" x="22" y="43">LLM 설명</text><text class="t s" x="22" y="81">선정 경로 요약</text><text class="t s" x="22" y="113">근거와 함께 제시</text></g>
+  <rect x="64" y="455" width="1072" height="80" rx="14" fill="#fff" stroke="#dec8ac"/><text class="t s" x="88" y="488">논문 방법을 참고한 설계이며 효과는 아직 측정하지 않음</text><text class="t s" x="88" y="515">PPR = Personalized PageRank</text>
+</svg>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" role="img" aria-labelledby="title desc">
+  <title id="title">Figure 7. 근거를 따라가는 그래프 검색</title>
+  <desc id="desc">질문의 엔터티를 해소하고 필요할 때 FTS5와 BM25 후보 검색을 거쳐 관계와 원문 근거로 답하는 실제 구조도</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#007d79"/></marker><style>.bg{fill:#f6f8fa}.box{fill:#fff;stroke:#cad4dd;stroke-width:2}.act{fill:#e8f5f3;stroke:#007d79;stroke-width:2}.t{font-family:'Malgun Gothic',sans-serif;fill:#152a42}.h{font-size:28px;font-weight:700}.l{font-size:20px;font-weight:700}.s{font-size:16px}.line{fill:none;stroke:#007d79;stroke-width:3;marker-end:url(#a)}</style></defs>
+  <rect class="bg" width="1200" height="600" rx="24"/><text class="t h" x="64" y="60">Figure 7 · 벡터가 아니라 근거 경로를 검색한다</text><text class="t s" x="64" y="92">조건: Brain 준비 완료 + 모델 노출 설정</text>
+  <g transform="translate(45 205)"><rect class="act" width="135" height="120" rx="18"/><text class="t l" x="38" y="48">질문</text></g><path class="line" d="M180 265H220"/>
+  <g transform="translate(220 185)"><rect class="act" width="190" height="160" rx="18"/><text class="t l" x="20" y="45">ID 조회</text><text class="t s" x="20" y="83">미해소일 때만</text><text class="t s" x="20" y="113">FTS5 · BM25</text></g><path class="line" d="M410 265H450"/>
+  <g transform="translate(450 205)"><rect class="box" width="165" height="120" rx="18"/><text class="t l" x="22" y="46">Entity 상세</text><text class="t s" x="22" y="82">후보 확정</text></g><path class="line" d="M615 265H655"/>
+  <g transform="translate(655 175)"><rect class="box" width="260" height="180" rx="18"/><text class="t l" x="22" y="43">관계 근거 묶음</text><text class="t s" x="22" y="80">방향 · 시각</text><text class="t s" x="22" y="110">원문 rationale</text><text class="t s" x="22" y="140">source</text></g><path class="line" d="M915 265H960"/>
+  <g transform="translate(960 205)"><rect class="act" width="195" height="120" rx="18"/><text class="t l" x="22" y="45">근거 답변</text><text class="t s" x="22" y="81">출처와 함께 생성</text></g>
+  <rect x="64" y="445" width="1072" height="70" rx="14" fill="#fff" stroke="#d8e0e7"/><text class="t s" x="88" y="487">현재 검색은 SQLite FTS5/BM25 기반 · Vector RAG 구현이 아님</text>
+</svg>

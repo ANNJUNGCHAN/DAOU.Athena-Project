@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" role="img" aria-labelledby="title desc">
+  <title id="title">Figure 4. 투자 Brain 적재 경로</title>
+  <desc id="desc">대화와 정형 거래 보유 데이터가 서로 다른 추출기를 거쳐 근거 필드와 함께 SQLite에 원자 저장되는 구조도</desc>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#007d79"/></marker><style>.bg{fill:#f6f8fa}.box{fill:#fff;stroke:#cad4dd;stroke-width:2}.act{fill:#e8f5f3;stroke:#007d79;stroke-width:2}.t{font-family:'Malgun Gothic',sans-serif;fill:#152a42}.h{font-size:28px;font-weight:700}.l{font-size:22px;font-weight:700}.s{font-size:17px}.line{fill:none;stroke:#007d79;stroke-width:3;marker-end:url(#a)}</style></defs>
+  <rect class="bg" width="1200" height="600" rx="24"/><text class="t h" x="64" y="60">Figure 4 · 대화와 거래는 다르게 읽는다</text><text class="t s" x="64" y="92">두 입력 경로를 하나의 근거 스키마로 합친다.</text>
+  <g transform="translate(65 145)"><rect class="box" width="190" height="105" rx="18"/><text class="t l" x="24" y="43">대화</text><text class="t s" x="24" y="75">비정형 입력</text></g><path class="line" d="M255 198H340"/><g transform="translate(340 145)"><rect class="act" width="260" height="105" rx="18"/><text class="t l" x="22" y="42">LLM 구조화 추출</text><text class="t s" x="22" y="75">관계와 근거 분리</text></g>
+  <g transform="translate(65 330)"><rect class="box" width="190" height="105" rx="18"/><text class="t l" x="24" y="43">거래·보유</text><text class="t s" x="24" y="75">정형 입력</text></g><path class="line" d="M255 383H340"/><g transform="translate(340 330)"><rect class="act" width="260" height="105" rx="18"/><text class="t l" x="22" y="42">정형 Projector</text><text class="t s" x="22" y="75">필드 직접 변환</text></g>
+  <path class="line" d="M600 198H670V290H720"/><path class="line" d="M600 383H670V310H720"/>
+  <g transform="translate(720 185)"><rect class="box" width="235" height="220" rx="20"/><text class="t l" x="24" y="42">공통 근거 스키마</text><text class="t s" x="24" y="80">entity · relation</text><text class="t s" x="24" y="112">rationale · tier</text><text class="t s" x="24" y="144">source</text><text class="t s" x="24" y="184">명시성 label</text></g><path class="line" d="M955 295H1010"/>
+  <g transform="translate(1010 220)"><rect class="act" width="150" height="150" rx="18"/><text class="t l" x="20" y="47">SQLite</text><text class="t s" x="20" y="82">원자 저장</text><path d="M30 108H120M30 127H120" stroke="#007d79" stroke-width="3"/></g>
+  <text class="t s" x="64" y="520">EXTRACTED · INFERRED · AMBIGUOUS = 진실 확률이 아니라 표현의 명시성</text>
+</svg>

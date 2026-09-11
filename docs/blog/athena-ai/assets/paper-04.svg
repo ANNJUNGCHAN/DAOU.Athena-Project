@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" role="img" aria-labelledby="title desc">
+  <title id="title">A-MEM의 일곱 필드 노트 구조</title><desc id="desc">원문에서 키워드 태그 문맥을 생성하고 원문과 함께 임베딩해 시각 링크를 포함한 일곱 필드 기억 노트를 만드는 방법</desc>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#007d79"/></marker><style>.bg{fill:#f6f8fa}.box{fill:#fff;stroke:#cad4dd;stroke-width:2}.hi{fill:#e8f5f3;stroke:#007d79;stroke-width:2}.t{font-family:'Malgun Gothic',sans-serif;fill:#152a42}.h{font-size:28px;font-weight:700}.l{font-size:21px;font-weight:700}.s{font-size:17px}.line{stroke:#007d79;stroke-width:3;marker-end:url(#arrow)}</style></defs>
+  <rect class="bg" width="1200" height="600" rx="24"/><text class="t h" x="64" y="62">A-MEM · 기억 하나를 일곱 필드로 만든다</text>
+  <rect class="box" x="64" y="165" width="180" height="100" rx="18"/><text class="t l" x="154" y="225" text-anchor="middle">입력 원문 c</text><path class="line" d="M244 215H330"/>
+  <rect class="hi" x="330" y="130" width="250" height="170" rx="18"/><text class="t l" x="455" y="178" text-anchor="middle">LLM 추출</text><text class="t s" x="455" y="220" text-anchor="middle">키워드 K · 태그 G</text><text class="t s" x="455" y="252" text-anchor="middle">문맥 X</text><path class="line" d="M580 215H665"/>
+  <rect class="box" x="665" y="130" width="265" height="170" rx="18"/><text class="t l" x="797" y="178" text-anchor="middle">임베딩 e</text><text class="t s" x="797" y="220" text-anchor="middle">embed(c, K, G, X)</text><text class="t s" x="797" y="252" text-anchor="middle">검색용 표현</text><path class="line" d="M930 215H995"/>
+  <rect class="hi" x="995" y="150" width="140" height="130" rx="18"/><text class="t l" x="1065" y="202" text-anchor="middle">노트 m</text><text class="t s" x="1065" y="240" text-anchor="middle">7개 필드</text>
+  <rect class="box" x="64" y="375" width="1072" height="112" rx="18"/><text class="t s" x="92" y="415">m = { c 원문 · t 시각 · K 키워드 · G 태그 · X 문맥 · e 벡터 · L 링크 }</text><text class="t s" x="92" y="453">링크 L은 다른 기억과의 관계를 표현한다.</text>
+  <text class="t s" x="64" y="552">Xu et al. · A-MEM · arXiv:2502.12110</text>
+</svg>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" role="img" aria-labelledby="title desc">
+  <title id="title">재구성 도식 8. HippoRAG 온라인 검색</title>
+  <desc id="desc">질문 엔터티를 그래프 노드에 연결하고 Personalized PageRank와 노드 문단 행렬로 문단 순위를 계산하는 논문 방법 설명도</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10Z" fill="#007d79"/></marker>
+    <style>.bg{fill:#f6f8fa}.card{fill:#fff;stroke:#cbd6de;stroke-width:2}.actual{fill:#e8f5f3;stroke:#007d79;stroke-width:2}.t{font-family:'Malgun Gothic',sans-serif;fill:#152a42}.h{font-size:28px;font-weight:700}.label{font-size:21px;font-weight:700}.sub{font-size:16px}.formula{font-size:20px;font-weight:700}.caption{font-size:14px;fill:#506579}.line{fill:none;stroke:#007d79;stroke-width:3;marker-end:url(#arrow)}</style>
+  </defs>
+  <rect class="bg" width="1200" height="600" rx="24"/>
+  <text class="t h" x="58" y="58">도식 8 · 온라인: 연상 확산으로 문단 찾기</text>
+  <g transform="translate(45 170)"><rect class="actual" width="175" height="125" rx="18"/><text class="t label" x="27" y="47">질문 엔터티</text><text class="t sub" x="27" y="83">LLM 추출</text></g>
+  <path class="line" d="M220 232H268"/>
+  <g transform="translate(268 150)"><rect class="actual" width="230" height="165" rx="18"/><text class="t label" x="25" y="44">Query nodes</text><text class="t sub" x="25" y="80">embedding 최근접</text><text class="t sub" x="25" y="110">specificity 가중</text><text class="t sub" x="25" y="138">정규화 seed s</text></g>
+  <path class="line" d="M498 232H548"/>
+  <g transform="translate(548 125)"><rect class="card" width="300" height="215" rx="20"/><text class="t label" x="25" y="44">Personalized PageRank</text><circle cx="75" cy="123" r="23" fill="#007d79"/><circle cx="160" cy="82" r="18" fill="#84c4be"/><circle cx="231" cy="136" r="20" fill="#84c4be"/><circle cx="137" cy="172" r="17" fill="#b8dcd8"/><path d="M97 113L143 91M177 94L214 124M96 137L120 162M155 166L212 144" stroke="#007d79" stroke-width="3"/><text class="t sub" x="25" y="201">그래프 전체로 확률 질량 확산</text></g>
+  <path class="line" d="M848 232H895"/>
+  <g transform="translate(895 150)"><rect class="actual" width="260" height="165" rx="18"/><text class="t label" x="27" y="44">문단 순위</text><text class="t formula" x="27" y="85">p = Pᵀr</text><text class="t sub" x="27" y="122">노드 점수 → 원문 문단</text></g>
+  <rect x="120" y="388" width="960" height="116" rx="18" fill="#fff" stroke="#d6dfe6"/><rect x="143" y="407" width="116" height="34" rx="17" fill="#e8f5f3" stroke="#007d79"/><text class="t sub" x="158" y="430">해설용 표기</text><text class="t formula" x="286" y="433">r = (1−α)s + αTᵀr</text><text class="t sub" x="286" y="469">α: 계속 이동 · s: specificity 가중 정규화 seed · T: 전이 행렬</text>
+  <text class="t caption" x="58" y="556">출처 · HippoRAG v3 §2.3 · https://arxiv.org/abs/2405.14831v3</text>
+</svg>
