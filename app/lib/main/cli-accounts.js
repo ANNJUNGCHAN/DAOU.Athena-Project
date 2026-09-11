@@ -8,6 +8,7 @@ const { performance } = require('node:perf_hooks');
 const electron = require('electron');
 const { getClaudeBin, claudeBinCandidates } = require('./claude-bin');
 const { getGrokBin, grokBinCandidates } = require('./grok-bin');
+const { resolveCodexExecutable } = require('./codex-bin');
 const { resolveCodexRuntimeHome, createCodexRuntime } = require('./codex-runtime-home');
 
 const PROVIDER_ORDER = Object.freeze(['claude', 'grok', 'codex']);
@@ -72,6 +73,7 @@ function createCliAccounts({
   spawnImpl = spawn,
   claudeBinImpl = getClaudeBin,
   grokBinImpl = getGrokBin,
+  codexBinImpl = resolveCodexExecutable,
   monotonicNow = () => performance.now(),
   statusTimeoutMs = CODEX_STATUS_TIMEOUT_MS,
   writeStateAtomicImpl,
@@ -84,11 +86,29 @@ function createCliAccounts({
 
   const userDataPath = appImpl.getPath('userData');
   const runtimeHome = resolveCodexRuntimeHome(userDataPath);
-  const codexRuntime = runtime || createCodexRuntime({
-    runtimeHome,
-    codexExecutable: 'codex',
-    spawnImpl,
-  });
+  let codexExecutable = runtime ? 'codex' : null;
+  let codexRuntime = runtime || null;
+  function refreshCodexRuntime() {
+    if (runtime) return runtime;
+    let discovered;
+    try {
+      discovered = codexBinImpl({ existsSync: fsImpl.existsSync.bind(fsImpl) });
+    } catch (error) {
+      if (error?.code !== 'CODEX_EXECUTABLE_NOT_FOUND') throw error;
+      codexExecutable = null;
+      codexRuntime = null;
+      return null;
+    }
+    if (!codexRuntime || discovered !== codexExecutable) {
+      codexExecutable = discovered;
+      codexRuntime = createCodexRuntime({
+        runtimeHome,
+        codexExecutable,
+        spawnImpl,
+      });
+    }
+    return codexRuntime;
+  }
   const persist = writeStateAtomicImpl || ((file, state) => defaultAtomicWrite(fsImpl, file, state));
   let mutexTail = Promise.resolve();
 
@@ -181,7 +201,12 @@ function createCliAccounts({
         resolve(status);
       };
       try {
-        child = codexRuntime.spawnPrivateHomeCommand(['login', 'status'], {
+        const activeRuntime = refreshCodexRuntime();
+        if (!activeRuntime) {
+          finish('unavailable');
+          return;
+        }
+        child = activeRuntime.spawnPrivateHomeCommand(['login', 'status'], {
           timeoutMs: statusTimeoutMs,
           stdio: 'ignore',
         });
@@ -317,13 +342,16 @@ function createCliAccounts({
     const cfg = LOGIN_COMMANDS[providerId];
     const name = PROVIDER_NAMES[providerId];
     if (!cfg || !name) return { ok: false, launched: false, message: '알 수 없는 CLI다' };
-    // claude는 PATH에만 기대지 않는다 — claude-bin.js가 오버라이드·PATH·네이티브
-    // 설치 순으로 푼다. codex는 아직 PATH 전제 그대로다(런타임이 별도 홈을 쓴다).
+    // 각 resolver가 PATH가 얕은 패키징 앱에서도 사용자 설치 위치를 찾는다.
+    const activeCodexRuntime = providerId === 'codex' ? refreshCodexRuntime() : null;
     const command = providerId === 'claude'
       ? claudeBinImpl()
       : providerId === 'grok'
         ? grokBinImpl()
-        : cfg.command;
+        : codexExecutable;
+    if (providerId === 'codex' && !activeCodexRuntime) {
+      return { ok: false, launched: false, message: `${name} CLI가 이 컴퓨터에 설치되어 있지 않다` };
+    }
     if (!await probeBinaryExists(command)) {
       // 어디를 봤는지 말한다 — "설치되어 있지 않다"만으로는 다음에 뭘 할지 알 수 없다.
       const where = providerId === 'claude'
@@ -335,7 +363,7 @@ function createCliAccounts({
     }
     try {
       const child = providerId === 'codex'
-        ? codexRuntime.spawnPrivateHomeInteractiveCommand(cfg.args, {
+        ? activeCodexRuntime.spawnPrivateHomeInteractiveCommand(cfg.args, {
           title: `Athena · ${name} 로그인`,
         })
         : spawnImpl(
@@ -372,7 +400,12 @@ function createCliAccounts({
         resolve(ok);
       };
       try {
-        child = codexRuntime.spawnPrivateHomeCommand(['logout'], {
+        const activeRuntime = refreshCodexRuntime();
+        if (!activeRuntime) {
+          finish(false);
+          return;
+        }
+        child = activeRuntime.spawnPrivateHomeCommand(['logout'], {
           timeoutMs: statusTimeoutMs,
           stdio: 'ignore',
         });

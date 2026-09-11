@@ -8,8 +8,8 @@ const {
   buildCodexAppServerArgs,
   createCodexChatRuntime,
   createMcpAudit,
-  resolveCodexExecutable,
 } = require('./codex-chat-runtime');
+const { resolveCodexExecutable } = require('./codex-bin');
 
 const USER_DATA = 'C:\\AthenaData';
 const CWD = 'C:\\AthenaData\\mcp-config';

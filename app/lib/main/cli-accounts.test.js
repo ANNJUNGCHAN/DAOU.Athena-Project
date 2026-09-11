@@ -284,13 +284,16 @@ test('Codex login uses the private runtime visible launcher and never mutates gl
   const userData = path.join(root, 'user-data');
   const globalHome = path.join(root, 'global-home');
   const globalAuth = path.join(globalHome, '.codex', 'auth.json');
+  const codexExecutable = path.join(root, 'codex.exe');
   fs.mkdirSync(path.dirname(globalAuth), { recursive: true });
   fs.writeFileSync(globalAuth, '{"sentinel":"global-must-not-change"}');
+  fs.writeFileSync(codexExecutable, 'fixture');
   const calls = [];
   const accounts = createCliAccounts({
     appImpl: { getPath: () => userData },
     fsImpl: fs,
     osImpl: { homedir: () => globalHome },
+    codexBinImpl: () => codexExecutable,
     spawnImpl(command, argv, options) {
       const child = createChild();
       calls.push({ command, argv, options, child });
@@ -304,17 +307,72 @@ test('Codex login uses the private runtime visible launcher and never mutates gl
 
   assert.equal(result.ok, true);
   assert.equal(result.launched, true);
-  assert.equal(calls.length, 2);
-  assert.deepEqual(calls[0].argv, ['codex']);
-  const launch = calls[1];
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].command, 'powershell.exe');
+  assert.deepEqual(calls[0].argv.slice(0, 3), ['-NoLogo', '-NoProfile', '-Command']);
+  const launch = calls[0];
   assert.equal(launch.command, 'powershell.exe');
   assert.equal(launch.options.shell, false);
   assert.equal(launch.options.env.CODEX_HOME, path.join(userData, 'codex-runtime'));
-  assert.equal(launch.options.env.ATHENA_CODEX_EXECUTABLE, 'codex');
+  assert.equal(launch.options.env.ATHENA_CODEX_EXECUTABLE, codexExecutable);
   assert.equal(launch.options.env.ATHENA_CODEX_ARGV_JSON, '["login"]');
   assert.equal(launch.child.unrefCalls, 1);
   assert.equal(fs.readFileSync(globalAuth, 'utf8'), '{"sentinel":"global-must-not-change"}');
   assert.equal(process.env.CODEX_HOME, originalCodexHome);
+});
+
+test('Codex install discovered after app startup is used by login retry without a bare-command spawn', async (t) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'athena-cli-codex-retry-'));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const userData = path.join(root, 'user-data');
+  const codexExecutable = path.join(root, 'codex.exe');
+  fs.writeFileSync(codexExecutable, 'fixture');
+  let installed = false;
+  const calls = [];
+  const accounts = createCliAccounts({
+    appImpl: { getPath: () => userData },
+    fsImpl: fs,
+    osImpl: { homedir: () => root },
+    codexBinImpl() {
+      if (!installed) throw Object.assign(new Error('missing'), { code: 'CODEX_EXECUTABLE_NOT_FOUND' });
+      return codexExecutable;
+    },
+    spawnImpl(command, argv, options) {
+      const child = createChild();
+      calls.push({ command, argv, options, child });
+      return child;
+    },
+  });
+
+  assert.deepEqual(await accounts.login('codex'), {
+    ok: false,
+    launched: false,
+    message: 'Codex CLI가 이 컴퓨터에 설치되어 있지 않다',
+  });
+  assert.deepEqual(calls, []);
+
+  installed = true;
+  const retried = await accounts.login('codex');
+  assert.equal(retried.ok, true);
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].command, 'powershell.exe');
+  assert.equal(calls[0].options.env.ATHENA_CODEX_EXECUTABLE, codexExecutable);
+  assert.equal(calls[0].child.unrefCalls, 1);
+});
+
+test('Codex login surfaces unexpected resolver failures instead of masking them as not installed', async (t) => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'athena-cli-codex-resolver-error-'));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const failure = Object.assign(new Error('Codex 경로 접근이 거부됨'), { code: 'EACCES' });
+  const accounts = createCliAccounts({
+    appImpl: { getPath: () => path.join(root, 'user-data') },
+    fsImpl: fs,
+    osImpl: { homedir: () => root },
+    codexBinImpl() { throw failure; },
+    spawnImpl() { throw new Error('unexpected spawn'); },
+  });
+
+  await assert.rejects(accounts.login('codex'), (error) => error === failure);
 });
 
 test('Codex logout and follow-up status use the same private home and clear only the private runtime row', async (t) => {
@@ -341,6 +399,7 @@ test('Codex logout and follow-up status use the same private home and clear only
     appImpl: { getPath: () => userData },
     fsImpl: fs,
     osImpl: { homedir: () => globalHome },
+    codexBinImpl: () => 'codex',
     spawnImpl(command, argv, options) {
       const child = createChild();
       calls.push({ command, argv, options });

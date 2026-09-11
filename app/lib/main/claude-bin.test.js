@@ -141,3 +141,23 @@ test('getClaudeBin은 오버라이드를 매번 다시 읽는다 (캐시하지 �
     resetClaudeBinCache();
   }
 });
+
+test('getClaudeBin은 미설치 fallback을 캐시하지 않아 실행 중 설치 후 재시도할 수 있다', () => {
+  const { getClaudeBin, resetClaudeBinCache } = require('./claude-bin');
+  let installed = false;
+  try {
+    resetClaudeBinCache();
+    const options = {
+      env: {},
+      platform: 'win32',
+      homedir,
+      existsSync: (candidate) => installed && candidate === nativeWin,
+      spawnSyncImpl: spawnSyncNever,
+    };
+    assert.equal(getClaudeBin(options), 'claude');
+    installed = true;
+    assert.equal(getClaudeBin(options), nativeWin);
+  } finally {
+    resetClaudeBinCache();
+  }
+});
