@@ -691,7 +691,10 @@ async def test_regression_auto_execute_conflicts_with_render_canvas_sealed_plan(
         nonlocal call_count
         if request.url.path == "/api/v1/llm/tools/resolve":
             return httpx.Response(200, json=_resolve_response_json(kind="query"))
-        assert request.url.path == "/api/v1/llm/tools/call"
+        expected_path = (
+            "/api/v1/llm/tools/call" if call_count == 0 else "/api/v1/llm/tools/call-query"
+        )
+        assert request.url.path == expected_path
         assert json.loads(request.content) == {"plan_token": "tok-auto"}
         call_count += 1
         if call_count == 1:

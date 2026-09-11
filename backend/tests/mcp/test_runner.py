@@ -512,7 +512,11 @@ async def test_healthcheck_supervisor_restarts_a_crashed_server_and_recovers_dis
         supervisor = asyncio.create_task(runner._supervise_healthchecks())
         try:
             for _ in range(150):
-                if handle.is_running and handle.restart_count >= 1:
+                # restart()는 새 세션을 세운 직후 is_running/restart_count를 먼저
+                # 갱신하고, 이어 list_tools() -> aggregator 변경 알림을 보낸다.
+                # 앞의 두 상태만 보고 supervisor를 취소하면 알림 직전 태스크를
+                # 끊을 수 있으므로 복구의 마지막 관찰 지점까지 기다린다.
+                if handle.is_running and handle.restart_count >= 1 and changed_events:
                     break
                 await asyncio.sleep(0.1)
             assert handle.is_running is True, "슈퍼바이저가 크래시를 감지해 재시작하지 못했다"
