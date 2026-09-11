@@ -6,6 +6,7 @@ const path = require('path');
 const { spawn } = require('child_process');
 const { BACKEND_DIR, PYTHON_EXE } = require('./mcp-config');
 const { killTree } = require('./proc-utils');
+const { getClaudeBin } = require('./claude-bin');
 
 const HEALTH_HOST = '127.0.0.1';
 const HEALTH_PORT = 8010;
@@ -59,6 +60,11 @@ function buildBackendEnv(baseEnv = process.env) {
     // 외부에서 띄운 backend의 환경은 건드릴 수 없으므로 brain status gate가
     // extraction_enabled=false를 정직한 degraded 원인으로 보고한다.
     env.ATHENA_BRAIN_USE_CLAUDE_CLI_EXTRACTION = 'true';
+  }
+  // 바로가기·WMI로 켠 앱의 PATH는 `claude`를 못 찾는다. 추출 자식은 shell:false라
+  // 절대 경로가 필요하다(claude-bin.js와 같은 이유).
+  if (!Object.prototype.hasOwnProperty.call(baseEnv, 'ATHENA_CLAUDE_BIN')) {
+    env.ATHENA_CLAUDE_BIN = getClaudeBin();
   }
   return env;
 }
