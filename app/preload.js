@@ -189,6 +189,8 @@ const INVOKE_CHANNELS = new Set([
   'athena:backtest-deployments',
   'athena:backtest-deployment-create',
   'athena:backtest-deployment-stop',
+  // 자동 주문 무장(보드 23) — 사람 클릭 전용. create·stop과 같은 다리다.
+  'athena:backtest-deployment-arm',
   'athena:backtest-signals',
   'athena:backtest-evaluate',
   // 2026-09-02 사용자 전략 등록부 — 내 폴더의 .py 하나가 프리셋과 같은 자리에 선다.
