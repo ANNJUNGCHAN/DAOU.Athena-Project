@@ -369,7 +369,11 @@ function stampRoot(root, envelope, definition, renderedCard = root) {
   copySpecializedDatasets(root, renderedCard);
   root.dataset.cardId = definition.cardId;
   root.dataset.cardKind = definition.kind;
-  root.dataset.integratedInstanceKey = instanceKeyFor(envelope);
+  // 주기 전환 봉투는 view_instance_id에 operation_ref가 들어 새 키가 된다.
+  // 이미 탭에 앉은 root의 키는 그대로 둬야 같은 종목 차트가 탭을 늘리지 않는다.
+  if (!root.dataset.integratedInstanceKey) {
+    root.dataset.integratedInstanceKey = instanceKeyFor(envelope);
+  }
   root.dataset.integratedTarget = normalizeIdentity(targetIdentity(envelope));
   Object.defineProperty(root, '__athenaIntegratedMetadata', {
     value: {

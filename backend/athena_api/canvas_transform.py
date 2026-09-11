@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import logging
+import math
 from datetime import datetime, timedelta, timezone
 from functools import lru_cache
 from pathlib import Path
@@ -383,13 +384,17 @@ def _aits_time(raw: Any, timezone_name: Any) -> str | int | None:
 
 def _aits_number(raw: Any) -> float | None:
     if isinstance(raw, (int, float)) and not isinstance(raw, bool):
-        return float(raw)
-    if not isinstance(raw, str) or not raw.strip():
+        value = float(raw)
+    elif isinstance(raw, str) and raw.strip():
+        try:
+            value = float(raw.strip().lstrip("+-"))
+        except ValueError:
+            return None
+    else:
         return None
-    try:
-        return float(raw.strip().lstrip("+-"))
-    except ValueError:
+    if not math.isfinite(value):
         return None
+    return abs(value)
 
 
 def resolve_screen_render_contract(

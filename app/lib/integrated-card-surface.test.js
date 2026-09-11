@@ -9,7 +9,7 @@ const {
   specializedClassNames, copySpecializedDatasets,
   matchesRealtimeTick, requireRealtimeSuccess, verifiedOperationRefsFor,
   visibleTargetsFor, realtimeEligibleFor,
-  rememberPanelSession, panelSessionFor, forgetPanelSession,
+  rememberPanelSession, panelSessionFor, forgetPanelSession, refreshExisting,
   detachForDestroy, findReusableRoot, buttonLabel, workflowStateLabel, isBoardSurface,
   buildCancelledState, buildAuthExpiredState,
 } = require('./integrated-card-surface');
@@ -127,6 +127,26 @@ test('ka10099 source rows stay snapshot-only while explicit ELW cards remain rea
   assert.equal(realtimeEligibleFor({
     operation_ref: 'base:ka30012', card_id: 'CC-03', mode: 'elw', stk_cd: '52M504',
   }), true);
+});
+
+test('주기 전환 봉투는 이미 앉은 탭 키를 덮지 않는다', () => {
+  const root = {
+    className: 'card w-full',
+    dataset: {},
+    querySelector() { return null; },
+    querySelectorAll() { return []; },
+  };
+  const first = {
+    card_id: 'CC-03', card_kind: 'instrument', stk_cd: '000660',
+    view_instance_id: 'view_day', operation_ref: 'base:ka10081',
+  };
+  refreshExisting(root, first);
+  const key = root.dataset.integratedInstanceKey;
+  assert.ok(key);
+  refreshExisting(root, {
+    ...first, view_instance_id: 'view_year', operation_ref: 'base:ka10094',
+  });
+  assert.equal(root.dataset.integratedInstanceKey, key);
 });
 
 test('integrated chart root keeps independent A then B sessions and returns A without duplication', () => {

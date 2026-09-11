@@ -62,12 +62,35 @@ test('ChartCandle/ChartCardBody normalization matches the AITS DTO shape', () =>
   assert.deepEqual(normalizeChartCandle({
     time: 20260821, open: '10', high: 12, low: 9, close: 11, volume: '100', turnoverAmount: '999', turnoverRate: null,
   }), {
-    time: '20260821', open: 10, high: 12, low: 9, close: 11, volume: 100, turnoverAmount: 999, turnoverRate: null,
+    time: '2026-08-21', open: 10, high: 12, low: 9, close: 11, volume: 100, turnoverAmount: 999, turnoverRate: null,
   });
   assert.deepEqual(normalizeChartCardBody(body()).candles[0], candle('2026-08-20', 100));
   assert.throws(() => normalizeChartCardBody(body({ period: 'quarter' })), /period/);
   assert.throws(() => normalizeChartCardBody(body({ target: 'coin' })), /target/);
   assert.throws(() => normalizeChartCardBody(body({ trId: '' })), /trId/);
+});
+
+test('년봉 숫자의 등락 부호와 0 저가는 양수 OHLC로 고친다', () => {
+  const repaired = normalizeChartCandle({
+    time: '2024', open: -25000, high: 3750000, low: 0, close: -1774000, volume: -10,
+  }, 'year');
+  assert.equal(repaired.time, '2024-01-01');
+  assert.equal(repaired.close, 1774000);
+  assert.equal(repaired.open, 25000);
+  assert.equal(repaired.low, 25000);
+  assert.equal(repaired.high, 3750000);
+  assert.equal(repaired.volume, 10);
+});
+
+test('틱 봉의 0 시가·저가는 종가로 메워 빈 화면이 되지 않는다', () => {
+  const repaired = normalizeChartCandle({
+    time: 1787274900, open: 0, high: 0, low: 0, close: 1775000, volume: 3,
+  }, 'tick');
+  assert.equal(repaired.time, 1787274900);
+  assert.equal(repaired.open, 1775000);
+  assert.equal(repaired.high, 1775000);
+  assert.equal(repaired.low, 1775000);
+  assert.equal(repaired.close, 1775000);
 });
 
 test('fixture adapter requires explicit period/target/trId without operation inference', () => {

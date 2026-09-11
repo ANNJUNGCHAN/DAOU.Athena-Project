@@ -305,6 +305,7 @@ test('통합 카드는 두 반환 경로 모두에서 자기 탭으로 옮겨진
     CANVAS.indexOf('async function renderIntegratedCard'),
     CANVAS.indexOf('function integratedRealtimeMeta'),
   );
+  assert.match(renderer, /findExistingChartRoot\(envelope\)/);
   assert.equal((renderer.match(/adoptIntoCanvasTab\(/g) || []).length, 2,
     '재사용 root 경로와 새 마운트 경로 둘 다 탭으로 가야 한다');
   assert.match(CANVAS, /const canvasTabs = window\.AthenaLib\.CanvasTabs;/);
@@ -344,6 +345,11 @@ test('surface_contract가 있으면 보드 마운트로, 없으면 기존 경로
   // 가로채지 않는다. 판정은 paper-card-routing.preservesAppPrimary가 든다(2026-09-04).
   assert.match(primary, /const boardCard = paperCardRouting\.preservesAppPrimary\(envelope, boardPrimaryRendererOf\(envelope\)\)\n\s*\? null : renderBoardSurfaceCard\(envelope\);\n\s*if \(boardCard\) return boardCard;/);
   assert.match(primary, /canvas_type === 'table' && !envelope\.fell_back\) return renderMcpTable/);
+  assert.match(primary, /reloadExistingChartFromEnvelope/);
+  assert.ok(
+    primary.indexOf('reloadExistingChartFromEnvelope') < primary.indexOf('renderBoardSurfaceCard'),
+    '주기 전환은 새 보드를 만들기 전에 기존 차트 패널을 다시 써야 한다',
+  );
   const board = CANVAS.slice(CANVAS.indexOf('function renderBoardSurfaceCard'), CANVAS.indexOf('async function renderTaskCanvasEnvelope'));
   assert.match(board, /if \(!contract \|\| !boardMount\) return null;/);
   // 보드를 못 세우면 범용 카드로 조용히 떨어뜨리지 않고 재시도 상태를 둔다.
@@ -664,6 +670,17 @@ test('남의 보드로 갈아타면 그 봉투의 차트를 얹지 않는다', (
   const index = registry.contractFor('32S7-0').primary.props_from.map((row) => row.mapping_id);
   assert.ok(stock.length > 0 && index.length > 0);
   assert.deepEqual(stock.filter((id) => index.includes(id)), []);
+});
+
+test('주기 전환은 보드 카드의 기존 차트 패널을 다시 찾고 탭 키를 유지한다', () => {
+  const reload = CANVAS.slice(
+    CANVAS.indexOf('async function reloadExistingAitsChartPanel'),
+    CANVAS.indexOf('function liveChartCard'),
+  );
+  assert.match(reload, /querySelectorAll\('\.card'\)/);
+  assert.doesNotMatch(reload, /querySelectorAll\('\.card\.chart'\)/);
+  const adopt = CANVAS.slice(CANVAS.indexOf('function adoptIntoCanvasTab'), CANVAS.indexOf('// ---------- 캔버스 카드 추가'));
+  assert.match(adopt, /root\.dataset && root\.dataset\.integratedInstanceKey/);
 });
 
 test('보드 껍질이 차트 신원을 찍어 paint ack에 넘긴다', () => {

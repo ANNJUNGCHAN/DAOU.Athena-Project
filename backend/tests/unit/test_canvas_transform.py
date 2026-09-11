@@ -350,6 +350,14 @@ def test_build_chart_bars_succeeds_for_all_p2a_chart_trs(mapping_id: str) -> Non
     }
 
 
+def test_aits_number_treats_signed_numeric_prices_as_magnitude() -> None:
+    assert canvas_transform._aits_number(-1774000) == 1774000.0
+    assert canvas_transform._aits_number(-25000) == 25000.0
+    assert canvas_transform._aits_number("+71000") == 71000.0
+    assert canvas_transform._aits_number("-0") == 0.0
+    assert canvas_transform._aits_number(float("inf")) is None
+
+
 # ---------------------------------------------------------------------------
 # P2a/P2b — resolve_chart_initial_period (manifest presentation.controls.
 # default_period 조회, P2a Deliverable). 8TR은 실제 값, 4TR(P2b)/비차트/미등록/
