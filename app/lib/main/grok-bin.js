@@ -74,11 +74,14 @@ function resolveGrokBin({
 }
 
 let cachedDiscovery = null;
-function getGrokBin() {
-  const explicit = process.env.ATHENA_GROK_BIN;
+function getGrokBin(options = {}) {
+  const env = options.env || process.env;
+  const explicit = env.ATHENA_GROK_BIN;
   if (explicit) return explicit;
-  if (cachedDiscovery === null) cachedDiscovery = resolveGrokBin({ env: {} });
-  return cachedDiscovery;
+  if (cachedDiscovery !== null) return cachedDiscovery;
+  const discovered = resolveGrokBin({ ...options, env: {} });
+  if (discovered !== FALLBACK) cachedDiscovery = discovered;
+  return discovered;
 }
 function resetGrokBinCache() {
   cachedDiscovery = null;

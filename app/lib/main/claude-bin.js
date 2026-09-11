@@ -107,11 +107,14 @@ function resolveClaudeBin({
 // 실행 중에 값을 바꾸는 프로브가 깨진다: probe-orb-mini-chart-card.js는 한
 // 프로세스 안에서 이 변수를 두 번(서로 다른 가짜 실행 파일로) 갈아끼운다.
 let cachedDiscovery = null;
-function getClaudeBin() {
-  const explicit = process.env.ATHENA_CLAUDE_BIN;
+function getClaudeBin(options = {}) {
+  const env = options.env || process.env;
+  const explicit = env.ATHENA_CLAUDE_BIN;
   if (explicit) return explicit;
-  if (cachedDiscovery === null) cachedDiscovery = resolveClaudeBin({ env: {} });
-  return cachedDiscovery;
+  if (cachedDiscovery !== null) return cachedDiscovery;
+  const discovered = resolveClaudeBin({ ...options, env: {} });
+  if (discovered !== FALLBACK) cachedDiscovery = discovered;
+  return discovered;
 }
 function resetClaudeBinCache() {
   cachedDiscovery = null;
