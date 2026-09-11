@@ -102,6 +102,18 @@ test('preload가 플러그인 제안 채널을 연다', () => {
   assert.match(on, /'athena:plugin-proposed'/);
 });
 
+test('preload가 배포 무장 채널을 연다', () => {
+  const preload = fs.readFileSync(path.join(__dirname, '..', '..', 'preload.js'), 'utf8');
+  const invoke = preload.slice(preload.indexOf('const INVOKE_CHANNELS'), preload.indexOf('const SEND_CHANNELS'));
+  for (const channel of [
+    'athena:backtest-deployment-create',
+    'athena:backtest-deployment-stop',
+    'athena:backtest-deployment-arm',
+  ]) {
+    assert.match(invoke, new RegExp(`'${channel}'`), channel);
+  }
+});
+
 // 승인 순서는 레지스트리의 decide가 소유한다(그 순서는 실제 호출로
 // plugin-proposal-registry.test.js가 잠근다). main이 지킬 몫은 두 가지다 —
 // 순서를 여기서 다시 적지 않는 것, 그리고 판번호를 한 번만 읽어 넘기는 것.
