@@ -149,6 +149,28 @@ test('주기 전환 봉투는 이미 앉은 탭 키를 덮지 않는다', () => 
   assert.equal(root.dataset.integratedInstanceKey, key);
 });
 
+test('주기 전환은 없는 패널 키로 기존 보드를 가리지 않는다', () => {
+  const dayPanel = { __athenaPanelKey: 'base:ka10081', hidden: false };
+  const root = {
+    className: 'card w-full',
+    dataset: {},
+    querySelector() { return null; },
+    querySelectorAll(selector) {
+      if (selector === '.integrated-card-panel') return [dayPanel];
+      if (selector === '.integrated-card-tab') return [];
+      return [];
+    },
+  };
+  const day = {
+    card_id: 'CC-03', card_kind: 'instrument', stk_cd: '000660',
+    operation_ref: 'base:ka10081',
+  };
+  refreshExisting(root, day);
+  assert.equal(dayPanel.hidden, false);
+  refreshExisting(root, { ...day, operation_ref: 'base:ka10094' });
+  assert.equal(dayPanel.hidden, false, '년봉 봉투의 새 panelKey로 일봉 패널을 숨기면 빈 화면이 된다');
+});
+
 test('integrated chart root keeps independent A then B sessions and returns A without duplication', () => {
   const root = {};
   const a = { mode: 'chart', section: 'daily', capability: 'chart', operation_ref: 'detail:ka10081:daily' };

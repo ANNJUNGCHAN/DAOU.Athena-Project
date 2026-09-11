@@ -328,3 +328,13 @@ test("tone 'change'와 'signed'는 같은 뜻이고 'neutral'은 색 없음이�
   // 색이 없어도 부호는 텍스트에 남는다.
   assert.equal(formatSlot({ unit: 'krw_ko', sign: true, tone: 'neutral' }, -24600).text, '-2만 4,600');
 });
+
+test('기업정보 헤더 현재가는 키움 등락 부호를 가격 앞에 붙이지 않는다', () => {
+  const slot = boardSlot('2RBO-1', 's005');
+  const down = formatSlot(slot.format, '-258000');
+  assert.equal(down.text, '25만 8,000');
+  assert.doesNotMatch(down.text, /^-/);
+  assert.equal(formatSlot({ unit: 'krw_ko', sign: false, tone: 'neutral' }, -258000).text, '25만 8,000');
+  const change = formatSlot({ unit: 'krw_ko', sign: true, tone: 'change' }, -258000);
+  assert.equal(change.text, '-25만 8,000');
+});

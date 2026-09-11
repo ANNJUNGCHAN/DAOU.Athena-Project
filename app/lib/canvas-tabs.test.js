@@ -350,6 +350,11 @@ test('surface_contract가 있으면 보드 마운트로, 없으면 기존 경로
     primary.indexOf('reloadExistingChartFromEnvelope') < primary.indexOf('renderBoardSurfaceCard'),
     '주기 전환은 새 보드를 만들기 전에 기존 차트 패널을 다시 써야 한다',
   );
+  assert.ok(
+    primary.indexOf('dataset.chartPanelId') < primary.indexOf('renderBoardSurfaceCard'),
+    'reload 실패 때도 살아 있는 차트 보드를 새 보드로 바꾸지 않는다',
+  );
+  assert.match(primary, /return liveRoot;/);
   const board = CANVAS.slice(CANVAS.indexOf('function renderBoardSurfaceCard'), CANVAS.indexOf('async function renderTaskCanvasEnvelope'));
   assert.match(board, /if \(!contract \|\| !boardMount\) return null;/);
   // 보드를 못 세우면 범용 카드로 조용히 떨어뜨리지 않고 재시도 상태를 둔다.
@@ -679,6 +684,8 @@ test('주기 전환은 보드 카드의 기존 차트 패널을 다시 찾고 �
   );
   assert.match(reload, /querySelectorAll\('\.card'\)/);
   assert.doesNotMatch(reload, /querySelectorAll\('\.card\.chart'\)/);
+  assert.match(reload, /integratedRoot\.dataset\.chartPanelId/);
+  assert.match(reload, /active\.generation \+ 1/);
   const adopt = CANVAS.slice(CANVAS.indexOf('function adoptIntoCanvasTab'), CANVAS.indexOf('// ---------- 캔버스 카드 추가'));
   assert.match(adopt, /root\.dataset && root\.dataset\.integratedInstanceKey/);
 });

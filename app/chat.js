@@ -3330,6 +3330,12 @@ document.addEventListener('keydown', (e) => {
     if (state !== 'idle') {
       abortLiveTurn();
     } else {
+      // 크게 보기 중 Esc는 카드를 지우지 않고 복귀한다(실측: 보드 차트가 빈 화면으로 남음).
+      const fullscreenBtn = document.querySelector('.card.is-expanded .chart-toolbar-fullscreen');
+      if (fullscreenBtn) {
+        fullscreenBtn.click();
+        return;
+      }
       // 옛 판에서 이 키는 캔버스 **창**을 수축시켜 닫았다(athena:collapse-canvas).
       // 닫을 창이 없어진 뒤 남는 의미는 "쌓인 카드를 치운다"이고, 두 영역이 같은
       // 문서에 사는 지금은 IPC 왕복 없이 shell.js 버스로 바로 부른다.

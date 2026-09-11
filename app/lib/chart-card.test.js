@@ -206,6 +206,17 @@ test('mock 데이터에 대한 실제 변환도 산술적으로 닫힌다(전량
 });
 
 
+test('크게 보기는 보드 카드도 확대하고 Esc는 카드를 지우지 않는다', () => {
+  const src = fs.readFileSync(path.join(__dirname, 'chart-card.js'), 'utf8');
+  assert.match(src, /container\.closest\('\.card'\)/);
+  assert.match(src, /onFullscreenKey/);
+  assert.match(src, /event\.stopPropagation\(\)/);
+  assert.match(src, /document\.addEventListener\('keydown', onFullscreenKey, true\)/);
+  const css = fs.readFileSync(path.join(__dirname, '..', 'canvas.css'), 'utf8');
+  assert.match(css, /\.card\.is-expanded/);
+  assert.match(css, /canvas-tab-deck:has\(\.card\.is-expanded\)/);
+});
+
 test('resolveInitialPeriod: AITS 주기 D/W/M/Y/MIN/TICK은 그대로 통과시킨다', () => {
   assert.equal(resolveInitialPeriod({ period: 'D' }), 'D');
   assert.equal(resolveInitialPeriod({ period: 'W' }), 'W');

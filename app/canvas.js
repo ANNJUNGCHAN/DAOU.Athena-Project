@@ -814,6 +814,21 @@ async function renderPrimaryEnvelope(envelope, options = {}) {
   // 만들면 캔버스 탭이 `차트 · 000660`로 늘어나고(실측), 년·틱도 빈 카드로 샌다.
   const reloaded = await reloadExistingChartFromEnvelope(envelope, options.integratedRoot);
   if (reloaded) return reloaded;
+  // reload가 실패해도 새 보드를 만들면 안 된다. 보드 표면은 panelKey에
+  // operation_ref를 넣어 빈 패널을 켜고, 같은 panelId를 파괴한 뒤 년·틱이
+  // 흰 화면으로 남는다(실측).
+  const liveRoot = options.integratedRoot;
+  const chartData = envelope && envelope.data && typeof envelope.data === 'object' ? envelope.data : {};
+  if (
+    liveRoot
+    && liveRoot.dataset
+    && liveRoot.dataset.chartPanelId
+    && liveRoot.dataset.destroying !== 'true'
+    && (chartData.chart || envelope.renderer_id === AITS_CHART_RENDERER_ID
+      || envelope.canvas_type === 'chart')
+  ) {
+    return liveRoot;
+  }
   // 표면 계약이 실려 오면 Paper 보드 원문을 그대로 마운트한다(D1) — 런타임 레이아웃
   // 재조립 없이 텍스트 노드만 바뀐다. 계약이 없으면 기존 경로 그대로.
   // 단, D1의 예외 — 앱 렌더러(AITS 차트·호가 래더·주문 초안)가 primary인 봉투는
@@ -2358,15 +2373,25 @@ function refreshChartSubtitle(card, envelope) {
 
 async function reloadExistingAitsChartPanel(descriptor, envelope, integratedRoot = null) {
   const integratedSession = integratedCardSurface.panelSessionFor(integratedRoot, envelope);
-  if (integratedSession) {
-    descriptor.panelId = integratedSession.panelId;
-    descriptor.context.panelId = integratedSession.panelId;
-    const active = aitsChartPanels.snapshot().find((session) => session.panelId === integratedSession.panelId);
-    descriptor.generation = active ? active.generation + 1 : integratedSession.generation + 1;
+  // 년·틱 봉투는 operation_ref가 달라 panelSessionFor가 놓친다. 이미 선 보드의
+  // chartPanelId를 써야 같은 렌더러에 봉이 들어가고 generation도 이어진다.
+  const existingPanelId = (integratedSession && integratedSession.panelId)
+    || (integratedRoot && integratedRoot.dataset && integratedRoot.dataset.chartPanelId)
+    || null;
+  if (existingPanelId) {
+    descriptor.panelId = existingPanelId;
+    descriptor.context.panelId = existingPanelId;
+    const active = aitsChartPanels.snapshot().find((session) => session.panelId === existingPanelId);
+    const fallbackGeneration = integratedSession
+      ? integratedSession.generation
+      : Number(integratedRoot && integratedRoot.dataset && integratedRoot.dataset.chartGeneration) || 1;
+    descriptor.generation = active ? active.generation + 1 : fallbackGeneration + 1;
     descriptor.context.generation = descriptor.generation;
   }
-  const card = (integratedSession && integratedRoot)
-    || Array.from(grid.querySelectorAll('.card')).find(
+  const card = (integratedRoot && existingPanelId
+      && integratedRoot.dataset.chartPanelId === existingPanelId)
+    ? integratedRoot
+    : Array.from(grid.querySelectorAll('.card')).find(
       (candidate) => candidate.dataset.chartPanelId === descriptor.panelId
     )
     || null;
