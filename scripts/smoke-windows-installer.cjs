@@ -225,6 +225,8 @@ const READINESS_EXPRESSION = `(() => {
     href: location.href,
     title: document.title,
     readyState: document.readyState,
+    documentVisibility: document.visibilityState,
+    documentHasFocus: document.hasFocus(),
     bodyChildCount: document.body ? document.body.children.length : 0,
     hasAthenaBridge: !!window.athena,
     hasAthenaShell: !!window.AthenaShell,
@@ -232,6 +234,9 @@ const READINESS_EXPRESSION = `(() => {
     bootVisible: visible(boot),
     shellVisible: visible(shell),
     onboardingVisible: visible(onboard),
+    shellBlockedForOnboarding: !!shell && shell.classList.contains('is-onboarding-hidden')
+      && shell.getAttribute('aria-hidden') === 'true' && shell.inert === true,
+    onboardingTextLength: String(onboard?.innerText || '').replace(/\\s+/g, ' ').trim().length,
     settingsVisible: visible(settings),
     textSample: String(document.body?.innerText || '').replace(/\\s+/g, ' ').trim().slice(0, 240),
   };
@@ -248,6 +253,14 @@ function installedFilePath(href) {
 function isWithin(candidate, parent) {
   const relative = path.relative(path.resolve(parent), path.resolve(candidate));
   return relative === '' || (!relative.startsWith(`..${path.sep}`) && relative !== '..' && !path.isAbsolute(relative));
+}
+
+function contentReadyState(state) {
+  if (!state || state.documentVisibility !== 'visible' || state.bootVisible) return false;
+  const normalShellReady = state.shellVisible && !state.onboardingVisible && state.textSample.length > 0;
+  const onboardingReady = state.onboardingVisible && state.shellBlockedForOnboarding
+    && state.onboardingTextLength > 0;
+  return normalShellReady || onboardingReady;
 }
 
 async function discoverPages(debugPort, sessions, deadline) {
@@ -271,6 +284,24 @@ async function discoverPages(debugPort, sessions, deadline) {
   throw new Error('installed app did not expose a shell page through CDP');
 }
 
+async function snapshotSessions(sessions) {
+  const observations = [];
+  for (const [id, session] of sessions) {
+    try {
+      const state = await session.evaluate(READINESS_EXPRESSION);
+      observations.push({
+        id,
+        target: session.target,
+        state,
+        loadedPath: installedFilePath(state.href),
+      });
+    } catch (error) {
+      observations.push({ id, target: session.target, error: safeError(error), loadedPath: '' });
+    }
+  }
+  return observations;
+}
+
 async function inspectReadyPages(debugPort, resourcesApp, sessions, deadline) {
   let targets = await discoverPages(debugPort, sessions, deadline);
   let observations = [];
@@ -284,16 +315,7 @@ async function inspectReadyPages(debugPort, resourcesApp, sessions, deadline) {
         sessions.set(target.id, await new CdpSession(target).connect());
       }
     }
-    observations = [];
-    for (const [id, session] of sessions) {
-      try {
-        const state = await session.evaluate(READINESS_EXPRESSION);
-        const loadedPath = installedFilePath(state.href);
-        observations.push({ id, target: session.target, state, loadedPath });
-      } catch (error) {
-        observations.push({ id, target: session.target, error: safeError(error), loadedPath: '' });
-      }
-    }
+    observations = await snapshotSessions(sessions);
     const ready = observations.filter(({ state, loadedPath }) => state
       && state.readyState === 'complete'
       && state.bodyChildCount > 0
@@ -302,8 +324,7 @@ async function inspectReadyPages(debugPort, resourcesApp, sessions, deadline) {
       && state.hasAthenaShell
       && loadedPath
       && isWithin(loadedPath, resourcesApp));
-    const contentReady = ready.some(({ state }) => state.shellVisible && !state.bootVisible
-      && (state.onboardingVisible || state.textSample.length > 0));
+    const contentReady = ready.some(({ state }) => contentReadyState(state));
     if (contentReady) return observations;
     await delay(POLL_INTERVAL_MS);
   }
@@ -333,6 +354,24 @@ function compactManifest(manifest) {
     providerCount: Array.isArray(manifest.providers) ? manifest.providers.length : null,
     modelCount: Array.isArray(manifest.models) ? manifest.models.length : null,
   };
+}
+
+function pageReports(observations, resourcesApp) {
+  return observations.map(({ id, target, state, error, loadedPath }) => ({
+    id,
+    type: target.type,
+    url: target.url,
+    loadedPath,
+    state: state || null,
+    error: error || null,
+    windowRole: /(?:[?&])shellHandoff=1(?:&|$)/.test(state?.href || '')
+      ? 'shell-handoff' : 'boot-window',
+    readinessRole: contentReadyState(state)
+      ? (state.onboardingVisible ? 'ready-onboarding' : 'ready-shell')
+      : (state?.bootVisible ? 'boot-pre-handoff' : 'not-content-ready'),
+    contentReady: contentReadyState(state),
+    underInstalledResourcesApp: !!loadedPath && isWithin(loadedPath, resourcesApp),
+  }));
 }
 
 function verifyBundledPython(resourcesDir, resourcesApp, env) {
@@ -368,21 +407,44 @@ function verifyBundledPython(resourcesDir, resourcesApp, env) {
   };
 }
 
-async function captureScreenshots(observations, sessions, outputDir) {
+async function captureScreenshots(observations, sessions, outputDir, { diagnostic = false } = {}) {
   const screenshots = [];
   let index = 0;
-  for (const observation of observations.filter(({ state }) => state)) {
+  const candidates = observations.filter(({ state }) => state).sort(
+    (left, right) => Number(contentReadyState(right.state)) - Number(contentReadyState(left.state)),
+  );
+  for (const observation of candidates) {
     index += 1;
     const session = sessions.get(observation.id);
-    const capture = await session.send('Page.captureScreenshot', {
-      format: 'png', fromSurface: true, captureBeyondViewport: false,
-    });
-    if (!capture.data) throw new Error(`CDP screenshot was empty for page ${observation.id}`);
-    const filename = `page-${String(index).padStart(2, '0')}.png`;
-    fs.writeFileSync(path.join(outputDir, filename), Buffer.from(capture.data, 'base64'));
-    screenshots.push({ pageId: observation.id, filename });
+    const required = contentReadyState(observation.state);
+    try {
+      let capture = null;
+      let lastError = null;
+      for (let attempt = 1; attempt <= 3; attempt += 1) {
+        try {
+          capture = await session.send('Page.captureScreenshot', {
+            format: 'png', fromSurface: true, captureBeyondViewport: false,
+          });
+          if (capture.data) break;
+          lastError = new Error(`CDP screenshot was empty for page ${observation.id}`);
+        } catch (error) {
+          lastError = error;
+        }
+        await delay(POLL_INTERVAL_MS);
+      }
+      if (!capture?.data) throw lastError || new Error(`CDP screenshot failed for page ${observation.id}`);
+      const prefix = diagnostic ? 'diagnostic-page' : 'page';
+      const filename = `${prefix}-${String(index).padStart(2, '0')}.png`;
+      fs.writeFileSync(path.join(outputDir, filename), Buffer.from(capture.data, 'base64'));
+      screenshots.push({ pageId: observation.id, filename, required });
+    } catch (error) {
+      if (!diagnostic && required) throw error;
+      screenshots.push({ pageId: observation.id, required, error: safeError(error) });
+    }
   }
-  if (!screenshots.length) throw new Error('no installed app screenshot was captured');
+  if (!diagnostic && !screenshots.some((item) => item.required && item.filename)) {
+    throw new Error('no content-ready installed app screenshot was captured');
+  }
   return screenshots;
 }
 
@@ -469,6 +531,7 @@ async function main() {
   };
   let child = null;
   const sessions = new Map();
+  let latestObservations = [];
   let stdoutStream = null;
   let stderrStream = null;
   try {
@@ -505,30 +568,26 @@ async function main() {
     child.once('exit', (code, signal) => { report.process.exit = { code, signal }; });
     child.once('error', (error) => { report.process.spawnError = safeError(error); });
     const deadline = startedAt + STARTUP_TIMEOUT_MS;
-    const [observations, manifest] = await Promise.all([
+    const manifestPromise = waitForManifest(deadline).then((manifest) => {
+      fs.writeFileSync(path.join(args.output, 'backend-manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`);
+      report.backend = {
+        ...report.backend,
+        ready: true,
+        url: `http://${LOOPBACK}:${BACKEND_PORT}/api/v1/llm/manifest`,
+        manifest: compactManifest(manifest),
+        manifestEvidence: 'backend-manifest.json',
+      };
+      return manifest;
+    });
+    const [observations] = await Promise.all([
       inspectReadyPages(debugPort, resourcesApp, sessions, deadline),
-      waitForManifest(deadline),
+      manifestPromise,
     ]);
-    report.pages = observations.map(({ id, target, state, error, loadedPath }) => ({
-      id,
-      type: target.type,
-      url: target.url,
-      loadedPath,
-      state: state || null,
-      error: error || null,
-      underInstalledResourcesApp: !!loadedPath && isWithin(loadedPath, resourcesApp),
-    }));
+    latestObservations = observations;
+    report.pages = pageReports(observations, resourcesApp);
     if (child.exitCode !== null || report.process.spawnError) {
       throw new Error(`installed Athena process exited during startup (${child.exitCode})`);
     }
-    fs.writeFileSync(path.join(args.output, 'backend-manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`);
-    report.backend = {
-      ...report.backend,
-      ready: true,
-      url: `http://${LOOPBACK}:${BACKEND_PORT}/api/v1/llm/manifest`,
-      manifest: compactManifest(manifest),
-      manifestEvidence: 'backend-manifest.json',
-    };
     report.bundledPython = verifyBundledPython(resourcesDir, resourcesApp, env);
     report.screenshots = await captureScreenshots(observations, sessions, args.output);
     await delay(500);
@@ -541,6 +600,13 @@ async function main() {
     report.outcome = 'PASS';
   } catch (error) {
     report.error = safeError(error);
+    if (sessions.size) {
+      latestObservations = await snapshotSessions(sessions);
+      report.pages = pageReports(latestObservations, resourcesApp);
+      report.screenshots = await captureScreenshots(
+        latestObservations, sessions, args.output, { diagnostic: true },
+      );
+    }
   } finally {
     report.runtimeExceptions = [...sessions.values()].flatMap((session) => (
       session.exceptions.map((exception) => ({ pageId: session.target.id, ...exception }))
@@ -568,7 +634,11 @@ async function main() {
   if (report.outcome !== 'PASS') process.exitCode = 1;
 }
 
-main().catch((error) => {
-  process.stderr.write(`installer smoke: FATAL - ${error.message}\n`);
-  process.exitCode = 1;
-});
+if (require.main === module) {
+  main().catch((error) => {
+    process.stderr.write(`installer smoke: FATAL - ${error.message}\n`);
+    process.exitCode = 1;
+  });
+}
+
+module.exports = { contentReadyState };

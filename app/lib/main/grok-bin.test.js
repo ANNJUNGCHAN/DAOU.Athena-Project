@@ -4,7 +4,7 @@ const test = require('node:test');
 const assert = require('node:assert');
 const path = require('node:path');
 
-const { resolveGrokBin, grokBinCandidates } = require('./grok-bin');
+const { resolveGrokBin, grokBinCandidates, getGrokBin, resetGrokBinCache } = require('./grok-bin');
 
 const HOME = path.join('C:', 'Users', 'tester');
 const homedir = () => HOME;
@@ -79,4 +79,23 @@ test('네이티브 경로는 homedir에서 유도한다 — 사용자명이 박�
 test('후보 목록에 ~/.grok/bin 이 들어 있다', () => {
   const candidates = grokBinCandidates({ platform: 'win32', homedir });
   assert.ok(candidates.some((item) => item.includes(path.join('.grok', 'bin'))));
+});
+
+test('getGrokBin은 미설치 fallback을 캐시하지 않아 실행 중 설치 후 재시도할 수 있다', () => {
+  let installed = false;
+  try {
+    resetGrokBinCache();
+    const options = {
+      env: {},
+      platform: 'win32',
+      homedir,
+      existsSync: (candidate) => installed && candidate === nativeWin,
+      spawnSyncImpl: spawnSyncNever,
+    };
+    assert.equal(getGrokBin(options), 'grok');
+    installed = true;
+    assert.equal(getGrokBin(options), nativeWin);
+  } finally {
+    resetGrokBinCache();
+  }
 });
