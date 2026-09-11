@@ -1055,14 +1055,24 @@ function mountBoardState(host, boardId, envelope, isCurrent = () => true) {
     ? Promise.resolve()
     : boardTemplateRegistry.loadBoard(targetBoardId);
   return ready
-    .then(() => {
+    .then(async () => {
       if (!isCurrent() || state.boardId !== targetBoardId) return null;
       const mounted = boardMount.mountBoard(
         host, targetBoardId, state.values, boardMountOptions(host, envelope),
       );
       rememberMountedBoard(state, mounted);
       wireMountedBoardControls(host, envelope, mounted);
-      return hydrateBoardSlots(host, envelope, mounted, isCurrent);
+      // 차트 봉은 봉투에 이미 있다. 수급·밸류 하이드레이션을 기다리면 첫 화면이
+      // pending 한도를 넘겨 답변만 timeout으로 뒤집힌다(실측: 일봉 카드 그림은
+      // 섰는데 채팅은 '질의 실패'). 차트는 하이드레이션과 동시에 얹는다.
+      const chartMount = mountBoardPrimary(host, envelope, mounted, null);
+      let hydrated;
+      try {
+        hydrated = await hydrateBoardSlots(host, envelope, mounted, isCurrent);
+      } finally {
+        await chartMount.catch(() => null);
+      }
+      return hydrated;
     });
 }
 
@@ -1553,6 +1563,11 @@ async function mountBoardPrimary(host, envelope, mounted, retry) {
     && boardPrimaryAcceptsEnvelope(primary, envelope)) {
     return mountBoardOrderbook(card, state, primary, envelope);
   }
+  if (primary && primary.renderer === BOARD_CHART_RENDERER && primary.mountPoint
+      && primary.mountPoint.dataset.bsPrimaryMounted === BOARD_CHART_RENDERER
+      && state.primaryPanelId) {
+    return null;
+  }
   // 안 얹기로 한 것도 결과다 — 껍질이 'loading'을 찍어 두고 여기서 조용히 빠지면
   // 확정 ack가 영영 안 나가고 main의 pendingMount 한도 뒤 'timeout'으로 샌다.
   // (갈아탄 보드에서는 이미 맺힌 뒤라 settleBoardChartMount가 아무 것도 안 한다.)
@@ -1740,6 +1755,7 @@ function boardLoadAnchor(state, host) {
 }
 
 function showBoardLoading(state, host) {
+  if (state.primaryDescriptor) return;
   removeBoardLoadNode(state);
   state.hydrationWarnings = [];
   host.hidden = true;

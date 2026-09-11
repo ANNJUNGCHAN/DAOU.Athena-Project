@@ -838,7 +838,9 @@ async function runRestDataset({
     retryAction.verifiedQueryOnly = dataset.items.every((item) => signedQueryOperations.has(operationKey(item)));
   }
   return {
-    ok: dataCanvasCount > 0 && firstCanvasMs <= dataset.firstCanvasDeadlineMs,
+    // 첫 카드 마감은 피드백 SLA(feedbackOk)다. 데이터 캔버스가 실제로 섰으면
+    // 늦은 차트 마운트를 사용자 실패로 뒤집지 않는다.
+    ok: dataCanvasCount > 0,
     feedbackOk: feedbackDeadlineMet,
     source: 'kiwoom-rest',
     datasetId: dataset.datasetId,

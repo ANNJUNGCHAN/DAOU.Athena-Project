@@ -116,3 +116,11 @@ test('the composer folds references at the same place it folds attachments', () 
   assert.ok(observed >= 0);
   assert.match(src.slice(observed, observed + 900), /data-technique/);
 });
+
+test('데이터 캔버스가 선 차트는 질의 실패 카드로 덮지 않는다', () => {
+  const src = fs.readFileSync(path.join(__dirname, '..', 'chat.js'), 'utf8');
+  assert.match(
+    src,
+    /if \(result && !result\.ok && !\(Number\(result\.dataCanvasCount\) > 0\)\)/,
+  );
+});
