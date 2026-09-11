@@ -1680,6 +1680,26 @@ test('껍질 paint를 알린 차트는 마운트가 마감을 넘겨 끝나도 �
   assert.equal(announced.result.state, null);
   assert.ok(announced.eventTypes.indexOf('paint-pending') < announced.eventTypes.indexOf('paint-ack'));
 
+  const lateData = await runRestDataset({
+    dataset: Object.assign(dataset(), { firstCanvasDeadlineMs: 40 }),
+    backendBase: 'http://backend',
+    fetchImpl: successfulFetch(),
+    emitCanvas: async (payload) => {
+      payload.onFirstPaint({ visiblePaintAt: payload.requestStartedAt + 8 });
+      await new Promise((resolve) => setTimeout(resolve, 80));
+      return {
+        verifiedVisible: true,
+        visiblePaintAt: payload.requestStartedAt + 80,
+        renderState: 'data',
+      };
+    },
+  });
+  assert.equal(lateData.ok, true);
+  assert.equal(lateData.error, null);
+  assert.ok(lateData.firstCanvasMs > 40);
+  assert.equal(lateData.dataCanvasCount, 1);
+  assert.equal(lateData.answerText, '캔버스에 표시했습니다.');
+
   // 알리지 않으면 종전대로 3초 마감이 걸린다 — 마감 자체는 살아 있다.
   const silent = await runProfile(false);
   assert.equal(silent.result.ok, false);

@@ -162,6 +162,28 @@ function toVolumeSeriesData(ohlcv) {
     }));
 }
 
+// 분·틱은 실제 epoch 초라 전날 종가와 오늘 시세가 한 축에 붙으면 이평이
+// 장 사이 공백을 가로질러 꺾인다(1분봉 실측). 30분 넘는 구멍은 세션 경계로
+// 보고 마지막 연속 구간만 그린다. 일·주·월·년은 날짜 문자열이라 손대지 않는다.
+const INTRADAY_SESSION_GAP_SEC = 30 * 60;
+
+function clipIntradayToLatestSession(ohlcv, period) {
+  const token = String(period || '');
+  if (token !== 'MIN' && token !== 'TICK') {
+    return Array.isArray(ohlcv) ? ohlcv : [];
+  }
+  const list = Array.isArray(ohlcv) ? ohlcv : [];
+  if (list.length < 2) return list.slice();
+  let start = 0;
+  for (let i = 1; i < list.length; i += 1) {
+    const prev = list[i - 1] && list[i - 1].time;
+    const next = list[i] && list[i].time;
+    if (typeof prev !== 'number' || typeof next !== 'number') continue;
+    if (next - prev > INTRADAY_SESSION_GAP_SEC) start = i;
+  }
+  return start === 0 ? list.slice() : list.slice(start);
+}
+
 function withAlpha(hex, alpha) {
   const h = hex.replace('#', '');
   const r = parseInt(h.slice(0, 2), 16);
@@ -696,8 +718,10 @@ async function createChartCard(container, opts) {
 
   function setData(ohlcv, options) {
     const shouldFitContent = !options || options.fitContent !== false;
-    const candleData = toCandleSeriesData(ohlcv);
-    const volumeData = toVolumeSeriesData(ohlcv);
+    const clipped = clipIntradayToLatestSession(ohlcv, currentPeriod);
+    currentBars = clipped;
+    const candleData = toCandleSeriesData(clipped);
+    const volumeData = toVolumeSeriesData(clipped);
     if (currentForm === 'line' || currentForm === 'area') {
       priceSeries.setData(candleData.map((d) => ({ time: d.time, value: d.close })));
     } else {
@@ -737,6 +761,15 @@ async function createChartCard(container, opts) {
     updateNote();
   }
 
+  // 분·틱 세션이 바뀌면 직전 장의 봉을 축에서 빼야 한다. update()는 점을
+  // 지울 수 없어 시리즈를 다시 깔고 새 장 폭에 맞춘다. applyChartTick 본문에
+  // setData를 두면 AITS 틱 경로 잠금이 깨지므로 여기로 뺀다.
+  function beginLatestIntradaySession(candle) {
+    currentBars = [candle];
+    dailyBars = dailyBars.concat([candle]);
+    setData(currentBars);
+  }
+
   // AITS ChartTickDelta 호환 경로. update는 같은 시각 슬롯의 마지막 봉 교체,
   // rollover는 새 봉 append다. renderer/series를 다시 만들지 않고 fitContent도
   // 호출하지 않으므로 진행봉 수신 전의 줌·팬 viewport가 유지된다.
@@ -749,6 +782,12 @@ async function createChartCard(container, opts) {
       currentBars[currentBars.length - 1] = candle;
       if (dailyBars.length) dailyBars[dailyBars.length - 1] = candle;
     } else if (kind === 'rollover') {
+      const prev = currentBars[currentBars.length - 1];
+      if (prev && typeof prev.time === 'number' && typeof candle.time === 'number'
+        && candle.time - prev.time > INTRADAY_SESSION_GAP_SEC) {
+        beginLatestIntradaySession(candle);
+        return true;
+      }
       currentBars.push(candle);
       dailyBars.push(candle);
     } else {
@@ -934,6 +973,8 @@ const __exports = {
   resolveInitialPeriod,
   toCandleSeriesData,
   toVolumeSeriesData,
+  clipIntradayToLatestSession,
+  INTRADAY_SESSION_GAP_SEC,
   withAlpha,
   formatVolumeKo,
   UP_COLOR,

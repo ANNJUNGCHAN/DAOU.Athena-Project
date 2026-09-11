@@ -1917,6 +1917,109 @@ test('값이 한 줄도 없는 열은 머리글까지 감춘다', () => {
   assert.equal(keep.hidden, false);
 });
 
+test('미제공 값과 실값 없는 행은 화면에 안 남긴다', () => {
+  const label = linked({ node: 'lab' });
+  const value = linked({ node: 'val' });
+  const row = linked({ node: 'row' }, [label, value]);
+  const liveLabel = linked({ node: 'liveLab' });
+  const liveValue = linked({ node: 'liveVal' });
+  const liveRow = linked({ node: 'liveRow' }, [liveLabel, liveValue]);
+  const surface = linked({ node: 'surface' }, [row, liveRow]);
+  const contract = { slots: [
+    { slot_id: 'lab', node: 'lab', kind: 'label', paper_text: '52주 범위', format: null },
+    { slot_id: 'val', node: 'val', kind: 'value', paper_text: '105,600 — 196,100', format: { kind: 'korean' } },
+    { slot_id: 'liveLab', node: 'liveLab', kind: 'label', paper_text: '현재가', format: null },
+    { slot_id: 'liveVal', node: 'liveVal', kind: 'value', paper_text: '150,850', format: { kind: 'number' } },
+  ] };
+
+  applyPlan(surface, mountPlan(contract, { liveVal: 150850 }));
+
+  assert.equal(value.textContent, '미제공');
+  assert.equal(value.hidden, true);
+  assert.equal(row.hidden, true);
+  assert.equal(liveValue.textContent, '150,850');
+  assert.equal(liveValue.hidden, false);
+  assert.equal(liveRow.hidden, false);
+});
+
+test('같은 행에 실값이 있으면 미제공 칸만 감춘다', () => {
+  const lowLabel = linked({ node: 'lowL' });
+  const lowVal = linked({ node: 'lowV' });
+  const miss = linked({ node: 'miss' });
+  const row = linked({ node: 'row' }, [lowLabel, lowVal, miss]);
+  const surface = linked({ node: 'surface' }, [row]);
+
+  applyPlan(surface, mountPlan({ slots: [
+    { slot_id: 'lowL', node: 'lowL', kind: 'label', paper_text: '52주 최저' },
+    { slot_id: 'lowV', node: 'lowV', kind: 'value', format: { kind: 'number' } },
+    { slot_id: 'miss', node: 'miss', kind: 'value', format: { kind: 'number' } },
+  ] }, { lowV: 1853000 }));
+
+  assert.equal(row.hidden, false);
+  assert.equal(lowVal.hidden, false);
+  assert.equal(lowVal.textContent, '1,853,000');
+  assert.equal(miss.hidden, true);
+  assert.equal(miss.textContent, '미제공');
+});
+
+test('미제공이던 칸은 값이 오면 다시 보인다', () => {
+  const label = linked({ node: 'lab' });
+  const value = linked({ node: 'val' });
+  const row = linked({ node: 'row' }, [label, value]);
+  const surface = linked({ node: 'surface' }, [row]);
+  const contract = { slots: [
+    { slot_id: 'lab', node: 'lab', kind: 'label', paper_text: '52주 범위' },
+    { slot_id: 'val', node: 'val', kind: 'value', format: { kind: 'number' } },
+  ] };
+
+  applyPlan(surface, mountPlan(contract, {}));
+  assert.equal(value.hidden, true);
+  assert.equal(row.hidden, true);
+
+  applyPlan(surface, mountPlan(contract, { val: 1234 }));
+  assert.equal(value.hidden, false);
+  assert.equal(row.hidden, false);
+  assert.equal(value.textContent, '1,234');
+});
+
+test('실시간 갱신으로 미제공이 값으로 바뀌면 칸이 다시 열린다', () => {
+  const label = linked({ node: 'lab' });
+  const value = linked({ node: 'val' });
+  const row = linked({ node: 'row' }, [label, value]);
+  const surface = linked({ node: 'surface' }, [row]);
+  const contract = { slots: [
+    { slot_id: 'lab', node: 'lab', kind: 'label', paper_text: '시가' },
+    { slot_id: 'val', node: 'val', kind: 'value', format: { kind: 'number' } },
+  ] };
+
+  applyPlan(surface, mountPlan(contract, {}));
+  assert.equal(value.hidden, true);
+
+  applyRealtimeSlots(surface, contract, { val: 4200 }, ['val']);
+  assert.equal(value.hidden, false);
+  assert.equal(row.hidden, false);
+  assert.equal(value.textContent, '4,200');
+});
+
+test('해당 없음과 집계 전은 미제공과 달리 화면에 남긴다', () => {
+  const na = linked({ node: 'na' });
+  const pending = linked({ node: 'pending' });
+  const surface = linked({ node: 'surface' }, [na, pending]);
+
+  applyPlan(surface, mountPlan({ slots: [
+    { slot_id: 'na', node: 'na', kind: 'value', format: { kind: 'korean' } },
+    { slot_id: 'pending', node: 'pending', kind: 'value', format: { kind: 'number' } },
+  ] }, {
+    na: { missing: 'not_applicable' },
+    pending: { missing: 'pending' },
+  }));
+
+  assert.equal(na.textContent, '해당 없음');
+  assert.equal(pending.textContent, '집계 전');
+  assert.equal(na.hidden, false);
+  assert.equal(pending.hidden, false);
+});
+
 
 // ---------- 넘침 처방의 후보 판정 ----------
 //

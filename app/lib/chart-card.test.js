@@ -13,6 +13,7 @@ const {
   toCandleSeriesData, toVolumeSeriesData, withAlpha, formatVolumeKo, UP_COLOR, DOWN_COLOR,
   resolveInitialPeriod, createCachedChartLibraryLoader, renderNowAndOnNextFrame,
   withReloadDeadline, RELOAD_DEADLINE_MS, RELOAD_DEADLINE_ERROR,
+  clipIntradayToLatestSession, INTRADAY_SESSION_GAP_SEC,
 } = require('./chart-card');
 
 const FIXTURE = require(path.join(__dirname, '..', 'data', 'chart-mock-ohlcv.json'));
@@ -147,6 +148,36 @@ test('toCandleSeriesData: 빈/비배열 입력은 빈 배열', () => {
   assert.deepEqual(toCandleSeriesData([]), []);
   assert.deepEqual(toCandleSeriesData(null), []);
   assert.deepEqual(toCandleSeriesData(undefined), []);
+});
+
+function minBar(time, close) {
+  return { time, open: close, high: close, low: close, close, volume: 1 };
+}
+
+test('분·틱은 장 사이 공백 뒤의 마지막 세션만 남긴다', () => {
+  const yesterday = 1_700_000_000;
+  const today = yesterday + 18 * 3600;
+  const bars = [
+    minBar(yesterday, 1860000),
+    minBar(yesterday + 60, 1861000),
+    minBar(today, 1776000),
+    minBar(today + 60, 1775000),
+  ];
+  const clipped = clipIntradayToLatestSession(bars, 'MIN');
+  assert.equal(clipped.length, 2);
+  assert.equal(clipped[0].close, 1776000);
+  assert.equal(clipped[1].close, 1775000);
+  assert.ok(today - (yesterday + 60) > INTRADAY_SESSION_GAP_SEC);
+  assert.deepEqual(clipIntradayToLatestSession(bars, 'TICK').map((b) => b.close), [1776000, 1775000]);
+  assert.equal(clipIntradayToLatestSession(bars, 'D').length, 4);
+});
+
+test('같은 장 안의 1분봉은 자르지 않는다', () => {
+  const t0 = 1_700_000_000;
+  const bars = [minBar(t0, 1), minBar(t0 + 60, 2), minBar(t0 + 120, 3)];
+  const clipped = clipIntradayToLatestSession(bars, 'MIN');
+  assert.equal(clipped.length, 3);
+  assert.equal(clipped[2].close, 3);
 });
 
 test('toVolumeSeriesData: 상승봉은 UP_COLOR alpha 0.5, 하락봉은 DOWN_COLOR alpha 0.5', () => {

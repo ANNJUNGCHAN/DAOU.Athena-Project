@@ -541,6 +541,30 @@ test('Paper가 준비되어 드러난 뒤 앱 렌더러를 얹는다', () => {
   assert.match(ready, /if \(mounted\) await mountBoardPrimary\(host, state\.primaryEnvelope \|\| envelope, mounted, retry\);/);
 });
 
+test('차트 primary는 하이드레이션과 동시에 얹고 로딩 화면으로 보드를 가리지 않는다', () => {
+  const mount = CANVAS.slice(
+    CANVAS.indexOf('function mountBoardState'),
+    CANVAS.indexOf('function switchStateBoard'),
+  );
+  assert.ok(
+    mount.indexOf('mountBoardPrimary(') < mount.indexOf('hydrateBoardSlots('),
+    '차트 마운트 promise를 하이드레이션 await보다 먼저 걸어야 병렬이 된다',
+  );
+  assert.match(mount, /const chartMount = mountBoardPrimary\(/);
+  assert.match(mount, /await hydrateBoardSlots\(/);
+  assert.match(mount, /await chartMount\.catch/);
+  const loading = CANVAS.slice(
+    CANVAS.indexOf('function showBoardLoading'),
+    CANVAS.indexOf('async function showBoardReady'),
+  );
+  assert.match(loading, /if \(state\.primaryDescriptor\) return;/);
+  const primary = CANVAS.slice(
+    CANVAS.indexOf('async function mountBoardPrimary'),
+    CANVAS.indexOf('// 봉투가 못 채운 슬롯을 마운트 뒤에 한 번 더 채운다.'),
+  );
+  assert.match(primary, /dataset\.bsPrimaryMounted === BOARD_CHART_RENDERER/);
+});
+
 test('상태 보드를 갈아타기 전에 열린 primary 패널을 먼저 닫는다', () => {
   const swap = CANVAS.slice(CANVAS.indexOf('function switchStateBoard'), CANVAS.indexOf('function findStateControl'));
   // 표면을 갈면 컨테이너가 바뀐다 — 같은 panelId를 다른 컨테이너로 열면 adapter가 던진다.

@@ -501,6 +501,65 @@ function hideEmptyValueUnits(surface, plan) {
   }
 }
 
+function isUnavailableSlotEl(el) {
+  if (!el) return false;
+  const marked = el.dataset
+    ? el.dataset.missing !== undefined
+    : (typeof el.getAttribute === 'function' && el.getAttribute('data-missing') !== null);
+  return marked && String(el.textContent || '').trim() === boardFormat.missingText();
+}
+
+function unitBoxForUnavailable(el, surface) {
+  let box = el.parentElement;
+  while (box && box !== surface && box.children && box.children.length < 2) {
+    box = box.parentElement;
+  }
+  if (!box || box === surface) return null;
+  return box;
+}
+
+function unitHasLiveSlot(box) {
+  const slots = typeof box.querySelectorAll === 'function'
+    ? [...box.querySelectorAll('[data-slot-id]')]
+    : [];
+  return slots.some((node) => {
+    if (node.dataset && node.dataset.bsDesignText) return false;
+    if (isUnavailableSlotEl(node)) return false;
+    return String(node.textContent || '').trim() !== '';
+  });
+}
+
+// 렌더러가 찍은 `미제공`은 화면에 남기지 않는다. 칸을 감추고, 그 상자에 실값이
+// 하나도 없으면 라벨이 빈 채로 남는 행도 함께 접는다. `집계 전`·`해당 없음`은
+// 다른 결측 사유라서 그대로 둔다. 값이 오면 같은 자리의 display를 되돌린다.
+function hideUnavailableUnits(surface) {
+  if (!surface || typeof surface.querySelectorAll !== 'function') return;
+  const next = [];
+  const seen = new Set();
+  const add = (el) => {
+    if (!el || seen.has(el)) return;
+    seen.add(el);
+    next.push(el);
+  };
+  for (const el of surface.querySelectorAll('[data-slot-id]')) {
+    if (!isUnavailableSlotEl(el)) continue;
+    add(el);
+    const box = unitBoxForUnavailable(el, surface);
+    if (box && !unitHasLiveSlot(box)) add(box);
+  }
+  const prev = Array.isArray(surface.__bsUnavailableHidden) ? surface.__bsUnavailableHidden : [];
+  for (const el of prev) {
+    if (seen.has(el)) continue;
+    setHidden(el, false);
+    if (el.dataset) delete el.dataset.bsUnavailableHidden;
+  }
+  for (const el of next) {
+    setHidden(el, true);
+    if (el.dataset) el.dataset.bsUnavailableHidden = 'true';
+  }
+  surface.__bsUnavailableHidden = next;
+}
+
 // DOM 쓰기 층 — 텍스트 노드만 건드린다. 구조·인라인 스타일 원문은 손대지 않는다(D1).
 function applyPlan(root, plan, options = {}) {
   const index = nodeIndex(root);
@@ -556,6 +615,7 @@ function applyPlan(root, plan, options = {}) {
   if (!options.partial) {
     hideEmptyValueUnits(root, plan);
   }
+  hideUnavailableUnits(root);
   if (options.partial) {
     return { unbound, unmapped: [], containers, collapsedRows, collapsedColumns };
   }

@@ -1657,12 +1657,13 @@ async function runQueryLive(text) {
   const aLine = streamALine || document.createElement('div');
   aLine.className = 'turn';
   if (execRecord) aLine.insertBefore(execRecord, aLine.firstChild);
-  if (result && !result.ok) {
+  if (result && !result.ok && !(Number(result.dataCanvasCount) > 0)) {
     // 스트리밍 버블이 이미 떠 있어도 실패는 실패로 보인다 — 원래(af8bb81)는
     // 어느 경로든 '실패 — ' 텍스트로 덮어썼는데 36f2a57이 실패 카드를 도입하며
     // !streamALine 경로만 바꿔 스트리밍-후-실패 턴이 '완료'처럼 렌더되던 회귀
     // (2026-08-27 병합 점검 M4, 반박 검증 CONFIRMED). 부분 스트리밍 텍스트는
     // 권위가 없으므로 제거하고 실패 카드가 대체한다(기존 덮어쓰기와 같은 원칙).
+    // 데이터 캔버스가 이미 선 차트는 ok 마감과 무관하게 실패 카드로 덮지 않는다.
     if (streamAText) streamAText.remove();
     renderFailureBubble(aLine, (result && result.error) || '알 수 없는 오류');
   } else {
